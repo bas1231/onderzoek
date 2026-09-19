@@ -1,7 +1,7 @@
 from pathlib import Path
 from typing import Literal
 
-from pydantic import BaseModel, Field, field_validator
+from pydantic import BaseModel, Field, field_validator, model_validator
 
 
 ALLOWED_EXECUTABLES = {
@@ -53,7 +53,7 @@ class Task(BaseModel):
 
     @field_validator("command")
     @classmethod
-    def safe_command(cls, value: list[str]) -> list[str]:
+    def basic_command_safety(cls, value: list[str]) -> list[str]:
         if not value:
             raise ValueError("empty command")
 
@@ -72,6 +72,7 @@ class Task(BaseModel):
             "dd",
             "kill",
             "killall",
+            "exit",
         }
 
         for item in value:
@@ -81,3 +82,56 @@ class Task(BaseModel):
                 )
 
         return value
+
+    @model_validator(mode="after")
+    def operation_command_match(self):
+        command = self.command
+
+        if self.operation == "health_check":
+            if command != [
+                ".venv/bin/python",
+                "experiments/health_check.py",
+            ]:
+                raise ValueError(
+                    "health_check command must use the canonical health script"
+                )
+
+        elif self.operation == "python":
+            if len(command) < 2:
+                raise ValueError("python operation requires a script")
+
+            script = Path(command[1])
+
+            if command[1].startswith("-"):
+                raise ValueError(
+                    "python -c / -m style execution is forbidden"
+                )
+
+            if script.is_absolute() or ".." in script.parts:
+                raise ValueError("unsafe Python script path")
+
+            allowed_prefixes = (
+                "experiments/",
+                "control/jobs/",
+            )
+
+            script_text = script.as_posix()
+
+            if not script_text.startswith(allowed_prefixes):
+                raise ValueError(
+                    "Python scripts must live under experiments/ or control/jobs/"
+                )
+
+            if script.suffix != ".py":
+                raise ValueError("Python task must execute a .py file")
+
+        elif self.operation == "pytest":
+            if len(command) < 3:
+                raise ValueError("pytest command incomplete")
+
+            if command[1:3] != ["-m", "pytest"]:
+                raise ValueError(
+                    "pytest must run through python -m pytest"
+                )
+
+        return self
