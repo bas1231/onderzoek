@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "experiments/bridge/e173.py"
+  ],
+  "exit_code": 1,
+  "finished_at": "2026-09-19T22:25:10.619589+00:00",
+  "hypothesis_id": "H7-SETTLEMENT-BOUNDARY",
+  "source_commit": "02b9e5e7a07a8be17c8b7d17748f4497384a6099",
+  "started_at": "2026-09-19T22:25:09.316282+00:00",
+  "status": "failed",
+  "stderr_sha256": "03ba18fa7d6c886ffeb95c5aa6ce93af46de756be45d0b381c84b477ed50daa9",
+  "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "task_class": "research",
+  "task_id": "TWC-PRIMARY-WEEK-PAYLOAD-E173"
+}
