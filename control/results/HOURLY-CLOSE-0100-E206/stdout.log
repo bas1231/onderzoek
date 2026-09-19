@@ -1,0 +1,25 @@
+{
+  "run_id": "hourly-20260920T010000+0200",
+  "decision": "NO_PROVEN_EDGE",
+  "status": "COMPLETED",
+  "surviving_candidates": 0,
+  "semantic_review_ref": "knowledge/runs/hourly-20260920T010000+0200-semantic-review.json",
+  "report_ref": "reports/hourly/hourly-20260920T010000+0200.md",
+  "h7_state": "NO_TEMPERATURE_REVISION_OBSERVED",
+  "h7_snapshot_count": 5,
+  "h7_temperature_changes": 0,
+  "e202_candidate_count": 0,
+  "commit": {
+    "rc": 0,
+    "stdout": "[main 6c7da54] research(hourly): close 01:00 semantic review\n 3 files changed, 252 insertions(+)\n create mode 100644 knowledge/runs/hourly-20260920T010000+0200-semantic-review.json\n create mode 100644 knowledge/runs/hourly-20260920T010000+0200.json\n create mode 100644 reports/hourly/hourly-20260920T010000+0200.md",
+    "stderr": ""
+  },
+  "push": {
+    "rc": 0,
+    "stdout": "",
+    "stderr": "To github.com:bas1231/onderzoek.git\n   b885648..6c7da54  HEAD -> main"
+  },
+  "live_trading": false,
+  "paid_actions": false,
+  "wallet_actions": false
+}
