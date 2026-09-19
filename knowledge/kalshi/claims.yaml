@@ -1,0 +1,320 @@
+schema_version: 1
+as_of: 2026-09-19
+economic_status: NO_PROVEN_EDGE
+records:
+  - id: KAL-UI-001
+    kind: fact
+    status: FACT_VERIFIED
+    claim: "Kalshi UI/category 'chance' values, search snippets and third-party mirrors mogen niet als executable prijs worden behandeld."
+    implication: "Alle economische tests moeten actuele bid/ask/L2 aan de juiste side gebruiken."
+    provenance:
+      - repo: bas1231/predictionbot
+        ref: main
+        path: onderzoek/KALSHI_COMPLEX_STRATEGY_HUNT_2026-09-19.md
+
+  - id: KAL-SEM-001
+    kind: negative_evidence
+    status: TESTED_NEGATIVE
+    claim: "Gelijke of bijna gelijke titel, settlementbron en einddatum bewijzen geen identieke payoff."
+    evidence: "BTC >100k families hadden verschillende startwindows/strike-semantiek; een vermeende duplicate-arb was daardoor geen identity."
+    agent_rule: "Measurement start/end, comparator, strike, source-transform en exceptions moeten in de canonical contract AST."
+    provenance:
+      - repo: bas1231/predictionbot
+        ref: main
+        path: onderzoek/KALSHI_COMPLEX_STRATEGY_HUNT_2026-09-19.md
+
+  - id: KAL-WX-001
+    kind: negative_evidence
+    status: TESTED_NEGATIVE
+    claim: "Kalshi hourly weather en daily high/low vormen niet automatisch een deterministic cross-market identity."
+    evidence: "De onderzochte hourly route gebruikte TWC, terwijl daily high/low NWS gebruikte."
+    implication: "Geen payout relation zonder exact dezelfde settlement source/transformation."
+    provenance:
+      - repo: bas1231/predictionbot
+        ref: main
+        path: onderzoek/KALSHI_COMPLEX_STRATEGY_HUNT_2026-09-19.md
+
+  - id: KAL-SOC-001
+    kind: negative_evidence
+    status: TESTED_NEGATIVE
+    claim: "De simpele regulation-time soccer HOME+DRAW+AWAY partition liet in een handmatige actuele spot-check geen goedkope basket zien."
+    evidence: "Minstens 12 examples; zichtbare YES basket circa 101-105 cent voor 100 cent payout vóór fees."
+    use: "No-arbitrage/control lane, niet als bewezen winststrategie."
+    provenance:
+      - repo: bas1231/market_algebra
+        ref: main
+        path: docs/NEGATIVE_EVIDENCE.md
+
+  - id: KAL-ALG-001
+    kind: hypothesis
+    status: STRUCTURAL_CANDIDATE
+    claim: "Team-total, game-total en spreadboeken hebben deterministische score-identiteiten die gegarandeerde-floor portfolios kunnen definiëren."
+    evidence: "Eerste handmatige voorbeelden waren sterk te duur; een 3-leg score-cover voorbeeld lag rond 152 cent vóór fees voor een 100-cent floor."
+    falsification:
+      - "Scan gelijktijdige executable tails met exacte integer/half-point arithmetic."
+      - "Kill indien geen net-positive cases na fees/depth op prospectieve corpus."
+    provenance:
+      - repo: bas1231/predictionbot
+        ref: main
+        path: onderzoek/KALSHI_COMPLEX_STRATEGY_HUNT_2026-09-19.md
+
+  - id: KAL-MVE-001
+    kind: hypothesis
+    status: STRUCTURAL_CANDIDATE
+    claim: "Voor AND-combo C=A∩B leveren subset/Frechet-relaties formele lower-bound portfolios op; potentiële mispricing moet tegen simultane MVE/primitive L2 worden getest."
+    examples:
+      - "YES(A)+NO(C) heeft minimum payout 1 als C subset A."
+      - "NO(A)+NO(B)+YES(C) heeft minimum payout 1."
+    blockers:
+      - "Simultane executable L2."
+      - "Fees/depth."
+      - "Exacte leg- en settlementsemantiek."
+    provenance:
+      - repo: bas1231/predictionbot
+        ref: main
+        path: onderzoek/KALSHI_COMPLEX_STRATEGY_HUNT_2026-09-19.md
+
+  - id: KAL-NEST-001
+    kind: observation
+    status: OBSERVED
+    claim: "Nested placement/qualifier relations zoals Winner⊂Top5⊂Top10 kunnen formele dominance-relaties opleveren, maar gecontroleerde actuele golf/SEC voorbeelden waren correct geordend en niet arbitrageerbaar."
+    provenance:
+      - repo: bas1231/predictionbot
+        ref: main
+        path: onderzoek/KALSHI_COMPLEX_STRATEGY_HUNT_2026-09-19.md
+
+  - id: KAL-DEADLINE-001
+    kind: hypothesis
+    status: STRUCTURAL_CANDIDATE
+    claim: "Voor dezelfde gebeurtenis met T1<T2 geldt E(T1)⊂E(T2); deadline-ladders kunnen daarom op executable dominance-crosses worden gescand."
+    evidence: "Historische Discord-snapshot gaf een circa 98-cent gross twee-leg floor-combinatie; niet live en waarschijnlijk fee-sensitive."
+    blocker: "Geen actuele execution proof."
+    provenance:
+      - repo: bas1231/predictionbot
+        ref: main
+        path: onderzoek/KALSHI_COMPLEX_STRATEGY_HUNT_2026-09-19.md
+
+  - id: KAL-TWC-001
+    kind: observation
+    status: RESEARCH_POSITIVE
+    claim: "TWC settlementbron exposeerde observeerbare no_report/preliminary/official states die fail-closed geclassificeerd konden worden."
+    details:
+      no_report: "data=null"
+      preliminary: "isOfficial=false"
+      official: "isOfficial=true met numerieke maxTemp en matching report date"
+    nonclaim: "Dit bewijst geen Source-Lock market edge."
+    provenance:
+      - repo: bas1231/proof-hunter
+        ref: ai/phase15-mecnet-discovery-watch-v0
+        path: LOGBOOK.md
+
+  - id: KAL-TWC-002
+    kind: fact
+    status: FACT_VERIFIED
+    claim: "Een ontbrekende betrouwbare TWC issueTime/publication timestamp betekent dat first-local-retrieval als conservatieve source_final_observed_at moet worden gebruikt."
+    provenance:
+      - repo: bas1231/proof-hunter
+        ref: ai/phase15-mecnet-discovery-watch-v0
+        path: LOGBOOK.md
+
+  - id: KAL-AST-001
+    kind: observation
+    status: RESEARCH_POSITIVE
+    claim: "Een echte KXHIGHNY event-instance kon uit structured-strike velden naar zes canonical predicates worden gecompileerd; alle 15 unordered pairs waren formeel DISJOINT."
+    details: "Vier between buckets plus lower/upper tail."
+    nonclaim: "Pairwise disjointness bewijst niet automatisch collective exhaustiveness of edge."
+    provenance:
+      - repo: bas1231/proof-hunter
+        ref: ai/phase15-mecnet-discovery-watch-v0
+        path: LOGBOOK.md
+
+  - id: KAL-DOMAIN-001
+    kind: negative_evidence
+    status: TESTED_NEGATIVE
+    claim: "De KXHIGHNY settlement-domain mocht niet veilig als uitsluitend gehele Fahrenheitwaarden worden gemodelleerd."
+    result: UNPROVEN_DISCRETE_DOMAIN
+    implication: "Geen integer-gap elimination zonder primaire source/domain proof."
+    provenance:
+      - repo: bas1231/proof-hunter
+        ref: ai/phase15-mecnet-discovery-watch-v0
+        path: LOGBOOK.md
+
+  - id: KAL-FLOOR-001
+    kind: negative_evidence
+    status: TESTED_NEGATIVE
+    claim: "De onderzochte KXHIGHNY six-NO standaard-settlement floor van $5 kon niet worden gepromoveerd tot een unconditional guaranteed pre-settlement payout."
+    blockers:
+      - "no-data / last-fair-price resolution"
+      - "Rule 7.1 Market Outcome Review"
+    result: UNPROVEN_UNCONDITIONAL_FLOOR
+    agent_rule: "Deze route is gesloten; exceptions niet post-hoc wegdefiniëren."
+    provenance:
+      - repo: bas1231/proof-hunter
+        ref: ai/phase15-mecnet-discovery-watch-v0
+        path: LOGBOOK.md
+      - repo: bas1231/proof-hunter
+        ref: ai/phase15-mecnet-discovery-watch-v0
+        path: experiments/PH-E012-pre-settlement-unconditional-floor-gate-v0.md
+
+  - id: KAL-MECNET-001
+    kind: observation
+    status: RESEARCH_POSITIVE
+    claim: "Voor de onderzochte KXHIGHNY event-instance werd eventmetadata met mutually_exclusive=true en literal collateral_return_type=MECNET vastgelegd."
+    nonclaim: "Niet generaliseren naar andere events zonder eigen eventmetadata."
+    provenance:
+      - repo: bas1231/proof-hunter
+        ref: ai/phase15-mecnet-discovery-watch-v0
+        path: PROJECT_STATUS.md
+
+  - id: KAL-MECNET-002
+    kind: fact
+    status: FACT_VERIFIED
+    claim: "Kalshi collateral return/netting verandert collateral/available-funds accounting van een hedged set, maar gedocumenteerde returned collateral is niet automatisch extra wealth."
+    implication: "Een $5 structural offset bij een six-NO MECNET set mag niet als $5 gratis/withdrawable cash of winst worden gemodelleerd."
+    provenance:
+      - repo: bas1231/predictionbot
+        ref: main
+        path: onderzoek/STATE_DEPENDENT_CONVERSION_GRAPH_RESEARCH_2026-09-19.md
+      - repo: bas1231/proof-hunter
+        ref: ai/phase15-mecnet-discovery-watch-v0
+        path: PROJECT_STATUS.md
+
+  - id: KAL-MECNET-003
+    kind: observation
+    status: RESEARCH_POSITIVE
+    claim: "Een authenticated GET-only proof gate kon voor een specifieke untouched event/subaccount toestand aantonen dat netting enabled was en geen voorafgaande event-order werd gevonden."
+    nonclaim: "Geen pricing edge, geen order en geen bewijs van post-fill collateral surplus."
+    privacy: "Accountdetails en private evidence-locaties zijn bewust niet naar deze publieke knowledge repo gekopieerd."
+    provenance:
+      - repo: bas1231/proof-hunter
+        ref: ai/phase15-mecnet-discovery-watch-v0
+        path: PROJECT_STATUS.md
+      - repo: bas1231/proof-hunter
+        ref: ai/phase15-mecnet-discovery-watch-v0
+        path: experiments/PH-E015-account-netting-lock-v0.md
+
+  - id: KAL-MECNET-004
+    kind: hypothesis
+    status: STRUCTURAL_CANDIDATE
+    claim: "Een six-NO MECNET basket moet alleen als pricing candidate gelden als alle zes legs contemporaneously executable zijn en de conservatieve all-in debit bound onder de structural offset ligt."
+    required_data:
+      - "fresh account/event-lock recheck"
+      - "fresh series/event metadata"
+      - "single batch six-market L2"
+      - "at least target depth on every leg"
+      - "exact fee provenance"
+      - "conservative rounding/fragmentation bound"
+    blockers_after_positive_snapshot:
+      - "non-atomic six-leg sequencing"
+      - "partial fill / book movement"
+      - "actual post-fill collateral accounting"
+      - "repeatability"
+    provenance:
+      - repo: bas1231/proof-hunter
+        ref: ai/phase15-mecnet-discovery-watch-v0
+        path: experiments/PH-E016-executable-six-leg-pricing-v0.md
+
+  - id: KAL-LIVE-001
+    kind: observation
+    status: RESEARCH_POSITIVE
+    claim: "Historische state-lock replay na TEAMTOTAL mapping-fix behield 718/718 MATCH TOTAL en 19/19 geldige TEAMTOTAL observations, verwijderde 103/103 valse TEAMTOTAL observations en behield 6/6 eerder surviving executable MATCH TOTAL observations."
+    nonclaim: "Valideert attribution voor de geteste fixtures; geen settlement finality of profitability proof."
+    provenance:
+      - repo: bas1231/proof-hunter
+        ref: main
+        path: STATE_LOCK_EXECUTION_RESEARCH_2026-09-19.md
+
+  - id: KAL-LIVE-002
+    kind: fact
+    status: FACT_VERIFIED
+    claim: "Een live sportscore die een threshold kruist is niet generiek monotone-final door sport-specifieke VAR/replay/challenge windows."
+    proof_ladder:
+      - RAW_SCORE_CROSSED
+      - SPORT_FINALITY_PROVED
+      - CONTRACT_SETTLEMENT_PROVED
+      - EXECUTABLE_NET_POSITIVE
+    implication: "Geen sport erft finality-regels van een andere sport."
+    provenance:
+      - repo: bas1231/proof-hunter
+        ref: main
+        path: STATE_LOCK_EXECUTION_RESEARCH_2026-09-19.md
+
+  - id: KAL-LIVE-003
+    kind: observation
+    status: NO_PROVEN_EDGE
+    claim: "Een prospectieve Live Watcher census vond 42 confirmations over 20 unieke milestones; 3 hadden een positieve net_lower_bound, maar alle 3 eindigden op SETTLEMENT_UNPROVEN."
+    implication: "Settlement/finality was de blocker; positieve gross/net-pricing alleen is onvoldoende."
+    provenance:
+      - repo: bas1231/live_watcher
+        ref: main
+        path: docs/LW0017_SETTLEMENT_BOTTLENECK.md
+
+  - id: KAL-LIVE-004
+    kind: negative_evidence
+    status: TESTED_NEGATIVE
+    claim: "Pre-LW0015/LW0017 captures missen genoeg contemporaneous lifecycle/finality detail om die execution context achteraf betrouwbaar te reconstrueren."
+    agent_rule: "Geen look-ahead reconstructie; label legacy detail als unavailable/unproven."
+    provenance:
+      - repo: bas1231/live_watcher
+        ref: main
+        path: docs/LW0015_VALIDATION_2026-09-19.md
+      - repo: bas1231/live_watcher
+        ref: main
+        path: docs/LW0017_SETTLEMENT_BOTTLENECK.md
+
+  - id: KAL-LIVE-005
+    kind: experiment_rule
+    status: FACT_VERIFIED
+    claim: "Soccer state-lock V1 is vooraf voorzien van een killregel: na 100 onafhankelijke proven-lock episodes zonder volledig geldige positieve episode wordt de hypothese gedood."
+    positive_episode_requires:
+      - "mathematical state lock"
+      - "current settlement/rules/finality proof"
+      - "current executable L2 + size"
+      - "applicable fees"
+      - "conservative net-edge lower bound > 0"
+      - "positive state observed prospectively for at least 2 seconds without evidence gap"
+    provenance:
+      - repo: bas1231/live_watcher
+        ref: main
+        path: docs/KILL_CHECK_2026-09-18.md
+
+  - id: KAL-EXEC-001
+    kind: fact
+    status: FACT_VERIFIED
+    claim: "Full L2/sequence integrity is required for execution-realistic research; a sequence gap invalidates local book state until a fresh snapshot."
+    non_evidence:
+      - midpoint
+      - last_trade
+      - candle
+      - stale_UI
+    provenance:
+      - repo: bas1231/proof-hunter
+        ref: main
+        path: STATE_LOCK_EXECUTION_RESEARCH_2026-09-19.md
+
+  - id: KAL-EXEC-002
+    kind: fact
+    status: FACT_VERIFIED
+    claim: "Fees, fill fragmentation, depth, shard/account state, partial fills and latency can eliminate small gross crosses and moeten vóór economic promotion worden gemodelleerd."
+    provenance:
+      - repo: bas1231/predictionbot
+        ref: main
+        path: onderzoek/KALSHI_COMPLEX_STRATEGY_HUNT_2026-09-19.md
+      - repo: bas1231/proof-hunter
+        ref: main
+        path: STATE_LOCK_EXECUTION_RESEARCH_2026-09-19.md
+
+  - id: KAL-JOINT-001
+    kind: hypothesis
+    status: HYPOTHESIS_UNTESTED
+    claim: "Dynamische logit jump-diffusion + covariance/tail dependence kan mogelijk joint probabilities van combos beter kalibreren dan independence/static-correlation baselines en de actuele combo market."
+    success_requires:
+      - "out-of-sample probability improvement"
+      - "improvement versus executable market price"
+      - "fees/depth-surviving discrepancy"
+      - "untouched holdout"
+      - "prospective shadow"
+    provenance:
+      - repo: bas1231/predictionbot
+        ref: main
+        path: onderzoek/PREDICTION_MARKET_NEW_MATH_RESEARCH_2026-09-19.md
