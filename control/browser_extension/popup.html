@@ -1,0 +1,63 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Prediction Research Bridge</title>
+  <style>
+    body {
+      font-family: system-ui, sans-serif;
+      width: 330px;
+      padding: 14px;
+    }
+
+    h3 {
+      margin-top: 0;
+    }
+
+    input {
+      width: 100%;
+      box-sizing: border-box;
+      margin: 6px 0 10px 0;
+    }
+
+    button {
+      width: 100%;
+      margin-top: 7px;
+      padding: 7px;
+    }
+
+    #status {
+      white-space: pre-wrap;
+      margin-top: 12px;
+      font-size: 12px;
+    }
+
+    .small {
+      font-size: 11px;
+      opacity: 0.75;
+    }
+  </style>
+</head>
+<body>
+
+<h3>Prediction Research Bridge</h3>
+
+<label for="token">Local bridge token</label>
+<input id="token" type="password" autocomplete="off">
+
+<button id="save">Save token</button>
+<button id="arm">Arm this ChatGPT conversation</button>
+<button id="disarm">Disarm</button>
+<button id="health">Check local bridge</button>
+
+<div id="status"></div>
+
+<p class="small">
+Only the explicitly armed ChatGPT conversation is allowed
+to submit tasks automatically.
+</p>
+
+<script src="popup.js"></script>
+
+</body>
+</html>

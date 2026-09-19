@@ -1,0 +1,32 @@
+{
+  "manifest_version": 3,
+  "name": "Prediction Research Bridge",
+  "version": "0.1.0",
+  "description": "Local no-API bridge between ChatGPT and Prediction Research WSL control plane.",
+  "permissions": [
+    "storage",
+    "tabs"
+  ],
+  "host_permissions": [
+    "http://127.0.0.1:8765/*"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_title": "Prediction Research Bridge",
+    "default_popup": "popup.html"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "https://chatgpt.com/*",
+        "https://chat.openai.com/*"
+      ],
+      "js": [
+        "content.js"
+      ],
+      "run_at": "document_idle"
+    }
+  ]
+}
