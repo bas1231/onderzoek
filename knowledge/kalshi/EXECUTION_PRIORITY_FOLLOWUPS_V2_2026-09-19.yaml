@@ -1,0 +1,114 @@
+schema_version: 1
+as_of: 2026-09-19
+economic_status: NO_PROVEN_EDGE
+purpose: >-
+  Prioriteer prospectief onderzoek op werkelijk lockbare cashflows voor retail/Starlink-infrastructuur,
+  niet op midpoint-anomalies. Volgorde is gebaseerd op formele sterkte, aantal legs, fee/capital efficiency
+  en huidige blockers; zij is geen claim dat een lane winstgevend is.
+
+priorities:
+  - priority: 1
+    id: KAL-INDEX-DOM-001
+    lane: index_range_threshold_two_leg_dominance
+    status: STRUCTURAL_CANDIDATE
+    thesis: >-
+      Voor dezelfde S&P/Nasdaq settlement key kan een range R een subset zijn van een lower-threshold A.
+      Dan geldt YES(A)+NO(R)>=1 zonder exacte range-synthese of volledige upper-bound precision proof.
+    why_now:
+      - slechts twee legs
+      - korte daily/intraday capital lock
+      - gepubliceerd lager S&P/Nasdaq fee-regime
+      - relation search past goed op lokale i9
+      - precision blocker van exacte threshold-range identity wordt deels omzeild
+    required_next_gate:
+      - bind concrete rules/source/timestamp/comparator per pair
+      - prospectieve simultaneous L2 + size capture
+      - actuele fee provenance
+      - exact rounded fees + slippage + legging
+      - opportunity lifetime versus retail/Starlink latency
+    kill_if:
+      - geen fee-net positive pairs in voldoende prospectieve corpus
+      - positive states systematisch te kort voor conservatieve retail execution
+      - onvoldoende depth/materiality
+    related_files:
+      - knowledge/kalshi/INDEX_RANGE_THRESHOLD_DOMINANCE_2026-09-19.md
+      - knowledge/kalshi/SHORT_HORIZON_REDUCED_FEE_INDEX_ALGEBRA_2026-09-19.md
+
+  - priority: 2
+    id: KAL-FEE-WATCH-001
+    lane: dynamic_fee_regime_revaluation
+    status: STRUCTURAL_CANDIDATE
+    thesis: >-
+      Bestaande payout identities kunnen economisch van teken veranderen wanneer fee multiplier,
+      override of waiver wijzigt, zelfs zonder prijswijziging.
+    why_now:
+      - fee changes/overrides zijn machineleesbaar
+      - veel gross candidates zitten slechts 1-5c van zero
+      - zeer goedkoop om lokaal alle bestaande identities opnieuw te waarderen
+    required_next_gate:
+      - ingest series/event fee-change feeds
+      - point-in-time fee binding op iedere candidate
+      - prospectief log candidates voor/na fee-state changes
+    related_files:
+      - knowledge/kalshi/EXECUTION_FEE_REGIME_AND_MAKER_TRIGGER_2026-09-19.md
+
+  - priority: 3
+    id: KAL-MAKER-COMPLETE-001
+    lane: maker_trigger_bounded_completion
+    status: STRUCTURAL_CANDIDATE
+    thesis: >-
+      Een passieve makerfill op één leg kan de fee-hurdle reduceren; resterende legs worden alleen
+      gecompleteerd als verse L2 binnen een harde cost ceiling nog een positieve payout-floor geeft.
+    why_now:
+      - vermijdt volledige all-taker fee op de triggerleg
+      - queue/fills zijn meetbaar
+      - potentieel geschikter voor retail dan pure taker race
+    required_next_gate:
+      - shadow queue/fill recorder
+      - 100ms/250ms/500ms/1s/2s completion survivability
+      - adverse-selection markout na makerfill
+      - partial-fill exposure accounting
+    kill_if:
+      - completion verdwijnt meestal vóór conservatieve Starlink-latency
+      - maker fills zijn sterk adverse-selected
+      - expected legging loss > fee/spread saving
+    related_files:
+      - knowledge/kalshi/EXECUTION_FEE_REGIME_AND_MAKER_TRIGGER_2026-09-19.md
+
+  - priority: 4
+    id: KAL-INDEX-XREP-001
+    lane: exact_index_threshold_range_cross_representation
+    status: STRUCTURAL_CANDIDATE
+    thesis: >-
+      Range payoff kan exact uit twee thresholds volgen wanneer source, timestamp, comparators en
+      settlement-domain/boundaries formeel exact aansluiten.
+    blocker: DOMAIN_UNPROVEN
+    required_next_gate:
+      - bind authoritative Kalshi expiration-value precision/domain
+      - prove no boundary gaps/overlaps
+      - only then activate 3-leg identity execution scan
+    related_files:
+      - knowledge/kalshi/INDEX_THRESHOLD_RANGE_CROSS_REPRESENTATION_2026-09-19.md
+
+  - priority: 5
+    id: KAL-FEE-ROUND-001
+    lane: fee_rounding_viable_quantity_gate
+    status: RESEARCH_POSITIVE
+    thesis: >-
+      Exact fee rounding and fill fragmentation define a quantity-dependent minimum gross edge;
+      small gross crosses must be filtered before expensive downstream validation.
+    required_next_gate:
+      - fee calculation per actual fill shard
+      - learn prospective fragmentation distribution
+      - compute minimum_quantity_for_positive_net_edge and max_quantity_before_slippage
+    related_files:
+      - knowledge/kalshi/FEE_ROUNDING_MINIMUM_VIABLE_EDGE_2026-09-19.md
+
+agent_rules:
+  - never promote UI Chance, midpoint, last trade or stale web card to execution evidence
+  - bind rules and fee state point-in-time
+  - prefer two-leg deterministic floors over many-leg baskets when economics are comparable
+  - require material absolute locked dollars and capital-time return, not merely edge_per_contract_gt_zero
+  - record negative and near-miss observations
+  - three-angle check before important conclusions
+  - overall status remains NO_PROVEN_EDGE until prospective execution gates pass
