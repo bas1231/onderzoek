@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "experiments/bridge/e219.py"
+  ],
+  "exit_code": 1,
+  "finished_at": "2026-09-19T23:28:32.108590+00:00",
+  "hypothesis_id": "H7-SETTLEMENT-BOUNDARY",
+  "source_commit": "6875631ad210cae5ea3c2fc80c09bf3aa8c84857",
+  "started_at": "2026-09-19T23:28:32.098280+00:00",
+  "status": "failed",
+  "stderr_sha256": "051da242dbd791e92f30da0eef52ff62b75b7c20b42da7b357a0eccb445cfc35",
+  "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "task_class": "research",
+  "task_id": "KALSHI-WEATHER-INDEX-DEGRADED-E219"
+}
