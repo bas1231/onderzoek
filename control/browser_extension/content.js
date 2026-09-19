@@ -22,15 +22,39 @@
     return `${location.origin}${location.pathname}`;
   }
 
+  function projectKeyFromCurrentUrl() {
+    const match = location.pathname.match(
+      /^\\/g\\/(g-p-[^/]+)\\//
+    );
+
+    return match ? match[1] : "";
+  }
+
   async function isArmed() {
     const stored = await chrome.storage.local.get([
-      "armedUrl"
+      "armedUrl",
+      "armedProjectKey"
     ]);
 
-    return (
+    if (
       stored.armedUrl &&
       stored.armedUrl === normalizedCurrentUrl()
-    );
+    ) {
+      return true;
+    }
+
+    const currentProjectKey =
+      projectKeyFromCurrentUrl();
+
+    if (
+      currentProjectKey &&
+      stored.armedProjectKey &&
+      currentProjectKey === stored.armedProjectKey
+    ) {
+      return true;
+    }
+
+    return false;
   }
 
   async function bridgeFetch(

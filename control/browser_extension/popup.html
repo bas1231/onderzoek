@@ -6,7 +6,7 @@
   <style>
     body {
       font-family: system-ui, sans-serif;
-      width: 330px;
+      width: 350px;
       padding: 14px;
     }
 
@@ -36,6 +36,10 @@
       font-size: 11px;
       opacity: 0.75;
     }
+
+    .primary {
+      font-weight: 700;
+    }
   </style>
 </head>
 <body>
@@ -46,15 +50,32 @@
 <input id="token" type="password" autocomplete="off">
 
 <button id="save">Save token</button>
-<button id="arm">Arm this ChatGPT conversation</button>
-<button id="disarm">Disarm</button>
-<button id="health">Check local bridge</button>
+
+<button id="armProject" class="primary">
+  Always arm chats in this project
+</button>
+
+<button id="armChat">
+  Arm only this chat
+</button>
+
+<button id="disableProject">
+  Disable project auto-arm
+</button>
+
+<button id="disarm">
+  Disarm everything
+</button>
+
+<button id="health">
+  Check local bridge
+</button>
 
 <div id="status"></div>
 
 <p class="small">
-Only the explicitly armed ChatGPT conversation is allowed
-to submit tasks automatically.
+Project auto-arm applies only to chats whose ChatGPT project ID
+matches the project armed here.
 </p>
 
 <script src="popup.js"></script>

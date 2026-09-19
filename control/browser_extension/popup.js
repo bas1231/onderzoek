@@ -1,6 +1,7 @@
 const tokenInput = document.getElementById("token");
 const statusBox = document.getElementById("status");
 
+
 function normalizedChatUrl(rawUrl) {
   try {
     const url = new URL(rawUrl);
@@ -9,6 +10,23 @@ function normalizedChatUrl(rawUrl) {
     return "";
   }
 }
+
+
+function projectKeyFromUrl(rawUrl) {
+  try {
+    const url = new URL(rawUrl);
+
+    const match = url.pathname.match(
+      /^\/g\/(g-p-[^/]+)\//
+    );
+
+    return match ? match[1] : "";
+
+  } catch {
+    return "";
+  }
+}
+
 
 async function activeTab() {
   const tabs = await chrome.tabs.query({
@@ -19,23 +37,46 @@ async function activeTab() {
   return tabs[0];
 }
 
-async function showState() {
+
+async function showState(message = "") {
   const stored = await chrome.storage.local.get([
     "bridgeToken",
-    "armedUrl"
+    "armedUrl",
+    "armedProjectKey"
   ]);
 
   if (stored.bridgeToken) {
     tokenInput.value = stored.bridgeToken;
   }
 
-  if (stored.armedUrl) {
-    statusBox.textContent =
-      `ARMED:\n${stored.armedUrl}`;
-  } else {
-    statusBox.textContent = "Not armed.";
+  const lines = [];
+
+  if (message) {
+    lines.push(message);
+    lines.push("");
   }
+
+  if (stored.armedProjectKey) {
+    lines.push(
+      `PROJECT AUTO-ARM:\n${stored.armedProjectKey}`
+    );
+  } else {
+    lines.push("PROJECT AUTO-ARM: disabled");
+  }
+
+  lines.push("");
+
+  if (stored.armedUrl) {
+    lines.push(
+      `EXACT CHAT:\n${stored.armedUrl}`
+    );
+  } else {
+    lines.push("EXACT CHAT: none");
+  }
+
+  statusBox.textContent = lines.join("\n");
 }
+
 
 document.getElementById("save").addEventListener(
   "click",
@@ -46,23 +87,64 @@ document.getElementById("save").addEventListener(
       bridgeToken: token
     });
 
-    statusBox.textContent = "Token saved locally.";
+    await showState("Token saved locally.");
   }
 );
 
-document.getElementById("arm").addEventListener(
+
+document.getElementById("armProject").addEventListener(
   "click",
   async () => {
     const tab = await activeTab();
 
-    const url = normalizedChatUrl(tab.url || "");
+    const projectKey = projectKeyFromUrl(
+      tab.url || ""
+    );
+
+    if (!projectKey) {
+      statusBox.textContent =
+        "Deze pagina lijkt niet binnen een ChatGPT-project te staan.";
+      return;
+    }
+
+    const token = tokenInput.value.trim();
+
+    if (token) {
+      await chrome.storage.local.set({
+        bridgeToken: token
+      });
+    }
+
+    await chrome.storage.local.set({
+      armedProjectKey: projectKey
+    });
+
+    await chrome.storage.local.remove(
+      "armedUrl"
+    );
+
+    await showState(
+      "Project auto-arm ingeschakeld."
+    );
+  }
+);
+
+
+document.getElementById("armChat").addEventListener(
+  "click",
+  async () => {
+    const tab = await activeTab();
+
+    const url = normalizedChatUrl(
+      tab.url || ""
+    );
 
     if (
       !url.startsWith("https://chatgpt.com/") &&
       !url.startsWith("https://chat.openai.com/")
     ) {
       statusBox.textContent =
-        "Open the intended ChatGPT conversation first.";
+        "Open eerst de bedoelde ChatGPT-chat.";
       return;
     }
 
@@ -78,18 +160,41 @@ document.getElementById("arm").addEventListener(
       armedUrl: url
     });
 
-    statusBox.textContent =
-      `ARMED:\n${url}`;
+    await showState(
+      "Alleen deze chat is armed."
+    );
   }
 );
+
+
+document.getElementById("disableProject").addEventListener(
+  "click",
+  async () => {
+    await chrome.storage.local.remove(
+      "armedProjectKey"
+    );
+
+    await showState(
+      "Project auto-arm uitgeschakeld."
+    );
+  }
+);
+
 
 document.getElementById("disarm").addEventListener(
   "click",
   async () => {
-    await chrome.storage.local.remove("armedUrl");
-    statusBox.textContent = "Disarmed.";
+    await chrome.storage.local.remove([
+      "armedUrl",
+      "armedProjectKey"
+    ]);
+
+    await showState(
+      "Alles disarmed."
+    );
   }
 );
+
 
 document.getElementById("health").addEventListener(
   "click",
@@ -100,7 +205,7 @@ document.getElementById("health").addEventListener(
         method: "GET",
         path: "/health"
       },
-      (response) => {
+      async (response) => {
         if (chrome.runtime.lastError) {
           statusBox.textContent =
             chrome.runtime.lastError.message;
@@ -108,10 +213,15 @@ document.getElementById("health").addEventListener(
         }
 
         statusBox.textContent =
-          JSON.stringify(response, null, 2);
+          JSON.stringify(
+            response,
+            null,
+            2
+          );
       }
     );
   }
 );
+
 
 showState();
