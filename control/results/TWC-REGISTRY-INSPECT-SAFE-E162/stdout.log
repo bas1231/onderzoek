@@ -1,0 +1,24 @@
+{
+  "items": [
+    {
+      "path": "control/hourly/source_sweep.py",
+      "bytes": 2167,
+      "preview": "from pathlib import Path\nfrom datetime import datetime, timezone\nfrom concurrent.futures import ThreadPoolExecutor, as_completed\nimport importlib.util\nimport json\n\nROOT = Path.cwd()\nOUT = ROOT / \"knowledge/runs/source_sweeps\"\n\ndef load(name, path):\n    spec = importlib.util.spec_from_file_location(name, path)\n    mod = importlib.util.module_from_spec(spec)\n    spec.loader.exec_module(mod)\n    return mod\n\ncollector = load(\"collector\", ROOT / \"control/hourly/collector.py\")\nchange = load(\"change_detection\", ROOT / \"control/hourly/change_detection.py\")\n\ndef one(source):\n    try:\n        body, headers, status = collector.fetch(source)\n        manifest = collector.archive(source, body, headers, status)\n        classification = change.classify(source[\"id\"])\n        return {\"source_id\":source[\"id\"],\"ok\":True,\"http_status\":status,\"bytes\":len(body),\"sha256\":manifest[\"sha256\"],\"classification\":classification.get(\"status\"),\"manifest\":classification.get(\"manifest\")}\n    except Exception as exc:\n        return {\"source_id\":source[\"id\"],\"ok\":False,\"error\":type(exc).__name__ + \": \" + str(exc)[:500]}\n\ndef sweep(max_workers=4):\n    started = datetime.now(timezone.utc)\n    sources = collector.load_sources()\n    results = []\n    with ThreadPoolExecutor(max_workers=max_workers) as pool:\n        futures = {pool.submit(one, s): s[\"id\"] for s in sources}\n        for future in as_completed(futures):\n            results.append(future.result())\n    results.sort(key=lambda x: x[\"source_id\"])\n    finished = datetime.now(timezone.utc)\n    data = {\"started_at\":started.isoformat(),\"finished_at\":finished.isoformat(),\"source_count\":len(sources),\"success_count\":sum(1 for r in results if r[\"ok\"]),\"failure_count\":sum(1 for r in results if not r[\"ok\"]),\"results\":results,\"paid_actions\":False,\"live_trading\":False,\"wallet_actions\":False}\n    OUT.mkdir(parents=True, exist_ok=True)\n    path = OUT / (started.strftime(\"%Y%m%dT%H%M%SZ\") + \".json\")\n    path.write_text(json.dumps(data, indent=2, sort_keys=True) + chr(10))\n    return path, data\n\nif __name__ == \"__main__\":\n    print(json.dumps({\"ok\":True,\"sources\":len(collector.load_sources()),\"max_workers\":4}, sort_keys=True))\n"
+    },
+    {
+      "path": "control/hourly/source_registry.py",
+      "bytes": 685,
+      "preview": "from pathlib import Path\nimport json\n\nROOT = Path.cwd()\nREGISTRY = ROOT / \"knowledge/sources/registry.json\"\n\ndef load_registry():\n    data = json.loads(REGISTRY.read_text())\n    seen = set()\n    for source in data.get(\"sources\", []):\n        sid = source.get(\"id\")\n        if not sid: raise RuntimeError(\"missing source id\")\n        if sid in seen: raise RuntimeError(\"duplicate source id: \" + sid)\n        seen.add(sid)\n        if source.get(\"cost_class\") != \"free_public\": raise RuntimeError(\"non-free source blocked: \" + sid)\n    return data\n\nif __name__ == \"__main__\":\n    data = load_registry()\n    print(json.dumps({\"ok\": True, \"sources\": len(data[\"sources\"])}, sort_keys=True))\n"
+    },
+    {
+      "path": "control/lifecycle/SOURCE-REGISTRY-E084.json",
+      "bytes": 855,
+      "preview": "{\n  \"created_at\": 1789850175.1691535,\n  \"history\": [\n    {\n      \"at\": 1789850175.1691556,\n      \"detail\": \"browser discovered task marker\",\n      \"state\": \"DISCOVERED\"\n    },\n    {\n      \"at\": 1789850177.361569,\n      \"detail\": \"bridge enqueue accepted\",\n      \"state\": \"ACCEPTED\"\n    },\n    {\n      \"at\": 1789850178.3580103,\n      \"detail\": \"executor claimed pending task\",\n      \"state\": \"RUNNING\"\n    },\n    {\n      \"at\": 1789850180.6813476,\n      \"detail\": \"executor finished task\",\n      \"state\": \"COMPLETED\"\n    },\n    {\n      \"at\": 1789850183.1121879,\n      \"detail\": \"bridge outbox exposed result\",\n      \"state\": \"DELIVERED\"\n    },\n    {\n      \"at\": 1789850186.0191858,\n      \"detail\": \"browser acknowledged result\",\n      \"state\": \"ACKED\"\n    }\n  ],\n  \"state\": \"ACKED\",\n  \"task_id\": \"SOURCE-REGISTRY-E084\",\n  \"updated_at\": 1789850186.0191858\n}\n"
+    },
+    {
+      "path": "control/tasks/completed/SOURCE-REGISTRY-E084.json",
+      "bytes": 304,
+      "preview": "{\n  \"command\": [\n    \".venv/bin/python\",\n    \"experiments/bridge/e084.py\"\n  ],\n  \"hypothesis_id\": \"CONTROL-AUTONOMOUS-RESEARCH\",\n  \"live_trading\": false,\n  \"operation\": \"python\",\n  \"task_class\": \"infrastructure\",\n  \"task_id\": \"SOURCE-REGISTRY-E084\",\n  \"timeout_seconds\": 45,\n  \"working_directory\": \".\"\n}\n"
+    }
+  ]
+}
