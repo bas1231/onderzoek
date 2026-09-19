@@ -1,0 +1,224 @@
+=== control/browser_extension/content.js ===
+243:         document.body &&
+244:         !nodes.includes(document.body)
+245:       ) {
+246:         nodes.push(document.body);
+247:       }
+248: 
+249:       for (const node of nodes) {
+250:         const text =
+251:             node.textContent ||
+252:             node.innerText ||
+253:             "";
+254: 
+255:         for (
+256:           const block of extractTaskBlocks(text)
+257:         ) {
+258:           let envelope;
+259: 
+260:           try {
+261:               envelope = JSON.parse(block);
+262:             } catch (error) {
+263:               console.error(
+264:                 "[Prediction Bridge] TASK_PARSE_FAILURE",
+265:                 {
+266:                   error: String(error),
+267:                   bytes: block.length,
+268:                   preview: block.slice(0, 250)
+269:                 }
+270:               );
+271: 
+272:               try {
+273:                 const stored =
+274:                   await chrome.storage.local.get([
+275:                     "bridgeParseFailures"
+276:                   ]);
+277: 
+278:                 const failures =
+279:                   Array.isArray(stored.bridgeParseFailures)
+280:                     ? stored.bridgeParseFailures
+281:                     : [];
+282: 
+283:                 failures.push({
+284:                   at: Date.now(),
+285:                   error: String(error),
+286:                   bytes: block.length,
+287:                   preview: block.slice(0, 250)
+288:                 });
+289: 
+290:                 while (failures.length > 50) {
+291:                   failures.shift();
+292:                 }
+293: 
+294:                 await chrome.storage.local.set({
+295:                   bridgeParseFailures: failures
+296:                 });
+297:               } catch (storageError) {
+298:                 console.error(
+299:                   "[Prediction Bridge] parse-error persistence failed",
+300:                   storageError
+301:                 );
+302:               }
+303: 
+304:               continue;
+305:             }
+306: 
+307:           const taskId =
+308:             envelope &&
+309:             envelope.task &&
+310:             envelope.task.task_id;
+311: 
+312:           if (!taskId) {
+313:             continue;
+314:           }
+315: 
+316:           if (
+317:             processed.has(taskId) ||
+318:             inFlightTaskIds.has(taskId)
+319:           ) {
+320:             continue;
+321:           }
+322: 
+323:           inFlightTaskIds.add(taskId);
+324: 
+325:           try {
+326:             console.log(
+327:               "[Prediction Bridge] task discovered:",
+328:               taskId
+329:             );
+330: 
+331:             await persistDurableEnvelope(
+332:                 taskId,
+333:                 envelope
+334:               );
+335: 
+336:               const discoverResponse =
+337:                 await bridgeFetch(
+338:                   "/discover",
+339:                   "POST",
+340:                   {
+341:                     task_id: taskId
+342:                   }
+343:                 );
+344: 
+345:               if (
+346:                 !discoverResponse ||
+347:                 !discoverResponse.ok
+348:               ) {
+349:                 console.warn(
+350:                   "[Prediction Bridge] discover rejected:",
+351:                   taskId,
+352:                   discoverResponse
+353:                 );
+354: 
+355:                 continue;
+=== control/browser_bridge.py ===
+717: 
+718:             stdout_file = result_dir / "stdout.log"
+719:             stderr_file = result_dir / "stderr.log"
+720: 
+721:             self.send_json(
+722:                 200,
+723:                 {
+724:                     "task_id": task_id,
+725:                     "result": result,
+726:                     "stdout": (
+727:                         stdout_file.read_text(
+728:                             errors="replace"
+729:                         )[:12000]
+730:                         if stdout_file.exists()
+731:                         else ""
+732:                     ),
+733:                     "stderr": (
+734:                         stderr_file.read_text(
+735:                             errors="replace"
+736:                         )[:12000]
+737:                         if stderr_file.exists()
+738:                         else ""
+739:                     ),
+740:                     "git_head": git(
+741:                         "rev-parse",
+742:                         "--short",
+743:                         "HEAD",
+744:                     ).stdout.strip(),
+745:                 },
+746:             )
+747:             return
+748: 
+749:         self.send_json(404, {"error": "not found"})
+750: 
+751:     def do_POST(self):
+752:         path = urlparse(self.path).path
+753: 
+754:         if not self.authorized():
+755:             self.send_json(401, {"error": "unauthorized"})
+756:             return
+757: 
+758:         try:
+759:             payload = self.read_json()
+760: 
+761:             with LOCK:
+762:                 if path == "/discover":
+763:                     task_id = str(
+764:                         payload.get("task_id", "")
+765:                     )
+766: 
+767:                     result = discover(task_id)
+768: 
+769:                     self.send_json(
+770:                         200 if result.get("ok") else 400,
+771:                         result,
+772:                     )
+773:                     return
+774: 
+775:                 if path == "/enqueue":
+776:                     envelope = BridgeEnvelope.model_validate(payload)
+777:                     result = enqueue(envelope)
+778: 
+779:                     self.send_json(
+780:                         200 if result.get("ok") else 409,
+781:                         result,
+782:                     )
+783:                     return
+784: 
+785:                 if path == "/ack":
+786:                     task_id = str(payload.get("task_id", ""))
+787:                     result = acknowledge(task_id)
+788: 
+789:                     self.send_json(
+790:                         200 if result.get("ok") else 404,
+791:                         result,
+792:                     )
+793:                     return
+794: 
+795:             self.send_json(404, {"error": "not found"})
+796: 
+797:         except Exception as exc:
+798:             self.send_json(
+799:                 400,
+800:                 {
+801:                     "error": type(exc).__name__,
+802:                     "detail": str(exc),
+803:                 },
+804:             )
+805: 
+806: 
+807: def main():
+808:     print(
+809:         f"Prediction Research Browser Bridge listening "
+810:         f"on http://{HOST}:{PORT}"
+811:     )
+812: 
+813:     server = ThreadingHTTPServer(
+814:         (HOST, PORT),
+815:         Handler,
+816:     )
+817: 
+818:     try:
+819:         server.serve_forever()
+820:     except KeyboardInterrupt:
+821:         print("Bridge stopping.")
+822: 
+823: 
+824: if __name__ == "__main__":
+825:     main()
