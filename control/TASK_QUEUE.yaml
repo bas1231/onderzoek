@@ -1,6 +1,10 @@
 schema_version: 1
 as_of: 2026-09-19
-queue_status: ACTIVE
+queue_status: PAUSED_BY_USER
+pause:
+  requested_at: 2026-09-19T17:45:00+02:00
+  reason: "User requested: write current state to Git and stop prediction-market research."
+  resume_condition: "Only resume when the user explicitly restarts prediction-market research."
 tasks:
   - id: TASK-WX-000
     candidate: KAL-WX-INDEX-001
@@ -156,3 +160,12 @@ tasks:
     priority: P3
     status: WATCH_ONLY
     objective: "Only surface exact-equivalent slow-market gaps with synchronized executable evidence; generic sports arb is deprioritized."
+
+  - id: TASK-YT-001
+    candidate: YOUTUBE_SCOUT
+    assigned_role: SCOUT
+    priority: P2
+    status: PAUSED
+    objective: "Use public YouTube metadata/captions/transcripts as a discovery layer for prediction-market mechanisms and practical execution intelligence, then verify claims independently before promotion."
+    methodology: methodology/YOUTUBE_SCOUT.md
+    resume_condition: "Explicit user instruction to resume prediction-market research."
