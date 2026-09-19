@@ -1,0 +1,27 @@
+{
+  "artifact": "knowledge/runs/twc-revision-summary-latest.json",
+  "created_at": "2026-09-19T22:54:58.586323+00:00",
+  "event_manifest_count": 0,
+  "event_manifests": [],
+  "first_snapshot_retrieved_at": "2026-09-19T22:49:08.113632+00:00",
+  "h7_state": "NO_TEMPERATURE_REVISION_OBSERVED",
+  "interpretation_guard": [
+    "Feed status is not assumed to equal Kalshi contract settlement finality.",
+    "Prospective recorder evidence only; historical late snapshots are not point-in-time substitutes.",
+    "No market edge is inferred without contemporaneous executable market data."
+  ],
+  "last_sha256": "ceb39cb81f8b1fdfa4a57f7d84c80e3d8386bacf14e4563cc560ca305ff2a1e5",
+  "last_snapshot_retrieved_at": "2026-09-19T22:53:40.381047+00:00",
+  "last_source_fetchedAt": "2026-09-19T22:53:14.182Z",
+  "live_trading": false,
+  "paid_actions": false,
+  "payload_change_intervals": 1,
+  "snapshot_count": 3,
+  "source_fetchedAt_change_intervals": 1,
+  "total_pending_to_settled": 0,
+  "total_pending_to_settled_temperature_changes": 0,
+  "total_settled_to_settled_temperature_changes": 0,
+  "total_status_changes": 0,
+  "total_temperature_changes": 0,
+  "wallet_actions": false
+}

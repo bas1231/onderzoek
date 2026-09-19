@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/twc_revision_summary.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-19T22:54:58.589625+00:00",
+  "hypothesis_id": "H7-SETTLEMENT-BOUNDARY",
+  "source_commit": "07a3cc371c1cafcd7ba0f3c597dada510027ff92",
+  "started_at": "2026-09-19T22:54:58.568544+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "85e8a303757a99cc41e719f0794c274b1902395320108494f62a2502480de653",
+  "task_class": "research",
+  "task_id": "TWC-REVISION-SUMMARY-E194"
+}
