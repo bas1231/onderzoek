@@ -1,0 +1,14 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/lifecycle_ledger.py",
+    "--self-test"
+  ],
+  "hypothesis_id": "CONTROL-DURABLE-DELIVERY",
+  "live_trading": false,
+  "operation": "python",
+  "task_class": "infrastructure",
+  "task_id": "RELIABILITY-E030",
+  "timeout_seconds": 30,
+  "working_directory": "."
+}
