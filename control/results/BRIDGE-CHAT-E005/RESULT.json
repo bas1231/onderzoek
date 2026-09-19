@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "experiments/health_check.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-19T18:16:43.130479+00:00",
+  "hypothesis_id": "CONTROL-CHAT-BRIDGE",
+  "source_commit": "2e932452426c217c4e87296a00063e4b2ac6c5f1",
+  "started_at": "2026-09-19T18:16:43.106410+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "83766b92d7c1935dfb4a9dd8b579387b39337147ff101263439b9882ff9ee468",
+  "task_class": "infrastructure",
+  "task_id": "BRIDGE-CHAT-E005"
+}
