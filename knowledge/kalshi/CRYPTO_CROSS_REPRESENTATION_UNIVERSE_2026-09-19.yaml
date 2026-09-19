@@ -1,0 +1,112 @@
+schema_version: 1
+as_of: 2026-09-19
+economic_status: NO_PROVEN_EDGE
+records:
+  - id: KAL-CRYPTO-XREP-001
+    kind: fact
+    status: FACT_VERIFIED
+    claim: >-
+      Kalshi crypto price contracts use the relevant CF Benchmarks Real-Time Index and a 60-second
+      average around the specified expiration time; contract terms support numerical comparator
+      forms including above/below/between/exactly/at least.
+    sources:
+      - url: https://help.kalshi.com/en/articles/13823838-crypto-markets
+        type: primary
+      - url: https://kalshi-public-docs.s3.amazonaws.com/contract_terms/RIPPLE.pdf
+        type: primary
+
+  - id: KAL-CRYPTO-XREP-002
+    kind: observation
+    status: RESEARCH_POSITIVE
+    claim: >-
+      Same-time threshold and range product families are publicly visible for DOGE and XRP and are
+      also visible across other crypto category views, so range-threshold relation mining is a
+      reusable product-class lane rather than an index-only special case.
+    concrete_examples:
+      - asset: DOGE
+        threshold_event: KXDOGED-26SEP1917
+        range_event: KXDOGE-26SEP1917
+        settlement_time: 2026-09-19 17:00 EDT
+      - asset: XRP
+        note: public tag/category pages show same-time price-threshold and price-range families for Sep 25 2026 17:00 EDT
+    sources:
+      - url: https://kalshi.com/category/crypto/doge
+        type: primary_market_index
+      - url: https://www.coinrithm.com/en/prediction-markets/kalshi/kxdoged-26sep1917
+        type: secondary_market_mirror
+      - url: https://www.coinrithm.com/en/prediction-markets/kalshi/kxdoge-26sep1917
+        type: secondary_market_mirror
+    nonclaim: >-
+      Product overlap alone is not execution evidence and does not prove that every displayed
+      threshold/range pair has identical rule versions or settlement keys.
+
+  - id: KAL-CRYPTO-XREP-003
+    kind: hypothesis
+    status: STRUCTURAL_CANDIDATE
+    claim: >-
+      For a canonical same-settlement lower threshold A, upper threshold H and intervening range R
+      satisfying H subset A, R subset A and H disjoint R, YES(A)+NO(H)+NO(R) has a standard-binary
+      settlement floor of $2, robust to small boundary gaps.
+    formal_reference: knowledge/kalshi/CRYPTO_RANGE_THRESHOLD_ROBUST_FLOOR_2026-09-19.md
+    execution_blockers:
+      - no simultaneous Kalshi L2 capture yet for all three legs
+      - full contingency/Outcome Review robustness unproven
+      - point-in-time fee state and fill fragmentation
+      - cross-leg skew / legging risk
+      - material capacity at positive net floor
+
+  - id: KAL-CRYPTO-XREP-004
+    kind: observation
+    status: RESEARCH_POSITIVE
+    claim: >-
+      Historical full-L2 data is commercially/publicly described for Kalshi KXDOGE range contracts,
+      making DOGE a practical first replay target if matching threshold-series tape can be sourced
+      at equivalent timestamps.
+    evidence:
+      source: CryptoStruct
+      series: KXDOGE
+      coverage: February-September 2026
+      reported_recent_activity:
+        trades_per_day: 436
+        turnover_usd_per_day: 5400
+        avg_spread_cents: 8.05
+        top1_depth_usd_per_side: 540.54
+        l2_updates_per_day: 1100000
+    source:
+      url: https://cryptostruct.com/prediction-markets/kalshi-kxdoge
+      type: third_party_tick_archive
+    caveat: >-
+      CryptoStruct's inferred outcomes are not official settlement evidence; only its raw L2/trade
+      tape is relevant for execution replay. Matching threshold tape is still required.
+
+  - id: KAL-CRYPTO-XREP-005
+    kind: experiment_rule
+    status: RESEARCH_POSITIVE
+    claim: >-
+      Cross-representation scanning should prioritize assets/events where threshold and range
+      families share exact asset/index/date/time and where all required legs have live depth.
+    canonical_settlement_key:
+      - asset
+      - CF_Benchmarks_index
+      - expiration_date
+      - expiration_time
+      - source_agency
+      - rule_version_hash
+    canonical_predicate_fields:
+      - comparator
+      - lower_bound
+      - upper_bound
+      - inclusivity
+      - no_data_branch
+      - contingency_signature
+    scanner_priority:
+      - standard-floor triples with gross display gap comfortably above estimated fees
+      - shorter expiration/capital lock
+      - deeper books and longer opportunity lifetime
+      - assets with historical L2 available for replay
+    reject:
+      - stale/UI-only quote
+      - mismatched settlement key
+      - sequence-invalid L2
+      - unbounded contingency branch
+      - positive edge only at zero or immaterial capacity
