@@ -1,0 +1,23 @@
+{
+  "agent_id": "informed_flow",
+  "contract": {
+    "agent": "informed_flow",
+    "gate": "no_insider_assumption_as_fact",
+    "input": "flow evidence",
+    "live_trading": false,
+    "output": [
+      "flow_hypotheses",
+      "confounders"
+    ],
+    "paid_actions": false,
+    "wallet_actions": false
+  },
+  "input_refs": [],
+  "live_trading": false,
+  "notes": [],
+  "output_refs": [],
+  "paid_actions": false,
+  "run_id": "hourly-20260919T220000+0200",
+  "status": "PENDING",
+  "wallet_actions": false
+}

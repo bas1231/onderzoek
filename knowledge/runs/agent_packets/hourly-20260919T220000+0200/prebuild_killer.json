@@ -1,0 +1,23 @@
+{
+  "agent_id": "prebuild_killer",
+  "contract": {
+    "agent": "prebuild_killer",
+    "gate": "attempt_rejection_first",
+    "input": "all new candidates",
+    "live_trading": false,
+    "output": [
+      "kill_tests",
+      "fatal_flaws"
+    ],
+    "paid_actions": false,
+    "wallet_actions": false
+  },
+  "input_refs": [],
+  "live_trading": false,
+  "notes": [],
+  "output_refs": [],
+  "paid_actions": false,
+  "run_id": "hourly-20260919T220000+0200",
+  "status": "PENDING",
+  "wallet_actions": false
+}

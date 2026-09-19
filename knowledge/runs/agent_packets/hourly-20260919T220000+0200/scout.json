@@ -1,0 +1,24 @@
+{
+  "agent_id": "scout",
+  "contract": {
+    "agent": "scout",
+    "gate": "discovery_only",
+    "input": "source registry plus prior hour state",
+    "live_trading": false,
+    "output": [
+      "leads",
+      "source_changes",
+      "coverage_gaps"
+    ],
+    "paid_actions": false,
+    "wallet_actions": false
+  },
+  "input_refs": [],
+  "live_trading": false,
+  "notes": [],
+  "output_refs": [],
+  "paid_actions": false,
+  "run_id": "hourly-20260919T220000+0200",
+  "status": "PENDING",
+  "wallet_actions": false
+}

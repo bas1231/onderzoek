@@ -1,0 +1,111 @@
+{
+  "failure_count": 0,
+  "finished_at": "2026-09-19T21:54:14.544614+00:00",
+  "live_trading": false,
+  "paid_actions": false,
+  "results": [
+    {
+      "bytes": 38051,
+      "classification": "UNCHANGED",
+      "http_status": 200,
+      "manifest": "/home/leonh/prediction_research/knowledge/documents/manifests/arxiv/20260919T215414Z_d7ed6c1e9723.json",
+      "ok": true,
+      "sha256": "d7ed6c1e9723edcceae8a3d3f258a7ca991bd64f841fad43632caa13a7fad746",
+      "source_id": "arxiv"
+    },
+    {
+      "bytes": 39257,
+      "classification": "UNCHANGED",
+      "http_status": 200,
+      "manifest": "/home/leonh/prediction_research/knowledge/documents/manifests/aviationweather/20260919T215413Z_dd6e0cc4b237.json",
+      "ok": true,
+      "sha256": "dd6e0cc4b237e05406554eb33d2b7963367175f44a5a0ae0feb4e59f707b0edf",
+      "source_id": "aviationweather"
+    },
+    {
+      "bytes": 56369,
+      "classification": "CHANGED",
+      "http_status": 200,
+      "manifest": "/home/leonh/prediction_research/knowledge/documents/manifests/cftc/20260919T215413Z_160b4a17edbe.json",
+      "ok": true,
+      "sha256": "160b4a17edbedd96600b546ca0dd2b24ea719348a72d25a866659eb899255e7b",
+      "source_id": "cftc"
+    },
+    {
+      "bytes": 104747,
+      "classification": "UNCHANGED",
+      "http_status": 200,
+      "manifest": "/home/leonh/prediction_research/knowledge/documents/manifests/ecmwf_open/20260919T215413Z_83c3dee07ef5.json",
+      "ok": true,
+      "sha256": "83c3dee07ef5f6d1a434fb3688a9a39e6aec75080ea93f3c0f9b60cea8df0be0",
+      "source_id": "ecmwf_open"
+    },
+    {
+      "bytes": 575803,
+      "classification": "CHANGED",
+      "http_status": 200,
+      "manifest": "/home/leonh/prediction_research/knowledge/documents/manifests/github/20260919T215414Z_71db9f7104e0.json",
+      "ok": true,
+      "sha256": "71db9f7104e08382f0661474f59c2e481f38c47ff3e8e162e9f594fd06df93ba",
+      "source_id": "github"
+    },
+    {
+      "bytes": 219716,
+      "classification": "UNCHANGED",
+      "http_status": 200,
+      "manifest": "/home/leonh/prediction_research/knowledge/documents/manifests/kalshi_docs/20260919T215413Z_94c183be8dd7.json",
+      "ok": true,
+      "sha256": "94c183be8dd7141d7c8bee939c2ff1fb07caac3c559161afa319daad968ad5ce",
+      "source_id": "kalshi_docs"
+    },
+    {
+      "bytes": 52105,
+      "classification": "CHANGED",
+      "http_status": 200,
+      "manifest": "/home/leonh/prediction_research/knowledge/documents/manifests/nomads/20260919T215414Z_abe08f22b730.json",
+      "ok": true,
+      "sha256": "abe08f22b730ccaefadbfaa211550c1ffe77efb68dffeb2329548aead291bfcc",
+      "source_id": "nomads"
+    },
+    {
+      "bytes": 127949,
+      "classification": "CHANGED",
+      "http_status": 200,
+      "manifest": "/home/leonh/prediction_research/knowledge/documents/manifests/nws/20260919T215413Z_5117d25d86c0.json",
+      "ok": true,
+      "sha256": "5117d25d86c0655fb91db85aa7318f92ca9a2b3c9802015e1fa4c7262cd03548",
+      "source_id": "nws"
+    },
+    {
+      "bytes": 445795,
+      "classification": "UNCHANGED",
+      "http_status": 200,
+      "manifest": "/home/leonh/prediction_research/knowledge/documents/manifests/polymarket_docs/20260919T215413Z_6061d788333a.json",
+      "ok": true,
+      "sha256": "6061d788333a11345f9b58eac43e8ad235ee9315b5bdb7acf8e01b8fc02342b7",
+      "source_id": "polymarket_docs"
+    },
+    {
+      "bytes": 8397,
+      "classification": "CHANGED",
+      "http_status": 200,
+      "manifest": "/home/leonh/prediction_research/knowledge/documents/manifests/reddit/20260919T215414Z_0cf599cc5338.json",
+      "ok": true,
+      "sha256": "0cf599cc5338ed27c3a328f733cfa4c1b771da1e97b700a6430d47b8d2b4b7ac",
+      "source_id": "reddit"
+    },
+    {
+      "bytes": 750000,
+      "classification": "CHANGED",
+      "http_status": 200,
+      "manifest": "/home/leonh/prediction_research/knowledge/documents/manifests/youtube/20260919T215414Z_5abbf3c6ad88.json",
+      "ok": true,
+      "sha256": "5abbf3c6ad885db177b7f04d4fbc0bd9392b8df7a2076f2f6b21f47d0b96fd58",
+      "source_id": "youtube"
+    }
+  ],
+  "source_count": 11,
+  "started_at": "2026-09-19T21:54:13.225477+00:00",
+  "success_count": 11,
+  "wallet_actions": false
+}
