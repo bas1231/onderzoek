@@ -127,9 +127,21 @@ document.getElementById("armProject").addEventListener(
       "armedUrl"
     );
 
-    await showState(
-      "Project auto-arm ingeschakeld."
-    );
+    const injection = await chrome.runtime.sendMessage({
+      type: "ensureInjected",
+      tabId: tab.id
+    });
+
+    if (injection && injection.ok) {
+      await showState(
+        "Project auto-arm ingeschakeld. Content bridge actief."
+      );
+    } else {
+      await showState(
+        "Project armed, maar content-injectie gaf een fout: " +
+        JSON.stringify(injection)
+      );
+    }
   }
 );
 
@@ -164,9 +176,21 @@ document.getElementById("armChat").addEventListener(
       armedUrl: url
     });
 
-    await showState(
-      "Alleen deze chat is armed."
-    );
+    const injection = await chrome.runtime.sendMessage({
+      type: "ensureInjected",
+      tabId: tab.id
+    });
+
+    if (injection && injection.ok) {
+      await showState(
+        "Alleen deze chat is armed. Content bridge actief."
+      );
+    } else {
+      await showState(
+        "Chat armed, maar content-injectie gaf een fout: " +
+        JSON.stringify(injection)
+      );
+    }
   }
 );
 

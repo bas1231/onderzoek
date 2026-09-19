@@ -1,6 +1,102 @@
+async function injectIntoTab(tabId) {
+  try {
+    const tab = await chrome.tabs.get(tabId);
+
+    if (!tab || !tab.url) {
+      return {
+        ok: false,
+        reason: "no tab/url"
+      };
+    }
+
+    if (
+      !tab.url.startsWith("https://chatgpt.com/") &&
+      !tab.url.startsWith("https://chat.openai.com/")
+    ) {
+      return {
+        ok: false,
+        reason: "not a ChatGPT tab"
+      };
+    }
+
+    await chrome.scripting.executeScript({
+      target: {
+        tabId
+      },
+      files: [
+        "content.js"
+      ]
+    });
+
+    return {
+      ok: true
+    };
+
+  } catch (error) {
+    console.warn(
+      "[Prediction Bridge] injection failed:",
+      error
+    );
+
+    return {
+      ok: false,
+      reason: String(error)
+    };
+  }
+}
+
+
+chrome.tabs.onUpdated.addListener(
+  async (tabId, changeInfo, tab) => {
+    if (changeInfo.status !== "complete") {
+      return;
+    }
+
+    if (!tab || !tab.url) {
+      return;
+    }
+
+    if (
+      tab.url.startsWith("https://chatgpt.com/") ||
+      tab.url.startsWith("https://chat.openai.com/")
+    ) {
+      await injectIntoTab(tabId);
+    }
+  }
+);
+
+
 chrome.runtime.onMessage.addListener(
   (message, sender, sendResponse) => {
-    if (!message || message.type !== "bridgeFetch") {
+    if (!message) {
+      return;
+    }
+
+    if (message.type === "ensureInjected") {
+      (async () => {
+        let tabId = message.tabId;
+
+        if (!tabId && sender && sender.tab) {
+          tabId = sender.tab.id;
+        }
+
+        if (!tabId) {
+          sendResponse({
+            ok: false,
+            reason: "missing tabId"
+          });
+          return;
+        }
+
+        const result = await injectIntoTab(tabId);
+        sendResponse(result);
+      })();
+
+      return true;
+    }
+
+
+    if (message.type !== "bridgeFetch") {
       return;
     }
 

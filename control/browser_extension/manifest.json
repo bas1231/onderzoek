@@ -1,9 +1,10 @@
 {
   "manifest_version": 3,
   "name": "Prediction Research Bridge",
-  "version": "0.2.2",
+  "version": "0.3.0",
   "description": "Local no-API bridge between ChatGPT and Prediction Research WSL control plane.",
   "permissions": [
+    "scripting",
     "storage",
     "tabs"
   ],

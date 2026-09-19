@@ -1,4 +1,10 @@
 (() => {
+  if (window.__PREDICTION_RESEARCH_BRIDGE_LOADED__) {
+    return;
+  }
+
+  window.__PREDICTION_RESEARCH_BRIDGE_LOADED__ = true;
+
   const LEFT = "<" + "<" + "<";
   const RIGHT = ">" + ">" + ">";
 
