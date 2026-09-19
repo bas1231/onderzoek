@@ -1,0 +1,91 @@
+{
+  "agents": {
+    "algebra": "NO_EVIDENCE",
+    "behavioral": "NO_EVIDENCE",
+    "chief_falsifier": "NO_EVIDENCE",
+    "independent_reproducer": "NO_EVIDENCE",
+    "informed_flow": "NO_EVIDENCE",
+    "microstructure": "NO_EVIDENCE",
+    "prebuild_killer": "COMPLETED",
+    "research_director": "COMPLETED",
+    "scout": "NO_EVIDENCE",
+    "settlement": "NO_EVIDENCE",
+    "weather_twc": "NO_EVIDENCE"
+  },
+  "candidate_status": "UNPROVEN",
+  "decision": "NO_PROVEN_EDGE",
+  "gates": {
+    "execution_reality": "NOT_TESTED",
+    "falsification": "NOT_TESTED",
+    "market_edge": "NOT_TESTED",
+    "point_in_time": "PENDING",
+    "reproduction": "NOT_TESTED",
+    "signal_edge": "NOT_TESTED",
+    "source_provenance": "PASS"
+  },
+  "live_trading": false,
+  "paid_actions": false,
+  "run_id": "hourly-20260920T000000+0200",
+  "semantic_review": {
+    "algebra": {
+      "reason": "Polymarket combo documentation shows platform capability only; no payoff identity or executable mispricing proved.",
+      "status": "NO_EVIDENCE"
+    },
+    "behavioral": {
+      "reason": "Bias match referred to bias-corrected weather products, not behavioral prediction-market bias.",
+      "status": "NO_EVIDENCE"
+    },
+    "informed_flow": {
+      "reason": "Flow matches referred to aviation traffic flow and software workflows, not informed trading flow.",
+      "status": "NO_EVIDENCE"
+    },
+    "microstructure": {
+      "reason": "Keyword routing produced generic regulatory and false-positive ask matches; no executable microstructure edge.",
+      "status": "NO_EVIDENCE"
+    },
+    "scout": {
+      "reason": "Discovery material only; no candidate survived semantic relevance review.",
+      "status": "NO_EVIDENCE"
+    },
+    "settlement": {
+      "reason": "Generic final/resolution terms did not establish a settlement-specific edge.",
+      "status": "NO_EVIDENCE"
+    },
+    "weather_twc": {
+      "reason": "Meteorological source availability only; no TWC settlement mapping or market-edge evidence.",
+      "status": "NO_EVIDENCE"
+    }
+  },
+  "source_failure_count": 0,
+  "source_manifests": {
+    "arxiv": "/home/leonh/prediction_research/knowledge/documents/manifests/arxiv/20260919T220029Z_d7ed6c1e9723.json",
+    "aviationweather": "/home/leonh/prediction_research/knowledge/documents/manifests/aviationweather/20260919T220029Z_dd6e0cc4b237.json",
+    "cftc": "/home/leonh/prediction_research/knowledge/documents/manifests/cftc/20260919T220029Z_03c50f4456a2.json",
+    "ecmwf_open": "/home/leonh/prediction_research/knowledge/documents/manifests/ecmwf_open/20260919T220029Z_83c3dee07ef5.json",
+    "github": "/home/leonh/prediction_research/knowledge/documents/manifests/github/20260919T220030Z_73d9b994f5d3.json",
+    "kalshi_docs": "/home/leonh/prediction_research/knowledge/documents/manifests/kalshi_docs/20260919T220029Z_94c183be8dd7.json",
+    "nomads": "/home/leonh/prediction_research/knowledge/documents/manifests/nomads/20260919T220029Z_ac1877039efb.json",
+    "nws": "/home/leonh/prediction_research/knowledge/documents/manifests/nws/20260919T220029Z_10bbe2ca5942.json",
+    "polymarket_docs": "/home/leonh/prediction_research/knowledge/documents/manifests/polymarket_docs/20260919T220029Z_6061d788333a.json",
+    "reddit": "/home/leonh/prediction_research/knowledge/documents/manifests/reddit/20260919T220030Z_99a9aa759ce8.json",
+    "youtube": "/home/leonh/prediction_research/knowledge/documents/manifests/youtube/20260919T220030Z_83be8f6905e1.json"
+  },
+  "source_success_count": 11,
+  "source_sweep_ref": "knowledge/runs/source_sweeps/20260919T220029Z.json",
+  "sources": {
+    "arxiv": "UNCHANGED",
+    "aviationweather": "UNCHANGED",
+    "cftc": "CHANGED",
+    "ecmwf_open": "UNCHANGED",
+    "github": "CHANGED",
+    "kalshi_docs": "UNCHANGED",
+    "nomads": "CHANGED",
+    "nws": "CHANGED",
+    "polymarket_docs": "UNCHANGED",
+    "reddit": "CHANGED",
+    "youtube": "CHANGED"
+  },
+  "started_at": "2026-09-20T00:00:29.085185+02:00",
+  "status": "COMPLETED",
+  "wallet_actions": false
+}

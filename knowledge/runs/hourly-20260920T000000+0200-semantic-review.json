@@ -1,0 +1,34 @@
+{
+  "decision": "NO_PROVEN_EDGE",
+  "review": {
+    "algebra": {
+      "reason": "Polymarket combo documentation shows platform capability only; no payoff identity or executable mispricing proved.",
+      "status": "NO_EVIDENCE"
+    },
+    "behavioral": {
+      "reason": "Bias match referred to bias-corrected weather products, not behavioral prediction-market bias.",
+      "status": "NO_EVIDENCE"
+    },
+    "informed_flow": {
+      "reason": "Flow matches referred to aviation traffic flow and software workflows, not informed trading flow.",
+      "status": "NO_EVIDENCE"
+    },
+    "microstructure": {
+      "reason": "Keyword routing produced generic regulatory and false-positive ask matches; no executable microstructure edge.",
+      "status": "NO_EVIDENCE"
+    },
+    "scout": {
+      "reason": "Discovery material only; no candidate survived semantic relevance review.",
+      "status": "NO_EVIDENCE"
+    },
+    "settlement": {
+      "reason": "Generic final/resolution terms did not establish a settlement-specific edge.",
+      "status": "NO_EVIDENCE"
+    },
+    "weather_twc": {
+      "reason": "Meteorological source availability only; no TWC settlement mapping or market-edge evidence.",
+      "status": "NO_EVIDENCE"
+    }
+  },
+  "run_id": "hourly-20260920T000000+0200"
+}
