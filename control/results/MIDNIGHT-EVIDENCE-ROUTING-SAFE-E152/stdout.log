@@ -1,0 +1,158 @@
+{
+  "ok": true,
+  "counts": {
+    "weather_twc": 4,
+    "microstructure": 5,
+    "behavioral": 1,
+    "informed_flow": 2,
+    "algebra": 1,
+    "settlement": 5,
+    "scout": 9
+  },
+  "review": {
+    "weather_twc": [
+      {
+        "source_id": "aviationweather",
+        "source_state": "UNCHANGED",
+        "document_sha256": "dd6e0cc4b237e05406554eb33d2b7963367175f44a5a0ae0feb4e59f707b0edf",
+        "retrieved_at": "2026-09-19T20:59:24.461145+00:00",
+        "term": "weather",
+        "snippet": "Aviation Weather Center Aviation Weather Center AWC Aviation Weather Center National Weather Service Contact Us Help Information Toggle dark mode Admin Sign in Weather Observations GFA FORECAST Ceiling & Visibility Clouds Precipitation Thunderstorms Temperature Winds Turbulence Icing Products SIGMET G-AIRMET Center Weather Adv Prog charts TAF map Forecast Discussions METAR/TAF data PIREP/AIREP data Wind/temp data ITWS data WAFS grids SigWx charts TCF/eTCF/ECFP Tools Terminal Weather Dashboard Winter Weather Dashboard Ceilin"
+      },
+      {
+        "source_id": "ecmwf_open",
+        "source_state": "UNCHANGED",
+        "document_sha256": "83c3dee07ef5f6d1a434fb3688a9a39e6aec75080ea93f3c0f9b60cea8df0be0",
+        "retrieved_at": "2026-09-19T20:59:24.830272+00:00",
+        "term": "weather",
+        "snippet": "ort Name Long Name ID Level ws Wind speed 10 pl: 250, 850 t Temperature 130 pl: 250, 500, 850 msl Mean sea level pressure 151 sfc gh Geopotential height 156 pl: 300, 500, 1000 Medium-range Ensemble: Probabilities, Daily Weather Events class=od; stream=enfo; type=ep Ranges for times 00z &12z: 0-24 to 336-360 by 12\u200b (24-hour ranges with 12-hour increments) Short Name Long Name ID Threshold Type of level tpg1 Total precipitation of at least 1 mm 131060 \u2265 1 mm sfc tpg5 Total precipitation of at least 5 mm 131061 \u2265 5 mm sfc tpg10 Total precipitation of at least 10 mm 131062 \u2265 10 mm sfc tpg20 Total precipitation of at least 20 mm 131063 \u2265 20 mm sfc tpg25 Total precipitation of at least 25 mm 131098 \u2265 25 mm sfc tpg50 Total precipitation"
+      },
+      {
+        "source_id": "nomads",
+        "source_state": "CHANGED",
+        "document_sha256": "ac1877039efbe086216ceaaeea58c81471bc265b61a522c191a43a091420525c",
+        "retrieved_at": "2026-09-19T22:00:29.923164+00:00",
+        "term": "weather",
+        "snippet": "NOMADS at ncep.noaa.gov HOME Forecast Local Graphical Aviation Marine Rivers and Lakes Hurricanes Severe Weather Fire Weather Space Weather Sun/Moon Long Range Forecasts Climate Prediction Past Weather Past Weather Heating/Cooling Days Monthly Temperatures Records Astronomical Data Safety Floods Tsunami Beach Hazards Wildfire Cold Tornadoes Fog Air Quality Heat Hurricanes Lightning Safe Boating Rip Currents Thunderstorms Space Weather Sun (Ultraviolet Radiation) Safety Campaigns Wind Drought Winter Weather Information Wireless Emergency Alerts Brochures Weather-Ready Nation Cooperative Observers Daily Briefing Damage/"
+      }
+    ],
+    "microstructure": [
+      {
+        "source_id": "cftc",
+        "source_state": "CHANGED",
+        "document_sha256": "03c50f4456a22f805032eed06f72f757985be5ef890fc1fd9ff6954c416f6dd9",
+        "retrieved_at": "2026-09-19T22:00:29.385653+00:00",
+        "term": "maker",
+        "snippet": "Issues Advisory on Self-Certifying Incentive Programs for Prediction Markets CFTC\u2019s Division of Market Oversight issued an advisory reminding designated contract markets of their obligations when self-certifying market-maker, liquidity, trading, or incentive programs under Regulations 40.5 and 40.6. Learn More CFTC Approves Final Rule Concerning Whistleblower Awards The Commission approved a final rule that incorporates a 30 percent presumption for whistleblower awards of $5 million or less\u2026 Learn more Holding Wrongdoers Accountable CFTC secures Court order directing Florida man to pay over $6 million for options fraud and imposing trading bans Learn more icon-go-arrow Created with Sketch. Whistleblower.gov Find information about"
+      },
+      {
+        "source_id": "ecmwf_open",
+        "source_state": "UNCHANGED",
+        "document_sha256": "83c3dee07ef5f6d1a434fb3688a9a39e6aec75080ea93f3c0f9b60cea8df0be0",
+        "retrieved_at": "2026-09-19T20:59:24.830272+00:00",
+        "term": "ask",
+        "snippet": "0 metre U wind component 165 sfc 10v 10 metre V wind component 166 sfc 2t 2 metre temperature 167 sfc 2d 2 metre dewpoint temperature 168 sfc ssrd Surface net short-wave (solar) radiation downwards 169 sfc lsm Land Sea Mask 172 sfc strd Surface net long-wave (thermal) radiation downwards 175 sfc ssr Surface net short-wave (solar) radiation 176 sfc str Surface net long-wave (thermal) radiation 177 sfc ttr Top net long-wave (thermal) radiation 179 sfc ewss Time-integrated eastward turbulent surface stress 180 sfc nsss Time-integrated northward turbulent surface stress 181 sfc ro Runoff 205 sfc tp Total Precipitation 228 sfc skt Skin temperature 235 sfc mx2t3 Maximum temperature at 2 metres in the last 3 hours 228026 sfc mn2t3 Minimu"
+      },
+      {
+        "source_id": "github",
+        "source_state": "CHANGED",
+        "document_sha256": "73d9b994f5d3437449e44d839dfd998612265114638909859972b25ee9bd728b",
+        "retrieved_at": "2026-09-19T22:00:30.196050+00:00",
+        "term": "ask",
+        "snippet": "otify Vodafone Accelerate your entire workflow From your first line of code to final deployment, GitHub provides AI and automation tools to help you build and ship better software faster. A Copilot chat window with the 'Ask' mode enabled. The user switches from 'Ask' mode to 'Agent' mode from a dropdown menu, then sends the prompt 'Update the website to allow searching for running races by name.' Copilot analyzes the codebase, then explains the required edits for three files before generating them. Copilot then confirms completion and summarizes the implemented changes for the new functionality allowing users to search races by name and view paginated, filtered results. Your AI partner everywhere. Copilot is ready to work with you"
+      }
+    ],
+    "behavioral": [
+      {
+        "source_id": "nomads",
+        "source_state": "CHANGED",
+        "document_sha256": "ac1877039efbe086216ceaaeea58c81471bc265b61a522c191a43a091420525c",
+        "retrieved_at": "2026-09-19T22:00:29.923164+00:00",
+        "term": "bias",
+        "snippet": "Params) 6 hours grib filter https GFS Ensemble 0.25 Degree 6 hours grib filter https GFS Ensemble Chem 0.5 Degree 6 hours grib filter https GFS Ensemble Chem 0.25 Degree 6 hours grib filter https GFS Ensemble 0.5 Degree Bias-Corrected 6 hours grib filter https GFS Ensemble NDGD resolution Bias-Corrected 6 hours grib filter https GTGN 15 minutes - https HGEFS 6 hours - https NAEFS high resolution Bias-Corrected 6 hours grib filter https NAEFS NDGD resolution Bias-Corrected 6 hours grib filter https ObsProc (Observations Processing) variable - https UVI (Ultraviolet Index) daily - https Regional Models ObsProc (Observations Processing) variable - https AQM Daily Maximum 06Z, 12Z grib filter https AQM Hourly Surface Ozone 06Z, 12Z gr"
+      }
+    ],
+    "informed_flow": [
+      {
+        "source_id": "aviationweather",
+        "source_state": "UNCHANGED",
+        "document_sha256": "dd6e0cc4b237e05406554eb33d2b7963367175f44a5a0ae0feb4e59f707b0edf",
+        "retrieved_at": "2026-09-19T20:59:24.461145+00:00",
+        "term": "flow",
+        "snippet": "WS data WAFS grids SigWx charts TCF/eTCF/ECFP Tools Terminal Weather Dashboard Winter Weather Dashboard Ceiling & Visibility Dashboard Pre-Duty Weather Briefings CWSU Status Advanced Map Decision support imagery Traffic Flow Management Portal Fax charts Archive View Data API Status Submit a PIREP Edit Gate Forecast Connect About AWC Recent changes Upcoming changes Outreach SIGMET Preview TCF Whiteboard Aviation Weather Testbed Sign in Settings Admin Auto Dark Light PIREP Submit Encode Close PIREP Entry Results The encoded PIREP should read as follows: If this is correct click SUBMIT, otherwise click BACK Submit Back Sign in Register Forgot Password Login You are accessing a U.S. Government information system, which includes: 1) th"
+      },
+      {
+        "source_id": "github",
+        "source_state": "CHANGED",
+        "document_sha256": "73d9b994f5d3437449e44d839dfd998612265114638909859972b25ee9bd728b",
+        "retrieved_at": "2026-09-19T22:00:30.196050+00:00",
+        "term": "flow",
+        "snippet": "GitHub Skip to content Navigation Menu Sign in Platform AI CODE CREATION GitHub Copilot Write better code with AI GitHub Copilot app Direct agents from issue to merge MCP Registry Integrate external tools DEVELOPER WORKFLOWS Actions Automate any workflow Codespaces Instant dev environments Issues Plan and track work Code Review Manage code changes Code Quality Enforce quality at merge APPLICATION SECURITY GitHub Advanced Security Find and fix vulnerabilities Code security Secure your code as you build Secret protection Stop leaks before they start EXPLORE Why GitHub Documentation Blog Changelog Marketplace View all features Solutions BY COMPANY SIZE Enterprises Small and medium teams Startups Nonprofits BY USE CASE App Modernizat"
+      }
+    ],
+    "algebra": [
+      {
+        "source_id": "polymarket_docs",
+        "source_state": "UNCHANGED",
+        "document_sha256": "6061d788333a11345f9b58eac43e8ad235ee9315b5bdb7acf8e01b8fc02342b7",
+        "retrieved_at": "2026-09-19T20:59:24.454376+00:00",
+        "term": "combo",
+        "snippet": "ils Prices and Order Books Analytics Real-Time Data Chainlink TWAP Prices Trading Overview Place Your First Order Wallets and Authentication Session Keys Beta Place Orders Manage Orders Real-Time Order Updates Positions Combos Wallet Activity Fees Market Making Matching Engine Restarts Bridge Programs Taker Rebate Program Maker Rebates Program Liquidity Rewards Builder Program Referral Program Resources Contracts Data Resources Error Codes \ud83c\uddfa\ud83c\uddf8 Looking for Polymarket US documentation? Visit US Docs \u2192 Polymarket Documentation Build on the world\u2019s largest prediction market. APIs, SDKs, and tools for prediction market developers. Developer Quickstart Make your first API request in minutes. Learn the basics of the Polymarket platform, f"
+      }
+    ],
+    "settlement": [
+      {
+        "source_id": "cftc",
+        "source_state": "CHANGED",
+        "document_sha256": "03c50f4456a22f805032eed06f72f757985be5ef890fc1fd9ff6954c416f6dd9",
+        "retrieved_at": "2026-09-19T22:00:29.385653+00:00",
+        "term": "final",
+        "snippet": "ousel Rotation On On CFTC and Kansas State University to Host AgCon October 22-23 CFTC Grants Multiple Whistleblower Awards CFTC Issues Advisory on Self-Certifying Incentive Programs for Prediction Markets CFTC Approves Final Rule Concerning Whistleblower Awards Holding Wrongdoers Accountable Whistleblower.gov CFTC and Kansas State University to Host AgCon October 22-23 See agenda and registration information Learn more CFTC Grants Multiple Whistleblower Awards The Commission granted 10 whistleblower awards totaling more than $150 million Learn more CFTC Issues Advisory on Self-Certifying Incentive Programs for Prediction Markets CFTC\u2019s Division of Market Oversight issued an advisory reminding designated contract markets of their"
+      },
+      {
+        "source_id": "ecmwf_open",
+        "source_state": "UNCHANGED",
+        "document_sha256": "83c3dee07ef5f6d1a434fb3688a9a39e6aec75080ea93f3c0f9b60cea8df0be0",
+        "retrieved_at": "2026-09-19T20:59:24.830272+00:00",
+        "term": "resolution",
+        "snippet": "pressure level (10 hPa) have also been added, please see parameter tables below. Product description These products are a subset of the full Catalogue of ECMWF Real-time Products and are based on the medium-range ( high-resolution and ensemble ) and seasonal forecast models. IFS data are released at the end of the real-time dissemination schedule . AIFS data are released as soon the data are produced. For further details about the available AIFS products, see the dataset descriptions for the Deterministic AIFS and Ensemble AIFS . Products are available at 0.25 degrees resolution in GRIB2 format unless stated otherwise. Future updates to the Open Data catalog may include further resolution improvement, in line with developments in"
+      },
+      {
+        "source_id": "github",
+        "source_state": "CHANGED",
+        "document_sha256": "73d9b994f5d3437449e44d839dfd998612265114638909859972b25ee9bd728b",
+        "retrieved_at": "2026-09-19T22:00:30.196050+00:00",
+        "term": "final",
+        "snippet": "rale Spotify Vodafone American Airlines Duolingo Ernst and Young Ford InfoSys Mercado Libre Mercedes-Benz Shopify Philips Soci\u00e9t\u00e9 G\u00e9n\u00e9rale Spotify Vodafone Accelerate your entire workflow From your first line of code to final deployment, GitHub provides AI and automation tools to help you build and ship better software faster. A Copilot chat window with the 'Ask' mode enabled. The user switches from 'Ask' mode to 'Agent' mode from a dropdown menu, then sends the prompt 'Update the website to allow searching for running races by name.' Copilot analyzes the codebase, then explains the required edits for three files before generating them. Copilot then confirms completion and summarizes the implemented changes for the new functionali"
+      }
+    ],
+    "scout": [
+      {
+        "source_id": "arxiv",
+        "source_state": "UNCHANGED",
+        "document_sha256": "d7ed6c1e9723edcceae8a3d3f258a7ca991bd64f841fad43632caa13a7fad746",
+        "retrieved_at": "2026-09-19T20:59:24.827234+00:00",
+        "term": "market",
+        "snippet": "ch ) includes: (see detailed description ): Computational Finance ; Economics ; General Finance ; Mathematical Finance ; Portfolio Management ; Pricing of Securities ; Risk Management ; Statistical Finance ; Trading and Market Microstructure Statistics Statistics ( stat new , recent , search ) includes: (see detailed description ): Applications ; Computation ; Machine Learning ; Methodology ; Other Statistics ; Statistics Theory Electrical Engineering and Systems Science Electrical Engineering and Systems Science ( eess new , recent , search ) includes: (see detailed description ): Audio and Speech Processing ; Image and Video Processing ; Signal Processing ; Systems and Control Economics Economics ( econ new , recent , search ) i"
+      },
+      {
+        "source_id": "aviationweather",
+        "source_state": "UNCHANGED",
+        "document_sha256": "dd6e0cc4b237e05406554eb33d2b7963367175f44a5a0ae0feb4e59f707b0edf",
+        "retrieved_at": "2026-09-19T20:59:24.461145+00:00",
+        "term": "forecast",
+        "snippet": "Aviation Weather Center Aviation Weather Center AWC Aviation Weather Center National Weather Service Contact Us Help Information Toggle dark mode Admin Sign in Weather Observations GFA FORECAST Ceiling & Visibility Clouds Precipitation Thunderstorms Temperature Winds Turbulence Icing Products SIGMET G-AIRMET Center Weather Adv Prog charts TAF map Forecast Discussions METAR/TAF data PIREP/AIREP data Wind/temp data ITWS data WAFS grids SigWx charts TCF/eTCF/ECFP Tools Terminal Weather Dashboard Winter Weather Dashboard Ceiling & Visibility Dashboard Pre-Duty Weather Briefings CWSU Status Advanced Map Decision support imagery Traffic Flow Management Portal Fax charts Archive View Data API Status Sub"
+      },
+      {
+        "source_id": "cftc",
+        "source_state": "CHANGED",
+        "document_sha256": "03c50f4456a22f805032eed06f72f757985be5ef890fc1fd9ff6954c416f6dd9",
+        "retrieved_at": "2026-09-19T22:00:29.385653+00:00",
+        "term": "prediction market",
+        "snippet": "ments of Traders Bank Participation Reports Cotton On-Call Financial Data for FCMS Staff Reports Weekly Swaps Report Cleared Margin Reports Office of the Chief Economist Forms & Submissions Learn & Protect Understanding Prediction Markets and Event Contracts Check Registration & Disciplinary History Submit a Tip or Complaint RED List Office of Proceedings Learning Resources News & Events Press Releases Public Statements & Remarks Events Carousel Rotation On On CFTC and Kansas State University to Host AgCon October 22-23 CFTC Grants Multiple Whistleblower Awards CFTC Issues Advisory on Self-Certifying Incentive Programs for Prediction Markets CFTC Approves Final Rule Concerning Whistleblower Awards Holding Wrongdoers Accountable Wh"
+      }
+    ]
+  },
+  "commit_rc": 0,
+  "push_rc": 0
+}
