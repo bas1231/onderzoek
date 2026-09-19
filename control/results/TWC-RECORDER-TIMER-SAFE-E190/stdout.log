@@ -1,0 +1,19 @@
+{
+  "service_name": "prediction-research-twc-recorder.service",
+  "timer_name": "prediction-research-twc-recorder.timer",
+  "verify_rc": 0,
+  "reload_rc": 0,
+  "enable_rc": 0,
+  "timer_active": "active",
+  "timer_enabled": "enabled",
+  "list_timers": "NEXT                          LEFT LAST PASSED UNIT                                   ACTIVATES\nSun 2026-09-20 01:05:00 CEST 13min -         - prediction-research-twc-recorder.timer prediction-research-twc-recorder.service\n\n1 timers listed.\nPass --all to see loaded but inactive timers, too.\n",
+  "commit_rc": 0,
+  "commit_stdout": "[main df4df05] build(weather): schedule TWC point-in-time recorder\n 2 files changed, 18 insertions(+)\n create mode 100644 control/weather/systemd/prediction-research-twc-recorder.service\n create mode 100644 control/weather/systemd/prediction-research-twc-recorder.timer\n",
+  "commit_stderr": "",
+  "push_rc": 0,
+  "push_stdout": "",
+  "push_stderr": "To github.com:bas1231/onderzoek.git\n   fd48d5e..df4df05  HEAD -> main\n",
+  "live_trading": false,
+  "paid_actions": false,
+  "wallet_actions": false
+}
