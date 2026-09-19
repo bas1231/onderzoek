@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "experiments/bridge/e150.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-19T22:05:31.738127+00:00",
+  "hypothesis_id": "AUTONOMOUS-HOURLY-RESEARCH",
+  "source_commit": "53b938a027cbbb1c418259ff067102369ca9400c",
+  "started_at": "2026-09-19T22:05:29.609003+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "b71a16d0ae8a049f2cb811a0edd03c35c89e69ce70414c153edb9c8e66c757ff",
+  "task_class": "research",
+  "task_id": "MIDNIGHT-SOURCE-QUALITY-E150"
+}
