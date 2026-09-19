@@ -163,7 +163,32 @@ def task_exists(task_id: str) -> bool:
 
 
 def commit_and_push(message: str) -> tuple[bool, str]:
-    git("add", "control/tasks", "experiments/bridge", "control/jobs", "tests/bridge")
+    stage_paths = [
+        "control/tasks",
+        "experiments/bridge",
+        "control/jobs",
+        "tests/bridge",
+    ]
+
+    existing_paths = [
+        path
+        for path in stage_paths
+        if (ROOT / path).exists()
+    ]
+
+    if existing_paths:
+        added = git(
+            "add",
+            "--",
+            *existing_paths,
+            check=False,
+        )
+
+        if added.returncode != 0:
+            return False, (
+                "git add failed: "
+                + added.stderr.strip()
+            )
 
     staged = git(
         "diff",
