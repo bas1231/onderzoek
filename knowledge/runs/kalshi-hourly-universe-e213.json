@@ -1,0 +1,1020 @@
+{
+  "created_at": "2026-09-19T23:20:07.516983+00:00",
+  "guards": [
+    "Series discovery is not settlement proof; individual market rules remain authoritative.",
+    "Zero open markets for a series does not prove discontinuation.",
+    "No market edge is inferred without contemporaneous executable orderbook evidence.",
+    "No live trading, paid actions, or wallet actions."
+  ],
+  "hourly_weather_series": [
+    {
+      "event_counts": {},
+      "open_market_count": 0,
+      "open_query_error": null,
+      "open_query_sha256": "50699ea1db13415ea46ec367dcfa58decd9660083271c5dc061561f38337fbac",
+      "open_query_status": 200,
+      "sample": [],
+      "series": {
+        "additional_prohibitions": [
+          "Persons who are employed by any of the Source Agencies are not permitted to trade on the Contract.",
+          "Persons who hold any material, non-public information on the Underlying are not permitted to trade on the Contract."
+        ],
+        "category": "Climate and Weather",
+        "contract_terms_url": "https://assets.kalshi.com/contract_terms/HMONTH.pdf",
+        "contract_url": "https://assets.kalshi.com/regulatory/product-certifications/HMONTH.pdf",
+        "frequency": "monthly",
+        "product_metadata": null,
+        "settlement_sources": [
+          {
+            "name": "NCEI",
+            "url": "https://www.ncei.noaa.gov/access/monitoring/climate-at-a-glance/global/time-series"
+          }
+        ],
+        "tags": [
+          "Climate change"
+        ],
+        "ticker": "HMONTH",
+        "title": "Hottest month instance"
+      },
+      "source_counts": {}
+    },
+    {
+      "event_counts": {},
+      "open_market_count": 0,
+      "open_query_error": null,
+      "open_query_sha256": "50699ea1db13415ea46ec367dcfa58decd9660083271c5dc061561f38337fbac",
+      "open_query_status": 200,
+      "sample": [],
+      "series": {
+        "additional_prohibitions": [
+          "Persons who are employed by any of the Source Agencies are not permitted to trade on the Contract.",
+          "Persons who hold any material, non-public information on the Underlying are not permitted to trade on the Contract."
+        ],
+        "category": "Climate and Weather",
+        "contract_terms_url": "https://assets.kalshi.com/contract_terms/HURSZ.pdf",
+        "contract_url": "https://assets.kalshi.com/regulatory/product-certifications/HURSZ.pdf",
+        "frequency": "custom",
+        "product_metadata": null,
+        "settlement_sources": [
+          {
+            "name": "National Oceanic and Atmospheric Administration",
+            "url": "https://www.nhc.noaa.gov/"
+          }
+        ],
+        "tags": [
+          "Hurricanes"
+        ],
+        "ticker": "HURCATH",
+        "title": "Hurricane Henri size"
+      },
+      "source_counts": {}
+    },
+    {
+      "event_counts": {
+        "KXAVGTKIAH-26SEP20": 5
+      },
+      "open_market_count": 5,
+      "open_query_error": null,
+      "open_query_sha256": "a01bdcdd273dee3a36e91ea6ebfe52697e211141035ce15f7194c18a64dbf9cf",
+      "open_query_status": 200,
+      "sample": [
+        {
+          "close_time": "2026-09-21T03:59:59Z",
+          "event_ticker": "KXAVGTKIAH-26SEP20",
+          "expected_expiration_time": "2026-09-22T03:59:59Z",
+          "floor_strike": 6,
+          "rules_primary": "If there is at least 6 or more consecutive days within September 14, 2026 through September 20, 2026 on which the daily average temperature at KIAH in Houston is strictly greater than 90 degrees Fahrenheit, then the market resolves to Yes.",
+          "rules_secondary": "Data for KIAH is available at https://weather.com/kalshi. A day's average temperature is the arithmetic mean of the hourly temperature values reported by The Weather Company for KIAH from 12:00 AM to 11:59 PM local time, rounded to the nearest whole degree. Data as published at the Expiration Time will be used; later revisions are disregarded.\n\nAn average of exactly 90 degrees Fahrenheit does not satisfy the condition. Only days within September 14, 2026 through September 20, 2026 may count toward a streak. A day with fewer than 18 reported hourly values does not satisfy the condition and breaks a streak.",
+          "source_label": "TWC",
+          "status": "active",
+          "ticker": "KXAVGTKIAH-26SEP20-6",
+          "title": "Will the average temperature in Houston be above 90\u00b0F for 6 or more consecutive days in the week of Sep 14, 2026?"
+        },
+        {
+          "close_time": "2026-09-21T03:59:59Z",
+          "event_ticker": "KXAVGTKIAH-26SEP20",
+          "expected_expiration_time": "2026-09-22T03:59:59Z",
+          "floor_strike": 5,
+          "rules_primary": "If there is at least 5 or more consecutive days within September 14, 2026 through September 20, 2026 on which the daily average temperature at KIAH in Houston is strictly greater than 90 degrees Fahrenheit, then the market resolves to Yes.",
+          "rules_secondary": "Data for KIAH is available at https://weather.com/kalshi. A day's average temperature is the arithmetic mean of the hourly temperature values reported by The Weather Company for KIAH from 12:00 AM to 11:59 PM local time, rounded to the nearest whole degree. Data as published at the Expiration Time will be used; later revisions are disregarded.\n\nAn average of exactly 90 degrees Fahrenheit does not satisfy the condition. Only days within September 14, 2026 through September 20, 2026 may count toward a streak. A day with fewer than 18 reported hourly values does not satisfy the condition and breaks a streak.",
+          "source_label": "TWC",
+          "status": "active",
+          "ticker": "KXAVGTKIAH-26SEP20-5",
+          "title": "Will the average temperature in Houston be above 90\u00b0F for 5 or more consecutive days in the week of Sep 14, 2026?"
+        },
+        {
+          "close_time": "2026-09-21T03:59:59Z",
+          "event_ticker": "KXAVGTKIAH-26SEP20",
+          "expected_expiration_time": "2026-09-22T03:59:59Z",
+          "floor_strike": 4,
+          "rules_primary": "If there is at least 4 or more consecutive days within September 14, 2026 through September 20, 2026 on which the daily average temperature at KIAH in Houston is strictly greater than 90 degrees Fahrenheit, then the market resolves to Yes.",
+          "rules_secondary": "Data for KIAH is available at https://weather.com/kalshi. A day's average temperature is the arithmetic mean of the hourly temperature values reported by The Weather Company for KIAH from 12:00 AM to 11:59 PM local time, rounded to the nearest whole degree. Data as published at the Expiration Time will be used; later revisions are disregarded.\n\nAn average of exactly 90 degrees Fahrenheit does not satisfy the condition. Only days within September 14, 2026 through September 20, 2026 may count toward a streak. A day with fewer than 18 reported hourly values does not satisfy the condition and breaks a streak.",
+          "source_label": "TWC",
+          "status": "active",
+          "ticker": "KXAVGTKIAH-26SEP20-4",
+          "title": "Will the average temperature in Houston be above 90\u00b0F for 4 or more consecutive days in the week of Sep 14, 2026?"
+        }
+      ],
+      "series": {
+        "additional_prohibitions": [
+          "Persons who are employed by any of the Source Agencies are not permitted to trade on the Contract.",
+          "Persons who hold any material, non-public information on the Underlying are not permitted to trade on the Contract."
+        ],
+        "category": "Climate and Weather",
+        "contract_terms_url": "https://assets.kalshi.com/contract_terms/GLOBALTEMPERATURESUSTAINED.pdf",
+        "contract_url": "https://assets.kalshi.com/regulatory/product-certifications/GLOBALTEMPERATURESUSTAINED.pdf",
+        "frequency": "weekly",
+        "product_metadata": null,
+        "settlement_sources": [
+          {
+            "name": "The Weather Company",
+            "url": "https://weather.com/kalshi"
+          }
+        ],
+        "tags": [
+          "Heatwaves"
+        ],
+        "ticker": "KXAVGTKIAH",
+        "title": "Average Weekly Temp in Houston (Bush) "
+      },
+      "source_counts": {
+        "TWC": 5
+      }
+    },
+    {
+      "event_counts": {},
+      "open_market_count": 0,
+      "open_query_error": null,
+      "open_query_sha256": "50699ea1db13415ea46ec367dcfa58decd9660083271c5dc061561f38337fbac",
+      "open_query_status": 200,
+      "sample": [],
+      "series": {
+        "additional_prohibitions": [
+          "Persons who are employed by any of the Source Agencies are not permitted to trade on the Contract.",
+          "Persons who hold any material, non-public information on the Underlying are not permitted to trade on the Contract."
+        ],
+        "category": "Climate and Weather",
+        "contract_terms_url": "https://assets.kalshi.com/contract_terms/BIGGESTQUAKE.pdf",
+        "contract_url": "https://assets.kalshi.com/regulatory/product-certifications/BIGGESTQUAKE.pdf",
+        "frequency": "hourly",
+        "product_metadata": null,
+        "settlement_sources": [
+          {
+            "name": "the United States Geological Survey",
+            "url": "https://www.usgs.gov"
+          }
+        ],
+        "tags": null,
+        "ticker": "KXBIGGESTQUAKEH",
+        "title": "Biggest earthquake hourly"
+      },
+      "source_counts": {}
+    },
+    {
+      "event_counts": {},
+      "open_market_count": 0,
+      "open_query_error": null,
+      "open_query_sha256": "50699ea1db13415ea46ec367dcfa58decd9660083271c5dc061561f38337fbac",
+      "open_query_status": 200,
+      "sample": [],
+      "series": {
+        "additional_prohibitions": [
+          "Persons who are employed by any of the Source Agencies are not permitted to trade on the Contract.",
+          "Persons who hold any material, non-public information on the Underlying are not permitted to trade on the Contract."
+        ],
+        "category": "Climate and Weather",
+        "contract_terms_url": "https://assets.kalshi.com/contract_terms/DENHIGH.pdf",
+        "contract_url": "https://assets.kalshi.com/regulatory/product-certifications/DENHIGH.pdf",
+        "frequency": "daily",
+        "product_metadata": null,
+        "settlement_sources": [
+          {
+            "name": "NWS Climatological Report",
+            "url": "https://forecast.weather.gov/product.php?site=BOU&product=CLI&issuedby=DEN"
+          }
+        ],
+        "tags": [
+          "Daily temperature"
+        ],
+        "ticker": "KXDENHIGH",
+        "title": "Highest temperature in Denver"
+      },
+      "source_counts": {}
+    },
+    {
+      "event_counts": {},
+      "open_market_count": 0,
+      "open_query_error": null,
+      "open_query_sha256": "50699ea1db13415ea46ec367dcfa58decd9660083271c5dc061561f38337fbac",
+      "open_query_status": 200,
+      "sample": [],
+      "series": {
+        "additional_prohibitions": [
+          "Persons who are employed by any of the Source Agencies are not permitted to trade on the Contract.",
+          "Persons who hold any material, non-public information on the Underlying are not permitted to trade on the Contract."
+        ],
+        "category": "Climate and Weather",
+        "contract_terms_url": "https://assets.kalshi.com/contract_terms/DVTEMP.pdf",
+        "contract_url": "https://assets.kalshi.com/regulatory/product-certifications/DVTEMP.pdf",
+        "frequency": "daily",
+        "product_metadata": null,
+        "settlement_sources": [
+          {
+            "name": "National Weather Service",
+            "url": "https://forecast.weather.gov/product.php?site=VEF&product=CLI&issuedby=LAS"
+          }
+        ],
+        "tags": null,
+        "ticker": "KXDVHIGH",
+        "title": "Death Valley temperature"
+      },
+      "source_counts": {}
+    },
+    {
+      "event_counts": {},
+      "open_market_count": 0,
+      "open_query_error": null,
+      "open_query_sha256": "50699ea1db13415ea46ec367dcfa58decd9660083271c5dc061561f38337fbac",
+      "open_query_status": 200,
+      "sample": [],
+      "series": {
+        "additional_prohibitions": [
+          "Persons who are employed by any of the Source Agencies are not permitted to trade on the Contract.",
+          "Persons who hold any material, non-public information on the Underlying are not permitted to trade on the Contract."
+        ],
+        "category": "Climate and Weather",
+        "contract_terms_url": "https://assets.kalshi.com/contract_terms/NHIGHD.pdf",
+        "contract_url": "https://assets.kalshi.com/regulatory/product-certifications/NHIGHD.pdf",
+        "frequency": "hourly",
+        "product_metadata": null,
+        "settlement_sources": [
+          {
+            "name": "The Weather Company",
+            "url": "https://weather.com/kalshi"
+          }
+        ],
+        "tags": [
+          "Hourly temperature"
+        ],
+        "ticker": "KXHIGHNYD",
+        "title": "Hourly Directional NYC Temperature"
+      },
+      "source_counts": {}
+    },
+    {
+      "event_counts": {},
+      "open_market_count": 0,
+      "open_query_error": null,
+      "open_query_sha256": "50699ea1db13415ea46ec367dcfa58decd9660083271c5dc061561f38337fbac",
+      "open_query_status": 200,
+      "sample": [],
+      "series": {
+        "additional_prohibitions": [
+          "Persons who are employed by any of the Source Agencies are not permitted to trade on the Contract.",
+          "Persons who hold any material, non-public information on the Underlying are not permitted to trade on the Contract."
+        ],
+        "category": "Climate and Weather",
+        "contract_terms_url": "https://assets.kalshi.com/contract_terms/GLOBALTEMPERATURE.pdf",
+        "contract_url": "https://assets.kalshi.com/regulatory/product-certifications/GLOBALTEMPERATURE.pdf",
+        "frequency": "daily",
+        "product_metadata": null,
+        "settlement_sources": [
+          {
+            "name": "The Weather Company",
+            "url": "https://weather.com/kalshi"
+          }
+        ],
+        "tags": null,
+        "ticker": "KXHIGHTVHHH",
+        "title": "Daily high temp Hong Kong"
+      },
+      "source_counts": {}
+    },
+    {
+      "event_counts": {
+        "KXHMONTH-26SEP": 1
+      },
+      "open_market_count": 1,
+      "open_query_error": null,
+      "open_query_sha256": "1982d9c927c5a16ad1802168f9d2cd6992c90ac3f2b9f583eb3a65ce11ab9879",
+      "open_query_status": 200,
+      "sample": [
+        {
+          "close_time": "2026-10-16T03:59:00Z",
+          "event_ticker": "KXHMONTH-26SEP",
+          "expected_expiration_time": "2026-10-08T14:00:00Z",
+          "floor_strike": null,
+          "rules_primary": "If Sep 2026 is the hottest September ever, then the market resolves to Yes.",
+          "rules_secondary": "",
+          "source_label": "OTHER_OR_UNSTATED",
+          "status": "active",
+          "ticker": "KXHMONTH-26SEP",
+          "title": "Will  Sep 2026 be the hottest Sep ever?"
+        }
+      ],
+      "series": {
+        "additional_prohibitions": [
+          "Persons who are employed by any of the Source Agencies are not permitted to trade on the Contract.",
+          "Persons who hold any material, non-public information on the Underlying are not permitted to trade on the Contract."
+        ],
+        "category": "Climate and Weather",
+        "contract_terms_url": "https://assets.kalshi.com/contract_terms/HMONTH.pdf",
+        "contract_url": "https://assets.kalshi.com/regulatory/product-certifications/HMONTH.pdf",
+        "frequency": "monthly",
+        "product_metadata": null,
+        "settlement_sources": [
+          {
+            "name": "NCEI",
+            "url": "https://www.ncei.noaa.gov/access/monitoring/climate-at-a-glance/global/time-series"
+          }
+        ],
+        "tags": [
+          "Climate change"
+        ],
+        "ticker": "KXHMONTH",
+        "title": "Hottest month instance"
+      },
+      "source_counts": {
+        "OTHER_OR_UNSTATED": 1
+      }
+    },
+    {
+      "event_counts": {},
+      "open_market_count": 0,
+      "open_query_error": null,
+      "open_query_sha256": "50699ea1db13415ea46ec367dcfa58decd9660083271c5dc061561f38337fbac",
+      "open_query_status": 200,
+      "sample": [],
+      "series": {
+        "additional_prohibitions": [
+          "Persons who are employed by any of the Source Agencies are not permitted to trade on the Contract.",
+          "Persons who hold any material, non-public information on the Underlying are not permitted to trade on the Contract."
+        ],
+        "category": "Climate and Weather",
+        "contract_terms_url": "https://assets.kalshi.com/contract_terms/HOUHIGH.pdf",
+        "contract_url": "https://assets.kalshi.com/regulatory/product-certifications/HOUHIGH.pdf",
+        "frequency": "daily",
+        "product_metadata": null,
+        "settlement_sources": [
+          {
+            "name": "NWS Climatological Report Houston",
+            "url": "https://forecast.weather.gov/product.php?site=HGX&product=CLI&issuedby=HOU"
+          }
+        ],
+        "tags": [
+          "Daily temperature"
+        ],
+        "ticker": "KXHOUHIGH",
+        "title": "Highest temperature in Houston"
+      },
+      "source_counts": {}
+    },
+    {
+      "event_counts": {},
+      "open_market_count": 0,
+      "open_query_error": null,
+      "open_query_sha256": "50699ea1db13415ea46ec367dcfa58decd9660083271c5dc061561f38337fbac",
+      "open_query_status": 200,
+      "sample": [],
+      "series": {
+        "additional_prohibitions": [
+          "Persons who are employed by any of the Source Agencies are not permitted to trade on the Contract.",
+          "Persons who hold any material, non-public information on the Underlying are not permitted to trade on the Contract."
+        ],
+        "category": "Climate and Weather",
+        "contract_terms_url": "https://assets.kalshi.com/contract_terms/HURSZ.pdf",
+        "contract_url": "https://assets.kalshi.com/regulatory/product-certifications/HURSZ.pdf",
+        "frequency": "custom",
+        "product_metadata": null,
+        "settlement_sources": [
+          {
+            "name": "National Oceanic and Atmospheric Administration",
+            "url": "https://www.nhc.noaa.gov/"
+          }
+        ],
+        "tags": [
+          "Hurricanes"
+        ],
+        "ticker": "KXHURCATH",
+        "title": "Hurricane Henri size"
+      },
+      "source_counts": {}
+    },
+    {
+      "event_counts": {},
+      "open_market_count": 0,
+      "open_query_error": null,
+      "open_query_sha256": "50699ea1db13415ea46ec367dcfa58decd9660083271c5dc061561f38337fbac",
+      "open_query_status": 200,
+      "sample": [],
+      "series": {
+        "additional_prohibitions": [
+          "Persons who are employed by any of the Source Agencies are not permitted to trade on the Contract.",
+          "Persons who hold any material, non-public information on the Underlying are not permitted to trade on the Contract."
+        ],
+        "category": "Climate and Weather",
+        "contract_terms_url": "https://assets.kalshi.com/contract_terms/INTERNATIONALTEMPERATURE.pdf",
+        "contract_url": "https://assets.kalshi.com/regulatory/product-certifications/INTERNATIONALTEMPERATURE.pdf",
+        "frequency": "daily",
+        "product_metadata": null,
+        "settlement_sources": [
+          {
+            "name": "The Weather Company",
+            "url": "https://weather.com/kalshi"
+          }
+        ],
+        "tags": null,
+        "ticker": "KXLOWTVHHH",
+        "title": "Daily low temp Hong Kong"
+      },
+      "source_counts": {}
+    },
+    {
+      "event_counts": {},
+      "open_market_count": 0,
+      "open_query_error": null,
+      "open_query_sha256": "50699ea1db13415ea46ec367dcfa58decd9660083271c5dc061561f38337fbac",
+      "open_query_status": 200,
+      "sample": [],
+      "series": {
+        "additional_prohibitions": [
+          "Persons who are employed by any of the Source Agencies are not permitted to trade on the Contract.",
+          "Persons who hold any material, non-public information on the Underlying are not permitted to trade on the Contract."
+        ],
+        "category": "Climate and Weather",
+        "contract_terms_url": "https://assets.kalshi.com/contract_terms/PHILHIGH.pdf",
+        "contract_url": "https://assets.kalshi.com/regulatory/product-certifications/PHILHIGH.pdf",
+        "frequency": "custom",
+        "product_metadata": null,
+        "settlement_sources": [
+          {
+            "name": "NWS Climatological Report",
+            "url": "https://forecast.weather.gov/product.php?site=PHI&product=CLI&issuedby=PHL"
+          }
+        ],
+        "tags": [
+          "Daily temperature"
+        ],
+        "ticker": "KXPHILHIGH",
+        "title": "Highest temperature in Philadelphia"
+      },
+      "source_counts": {}
+    },
+    {
+      "event_counts": {},
+      "open_market_count": 0,
+      "open_query_error": null,
+      "open_query_sha256": "50699ea1db13415ea46ec367dcfa58decd9660083271c5dc061561f38337fbac",
+      "open_query_status": 200,
+      "sample": [],
+      "series": {
+        "additional_prohibitions": [
+          "Persons who are employed by any of the Source Agencies are not permitted to trade on the Contract.",
+          "Persons who hold any material, non-public information on the Underlying are not permitted to trade on the Contract."
+        ],
+        "category": "Climate and Weather",
+        "contract_terms_url": "https://assets.kalshi.com/contract_terms/LOCALTEMPERATURE.pdf",
+        "contract_url": "https://assets.kalshi.com/regulatory/product-certifications/LOCALTEMPERATURE.pdf",
+        "frequency": "hourly",
+        "product_metadata": null,
+        "settlement_sources": [
+          {
+            "name": "The Weather Company",
+            "url": "https://weather.com/kalshi"
+          }
+        ],
+        "tags": [
+          "Hourly temperature"
+        ],
+        "ticker": "KXTEMPAUSH",
+        "title": "Hourly Directional Austin Temperature"
+      },
+      "source_counts": {}
+    },
+    {
+      "event_counts": {},
+      "open_market_count": 0,
+      "open_query_error": null,
+      "open_query_sha256": "50699ea1db13415ea46ec367dcfa58decd9660083271c5dc061561f38337fbac",
+      "open_query_status": 200,
+      "sample": [],
+      "series": {
+        "additional_prohibitions": [
+          "Persons who are employed by any of the Source Agencies are not permitted to trade on the Contract.",
+          "Persons who hold any material, non-public information on the Underlying are not permitted to trade on the Contract."
+        ],
+        "category": "Climate and Weather",
+        "contract_terms_url": "https://assets.kalshi.com/contract_terms/NHIGHD.pdf",
+        "contract_url": "https://assets.kalshi.com/regulatory/product-certifications/NHIGHD.pdf",
+        "frequency": "hourly",
+        "product_metadata": null,
+        "settlement_sources": [
+          {
+            "name": "The Weather Company",
+            "url": "https://weather.com/kalshi"
+          }
+        ],
+        "tags": [
+          "Hourly temperature"
+        ],
+        "ticker": "KXTEMPBOSH",
+        "title": "Hourly Directional Boston Temperature"
+      },
+      "source_counts": {}
+    },
+    {
+      "event_counts": {},
+      "open_market_count": 0,
+      "open_query_error": null,
+      "open_query_sha256": "50699ea1db13415ea46ec367dcfa58decd9660083271c5dc061561f38337fbac",
+      "open_query_status": 200,
+      "sample": [],
+      "series": {
+        "additional_prohibitions": [
+          "Persons who are employed by any of the Source Agencies are not permitted to trade on the Contract.",
+          "Persons who hold any material, non-public information on the Underlying are not permitted to trade on the Contract."
+        ],
+        "category": "Climate and Weather",
+        "contract_terms_url": "https://assets.kalshi.com/contract_terms/LOCALTEMPERATURE.pdf",
+        "contract_url": "https://assets.kalshi.com/regulatory/product-certifications/LOCALTEMPERATURE.pdf",
+        "frequency": "hourly",
+        "product_metadata": null,
+        "settlement_sources": [
+          {
+            "name": "The Weather Company",
+            "url": "https://weather.com/kalshi"
+          }
+        ],
+        "tags": [
+          "Hourly temperature"
+        ],
+        "ticker": "KXTEMPCHIH",
+        "title": "Hourly Directional Chicago Temperature"
+      },
+      "source_counts": {}
+    },
+    {
+      "event_counts": {
+        "KXTEMPCHIHS-26SEP1920": 10
+      },
+      "open_market_count": 10,
+      "open_query_error": null,
+      "open_query_sha256": "4ec50b92f484fbe0980e50faeb7303a67d785b96a9461cdb3e2d177048f50504",
+      "open_query_status": 200,
+      "sample": [
+        {
+          "close_time": "2026-09-20T00:00:00Z",
+          "event_ticker": "KXTEMPCHIHS-26SEP1920",
+          "expected_expiration_time": "2026-09-20T00:05:00Z",
+          "floor_strike": 71.99,
+          "rules_primary": "If the temperature recorded at Chicago Metro Area for Sep 19, 2026 at 8 PM EDT as reported by Synoptic Data, is above 71.99\u00b0, then the market resolves to Yes.",
+          "rules_secondary": "The official final value for this market is determined strictly by the temperature reported by Synoptic Data, calculated in accordance with the Kalshi Weather Index Methodology. Alternative sources\u2014such as NWS Climatological Reports or Google Weather\u2014may serve as references, but are not authoritative and will not be used for market resolution.",
+          "source_label": "SYNOPTIC+KALSHI_WEATHER_INDEX",
+          "status": "active",
+          "ticker": "KXTEMPCHIHS-26SEP1920-T71.99",
+          "title": "Will the temp in Chicago Metro Area be above 71.99\u00b0 on Sep 19, 2026 at 8pm EDT?"
+        },
+        {
+          "close_time": "2026-09-20T00:00:00Z",
+          "event_ticker": "KXTEMPCHIHS-26SEP1920",
+          "expected_expiration_time": "2026-09-20T00:05:00Z",
+          "floor_strike": 70.99,
+          "rules_primary": "If the temperature recorded at Chicago Metro Area for Sep 19, 2026 at 8 PM EDT as reported by Synoptic Data, is above 70.99\u00b0, then the market resolves to Yes.",
+          "rules_secondary": "The official final value for this market is determined strictly by the temperature reported by Synoptic Data, calculated in accordance with the Kalshi Weather Index Methodology. Alternative sources\u2014such as NWS Climatological Reports or Google Weather\u2014may serve as references, but are not authoritative and will not be used for market resolution.",
+          "source_label": "SYNOPTIC+KALSHI_WEATHER_INDEX",
+          "status": "active",
+          "ticker": "KXTEMPCHIHS-26SEP1920-T70.99",
+          "title": "Will the temp in Chicago Metro Area be above 70.99\u00b0 on Sep 19, 2026 at 8pm EDT?"
+        },
+        {
+          "close_time": "2026-09-20T00:00:00Z",
+          "event_ticker": "KXTEMPCHIHS-26SEP1920",
+          "expected_expiration_time": "2026-09-20T00:05:00Z",
+          "floor_strike": 69.99,
+          "rules_primary": "If the temperature recorded at Chicago Metro Area for Sep 19, 2026 at 8 PM EDT as reported by Synoptic Data, is above 69.99\u00b0, then the market resolves to Yes.",
+          "rules_secondary": "The official final value for this market is determined strictly by the temperature reported by Synoptic Data, calculated in accordance with the Kalshi Weather Index Methodology. Alternative sources\u2014such as NWS Climatological Reports or Google Weather\u2014may serve as references, but are not authoritative and will not be used for market resolution.",
+          "source_label": "SYNOPTIC+KALSHI_WEATHER_INDEX",
+          "status": "active",
+          "ticker": "KXTEMPCHIHS-26SEP1920-T69.99",
+          "title": "Will the temp in Chicago Metro Area be above 69.99\u00b0 on Sep 19, 2026 at 8pm EDT?"
+        }
+      ],
+      "series": {
+        "additional_prohibitions": [
+          "Persons who are employed by any of the Source Agencies are not permitted to trade on the Contract.",
+          "Persons who hold any material, non-public information on the Underlying are not permitted to trade on the Contract."
+        ],
+        "category": "Climate and Weather",
+        "contract_terms_url": "https://assets.kalshi.com/contract_terms/CHIMETROWINDEX.pdf",
+        "contract_url": "https://assets.kalshi.com/regulatory/product-certifications/CHIMETROWINDEX.pdf",
+        "frequency": "hourly",
+        "product_metadata": null,
+        "settlement_sources": [
+          {
+            "name": "Kalshi",
+            "url": "https://kalshi.com"
+          }
+        ],
+        "tags": [
+          "Hourly temperature"
+        ],
+        "ticker": "KXTEMPCHIHS",
+        "title": "Hourly Directional Chicago Metro Temperature"
+      },
+      "source_counts": {
+        "SYNOPTIC+KALSHI_WEATHER_INDEX": 10
+      }
+    },
+    {
+      "event_counts": {},
+      "open_market_count": 0,
+      "open_query_error": null,
+      "open_query_sha256": "50699ea1db13415ea46ec367dcfa58decd9660083271c5dc061561f38337fbac",
+      "open_query_status": 200,
+      "sample": [],
+      "series": {
+        "additional_prohibitions": [
+          "Persons who are employed by any of the Source Agencies are not permitted to trade on the Contract.",
+          "Persons who hold any material, non-public information on the Underlying are not permitted to trade on the Contract."
+        ],
+        "category": "Climate and Weather",
+        "contract_terms_url": "https://assets.kalshi.com/contract_terms/CHIMETROWINDEX.pdf",
+        "contract_url": "https://assets.kalshi.com/regulatory/product-certifications/CHIMETROWINDEX.pdf",
+        "frequency": "hourly",
+        "product_metadata": null,
+        "settlement_sources": [
+          {
+            "name": "Kalshi",
+            "url": "https://kalshi.com"
+          }
+        ],
+        "tags": null,
+        "ticker": "KXTEMPCHIMETROHS",
+        "title": "Hourly Directional Chicago Metro Temperature"
+      },
+      "source_counts": {}
+    },
+    {
+      "event_counts": {},
+      "open_market_count": 0,
+      "open_query_error": null,
+      "open_query_sha256": "50699ea1db13415ea46ec367dcfa58decd9660083271c5dc061561f38337fbac",
+      "open_query_status": 200,
+      "sample": [],
+      "series": {
+        "additional_prohibitions": [
+          "Persons who are employed by any of the Source Agencies are not permitted to trade on the Contract.",
+          "Persons who hold any material, non-public information on the Underlying are not permitted to trade on the Contract."
+        ],
+        "category": "Climate and Weather",
+        "contract_terms_url": "https://assets.kalshi.com/contract_terms/LOCALTEMPERATURE.pdf",
+        "contract_url": "https://assets.kalshi.com/regulatory/product-certifications/LOCALTEMPERATURE.pdf",
+        "frequency": "hourly",
+        "product_metadata": null,
+        "settlement_sources": [
+          {
+            "name": "The Weather Company",
+            "url": "https://weather.com/kalshi"
+          }
+        ],
+        "tags": [
+          "Hourly temperature"
+        ],
+        "ticker": "KXTEMPDCH",
+        "title": "Hourly Directional DC Temperature"
+      },
+      "source_counts": {}
+    },
+    {
+      "event_counts": {},
+      "open_market_count": 0,
+      "open_query_error": null,
+      "open_query_sha256": "50699ea1db13415ea46ec367dcfa58decd9660083271c5dc061561f38337fbac",
+      "open_query_status": 200,
+      "sample": [],
+      "series": {
+        "additional_prohibitions": [
+          "Persons who are employed by any of the Source Agencies are not permitted to trade on the Contract.",
+          "Persons who hold any material, non-public information on the Underlying are not permitted to trade on the Contract."
+        ],
+        "category": "Climate and Weather",
+        "contract_terms_url": "https://assets.kalshi.com/contract_terms/LAWINDEX.pdf",
+        "contract_url": "https://assets.kalshi.com/regulatory/product-certifications/LAWINDEX.pdf",
+        "frequency": "hourly",
+        "product_metadata": null,
+        "settlement_sources": [
+          {
+            "name": "Kalshi",
+            "url": "https://kalshi.com"
+          }
+        ],
+        "tags": null,
+        "ticker": "KXTEMPLAHS",
+        "title": "Hourly Directional Coastal LA Temperature"
+      },
+      "source_counts": {}
+    },
+    {
+      "event_counts": {},
+      "open_market_count": 0,
+      "open_query_error": null,
+      "open_query_sha256": "50699ea1db13415ea46ec367dcfa58decd9660083271c5dc061561f38337fbac",
+      "open_query_status": 200,
+      "sample": [],
+      "series": {
+        "additional_prohibitions": [
+          "Persons who are employed by any of the Source Agencies are not permitted to trade on the Contract.",
+          "Persons who hold any material, non-public information on the Underlying are not permitted to trade on the Contract."
+        ],
+        "category": "Climate and Weather",
+        "contract_terms_url": "https://assets.kalshi.com/contract_terms/LOCALTEMPERATURE.pdf",
+        "contract_url": "https://assets.kalshi.com/regulatory/product-certifications/LOCALTEMPERATURE.pdf",
+        "frequency": "hourly",
+        "product_metadata": null,
+        "settlement_sources": [
+          {
+            "name": "The Weather Company",
+            "url": "https://weather.com/kalshi"
+          }
+        ],
+        "tags": [
+          "Hourly temperature"
+        ],
+        "ticker": "KXTEMPLAXH",
+        "title": "Hourly Directional Los Angeles Temperature"
+      },
+      "source_counts": {}
+    },
+    {
+      "event_counts": {
+        "KXTEMPLAXHS-26SEP1920": 10
+      },
+      "open_market_count": 10,
+      "open_query_error": null,
+      "open_query_sha256": "1aac59cf01513269440d59f10f6b2e5beb85e72a85c5ffc9452a1b6e7ebca2bf",
+      "open_query_status": 200,
+      "sample": [
+        {
+          "close_time": "2026-09-20T00:00:00Z",
+          "event_ticker": "KXTEMPLAXHS-26SEP1920",
+          "expected_expiration_time": "2026-09-20T00:05:00Z",
+          "floor_strike": 78.99,
+          "rules_primary": "If the temperature recorded at Coastal Los Angeles for Sep 19, 2026 at 8 PM EDT as reported by Synoptic Data, is above 78.99\u00b0, then the market resolves to Yes.",
+          "rules_secondary": "The official final value for this market is determined strictly by the temperature reported by Synoptic Data, calculated in accordance with the Kalshi Weather Index Methodology. Alternative sources\u2014such as NWS Climatological Reports or Google Weather\u2014may serve as references, but are not authoritative and will not be used for market resolution.",
+          "source_label": "SYNOPTIC+KALSHI_WEATHER_INDEX",
+          "status": "active",
+          "ticker": "KXTEMPLAXHS-26SEP1920-T78.99",
+          "title": "Will the temp in Coastal Los Angeles be above 78.99\u00b0 on Sep 19, 2026 at 8pm EDT?"
+        },
+        {
+          "close_time": "2026-09-20T00:00:00Z",
+          "event_ticker": "KXTEMPLAXHS-26SEP1920",
+          "expected_expiration_time": "2026-09-20T00:05:00Z",
+          "floor_strike": 77.99,
+          "rules_primary": "If the temperature recorded at Coastal Los Angeles for Sep 19, 2026 at 8 PM EDT as reported by Synoptic Data, is above 77.99\u00b0, then the market resolves to Yes.",
+          "rules_secondary": "The official final value for this market is determined strictly by the temperature reported by Synoptic Data, calculated in accordance with the Kalshi Weather Index Methodology. Alternative sources\u2014such as NWS Climatological Reports or Google Weather\u2014may serve as references, but are not authoritative and will not be used for market resolution.",
+          "source_label": "SYNOPTIC+KALSHI_WEATHER_INDEX",
+          "status": "active",
+          "ticker": "KXTEMPLAXHS-26SEP1920-T77.99",
+          "title": "Will the temp in Coastal Los Angeles be above 77.99\u00b0 on Sep 19, 2026 at 8pm EDT?"
+        },
+        {
+          "close_time": "2026-09-20T00:00:00Z",
+          "event_ticker": "KXTEMPLAXHS-26SEP1920",
+          "expected_expiration_time": "2026-09-20T00:05:00Z",
+          "floor_strike": 76.99,
+          "rules_primary": "If the temperature recorded at Coastal Los Angeles for Sep 19, 2026 at 8 PM EDT as reported by Synoptic Data, is above 76.99\u00b0, then the market resolves to Yes.",
+          "rules_secondary": "The official final value for this market is determined strictly by the temperature reported by Synoptic Data, calculated in accordance with the Kalshi Weather Index Methodology. Alternative sources\u2014such as NWS Climatological Reports or Google Weather\u2014may serve as references, but are not authoritative and will not be used for market resolution.",
+          "source_label": "SYNOPTIC+KALSHI_WEATHER_INDEX",
+          "status": "active",
+          "ticker": "KXTEMPLAXHS-26SEP1920-T76.99",
+          "title": "Will the temp in Coastal Los Angeles be above 76.99\u00b0 on Sep 19, 2026 at 8pm EDT?"
+        }
+      ],
+      "series": {
+        "additional_prohibitions": [
+          "Persons who are employed by any of the Source Agencies are not permitted to trade on the Contract.",
+          "Persons who hold any material, non-public information on the Underlying are not permitted to trade on the Contract."
+        ],
+        "category": "Climate and Weather",
+        "contract_terms_url": "https://assets.kalshi.com/contract_terms/LAWINDEX.pdf",
+        "contract_url": "https://assets.kalshi.com/regulatory/product-certifications/LAWINDEX.pdf",
+        "frequency": "hourly",
+        "product_metadata": null,
+        "settlement_sources": [
+          {
+            "name": "Synoptic Data",
+            "url": "https://synopticdata.com/"
+          }
+        ],
+        "tags": [
+          "Hourly temperature"
+        ],
+        "ticker": "KXTEMPLAXHS",
+        "title": "Hourly Directional Coastal LA Temperature"
+      },
+      "source_counts": {
+        "SYNOPTIC+KALSHI_WEATHER_INDEX": 10
+      }
+    },
+    {
+      "event_counts": {
+        "KXTEMPMIAH-26SEP1920": 10
+      },
+      "open_market_count": 10,
+      "open_query_error": null,
+      "open_query_sha256": "a0a8052b15e30cc27dd222987b646127b2b69ba83cd4a1153cd2eedb106ac446",
+      "open_query_status": 200,
+      "sample": [
+        {
+          "close_time": "2026-09-20T00:00:00Z",
+          "event_ticker": "KXTEMPMIAH-26SEP1920",
+          "expected_expiration_time": "2026-09-20T00:05:00Z",
+          "floor_strike": 80.99,
+          "rules_primary": "If the temperature recorded at Miami, FL for Sep 19, 2026 at 8 PM EDT as reported by Synoptic Data, is above 80.99\u00b0, then the market resolves to Yes.",
+          "rules_secondary": "The official final value for this market is determined strictly by the temperature reported by Synoptic Data, calculated in accordance with the Kalshi Weather Index Methodology. Alternative sources\u2014such as NWS Climatological Reports or Google Weather\u2014may serve as references, but are not authoritative and will not be used for market resolution.",
+          "source_label": "SYNOPTIC+KALSHI_WEATHER_INDEX",
+          "status": "active",
+          "ticker": "KXTEMPMIAH-26SEP1920-T80.99",
+          "title": "Will the temp in Miami be above 80.99\u00b0 on Sep 19, 2026 at 8pm EDT?"
+        },
+        {
+          "close_time": "2026-09-20T00:00:00Z",
+          "event_ticker": "KXTEMPMIAH-26SEP1920",
+          "expected_expiration_time": "2026-09-20T00:05:00Z",
+          "floor_strike": 79.99,
+          "rules_primary": "If the temperature recorded at Miami, FL for Sep 19, 2026 at 8 PM EDT as reported by Synoptic Data, is above 79.99\u00b0, then the market resolves to Yes.",
+          "rules_secondary": "The official final value for this market is determined strictly by the temperature reported by Synoptic Data, calculated in accordance with the Kalshi Weather Index Methodology. Alternative sources\u2014such as NWS Climatological Reports or Google Weather\u2014may serve as references, but are not authoritative and will not be used for market resolution.",
+          "source_label": "SYNOPTIC+KALSHI_WEATHER_INDEX",
+          "status": "active",
+          "ticker": "KXTEMPMIAH-26SEP1920-T79.99",
+          "title": "Will the temp in Miami be above 79.99\u00b0 on Sep 19, 2026 at 8pm EDT?"
+        },
+        {
+          "close_time": "2026-09-20T00:00:00Z",
+          "event_ticker": "KXTEMPMIAH-26SEP1920",
+          "expected_expiration_time": "2026-09-20T00:05:00Z",
+          "floor_strike": 78.99,
+          "rules_primary": "If the temperature recorded at Miami, FL for Sep 19, 2026 at 8 PM EDT as reported by Synoptic Data, is above 78.99\u00b0, then the market resolves to Yes.",
+          "rules_secondary": "The official final value for this market is determined strictly by the temperature reported by Synoptic Data, calculated in accordance with the Kalshi Weather Index Methodology. Alternative sources\u2014such as NWS Climatological Reports or Google Weather\u2014may serve as references, but are not authoritative and will not be used for market resolution.",
+          "source_label": "SYNOPTIC+KALSHI_WEATHER_INDEX",
+          "status": "active",
+          "ticker": "KXTEMPMIAH-26SEP1920-T78.99",
+          "title": "Will the temp in Miami be above 78.99\u00b0 on Sep 19, 2026 at 8pm EDT?"
+        }
+      ],
+      "series": {
+        "additional_prohibitions": [
+          "Persons who are employed by any of the Source Agencies are not permitted to trade on the Contract.",
+          "Persons who hold any material, non-public information on the Underlying are not permitted to trade on the Contract."
+        ],
+        "category": "Climate and Weather",
+        "contract_terms_url": "https://assets.kalshi.com/contract_terms/MIAWINDEX.pdf",
+        "contract_url": "https://assets.kalshi.com/regulatory/product-certifications/MIAWINDEX.pdf",
+        "frequency": "hourly",
+        "product_metadata": null,
+        "settlement_sources": [
+          {
+            "name": "Synoptic Data",
+            "url": "https://synopticdata.com/"
+          }
+        ],
+        "tags": [
+          "Hourly temperature"
+        ],
+        "ticker": "KXTEMPMIAH",
+        "title": "Hourly Directional Miami Temperature"
+      },
+      "source_counts": {
+        "SYNOPTIC+KALSHI_WEATHER_INDEX": 10
+      }
+    },
+    {
+      "event_counts": {},
+      "open_market_count": 0,
+      "open_query_error": null,
+      "open_query_sha256": "50699ea1db13415ea46ec367dcfa58decd9660083271c5dc061561f38337fbac",
+      "open_query_status": 200,
+      "sample": [],
+      "series": {
+        "additional_prohibitions": [
+          "Persons who are employed by any of the Source Agencies are not permitted to trade on the Contract.",
+          "Persons who hold any material, non-public information on the Underlying are not permitted to trade on the Contract."
+        ],
+        "category": "Climate and Weather",
+        "contract_terms_url": "https://assets.kalshi.com/contract_terms/LOCALTEMPERATURE.pdf",
+        "contract_url": "https://assets.kalshi.com/regulatory/product-certifications/LOCALTEMPERATURE.pdf",
+        "frequency": "hourly",
+        "product_metadata": null,
+        "settlement_sources": [
+          {
+            "name": "The Weather Company",
+            "url": "https://weather.com/kalshi"
+          }
+        ],
+        "tags": [
+          "Hourly temperature"
+        ],
+        "ticker": "KXTEMPNYCH",
+        "title": "Hourly Directional NYC Temperature"
+      },
+      "source_counts": {}
+    },
+    {
+      "event_counts": {
+        "KXTEMPNYCHS-26SEP1920": 10
+      },
+      "open_market_count": 10,
+      "open_query_error": null,
+      "open_query_sha256": "39599ad16e8660abb8314b86ed6839dc83784d89a4c9b6f090a30b9c1aa4a234",
+      "open_query_status": 200,
+      "sample": [
+        {
+          "close_time": "2026-09-20T00:00:00Z",
+          "event_ticker": "KXTEMPNYCHS-26SEP1920",
+          "expected_expiration_time": "2026-09-20T00:05:00Z",
+          "floor_strike": 68.99,
+          "rules_primary": "If the temperature recorded at New York City for Sep 19, 2026 at 8 PM EDT as reported by Synoptic Data, is above 68.99\u00b0, then the market resolves to Yes.",
+          "rules_secondary": "The official final value for this market is determined strictly by the temperature reported by Synoptic Data, calculated in accordance with the Kalshi Weather Index Methodology. Alternative sources\u2014such as NWS Climatological Reports or Google Weather\u2014may serve as references, but are not authoritative and will not be used for market resolution.",
+          "source_label": "SYNOPTIC+KALSHI_WEATHER_INDEX",
+          "status": "active",
+          "ticker": "KXTEMPNYCHS-26SEP1920-T68.99",
+          "title": "Will the temp in New York City be above 68.99\u00b0 on Sep 19, 2026 at 8pm EDT?"
+        },
+        {
+          "close_time": "2026-09-20T00:00:00Z",
+          "event_ticker": "KXTEMPNYCHS-26SEP1920",
+          "expected_expiration_time": "2026-09-20T00:05:00Z",
+          "floor_strike": 67.99,
+          "rules_primary": "If the temperature recorded at New York City for Sep 19, 2026 at 8 PM EDT as reported by Synoptic Data, is above 67.99\u00b0, then the market resolves to Yes.",
+          "rules_secondary": "The official final value for this market is determined strictly by the temperature reported by Synoptic Data, calculated in accordance with the Kalshi Weather Index Methodology. Alternative sources\u2014such as NWS Climatological Reports or Google Weather\u2014may serve as references, but are not authoritative and will not be used for market resolution.",
+          "source_label": "SYNOPTIC+KALSHI_WEATHER_INDEX",
+          "status": "active",
+          "ticker": "KXTEMPNYCHS-26SEP1920-T67.99",
+          "title": "Will the temp in New York City be above 67.99\u00b0 on Sep 19, 2026 at 8pm EDT?"
+        },
+        {
+          "close_time": "2026-09-20T00:00:00Z",
+          "event_ticker": "KXTEMPNYCHS-26SEP1920",
+          "expected_expiration_time": "2026-09-20T00:05:00Z",
+          "floor_strike": 66.99,
+          "rules_primary": "If the temperature recorded at New York City for Sep 19, 2026 at 8 PM EDT as reported by Synoptic Data, is above 66.99\u00b0, then the market resolves to Yes.",
+          "rules_secondary": "The official final value for this market is determined strictly by the temperature reported by Synoptic Data, calculated in accordance with the Kalshi Weather Index Methodology. Alternative sources\u2014such as NWS Climatological Reports or Google Weather\u2014may serve as references, but are not authoritative and will not be used for market resolution.",
+          "source_label": "SYNOPTIC+KALSHI_WEATHER_INDEX",
+          "status": "active",
+          "ticker": "KXTEMPNYCHS-26SEP1920-T66.99",
+          "title": "Will the temp in New York City be above 66.99\u00b0 on Sep 19, 2026 at 8pm EDT?"
+        }
+      ],
+      "series": {
+        "additional_prohibitions": [
+          "Persons who are employed by any of the Source Agencies are not permitted to trade on the Contract.",
+          "Persons who hold any material, non-public information on the Underlying are not permitted to trade on the Contract."
+        ],
+        "category": "Climate and Weather",
+        "contract_terms_url": "https://assets.kalshi.com/contract_terms/NYCWINDEX.pdf",
+        "contract_url": "https://assets.kalshi.com/regulatory/product-certifications/NYCWINDEX.pdf",
+        "frequency": "hourly",
+        "product_metadata": null,
+        "settlement_sources": [
+          {
+            "name": "Synoptic Data",
+            "url": "https://synopticdata.com/"
+          }
+        ],
+        "tags": [
+          "Hourly temperature"
+        ],
+        "ticker": "KXTEMPNYCHS",
+        "title": "Hourly Directional NYC Temperature"
+      },
+      "source_counts": {
+        "SYNOPTIC+KALSHI_WEATHER_INDEX": 10
+      }
+    }
+  ],
+  "hourly_weather_series_count": 25,
+  "live_trading": false,
+  "paid_actions": false,
+  "series_query_results": [
+    {
+      "last_cursor": false,
+      "pages": 1,
+      "params": {
+        "category": "Climate and Weather",
+        "include_product_metadata": "true"
+      },
+      "row_count": 398
+    },
+    {
+      "last_cursor": false,
+      "pages": 1,
+      "params": {
+        "category": "Climate and Weather"
+      },
+      "row_count": 398
+    }
+  ],
+  "series_total_unique": 398,
+  "wallet_actions": false
+}
