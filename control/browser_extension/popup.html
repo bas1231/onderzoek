@@ -6,7 +6,7 @@
   <style>
     body {
       font-family: system-ui, sans-serif;
-      width: 350px;
+      width: 370px;
       padding: 14px;
     }
 
@@ -23,22 +23,29 @@
     button {
       width: 100%;
       margin-top: 7px;
-      padding: 7px;
+      padding: 8px;
     }
 
     #status {
       white-space: pre-wrap;
       margin-top: 12px;
       font-size: 12px;
+      max-height: 320px;
+      overflow: auto;
+    }
+
+    .primary {
+      font-weight: 700;
+    }
+
+    .test {
+      font-weight: 700;
+      margin-top: 15px;
     }
 
     .small {
       font-size: 11px;
       opacity: 0.75;
-    }
-
-    .primary {
-      font-weight: 700;
     }
   </style>
 </head>
@@ -59,6 +66,14 @@
   Arm only this chat
 </button>
 
+<button id="roundTrip" class="test">
+  Run local round-trip test
+</button>
+
+<button id="health">
+  Check local bridge
+</button>
+
 <button id="disableProject">
   Disable project auto-arm
 </button>
@@ -67,15 +82,11 @@
   Disarm everything
 </button>
 
-<button id="health">
-  Check local bridge
-</button>
-
 <div id="status"></div>
 
 <p class="small">
-Project auto-arm applies only to chats whose ChatGPT project ID
-matches the project armed here.
+Round-trip test bypasses ChatGPT page scanning and directly tests:
+extension → bridge → Git → WSL → result.
 </p>
 
 <script src="popup.js"></script>

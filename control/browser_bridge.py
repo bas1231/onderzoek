@@ -428,6 +428,74 @@ class Handler(BaseHTTPRequestHandler):
             )
             return
 
+        if path.startswith("/result/"):
+            task_id = path[len("/result/"):]
+
+            allowed = set(
+                "abcdefghijklmnopqrstuvwxyz"
+                "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+                "0123456789-_."
+            )
+
+            if (
+                not task_id
+                or len(task_id) > 160
+                or any(ch not in allowed for ch in task_id)
+            ):
+                self.send_json(
+                    400,
+                    {"error": "invalid task_id"},
+                )
+                return
+
+            result_dir = RESULTS / task_id
+            result_file = result_dir / "RESULT.json"
+
+            if not result_file.exists():
+                self.send_json(
+                    404,
+                    {
+                        "task_id": task_id,
+                        "status": "pending"
+                    },
+                )
+                return
+
+            result = json.loads(
+                result_file.read_text()
+            )
+
+            stdout_file = result_dir / "stdout.log"
+            stderr_file = result_dir / "stderr.log"
+
+            self.send_json(
+                200,
+                {
+                    "task_id": task_id,
+                    "result": result,
+                    "stdout": (
+                        stdout_file.read_text(
+                            errors="replace"
+                        )[:12000]
+                        if stdout_file.exists()
+                        else ""
+                    ),
+                    "stderr": (
+                        stderr_file.read_text(
+                            errors="replace"
+                        )[:12000]
+                        if stderr_file.exists()
+                        else ""
+                    ),
+                    "git_head": git(
+                        "rev-parse",
+                        "--short",
+                        "HEAD",
+                    ).stdout.strip(),
+                },
+            )
+            return
+
         self.send_json(404, {"error": "not found"})
 
     def do_POST(self):
