@@ -25,7 +25,7 @@ RESULTS = ROOT / "control/results"
 HOST = "127.0.0.1"
 PORT = 8765
 
-LOCK = threading.Lock()
+LOCK = threading.RLock()
 
 
 class FileWrite(BaseModel):
@@ -162,13 +162,17 @@ def task_exists(task_id: str) -> bool:
     return False
 
 
-def commit_and_push(message: str) -> tuple[bool, str]:
-    stage_paths = [
-        "control/tasks",
-        "experiments/bridge",
-        "control/jobs",
-        "tests/bridge",
-    ]
+def commit_and_push(
+    message: str,
+    stage_paths: list[str] | None = None,
+) -> tuple[bool, str]:
+    if stage_paths is None:
+        stage_paths = [
+            "control/tasks",
+            "experiments/bridge",
+            "control/jobs",
+            "tests/bridge",
+        ]
 
     existing_paths = [
         path
@@ -176,19 +180,21 @@ def commit_and_push(message: str) -> tuple[bool, str]:
         if (ROOT / path).exists()
     ]
 
-    if existing_paths:
-        added = git(
-            "add",
-            "--",
-            *existing_paths,
-            check=False,
-        )
+    if not existing_paths:
+        return False, "nothing to stage"
 
-        if added.returncode != 0:
-            return False, (
-                "git add failed: "
-                + added.stderr.strip()
-            )
+    added = git(
+        "add",
+        "--",
+        *existing_paths,
+        check=False,
+    )
+
+    if added.returncode != 0:
+        return False, (
+            "git add failed: "
+            + added.stderr.strip()
+        )
 
     staged = git(
         "diff",
@@ -208,7 +214,10 @@ def commit_and_push(message: str) -> tuple[bool, str]:
     )
 
     if commit.returncode != 0:
-        return False, commit.stderr.strip()
+        return False, (
+            "git commit failed: "
+            + commit.stderr.strip()
+        )
 
     pushed = git(
         "push",
@@ -229,63 +238,170 @@ def commit_and_push(message: str) -> tuple[bool, str]:
 def enqueue(envelope: BridgeEnvelope) -> dict:
     task = envelope.task
 
-    if task.task_class == "research" and queue_status() != "ACTIVE":
+    with LOCK:
+        if (
+            task.task_class == "research"
+            and queue_status() != "ACTIVE"
+        ):
+            return {
+                "ok": False,
+                "error": "research queue is paused",
+                "queue_status": queue_status(),
+            }
+
+        task_rel = (
+            "control/tasks/pending/"
+            + task.task_id
+            + ".json"
+        )
+
+        task_path = ROOT / task_rel
+
+        stage_paths = [
+            file_write.path
+            for file_write in envelope.files
+        ] + [task_rel]
+
+        if task_exists(task.task_id):
+            recovered = False
+            detail = "existing task"
+
+            if task_path.exists():
+                committed_check = git(
+                    "cat-file",
+                    "-e",
+                    "HEAD:" + task_rel,
+                    check=False,
+                )
+
+                if committed_check.returncode != 0:
+                    committed, detail = commit_and_push(
+                        envelope.commit_message,
+                        stage_paths,
+                    )
+
+                    if not committed:
+                        print(
+                            "[bridge] recovery failed "
+                            f"task_id={task.task_id} "
+                            f"detail={detail}"
+                        )
+
+                        return {
+                            "ok": False,
+                            "error": detail,
+                            "recoverable": True,
+                        }
+
+                    recovered = True
+                else:
+                    detail = (
+                        "existing committed task"
+                    )
+
+            state = load_state()
+
+            if (
+                task.task_id
+                not in state["bridge_tasks"]
+            ):
+                state["bridge_tasks"].append(
+                    task.task_id
+                )
+
+            save_state(state)
+
+            print(
+                "[bridge] idempotent enqueue "
+                f"task_id={task.task_id} "
+                f"recovered={recovered}"
+            )
+
+            return {
+                "ok": True,
+                "task_id": task.task_id,
+                "duplicate": True,
+                "recovered": recovered,
+                "git": detail,
+                "queue_status": queue_status(),
+            }
+
+        for file_write in envelope.files:
+            target = ROOT / file_write.path
+
+            target.parent.mkdir(
+                parents=True,
+                exist_ok=True,
+            )
+
+            target.write_text(
+                file_write.content,
+                encoding="utf-8",
+            )
+
+        PENDING.mkdir(
+            parents=True,
+            exist_ok=True,
+        )
+
+        tmp_path = (
+            PENDING /
+            f".{task.task_id}.tmp"
+        )
+
+        tmp_path.write_text(
+            json.dumps(
+                task.model_dump(),
+                indent=2,
+                sort_keys=True,
+            )
+            + "\n",
+            encoding="utf-8",
+        )
+
+        tmp_path.replace(task_path)
+
+        committed, detail = commit_and_push(
+            envelope.commit_message,
+            stage_paths,
+        )
+
+        if not committed:
+            print(
+                "[bridge] enqueue commit failed "
+                f"task_id={task.task_id} "
+                f"detail={detail}"
+            )
+
+            return {
+                "ok": False,
+                "error": detail,
+                "recoverable": True,
+            }
+
+        state = load_state()
+
+        if (
+            task.task_id
+            not in state["bridge_tasks"]
+        ):
+            state["bridge_tasks"].append(
+                task.task_id
+            )
+
+        save_state(state)
+
+        print(
+            "[bridge] enqueue accepted "
+            f"task_id={task.task_id}"
+        )
+
         return {
-            "ok": False,
-            "error": "research queue is paused",
+            "ok": True,
+            "task_id": task.task_id,
+            "git": detail,
             "queue_status": queue_status(),
         }
-
-    if task_exists(task.task_id):
-        return {
-            "ok": False,
-            "error": "task_id already exists",
-        }
-
-    for file_write in envelope.files:
-        target = ROOT / file_write.path
-        target.parent.mkdir(parents=True, exist_ok=True)
-        target.write_text(file_write.content)
-
-    PENDING.mkdir(parents=True, exist_ok=True)
-
-    task_path = PENDING / f"{task.task_id}.json"
-    tmp_path = PENDING / f".{task.task_id}.tmp"
-
-    tmp_path.write_text(
-        json.dumps(
-            task.model_dump(),
-            indent=2,
-            sort_keys=True,
-        )
-        + "\n"
-    )
-
-    tmp_path.replace(task_path)
-
-    committed, detail = commit_and_push(
-        envelope.commit_message
-    )
-
-    if not committed:
-        return {
-            "ok": False,
-            "error": detail,
-        }
-
-    state = load_state()
-
-    if task.task_id not in state["bridge_tasks"]:
-        state["bridge_tasks"].append(task.task_id)
-
-    save_state(state)
-
-    return {
-        "ok": True,
-        "task_id": task.task_id,
-        "git": detail,
-        "queue_status": queue_status(),
-    }
 
 
 def next_outbox_item() -> dict | None:

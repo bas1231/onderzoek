@@ -23,6 +23,9 @@
   let scanTimer = null;
   let polling = false;
   let sendingResult = false;
+  let scanning = false;
+
+  const inFlightTaskIds = new Set();
 
   function normalizedCurrentUrl() {
     return `${location.origin}${location.pathname}`;
@@ -163,80 +166,125 @@
   }
 
   async function scanForTasks() {
-    if (!(await isArmed())) {
+    if (scanning) {
       return;
     }
 
-    const processed = new Set(
-      await processedTaskIds()
-    );
+    scanning = true;
 
-    const nodes = assistantMessages();
+    try {
+      if (!(await isArmed())) {
+        return;
+      }
 
-    if (document.body && !nodes.includes(document.body)) {
-      nodes.push(document.body);
-    }
+      const processed = new Set(
+        await processedTaskIds()
+      );
 
-    for (const node of nodes) {
-      const text = node.innerText || node.textContent || "";
+      const nodes = assistantMessages();
 
-      for (const block of extractTaskBlocks(text)) {
-        let envelope;
+      if (
+        document.body &&
+        !nodes.includes(document.body)
+      ) {
+        nodes.push(document.body);
+      }
 
-        try {
-          envelope = JSON.parse(block);
-        } catch {
-          continue;
-        }
+      for (const node of nodes) {
+        const text =
+          node.innerText ||
+          node.textContent ||
+          "";
 
-        const taskId =
-          envelope &&
-          envelope.task &&
-          envelope.task.task_id;
+        for (
+          const block of extractTaskBlocks(text)
+        ) {
+          let envelope;
 
-        if (!taskId) {
-          continue;
-        }
+          try {
+            envelope = JSON.parse(block);
+          } catch {
+            continue;
+          }
 
-        if (processed.has(taskId)) {
-          continue;
-        }
+          const taskId =
+            envelope &&
+            envelope.task &&
+            envelope.task.task_id;
 
-        const response = await bridgeFetch(
-          "/enqueue",
-          "POST",
-          envelope
-        );
+          if (!taskId) {
+            continue;
+          }
 
-        if (
-          response &&
-          (
-            response.ok ||
-            (
+          if (
+            processed.has(taskId) ||
+            inFlightTaskIds.has(taskId)
+          ) {
+            continue;
+          }
+
+          inFlightTaskIds.add(taskId);
+
+          try {
+            console.log(
+              "[Prediction Bridge] task discovered:",
+              taskId
+            );
+
+            const response = await bridgeFetch(
+              "/enqueue",
+              "POST",
+              envelope
+            );
+
+            const alreadyExists =
+              response &&
               response.status === 409 &&
               response.data &&
               response.data.error ===
-                "task_id already exists"
-            )
-          )
-        ) {
-          await markTaskProcessed(taskId);
-          processed.add(taskId);
+                "task_id already exists";
 
-          console.log(
-            "[Prediction Bridge] task accepted:",
-            taskId
-          );
-        } else {
-          console.warn(
-            "[Prediction Bridge] task rejected:",
-            taskId,
-            response
-          );
+            if (
+              response &&
+              (
+                response.ok ||
+                alreadyExists
+              )
+            ) {
+              await markTaskProcessed(taskId);
+              processed.add(taskId);
+
+              console.log(
+                "[Prediction Bridge] task accepted:",
+                taskId,
+                response.status
+              );
+            } else {
+              console.warn(
+                "[Prediction Bridge] task rejected:",
+                taskId,
+                response
+              );
+            }
+
+          } catch (error) {
+            console.warn(
+              "[Prediction Bridge] enqueue exception:",
+              taskId,
+              error
+            );
+
+          } finally {
+            inFlightTaskIds.delete(taskId);
+          }
         }
       }
+
+    } finally {
+      scanning = false;
     }
   }
+
 
   function assistantIsGenerating() {
     return Boolean(
@@ -473,6 +521,7 @@
     document.documentElement,
     {
       childList: true,
+      characterData: true,
       subtree: true
     }
   );
