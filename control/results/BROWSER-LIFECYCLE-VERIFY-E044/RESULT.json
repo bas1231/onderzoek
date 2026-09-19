@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "experiments/bridge/e044.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-19T19:45:54.024249+00:00",
+  "hypothesis_id": "CONTROL-NO-SILENT-WAITING",
+  "source_commit": "51352a926e73f96bdaf26c5eaabf09033ae0cd33",
+  "started_at": "2026-09-19T19:45:54.004461+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "ef88b71c9e2b4abca31749cb916280917325f034b99de682b7c2351000ce09ab",
+  "task_class": "infrastructure",
+  "task_id": "BROWSER-LIFECYCLE-VERIFY-E044"
+}
