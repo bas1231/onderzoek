@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "experiments/health_check.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-19T18:26:01.508837+00:00",
+  "hypothesis_id": "CONTROL-BRIDGE-DIAGNOSTIC",
+  "source_commit": "437a35d167b08e1dc3cf0c1478c1a654c4fb510e",
+  "started_at": "2026-09-19T18:26:01.474710+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "2a12b1d81d1407e295dfc88053873c8a9a85558c7bb0a88c756b8cd8a842dfa5",
+  "task_class": "infrastructure",
+  "task_id": "BRIDGE-DIAG-E006"
+}
