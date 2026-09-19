@@ -1,0 +1,33 @@
+{
+  "community_rule": "Community and video sources are discovery leads only until independently supported.",
+  "evidence_priority": [
+    "official_primary",
+    "academic_primary",
+    "reputable_secondary",
+    "code_repository",
+    "community_discovery"
+  ],
+  "forbidden": [
+    "paid_action_without_explicit_approval",
+    "live_trading",
+    "wallet_action",
+    "post_close_information_leakage",
+    "post_hoc_profit_optimization"
+  ],
+  "gates": [
+    "source_provenance",
+    "point_in_time",
+    "signal_edge",
+    "market_edge",
+    "execution_reality",
+    "prebuild_killer",
+    "chief_falsifier",
+    "independent_reproducer"
+  ],
+  "market_rule": "A meteorological forecasting improvement without executable market mispricing is not a trading edge.",
+  "null_result": "NO_PROVEN_EDGE",
+  "promotion_rule": "No candidate may be called proven unless every required gate passes out of sample.",
+  "research_only": true,
+  "version": 1,
+  "weather_rule": "Predict TWC settlement value as black box; do not equate objective weather truth with settlement."
+}
