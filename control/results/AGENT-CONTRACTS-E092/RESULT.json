@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "experiments/bridge/e092.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-19T20:40:47.666367+00:00",
+  "hypothesis_id": "CONTROL-AUTONOMOUS-RESEARCH",
+  "source_commit": "e157929542ba26f1c759c9117c3e918964501ae2",
+  "started_at": "2026-09-19T20:40:45.566995+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "f23fe49f115d7a5670224cfaa16a511cbaff7e4577768e4d1ec7cff5cd4a9d6f",
+  "task_class": "infrastructure",
+  "task_id": "AGENT-CONTRACTS-E092"
+}
