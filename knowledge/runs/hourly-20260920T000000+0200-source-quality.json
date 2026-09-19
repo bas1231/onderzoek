@@ -1,0 +1,85 @@
+{
+  "low_text_yield_count": 2,
+  "rule": "LOW_TEXT_YIELD may not support a research claim",
+  "run_id": "hourly-20260920T000000+0200",
+  "sources": [
+    {
+      "chars": 5931,
+      "document_sha256": "d7ed6c1e9723edcceae8a3d3f258a7ca991bd64f841fad43632caa13a7fad746",
+      "source_id": "arxiv",
+      "status": "USABLE",
+      "text_ref": "knowledge/documents/text/arxiv/d7ed6c1e9723edcceae8a3d3f258a7ca991bd64f841fad43632caa13a7fad746.json"
+    },
+    {
+      "chars": 3566,
+      "document_sha256": "dd6e0cc4b237e05406554eb33d2b7963367175f44a5a0ae0feb4e59f707b0edf",
+      "source_id": "aviationweather",
+      "status": "USABLE",
+      "text_ref": "knowledge/documents/text/aviationweather/dd6e0cc4b237e05406554eb33d2b7963367175f44a5a0ae0feb4e59f707b0edf.json"
+    },
+    {
+      "chars": 4805,
+      "document_sha256": "03c50f4456a22f805032eed06f72f757985be5ef890fc1fd9ff6954c416f6dd9",
+      "source_id": "cftc",
+      "status": "USABLE",
+      "text_ref": "knowledge/documents/text/cftc/03c50f4456a22f805032eed06f72f757985be5ef890fc1fd9ff6954c416f6dd9.json"
+    },
+    {
+      "chars": 26229,
+      "document_sha256": "83c3dee07ef5f6d1a434fb3688a9a39e6aec75080ea93f3c0f9b60cea8df0be0",
+      "source_id": "ecmwf_open",
+      "status": "USABLE",
+      "text_ref": "knowledge/documents/text/ecmwf_open/83c3dee07ef5f6d1a434fb3688a9a39e6aec75080ea93f3c0f9b60cea8df0be0.json"
+    },
+    {
+      "chars": 7669,
+      "document_sha256": "73d9b994f5d3437449e44d839dfd998612265114638909859972b25ee9bd728b",
+      "source_id": "github",
+      "status": "USABLE",
+      "text_ref": "knowledge/documents/text/github/73d9b994f5d3437449e44d839dfd998612265114638909859972b25ee9bd728b.json"
+    },
+    {
+      "chars": 1539,
+      "document_sha256": "94c183be8dd7141d7c8bee939c2ff1fb07caac3c559161afa319daad968ad5ce",
+      "source_id": "kalshi_docs",
+      "status": "USABLE",
+      "text_ref": "knowledge/documents/text/kalshi_docs/94c183be8dd7141d7c8bee939c2ff1fb07caac3c559161afa319daad968ad5ce.json"
+    },
+    {
+      "chars": 6959,
+      "document_sha256": "ac1877039efbe086216ceaaeea58c81471bc265b61a522c191a43a091420525c",
+      "source_id": "nomads",
+      "status": "USABLE",
+      "text_ref": "knowledge/documents/text/nomads/ac1877039efbe086216ceaaeea58c81471bc265b61a522c191a43a091420525c.json"
+    },
+    {
+      "chars": 2470,
+      "document_sha256": "10bbe2ca5942d63be24e5827f8eaadaa21dc56921632364e08f4a5ceec2618ca",
+      "source_id": "nws",
+      "status": "USABLE",
+      "text_ref": "knowledge/documents/text/nws/10bbe2ca5942d63be24e5827f8eaadaa21dc56921632364e08f4a5ceec2618ca.json"
+    },
+    {
+      "chars": 2721,
+      "document_sha256": "6061d788333a11345f9b58eac43e8ad235ee9315b5bdb7acf8e01b8fc02342b7",
+      "source_id": "polymarket_docs",
+      "status": "USABLE",
+      "text_ref": "knowledge/documents/text/polymarket_docs/6061d788333a11345f9b58eac43e8ad235ee9315b5bdb7acf8e01b8fc02342b7.json"
+    },
+    {
+      "chars": 6,
+      "document_sha256": "99a9aa759ce8f30697a42e25f96fd31736d3b14408b87223cd4c8d2597fa2e22",
+      "source_id": "reddit",
+      "status": "LOW_TEXT_YIELD",
+      "text_ref": "knowledge/documents/text/reddit/99a9aa759ce8f30697a42e25f96fd31736d3b14408b87223cd4c8d2597fa2e22.json"
+    },
+    {
+      "chars": 203,
+      "document_sha256": "83be8f6905e1893f83fc657fc4710a63ec91597fa9ca51eb89d37829efc5f759",
+      "source_id": "youtube",
+      "status": "LOW_TEXT_YIELD",
+      "text_ref": "knowledge/documents/text/youtube/83be8f6905e1893f83fc657fc4710a63ec91597fa9ca51eb89d37829efc5f759.json"
+    }
+  ],
+  "usable_count": 9
+}
