@@ -57,6 +57,10 @@ De drie tests mogen niet slechts drie varianten van exact dezelfde aanname zijn.
 - Leg bij een nieuwe candidate meteen `falsification`, `required_data` en `execution_blockers` vast.
 - Bewaar zowel positieve als negatieve resultaten zodat andere agents dezelfde doodlopende route niet opnieuw hoeven te ontdekken.
 
+## Efficiencyregel voor antwoorden aan de gebruiker
+
+Elk agent-antwoord aan de gebruiker bevat aan het einde een korte samenvatting van maximaal **5 regels**. Deze samenvatting moet alleen de belangrijkste uitkomst, status, blocker(s) en/of eerstvolgende relevante actie bevatten. Vermijd herhaling van details die al in het hoofdantwoord staan.
+
 ## Discovery
 
 Agents mogen onder meer zoeken naar:
