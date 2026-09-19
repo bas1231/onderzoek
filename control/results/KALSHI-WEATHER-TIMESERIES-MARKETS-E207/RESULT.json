@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "experiments/bridge/e207.py"
+  ],
+  "exit_code": 1,
+  "finished_at": "2026-09-19T23:09:50.131001+00:00",
+  "hypothesis_id": "H7-SETTLEMENT-BOUNDARY",
+  "source_commit": "96010e03c1a44447a038fd0c36f64d7dc22e5044",
+  "started_at": "2026-09-19T23:09:50.121317+00:00",
+  "status": "failed",
+  "stderr_sha256": "fc58eaaa1cd16117ddbbf95cd44e769490bf5b084eabd8998837789dde688ffe",
+  "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "task_class": "research",
+  "task_id": "KALSHI-WEATHER-TIMESERIES-MARKETS-E207"
+}
