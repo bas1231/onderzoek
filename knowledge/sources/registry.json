@@ -1,0 +1,105 @@
+{
+  "policy": "free_public_only",
+  "sources": [
+    {
+      "cadence": "hourly",
+      "cost_class": "free_public",
+      "grade": "primary",
+      "id": "kalshi_docs",
+      "name": "Kalshi documentation",
+      "type": "official_venue",
+      "url": "https://docs.kalshi.com/"
+    },
+    {
+      "cadence": "hourly",
+      "cost_class": "free_public",
+      "grade": "primary",
+      "id": "polymarket_docs",
+      "name": "Polymarket documentation",
+      "type": "official_venue",
+      "url": "https://docs.polymarket.com/"
+    },
+    {
+      "cadence": "daily",
+      "cost_class": "free_public",
+      "grade": "primary",
+      "id": "cftc",
+      "name": "CFTC",
+      "type": "regulator",
+      "url": "https://www.cftc.gov/"
+    },
+    {
+      "cadence": "hourly",
+      "cost_class": "free_public",
+      "grade": "primary",
+      "id": "aviationweather",
+      "name": "Aviation Weather Center",
+      "type": "meteorology",
+      "url": "https://aviationweather.gov/"
+    },
+    {
+      "cadence": "hourly",
+      "cost_class": "free_public",
+      "grade": "primary",
+      "id": "nws",
+      "name": "National Weather Service",
+      "type": "meteorology",
+      "url": "https://www.weather.gov/"
+    },
+    {
+      "cadence": "hourly",
+      "cost_class": "free_public",
+      "grade": "primary",
+      "id": "ecmwf_open",
+      "name": "ECMWF Open Data",
+      "type": "meteorology",
+      "url": "https://www.ecmwf.int/en/forecasts/datasets/open-data"
+    },
+    {
+      "cadence": "hourly",
+      "cost_class": "free_public",
+      "grade": "primary",
+      "id": "nomads",
+      "name": "NCEP NOMADS",
+      "type": "meteorology",
+      "url": "https://nomads.ncep.noaa.gov/"
+    },
+    {
+      "cadence": "hourly",
+      "cost_class": "free_public",
+      "grade": "secondary",
+      "id": "arxiv",
+      "name": "arXiv",
+      "type": "papers",
+      "url": "https://arxiv.org/"
+    },
+    {
+      "cadence": "hourly",
+      "cost_class": "free_public",
+      "grade": "discovery",
+      "id": "github",
+      "name": "GitHub public repositories",
+      "type": "code",
+      "url": "https://github.com/"
+    },
+    {
+      "cadence": "hourly",
+      "cost_class": "free_public",
+      "grade": "discovery",
+      "id": "reddit",
+      "name": "Reddit public discussions",
+      "type": "community",
+      "url": "https://www.reddit.com/"
+    },
+    {
+      "cadence": "hourly",
+      "cost_class": "free_public",
+      "grade": "discovery",
+      "id": "youtube",
+      "name": "YouTube public content",
+      "type": "video",
+      "url": "https://www.youtube.com/"
+    }
+  ],
+  "version": 1
+}
