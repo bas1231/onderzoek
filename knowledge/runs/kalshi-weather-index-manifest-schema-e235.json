@@ -1,0 +1,702 @@
+{
+  "interpretation": [
+    "This task only inspects already archived manifest metadata.",
+    "Its purpose is to identify the authoritative recorder retrieval timestamp field before first-seen latency analysis.",
+    "No network calls, market prices, trading, paid actions, or wallet actions are used."
+  ],
+  "live_trading": false,
+  "manifest_count": 30,
+  "paid_actions": false,
+  "samples": [
+    {
+      "city_shapes": [
+        {
+          "city": "nyc",
+          "config_version": "nyc-temperature-v1.0-cal-20260914",
+          "keys": [
+            "bytes",
+            "city",
+            "config_version",
+            "content_type",
+            "guards",
+            "latest_any",
+            "latest_complete",
+            "latest_complete_t_changed",
+            "latest_complete_v_changed_for_same_t",
+            "latest_incomplete",
+            "payload_changed",
+            "previous_sha256",
+            "sha256",
+            "status",
+            "timeseries_count",
+            "units"
+          ],
+          "sha256": "781b8d5d41e74ade8035b923d5bffec15021815abebafdab7b9b8a58129067cb"
+        },
+        {
+          "city": "miami",
+          "config_version": "miami-temperature-v1.0-cal-20260914",
+          "keys": [
+            "bytes",
+            "city",
+            "config_version",
+            "content_type",
+            "guards",
+            "latest_any",
+            "latest_complete",
+            "latest_complete_t_changed",
+            "latest_complete_v_changed_for_same_t",
+            "latest_incomplete",
+            "payload_changed",
+            "previous_sha256",
+            "sha256",
+            "status",
+            "timeseries_count",
+            "units"
+          ],
+          "sha256": "2e676ded2abd124ad05e022a5cf56db2de471d7433304d6c2927d620af62e133"
+        },
+        {
+          "city": "chicago",
+          "config_version": "chicago-temperature-v1.0-cal-20260914",
+          "keys": [
+            "bytes",
+            "city",
+            "config_version",
+            "content_type",
+            "guards",
+            "latest_any",
+            "latest_complete",
+            "latest_complete_t_changed",
+            "latest_complete_v_changed_for_same_t",
+            "latest_incomplete",
+            "payload_changed",
+            "previous_sha256",
+            "sha256",
+            "status",
+            "timeseries_count",
+            "units"
+          ],
+          "sha256": "63a2ce5164e83c1e33daaf4c1452011b374301dabe347d5f0ba96e151fe17d97"
+        }
+      ],
+      "name": "kwi-20260919T234619.080011+0000-852847b46788.json",
+      "path": "/home/leonh/.local/state/prediction-research/kalshi_weather_index_manifests/kwi-20260919T234619.080011+0000-852847b46788.json",
+      "timeish_fields": {
+        "retrieved_at": "2026-09-19T23:46:19.080011+00:00"
+      },
+      "top_level_keys": [
+        "cities",
+        "live_trading",
+        "paid_actions",
+        "retrieved_at",
+        "source",
+        "wallet_actions"
+      ]
+    },
+    {
+      "city_shapes": [
+        {
+          "city": "nyc",
+          "config_version": "nyc-temperature-v1.0-cal-20260914",
+          "keys": [
+            "bytes",
+            "city",
+            "config_version",
+            "content_type",
+            "guards",
+            "latest_any",
+            "latest_complete",
+            "latest_complete_t_changed",
+            "latest_complete_v_changed_for_same_t",
+            "latest_incomplete",
+            "payload_changed",
+            "previous_sha256",
+            "sha256",
+            "status",
+            "timeseries_count",
+            "units"
+          ],
+          "sha256": "080f34ca20db0eaa7a73f99488d4839eb6ee749b7eb78632ee0d8c8d311b9a61"
+        },
+        {
+          "city": "miami",
+          "config_version": "miami-temperature-v1.0-cal-20260914",
+          "keys": [
+            "bytes",
+            "city",
+            "config_version",
+            "content_type",
+            "guards",
+            "latest_any",
+            "latest_complete",
+            "latest_complete_t_changed",
+            "latest_complete_v_changed_for_same_t",
+            "latest_incomplete",
+            "payload_changed",
+            "previous_sha256",
+            "sha256",
+            "status",
+            "timeseries_count",
+            "units"
+          ],
+          "sha256": "51f1c55fdc94a6d0e967190eddf7266b58368545571fde03d984784fd6de3c7f"
+        },
+        {
+          "city": "chicago",
+          "config_version": "chicago-temperature-v1.0-cal-20260914",
+          "keys": [
+            "bytes",
+            "city",
+            "config_version",
+            "content_type",
+            "guards",
+            "latest_any",
+            "latest_complete",
+            "latest_complete_t_changed",
+            "latest_complete_v_changed_for_same_t",
+            "latest_incomplete",
+            "payload_changed",
+            "previous_sha256",
+            "sha256",
+            "status",
+            "timeseries_count",
+            "units"
+          ],
+          "sha256": "e50080f899c7b703a518295d20f4ad86756afc53fffcd9a1a56071733052a842"
+        }
+      ],
+      "name": "kwi-20260919T234719.084455+0000-8f4e3f94c34a.json",
+      "path": "/home/leonh/.local/state/prediction-research/kalshi_weather_index_manifests/kwi-20260919T234719.084455+0000-8f4e3f94c34a.json",
+      "timeish_fields": {
+        "retrieved_at": "2026-09-19T23:47:19.084455+00:00"
+      },
+      "top_level_keys": [
+        "cities",
+        "live_trading",
+        "paid_actions",
+        "retrieved_at",
+        "source",
+        "wallet_actions"
+      ]
+    },
+    {
+      "city_shapes": [
+        {
+          "city": "nyc",
+          "config_version": "nyc-temperature-v1.0-cal-20260914",
+          "keys": [
+            "bytes",
+            "city",
+            "config_version",
+            "content_type",
+            "guards",
+            "latest_any",
+            "latest_complete",
+            "latest_complete_t_changed",
+            "latest_complete_v_changed_for_same_t",
+            "latest_incomplete",
+            "payload_changed",
+            "previous_sha256",
+            "sha256",
+            "status",
+            "timeseries_count",
+            "units"
+          ],
+          "sha256": "2914f8430633482f5f61d4bfd40e9c6ff2061ff183650194d7c06047737de957"
+        },
+        {
+          "city": "miami",
+          "config_version": "miami-temperature-v1.0-cal-20260914",
+          "keys": [
+            "bytes",
+            "city",
+            "config_version",
+            "content_type",
+            "guards",
+            "latest_any",
+            "latest_complete",
+            "latest_complete_t_changed",
+            "latest_complete_v_changed_for_same_t",
+            "latest_incomplete",
+            "payload_changed",
+            "previous_sha256",
+            "sha256",
+            "status",
+            "timeseries_count",
+            "units"
+          ],
+          "sha256": "5e944be48ccf6871270a5443dc1d0ca6923f89ebc7a3b35a25aa79a2de48f802"
+        },
+        {
+          "city": "chicago",
+          "config_version": "chicago-temperature-v1.0-cal-20260914",
+          "keys": [
+            "bytes",
+            "city",
+            "config_version",
+            "content_type",
+            "guards",
+            "latest_any",
+            "latest_complete",
+            "latest_complete_t_changed",
+            "latest_complete_v_changed_for_same_t",
+            "latest_incomplete",
+            "payload_changed",
+            "previous_sha256",
+            "sha256",
+            "status",
+            "timeseries_count",
+            "units"
+          ],
+          "sha256": "09e04050222ffa02713a3e18e02482b1fbb3bbbf790d856053ebfb77f8ed9c58"
+        }
+      ],
+      "name": "kwi-20260919T234819.097719+0000-ffcfb5af891b.json",
+      "path": "/home/leonh/.local/state/prediction-research/kalshi_weather_index_manifests/kwi-20260919T234819.097719+0000-ffcfb5af891b.json",
+      "timeish_fields": {
+        "retrieved_at": "2026-09-19T23:48:19.097719+00:00"
+      },
+      "top_level_keys": [
+        "cities",
+        "live_trading",
+        "paid_actions",
+        "retrieved_at",
+        "source",
+        "wallet_actions"
+      ]
+    },
+    {
+      "city_shapes": [
+        {
+          "city": "nyc",
+          "config_version": "nyc-temperature-v1.0-cal-20260914",
+          "keys": [
+            "bytes",
+            "city",
+            "config_version",
+            "content_type",
+            "guards",
+            "latest_any",
+            "latest_complete",
+            "latest_complete_t_changed",
+            "latest_complete_v_changed_for_same_t",
+            "latest_incomplete",
+            "payload_changed",
+            "previous_sha256",
+            "sha256",
+            "status",
+            "timeseries_count",
+            "units"
+          ],
+          "sha256": "a81b72b754a9f253a2259377cc71ae67e4b20465b759d4be2092f58b74d3f105"
+        },
+        {
+          "city": "miami",
+          "config_version": "miami-temperature-v1.0-cal-20260914",
+          "keys": [
+            "bytes",
+            "city",
+            "config_version",
+            "content_type",
+            "guards",
+            "latest_any",
+            "latest_complete",
+            "latest_complete_t_changed",
+            "latest_complete_v_changed_for_same_t",
+            "latest_incomplete",
+            "payload_changed",
+            "previous_sha256",
+            "sha256",
+            "status",
+            "timeseries_count",
+            "units"
+          ],
+          "sha256": "f70bf2001ab1c7f4b3f4799a55a8b22dbf0c41aa6c26257d4931812f20f19429"
+        },
+        {
+          "city": "chicago",
+          "config_version": "chicago-temperature-v1.0-cal-20260914",
+          "keys": [
+            "bytes",
+            "city",
+            "config_version",
+            "content_type",
+            "guards",
+            "latest_any",
+            "latest_complete",
+            "latest_complete_t_changed",
+            "latest_complete_v_changed_for_same_t",
+            "latest_incomplete",
+            "payload_changed",
+            "previous_sha256",
+            "sha256",
+            "status",
+            "timeseries_count",
+            "units"
+          ],
+          "sha256": "6853cc6cd32245903d209fa7d2105d9f77909dc0d28df5fb2de1f836dc416824"
+        }
+      ],
+      "name": "kwi-20260919T234919.091376+0000-d59c9e704c3f.json",
+      "path": "/home/leonh/.local/state/prediction-research/kalshi_weather_index_manifests/kwi-20260919T234919.091376+0000-d59c9e704c3f.json",
+      "timeish_fields": {
+        "retrieved_at": "2026-09-19T23:49:19.091376+00:00"
+      },
+      "top_level_keys": [
+        "cities",
+        "live_trading",
+        "paid_actions",
+        "retrieved_at",
+        "source",
+        "wallet_actions"
+      ]
+    },
+    {
+      "city_shapes": [
+        {
+          "city": "nyc",
+          "config_version": "nyc-temperature-v1.0-cal-20260914",
+          "keys": [
+            "bytes",
+            "city",
+            "config_version",
+            "content_type",
+            "guards",
+            "latest_any",
+            "latest_complete",
+            "latest_complete_t_changed",
+            "latest_complete_v_changed_for_same_t",
+            "latest_incomplete",
+            "payload_changed",
+            "previous_sha256",
+            "sha256",
+            "status",
+            "timeseries_count",
+            "units"
+          ],
+          "sha256": "87024bcf8e2d5daa1ce84635e04c6334470cf0de165abf8f723bd3aaad24f24a"
+        },
+        {
+          "city": "miami",
+          "config_version": "miami-temperature-v1.0-cal-20260914",
+          "keys": [
+            "bytes",
+            "city",
+            "config_version",
+            "content_type",
+            "guards",
+            "latest_any",
+            "latest_complete",
+            "latest_complete_t_changed",
+            "latest_complete_v_changed_for_same_t",
+            "latest_incomplete",
+            "payload_changed",
+            "previous_sha256",
+            "sha256",
+            "status",
+            "timeseries_count",
+            "units"
+          ],
+          "sha256": "3e86fb49165a1d77ed60068455edbffe60386278daa9bcd4dfbcb77f6b504bd5"
+        },
+        {
+          "city": "chicago",
+          "config_version": "chicago-temperature-v1.0-cal-20260914",
+          "keys": [
+            "bytes",
+            "city",
+            "config_version",
+            "content_type",
+            "guards",
+            "latest_any",
+            "latest_complete",
+            "latest_complete_t_changed",
+            "latest_complete_v_changed_for_same_t",
+            "latest_incomplete",
+            "payload_changed",
+            "previous_sha256",
+            "sha256",
+            "status",
+            "timeseries_count",
+            "units"
+          ],
+          "sha256": "9673543bfc31159565e1cf4ae36696b7aec225d0dd5ac9368f1f4d452548e2b4"
+        }
+      ],
+      "name": "kwi-20260919T235019.082873+0000-8713e73185f8.json",
+      "path": "/home/leonh/.local/state/prediction-research/kalshi_weather_index_manifests/kwi-20260919T235019.082873+0000-8713e73185f8.json",
+      "timeish_fields": {
+        "retrieved_at": "2026-09-19T23:50:19.082873+00:00"
+      },
+      "top_level_keys": [
+        "cities",
+        "live_trading",
+        "paid_actions",
+        "retrieved_at",
+        "source",
+        "wallet_actions"
+      ]
+    },
+    {
+      "city_shapes": [
+        {
+          "city": "nyc",
+          "config_version": "nyc-temperature-v1.0-cal-20260914",
+          "keys": [
+            "bytes",
+            "city",
+            "config_version",
+            "content_type",
+            "guards",
+            "latest_any",
+            "latest_complete",
+            "latest_complete_t_changed",
+            "latest_complete_v_changed_for_same_t",
+            "latest_incomplete",
+            "payload_changed",
+            "previous_sha256",
+            "sha256",
+            "status",
+            "timeseries_count",
+            "units"
+          ],
+          "sha256": "bee0e11f1e32903a8a4001101f587cb0c11bbd56e4a4fbfef715fd50bd9adf1e"
+        },
+        {
+          "city": "miami",
+          "config_version": "miami-temperature-v1.0-cal-20260914",
+          "keys": [
+            "bytes",
+            "city",
+            "config_version",
+            "content_type",
+            "guards",
+            "latest_any",
+            "latest_complete",
+            "latest_complete_t_changed",
+            "latest_complete_v_changed_for_same_t",
+            "latest_incomplete",
+            "payload_changed",
+            "previous_sha256",
+            "sha256",
+            "status",
+            "timeseries_count",
+            "units"
+          ],
+          "sha256": "942b6b3f564c1fedcf75555f37bb0df420c1de5b56af5b90eaa98125f64e2485"
+        },
+        {
+          "city": "chicago",
+          "config_version": "chicago-temperature-v1.0-cal-20260914",
+          "keys": [
+            "bytes",
+            "city",
+            "config_version",
+            "content_type",
+            "guards",
+            "latest_any",
+            "latest_complete",
+            "latest_complete_t_changed",
+            "latest_complete_v_changed_for_same_t",
+            "latest_incomplete",
+            "payload_changed",
+            "previous_sha256",
+            "sha256",
+            "status",
+            "timeseries_count",
+            "units"
+          ],
+          "sha256": "cd1cd3b0c934503515792841630633df8c0aabb9e57324ebc35c2178da28536f"
+        }
+      ],
+      "name": "kwi-20260919T235119.084583+0000-23348839edee.json",
+      "path": "/home/leonh/.local/state/prediction-research/kalshi_weather_index_manifests/kwi-20260919T235119.084583+0000-23348839edee.json",
+      "timeish_fields": {
+        "retrieved_at": "2026-09-19T23:51:19.084583+00:00"
+      },
+      "top_level_keys": [
+        "cities",
+        "live_trading",
+        "paid_actions",
+        "retrieved_at",
+        "source",
+        "wallet_actions"
+      ]
+    },
+    {
+      "city_shapes": [
+        {
+          "city": "nyc",
+          "config_version": "nyc-temperature-v1.0-cal-20260914",
+          "keys": [
+            "bytes",
+            "city",
+            "config_version",
+            "content_type",
+            "guards",
+            "latest_any",
+            "latest_complete",
+            "latest_complete_t_changed",
+            "latest_complete_v_changed_for_same_t",
+            "latest_incomplete",
+            "payload_changed",
+            "previous_sha256",
+            "sha256",
+            "status",
+            "timeseries_count",
+            "units"
+          ],
+          "sha256": "9450961abc094fc08adb8b82d815dbe2ebc9c02510fc4cb2db9abffc0ec45639"
+        },
+        {
+          "city": "miami",
+          "config_version": "miami-temperature-v1.0-cal-20260914",
+          "keys": [
+            "bytes",
+            "city",
+            "config_version",
+            "content_type",
+            "guards",
+            "latest_any",
+            "latest_complete",
+            "latest_complete_t_changed",
+            "latest_complete_v_changed_for_same_t",
+            "latest_incomplete",
+            "payload_changed",
+            "previous_sha256",
+            "sha256",
+            "status",
+            "timeseries_count",
+            "units"
+          ],
+          "sha256": "e6a9a82df0e3ba59d8661ff4ec803847c500a928fe5f77dd1919c6d740551475"
+        },
+        {
+          "city": "chicago",
+          "config_version": "chicago-temperature-v1.0-cal-20260914",
+          "keys": [
+            "bytes",
+            "city",
+            "config_version",
+            "content_type",
+            "guards",
+            "latest_any",
+            "latest_complete",
+            "latest_complete_t_changed",
+            "latest_complete_v_changed_for_same_t",
+            "latest_incomplete",
+            "payload_changed",
+            "previous_sha256",
+            "sha256",
+            "status",
+            "timeseries_count",
+            "units"
+          ],
+          "sha256": "1545841b2716fbf1e50d81c4395580ec70d303e4efcd591246a0dff646e73ed1"
+        }
+      ],
+      "name": "kwi-20260919T235219.081126+0000-7a1618804141.json",
+      "path": "/home/leonh/.local/state/prediction-research/kalshi_weather_index_manifests/kwi-20260919T235219.081126+0000-7a1618804141.json",
+      "timeish_fields": {
+        "retrieved_at": "2026-09-19T23:52:19.081126+00:00"
+      },
+      "top_level_keys": [
+        "cities",
+        "live_trading",
+        "paid_actions",
+        "retrieved_at",
+        "source",
+        "wallet_actions"
+      ]
+    },
+    {
+      "city_shapes": [
+        {
+          "city": "nyc",
+          "config_version": "nyc-temperature-v1.0-cal-20260914",
+          "keys": [
+            "bytes",
+            "city",
+            "config_version",
+            "content_type",
+            "guards",
+            "latest_any",
+            "latest_complete",
+            "latest_complete_t_changed",
+            "latest_complete_v_changed_for_same_t",
+            "latest_incomplete",
+            "payload_changed",
+            "previous_sha256",
+            "sha256",
+            "status",
+            "timeseries_count",
+            "units"
+          ],
+          "sha256": "87fc57567c3bbbd740021641537d01d708fce378f5ca73d2ddbd49918c05307c"
+        },
+        {
+          "city": "miami",
+          "config_version": "miami-temperature-v1.0-cal-20260914",
+          "keys": [
+            "bytes",
+            "city",
+            "config_version",
+            "content_type",
+            "guards",
+            "latest_any",
+            "latest_complete",
+            "latest_complete_t_changed",
+            "latest_complete_v_changed_for_same_t",
+            "latest_incomplete",
+            "payload_changed",
+            "previous_sha256",
+            "sha256",
+            "status",
+            "timeseries_count",
+            "units"
+          ],
+          "sha256": "42f907d3f5f8f185ee078a309c7d121e70de91eefdeb2fa84752fa934cec309d"
+        },
+        {
+          "city": "chicago",
+          "config_version": "chicago-temperature-v1.0-cal-20260914",
+          "keys": [
+            "bytes",
+            "city",
+            "config_version",
+            "content_type",
+            "guards",
+            "latest_any",
+            "latest_complete",
+            "latest_complete_t_changed",
+            "latest_complete_v_changed_for_same_t",
+            "latest_incomplete",
+            "payload_changed",
+            "previous_sha256",
+            "sha256",
+            "status",
+            "timeseries_count",
+            "units"
+          ],
+          "sha256": "7c3c6e3c7a2265dbaa6e909678a02bd1d3c55e1c8f5afed7fb82da1ec84cdaf0"
+        }
+      ],
+      "name": "kwi-20260919T235319.080202+0000-460cc1dd5992.json",
+      "path": "/home/leonh/.local/state/prediction-research/kalshi_weather_index_manifests/kwi-20260919T235319.080202+0000-460cc1dd5992.json",
+      "timeish_fields": {
+        "retrieved_at": "2026-09-19T23:53:19.080202+00:00"
+      },
+      "top_level_keys": [
+        "cities",
+        "live_trading",
+        "paid_actions",
+        "retrieved_at",
+        "source",
+        "wallet_actions"
+      ]
+    }
+  ],
+  "task_id": "KALSHI-WEATHER-INDEX-MANIFEST-SCHEMA-E235",
+  "wallet_actions": false
+}
