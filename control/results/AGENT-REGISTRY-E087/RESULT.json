@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "experiments/bridge/e087.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-19T20:37:59.652251+00:00",
+  "hypothesis_id": "CONTROL-AUTONOMOUS-RESEARCH",
+  "source_commit": "703257a1215e3547abe453182a2977a82835ab77",
+  "started_at": "2026-09-19T20:37:57.468732+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "d9398c5e22c2bc1bdc213d84bc41fd0790b77770ccd0add12bd660168e9612d8",
+  "task_class": "infrastructure",
+  "task_id": "AGENT-REGISTRY-E087"
+}
