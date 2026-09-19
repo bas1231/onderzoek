@@ -24,7 +24,7 @@
 
   function projectKeyFromCurrentUrl() {
     const match = location.pathname.match(
-      /^\\/g\\/(g-p-[^/]+)\\//
+      /\/g\/(g-p-[^/]+)/
     );
 
     return match ? match[1] : "";
@@ -71,11 +71,22 @@
   }
 
   function assistantMessages() {
-    return Array.from(
+    const specific = Array.from(
       document.querySelectorAll(
         '[data-message-author-role="assistant"]'
       )
     );
+
+    if (specific.length > 0) {
+      return specific;
+    }
+
+    /*
+     * ChatGPT wijzigt geregeld zijn DOM-structuur.
+     * Als de specifieke selector niet bestaat, scan dan de
+     * zichtbare pagina als fallback.
+     */
+    return document.body ? [document.body] : [];
   }
 
   function extractTaskBlocks(text) {
@@ -150,7 +161,13 @@
       await processedTaskIds()
     );
 
-    for (const node of assistantMessages()) {
+    const nodes = assistantMessages();
+
+    if (document.body && !nodes.includes(document.body)) {
+      nodes.push(document.body);
+    }
+
+    for (const node of nodes) {
       const text = node.innerText || node.textContent || "";
 
       for (const block of extractTaskBlocks(text)) {
@@ -456,6 +473,27 @@
       pollOutbox();
     },
     4000
+  );
+
+  setInterval(
+    async () => {
+      if (!(await isArmed())) {
+        return;
+      }
+
+      try {
+        await bridgeFetch(
+          "/health",
+          "GET"
+        );
+      } catch (error) {
+        console.warn(
+          "[Prediction Bridge] heartbeat failed:",
+          error
+        );
+      }
+    },
+    10000
   );
 
   scheduleScan();
