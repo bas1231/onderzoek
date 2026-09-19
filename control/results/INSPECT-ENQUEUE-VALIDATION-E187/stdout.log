@@ -1,0 +1,64 @@
+{
+  "hits": [
+    {
+      "path": "control/browser_bridge.py",
+      "line": 49,
+      "snippet": "        path = Path(value)\n\n        if path.is_absolute():\n            raise ValueError(\"absolute paths forbidden\")\n\n        if \"..\" in path.parts:\n            raise ValueError(\"parent traversal forbidden\")\n\n        allowed = (\n            \"experiments/bridge/\",\n            \"control/jobs/\",\n            \"tests/bridge/\",\n        )\n\n        text = path.as_posix()\n\n        if not text.startswith(allowed):\n            raise ValueError(\n                \"bridge file writes restricted to \"\n                \"experiments/bridge/, control/jobs/, tests/bridge/\"\n            )\n"
+    },
+    {
+      "path": "control/browser_bridge.py",
+      "line": 57,
+      "snippet": "        allowed = (\n            \"experiments/bridge/\",\n            \"control/jobs/\",\n            \"tests/bridge/\",\n        )\n\n        text = path.as_posix()\n\n        if not text.startswith(allowed):\n            raise ValueError(\n                \"bridge file writes restricted to \"\n                \"experiments/bridge/, control/jobs/, tests/bridge/\"\n            )\n\n        return value\n\n\nclass BridgeEnvelope(BaseModel):\n    bridge_version: int = 1\n    commit_message: str = Field(min_length=3, max_length=160)\n    files: list[FileWrite] = []\n    task: Task"
+    },
+    {
+      "path": "control/browser_bridge.py",
+      "line": 59,
+      "snippet": "            \"control/jobs/\",\n            \"tests/bridge/\",\n        )\n\n        text = path.as_posix()\n\n        if not text.startswith(allowed):\n            raise ValueError(\n                \"bridge file writes restricted to \"\n                \"experiments/bridge/, control/jobs/, tests/bridge/\"\n            )\n\n        return value\n\n\nclass BridgeEnvelope(BaseModel):\n    bridge_version: int = 1\n    commit_message: str = Field(min_length=3, max_length=160)\n    files: list[FileWrite] = []\n    task: Task\n\n    @field_validator(\"commit_message\")"
+    },
+    {
+      "path": "control/browser_bridge.py",
+      "line": 691,
+      "snippet": "                    \"item\": next_outbox_item()\n                },\n            )\n            return\n\n        if path.startswith(\"/result/\"):\n            task_id = path[len(\"/result/\"):]\n\n            allowed = set(\n                \"abcdefghijklmnopqrstuvwxyz\"\n                \"ABCDEFGHIJKLMNOPQRSTUVWXYZ\"\n                \"0123456789-_.\"\n            )\n\n            if (\n                not task_id\n                or len(task_id) > 160\n                or any(ch not in allowed for ch in task_id)\n            ):\n                self.send_json(\n                    400,\n                    {\"error\": \"invalid task_id\"},"
+    },
+    {
+      "path": "control/browser_bridge.py",
+      "line": 700,
+      "snippet": "                \"abcdefghijklmnopqrstuvwxyz\"\n                \"ABCDEFGHIJKLMNOPQRSTUVWXYZ\"\n                \"0123456789-_.\"\n            )\n\n            if (\n                not task_id\n                or len(task_id) > 160\n                or any(ch not in allowed for ch in task_id)\n            ):\n                self.send_json(\n                    400,\n                    {\"error\": \"invalid task_id\"},\n                )\n                return\n\n            result_dir = RESULTS / task_id\n            result_file = result_dir / \"RESULT.json\"\n\n            if not result_file.exists():\n                self.send_json(\n                    404,"
+    },
+    {
+      "path": "control/jobs/lifecycle_supervisor.py",
+      "line": 343,
+      "snippet": "        \"checked_at\": now(),\n        \"check_interval_seconds\":\n            CHECK_INTERVAL,\n        \"ledger_records\":\n            len(records),\n        \"incidents_seen\":\n            len(incidents),\n        \"guardrails\": {\n            \"running_task_kill_allowed\":\n                False,\n            \"paid_actions_allowed\":\n                False,\n            \"live_trading_allowed\":\n                False,\n            \"wallet_actions_allowed\":\n                False,\n        },\n    }\n\n    atomic_json(\n        STATUS_FILE,\n        status,"
+    },
+    {
+      "path": "control/jobs/lifecycle_supervisor.py",
+      "line": 345,
+      "snippet": "            CHECK_INTERVAL,\n        \"ledger_records\":\n            len(records),\n        \"incidents_seen\":\n            len(incidents),\n        \"guardrails\": {\n            \"running_task_kill_allowed\":\n                False,\n            \"paid_actions_allowed\":\n                False,\n            \"live_trading_allowed\":\n                False,\n            \"wallet_actions_allowed\":\n                False,\n        },\n    }\n\n    atomic_json(\n        STATUS_FILE,\n        status,\n    )\n"
+    },
+    {
+      "path": "control/jobs/lifecycle_supervisor.py",
+      "line": 347,
+      "snippet": "            len(records),\n        \"incidents_seen\":\n            len(incidents),\n        \"guardrails\": {\n            \"running_task_kill_allowed\":\n                False,\n            \"paid_actions_allowed\":\n                False,\n            \"live_trading_allowed\":\n                False,\n            \"wallet_actions_allowed\":\n                False,\n        },\n    }\n\n    atomic_json(\n        STATUS_FILE,\n        status,\n    )\n\n    return status\n"
+    },
+    {
+      "path": "control/jobs/lifecycle_supervisor.py",
+      "line": 349,
+      "snippet": "            len(incidents),\n        \"guardrails\": {\n            \"running_task_kill_allowed\":\n                False,\n            \"paid_actions_allowed\":\n                False,\n            \"live_trading_allowed\":\n                False,\n            \"wallet_actions_allowed\":\n                False,\n        },\n    }\n\n    atomic_json(\n        STATUS_FILE,\n        status,\n    )\n\n    return status\n\n\ndef loop():"
+    },
+    {
+      "path": "control/backups/e040_bridge_20260919T194311Z.py",
+      "line": 47,
+      "snippet": "        path = Path(value)\n\n        if path.is_absolute():\n            raise ValueError(\"absolute paths forbidden\")\n\n        if \"..\" in path.parts:\n            raise ValueError(\"parent traversal forbidden\")\n\n        allowed = (\n            \"experiments/bridge/\",\n            \"control/jobs/\",\n            \"tests/bridge/\",\n        )\n\n        text = path.as_posix()\n\n        if not text.startswith(allowed):\n            raise ValueError(\n                \"bridge file writes restricted to \"\n                \"experiments/bridge/, control/jobs/, tests/bridge/\"\n            )\n"
+    },
+    {
+      "path": "control/backups/e040_bridge_20260919T194311Z.py",
+      "line": 55,
+      "snippet": "        allowed = (\n            \"experiments/bridge/\",\n            \"control/jobs/\",\n            \"tests/bridge/\",\n        )\n\n        text = path.as_posix()\n\n        if not text.startswith(allowed):\n            raise ValueError(\n                \"bridge file writes restricted to \"\n                \"experiments/bridge/, control/jobs/, tests/bridge/\"\n            )\n\n        return value\n\n\nclass BridgeEnvelope(BaseModel):\n    bridge_version: int = 1\n    commit_message: str = Field(min_length=3, max_length=160)\n    files: list[FileWrite] = []\n    task: Task"
+    },
+    {
+      "path": "control/backups/e040_bridge_20260919T194311Z.py",
+      "line": 57,
+      "snippet": "            \"control/jobs/\",\n            \"tests/bridge/\",\n        )\n\n        text = path.as_posix()\n\n        if not text.startswith(allowed):\n            raise ValueError(\n                \"bridge file writes restricted to \"\n                \"experiments/bridge/, control/jobs/, tests/bridge/\"\n            )\n\n        return value\n\n\nclass BridgeEnvelope(BaseModel):\n    bridge_version: int = 1\n    commit_message: str = Field(min_length=3, max_length=160)\n    files: list[FileWrite] = []\n    task: Task\n\n    @field_validator(\"commit_message\")"
+    }
+  ]
+}

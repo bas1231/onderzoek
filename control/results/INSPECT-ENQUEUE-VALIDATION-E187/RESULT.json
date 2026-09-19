@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "experiments/bridge/e187.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-19T22:46:25.644435+00:00",
+  "hypothesis_id": "CONTROL-NO-SILENT-WAITING",
+  "source_commit": "3d0827323a3d167a8d9302bc2042848eda40ee99",
+  "started_at": "2026-09-19T22:46:25.616760+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "e1e3f0a1a95a6ae2c44ed93987b461f65c04494b234839dbee20b550609a1467",
+  "task_class": "infrastructure",
+  "task_id": "INSPECT-ENQUEUE-VALIDATION-E187"
+}
