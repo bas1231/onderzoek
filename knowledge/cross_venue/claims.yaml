@@ -1,0 +1,140 @@
+schema_version: 1
+as_of: 2026-09-19
+economic_status: NO_PROVEN_EDGE
+records:
+  - id: FX-COUPON-001
+    venue: ForecastEx
+    kind: fact
+    status: FACT_VERIFIED
+    claim: "ForecastEx voegt een incentive coupon/carry toe aan open Forecast Contracts; de rate is variabel en de contractuele minimumformule kan tot nul dalen."
+    implication: "Huidige positieve APY mag niet als gegarandeerde forward cashflow worden behandeld."
+    provenance:
+      - repo: bas1231/predictionbot
+        ref: main
+        path: onderzoek/FORECASTEX_COUPON_AND_YIELD_RESEARCH_2026-09-19.md
+
+  - id: FX-COUPON-002
+    venue: ForecastEx
+    kind: negative_evidence
+    status: TESTED_NEGATIVE
+    claim: "Naieve same-market YES+NO coupon farming is geen geldige persistent hedge-route onder de onderzochte regels."
+    evidence:
+      - "Rule 604 nett offsetting YES/NO positions in dezelfde Forecast Market."
+      - "Publieke 12,398,980-snapshot studie vond 0 same-market YES-ask+NO-ask observations onder $1; minimum $1.03 in dat corpus."
+    provenance:
+      - repo: bas1231/predictionbot
+        ref: main
+        path: onderzoek/FORECASTEX_COUPON_AND_YIELD_RESEARCH_2026-09-19.md
+
+  - id: FX-COUPON-003
+    venue: ForecastEx
+    kind: hypothesis
+    status: STRUCTURAL_CANDIDATE
+    claim: "Cross-threshold guaranteed-floor portfolios plus daadwerkelijk gerealiseerde couponcarry kunnen economisch anders zijn dan pure static payout algebra."
+    example_structure: "Voor L<H heeft YES(X>L)+NO(X>H) terminal floor 1 en middle-state payout 2."
+    blockers:
+      - "variabele toekomstige coupon"
+      - "simultane executable entry"
+      - "exacte fees"
+      - "daily closing values voor carry"
+      - "source/rounding/expiry identity"
+      - "depth"
+    next_test: "Historische cross-threshold census met realized coupons en execution-realistische entry."
+    provenance:
+      - repo: bas1231/predictionbot
+        ref: main
+        path: onderzoek/FORECASTEX_COUPON_AND_YIELD_RESEARCH_2026-09-19.md
+
+  - id: PREDICT-YIELD-001
+    venue: Predict.fun
+    kind: fact
+    status: FACT_VERIFIED
+    claim: "Yield-bearing conditional positions genereren variabele externe DeFi-yield; merge/split zelf creëert geen deterministische extra collateral."
+    result: "Naieve split-hold-merge >1 loop afgewezen; principal en yield worden afzonderlijk behandeld."
+    provenance:
+      - repo: bas1231/predictionbot
+        ref: main
+        path: onderzoek/FORECASTEX_COUPON_AND_YIELD_RESEARCH_2026-09-19.md
+
+  - id: STATEGRAPH-001
+    venue: Kalshi
+    kind: negative_evidence
+    status: TESTED_NEGATIVE
+    claim: "Gewone collateral return/netting, settlement en Combo-lifecycle leverden in de onderzochte documentatie geen nieuwe state-dependent value-creating deterministic conversion cycle op."
+    reason: "Mechanismen reduceren tot static payoff algebra, collateral timing of toekomstige orderbook/RFQ-afhankelijkheid."
+    provenance:
+      - repo: bas1231/predictionbot
+        ref: main
+        path: onderzoek/STATE_DEPENDENT_CONVERSION_GRAPH_RESEARCH_2026-09-19.md
+
+  - id: STATEGRAPH-002
+    venue: Limitless
+    kind: negative_evidence
+    status: TESTED_NEGATIVE
+    claim: "Split/merge, NegRisk conversion, Packs en redemption leverden geen nieuwe deterministic value-creating cycle; ze implementeren of realiseren bestaande payoff-identiteiten."
+    provenance:
+      - repo: bas1231/predictionbot
+        ref: main
+        path: onderzoek/STATE_DEPENDENT_CONVERSION_GRAPH_RESEARCH_2026-09-19.md
+
+  - id: STATEGRAPH-003
+    venue: Opinion
+    kind: negative_evidence
+    status: TESTED_NEGATIVE
+    claim: "Geen proof-safe state-dependent value-creating conversion cycle gevonden; split/merge/redeem zijn static/value-preserving en matched trades kunnen on-chain nog falen."
+    provenance:
+      - repo: bas1231/predictionbot
+        ref: main
+        path: onderzoek/STATE_DEPENDENT_CONVERSION_GRAPH_RESEARCH_2026-09-19.md
+
+  - id: SEER-NESTED-001
+    venue: Seer/Gnosis
+    kind: hypothesis
+    status: STRUCTURAL_CANDIDATE
+    claim: "Nested conditional tokens creëren een echte recursively conditional asset graph, maar pure nested split/merge blijft value-preserving."
+    research_question: "Bestaan er state-gated rights na parent/invalid/futarchy transitions die niet tot static payoff algebra reduceren?"
+    provenance:
+      - repo: bas1231/predictionbot
+        ref: main
+        path: onderzoek/STATE_DEPENDENT_CONVERSION_GRAPH_RESEARCH_2026-09-19.md
+
+  - id: TRUEO-BOND-001
+    venue: Trueo
+    kind: hypothesis
+    status: TESTED_NEGATIVE
+    claim: "Oracle/dispute-bond cashflows kunnen theoretisch met outcome tokens worden gecombineerd, maar de onderzochte huidige factory zette rewardAmount op 0, waardoor de gevonden reward-hedge route niet economisch actief was."
+    legal_review_required: true
+    note: "Alleen mechanisme/falsificatie; geen protocolmanipulatie of exploitinstructies."
+    provenance:
+      - repo: bas1231/predictionbot
+        ref: main
+        path: onderzoek/ORACLE_BOND_MARKET_HEDGE_RESEARCH_2026-09-19.md
+
+  - id: SEER-ORACLE-001
+    venue: Reality.eth/Seer
+    kind: hypothesis
+    status: STRUCTURAL_CANDIDATE
+    claim: "Een oracle/arbitration state claim en een outcome token kunnen aan dezelfde resolution state gekoppeld zijn en daardoor een cross-layer hedge-object vormen."
+    proof_blockers:
+      - "exacte requester/bond/reward payoutsemantiek"
+      - "alle appeal/cancel/invalid states"
+      - "single-numeraire proof"
+      - "t0 executable token hedge"
+      - "live instance"
+      - "legal/venue-rule review"
+    legal_review_required: true
+    safety: "Niet operationaliseren als manipulatie van oracle/disputeprocessen; uitsluitend analyseren als legitieme protocolincentive en formele payoffrelatie."
+    provenance:
+      - repo: bas1231/predictionbot
+        ref: main
+        path: onderzoek/ORACLE_BOND_MARKET_HEDGE_RESEARCH_2026-09-19.md
+
+  - id: PRIORART-001
+    venue: cross_venue
+    kind: fact
+    status: FACT_VERIFIED
+    claim: "Settlement discounting/capital lock-up en protocol-executable arbitrage zijn reeds publiek onderzochte mechanismen; ze mogen niet als nieuw edge-concept worden verkocht zonder aanvullende mechaniek/evidence."
+    provenance:
+      - repo: bas1231/predictionbot
+        ref: main
+        path: onderzoek/STATE_DEPENDENT_CONVERSION_GRAPH_RESEARCH_2026-09-19.md
