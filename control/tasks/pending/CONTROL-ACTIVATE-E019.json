@@ -1,0 +1,13 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/activate_research_e019.py"
+  ],
+  "hypothesis_id": "CONTROL-RESEARCH-ACTIVATION",
+  "live_trading": false,
+  "operation": "python",
+  "task_class": "infrastructure",
+  "task_id": "CONTROL-ACTIVATE-E019",
+  "timeout_seconds": 120,
+  "working_directory": "."
+}
