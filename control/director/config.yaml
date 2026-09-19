@@ -1,0 +1,20 @@
+schema_version: 1
+
+model:
+  default: gpt-5.6-terra
+  difficult_research: gpt-5.6-sol
+
+reasoning:
+  default: medium
+  difficult_research: high
+
+execution:
+  autonomous_research: false
+  allow_task_creation: false
+  allow_live_trading: false
+  allow_capital_access: false
+
+limits:
+  max_context_chars: 120000
+  max_recent_commits: 20
+  max_proposals_per_cycle: 3

@@ -175,3 +175,19 @@ Wanneer onderzoek via de lokale WSL control-plane wordt uitgevoerd,
 gelden aanvullend de regels in `control/LOCAL_EXECUTION_RULES.md`.
 
 De lokale executor is een research-worker en geen live-trading executor.
+
+## AI Research Director
+
+De lokale AI-orchestrator staat in `control/director.py`.
+
+Agentrollen staan in `agents/roles/`.
+
+De Director:
+- moet de verplichte bootstrap-context uit deze repository lezen;
+- mag een gepauzeerde researchqueue nooit zelfstandig hervatten;
+- mag tijdens bootstrap alleen infrastructurele voorstellen doen;
+- mag pas uitvoerbare researchtaken genereren wanneer daarvoor expliciet
+  een afzonderlijke promotion/enable-gate is geactiveerd;
+- heeft geen toegang tot live tradingcapital of wallets.
+
+API-secrets worden nooit in Git opgeslagen.
