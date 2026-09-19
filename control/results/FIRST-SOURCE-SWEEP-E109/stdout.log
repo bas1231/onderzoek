@@ -1,0 +1,111 @@
+{
+  "ok": true,
+  "sweep": "knowledge/runs/source_sweeps/20260919T205924Z.json",
+  "source_count": 11,
+  "success_count": 11,
+  "failure_count": 0,
+  "results": [
+    {
+      "source_id": "arxiv",
+      "ok": true,
+      "http_status": 200,
+      "bytes": 38051,
+      "sha256": "d7ed6c1e9723edcceae8a3d3f258a7ca991bd64f841fad43632caa13a7fad746",
+      "classification": "FIRST_SEEN",
+      "manifest": "/home/leonh/prediction_research/knowledge/documents/manifests/arxiv/20260919T205924Z_d7ed6c1e9723.json"
+    },
+    {
+      "source_id": "aviationweather",
+      "ok": true,
+      "http_status": 200,
+      "bytes": 39257,
+      "sha256": "dd6e0cc4b237e05406554eb33d2b7963367175f44a5a0ae0feb4e59f707b0edf",
+      "classification": "FIRST_SEEN",
+      "manifest": "/home/leonh/prediction_research/knowledge/documents/manifests/aviationweather/20260919T205924Z_dd6e0cc4b237.json"
+    },
+    {
+      "source_id": "cftc",
+      "ok": true,
+      "http_status": 200,
+      "bytes": 56369,
+      "sha256": "7eda46ec96f63845772095154b42005234750ca09bbc62dfb1a0a95ae001ad86",
+      "classification": "FIRST_SEEN",
+      "manifest": "/home/leonh/prediction_research/knowledge/documents/manifests/cftc/20260919T205924Z_7eda46ec96f6.json"
+    },
+    {
+      "source_id": "ecmwf_open",
+      "ok": true,
+      "http_status": 200,
+      "bytes": 104747,
+      "sha256": "83c3dee07ef5f6d1a434fb3688a9a39e6aec75080ea93f3c0f9b60cea8df0be0",
+      "classification": "FIRST_SEEN",
+      "manifest": "/home/leonh/prediction_research/knowledge/documents/manifests/ecmwf_open/20260919T205924Z_83c3dee07ef5.json"
+    },
+    {
+      "source_id": "github",
+      "ok": true,
+      "http_status": 200,
+      "bytes": 575802,
+      "sha256": "a7b75452a6a097d19bf2d4d575f951df3f81cf13121581c012d7d5c1b0b397c5",
+      "classification": "FIRST_SEEN",
+      "manifest": "/home/leonh/prediction_research/knowledge/documents/manifests/github/20260919T205925Z_a7b75452a6a0.json"
+    },
+    {
+      "source_id": "kalshi_docs",
+      "ok": true,
+      "http_status": 200,
+      "bytes": 219716,
+      "sha256": "94c183be8dd7141d7c8bee939c2ff1fb07caac3c559161afa319daad968ad5ce",
+      "classification": "UNCHANGED",
+      "manifest": "/home/leonh/prediction_research/knowledge/documents/manifests/kalshi_docs/20260919T205924Z_94c183be8dd7.json"
+    },
+    {
+      "source_id": "nomads",
+      "ok": true,
+      "http_status": 200,
+      "bytes": 52105,
+      "sha256": "4082f3d055b79ec791859f5b977787eddd736135c1b2f23e1ed58d3753bda363",
+      "classification": "FIRST_SEEN",
+      "manifest": "/home/leonh/prediction_research/knowledge/documents/manifests/nomads/20260919T205924Z_4082f3d055b7.json"
+    },
+    {
+      "source_id": "nws",
+      "ok": true,
+      "http_status": 200,
+      "bytes": 121877,
+      "sha256": "d16c42159a3d96a714d2ae1748b8e8af5c1056ca74715693727077befac70813",
+      "classification": "FIRST_SEEN",
+      "manifest": "/home/leonh/prediction_research/knowledge/documents/manifests/nws/20260919T205924Z_d16c42159a3d.json"
+    },
+    {
+      "source_id": "polymarket_docs",
+      "ok": true,
+      "http_status": 200,
+      "bytes": 445795,
+      "sha256": "6061d788333a11345f9b58eac43e8ad235ee9315b5bdb7acf8e01b8fc02342b7",
+      "classification": "FIRST_SEEN",
+      "manifest": "/home/leonh/prediction_research/knowledge/documents/manifests/polymarket_docs/20260919T205924Z_6061d788333a.json"
+    },
+    {
+      "source_id": "reddit",
+      "ok": true,
+      "http_status": 200,
+      "bytes": 8397,
+      "sha256": "fadd1892faab68e2f91bfea90729dd12e3b5c86e73a2ac80e2d6bf7fd97a6cf1",
+      "classification": "FIRST_SEEN",
+      "manifest": "/home/leonh/prediction_research/knowledge/documents/manifests/reddit/20260919T205924Z_fadd1892faab.json"
+    },
+    {
+      "source_id": "youtube",
+      "ok": true,
+      "http_status": 200,
+      "bytes": 750000,
+      "sha256": "841c9ee3fd889d9a9386b7843ae5ecf39e72d53203a1a7729215cae4d9c66612",
+      "classification": "FIRST_SEEN",
+      "manifest": "/home/leonh/prediction_research/knowledge/documents/manifests/youtube/20260919T205925Z_841c9ee3fd88.json"
+    }
+  ],
+  "commit_rc": 0,
+  "push_rc": 0,
+  "head": "8a20fd5 run(hourly): archive first multi-source sweep"
+}
