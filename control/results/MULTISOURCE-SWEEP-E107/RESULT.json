@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "experiments/bridge/e107.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-19T20:58:52.389143+00:00",
+  "hypothesis_id": "CONTROL-AUTONOMOUS-RESEARCH",
+  "source_commit": "ad4cd0107359469492aa217cce1dbacba8dd5e3f",
+  "started_at": "2026-09-19T20:58:50.074697+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "a56ff4b61e45458e8129da42e22d6194b5fad4a19347753233cd23221ef14a76",
+  "task_class": "infrastructure",
+  "task_id": "MULTISOURCE-SWEEP-E107"
+}
