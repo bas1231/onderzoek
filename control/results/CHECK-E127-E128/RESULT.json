@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "experiments/bridge/e128.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-19T21:49:47.245977+00:00",
+  "hypothesis_id": "CONTROL-NO-SILENT-WAITING",
+  "source_commit": "b51b46f27fb081809ef2237c4c144362e39231d0",
+  "started_at": "2026-09-19T21:49:47.223456+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "bb2c67e35675a2d5c88b39314d202d237e9d52fd19005bd9ff4132c5f7082446",
+  "task_class": "infrastructure",
+  "task_id": "CHECK-E127-E128"
+}
