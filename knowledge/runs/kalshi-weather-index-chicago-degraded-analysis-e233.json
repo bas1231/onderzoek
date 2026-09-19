@@ -1,0 +1,1609 @@
+{
+  "conditional_inference": [
+    {
+      "if_equal_base_weights_and_only_station_offsets_apply": {
+        "implied_missing_station_offset_minus_city_reference_f_equivalent": 1.4600000000000364,
+        "note": "This is a conditional algebraic implication, not an estimate of the current official calibration unless equal weights and the documented offset formula are confirmed for this effective config."
+      },
+      "missing_station": "KORD1M",
+      "observed_residual_f": 0.3650000000000091,
+      "t": 1789854780000
+    }
+  ],
+  "config_version": "chicago-temperature-v1.0-cal-20260914",
+  "degraded_category_counts": {
+    "('degraded', ('KARR1M', 'KDPA1M', 'KMDW1M', 'KPWK1M'), ('KORD1M',), (('KARR1M', 'missing'), ('KDPA1M', 'missing'), ('KMDW1M', 'missing'), ('KPWK1M', 'missing')))": 1,
+    "('degraded', ('KDPA1M',), (), (('KDPA1M', 'missing'),))": 36,
+    "('incomplete', (), (), ())": 3,
+    "('normal', (), (), ())": 138
+  },
+  "degraded_count": 37,
+  "degraded_examples": [
+    {
+      "contributors": 5,
+      "fallback_station_ids": [
+        "KDPA1M"
+      ],
+      "missing_station_ids": [],
+      "primary_nonok": [
+        {
+          "code": "ok",
+          "obs_time_ms": 1789851120000,
+          "primary_code": "missing",
+          "received_at_ms": 1789851371853,
+          "source": "metar",
+          "station_id": "KDPA1M",
+          "temp_f": 69.08
+        }
+      ],
+      "raw_mean": 70.01599999999999,
+      "residual_vs_raw_mean": 0.0040000000000048885,
+      "stations": [
+        {
+          "code": "ok",
+          "obs_time_ms": null,
+          "primary_code": null,
+          "received_at_ms": 1789851253981,
+          "source": "hf_asos",
+          "station_id": "KARR1M",
+          "temp_f": 69.8
+        },
+        {
+          "code": "ok",
+          "obs_time_ms": 1789851120000,
+          "primary_code": "missing",
+          "received_at_ms": 1789851371853,
+          "source": "metar",
+          "station_id": "KDPA1M",
+          "temp_f": 69.08
+        },
+        {
+          "code": "ok",
+          "obs_time_ms": null,
+          "primary_code": null,
+          "received_at_ms": 1789851255494,
+          "source": "hf_asos",
+          "station_id": "KMDW1M",
+          "temp_f": 71.6
+        },
+        {
+          "code": "ok",
+          "obs_time_ms": null,
+          "primary_code": null,
+          "received_at_ms": 1789851255494,
+          "source": "hf_asos",
+          "station_id": "KORD1M",
+          "temp_f": 69.8
+        },
+        {
+          "code": "ok",
+          "obs_time_ms": null,
+          "primary_code": null,
+          "received_at_ms": 1789851255494,
+          "source": "hf_asos",
+          "station_id": "KPWK1M",
+          "temp_f": 69.8
+        }
+      ],
+      "status": "degraded",
+      "t": 1789851120000,
+      "v": 70.02
+    },
+    {
+      "contributors": 5,
+      "fallback_station_ids": [
+        "KDPA1M"
+      ],
+      "missing_station_ids": [],
+      "primary_nonok": [
+        {
+          "code": "ok",
+          "obs_time_ms": 1789851120000,
+          "primary_code": "missing",
+          "received_at_ms": 1789851371853,
+          "source": "metar",
+          "station_id": "KDPA1M",
+          "temp_f": 69.08
+        }
+      ],
+      "raw_mean": 70.01599999999999,
+      "residual_vs_raw_mean": 0.0040000000000048885,
+      "stations": [
+        {
+          "code": "ok",
+          "obs_time_ms": null,
+          "primary_code": null,
+          "received_at_ms": 1789851616580,
+          "source": "hf_asos",
+          "station_id": "KARR1M",
+          "temp_f": 69.8
+        },
+        {
+          "code": "ok",
+          "obs_time_ms": 1789851120000,
+          "primary_code": "missing",
+          "received_at_ms": 1789851371853,
+          "source": "metar",
+          "station_id": "KDPA1M",
+          "temp_f": 69.08
+        },
+        {
+          "code": "ok",
+          "obs_time_ms": null,
+          "primary_code": null,
+          "received_at_ms": 1789851618090,
+          "source": "hf_asos",
+          "station_id": "KMDW1M",
+          "temp_f": 71.6
+        },
+        {
+          "code": "ok",
+          "obs_time_ms": null,
+          "primary_code": null,
+          "received_at_ms": 1789851618593,
+          "source": "hf_asos",
+          "station_id": "KORD1M",
+          "temp_f": 69.8
+        },
+        {
+          "code": "ok",
+          "obs_time_ms": null,
+          "primary_code": null,
+          "received_at_ms": 1789851618090,
+          "source": "hf_asos",
+          "station_id": "KPWK1M",
+          "temp_f": 69.8
+        }
+      ],
+      "status": "degraded",
+      "t": 1789851480000,
+      "v": 70.02
+    },
+    {
+      "contributors": 5,
+      "fallback_station_ids": [
+        "KDPA1M"
+      ],
+      "missing_station_ids": [],
+      "primary_nonok": [
+        {
+          "code": "ok",
+          "obs_time_ms": 1789851120000,
+          "primary_code": "missing",
+          "received_at_ms": 1789851371853,
+          "source": "metar",
+          "station_id": "KDPA1M",
+          "temp_f": 69.08
+        }
+      ],
+      "raw_mean": 69.65599999999999,
+      "residual_vs_raw_mean": 0.0040000000000048885,
+      "stations": [
+        {
+          "code": "ok",
+          "obs_time_ms": null,
+          "primary_code": null,
+          "received_at_ms": 1789851935197,
+          "source": "hf_asos",
+          "station_id": "KARR1M",
+          "temp_f": 68
+        },
+        {
+          "code": "ok",
+          "obs_time_ms": 1789851120000,
+          "primary_code": "missing",
+          "received_at_ms": 1789851371853,
+          "source": "metar",
+          "station_id": "KDPA1M",
+          "temp_f": 69.08
+        },
+        {
+          "code": "ok",
+          "obs_time_ms": null,
+          "primary_code": null,
+          "received_at_ms": 1789851937214,
+          "source": "hf_asos",
+          "station_id": "KMDW1M",
+          "temp_f": 71.6
+        },
+        {
+          "code": "ok",
+          "obs_time_ms": null,
+          "primary_code": null,
+          "received_at_ms": 1789851937214,
+          "source": "hf_asos",
+          "station_id": "KORD1M",
+          "temp_f": 69.8
+        },
+        {
+          "code": "ok",
+          "obs_time_ms": null,
+          "primary_code": null,
+          "received_at_ms": 1789851936707,
+          "source": "hf_asos",
+          "station_id": "KPWK1M",
+          "temp_f": 69.8
+        }
+      ],
+      "status": "degraded",
+      "t": 1789851780000,
+      "v": 69.66
+    },
+    {
+      "contributors": 5,
+      "fallback_station_ids": [
+        "KDPA1M"
+      ],
+      "missing_station_ids": [],
+      "primary_nonok": [
+        {
+          "code": "ok",
+          "obs_time_ms": 1789851120000,
+          "primary_code": "missing",
+          "received_at_ms": 1789851371853,
+          "source": "metar",
+          "station_id": "KDPA1M",
+          "temp_f": 69.08
+        }
+      ],
+      "raw_mean": 69.65599999999999,
+      "residual_vs_raw_mean": 0.0040000000000048885,
+      "stations": [
+        {
+          "code": "ok",
+          "obs_time_ms": null,
+          "primary_code": null,
+          "received_at_ms": 1789852157719,
+          "source": "hf_asos",
+          "station_id": "KARR1M",
+          "temp_f": 68
+        },
+        {
+          "code": "ok",
+          "obs_time_ms": 1789851120000,
+          "primary_code": "missing",
+          "received_at_ms": 1789851371853,
+          "source": "metar",
+          "station_id": "KDPA1M",
+          "temp_f": 69.08
+        },
+        {
+          "code": "ok",
+          "obs_time_ms": null,
+          "primary_code": null,
+          "received_at_ms": 1789852158224,
+          "source": "hf_asos",
+          "station_id": "KMDW1M",
+          "temp_f": 71.6
+        },
+        {
+          "code": "ok",
+          "obs_time_ms": null,
+          "primary_code": null,
+          "received_at_ms": 1789852159232,
+          "source": "hf_asos",
+          "station_id": "KORD1M",
+          "temp_f": 69.8
+        },
+        {
+          "code": "ok",
+          "obs_time_ms": null,
+          "primary_code": null,
+          "received_at_ms": 1789852159232,
+          "source": "hf_asos",
+          "station_id": "KPWK1M",
+          "temp_f": 69.8
+        }
+      ],
+      "status": "degraded",
+      "t": 1789852020000,
+      "v": 69.66
+    },
+    {
+      "contributors": 5,
+      "fallback_station_ids": [
+        "KDPA1M"
+      ],
+      "missing_station_ids": [],
+      "primary_nonok": [
+        {
+          "code": "ok",
+          "obs_time_ms": 1789851120000,
+          "primary_code": "missing",
+          "received_at_ms": 1789851371853,
+          "source": "metar",
+          "station_id": "KDPA1M",
+          "temp_f": 69.08
+        }
+      ],
+      "raw_mean": 69.65599999999999,
+      "residual_vs_raw_mean": 0.0040000000000048885,
+      "stations": [
+        {
+          "code": "ok",
+          "obs_time_ms": null,
+          "primary_code": null,
+          "received_at_ms": 1789852404273,
+          "source": "hf_asos",
+          "station_id": "KARR1M",
+          "temp_f": 68
+        },
+        {
+          "code": "ok",
+          "obs_time_ms": 1789851120000,
+          "primary_code": "missing",
+          "received_at_ms": 1789851371853,
+          "source": "metar",
+          "station_id": "KDPA1M",
+          "temp_f": 69.08
+        },
+        {
+          "code": "ok",
+          "obs_time_ms": null,
+          "primary_code": null,
+          "received_at_ms": 1789852405285,
+          "source": "hf_asos",
+          "station_id": "KMDW1M",
+          "temp_f": 71.6
+        },
+        {
+          "code": "ok",
+          "obs_time_ms": null,
+          "primary_code": null,
+          "received_at_ms": 1789852405285,
+          "source": "hf_asos",
+          "station_id": "KORD1M",
+          "temp_f": 69.8
+        },
+        {
+          "code": "ok",
+          "obs_time_ms": null,
+          "primary_code": null,
+          "received_at_ms": 1789852405285,
+          "source": "hf_asos",
+          "station_id": "KPWK1M",
+          "temp_f": 69.8
+        }
+      ],
+      "status": "degraded",
+      "t": 1789852260000,
+      "v": 69.66
+    },
+    {
+      "contributors": 5,
+      "fallback_station_ids": [
+        "KDPA1M"
+      ],
+      "missing_station_ids": [],
+      "primary_nonok": [
+        {
+          "code": "ok",
+          "obs_time_ms": 1789851120000,
+          "primary_code": "missing",
+          "received_at_ms": 1789851371853,
+          "source": "metar",
+          "station_id": "KDPA1M",
+          "temp_f": 69.08
+        }
+      ],
+      "raw_mean": 69.65599999999999,
+      "residual_vs_raw_mean": 0.0040000000000048885,
+      "stations": [
+        {
+          "code": "ok",
+          "obs_time_ms": null,
+          "primary_code": null,
+          "received_at_ms": 1789852656662,
+          "source": "hf_asos",
+          "station_id": "KARR1M",
+          "temp_f": 68
+        },
+        {
+          "code": "ok",
+          "obs_time_ms": 1789851120000,
+          "primary_code": "missing",
+          "received_at_ms": 1789851371853,
+          "source": "metar",
+          "station_id": "KDPA1M",
+          "temp_f": 69.08
+        },
+        {
+          "code": "ok",
+          "obs_time_ms": null,
+          "primary_code": null,
+          "received_at_ms": 1789852657729,
+          "source": "hf_asos",
+          "station_id": "KMDW1M",
+          "temp_f": 71.6
+        },
+        {
+          "code": "ok",
+          "obs_time_ms": null,
+          "primary_code": null,
+          "received_at_ms": 1789852657729,
+          "source": "hf_asos",
+          "station_id": "KORD1M",
+          "temp_f": 69.8
+        },
+        {
+          "code": "ok",
+          "obs_time_ms": null,
+          "primary_code": null,
+          "received_at_ms": 1789852657729,
+          "source": "hf_asos",
+          "station_id": "KPWK1M",
+          "temp_f": 69.8
+        }
+      ],
+      "status": "degraded",
+      "t": 1789852500000,
+      "v": 69.66
+    },
+    {
+      "contributors": 5,
+      "fallback_station_ids": [
+        "KDPA1M"
+      ],
+      "missing_station_ids": [],
+      "primary_nonok": [
+        {
+          "code": "ok",
+          "obs_time_ms": 1789851120000,
+          "primary_code": "missing",
+          "received_at_ms": 1789851371853,
+          "source": "metar",
+          "station_id": "KDPA1M",
+          "temp_f": 69.08
+        }
+      ],
+      "raw_mean": 69.65599999999999,
+      "residual_vs_raw_mean": 0.0040000000000048885,
+      "stations": [
+        {
+          "code": "ok",
+          "obs_time_ms": null,
+          "primary_code": null,
+          "received_at_ms": 1789852885352,
+          "source": "hf_asos",
+          "station_id": "KARR1M",
+          "temp_f": 68
+        },
+        {
+          "code": "ok",
+          "obs_time_ms": 1789851120000,
+          "primary_code": "missing",
+          "received_at_ms": 1789851371853,
+          "source": "metar",
+          "station_id": "KDPA1M",
+          "temp_f": 69.08
+        },
+        {
+          "code": "ok",
+          "obs_time_ms": null,
+          "primary_code": null,
+          "received_at_ms": 1789852885859,
+          "source": "hf_asos",
+          "station_id": "KMDW1M",
+          "temp_f": 71.6
+        },
+        {
+          "code": "ok",
+          "obs_time_ms": null,
+          "primary_code": null,
+          "received_at_ms": 1789852885859,
+          "source": "hf_asos",
+          "station_id": "KORD1M",
+          "temp_f": 69.8
+        },
+        {
+          "code": "ok",
+          "obs_time_ms": null,
+          "primary_code": null,
+          "received_at_ms": 1789852885859,
+          "source": "hf_asos",
+          "station_id": "KPWK1M",
+          "temp_f": 69.8
+        }
+      ],
+      "status": "degraded",
+      "t": 1789852740000,
+      "v": 69.66
+    },
+    {
+      "contributors": 5,
+      "fallback_station_ids": [
+        "KDPA1M"
+      ],
+      "missing_station_ids": [],
+      "primary_nonok": [
+        {
+          "code": "ok",
+          "obs_time_ms": 1789851120000,
+          "primary_code": "missing",
+          "received_at_ms": 1789851371853,
+          "source": "metar",
+          "station_id": "KDPA1M",
+          "temp_f": 69.08
+        }
+      ],
+      "raw_mean": 69.65599999999999,
+      "residual_vs_raw_mean": 0.0040000000000048885,
+      "stations": [
+        {
+          "code": "ok",
+          "obs_time_ms": null,
+          "primary_code": null,
+          "received_at_ms": 1789853122995,
+          "source": "hf_asos",
+          "station_id": "KARR1M",
+          "temp_f": 68
+        },
+        {
+          "code": "ok",
+          "obs_time_ms": 1789851120000,
+          "primary_code": "missing",
+          "received_at_ms": 1789851371853,
+          "source": "metar",
+          "station_id": "KDPA1M",
+          "temp_f": 69.08
+        },
+        {
+          "code": "ok",
+          "obs_time_ms": null,
+          "primary_code": null,
+          "received_at_ms": 1789853124002,
+          "source": "hf_asos",
+          "station_id": "KMDW1M",
+          "temp_f": 71.6
+        },
+        {
+          "code": "ok",
+          "obs_time_ms": null,
+          "primary_code": null,
+          "received_at_ms": 1789853124503,
+          "source": "hf_asos",
+          "station_id": "KORD1M",
+          "temp_f": 69.8
+        },
+        {
+          "code": "ok",
+          "obs_time_ms": null,
+          "primary_code": null,
+          "received_at_ms": 1789853124503,
+          "source": "hf_asos",
+          "station_id": "KPWK1M",
+          "temp_f": 69.8
+        }
+      ],
+      "status": "degraded",
+      "t": 1789852980000,
+      "v": 69.66
+    },
+    {
+      "contributors": 5,
+      "fallback_station_ids": [
+        "KDPA1M"
+      ],
+      "missing_station_ids": [],
+      "primary_nonok": [
+        {
+          "code": "ok",
+          "obs_time_ms": 1789851120000,
+          "primary_code": "missing",
+          "received_at_ms": 1789851371853,
+          "source": "metar",
+          "station_id": "KDPA1M",
+          "temp_f": 69.08
+        }
+      ],
+      "raw_mean": 69.65599999999999,
+      "residual_vs_raw_mean": 0.0040000000000048885,
+      "stations": [
+        {
+          "code": "ok",
+          "obs_time_ms": null,
+          "primary_code": null,
+          "received_at_ms": 1789853365980,
+          "source": "hf_asos",
+          "station_id": "KARR1M",
+          "temp_f": 68
+        },
+        {
+          "code": "ok",
+          "obs_time_ms": 1789851120000,
+          "primary_code": "missing",
+          "received_at_ms": 1789851371853,
+          "source": "metar",
+          "station_id": "KDPA1M",
+          "temp_f": 69.08
+        },
+        {
+          "code": "ok",
+          "obs_time_ms": null,
+          "primary_code": null,
+          "received_at_ms": 1789853367996,
+          "source": "hf_asos",
+          "station_id": "KMDW1M",
+          "temp_f": 71.6
+        },
+        {
+          "code": "ok",
+          "obs_time_ms": null,
+          "primary_code": null,
+          "received_at_ms": 1789853366989,
+          "source": "hf_asos",
+          "station_id": "KORD1M",
+          "temp_f": 69.8
+        },
+        {
+          "code": "ok",
+          "obs_time_ms": null,
+          "primary_code": null,
+          "received_at_ms": 1789853367494,
+          "source": "hf_asos",
+          "station_id": "KPWK1M",
+          "temp_f": 69.8
+        }
+      ],
+      "status": "degraded",
+      "t": 1789853220000,
+      "v": 69.66
+    },
+    {
+      "contributors": 5,
+      "fallback_station_ids": [
+        "KDPA1M"
+      ],
+      "missing_station_ids": [],
+      "primary_nonok": [
+        {
+          "code": "ok",
+          "obs_time_ms": 1789851120000,
+          "primary_code": "missing",
+          "received_at_ms": 1789851371853,
+          "source": "metar",
+          "station_id": "KDPA1M",
+          "temp_f": 69.08
+        }
+      ],
+      "raw_mean": 69.65599999999999,
+      "residual_vs_raw_mean": 0.0040000000000048885,
+      "stations": [
+        {
+          "code": "ok",
+          "obs_time_ms": null,
+          "primary_code": null,
+          "received_at_ms": 1789853606395,
+          "source": "hf_asos",
+          "station_id": "KARR1M",
+          "temp_f": 68
+        },
+        {
+          "code": "ok",
+          "obs_time_ms": 1789851120000,
+          "primary_code": "missing",
+          "received_at_ms": 1789851371853,
+          "source": "metar",
+          "station_id": "KDPA1M",
+          "temp_f": 69.08
+        },
+        {
+          "code": "ok",
+          "obs_time_ms": null,
+          "primary_code": null,
+          "received_at_ms": 1789853607911,
+          "source": "hf_asos",
+          "station_id": "KMDW1M",
+          "temp_f": 71.6
+        },
+        {
+          "code": "ok",
+          "obs_time_ms": null,
+          "primary_code": null,
+          "received_at_ms": 1789853607911,
+          "source": "hf_asos",
+          "station_id": "KORD1M",
+          "temp_f": 69.8
+        },
+        {
+          "code": "ok",
+          "obs_time_ms": null,
+          "primary_code": null,
+          "received_at_ms": 1789853607911,
+          "source": "hf_asos",
+          "station_id": "KPWK1M",
+          "temp_f": 69.8
+        }
+      ],
+      "status": "degraded",
+      "t": 1789853460000,
+      "v": 69.66
+    },
+    {
+      "contributors": 5,
+      "fallback_station_ids": [
+        "KDPA1M"
+      ],
+      "missing_station_ids": [],
+      "primary_nonok": [
+        {
+          "code": "ok",
+          "obs_time_ms": 1789851120000,
+          "primary_code": "missing",
+          "received_at_ms": 1789851371853,
+          "source": "metar",
+          "station_id": "KDPA1M",
+          "temp_f": 69.08
+        }
+      ],
+      "raw_mean": 69.65599999999999,
+      "residual_vs_raw_mean": 0.0040000000000048885,
+      "stations": [
+        {
+          "code": "ok",
+          "obs_time_ms": null,
+          "primary_code": null,
+          "received_at_ms": 1789853854076,
+          "source": "hf_asos",
+          "station_id": "KARR1M",
+          "temp_f": 68
+        },
+        {
+          "code": "ok",
+          "obs_time_ms": 1789851120000,
+          "primary_code": "missing",
+          "received_at_ms": 1789851371853,
+          "source": "metar",
+          "station_id": "KDPA1M",
+          "temp_f": 69.08
+        },
+        {
+          "code": "ok",
+          "obs_time_ms": null,
+          "primary_code": null,
+          "received_at_ms": 1789853855591,
+          "source": "hf_asos",
+          "station_id": "KMDW1M",
+          "temp_f": 71.6
+        },
+        {
+          "code": "ok",
+          "obs_time_ms": null,
+          "primary_code": null,
+          "received_at_ms": 1789853855085,
+          "source": "hf_asos",
+          "station_id": "KORD1M",
+          "temp_f": 69.8
+        },
+        {
+          "code": "ok",
+          "obs_time_ms": null,
+          "primary_code": null,
+          "received_at_ms": 1789853856095,
+          "source": "hf_asos",
+          "station_id": "KPWK1M",
+          "temp_f": 69.8
+        }
+      ],
+      "status": "degraded",
+      "t": 1789853700000,
+      "v": 69.66
+    },
+    {
+      "contributors": 5,
+      "fallback_station_ids": [
+        "KDPA1M"
+      ],
+      "missing_station_ids": [],
+      "primary_nonok": [
+        {
+          "code": "ok",
+          "obs_time_ms": 1789851120000,
+          "primary_code": "missing",
+          "received_at_ms": 1789851371853,
+          "source": "metar",
+          "station_id": "KDPA1M",
+          "temp_f": 69.08
+        }
+      ],
+      "raw_mean": 69.65599999999999,
+      "residual_vs_raw_mean": 0.0040000000000048885,
+      "stations": [
+        {
+          "code": "ok",
+          "obs_time_ms": null,
+          "primary_code": null,
+          "received_at_ms": 1789854073537,
+          "source": "hf_asos",
+          "station_id": "KARR1M",
+          "temp_f": 68
+        },
+        {
+          "code": "ok",
+          "obs_time_ms": 1789851120000,
+          "primary_code": "missing",
+          "received_at_ms": 1789851371853,
+          "source": "metar",
+          "station_id": "KDPA1M",
+          "temp_f": 69.08
+        },
+        {
+          "code": "ok",
+          "obs_time_ms": null,
+          "primary_code": null,
+          "received_at_ms": 1789854073537,
+          "source": "hf_asos",
+          "station_id": "KMDW1M",
+          "temp_f": 71.6
+        },
+        {
+          "code": "ok",
+          "obs_time_ms": null,
+          "primary_code": null,
+          "received_at_ms": 1789854075047,
+          "source": "hf_asos",
+          "station_id": "KORD1M",
+          "temp_f": 69.8
+        },
+        {
+          "code": "ok",
+          "obs_time_ms": null,
+          "primary_code": null,
+          "received_at_ms": 1789854075047,
+          "source": "hf_asos",
+          "station_id": "KPWK1M",
+          "temp_f": 69.8
+        }
+      ],
+      "status": "degraded",
+      "t": 1789853940000,
+      "v": 69.66
+    },
+    {
+      "contributors": 5,
+      "fallback_station_ids": [
+        "KDPA1M"
+      ],
+      "missing_station_ids": [],
+      "primary_nonok": [
+        {
+          "code": "ok",
+          "obs_time_ms": 1789851120000,
+          "primary_code": "missing",
+          "received_at_ms": 1789851371853,
+          "source": "metar",
+          "station_id": "KDPA1M",
+          "temp_f": 69.08
+        }
+      ],
+      "raw_mean": 69.65599999999999,
+      "residual_vs_raw_mean": 0.0040000000000048885,
+      "stations": [
+        {
+          "code": "ok",
+          "obs_time_ms": null,
+          "primary_code": null,
+          "received_at_ms": 1789854329999,
+          "source": "hf_asos",
+          "station_id": "KARR1M",
+          "temp_f": 68
+        },
+        {
+          "code": "ok",
+          "obs_time_ms": 1789851120000,
+          "primary_code": "missing",
+          "received_at_ms": 1789851371853,
+          "source": "metar",
+          "station_id": "KDPA1M",
+          "temp_f": 69.08
+        },
+        {
+          "code": "ok",
+          "obs_time_ms": null,
+          "primary_code": null,
+          "received_at_ms": 1789854330635,
+          "source": "hf_asos",
+          "station_id": "KMDW1M",
+          "temp_f": 71.6
+        },
+        {
+          "code": "ok",
+          "obs_time_ms": null,
+          "primary_code": null,
+          "received_at_ms": 1789854330635,
+          "source": "hf_asos",
+          "station_id": "KORD1M",
+          "temp_f": 69.8
+        },
+        {
+          "code": "ok",
+          "obs_time_ms": null,
+          "primary_code": null,
+          "received_at_ms": 1789854330635,
+          "source": "hf_asos",
+          "station_id": "KPWK1M",
+          "temp_f": 69.8
+        }
+      ],
+      "status": "degraded",
+      "t": 1789854180000,
+      "v": 69.66
+    },
+    {
+      "contributors": 5,
+      "fallback_station_ids": [
+        "KDPA1M"
+      ],
+      "missing_station_ids": [],
+      "primary_nonok": [
+        {
+          "code": "ok",
+          "obs_time_ms": 1789851120000,
+          "primary_code": "missing",
+          "received_at_ms": 1789851371853,
+          "source": "metar",
+          "station_id": "KDPA1M",
+          "temp_f": 69.08
+        }
+      ],
+      "raw_mean": 69.296,
+      "residual_vs_raw_mean": 0.003999999999990678,
+      "stations": [
+        {
+          "code": "ok",
+          "obs_time_ms": null,
+          "primary_code": null,
+          "received_at_ms": 1789854435133,
+          "source": "hf_asos",
+          "station_id": "KARR1M",
+          "temp_f": 68
+        },
+        {
+          "code": "ok",
+          "obs_time_ms": 1789851120000,
+          "primary_code": "missing",
+          "received_at_ms": 1789851371853,
+          "source": "metar",
+          "station_id": "KDPA1M",
+          "temp_f": 69.08
+        },
+        {
+          "code": "ok",
+          "obs_time_ms": null,
+          "primary_code": null,
+          "received_at_ms": 1789854435757,
+          "source": "hf_asos",
+          "station_id": "KMDW1M",
+          "temp_f": 71.6
+        },
+        {
+          "code": "ok",
+          "obs_time_ms": null,
+          "primary_code": null,
+          "received_at_ms": 1789854436261,
+          "source": "hf_asos",
+          "station_id": "KORD1M",
+          "temp_f": 69.8
+        },
+        {
+          "code": "ok",
+          "obs_time_ms": null,
+          "primary_code": null,
+          "received_at_ms": 1789854438948,
+          "source": "hf_asos",
+          "station_id": "KPWK1M",
+          "temp_f": 68
+        }
+      ],
+      "status": "degraded",
+      "t": 1789854300000,
+      "v": 69.3
+    },
+    {
+      "contributors": 5,
+      "fallback_station_ids": [
+        "KDPA1M"
+      ],
+      "missing_station_ids": [],
+      "primary_nonok": [
+        {
+          "code": "ok",
+          "obs_time_ms": 1789851120000,
+          "primary_code": "missing",
+          "received_at_ms": 1789851371853,
+          "source": "metar",
+          "station_id": "KDPA1M",
+          "temp_f": 69.08
+        }
+      ],
+      "raw_mean": 69.296,
+      "residual_vs_raw_mean": 0.003999999999990678,
+      "stations": [
+        {
+          "code": "ok",
+          "obs_time_ms": null,
+          "primary_code": null,
+          "received_at_ms": 1789854677547,
+          "source": "hf_asos",
+          "station_id": "KARR1M",
+          "temp_f": 68
+        },
+        {
+          "code": "ok",
+          "obs_time_ms": 1789851120000,
+          "primary_code": "missing",
+          "received_at_ms": 1789851371853,
+          "source": "metar",
+          "station_id": "KDPA1M",
+          "temp_f": 69.08
+        },
+        {
+          "code": "ok",
+          "obs_time_ms": null,
+          "primary_code": null,
+          "received_at_ms": 1789854679064,
+          "source": "hf_asos",
+          "station_id": "KMDW1M",
+          "temp_f": 71.6
+        },
+        {
+          "code": "ok",
+          "obs_time_ms": null,
+          "primary_code": null,
+          "received_at_ms": 1789854679064,
+          "source": "hf_asos",
+          "station_id": "KORD1M",
+          "temp_f": 69.8
+        },
+        {
+          "code": "ok",
+          "obs_time_ms": null,
+          "primary_code": null,
+          "received_at_ms": 1789854678559,
+          "source": "hf_asos",
+          "station_id": "KPWK1M",
+          "temp_f": 68
+        }
+      ],
+      "status": "degraded",
+      "t": 1789854540000,
+      "v": 69.3
+    },
+    {
+      "contributors": 4,
+      "fallback_station_ids": [
+        "KARR1M",
+        "KDPA1M",
+        "KMDW1M",
+        "KPWK1M"
+      ],
+      "missing_station_ids": [
+        "KORD1M"
+      ],
+      "primary_nonok": [
+        {
+          "code": "ok",
+          "obs_time_ms": 1789854720000,
+          "primary_code": "missing",
+          "received_at_ms": 1789854974808,
+          "source": "metar",
+          "station_id": "KARR1M",
+          "temp_f": 68
+        },
+        {
+          "code": "ok",
+          "obs_time_ms": 1789854720000,
+          "primary_code": "missing",
+          "received_at_ms": 1789854975819,
+          "source": "metar",
+          "station_id": "KDPA1M",
+          "temp_f": 69.08
+        },
+        {
+          "code": "ok",
+          "obs_time_ms": 1789854780000,
+          "primary_code": "missing",
+          "received_at_ms": 1789854976337,
+          "source": "metar",
+          "station_id": "KMDW1M",
+          "temp_f": 71.06
+        },
+        {
+          "code": "ok",
+          "obs_time_ms": 1789854720000,
+          "primary_code": "missing",
+          "received_at_ms": 1789854976840,
+          "source": "metar",
+          "station_id": "KPWK1M",
+          "temp_f": 68
+        }
+      ],
+      "raw_mean": 69.035,
+      "residual_vs_raw_mean": 0.3650000000000091,
+      "stations": [
+        {
+          "code": "ok",
+          "obs_time_ms": 1789854720000,
+          "primary_code": "missing",
+          "received_at_ms": 1789854974808,
+          "source": "metar",
+          "station_id": "KARR1M",
+          "temp_f": 68
+        },
+        {
+          "code": "ok",
+          "obs_time_ms": 1789854720000,
+          "primary_code": "missing",
+          "received_at_ms": 1789854975819,
+          "source": "metar",
+          "station_id": "KDPA1M",
+          "temp_f": 69.08
+        },
+        {
+          "code": "ok",
+          "obs_time_ms": 1789854780000,
+          "primary_code": "missing",
+          "received_at_ms": 1789854976337,
+          "source": "metar",
+          "station_id": "KMDW1M",
+          "temp_f": 71.06
+        },
+        {
+          "code": "missing",
+          "obs_time_ms": null,
+          "primary_code": null,
+          "received_at_ms": null,
+          "source": null,
+          "station_id": "KORD1M",
+          "temp_f": null
+        },
+        {
+          "code": "ok",
+          "obs_time_ms": 1789854720000,
+          "primary_code": "missing",
+          "received_at_ms": 1789854976840,
+          "source": "metar",
+          "station_id": "KPWK1M",
+          "temp_f": 68
+        }
+      ],
+      "status": "degraded",
+      "t": 1789854780000,
+      "v": 69.4
+    },
+    {
+      "contributors": 5,
+      "fallback_station_ids": [
+        "KDPA1M"
+      ],
+      "missing_station_ids": [],
+      "primary_nonok": [
+        {
+          "code": "ok",
+          "obs_time_ms": 1789854720000,
+          "primary_code": "missing",
+          "received_at_ms": 1789854975819,
+          "source": "metar",
+          "station_id": "KDPA1M",
+          "temp_f": 69.08
+        }
+      ],
+      "raw_mean": 68.936,
+      "residual_vs_raw_mean": 0.003999999999990678,
+      "stations": [
+        {
+          "code": "ok",
+          "obs_time_ms": null,
+          "primary_code": null,
+          "received_at_ms": 1789854977843,
+          "source": "hf_asos",
+          "station_id": "KARR1M",
+          "temp_f": 68
+        },
+        {
+          "code": "ok",
+          "obs_time_ms": 1789854720000,
+          "primary_code": "missing",
+          "received_at_ms": 1789854975819,
+          "source": "metar",
+          "station_id": "KDPA1M",
+          "temp_f": 69.08
+        },
+        {
+          "code": "ok",
+          "obs_time_ms": null,
+          "primary_code": null,
+          "received_at_ms": 1789854979349,
+          "source": "hf_asos",
+          "station_id": "KMDW1M",
+          "temp_f": 71.6
+        },
+        {
+          "code": "ok",
+          "obs_time_ms": null,
+          "primary_code": null,
+          "received_at_ms": 1789854979349,
+          "source": "hf_asos",
+          "station_id": "KORD1M",
+          "temp_f": 69.8
+        },
+        {
+          "code": "ok",
+          "obs_time_ms": null,
+          "primary_code": null,
+          "received_at_ms": 1789854978345,
+          "source": "hf_asos",
+          "station_id": "KPWK1M",
+          "temp_f": 66.2
+        }
+      ],
+      "status": "degraded",
+      "t": 1789854840000,
+      "v": 68.94
+    },
+    {
+      "contributors": 5,
+      "fallback_station_ids": [
+        "KDPA1M"
+      ],
+      "missing_station_ids": [],
+      "primary_nonok": [
+        {
+          "code": "ok",
+          "obs_time_ms": 1789854720000,
+          "primary_code": "missing",
+          "received_at_ms": 1789854975819,
+          "source": "metar",
+          "station_id": "KDPA1M",
+          "temp_f": 69.08
+        }
+      ],
+      "raw_mean": 68.936,
+      "residual_vs_raw_mean": 0.003999999999990678,
+      "stations": [
+        {
+          "code": "ok",
+          "obs_time_ms": null,
+          "primary_code": null,
+          "received_at_ms": 1789855284896,
+          "source": "hf_asos",
+          "station_id": "KARR1M",
+          "temp_f": 68
+        },
+        {
+          "code": "ok",
+          "obs_time_ms": 1789854720000,
+          "primary_code": "missing",
+          "received_at_ms": 1789854975819,
+          "source": "metar",
+          "station_id": "KDPA1M",
+          "temp_f": 69.08
+        },
+        {
+          "code": "ok",
+          "obs_time_ms": null,
+          "primary_code": null,
+          "received_at_ms": 1789855285917,
+          "source": "hf_asos",
+          "station_id": "KMDW1M",
+          "temp_f": 71.6
+        },
+        {
+          "code": "ok",
+          "obs_time_ms": null,
+          "primary_code": null,
+          "received_at_ms": 1789855285411,
+          "source": "hf_asos",
+          "station_id": "KORD1M",
+          "temp_f": 69.8
+        },
+        {
+          "code": "ok",
+          "obs_time_ms": null,
+          "primary_code": null,
+          "received_at_ms": 1789855285917,
+          "source": "hf_asos",
+          "station_id": "KPWK1M",
+          "temp_f": 66.2
+        }
+      ],
+      "status": "degraded",
+      "t": 1789855140000,
+      "v": 68.94
+    },
+    {
+      "contributors": 5,
+      "fallback_station_ids": [
+        "KDPA1M"
+      ],
+      "missing_station_ids": [],
+      "primary_nonok": [
+        {
+          "code": "ok",
+          "obs_time_ms": 1789854720000,
+          "primary_code": "missing",
+          "received_at_ms": 1789854975819,
+          "source": "metar",
+          "station_id": "KDPA1M",
+          "temp_f": 69.08
+        }
+      ],
+      "raw_mean": 68.936,
+      "residual_vs_raw_mean": 0.003999999999990678,
+      "stations": [
+        {
+          "code": "ok",
+          "obs_time_ms": null,
+          "primary_code": null,
+          "received_at_ms": 1789856303623,
+          "source": "hf_asos",
+          "station_id": "KARR1M",
+          "temp_f": 68
+        },
+        {
+          "code": "ok",
+          "obs_time_ms": 1789854720000,
+          "primary_code": "missing",
+          "received_at_ms": 1789854975819,
+          "source": "metar",
+          "station_id": "KDPA1M",
+          "temp_f": 69.08
+        },
+        {
+          "code": "ok",
+          "obs_time_ms": null,
+          "primary_code": null,
+          "received_at_ms": 1789856305131,
+          "source": "hf_asos",
+          "station_id": "KMDW1M",
+          "temp_f": 71.6
+        },
+        {
+          "code": "ok",
+          "obs_time_ms": null,
+          "primary_code": null,
+          "received_at_ms": 1789856303623,
+          "source": "hf_asos",
+          "station_id": "KORD1M",
+          "temp_f": 69.8
+        },
+        {
+          "code": "ok",
+          "obs_time_ms": null,
+          "primary_code": null,
+          "received_at_ms": 1789856303623,
+          "source": "hf_asos",
+          "station_id": "KPWK1M",
+          "temp_f": 66.2
+        }
+      ],
+      "status": "degraded",
+      "t": 1789856160000,
+      "v": 68.94
+    },
+    {
+      "contributors": 5,
+      "fallback_station_ids": [
+        "KDPA1M"
+      ],
+      "missing_station_ids": [],
+      "primary_nonok": [
+        {
+          "code": "ok",
+          "obs_time_ms": 1789854720000,
+          "primary_code": "missing",
+          "received_at_ms": 1789854975819,
+          "source": "metar",
+          "station_id": "KDPA1M",
+          "temp_f": 69.08
+        }
+      ],
+      "raw_mean": 68.936,
+      "residual_vs_raw_mean": 0.003999999999990678,
+      "stations": [
+        {
+          "code": "ok",
+          "obs_time_ms": null,
+          "primary_code": null,
+          "received_at_ms": 1789856555249,
+          "source": "hf_asos",
+          "station_id": "KARR1M",
+          "temp_f": 68
+        },
+        {
+          "code": "ok",
+          "obs_time_ms": 1789854720000,
+          "primary_code": "missing",
+          "received_at_ms": 1789854975819,
+          "source": "metar",
+          "station_id": "KDPA1M",
+          "temp_f": 69.08
+        },
+        {
+          "code": "ok",
+          "obs_time_ms": null,
+          "primary_code": null,
+          "received_at_ms": 1789856555773,
+          "source": "hf_asos",
+          "station_id": "KMDW1M",
+          "temp_f": 71.6
+        },
+        {
+          "code": "ok",
+          "obs_time_ms": null,
+          "primary_code": null,
+          "received_at_ms": 1789856555773,
+          "source": "hf_asos",
+          "station_id": "KORD1M",
+          "temp_f": 69.8
+        },
+        {
+          "code": "ok",
+          "obs_time_ms": null,
+          "primary_code": null,
+          "received_at_ms": 1789856556278,
+          "source": "hf_asos",
+          "station_id": "KPWK1M",
+          "temp_f": 66.2
+        }
+      ],
+      "status": "degraded",
+      "t": 1789856400000,
+      "v": 68.94
+    }
+  ],
+  "interpretation": [
+    "Fallback METAR usage alone does not imply a large canonical-value residual versus the raw station mean.",
+    "The material residual observed so far is associated with a missing member, consistent with the documented offset-adjusted renormalized index formula.",
+    "Exact current calibration parameters remain unproven because the effective config differs from the certification's initial config identifier.",
+    "NO_PROVEN_EDGE remains in force; this task contains no market-price test."
+  ],
+  "live_trading": false,
+  "outlier_count_abs_residual_gt_0_011f": 1,
+  "outliers": [
+    {
+      "contributors": 4,
+      "fallback_station_ids": [
+        "KARR1M",
+        "KDPA1M",
+        "KMDW1M",
+        "KPWK1M"
+      ],
+      "missing_station_ids": [
+        "KORD1M"
+      ],
+      "primary_nonok": [
+        {
+          "code": "ok",
+          "obs_time_ms": 1789854720000,
+          "primary_code": "missing",
+          "received_at_ms": 1789854974808,
+          "source": "metar",
+          "station_id": "KARR1M",
+          "temp_f": 68
+        },
+        {
+          "code": "ok",
+          "obs_time_ms": 1789854720000,
+          "primary_code": "missing",
+          "received_at_ms": 1789854975819,
+          "source": "metar",
+          "station_id": "KDPA1M",
+          "temp_f": 69.08
+        },
+        {
+          "code": "ok",
+          "obs_time_ms": 1789854780000,
+          "primary_code": "missing",
+          "received_at_ms": 1789854976337,
+          "source": "metar",
+          "station_id": "KMDW1M",
+          "temp_f": 71.06
+        },
+        {
+          "code": "ok",
+          "obs_time_ms": 1789854720000,
+          "primary_code": "missing",
+          "received_at_ms": 1789854976840,
+          "source": "metar",
+          "station_id": "KPWK1M",
+          "temp_f": 68
+        }
+      ],
+      "raw_mean": 69.035,
+      "residual_vs_raw_mean": 0.3650000000000091,
+      "stations": [
+        {
+          "code": "ok",
+          "obs_time_ms": 1789854720000,
+          "primary_code": "missing",
+          "received_at_ms": 1789854974808,
+          "source": "metar",
+          "station_id": "KARR1M",
+          "temp_f": 68
+        },
+        {
+          "code": "ok",
+          "obs_time_ms": 1789854720000,
+          "primary_code": "missing",
+          "received_at_ms": 1789854975819,
+          "source": "metar",
+          "station_id": "KDPA1M",
+          "temp_f": 69.08
+        },
+        {
+          "code": "ok",
+          "obs_time_ms": 1789854780000,
+          "primary_code": "missing",
+          "received_at_ms": 1789854976337,
+          "source": "metar",
+          "station_id": "KMDW1M",
+          "temp_f": 71.06
+        },
+        {
+          "code": "missing",
+          "obs_time_ms": null,
+          "primary_code": null,
+          "received_at_ms": null,
+          "source": null,
+          "station_id": "KORD1M",
+          "temp_f": null
+        },
+        {
+          "code": "ok",
+          "obs_time_ms": 1789854720000,
+          "primary_code": "missing",
+          "received_at_ms": 1789854976840,
+          "source": "metar",
+          "station_id": "KPWK1M",
+          "temp_f": 68
+        }
+      ],
+      "status": "degraded",
+      "t": 1789854780000,
+      "v": 69.4
+    }
+  ],
+  "paid_actions": false,
+  "point_count": 178,
+  "raw_sha256": "9673543bfc31159565e1cf4ae36696b7aec225d0dd5ac9368f1f4d452548e2b4",
+  "status_summary": {
+    "degraded": {
+      "count": 37,
+      "fallback_points": 37,
+      "missing_points": 1,
+      "primary_nonok_points": 37,
+      "residual_abs": {
+        "count": 37,
+        "max": 0.3650000000000091,
+        "mean": 0.013756756756752924,
+        "median": 0.003999999999990678,
+        "min": 0.003999999999990678
+      }
+    },
+    "incomplete": {
+      "count": 3,
+      "fallback_points": 0,
+      "missing_points": 0,
+      "primary_nonok_points": 0,
+      "residual_abs": {
+        "count": 0
+      }
+    },
+    "normal": {
+      "count": 138,
+      "fallback_points": 0,
+      "missing_points": 0,
+      "primary_nonok_points": 0,
+      "residual_abs": {
+        "count": 138,
+        "max": 0.0,
+        "mean": 0.0,
+        "median": 0.0,
+        "min": 0.0
+      }
+    }
+  },
+  "task_id": "KALSHI-WEATHER-INDEX-CHICAGO-DEGRADED-E233",
+  "wallet_actions": false
+}
