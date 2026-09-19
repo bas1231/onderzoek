@@ -1,0 +1,99 @@
+{
+  "artifact": "knowledge/runs/twc-kalshi-hourly-transition-e180.json",
+  "old_fetchedAt": "2026-09-19T22:24:40.032Z",
+  "new_fetchedAt": "2026-09-19T22:30:45.772Z",
+  "new_sha256": "ef47433aeea01ea8d3d2282257b9c93f4e59ab8f808d0414eb7c5c1ff52cbfd5",
+  "new_status_counts": {
+    "settled": 5156
+  },
+  "tracked_status_transition_count": 7,
+  "tracked_temperature_change_count": 0,
+  "tracked": [
+    {
+      "icaoId": "KPVD",
+      "reportTimeUTC": "2026-09-19T22:00:00.000Z",
+      "old_status": "pending",
+      "new_status": "settled",
+      "old_tempC": 17.8,
+      "new_tempC": 17.8,
+      "old_tempF": 64,
+      "new_tempF": 64,
+      "status_changed": true,
+      "temperature_changed": false
+    },
+    {
+      "icaoId": "KSAN",
+      "reportTimeUTC": "2026-09-19T22:00:00.000Z",
+      "old_status": "pending",
+      "new_status": "settled",
+      "old_tempC": 24.4,
+      "new_tempC": 24.4,
+      "old_tempF": 75.9,
+      "new_tempF": 75.9,
+      "status_changed": true,
+      "temperature_changed": false
+    },
+    {
+      "icaoId": "KSDF",
+      "reportTimeUTC": "2026-09-19T22:00:00.000Z",
+      "old_status": "pending",
+      "new_status": "settled",
+      "old_tempC": 34.4,
+      "new_tempC": 34.4,
+      "old_tempF": 93.9,
+      "new_tempF": 93.9,
+      "status_changed": true,
+      "temperature_changed": false
+    },
+    {
+      "icaoId": "KSJC",
+      "reportTimeUTC": "2026-09-19T22:00:00.000Z",
+      "old_status": "pending",
+      "new_status": "settled",
+      "old_tempC": 23.3,
+      "new_tempC": 23.3,
+      "old_tempF": 73.9,
+      "new_tempF": 73.9,
+      "status_changed": true,
+      "temperature_changed": false
+    },
+    {
+      "icaoId": "KSPG",
+      "reportTimeUTC": "2026-09-19T22:00:00.000Z",
+      "old_status": "pending",
+      "new_status": "settled",
+      "old_tempC": 26.7,
+      "new_tempC": 26.7,
+      "old_tempF": 80.1,
+      "new_tempF": 80.1,
+      "status_changed": true,
+      "temperature_changed": false
+    },
+    {
+      "icaoId": "KTPA",
+      "reportTimeUTC": "2026-09-19T22:00:00.000Z",
+      "old_status": "pending",
+      "new_status": "settled",
+      "old_tempC": 25.6,
+      "new_tempC": 25.6,
+      "old_tempF": 78.1,
+      "new_tempF": 78.1,
+      "status_changed": true,
+      "temperature_changed": false
+    },
+    {
+      "icaoId": "KTTN",
+      "reportTimeUTC": "2026-09-19T22:00:00.000Z",
+      "old_status": "pending",
+      "new_status": "settled",
+      "old_tempC": 19.4,
+      "new_tempC": 19.4,
+      "old_tempF": 66.9,
+      "new_tempF": 66.9,
+      "status_changed": true,
+      "temperature_changed": false
+    }
+  ],
+  "commit_rc": 0,
+  "push_rc": 0
+}

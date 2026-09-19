@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "experiments/bridge/e180.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-19T22:33:56.289134+00:00",
+  "hypothesis_id": "H7-SETTLEMENT-BOUNDARY",
+  "source_commit": "101ada334274268777d5297dd398f3147ed72730",
+  "started_at": "2026-09-19T22:33:52.950251+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "a9332e49812de522958681f5449364c0ab45ef01e7702e8834d0b5803bc0c957",
+  "task_class": "research",
+  "task_id": "TWC-HOURLY-PENDING-TRANSITION-SAFE-E180"
+}
