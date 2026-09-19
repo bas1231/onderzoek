@@ -396,3 +396,88 @@ document.getElementById("disarm")
 
 
 showState();
+
+
+document.getElementById("pageDiagnostic")
+  .addEventListener(
+    "click",
+    async () => {
+      const tab = await activeTab();
+
+      if (!tab || !tab.id) {
+        statusBox.textContent =
+          "Geen actieve tab gevonden.";
+        return;
+      }
+
+      try {
+        const results =
+          await chrome.scripting.executeScript({
+            target: {
+              tabId: tab.id
+            },
+
+            func: () => {
+              const bodyText =
+                document.body
+                  ? (document.body.innerText || "")
+                  : "";
+
+              const taskStart =
+                "<<<PREDICTION_BRIDGE_TASK>>>";
+
+              const taskEnd =
+                "<<<END_PREDICTION_BRIDGE_TASK>>>";
+
+              const startCount =
+                bodyText.split(taskStart).length - 1;
+
+              const endCount =
+                bodyText.split(taskEnd).length - 1;
+
+              const composer =
+                document.querySelector("#prompt-textarea") ||
+                document.querySelector(
+                  '[contenteditable="true"][role="textbox"]'
+                ) ||
+                document.querySelector("textarea");
+
+              const assistantSelectorCount =
+                document.querySelectorAll(
+                  '[data-message-author-role="assistant"]'
+                ).length;
+
+              return {
+                url: location.href,
+                pathname: location.pathname,
+                title: document.title,
+                body_chars: bodyText.length,
+                task_start_markers: startCount,
+                task_end_markers: endCount,
+                composer_found: Boolean(composer),
+                assistant_nodes:
+                  assistantSelectorCount
+              };
+            }
+          });
+
+        const result =
+          results &&
+          results[0] &&
+          results[0].result;
+
+        statusBox.textContent =
+          "CHATGPT PAGE DIAGNOSTIC\n\n" +
+          JSON.stringify(
+            result,
+            null,
+            2
+          );
+
+      } catch (error) {
+        statusBox.textContent =
+          "PAGE ACCESS FAILED\n\n" +
+          String(error);
+      }
+    }
+  );
