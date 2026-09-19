@@ -193,22 +193,43 @@ async function watchdogTick() {
     }
 
     try {
-      await chrome.tabs.sendMessage(
+      const response = await chrome.tabs.sendMessage(
         tab.id,
         {
           type: "predictionWatchdogTick"
         }
       );
+
+      if (!response || response.ok !== true) {
+        const repaired = await chrome.tabs.sendMessage(
+          tab.id,
+          {
+            type: "predictionForceRepair"
+          }
+        );
+
+        if (!repaired || repaired.ok !== true) {
+          throw new Error(
+            "watchdog force repair failed"
+          );
+        }
+      }
     } catch {
       await injectIntoTab(tab.id);
 
       try {
-        await chrome.tabs.sendMessage(
+        const response = await chrome.tabs.sendMessage(
           tab.id,
           {
             type: "predictionWatchdogTick"
           }
         );
+
+        if (!response || response.ok !== true) {
+          throw new Error(
+            "watchdog reinjection failed"
+          );
+        }
       } catch (error) {
         console.warn(
           "[Prediction Bridge] alarm tick failed:",
