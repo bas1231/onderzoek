@@ -1,0 +1,31 @@
+{
+  "status": [
+    " M control/browser_extension/background.js",
+    " M control/browser_extension/content.js",
+    " M control/browser_extension/manifest.json",
+    " M control/executor.py",
+    " M control/jobs/lifecycle_supervisor.py",
+    " D control/tasks/pending/RELIABILITY-AUDIT-E053A.json",
+    "?? control/backups/",
+    "?? control/lifecycle/",
+    "?? control/tasks/running/"
+  ],
+  "stat": [
+    " control/browser_extension/background.js            | 80 ++++++++++++++++++++++",
+    " control/browser_extension/content.js               | 38 ++++++++++",
+    " control/browser_extension/manifest.json            |  5 +-",
+    " control/executor.py                                | 14 +++-",
+    " control/jobs/lifecycle_supervisor.py               | 19 +++++",
+    " control/tasks/pending/RELIABILITY-AUDIT-E053A.json | 13 ----",
+    " 6 files changed, 153 insertions(+), 16 deletions(-)"
+  ],
+  "names": [
+    "control/browser_extension/background.js",
+    "control/browser_extension/content.js",
+    "control/browser_extension/manifest.json",
+    "control/executor.py",
+    "control/jobs/lifecycle_supervisor.py",
+    "control/tasks/pending/RELIABILITY-AUDIT-E053A.json"
+  ],
+  "head": "ef767b5 test(control): audit dirty reliability tree"
+}
