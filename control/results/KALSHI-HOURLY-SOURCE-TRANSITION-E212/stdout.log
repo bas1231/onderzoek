@@ -1,0 +1,339 @@
+{
+  "artifact": "knowledge/runs/kalshi-hourly-source-transition-e212.json",
+  "transition_events": {
+    "KXTEMPNYCH": [
+      {
+        "event_ticker": "KXTEMPNYCH-26SEP1010",
+        "http_status": 200,
+        "market_count": 10,
+        "source_counts": {
+          "TWC": 10
+        },
+        "sample": {
+          "ticker": "KXTEMPNYCH-26SEP1010-T71.99",
+          "event_ticker": "KXTEMPNYCH-26SEP1010",
+          "title": "Will the temp in New York City be above 71.99\u00b0 on Sep 10, 2026 at 10am EDT?",
+          "close_time": "2026-09-10T14:00:00Z",
+          "expected_expiration_time": "2026-09-10T14:05:00Z",
+          "status": "finalized",
+          "result": "yes",
+          "floor_strike": 71.99,
+          "rules_primary": "If the temperature recorded at Central Park, New York City for Sep 10, 2026 10 AM EDT as reported by The Weather Company (for coordinates KNYC), is above 71.99\u00b0, then the market resolves to Yes.",
+          "rules_secondary": "Not all weather data is the same. While checking a source like AccuWeather or Google Weather may help guide your decision, the official and final value used to determine this market is the maximum/minimum temperature as reported by the Weather Company.\n\nReading weather data\nPreliminary Weather Company data may be subject to rounding and conversion differences from the final reported value.\nUse caution when interpreting preliminary Weather Company readings.",
+          "source_label": "TWC"
+        },
+        "sha256": "681bd3c532eba369fac4314256845c5e73b0ac26c048230652e3423e6fc075e1",
+        "error": null
+      },
+      {
+        "event_ticker": "KXTEMPNYCH-26SEP1011",
+        "http_status": 200,
+        "market_count": 0,
+        "source_counts": {},
+        "sample": null,
+        "sha256": "50699ea1db13415ea46ec367dcfa58decd9660083271c5dc061561f38337fbac",
+        "error": null
+      },
+      {
+        "event_ticker": "KXTEMPNYCH-26SEP1012",
+        "http_status": 200,
+        "market_count": 0,
+        "source_counts": {},
+        "sample": null,
+        "sha256": "50699ea1db13415ea46ec367dcfa58decd9660083271c5dc061561f38337fbac",
+        "error": null
+      }
+    ],
+    "KXTEMPCHIH": [
+      {
+        "event_ticker": "KXTEMPCHIH-26SEP1010",
+        "http_status": 200,
+        "market_count": 10,
+        "source_counts": {
+          "TWC": 10
+        },
+        "sample": {
+          "ticker": "KXTEMPCHIH-26SEP1010-T72.99",
+          "event_ticker": "KXTEMPCHIH-26SEP1010",
+          "title": "Will the temp in Chicago be above 72.99\u00b0 on Sep 10, 2026 at 10am EDT?",
+          "close_time": "2026-09-10T14:00:00Z",
+          "expected_expiration_time": "2026-09-10T14:05:00Z",
+          "status": "finalized",
+          "result": "no",
+          "floor_strike": 72.99,
+          "rules_primary": "If the temperature recorded at Chicago, IL for Sep 10, 2026 10 AM EDT as reported by The Weather Company (for coordinates KORD), is above 72.99\u00b0, then the market resolves to Yes.",
+          "rules_secondary": "Not all weather data is the same. While checking a source like AccuWeather or Google Weather may help guide your decision, the official and final value used to determine this market is the maximum/minimum temperature as reported by the Weather Company.\n\nReading weather data\nPreliminary Weather Company data may be subject to rounding and conversion differences from the final reported value.\nUse caution when interpreting preliminary Weather Company readings.",
+          "source_label": "TWC"
+        },
+        "sha256": "9a344903ef2dba834fccabb632519bfc58b3c2bd1caedbc1aa5d6a87696f8e2e",
+        "error": null
+      },
+      {
+        "event_ticker": "KXTEMPCHIH-26SEP1011",
+        "http_status": 200,
+        "market_count": 0,
+        "source_counts": {},
+        "sample": null,
+        "sha256": "50699ea1db13415ea46ec367dcfa58decd9660083271c5dc061561f38337fbac",
+        "error": null
+      },
+      {
+        "event_ticker": "KXTEMPCHIH-26SEP1012",
+        "http_status": 200,
+        "market_count": 0,
+        "source_counts": {},
+        "sample": null,
+        "sha256": "50699ea1db13415ea46ec367dcfa58decd9660083271c5dc061561f38337fbac",
+        "error": null
+      }
+    ],
+    "KXTEMPLAXH": [
+      {
+        "event_ticker": "KXTEMPLAXH-26SEP1010",
+        "http_status": 200,
+        "market_count": 10,
+        "source_counts": {
+          "TWC": 10
+        },
+        "sample": {
+          "ticker": "KXTEMPLAXH-26SEP1010-T75.99",
+          "event_ticker": "KXTEMPLAXH-26SEP1010",
+          "title": "Will the temp in Los Angeles be above 75.99\u00b0 on Sep 10, 2026 at 10am EDT?",
+          "close_time": "2026-09-10T14:00:00Z",
+          "expected_expiration_time": "2026-09-10T14:05:00Z",
+          "status": "finalized",
+          "result": "yes",
+          "floor_strike": 75.99,
+          "rules_primary": "If the temperature recorded at Los Angeles, CA for Sep 10, 2026 10 AM EDT as reported by The Weather Company (for coordinates KLAX), is above 75.99\u00b0, then the market resolves to Yes.",
+          "rules_secondary": "Not all weather data is the same. While checking a source like AccuWeather or Google Weather may help guide your decision, the official and final value used to determine this market is the maximum/minimum temperature as reported by the Weather Company.\n\nReading weather data\nPreliminary Weather Company data may be subject to rounding and conversion differences from the final reported value.\nUse caution when interpreting preliminary Weather Company readings.",
+          "source_label": "TWC"
+        },
+        "sha256": "59ee89e53dc5afeb184d5d6c5f98e87a4492d426f850ec49b81bb012f1e7f79b",
+        "error": null
+      },
+      {
+        "event_ticker": "KXTEMPLAXH-26SEP1011",
+        "http_status": 200,
+        "market_count": 0,
+        "source_counts": {},
+        "sample": null,
+        "sha256": "50699ea1db13415ea46ec367dcfa58decd9660083271c5dc061561f38337fbac",
+        "error": null
+      },
+      {
+        "event_ticker": "KXTEMPLAXH-26SEP1012",
+        "http_status": 200,
+        "market_count": 0,
+        "source_counts": {},
+        "sample": null,
+        "sha256": "50699ea1db13415ea46ec367dcfa58decd9660083271c5dc061561f38337fbac",
+        "error": null
+      }
+    ],
+    "KXTEMPMIAH": [
+      {
+        "event_ticker": "KXTEMPMIAH-26SEP1010",
+        "http_status": 200,
+        "market_count": 10,
+        "source_counts": {
+          "SYNOPTIC+KALSHI_WEATHER_INDEX": 10
+        },
+        "sample": {
+          "ticker": "KXTEMPMIAH-26SEP1010-T79.99",
+          "event_ticker": "KXTEMPMIAH-26SEP1010",
+          "title": "Will the temp in Miami be above 79.99\u00b0 on Sep 10, 2026 at 10am EDT?",
+          "close_time": "2026-09-10T14:00:00Z",
+          "expected_expiration_time": "2026-09-10T14:05:00Z",
+          "status": "finalized",
+          "result": "yes",
+          "floor_strike": 79.99,
+          "rules_primary": "If the temperature recorded at Miami, FL for Sep 10, 2026 at 10 AM EDT as reported by Synoptic Data, is above 79.99\u00b0, then the market resolves to Yes.",
+          "rules_secondary": "The official final value for this market is determined strictly by the temperature reported by Synoptic Data, calculated in accordance with the Kalshi Weather Index Methodology. Alternative sources\u2014such as NWS Climatological Reports or Google Weather\u2014may serve as references, but are not authoritative and will not be used for market resolution.",
+          "source_label": "SYNOPTIC+KALSHI_WEATHER_INDEX"
+        },
+        "sha256": "080fca3502fe2ef58064cd7844fbe78d5b16b6916634479042be46cb3028628d",
+        "error": null
+      },
+      {
+        "event_ticker": "KXTEMPMIAH-26SEP1011",
+        "http_status": 200,
+        "market_count": 10,
+        "source_counts": {
+          "SYNOPTIC+KALSHI_WEATHER_INDEX": 10
+        },
+        "sample": {
+          "ticker": "KXTEMPMIAH-26SEP1011-T80.99",
+          "event_ticker": "KXTEMPMIAH-26SEP1011",
+          "title": "Will the temp in Miami be above 80.99\u00b0 on Sep 10, 2026 at 11am EDT?",
+          "close_time": "2026-09-10T15:00:00Z",
+          "expected_expiration_time": "2026-09-10T15:05:00Z",
+          "status": "finalized",
+          "result": "yes",
+          "floor_strike": 80.99,
+          "rules_primary": "If the temperature recorded at Miami, FL for Sep 10, 2026 at 11 AM EDT as reported by Synoptic Data, is above 80.99\u00b0, then the market resolves to Yes.",
+          "rules_secondary": "The official final value for this market is determined strictly by the temperature reported by Synoptic Data, calculated in accordance with the Kalshi Weather Index Methodology. Alternative sources\u2014such as NWS Climatological Reports or Google Weather\u2014may serve as references, but are not authoritative and will not be used for market resolution.",
+          "source_label": "SYNOPTIC+KALSHI_WEATHER_INDEX"
+        },
+        "sha256": "3aaab47ec53467910922d3fe40018b2fc1ddb8e108869d7c142c75c7f4a230d6",
+        "error": null
+      },
+      {
+        "event_ticker": "KXTEMPMIAH-26SEP1012",
+        "http_status": 200,
+        "market_count": 10,
+        "source_counts": {
+          "SYNOPTIC+KALSHI_WEATHER_INDEX": 10
+        },
+        "sample": {
+          "ticker": "KXTEMPMIAH-26SEP1012-T84.99",
+          "event_ticker": "KXTEMPMIAH-26SEP1012",
+          "title": "Will the temp in Miami be above 84.99\u00b0 on Sep 10, 2026 at 12pm EDT?",
+          "close_time": "2026-09-10T16:00:00Z",
+          "expected_expiration_time": "2026-09-10T16:05:00Z",
+          "status": "finalized",
+          "result": "yes",
+          "floor_strike": 84.99,
+          "rules_primary": "If the temperature recorded at Miami, FL for Sep 10, 2026 at 12 PM EDT as reported by Synoptic Data, is above 84.99\u00b0, then the market resolves to Yes.",
+          "rules_secondary": "The official final value for this market is determined strictly by the temperature reported by Synoptic Data, calculated in accordance with the Kalshi Weather Index Methodology. Alternative sources\u2014such as NWS Climatological Reports or Google Weather\u2014may serve as references, but are not authoritative and will not be used for market resolution.",
+          "source_label": "SYNOPTIC+KALSHI_WEATHER_INDEX"
+        },
+        "sha256": "0544a6f75c918b5c1393b16856233d88ae728a46f8b9353359cbff5b42dbace4",
+        "error": null
+      }
+    ]
+  },
+  "current_open": {
+    "KXTEMPNYCH": {
+      "http_status": 200,
+      "market_count": 0,
+      "source_counts": {},
+      "event_counts": {},
+      "sample": [],
+      "sha256": "50699ea1db13415ea46ec367dcfa58decd9660083271c5dc061561f38337fbac",
+      "error": null
+    },
+    "KXTEMPCHIH": {
+      "http_status": 200,
+      "market_count": 0,
+      "source_counts": {},
+      "event_counts": {},
+      "sample": [],
+      "sha256": "50699ea1db13415ea46ec367dcfa58decd9660083271c5dc061561f38337fbac",
+      "error": null
+    },
+    "KXTEMPLAXH": {
+      "http_status": 200,
+      "market_count": 0,
+      "source_counts": {},
+      "event_counts": {},
+      "sample": [],
+      "sha256": "50699ea1db13415ea46ec367dcfa58decd9660083271c5dc061561f38337fbac",
+      "error": null
+    },
+    "KXTEMPMIAH": {
+      "http_status": 200,
+      "market_count": 10,
+      "source_counts": {
+        "SYNOPTIC+KALSHI_WEATHER_INDEX": 10
+      },
+      "event_counts": {
+        "KXTEMPMIAH-26SEP1920": 10
+      },
+      "sample": [
+        {
+          "ticker": "KXTEMPMIAH-26SEP1920-T80.99",
+          "event_ticker": "KXTEMPMIAH-26SEP1920",
+          "title": "Will the temp in Miami be above 80.99\u00b0 on Sep 19, 2026 at 8pm EDT?",
+          "close_time": "2026-09-20T00:00:00Z",
+          "expected_expiration_time": "2026-09-20T00:05:00Z",
+          "status": "active",
+          "result": "",
+          "floor_strike": 80.99,
+          "rules_primary": "If the temperature recorded at Miami, FL for Sep 19, 2026 at 8 PM EDT as reported by Synoptic Data, is above 80.99\u00b0, then the market resolves to Yes.",
+          "rules_secondary": "The official final value for this market is determined strictly by the temperature reported by Synoptic Data, calculated in accordance with the Kalshi Weather Index Methodology. Alternative sources\u2014such as NWS Climatological Reports or Google Weather\u2014may serve as references, but are not authoritative and will not be used for market resolution.",
+          "source_label": "SYNOPTIC+KALSHI_WEATHER_INDEX"
+        },
+        {
+          "ticker": "KXTEMPMIAH-26SEP1920-T79.99",
+          "event_ticker": "KXTEMPMIAH-26SEP1920",
+          "title": "Will the temp in Miami be above 79.99\u00b0 on Sep 19, 2026 at 8pm EDT?",
+          "close_time": "2026-09-20T00:00:00Z",
+          "expected_expiration_time": "2026-09-20T00:05:00Z",
+          "status": "active",
+          "result": "",
+          "floor_strike": 79.99,
+          "rules_primary": "If the temperature recorded at Miami, FL for Sep 19, 2026 at 8 PM EDT as reported by Synoptic Data, is above 79.99\u00b0, then the market resolves to Yes.",
+          "rules_secondary": "The official final value for this market is determined strictly by the temperature reported by Synoptic Data, calculated in accordance with the Kalshi Weather Index Methodology. Alternative sources\u2014such as NWS Climatological Reports or Google Weather\u2014may serve as references, but are not authoritative and will not be used for market resolution.",
+          "source_label": "SYNOPTIC+KALSHI_WEATHER_INDEX"
+        },
+        {
+          "ticker": "KXTEMPMIAH-26SEP1920-T78.99",
+          "event_ticker": "KXTEMPMIAH-26SEP1920",
+          "title": "Will the temp in Miami be above 78.99\u00b0 on Sep 19, 2026 at 8pm EDT?",
+          "close_time": "2026-09-20T00:00:00Z",
+          "expected_expiration_time": "2026-09-20T00:05:00Z",
+          "status": "active",
+          "result": "",
+          "floor_strike": 78.99,
+          "rules_primary": "If the temperature recorded at Miami, FL for Sep 19, 2026 at 8 PM EDT as reported by Synoptic Data, is above 78.99\u00b0, then the market resolves to Yes.",
+          "rules_secondary": "The official final value for this market is determined strictly by the temperature reported by Synoptic Data, calculated in accordance with the Kalshi Weather Index Methodology. Alternative sources\u2014such as NWS Climatological Reports or Google Weather\u2014may serve as references, but are not authoritative and will not be used for market resolution.",
+          "source_label": "SYNOPTIC+KALSHI_WEATHER_INDEX"
+        },
+        {
+          "ticker": "KXTEMPMIAH-26SEP1920-T77.99",
+          "event_ticker": "KXTEMPMIAH-26SEP1920",
+          "title": "Will the temp in Miami be above 77.99\u00b0 on Sep 19, 2026 at 8pm EDT?",
+          "close_time": "2026-09-20T00:00:00Z",
+          "expected_expiration_time": "2026-09-20T00:05:00Z",
+          "status": "active",
+          "result": "",
+          "floor_strike": 77.99,
+          "rules_primary": "If the temperature recorded at Miami, FL for Sep 19, 2026 at 8 PM EDT as reported by Synoptic Data, is above 77.99\u00b0, then the market resolves to Yes.",
+          "rules_secondary": "The official final value for this market is determined strictly by the temperature reported by Synoptic Data, calculated in accordance with the Kalshi Weather Index Methodology. Alternative sources\u2014such as NWS Climatological Reports or Google Weather\u2014may serve as references, but are not authoritative and will not be used for market resolution.",
+          "source_label": "SYNOPTIC+KALSHI_WEATHER_INDEX"
+        },
+        {
+          "ticker": "KXTEMPMIAH-26SEP1920-T76.99",
+          "event_ticker": "KXTEMPMIAH-26SEP1920",
+          "title": "Will the temp in Miami be above 76.99\u00b0 on Sep 19, 2026 at 8pm EDT?",
+          "close_time": "2026-09-20T00:00:00Z",
+          "expected_expiration_time": "2026-09-20T00:05:00Z",
+          "status": "active",
+          "result": "",
+          "floor_strike": 76.99,
+          "rules_primary": "If the temperature recorded at Miami, FL for Sep 19, 2026 at 8 PM EDT as reported by Synoptic Data, is above 76.99\u00b0, then the market resolves to Yes.",
+          "rules_secondary": "The official final value for this market is determined strictly by the temperature reported by Synoptic Data, calculated in accordance with the Kalshi Weather Index Methodology. Alternative sources\u2014such as NWS Climatological Reports or Google Weather\u2014may serve as references, but are not authoritative and will not be used for market resolution.",
+          "source_label": "SYNOPTIC+KALSHI_WEATHER_INDEX"
+        },
+        {
+          "ticker": "KXTEMPMIAH-26SEP1920-T75.99",
+          "event_ticker": "KXTEMPMIAH-26SEP1920",
+          "title": "Will the temp in Miami be above 75.99\u00b0 on Sep 19, 2026 at 8pm EDT?",
+          "close_time": "2026-09-20T00:00:00Z",
+          "expected_expiration_time": "2026-09-20T00:05:00Z",
+          "status": "active",
+          "result": "",
+          "floor_strike": 75.99,
+          "rules_primary": "If the temperature recorded at Miami, FL for Sep 19, 2026 at 8 PM EDT as reported by Synoptic Data, is above 75.99\u00b0, then the market resolves to Yes.",
+          "rules_secondary": "The official final value for this market is determined strictly by the temperature reported by Synoptic Data, calculated in accordance with the Kalshi Weather Index Methodology. Alternative sources\u2014such as NWS Climatological Reports or Google Weather\u2014may serve as references, but are not authoritative and will not be used for market resolution.",
+          "source_label": "SYNOPTIC+KALSHI_WEATHER_INDEX"
+        }
+      ],
+      "sha256": "c8b4a18488f8e92c4b0c8c87d5438fc062c33e1dbc6d8fad7656c180551e5095",
+      "error": null
+    }
+  },
+  "commit": {
+    "rc": 0,
+    "stdout": "[main 3f21f54] research(weather): resolve exact hourly settlement transition\n 1 file changed, 335 insertions(+)\n create mode 100644 knowledge/runs/kalshi-hourly-source-transition-e212.json",
+    "stderr": ""
+  },
+  "push": {
+    "rc": 0,
+    "stdout": "",
+    "stderr": "To github.com:bas1231/onderzoek.git\n   707d752..3f21f54  HEAD -> main"
+  },
+  "live_trading": false,
+  "paid_actions": false,
+  "wallet_actions": false
+}
