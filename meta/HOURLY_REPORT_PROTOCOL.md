@@ -5,14 +5,16 @@ Doel: ieder uurrapport gebruikt `bas1231/onderzoek` als canonieke gedeelde kenni
 ## Verplichte volgorde per run
 
 1. Lees `AGENTS.md`, `methodology/RESEARCH_PROTOCOL.md` en `negative_evidence/LEDGER.md`.
-2. Lees het meest recente bestand in `meta/hourly_reports/` en neem `baseline_head_after_run` als vorige Git-baseline.
-3. Inspecteer alle commits en gewijzigde/nieuwe bestanden na die baseline.
+2. Lees het meest recente bestand in `meta/hourly_reports/` en neem `baseline_knowledge_head` als vorige Git-baseline.
+3. Inspecteer alle commits en gewijzigde/nieuwe bestanden na die baseline. Negeer commits die uitsluitend bookkeeping in `meta/hourly_reports/` aanpassen.
 4. Behandel commits die niet door de huidige sessie zijn geschreven als `other_session_or_agent_change`; GitHub-auteurschap alleen is onvoldoende om een specifieke agent te identificeren.
 5. Vat betekenisvolle nieuwe Git-inhoud inhoudelijk samen en leg relaties/duplicaten/conflicten met bestaande records vast.
 6. Voer daarna de actuele externe Prediction Edge Watch uit, Kalshi-first.
 7. Schrijf duurzame nieuwe claims/hypotheses naar de passende `knowledge/`- of `negative_evidence/`-locatie met datum, status, provenance, required_data, falsification en execution_blockers waar relevant.
-8. Schrijf altijd een auditrecord van de run naar `meta/hourly_reports/YYYY-MM-DD_HHMM_TZ.md` wanneer er betekenisvolle nieuwe Git-inhoud of externe bevindingen zijn.
-9. Noteer in dat record de HEAD-SHA na alle writes als `baseline_head_after_run`, zodat de volgende run alleen de echte delta hoeft te inspecteren.
+8. Bepaal daarna de laatste inhoudelijke commit-SHA vóór het auditrapport zelf en noteer die als `baseline_knowledge_head`.
+9. Schrijf een auditrecord naar `meta/hourly_reports/YYYY-MM-DD_HHMM_TZ.md` wanneer er betekenisvolle nieuwe Git-inhoud of externe bevindingen zijn.
+
+Deze baseline is bewust de laatste inhoudelijke commit vóór de rapport-write: een bestand kan zijn eigen commit-SHA niet stabiel bevatten. De volgende run scant na deze baseline en negeert pure hourly-report-bookkeeping.
 
 ## Rapportindeling
 
