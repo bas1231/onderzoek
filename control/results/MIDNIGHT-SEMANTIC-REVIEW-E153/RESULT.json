@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "experiments/bridge/e153.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-19T22:08:15.733023+00:00",
+  "hypothesis_id": "AUTONOMOUS-HOURLY-RESEARCH",
+  "source_commit": "2056efbb92bd65132d224103c3dbd1e32e82807b",
+  "started_at": "2026-09-19T22:08:13.575127+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "617638b99a352c2844a97eca5a92c32459b7bf08c3972b3bdba964ee1f1bbc82",
+  "task_class": "research",
+  "task_id": "MIDNIGHT-SEMANTIC-REVIEW-E153"
+}
