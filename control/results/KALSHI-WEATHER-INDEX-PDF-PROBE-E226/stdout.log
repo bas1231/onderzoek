@@ -1,0 +1,101 @@
+{
+  "artifact": "knowledge/runs/kalshi-weather-index-pdf-probe-e226.json",
+  "probe": {
+    "modules": {
+      "fitz": false,
+      "pdfplumber": false,
+      "pypdf": false,
+      "PyPDF2": false,
+      "pdfminer": false,
+      "pypdfium2": false
+    },
+    "binaries": {
+      "mutool": null,
+      "pdftotext": null,
+      "gs": null,
+      "pdfinfo": null,
+      "strings": "/usr/bin/strings"
+    }
+  },
+  "documents": [
+    {
+      "ticker": "KXTEMPCHIHS",
+      "field": "contract_url",
+      "backend": "strings",
+      "text_chars": 28245,
+      "hit_terms": [],
+      "error": null
+    },
+    {
+      "ticker": "KXTEMPCHIHS",
+      "field": "contract_terms_url",
+      "backend": "strings",
+      "text_chars": 6823,
+      "hit_terms": [],
+      "error": null
+    },
+    {
+      "ticker": "KXTEMPLAXHS",
+      "field": "contract_url",
+      "backend": "strings",
+      "text_chars": 28429,
+      "hit_terms": [],
+      "error": null
+    },
+    {
+      "ticker": "KXTEMPLAXHS",
+      "field": "contract_terms_url",
+      "backend": "strings",
+      "text_chars": 6886,
+      "hit_terms": [],
+      "error": null
+    },
+    {
+      "ticker": "KXTEMPMIAH",
+      "field": "contract_url",
+      "backend": "strings",
+      "text_chars": 40911,
+      "hit_terms": [
+        "interpol"
+      ],
+      "error": null
+    },
+    {
+      "ticker": "KXTEMPMIAH",
+      "field": "contract_terms_url",
+      "backend": "strings",
+      "text_chars": 9652,
+      "hit_terms": [],
+      "error": null
+    },
+    {
+      "ticker": "KXTEMPNYCHS",
+      "field": "contract_url",
+      "backend": "strings",
+      "text_chars": 28326,
+      "hit_terms": [],
+      "error": null
+    },
+    {
+      "ticker": "KXTEMPNYCHS",
+      "field": "contract_terms_url",
+      "backend": "strings",
+      "text_chars": 6858,
+      "hit_terms": [],
+      "error": null
+    }
+  ],
+  "commit": {
+    "rc": 0,
+    "stdout": "[main 7013966] research(weather): probe local PDF extraction backends\n 1 file changed, 209 insertions(+)\n create mode 100644 knowledge/runs/kalshi-weather-index-pdf-probe-e226.json",
+    "stderr": ""
+  },
+  "push": {
+    "rc": 0,
+    "stdout": "",
+    "stderr": "To github.com:bas1231/onderzoek.git\n   4b86805..7013966  HEAD -> main"
+  },
+  "live_trading": false,
+  "paid_actions": false,
+  "wallet_actions": false
+}
