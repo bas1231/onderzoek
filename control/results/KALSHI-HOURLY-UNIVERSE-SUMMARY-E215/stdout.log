@@ -1,0 +1,249 @@
+{
+  "artifact": "knowledge/runs/kalshi-hourly-universe-strict-e215.json",
+  "strict_hourly_temperature_count": 13,
+  "series_classification_counts": {
+    "TWC": 7,
+    "SYNOPTIC": 4,
+    "KALSHI_OTHER": 2
+  },
+  "active_series_count": 4,
+  "active_series_classification_counts": {
+    "SYNOPTIC": 4
+  },
+  "active_series": [
+    {
+      "ticker": "KXTEMPCHIHS",
+      "title": "Hourly Directional Chicago Metro Temperature",
+      "settlement_source_names": [
+        "Kalshi"
+      ],
+      "open_market_count": 10,
+      "source_counts": {
+        "SYNOPTIC+KALSHI_WEATHER_INDEX": 10
+      },
+      "event_counts": {
+        "KXTEMPCHIHS-26SEP1920": 10
+      },
+      "classification": "SYNOPTIC"
+    },
+    {
+      "ticker": "KXTEMPLAXHS",
+      "title": "Hourly Directional Coastal LA Temperature",
+      "settlement_source_names": [
+        "Synoptic Data"
+      ],
+      "open_market_count": 10,
+      "source_counts": {
+        "SYNOPTIC+KALSHI_WEATHER_INDEX": 10
+      },
+      "event_counts": {
+        "KXTEMPLAXHS-26SEP1920": 10
+      },
+      "classification": "SYNOPTIC"
+    },
+    {
+      "ticker": "KXTEMPMIAH",
+      "title": "Hourly Directional Miami Temperature",
+      "settlement_source_names": [
+        "Synoptic Data"
+      ],
+      "open_market_count": 10,
+      "source_counts": {
+        "SYNOPTIC+KALSHI_WEATHER_INDEX": 10
+      },
+      "event_counts": {
+        "KXTEMPMIAH-26SEP1920": 10
+      },
+      "classification": "SYNOPTIC"
+    },
+    {
+      "ticker": "KXTEMPNYCHS",
+      "title": "Hourly Directional NYC Temperature",
+      "settlement_source_names": [
+        "Synoptic Data"
+      ],
+      "open_market_count": 10,
+      "source_counts": {
+        "SYNOPTIC+KALSHI_WEATHER_INDEX": 10
+      },
+      "event_counts": {
+        "KXTEMPNYCHS-26SEP1920": 10
+      },
+      "classification": "SYNOPTIC"
+    }
+  ],
+  "all_strict_series": [
+    {
+      "ticker": "KXHIGHNYD",
+      "title": "Hourly Directional NYC Temperature",
+      "settlement_source_names": [
+        "The Weather Company"
+      ],
+      "open_market_count": 0,
+      "source_counts": {},
+      "event_counts": {},
+      "classification": "TWC"
+    },
+    {
+      "ticker": "KXTEMPAUSH",
+      "title": "Hourly Directional Austin Temperature",
+      "settlement_source_names": [
+        "The Weather Company"
+      ],
+      "open_market_count": 0,
+      "source_counts": {},
+      "event_counts": {},
+      "classification": "TWC"
+    },
+    {
+      "ticker": "KXTEMPBOSH",
+      "title": "Hourly Directional Boston Temperature",
+      "settlement_source_names": [
+        "The Weather Company"
+      ],
+      "open_market_count": 0,
+      "source_counts": {},
+      "event_counts": {},
+      "classification": "TWC"
+    },
+    {
+      "ticker": "KXTEMPCHIH",
+      "title": "Hourly Directional Chicago Temperature",
+      "settlement_source_names": [
+        "The Weather Company"
+      ],
+      "open_market_count": 0,
+      "source_counts": {},
+      "event_counts": {},
+      "classification": "TWC"
+    },
+    {
+      "ticker": "KXTEMPCHIHS",
+      "title": "Hourly Directional Chicago Metro Temperature",
+      "settlement_source_names": [
+        "Kalshi"
+      ],
+      "open_market_count": 10,
+      "source_counts": {
+        "SYNOPTIC+KALSHI_WEATHER_INDEX": 10
+      },
+      "event_counts": {
+        "KXTEMPCHIHS-26SEP1920": 10
+      },
+      "classification": "SYNOPTIC"
+    },
+    {
+      "ticker": "KXTEMPCHIMETROHS",
+      "title": "Hourly Directional Chicago Metro Temperature",
+      "settlement_source_names": [
+        "Kalshi"
+      ],
+      "open_market_count": 0,
+      "source_counts": {},
+      "event_counts": {},
+      "classification": "KALSHI_OTHER"
+    },
+    {
+      "ticker": "KXTEMPDCH",
+      "title": "Hourly Directional DC Temperature",
+      "settlement_source_names": [
+        "The Weather Company"
+      ],
+      "open_market_count": 0,
+      "source_counts": {},
+      "event_counts": {},
+      "classification": "TWC"
+    },
+    {
+      "ticker": "KXTEMPLAHS",
+      "title": "Hourly Directional Coastal LA Temperature",
+      "settlement_source_names": [
+        "Kalshi"
+      ],
+      "open_market_count": 0,
+      "source_counts": {},
+      "event_counts": {},
+      "classification": "KALSHI_OTHER"
+    },
+    {
+      "ticker": "KXTEMPLAXH",
+      "title": "Hourly Directional Los Angeles Temperature",
+      "settlement_source_names": [
+        "The Weather Company"
+      ],
+      "open_market_count": 0,
+      "source_counts": {},
+      "event_counts": {},
+      "classification": "TWC"
+    },
+    {
+      "ticker": "KXTEMPLAXHS",
+      "title": "Hourly Directional Coastal LA Temperature",
+      "settlement_source_names": [
+        "Synoptic Data"
+      ],
+      "open_market_count": 10,
+      "source_counts": {
+        "SYNOPTIC+KALSHI_WEATHER_INDEX": 10
+      },
+      "event_counts": {
+        "KXTEMPLAXHS-26SEP1920": 10
+      },
+      "classification": "SYNOPTIC"
+    },
+    {
+      "ticker": "KXTEMPMIAH",
+      "title": "Hourly Directional Miami Temperature",
+      "settlement_source_names": [
+        "Synoptic Data"
+      ],
+      "open_market_count": 10,
+      "source_counts": {
+        "SYNOPTIC+KALSHI_WEATHER_INDEX": 10
+      },
+      "event_counts": {
+        "KXTEMPMIAH-26SEP1920": 10
+      },
+      "classification": "SYNOPTIC"
+    },
+    {
+      "ticker": "KXTEMPNYCH",
+      "title": "Hourly Directional NYC Temperature",
+      "settlement_source_names": [
+        "The Weather Company"
+      ],
+      "open_market_count": 0,
+      "source_counts": {},
+      "event_counts": {},
+      "classification": "TWC"
+    },
+    {
+      "ticker": "KXTEMPNYCHS",
+      "title": "Hourly Directional NYC Temperature",
+      "settlement_source_names": [
+        "Synoptic Data"
+      ],
+      "open_market_count": 10,
+      "source_counts": {
+        "SYNOPTIC+KALSHI_WEATHER_INDEX": 10
+      },
+      "event_counts": {
+        "KXTEMPNYCHS-26SEP1920": 10
+      },
+      "classification": "SYNOPTIC"
+    }
+  ],
+  "commit": {
+    "rc": 0,
+    "stdout": "[main 8685d3f] audit(weather): strictly classify hourly temperature universe\n 1 file changed, 240 insertions(+)\n create mode 100644 knowledge/runs/kalshi-hourly-universe-strict-e215.json",
+    "stderr": ""
+  },
+  "push": {
+    "rc": 0,
+    "stdout": "",
+    "stderr": "To github.com:bas1231/onderzoek.git\n   c967c78..8685d3f  HEAD -> main"
+  },
+  "live_trading": false,
+  "paid_actions": false,
+  "wallet_actions": false
+}
