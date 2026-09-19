@@ -1,0 +1,77 @@
+{
+  "artifact": "knowledge/runs/kalshi-weather-index-official-docs-text-e224.json",
+  "backend": "strings_fallback",
+  "documents": [
+    {
+      "ticker": "KXTEMPCHIHS",
+      "field": "contract_url",
+      "text_chars": 28245,
+      "hit_terms": [],
+      "error": null
+    },
+    {
+      "ticker": "KXTEMPCHIHS",
+      "field": "contract_terms_url",
+      "text_chars": 6823,
+      "hit_terms": [],
+      "error": null
+    },
+    {
+      "ticker": "KXTEMPLAXHS",
+      "field": "contract_url",
+      "text_chars": 28429,
+      "hit_terms": [],
+      "error": null
+    },
+    {
+      "ticker": "KXTEMPLAXHS",
+      "field": "contract_terms_url",
+      "text_chars": 6886,
+      "hit_terms": [],
+      "error": null
+    },
+    {
+      "ticker": "KXTEMPMIAH",
+      "field": "contract_url",
+      "text_chars": 40911,
+      "hit_terms": [
+        "interpol"
+      ],
+      "error": null
+    },
+    {
+      "ticker": "KXTEMPMIAH",
+      "field": "contract_terms_url",
+      "text_chars": 9652,
+      "hit_terms": [],
+      "error": null
+    },
+    {
+      "ticker": "KXTEMPNYCHS",
+      "field": "contract_url",
+      "text_chars": 28326,
+      "hit_terms": [],
+      "error": null
+    },
+    {
+      "ticker": "KXTEMPNYCHS",
+      "field": "contract_terms_url",
+      "text_chars": 6858,
+      "hit_terms": [],
+      "error": null
+    }
+  ],
+  "commit": {
+    "rc": 0,
+    "stdout": "[main ec8e706] research(weather): extract official Weather Index PDF text\n 1 file changed, 109 insertions(+)\n create mode 100644 knowledge/runs/kalshi-weather-index-official-docs-text-e224.json",
+    "stderr": ""
+  },
+  "push": {
+    "rc": 0,
+    "stdout": "",
+    "stderr": "To github.com:bas1231/onderzoek.git\n   be779c9..ec8e706  HEAD -> main"
+  },
+  "live_trading": false,
+  "paid_actions": false,
+  "wallet_actions": false
+}
