@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "experiments/health_check.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-19T18:47:48.826579+00:00",
+  "hypothesis_id": "CONTROL-BROWSER-BRIDGE-RELIABILITY",
+  "source_commit": "c9b1e75870d17f379ff10790e77ae81b3f963385",
+  "started_at": "2026-09-19T18:47:48.784905+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "c632808b583f42094a14f383ff95b11ad2dd7f5d6b24e7c339cd293f59afd65d",
+  "task_class": "infrastructure",
+  "task_id": "BRIDGE-SOAK-E015C"
+}
