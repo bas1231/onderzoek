@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "experiments/bridge/e098.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-19T20:55:15.785048+00:00",
+  "hypothesis_id": "CONTROL-NO-SILENT-WAITING",
+  "source_commit": "88bbd450df3a13640f78379a577d4f8394a6b191",
+  "started_at": "2026-09-19T20:55:15.762793+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "ce46424d391707df3316a373758513213a601547ef0be3465e5cfdf9f220cbaf",
+  "task_class": "infrastructure",
+  "task_id": "DELAY-DIAG-E098"
+}
