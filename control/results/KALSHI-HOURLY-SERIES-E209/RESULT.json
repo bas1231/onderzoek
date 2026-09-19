@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "experiments/bridge/e209.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-19T23:13:30.192753+00:00",
+  "hypothesis_id": "H7-SETTLEMENT-BOUNDARY",
+  "source_commit": "316bac03d44e3fa0cb24de372fc2db1330901c0b",
+  "started_at": "2026-09-19T23:13:23.471880+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "ceb5c6bc2ecdfd46e9166f5a5c94f7ebc420402a2df5e0a8f801664900fdc28d",
+  "task_class": "research",
+  "task_id": "KALSHI-HOURLY-SERIES-E209"
+}
