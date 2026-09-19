@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "experiments/bridge/e071.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-19T20:11:53.232039+00:00",
+  "hypothesis_id": "CONTROL-NO-SILENT-WAITING",
+  "source_commit": "5bf4c2e6e461c85b909cdaf499f29e9cccb0e296",
+  "started_at": "2026-09-19T20:11:53.212044+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "8afc2cbd08c9db8c309444be76ee99d1d97a746618ace479f99b045c341ebae0",
+  "task_class": "infrastructure",
+  "task_id": "E065-ACCEPT-DIAG-E071"
+}

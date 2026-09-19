@@ -1,0 +1,221 @@
+=== LIFECYCLE ===
+{
+  "created_at": 1789848511.9951324,
+  "history": [
+    {
+      "at": 1789848511.995134,
+      "detail": "browser discovered task marker",
+      "state": "DISCOVERED"
+    }
+  ],
+  "state": "DISCOVERED",
+  "task_id": "SCANNER-RECOVERY-E065",
+  "updated_at": 1789848511.995134
+}
+
+=== PENDING ===
+{
+  "command": [
+    ".venv/bin/python",
+    "experiments/bridge/e065.py"
+  ],
+  "hypothesis_id": "CONTROL-NO-SILENT-WAITING",
+  "live_trading": false,
+  "operation": "python",
+  "task_class": "infrastructure",
+  "task_id": "SCANNER-RECOVERY-E065",
+  "timeout_seconds": 30,
+  "working_directory": "."
+}
+
+=== BRIDGE FUNCTIONS ===
+246: def discover(task_id: str) -> dict:
+247:     if not TASK_ID_RE.fullmatch(task_id):
+248:         return {
+249:             "ok": False,
+250:             "error": "invalid task_id",
+251:         }
+252: 
+253:     lifecycle_update(
+254:         task_id,
+255:         "DISCOVERED",
+256:         "browser discovered task marker",
+257:     )
+258: 
+259:     return {
+260:         "ok": True,
+261:         "task_id": task_id,
+262:         "state": "DISCOVERED",
+263:     }
+264: 
+265: 
+266: def enqueue(envelope: BridgeEnvelope) -> dict:
+267:     task = envelope.task
+268: 
+269:     with LOCK:
+270:         if (
+271:             task.task_class == "research"
+272:             and queue_status() != "ACTIVE"
+273:         ):
+274:             return {
+275:                 "ok": False,
+276:                 "error": "research queue is paused",
+277:                 "queue_status": queue_status(),
+278:             }
+279: 
+280:         task_rel = (
+281:             "control/tasks/pending/"
+282:             + task.task_id
+283:             + ".json"
+284:         )
+285: 
+286:         task_path = ROOT / task_rel
+287: 
+288:         stage_paths = [
+289:             file_write.path
+290:             for file_write in envelope.files
+291:         ] + [task_rel]
+292: 
+293:         if task_exists(task.task_id):
+294:             recovered = False
+295:             detail = "existing task"
+296: 
+297:             if task_path.exists():
+298:                 committed_check = git(
+299:                     "cat-file",
+300:                     "-e",
+301:                     "HEAD:" + task_rel,
+302:                     check=False,
+303:                 )
+304: 
+305:                 if committed_check.returncode != 0:
+306:                     committed, detail = commit_and_push(
+307:                         envelope.commit_message,
+308:                         stage_paths,
+309:                     )
+310: 
+311:                     if not committed:
+312:                         print(
+313:                             "[bridge] recovery failed "
+314:                             f"task_id={task.task_id} "
+315:                             f"detail={detail}"
+316:                         )
+317: 
+318:                         return {
+319:                             "ok": False,
+320:                             "error": detail,
+321:                             "recoverable": True,
+322:                         }
+323: 
+324:                     recovered = True
+325:                 else:
+326:                     detail = (
+327:                         "existing committed task"
+328:                     )
+329: 
+330:             state = load_state()
+331: 
+332:             if (
+333:                 task.task_id
+334:                 not in state["bridge_tasks"]
+335:             ):
+336:                 state["bridge_tasks"].append(
+337:                     task.task_id
+338:                 )
+339: 
+340:             save_state(state)
+266: def enqueue(envelope: BridgeEnvelope) -> dict:
+267:     task = envelope.task
+268: 
+269:     with LOCK:
+270:         if (
+271:             task.task_class == "research"
+272:             and queue_status() != "ACTIVE"
+273:         ):
+274:             return {
+275:                 "ok": False,
+276:                 "error": "research queue is paused",
+277:                 "queue_status": queue_status(),
+278:             }
+279: 
+280:         task_rel = (
+281:             "control/tasks/pending/"
+282:             + task.task_id
+283:             + ".json"
+284:         )
+285: 
+286:         task_path = ROOT / task_rel
+287: 
+288:         stage_paths = [
+289:             file_write.path
+290:             for file_write in envelope.files
+291:         ] + [task_rel]
+292: 
+293:         if task_exists(task.task_id):
+294:             recovered = False
+295:             detail = "existing task"
+296: 
+297:             if task_path.exists():
+298:                 committed_check = git(
+299:                     "cat-file",
+300:                     "-e",
+301:                     "HEAD:" + task_rel,
+302:                     check=False,
+303:                 )
+304: 
+305:                 if committed_check.returncode != 0:
+306:                     committed, detail = commit_and_push(
+307:                         envelope.commit_message,
+308:                         stage_paths,
+309:                     )
+310: 
+311:                     if not committed:
+312:                         print(
+313:                             "[bridge] recovery failed "
+314:                             f"task_id={task.task_id} "
+315:                             f"detail={detail}"
+316:                         )
+317: 
+318:                         return {
+319:                             "ok": False,
+320:                             "error": detail,
+321:                             "recoverable": True,
+322:                         }
+323: 
+324:                     recovered = True
+325:                 else:
+326:                     detail = (
+327:                         "existing committed task"
+328:                     )
+329: 
+330:             state = load_state()
+331: 
+332:             if (
+333:                 task.task_id
+334:                 not in state["bridge_tasks"]
+335:             ):
+336:                 state["bridge_tasks"].append(
+337:                     task.task_id
+338:                 )
+339: 
+340:             save_state(state)
+341: 
+342:             print(
+343:                 "[bridge] idempotent enqueue "
+344:                 f"task_id={task.task_id} "
+345:                 f"recovered={recovered}"
+346:             )
+347: 
+348:             return {
+349:                 "ok": True,
+350:                 "task_id": task.task_id,
+351:                 "duplicate": True,
+352:                 "recovered": recovered,
+353:                 "git": detail,
+354:                 "queue_status": queue_status(),
+355:             }
+356: 
+357:         for file_write in envelope.files:
+358:             target = ROOT / file_write.path
+359: 
+360:             target.parent.mkdir(
