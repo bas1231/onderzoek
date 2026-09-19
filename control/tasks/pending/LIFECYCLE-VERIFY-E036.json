@@ -1,0 +1,13 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "experiments/bridge/e036.py"
+  ],
+  "hypothesis_id": "CONTROL-DURABLE-LIFECYCLE",
+  "live_trading": false,
+  "operation": "python",
+  "task_class": "infrastructure",
+  "task_id": "LIFECYCLE-VERIFY-E036",
+  "timeout_seconds": 30,
+  "working_directory": "."
+}

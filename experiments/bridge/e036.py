@@ -1,0 +1,1 @@
+import json;from pathlib import Path;p=Path('control/lifecycle/LIFECYCLE-ORDER-E035.json');r=json.loads(p.read_text());print(json.dumps({'state':r.get('state'),'history':[x.get('state') for x in r.get('history',[])]}))
