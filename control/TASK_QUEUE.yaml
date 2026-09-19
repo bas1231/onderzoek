@@ -1,6 +1,6 @@
 schema_version: 1
 as_of: 2026-09-19
-queue_status: PAUSED_BY_USER
+queue_status: ACTIVE
 pause:
   requested_at: 2026-09-19T17:45:00+02:00
   reason: "User requested: write current state to Git and stop prediction-market research."
