@@ -1,7 +1,7 @@
 # YOUTUBE_SCOUT
 
 Datum: 2026-09-19
-Status: METHODOLOGY / DISCOVERY SOURCE ONLY
+Status: PAUSED / METHODOLOGY SAVED / DISCOVERY SOURCE ONLY
 
 ## Doel
 
@@ -204,3 +204,7 @@ Meet:
 - engineering/research time saved.
 
 Een goede `YOUTUBE_SCOUT` kijkt dus vooral **niet** honderden video's volledig: hij filtert honderden video's goedkoop en verdiept alleen waar de expected information gain hoog genoeg is.
+
+## Pause state — 2026-09-19
+
+Prediction-market research is op expliciet verzoek van de gebruiker gepauzeerd. Deze methode blijft bewaard als backlog/design, maar `YOUTUBE_SCOUT` mag niet zelfstandig hervatten totdat de gebruiker prediction-market research expliciet opnieuw start.
