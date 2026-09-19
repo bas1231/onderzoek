@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "experiments/bridge/e237.py"
+  ],
+  "exit_code": 1,
+  "finished_at": "2026-09-19T23:58:15.563560+00:00",
+  "hypothesis_id": "H7-SETTLEMENT-BOUNDARY",
+  "source_commit": "660f90e34bd19fcdc0eaacd2a0c1e805a891e89f",
+  "started_at": "2026-09-19T23:58:15.374477+00:00",
+  "status": "failed",
+  "stderr_sha256": "df71fa7b12a793bc239c5de39f3ff57e524b671b03863559b50d73c4c7fd4d22",
+  "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "task_class": "research",
+  "task_id": "KALSHI-WEATHER-INDEX-LIFECYCLE-E237"
+}
