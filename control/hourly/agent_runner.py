@@ -1,0 +1,48 @@
+from pathlib import Path
+import json
+import importlib.util
+
+ROOT = Path.cwd()
+AGENTS = ROOT / "agents/registry.json"
+CONTRACTS = ROOT / "agents/contracts"
+PACKETS = ROOT / "knowledge/runs/agent_packets"
+
+def load_bootstrap():
+    path = ROOT / "control/hourly/bootstrap_run.py"
+    spec = importlib.util.spec_from_file_location("bootstrap_run", path)
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    return mod
+
+def create_packets():
+    boot = load_bootstrap()
+    manifest_path, report_path, run = boot.bootstrap()
+    registry = json.loads(AGENTS.read_text())
+    run_dir = PACKETS / run["run_id"]
+    run_dir.mkdir(parents=True, exist_ok=True)
+    created = []
+    for role in registry["roles"]:
+        aid = role["id"]
+        contract_path = CONTRACTS / (aid + ".json")
+        contract = json.loads(contract_path.read_text())
+        packet = {
+            "run_id": run["run_id"],
+            "agent_id": aid,
+            "status": "PENDING",
+            "contract": contract,
+            "input_refs": [],
+            "output_refs": [],
+            "notes": [],
+            "live_trading": False,
+            "paid_actions": False,
+            "wallet_actions": False
+        }
+        out = run_dir / (aid + ".json")
+        if not out.exists():
+            out.write_text(json.dumps(packet, indent=2, sort_keys=True) + chr(10))
+        created.append(str(out.relative_to(ROOT)))
+    return run, manifest_path, report_path, created
+
+if __name__ == "__main__":
+    run, manifest, report, packets = create_packets()
+    print(json.dumps({"ok":True,"run_id":run["run_id"],"packets":len(packets),"manifest":str(manifest.relative_to(ROOT)),"report":str(report.relative_to(ROOT))}, sort_keys=True))
