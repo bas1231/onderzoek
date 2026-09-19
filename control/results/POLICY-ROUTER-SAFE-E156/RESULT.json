@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "experiments/bridge/e156.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-19T22:10:50.208375+00:00",
+  "hypothesis_id": "AUTONOMOUS-HOURLY-RESEARCH",
+  "source_commit": "880f22b542117d4361bc6c4fdcfd3a377994e107",
+  "started_at": "2026-09-19T22:10:47.771928+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "d16a7094535454320c513bc76b438437dd6e74788d5044da03c2aa23873bc6c3",
+  "task_class": "research",
+  "task_id": "POLICY-ROUTER-SAFE-E156"
+}
