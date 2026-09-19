@@ -1,0 +1,13 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/inventory_active_system_e020.py"
+  ],
+  "hypothesis_id": "CONTROL-POST-ACTIVATION",
+  "live_trading": false,
+  "operation": "python",
+  "task_class": "infrastructure",
+  "task_id": "CONTROL-INVENTORY-E020",
+  "timeout_seconds": 120,
+  "working_directory": "."
+}
