@@ -1,0 +1,13 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "experiments/bridge/e082.py"
+  ],
+  "hypothesis_id": "CONTROL-AUTONOMOUS-RESEARCH",
+  "live_trading": false,
+  "operation": "python",
+  "task_class": "infrastructure",
+  "task_id": "KNOWLEDGE-SCHEMA-E082",
+  "timeout_seconds": 45,
+  "working_directory": "."
+}
