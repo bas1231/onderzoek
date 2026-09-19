@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "experiments/health_check.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-19T17:32:27.018943+00:00",
+  "hypothesis_id": "CONTROL-HEALTH",
+  "source_commit": "9a87efdc38a5be9274308e2a6b2994687b6c7ca1",
+  "started_at": "2026-09-19T17:32:26.986283+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "42cc1769bf129ba4730a7136db1d62172dd8d975d924bf9e4c7530c469238d14",
+  "task_class": "infrastructure",
+  "task_id": "CONTROL-HEALTH-E005"
+}
