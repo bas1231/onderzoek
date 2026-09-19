@@ -16,11 +16,15 @@ function projectKeyFromUrl(rawUrl) {
   try {
     const url = new URL(rawUrl);
 
-    const match = url.pathname.match(
-      /^\/g\/(g-p-[^/]+)\//
+    const parts = url.pathname
+      .split("/")
+      .filter(Boolean);
+
+    const projectPart = parts.find(
+      part => part.startsWith("g-p-")
     );
 
-    return match ? match[1] : "";
+    return projectPart || "";
 
   } catch {
     return "";

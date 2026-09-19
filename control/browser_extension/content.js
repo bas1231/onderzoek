@@ -23,11 +23,15 @@
   }
 
   function projectKeyFromCurrentUrl() {
-    const match = location.pathname.match(
-      /\/g\/(g-p-[^/]+)/
+    const parts = location.pathname
+      .split("/")
+      .filter(Boolean);
+
+    const projectPart = parts.find(
+      part => part.startsWith("g-p-")
     );
 
-    return match ? match[1] : "";
+    return projectPart || "";
   }
 
   async function isArmed() {
