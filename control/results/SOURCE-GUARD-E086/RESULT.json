@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "experiments/bridge/e086.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-19T20:37:20.274751+00:00",
+  "hypothesis_id": "CONTROL-AUTONOMOUS-RESEARCH",
+  "source_commit": "0b018a6f09ec0df9f7ef9e3c8ed24b77c16afc9e",
+  "started_at": "2026-09-19T20:37:18.117355+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "6a65536b9703c4d2b65a1d4f46031ebf54c579a8e8921c9fab9acedb791d0379",
+  "task_class": "infrastructure",
+  "task_id": "SOURCE-GUARD-E086"
+}
