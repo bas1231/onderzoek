@@ -1,0 +1,90 @@
+schema_version: 1
+as_of: 2026-09-19
+queue_status: ACTIVE
+tasks:
+  - id: TASK-WX-001
+    candidate: KAL-WX-INDEX-001
+    assigned_role: RULES
+    priority: P0
+    status: READY
+    objective: "Capture direct Kalshi KXTEMP series/event/market metadata and exact rule/source text point-in-time for active cities."
+    acceptance:
+      - "At least one active event per initial city captured from direct Kalshi API/source."
+      - "Archive retrieval timestamp, close time, comparator/strike, source agency, rule text/version where exposed."
+      - "No secondary mirror used as authority."
+    output: "agents/rules/findings/"
+
+  - id: TASK-WX-002
+    candidate: KAL-WX-INDEX-001
+    assigned_role: DATA
+    priority: P0
+    status: READY
+    depends_on: [TASK-WX-001]
+    objective: "Build immutable Weather Index recorder using /live_data/weather/{city} and calibration endpoint."
+    capture:
+      - "raw JSON body"
+      - "retrieval timestamp"
+      - "city"
+      - "config_version"
+      - "t/v/status/contributors/receipt_basis"
+      - "detailed station readings"
+      - "calibration timeline snapshots"
+      - "content hash"
+    note: "Large raw data outside knowledge Git; Git stores manifests/hashes/schema only."
+
+  - id: TASK-WX-003
+    candidate: KAL-WX-INDEX-001
+    assigned_role: MICROSTRUCTURE
+    priority: P0
+    status: READY
+    depends_on: [TASK-WX-001]
+    objective: "Record contemporaneous KXTEMP L2 and lifecycle for the same events/timestamps as Weather Index observations."
+    capture:
+      - "full relevant L2"
+      - "orderbook timestamp and local receive timestamp"
+      - "trades"
+      - "market lifecycle"
+      - "fee schedule/overrides"
+      - "close timestamp"
+
+  - id: TASK-WX-004
+    candidate: KAL-WX-INDEX-001
+    assigned_role: SIGNALS
+    priority: P1
+    status: BLOCKED
+    depends_on: [TASK-WX-001, TASK-WX-002]
+    objective: "Run KAL-WX-E001 Angle 2 exactly as preregistered."
+    blocker: "Requires sufficient immutable point-in-time corpus."
+
+  - id: TASK-WX-005
+    candidate: KAL-WX-INDEX-001
+    assigned_role: MICROSTRUCTURE
+    priority: P1
+    status: BLOCKED
+    depends_on: [TASK-WX-003, TASK-WX-004]
+    objective: "Run KAL-WX-E001 Angle 3 market/execution test only after signal gate."
+    blocker: "No market-edge test before signal evidence and aligned L2 corpus exist."
+
+  - id: TASK-WX-006
+    candidate: KAL-WX-INDEX-001
+    assigned_role: RED_TEAM
+    priority: P1
+    status: READY
+    objective: "Attack experiment for leakage, source-regime drift, receipt_basis/backfill leakage, timestamp mismatch, > versus >= errors, calibration effective/published-time leakage, correlated threshold double-counting and stale-book assumptions."
+    acceptance:
+      - "At least three independent failure modes checked."
+      - "Counterexamples preserved even if candidate survives."
+
+  - id: TASK-FLB-001
+    candidate: KAL-FLB-002
+    assigned_role: SIGNALS_MICROSTRUCTURE
+    priority: P2
+    status: READY
+    objective: "Define preregistered price-bucket x category x maker/taker experiment with post-fill markouts and rewards; do not trade from generic FLB claim."
+
+  - id: TASK-XVENUE-001
+    candidate: KAL-XVENUE-002
+    assigned_role: SCOUT
+    priority: P3
+    status: WATCH_ONLY
+    objective: "Only surface exact-equivalent slow-market gaps with synchronized executable evidence; generic sports arb is deprioritized."
