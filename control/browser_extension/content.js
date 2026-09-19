@@ -841,6 +841,52 @@
     );
 
 
+  chrome.runtime.onMessage.addListener(
+    (message, sender, sendResponse) => {
+      if (
+        !message ||
+        message.type !== "predictionForceRepair"
+      ) {
+        return;
+      }
+
+      scanning = false;
+      polling = false;
+      sendingResult = false;
+      scanStartedAt = 0;
+
+      if (scanTimer) {
+        clearTimeout(scanTimer);
+        scanTimer = null;
+      }
+
+      (async () => {
+        try {
+          await scanForTasks();
+          await flushDurableQueue();
+          await pollOutbox();
+
+          sendResponse({
+            ok: true
+          });
+        } catch (error) {
+          console.error(
+            "[Prediction Bridge] force repair failed:",
+            error
+          );
+
+          sendResponse({
+            ok: false,
+            error: String(error)
+          });
+        }
+      })();
+
+      return true;
+    }
+  );
+
+
   // RELIABILITY_TICK_E079
   async function reliabilityTickE079() {
     try {
