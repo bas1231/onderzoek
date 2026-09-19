@@ -30,7 +30,7 @@ Afgewezen voor de onderzochte families omdat settlement sources verschilden (TWC
 Bron: idem.
 
 ### Team total / game total / spread eerste examples
-Formele identities bestaan, maar eerste gecontroleerde examples waren ruim te duur. Een 3-leg score-cover example kostte ongeveer 152 cent vóór fees voor een minimum payout van 100 cent.
+Formele identities bestaan, maar eerste gecontroleerde examples waren ruim te duur. Een 3-leg score-cover voorbeeld kostte ongeveer 152 cent vóór fees voor een minimum payout van 100 cent.
 
 Status: identity geldig; economische edge niet aangetoond.
 
@@ -59,6 +59,13 @@ Eerste census: 3 confirmations met positieve net lower bound, maar alle drie `SE
 ### Legacy lifecycle/finality reconstruction
 Niet toegestaan. Pre-LW0015/LW0017 evidence mist contemporaneous detail; latere brondata mag dit niet invullen.
 
+### Scheduled macro first-decidability after official release
+Afgewezen voor de gecontroleerde Fed/CPI/payroll-families als simpele strategie `wacht op officiële release → handel daarna op stale Kalshi quote`. De gecontroleerde markten sloten vóór de geplande officiële release: FOMC ongeveer één minuut ervoor; CPI/payrolls ongeveer één tot vijf minuten ervoor afhankelijk van contract. Er is dus in deze families geen post-release executable Kalshi-window om te exploiteren.
+
+Status: `TESTED_NEGATIVE` voor deze geplande macrofamilies. Dit sluit first-decidability in andere contractfamilies niet uit.
+
+Bron: `knowledge/kalshi/priority_followups_2026-09-19.yaml`, `KAL-DEC-MACRO-001`; Federal Reserve/BLS primaire release-timing plus gedateerde Kalshi API snapshots.
+
 ## ForecastEx / andere venues
 
 ### ForecastEx same-market YES+NO coupon farming
@@ -79,7 +86,7 @@ Mechanisme theoretisch interessant, maar onderzochte factory zette rewardAmount=
 ## Runner/Strix historical research
 
 ### Focused Runner entry screening
-Historische high-coverage screening promoveerde geen entry candidates. Fees/slippage/failures/latency/self-impact waren bovendien niet inbegrepen en nieuwste holdout bleef ongeopend. Geen economic PnL claim.
+Historische high-coverage screening promoveerde geen entry candidates. Fees/slippage/failures/latency/self-impact waren bovendien niet inbegrepen en nieuwste historische holdout bleef ongeopend. Geen economic PnL claim.
 
 ### Early sell / absorption
 Sommige scores verhoogden de frequentie van extreme winner labels, maar in zichtbare top-selecties bleven gemiddelde, mediane, winsorized en leave-top-k PnL-statistieken negatief. Dit is development evidence en geen pristine confirmation.
