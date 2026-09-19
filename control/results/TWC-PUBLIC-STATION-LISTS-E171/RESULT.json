@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "experiments/bridge/e171.py"
+  ],
+  "exit_code": 1,
+  "finished_at": "2026-09-19T22:23:06.612494+00:00",
+  "hypothesis_id": "H7-SETTLEMENT-BOUNDARY",
+  "source_commit": "c10380890d95c9a4fe90492b05dc4bd5effb0edf",
+  "started_at": "2026-09-19T22:23:06.597669+00:00",
+  "status": "failed",
+  "stderr_sha256": "c600a16bf5af6d6a57258ddbac7bf6a470950b286d247aaad23b337d6a5d4a6d",
+  "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "task_class": "research",
+  "task_id": "TWC-PUBLIC-STATION-LISTS-E171"
+}
