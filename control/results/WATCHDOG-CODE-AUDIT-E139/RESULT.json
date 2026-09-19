@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "experiments/bridge/e139.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-19T21:56:09.800355+00:00",
+  "hypothesis_id": "CONTROL-NO-SILENT-WAITING",
+  "source_commit": "03044472d6d1d62471499e7029debd399383d21f",
+  "started_at": "2026-09-19T21:56:09.781987+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "6098a4e8255db2536de86300f309445c0071cb9823c96a3a192ad070294edb8f",
+  "task_class": "infrastructure",
+  "task_id": "WATCHDOG-CODE-AUDIT-E139"
+}
