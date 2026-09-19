@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "experiments/bridge/e158.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-19T22:13:07.026378+00:00",
+  "hypothesis_id": "AUTONOMOUS-HOURLY-RESEARCH",
+  "source_commit": "d62fd7552f0be8339e5c1f0fcd7ef2aeab3b45d8",
+  "started_at": "2026-09-19T22:13:04.758691+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "585c16e4dee32da49c1714f62e24bcffeac1a82aa947111ee90771da81775618",
+  "task_class": "research",
+  "task_id": "HOURLY-QUALITY-ROUTER-INTEGRATION-E158"
+}
