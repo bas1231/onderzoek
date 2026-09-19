@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "experiments/bridge/e140.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-19T21:56:32.027769+00:00",
+  "hypothesis_id": "CONTROL-AUTONOMOUS-RESEARCH",
+  "source_commit": "e1b70e5345591dbc0ba880f09f6c320b2d7ec945",
+  "started_at": "2026-09-19T21:56:32.000214+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "b82d1d7593c6b08c3a6c3f6506f1b80aa62bafc353d7e652903cf0c8f90d46ec",
+  "task_class": "infrastructure",
+  "task_id": "VERIFY-AUTONOMOUS-HOURLY-E140"
+}
