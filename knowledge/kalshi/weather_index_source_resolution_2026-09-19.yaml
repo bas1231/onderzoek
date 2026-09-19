@@ -1,0 +1,51 @@
+schema_version: 1
+as_of: 2026-09-19
+economic_status: NO_PROVEN_EDGE
+records:
+  - id: KAL-WX-SRC-001
+    kind: observation
+    status: RESEARCH_POSITIVE
+    claim: "De settlement/source-semantiek voor actuele KXTEMP hourly markets moet per exacte series/rule-version worden vastgelegd; de huidige publieke bronnen geven een materieel conflict tussen algemene Kalshi weather-documentatie/partnershiptaal en recente contractregels die Synoptic Data + Kalshi Weather Index Methodology noemen."
+    source_conflict: true
+    evidence:
+      - "Kalshi Predictions API documenteert GET /live_data/weather/{city} als de Kalshi-computed city temperature index en noemt deze de canonical minute-resolution series behind hourly temperature markets."
+      - "De API exposeert per indexpunt status, contributors, receipt_basis en optioneel per-station readings; config_version wordt meegeleverd."
+      - "Kalshi publiceert daarnaast een append-only calibration timeline met effective_at_ms, published_at_ms, station weights/offsets, city_reference_c en calibration windows."
+      - "Kalshi Help Center van 2026-07-22 zegt dat hourly temperature markets op The Weather Company settelen."
+      - "Kalshi/TWC partnership van 2026-08-27 zegt in algemene zin dat The Weather Company authoritative observation data levert voor settlement van weather markets."
+      - "Meerdere recente KXTEMP-contractweergaven van 2026-08-17 t/m 2026-09-19 tonen daarentegen expliciet 'reported by Synoptic Data' en 'calculated in accordance with the Kalshi Weather Index Methodology'."
+    interpretation: "Niet aannemen dat oude TWC-only KXTEMP-semantiek nog geldt, maar evenmin aannemen dat alle hourly series uniform naar Synoptic/Weather Index zijn gemigreerd. De exacte actieve series/rule-version is de authority voor ieder experiment."
+    supersedes_interpretation:
+      - KAL-WX-INDEX-001
+    required_data:
+      - "directe Kalshi Get Series/Get Market metadata voor ieder getoetst KXTEMP event"
+      - "exacte rule text / rules_version met retrieval timestamp"
+      - "Weather Index minute points met config_version/status/receipt_basis"
+      - "calibration timeline zoals point-in-time gepubliceerd"
+      - "final market settlement"
+    falsification:
+      - "Als directe Kalshi series/rules voor alle actieve KXTEMP-contracten eenduidig één settlementbron tonen, sluit het source-conflict voor die rule-version."
+      - "Geen cross-version generalisatie zonder nieuwe rule check."
+    three_angle_check:
+      primary_api_semantics: PASS
+      current_contract_mirror_crosscheck: PASS
+      direct_live_series_rule_capture: PENDING
+    provenance:
+      - url: "https://docs.kalshi.com/api-reference/live-data/get-weather-index"
+        type: primary_api_documentation
+      - url: "https://docs.kalshi.com/api-reference/live-data/get-weather-index-calibrations"
+        type: primary_api_documentation
+      - url: "https://help.kalshi.com/en/articles/13823837-weather-markets"
+        type: primary_help_documentation
+      - url: "https://news.kalshi.com/p/kalshi-weather-company-partnership"
+        type: primary_announcement
+      - url: "https://pmip.io/markets/kalshi/KXTEMPMIAH-26AUG2408-T78.99"
+        type: secondary_contract_mirror
+      - url: "https://www.coinbase.com/en-nl/predictions/event/KXTEMPMIAH-26AUG2212"
+        type: secondary_contract_distribution
+      - url: "https://www.coinrithm.com/en/prediction-markets/kalshi/kxtempnychs-26sep1901"
+        type: secondary_contract_mirror
+    related:
+      - KAL-TWC-001
+      - KAL-TWC-002
+      - KAL-WX-INDEX-001
