@@ -1,0 +1,13 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/enforce_no_cost_policy.py"
+  ],
+  "hypothesis_id": "CONTROL-GUARDRAILS",
+  "live_trading": false,
+  "operation": "python",
+  "task_class": "infrastructure",
+  "task_id": "COST-POLICY-001",
+  "timeout_seconds": 60,
+  "working_directory": "."
+}
