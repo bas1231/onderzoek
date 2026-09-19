@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "experiments/bridge/e054.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-19T19:53:53.278641+00:00",
+  "hypothesis_id": "CONTROL-NO-SILENT-WAITING",
+  "source_commit": "ec9e67b3f42a13b1a5b93175ee07398bb7eecb4a",
+  "started_at": "2026-09-19T19:53:53.268686+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "896bff578e96aa9a371df1b02938cf114c00c6a8250b76408781b1739961cfea",
+  "task_class": "infrastructure",
+  "task_id": "TRANSPORT-PING-E054"
+}
