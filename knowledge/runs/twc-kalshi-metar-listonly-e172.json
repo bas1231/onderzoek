@@ -1,0 +1,119 @@
+{
+  "live_trading": false,
+  "paid_actions": false,
+  "retrieved_at": "2026-09-19T22:23:59.841532+00:00",
+  "rows": [
+    {
+      "bytes": 2919,
+      "content_type": "application/json",
+      "json": true,
+      "label": "primary",
+      "sha256": "4db67ad7dee92ccd9aae960a8156741c309e0ac6e022bb1ad541dcfafef1a8a8",
+      "station_count": 38,
+      "station_sample": [
+        {
+          "icaoId": "KATL",
+          "stationName": "Atlanta",
+          "timezone": "America/New_York"
+        },
+        {
+          "icaoId": "KAUS",
+          "stationName": "Austin",
+          "timezone": "America/Chicago"
+        },
+        {
+          "icaoId": "KBOS",
+          "stationName": "Boston",
+          "timezone": "America/New_York"
+        },
+        {
+          "icaoId": "KCLL",
+          "stationName": "College Station",
+          "timezone": "America/Chicago"
+        },
+        {
+          "icaoId": "KCMH",
+          "stationName": "Columbus",
+          "timezone": "America/New_York"
+        },
+        {
+          "icaoId": "KCVG",
+          "stationName": "Cincinnati / Covington",
+          "timezone": "America/New_York"
+        },
+        {
+          "icaoId": "KDCA",
+          "stationName": "Washington, DC",
+          "timezone": "America/New_York"
+        },
+        {
+          "icaoId": "KDEN",
+          "stationName": "Denver",
+          "timezone": "America/Denver"
+        }
+      ],
+      "status": 200,
+      "top_keys": [
+        "listOnly",
+        "stations"
+      ]
+    },
+    {
+      "bytes": 1492,
+      "content_type": "application/json",
+      "json": true,
+      "label": "international",
+      "sha256": "bad5480883b33f0ec163d1bf251704dfcb49b4dcb4da261b5d149b464761643d",
+      "station_count": 21,
+      "station_sample": [
+        {
+          "icaoId": "CYYZ",
+          "stationName": "Toronto",
+          "timezone": "America/Toronto"
+        },
+        {
+          "icaoId": "EBBR",
+          "stationName": "Brussels",
+          "timezone": "Europe/Brussels"
+        },
+        {
+          "icaoId": "EDDB",
+          "stationName": "Berlin",
+          "timezone": "Europe/Berlin"
+        },
+        {
+          "icaoId": "EDDF",
+          "stationName": "Frankfurt",
+          "timezone": "Europe/Berlin"
+        },
+        {
+          "icaoId": "EGLL",
+          "stationName": "London",
+          "timezone": "Europe/London"
+        },
+        {
+          "icaoId": "EHAM",
+          "stationName": "Amsterdam",
+          "timezone": "Europe/Amsterdam"
+        },
+        {
+          "icaoId": "LFPG",
+          "stationName": "Paris",
+          "timezone": "Europe/Paris"
+        },
+        {
+          "icaoId": "LSGG",
+          "stationName": "Geneva",
+          "timezone": "Europe/Zurich"
+        }
+      ],
+      "status": 200,
+      "top_keys": [
+        "listOnly",
+        "stations"
+      ]
+    }
+  ],
+  "source": "public_twc_kalshi_frontend_discovery",
+  "wallet_actions": false
+}
