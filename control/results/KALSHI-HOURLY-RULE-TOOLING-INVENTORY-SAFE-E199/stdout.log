@@ -1,0 +1,2951 @@
+{
+  "file_count": 120,
+  "hits": [
+    {
+      "path": "control/hourly/role_router.py",
+      "matched": [
+        "rules",
+        "weather",
+        "temperature"
+      ],
+      "size": 2638,
+      "sample": [
+        {
+          "line": 7,
+          "text": "    'weather_twc': ['metar', '2 metre temperature', 'dewpoint', 'wind component', 'temperature forecast'],"
+        },
+        {
+          "line": 12,
+          "text": "    'settlement': ['settlement', 'resolution rules', 'oracle', 'dispute', 'final settlement'],"
+        }
+      ]
+    },
+    {
+      "path": "control/jobs/enforce_no_cost_policy.py",
+      "matched": [
+        "rules"
+      ],
+      "size": 2415,
+      "sample": [
+        {
+          "line": 36,
+          "text": " ROOT / 'control' / 'LOCAL_EXECUTION_RULES.md',"
+        },
+        {
+          "line": 70,
+          "text": "print('PASS: control/LOCAL_EXECUTION_RULES.md')"
+        }
+      ]
+    },
+    {
+      "path": "control/jobs/inventory_active_system_e020.py",
+      "matched": [
+        "rules"
+      ],
+      "size": 1839,
+      "sample": [
+        {
+          "line": 3,
+          "text": "except Exception as e: wd_compile='FAIL: '+repr(e);agents=(root/'AGENTS.md').read_text(encoding='utf-8',errors='replace') if (root/'AGENTS.md').exists() else '';local=(root/'control/LOCAL_EXECUTION_RULES.md').read_text(encoding='utf-8',errors='replace') if (root/'control/LOCAL_EXECUTION_RULES.md').exists() else '';print(json.dumps({'status':'ok','task_id':'CONTROL-INVENTORY-E020','queue_status':'ACTIVE','pending_tasks':pending,'repo_agent_hourly_timer_service_files':files,'user_units':[x for x in units if any(k in x.lower() for k in ('prediction','research','hourly','agent','proof','radar','runner','surplus'))],'user_timers':[x for x in timers if any(k in x.lower() for k in ('prediction','research','hourly','agent','proof','radar','runner','surplus'))],'watchdog_source_compile':wd_compile,'no_cost_policy_in_AGENTS':('HARD NO-COST POLICY' in agents),'no_cost_policy_in_LOCAL_EXECUTION_RULES':('HARD NO-COST POLICY' in local),'paid_actions_allowed':False,'live_trading_allowed':False,'walle"
+        }
+      ]
+    },
+    {
+      "path": "control/weather/twc_hourly_recorder.py",
+      "matched": [
+        "kalshi",
+        "weather",
+        "temperature"
+      ],
+      "size": 5614,
+      "sample": [
+        {
+          "line": 18,
+          "text": "url = \"https://weather.com/kalshi/api/metar?primary=true&weekStart=\" + week_start"
+        },
+        {
+          "line": 81,
+          "text": "    \"temperature_change_count\": None,"
+        },
+        {
+          "line": 83,
+          "text": "    \"pending_to_settled_temperature_change_count\": None,"
+        },
+        {
+          "line": 84,
+          "text": "    \"settled_to_settled_temperature_change_count\": None,"
+        },
+        {
+          "line": 89,
+          "text": "    \"interpretation_guard\": \"TWC feed status is not assumed to equal Kalshi contract settlement finality.\""
+        },
+        {
+          "line": 97,
+          "text": "    temperature_changes = []"
+        },
+        {
+          "line": 103,
+          "text": "        temperature_changed = ("
+        },
+        {
+          "line": 109,
+          "text": "        if temperature_changed:"
+        },
+        {
+          "line": 110,
+          "text": "            temperature_changes.append((old, new))"
+        },
+        {
+          "line": 111,
+          "text": "        if status_changed or temperature_changed:"
+        },
+        {
+          "line": 127,
+          "text": "    summary[\"temperature_change_count\"] = len(temperature_changes)"
+        },
+        {
+          "line": 132,
+          "text": "    summary[\"pending_to_settled_temperature_change_count\"] = sum("
+        }
+      ]
+    },
+    {
+      "path": ".venv/lib/python3.12/site-packages/_pytest/mark/structures.py",
+      "matched": [
+        "rules"
+      ],
+      "size": 24633,
+      "sample": [
+        {
+          "line": 351,
+          "text": "    Note: The rules above prevent a ``MarkDecorator`` from storing only a"
+        },
+        {
+          "line": 395,
+          "text": "    # the first match so it works out even if we break the rules."
+        }
+      ]
+    },
+    {
+      "path": ".venv/lib/python3.12/site-packages/_pytest/raises.py",
+      "matched": [
+        "rules"
+      ],
+      "size": 59770,
+      "sample": [
+        {
+          "line": 204,
+          "text": "       note that normal context manager rules apply and that the exception"
+        }
+      ]
+    },
+    {
+      "path": ".venv/lib/python3.12/site-packages/h11/_connection.py",
+      "matched": [
+        "rules"
+      ],
+      "size": 26863,
+      "sample": [
+        {
+          "line": 72,
+          "text": "# RFC 7230's rules for connection lifecycles:"
+        }
+      ]
+    },
+    {
+      "path": ".venv/lib/python3.12/site-packages/h11/_events.py",
+      "matched": [
+        "rules"
+      ],
+      "size": 11792,
+      "sample": [
+        {
+          "line": 65,
+          "text": "       :ref:`the header normalization rules <headers-format>` for details."
+        },
+        {
+          "line": 70,
+          "text": "       ``b\"1.1\"``. See :ref:`the HTTP version normalization rules"
+        },
+        {
+          "line": 190,
+          "text": "       :ref:`the header normalization rules <headers-format>` for"
+        },
+        {
+          "line": 196,
+          "text": "       ``b\"1.1\"``. See :ref:`the HTTP version normalization rules"
+        },
+        {
+          "line": 232,
+          "text": "       :ref:`the header normalization rules <headers-format>` for details."
+        },
+        {
+          "line": 237,
+          "text": "       ``b\"1.1\"``. See :ref:`the HTTP version normalization rules"
+        },
+        {
+          "line": 326,
+          "text": "       (name, value) pairs. See :ref:`the header normalization rules"
+        }
+      ]
+    },
+    {
+      "path": ".venv/lib/python3.12/site-packages/h11/_state.py",
+      "matched": [
+        "rules"
+      ],
+      "size": 13231,
+      "sample": [
+        {
+          "line": 12,
+          "text": "# don't cheat and apply different rules to local and remote parties."
+        },
+        {
+          "line": 41,
+          "text": "# happens. But there are somewhat complicated rules for which machines can"
+        },
+        {
+          "line": 44,
+          "text": "# not in a state where it expects that event then it's an error.) These rules"
+        },
+        {
+          "line": 317,
+          "text": "        # We apply these rules repeatedly until converging on a fixed point"
+        }
+      ]
+    },
+    {
+      "path": ".venv/lib/python3.12/site-packages/httpcore2/_async/socks_proxy.py",
+      "matched": [
+        "rules"
+      ],
+      "size": 13862,
+      "sample": [
+        {
+          "line": 32,
+          "text": "    b\"\\x02\": \"Connection not allowed by ruleset\","
+        }
+      ]
+    },
+    {
+      "path": ".venv/lib/python3.12/site-packages/httpcore2/_sync/socks_proxy.py",
+      "matched": [
+        "rules"
+      ],
+      "size": 13635,
+      "sample": [
+        {
+          "line": 32,
+          "text": "    b\"\\x02\": \"Connection not allowed by ruleset\","
+        }
+      ]
+    },
+    {
+      "path": ".venv/lib/python3.12/site-packages/httpx2/_urlparse.py",
+      "matched": [
+        "rules"
+      ],
+      "size": 18323,
+      "sample": [
+        {
+          "line": 401,
+          "text": "    Path validation rules that depend on if the URL contains"
+        }
+      ]
+    },
+    {
+      "path": ".venv/lib/python3.12/site-packages/idna/cli.py",
+      "matched": [
+        "rules"
+      ],
+      "size": 4245,
+      "sample": [
+        {
+          "line": 62,
+          "text": "        help=\"Disable the default UTS #46 mapping and apply IDNA 2008 rules verbatim.\","
+        }
+      ]
+    },
+    {
+      "path": ".venv/lib/python3.12/site-packages/idna/core.py",
+      "matched": [
+        "rules"
+      ],
+      "size": 32580,
+      "sample": [
+        {
+          "line": 180,
+          "text": "    :param check_ltr: If ``True``, apply the rules even when the label"
+        },
+        {
+          "line": 188,
+          "text": "    # Bidi rules should only be applied if string contains RTL characters"
+        },
+        {
+          "line": 275,
+          "text": "        # Rules 3 and 6 concern the last character that is not a"
+        },
+        {
+          "line": 340,
+          "text": "    \"\"\"Validate the CONTEXTJ rules from :rfc:`5892` Appendix A."
+        },
+        {
+          "line": 342,
+          "text": "    These rules govern the contextual use of the joiner codepoints"
+        },
+        {
+          "line": 394,
+          "text": "    \"\"\"Validate the CONTEXTO rules from :rfc:`5892` Appendix A."
+        },
+        {
+          "line": 396,
+          "text": "    Covers the contextual rules for codepoints such as MIDDLE DOT"
+        },
+        {
+          "line": 472,
+          "text": "    # by the label contextual rules below."
+        },
+        {
+          "line": 614,
+          "text": "    under ``UseSTD3ASCIIRules``.\"\"\""
+        },
+        {
+          "line": 637,
+          "text": "def uts46_remap(domain: str, std3_rules: bool = True, transitional: bool = False) -> str:"
+        },
+        {
+          "line": 646,
+          "text": "    :param std3_rules: If ``True``, apply UTS #46's ``UseSTD3ASCIIRules``:"
+        },
+        {
+          "line": 659,
+          "text": "        codepoint under the chosen rules."
+        }
+      ]
+    },
+    {
+      "path": ".venv/lib/python3.12/site-packages/openai/_utils/_path.py",
+      "matched": [
+        "rules"
+      ],
+      "size": 4701,
+      "sample": [
+        {
+          "line": 109,
+          "text": "    # Interpolate each portion with the appropriate quoting rules."
+        }
+      ]
+    },
+    {
+      "path": ".venv/lib/python3.12/site-packages/openai/resources/admin/organization/projects/api_keys.py",
+      "matched": [
+        "rules"
+      ],
+      "size": 17297,
+      "sample": [
+        {
+          "line": 117,
+          "text": "              applies its existing membership-based visibility rules, which may exclude some"
+        },
+        {
+          "line": 292,
+          "text": "              applies its existing membership-based visibility rules, which may exclude some"
+        }
+      ]
+    },
+    {
+      "path": ".venv/lib/python3.12/site-packages/openai/resources/audio/transcriptions.py",
+      "matched": [
+        "temperature"
+      ],
+      "size": 57450,
+      "sample": [
+        {
+          "line": 82,
+          "text": "        temperature: float | Omit = omit,"
+        },
+        {
+          "line": 148,
+          "text": "          temperature: The sampling temperature, between 0 and 1. Higher values like 0.8 will make the"
+        },
+        {
+          "line": 152,
+          "text": "              automatically increase the temperature until certain thresholds are hit."
+        },
+        {
+          "line": 178,
+          "text": "        temperature: float | Omit = omit,"
+        },
+        {
+          "line": 201,
+          "text": "        temperature: float | Omit = omit,"
+        },
+        {
+          "line": 224,
+          "text": "        temperature: float | Omit = omit,"
+        },
+        {
+          "line": 250,
+          "text": "        temperature: float | Omit = omit,"
+        },
+        {
+          "line": 332,
+          "text": "          temperature: The sampling temperature, between 0 and 1. Higher values like 0.8 will make the"
+        },
+        {
+          "line": 336,
+          "text": "              automatically increase the temperature until certain thresholds are hit."
+        },
+        {
+          "line": 371,
+          "text": "        temperature: float | Omit = omit,"
+        },
+        {
+          "line": 453,
+          "text": "          temperature: The sampling temperature, between 0 and 1. Higher values like 0.8 will make the"
+        },
+        {
+          "line": 457,
+          "text": "              automatically increase the temperature until certain thresholds are hit."
+        }
+      ]
+    },
+    {
+      "path": ".venv/lib/python3.12/site-packages/openai/resources/audio/translations.py",
+      "matched": [
+        "temperature"
+      ],
+      "size": 15789,
+      "sample": [
+        {
+          "line": 61,
+          "text": "        temperature: float | Omit = omit,"
+        },
+        {
+          "line": 78,
+          "text": "        temperature: float | Omit = omit,"
+        },
+        {
+          "line": 95,
+          "text": "        temperature: float | Omit = omit,"
+        },
+        {
+          "line": 111,
+          "text": "        temperature: float | Omit = omit,"
+        },
+        {
+          "line": 139,
+          "text": "          temperature: The sampling temperature, between 0 and 1. Higher values like 0.8 will make the"
+        },
+        {
+          "line": 143,
+          "text": "              automatically increase the temperature until certain thresholds are hit."
+        },
+        {
+          "line": 159,
+          "text": "                \"temperature\": temperature,"
+        },
+        {
+          "line": 213,
+          "text": "        temperature: float | Omit = omit,"
+        },
+        {
+          "line": 230,
+          "text": "        temperature: float | Omit = omit,"
+        },
+        {
+          "line": 247,
+          "text": "        temperature: float | Omit = omit,"
+        },
+        {
+          "line": 263,
+          "text": "        temperature: float | Omit = omit,"
+        },
+        {
+          "line": 291,
+          "text": "          temperature: The sampling temperature, between 0 and 1. Higher values like 0.8 will make the"
+        }
+      ]
+    },
+    {
+      "path": ".venv/lib/python3.12/site-packages/openai/resources/beta/assistants.py",
+      "matched": [
+        "temperature"
+      ],
+      "size": 50241,
+      "sample": [
+        {
+          "line": 68,
+          "text": "        temperature: Optional[float] | Omit = omit,"
+        },
+        {
+          "line": 131,
+          "text": "          temperature: What sampling temperature to use, between 0 and 2. Higher values like 0.8 will"
+        },
+        {
+          "line": 144,
+          "text": "          top_p: An alternative to sampling with temperature, called nucleus sampling, where the"
+        },
+        {
+          "line": 148,
+          "text": "              We generally recommend altering this or temperature but not both."
+        },
+        {
+          "line": 170,
+          "text": "                    \"temperature\": temperature,"
+        },
+        {
+          "line": 285,
+          "text": "        temperature: Optional[float] | Omit = omit,"
+        },
+        {
+          "line": 349,
+          "text": "          temperature: What sampling temperature to use, between 0 and 2. Higher values like 0.8 will"
+        },
+        {
+          "line": 362,
+          "text": "          top_p: An alternative to sampling with temperature, called nucleus sampling, where the"
+        },
+        {
+          "line": 366,
+          "text": "              We generally recommend altering this or temperature but not both."
+        },
+        {
+          "line": 390,
+          "text": "                    \"temperature\": temperature,"
+        },
+        {
+          "line": 547,
+          "text": "        temperature: Optional[float] | Omit = omit,"
+        },
+        {
+          "line": 610,
+          "text": "          temperature: What sampling temperature to use, between 0 and 2. Higher values like 0.8 will"
+        }
+      ]
+    },
+    {
+      "path": ".venv/lib/python3.12/site-packages/openai/resources/beta/realtime/realtime.py",
+      "matched": [
+        "temperature"
+      ],
+      "size": 43774,
+      "sample": [
+        {
+          "line": 644,
+          "text": "        `instructions`, and `temperature`. These fields will override the Session's"
+        },
+        {
+          "line": 896,
+          "text": "        `instructions`, and `temperature`. These fields will override the Session's"
+        }
+      ]
+    },
+    {
+      "path": ".venv/lib/python3.12/site-packages/openai/resources/beta/realtime/sessions.py",
+      "matched": [
+        "temperature"
+      ],
+      "size": 22014,
+      "sample": [
+        {
+          "line": 64,
+          "text": "        temperature: float | NotGiven = NOT_GIVEN,"
+        },
+        {
+          "line": 137,
+          "text": "          temperature: Sampling temperature for the model, limited to [0.6, 1.2]. For audio models a"
+        },
+        {
+          "line": 138,
+          "text": "              temperature of 0.8 is highly recommended for best performance."
+        },
+        {
+          "line": 189,
+          "text": "                    \"temperature\": temperature,"
+        },
+        {
+          "line": 248,
+          "text": "        temperature: float | NotGiven = NOT_GIVEN,"
+        },
+        {
+          "line": 321,
+          "text": "          temperature: Sampling temperature for the model, limited to [0.6, 1.2]. For audio models a"
+        },
+        {
+          "line": 322,
+          "text": "              temperature of 0.8 is highly recommended for best performance."
+        },
+        {
+          "line": 373,
+          "text": "                    \"temperature\": temperature,"
+        }
+      ]
+    },
+    {
+      "path": ".venv/lib/python3.12/site-packages/openai/resources/beta/responses/responses.py",
+      "matched": [
+        "temperature"
+      ],
+      "size": 268981,
+      "sample": [
+        {
+          "line": 245,
+          "text": "        temperature: Optional[float] | Omit = omit,"
+        },
+        {
+          "line": 440,
+          "text": "          temperature: What sampling temperature to use, between 0 and 2. Higher values like 0.8 will"
+        },
+        {
+          "line": 480,
+          "text": "          top_p: An alternative to sampling with temperature, called nucleus sampling, where the"
+        },
+        {
+          "line": 484,
+          "text": "              We generally recommend altering this or `temperature` but not both."
+        },
+        {
+          "line": 648,
+          "text": "        temperature: Optional[float] | Omit = omit,"
+        },
+        {
+          "line": 843,
+          "text": "          temperature: What sampling temperature to use, between 0 and 2. Higher values like 0.8 will"
+        },
+        {
+          "line": 883,
+          "text": "          top_p: An alternative to sampling with temperature, called nucleus sampling, where the"
+        },
+        {
+          "line": 887,
+          "text": "              We generally recommend altering this or `temperature` but not both."
+        },
+        {
+          "line": 1051,
+          "text": "        temperature: Optional[float] | Omit = omit,"
+        },
+        {
+          "line": 1246,
+          "text": "          temperature: What sampling temperature to use, between 0 and 2. Higher values like 0.8 will"
+        },
+        {
+          "line": 1286,
+          "text": "          top_p: An alternative to sampling with temperature, called nucleus sampling, where the"
+        },
+        {
+          "line": 1290,
+          "text": "              We generally recommend altering this or `temperature` but not both."
+        }
+      ]
+    },
+    {
+      "path": ".venv/lib/python3.12/site-packages/openai/resources/beta/threads/runs/runs.py",
+      "matched": [
+        "temperature"
+      ],
+      "size": 155958,
+      "sample": [
+        {
+          "line": 108,
+          "text": "        temperature: Optional[float] | Omit = omit,"
+        },
+        {
+          "line": 207,
+          "text": "          temperature: What sampling temperature to use, between 0 and 2. Higher values like 0.8 will"
+        },
+        {
+          "line": 222,
+          "text": "          top_p: An alternative to sampling with temperature, called nucleus sampling, where the"
+        },
+        {
+          "line": 226,
+          "text": "              We generally recommend altering this or temperature but not both."
+        },
+        {
+          "line": 260,
+          "text": "        temperature: Optional[float] | Omit = omit,"
+        },
+        {
+          "line": 359,
+          "text": "          temperature: What sampling temperature to use, between 0 and 2. Higher values like 0.8 will"
+        },
+        {
+          "line": 374,
+          "text": "          top_p: An alternative to sampling with temperature, called nucleus sampling, where the"
+        },
+        {
+          "line": 378,
+          "text": "              We generally recommend altering this or temperature but not both."
+        },
+        {
+          "line": 412,
+          "text": "        temperature: Optional[float] | Omit = omit,"
+        },
+        {
+          "line": 511,
+          "text": "          temperature: What sampling temperature to use, between 0 and 2. Higher values like 0.8 will"
+        },
+        {
+          "line": 526,
+          "text": "          top_p: An alternative to sampling with temperature, called nucleus sampling, where the"
+        },
+        {
+          "line": 530,
+          "text": "              We generally recommend altering this or temperature but not both."
+        }
+      ]
+    },
+    {
+      "path": ".venv/lib/python3.12/site-packages/openai/resources/beta/threads/threads.py",
+      "matched": [
+        "temperature"
+      ],
+      "size": 100278,
+      "sample": [
+        {
+          "line": 309,
+          "text": "        temperature: Optional[float] | Omit = omit,"
+        },
+        {
+          "line": 388,
+          "text": "          temperature: What sampling temperature to use, between 0 and 2. Higher values like 0.8 will"
+        },
+        {
+          "line": 411,
+          "text": "          top_p: An alternative to sampling with temperature, called nucleus sampling, where the"
+        },
+        {
+          "line": 415,
+          "text": "              We generally recommend altering this or temperature but not both."
+        },
+        {
+          "line": 444,
+          "text": "        temperature: Optional[float] | Omit = omit,"
+        },
+        {
+          "line": 523,
+          "text": "          temperature: What sampling temperature to use, between 0 and 2. Higher values like 0.8 will"
+        },
+        {
+          "line": 546,
+          "text": "          top_p: An alternative to sampling with temperature, called nucleus sampling, where the"
+        },
+        {
+          "line": 550,
+          "text": "              We generally recommend altering this or temperature but not both."
+        },
+        {
+          "line": 579,
+          "text": "        temperature: Optional[float] | Omit = omit,"
+        },
+        {
+          "line": 658,
+          "text": "          temperature: What sampling temperature to use, between 0 and 2. Higher values like 0.8 will"
+        },
+        {
+          "line": 681,
+          "text": "          top_p: An alternative to sampling with temperature, called nucleus sampling, where the"
+        },
+        {
+          "line": 685,
+          "text": "              We generally recommend altering this or temperature but not both."
+        }
+      ]
+    },
+    {
+      "path": ".venv/lib/python3.12/site-packages/openai/resources/chat/completions/completions.py",
+      "matched": [
+        "temperature"
+      ],
+      "size": 182333,
+      "sample": [
+        {
+          "line": 122,
+          "text": "        temperature: Optional[float] | Omit = omit,"
+        },
+        {
+          "line": 226,
+          "text": "                    \"temperature\": temperature,"
+        },
+        {
+          "line": 284,
+          "text": "        temperature: Optional[float] | Omit = omit,"
+        },
+        {
+          "line": 531,
+          "text": "          temperature: What sampling temperature to use, between 0 and 2. Higher values like 0.8 will"
+        },
+        {
+          "line": 556,
+          "text": "          top_p: An alternative to sampling with temperature, called nucleus sampling, where the"
+        },
+        {
+          "line": 560,
+          "text": "              We generally recommend altering this or `temperature` but not both."
+        },
+        {
+          "line": 620,
+          "text": "        temperature: Optional[float] | Omit = omit,"
+        },
+        {
+          "line": 867,
+          "text": "          temperature: What sampling temperature to use, between 0 and 2. Higher values like 0.8 will"
+        },
+        {
+          "line": 892,
+          "text": "          top_p: An alternative to sampling with temperature, called nucleus sampling, where the"
+        },
+        {
+          "line": 896,
+          "text": "              We generally recommend altering this or `temperature` but not both."
+        },
+        {
+          "line": 956,
+          "text": "        temperature: Optional[float] | Omit = omit,"
+        },
+        {
+          "line": 1203,
+          "text": "          temperature: What sampling temperature to use, between 0 and 2. Higher values like 0.8 will"
+        }
+      ]
+    },
+    {
+      "path": ".venv/lib/python3.12/site-packages/openai/resources/completions.py",
+      "matched": [
+        "temperature"
+      ],
+      "size": 61004,
+      "sample": [
+        {
+          "line": 68,
+          "text": "        temperature: Optional[float] | Omit = omit,"
+        },
+        {
+          "line": 182,
+          "text": "          temperature: What sampling temperature to use, between 0 and 2. Higher values like 0.8 will"
+        },
+        {
+          "line": 188,
+          "text": "          top_p: An alternative to sampling with temperature, called nucleus sampling, where the"
+        },
+        {
+          "line": 192,
+          "text": "              We generally recommend altering this or `temperature` but not both."
+        },
+        {
+          "line": 227,
+          "text": "        temperature: Optional[float] | Omit = omit,"
+        },
+        {
+          "line": 341,
+          "text": "          temperature: What sampling temperature to use, between 0 and 2. Higher values like 0.8 will"
+        },
+        {
+          "line": 347,
+          "text": "          top_p: An alternative to sampling with temperature, called nucleus sampling, where the"
+        },
+        {
+          "line": 351,
+          "text": "              We generally recommend altering this or `temperature` but not both."
+        },
+        {
+          "line": 386,
+          "text": "        temperature: Optional[float] | Omit = omit,"
+        },
+        {
+          "line": 500,
+          "text": "          temperature: What sampling temperature to use, between 0 and 2. Higher values like 0.8 will"
+        },
+        {
+          "line": 506,
+          "text": "          top_p: An alternative to sampling with temperature, called nucleus sampling, where the"
+        },
+        {
+          "line": 510,
+          "text": "              We generally recommend altering this or `temperature` but not both."
+        }
+      ]
+    },
+    {
+      "path": ".venv/lib/python3.12/site-packages/openai/resources/responses/responses.py",
+      "matched": [
+        "temperature"
+      ],
+      "size": 261178,
+      "sample": [
+        {
+          "line": 160,
+          "text": "        temperature: Optional[float] | Omit = omit,"
+        },
+        {
+          "line": 352,
+          "text": "          temperature: What sampling temperature to use, between 0 and 2. Higher values like 0.8 will"
+        },
+        {
+          "line": 392,
+          "text": "          top_p: An alternative to sampling with temperature, called nucleus sampling, where the"
+        },
+        {
+          "line": 396,
+          "text": "              We generally recommend altering this or `temperature` but not both."
+        },
+        {
+          "line": 449,
+          "text": "        temperature: Optional[float] | Omit = omit,"
+        },
+        {
+          "line": 641,
+          "text": "          temperature: What sampling temperature to use, between 0 and 2. Higher values like 0.8 will"
+        },
+        {
+          "line": 681,
+          "text": "          top_p: An alternative to sampling with temperature, called nucleus sampling, where the"
+        },
+        {
+          "line": 685,
+          "text": "              We generally recommend altering this or `temperature` but not both."
+        },
+        {
+          "line": 738,
+          "text": "        temperature: Optional[float] | Omit = omit,"
+        },
+        {
+          "line": 930,
+          "text": "          temperature: What sampling temperature to use, between 0 and 2. Higher values like 0.8 will"
+        },
+        {
+          "line": 970,
+          "text": "          top_p: An alternative to sampling with temperature, called nucleus sampling, where the"
+        },
+        {
+          "line": 974,
+          "text": "              We generally recommend altering this or `temperature` but not both."
+        }
+      ]
+    },
+    {
+      "path": ".venv/lib/python3.12/site-packages/openai/types/admin/organization/projects/api_key_list_params.py",
+      "matched": [
+        "rules"
+      ],
+      "size": 1135,
+      "sample": [
+        {
+          "line": 31,
+          "text": "    applies its existing membership-based visibility rules, which may exclude some"
+        }
+      ]
+    },
+    {
+      "path": ".venv/lib/python3.12/site-packages/openai/types/audio/transcription_create_params.py",
+      "matched": [
+        "temperature"
+      ],
+      "size": 7507,
+      "sample": [
+        {
+          "line": 115,
+          "text": "    temperature: float"
+        },
+        {
+          "line": 116,
+          "text": "    \"\"\"The sampling temperature, between 0 and 1."
+        },
+        {
+          "line": 121,
+          "text": "    automatically increase the temperature until certain thresholds are hit."
+        }
+      ]
+    },
+    {
+      "path": ".venv/lib/python3.12/site-packages/openai/types/audio/transcription_segment.py",
+      "matched": [
+        "temperature"
+      ],
+      "size": 1152,
+      "sample": [
+        {
+          "line": 42,
+          "text": "    temperature: float"
+        },
+        {
+          "line": 43,
+          "text": "    \"\"\"Temperature parameter used for generating the segment.\"\"\""
+        }
+      ]
+    },
+    {
+      "path": ".venv/lib/python3.12/site-packages/openai/types/audio/translation_create_params.py",
+      "matched": [
+        "temperature"
+      ],
+      "size": 1744,
+      "sample": [
+        {
+          "line": 45,
+          "text": "    temperature: float"
+        },
+        {
+          "line": 46,
+          "text": "    \"\"\"The sampling temperature, between 0 and 1."
+        },
+        {
+          "line": 51,
+          "text": "    automatically increase the temperature until certain thresholds are hit."
+        }
+      ]
+    },
+    {
+      "path": ".venv/lib/python3.12/site-packages/openai/types/beta/assistant.py",
+      "matched": [
+        "temperature"
+      ],
+      "size": 5429,
+      "sample": [
+        {
+          "line": 119,
+          "text": "    temperature: Optional[float] = None"
+        },
+        {
+          "line": 120,
+          "text": "    \"\"\"What sampling temperature to use, between 0 and 2."
+        },
+        {
+          "line": 136,
+          "text": "    An alternative to sampling with temperature, called nucleus sampling, where the"
+        },
+        {
+          "line": 140,
+          "text": "    We generally recommend altering this or temperature but not both."
+        }
+      ]
+    },
+    {
+      "path": ".venv/lib/python3.12/site-packages/openai/types/beta/assistant_create_params.py",
+      "matched": [
+        "temperature"
+      ],
+      "size": 8658,
+      "sample": [
+        {
+          "line": 96,
+          "text": "    temperature: Optional[float]"
+        },
+        {
+          "line": 97,
+          "text": "    \"\"\"What sampling temperature to use, between 0 and 2."
+        },
+        {
+          "line": 120,
+          "text": "    An alternative to sampling with temperature, called nucleus sampling, where the"
+        },
+        {
+          "line": 124,
+          "text": "    We generally recommend altering this or temperature but not both."
+        }
+      ]
+    },
+    {
+      "path": ".venv/lib/python3.12/site-packages/openai/types/beta/assistant_update_params.py",
+      "matched": [
+        "temperature"
+      ],
+      "size": 7077,
+      "sample": [
+        {
+          "line": 131,
+          "text": "    temperature: Optional[float]"
+        },
+        {
+          "line": 132,
+          "text": "    \"\"\"What sampling temperature to use, between 0 and 2."
+        },
+        {
+          "line": 155,
+          "text": "    An alternative to sampling with temperature, called nucleus sampling, where the"
+        },
+        {
+          "line": 159,
+          "text": "    We generally recommend altering this or temperature but not both."
+        }
+      ]
+    },
+    {
+      "path": ".venv/lib/python3.12/site-packages/openai/types/beta/beta_response.py",
+      "matched": [
+        "temperature"
+      ],
+      "size": 25376,
+      "sample": [
+        {
+          "line": 475,
+          "text": "    temperature: Optional[float] = None"
+        },
+        {
+          "line": 476,
+          "text": "    \"\"\"What sampling temperature to use, between 0 and 2."
+        },
+        {
+          "line": 516,
+          "text": "    An alternative to sampling with temperature, called nucleus sampling, where the"
+        },
+        {
+          "line": 520,
+          "text": "    We generally recommend altering this or `temperature` but not both."
+        }
+      ]
+    },
+    {
+      "path": ".venv/lib/python3.12/site-packages/openai/types/beta/beta_responses_client_event.py",
+      "matched": [
+        "temperature"
+      ],
+      "size": 27854,
+      "sample": [
+        {
+          "line": 588,
+          "text": "    temperature: Optional[float] = None"
+        },
+        {
+          "line": 589,
+          "text": "    \"\"\"What sampling temperature to use, between 0 and 2."
+        },
+        {
+          "line": 645,
+          "text": "    An alternative to sampling with temperature, called nucleus sampling, where the"
+        },
+        {
+          "line": 649,
+          "text": "    We generally recommend altering this or `temperature` but not both."
+        }
+      ]
+    },
+    {
+      "path": ".venv/lib/python3.12/site-packages/openai/types/beta/beta_responses_client_event_param.py",
+      "matched": [
+        "temperature"
+      ],
+      "size": 27772,
+      "sample": [
+        {
+          "line": 587,
+          "text": "    temperature: Optional[float]"
+        },
+        {
+          "line": 588,
+          "text": "    \"\"\"What sampling temperature to use, between 0 and 2."
+        },
+        {
+          "line": 644,
+          "text": "    An alternative to sampling with temperature, called nucleus sampling, where the"
+        },
+        {
+          "line": 648,
+          "text": "    We generally recommend altering this or `temperature` but not both."
+        }
+      ]
+    },
+    {
+      "path": ".venv/lib/python3.12/site-packages/openai/types/beta/beta_tool_choice_allowed.py",
+      "matched": [
+        "weather"
+      ],
+      "size": 1107,
+      "sample": [
+        {
+          "line": 30,
+          "text": "      { \"type\": \"function\", \"name\": \"get_weather\" },"
+        }
+      ]
+    },
+    {
+      "path": ".venv/lib/python3.12/site-packages/openai/types/beta/beta_tool_choice_allowed_param.py",
+      "matched": [
+        "weather"
+      ],
+      "size": 1191,
+      "sample": [
+        {
+          "line": 30,
+          "text": "      { \"type\": \"function\", \"name\": \"get_weather\" },"
+        }
+      ]
+    },
+    {
+      "path": ".venv/lib/python3.12/site-packages/openai/types/beta/realtime/realtime_response.py",
+      "matched": [
+        "temperature"
+      ],
+      "size": 3480,
+      "sample": [
+        {
+          "line": 70,
+          "text": "    temperature: Optional[float] = None"
+        },
+        {
+          "line": 71,
+          "text": "    \"\"\"Sampling temperature for the model, limited to [0.6, 1.2]. Defaults to 0.8.\"\"\""
+        }
+      ]
+    },
+    {
+      "path": ".venv/lib/python3.12/site-packages/openai/types/beta/realtime/response_create_event.py",
+      "matched": [
+        "temperature"
+      ],
+      "size": 4676,
+      "sample": [
+        {
+          "line": 89,
+          "text": "    temperature: Optional[float] = None"
+        },
+        {
+          "line": 90,
+          "text": "    \"\"\"Sampling temperature for the model, limited to [0.6, 1.2]. Defaults to 0.8.\"\"\""
+        }
+      ]
+    },
+    {
+      "path": ".venv/lib/python3.12/site-packages/openai/types/beta/realtime/response_create_event_param.py",
+      "matched": [
+        "temperature"
+      ],
+      "size": 4532,
+      "sample": [
+        {
+          "line": 90,
+          "text": "    temperature: float"
+        },
+        {
+          "line": 91,
+          "text": "    \"\"\"Sampling temperature for the model, limited to [0.6, 1.2]. Defaults to 0.8.\"\"\""
+        }
+      ]
+    },
+    {
+      "path": ".venv/lib/python3.12/site-packages/openai/types/beta/realtime/session.py",
+      "matched": [
+        "temperature"
+      ],
+      "size": 10096,
+      "sample": [
+        {
+          "line": 231,
+          "text": "    temperature: Optional[float] = None"
+        },
+        {
+          "line": 232,
+          "text": "    \"\"\"Sampling temperature for the model, limited to [0.6, 1.2]."
+        },
+        {
+          "line": 234,
+          "text": "    For audio models a temperature of 0.8 is highly recommended for best"
+        }
+      ]
+    },
+    {
+      "path": ".venv/lib/python3.12/site-packages/openai/types/beta/realtime/session_create_params.py",
+      "matched": [
+        "temperature"
+      ],
+      "size": 10164,
+      "sample": [
+        {
+          "line": 108,
+          "text": "    temperature: float"
+        },
+        {
+          "line": 109,
+          "text": "    \"\"\"Sampling temperature for the model, limited to [0.6, 1.2]."
+        },
+        {
+          "line": 111,
+          "text": "    For audio models a temperature of 0.8 is highly recommended for best"
+        }
+      ]
+    },
+    {
+      "path": ".venv/lib/python3.12/site-packages/openai/types/beta/realtime/session_create_response.py",
+      "matched": [
+        "temperature"
+      ],
+      "size": 6487,
+      "sample": [
+        {
+          "line": 158,
+          "text": "    temperature: Optional[float] = None"
+        },
+        {
+          "line": 159,
+          "text": "    \"\"\"Sampling temperature for the model, limited to [0.6, 1.2]. Defaults to 0.8.\"\"\""
+        }
+      ]
+    },
+    {
+      "path": ".venv/lib/python3.12/site-packages/openai/types/beta/realtime/session_update_event.py",
+      "matched": [
+        "temperature"
+      ],
+      "size": 11150,
+      "sample": [
+        {
+          "line": 253,
+          "text": "    temperature: Optional[float] = None"
+        },
+        {
+          "line": 254,
+          "text": "    \"\"\"Sampling temperature for the model, limited to [0.6, 1.2]."
+        },
+        {
+          "line": 256,
+          "text": "    For audio models a temperature of 0.8 is highly recommended for best"
+        }
+      ]
+    },
+    {
+      "path": ".venv/lib/python3.12/site-packages/openai/types/beta/realtime/session_update_event_param.py",
+      "matched": [
+        "temperature"
+      ],
+      "size": 10662,
+      "sample": [
+        {
+          "line": 251,
+          "text": "    temperature: float"
+        },
+        {
+          "line": 252,
+          "text": "    \"\"\"Sampling temperature for the model, limited to [0.6, 1.2]."
+        },
+        {
+          "line": 254,
+          "text": "    For audio models a temperature of 0.8 is highly recommended for best"
+        }
+      ]
+    },
+    {
+      "path": ".venv/lib/python3.12/site-packages/openai/types/beta/response_create_params.py",
+      "matched": [
+        "temperature"
+      ],
+      "size": 27007,
+      "sample": [
+        {
+          "line": 367,
+          "text": "    temperature: Optional[float]"
+        },
+        {
+          "line": 368,
+          "text": "    \"\"\"What sampling temperature to use, between 0 and 2."
+        },
+        {
+          "line": 424,
+          "text": "    An alternative to sampling with temperature, called nucleus sampling, where the"
+        },
+        {
+          "line": 428,
+          "text": "    We generally recommend altering this or `temperature` but not both."
+        }
+      ]
+    },
+    {
+      "path": ".venv/lib/python3.12/site-packages/openai/types/beta/thread_create_and_run_params.py",
+      "matched": [
+        "temperature"
+      ],
+      "size": 16024,
+      "sample": [
+        {
+          "line": 123,
+          "text": "    temperature: Optional[float]"
+        },
+        {
+          "line": 124,
+          "text": "    \"\"\"What sampling temperature to use, between 0 and 2."
+        },
+        {
+          "line": 164,
+          "text": "    An alternative to sampling with temperature, called nucleus sampling, where the"
+        },
+        {
+          "line": 168,
+          "text": "    We generally recommend altering this or temperature but not both."
+        }
+      ]
+    },
+    {
+      "path": ".venv/lib/python3.12/site-packages/openai/types/beta/threads/run.py",
+      "matched": [
+        "temperature"
+      ],
+      "size": 9164,
+      "sample": [
+        {
+          "line": 270,
+          "text": "    temperature: Optional[float] = None"
+        },
+        {
+          "line": 271,
+          "text": "    \"\"\"The sampling temperature used for this run. If not set, defaults to 1.\"\"\""
+        }
+      ]
+    },
+    {
+      "path": ".venv/lib/python3.12/site-packages/openai/types/beta/threads/run_create_params.py",
+      "matched": [
+        "temperature"
+      ],
+      "size": 10574,
+      "sample": [
+        {
+          "line": 146,
+          "text": "    temperature: Optional[float]"
+        },
+        {
+          "line": 147,
+          "text": "    \"\"\"What sampling temperature to use, between 0 and 2."
+        },
+        {
+          "line": 172,
+          "text": "    An alternative to sampling with temperature, called nucleus sampling, where the"
+        },
+        {
+          "line": 176,
+          "text": "    We generally recommend altering this or temperature but not both."
+        }
+      ]
+    },
+    {
+      "path": ".venv/lib/python3.12/site-packages/openai/types/chat/chat_completion_allowed_tools_param.py",
+      "matched": [
+        "weather"
+      ],
+      "size": 1086,
+      "sample": [
+        {
+          "line": 30,
+          "text": "      { \"type\": \"function\", \"function\": { \"name\": \"get_weather\" } },"
+        }
+      ]
+    },
+    {
+      "path": ".venv/lib/python3.12/site-packages/openai/types/chat/completion_create_params.py",
+      "matched": [
+        "temperature"
+      ],
+      "size": 22973,
+      "sample": [
+        {
+          "line": 318,
+          "text": "    temperature: Optional[float]"
+        },
+        {
+          "line": 319,
+          "text": "    \"\"\"What sampling temperature to use, between 0 and 2."
+        },
+        {
+          "line": 358,
+          "text": "    An alternative to sampling with temperature, called nucleus sampling, where the"
+        },
+        {
+          "line": 362,
+          "text": "    We generally recommend altering this or `temperature` but not both."
+        }
+      ]
+    },
+    {
+      "path": ".venv/lib/python3.12/site-packages/openai/types/completion_create_params.py",
+      "matched": [
+        "temperature"
+      ],
+      "size": 7742,
+      "sample": [
+        {
+          "line": 140,
+          "text": "    temperature: Optional[float]"
+        },
+        {
+          "line": 141,
+          "text": "    \"\"\"What sampling temperature to use, between 0 and 2."
+        },
+        {
+          "line": 151,
+          "text": "    An alternative to sampling with temperature, called nucleus sampling, where the"
+        },
+        {
+          "line": 155,
+          "text": "    We generally recommend altering this or `temperature` but not both."
+        }
+      ]
+    },
+    {
+      "path": ".venv/lib/python3.12/site-packages/openai/types/evals/create_eval_completions_run_data_source.py",
+      "matched": [
+        "temperature"
+      ],
+      "size": 8762,
+      "sample": [
+        {
+          "line": 217,
+          "text": "    temperature: Optional[float] = None"
+        },
+        {
+          "line": 218,
+          "text": "    \"\"\"A higher temperature increases randomness in the outputs.\"\"\""
+        },
+        {
+          "line": 229,
+          "text": "    \"\"\"An alternative to temperature for nucleus sampling; 1.0 includes all tokens.\"\"\""
+        }
+      ]
+    },
+    {
+      "path": ".venv/lib/python3.12/site-packages/openai/types/evals/create_eval_completions_run_data_source_param.py",
+      "matched": [
+        "temperature"
+      ],
+      "size": 8845,
+      "sample": [
+        {
+          "line": 213,
+          "text": "    temperature: float"
+        },
+        {
+          "line": 214,
+          "text": "    \"\"\"A higher temperature increases randomness in the outputs.\"\"\""
+        },
+        {
+          "line": 225,
+          "text": "    \"\"\"An alternative to temperature for nucleus sampling; 1.0 includes all tokens.\"\"\""
+        }
+      ]
+    },
+    {
+      "path": ".venv/lib/python3.12/site-packages/openai/types/evals/run_cancel_response.py",
+      "matched": [
+        "temperature"
+      ],
+      "size": 15214,
+      "sample": [
+        {
+          "line": 116,
+          "text": "    temperature: Optional[float] = None"
+        },
+        {
+          "line": 117,
+          "text": "    \"\"\"Sampling temperature. This is a query parameter used to select responses.\"\"\""
+        },
+        {
+          "line": 280,
+          "text": "    temperature: Optional[float] = None"
+        },
+        {
+          "line": 281,
+          "text": "    \"\"\"A higher temperature increases randomness in the outputs.\"\"\""
+        },
+        {
+          "line": 312,
+          "text": "    \"\"\"An alternative to temperature for nucleus sampling; 1.0 includes all tokens.\"\"\""
+        }
+      ]
+    },
+    {
+      "path": ".venv/lib/python3.12/site-packages/openai/types/evals/run_create_params.py",
+      "matched": [
+        "temperature"
+      ],
+      "size": 14158,
+      "sample": [
+        {
+          "line": 129,
+          "text": "    temperature: Optional[float]"
+        },
+        {
+          "line": 130,
+          "text": "    \"\"\"Sampling temperature. This is a query parameter used to select responses.\"\"\""
+        },
+        {
+          "line": 298,
+          "text": "    temperature: float"
+        },
+        {
+          "line": 299,
+          "text": "    \"\"\"A higher temperature increases randomness in the outputs.\"\"\""
+        },
+        {
+          "line": 330,
+          "text": "    \"\"\"An alternative to temperature for nucleus sampling; 1.0 includes all tokens.\"\"\""
+        }
+      ]
+    },
+    {
+      "path": ".venv/lib/python3.12/site-packages/openai/types/evals/run_create_response.py",
+      "matched": [
+        "temperature"
+      ],
+      "size": 15214,
+      "sample": [
+        {
+          "line": 116,
+          "text": "    temperature: Optional[float] = None"
+        },
+        {
+          "line": 117,
+          "text": "    \"\"\"Sampling temperature. This is a query parameter used to select responses.\"\"\""
+        },
+        {
+          "line": 280,
+          "text": "    temperature: Optional[float] = None"
+        },
+        {
+          "line": 281,
+          "text": "    \"\"\"A higher temperature increases randomness in the outputs.\"\"\""
+        },
+        {
+          "line": 312,
+          "text": "    \"\"\"An alternative to temperature for nucleus sampling; 1.0 includes all tokens.\"\"\""
+        }
+      ]
+    },
+    {
+      "path": ".venv/lib/python3.12/site-packages/openai/types/evals/run_list_response.py",
+      "matched": [
+        "temperature"
+      ],
+      "size": 15210,
+      "sample": [
+        {
+          "line": 116,
+          "text": "    temperature: Optional[float] = None"
+        },
+        {
+          "line": 117,
+          "text": "    \"\"\"Sampling temperature. This is a query parameter used to select responses.\"\"\""
+        },
+        {
+          "line": 280,
+          "text": "    temperature: Optional[float] = None"
+        },
+        {
+          "line": 281,
+          "text": "    \"\"\"A higher temperature increases randomness in the outputs.\"\"\""
+        },
+        {
+          "line": 312,
+          "text": "    \"\"\"An alternative to temperature for nucleus sampling; 1.0 includes all tokens.\"\"\""
+        }
+      ]
+    },
+    {
+      "path": ".venv/lib/python3.12/site-packages/openai/types/evals/run_retrieve_response.py",
+      "matched": [
+        "temperature"
+      ],
+      "size": 15218,
+      "sample": [
+        {
+          "line": 116,
+          "text": "    temperature: Optional[float] = None"
+        },
+        {
+          "line": 117,
+          "text": "    \"\"\"Sampling temperature. This is a query parameter used to select responses.\"\"\""
+        },
+        {
+          "line": 280,
+          "text": "    temperature: Optional[float] = None"
+        },
+        {
+          "line": 281,
+          "text": "    \"\"\"A higher temperature increases randomness in the outputs.\"\"\""
+        },
+        {
+          "line": 312,
+          "text": "    \"\"\"An alternative to temperature for nucleus sampling; 1.0 includes all tokens.\"\"\""
+        }
+      ]
+    },
+    {
+      "path": ".venv/lib/python3.12/site-packages/openai/types/evals/runs/output_item_list_response.py",
+      "matched": [
+        "temperature"
+      ],
+      "size": 4119,
+      "sample": [
+        {
+          "line": 103,
+          "text": "    temperature: float"
+        },
+        {
+          "line": 104,
+          "text": "    \"\"\"The sampling temperature used.\"\"\""
+        }
+      ]
+    },
+    {
+      "path": ".venv/lib/python3.12/site-packages/openai/types/evals/runs/output_item_retrieve_response.py",
+      "matched": [
+        "temperature"
+      ],
+      "size": 4127,
+      "sample": [
+        {
+          "line": 103,
+          "text": "    temperature: float"
+        },
+        {
+          "line": 104,
+          "text": "    \"\"\"The sampling temperature used.\"\"\""
+        }
+      ]
+    },
+    {
+      "path": ".venv/lib/python3.12/site-packages/openai/types/graders/score_model_grader.py",
+      "matched": [
+        "temperature"
+      ],
+      "size": 4036,
+      "sample": [
+        {
+          "line": 99,
+          "text": "    temperature: Optional[float] = None"
+        },
+        {
+          "line": 100,
+          "text": "    \"\"\"A higher temperature increases randomness in the outputs.\"\"\""
+        },
+        {
+          "line": 103,
+          "text": "    \"\"\"An alternative to temperature for nucleus sampling; 1.0 includes all tokens.\"\"\""
+        }
+      ]
+    },
+    {
+      "path": ".venv/lib/python3.12/site-packages/openai/types/graders/score_model_grader_param.py",
+      "matched": [
+        "temperature"
+      ],
+      "size": 4213,
+      "sample": [
+        {
+          "line": 105,
+          "text": "    temperature: Optional[float]"
+        },
+        {
+          "line": 106,
+          "text": "    \"\"\"A higher temperature increases randomness in the outputs.\"\"\""
+        },
+        {
+          "line": 109,
+          "text": "    \"\"\"An alternative to temperature for nucleus sampling; 1.0 includes all tokens.\"\"\""
+        }
+      ]
+    },
+    {
+      "path": ".venv/lib/python3.12/site-packages/openai/types/live/media_session_config_param.py",
+      "matched": [
+        "rules"
+      ],
+      "size": 3934,
+      "sample": [
+        {
+          "line": 109,
+          "text": "    put business rules and tool workflows in a separate"
+        }
+      ]
+    },
+    {
+      "path": ".venv/lib/python3.12/site-packages/openai/types/live/session_accept_params.py",
+      "matched": [
+        "rules"
+      ],
+      "size": 3985,
+      "sample": [
+        {
+          "line": 118,
+          "text": "    put business rules and tool workflows in a separate"
+        }
+      ]
+    },
+    {
+      "path": ".venv/lib/python3.12/site-packages/openai/types/live/session_config.py",
+      "matched": [
+        "rules"
+      ],
+      "size": 4117,
+      "sample": [
+        {
+          "line": 112,
+          "text": "    put business rules and tool workflows in a separate"
+        }
+      ]
+    },
+    {
+      "path": ".venv/lib/python3.12/site-packages/openai/types/live/session_config_param.py",
+      "matched": [
+        "rules"
+      ],
+      "size": 4099,
+      "sample": [
+        {
+          "line": 110,
+          "text": "    put business rules and tool workflows in a separate"
+        }
+      ]
+    },
+    {
+      "path": ".venv/lib/python3.12/site-packages/openai/types/live/session_resource.py",
+      "matched": [
+        "rules"
+      ],
+      "size": 4517,
+      "sample": [
+        {
+          "line": 126,
+          "text": "    put business rules and tool workflows in a separate"
+        }
+      ]
+    },
+    {
+      "path": ".venv/lib/python3.12/site-packages/openai/types/responses/response.py",
+      "matched": [
+        "temperature"
+      ],
+      "size": 20450,
+      "sample": [
+        {
+          "line": 316,
+          "text": "    temperature: Optional[float] = None"
+        },
+        {
+          "line": 317,
+          "text": "    \"\"\"What sampling temperature to use, between 0 and 2."
+        },
+        {
+          "line": 357,
+          "text": "    An alternative to sampling with temperature, called nucleus sampling, where the"
+        },
+        {
+          "line": 361,
+          "text": "    We generally recommend altering this or `temperature` but not both."
+        }
+      ]
+    },
+    {
+      "path": ".venv/lib/python3.12/site-packages/openai/types/responses/response_create_params.py",
+      "matched": [
+        "temperature"
+      ],
+      "size": 20410,
+      "sample": [
+        {
+          "line": 255,
+          "text": "    temperature: Optional[float]"
+        },
+        {
+          "line": 256,
+          "text": "    \"\"\"What sampling temperature to use, between 0 and 2."
+        },
+        {
+          "line": 312,
+          "text": "    An alternative to sampling with temperature, called nucleus sampling, where the"
+        },
+        {
+          "line": 316,
+          "text": "    We generally recommend altering this or `temperature` but not both."
+        }
+      ]
+    },
+    {
+      "path": ".venv/lib/python3.12/site-packages/openai/types/responses/responses_client_event.py",
+      "matched": [
+        "temperature"
+      ],
+      "size": 22331,
+      "sample": [
+        {
+          "line": 421,
+          "text": "    temperature: Optional[float] = None"
+        },
+        {
+          "line": 422,
+          "text": "    \"\"\"What sampling temperature to use, between 0 and 2."
+        },
+        {
+          "line": 478,
+          "text": "    An alternative to sampling with temperature, called nucleus sampling, where the"
+        },
+        {
+          "line": 482,
+          "text": "    We generally recommend altering this or `temperature` but not both."
+        }
+      ]
+    },
+    {
+      "path": ".venv/lib/python3.12/site-packages/openai/types/responses/responses_client_event_param.py",
+      "matched": [
+        "temperature"
+      ],
+      "size": 22281,
+      "sample": [
+        {
+          "line": 421,
+          "text": "    temperature: Optional[float]"
+        },
+        {
+          "line": 422,
+          "text": "    \"\"\"What sampling temperature to use, between 0 and 2."
+        },
+        {
+          "line": 478,
+          "text": "    An alternative to sampling with temperature, called nucleus sampling, where the"
+        },
+        {
+          "line": 482,
+          "text": "    We generally recommend altering this or `temperature` but not both."
+        }
+      ]
+    },
+    {
+      "path": ".venv/lib/python3.12/site-packages/openai/types/responses/tool_choice_allowed.py",
+      "matched": [
+        "weather"
+      ],
+      "size": 1099,
+      "sample": [
+        {
+          "line": 30,
+          "text": "      { \"type\": \"function\", \"name\": \"get_weather\" },"
+        }
+      ]
+    },
+    {
+      "path": ".venv/lib/python3.12/site-packages/openai/types/responses/tool_choice_allowed_param.py",
+      "matched": [
+        "weather"
+      ],
+      "size": 1183,
+      "sample": [
+        {
+          "line": 30,
+          "text": "      { \"type\": \"function\", \"name\": \"get_weather\" },"
+        }
+      ]
+    },
+    {
+      "path": ".venv/lib/python3.12/site-packages/packaging/_parser.py",
+      "matched": [
+        "rules"
+      ],
+      "size": 12639,
+      "sample": [
+        {
+          "line": 13,
+          "text": "from ._tokenizer import DEFAULT_RULES, ParserSyntaxError, Tokenizer"
+        },
+        {
+          "line": 107,
+          "text": "    return _parse_requirement(Tokenizer(source, rules=DEFAULT_RULES))"
+        },
+        {
+          "line": 310,
+          "text": "    return _parse_full_marker(Tokenizer(source, rules=DEFAULT_RULES))"
+        }
+      ]
+    },
+    {
+      "path": ".venv/lib/python3.12/site-packages/packaging/_tokenizer.py",
+      "matched": [
+        "rules"
+      ],
+      "size": 5573,
+      "sample": [
+        {
+          "line": 44,
+          "text": "DEFAULT_RULES: dict[str, re.Pattern[str]] = {"
+        },
+        {
+          "line": 103,
+          "text": "    __slots__ = (\"next_token\", \"position\", \"rules\", \"source\")"
+        },
+        {
+          "line": 109,
+          "text": "        rules: Mapping[str, re.Pattern[str]],"
+        },
+        {
+          "line": 112,
+          "text": "        self.rules = rules"
+        },
+        {
+          "line": 131,
+          "text": "        assert name in self.rules, f\"Unknown token name: {name!r}\""
+        },
+        {
+          "line": 133,
+          "text": "        expression = self.rules[name]"
+        }
+      ]
+    },
+    {
+      "path": ".venv/lib/python3.12/site-packages/packaging/utils.py",
+      "matched": [
+        "rules"
+      ],
+      "size": 12215,
+      "sample": [
+        {
+          "line": 269,
+          "text": "    # See PEP 427 for the rules on escaping the project name."
+        }
+      ]
+    },
+    {
+      "path": ".venv/lib/python3.12/site-packages/pip/_internal/cli/cmdoptions.py",
+      "matched": [
+        "rules"
+      ],
+      "size": 41180,
+      "sample": [
+        {
+          "line": 455,
+          "text": "        \"--index-url. Should follow the same rules as \""
+        }
+      ]
+    },
+    {
+      "path": ".venv/lib/python3.12/site-packages/pip/_vendor/distlib/compat.py",
+      "matched": [
+        "rules"
+      ],
+      "size": 40605,
+      "sample": [
+        {
+          "line": 143,
+          "text": "        rules are followed, but IP addresses are not accepted for *hostname*."
+        }
+      ]
+    },
+    {
+      "path": ".venv/lib/python3.12/site-packages/pip/_vendor/distlib/util.py",
+      "matched": [
+        "rules"
+      ],
+      "size": 68167,
+      "sample": [
+        {
+          "line": 268,
+          "text": "def get_resources_dests(resources_root, rules):"
+        },
+        {
+          "line": 279,
+          "text": "    for base, suffix, dest in rules:"
+        }
+      ]
+    },
+    {
+      "path": ".venv/lib/python3.12/site-packages/pip/_vendor/idna/cli.py",
+      "matched": [
+        "rules"
+      ],
+      "size": 4139,
+      "sample": [
+        {
+          "line": 58,
+          "text": "        help=\"Disable the default UTS #46 mapping and apply IDNA 2008 rules verbatim.\","
+        }
+      ]
+    },
+    {
+      "path": ".venv/lib/python3.12/site-packages/pip/_vendor/idna/core.py",
+      "matched": [
+        "rules"
+      ],
+      "size": 24685,
+      "sample": [
+        {
+          "line": 109,
+          "text": "    :param check_ltr: If ``True``, apply the rules even when the label"
+        },
+        {
+          "line": 117,
+          "text": "    # Bidi rules should only be applied if string contains RTL characters"
+        },
+        {
+          "line": 220,
+          "text": "    \"\"\"Validate the CONTEXTJ rules from :rfc:`5892` Appendix A."
+        },
+        {
+          "line": 222,
+          "text": "    These rules govern the contextual use of the joiner codepoints"
+        },
+        {
+          "line": 274,
+          "text": "    \"\"\"Validate the CONTEXTO rules from :rfc:`5892` Appendix A."
+        },
+        {
+          "line": 276,
+          "text": "    Covers the contextual rules for codepoints such as MIDDLE DOT"
+        },
+        {
+          "line": 348,
+          "text": "    # use cases, still reducing processing of label contextual rules"
+        },
+        {
+          "line": 454,
+          "text": "def uts46_remap(domain: str, std3_rules: bool = True, transitional: bool = False) -> str:"
+        },
+        {
+          "line": 463,
+          "text": "    :param std3_rules: If ``True``, apply the stricter STD3 ASCII rules"
+        },
+        {
+          "line": 471,
+          "text": "        codepoint under the chosen rules."
+        },
+        {
+          "line": 487,
+          "text": "        # 3 is disallowed-STD3 (kept unmapped if std3_rules is off and no mapping)."
+        },
+        {
+          "line": 489,
+          "text": "            status == \"V\" or (status == \"D\" and not transitional) or (status == \"3\" and not std3_rules and replacement is None)"
+        }
+      ]
+    },
+    {
+      "path": ".venv/lib/python3.12/site-packages/pip/_vendor/packaging/_parser.py",
+      "matched": [
+        "rules"
+      ],
+      "size": 11698,
+      "sample": [
+        {
+          "line": 12,
+          "text": "from ._tokenizer import DEFAULT_RULES, Tokenizer"
+        },
+        {
+          "line": 99,
+          "text": "    return _parse_requirement(Tokenizer(source, rules=DEFAULT_RULES))"
+        },
+        {
+          "line": 293,
+          "text": "    return _parse_full_marker(Tokenizer(source, rules=DEFAULT_RULES))"
+        }
+      ]
+    },
+    {
+      "path": ".venv/lib/python3.12/site-packages/pip/_vendor/packaging/_tokenizer.py",
+      "matched": [
+        "rules"
+      ],
+      "size": 5391,
+      "sample": [
+        {
+          "line": 39,
+          "text": "DEFAULT_RULES: dict[str, re.Pattern[str]] = {"
+        },
+        {
+          "line": 102,
+          "text": "        rules: Mapping[str, re.Pattern[str]],"
+        },
+        {
+          "line": 105,
+          "text": "        self.rules = rules"
+        },
+        {
+          "line": 124,
+          "text": "        assert name in self.rules, f\"Unknown token name: {name!r}\""
+        },
+        {
+          "line": 126,
+          "text": "        expression = self.rules[name]"
+        }
+      ]
+    },
+    {
+      "path": ".venv/lib/python3.12/site-packages/pip/_vendor/packaging/utils.py",
+      "matched": [
+        "rules"
+      ],
+      "size": 9848,
+      "sample": [
+        {
+          "line": 216,
+          "text": "    # See PEP 427 for the rules on escaping the project name."
+        }
+      ]
+    },
+    {
+      "path": ".venv/lib/python3.12/site-packages/pip/_vendor/pygments/lexer.py",
+      "matched": [
+        "rules"
+      ],
+      "size": 35394,
+      "sample": [
+        {
+          "line": 332,
+          "text": "    Indicates that a state should include rules from another state."
+        },
+        {
+          "line": 691,
+          "text": "    #: to signify a new, anonymous state combined from the rules of two"
+        },
+        {
+          "line": 700,
+          "text": "    #: case the rules from the state named by the string are included in the"
+        }
+      ]
+    },
+    {
+      "path": ".venv/lib/python3.12/site-packages/pip/_vendor/pygments/lexers/python.py",
+      "matched": [
+        "rules"
+      ],
+      "size": 54250,
+      "sample": [
+        {
+          "line": 67,
+          "text": "    def innerstring_rules(ttype):"
+        },
+        {
+          "line": 87,
+          "text": "    def fstring_rules(ttype):"
+        },
+        {
+          "line": 364,
+          "text": "        'fstrings-single': fstring_rules(String.Single),"
+        },
+        {
+          "line": 365,
+          "text": "        'fstrings-double': fstring_rules(String.Double),"
+        },
+        {
+          "line": 366,
+          "text": "        'strings-single': innerstring_rules(String.Single),"
+        },
+        {
+          "line": 367,
+          "text": "        'strings-double': innerstring_rules(String.Double),"
+        },
+        {
+          "line": 435,
+          "text": "    def innerstring_rules(ttype):"
+        },
+        {
+          "line": 613,
+          "text": "        'strings-single': innerstring_rules(String.Single),"
+        },
+        {
+          "line": 614,
+          "text": "        'strings-double': innerstring_rules(String.Double),"
+        }
+      ]
+    },
+    {
+      "path": ".venv/lib/python3.12/site-packages/pip/_vendor/rich/_spinners.py",
+      "matched": [
+        "weather"
+      ],
+      "size": 19919,
+      "sample": [
+        {
+          "line": 407,
+          "text": "    \"weather\": {"
+        }
+      ]
+    },
+    {
+      "path": ".venv/lib/python3.12/site-packages/pip/_vendor/rich/console.py",
+      "matched": [
+        "rules"
+      ],
+      "size": 100849,
+      "sample": [
+        {
+          "line": 2277,
+          "text": "                stylesheet_rules: List[str] = []"
+        },
+        {
+          "line": 2278,
+          "text": "                stylesheet_append = stylesheet_rules.append"
+        },
+        {
+          "line": 2282,
+          "text": "                stylesheet = \"\\n\".join(stylesheet_rules)"
+        },
+        {
+          "line": 2357,
+          "text": "            \"\"\"Convert a Style to CSS rules for SVG.\"\"\""
+        },
+        {
+          "line": 2360,
+          "text": "            css_rules = []"
+        },
+        {
+          "line": 2375,
+          "text": "            css_rules.append(f\"fill: {color.hex}\")"
+        },
+        {
+          "line": 2377,
+          "text": "                css_rules.append(\"font-weight: bold\")"
+        },
+        {
+          "line": 2379,
+          "text": "                css_rules.append(\"font-style: italic;\")"
+        },
+        {
+          "line": 2381,
+          "text": "                css_rules.append(\"text-decoration: underline;\")"
+        },
+        {
+          "line": 2383,
+          "text": "                css_rules.append(\"text-decoration: line-through;\")"
+        },
+        {
+          "line": 2385,
+          "text": "            css = \";\".join(css_rules)"
+        },
+        {
+          "line": 2460,
+          "text": "                rules = get_svg_style(style)"
+        }
+      ]
+    },
+    {
+      "path": ".venv/lib/python3.12/site-packages/pip/_vendor/rich/prompt.py",
+      "matched": [
+        "temperature"
+      ],
+      "size": 12447,
+      "sample": [
+        {
+          "line": 332,
+          "text": "        >>> temperature = FloatPrompt.ask(\"Enter desired temperature\")"
+        }
+      ]
+    },
+    {
+      "path": ".venv/lib/python3.12/site-packages/pip/_vendor/tomli/_parser.py",
+      "matched": [
+        "rules"
+      ],
+      "size": 26440,
+      "sample": [
+        {
+          "line": 178,
+          "text": "        # 2. Parse rules. Expect one of the following:"
+        }
+      ]
+    },
+    {
+      "path": ".venv/lib/python3.12/site-packages/pip/_vendor/urllib3/util/ssl_match_hostname.py",
+      "matched": [
+        "rules"
+      ],
+      "size": 5479,
+      "sample": [
+        {
+          "line": 102,
+          "text": "    rules are followed, but IP addresses are not accepted for *hostname*."
+        }
+      ]
+    },
+    {
+      "path": ".venv/lib/python3.12/site-packages/pip/_vendor/urllib3/util/url.py",
+      "matched": [
+        "rules"
+      ],
+      "size": 15256,
+      "sample": [
+        {
+          "line": 340,
+          "text": "            return idna.encode(name.lower(), strict=True, std3_rules=True)"
+        }
+      ]
+    },
+    {
+      "path": ".venv/lib/python3.12/site-packages/pydantic/functional_serializers.py",
+      "matched": [
+        "temperature"
+      ],
+      "size": 18117,
+      "sample": [
+        {
+          "line": 380,
+          "text": "    An example would be to serialize temperature to the same temperature scale, such as degrees Celsius."
+        },
+        {
+          "line": 387,
+          "text": "    class TemperatureModel(BaseModel):"
+        },
+        {
+          "line": 397,
+          "text": "    temperature = TemperatureModel(unit='F', value=212)"
+        },
+        {
+          "line": 398,
+          "text": "    print(temperature.model_dump())"
+        }
+      ]
+    },
+    {
+      "path": ".venv/lib/python3.12/site-packages/pydantic_core/core_schema.py",
+      "matched": [
+        "rules"
+      ],
+      "size": 155574,
+      "sample": [
+        {
+          "line": 49,
+          "text": "        strict: Whether the configuration should strictly adhere to specified rules."
+        }
+      ]
+    },
+    {
+      "path": ".venv/lib/python3.12/site-packages/pygments/formatters/html.py",
+      "matched": [
+        "rules"
+      ],
+      "size": 36351,
+      "sample": [
+        {
+          "line": 152,
+          "text": "    containing CSS rules for the CSS classes used by the formatter. The"
+        },
+        {
+          "line": 500,
+          "text": "                # hierarchy (necessary for CSS cascading rules!)"
+        }
+      ]
+    },
+    {
+      "path": ".venv/lib/python3.12/site-packages/pygments/lexer.py",
+      "matched": [
+        "rules"
+      ],
+      "size": 35155,
+      "sample": [
+        {
+          "line": 330,
+          "text": "    Indicates that a state should include rules from another state."
+        },
+        {
+          "line": 689,
+          "text": "    #: to signify a new, anonymous state combined from the rules of two"
+        },
+        {
+          "line": 698,
+          "text": "    #: case the rules from the state named by the string are included in the"
+        }
+      ]
+    },
+    {
+      "path": ".venv/lib/python3.12/site-packages/pygments/lexers/_cocoa_builtins.py",
+      "matched": [
+        "rules",
+        "temperature",
+        "ticker"
+      ],
+      "size": 105176,
+      "sample": [
+        {
+          "line": 14,
+          "text": "COCOA_INTERFACES = {'AAAttribution', 'ABNewPersonViewController', 'ABPeoplePickerNavigationController', 'ABPersonViewController', 'ABUnknownPersonViewController', 'ACAccount', 'ACAccountCredential', 'ACAccountStore', 'ACAccountType', 'ADBannerView', 'ADClient', 'ADInterstitialAd', 'ADInterstitialAdPresentationViewController', 'AEAssessmentConfiguration', 'AEAssessmentSession', 'ALAsset', 'ALAssetRepresentation', 'ALAssetsFilter', 'ALAssetsGroup', 'ALAssetsLibrary', 'APActivationPayload', 'ARAnchor', 'ARAppClipCodeAnchor', 'ARBody2D', 'ARBodyAnchor', 'ARBodyTrackingConfiguration', 'ARCamera', 'ARCoachingOverlayView', 'ARCollaborationData', 'ARConfiguration', 'ARDepthData', 'ARDirectionalLightEstimate', 'AREnvironmentProbeAnchor', 'ARFaceAnchor', 'ARFaceGeometry', 'ARFaceTrackingConfiguration', 'ARFrame', 'ARGeoAnchor', 'ARGeoTrackingConfiguration', 'ARGeoTrackingStatus', 'ARGeometryElement', 'ARGeometrySource', 'ARHitTestResult', 'ARImageAnchor', 'ARImageTrackingConfiguration', 'ARLight"
+        },
+        {
+          "line": 15,
+          "text": "COCOA_PROTOCOLS = {'ABNewPersonViewControllerDelegate', 'ABPeoplePickerNavigationControllerDelegate', 'ABPersonViewControllerDelegate', 'ABUnknownPersonViewControllerDelegate', 'ADActionViewControllerChildInterface', 'ADActionViewControllerInterface', 'ADBannerViewDelegate', 'ADInterstitialAdDelegate', 'AEAssessmentSessionDelegate', 'ARAnchorCopying', 'ARCoachingOverlayViewDelegate', 'ARSCNViewDelegate', 'ARSKViewDelegate', 'ARSessionDelegate', 'ARSessionObserver', 'ARSessionProviding', 'ARTrackable', 'ASAccountAuthenticationModificationControllerDelegate', 'ASAccountAuthenticationModificationControllerPresentationContextProviding', 'ASAuthorizationControllerDelegate', 'ASAuthorizationControllerPresentationContextProviding', 'ASAuthorizationCredential', 'ASAuthorizationProvider', 'ASAuthorizationProviderExtensionAuthorizationRequestHandler', 'ASWebAuthenticationPresentationContextProviding', 'ASWebAuthenticationSessionRequestDelegate', 'ASWebAuthenticationSessionWebBrowserSessionHandli"
+        }
+      ]
+    },
+    {
+      "path": ".venv/lib/python3.12/site-packages/pygments/lexers/_lasso_builtins.py",
+      "matched": [
+        "rules"
+      ],
+      "size": 134513,
+      "sample": [
+        {
+          "line": 4542,
+          "text": "        'rules',"
+        }
+      ]
+    },
+    {
+      "path": ".venv/lib/python3.12/site-packages/pygments/lexers/_php_builtins.py",
+      "matched": [
+        "temperature"
+      ],
+      "size": 108054,
+      "sample": [
+        {
+          "line": 614,
+          "text": "          'fann_get_sarprop_temperature',"
+        },
+        {
+          "line": 678,
+          "text": "          'fann_set_sarprop_temperature',"
+        }
+      ]
+    },
+    {
+      "path": ".venv/lib/python3.12/site-packages/pygments/lexers/_scheme_builtins.py",
+      "matched": [
+        "rules"
+      ],
+      "size": 32567,
+      "sample": [
+        {
+          "line": 100,
+          "text": "    \"syntax-rules\","
+        }
+      ]
+    },
+    {
+      "path": ".venv/lib/python3.12/site-packages/pygments/lexers/_sourcemod_builtins.py",
+      "matched": [
+        "rules"
+      ],
+      "size": 26780,
+      "sample": [
+        {
+          "line": 696,
+          "text": "    'GameRules_GetProp',"
+        },
+        {
+          "line": 697,
+          "text": "    'GameRules_SetProp',"
+        },
+        {
+          "line": 698,
+          "text": "    'GameRules_GetPropFloat',"
+        },
+        {
+          "line": 699,
+          "text": "    'GameRules_SetPropFloat',"
+        },
+        {
+          "line": 700,
+          "text": "    'GameRules_GetPropEnt',"
+        },
+        {
+          "line": 701,
+          "text": "    'GameRules_SetPropEnt',"
+        },
+        {
+          "line": 702,
+          "text": "    'GameRules_GetPropVector',"
+        },
+        {
+          "line": 703,
+          "text": "    'GameRules_SetPropVector',"
+        },
+        {
+          "line": 704,
+          "text": "    'GameRules_GetPropString',"
+        },
+        {
+          "line": 705,
+          "text": "    'GameRules_SetPropString',"
+        },
+        {
+          "line": 706,
+          "text": "    'GameRules_GetRoundState',"
+        }
+      ]
+    },
+    {
+      "path": ".venv/lib/python3.12/site-packages/pygments/lexers/archetype.py",
+      "matched": [
+        "rules"
+      ],
+      "size": 11577,
+      "sample": [
+        {
+          "line": 268,
+          "text": "            # repeating the following two rules from the root state enable multi-line"
+        },
+        {
+          "line": 285,
+          "text": "        'rules_section': ["
+        },
+        {
+          "line": 310,
+          "text": "            (r'^(rules)[ \\t]*\\n', Generic.Heading, 'rules_section'),"
+        }
+      ]
+    },
+    {
+      "path": ".venv/lib/python3.12/site-packages/pygments/lexers/c_like.py",
+      "matched": [
+        "temperature"
+      ],
+      "size": 32374,
+      "sample": [
+        {
+          "line": 478,
+          "text": "        'readStringUntil', 'rewindDirectory', 'readTemperature', 'setClockDivider',"
+        }
+      ]
+    },
+    {
+      "path": ".venv/lib/python3.12/site-packages/pygments/lexers/crystal.py",
+      "matched": [
+        "rules"
+      ],
+      "size": 15757,
+      "sample": [
+        {
+          "line": 88,
+          "text": "    def gen_crystalstrings_rules():"
+        },
+        {
+          "line": 364,
+          "text": "    tokens.update(gen_crystalstrings_rules())"
+        }
+      ]
+    },
+    {
+      "path": ".venv/lib/python3.12/site-packages/pygments/lexers/data.py",
+      "matched": [
+        "rules"
+      ],
+      "size": 27068,
+      "sample": [
+        {
+          "line": 168,
+          "text": "        # the root rules"
+        },
+        {
+          "line": 303,
+          "text": "            # include flow collection rules"
+        },
+        {
+          "line": 314,
+          "text": "            # include flow collection rules"
+        },
+        {
+          "line": 358,
+          "text": "            # include whitespace and line break rules"
+        },
+        {
+          "line": 370,
+          "text": "            # include whitespace and line break rules"
+        }
+      ]
+    },
+    {
+      "path": ".venv/lib/python3.12/site-packages/pygments/lexers/erlang.py",
+      "matched": [
+        "rules"
+      ],
+      "size": 19150,
+      "sample": [
+        {
+          "line": 190,
+          "text": "def gen_elixir_string_rules(name, symbol, token):"
+        },
+        {
+          "line": 202,
+          "text": "def gen_elixir_sigstr_rules(term, term_class, token, interpol=True):"
+        },
+        {
+          "line": 283,
+          "text": "    def gen_elixir_sigil_rules():"
+        },
+        {
+          "line": 296,
+          "text": "        # heredocs have slightly different rules"
+        },
+        {
+          "line": 329,
+          "text": "                gen_elixir_sigstr_rules(rterm, rterm_class, token)"
+        },
+        {
+          "line": 331,
+          "text": "                gen_elixir_sigstr_rules(rterm, rterm_class, token, interpol=False)"
+        },
+        {
+          "line": 462,
+          "text": "    tokens.update(gen_elixir_string_rules('double', '\"', String.Double))"
+        },
+        {
+          "line": 463,
+          "text": "    tokens.update(gen_elixir_string_rules('single', \"'\", String.Single))"
+        },
+        {
+          "line": 464,
+          "text": "    tokens.update(gen_elixir_string_rules('double_atom', '\"', String.Symbol))"
+        },
+        {
+          "line": 465,
+          "text": "    tokens.update(gen_elixir_string_rules('single_atom', \"'\", String.Symbol))"
+        },
+        {
+          "line": 466,
+          "text": "    tokens.update(gen_elixir_sigil_rules())"
+        }
+      ]
+    },
+    {
+      "path": ".venv/lib/python3.12/site-packages/pygments/lexers/floscript.py",
+      "matched": [
+        "rules"
+      ],
+      "size": 3028,
+      "sample": [
+        {
+          "line": 29,
+          "text": "    def innerstring_rules(ttype):"
+        }
+      ]
+    },
+    {
+      "path": ".venv/lib/python3.12/site-packages/pygments/lexers/gdscript.py",
+      "matched": [
+        "rules"
+      ],
+      "size": 7565,
+      "sample": [
+        {
+          "line": 36,
+          "text": "    def innerstring_rules(ttype):"
+        },
+        {
+          "line": 148,
+          "text": "        \"strings-single\": innerstring_rules(String.Single),"
+        },
+        {
+          "line": 149,
+          "text": "        \"strings-double\": innerstring_rules(String.Double),"
+        }
+      ]
+    },
+    {
+      "path": ".venv/lib/python3.12/site-packages/pygments/lexers/grammar_notation.py",
+      "matched": [
+        "rules"
+      ],
+      "size": 8046,
+      "sample": [
+        {
+          "line": 80,
+          "text": "    _core_rules = ("
+        },
+        {
+          "line": 114,
+          "text": "            (words(_core_rules, suffix=r'\\b'), Keyword),"
+        }
+      ]
+    },
+    {
+      "path": ".venv/lib/python3.12/site-packages/pygments/lexers/int_fiction.py",
+      "matched": [
+        "rules"
+      ],
+      "size": 56547,
+      "sample": [
+        {
+          "line": 929,
+          "text": "             ('#pop', 'object-body/no-braces', 'grammar', 'grammar-rules')),"
+        },
+        {
+          "line": 1156,
+          "text": "            (r':', Punctuation, 'grammar-rules'),"
+        },
+        {
+          "line": 1170,
+          "text": "        'grammar-rules': ["
+        }
+      ]
+    },
+    {
+      "path": ".venv/lib/python3.12/site-packages/pygments/lexers/json5.py",
+      "matched": [
+        "rules"
+      ],
+      "size": 2505,
+      "sample": [
+        {
+          "line": 18,
+          "text": "def string_rules(quote_mark):"
+        },
+        {
+          "line": 61,
+          "text": "        'singlestring': string_rules(\"'\"),"
+        },
+        {
+          "line": 62,
+          "text": "        'doublestring': string_rules('\"'),"
+        }
+      ]
+    },
+    {
+      "path": ".venv/lib/python3.12/site-packages/pygments/lexers/jsonnet.py",
+      "matched": [
+        "rules"
+      ],
+      "size": 5543,
+      "sample": [
+        {
+          "line": 21,
+          "text": "def string_rules(quote_mark):"
+        },
+        {
+          "line": 77,
+          "text": "        'singlestring': string_rules(\"'\"),"
+        },
+        {
+          "line": 78,
+          "text": "        'doublestring': string_rules('\"'),"
+        }
+      ]
+    },
+    {
+      "path": ".venv/lib/python3.12/site-packages/pygments/lexers/jsx.py",
+      "matched": [
+        "rules"
+      ],
+      "size": 2748,
+      "sample": [
+        {
+          "line": 20,
+          "text": "_JSX_RULES = {"
+        },
+        {
+          "line": 79,
+          "text": "    **_JSX_RULES}"
+        },
+        {
+          "line": 102,
+          "text": "    **_JSX_RULES}"
+        }
+      ]
+    },
+    {
+      "path": ".venv/lib/python3.12/site-packages/pygments/lexers/lean.py",
+      "matched": [
+        "rules"
+      ],
+      "size": 8588,
+      "sample": [
+        {
+          "line": 163,
+          "text": "        'def', 'macro', 'elab', 'syntax', 'macro_rules', '#reduce', 'where',"
+        }
+      ]
+    },
+    {
+      "path": ".venv/lib/python3.12/site-packages/pygments/lexers/lisp.py",
+      "matched": [
+        "rules"
+      ],
+      "size": 157900,
+      "sample": [
+        {
+          "line": 73,
+          "text": "    # Scheme has funky syntactic rules for numbers. These are all"
+        },
+        {
+          "line": 83,
+          "text": "    number_rules = {}"
+        },
+        {
+          "line": 170,
+          "text": "        number_rules[base] = num"
+        },
+        {
+          "line": 221,
+          "text": "            (number_rules[2], Number.Bin, '#pop'),"
+        },
+        {
+          "line": 222,
+          "text": "            (number_rules[8], Number.Oct, '#pop'),"
+        },
+        {
+          "line": 223,
+          "text": "            (number_rules[10], decimal_cb, '#pop'),"
+        },
+        {
+          "line": 224,
+          "text": "            (number_rules[16], Number.Hex, '#pop'),"
+        },
+        {
+          "line": 696,
+          "text": "        'syntax-case', 'syntax-case*', 'syntax-id-rules', 'syntax-rules',"
+        }
+      ]
+    },
+    {
+      "path": ".venv/lib/python3.12/site-packages/pygments/lexers/markup.py",
+      "matched": [
+        "rules"
+      ],
+      "size": 66526,
+      "sample": [
+        {
+          "line": 107,
+          "text": "            (r'^----+$', Keyword),  # Horizontal rules"
+        },
+        {
+          "line": 608,
+          "text": "            # warning: the following rules eat outer tags."
+        },
+        {
+          "line": 940,
+          "text": "    def nowiki_tag_rules(tag_name):"
+        },
+        {
+          "line": 948,
+          "text": "    def plaintext_tag_rules(tag_name):"
+        },
+        {
+          "line": 954,
+          "text": "    def delegate_tag_rules(tag_name, lexer, **lexer_kwargs):"
+        },
+        {
+          "line": 961,
+          "text": "    def text_rules(token):"
+        },
+        {
+          "line": 1184,
+          "text": "            # Horizontal rules"
+        },
+        {
+          "line": 1429,
+          "text": "            *text_rules(Keyword),"
+        },
+        {
+          "line": 1512,
+          "text": "            *text_rules(Name.Tag),"
+        },
+        {
+          "line": 1584,
+          "text": "            *text_rules(Generic.Subheading),"
+        },
+        {
+          "line": 1616,
+          "text": "            *text_rules(String),"
+        },
+        {
+          "line": 1621,
+          "text": "            *text_rules(String.Single),"
+        }
+      ]
+    },
+    {
+      "path": ".venv/lib/python3.12/site-packages/pygments/lexers/ml.py",
+      "matched": [
+        "rules"
+      ],
+      "size": 35398,
+      "sample": [
+        {
+          "line": 484,
+          "text": "        # factorizing these rules, because they are inserted many times"
+        }
+      ]
+    }
+  ]
+}
