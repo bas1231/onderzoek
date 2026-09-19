@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "experiments/bridge/e075.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-19T20:25:27.013547+00:00",
+  "hypothesis_id": "CONTROL-NO-SILENT-WAITING",
+  "source_commit": "2b641efc10313471b58543875642de52bee2f944",
+  "started_at": "2026-09-19T20:25:27.004098+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "a2b2afbb6ba77c33d96f258ae79442ac51f35f0c9743c688b0edb860afd939ee",
+  "task_class": "infrastructure",
+  "task_id": "AUTONOMOUS-PICKUP-E075"
+}
