@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "experiments/bridge/e035.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-19T19:40:16.190432+00:00",
+  "hypothesis_id": "CONTROL-DURABLE-LIFECYCLE",
+  "source_commit": "98340f87d294cddafb333c206c5e7bd3b8a1a080",
+  "started_at": "2026-09-19T19:40:16.181261+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "2ca1a61ceca7c169683efa22e1c92fe15b2dafec2dacb13b131f7625fac8e3d5",
+  "task_class": "infrastructure",
+  "task_id": "LIFECYCLE-ORDER-E035"
+}
