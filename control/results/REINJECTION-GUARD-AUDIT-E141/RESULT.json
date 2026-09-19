@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "experiments/bridge/e141.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-19T21:57:14.212301+00:00",
+  "hypothesis_id": "CONTROL-NO-SILENT-WAITING",
+  "source_commit": "06dfb5d8943e68643d0b2d9fd69264f629f31c64",
+  "started_at": "2026-09-19T21:57:14.192850+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "ade518a633fcca0277572a48a8dd2447da8b781498a395c7fcb47ad867251c13",
+  "task_class": "infrastructure",
+  "task_id": "REINJECTION-GUARD-AUDIT-E141"
+}
