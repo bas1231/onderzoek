@@ -1,0 +1,37 @@
+{
+  "cadence": "hourly",
+  "default_candidate_status": "UNPROVEN",
+  "live_trading": false,
+  "paid_actions": false,
+  "pipeline": [
+    "scout",
+    "weather_twc",
+    "microstructure",
+    "behavioral",
+    "informed_flow",
+    "algebra",
+    "settlement",
+    "prebuild_killer",
+    "chief_falsifier",
+    "independent_reproducer",
+    "research_director"
+  ],
+  "report_sections": [
+    "run_metadata",
+    "source_coverage",
+    "new_evidence",
+    "candidate_hypotheses",
+    "negative_evidence",
+    "falsification",
+    "reproduction",
+    "coverage_gaps",
+    "incidents",
+    "decision",
+    "next_hour"
+  ],
+  "source_policy": "free_public_only",
+  "status": "ACTIVE",
+  "valid_null_result": "NO_PROVEN_EDGE",
+  "version": 1,
+  "wallet_actions": false
+}
