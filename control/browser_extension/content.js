@@ -24,6 +24,7 @@
   let polling = false;
   let sendingResult = false;
   let scanning = false;
+  let scanStartedAt = 0;
 
   const inFlightTaskIds = new Set();
 
@@ -522,6 +523,7 @@
 
     } finally {
       scanning = false;
+      scanStartedAt = 0;
     }
   }
 
@@ -837,5 +839,32 @@
         return true;
       }
     );
+
+
+  // RELIABILITY_TICK_E079
+  async function reliabilityTickE079() {
+    try {
+      await Promise.allSettled([
+        scanForTasks(),
+        flushDurableQueue(),
+        pollOutbox()
+      ]);
+    } catch (error) {
+      console.error(
+        "[Prediction Bridge] reliability tick failed",
+        error
+      );
+    }
+  }
+
+  setInterval(
+    reliabilityTickE079,
+    10000
+  );
+
+  setTimeout(
+    reliabilityTickE079,
+    750
+  );
 
 })();
