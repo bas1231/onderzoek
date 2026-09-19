@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "experiments/bridge/e145.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-19T22:02:08.690613+00:00",
+  "hypothesis_id": "CONTROL-NO-SILENT-WAITING",
+  "source_commit": "7f2853888193d8229b1f13955b706e8bc5e66008",
+  "started_at": "2026-09-19T22:02:08.665889+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "4d446d41b1cea14bbf70e24558332b50cfbed8a4d73d26601b5969875de9db21",
+  "task_class": "infrastructure",
+  "task_id": "WATCHDOG-ANCHORS-E145"
+}
