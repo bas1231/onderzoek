@@ -1,0 +1,39 @@
+{
+  "agent_id": "weather_twc",
+  "evidence": [
+    {
+      "document_sha256": "dd6e0cc4b237e05406554eb33d2b7963367175f44a5a0ae0feb4e59f707b0edf",
+      "retrieved_at": "2026-09-19T20:59:24.461145+00:00",
+      "snippet": "Aviation Weather Center Aviation Weather Center AWC Aviation Weather Center National Weather Service Contact Us Help Information Toggle dark mode Admin Sign in Weather Observations GFA FORECAST Ceiling & Visibility Clouds Precipitation Thunderstorms Temperature Winds Turbulence Icing Products SIGMET G-AIRMET Center Weather Adv Prog charts TAF map Forecast Discussions METAR/TAF data PIREP/AIREP data Wind/temp data ITWS data WAFS grids SigWx charts TCF/eTCF/ECFP Tools Terminal Weather Dashboard Winter Weather Dashboard Ceilin",
+      "source_id": "aviationweather",
+      "source_state": "UNCHANGED",
+      "term": "weather"
+    },
+    {
+      "document_sha256": "83c3dee07ef5f6d1a434fb3688a9a39e6aec75080ea93f3c0f9b60cea8df0be0",
+      "retrieved_at": "2026-09-19T20:59:24.830272+00:00",
+      "snippet": "ort Name Long Name ID Level ws Wind speed 10 pl: 250, 850 t Temperature 130 pl: 250, 500, 850 msl Mean sea level pressure 151 sfc gh Geopotential height 156 pl: 300, 500, 1000 Medium-range Ensemble: Probabilities, Daily Weather Events class=od; stream=enfo; type=ep Ranges for times 00z &12z: 0-24 to 336-360 by 12\u200b (24-hour ranges with 12-hour increments) Short Name Long Name ID Threshold Type of level tpg1 Total precipitation of at least 1 mm 131060 \u2265 1 mm sfc tpg5 Total precipitation of at least 5 mm 131061 \u2265 5 mm sfc tpg10 Total precipitation of at least 10 mm 131062 \u2265 10 mm sfc tpg20 Total precipitation of at least 20 mm 131063 \u2265 20 mm sfc tpg25 Total precipitation of at least 25 mm 131098 \u2265 25 mm sfc tpg50 Total precipitation",
+      "source_id": "ecmwf_open",
+      "source_state": "UNCHANGED",
+      "term": "weather"
+    },
+    {
+      "document_sha256": "ac1877039efbe086216ceaaeea58c81471bc265b61a522c191a43a091420525c",
+      "retrieved_at": "2026-09-19T22:00:29.923164+00:00",
+      "snippet": "NOMADS at ncep.noaa.gov HOME Forecast Local Graphical Aviation Marine Rivers and Lakes Hurricanes Severe Weather Fire Weather Space Weather Sun/Moon Long Range Forecasts Climate Prediction Past Weather Past Weather Heating/Cooling Days Monthly Temperatures Records Astronomical Data Safety Floods Tsunami Beach Hazards Wildfire Cold Tornadoes Fog Air Quality Heat Hurricanes Lightning Safe Boating Rip Currents Thunderstorms Space Weather Sun (Ultraviolet Radiation) Safety Campaigns Wind Drought Winter Weather Information Wireless Emergency Alerts Brochures Weather-Ready Nation Cooperative Observers Daily Briefing Damage/",
+      "source_id": "nomads",
+      "source_state": "CHANGED",
+      "term": "weather"
+    },
+    {
+      "document_sha256": "10bbe2ca5942d63be24e5827f8eaadaa21dc56921632364e08f4a5ceec2618ca",
+      "retrieved_at": "2026-09-19T22:00:29.748112+00:00",
+      "snippet": "National Weather Service HOME FORECAST Local Graphical Aviation Marine Rivers and Lakes Hurricanes Severe Weather Fire Weather Sunrise/Sunset Long Range Forecasts Climate Prediction Space Weather PAST WEATHER Past Weather Astronomical Data Certified Weather Data SAFETY INFORMATION Wireless Emergency Alerts Brochures Weather-Ready Nation Cooperative Observers Daily Briefing Damage/Fatality/Injury Statistics Forecast Models GIS Data Portal NOAA Weather Radio Publications SKYWARN Storm Spotters StormReady TsunamiReady Service",
+      "source_id": "nws",
+      "source_state": "CHANGED",
+      "term": "weather"
+    }
+  ],
+  "run_id": "hourly-20260920T000000+0200",
+  "status": "EVIDENCE_ROUTED"
+}

@@ -1,0 +1,15 @@
+{
+  "agent_id": "behavioral",
+  "evidence": [
+    {
+      "document_sha256": "ac1877039efbe086216ceaaeea58c81471bc265b61a522c191a43a091420525c",
+      "retrieved_at": "2026-09-19T22:00:29.923164+00:00",
+      "snippet": "Params) 6 hours grib filter https GFS Ensemble 0.25 Degree 6 hours grib filter https GFS Ensemble Chem 0.5 Degree 6 hours grib filter https GFS Ensemble Chem 0.25 Degree 6 hours grib filter https GFS Ensemble 0.5 Degree Bias-Corrected 6 hours grib filter https GFS Ensemble NDGD resolution Bias-Corrected 6 hours grib filter https GTGN 15 minutes - https HGEFS 6 hours - https NAEFS high resolution Bias-Corrected 6 hours grib filter https NAEFS NDGD resolution Bias-Corrected 6 hours grib filter https ObsProc (Observations Processing) variable - https UVI (Ultraviolet Index) daily - https Regional Models ObsProc (Observations Processing) variable - https AQM Daily Maximum 06Z, 12Z grib filter https AQM Hourly Surface Ozone 06Z, 12Z gr",
+      "source_id": "nomads",
+      "source_state": "CHANGED",
+      "term": "bias"
+    }
+  ],
+  "run_id": "hourly-20260920T000000+0200",
+  "status": "EVIDENCE_ROUTED"
+}
