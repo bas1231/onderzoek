@@ -1,0 +1,61 @@
+{
+  "artifact": "knowledge/runs/kalshi-hourly-rules-live-e202.json",
+  "climate_series_count": 0,
+  "candidate_count": 0,
+  "candidate_tickers": [],
+  "details": [],
+  "weather_index_public_probes": [
+    {
+      "city": "nyc",
+      "status": 200,
+      "sha256": "9ec4f191acff8aa99fb579ae0240eb887ca8942fdce0c821616d65597de6efbe",
+      "top_keys": [
+        "city",
+        "config_version",
+        "timeseries",
+        "units"
+      ],
+      "point_count": 0,
+      "sample": null
+    },
+    {
+      "city": "miami",
+      "status": 200,
+      "sha256": "606b59c44dd9c31c92d55aa61db90f7f83e1ccbb46c47b57857e4672bc364e1a",
+      "top_keys": [
+        "city",
+        "config_version",
+        "timeseries",
+        "units"
+      ],
+      "point_count": 0,
+      "sample": null
+    },
+    {
+      "city": "chicago",
+      "status": 200,
+      "sha256": "3ef253fd8a4a64a508ad83024e7b4c61db90d4a8c3e09d74244859a2341a70a6",
+      "top_keys": [
+        "city",
+        "config_version",
+        "timeseries",
+        "units"
+      ],
+      "point_count": 0,
+      "sample": null
+    },
+    {
+      "city": "lax",
+      "error": "<HTTPError 400: 'Bad Request'>"
+    }
+  ],
+  "commit_rc": 0,
+  "commit_stdout": "[main 3dc689e] research(weather): capture live Kalshi hourly rule metadata\n 1 file changed, 63 insertions(+)\n create mode 100644 knowledge/runs/kalshi-hourly-rules-live-e202.json",
+  "commit_stderr": "",
+  "push_rc": 0,
+  "push_stdout": "",
+  "push_stderr": "To github.com:bas1231/onderzoek.git\n   3d94d61..3dc689e  HEAD -> main",
+  "live_trading": false,
+  "paid_actions": false,
+  "wallet_actions": false
+}
