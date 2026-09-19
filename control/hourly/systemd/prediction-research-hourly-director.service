@@ -1,0 +1,7 @@
+[Unit]
+Description=Prediction Research hourly director wake
+
+[Service]
+Type=oneshot
+WorkingDirectory=/home/leonh/prediction_research
+ExecStart=/home/leonh/prediction_research/.venv/bin/python /home/leonh/prediction_research/control/hourly/hourly_wake.py

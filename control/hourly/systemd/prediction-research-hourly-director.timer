@@ -1,0 +1,12 @@
+[Unit]
+Description=Prediction Research hourly director timer
+
+[Timer]
+OnCalendar=*-*-* *:00:00
+Persistent=true
+AccuracySec=30s
+RandomizedDelaySec=0
+Unit=prediction-research-hourly-director.service
+
+[Install]
+WantedBy=timers.target
