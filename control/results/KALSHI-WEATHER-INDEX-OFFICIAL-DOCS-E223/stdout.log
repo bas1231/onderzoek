@@ -1,0 +1,128 @@
+{
+  "artifact": "knowledge/runs/kalshi-weather-index-official-docs-e223.json",
+  "target_tickers": [
+    "KXTEMPCHIHS",
+    "KXTEMPLAXHS",
+    "KXTEMPMIAH",
+    "KXTEMPNYCHS"
+  ],
+  "official_docs": [
+    {
+      "ticker": "KXTEMPCHIHS",
+      "field": "contract_url",
+      "url": "https://assets.kalshi.com/regulatory/product-certifications/CHIMETROWINDEX.pdf",
+      "status": 200,
+      "content_type": "application/pdf",
+      "sha256": "d64de13586308c90bed771ec1ddf494c13f51972fda5b92d83d9031a561d4afb",
+      "bytes": 278108,
+      "pdftotext_rc": null,
+      "text_chars": null,
+      "hit_terms": [],
+      "error": "FileNotFoundError(2, 'No such file or directory')"
+    },
+    {
+      "ticker": "KXTEMPCHIHS",
+      "field": "contract_terms_url",
+      "url": "https://assets.kalshi.com/contract_terms/CHIMETROWINDEX.pdf",
+      "status": 200,
+      "content_type": "application/pdf",
+      "sha256": "1ecb1894612b75e64b65a1da52abde163c61500278f4da01a2289e7302bc8575",
+      "bytes": 33456,
+      "pdftotext_rc": null,
+      "text_chars": null,
+      "hit_terms": [],
+      "error": "FileNotFoundError(2, 'No such file or directory')"
+    },
+    {
+      "ticker": "KXTEMPLAXHS",
+      "field": "contract_url",
+      "url": "https://assets.kalshi.com/regulatory/product-certifications/LAWINDEX.pdf",
+      "status": 200,
+      "content_type": "application/pdf",
+      "sha256": "b160d8e38e6dc4ce15c837d990b69b96ca0f40ee0dd010b0f2b78c642038583d",
+      "bytes": 277886,
+      "pdftotext_rc": null,
+      "text_chars": null,
+      "hit_terms": [],
+      "error": "FileNotFoundError(2, 'No such file or directory')"
+    },
+    {
+      "ticker": "KXTEMPLAXHS",
+      "field": "contract_terms_url",
+      "url": "https://assets.kalshi.com/contract_terms/LAWINDEX.pdf",
+      "status": 200,
+      "content_type": "application/pdf",
+      "sha256": "d568fa6f87f1321884d7e7051e5ec0c4b84d52b92e40fffd156771ea94d07aca",
+      "bytes": 33228,
+      "pdftotext_rc": null,
+      "text_chars": null,
+      "hit_terms": [],
+      "error": "FileNotFoundError(2, 'No such file or directory')"
+    },
+    {
+      "ticker": "KXTEMPMIAH",
+      "field": "contract_url",
+      "url": "https://assets.kalshi.com/regulatory/product-certifications/MIAWINDEX.pdf",
+      "status": 200,
+      "content_type": "application/pdf",
+      "sha256": "f9239740141bf38c95708fc7b954a1b44ecb40a517fe12ebe975597540eeb4b1",
+      "bytes": 459092,
+      "pdftotext_rc": null,
+      "text_chars": null,
+      "hit_terms": [],
+      "error": "FileNotFoundError(2, 'No such file or directory')"
+    },
+    {
+      "ticker": "KXTEMPMIAH",
+      "field": "contract_terms_url",
+      "url": "https://assets.kalshi.com/contract_terms/MIAWINDEX.pdf",
+      "status": 200,
+      "content_type": "application/pdf",
+      "sha256": "f7acb398f739ef0b4745e9ae4cbf19b9834676ca4316a81af5c7e3c2c4d20a87",
+      "bytes": 62829,
+      "pdftotext_rc": null,
+      "text_chars": null,
+      "hit_terms": [],
+      "error": "FileNotFoundError(2, 'No such file or directory')"
+    },
+    {
+      "ticker": "KXTEMPNYCHS",
+      "field": "contract_url",
+      "url": "https://assets.kalshi.com/regulatory/product-certifications/NYCWINDEX.pdf",
+      "status": 200,
+      "content_type": "application/pdf",
+      "sha256": "ce86fe7a3e3c8f1d1363e5e99238772bd1d4ead726e57fb4097441dc2cf64eb1",
+      "bytes": 278661,
+      "pdftotext_rc": null,
+      "text_chars": null,
+      "hit_terms": [],
+      "error": "FileNotFoundError(2, 'No such file or directory')"
+    },
+    {
+      "ticker": "KXTEMPNYCHS",
+      "field": "contract_terms_url",
+      "url": "https://assets.kalshi.com/contract_terms/NYCWINDEX.pdf",
+      "status": 200,
+      "content_type": "application/pdf",
+      "sha256": "7a92d3bca455d904942c7c6a3b079c1825de298acf44d820238933c522892a28",
+      "bytes": 33128,
+      "pdftotext_rc": null,
+      "text_chars": null,
+      "hit_terms": [],
+      "error": "FileNotFoundError(2, 'No such file or directory')"
+    }
+  ],
+  "commit": {
+    "rc": 0,
+    "stdout": "[main 94c9a61] research(weather): inspect official Weather Index documents\n 1 file changed, 298 insertions(+)\n create mode 100644 knowledge/runs/kalshi-weather-index-official-docs-e223.json",
+    "stderr": ""
+  },
+  "push": {
+    "rc": 0,
+    "stdout": "",
+    "stderr": "To github.com:bas1231/onderzoek.git\n   85173cc..94c9a61  HEAD -> main"
+  },
+  "live_trading": false,
+  "paid_actions": false,
+  "wallet_actions": false
+}
