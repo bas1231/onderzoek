@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "experiments/health_check.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-19T18:10:22.102866+00:00",
+  "hypothesis_id": "CONTROL-POPUP-ROUNDTRIP",
+  "source_commit": "b9ec50155bcf8cd92268b033d463798c58da5eb4",
+  "started_at": "2026-09-19T18:10:22.075787+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "aad856ea464f357104482d77bf576fbfcbc480118d206f4b922981a67f5dcfb2",
+  "task_class": "infrastructure",
+  "task_id": "POPUP-ROUNDTRIP-1789841393411"
+}
