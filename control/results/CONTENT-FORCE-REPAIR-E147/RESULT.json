@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "experiments/bridge/e147.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-19T22:03:35.625244+00:00",
+  "hypothesis_id": "CONTROL-NO-SILENT-WAITING",
+  "source_commit": "839d004403fbfff45b328c0a98d13584c3dc8c2e",
+  "started_at": "2026-09-19T22:03:33.288935+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "83f80ceaff07354e6da462a3ef3543a47819ac72a05d68b344331312e2989da9",
+  "task_class": "infrastructure",
+  "task_id": "CONTENT-FORCE-REPAIR-E147"
+}
