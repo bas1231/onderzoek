@@ -1,0 +1,13 @@
+{
+  "task_id": "CONTROL-RESEARCH-PAUSE-E004",
+  "hypothesis_id": "CONTROL-PAUSE-GATE",
+  "task_class": "research",
+  "operation": "health_check",
+  "working_directory": ".",
+  "command": [
+    ".venv/bin/python",
+    "experiments/health_check.py"
+  ],
+  "timeout_seconds": 60,
+  "live_trading": false
+}
