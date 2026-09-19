@@ -192,9 +192,9 @@
 
       for (const node of nodes) {
         const text =
-          node.innerText ||
-          node.textContent ||
-          "";
+            node.textContent ||
+            node.innerText ||
+            "";
 
         for (
           const block of extractTaskBlocks(text)
@@ -202,10 +202,51 @@
           let envelope;
 
           try {
-            envelope = JSON.parse(block);
-          } catch {
-            continue;
-          }
+              envelope = JSON.parse(block);
+            } catch (error) {
+              console.error(
+                "[Prediction Bridge] TASK_PARSE_FAILURE",
+                {
+                  error: String(error),
+                  bytes: block.length,
+                  preview: block.slice(0, 250)
+                }
+              );
+
+              try {
+                const stored =
+                  await chrome.storage.local.get([
+                    "bridgeParseFailures"
+                  ]);
+
+                const failures =
+                  Array.isArray(stored.bridgeParseFailures)
+                    ? stored.bridgeParseFailures
+                    : [];
+
+                failures.push({
+                  at: Date.now(),
+                  error: String(error),
+                  bytes: block.length,
+                  preview: block.slice(0, 250)
+                });
+
+                while (failures.length > 50) {
+                  failures.shift();
+                }
+
+                await chrome.storage.local.set({
+                  bridgeParseFailures: failures
+                });
+              } catch (storageError) {
+                console.error(
+                  "[Prediction Bridge] parse-error persistence failed",
+                  storageError
+                );
+              }
+
+              continue;
+            }
 
           const taskId =
             envelope &&
