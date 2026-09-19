@@ -1,0 +1,13 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "experiments/health_check.py"
+  ],
+  "hypothesis_id": "CONTROL-POPUP-ROUNDTRIP",
+  "live_trading": false,
+  "operation": "health_check",
+  "task_class": "infrastructure",
+  "task_id": "POPUP-ROUNDTRIP-1789841408261",
+  "timeout_seconds": 60,
+  "working_directory": "."
+}
