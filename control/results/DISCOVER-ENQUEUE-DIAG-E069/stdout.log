@@ -1,0 +1,42 @@
+{
+  "SCANNER-RECOVERY-E065": [
+    "control/tasks/pending/SCANNER-RECOVERY-E065.json",
+    "control/lifecycle/SCANNER-RECOVERY-E065.json",
+    "control/lifecycle/INCIDENT-SCANNER-RECOVERY-E065__NO_ENQUEUE_ACK.json"
+  ],
+  "PREDISCOVER-ANCHORS-E068": [
+    "control/tasks/completed/PREDISCOVER-ANCHORS-E068.json",
+    "control/results/PREDISCOVER-ANCHORS-E068",
+    "control/lifecycle/PREDISCOVER-ANCHORS-E068.json"
+  ],
+  "bridge_tail": [
+    "Sep 19 21:57:42 Strix python[17745]: 127.0.0.1 - \"POST /discover HTTP/1.1\" 200 -",
+    "Sep 19 21:57:44 Strix python[17745]: 127.0.0.1 - \"POST /enqueue HTTP/1.1\" 200 -",
+    "Sep 19 21:58:06 Strix python[17745]: 127.0.0.1 - \"POST /discover HTTP/1.1\" 200 -",
+    "Sep 19 21:58:08 Strix python[17745]: 127.0.0.1 - \"POST /enqueue HTTP/1.1\" 200 -",
+    "Sep 19 21:58:53 Strix python[17745]: 127.0.0.1 - \"POST /discover HTTP/1.1\" 200 -",
+    "Sep 19 21:58:56 Strix python[17745]: 127.0.0.1 - \"POST /enqueue HTTP/1.1\" 200 -",
+    "Sep 19 21:59:14 Strix python[17745]: 127.0.0.1 - \"POST /discover HTTP/1.1\" 200 -",
+    "Sep 19 21:59:16 Strix python[17745]: 127.0.0.1 - \"POST /enqueue HTTP/1.1\" 200 -",
+    "Sep 19 22:00:34 Strix python[17745]: 127.0.0.1 - \"POST /discover HTTP/1.1\" 200 -",
+    "Sep 19 22:00:36 Strix python[17745]: 127.0.0.1 - \"POST /enqueue HTTP/1.1\" 200 -",
+    "Sep 19 22:00:54 Strix python[17745]: 127.0.0.1 - \"POST /discover HTTP/1.1\" 200 -",
+    "Sep 19 22:00:56 Strix python[17745]: 127.0.0.1 - \"POST /enqueue HTTP/1.1\" 200 -",
+    "Sep 19 22:08:29 Strix python[17745]: 127.0.0.1 - \"POST /discover HTTP/1.1\" 200 -",
+    "Sep 19 22:08:31 Strix python[17745]: 127.0.0.1 - \"POST /enqueue HTTP/1.1\" 200 -",
+    "Sep 19 22:08:31 Strix python[17745]: 127.0.0.1 - \"POST /discover HTTP/1.1\" 200 -",
+    "Sep 19 22:08:32 Strix python[17745]: 127.0.0.1 - \"POST /enqueue HTTP/1.1\" 409 -",
+    "Sep 19 22:08:32 Strix python[17745]: 127.0.0.1 - \"POST /discover HTTP/1.1\" 200 -",
+    "Sep 19 22:08:32 Strix python[17745]: 127.0.0.1 - \"POST /enqueue HTTP/1.1\" 200 -",
+    "Sep 19 22:08:50 Strix python[17745]: 127.0.0.1 - \"POST /discover HTTP/1.1\" 200 -",
+    "Sep 19 22:08:53 Strix python[17745]: 127.0.0.1 - \"POST /enqueue HTTP/1.1\" 200 -",
+    "Sep 19 22:09:18 Strix python[17745]: 127.0.0.1 - \"POST /discover HTTP/1.1\" 200 -",
+    "Sep 19 22:09:21 Strix python[17745]: 127.0.0.1 - \"POST /enqueue HTTP/1.1\" 200 -",
+    "Sep 19 22:09:42 Strix python[17745]: 127.0.0.1 - \"POST /discover HTTP/1.1\" 200 -",
+    "Sep 19 22:09:45 Strix python[17745]: 127.0.0.1 - \"POST /enqueue HTTP/1.1\" 200 -",
+    "Sep 19 22:10:14 Strix python[17745]: 127.0.0.1 - \"POST /discover HTTP/1.1\" 200 -",
+    "Sep 19 22:10:18 Strix python[17745]: 127.0.0.1 - \"POST /enqueue HTTP/1.1\" 200 -",
+    "Sep 19 22:10:34 Strix python[17745]: 127.0.0.1 - \"POST /discover HTTP/1.1\" 200 -",
+    "Sep 19 22:10:37 Strix python[17745]: 127.0.0.1 - \"POST /enqueue HTTP/1.1\" 200 -"
+  ]
+}

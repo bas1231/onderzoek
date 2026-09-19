@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "experiments/bridge/e069.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-19T20:10:37.910988+00:00",
+  "hypothesis_id": "CONTROL-NO-SILENT-WAITING",
+  "source_commit": "4dfb859a1c594f352f4ed863c7ca9f2cf0237843",
+  "started_at": "2026-09-19T20:10:37.877316+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "5ab88c4e27c396bb0029fef64bfd4534ce3eec6098f3aab9b0cbc8727ccc7c79",
+  "task_class": "infrastructure",
+  "task_id": "DISCOVER-ENQUEUE-DIAG-E069"
+}
