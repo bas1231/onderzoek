@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import re
 import secrets
 import subprocess
 import threading
@@ -234,6 +235,32 @@ def commit_and_push(
         )
 
     return True, "committed and pushed"
+
+
+
+TASK_ID_RE = re.compile(
+    r"^[A-Za-z0-9_.:-]{3,160}$"
+)
+
+
+def discover(task_id: str) -> dict:
+    if not TASK_ID_RE.fullmatch(task_id):
+        return {
+            "ok": False,
+            "error": "invalid task_id",
+        }
+
+    lifecycle_update(
+        task_id,
+        "DISCOVERED",
+        "browser discovered task marker",
+    )
+
+    return {
+        "ok": True,
+        "task_id": task_id,
+        "state": "DISCOVERED",
+    }
 
 
 def enqueue(envelope: BridgeEnvelope) -> dict:
@@ -644,6 +671,19 @@ class Handler(BaseHTTPRequestHandler):
             payload = self.read_json()
 
             with LOCK:
+                if path == "/discover":
+                    task_id = str(
+                        payload.get("task_id", "")
+                    )
+
+                    result = discover(task_id)
+
+                    self.send_json(
+                        200 if result.get("ok") else 400,
+                        result,
+                    )
+                    return
+
                 if path == "/enqueue":
                     envelope = BridgeEnvelope.model_validate(payload)
                     result = enqueue(envelope)
