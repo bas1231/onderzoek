@@ -1,0 +1,8 @@
+{
+  "recorder_rc": 0,
+  "RECORDER_OUTPUT": "{\n  \"added_count\": 0,\n  \"bytes\": 2174272,\n  \"changes_sample\": [],\n  \"common_count\": 5156,\n  \"content_type\": \"application/json\",\n  \"fetchedAt\": \"2026-09-19T22:47:32.659Z\",\n  \"http_status\": 200,\n  \"interpretation_guard\": \"TWC feed status is not assumed to equal Kalshi contract settlement finality.\",\n  \"live_trading\": false,\n  \"manifest_name\": \"twc-hourly-20260919T225205Z-1e3bfafc2390.json\",\n  \"observation_count\": 5156,\n  \"paid_actions\": false,\n  \"pending_to_settled_count\": 0,\n  \"pending_to_settled_temperature_change_count\": 0,\n  \"previous_manifest\": \"twc-hourly-20260919T224908Z-1e3bfafc2390.json\",\n  \"removed_count\": 0,\n  \"retrieved_at\": \"2026-09-19T22:52:05.289400+00:00\",\n  \"settled_to_settled_temperature_change_count\": 0,\n  \"sha256\": \"1e3bfafc23908ca33a4ee83d330b3e35a84262b239fa43dabf474e1af66c86c7\",\n  \"station_count\": 38,\n  \"status_change_count\": 0,\n  \"status_counts\": {\n    \"settled\": 5156\n  },\n  \"temperature_change_count\": 0,\n  \"wallet_actions\": false,\n  \"weekStart\": \"2026-09-14\"\n}\n",
+  "RECORDER_STDERR": "",
+  "manifest_count": 2,
+  "latest_manifests": [],
+  "timer_status": "NEXT                          LEFT LAST PASSED UNIT                                   ACTIVATES\nSun 2026-09-20 01:05:00 CEST 12min -         - prediction-research-twc-recorder.timer prediction-research-twc-recorder.service\n\n1 timers listed.\nPass --all to see loaded but inactive timers, too.\n"
+}
