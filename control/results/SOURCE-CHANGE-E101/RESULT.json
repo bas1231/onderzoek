@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "experiments/bridge/e101.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-19T20:56:28.942048+00:00",
+  "hypothesis_id": "CONTROL-AUTONOMOUS-RESEARCH",
+  "source_commit": "fc9ab044f8372bdaf362e623e9cbfede8575c2b3",
+  "started_at": "2026-09-19T20:56:26.677301+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "0eb23a1eb1281154f763c98eaaed46496d19fc92ef4ca34394d998bbd1b41a1e",
+  "task_class": "infrastructure",
+  "task_id": "SOURCE-CHANGE-E101"
+}
