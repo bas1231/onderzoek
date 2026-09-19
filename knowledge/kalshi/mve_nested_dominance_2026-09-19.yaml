@@ -1,0 +1,102 @@
+schema_version: 1
+as_of: 2026-09-19
+economic_status: NO_PROVEN_EDGE
+records:
+  - id: KAL-MVE-002
+    venue: kalshi
+    kind: fact
+    status: FACT_VERIFIED
+    claim: "Kalshi Combos/MVEs settle as the product of the values of their selected underlying positions, and this product rule explicitly continues to apply when an underlying position settles scalar/fractional between $0 and $1."
+    evidence:
+      - "Kalshi's current Combos help states that combo payout equals the product of each individual position value, with maximum payout $1."
+      - "The same primary source gives a scalar example: $0.70 x $1.00 x $1.00 = $0.70 and states that underlying scalar settlement provisions remain applicable."
+      - "The Trade API exposes mve_selected_legs with event_ticker, market_ticker, side and yes_settlement_value_dollars, plus full market rules/settlement metadata."
+    sources:
+      - url: "https://help.kalshi.com/en/articles/13823820-combos"
+        source_type: primary
+        checked_at: "2026-09-19"
+      - url: "https://docs.kalshi.com/api-reference/events/get-multivariate-events"
+        source_type: primary
+        checked_at: "2026-09-19"
+    nonclaim: "This fact alone is not an executable arbitrage or market edge."
+
+  - id: KAL-MVE-003
+    venue: kalshi
+    kind: hypothesis
+    status: STRUCTURAL_CANDIDATE
+    claim: "Nested Combo/MVE leg sets create a scalar-robust payout dominance relation. If combo S contains selected-position set S and combo T contains every identical selected position in S plus one or more extra selected positions (S is a strict subset of T), then the YES settlement value of T cannot exceed the YES settlement value of S, provided both combo markets follow the documented product-settlement rule."
+    formalization:
+      notation: "Let each selected position value x_i be in [0,1]. Define P(S)=product_{i in S} x_i. If T=S union R, then P(T)=P(S)*product_{j in R} x_j."
+      theorem: "0 <= product_{j in R} x_j <= 1 implies P(T) <= P(S)."
+      two_market_floor: "Under the standard complementary YES/NO contract structure, YES(S)+NO(T) has settlement cashflow 1 + P(S) - P(T) >= 1."
+      equivalent_price_constraint: "An execution candidate exists when executable YES(S) acquisition plus executable NO(T) acquisition, after all fees and buffers, is below the proven $1 floor. Equivalently, a sufficiently crossed executable dominance quote can be detected from the two books."
+    why_new_relative_to_existing_kal_mve_001:
+      - "KAL-MVE-001 recorded primitive-vs-AND Fréchet-style relations for a two-leg binary interpretation."
+      - "This record adds combo-vs-combo strict leg-set nesting and explicitly tests robustness to scalar/fractional underlying settlement."
+      - "The proof does not require independence, estimated probabilities, correlation modelling, or binary-only leg outcomes."
+    three_angle_check:
+      semantics_source:
+        result: PASS_FOR_STRUCTURAL_CANDIDATE
+        detail: "Primary Kalshi documentation states product settlement and explicitly includes scalar underlying values. Exact concrete combo rules must still be hashed/checked before any live proof is promoted."
+      formal_counterexample_search:
+        result: PASS_FOR_STRUCTURAL_CANDIDATE
+        detail: "Algebraic proof is direct; an independent numerical grid/random check over position values in [0,1] found no counterexample."
+      execution:
+        result: NOT_YET_PROVEN
+        detail: "Combos use live RFQ/dedicated order-book pricing; Kalshi states quotes may change and fills are not guaranteed. No contemporaneous fee-net positive nested-combo cross has yet been captured."
+    required_data:
+      - "current MVE universe with exact mve_selected_legs including side"
+      - "concrete combo rules_primary/rules_secondary and rule hashes for both nested markets"
+      - "same-time executable L2 or firm RFQ evidence for both combo markets"
+      - "timestamp-effective fee_type/fee_multiplier/fee-waiver state"
+      - "depth at target quantity"
+      - "quote/order timestamps and cross-leg skew"
+      - "partial-fill/legging and quote-withdrawal handling"
+      - "settlement/finality lifecycle for both combo markets"
+    falsification:
+      - "Reject any pair where the smaller leg set is not an exact side-aware subset of the larger leg set."
+      - "Reject if concrete market rules contain a combo-level settlement branch that breaks the documented product relation."
+      - "Replay settled scalar/DNP examples and verify observed combo settlement equals the product transform for side-aware selected positions."
+      - "Run a prospective read-only census; kill/deprioritize if fee-net executable crosses are absent or systematically shorter than safe retail execution latency."
+      - "Require repeated prospective positive net_locked_edge after fees, depth, skew and legging before any economic promotion."
+    execution_blockers:
+      - "RFQ quotes may change before execution and fills are not guaranteed."
+      - "Two-market acquisition is not assumed atomic."
+      - "Exact NO-side complement/scalar accounting should be independently validated on determined MVE examples before live-money use."
+      - "Many MVE objects may have no usable live depth despite existing in REST."
+      - "Fee overrides and fee-waiver fields are market-specific and must be bound point-in-time, not assumed."
+    related:
+      - KAL-MVE-001
+      - KAL-EXEC-001
+      - KAL-EXEC-002
+    sources:
+      - url: "https://help.kalshi.com/en/articles/13823820-combos"
+        source_type: primary
+        checked_at: "2026-09-19"
+      - url: "https://help.kalshi.com/en/articles/13823806-buying-yes-vs-selling-no"
+        source_type: primary
+        checked_at: "2026-09-19"
+      - url: "https://docs.kalshi.com/api-reference/events/get-multivariate-events"
+        source_type: primary
+        checked_at: "2026-09-19"
+    economic_status: NO_PROVEN_EDGE
+
+  - id: KAL-MVE-004
+    venue: kalshi
+    kind: candidate
+    status: RESEARCH_POSITIVE
+    claim: "The current MVE universe is large enough that nested-set relation discovery should be indexed by exact selected-leg signatures rather than all-pairs ticker comparison."
+    evidence:
+      - "A preregistered seven-day 2026 study reports 7,611,594 unique REST MVE market tickers, 83,701 selected-leg primitives and 66,344,938 selected-leg occurrences; 35.38% of objects had positive cumulative volume or open interest at retrieval."
+      - "The study reports zero collision groups for exact structural signatures, so ticker count massively overstates independent economic breadth while exact leg signatures remain a useful structural key."
+    implementation_implication:
+      - "Represent each combo by a canonical sorted set of (event_ticker, market_ticker, side)."
+      - "For a combo with leg set T, generate immediate-subset signatures T minus one leg and hash-lookup existing smaller combos; this is proportional to total leg occurrences rather than O(number_of_combos^2)."
+      - "Prioritize objects with live depth/activity and two-market nested relations before more complex portfolio synthesis."
+    source:
+      title: "On-Demand Combinatorial Event Markets on Kalshi: Instantiation, Concentration, and Effective Market Breadth"
+      url: "https://arxiv.org/abs/2609.17610"
+      source_type: "recent preprint / independently collected public API census"
+      checked_at: "2026-09-19"
+    caveat: "Large object count does not establish price inefficiency or executable edge; most economics still require prospective L2/RFQ evidence."
+    economic_status: NO_PROVEN_EDGE
