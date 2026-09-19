@@ -1,0 +1,98 @@
+run_id: PEW-20260919-1620-CEST
+status: RESEARCH_ONLY
+economic_status: NO_PROVEN_EDGE
+findings:
+  - id: PUB-KAL-DECIDABILITY-20260919-01
+    novelty: NEW_TO_KB
+    type: settlement_finality_observability
+    evidence_level: PREPRINT_WITH_PROSPECTIVE_INFRASTRUCTURE
+    title: First versus stable contractual decidability on Kalshi
+    source:
+      title: "From Public Evidence to Contractual Outcome: First and Stable Decidability on Kalshi"
+      url: "https://arxiv.org/abs/2609.16642"
+      published: 2026-09-15
+    mechanism: >-
+      Distinguishes first decidability (earliest contemporaneous point where rules plus public evidence map to one contractual outcome) from stable decidability (earliest retrospective point after which that outcome never changes through finalization). Historical recovery found no eligible historical sample because exact historical rule/source objects were unavailable; prospective infrastructure is active.
+    relation_to_existing:
+      - proof-hunter source-lock/finality lane
+      - live_watcher settlement bottleneck
+      - KAL-SRC-001
+    implication: >-
+      Strengthens the existing requirement that a live state-lock is not enough: the system should separately timestamp evidence availability, rule-version availability, first decidability and stable/final decidability. It does not establish a tradable edge.
+    required_data:
+      - prospectively frozen contract/rule versions
+      - exact official source-release objects and correction history
+      - contemporaneous prices/L2 around first-decidability transitions
+      - venue determination/finality timestamps
+    falsification:
+      - show that first-decidability timestamps cannot be recovered prospectively without ambiguity
+      - or show no executable positive spread remains after first decidability and before market repricing/finality across a preregistered sample
+    execution_risks:
+      - corrections and revisions
+      - unfinished contract conditions
+      - rule-version mismatch
+      - source hierarchy ambiguity
+      - latency and thin executable depth
+
+  - id: PUB-XVENUE-VULTAX-20260919-01
+    novelty: NEW_TO_KB
+    type: cross_venue_execution_evidence
+    evidence_level: THIRD_PARTY_EMPIRICAL_RESEARCH
+    title: Execution-aware Kalshi-Polymarket gaps concentrate in slower markets, not pre-game sports
+    source:
+      title: "Kalshi–Polymarket Arbitrage: 32,638 Price Checks, and Where a Gap Survived Fees"
+      url: "https://vultax.com/research/kalshi-polymarket-arbitrage-gaps-after-fees"
+      published: 2026-09-16
+    mechanism: >-
+      A 28-hour third-party study reports 32,638 cross-venue checks with order-book walking. Pre-game NFL had zero fee-clearing crosses in 7,518 readings, while some slower political/Fed pairs reportedly cleared fees at depth. In-play crosses were discarded because venue reads could be up to two minutes apart.
+    relation_to_existing:
+      - cross-venue semantic identity lane
+      - true-time alignment falsification gate
+      - capital-lock/carry research
+      - sports stale-mirror negative evidence
+    implication: >-
+      Supports deprioritizing generic pre-game sports cross-venue scanning and prioritizing slower contracts only after exact semantic identity, synchronized timestamps, capital lock and annualized return are modeled. This is corroborating research, not independently reproduced edge evidence.
+    required_data:
+      - independent contemporaneous L2 from both venues
+      - exact fee schedules and account eligibility
+      - rule-equivalence proof per pair
+      - settlement/capital-lock duration
+    falsification:
+      - independently replay matched slower-market pairs with synchronized snapshots and show gaps disappear after fees/depth/rule matching
+      - test whether reported persistence survives a fresh untouched period
+    execution_risks:
+      - asynchronous venue reads
+      - rule mismatch
+      - low return on locked capital
+      - thin depth
+      - venue/access constraints
+
+  - id: PUB-POLY-FLB-20260919-01
+    novelty: NEW_EVIDENCE_EXISTING_LANE
+    type: behavioral_microstructure
+    evidence_level: PREPRINT_LARGE_TRANSACTION_DATASET
+    title: Polymarket FLB is aggregation- and category-dependent
+    source:
+      title: "The Favorite-Longshot Bias in Prediction Markets: Evidence from Polymarket"
+      url: "https://arxiv.org/abs/2609.12878"
+      published: 2026-09-11
+    mechanism: >-
+      Study of 588 million trades reports strong losses on sub-10-cent purchases and small positive returns at 90+ cents in raw flow, but sign/magnitude changes with parent-event grouping and the two-sided pattern is absent in Sports.
+    relation_to_existing:
+      - favorite-longshot bias lane
+      - maker/taker flow-bias lane
+      - warning against simple buy-favorites strategy
+    implication: >-
+      Reinforces that FLB must be conditioned on market family, grouping and execution role; aggregate price-bucket backtests are insufficient.
+    required_data:
+      - venue-specific maker/taker labeled fills
+      - event-family grouping
+      - fees and markouts
+      - untouched category/time splits
+    falsification:
+      - test preregistered grouped returns by category and maker/taker role on fresh data
+    execution_risks:
+      - aggregation bias
+      - adverse selection
+      - fees/spread
+      - category instability
