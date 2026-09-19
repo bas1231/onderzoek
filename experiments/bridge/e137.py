@@ -1,0 +1,1 @@
+from pathlib import Path;p=Path('control/browser_extension/content.js');t=p.read_text(errors='replace');[(print('KEY',k,'AT',t.find(k)),print(t[max(0,t.find(k)-1600):t.find(k)+2400])) for k in ['outbox','/ack']]
