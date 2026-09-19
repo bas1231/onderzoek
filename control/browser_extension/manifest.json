@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Prediction Research Bridge",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "Local no-API bridge between ChatGPT and Prediction Research WSL control plane.",
   "permissions": [
     "scripting",
@@ -9,7 +9,9 @@
     "tabs"
   ],
   "host_permissions": [
-    "http://127.0.0.1:8765/*"
+    "http://127.0.0.1:8765/*",
+    "https://chat.openai.com/*",
+    "https://chatgpt.com/*"
   ],
   "background": {
     "service_worker": "background.js"
