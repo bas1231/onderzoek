@@ -49,6 +49,30 @@ def current_commit() -> str:
     return git("rev-parse", "HEAD").stdout.strip()
 
 
+def push_head_best_effort() -> bool:
+    """
+    Push completed local research history to the private Git remote.
+
+    A remote failure never erases local evidence.
+    """
+    result = git(
+        "push",
+        "origin",
+        "HEAD:main",
+        check=False,
+    )
+
+    if result.returncode == 0:
+        print("Git push: PASS")
+        return True
+
+    print("Git push: FAILED")
+    if result.stderr:
+        print(result.stderr.strip())
+
+    return False
+
+
 def research_queue_paused() -> bool:
     if not TASK_QUEUE.exists():
         return True
@@ -61,6 +85,28 @@ def research_queue_paused() -> bool:
             return status != "ACTIVE"
 
     return True
+
+
+def task_is_committed(task_file: Path) -> bool:
+    """
+    Process a task only after the task file exists in Git HEAD.
+
+    This prevents the executor from racing with a human or director
+    that is still creating/staging/committing the task.
+    """
+    try:
+        relative = task_file.relative_to(ROOT).as_posix()
+    except ValueError:
+        return False
+
+    probe = git(
+        "cat-file",
+        "-e",
+        f"HEAD:{relative}",
+        check=False,
+    )
+
+    return probe.returncode == 0
 
 
 def process_task(task_file: Path) -> str:
@@ -177,6 +223,7 @@ def process_task(task_file: Path) -> str:
             "-m",
             f"result({task.task_id}): {status}",
         )
+        push_head_best_effort()
 
     print(
         f"{task.task_id}: {status} "
@@ -236,6 +283,7 @@ def record_infrastructure_failure(
                     "infrastructure failure"
                 ),
             )
+            push_head_best_effort()
 
     except Exception as handling_exc:
         print(
@@ -269,6 +317,9 @@ def main() -> None:
         paused_seen = False
 
         for task_file in tasks:
+            if not task_is_committed(task_file):
+                continue
+
             try:
                 outcome = process_task(task_file)
 
