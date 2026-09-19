@@ -1,0 +1,17 @@
+{
+  "ok": true,
+  "checks": {
+    "roles": true,
+    "free_only": true,
+    "sources": true,
+    "live_off": true,
+    "paid_off": true,
+    "wallet_off": true,
+    "null_valid": true,
+    "active": true
+  },
+  "report": "hourly-reports/20260919_223941_dry-run.md",
+  "commit_rc": 0,
+  "push_rc": 0,
+  "head": "5f61ae7 test(hourly): validate director dry run"
+}
