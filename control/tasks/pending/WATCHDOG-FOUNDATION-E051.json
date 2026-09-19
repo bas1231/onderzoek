@@ -1,0 +1,13 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "experiments/bridge/e051.py"
+  ],
+  "hypothesis_id": "CONTROL-NO-SILENT-WAITING",
+  "live_trading": false,
+  "operation": "python",
+  "task_class": "infrastructure",
+  "task_id": "WATCHDOG-FOUNDATION-E051",
+  "timeout_seconds": 30,
+  "working_directory": "."
+}

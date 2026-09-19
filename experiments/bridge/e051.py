@@ -1,0 +1,1 @@
+import json,subprocess;from pathlib import Path;m=json.loads(Path('control/browser_extension/manifest.json').read_text());s=subprocess.run(['systemctl','--user','is-active','prediction-research-lifecycle-supervisor.service'],capture_output=True,text=True).stdout.strip();print(json.dumps({'version':m.get('version'),'alarms':'alarms' in m.get('permissions',[]),'supervisor':s}))
