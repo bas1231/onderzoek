@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/diag_e021.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-19T19:08:26.735525+00:00",
+  "hypothesis_id": "CONTROL-TRANSPORT-INTEGRITY",
+  "source_commit": "5339694ce0c40672a177a9e25e49f94c4090d052",
+  "started_at": "2026-09-19T19:08:26.708774+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "9649187950de768f7f678328be27834f7ccb3d0a52fbddb474f0ce5974ce09d7",
+  "task_class": "infrastructure",
+  "task_id": "BRIDGE-DIAG-E022"
+}
