@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "experiments/bridge/e123.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-19T21:48:24.977936+00:00",
+  "hypothesis_id": "CONTROL-NO-SILENT-WAITING",
+  "source_commit": "0e1351d0c19d6cf6d0607f09417456f51d260ae1",
+  "started_at": "2026-09-19T21:48:24.945467+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "3f80622dc718bdd94e73ec4c81dc3cb85fd6c097a3f3ac81bcc38730f7764143",
+  "task_class": "infrastructure",
+  "task_id": "RECONCILE-FINAL-CHANNEL-E123"
+}
