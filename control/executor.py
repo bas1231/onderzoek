@@ -9,6 +9,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 from validator import Task
+from jobs.lifecycle_ledger import update as lifecycle_update
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -123,6 +124,12 @@ def process_task(task_file: Path) -> str:
     running_file = RUNNING / task_file.name
     shutil.move(task_file, running_file)
 
+    lifecycle_update(
+        task.task_id,
+        "RUNNING",
+        "executor claimed pending task",
+    )
+
     started_at = now_iso()
     source_commit = current_commit()
 
@@ -202,6 +209,14 @@ def process_task(task_file: Path) -> str:
     ) / running_file.name
 
     shutil.move(running_file, destination)
+
+    lifecycle_update(
+        task.task_id,
+        "COMPLETED"
+        if status == "completed"
+        else "FAILED",
+        "executor finished task",
+    )
 
     git(
         "add",

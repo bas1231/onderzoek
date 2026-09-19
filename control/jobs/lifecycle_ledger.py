@@ -1,5 +1,6 @@
 from pathlib import Path
 import json
+import fcntl
 import os
 import sys
 import tempfile
@@ -8,6 +9,7 @@ import time
 ROOT = Path.cwd()
 LEDGER_DIR = ROOT / "control" / "lifecycle"
 LEDGER_DIR.mkdir(parents=True, exist_ok=True)
+LOCK_FILE = LEDGER_DIR / ".ledger.lock"
 
 VALID_STATES = {
     "DISCOVERED",
@@ -85,20 +87,50 @@ def update(task_id, state, detail=""):
             f"invalid lifecycle state: {state}"
         )
 
-    record = load_record(task_id)
-    now = time.time()
+    order = {
+        None: 0,
+        "DISCOVERED": 10,
+        "ACCEPTED": 20,
+        "RUNNING": 30,
+        "COMPLETED": 40,
+        "FAILED": 40,
+        "DELIVERED": 50,
+        "ACKED": 60,
+        "INCIDENT": 70,
+    }
 
-    record["state"] = state
-    record["updated_at"] = now
-    record["history"].append(
-        {
-            "state": state,
-            "at": now,
-            "detail": detail,
-        }
-    )
+    with LOCK_FILE.open("a+") as lock_handle:
+        fcntl.flock(
+            lock_handle.fileno(),
+            fcntl.LOCK_EX,
+        )
 
-    return write_record(record)
+        record = load_record(task_id)
+        current = record.get("state")
+
+        if current == state:
+            return record
+
+        if (
+            current in order
+            and state in order
+            and order[state] < order[current]
+        ):
+            return record
+
+        now = time.time()
+
+        record["state"] = state
+        record["updated_at"] = now
+        record["history"].append(
+            {
+                "state": state,
+                "at": now,
+                "detail": detail,
+            }
+        )
+
+        return write_record(record)
 
 
 def self_test():

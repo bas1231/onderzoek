@@ -11,6 +11,7 @@ from urllib.parse import urlparse
 from pydantic import BaseModel, Field, field_validator
 
 from validator import Task
+from jobs.lifecycle_ledger import update as lifecycle_update
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -391,6 +392,12 @@ def enqueue(envelope: BridgeEnvelope) -> dict:
 
         save_state(state)
 
+        lifecycle_update(
+            task.task_id,
+            "ACCEPTED",
+            "bridge enqueue accepted",
+        )
+
         print(
             "[bridge] enqueue accepted "
             f"task_id={task.task_id}"
@@ -437,6 +444,12 @@ def next_outbox_item() -> dict | None:
             else ""
         )
 
+        lifecycle_update(
+            task_id,
+            "DELIVERED",
+            "bridge outbox exposed result",
+        )
+
         return {
             "task_id": task_id,
             "result": result,
@@ -467,6 +480,12 @@ def acknowledge(task_id: str) -> dict:
         acked.append(task_id)
 
     save_state(state)
+
+    lifecycle_update(
+        task_id,
+        "ACKED",
+        "browser acknowledged result",
+    )
 
     return {
         "ok": True,
