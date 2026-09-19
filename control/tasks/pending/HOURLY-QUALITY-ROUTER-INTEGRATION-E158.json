@@ -1,0 +1,13 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "experiments/bridge/e158.py"
+  ],
+  "hypothesis_id": "AUTONOMOUS-HOURLY-RESEARCH",
+  "live_trading": false,
+  "operation": "python",
+  "task_class": "research",
+  "task_id": "HOURLY-QUALITY-ROUTER-INTEGRATION-E158",
+  "timeout_seconds": 60,
+  "working_directory": "."
+}
