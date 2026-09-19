@@ -1,0 +1,13 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "experiments/bridge/e226.py"
+  ],
+  "hypothesis_id": "H7-SETTLEMENT-BOUNDARY",
+  "live_trading": false,
+  "operation": "python",
+  "task_class": "research",
+  "task_id": "KALSHI-WEATHER-INDEX-PDF-PROBE-E226",
+  "timeout_seconds": 90,
+  "working_directory": "."
+}
