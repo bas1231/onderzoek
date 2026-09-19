@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "experiments/bridge/e051.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-19T19:50:33.302571+00:00",
+  "hypothesis_id": "CONTROL-NO-SILENT-WAITING",
+  "source_commit": "ba91e3cbc4912950dfd884f619676ff9abddc551",
+  "started_at": "2026-09-19T19:50:33.279414+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "bb168bdec594180a8f0c40c4706df022ddd182f329a2e791b2a078aac6e6638f",
+  "task_class": "infrastructure",
+  "task_id": "WATCHDOG-FOUNDATION-E051"
+}
