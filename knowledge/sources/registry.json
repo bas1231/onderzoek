@@ -99,6 +99,24 @@
       "name": "YouTube public content",
       "type": "video",
       "url": "https://www.youtube.com/"
+    },
+    {
+      "cadence": "daily",
+      "cost_class": "free_public",
+      "grade": "primary",
+      "id": "kalshi_weather_rules",
+      "name": "Kalshi weather market rules",
+      "type": "official_venue",
+      "url": "https://help.kalshi.com/en/articles/13823837-weather-markets"
+    },
+    {
+      "cadence": "hourly",
+      "cost_class": "free_public",
+      "grade": "primary",
+      "id": "twc_kalshi",
+      "name": "The Weather Company Kalshi settlement page",
+      "type": "settlement_source",
+      "url": "https://weather.com/kalshi"
     }
   ],
   "version": 1

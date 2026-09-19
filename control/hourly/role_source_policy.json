@@ -57,7 +57,9 @@
       "nws",
       "ecmwf_open",
       "nomads",
-      "arxiv"
+      "arxiv",
+      "kalshi_weather_rules",
+      "twc_kalshi"
     ]
   },
   "settlement": {
@@ -66,7 +68,9 @@
     ],
     "evidence_sources": [
       "kalshi_docs",
-      "polymarket_docs"
+      "polymarket_docs",
+      "kalshi_weather_rules",
+      "twc_kalshi"
     ]
   },
   "weather_twc": {
@@ -77,7 +81,9 @@
       "aviationweather",
       "nws",
       "ecmwf_open",
-      "nomads"
+      "nomads",
+      "kalshi_weather_rules",
+      "twc_kalshi"
     ]
   }
 }
