@@ -1,0 +1,9 @@
+from pathlib import Path
+import json,subprocess
+h='https'+chr(58)+chr(47)+chr(47)
+rows=[('kalshi_docs','Kalshi documentation',h+'docs.kalshi.com/','official_venue','primary','hourly'),('polymarket_docs','Polymarket documentation',h+'docs.polymarket.com/','official_venue','primary','hourly'),('cftc','CFTC',h+'www.cftc.gov/','regulator','primary','daily'),('aviationweather','Aviation Weather Center',h+'aviationweather.gov/','meteorology','primary','hourly'),('nws','National Weather Service',h+'www.weather.gov/','meteorology','primary','hourly'),('ecmwf_open','ECMWF Open Data',h+'www.ecmwf.int/en/forecasts/datasets/open-data','meteorology','primary','hourly'),('nomads','NCEP NOMADS',h+'nomads.ncep.noaa.gov/','meteorology','primary','hourly'),('arxiv','arXiv',h+'arxiv.org/','papers','secondary','hourly'),('github','GitHub public repositories',h+'github.com/','code','discovery','hourly'),('reddit','Reddit public discussions',h+'www.reddit.com/','community','discovery','hourly'),('youtube','YouTube public content',h+'www.youtube.com/','video','discovery','hourly')]
+s=[{'id':a,'name':b,'url':c,'type':d,'cost_class':'free_public','grade':e,'cadence':f} for a,b,c,d,e,f in rows]
+p=Path('knowledge/sources/registry.json');p.parent.mkdir(parents=True,exist_ok=True);p.write_text(json.dumps({'version':1,'policy':'free_public_only','sources':s},indent=2,sort_keys=True)+chr(10))
+r=lambda a:subprocess.run(a,capture_output=True,text=True,check=False)
+d=r(['git','diff','--check']);ok=d.returncode==0
+if ok:r(['git','add',str(p)]);c=r(['git','commit','-m','build(research): add free public source registry']);q=r(['git','push','origin','HEAD:main']);print(json.dumps({'ok':ok,'sources':len(s),'commit_rc':c.returncode,'push_rc':q.returncode,'head':r(['git','log','-1','--oneline']).stdout.strip()}))
