@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "experiments/bridge/e210.py"
+  ],
+  "exit_code": 1,
+  "finished_at": "2026-09-19T23:15:17.496010+00:00",
+  "hypothesis_id": "H7-SETTLEMENT-BOUNDARY",
+  "source_commit": "fd6ad0229ca7d381b176e36d248965d4284d7b8a",
+  "started_at": "2026-09-19T23:15:17.478653+00:00",
+  "status": "failed",
+  "stderr_sha256": "33f7d28cd8f767e52522f761b0e796a7c54c0c8b9f04c27684fe810953d77ec8",
+  "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "task_class": "research",
+  "task_id": "KALSHI-HOURLY-SOURCE-TRANSITION-E210"
+}
