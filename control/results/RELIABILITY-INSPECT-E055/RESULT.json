@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "experiments/bridge/e055.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-19T19:54:27.711736+00:00",
+  "hypothesis_id": "CONTROL-NO-SILENT-WAITING",
+  "source_commit": "11dc3e8e8ad568d937b58cb49bbd428dd9b07bf0",
+  "started_at": "2026-09-19T19:54:27.686171+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "e3c08557f411416bec63c287adf86d979257ad51a50a35848812d58dc35ae68e",
+  "task_class": "infrastructure",
+  "task_id": "RELIABILITY-INSPECT-E055"
+}
