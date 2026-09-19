@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "experiments/bridge/e108.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-19T20:59:11.914172+00:00",
+  "hypothesis_id": "CONTROL-AUTONOMOUS-RESEARCH",
+  "source_commit": "42a999563b41d86cbe3b40fab2febf47217b0723",
+  "started_at": "2026-09-19T20:59:09.622361+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "1cc8dcf5d00ed74af22175d6bc6aae15480c11da1e7834b22847a9f36f5febeb",
+  "task_class": "infrastructure",
+  "task_id": "SWEEP-DIRECTOR-E108"
+}
