@@ -1,0 +1,45 @@
+from pathlib import Path
+from datetime import datetime, timezone
+from concurrent.futures import ThreadPoolExecutor, as_completed
+import importlib.util
+import json
+
+ROOT = Path.cwd()
+OUT = ROOT / "knowledge/runs/source_sweeps"
+
+def load(name, path):
+    spec = importlib.util.spec_from_file_location(name, path)
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    return mod
+
+collector = load("collector", ROOT / "control/hourly/collector.py")
+change = load("change_detection", ROOT / "control/hourly/change_detection.py")
+
+def one(source):
+    try:
+        body, headers, status = collector.fetch(source)
+        manifest = collector.archive(source, body, headers, status)
+        classification = change.classify(source["id"])
+        return {"source_id":source["id"],"ok":True,"http_status":status,"bytes":len(body),"sha256":manifest["sha256"],"classification":classification.get("status"),"manifest":classification.get("manifest")}
+    except Exception as exc:
+        return {"source_id":source["id"],"ok":False,"error":type(exc).__name__ + ": " + str(exc)[:500]}
+
+def sweep(max_workers=4):
+    started = datetime.now(timezone.utc)
+    sources = collector.load_sources()
+    results = []
+    with ThreadPoolExecutor(max_workers=max_workers) as pool:
+        futures = {pool.submit(one, s): s["id"] for s in sources}
+        for future in as_completed(futures):
+            results.append(future.result())
+    results.sort(key=lambda x: x["source_id"])
+    finished = datetime.now(timezone.utc)
+    data = {"started_at":started.isoformat(),"finished_at":finished.isoformat(),"source_count":len(sources),"success_count":sum(1 for r in results if r["ok"]),"failure_count":sum(1 for r in results if not r["ok"]),"results":results,"paid_actions":False,"live_trading":False,"wallet_actions":False}
+    OUT.mkdir(parents=True, exist_ok=True)
+    path = OUT / (started.strftime("%Y%m%dT%H%M%SZ") + ".json")
+    path.write_text(json.dumps(data, indent=2, sort_keys=True) + chr(10))
+    return path, data
+
+if __name__ == "__main__":
+    print(json.dumps({"ok":True,"sources":len(collector.load_sources()),"max_workers":4}, sort_keys=True))
