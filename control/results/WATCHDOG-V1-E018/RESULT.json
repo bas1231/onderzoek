@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/install_watchdog_v3.py"
+  ],
+  "exit_code": 1,
+  "finished_at": "2026-09-19T18:51:35.437331+00:00",
+  "hypothesis_id": "CONTROL-WATCHDOG",
+  "source_commit": "2a6711cca35adeebeabf8369bc53e15cb5c28adc",
+  "started_at": "2026-09-19T18:51:35.406532+00:00",
+  "status": "failed",
+  "stderr_sha256": "d3ea3fb9f2da75e951ed9722ac71a73ff9a6bc57abba477b4a01076fdc842983",
+  "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "task_class": "infrastructure",
+  "task_id": "WATCHDOG-V1-E018"
+}
