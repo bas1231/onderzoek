@@ -1,0 +1,4 @@
+  File "/home/leonh/prediction_research/control/jobs/install_watchdog_v2.py", line 30
+    print(proc.stdout.rstrip())
+    ^
+IndentationError: expected an indented block after 'if' statement on line 29
