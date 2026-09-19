@@ -6,3 +6,4 @@ After=network-online.target
 Type=oneshot
 WorkingDirectory=%h/prediction_research
 ExecStart=%h/prediction_research/.venv/bin/python %h/prediction_research/control/weather/twc_hourly_recorder.py
+ExecStartPost=%h/prediction_research/.venv/bin/python %h/prediction_research/control/jobs/twc_revision_summary.py
