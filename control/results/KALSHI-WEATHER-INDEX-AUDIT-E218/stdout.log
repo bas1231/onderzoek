@@ -1,0 +1,281 @@
+{
+  "manifest_count": 4,
+  "recent_manifests": [
+    {
+      "path": "/home/leonh/.local/state/prediction-research/kalshi_weather_index_manifests/kwi-20260919T232453.632399+0000-1b37b1771461.json",
+      "retrieved_at": "2026-09-19T23:24:53.632399+00:00",
+      "cities": [
+        {
+          "city": "nyc",
+          "sha256": "3452861163ccfa1a85399519b7d2ee02ad5f297888db5589da43055116e000bd",
+          "timeseries_count": 177,
+          "latest_complete_t": 1789859940000,
+          "latest_complete_v": 65.08,
+          "payload_changed": null,
+          "latest_complete_t_changed": null,
+          "latest_complete_v_changed_for_same_t": null
+        },
+        {
+          "city": "miami",
+          "sha256": "4fc3b96e8d31e3c0993ae7abcf3e185a4470287099420ae6f0d8532834fd575a",
+          "timeseries_count": 178,
+          "latest_complete_t": 1789859940000,
+          "latest_complete_v": 77.36,
+          "payload_changed": null,
+          "latest_complete_t_changed": null,
+          "latest_complete_v_changed_for_same_t": null
+        },
+        {
+          "city": "chicago",
+          "sha256": "fdbcfdcd70c62b5272584a8f89a660ad8380676a198eddbc780d9c4485d1974f",
+          "timeseries_count": 179,
+          "latest_complete_t": 1789859940000,
+          "latest_complete_v": 68.72,
+          "payload_changed": null,
+          "latest_complete_t_changed": null,
+          "latest_complete_v_changed_for_same_t": null
+        }
+      ]
+    },
+    {
+      "path": "/home/leonh/.local/state/prediction-research/kalshi_weather_index_manifests/kwi-20260919T232614.191085+0000-da33e7f9b167.json",
+      "retrieved_at": "2026-09-19T23:26:14.191085+00:00",
+      "cities": [
+        {
+          "city": "nyc",
+          "sha256": "93bedc159fcd6f145c21c8253c6e9b53172f9b830484918f97d58ddeea251cef",
+          "timeseries_count": 175,
+          "latest_complete_t": 1789860000000,
+          "latest_complete_v": 65.08,
+          "payload_changed": true,
+          "latest_complete_t_changed": true,
+          "latest_complete_v_changed_for_same_t": false
+        },
+        {
+          "city": "miami",
+          "sha256": "19a313b5ff91ce47698c15bcfad2cf631a482e3e52dd7a3a7ff3f1708ba5b2b5",
+          "timeseries_count": 176,
+          "latest_complete_t": 1789860000000,
+          "latest_complete_v": 77.36,
+          "payload_changed": true,
+          "latest_complete_t_changed": true,
+          "latest_complete_v_changed_for_same_t": false
+        },
+        {
+          "city": "chicago",
+          "sha256": "29df19ba510c249c8bd09092ef2d739ad7e370b63371466178d124466b8352f1",
+          "timeseries_count": 177,
+          "latest_complete_t": 1789860000000,
+          "latest_complete_v": 68.72,
+          "payload_changed": true,
+          "latest_complete_t_changed": true,
+          "latest_complete_v_changed_for_same_t": false
+        }
+      ]
+    },
+    {
+      "path": "/home/leonh/.local/state/prediction-research/kalshi_weather_index_manifests/kwi-20260919T232615.489349+0000-731d3909e5bb.json",
+      "retrieved_at": "2026-09-19T23:26:15.489349+00:00",
+      "cities": [
+        {
+          "city": "nyc",
+          "sha256": "93bedc159fcd6f145c21c8253c6e9b53172f9b830484918f97d58ddeea251cef",
+          "timeseries_count": 175,
+          "latest_complete_t": 1789860000000,
+          "latest_complete_v": 65.08,
+          "payload_changed": false,
+          "latest_complete_t_changed": false,
+          "latest_complete_v_changed_for_same_t": false
+        },
+        {
+          "city": "miami",
+          "sha256": "19a313b5ff91ce47698c15bcfad2cf631a482e3e52dd7a3a7ff3f1708ba5b2b5",
+          "timeseries_count": 176,
+          "latest_complete_t": 1789860000000,
+          "latest_complete_v": 77.36,
+          "payload_changed": false,
+          "latest_complete_t_changed": false,
+          "latest_complete_v_changed_for_same_t": false
+        },
+        {
+          "city": "chicago",
+          "sha256": "29df19ba510c249c8bd09092ef2d739ad7e370b63371466178d124466b8352f1",
+          "timeseries_count": 177,
+          "latest_complete_t": 1789860000000,
+          "latest_complete_v": 68.72,
+          "payload_changed": false,
+          "latest_complete_t_changed": false,
+          "latest_complete_v_changed_for_same_t": false
+        }
+      ]
+    },
+    {
+      "path": "/home/leonh/.local/state/prediction-research/kalshi_weather_index_manifests/kwi-20260919T232719.087929+0000-afcaeaf79527.json",
+      "retrieved_at": "2026-09-19T23:27:19.087929+00:00",
+      "cities": [
+        {
+          "city": "nyc",
+          "sha256": "2a74443d53085752b0c9f4b768542bd7c15f0a8194dc44cbd7058998710da860",
+          "timeseries_count": 176,
+          "latest_complete_t": 1789860060000,
+          "latest_complete_v": 65.08,
+          "payload_changed": true,
+          "latest_complete_t_changed": true,
+          "latest_complete_v_changed_for_same_t": false
+        },
+        {
+          "city": "miami",
+          "sha256": "a8d3d607cdefc4bd50618e431bbbdcf527206f6e0d92eca465396634ab4521be",
+          "timeseries_count": 178,
+          "latest_complete_t": 1789860120000,
+          "latest_complete_v": 77.36,
+          "payload_changed": true,
+          "latest_complete_t_changed": true,
+          "latest_complete_v_changed_for_same_t": false
+        },
+        {
+          "city": "chicago",
+          "sha256": "9cb25292e1d9839a81bf6d040fc93289ad9de7ffbb5d4c33c9e7157216a6276e",
+          "timeseries_count": 178,
+          "latest_complete_t": 1789860060000,
+          "latest_complete_v": 68.72,
+          "payload_changed": true,
+          "latest_complete_t_changed": true,
+          "latest_complete_v_changed_for_same_t": false
+        }
+      ]
+    }
+  ],
+  "latest_manifest": "/home/leonh/.local/state/prediction-research/kalshi_weather_index_manifests/kwi-20260919T232719.087929+0000-afcaeaf79527.json",
+  "formula_audit": [
+    {
+      "city": "nyc",
+      "sha256": "2a74443d53085752b0c9f4b768542bd7c15f0a8194dc44cbd7058998710da860",
+      "config_version": "nyc-temperature-v1.0-cal-20260914",
+      "complete_points_checked": 173,
+      "max_abs_residual": 0.005000000000009663,
+      "mean_abs_residual": 0.00277456647398723,
+      "exact_to_2dp_count": 166,
+      "contributor_mismatch_count": 0,
+      "weird_count": 0,
+      "weird_examples": [],
+      "first_complete": [
+        1789849680000,
+        68.68,
+        68.675,
+        0.005000000000009663,
+        8,
+        8
+      ],
+      "last_complete": [
+        1789860060000,
+        65.08,
+        65.075,
+        0.0049999999999954525,
+        8,
+        8
+      ]
+    },
+    {
+      "city": "miami",
+      "sha256": "a8d3d607cdefc4bd50618e431bbbdcf527206f6e0d92eca465396634ab4521be",
+      "config_version": "miami-temperature-v1.0-cal-20260914",
+      "complete_points_checked": 175,
+      "max_abs_residual": 1.4210854715202004e-14,
+      "mean_abs_residual": 2.517351406692926e-15,
+      "exact_to_2dp_count": 175,
+      "contributor_mismatch_count": 0,
+      "weird_count": 0,
+      "weird_examples": [],
+      "first_complete": [
+        1789849680000,
+        84.2,
+        84.2,
+        0.0,
+        5,
+        5
+      ],
+      "last_complete": [
+        1789860120000,
+        77.36,
+        77.36,
+        0.0,
+        5,
+        5
+      ]
+    },
+    {
+      "city": "chicago",
+      "sha256": "9cb25292e1d9839a81bf6d040fc93289ad9de7ffbb5d4c33c9e7157216a6276e",
+      "config_version": "chicago-temperature-v1.0-cal-20260914",
+      "complete_points_checked": 174,
+      "max_abs_residual": 0.3650000000000091,
+      "mean_abs_residual": 0.002925287356322903,
+      "exact_to_2dp_count": 173,
+      "contributor_mismatch_count": 0,
+      "weird_count": 1,
+      "weird_examples": [
+        {
+          "t": 1789854780000,
+          "v": 69.4,
+          "mean_ok": 69.035,
+          "residual": 0.3650000000000091,
+          "contributors": 4,
+          "ok_station_count": 4,
+          "status": "degraded"
+        }
+      ],
+      "first_complete": [
+        1789849680000,
+        70.02,
+        70.01599999999999,
+        0.0040000000000048885,
+        5,
+        5
+      ],
+      "last_complete": [
+        1789860060000,
+        68.72,
+        68.72,
+        0.0,
+        5,
+        5
+      ]
+    }
+  ],
+  "systemd": {
+    "timer_active": {
+      "rc": 0,
+      "stdout": "active",
+      "stderr": ""
+    },
+    "timer_enabled": {
+      "rc": 0,
+      "stdout": "enabled",
+      "stderr": ""
+    },
+    "timer_list": {
+      "rc": 0,
+      "stdout": "NEXT                         LEFT LAST                          PASSED UNIT                                                    ACTIVATES\nSun 2026-09-20 01:28:15 CEST  40s Sun 2026-09-20 01:27:19 CEST 15s ago prediction-research-kalshi-weather-index-recorder.timer prediction-research-kalshi-weather-index-recorder.service\n\n1 timers listed.\nPass --all to see loaded but inactive timers, too.",
+      "stderr": ""
+    },
+    "service_props": {
+      "rc": 0,
+      "stdout": "Result=success\nExecMainStatus=0\nActiveState=inactive\nSubState=dead",
+      "stderr": ""
+    },
+    "journal_tail": {
+      "rc": 0,
+      "stdout": "Sep 20 01:27:20 Strix python[595433]:       \"guards\": [\nSep 20 01:27:20 Strix python[595433]:         \"Public Kalshi weather timeseries availability does not by itself prove contract settlement equivalence.\",\nSep 20 01:27:20 Strix python[595433]:         \"Incomplete points are not treated as final.\",\nSep 20 01:27:20 Strix python[595433]:         \"No market edge is inferred without contemporaneous executable market data.\"\nSep 20 01:27:20 Strix python[595433]:       ]\nSep 20 01:27:20 Strix python[595433]:     }\nSep 20 01:27:20 Strix python[595433]:   ],\nSep 20 01:27:20 Strix python[595433]:   \"live_trading\": false,\nSep 20 01:27:20 Strix python[595433]:   \"paid_actions\": false,\nSep 20 01:27:20 Strix python[595433]:   \"wallet_actions\": false\nSep 20 01:27:20 Strix python[595433]: }\nSep 20 01:27:20 Strix systemd[334]: Finished prediction-research-kalshi-weather-index-recorder.service - Prediction Research Kalshi Weather Index recorder.",
+      "stderr": ""
+    }
+  },
+  "interpretation_guard": [
+    "Arithmetic agreement with public timeseries values does not prove the formal Kalshi Weather Index methodology.",
+    "Only complete/non-incomplete points with numeric v are evaluated.",
+    "No market edge is inferred."
+  ],
+  "live_trading": false,
+  "paid_actions": false,
+  "wallet_actions": false
+}
