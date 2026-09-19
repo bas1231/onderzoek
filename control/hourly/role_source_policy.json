@@ -1,0 +1,83 @@
+{
+  "algebra": {
+    "coverage_gaps": [],
+    "discovery_sources": [
+      "github"
+    ],
+    "evidence_sources": [
+      "kalshi_docs",
+      "polymarket_docs"
+    ]
+  },
+  "behavioral": {
+    "coverage_gaps": [],
+    "discovery_sources": [
+      "reddit",
+      "youtube"
+    ],
+    "evidence_sources": [
+      "arxiv"
+    ]
+  },
+  "informed_flow": {
+    "coverage_gaps": [
+      "No point-in-time participant identity/flow dataset"
+    ],
+    "discovery_sources": [
+      "reddit",
+      "youtube"
+    ],
+    "evidence_sources": [
+      "arxiv",
+      "cftc"
+    ]
+  },
+  "microstructure": {
+    "coverage_gaps": [
+      "No live orderbook snapshot source in hourly registry"
+    ],
+    "evidence_sources": [
+      "kalshi_docs",
+      "polymarket_docs",
+      "cftc"
+    ]
+  },
+  "scout": {
+    "coverage_gaps": [],
+    "discovery_sources": [
+      "github",
+      "reddit",
+      "youtube"
+    ],
+    "evidence_sources": [
+      "kalshi_docs",
+      "polymarket_docs",
+      "cftc",
+      "aviationweather",
+      "nws",
+      "ecmwf_open",
+      "nomads",
+      "arxiv"
+    ]
+  },
+  "settlement": {
+    "coverage_gaps": [
+      "Venue-specific contract-rule pages may need deeper retrieval than docs landing pages"
+    ],
+    "evidence_sources": [
+      "kalshi_docs",
+      "polymarket_docs"
+    ]
+  },
+  "weather_twc": {
+    "coverage_gaps": [
+      "No TWC-specific primary source in registry"
+    ],
+    "evidence_sources": [
+      "aviationweather",
+      "nws",
+      "ecmwf_open",
+      "nomads"
+    ]
+  }
+}
