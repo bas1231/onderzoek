@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "experiments/health_check.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-19T18:54:16.441229+00:00",
+  "hypothesis_id": "CONTROL-PAUSE-GATE",
+  "source_commit": "677e4d8735d2328fcccdffd818ec7e1b4ebc542f",
+  "started_at": "2026-09-19T18:54:16.408472+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "2c4cf588f9a9cbcf45f7f29228adef82ab07874469a121e4c36228cabd516cc3",
+  "task_class": "research",
+  "task_id": "CONTROL-RESEARCH-PAUSE-E004"
+}
