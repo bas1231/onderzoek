@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "experiments/bridge/e039.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-19T19:42:20.241563+00:00",
+  "hypothesis_id": "CONTROL-NO-SILENT-WAITING",
+  "source_commit": "5291a54415c11193ff4405863707290c1f1e4b43",
+  "started_at": "2026-09-19T19:42:20.188967+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "4784e6193f2aef385393a9ace754623aa68ed849d84f0d0c35d62c4a80e10bd9",
+  "task_class": "infrastructure",
+  "task_id": "SUPERVISOR-STALL-E039"
+}
