@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "experiments/bridge/e137.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-19T21:55:01.452165+00:00",
+  "hypothesis_id": "CONTROL-NO-SILENT-WAITING",
+  "source_commit": "f9470eef2aa7ce74ca45f7d18e6cf9ba062a0219",
+  "started_at": "2026-09-19T21:55:01.435074+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "3933463c29896c081b56fefc39a9cfc81a55a4b2b5ff7d081c7dac8fb6cfdd1e",
+  "task_class": "infrastructure",
+  "task_id": "ACK-CODE-SAFE-E137"
+}
