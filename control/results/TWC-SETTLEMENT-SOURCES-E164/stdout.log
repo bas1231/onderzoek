@@ -1,0 +1,24 @@
+{
+  "ok": true,
+  "source_count": 13,
+  "checks": [
+    {
+      "source_id": "kalshi_weather_rules",
+      "http_status": 200,
+      "bytes": 82130,
+      "sha256": "ed25de24cd741654b83c4a4e3998402b4528b3bfb304697874a41cabacabd614",
+      "chars": 4859,
+      "usable": true
+    },
+    {
+      "source_id": "twc_kalshi",
+      "http_status": 200,
+      "bytes": 25156,
+      "sha256": "4778025a622cc00d648ad1ebfac78e365ff990992bf072d18daa05d90a3fb489",
+      "chars": 238,
+      "usable": false
+    }
+  ],
+  "commit_rc": 0,
+  "push_rc": 0
+}

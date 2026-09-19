@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "experiments/bridge/e164.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-19T22:17:32.372129+00:00",
+  "hypothesis_id": "H7-SETTLEMENT-BOUNDARY",
+  "source_commit": "be7073c47013124c77a872d7c717ac220ccf6804",
+  "started_at": "2026-09-19T22:17:29.085681+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "9bde60cfc7b1d2847cf9cf11e598886fedb01337e91bfe77b4010f4c206aab50",
+  "task_class": "research",
+  "task_id": "TWC-SETTLEMENT-SOURCES-E164"
+}
