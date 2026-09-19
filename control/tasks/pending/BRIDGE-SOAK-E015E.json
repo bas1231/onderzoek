@@ -1,0 +1,13 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "experiments/health_check.py"
+  ],
+  "hypothesis_id": "CONTROL-BROWSER-BRIDGE-RELIABILITY",
+  "live_trading": false,
+  "operation": "health_check",
+  "task_class": "infrastructure",
+  "task_id": "BRIDGE-SOAK-E015E",
+  "timeout_seconds": 60,
+  "working_directory": "."
+}
