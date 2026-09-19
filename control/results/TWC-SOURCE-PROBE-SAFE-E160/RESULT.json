@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "experiments/bridge/e160.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-19T22:14:36.842920+00:00",
+  "hypothesis_id": "H7-SETTLEMENT-BOUNDARY",
+  "source_commit": "12fed83feeb11e755c1006d4bb725a7bf341c9cd",
+  "started_at": "2026-09-19T22:14:34.275886+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "99e4409a96df745be6f3b122f954c7e149925e50b4511f57c24321afaa47118d",
+  "task_class": "research",
+  "task_id": "TWC-SOURCE-PROBE-SAFE-E160"
+}
