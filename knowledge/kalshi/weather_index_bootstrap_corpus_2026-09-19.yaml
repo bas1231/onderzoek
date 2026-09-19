@@ -1,0 +1,41 @@
+schema_version: 1
+as_of: 2026-09-19
+economic_status: NO_PROVEN_EDGE
+records:
+  - id: KAL-WX-DATA-001
+    kind: observation
+    status: RESEARCH_POSITIVE
+    claim: "Er bestaat een publiek bootstrap-corpus waarmee KAL-WX-E001 development-only kan starten zonder te wachten op een volledig nieuw prospectief archief."
+    evidence:
+      - "Een publieke Apify archive beschrijft complete city-hour Weather Index records vanaf 2026-09-03, met minute values/status/contributors/configVersion en een CC BY 4.0 archive."
+      - "De upstream Kalshi index zelf heeft volgens de bron slechts circa 7-10 dagen retentie, dus eigen immutable recording blijft noodzakelijk."
+      - "Mostly Right publiceert recorded KXTEMP order books voor Miami, NYC, LA en Chicago; de zichtbare hourly tables bevatten tienduizenden tot >100k rows en timestamps/orderbook depth fields."
+      - "De orderbook dataset is bruikbaar voor development/reconstruction maar kan gaps bevatten en is geen bewijs van executed fills."
+    bootstrap_scope:
+      index_archive_start: "2026-09-03"
+      orderbook_start_approx: "2026-09-10"
+      hourly_orderbook_cities:
+        - miami
+        - new_york_city
+        - los_angeles
+        - chicago
+    allowed_use:
+      - "schema validation"
+      - "timestamp alignment tests"
+      - "feature engineering development"
+      - "baseline sanity replay"
+      - "discovery of data-quality failure modes"
+    prohibited_use:
+      - "claim PROVEN_EDGE"
+      - "treat as untouched holdout after inspecting"
+      - "infer fills from resting book alone"
+      - "backfill contemporaneous rule/source state from later docs"
+    next_action: "Ingest as DEVELOPMENT corpus, while starting first-party immutable recorder for all future validation/holdout/shadow evidence."
+    provenance:
+      - url: "https://apify.com/gratified_ashram/kalshi-weather-index"
+        type: public_dataset_documentation
+      - url: "https://mostlyright.md/datasets/kalshi-us-city-temperature-order-books-live"
+        type: public_dataset_documentation
+    related:
+      - KAL-WX-INDEX-001
+      - KAL-WX-SRC-001
