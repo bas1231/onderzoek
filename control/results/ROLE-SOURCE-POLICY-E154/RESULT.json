@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "experiments/bridge/e154.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-19T22:08:45.410571+00:00",
+  "hypothesis_id": "AUTONOMOUS-HOURLY-RESEARCH",
+  "source_commit": "d89681ed38ba8f53e191995addc537471ad6bc4e",
+  "started_at": "2026-09-19T22:08:42.987018+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "0f7f97427b024ea70340dc355073f959def8be5ca469617ab9d2e79c56ce0ac7",
+  "task_class": "research",
+  "task_id": "ROLE-SOURCE-POLICY-E154"
+}
