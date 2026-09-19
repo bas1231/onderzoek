@@ -1,0 +1,13 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "experiments/bridge/e144.py"
+  ],
+  "hypothesis_id": "AUTONOMOUS-HOURLY-RESEARCH",
+  "live_trading": false,
+  "operation": "python",
+  "task_class": "research",
+  "task_id": "MIDNIGHT-RUN-AUDIT-E144",
+  "timeout_seconds": 30,
+  "working_directory": "."
+}
