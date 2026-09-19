@@ -1,0 +1,122 @@
+{
+  "candidate_status": "UNPROVEN",
+  "chief_falsifier": {
+    "finding": "All apparent positives can currently be explained by source availability, documentation changes, or metadata updates rather than predictive or executable advantage.",
+    "status": "NO_SURVIVING_CANDIDATE"
+  },
+  "decision": "NO_PROVEN_EDGE",
+  "e202_followup": {
+    "artifact_ref": "knowledge/runs/kalshi-hourly-rules-live-e202.json",
+    "assessment": "The public Kalshi weather endpoint is a research lead only. E202 did not establish concrete hourly market rules or settlement equivalence.",
+    "candidate_count": 0,
+    "weather_index_public_probes": [
+      {
+        "city": "nyc",
+        "point_count": 0,
+        "sample": null,
+        "sha256": "9ec4f191acff8aa99fb579ae0240eb887ca8942fdce0c821616d65597de6efbe",
+        "status": 200,
+        "top_keys": [
+          "city",
+          "config_version",
+          "timeseries",
+          "units"
+        ]
+      },
+      {
+        "city": "miami",
+        "point_count": 0,
+        "sample": null,
+        "sha256": "606b59c44dd9c31c92d55aa61db90f7f83e1ccbb46c47b57857e4672bc364e1a",
+        "status": 200,
+        "top_keys": [
+          "city",
+          "config_version",
+          "timeseries",
+          "units"
+        ]
+      },
+      {
+        "city": "chicago",
+        "point_count": 0,
+        "sample": null,
+        "sha256": "3ef253fd8a4a64a508ad83024e7b4c61db90d4a8c3e09d74244859a2341a70a6",
+        "status": 200,
+        "top_keys": [
+          "city",
+          "config_version",
+          "timeseries",
+          "units"
+        ]
+      },
+      {
+        "city": "lax",
+        "error": "<HTTPError 400: 'Bad Request'>"
+      }
+    ]
+  },
+  "guards": [
+    "No live trading.",
+    "No paid actions.",
+    "No wallet actions.",
+    "No market edge inferred without point-in-time executable market data.",
+    "No TWC feed status assumed equivalent to Kalshi contract finality."
+  ],
+  "h7_revision_evidence": {
+    "assessment": "Prospective collection is operating, but the current sample is too small to establish or globally falsify H7. Metadata/payload changes are not treated as temperature revisions.",
+    "h7_state": "NO_TEMPERATURE_REVISION_OBSERVED",
+    "payload_change_intervals": 2,
+    "snapshot_count": 5,
+    "summary_ref": "knowledge/runs/twc-revision-summary-latest.json",
+    "total_pending_to_settled": 0,
+    "total_pending_to_settled_temperature_changes": 0,
+    "total_status_changes": 0,
+    "total_temperature_changes": 0
+  },
+  "independent_reproducer": {
+    "finding": "No candidate passed the pre-build and falsification gates, so independent reproduction is not applicable this hour.",
+    "status": "NO_CANDIDATE_TO_REPRODUCE"
+  },
+  "prebuild_killer": {
+    "reasons": [
+      "No demonstrated signal edge.",
+      "No demonstrated market edge.",
+      "No contemporaneous executable pricing evidence tied to the weather signal.",
+      "Weather-index availability and documentation changes are not an edge."
+    ],
+    "status": "COMPLETED",
+    "verdict": "KILL_FOR_NOW"
+  },
+  "reviewed_at": "2026-09-19T23:08:55.792516+00:00",
+  "run_id": "hourly-20260920T010000+0200",
+  "specialist_findings": {
+    "algebra": {
+      "finding": "The routed combo evidence only establishes product/documentation availability and does not prove any payout identity with positive executable edge.",
+      "status": "NO_EDGE_EVIDENCE"
+    },
+    "behavioral": {
+      "finding": "No hypothesis-specific behavioral evidence was routed.",
+      "status": "NO_EVIDENCE"
+    },
+    "informed_flow": {
+      "finding": "No point-in-time participant identity or flow dataset was available.",
+      "status": "NO_EVIDENCE"
+    },
+    "microstructure": {
+      "finding": "The routed evidence is generic Polymarket order-book documentation. No point-in-time executable orderbook snapshot or mispricing episode was supplied for this run.",
+      "status": "NO_EDGE_EVIDENCE"
+    },
+    "scout": {
+      "finding": "General venue/regulatory/documentation changes were found, but no new edge candidate survived semantic review.",
+      "status": "NO_EDGE_EVIDENCE"
+    },
+    "settlement": {
+      "finding": "Settlement-source documentation is relevant, but exact live market-rule metadata was not resolved by E202. The public Kalshi weather endpoint exists, yet its relation to contract settlement/finality is unproven.",
+      "status": "NO_EDGE_EVIDENCE"
+    },
+    "weather_twc": {
+      "finding": "Official Kalshi weather guidance again supports TWC as the settlement source for hourly temperature markets, but this run contains no out-of-sample evidence that a model predicts the final TWC value better than baselines.",
+      "status": "NO_EDGE_EVIDENCE"
+    }
+  }
+}
