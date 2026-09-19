@@ -1,0 +1,13 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "experiments/bridge/e109.py"
+  ],
+  "hypothesis_id": "CONTROL-AUTONOMOUS-RESEARCH",
+  "live_trading": false,
+  "operation": "python",
+  "task_class": "infrastructure",
+  "task_id": "FIRST-SOURCE-SWEEP-E109",
+  "timeout_seconds": 90,
+  "working_directory": "."
+}
