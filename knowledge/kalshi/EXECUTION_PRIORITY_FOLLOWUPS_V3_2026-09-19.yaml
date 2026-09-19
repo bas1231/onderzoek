@@ -1,0 +1,136 @@
+schema_version: 1
+as_of: 2026-09-19
+economic_status: NO_PROVEN_EDGE
+supersedes: knowledge/kalshi/EXECUTION_PRIORITY_FOLLOWUPS_V2_2026-09-19.yaml
+purpose: >-
+  Prioriteer deterministic/locked cashflows die realistisch uitvoerbaar kunnen zijn met een lokale
+  ROG Strix i9 + snelle Starlink, zonder colocatie. Deze rangorde is research-prioriteit en geen
+  claim van bewezen winstgevendheid.
+
+priorities:
+  - priority: 1
+    id: KAL-CRYPTO-ROBUST-FLOOR-001
+    lane: crypto_range_threshold_three_leg_robust_floor
+    status: STRUCTURAL_CANDIDATE
+    thesis: >-
+      Voor dezelfde crypto settlement key met lower threshold A, upper threshold H en tussenrange R,
+      waarbij H subset A, R subset A en H disjoint R, geldt onder standard binary settlement:
+      YES(A)+NO(H)+NO(R)>=2. Boundary-gaps breken de floor niet.
+    why_now:
+      - slechts drie legs
+      - standaard/no-data payofffloor formeel sterk
+      - actuele DOGE productfamilies tonen threshold+range overlap op hetzelfde settlementmoment
+      - discovery-display gap was groot genoeg om normale fee-orde mogelijk te overleven
+      - korte crypto expiries beperken capital lock
+      - historische full-L2 range data bestaat voor DOGE
+      - relation search is zeer goedkoop op lokale i9
+    three_angle_status:
+      semantics: PARTIAL_PASS_STANDARD_AND_NO_DATA
+      formal_counterexample: PASS_STANDARD_BINARY
+      execution: NOT_PROVEN_NO_SIMULTANEOUS_KALSHI_L2
+    blockers:
+      - contingency / Rule 6.3(c) unconditional lower bound not proven
+      - simultaneous sequence-valid Kalshi L2 for all three legs absent
+      - matching historical threshold tape not yet sourced
+      - cross-leg skew, slippage, partial fills and capacity
+    required_next_gate:
+      - capture same-timestamp Kalshi L2 for A,H,R
+      - bind current fee state and exact rounded fees
+      - measure positive-net opportunity lifetime at 100ms/250ms/500ms/1s/2s/5s
+      - prove or fail-close contingency branches
+      - source matching historical threshold L2 and replay against range L2
+      - compute material absolute locked dollars and capital-time return
+    kill_if:
+      - contingency can push payout below floor without a safe fail-closed classifier
+      - no fee-net positive states in sufficient prospective corpus
+      - states are systematically too short for conservative Starlink execution
+      - depth/materiality is insufficient
+    related_files:
+      - knowledge/kalshi/CRYPTO_RANGE_THRESHOLD_ROBUST_FLOOR_2026-09-19.md
+      - knowledge/kalshi/CRYPTO_CROSS_REPRESENTATION_UNIVERSE_2026-09-19.yaml
+      - knowledge/kalshi/FEE_ROUNDING_MINIMUM_VIABLE_EDGE_2026-09-19.md
+
+  - priority: 2
+    id: KAL-INDEX-DOM-001
+    lane: index_range_threshold_two_leg_dominance
+    status: STRUCTURAL_CANDIDATE
+    thesis: >-
+      Voor dezelfde S&P/Nasdaq settlement key kan range R subset zijn van lower-threshold A,
+      waardoor YES(A)+NO(R)>=1.
+    why_now:
+      - slechts twee legs
+      - korte daily/intraday capital lock
+      - gepubliceerd lager S&P/Nasdaq fee-regime
+      - boundary precision van exacte identity is niet nodig voor subsetrichting
+    required_next_gate:
+      - concrete same-key pair binding
+      - simultaneous L2 + size
+      - current fee provenance
+      - opportunity lifetime versus retail latency
+    related_files:
+      - knowledge/kalshi/INDEX_RANGE_THRESHOLD_DOMINANCE_2026-09-19.md
+      - knowledge/kalshi/SHORT_HORIZON_REDUCED_FEE_INDEX_ALGEBRA_2026-09-19.md
+
+  - priority: 3
+    id: KAL-FEE-WATCH-001
+    lane: dynamic_fee_regime_revaluation
+    status: STRUCTURAL_CANDIDATE
+    thesis: >-
+      Bestaande payout identities kunnen economisch van teken veranderen wanneer fee multiplier,
+      override of waiver wijzigt, zelfs zonder prijswijziging.
+    required_next_gate:
+      - ingest fee-change feeds
+      - bind fee state point-in-time
+      - prospectief revalue all structural candidates on fee changes
+    related_files:
+      - knowledge/kalshi/EXECUTION_FEE_REGIME_AND_MAKER_TRIGGER_2026-09-19.md
+
+  - priority: 4
+    id: KAL-MAKER-COMPLETE-001
+    lane: maker_trigger_bounded_completion
+    status: STRUCTURAL_CANDIDATE
+    thesis: >-
+      Een passieve fill op één leg kan fee/spread hurdle reduceren; resterende hedgelegs worden alleen
+      gecompleteerd als verse L2 binnen een harde cost ceiling nog een positieve payoutfloor geeft.
+    required_next_gate:
+      - shadow queue/fill recorder
+      - completion survivability windows
+      - adverse-selection markouts
+      - partial-fill exposure accounting
+    kill_if:
+      - completion vervalt vóór conservative Starlink latency
+      - adverse selection/legging loss exceeds maker benefit
+    related_files:
+      - knowledge/kalshi/EXECUTION_FEE_REGIME_AND_MAKER_TRIGGER_2026-09-19.md
+
+  - priority: 5
+    id: KAL-INDEX-XREP-001
+    lane: exact_index_threshold_range_cross_representation
+    status: STRUCTURAL_CANDIDATE
+    blocker: DOMAIN_UNPROVEN
+    thesis: >-
+      Exacte range=threshold-difference identity alleen activeren als settlement-domain en boundaries
+      formeel zonder gaps/overlaps zijn bewezen.
+    related_files:
+      - knowledge/kalshi/INDEX_THRESHOLD_RANGE_CROSS_REPRESENTATION_2026-09-19.md
+
+  - priority: 6
+    id: KAL-FEE-ROUND-001
+    lane: fee_rounding_viable_quantity_gate
+    status: RESEARCH_POSITIVE
+    thesis: >-
+      Exact fee rounding, quantity en fill fragmentation bepalen de minimum gross edge voordat een
+      candidate economisch levensvatbaar kan zijn.
+    related_files:
+      - knowledge/kalshi/FEE_ROUNDING_MINIMUM_VIABLE_EDGE_2026-09-19.md
+
+agent_rules:
+  - UI chance, midpoint, last trade and asynchronous mirrors are discovery only
+  - bind all relations to exact settlement key + rule version
+  - fail closed on contingency/finality ambiguity
+  - use simultaneous sequence-valid L2 for execution promotion
+  - model exact rounded fees per fill shard
+  - require material absolute locked dollars, capacity and capital-time return
+  - measure opportunity lifetime against retail/Starlink latency
+  - three-angle check before important conclusions
+  - overall status remains NO_PROVEN_EDGE until prospective execution gates pass
