@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "experiments/bridge/e073.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-19T20:22:16.620358+00:00",
+  "hypothesis_id": "CONTROL-NO-SILENT-WAITING",
+  "source_commit": "fb063bc82e290df050e3870added282492eaea8a",
+  "started_at": "2026-09-19T20:22:16.601171+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "7aba4a8d195a1898b5c370abface71c24507ebb3d6dc736ec8a103202871aa6d",
+  "task_class": "infrastructure",
+  "task_id": "E072-STATUS-E073"
+}
