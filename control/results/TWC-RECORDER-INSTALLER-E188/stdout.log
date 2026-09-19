@@ -1,0 +1,12 @@
+{
+  "target": "control/weather/twc_hourly_recorder.py",
+  "compile_rc": 0,
+  "probe_rc": 0,
+  "probe_stdout": "{\n  \"added_count\": null,\n  \"bytes\": 2174272,\n  \"changes_sample\": [],\n  \"common_count\": null,\n  \"content_type\": \"application/json\",\n  \"fetchedAt\": \"2026-09-19T22:47:32.659Z\",\n  \"http_status\": 200,\n  \"interpretation_guard\": \"TWC feed status is not assumed to equal Kalshi contract settlement finality.\",\n  \"live_trading\": false,\n  \"manifest_name\": \"twc-hourly-20260919T224908Z-1e3bfafc2390.json\",\n  \"observation_count\": 5156,\n  \"paid_actions\": false,\n  \"pending_to_settled_count\": null,\n  \"pending_to_settled_temperature_change_count\": null,\n  \"previous_manifest\": null,\n  \"removed_count\": null,\n  \"retrieved_at\": \"2026-09-19T22:49:08.113632+00:00\",\n  \"settled_to_settled_temperature_change_count\": null,\n  \"sha256\": \"1e3bfafc23908ca33a4ee83d330b3e35a84262b239fa43dabf474e1af66c86c7\",\n  \"station_count\": 38,\n  \"status_change_count\": null,\n  \"status_counts\": {\n    \"settled\": 5156\n  },\n  \"temperature_change_count\": null,\n  \"wallet_actions\": false,\n  \"weekStart\": \"2026-09-14\"\n}\n",
+  "commit_rc": 0,
+  "commit_stdout": "[main 5d8607f] build(weather): add TWC point-in-time recorder core\n 1 file changed, 147 insertions(+)\n create mode 100644 control/weather/twc_hourly_recorder.py\n",
+  "commit_stderr": "",
+  "push_rc": 0,
+  "push_stdout": "",
+  "push_stderr": "To github.com:bas1231/onderzoek.git\n   da66440..5d8607f  HEAD -> main\n"
+}
