@@ -1,0 +1,15 @@
+{
+  "checks": {
+    "bridge": true,
+    "executor": true,
+    "supervisor": true,
+    "background": true,
+    "content": true,
+    "diff": false,
+    "alarms": true,
+    "version": "0.5.1",
+    "incident_outbox": true,
+    "no_enqueue": true
+  },
+  "ok": false
+}
