@@ -168,3 +168,10 @@ De volgorde blijft:
 Een live trade of één winstgevende dag bewijst geen structurele edge. Promotie naar `PROVEN_EDGE` vereist herhaalbare netto winst na alle relevante kosten en risico's, zonder dat regels of criteria achteraf zijn aangepast.
 
 `NO_PROVEN_EDGE` blijft altijd een geldige en gewenste onderzoeksuitkomst.
+
+## Lokale autonome uitvoering
+
+Wanneer onderzoek via de lokale WSL control-plane wordt uitgevoerd,
+gelden aanvullend de regels in `control/LOCAL_EXECUTION_RULES.md`.
+
+De lokale executor is een research-worker en geen live-trading executor.
