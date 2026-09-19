@@ -1,0 +1,13 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "experiments/bridge/e191.py"
+  ],
+  "hypothesis_id": "H7-SETTLEMENT-BOUNDARY",
+  "live_trading": false,
+  "operation": "python",
+  "task_class": "research",
+  "task_id": "TWC-RECORDER-SECOND-SNAPSHOT-E191",
+  "timeout_seconds": 60,
+  "working_directory": "."
+}
