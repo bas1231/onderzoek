@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "experiments/bridge/e195.py"
+  ],
+  "exit_code": 1,
+  "finished_at": "2026-09-19T22:55:30.844555+00:00",
+  "hypothesis_id": "H7-SETTLEMENT-BOUNDARY",
+  "source_commit": "88c4e2cb0651ff2951214311fbadc3993233fc44",
+  "started_at": "2026-09-19T22:55:30.834694+00:00",
+  "status": "failed",
+  "stderr_sha256": "cfba22f1476aa333518726d95d35ebb965a703472615e1a0a9f8f30e2c93f176",
+  "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "task_class": "infrastructure",
+  "task_id": "TWC-RECORDER-AUTO-SUMMARY-E195"
+}
