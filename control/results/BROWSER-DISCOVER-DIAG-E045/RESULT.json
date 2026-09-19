@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "experiments/bridge/e045.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-19T19:46:21.048620+00:00",
+  "hypothesis_id": "CONTROL-NO-SILENT-WAITING",
+  "source_commit": "4d1ec4943b63ae180b5ed73cab3ce6f2f3577fb7",
+  "started_at": "2026-09-19T19:46:21.019473+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "1fb9e43729b79e5490fe5d2b88b3304b74d8d3a7c474b78bd6bc45ae25839baf",
+  "task_class": "infrastructure",
+  "task_id": "BROWSER-DISCOVER-DIAG-E045"
+}
