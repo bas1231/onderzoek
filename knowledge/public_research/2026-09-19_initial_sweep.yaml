@@ -1,0 +1,98 @@
+schema_version: 1
+sweep_date: 2026-09-19
+scope: "Public web, papers, GitHub/forum discovery; Kalshi-first. No direct darkweb/Tor access."
+economic_status: NO_PROVEN_EDGE
+records:
+  - id: PUB-XVENUE-001
+    kind: paper
+    status: RESEARCH_POSITIVE
+    title: "Mistiming is not Arbitrage: A Pre-registered Falsification of Cross-Platform Prediction-market Arbitrage..."
+    source_url: "https://doi.org/10.2139/ssrn.7175258"
+    source_date: 2026-08-05
+    source_type: "SSRN working paper"
+    claim_summary: "Op executable, true-time-aligned Kalshi/Polymarket data over 855 deterministisch gematchte MLB moneylines plus Fed strikes vond de auteur geen robuuste persistent cross-platform arb; verschoven timestamps vergrootten de schijnbare edge sterk."
+    reported_details:
+      aligned_fee_clearing_minutes: "7.03% of 20,915 aligned minutes"
+      median_aligned_mid_divergence: "0.60 cent"
+      comparison_fee_reference: "2.00 cent Kalshi fee in the paper's setup"
+      median_edge_life: "1 minute for fee-clearing aligned minutes"
+    implication: "Timestamp alignment / data staleness is een first-class falsification gate voor cross-venue research."
+    next_action: "Reproduceer op onze eigen contemporaneous L2; gebruik paper niet als universele no-arbitrage claim."
+
+  - id: PUB-XVENUE-002
+    kind: paper
+    status: CONTESTED
+    title: "From Forecasting Tool to Financial Asset: Evidence of Persistent Arbitrage in Prediction Markets"
+    source_url: "https://papers.ssrn.com/sol3/papers.cfm?abstract_id=6905683"
+    source_date: 2026-06-11
+    source_type: "SSRN working paper"
+    claim_summary: "Rapporteert persistent arbitrage tussen Kalshi en Polymarket in twee onderzochte eventtypes."
+    conflict_with:
+      - PUB-XVENUE-001
+    caveat: "De abstractclaim moet worden onderscheiden van execution-realistische contemporaneous L2; twee eventtypes zijn geen algemene venue-edge."
+    agent_rule: "Bewaar beide papers; laat agents het methodologische verschil analyseren in plaats van één conclusie te kiezen."
+
+  - id: PUB-POLY-001
+    kind: paper
+    status: RESEARCH_POSITIVE
+    title: "Arbitrage Analysis in Polymarket NBA Markets"
+    source_url: "https://arxiv.org/abs/2605.00864"
+    source_date: 2026-04-22
+    source_type: "arXiv paper"
+    dataset: ">75 million LOB snapshots across 173 NBA games"
+    reported_results:
+      single_market_executable_episodes: 7
+      single_market_median_duration_seconds: 3.6
+      combinatorial_active_episodes: 290
+      combinatorial_median_return_bps: 101
+      depth_constrained_fraction: "76.9%"
+      constrained_average_size_shares: 14.8
+    implication: "Combinatorial inefficiencies kunnen bestaan maar zijn vaak secondenkort en depth-limited; retail-scale edge is plausibeler dan schaalbare free money."
+    relation_to_project:
+      - "Market Algebra"
+      - "short-cycle combo identities"
+      - "latency/depth proof"
+
+  - id: PUB-KAL-MAKER-001
+    kind: paper
+    status: RESEARCH_POSITIVE
+    title: "Makers and Takers: The Economics of the Kalshi Prediction Market"
+    source_url: "https://doi.org/10.65864/s9kc4p0b7t"
+    source_date: 2026
+    source_type: "CESifo working paper"
+    dataset: ">300,000 contracts according to abstract"
+    claim_summary: "Documenteert favorite-longshot bias en verschillende maker/taker patronen; lage-prijscontracten presteren slechter en hoge-prijscontracten beter dan break-even-calibratie zou vereisen."
+    agent_rule: "Niet vertalen naar 'buy favorites' zonder executable entry, maker/taker side, fees, fills en adverse-selection test."
+    relation_to_project:
+      - "Surplus Maker"
+      - "flow-bias"
+      - "favorite-longshot negative/control research"
+
+  - id: PUB-KAL-REDDIT-001
+    kind: community_report
+    status: ANECDOTAL
+    source_url: "https://www.reddit.com/r/Kalshi/comments/1vobcrl/i_ran_about_40_automated_trading_experiments_on/"
+    source_date: 2026-08-14
+    claim_summary: "Poster beschrijft circa 40 botexperimenten en meldt dat longshot buying, ask-crossing favorites, whale-following en meerdere andere lanes faalden; een resting-maker-favorite lane zou in live fills zijn overgebleven."
+    useful_test_hypotheses:
+      - "maker spread capture versus post-fill adverse-selection markout"
+      - "favorite-longshot effect apart meten voor maker/taker"
+      - "queue position / fill selection"
+    evidence_warning: "Community/anekdote; claims niet als proof opslaan."
+
+  - id: PUB-SETTLE-001
+    kind: prior_art
+    status: FACT_VERIFIED
+    title: "When Certainty Is Not Worth It: Capital Lock-Up and Settlement Discounting in Prediction Markets"
+    source_url: "https://www.alphaxiv.org/abs/2605.31431"
+    source_date: 2026-05-29
+    claim_summary: "Onderzoekt maturity-dependent settlement discount/capital lock-up in near-certain prediction claims."
+    implication: "Settlement-timing discount is prior art en niet op zichzelf een nieuwe edge."
+
+  - id: PUB-KAL-COLLATERAL-001
+    kind: primary_docs
+    status: FACT_VERIFIED
+    source_url: "https://help.kalshi.com/en/articles/13823816-collateral-return"
+    source_date: 2026-05-17
+    claim_summary: "Kalshi documenteert dat event-level netting_enabled bij de eerste order in het event wordt vastgelegd, ook voor een ongevulde/geannuleerde order."
+    implication: "Account/event state is path-dependent en moet vóór een MECNET execution test point-in-time worden bewezen."
