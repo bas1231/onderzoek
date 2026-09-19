@@ -1,0 +1,8 @@
+[Unit]
+Description=Prediction Research TWC hourly point-in-time recorder
+After=network-online.target
+
+[Service]
+Type=oneshot
+WorkingDirectory=%h/prediction_research
+ExecStart=%h/prediction_research/.venv/bin/python %h/prediction_research/control/weather/twc_hourly_recorder.py
