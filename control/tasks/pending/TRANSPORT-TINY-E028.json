@@ -1,0 +1,13 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "experiments/bridge/e028.py"
+  ],
+  "hypothesis_id": "CONTROL-TRANSPORT-INTEGRITY",
+  "live_trading": false,
+  "operation": "python",
+  "task_class": "infrastructure",
+  "task_id": "TRANSPORT-TINY-E028",
+  "timeout_seconds": 30,
+  "working_directory": "."
+}
