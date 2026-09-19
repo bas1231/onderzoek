@@ -1,0 +1,201 @@
+{
+  "bundle_count": 10,
+  "success_count": 10,
+  "interesting_count": 4,
+  "interesting": [
+    {
+      "src": "/vc-ap-7f3f87/_next/static/chunks/0luv-3p3qd3lf.js?dpl=dpl_3ZDu7VohAbD8GgaR5gUzomSHAt1C",
+      "url": "https://weather.com/vc-ap-7f3f87/_next/static/chunks/0luv-3p3qd3lf.js?dpl=dpl_3ZDu7VohAbD8GgaR5gUzomSHAt1C",
+      "status": 200,
+      "content_type": "application/javascript; charset=utf-8",
+      "bytes": 52527,
+      "sha256": "ec5c04dc6baa1d28b4d64a3a50396b945725e5edfac50cb209050f703f00c95d",
+      "hits": [
+        {
+          "term": "fetch(",
+          "count": 2,
+          "snippet": "+)eo(e,n[t]);throw new l.StaticGenBailoutError}if(r.hasDynamicViewport)throw console.error(`Route \"${e.route}\" has a \\`generateViewport\\` that depends on Request data (\\`cookies()\\`, etc...) or uncached external data (\\`fetch(...)\\`, etc...) without explicitly allowing fully dynamic rendering. See more info here: https://nextjs.org/docs/messages/next-prerender-dynamic-viewport`),new l.StaticGenBailoutError;if(1===t)throw console.error(`Route \"${e.route}\" did not produce a static shell and Next.js was unable to determine a reason. This is a bug in Next.js.`),new l.StaticGenBailoutError}else if(!1===r.hasAllowedDynamic&&r.hasDynamicMetadata)throw console.error(`Route \"${e.route}\" has a \\`generateMetadata\\` that depends on Request data (\\`cookies()\\`, etc...) or uncached external data (\\`fetch(...)\\`, etc...) when the rest of the route does not. See more info here: https://nextjs.org/docs/messages/next-prerend"
+        }
+      ]
+    },
+    {
+      "src": "/vc-ap-7f3f87/_next/static/chunks/0w9b9-w21kbbm.js?dpl=dpl_3ZDu7VohAbD8GgaR5gUzomSHAt1C",
+      "url": "https://weather.com/vc-ap-7f3f87/_next/static/chunks/0w9b9-w21kbbm.js?dpl=dpl_3ZDu7VohAbD8GgaR5gUzomSHAt1C",
+      "status": 200,
+      "content_type": "application/javascript; charset=utf-8",
+      "bytes": 143762,
+      "sha256": "c46f672a09e7d08ad8a19e9de80f382a7cacff36650464d82223b20e6352a77d",
+      "hits": [
+        {
+          "term": "fetch(",
+          "count": 2,
+          "snippet": "ose())},cancel(){l.cancel()}})),r,{allowPartialStream:!0})}async function T(e,t,r,a,l){var u,c;let d=(0,h.getDeploymentId)();d&&(t[\"x-deployment-id\"]=d);let p=new URL(e);await (0,f.setCacheBustingSearchParam)(p,t);let y=fetch(p,{credentials:\"same-origin\",headers:t,priority:r||void 0,signal:l}).then(P),_=y.then(({response:e})=>e),g=a?(u=_,c=t,v(u,{callServer:o.callServer,findSourceMapURL:s.findSourceMapURL,debugChannel:n&&n(c)})):null,E=await _,R=E.redirected,m=new URL(E.url,p);return m.searchParams.delete(i.NEXT_RSC_UNION_QUERY),{url:m.href,redirected:R,ok:E.ok,headers:E.headers,body:E.body,status:E.status,flightResponsePromise:g,cacheData:y.then(({cacheData:e})=>e)}}function O(e,t,r){return g(e,{callServer:o.callServer,findSourceMapURL:s.findSourceMapURL,debugChannel:n&&n(t),unstable_allowPartialStream:r?.allowPartialStream})}\"u\">typeof window&&(window.addEventListener(\"pagehide\",()=>{R=!0}),window.addEven"
+        },
+        {
+          "term": "report",
+          "count": 4,
+          "snippet": "px\"}):null;function v(e,t){void 0!==y.get(e)&&P(e),y.set(e,t),null!==g&&g.observe(e)}function E(t){if(!(\"u\">typeof window))return null;{let{createPrefetchURL:r}=e.r(93871);try{return r(t)}catch{return(\"function\"==typeof reportError?reportError:console.error)(`Cannot prefetch '${t}' because it cannot be converted to a URL.`),null}}}function R(e,t,r,n,a,l){if(a){let a=E(t);if(null!==a){let t={router:r,fetchStrategy:n,isVisible:!1,prefetchTask:null,prefetchHref:a.href,setOptimisticLinkStatus:l};return v(e,t),t}}return{router:r,fetchStrategy:n,isVisible:!1,prefetchTask:null,prefetchHref:null,setOptimisticLinkStatus:l}}function m(e,t,r,n){let a=E(t);null===a||v(e,{router:r,fetchStrategy:n,isVisible:!1,prefetchTask:null,prefetchHref:a.href,setOptimisticLinkStatus:null})}function P(e){let t=y.get(e);if(void 0!==t){y.delete(e),_.delete(t);let r=t.prefetchTask;null!==r&&(0,i.cancelPrefetchTask)(r)}null!==g&&g.unobse"
+        },
+        {
+          "term": "location",
+          "count": 34,
+          "snippet": "{return i}};for(var a in n)Object.defineProperty(r,a,{enumerable:!0,get:n[a]});e.r(73447);let l=e.r(66290);function u(e){return!!(e&&\"u\">typeof window)&&!!window.next.__pendingUrl&&(0,l.createHrefFromUrl)(new URL(window.location.href))!==(0,l.createHrefFromUrl)(window.next.__pendingUrl)&&(console.error(\"Error occurred during navigation, falling back to hard navigation\",e),window.location.href=window.next.__pendingUrl.toString(),!0)}function i(){}(\"function\"==typeof r.default||\"object\"==typeof r.default&&null!==r.default)&&void 0===r.default.__esModule&&(Object.defineProperty(r.default,\"__esModule\",{value:!0}),Object.assign(r.default,r),t.exports=r.default)},51791,(e,t,r)=>{\"use strict\";Object.defineProperty(r,\"__esModule\",{value:!0}),Object.defineProperty(r,\"HTML_LIMITED_BOT_UA_RE\",{enumerable:!0,get:function(){return n}});let n=/[\\w-]+-Google|Google-[\\w-]+|Chrome-Lighthouse|Slurp|DuckDuckBot|baiduspider|ya"
+        }
+      ]
+    },
+    {
+      "src": "/vc-ap-7f3f87/_next/static/chunks/turbopack-0184rk1idtw0a.js?dpl=dpl_3ZDu7VohAbD8GgaR5gUzomSHAt1C",
+      "url": "https://weather.com/vc-ap-7f3f87/_next/static/chunks/turbopack-0184rk1idtw0a.js?dpl=dpl_3ZDu7VohAbD8GgaR5gUzomSHAt1C",
+      "status": 200,
+      "content_type": "application/javascript; charset=utf-8",
+      "bytes": 11032,
+      "sha256": "44e454a9cb0ea85dba4c054496be3b673d02a93d89d32732b1f4c8755315655a",
+      "hits": [
+        {
+          "term": "fetch(",
+          "count": 2,
+          "snippet": "t(\"script\");e.src=t,e.onerror=()=>{r.reject()},document.head.appendChild(e)}}else throw Error(`can't infer type of chunk from URL ${t}`)}return r.loadingStarted=!0,r.promise})(e,t),async loadWebAssembly(e,t,r,n,o){let l=fetch(N(r)),{instance:i}=await WebAssembly.instantiateStreaming(l,o);return i.exports},async loadWebAssemblyModule(e,t,r,n){let o=fetch(N(r));return await WebAssembly.compileStreaming(o)}};let H=globalThis.TURBOPACK;globalThis.TURBOPACK={push:F},H.forEach(F)})(); ;(function(){if(typeof document===\"undefined\"||!/(?:^|;\\s)__vercel_toolbar=1(?:;|$)/.test(document.cookie))return;var s=document.createElement('script');s.src='https://vercel.live/_next-live/feedback/feedback.js';s.setAttribute(\"data-explicit-opt-in\",\"true\");s.setAttribute(\"data-cookie-opt-in\",\"true\");s.setAttribute(\"data-deployment-id\",\"dpl_3ZDu7VohAbD8GgaR5gUzomSHAt1C\");((document.head||document.documentElement).appendChild(s))})("
+        },
+        {
+          "term": "location",
+          "count": 1,
+          "snippet": "function(e){return`/ROOT/${e??\"\"}`},S.q=function(e,t){m.call(this,`${e}${r}`,t)},S.b=function(e,t,o,l){let i=\"SharedWorker\"===e.name,s=[o.map(e=>N(e)).reverse(),r];for(let e of n)s.push(globalThis[e]);let u=new URL(N(t),location.origin),a=JSON.stringify(s);return i?u.searchParams.set(\"params\",a):u.hash=\"#params=\"+encodeURIComponent(a),new e(u,l?{...l,type:void 0}:void 0)};let q=/\\.js(?:\\?[^#]*)?(?:#.*)?$/,K=/\\.css(?:\\?[^#]*)?(?:#.*)?$/;function L(e){return K.test(e)}u.w=function(t,r,n){return e.loadWebAssembly(l.Parent,this.m.id,t,r,n)},u.u=function(t,r){return e.loadWebAssemblyModule(l.Parent,this.m.id,t,r)};let I={};u.c=I;let B=(e,t)=>{let r=I[e];if(r){if(r.error)throw r.error;return r}return W(e,l.Parent,t.id)};function W(e,t,r){let n=$.get(e);if(\"function\"!=typeof n)throw Error(function(e,t,r){let n;switch(t){case 0:n=`as a runtime entry of chunk ${r}`;break;case 1:n=`because it was required from module"
+        }
+      ]
+    },
+    {
+      "src": "/vc-ap-7f3f87/_next/static/chunks/0v_-6ufka9s-4.js?dpl=dpl_3ZDu7VohAbD8GgaR5gUzomSHAt1C",
+      "url": "https://weather.com/vc-ap-7f3f87/_next/static/chunks/0v_-6ufka9s-4.js?dpl=dpl_3ZDu7VohAbD8GgaR5gUzomSHAt1C",
+      "status": 200,
+      "content_type": "application/javascript; charset=utf-8",
+      "bytes": 726275,
+      "sha256": "1b8f633c09d3e3cff75fefc80a04a7cfafb5756ec6138ad0e6fd2f99d4bba756",
+      "hits": [
+        {
+          "term": "/api/",
+          "count": 9,
+          "snippet": "Change:t,icao:r,city:n,country:o,date:a}){let[i,l]=(0,ee.useState)(null),[s,u]=(0,ee.useState)(!1),[c,d]=(0,ee.useState)(null);return(0,ee.useEffect)(()=>{if(!e||!r)return;let t=!1;return u(!0),d(null),l(null),fetch(iJ(`/api/climate/international/observations?icao=${encodeURIComponent(r)}&date=${encodeURIComponent(a)}`)).then(async e=>{if(!e.ok){let t=await e.json().catch(()=>({}));throw Error(t?.error??`Request failed (${e.status})`)}return await e.json()}).then(e=>{t||l(e)}).catch(e=>{t||d(e.message)}).finally(()=>{t||u(!1)}),()=>{t=!0}},[e,r,a]),(0,ee.useMemo)(()=>i?`intl-obs_${i.icao}_${i.date}.csv`:\"observations.csv\",[i]),(0,J.jsx)(iY,{open:e,onOpenChange:t,children:(0,J.jsxs)(iG,{className:\"max-w-3xl max-h-[85vh] overflow-hidden flex flex-col p-0\",children:[(0,J.jsxs)(iX,{className:\"px-6 pt-6 pb-4 border-b border-border/50\",children:[(0,J.jsx)(\"div\",{className:\"flex items-start justify-between gap-4\","
+        },
+        {
+          "term": "fetch(",
+          "count": 5,
+          "snippet": "n:e,onOpenChange:t,icao:r,city:n,country:o,date:a}){let[i,l]=(0,ee.useState)(null),[s,u]=(0,ee.useState)(!1),[c,d]=(0,ee.useState)(null);return(0,ee.useEffect)(()=>{if(!e||!r)return;let t=!1;return u(!0),d(null),l(null),fetch(iJ(`/api/climate/international/observations?icao=${encodeURIComponent(r)}&date=${encodeURIComponent(a)}`)).then(async e=>{if(!e.ok){let t=await e.json().catch(()=>({}));throw Error(t?.error??`Request failed (${e.status})`)}return await e.json()}).then(e=>{t||l(e)}).catch(e=>{t||d(e.message)}).finally(()=>{t||u(!1)}),()=>{t=!0}},[e,r,a]),(0,ee.useMemo)(()=>i?`intl-obs_${i.icao}_${i.date}.csv`:\"observations.csv\",[i]),(0,J.jsx)(iY,{open:e,onOpenChange:t,children:(0,J.jsxs)(iG,{className:\"max-w-3xl max-h-[85vh] overflow-hidden flex flex-col p-0\",children:[(0,J.jsxs)(iX,{className:\"px-6 pt-6 pb-4 border-b border-border/50\",children:[(0,J.jsx)(\"div\",{className:\"flex items-start justify-betwe"
+        },
+        {
+          "term": "climate",
+          "count": 27,
+          "snippet": "e:t,icao:r,city:n,country:o,date:a}){let[i,l]=(0,ee.useState)(null),[s,u]=(0,ee.useState)(!1),[c,d]=(0,ee.useState)(null);return(0,ee.useEffect)(()=>{if(!e||!r)return;let t=!1;return u(!0),d(null),l(null),fetch(iJ(`/api/climate/international/observations?icao=${encodeURIComponent(r)}&date=${encodeURIComponent(a)}`)).then(async e=>{if(!e.ok){let t=await e.json().catch(()=>({}));throw Error(t?.error??`Request failed (${e.status})`)}return await e.json()}).then(e=>{t||l(e)}).catch(e=>{t||d(e.message)}).finally(()=>{t||u(!1)}),()=>{t=!0}},[e,r,a]),(0,ee.useMemo)(()=>i?`intl-obs_${i.icao}_${i.date}.csv`:\"observations.csv\",[i]),(0,J.jsx)(iY,{open:e,onOpenChange:t,children:(0,J.jsxs)(iG,{className:\"max-w-3xl max-h-[85vh] overflow-hidden flex flex-col p-0\",children:[(0,J.jsxs)(iX,{className:\"px-6 pt-6 pb-4 border-b border-border/50\",children:[(0,J.jsx)(\"div\",{className:\"flex items-start justify-between gap-4\",child"
+        },
+        {
+          "term": "station",
+          "count": 43,
+          "snippet": "\"mt-1 text-xs\",children:[\"Local-day observations for\",\" \",(0,J.jsx)(\"span\",{className:\"font-mono text-foreground\",children:a}),\". Max/min are derived from all METAR and SPECI temperature observations received during the station's local calendar day (midnight to midnight local time).\"]})]})}),i&&(0,J.jsxs)(\"div\",{className:\"mt-3 flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-muted-foreground\",children:[(0,J.jsxs)(\"span\",{children:[(0,J.jsx)(\"span\",{className:\"text-muted-foreground/70\",children:\"Max:\"}),\" \",(0,J.jsx)(\"span\",{className:\"font-mono font-semibold text-rose-300\",children:null!==i.maxTemp?`${i.maxTemp}\\xb0C`:\"\u2014\"})]}),(0,J.jsxs)(\"span\",{children:[(0,J.jsx)(\"span\",{className:\"text-muted-foreground/70\",children:\"Min:\"}),\" \",(0,J.jsx)(\"span\",{className:\"font-mono font-semibold text-sky-300\",children:null!==i.minTemp?`${i.minTemp}\\xb0C`:\"\u2014\"})]}),(0,J.jsxs)(\"span\",{children:[(0,J.jsx)(\"span\",{c"
+        },
+        {
+          "term": "report",
+          "count": 53,
+          "snippet": "er/40 transition-colors ${u?\"bg-rose-500/10 hover:bg-rose-500/15\":c?\"bg-sky-500/10 hover:bg-sky-500/15\":\"hover:bg-muted/30\"}`,children:[(0,J.jsx)(\"td\",{className:\"px-3 py-1.5 whitespace-nowrap\",children:(n=(r=new Date(e.reportTime)).getUTCFullYear(),o=String(r.getUTCMonth()+1).padStart(2,\"0\"),a=String(r.getUTCDate()).padStart(2,\"0\"),l=String(r.getUTCHours()).padStart(2,\"0\"),s=String(r.getUTCMinutes()).padStart(2,\"0\"),`${n}-${o}-${a} ${l}:${s}Z`)}),(0,J.jsx)(\"td\",{className:\"px-3 py-1.5 whitespace-nowrap\",children:(0,J.jsx)(\"span\",{className:\"SPECI\"===e.metarType?\"text-amber-300\":\"text-foreground/90\",children:e.metarType})}),(0,J.jsx)(\"td\",{className:\"px-3 py-1.5 text-right tabular-nums whitespace-nowrap\",children:null!==e.tempC?(0,J.jsxs)(\"span\",{className:u?\"font-bold text-rose-300\":c?\"font-bold text-sky-300\":\"\",children:[e.tempC.toFixed(1),u?\" \u25b2\":c?\" \u25bc\":\"\"]}):(0,J.jsx)(\"span\",{className:\"text-muted-foregr"
+        },
+        {
+          "term": "observation",
+          "count": 26,
+          "snippet": "try:o,date:a}){let[i,l]=(0,ee.useState)(null),[s,u]=(0,ee.useState)(!1),[c,d]=(0,ee.useState)(null);return(0,ee.useEffect)(()=>{if(!e||!r)return;let t=!1;return u(!0),d(null),l(null),fetch(iJ(`/api/climate/international/observations?icao=${encodeURIComponent(r)}&date=${encodeURIComponent(a)}`)).then(async e=>{if(!e.ok){let t=await e.json().catch(()=>({}));throw Error(t?.error??`Request failed (${e.status})`)}return await e.json()}).then(e=>{t||l(e)}).catch(e=>{t||d(e.message)}).finally(()=>{t||u(!1)}),()=>{t=!0}},[e,r,a]),(0,ee.useMemo)(()=>i?`intl-obs_${i.icao}_${i.date}.csv`:\"observations.csv\",[i]),(0,J.jsx)(iY,{open:e,onOpenChange:t,children:(0,J.jsxs)(iG,{className:\"max-w-3xl max-h-[85vh] overflow-hidden flex flex-col p-0\",children:[(0,J.jsxs)(iX,{className:\"px-6 pt-6 pb-4 border-b border-border/50\",children:[(0,J.jsx)(\"div\",{className:\"flex items-start justify-between gap-4\",children:(0,J.jsxs)(\"div\",{"
+        },
+        {
+          "term": "temperature",
+          "count": 14,
+          "snippet": "er\",children:r})]}),(0,J.jsxs)(iZ,{className:\"mt-1 text-xs\",children:[\"Local-day observations for\",\" \",(0,J.jsx)(\"span\",{className:\"font-mono text-foreground\",children:a}),\". Max/min are derived from all METAR and SPECI temperature observations received during the station's local calendar day (midnight to midnight local time).\"]})]})}),i&&(0,J.jsxs)(\"div\",{className:\"mt-3 flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-muted-foreground\",children:[(0,J.jsxs)(\"span\",{children:[(0,J.jsx)(\"span\",{className:\"text-muted-foreground/70\",children:\"Max:\"}),\" \",(0,J.jsx)(\"span\",{className:\"font-mono font-semibold text-rose-300\",children:null!==i.maxTemp?`${i.maxTemp}\\xb0C`:\"\u2014\"})]}),(0,J.jsxs)(\"span\",{children:[(0,J.jsx)(\"span\",{className:\"text-muted-foreground/70\",children:\"Min:\"}),\" \",(0,J.jsx)(\"span\",{className:\"font-mono font-semibold text-sky-300\",children:null!==i.minTemp?`${i.minTemp}\\xb0C`:\"\u2014\"})]}),(0,"
+        }
+      ]
+    }
+  ],
+  "summary": [
+    {
+      "src": "/vc-ap-7f3f87/_next/static/chunks/0luv-3p3qd3lf.js?dpl=dpl_3ZDu7VohAbD8GgaR5gUzomSHAt1C",
+      "status": 200,
+      "bytes": 52527,
+      "hit_terms": [
+        "fetch("
+      ]
+    },
+    {
+      "src": "/vc-ap-7f3f87/_next/static/chunks/0w9b9-w21kbbm.js?dpl=dpl_3ZDu7VohAbD8GgaR5gUzomSHAt1C",
+      "status": 200,
+      "bytes": 143762,
+      "hit_terms": [
+        "fetch(",
+        "report",
+        "location"
+      ]
+    },
+    {
+      "src": "/vc-ap-7f3f87/_next/static/chunks/15nn0nepfh~5r.js?dpl=dpl_3ZDu7VohAbD8GgaR5gUzomSHAt1C",
+      "status": 200,
+      "bytes": 226357,
+      "hit_terms": [
+        "report",
+        "location"
+      ]
+    },
+    {
+      "src": "/vc-ap-7f3f87/_next/static/chunks/turbopack-0184rk1idtw0a.js?dpl=dpl_3ZDu7VohAbD8GgaR5gUzomSHAt1C",
+      "status": 200,
+      "bytes": 11032,
+      "hit_terms": [
+        "fetch(",
+        "location"
+      ]
+    },
+    {
+      "src": "/vc-ap-7f3f87/_next/static/chunks/0qhaic_gz-g7..js?dpl=dpl_3ZDu7VohAbD8GgaR5gUzomSHAt1C",
+      "status": 200,
+      "bytes": 11140,
+      "hit_terms": []
+    },
+    {
+      "src": "/vc-ap-7f3f87/_next/static/chunks/0o-0m-u_g1k0-.js?dpl=dpl_3ZDu7VohAbD8GgaR5gUzomSHAt1C",
+      "status": 200,
+      "bytes": 57746,
+      "hit_terms": [
+        "location"
+      ]
+    },
+    {
+      "src": "/vc-ap-7f3f87/_next/static/chunks/00iyto0y47051.js?dpl=dpl_3ZDu7VohAbD8GgaR5gUzomSHAt1C",
+      "status": 200,
+      "bytes": 272,
+      "hit_terms": []
+    },
+    {
+      "src": "/vc-ap-7f3f87/_next/static/chunks/0v_-6ufka9s-4.js?dpl=dpl_3ZDu7VohAbD8GgaR5gUzomSHAt1C",
+      "status": 200,
+      "bytes": 726275,
+      "hit_terms": [
+        "/api/",
+        "fetch(",
+        "climate",
+        "station",
+        "report",
+        "observation",
+        "temperature"
+      ]
+    },
+    {
+      "src": "/vc-ap-7f3f87/_next/static/chunks/03~yq9q893hmn.js?dpl=dpl_3ZDu7VohAbD8GgaR5gUzomSHAt1C",
+      "status": 200,
+      "bytes": 112594,
+      "hit_terms": [
+        "location"
+      ]
+    },
+    {
+      "src": "/vc-ap-7f3f87/_next/static/chunks/0oauj6f5rtwcv.js?dpl=dpl_3ZDu7VohAbD8GgaR5gUzomSHAt1C",
+      "status": 200,
+      "bytes": 23594,
+      "hit_terms": [
+        "report",
+        "location"
+      ]
+    }
+  ]
+}

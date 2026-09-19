@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "experiments/bridge/e168.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-19T22:20:39.603271+00:00",
+  "hypothesis_id": "H7-SETTLEMENT-BOUNDARY",
+  "source_commit": "de0b3f4143e54e4e45fff37680df47b55d081c3c",
+  "started_at": "2026-09-19T22:20:36.342482+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "1d73bcd1c060a34289868787ac64723946920ce08859e48b077412264abf2cad",
+  "task_class": "research",
+  "task_id": "TWC-BUNDLE-ENDPOINT-SCAN-E168"
+}
