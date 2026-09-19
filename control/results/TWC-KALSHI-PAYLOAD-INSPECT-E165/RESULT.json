@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "experiments/bridge/e165.py"
+  ],
+  "exit_code": 1,
+  "finished_at": "2026-09-19T22:18:14.642022+00:00",
+  "hypothesis_id": "H7-SETTLEMENT-BOUNDARY",
+  "source_commit": "6a238ef92a19145b5c09bcb4f2db901ee7760e1c",
+  "started_at": "2026-09-19T22:18:14.622188+00:00",
+  "status": "failed",
+  "stderr_sha256": "cf04e9f90268f84877a5cad76c0e5a51ba88de6192e71cd1165d89b64cf625c2",
+  "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "task_class": "research",
+  "task_id": "TWC-KALSHI-PAYLOAD-INSPECT-E165"
+}
