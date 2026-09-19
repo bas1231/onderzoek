@@ -1,0 +1,83 @@
+{
+  "artifact": "knowledge/runs/kalshi-weather-index-first-seen-e236.json",
+  "manifest_count": 32,
+  "cities": {
+    "chicago": {
+      "point_count": 27,
+      "lag_from_event_s": {
+        "count": 27,
+        "min": 319.07939599609375,
+        "median": 319.0845830078125,
+        "mean": 324.6282926884404,
+        "p90": 319.0977189941406,
+        "max": 379.0879289550781
+      },
+      "after_latest_station_receipt_s": {
+        "count": 27,
+        "min": 164.79489111328124,
+        "median": 178.456873046875,
+        "mean": 179.80677416992188,
+        "p90": 183.20778100585937,
+        "max": 217.93708520507812
+      },
+      "normal_count": 22,
+      "degraded_count": 5
+    },
+    "miami": {
+      "point_count": 28,
+      "lag_from_event_s": {
+        "count": 28,
+        "min": 319.07929296875,
+        "median": 319.08451904296874,
+        "mean": 322.2872569841657,
+        "p90": 319.0967810058594,
+        "max": 374.19108520507814
+      },
+      "after_latest_station_receipt_s": {
+        "count": 28,
+        "min": 164.79489111328124,
+        "median": 177.6172509765625,
+        "mean": 178.78472126988,
+        "p90": 183.20778100585937,
+        "max": 218.44208520507811
+      },
+      "normal_count": 28,
+      "degraded_count": 0
+    },
+    "nyc": {
+      "point_count": 31,
+      "lag_from_event_s": {
+        "count": 31,
+        "min": 353.6323991699219,
+        "median": 379.08427416992185,
+        "mean": 378.10678278572334,
+        "p90": 379.0923640136719,
+        "max": 379.0977189941406
+      },
+      "after_latest_station_receipt_s": {
+        "count": 31,
+        "min": 194.41792895507814,
+        "median": 235.99139599609376,
+        "mean": 233.40984730185232,
+        "p90": 241.78572900390625,
+        "max": 243.2073388671875
+      },
+      "normal_count": 31,
+      "degraded_count": 0
+    }
+  },
+  "revision_count": 0,
+  "commit": {
+    "rc": 0,
+    "stdout": "[main 642b93e] research(weather): measure Weather Index first-seen latency\n 1 file changed, 1034 insertions(+)\n create mode 100644 knowledge/runs/kalshi-weather-index-first-seen-e236.json",
+    "stderr": ""
+  },
+  "push": {
+    "rc": 0,
+    "stdout": "",
+    "stderr": "To github.com:bas1231/onderzoek.git\n   bd064a8..642b93e  HEAD -> main"
+  },
+  "live_trading": false,
+  "paid_actions": false,
+  "wallet_actions": false
+}
