@@ -1,0 +1,90 @@
+schema_version: 1
+as_of: 2026-09-19
+candidate: KAL-WX-INDEX-001
+experiment: KAL-WX-E001
+economic_status: NO_PROVEN_EDGE
+implementation_status: IMPLEMENTED_LIVE_CAPTURE_PENDING
+source_repo:
+  repo: bas1231/proof-hunter
+  branch: ai/weather-index-e001-recorder-v0
+  head: 39abe963631cd2b5caefba2f20f27efe98fc80d7
+  base_branch: ai/phase15-mecnet-discovery-watch-v0
+  base_sha: 9dc7dff86485f2764efbb3e4c294f7a7ba264819
+components:
+  - name: weather_index_adapter
+    path: proof_hunter/venues/kalshi_weather.py
+    role: "Read-only raw Weather Index and calibration endpoint capture."
+  - name: rules_capture
+    path: proof_hunter/source_lock/weather_rules_capture.py
+    role: "Raw-first KXTEMP series/event/market rules provenance."
+  - name: fee_provenance
+    paths:
+      - proof_hunter/venues/kalshi_fees.py
+      - proof_hunter/source_lock/weather_fee_capture.py
+    role: "Series fee history and event fee override history."
+  - name: l2_capture
+    path: proof_hunter/source_lock/weather_l2_capture.py
+    role: "Authenticated GET-only batched KXTEMP orderbooks after public market discovery."
+  - name: trade_tape
+    paths:
+      - proof_hunter/venues/kalshi_trades.py
+      - proof_hunter/source_lock/weather_trade_capture.py
+    role: "Overlapping public KXTEMP trade windows; downstream replay must deduplicate by venue trade ID."
+  - name: orchestrator
+    path: proof_hunter/source_lock/weather_index_watch.py
+    role: "Shared cycle_id across rules/fees/index/calibration/L2/trades; append-only raw evidence."
+  - name: cli
+    path: pyproject.toml
+    entrypoint: proof-hunter-weather-watch
+capture_policy:
+  default_poll_seconds: 60
+  weather_index_overlap_seconds: 900
+  trade_overlap_seconds: 900
+  rules_and_fees_every_polls: 15
+  calibrations_every_polls: 60
+  orderbooks: "every poll, authenticated batched read"
+  raw_storage: "append-only filesystem archive with exact response bytes, local retrieval timestamp and SHA-256"
+  event_log: "append-only JSONL with fsync and shared cycle_id"
+authentication:
+  orderbooks: REQUIRED
+  mode: GET_ONLY
+  environment_variables:
+    - KALSHI_API_KEY_ID
+    - KALSHI_PRIVATE_KEY_PATH
+  note: "No credentials are stored in this public/canonical knowledge record."
+three_angle_alignment:
+  angle_1_rules_semantics:
+    implementation: PRESENT
+    live_evidence: PENDING
+  angle_2_signal_edge:
+    implementation: NOT_STARTED
+    blocker: "Requires sufficient immutable point-in-time corpus and semantic gate."
+  angle_3_market_execution_edge:
+    evidence_capture_implementation: PRESENT
+    analysis: BLOCKED
+    blocker: "Requires signal gate plus live aligned L2/trades/fee corpus."
+  independent_red_team:
+    status: READY
+    task: TASK-WX-006
+verification:
+  github_actions:
+    status: UNAVAILABLE_AS_TEST_EVIDENCE
+    evidence: "Repository currently has zero successful Actions runs; jobs terminate with no executed steps. Base branch exhibits same behavior."
+    nonclaim: "Actions failure is not treated as a code-test failure or a pass."
+  local_pytest:
+    status: PENDING_STRIX_OR_KALI
+  live_read_only_smoke:
+    status: PENDING_STRIX_OR_KALI
+  live_raw_integrity_check:
+    status: PENDING
+important_corrections:
+  - "Current orderbook capture must use authenticated read access; older public-client orderbook assumption is not trusted."
+  - "Current KXTEMP settlement/source semantics remain event/rule-version gated; no global TWC or Synoptic assumption is promoted."
+  - "Calibration published_at/effective_at and Weather Index receipt_basis must remain point-in-time features, never backfilled into earlier decisions."
+next_gate:
+  - "Checkout branch on Strix/Kali."
+  - "Install project with dev+auth dependencies and run full pytest."
+  - "Run one read-only capture cycle for the four preregistered KXTEMP series."
+  - "Inspect direct series/event/market rules and classify current settlement source per event."
+  - "Verify HTTP status, timestamps, hashes, non-empty Weather Index, L2 and fee/trade evidence."
+  - "Only then start corpus collection and Angle 2 development replay."
