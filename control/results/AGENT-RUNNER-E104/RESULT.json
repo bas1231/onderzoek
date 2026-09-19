@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "experiments/bridge/e104.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-19T20:57:38.032787+00:00",
+  "hypothesis_id": "CONTROL-AUTONOMOUS-RESEARCH",
+  "source_commit": "c2fde83318ffb6594e0ad2f258db2f6248bf5cc1",
+  "started_at": "2026-09-19T20:57:35.704817+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "434d81f1b0dc34df3fda195f80ea073cd2af1026758ecfe838b243d7f551844f",
+  "task_class": "infrastructure",
+  "task_id": "AGENT-RUNNER-E104"
+}
