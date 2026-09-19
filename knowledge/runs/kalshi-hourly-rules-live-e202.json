@@ -1,0 +1,63 @@
+{
+  "auth_used": false,
+  "climate_series_count": 0,
+  "created_at": "2026-09-19T23:03:14.735231+00:00",
+  "guards": [
+    "Discovery by series metadata is not settlement proof.",
+    "Exact market rules override generic help/docs.",
+    "Weather-index availability does not btself prove it is the settlement source.",
+    "No market edge is inferred without point-in-time executable orderbook evidence."
+  ],
+  "hourly_temperature_candidate_count": 0,
+  "hourly_temperature_candidates": [],
+  "live_trading": false,
+  "paid_actions": false,
+  "series_pages": 1,
+  "source": "Kalshi public Trade API v2",
+  "wallet_actions": false,
+  "weather_index_public_probes": [
+    {
+      "city": "nyc",
+      "point_count": 0,
+      "sample": null,
+      "sha256": "9ec4f191acff8aa99fb579ae0240eb887ca8942fdce0c821616d65597de6efbe",
+      "status": 200,
+      "top_keys": [
+        "city",
+        "config_version",
+        "timeseries",
+        "units"
+      ]
+    },
+    {
+      "city": "miami",
+      "point_count": 0,
+      "sample": null,
+      "sha256": "606b59c44dd9c31c92d55aa61db90f7f83e1ccbb46c47b57857e4672bc364e1a",
+      "status": 200,
+      "top_keys": [
+        "city",
+        "config_version",
+        "timeseries",
+        "units"
+      ]
+    },
+    {
+      "city": "chicago",
+      "point_count": 0,
+      "sample": null,
+      "sha256": "3ef253fd8a4a64a508ad83024e7b4c61db90d4a8c3e09d74244859a2341a70a6",
+      "status": 200,
+      "top_keys": [
+        "city",
+        "config_version",
+        "timeseries",
+        "units"
+      ]
+    },
+    {
+      "city": "lax",
+      "error": "<HTTPError 400: 'Bad Request'>"
+    }
+  ]
+}
