@@ -1,0 +1,13 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "experiments/bridge/e090.py"
+  ],
+  "hypothesis_id": "CONTROL-AUTONOMOUS-RESEARCH",
+  "live_trading": false,
+  "operation": "python",
+  "task_class": "infrastructure",
+  "task_id": "HOURLY-DRYRUN-E090",
+  "timeout_seconds": 45,
+  "working_directory": "."
+}
