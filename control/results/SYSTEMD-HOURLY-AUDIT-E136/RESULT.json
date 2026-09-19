@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "experiments/bridge/e136.py"
+  ],
+  "exit_code": 1,
+  "finished_at": "2026-09-19T21:54:29.270727+00:00",
+  "hypothesis_id": "CONTROL-AUTONOMOUS-RESEARCH",
+  "source_commit": "f82c628493f4e0b965193beca3f7b4399428c04f",
+  "started_at": "2026-09-19T21:54:29.248300+00:00",
+  "status": "failed",
+  "stderr_sha256": "4837051d1fb9f37c2b788d10a04784c8de8858782b4b6123f01bcf3017323411",
+  "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "task_class": "infrastructure",
+  "task_id": "SYSTEMD-HOURLY-AUDIT-E136"
+}
