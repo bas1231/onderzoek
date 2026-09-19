@@ -2,25 +2,59 @@ schema_version: 1
 as_of: 2026-09-19
 queue_status: ACTIVE
 tasks:
+  - id: TASK-WX-000
+    candidate: KAL-WX-INDEX-001
+    assigned_role: BUILD_VALIDATION
+    priority: P0
+    status: READY
+    objective: "Validate the implemented KAL-WX-E001 recorder branch locally on Strix/Kali before any prospective corpus is treated as research evidence."
+    source:
+      repo: bas1231/proof-hunter
+      branch: ai/weather-index-e001-recorder-v0
+      head: 39abe963631cd2b5caefba2f20f27efe98fc80d7
+    acceptance:
+      - "Install dev+auth dependencies successfully."
+      - "Run full pytest without changing tests to obtain a pass."
+      - "Run one read-only four-city capture cycle."
+      - "Confirm raw archive files, metadata, SHA-256, HTTP status and append-only event log."
+      - "No write/trading endpoint invoked."
+    note: "GitHub Actions is not accepted as test evidence because this repository currently has zero successful Actions runs and jobs terminate before steps execute."
+
   - id: TASK-WX-001
     candidate: KAL-WX-INDEX-001
     assigned_role: RULES
     priority: P0
-    status: READY
+    status: IN_PROGRESS
     objective: "Capture direct Kalshi KXTEMP series/event/market metadata and exact rule/source text point-in-time for active cities."
+    implementation:
+      status: IMPLEMENTED_LIVE_CAPTURE_PENDING
+      repo: bas1231/proof-hunter
+      branch: ai/weather-index-e001-recorder-v0
+      paths:
+        - proof_hunter/source_lock/weather_rules_capture.py
+        - proof_hunter/source_lock/weather_index_watch.py
     acceptance:
       - "At least one active event per initial city captured from direct Kalshi API/source."
       - "Archive retrieval timestamp, close time, comparator/strike, source agency, rule text/version where exposed."
       - "No secondary mirror used as authority."
+      - "Classify source per contemporaneous event/rule version; do not assume global TWC or Synoptic semantics."
     output: "agents/rules/findings/"
 
   - id: TASK-WX-002
     candidate: KAL-WX-INDEX-001
     assigned_role: DATA
     priority: P0
-    status: READY
-    depends_on: [TASK-WX-001]
-    objective: "Build immutable Weather Index recorder using /live_data/weather/{city} and calibration endpoint."
+    status: IN_PROGRESS
+    depends_on: [TASK-WX-000, TASK-WX-001]
+    objective: "Build and prospectively run immutable Weather Index recorder using /live_data/weather/{city} and calibration endpoint."
+    implementation:
+      status: IMPLEMENTED_LIVE_CAPTURE_PENDING
+      repo: bas1231/proof-hunter
+      branch: ai/weather-index-e001-recorder-v0
+      paths:
+        - proof_hunter/venues/kalshi_weather.py
+        - proof_hunter/source_lock/weather_capture.py
+        - proof_hunter/source_lock/weather_index_watch.py
     capture:
       - "raw JSON body"
       - "retrieval timestamp"
@@ -30,22 +64,34 @@ tasks:
       - "detailed station readings"
       - "calibration timeline snapshots"
       - "content hash"
-    note: "Large raw data outside knowledge Git; Git stores manifests/hashes/schema only."
+    note: "Large raw data outside knowledge Git; Git stores manifests/hashes/schema only. Calibration published_at/effective_at and receipt_basis are point-in-time fields and must not be backfilled."
 
   - id: TASK-WX-003
     candidate: KAL-WX-INDEX-001
     assigned_role: MICROSTRUCTURE
     priority: P0
-    status: READY
-    depends_on: [TASK-WX-001]
-    objective: "Record contemporaneous KXTEMP L2 and lifecycle for the same events/timestamps as Weather Index observations."
+    status: IN_PROGRESS
+    depends_on: [TASK-WX-000, TASK-WX-001]
+    objective: "Record contemporaneous KXTEMP L2, trades, lifecycle and fee provenance for the same cycles as Weather Index observations."
+    implementation:
+      status: IMPLEMENTED_LIVE_CAPTURE_PENDING
+      repo: bas1231/proof-hunter
+      branch: ai/weather-index-e001-recorder-v0
+      paths:
+        - proof_hunter/source_lock/weather_l2_capture.py
+        - proof_hunter/source_lock/weather_trade_capture.py
+        - proof_hunter/source_lock/weather_fee_capture.py
+        - proof_hunter/venues/kalshi_fees.py
+        - proof_hunter/venues/kalshi_trades.py
+        - proof_hunter/source_lock/weather_index_watch.py
     capture:
-      - "full relevant L2"
-      - "orderbook timestamp and local receive timestamp"
-      - "trades"
-      - "market lifecycle"
-      - "fee schedule/overrides"
+      - "authenticated batched full relevant L2"
+      - "orderbook/local receive timestamps"
+      - "overlapping public trade tape with downstream trade-id deduplication"
+      - "market lifecycle/rules snapshots"
+      - "series fee history and event fee overrides"
       - "close timestamp"
+    correction: "Current orderbook reads are treated as authenticated; the older public-orderbook assumption is not trusted."
 
   - id: TASK-WX-004
     candidate: KAL-WX-INDEX-001
@@ -54,7 +100,7 @@ tasks:
     status: BLOCKED
     depends_on: [TASK-WX-001, TASK-WX-002]
     objective: "Run KAL-WX-E001 Angle 2 exactly as preregistered."
-    blocker: "Requires sufficient immutable point-in-time corpus."
+    blocker: "Requires sufficient immutable point-in-time corpus after local/live recorder validation and semantic gate."
 
   - id: TASK-WX-005
     candidate: KAL-WX-INDEX-001
@@ -63,14 +109,14 @@ tasks:
     status: BLOCKED
     depends_on: [TASK-WX-003, TASK-WX-004]
     objective: "Run KAL-WX-E001 Angle 3 market/execution test only after signal gate."
-    blocker: "No market-edge test before signal evidence and aligned L2 corpus exist."
+    blocker: "No market-edge test before signal evidence and aligned L2/trade/fee corpus exist."
 
   - id: TASK-WX-006
     candidate: KAL-WX-INDEX-001
     assigned_role: RED_TEAM
     priority: P1
     status: READY
-    objective: "Attack experiment for leakage, source-regime drift, receipt_basis/backfill leakage, timestamp mismatch, > versus >= errors, calibration effective/published-time leakage, correlated threshold double-counting and stale-book assumptions."
+    objective: "Attack experiment for leakage, source-regime drift, receipt_basis/backfill leakage, timestamp mismatch, > versus >= errors, calibration effective/published-time leakage, correlated threshold double-counting, stale-book assumptions, authentication gaps and trade-window deduplication errors."
     acceptance:
       - "At least three independent failure modes checked."
       - "Counterexamples preserved even if candidate survives."
