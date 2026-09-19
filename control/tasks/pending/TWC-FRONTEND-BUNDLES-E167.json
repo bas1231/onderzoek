@@ -1,0 +1,13 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "experiments/bridge/e167.py"
+  ],
+  "hypothesis_id": "H7-SETTLEMENT-BOUNDARY",
+  "live_trading": false,
+  "operation": "python",
+  "task_class": "research",
+  "task_id": "TWC-FRONTEND-BUNDLES-E167",
+  "timeout_seconds": 30,
+  "working_directory": "."
+}
