@@ -1,0 +1,18 @@
+{
+  "rc": 0,
+  "stdout": "{\"ok\": true, \"path\": \"knowledge/runs/hourly-20260919T220000+0200.json\", \"run_id\": \"hourly-20260919T220000+0200\"}",
+  "stderr": "",
+  "checks": {
+    "agents": true,
+    "sources": true,
+    "all_agents_pending": true,
+    "all_sources_pending": true,
+    "decision": true,
+    "live_off": true,
+    "paid_off": true,
+    "wallet_off": true
+  },
+  "ok": true,
+  "commit_rc": 0,
+  "push_rc": 0
+}
