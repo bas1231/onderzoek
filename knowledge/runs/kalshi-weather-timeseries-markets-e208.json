@@ -1,0 +1,352 @@
+{
+  "auth_used": false,
+  "created_at": "2026-09-19T23:11:33.795111+00:00",
+  "guards": [
+    "Keyword discovery is not settlement proof.",
+    "Public weather timeseries availability does not prove it is the settlement source.",
+    "Market rules override generic documentation.",
+    "No market edge is inferred without point-in-time executable orderbook evidence."
+  ],
+  "live_trading": false,
+  "open_market_count": 12000,
+  "open_market_pages": 12,
+  "paid_actions": false,
+  "source": "Kalshi public Trade API v2",
+  "wallet_actions": false,
+  "weather_temperature_candidate_count": 0,
+  "weather_temperature_candidates": [],
+  "weather_timeseries": [
+    {
+      "city": "nyc",
+      "city_field": "nyc",
+      "config_version": "nyc-temperature-v1.0-cal-20260914",
+      "first_point": {
+        "contributors": 8,
+        "stations": [
+          {
+            "code": "ok",
+            "received_at_ms": 1789852462486,
+            "source": "hf_asos",
+            "station_id": "KCDW1M",
+            "temp_f": 69.8
+          },
+          {
+            "code": "ok",
+            "received_at_ms": 1789852462486,
+            "source": "hf_asos",
+            "station_id": "KEWR1M",
+            "temp_f": 68
+          },
+          {
+            "code": "ok",
+            "received_at_ms": 1789852461981,
+            "source": "hf_asos",
+            "station_id": "KFRG1M",
+            "temp_f": 66.2
+          },
+          {
+            "code": "ok",
+            "received_at_ms": 1789852461981,
+            "source": "hf_asos",
+            "station_id": "KHPN1M",
+            "temp_f": 66.2
+          },
+          {
+            "code": "ok",
+            "received_at_ms": 1789852461476,
+            "source": "hf_asos",
+            "station_id": "KISP1M",
+            "temp_f": 66.2
+          },
+          {
+            "code": "ok",
+            "received_at_ms": 1789852461476,
+            "source": "hf_asos",
+            "station_id": "KLGA1M",
+            "temp_f": 69.8
+          },
+          {
+            "code": "ok",
+            "received_at_ms": 1789852469554,
+            "source": "hf_asos",
+            "station_id": "KSMQ1M",
+            "temp_f": 68
+          },
+          {
+            "code": "ok",
+            "received_at_ms": 1789852462990,
+            "source": "hf_asos",
+            "station_id": "KTEB1M",
+            "temp_f": 69.8
+          }
+        ],
+        "status": "normal",
+        "t": 1789852320000,
+        "v": 68
+      },
+      "last_point": {
+        "stations": [
+          {
+            "code": "pending",
+            "received_at_ms": 1789859426363,
+            "source": "hf_asos",
+            "station_id": "KCDW1M",
+            "temp_f": 66.2
+          },
+          {
+            "code": "pending",
+            "received_at_ms": 1789859426867,
+            "source": "hf_asos",
+            "station_id": "KEWR1M",
+            "temp_f": 66.2
+          },
+          {
+            "code": "pending",
+            "received_at_ms": 1789859426867,
+            "source": "hf_asos",
+            "station_id": "KFRG1M",
+            "temp_f": 64.4
+          },
+          {
+            "code": "pending",
+            "received_at_ms": 1789859426867,
+            "source": "hf_asos",
+            "station_id": "KHPN1M",
+            "temp_f": 64.4
+          },
+          {
+            "code": "pending",
+            "received_at_ms": 1789859426867,
+            "source": "hf_asos",
+            "station_id": "KISP1M",
+            "temp_f": 62.6
+          },
+          {
+            "code": "pending",
+            "received_at_ms": 1789859426867,
+            "source": "hf_asos",
+            "station_id": "KLGA1M",
+            "temp_f": 66.2
+          },
+          {
+            "code": "pending",
+            "received_at_ms": 1789859428376,
+            "source": "hf_asos",
+            "station_id": "KSMQ1M",
+            "temp_f": 64.4
+          },
+          {
+            "code": "pending",
+            "received_at_ms": 1789859427873,
+            "source": "hf_asos",
+            "station_id": "KTEB1M",
+            "temp_f": 66.2
+          }
+        ],
+        "status": "incomplete",
+        "t": 1789859280000
+      },
+      "point_keys": [
+        "contributors",
+        "stations",
+        "status",
+        "t",
+        "v"
+      ],
+      "sha256": "5d78bd07c50c2d7869cf5fb0ca44bd2f4abe4b8310279f10bad61a67b0a12293",
+      "status": 200,
+      "timeseries_count": 115,
+      "top_keys": [
+        "city",
+        "config_version",
+        "timeseries",
+        "units"
+      ],
+      "units": "fahrenheit"
+    },
+    {
+      "city": "miami",
+      "city_field": "miami",
+      "config_version": "miami-temperature-v1.0-cal-20260914",
+      "first_point": {
+        "contributors": 5,
+        "stations": [
+          {
+            "code": "ok",
+            "received_at_ms": 1789852469050,
+            "source": "hf_asos",
+            "station_id": "KFLL1M",
+            "temp_f": 78.8
+          },
+          {
+            "code": "ok",
+            "received_at_ms": 1789852462486,
+            "source": "hf_asos",
+            "station_id": "KFXE1M",
+            "temp_f": 82.4
+          },
+          {
+            "code": "ok",
+            "received_at_ms": 1789852462990,
+            "source": "hf_asos",
+            "station_id": "KMIA1M",
+            "temp_f": 84.2
+          },
+          {
+            "code": "ok",
+            "received_at_ms": 1789852469050,
+            "source": "hf_asos",
+            "station_id": "KOPF1M",
+            "temp_f": 84.2
+          },
+          {
+            "code": "ok",
+            "received_at_ms": 1789852461981,
+            "source": "hf_asos",
+            "station_id": "KPMP1M",
+            "temp_f": 82.4
+          }
+        ],
+        "status": "normal",
+        "t": 1789852320000,
+        "v": 82.4
+      },
+      "last_point": {
+        "stations": [
+          {
+            "code": "pending",
+            "received_at_ms": 1789859426867,
+            "source": "hf_asos",
+            "station_id": "KFLL1M",
+            "temp_f": 78.8
+          },
+          {
+            "code": "pending",
+            "received_at_ms": 1789859426867,
+            "source": "hf_asos",
+            "station_id": "KFXE1M",
+            "temp_f": 78.8
+          },
+          {
+            "code": "pending",
+            "received_at_ms": 1789859426867,
+            "source": "hf_asos",
+            "station_id": "KMIA1M",
+            "temp_f": 77
+          },
+          {
+            "code": "pending",
+            "received_at_ms": 1789859427873,
+            "source": "hf_asos",
+            "station_id": "KOPF1M",
+            "temp_f": 73.4
+          },
+          {
+            "code": "pending",
+            "received_at_ms": 1789859427873,
+            "source": "hf_asos",
+            "station_id": "KPMP1M",
+            "temp_f": 80.6
+          }
+        ],
+        "status": "incomplete",
+        "t": 1789859280000
+      },
+      "point_keys": [
+        "contributors",
+        "stations",
+        "status",
+        "t",
+        "v"
+      ],
+      "sha256": "392ee94579c50b965a9e33826d6d163fe3900b8486d61bdbfd615f0c1975857e",
+      "status": 200,
+      "timeseries_count": 116,
+      "top_keys": [
+        "city",
+        "config_version",
+        "timeseries",
+        "units"
+      ],
+      "units": "fahrenheit"
+    },
+    {
+      "city": "chicago",
+      "city_field": "chicago",
+      "config_version": "chicago-temperature-v1.0-cal-20260914",
+      "first_point": {
+        "contributors": 5,
+        "stations": [
+          {
+            "code": "ok",
+            "received_at_ms": 1789852462486,
+            "source": "hf_asos",
+            "station_id": "KARR1M",
+            "temp_f": 68
+          },
+          {
+            "code": "ok",
+            "received_at_ms": 1789852404778,
+            "source": "hf_asos",
+            "station_id": "KDPA1M",
+            "temp_f": 69.8
+          },
+          {
+            "code": "ok",
+            "received_at_ms": 1789852469050,
+            "source": "hf_asos",
+            "station_id": "KMDW1M",
+            "temp_f": 71.6
+          },
+          {
+            "code": "ok",
+            "received_at_ms": 1789852462990,
+            "source": "hf_asos",
+            "station_id": "KORD1M",
+            "temp_f": 69.8
+          },
+          {
+            "code": "ok",
+            "received_at_ms": 1789852461981,
+            "source": "hf_asos",
+            "station_id": "KPWK1M",
+            "temp_f": 69.8
+          }
+        ],
+        "status": "normal",
+        "t": 1789852320000,
+        "v": 69.8
+      },
+      "last_point": {
+        "stations": [
+          {
+            "code": "pending",
+            "received_at_ms": 1789859426363,
+            "source": "hf_asos",
+            "station_id": "KDPA1M",
+            "temp_f": 69.8
+          }
+        ],
+        "status": "incomplete",
+        "t": 1789859340000
+      },
+      "point_keys": [
+        "contributors",
+        "stations",
+        "status",
+        "t",
+        "v"
+      ],
+      "sha256": "4abea168d246c259a084284c8042ecb3add01eba2b535273728be7459f3208ec",
+      "status": 200,
+      "timeseries_count": 117,
+      "top_keys": [
+        "city",
+        "config_version",
+        "timeseries",
+        "units"
+      ],
+      "units": "fahrenheit"
+    }
+  ]
+}
