@@ -1,0 +1,1 @@
+import subprocess,json;run=lambda a:subprocess.run(a,capture_output=True,text=True,check=False);print(json.dumps({'head':run(['git','log','-1','--oneline']).stdout.strip(),'status':run(['git','status','--short']).stdout.splitlines(),'e056_commits':run(['git','log','--all','--oneline','--grep=no-silent-waiting','-10']).stdout.splitlines()},indent=2))
