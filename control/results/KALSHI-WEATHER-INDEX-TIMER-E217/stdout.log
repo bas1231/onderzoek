@@ -1,0 +1,53 @@
+{
+  "service": "prediction-research-kalshi-weather-index-recorder.service",
+  "timer": "prediction-research-kalshi-weather-index-recorder.timer",
+  "cadence": "every minute at second 15",
+  "daemon_reload": {
+    "rc": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  "enable_now": {
+    "rc": 0,
+    "stdout": "",
+    "stderr": "Created symlink /home/leonh/.config/systemd/user/timers.target.wants/prediction-research-kalshi-weather-index-recorder.timer \u2192 /home/leonh/.config/systemd/user/prediction-research-kalshi-weather-index-recorder.timer."
+  },
+  "manual_probe_start": {
+    "rc": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  "timer_active": {
+    "rc": 0,
+    "stdout": "active",
+    "stderr": ""
+  },
+  "timer_enabled": {
+    "rc": 0,
+    "stdout": "enabled",
+    "stderr": ""
+  },
+  "service_state": {
+    "rc": 0,
+    "stdout": "Result=success\nExecMainStatus=0\nActiveState=activating\nSubState=start",
+    "stderr": ""
+  },
+  "timer_schedule": {
+    "rc": 0,
+    "stdout": "NEXT LEFT LAST                           PASSED UNIT                                                    ACTIVATES\n-       - Sun 2026-09-20 01:26:15 CEST 40ms ago prediction-research-kalshi-weather-index-recorder.timer prediction-research-kalshi-weather-index-recorder.service\n\n1 timers listed.\nPass --all to see loaded but inactive timers, too.",
+    "stderr": ""
+  },
+  "commit": {
+    "rc": 0,
+    "stdout": "[main e458c4a] build(weather): schedule Kalshi Weather Index recorder\n 2 files changed, 18 insertions(+)\n create mode 100644 control/weather/systemd/prediction-research-kalshi-weather-index-recorder.service\n create mode 100644 control/weather/systemd/prediction-research-kalshi-weather-index-recorder.timer",
+    "stderr": ""
+  },
+  "push": {
+    "rc": 0,
+    "stdout": "",
+    "stderr": "To github.com:bas1231/onderzoek.git\n   f45bdea..e458c4a  HEAD -> main"
+  },
+  "live_trading": false,
+  "paid_actions": false,
+  "wallet_actions": false
+}
