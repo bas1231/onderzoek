@@ -1,0 +1,529 @@
+{
+  "artifact": "knowledge/runs/kalshi-weather-index-schema-e231.json",
+  "latest_manifest": "/home/leonh/.local/state/prediction-research/kalshi_weather_index_manifests/kwi-20260919T234619.080011+0000-852847b46788.json",
+  "cities": [
+    {
+      "city": "nyc",
+      "config_version": "nyc-temperature-v1.0-cal-20260914",
+      "top_level_keys": [
+        "city",
+        "config_version",
+        "timeseries",
+        "units"
+      ],
+      "interesting_hit_count": 500,
+      "distinct_key_count": 14,
+      "sample_hits": [
+        {
+          "path": "$.config_version",
+          "key": "config_version",
+          "value_sample": "nyc-temperature-v1.0-cal-20260914",
+          "value_type": "str"
+        },
+        {
+          "path": "$.timeseries[].contributors",
+          "key": "contributors",
+          "value_sample": 8,
+          "value_type": "int"
+        },
+        {
+          "path": "$.timeseries[].stations",
+          "key": "stations",
+          "value_sample": {
+            "type": "list",
+            "size": 8
+          },
+          "value_type": "list"
+        },
+        {
+          "path": "$.timeseries[].stations[].source",
+          "key": "source",
+          "value_sample": "hf_asos",
+          "value_type": "str"
+        },
+        {
+          "path": "$.timeseries[].stations[].station_id",
+          "key": "station_id",
+          "value_sample": "KCDW1M",
+          "value_type": "str"
+        },
+        {
+          "path": "$.timeseries[].stations[].source",
+          "key": "source",
+          "value_sample": "hf_asos",
+          "value_type": "str"
+        },
+        {
+          "path": "$.timeseries[].stations[].station_id",
+          "key": "station_id",
+          "value_sample": "KEWR1M",
+          "value_type": "str"
+        },
+        {
+          "path": "$.timeseries[].stations[].source",
+          "key": "source",
+          "value_sample": "hf_asos",
+          "value_type": "str"
+        },
+        {
+          "path": "$.timeseries[].stations[].station_id",
+          "key": "station_id",
+          "value_sample": "KFRG1M",
+          "value_type": "str"
+        },
+        {
+          "path": "$.timeseries[].stations[].source",
+          "key": "source",
+          "value_sample": "hf_asos",
+          "value_type": "str"
+        },
+        {
+          "path": "$.timeseries[].stations[].station_id",
+          "key": "station_id",
+          "value_sample": "KHPN1M",
+          "value_type": "str"
+        },
+        {
+          "path": "$.timeseries[].stations[].source",
+          "key": "source",
+          "value_sample": "hf_asos",
+          "value_type": "str"
+        },
+        {
+          "path": "$.timeseries[].stations[].station_id",
+          "key": "station_id",
+          "value_sample": "KISP1M",
+          "value_type": "str"
+        },
+        {
+          "path": "$.timeseries[].stations[].source",
+          "key": "source",
+          "value_sample": "hf_asos",
+          "value_type": "str"
+        },
+        {
+          "path": "$.timeseries[].stations[].station_id",
+          "key": "station_id",
+          "value_sample": "KLGA1M",
+          "value_type": "str"
+        },
+        {
+          "path": "$.timeseries[].stations[].source",
+          "key": "source",
+          "value_sample": "hf_asos",
+          "value_type": "str"
+        },
+        {
+          "path": "$.timeseries[].stations[].station_id",
+          "key": "station_id",
+          "value_sample": "KSMQ1M",
+          "value_type": "str"
+        },
+        {
+          "path": "$.timeseries[].stations[].source",
+          "key": "source",
+          "value_sample": "hf_asos",
+          "value_type": "str"
+        },
+        {
+          "path": "$.timeseries[].stations[].station_id",
+          "key": "station_id",
+          "value_sample": "KTEB1M",
+          "value_type": "str"
+        },
+        {
+          "path": "$.timeseries[].status",
+          "key": "status",
+          "value_sample": "normal",
+          "value_type": "str"
+        },
+        {
+          "path": "$.timeseries[].contributors",
+          "key": "contributors",
+          "value_sample": 8,
+          "value_type": "int"
+        },
+        {
+          "path": "$.timeseries[].stations",
+          "key": "stations",
+          "value_sample": {
+            "type": "list",
+            "size": 8
+          },
+          "value_type": "list"
+        },
+        {
+          "path": "$.timeseries[].stations[].source",
+          "key": "source",
+          "value_sample": "hf_asos",
+          "value_type": "str"
+        },
+        {
+          "path": "$.timeseries[].stations[].station_id",
+          "key": "station_id",
+          "value_sample": "KCDW1M",
+          "value_type": "str"
+        },
+        {
+          "path": "$.timeseries[].stations[].source",
+          "key": "source",
+          "value_sample": "hf_asos",
+          "value_type": "str"
+        }
+      ]
+    },
+    {
+      "city": "miami",
+      "config_version": "miami-temperature-v1.0-cal-20260914",
+      "top_level_keys": [
+        "city",
+        "config_version",
+        "timeseries",
+        "units"
+      ],
+      "interesting_hit_count": 500,
+      "distinct_key_count": 14,
+      "sample_hits": [
+        {
+          "path": "$.config_version",
+          "key": "config_version",
+          "value_sample": "miami-temperature-v1.0-cal-20260914",
+          "value_type": "str"
+        },
+        {
+          "path": "$.timeseries[].contributors",
+          "key": "contributors",
+          "value_sample": 5,
+          "value_type": "int"
+        },
+        {
+          "path": "$.timeseries[].stations",
+          "key": "stations",
+          "value_sample": {
+            "type": "list",
+            "size": 5
+          },
+          "value_type": "list"
+        },
+        {
+          "path": "$.timeseries[].stations[].source",
+          "key": "source",
+          "value_sample": "hf_asos",
+          "value_type": "str"
+        },
+        {
+          "path": "$.timeseries[].stations[].station_id",
+          "key": "station_id",
+          "value_sample": "KFLL1M",
+          "value_type": "str"
+        },
+        {
+          "path": "$.timeseries[].stations[].source",
+          "key": "source",
+          "value_sample": "hf_asos",
+          "value_type": "str"
+        },
+        {
+          "path": "$.timeseries[].stations[].station_id",
+          "key": "station_id",
+          "value_sample": "KFXE1M",
+          "value_type": "str"
+        },
+        {
+          "path": "$.timeseries[].stations[].source",
+          "key": "source",
+          "value_sample": "hf_asos",
+          "value_type": "str"
+        },
+        {
+          "path": "$.timeseries[].stations[].station_id",
+          "key": "station_id",
+          "value_sample": "KMIA1M",
+          "value_type": "str"
+        },
+        {
+          "path": "$.timeseries[].stations[].source",
+          "key": "source",
+          "value_sample": "hf_asos",
+          "value_type": "str"
+        },
+        {
+          "path": "$.timeseries[].stations[].station_id",
+          "key": "station_id",
+          "value_sample": "KOPF1M",
+          "value_type": "str"
+        },
+        {
+          "path": "$.timeseries[].stations[].source",
+          "key": "source",
+          "value_sample": "hf_asos",
+          "value_type": "str"
+        },
+        {
+          "path": "$.timeseries[].stations[].station_id",
+          "key": "station_id",
+          "value_sample": "KPMP1M",
+          "value_type": "str"
+        },
+        {
+          "path": "$.timeseries[].status",
+          "key": "status",
+          "value_sample": "normal",
+          "value_type": "str"
+        },
+        {
+          "path": "$.timeseries[].contributors",
+          "key": "contributors",
+          "value_sample": 5,
+          "value_type": "int"
+        },
+        {
+          "path": "$.timeseries[].stations",
+          "key": "stations",
+          "value_sample": {
+            "type": "list",
+            "size": 5
+          },
+          "value_type": "list"
+        },
+        {
+          "path": "$.timeseries[].stations[].source",
+          "key": "source",
+          "value_sample": "hf_asos",
+          "value_type": "str"
+        },
+        {
+          "path": "$.timeseries[].stations[].station_id",
+          "key": "station_id",
+          "value_sample": "KFLL1M",
+          "value_type": "str"
+        },
+        {
+          "path": "$.timeseries[].stations[].source",
+          "key": "source",
+          "value_sample": "hf_asos",
+          "value_type": "str"
+        },
+        {
+          "path": "$.timeseries[].stations[].station_id",
+          "key": "station_id",
+          "value_sample": "KFXE1M",
+          "value_type": "str"
+        },
+        {
+          "path": "$.timeseries[].stations[].source",
+          "key": "source",
+          "value_sample": "hf_asos",
+          "value_type": "str"
+        },
+        {
+          "path": "$.timeseries[].stations[].station_id",
+          "key": "station_id",
+          "value_sample": "KMIA1M",
+          "value_type": "str"
+        },
+        {
+          "path": "$.timeseries[].stations[].source",
+          "key": "source",
+          "value_sample": "hf_asos",
+          "value_type": "str"
+        },
+        {
+          "path": "$.timeseries[].stations[].station_id",
+          "key": "station_id",
+          "value_sample": "KOPF1M",
+          "value_type": "str"
+        },
+        {
+          "path": "$.timeseries[].stations[].source",
+          "key": "source",
+          "value_sample": "hf_asos",
+          "value_type": "str"
+        }
+      ]
+    },
+    {
+      "city": "chicago",
+      "config_version": "chicago-temperature-v1.0-cal-20260914",
+      "top_level_keys": [
+        "city",
+        "config_version",
+        "timeseries",
+        "units"
+      ],
+      "interesting_hit_count": 500,
+      "distinct_key_count": 16,
+      "sample_hits": [
+        {
+          "path": "$.config_version",
+          "key": "config_version",
+          "value_sample": "chicago-temperature-v1.0-cal-20260914",
+          "value_type": "str"
+        },
+        {
+          "path": "$.timeseries[].contributors",
+          "key": "contributors",
+          "value_sample": 5,
+          "value_type": "int"
+        },
+        {
+          "path": "$.timeseries[].stations",
+          "key": "stations",
+          "value_sample": {
+            "type": "list",
+            "size": 5
+          },
+          "value_type": "list"
+        },
+        {
+          "path": "$.timeseries[].stations[].source",
+          "key": "source",
+          "value_sample": "hf_asos",
+          "value_type": "str"
+        },
+        {
+          "path": "$.timeseries[].stations[].station_id",
+          "key": "station_id",
+          "value_sample": "KARR1M",
+          "value_type": "str"
+        },
+        {
+          "path": "$.timeseries[].stations[].source",
+          "key": "source",
+          "value_sample": "hf_asos",
+          "value_type": "str"
+        },
+        {
+          "path": "$.timeseries[].stations[].station_id",
+          "key": "station_id",
+          "value_sample": "KDPA1M",
+          "value_type": "str"
+        },
+        {
+          "path": "$.timeseries[].stations[].source",
+          "key": "source",
+          "value_sample": "hf_asos",
+          "value_type": "str"
+        },
+        {
+          "path": "$.timeseries[].stations[].station_id",
+          "key": "station_id",
+          "value_sample": "KMDW1M",
+          "value_type": "str"
+        },
+        {
+          "path": "$.timeseries[].stations[].source",
+          "key": "source",
+          "value_sample": "hf_asos",
+          "value_type": "str"
+        },
+        {
+          "path": "$.timeseries[].stations[].station_id",
+          "key": "station_id",
+          "value_sample": "KORD1M",
+          "value_type": "str"
+        },
+        {
+          "path": "$.timeseries[].stations[].source",
+          "key": "source",
+          "value_sample": "hf_asos",
+          "value_type": "str"
+        },
+        {
+          "path": "$.timeseries[].stations[].station_id",
+          "key": "station_id",
+          "value_sample": "KPWK1M",
+          "value_type": "str"
+        },
+        {
+          "path": "$.timeseries[].status",
+          "key": "status",
+          "value_sample": "normal",
+          "value_type": "str"
+        },
+        {
+          "path": "$.timeseries[].contributors",
+          "key": "contributors",
+          "value_sample": 5,
+          "value_type": "int"
+        },
+        {
+          "path": "$.timeseries[].stations",
+          "key": "stations",
+          "value_sample": {
+            "type": "list",
+            "size": 5
+          },
+          "value_type": "list"
+        },
+        {
+          "path": "$.timeseries[].stations[].source",
+          "key": "source",
+          "value_sample": "hf_asos",
+          "value_type": "str"
+        },
+        {
+          "path": "$.timeseries[].stations[].station_id",
+          "key": "station_id",
+          "value_sample": "KARR1M",
+          "value_type": "str"
+        },
+        {
+          "path": "$.timeseries[].stations[].source",
+          "key": "source",
+          "value_sample": "metar",
+          "value_type": "str"
+        },
+        {
+          "path": "$.timeseries[].stations[].station_id",
+          "key": "station_id",
+          "value_sample": "KDPA1M",
+          "value_type": "str"
+        },
+        {
+          "path": "$.timeseries[].stations[].source",
+          "key": "source",
+          "value_sample": "hf_asos",
+          "value_type": "str"
+        },
+        {
+          "path": "$.timeseries[].stations[].station_id",
+          "key": "station_id",
+          "value_sample": "KMDW1M",
+          "value_type": "str"
+        },
+        {
+          "path": "$.timeseries[].stations[].source",
+          "key": "source",
+          "value_sample": "hf_asos",
+          "value_type": "str"
+        },
+        {
+          "path": "$.timeseries[].stations[].station_id",
+          "key": "station_id",
+          "value_sample": "KORD1M",
+          "value_type": "str"
+        },
+        {
+          "path": "$.timeseries[].stations[].source",
+          "key": "source",
+          "value_sample": "hf_asos",
+          "value_type": "str"
+        }
+      ]
+    }
+  ],
+  "commit": {
+    "rc": 0,
+    "stdout": "[main 0dc8cbd] research(weather): inspect Weather Index raw schema\n 1 file changed, 9561 insertions(+)\n create mode 100644 knowledge/runs/kalshi-weather-index-schema-e231.json",
+    "stderr": ""
+  },
+  "push": {
+    "rc": 0,
+    "stdout": "",
+    "stderr": "To github.com:bas1231/onderzoek.git\n   8d001fd..0dc8cbd  HEAD -> main"
+  },
+  "live_trading": false,
+  "paid_actions": false,
+  "wallet_actions": false
+}
