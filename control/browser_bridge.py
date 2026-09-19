@@ -444,6 +444,94 @@ def next_outbox_item() -> dict | None:
     bridge_tasks = state.get("bridge_tasks", [])
     acked = set(state.get("acked", []))
 
+    # RELIABILITY-E056: deliver local watchdog incidents
+    # through the already proven browser result outbox.
+    incident_dir = (
+        Path.home()
+        / ".local"
+        / "state"
+        / "prediction-research"
+        / "incidents"
+    )
+
+    if incident_dir.exists():
+        incident_paths = sorted(
+            incident_dir.glob("*.json"),
+            key=lambda path: path.stat().st_mtime,
+        )
+
+        for incident_path in incident_paths:
+            try:
+                incident = json.loads(
+                    incident_path.read_text(
+                        encoding="utf-8"
+                    )
+                )
+            except Exception:
+                continue
+
+            if not incident.get("deliver_to_chat"):
+                continue
+
+            raw_task_id = (
+                "INCIDENT-"
+                + incident_path.stem
+            )
+
+            task_id = "".join(
+                ch
+                if (
+                    ch.isalnum()
+                    or ch in "._:-"
+                )
+                else "_"
+                for ch in raw_task_id
+            )[:150]
+
+            if task_id in acked:
+                continue
+
+            bridge_tasks = state.setdefault(
+                "bridge_tasks",
+                [],
+            )
+
+            if task_id not in bridge_tasks:
+                bridge_tasks.append(task_id)
+                save_state(state)
+
+            head = git(
+                "rev-parse",
+                "--short",
+                "HEAD",
+            ).stdout.strip()
+
+            result = {
+                "task_id": task_id,
+                "hypothesis_id":
+                    "CONTROL-NO-SILENT-WAITING",
+                "task_class": "infrastructure",
+                "status": "incident",
+                "source_commit": head,
+                "started_at": None,
+                "finished_at": None,
+                "exit_code": None,
+                "command": [],
+                "incident": incident,
+            }
+
+            return {
+                "task_id": task_id,
+                "result": result,
+                "stdout": json.dumps(
+                    incident,
+                    indent=2,
+                    sort_keys=True,
+                ),
+                "stderr": "",
+                "git_head": head,
+            }
+
     for task_id in bridge_tasks:
         if task_id in acked:
             continue

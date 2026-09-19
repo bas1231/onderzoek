@@ -20,6 +20,7 @@ STATUS_FILE = STATE_ROOT / "supervisor_status.json"
 
 CHECK_INTERVAL = 15
 
+DISCOVERED_LIMIT = 90
 ACCEPTED_LIMIT = 90
 RESULT_DELIVERY_LIMIT = 90
 ACK_LIMIT = 90
@@ -147,6 +148,7 @@ def open_incident(
         ),
         "detail": detail,
         "status": "OPEN",
+        "deliver_to_chat": True,
         "automatic_action": "NONE",
         "running_task_killed": False,
         "paid_action": False,
@@ -196,6 +198,24 @@ def inspect_record(path):
     incidents = []
 
     if (
+        state == "DISCOVERED"
+        and age > DISCOVERED_LIMIT
+    ):
+        incidents.append(
+            open_incident(
+                task_id,
+                "NO_ENQUEUE_ACK",
+                state,
+                age,
+                (
+                    "Browser ontdekte de taak, maar "
+                    "binnen de deadline kwam geen "
+                    "duurzame ACCEPTED/enqueue-state."
+                ),
+            )
+        )
+
+    elif (
         state == "ACCEPTED"
         and age > ACCEPTED_LIMIT
     ):

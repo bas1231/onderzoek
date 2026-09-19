@@ -1,12 +1,13 @@
 {
   "manifest_version": 3,
   "name": "Prediction Research Bridge",
-  "version": "0.4.0",
+  "version": "0.5.1",
   "description": "Local no-API bridge between ChatGPT and Prediction Research WSL control plane.",
   "permissions": [
     "scripting",
     "storage",
-    "tabs"
+    "tabs",
+    "alarms"
   ],
   "host_permissions": [
     "http://127.0.0.1:8765/*",

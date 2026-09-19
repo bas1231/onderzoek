@@ -684,4 +684,42 @@
   console.log(
     "[Prediction Bridge] content script loaded"
   );
+
+
+    // RELIABILITY-E050
+    chrome.runtime.onMessage.addListener(
+      (message, sender, sendResponse) => {
+        if (
+          !message ||
+          message.type !== "predictionWatchdogTick"
+        ) {
+          return;
+        }
+
+        (async () => {
+          try {
+            await scanForTasks();
+            await flushDurableQueue();
+            await pollOutbox();
+
+            sendResponse({
+              ok: true
+            });
+          } catch (error) {
+            console.error(
+              "[Prediction Bridge] watchdog tick error:",
+              error
+            );
+
+            sendResponse({
+              ok: false,
+              error: String(error)
+            });
+          }
+        })();
+
+        return true;
+      }
+    );
+
 })();

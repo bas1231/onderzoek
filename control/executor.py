@@ -9,7 +9,10 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 from validator import Task
-from jobs.lifecycle_ledger import update as lifecycle_update
+from jobs.lifecycle_ledger import (
+    load_record as lifecycle_load,
+    update as lifecycle_update,
+)
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -120,6 +123,15 @@ def process_task(task_file: Path) -> str:
             "task left pending"
         )
         return "paused"
+
+    lifecycle = lifecycle_load(task.task_id)
+
+    if lifecycle.get("state") != "ACCEPTED":
+        print(
+            f"{task.task_id}: waiting for durable "
+            "bridge ACCEPTED state"
+        )
+        return "awaiting_accept"
 
     running_file = RUNNING / task_file.name
     shutil.move(task_file, running_file)

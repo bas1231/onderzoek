@@ -160,3 +160,82 @@ chrome.runtime.onMessage.addListener(
     return true;
   }
 );
+
+// RELIABILITY-E050
+const WATCHDOG_ALARM =
+  "prediction-research-watchdog-v1";
+
+async function ensureWatchdogAlarm() {
+  const existing =
+    await chrome.alarms.get(WATCHDOG_ALARM);
+
+  if (!existing) {
+    await chrome.alarms.create(
+      WATCHDOG_ALARM,
+      {
+        periodInMinutes: 0.5
+      }
+    );
+  }
+}
+
+async function watchdogTick() {
+  const tabs = await chrome.tabs.query({
+    url: [
+      "https://chatgpt.com/*",
+      "https://chat.openai.com/*"
+    ]
+  });
+
+  for (const tab of tabs) {
+    if (!tab.id) {
+      continue;
+    }
+
+    try {
+      await chrome.tabs.sendMessage(
+        tab.id,
+        {
+          type: "predictionWatchdogTick"
+        }
+      );
+    } catch {
+      await injectIntoTab(tab.id);
+
+      try {
+        await chrome.tabs.sendMessage(
+          tab.id,
+          {
+            type: "predictionWatchdogTick"
+          }
+        );
+      } catch (error) {
+        console.warn(
+          "[Prediction Bridge] alarm tick failed:",
+          error
+        );
+      }
+    }
+  }
+}
+
+chrome.alarms.onAlarm.addListener(
+  alarm => {
+    if (
+      alarm &&
+      alarm.name === WATCHDOG_ALARM
+    ) {
+      watchdogTick();
+    }
+  }
+);
+
+chrome.runtime.onInstalled.addListener(
+  ensureWatchdogAlarm
+);
+
+chrome.runtime.onStartup.addListener(
+  ensureWatchdogAlarm
+);
+
+ensureWatchdogAlarm();
