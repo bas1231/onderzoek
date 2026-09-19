@@ -342,6 +342,7 @@ def main() -> None:
             continue
 
         paused_seen = False
+        awaiting_accept_seen = False
 
         for task_file in tasks:
             if not task_is_committed(task_file):
@@ -352,6 +353,8 @@ def main() -> None:
 
                 if outcome == "paused":
                     paused_seen = True
+                elif outcome == "awaiting_accept":
+                    awaiting_accept_seen = True
 
             except Exception as exc:
                 print(
@@ -366,6 +369,8 @@ def main() -> None:
 
         if paused_seen:
             time.sleep(30)
+        elif awaiting_accept_seen:
+            time.sleep(5)
 
 
 if __name__ == "__main__":

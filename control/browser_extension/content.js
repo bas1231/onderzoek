@@ -75,12 +75,71 @@
     method = "GET",
     body = undefined
   ) {
-    return await chrome.runtime.sendMessage({
-      type: "bridgeFetch",
-      path,
-      method,
-      body
-    });
+    return await new Promise(
+      (resolve, reject) => {
+        let settled = false;
+
+        const timer = setTimeout(
+          () => {
+            if (settled) {
+              return;
+            }
+
+            settled = true;
+
+            reject(
+              new Error(
+                "Prediction Bridge request timeout"
+              )
+            );
+          },
+          10000
+        );
+
+        chrome.runtime.sendMessage({
+          type: "bridgeFetch",
+          path,
+          method,
+          body
+        }).then(
+          value => {
+            if (settled) {
+              return;
+            }
+
+            settled = true;
+            clearTimeout(timer);
+            resolve(value);
+          },
+          error => {
+            if (settled) {
+              return;
+            }
+
+            settled = true;
+            clearTimeout(timer);
+            reject(error);
+          }
+        );
+      }
+    );
+  }
+
+  function bridgeFingerprint(text) {
+    let hash = 2166136261;
+
+    for (let i = 0; i < text.length; i += 1) {
+      hash ^= text.charCodeAt(i);
+
+      hash = Math.imul(
+        hash,
+        16777619
+      );
+    }
+
+    return (
+      hash >>> 0
+    ).toString(16);
   }
 
   function assistantMessages() {
@@ -237,20 +296,31 @@
         await processedTaskIds()
       );
 
-      const nodes = assistantMessages();
+      const allNodes =
+        assistantMessages();
+
+      const nodes =
+        allNodes.length > 24
+          ? allNodes.slice(-24)
+          : allNodes;
 
       if (
-        document.body &&
-        !nodes.includes(document.body)
+        nodes.length === 0 &&
+        document.body
       ) {
         nodes.push(document.body);
       }
 
       for (const node of nodes) {
-        const text =
+        const rawText =
             node.textContent ||
             node.innerText ||
             "";
+
+        const text =
+          rawText.length > 250000
+            ? rawText.slice(-250000)
+            : rawText;
 
         for (
           const block of extractTaskBlocks(text)
@@ -301,6 +371,31 @@
                 );
               }
 
+              try {
+                await bridgeFetch(
+                  "/incident",
+                  "POST",
+                  {
+                    incident_id:
+                      "browser-task-parse-"
+                      + bridgeFingerprint(block),
+                    reason:
+                      "TASK_PARSE_FAILURE",
+                    detail:
+                      String(error)
+                      + " | bytes="
+                      + String(block.length)
+                      + " | preview="
+                      + block.slice(0, 500)
+                  }
+                );
+              } catch (incidentError) {
+                console.error(
+                  "[Prediction Bridge] parse incident failed",
+                  incidentError
+                );
+              }
+
               continue;
             }
 
@@ -310,6 +405,27 @@
             envelope.task.task_id;
 
           if (!taskId) {
+            try {
+              await bridgeFetch(
+                "/incident",
+                "POST",
+                {
+                  incident_id:
+                    "browser-missing-task-id-"
+                    + bridgeFingerprint(block),
+                  reason:
+                    "TASK_ID_MISSING",
+                  detail:
+                    block.slice(0, 1000)
+                }
+              );
+            } catch (incidentError) {
+              console.error(
+                "[Prediction Bridge] missing-id incident failed",
+                incidentError
+              );
+            }
+
             continue;
           }
 

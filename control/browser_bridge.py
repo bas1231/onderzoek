@@ -5,6 +5,7 @@ import re
 import secrets
 import subprocess
 import threading
+import time
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from urllib.parse import urlparse
@@ -338,6 +339,12 @@ def enqueue(envelope: BridgeEnvelope) -> dict:
                 )
 
             save_state(state)
+
+            lifecycle_update(
+                task.task_id,
+                "ACCEPTED",
+                "bridge accepted idempotent enqueue",
+            )
 
             print(
                 "[bridge] idempotent enqueue "
@@ -759,6 +766,119 @@ class Handler(BaseHTTPRequestHandler):
             payload = self.read_json()
 
             with LOCK:
+                if path == "/incident":
+                    reason = str(
+                        payload.get(
+                            "reason",
+                            "BROWSER_INCIDENT",
+                        )
+                    )[:80]
+
+                    detail = str(
+                        payload.get(
+                            "detail",
+                            "",
+                        )
+                    )[:4000]
+
+                    incident_id = str(
+                        payload.get(
+                            "incident_id",
+                            "browser-incident",
+                        )
+                    )[:160]
+
+                    safe_id = re.sub(
+                        r"[^A-Za-z0-9_.:-]+",
+                        "_",
+                        incident_id,
+                    )
+
+                    safe_reason = re.sub(
+                        r"[^A-Za-z0-9_.:-]+",
+                        "_",
+                        reason,
+                    )
+
+                    incident_dir = (
+                        Path.home()
+                        / ".local"
+                        / "state"
+                        / "prediction-research"
+                        / "incidents"
+                    )
+
+                    incident_dir.mkdir(
+                        parents=True,
+                        exist_ok=True,
+                    )
+
+                    now = time.time()
+
+                    incident_path = (
+                        incident_dir
+                        / (
+                            safe_id
+                            + "__"
+                            + safe_reason
+                            + ".json"
+                        )
+                    )
+
+                    if incident_path.exists():
+                        try:
+                            data = json.loads(
+                                incident_path.read_text(
+                                    encoding="utf-8"
+                                )
+                            )
+                        except Exception:
+                            data = {}
+                    else:
+                        data = {}
+
+                    data.update(
+                        {
+                            "incident_id": incident_id,
+                            "task_id": safe_id,
+                            "reason": reason,
+                            "detail": detail,
+                            "status": "OPEN",
+                            "deliver_to_chat": True,
+                            "first_seen_at":
+                                data.get(
+                                    "first_seen_at",
+                                    now,
+                                ),
+                            "last_seen_at": now,
+                            "automatic_action": "NONE",
+                            "running_task_killed": False,
+                            "paid_action": False,
+                            "live_trading_action": False,
+                            "wallet_action": False,
+                        }
+                    )
+
+                    incident_path.write_text(
+                        json.dumps(
+                            data,
+                            indent=2,
+                            sort_keys=True,
+                        )
+                        + chr(10),
+                        encoding="utf-8",
+                    )
+
+                    self.send_json(
+                        200,
+                        {
+                            "ok": True,
+                            "incident_id":
+                                incident_id,
+                        },
+                    )
+                    return
+
                 if path == "/discover":
                     task_id = str(
                         payload.get("task_id", "")
