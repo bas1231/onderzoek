@@ -1,0 +1,121 @@
+schema_version: 1
+as_of: 2026-09-19
+id: KAL-WX-PB001
+candidate: KAL-WX-INDEX-001
+search_family: hourly_weather_information_lag
+hypothesis_family: weather_index_signal_and_market_absorption
+status: PREBUILD_REVIEWED
+economic_status: NO_PROVEN_EDGE
+purpose: >-
+  Apply the new Pre-Build Killer retroactively to KAL-WX-E001. Distinguish a low-cost
+  evidence-capture build from a strategy/model/execution build. No research result has
+  yet earned a strategy build warrant.
+
+multiple_testing_context:
+  known_primary_dimensions:
+    cities_initial: 4
+    horizons_minutes: [240, 180, 120, 60, 30, 15, 5]
+    feature_families: 17
+    notes:
+      - "Threshold contracts from one city-hour settlement are one correlated economic event, not independent tests."
+      - "City/horizon/feature subgroup searches must be counted; post-hoc survivors become new experiment versions."
+      - "The public bootstrap corpus is development-only and cannot later become untouched holdout evidence."
+
+gates:
+  gate_0_novelty_prior_art:
+    status: PARTIAL_PASS
+    evidence:
+      - "Generic METAR/short-horizon weather nowcasting and favorite model-vs-market comparisons are not novel and are already crowded."
+      - "Kalshi now exposes its own minute-resolution Weather Index plus calibration history, which creates a newer point-in-time feature surface."
+      - "Other public builders already monitor KXTEMP/Synoptic/KWI semantics, so 'nobody noticed the source change' is explicitly rejected as a mechanism."
+    conclusion: >-
+      Novelty is sufficient only for a narrowly defined information-timing/calibration/source-regime
+      experiment, not for a generic weather-model edge claim.
+
+  gate_1_semantic_rules_viability:
+    status: PENDING
+    evidence:
+      - "Newer KXTEMP contracts use Synoptic Data / Kalshi Weather Index Methodology while older contracts used The Weather Company."
+      - "Chicago has a documented 2026-09-10 intra-day old-series to new-series cutover between adjacent hours."
+      - "Exact same-city x same-settlement-minute old/new overlap remains UNPROVEN."
+    blocker: >-
+      Every modeled event needs contemporaneously archived contract-specific source/rules/version.
+      No global TWC, Synoptic or KWI source assumption is allowed.
+    relation:
+      - KALSHI_WEATHER_SOURCE_MIGRATION_MISPRICING_HYPOTHESIS_2026-09-19
+
+  gate_2_economic_headroom:
+    status: UNPROVEN
+    evidence:
+      - "No measured out-of-sample forecast improvement versus the market exists yet."
+      - "No fee-clearing executable probability gap has yet been established for this mechanism."
+    conclusion: "Strategy/model build is not warranted on economic headroom yet."
+
+  gate_3_cheap_empirical_falsification:
+    status: READY_NOT_RUN
+    evidence:
+      - "Public Weather Index archive exists from 2026-09-03."
+      - "Public second-level KXTEMP orderbook corpus exists from about 2026-09-10 for Miami, NYC, Chicago and LA."
+    allowed_use:
+      - schema_validation
+      - timestamp_alignment
+      - baseline_sanity_replay
+      - data_quality_failure_discovery
+    nonclaim: "This inspected corpus is development-only and cannot confirm edge."
+
+  gate_4_execution_spotcheck:
+    status: PARTIAL_READY_NOT_RUN
+    evidence:
+      - "Public recorded second-level orderbooks exist for the four initial hourly series."
+      - "The new recorder implements authenticated batched REST L2, public trades and fee provenance for prospective evidence."
+      - "Continuous WebSocket orderbook_delta/trade evidence is required before any second-level repricing-lag conclusion."
+    blocker: "No prospective technical-integrity-pass capture or conservative net-execution calculation yet."
+
+  gate_5_build_warrant:
+    evidence_capture:
+      status: BUILD_APPROVED
+      reason: >-
+        Low incremental engineering cost due to reuse of proof-hunter raw/archive/auth infrastructure,
+        high information gain, short data retention upstream, and the recorder is needed to falsify
+        semantic/signal/execution hypotheses without hindsight.
+    strategy_model_execution:
+      status: BUILD_BLOCKED
+      reason: >-
+        Semantic gate, cheap empirical replay, economic headroom and execution spotcheck have not passed.
+        Do not build an autonomous trading strategy from this candidate yet.
+
+three_independent_reviews:
+  semantic_adversary:
+    current_result: OPEN_BLOCKER
+    key_attack: "source migration / contract-specific rule mismatch"
+  data_statistical_adversary:
+    current_result: OPEN_BLOCKER
+    key_attack: "backfill, calibration published/effective leakage, correlated thresholds, adaptive city/horizon/feature search"
+  execution_economic_adversary:
+    current_result: OPEN_BLOCKER
+    key_attack: "REST sampling artefact, authenticated L2 timing, fees/depth, no proven fill or headroom"
+
+next_actions_in_order:
+  - "Run local full pytest on ai/weather-index-e001-recorder-v0 without modifying tests."
+  - "Run one four-city read-only capture and deterministic integrity validator."
+  - "Classify live contract-specific rules/source for every captured event."
+  - "Run a development-only cheap replay on the known public bootstrap corpus with predeclared simple baselines."
+  - "Perform a conservative execution spotcheck on exact same timestamps."
+  - "Only survivors may request a model/strategy build warrant."
+
+provenance:
+  - repo: bas1231/onderzoek
+    ref: main
+    path: methodology/RESEARCH_PROTOCOL.md
+  - repo: bas1231/onderzoek
+    ref: main
+    path: methodology/CONTINUOUS_PREDICTION_MARKET_RED_TEAM.md
+  - repo: bas1231/onderzoek
+    ref: main
+    path: knowledge/kalshi/weather_index_bootstrap_corpus_2026-09-19.yaml
+  - repo: bas1231/onderzoek
+    ref: main
+    path: knowledge/kalshi/KALSHI_WEATHER_SOURCE_MIGRATION_MISPRICING_HYPOTHESIS_2026-09-19.md
+  - repo: bas1231/proof-hunter
+    ref: ai/weather-index-e001-recorder-v0
+    path: proof_hunter/source_lock/weather_index_watch.py
