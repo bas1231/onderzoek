@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "experiments/bridge/e132.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-19T21:52:21.208121+00:00",
+  "hypothesis_id": "CONTROL-NO-SILENT-WAITING",
+  "source_commit": "adccaf62031363f5f5956c232881debc2f6146a9",
+  "started_at": "2026-09-19T21:52:21.188502+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "5cc2e26c67b5fc8d8a352ceb4c07ca6a6bf0bfba729bff71d9fbe1574e2686ff",
+  "task_class": "infrastructure",
+  "task_id": "TINY-STATUS-E132"
+}
