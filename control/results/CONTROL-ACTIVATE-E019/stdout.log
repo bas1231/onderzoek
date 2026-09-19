@@ -1,0 +1,23 @@
+[main d508a6f] control: activate research queue by explicit user approval
+ 2 files changed, 4 insertions(+), 1 deletion(-)
+ create mode 100644 control/RESEARCH_ACTIVATION_LOG.md
+{
+  "status": "ok",
+  "task_id": "CONTROL-ACTIVATE-E019",
+  "queue_status": "ACTIVE",
+  "paid_actions_allowed": false,
+  "live_trading_allowed": false,
+  "wallet_actions_allowed": false,
+  "candidate_units": [
+    "gpg-agent.service                                static    -",
+    "prediction-research-browser-bridge.service       enabled   enabled",
+    "prediction-research-executor.service             enabled   enabled",
+    "snapd.session-agent.service                      static    -",
+    "ssh-agent.service                                static    -",
+    "gpg-agent-browser.socket                         enabled   enabled",
+    "gpg-agent-extra.socket                           enabled   enabled",
+    "gpg-agent-ssh.socket                             enabled   enabled",
+    "gpg-agent.socket                                 enabled   enabled",
+    "snapd.session-agent.socket                       disabled  enabled"
+  ]
+}

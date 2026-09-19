@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/activate_research_e019.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-19T18:54:14.300994+00:00",
+  "hypothesis_id": "CONTROL-RESEARCH-ACTIVATION",
+  "source_commit": "fd75c904be9a6bb0e14136c0b886421e55046c87",
+  "started_at": "2026-09-19T18:54:11.924861+00:00",
+  "status": "completed",
+  "stderr_sha256": "cae2233f8704fe1a2ff50b36112083884019bbf177a01cb16b9135074bbe55c8",
+  "stdout_sha256": "5664aa3224441597a5422b48de09a5ab0a144e0f68afaac52ca6678a9913a2d8",
+  "task_class": "infrastructure",
+  "task_id": "CONTROL-ACTIVATE-E019"
+}
