@@ -1,0 +1,1 @@
+from pathlib import Path;import json;R=Path.cwd();ids=['QUOTE-SAFE-HOURLY-E131','TINY-STATUS-E132'];print(json.dumps({'cycle':(R/'control/hourly/hourly_cycle.py').exists(),'hits':{i:[str(p) for p in (R/'control').rglob('*') if i in p.name] for i in ids}}))
