@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "experiments/bridge/e111.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-19T21:00:16.084385+00:00",
+  "hypothesis_id": "CONTROL-AUTONOMOUS-RESEARCH",
+  "source_commit": "5a0ee7ae94197cf84769b00f15c4aaaac3ea75e6",
+  "started_at": "2026-09-19T21:00:13.944980+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "391449251f35c04e5c15dc89b3570a044f8d83ef75281418e3afb8549ba31558",
+  "task_class": "infrastructure",
+  "task_id": "APPLY-FIRST-SWEEP-E111"
+}
