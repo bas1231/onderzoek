@@ -1,0 +1,13 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "experiments/bridge/e203.py"
+  ],
+  "hypothesis_id": "CONTROL-HOURLY-RESEARCH-DIRECTOR",
+  "live_trading": false,
+  "operation": "python",
+  "task_class": "research",
+  "task_id": "HOURLY-DIRECTOR-EVIDENCE-0100-E203",
+  "timeout_seconds": 45,
+  "working_directory": "."
+}
