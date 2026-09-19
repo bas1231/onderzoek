@@ -1,0 +1,12 @@
+{
+  "agent": "settlement",
+  "gate": "primary_rules_preferred",
+  "input": "rules and oracle evidence",
+  "live_trading": false,
+  "output": [
+    "settlement_constraints",
+    "finality_risks"
+  ],
+  "paid_actions": false,
+  "wallet_actions": false
+}

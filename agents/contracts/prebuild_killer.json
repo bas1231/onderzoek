@@ -1,0 +1,12 @@
+{
+  "agent": "prebuild_killer",
+  "gate": "attempt_rejection_first",
+  "input": "all new candidates",
+  "live_trading": false,
+  "output": [
+    "kill_tests",
+    "fatal_flaws"
+  ],
+  "paid_actions": false,
+  "wallet_actions": false
+}

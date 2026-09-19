@@ -1,0 +1,13 @@
+{
+  "agent": "weather_twc",
+  "gate": "signal_edge_only_until_market_test",
+  "input": "weather and settlement leads",
+  "live_trading": false,
+  "output": [
+    "signal_hypotheses",
+    "point_in_time_risks",
+    "negative_evidence"
+  ],
+  "paid_actions": false,
+  "wallet_actions": false
+}

@@ -1,0 +1,12 @@
+{
+  "agent": "informed_flow",
+  "gate": "no_insider_assumption_as_fact",
+  "input": "flow evidence",
+  "live_trading": false,
+  "output": [
+    "flow_hypotheses",
+    "confounders"
+  ],
+  "paid_actions": false,
+  "wallet_actions": false
+}

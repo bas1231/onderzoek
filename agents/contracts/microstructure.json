@@ -1,0 +1,13 @@
+{
+  "agent": "microstructure",
+  "gate": "executable_evidence_required",
+  "input": "venue and orderbook evidence",
+  "live_trading": false,
+  "output": [
+    "execution_constraints",
+    "market_hypotheses",
+    "negative_evidence"
+  ],
+  "paid_actions": false,
+  "wallet_actions": false
+}

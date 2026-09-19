@@ -1,0 +1,13 @@
+{
+  "agent": "scout",
+  "gate": "discovery_only",
+  "input": "source registry plus prior hour state",
+  "live_trading": false,
+  "output": [
+    "leads",
+    "source_changes",
+    "coverage_gaps"
+  ],
+  "paid_actions": false,
+  "wallet_actions": false
+}
