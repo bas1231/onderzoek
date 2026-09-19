@@ -1,0 +1,298 @@
+{
+  "guards": [
+    "Only official Kalshi series metadata and linked official Kalshi documents are inspected.",
+    "A document keyword hit is evidence only for the text shown, not for unstated implementation details.",
+    "No market edge is inferred."
+  ],
+  "live_trading": false,
+  "official_docs": [
+    {
+      "bytes": 278108,
+      "content_type": "application/pdf",
+      "error": "FileNotFoundError(2, 'No such file or directory')",
+      "field": "contract_url",
+      "raw_path": "/home/leonh/.local/state/prediction-research/raw/kalshi_weather_docs_e223/d64de13586308c90bed771ec1ddf494c13f51972fda5b92d83d9031a561d4afb.bin",
+      "sha256": "d64de13586308c90bed771ec1ddf494c13f51972fda5b92d83d9031a561d4afb",
+      "status": 200,
+      "ticker": "KXTEMPCHIHS",
+      "url": "https://assets.kalshi.com/regulatory/product-certifications/CHIMETROWINDEX.pdf"
+    },
+    {
+      "bytes": 33456,
+      "content_type": "application/pdf",
+      "error": "FileNotFoundError(2, 'No such file or directory')",
+      "field": "contract_terms_url",
+      "raw_path": "/home/leonh/.local/state/prediction-research/raw/kalshi_weather_docs_e223/1ecb1894612b75e64b65a1da52abde163c61500278f4da01a2289e7302bc8575.bin",
+      "sha256": "1ecb1894612b75e64b65a1da52abde163c61500278f4da01a2289e7302bc8575",
+      "status": 200,
+      "ticker": "KXTEMPCHIHS",
+      "url": "https://assets.kalshi.com/contract_terms/CHIMETROWINDEX.pdf"
+    },
+    {
+      "bytes": 277886,
+      "content_type": "application/pdf",
+      "error": "FileNotFoundError(2, 'No such file or directory')",
+      "field": "contract_url",
+      "raw_path": "/home/leonh/.local/state/prediction-research/raw/kalshi_weather_docs_e223/b160d8e38e6dc4ce15c837d990b69b96ca0f40ee0dd010b0f2b78c642038583d.bin",
+      "sha256": "b160d8e38e6dc4ce15c837d990b69b96ca0f40ee0dd010b0f2b78c642038583d",
+      "status": 200,
+      "ticker": "KXTEMPLAXHS",
+      "url": "https://assets.kalshi.com/regulatory/product-certifications/LAWINDEX.pdf"
+    },
+    {
+      "bytes": 33228,
+      "content_type": "application/pdf",
+      "error": "FileNotFoundError(2, 'No such file or directory')",
+      "field": "contract_terms_url",
+      "raw_path": "/home/leonh/.local/state/prediction-research/raw/kalshi_weather_docs_e223/d568fa6f87f1321884d7e7051e5ec0c4b84d52b92e40fffd156771ea94d07aca.bin",
+      "sha256": "d568fa6f87f1321884d7e7051e5ec0c4b84d52b92e40fffd156771ea94d07aca",
+      "status": 200,
+      "ticker": "KXTEMPLAXHS",
+      "url": "https://assets.kalshi.com/contract_terms/LAWINDEX.pdf"
+    },
+    {
+      "bytes": 459092,
+      "content_type": "application/pdf",
+      "error": "FileNotFoundError(2, 'No such file or directory')",
+      "field": "contract_url",
+      "raw_path": "/home/leonh/.local/state/prediction-research/raw/kalshi_weather_docs_e223/f9239740141bf38c95708fc7b954a1b44ecb40a517fe12ebe975597540eeb4b1.bin",
+      "sha256": "f9239740141bf38c95708fc7b954a1b44ecb40a517fe12ebe975597540eeb4b1",
+      "status": 200,
+      "ticker": "KXTEMPMIAH",
+      "url": "https://assets.kalshi.com/regulatory/product-certifications/MIAWINDEX.pdf"
+    },
+    {
+      "bytes": 62829,
+      "content_type": "application/pdf",
+      "error": "FileNotFoundError(2, 'No such file or directory')",
+      "field": "contract_terms_url",
+      "raw_path": "/home/leonh/.local/state/prediction-research/raw/kalshi_weather_docs_e223/f7acb398f739ef0b4745e9ae4cbf19b9834676ca4316a81af5c7e3c2c4d20a87.bin",
+      "sha256": "f7acb398f739ef0b4745e9ae4cbf19b9834676ca4316a81af5c7e3c2c4d20a87",
+      "status": 200,
+      "ticker": "KXTEMPMIAH",
+      "url": "https://assets.kalshi.com/contract_terms/MIAWINDEX.pdf"
+    },
+    {
+      "bytes": 278661,
+      "content_type": "application/pdf",
+      "error": "FileNotFoundError(2, 'No such file or directory')",
+      "field": "contract_url",
+      "raw_path": "/home/leonh/.local/state/prediction-research/raw/kalshi_weather_docs_e223/ce86fe7a3e3c8f1d1363e5e99238772bd1d4ead726e57fb4097441dc2cf64eb1.bin",
+      "sha256": "ce86fe7a3e3c8f1d1363e5e99238772bd1d4ead726e57fb4097441dc2cf64eb1",
+      "status": 200,
+      "ticker": "KXTEMPNYCHS",
+      "url": "https://assets.kalshi.com/regulatory/product-certifications/NYCWINDEX.pdf"
+    },
+    {
+      "bytes": 33128,
+      "content_type": "application/pdf",
+      "error": "FileNotFoundError(2, 'No such file or directory')",
+      "field": "contract_terms_url",
+      "raw_path": "/home/leonh/.local/state/prediction-research/raw/kalshi_weather_docs_e223/7a92d3bca455d904942c7c6a3b079c1825de298acf44d820238933c522892a28.bin",
+      "sha256": "7a92d3bca455d904942c7c6a3b079c1825de298acf44d820238933c522892a28",
+      "status": 200,
+      "ticker": "KXTEMPNYCHS",
+      "url": "https://assets.kalshi.com/contract_terms/NYCWINDEX.pdf"
+    }
+  ],
+  "paid_actions": false,
+  "targets": {
+    "KXTEMPCHIHS": {
+      "contract_terms_url": "https://assets.kalshi.com/contract_terms/CHIMETROWINDEX.pdf",
+      "contract_url": "https://assets.kalshi.com/regulatory/product-certifications/CHIMETROWINDEX.pdf",
+      "sample": [
+        {
+          "close_time": "2026-09-20T00:00:00Z",
+          "event_ticker": "KXTEMPCHIHS-26SEP1920",
+          "expected_expiration_time": "2026-09-20T00:05:00Z",
+          "floor_strike": 71.99,
+          "rules_primary": "If the temperature recorded at Chicago Metro Area for Sep 19, 2026 at 8 PM EDT as reported by Synoptic Data, is above 71.99\u00b0, then the market resolves to Yes.",
+          "rules_secondary": "The official final value for this market is determined strictly by the temperature reported by Synoptic Data, calculated in accordance with the Kalshi Weather Index Methodology. Alternative sources\u2014such as NWS Climatological Reports or Google Weather\u2014may serve as references, but are not authoritative and will not be used for market resolution.",
+          "source_label": "SYNOPTIC+KALSHI_WEATHER_INDEX",
+          "status": "active",
+          "ticker": "KXTEMPCHIHS-26SEP1920-T71.99",
+          "title": "Will the temp in Chicago Metro Area be above 71.99\u00b0 on Sep 19, 2026 at 8pm EDT?"
+        },
+        {
+          "close_time": "2026-09-20T00:00:00Z",
+          "event_ticker": "KXTEMPCHIHS-26SEP1920",
+          "expected_expiration_time": "2026-09-20T00:05:00Z",
+          "floor_strike": 70.99,
+          "rules_primary": "If the temperature recorded at Chicago Metro Area for Sep 19, 2026 at 8 PM EDT as reported by Synoptic Data, is above 70.99\u00b0, then the market resolves to Yes.",
+          "rules_secondary": "The official final value for this market is determined strictly by the temperature reported by Synoptic Data, calculated in accordance with the Kalshi Weather Index Methodology. Alternative sources\u2014such as NWS Climatological Reports or Google Weather\u2014may serve as references, but are not authoritative and will not be used for market resolution.",
+          "source_label": "SYNOPTIC+KALSHI_WEATHER_INDEX",
+          "status": "active",
+          "ticker": "KXTEMPCHIHS-26SEP1920-T70.99",
+          "title": "Will the temp in Chicago Metro Area be above 70.99\u00b0 on Sep 19, 2026 at 8pm EDT?"
+        },
+        {
+          "close_time": "2026-09-20T00:00:00Z",
+          "event_ticker": "KXTEMPCHIHS-26SEP1920",
+          "expected_expiration_time": "2026-09-20T00:05:00Z",
+          "floor_strike": 69.99,
+          "rules_primary": "If the temperature recorded at Chicago Metro Area for Sep 19, 2026 at 8 PM EDT as reported by Synoptic Data, is above 69.99\u00b0, then the market resolves to Yes.",
+          "rules_secondary": "The official final value for this market is determined strictly by the temperature reported by Synoptic Data, calculated in accordance with the Kalshi Weather Index Methodology. Alternative sources\u2014such as NWS Climatological Reports or Google Weather\u2014may serve as references, but are not authoritative and will not be used for market resolution.",
+          "source_label": "SYNOPTIC+KALSHI_WEATHER_INDEX",
+          "status": "active",
+          "ticker": "KXTEMPCHIHS-26SEP1920-T69.99",
+          "title": "Will the temp in Chicago Metro Area be above 69.99\u00b0 on Sep 19, 2026 at 8pm EDT?"
+        }
+      ],
+      "settlement_sources": [
+        {
+          "name": "Kalshi",
+          "url": "https://kalshi.com"
+        }
+      ],
+      "title": "Hourly Directional Chicago Metro Temperature"
+    },
+    "KXTEMPLAXHS": {
+      "contract_terms_url": "https://assets.kalshi.com/contract_terms/LAWINDEX.pdf",
+      "contract_url": "https://assets.kalshi.com/regulatory/product-certifications/LAWINDEX.pdf",
+      "sample": [
+        {
+          "close_time": "2026-09-20T00:00:00Z",
+          "event_ticker": "KXTEMPLAXHS-26SEP1920",
+          "expected_expiration_time": "2026-09-20T00:05:00Z",
+          "floor_strike": 78.99,
+          "rules_primary": "If the temperature recorded at Coastal Los Angeles for Sep 19, 2026 at 8 PM EDT as reported by Synoptic Data, is above 78.99\u00b0, then the market resolves to Yes.",
+          "rules_secondary": "The official final value for this market is determined strictly by the temperature reported by Synoptic Data, calculated in accordance with the Kalshi Weather Index Methodology. Alternative sources\u2014such as NWS Climatological Reports or Google Weather\u2014may serve as references, but are not authoritative and will not be used for market resolution.",
+          "source_label": "SYNOPTIC+KALSHI_WEATHER_INDEX",
+          "status": "active",
+          "ticker": "KXTEMPLAXHS-26SEP1920-T78.99",
+          "title": "Will the temp in Coastal Los Angeles be above 78.99\u00b0 on Sep 19, 2026 at 8pm EDT?"
+        },
+        {
+          "close_time": "2026-09-20T00:00:00Z",
+          "event_ticker": "KXTEMPLAXHS-26SEP1920",
+          "expected_expiration_time": "2026-09-20T00:05:00Z",
+          "floor_strike": 77.99,
+          "rules_primary": "If the temperature recorded at Coastal Los Angeles for Sep 19, 2026 at 8 PM EDT as reported by Synoptic Data, is above 77.99\u00b0, then the market resolves to Yes.",
+          "rules_secondary": "The official final value for this market is determined strictly by the temperature reported by Synoptic Data, calculated in accordance with the Kalshi Weather Index Methodology. Alternative sources\u2014such as NWS Climatological Reports or Google Weather\u2014may serve as references, but are not authoritative and will not be used for market resolution.",
+          "source_label": "SYNOPTIC+KALSHI_WEATHER_INDEX",
+          "status": "active",
+          "ticker": "KXTEMPLAXHS-26SEP1920-T77.99",
+          "title": "Will the temp in Coastal Los Angeles be above 77.99\u00b0 on Sep 19, 2026 at 8pm EDT?"
+        },
+        {
+          "close_time": "2026-09-20T00:00:00Z",
+          "event_ticker": "KXTEMPLAXHS-26SEP1920",
+          "expected_expiration_time": "2026-09-20T00:05:00Z",
+          "floor_strike": 76.99,
+          "rules_primary": "If the temperature recorded at Coastal Los Angeles for Sep 19, 2026 at 8 PM EDT as reported by Synoptic Data, is above 76.99\u00b0, then the market resolves to Yes.",
+          "rules_secondary": "The official final value for this market is determined strictly by the temperature reported by Synoptic Data, calculated in accordance with the Kalshi Weather Index Methodology. Alternative sources\u2014such as NWS Climatological Reports or Google Weather\u2014may serve as references, but are not authoritative and will not be used for market resolution.",
+          "source_label": "SYNOPTIC+KALSHI_WEATHER_INDEX",
+          "status": "active",
+          "ticker": "KXTEMPLAXHS-26SEP1920-T76.99",
+          "title": "Will the temp in Coastal Los Angeles be above 76.99\u00b0 on Sep 19, 2026 at 8pm EDT?"
+        }
+      ],
+      "settlement_sources": [
+        {
+          "name": "Synoptic Data",
+          "url": "https://synopticdata.com/"
+        }
+      ],
+      "title": "Hourly Directional Coastal LA Temperature"
+    },
+    "KXTEMPMIAH": {
+      "contract_terms_url": "https://assets.kalshi.com/contract_terms/MIAWINDEX.pdf",
+      "contract_url": "https://assets.kalshi.com/regulatory/product-certifications/MIAWINDEX.pdf",
+      "sample": [
+        {
+          "close_time": "2026-09-20T00:00:00Z",
+          "event_ticker": "KXTEMPMIAH-26SEP1920",
+          "expected_expiration_time": "2026-09-20T00:05:00Z",
+          "floor_strike": 80.99,
+          "rules_primary": "If the temperature recorded at Miami, FL for Sep 19, 2026 at 8 PM EDT as reported by Synoptic Data, is above 80.99\u00b0, then the market resolves to Yes.",
+          "rules_secondary": "The official final value for this market is determined strictly by the temperature reported by Synoptic Data, calculated in accordance with the Kalshi Weather Index Methodology. Alternative sources\u2014such as NWS Climatological Reports or Google Weather\u2014may serve as references, but are not authoritative and will not be used for market resolution.",
+          "source_label": "SYNOPTIC+KALSHI_WEATHER_INDEX",
+          "status": "active",
+          "ticker": "KXTEMPMIAH-26SEP1920-T80.99",
+          "title": "Will the temp in Miami be above 80.99\u00b0 on Sep 19, 2026 at 8pm EDT?"
+        },
+        {
+          "close_time": "2026-09-20T00:00:00Z",
+          "event_ticker": "KXTEMPMIAH-26SEP1920",
+          "expected_expiration_time": "2026-09-20T00:05:00Z",
+          "floor_strike": 79.99,
+          "rules_primary": "If the temperature recorded at Miami, FL for Sep 19, 2026 at 8 PM EDT as reported by Synoptic Data, is above 79.99\u00b0, then the market resolves to Yes.",
+          "rules_secondary": "The official final value for this market is determined strictly by the temperature reported by Synoptic Data, calculated in accordance with the Kalshi Weather Index Methodology. Alternative sources\u2014such as NWS Climatological Reports or Google Weather\u2014may serve as references, but are not authoritative and will not be used for market resolution.",
+          "source_label": "SYNOPTIC+KALSHI_WEATHER_INDEX",
+          "status": "active",
+          "ticker": "KXTEMPMIAH-26SEP1920-T79.99",
+          "title": "Will the temp in Miami be above 79.99\u00b0 on Sep 19, 2026 at 8pm EDT?"
+        },
+        {
+          "close_time": "2026-09-20T00:00:00Z",
+          "event_ticker": "KXTEMPMIAH-26SEP1920",
+          "expected_expiration_time": "2026-09-20T00:05:00Z",
+          "floor_strike": 78.99,
+          "rules_primary": "If the temperature recorded at Miami, FL for Sep 19, 2026 at 8 PM EDT as reported by Synoptic Data, is above 78.99\u00b0, then the market resolves to Yes.",
+          "rules_secondary": "The official final value for this market is determined strictly by the temperature reported by Synoptic Data, calculated in accordance with the Kalshi Weather Index Methodology. Alternative sources\u2014such as NWS Climatological Reports or Google Weather\u2014may serve as references, but are not authoritative and will not be used for market resolution.",
+          "source_label": "SYNOPTIC+KALSHI_WEATHER_INDEX",
+          "status": "active",
+          "ticker": "KXTEMPMIAH-26SEP1920-T78.99",
+          "title": "Will the temp in Miami be above 78.99\u00b0 on Sep 19, 2026 at 8pm EDT?"
+        }
+      ],
+      "settlement_sources": [
+        {
+          "name": "Synoptic Data",
+          "url": "https://synopticdata.com/"
+        }
+      ],
+      "title": "Hourly Directional Miami Temperature"
+    },
+    "KXTEMPNYCHS": {
+      "contract_terms_url": "https://assets.kalshi.com/contract_terms/NYCWINDEX.pdf",
+      "contract_url": "https://assets.kalshi.com/regulatory/product-certifications/NYCWINDEX.pdf",
+      "sample": [
+        {
+          "close_time": "2026-09-20T00:00:00Z",
+          "event_ticker": "KXTEMPNYCHS-26SEP1920",
+          "expected_expiration_time": "2026-09-20T00:05:00Z",
+          "floor_strike": 68.99,
+          "rules_primary": "If the temperature recorded at New York City for Sep 19, 2026 at 8 PM EDT as reported by Synoptic Data, is above 68.99\u00b0, then the market resolves to Yes.",
+          "rules_secondary": "The official final value for this market is determined strictly by the temperature reported by Synoptic Data, calculated in accordance with the Kalshi Weather Index Methodology. Alternative sources\u2014such as NWS Climatological Reports or Google Weather\u2014may serve as references, but are not authoritative and will not be used for market resolution.",
+          "source_label": "SYNOPTIC+KALSHI_WEATHER_INDEX",
+          "status": "active",
+          "ticker": "KXTEMPNYCHS-26SEP1920-T68.99",
+          "title": "Will the temp in New York City be above 68.99\u00b0 on Sep 19, 2026 at 8pm EDT?"
+        },
+        {
+          "close_time": "2026-09-20T00:00:00Z",
+          "event_ticker": "KXTEMPNYCHS-26SEP1920",
+          "expected_expiration_time": "2026-09-20T00:05:00Z",
+          "floor_strike": 67.99,
+          "rules_primary": "If the temperature recorded at New York City for Sep 19, 2026 at 8 PM EDT as reported by Synoptic Data, is above 67.99\u00b0, then the market resolves to Yes.",
+          "rules_secondary": "The official final value for this market is determined strictly by the temperature reported by Synoptic Data, calculated in accordance with the Kalshi Weather Index Methodology. Alternative sources\u2014such as NWS Climatological Reports or Google Weather\u2014may serve as references, but are not authoritative and will not be used for market resolution.",
+          "source_label": "SYNOPTIC+KALSHI_WEATHER_INDEX",
+          "status": "active",
+          "ticker": "KXTEMPNYCHS-26SEP1920-T67.99",
+          "title": "Will the temp in New York City be above 67.99\u00b0 on Sep 19, 2026 at 8pm EDT?"
+        },
+        {
+          "close_time": "2026-09-20T00:00:00Z",
+          "event_ticker": "KXTEMPNYCHS-26SEP1920",
+          "expected_expiration_time": "2026-09-20T00:05:00Z",
+          "floor_strike": 66.99,
+          "rules_primary": "If the temperature recorded at New York City for Sep 19, 2026 at 8 PM EDT as reported by Synoptic Data, is above 66.99\u00b0, then the market resolves to Yes.",
+          "rules_secondary": "The official final value for this market is determined strictly by the temperature reported by Synoptic Data, calculated in accordance with the Kalshi Weather Index Methodology. Alternative sources\u2014such as NWS Climatological Reports or Google Weather\u2014may serve as references, but are not authoritative and will not be used for market resolution.",
+          "source_label": "SYNOPTIC+KALSHI_WEATHER_INDEX",
+          "status": "active",
+          "ticker": "KXTEMPNYCHS-26SEP1920-T66.99",
+          "title": "Will the temp in New York City be above 66.99\u00b0 on Sep 19, 2026 at 8pm EDT?"
+        }
+      ],
+      "settlement_sources": [
+        {
+          "name": "Synoptic Data",
+          "url": "https://synopticdata.com/"
+        }
+      ],
+      "title": "Hourly Directional NYC Temperature"
+    }
+  },
+  "wallet_actions": false
+}
