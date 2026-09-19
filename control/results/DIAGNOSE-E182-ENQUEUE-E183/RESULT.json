@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "experiments/bridge/e183.py"
+  ],
+  "exit_code": 1,
+  "finished_at": "2026-09-19T22:40:38.777310+00:00",
+  "hypothesis_id": "CONTROL-NO-SILENT-WAITING",
+  "source_commit": "c8ae1d96f8725355f94073aa494a4ed1b051b61e",
+  "started_at": "2026-09-19T22:40:38.761202+00:00",
+  "status": "failed",
+  "stderr_sha256": "41a3b28ae57baf586457df81de14ddadbfd5b0adc93af276a6b4a65f2e8c9fed",
+  "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "task_class": "infrastructure",
+  "task_id": "DIAGNOSE-E182-ENQUEUE-E183"
+}
