@@ -1,0 +1,8 @@
+[Unit]
+Description=Prediction Research Kalshi Weather Index recorder
+After=network-online.target
+
+[Service]
+Type=oneshot
+WorkingDirectory=%h/prediction_research
+ExecStart=%h/prediction_research/.venv/bin/python %h/prediction_research/control/weather/kalshi_weather_index_recorder.py
