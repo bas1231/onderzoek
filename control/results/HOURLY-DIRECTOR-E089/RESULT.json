@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "experiments/bridge/e089.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-19T20:39:14.291244+00:00",
+  "hypothesis_id": "CONTROL-AUTONOMOUS-RESEARCH",
+  "source_commit": "6878bff6f2dab913841044212c8d7e36a8b27fcc",
+  "started_at": "2026-09-19T20:39:11.894506+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "249ae117c7b753bd797afb1e16daaf398bc2acbc65029a8f9a8c1ea58ca1bd83",
+  "task_class": "infrastructure",
+  "task_id": "HOURLY-DIRECTOR-E089"
+}
