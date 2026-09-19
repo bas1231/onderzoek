@@ -1,0 +1,1 @@
+from pathlib import Path;R=Path.cwd();print('REGISTRY');print((R/'knowledge/sources/registry.json').read_text(errors='replace'));print('COLLECTOR');print((R/'control/hourly/collector.py').read_text(errors='replace'))
