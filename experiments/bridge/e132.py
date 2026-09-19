@@ -1,0 +1,1 @@
+from pathlib import Path;R=Path.cwd();print('cycle', (R/'control/hourly/hourly_cycle.py').exists());print('e131', any('QUOTE-SAFE-HOURLY-E131' in str(p) for p in (R/'control').rglob('*')))
