@@ -1,0 +1,1 @@
+from pathlib import Path;import json,time;ROOT=Path.cwd();DIR=ROOT/'control/lifecycle';DIR.mkdir(parents=True,exist_ok=True);defp=lambda i:DIR/(i+'.json');print(json.dumps({'status':'ok','dir':str(DIR.relative_to(ROOT)),'ts':time.time()}))
