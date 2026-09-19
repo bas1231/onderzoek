@@ -1,0 +1,88 @@
+{
+  "artifact": "knowledge/runs/kalshi-weather-config-candidate-context-e230.json",
+  "e229_context_hit_count": 7,
+  "direct_hit_count": 17,
+  "direct_hits": [
+    {
+      "needle": "/live_data/weather/chicago/calibrations",
+      "path": "/home/leonh/prediction_research/knowledge/runs/kalshi-weather-config-discovery-e229.json"
+    },
+    {
+      "needle": "/live_data/weather/chicago/calibrations",
+      "path": "/home/leonh/prediction_research/knowledge/kalshi/KALSHI_WEATHER_SOURCE_MIGRATION_MISPRICING_HYPOTHESIS_2026-09-19.md"
+    },
+    {
+      "needle": "/live_data/weather/chicago/calibrations",
+      "path": "/home/leonh/prediction_research/control/results/KALSHI-WEATHER-CONFIG-DISCOVERY-E229/stdout.log"
+    },
+    {
+      "needle": "configuration/offsets",
+      "path": "/home/leonh/prediction_research/knowledge/runs/kalshi-weather-config-discovery-e229.json"
+    },
+    {
+      "needle": "configuration/offsets",
+      "path": "/home/leonh/prediction_research/knowledge/runs/kalshi-weather-index-methodology-summary-e228.json"
+    },
+    {
+      "needle": "configuration/offsets",
+      "path": "/home/leonh/prediction_research/control/results/KALSHI-WEATHER-CONFIG-DISCOVERY-E229/stdout.log"
+    },
+    {
+      "needle": "calibration/config",
+      "path": "/home/leonh/prediction_research/knowledge/runs/kalshi-weather-config-discovery-e229.json"
+    },
+    {
+      "needle": "calibration/config",
+      "path": "/home/leonh/prediction_research/knowledge/kalshi/KALSHI_WEATHER_INDEX_PREPUBLICATION_HYPOTHESIS_2026-09-19.md"
+    },
+    {
+      "needle": "calibration/config",
+      "path": "/home/leonh/prediction_research/knowledge/kalshi/KALSHI_WEATHER_INDEX_FREE_REPLAY_CASE_2026-09-09.md"
+    },
+    {
+      "needle": "calibration/config",
+      "path": "/home/leonh/prediction_research/hourly-reports/2026-09-19/1654_prediction_edge_watch.md"
+    },
+    {
+      "needle": "calibration/config",
+      "path": "/home/leonh/prediction_research/control/results/KALSHI-WEATHER-CONFIG-DISCOVERY-E229/stdout.log"
+    },
+    {
+      "needle": "source/config/revision",
+      "path": "/home/leonh/prediction_research/knowledge/runs/kalshi-weather-config-discovery-e229.json"
+    },
+    {
+      "needle": "source/config/revision",
+      "path": "/home/leonh/prediction_research/candidates/active/KAL-WX-INDEX-001.yaml"
+    },
+    {
+      "needle": "source/config/revision",
+      "path": "/home/leonh/prediction_research/control/results/KALSHI-WEATHER-CONFIG-DISCOVERY-E229/stdout.log"
+    },
+    {
+      "needle": "config_version/status/receipt_basis",
+      "path": "/home/leonh/prediction_research/knowledge/runs/kalshi-weather-config-discovery-e229.json"
+    },
+    {
+      "needle": "config_version/status/receipt_basis",
+      "path": "/home/leonh/prediction_research/knowledge/kalshi/weather_index_source_resolution_2026-09-19.yaml"
+    },
+    {
+      "needle": "config_version/status/receipt_basis",
+      "path": "/home/leonh/prediction_research/control/results/KALSHI-WEATHER-CONFIG-DISCOVERY-E229/stdout.log"
+    }
+  ],
+  "commit": {
+    "rc": 0,
+    "stdout": "[main beac272] research(weather): trace Weather Index config route provenance\n 1 file changed, 156 insertions(+)\n create mode 100644 knowledge/runs/kalshi-weather-config-candidate-context-e230.json",
+    "stderr": ""
+  },
+  "push": {
+    "rc": 0,
+    "stdout": "",
+    "stderr": "To github.com:bas1231/onderzoek.git\n   e94f230..beac272  HEAD -> main"
+  },
+  "live_trading": false,
+  "paid_actions": false,
+  "wallet_actions": false
+}
