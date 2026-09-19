@@ -1,0 +1,1 @@
+import subprocess,json;from pathlib import Path;run=lambda a:subprocess.run(a,capture_output=True,text=True,check=False);e=Path('control/executor.py').read_text().splitlines();print(json.dumps({'executor_tail':e,'git_status':run(['git','status','--short']).stdout.splitlines(),'head':run(['git','log','-1','--oneline']).stdout.strip()},indent=2))
