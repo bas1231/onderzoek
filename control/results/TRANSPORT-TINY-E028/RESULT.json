@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "experiments/bridge/e028.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-19T19:30:14.588026+00:00",
+  "hypothesis_id": "CONTROL-TRANSPORT-INTEGRITY",
+  "source_commit": "b8ee46450b2e3cfdcd088c0c0d2ed6b29a5cd57c",
+  "started_at": "2026-09-19T19:30:14.578509+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "46fbee07a5e6cc4845e44329829a2f64cd6c8e4e88f44b6e541780c543cf5608",
+  "task_class": "infrastructure",
+  "task_id": "TRANSPORT-TINY-E028"
+}
