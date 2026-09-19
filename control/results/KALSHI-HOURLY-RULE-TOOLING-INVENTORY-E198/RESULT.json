@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "experiments/bridge/e198.py"
+  ],
+  "exit_code": 1,
+  "finished_at": "2026-09-19T22:57:47.280430+00:00",
+  "hypothesis_id": "H7-SETTLEMENT-BOUNDARY",
+  "source_commit": "c626ada60977d74c6536535f19d97e44b0a1b210",
+  "started_at": "2026-09-19T22:57:47.265380+00:00",
+  "status": "failed",
+  "stderr_sha256": "14fa1644e011fdfe52bdff817652369e3e024019c05d8c6fe2e0e6167176534c",
+  "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "task_class": "research",
+  "task_id": "KALSHI-HOURLY-RULE-TOOLING-INVENTORY-E198"
+}
