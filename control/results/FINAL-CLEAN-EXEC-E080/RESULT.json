@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "experiments/bridge/e080.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-19T20:33:21.909838+00:00",
+  "hypothesis_id": "CONTROL-NO-SILENT-WAITING",
+  "source_commit": "3b82db9421fbd099918c755387a012994a08ecfd",
+  "started_at": "2026-09-19T20:33:21.899356+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "12dbf3fadc7c7b1f8602e604c91e48f3bd033eb9065e1d71fbe94a0caf89b93d",
+  "task_class": "infrastructure",
+  "task_id": "FINAL-CLEAN-EXEC-E080"
+}
