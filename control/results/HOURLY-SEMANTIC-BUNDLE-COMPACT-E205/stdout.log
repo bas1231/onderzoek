@@ -1,0 +1,292 @@
+{
+  "run_id": "hourly-20260920T010000+0200",
+  "run_status": "STARTED",
+  "decision": "NO_PROVEN_EDGE",
+  "candidate_status": "UNPROVEN",
+  "gates": {
+    "execution_reality": "PENDING",
+    "falsification": "PENDING",
+    "market_edge": "PENDING",
+    "point_in_time": "PENDING",
+    "reproduction": "PENDING",
+    "signal_edge": "PENDING",
+    "source_provenance": "PASS"
+  },
+  "agents": {
+    "algebra": "PENDING",
+    "behavioral": "PENDING",
+    "chief_falsifier": "PENDING",
+    "independent_reproducer": "PENDING",
+    "informed_flow": "PENDING",
+    "microstructure": "PENDING",
+    "prebuild_killer": "PENDING",
+    "research_director": "PENDING",
+    "scout": "PENDING",
+    "settlement": "PENDING",
+    "weather_twc": "PENDING"
+  },
+  "source_success_count": 13,
+  "source_failure_count": 0,
+  "usable_count": 10,
+  "low_text_count": 3,
+  "roles": {
+    "weather_twc": {
+      "status": "EVIDENCE_ROUTED",
+      "coverage_gaps": [
+        "No TWC-specific primary source in registry"
+      ],
+      "evidence": [
+        {
+          "source_id": "aviationweather",
+          "source_state": "UNCHANGED",
+          "term": "metar",
+          "snippet": "n Sign in Weather Observations GFA FORECAST Ceiling & Visibility Clouds Precipitation Thunderstorms Temperature Winds Turbulence Icing Products SIGMET G-AIRMET Center Weather Adv Prog charts TAF map Forecast Discussions METAR/TAF data PIREP/AIREP data Wind/temp data ITWS data WAFS grids SigWx charts TCF/eTCF/ECFP Tools Terminal Weather Dashboard Winter Weather Dashboard Ceiling & Visibility Dashboard Pre-Duty Weather Briefings CWSU Status Advanced Map Decision support imagery Traffic Flow Management Portal Fax charts Archive View Data API Status Submit a PIREP Edit Gate Forecast Connect About AWC Recent changes Upcoming changes Outreach SIGMET Preview TCF Whiteboard Aviation Weather Testbed Sign in Settings Admin Auto Dark Light P",
+          "retrieved_at": "2026-09-19T20:59:24.461145+00:00"
+        },
+        {
+          "source_id": "ecmwf_open",
+          "source_state": "UNCHANGED",
+          "term": "2 metre temperature",
+          "snippet": "d deviation of sub-gridscale orography (step 0) 160 sfc slor Slope of sub-gridscale orography (step 0) 163 sfc tcc Total cloud cover 164 sfc 10u 10 metre U wind component 165 sfc 10v 10 metre V wind component 166 sfc 2t 2 metre temperature 167 sfc 2d 2 metre dewpoint temperature 168 sfc ssrd Surface net short-wave (solar) radiation downwards 169 sfc lsm Land Sea Mask 172 sfc strd Surface net long-wave (thermal) radiation downwards 175 sfc ssr Surface net short-wave (solar) radiation 176 sfc str Surface net long-wave (thermal) radiation 177 sfc ttr Top net long-wave (thermal) radiation 179 sfc ewss Time-integrated eastward turbulent surface stress 180 sfc nsss Time-integrated northward turbulent surface stress 181 sfc ro Runoff 205",
+          "retrieved_at": "2026-09-19T20:59:24.830272+00:00"
+        },
+        {
+          "source_id": "kalshi_weather_rules",
+          "source_state": "CHANGED",
+          "term": "metar",
+          "snippet": "ing based on the high temperature recorded in the final NWS Daily Climate Report. Market determination may be delayed in the rare instances of a) a high temperature is not consistent with 6-hr or 24-hr highs reported by METAR or b) the final NWS Climate Report high temperature value is lower than previous preliminary report. \u200b Hourly Temperature Markets Some temperature markets are hourly - the market title names an exact time, for example \u201cChicago temperature at 5 PM EDT.\u201d These markets are also directional: each contract resolves on whether the temperature at that time is above or below a specific level, rather than within a range. They settle on the temperature at that exact time as reported by The Weather Company for the stati",
+          "retrieved_at": "2026-09-19T23:00:30.887528+00:00"
+        }
+      ]
+    },
+    "settlement": {
+      "status": "EVIDENCE_ROUTED",
+      "coverage_gaps": [
+        "Venue-specific contract-rule pages may need deeper retrieval than docs landing pages"
+      ],
+      "evidence": [
+        {
+          "source_id": "kalshi_weather_rules",
+          "source_state": "CHANGED",
+          "term": "settlement",
+          "snippet": "amounts in specific cities, from New York City to Los Angeles. Traders can take positions on whether a city will reach a certain high temperature or fall within a particular range. Each weather market names its official settlement source in its market rules. Daily high/low temperature markets settle based on the final climate report issued by the National Weather Service (NWS), typically released the following morning. Hourly temperature markets settle on readings from The Weather Company . Always check the specific market\u2019s rules for its source. How Do I Trade on Weather Markets? Kalshi creates a prediction market around a specific temperature threshold for a given location. For example: \u201cHighest temperature in Chicago on April 1",
+          "retrieved_at": "2026-09-19T23:00:30.887528+00:00"
+        }
+      ]
+    },
+    "microstructure": {
+      "status": "EVIDENCE_ROUTED",
+      "coverage_gaps": [
+        "No live orderbook snapshot source in hourly registry"
+      ],
+      "evidence": [
+        {
+          "source_id": "polymarket_docs",
+          "source_state": "UNCHANGED",
+          "term": "order book",
+          "snippet": "market 101 SDKs & APIs Core Concepts Markets & Events Negative Risk Markets Prices & Orderbook Positions & Tokens Polymarket USD Order Lifecycle Resolution Market Data Overview Discover Markets Market Details Prices and Order Books Analytics Real-Time Data Chainlink TWAP Prices Trading Overview Place Your First Order Wallets and Authentication Session Keys Beta Place Orders Manage Orders Real-Time Order Updates Positions Combos Wallet Activity Fees Market Making Matching Engine Restarts Bridge Programs Taker Rebate Program Maker Rebates Program Liquidity Rewards Builder Program Referral Program Resources Contracts Data Resources Error Codes \ud83c\uddfa\ud83c\uddf8 Looking for Polymarket US documentation? Visit US Docs \u2192 Polymarket Documentation Build",
+          "retrieved_at": "2026-09-19T20:59:24.454376+00:00"
+        }
+      ]
+    },
+    "algebra": {
+      "status": "EVIDENCE_ROUTED",
+      "coverage_gaps": [],
+      "evidence": [
+        {
+          "source_id": "polymarket_docs",
+          "source_state": "UNCHANGED",
+          "term": "combo",
+          "snippet": "ils Prices and Order Books Analytics Real-Time Data Chainlink TWAP Prices Trading Overview Place Your First Order Wallets and Authentication Session Keys Beta Place Orders Manage Orders Real-Time Order Updates Positions Combos Wallet Activity Fees Market Making Matching Engine Restarts Bridge Programs Taker Rebate Program Maker Rebates Program Liquidity Rewards Builder Program Referral Program Resources Contracts Data Resources Error Codes \ud83c\uddfa\ud83c\uddf8 Looking for Polymarket US documentation? Visit US Docs \u2192 Polymarket Documentation Build on the world\u2019s largest prediction market. APIs, SDKs, and tools for prediction market developers. Developer Quickstart Make your first API request in minutes. Learn the basics of the Polymarket platform, f",
+          "retrieved_at": "2026-09-19T20:59:24.454376+00:00"
+        }
+      ]
+    },
+    "behavioral": {
+      "status": "NO_EVIDENCE",
+      "coverage_gaps": [],
+      "evidence": []
+    },
+    "informed_flow": {
+      "status": "NO_EVIDENCE",
+      "coverage_gaps": [
+        "No point-in-time participant identity/flow dataset"
+      ],
+      "evidence": []
+    },
+    "scout": {
+      "status": "EVIDENCE_ROUTED",
+      "coverage_gaps": [],
+      "evidence": [
+        {
+          "source_id": "cftc",
+          "source_state": "CHANGED",
+          "term": "prediction market",
+          "snippet": "ments of Traders Bank Participation Reports Cotton On-Call Financial Data for FCMS Staff Reports Weekly Swaps Report Cleared Margin Reports Office of the Chief Economist Forms & Submissions Learn & Protect Understanding Prediction Markets and Event Contracts Check Registration & Disciplinary History Submit a Tip or Complaint RED List Office of Proceedings Learning Resources News & Events Press Releases Public Statements & Remarks Events Carousel Rotation On On CFTC and Kansas State University to Host AgCon October 22-23 CFTC Grants Multiple Whistleblower Awards CFTC Issues Advisory on Self-Certifying Incentive Programs for Prediction Markets CFTC Approves Final Rule Concerning Whistleblower Awards Holding Wrongdoers Accountable Wh",
+          "retrieved_at": "2026-09-19T23:00:29.431187+00:00"
+        },
+        {
+          "source_id": "kalshi_docs",
+          "source_state": "UNCHANGED",
+          "term": "prediction market",
+          "snippet": "king Your First Request Make your first API call and start trading on Kalshi. Demo Environment Build and test safely against the demo environment. API Keys Generate and manage your API credentials. Kalshi Academy New to prediction markets? Explore educational resources and tutorials. Reference Rate Limits Token budgets, tiers, and bursting. Changelog Stay updated with the latest API changes. Glossary Key terms and concepts used across the exchange. Specifications Predictions REST Download openapi.yaml for event-contract REST API integration. Predictions WebSocket Download asyncapi.yaml for event-contract WebSocket integration. Perps REST Download perps_openapi.yaml for perpetual futures REST API integration. Perps WebSocket Downlo",
+          "retrieved_at": "2026-09-19T20:59:24.774537+00:00"
+        },
+        {
+          "source_id": "kalshi_weather_rules",
+          "source_state": "CHANGED",
+          "term": "prediction market",
+          "snippet": "cally released the following morning. Hourly temperature markets settle on readings from The Weather Company . Always check the specific market\u2019s rules for its source. How Do I Trade on Weather Markets? Kalshi creates a prediction market around a specific temperature threshold for a given location. For example: \u201cHighest temperature in Chicago on April 15, 2025?\u201d \u200b Contract prices for temperature ranges may shift as new weather data (e.g., forecasts, model runs, satellite images, observations) becomes available. Note: Not all weather data is the same. Apps like AccuWeather, iOS Weather, or Google Weather may be useful for guidance but do not determine contract outcomes. The only source used for settlement is the one named in the ma",
+          "retrieved_at": "2026-09-19T23:00:30.887528+00:00"
+        },
+        {
+          "source_id": "polymarket_docs",
+          "source_state": "UNCHANGED",
+          "term": "prediction market",
+          "snippet": "Program Liquidity Rewards Builder Program Referral Program Resources Contracts Data Resources Error Codes \ud83c\uddfa\ud83c\uddf8 Looking for Polymarket US documentation? Visit US Docs \u2192 Polymarket Documentation Build on the world\u2019s largest prediction market. APIs, SDKs, and tools for prediction market developers. Developer Quickstart Make your first API request in minutes. Learn the basics of the Polymarket platform, fetch market data, place orders, and redeem winning positions. Place Your First Order \u2192 TypeScript Python API import { createPublicClient } from \"@polymarket/client\" ; const client = createPublicClient (); const pages = client . listMarkets ({ closed: false }); const { items : markets } = await pages . firstPage (); from polymarket impor",
+          "retrieved_at": "2026-09-19T20:59:24.454376+00:00"
+        }
+      ]
+    }
+  },
+  "changed_sources": [
+    {
+      "source_id": "cftc",
+      "quality": "USABLE",
+      "chars": 4805,
+      "text_ref": "knowledge/documents/text/cftc/1b3dc2876eb592e88512a72f9add2378d3fa099e7259613715ddfac51ce03777.json",
+      "excerpt": "Commodity Futures Trading Commission | CFTC /frontpage-latest-news Skip to main content icon-hamburger Created with Sketch. Menu Transparency Contact Us Search Search Main navigation About the CFTC The Commission Chairman & Commissioners CFTC Organization Advisory Committees Innovation at the CFTC Agriculture at the CFTC Budget & Performance Privacy at the CFTC Careers Industry Oversight Industry Filings Trading Organizations Clearing Organizations Data Repositories Intermediaries Market Surveillance Contracts & Products Rules & Rule Amendments Anti-Money Laundering Law & Regulation Commodity Exchange Act & Regulations How Rules Are Made Holding Wrongdoers Accountable Federal Register Public Comments CFTC Staff Letters Market Data & Economic Analysis Data at CFTC Commitments of Traders Bank Participation Reports Cotton On-Call Financial Data for FCMS Staff Reports Weekly Swaps Report Cleared Margin Reports Office of the Chief Economist Forms & Submissions Learn & Protect Understanding Prediction Markets and Event Contracts Check Registration & Disciplinary History Submit a Tip or Complaint RED List Office of Proceedings Learning Resources News & Events Press Releases Public Statements & Remarks Events Carousel Rotation On On CFTC and Kansas State University to Host AgCon October 22-23 CFTC Grants Multiple Whistleblower Awards CFTC Issues Advisory on Self-Certifying Incentive Programs for Prediction Markets CFTC Approves Final Rule Concerning Whistleblower Awards Holding Wrongdoers Accountable Whistleblower.gov CFTC and Kansas State University to Host AgCon October 22-23 See"
+    },
+    {
+      "source_id": "github",
+      "quality": "USABLE",
+      "chars": 7669,
+      "text_ref": "knowledge/documents/text/github/f42e282da315700c4c0dca4b515d1630b3441404f69cbf69ed4b7427a57f159a.json",
+      "excerpt": "GitHub \u00b7 Change is constant. GitHub keeps you ahead. \u00b7 GitHub Skip to content Navigation Menu Sign in Platform AI CODE CREATION GitHub Copilot Write better code with AI GitHub Copilot app Direct agents from issue to merge MCP Registry Integrate external tools DEVELOPER WORKFLOWS Actions Automate any workflow Codespaces Instant dev environments Issues Plan and track work Code Review Manage code changes Code Quality Enforce quality at merge APPLICATION SECURITY GitHub Advanced Security Find and fix vulnerabilities Code security Secure your code as you build Secret protection Stop leaks before they start EXPLORE Why GitHub Documentation Blog Changelog Marketplace View all features Solutions BY COMPANY SIZE Enterprises Small and medium teams Startups Nonprofits BY USE CASE App Modernization DevSecOps DevOps CI/CD View all use cases BY INDUSTRY Healthcare Financial services Manufacturing Government View all industries View all solutions Resources EXPLORE BY TOPIC AI Software Development DevOps Security View all topics EXPLORE BY TYPE Customer stories Events & webinars Ebooks & reports Business insights GitHub Skills SUPPORT & SERVICES Documentation Customer support Community forum Trust center Partners View all resources Open Source COMMUNITY GitHub Sponsors Fund open source developers PROGRAMS Security Lab Maintainer Community GitHub Stars Archive Program REPOSITORIES Topics Trending Collections Enterprise ENTERPRISE SOLUTIONS Enterprise platform AI-powered developer platform AVAILABLE ADD-ONS GitHub Advanced Security Enterprise-grade security features Copilot for Business Ente"
+    },
+    {
+      "source_id": "kalshi_weather_rules",
+      "quality": "USABLE",
+      "chars": 4859,
+      "text_ref": "knowledge/documents/text/kalshi_weather_rules/1c1c1110d5aaa97eba247056c3cd9e877b546e618c7a2326d16e259df34a7246.json",
+      "excerpt": "Weather Markets | Kalshi Help Center Copyright (c) 2023, Intercom, Inc. ( [email protected] ) with Reserved Font Name \"Inter\". This Font Software is licensed under the SIL Open Font License, Version 1.1. Copyright (c) 2023, Intercom, Inc. ( [email protected] ) with Reserved Font Name \"Inter\". This Font Software is licensed under the SIL Open Font License, Version 1.1. Skip to main content Search for articles... All Collections Markets Popular Markets Weather Markets Weather Markets July 22, 2026 Table of contents How do weather markets work? Kalshi offers a wide variety of weather-related markets that allow users to trade contracts based on temperature movements or precipitation amounts in specific cities, from New York City to Los Angeles. Traders can take positions on whether a city will reach a certain high temperature or fall within a particular range. Each weather market names its official settlement source in its market rules. Daily high/low temperature markets settle based on the final climate report issued by the National Weather Service (NWS), typically released the following morning. Hourly temperature markets settle on readings from The Weather Company . Always check the specific market\u2019s rules for its source. How Do I Trade on Weather Markets? Kalshi creates a prediction market around a specific temperature threshold for a given location. For example: \u201cHighest temperature in Chicago on April 15, 2025?\u201d \u200b Contract prices for temperature ranges may shift as new weather data (e.g., forecasts, model runs, satellite images, observations) becomes available. Note: Not "
+    },
+    {
+      "source_id": "nomads",
+      "quality": "USABLE",
+      "chars": 6959,
+      "text_ref": "knowledge/documents/text/nomads/2767bb0a732969e132093208c38b5c7e4cd52a84cf31385a56526a66ee2059db.json",
+      "excerpt": "NOMADS at ncep.noaa.gov HOME Forecast Local Graphical Aviation Marine Rivers and Lakes Hurricanes Severe Weather Fire Weather Space Weather Sun/Moon Long Range Forecasts Climate Prediction Past Weather Past Weather Heating/Cooling Days Monthly Temperatures Records Astronomical Data Safety Floods Tsunami Beach Hazards Wildfire Cold Tornadoes Fog Air Quality Heat Hurricanes Lightning Safe Boating Rip Currents Thunderstorms Space Weather Sun (Ultraviolet Radiation) Safety Campaigns Wind Drought Winter Weather Information Wireless Emergency Alerts Brochures Weather-Ready Nation Cooperative Observers Daily Briefing Damage/Fatality/Injury Statistics Forecast Models GIS Data Portal NOAA Weather Radio Publications SKYWARN Storm Spotters StormReady TsunamiReady Service Change Notices Education Be A Force of Nature NWS Education Home News NWS News Events Social Media Pubs/Brochures/Booklets NWS Media Contacts Search Search For NWS All NOAA About About NWS Organization Strategic Plan Commitment to Diversity For NWS Employees International National Centers Careers Contact Us Glossary NOAA Operational Model Archive and Distribution System NCEP > NCO > NOMADS | NOMADS Overview | Information | Documents | What's New? | NOMADS Status NOMADS Data at NCEP Click on the link in the Data Set field for description and availability information. Click on the column headings for description of each data access method. Data Set freq grib filter https Global Models AIGFS 6 hours - https AIGEFS 6 hours - https GDAS 6 hours grib filter https GDAS 0.25 6 hours grib filter https GFS 0.25 Degree 6 hours g"
+    },
+    {
+      "source_id": "nws",
+      "quality": "USABLE",
+      "chars": 2429,
+      "text_ref": "knowledge/documents/text/nws/5b5848cbffbfb87436f57d82992af63641dc86d5afbb3410b5563b35926b14d0.json",
+      "excerpt": "National Weather Service HOME FORECAST Local Graphical Aviation Marine Rivers and Lakes Hurricanes Severe Weather Fire Weather Sunrise/Sunset Long Range Forecasts Climate Prediction Space Weather PAST WEATHER Past Weather Astronomical Data Certified Weather Data SAFETY INFORMATION Wireless Emergency Alerts Weather-Ready Nation Brochures Cooperative Observers Daily Briefing Damage/Fatality/Injury Statistics Forecast Models GIS Data Portal NOAA Weather Radio Publications SKYWARN Storm Spotters StormReady TsunamiReady Service Change Notices EDUCATION NEWS SEARCH Search For NWS All NOAA ABOUT About NWS Organization For NWS Employees National Centers Careers Contact Us Glossary Social Media NWS Transformation Local forecast by \"City, St\" or ZIP code Sorry, the location you searched for was not found. Please try another search. Multiple locations were found. Please select one of the following: Location Help Dangerous Heat and Heavy Rainfall into the Weekend Hot temperatures and high humidity are forecast to continue across the mid-Mississippi Valley into this weekend. Heat Advisories remain in effect. Heavy to excessive rainfall occurring at times through the weekend could bring areas of flooding to parts of the northern Rockies, upper Midwest, central Great Lakes, and southern New England. Read More > Customize Your Weather.gov Enter Your City, ST or ZIP Code Remember Me Privacy Policy LOADING... ACTIVE ALERTS FORECAST MAPS RADAR Standard Radar (Low Bandwidth) Enhanced Radar RIVERS, LAKES, RAINFALL AIR QUALITY SATELLITE CURRENT American Samoa Guam Puerto Rico/Virgin Islands Clic"
+    },
+    {
+      "source_id": "reddit",
+      "quality": "LOW_TEXT_YIELD",
+      "chars": 6,
+      "text_ref": "knowledge/documents/text/reddit/1f57d31ad5289f981c0be5e87d44eb13d69e2e6b83f89202c2be0617c3acee0d.json",
+      "excerpt": "Reddit"
+    },
+    {
+      "source_id": "youtube",
+      "quality": "LOW_TEXT_YIELD",
+      "chars": 203,
+      "text_ref": "knowledge/documents/text/youtube/47401bed1169bb9f24c1d4c296b697d8887bed7ebd327a088323e6102174fe4c.json",
+      "excerpt": "YouTube Over Pers Auteursrecht Contact Creators Adverteren Ontwikkelaars Voorwaarden Privacy Beleid en veiligheid Zo werkt YouTube Nieuwe functies testen \u00a9 2026 Google LLC YouTube, een bedrijf van Google"
+    }
+  ],
+  "twc_revision_summary": {
+    "created_at": "2026-09-19T23:05:29.738641+00:00",
+    "event_manifest_count": 0,
+    "event_manifests": [],
+    "first_snapshot_retrieved_at": "2026-09-19T22:49:08.113632+00:00",
+    "h7_state": "NO_TEMPERATURE_REVISION_OBSERVED",
+    "interpretation_guard": [
+      "Feed status is not assumed to equal Kalshi contract settlement finality.",
+      "Prospective recorder evidence only; historical late snapshots are not point-in-time substitutes.",
+      "No market edge is inferred without contemporaneous executable market data."
+    ],
+    "last_sha256": "e5a1d58f6f30a12f3b6c3a4825a01f52846faac328c801eaed359d115495b28e",
+    "last_snapshot_retrieved_at": "2026-09-19T23:05:29.089975+00:00",
+    "last_source_fetchedAt": "2026-09-19T23:04:21.652Z",
+    "live_trading": false,
+    "paid_actions": false,
+    "payload_change_intervals": 2,
+    "snapshot_count": 5,
+    "source_fetchedAt_change_intervals": 2,
+    "total_pending_to_settled": 0,
+    "total_pending_to_settled_temperature_changes": 0,
+    "total_settled_to_settled_temperature_changes": 0,
+    "total_status_changes": 0,
+    "total_temperature_changes": 0,
+    "wallet_actions": false
+  },
+  "kalshi_e202": {
+    "auth_used": false,
+    "climate_series_count": 0,
+    "created_at": "2026-09-19T23:03:14.735231+00:00",
+    "guards": [
+      "Discovery by series metadata is not settlement proof.",
+      "Exact market rules override generic help/docs.",
+      "Weather-index availability does not btself prove it is the settlement source.",
+      "No market edge is inferred without point-in-time executable orderbook evidence."
+    ],
+    "hourly_temperature_candidate_count": 0,
+    "hourly_temperature_candidates": [],
+    "live_trading": false,
+    "paid_actions": false,
+    "series_pages": 1,
+    "source": "Kalshi public Trade API v2",
+    "wallet_actions": false,
+    "weather_index_public_probes": [
+      {
+        "city": "nyc",
+        "point_count": 0,
+        "sample": null,
+        "sha256": "9ec4f191acff8aa99fb579ae0240eb887ca8942fdce0c821616d65597de6efbe",
+        "status": 200,
+        "top_keys": [
+          "city",
+          "config_version",
+          "timeseries",
+          "units"
+        ]
+      },
+      {
+        "city": "miami",
+        "point_count": 0,
+        "sample": null,
+        "sha256": "606b59c44dd9c31c92d55aa61db90f7f83e1ccbb46c47b57857e4672bc364e1a",
+        "status": 200,
+        "top_keys": [
+          "city",
+          "config_version",
+          "timeseries",
+          "units"
+        ]
+      },
+      {
+        "city": "chicago",
+        "point_count": 0,
+        "sample": null,
+        "sha256": "3ef253fd8a4a64a508ad83024e7b4c61db90d4a8c3e09d74244859a2341a70a6",
+        "status": 200,
+        "top_keys": [
+          "city",
+          "config_version",
+          "timeseries",
+          "units"
+        ]
+      },
+      {
+        "city": "lax",
+        "error": "<HTTPError 400: 'Bad Request'>"
+      }
+    ]
+  }
+}
