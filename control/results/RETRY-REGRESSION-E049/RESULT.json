@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "experiments/bridge/e049.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-19T19:49:10.979061+00:00",
+  "hypothesis_id": "CONTROL-NO-SILENT-WAITING",
+  "source_commit": "808c90b755cc047557133970105110f1e518aa6b",
+  "started_at": "2026-09-19T19:49:10.970197+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "4b5e6940fa752130ede1b441d4c5ab4b65feab679256f8b3f45a9e14f6d03122",
+  "task_class": "infrastructure",
+  "task_id": "RETRY-REGRESSION-E049"
+}
