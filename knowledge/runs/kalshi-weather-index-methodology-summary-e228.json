@@ -1,0 +1,115 @@
+{
+  "cross_checks": {
+    "chicago_certification_initial_config": "chicago-temperature-v1.1",
+    "chicago_public_feed_config_e216": "chicago-temperature-v1.0-cal-20260914",
+    "config_match": false,
+    "e227_interpol_hit": "FALSE_POSITIVE_PDF_IMAGE_METADATA",
+    "e227_reason": "The strings hit is /Interpolate true on an embedded image XObject, not weather methodology text.",
+    "implication": "Do not apply the certification's initial offsets to the current feed without obtaining the effective configuration record. Weekly offset refreshes are explicitly prospective."
+  },
+  "guards": [
+    "This artifact is a structured research summary of official Kalshi certifications already archived in E223.",
+    "Initial configuration parameters are not assumed to equal later effective calibrated configurations.",
+    "No trading, paid action, or wallet action is performed."
+  ],
+  "live_trading": false,
+  "paid_actions": false,
+  "research_date": "2026-09-20",
+  "research_implications": [
+    "Simple arithmetic station averaging is falsified as the general model.",
+    "The index is a deterministic offset-adjusted weighted network estimate with source hierarchy and QC.",
+    "Missing primary data can trigger fallback/substitution while still producing a degraded canonical value.",
+    "The Chicago anomaly in E221 is now qualitatively explained by methodology, but exact numeric reproduction requires the effective configuration/offsets and exact selected source values for that minute.",
+    "Canonical point finality makes point-in-time capture essential; late observations cannot be substituted retrospectively for settlement research.",
+    "NO_PROVEN_EDGE remains the correct market conclusion until signal superiority and contemporaneous executable pricing are tested."
+  ],
+  "sources": {
+    "chicago": {
+      "archived_sha256_e223": "d64de13586308c90bed771ec1ddf494c13f51972fda5b92d83d9031a561d4afb",
+      "base_weight_each": 0.2,
+      "eligibility_deadline_seconds": 300,
+      "fallback": "hierarchy including prior-minute HF-ASOS and official ASOS METAR/SPECI, bounded to max age 75 minutes",
+      "finality": "canonical observation once published governs contract; later restatements are not used for expiration value/outcome under this contract",
+      "formula": {
+        "adjusted_station": "z_i(t) = x_i(t) - b_i + B_c",
+        "city_reference": "B_c = sum over configured M of w_i*b_i",
+        "index": "Index_c(t) = sum over accepted A(t) of w_i*z_i(t) / sum over accepted A(t) of w_i"
+      },
+      "initial_city_reference_c": 0.0,
+      "initial_configuration_identifier": "chicago-temperature-v1.1",
+      "initial_offsets_c": {
+        "KARR": -1.0,
+        "KDPA": -0.5,
+        "KMDW": 1.0,
+        "KORD": 0.5,
+        "KPWK": 0.0
+      },
+      "members": [
+        "KMDW",
+        "KORD",
+        "KPWK",
+        "KDPA",
+        "KARR"
+      ],
+      "methodology_version": "1.0",
+      "official_pdf_url": "https://assets.kalshi.com/regulatory/product-certifications/CHIMETROWINDEX.pdf",
+      "primary": "one-minute HF-ASOS via Synoptic Data, exact event minute",
+      "quorum": {
+        "minimum_members": 4,
+        "minimum_weight_share": 0.8
+      },
+      "rounding": "calculate in C at full precision; final output F rounded to nearest 0.01F",
+      "settlement": "for at-contract, after S+300s select greatest canonical event time t<=S, contract requires t no more than 60 minutes before S",
+      "status_semantics": {
+        "degraded": "member absent, fallback used, or QC substitution occurred",
+        "normal": "every member contributed exact primary observation",
+        "unavailable": "quorum not met; no numeric canonical observation"
+      }
+    },
+    "miami": {
+      "archived_sha256_e223": "f9239740141bf38c95708fc7b954a1b44ecb40a517fe12ebe975597540eeb4b1",
+      "base_weight_each": 0.2,
+      "eligibility_deadline_seconds": 300,
+      "fallback": "same-station official ASOS METAR/SPECI after primary failure, max age 75 minutes",
+      "finality": "canonical observation once published governs contract; later restatements are not used for expiration value/outcome under this contract",
+      "formula": {
+        "adjusted_station": "z_i(t) = x_i(t) - b_i + B_c",
+        "city_reference": "B_c = sum over configured M of w_i*b_i",
+        "index": "Index_c(t) = sum over accepted A(t) of w_i*z_i(t) / sum over accepted A(t) of w_i"
+      },
+      "initial_city_reference_c": -0.1,
+      "initial_configuration_identifier": "miami-temperature-v1.0",
+      "initial_offsets_c": {
+        "KFLL": 0.0,
+        "KFXE": 0.0,
+        "KMIA": 0.0,
+        "KOPF": -0.5,
+        "KPMP": 0.0
+      },
+      "members": [
+        "KMIA",
+        "KOPF",
+        "KFLL",
+        "KFXE",
+        "KPMP"
+      ],
+      "methodology_version": "1.0",
+      "official_pdf_url": "https://assets.kalshi.com/regulatory/product-certifications/MIAWINDEX.pdf",
+      "primary": "one-minute HF-ASOS via Synoptic Data, exact event minute",
+      "quorum": {
+        "minimum_members": 4,
+        "minimum_weight_share": 0.8
+      },
+      "rounding": "calculate in C at full precision; final output F rounded to nearest 0.01F",
+      "settlement": "for at-contract, after S+300s select greatest canonical event time t<=S, contract requires t no more than 60 minutes before S",
+      "status_semantics": {
+        "degraded": "member absent, fallback used, or QC substitution occurred",
+        "normal": "every member contributed exact primary observation",
+        "unavailable": "quorum not met; no numeric canonical observation"
+      }
+    }
+  },
+  "status": "EVIDENCE_SUMMARY",
+  "task_id": "KALSHI-WEATHER-INDEX-METHODOLOGY-SUMMARY-E228",
+  "wallet_actions": false
+}
