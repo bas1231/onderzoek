@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "experiments/bridge/e081.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-19T20:34:11.565904+00:00",
+  "hypothesis_id": "CONTROL-AUTONOMOUS-RESEARCH",
+  "source_commit": "655644b9012374d631b4bf763eefef338219ba79",
+  "started_at": "2026-09-19T20:34:09.212351+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "ec11c69d842458895e83c6c562257a23656e027931a904f31c31ad06ffb8ce8b",
+  "task_class": "infrastructure",
+  "task_id": "RELIABILITY-GATE-E081"
+}
