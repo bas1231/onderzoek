@@ -1,0 +1,1 @@
+print('E122_FINAL_CHANNEL_OK')

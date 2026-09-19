@@ -1,0 +1,13 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "experiments/bridge/e122.py"
+  ],
+  "hypothesis_id": "CONTROL-NO-SILENT-WAITING",
+  "live_trading": false,
+  "operation": "python",
+  "task_class": "infrastructure",
+  "task_id": "FINAL-CHANNEL-CANARY-E122",
+  "timeout_seconds": 30,
+  "working_directory": "."
+}
