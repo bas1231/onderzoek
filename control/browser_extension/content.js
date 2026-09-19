@@ -165,6 +165,62 @@
     });
   }
 
+    // RELIABILITY-E042A
+    const DURABLE_QUEUE_KEY =
+      "predictionDurableTaskQueueV1";
+
+    async function loadDurableQueue() {
+      const stored = await chrome.storage.local.get([
+        DURABLE_QUEUE_KEY
+      ]);
+
+      const queue = stored[DURABLE_QUEUE_KEY];
+
+      return (
+        queue &&
+        typeof queue === "object" &&
+        !Array.isArray(queue)
+      )
+        ? queue
+        : {};
+    }
+
+    async function saveDurableQueue(queue) {
+      await chrome.storage.local.set({
+        [DURABLE_QUEUE_KEY]: queue
+      });
+    }
+
+    async function persistDurableEnvelope(
+      taskId,
+      envelope
+    ) {
+      const queue = await loadDurableQueue();
+
+      queue[taskId] = {
+        envelope,
+        discoveredAt:
+          queue[taskId]?.discoveredAt || Date.now(),
+        updatedAt: Date.now(),
+        attempts:
+          Number(queue[taskId]?.attempts || 0),
+        lastError:
+          queue[taskId]?.lastError || ""
+      };
+
+      await saveDurableQueue(queue);
+    }
+
+    async function removeDurableEnvelope(taskId) {
+      const queue = await loadDurableQueue();
+
+      if (queue[taskId]) {
+        delete queue[taskId];
+        await saveDurableQueue(queue);
+      }
+    }
+
+
   async function scanForTasks() {
     if (scanning) {
       return;
@@ -272,11 +328,38 @@
               taskId
             );
 
-            const response = await bridgeFetch(
-              "/enqueue",
-              "POST",
-              envelope
-            );
+            await persistDurableEnvelope(
+                taskId,
+                envelope
+              );
+
+              const discoverResponse =
+                await bridgeFetch(
+                  "/discover",
+                  "POST",
+                  {
+                    task_id: taskId
+                  }
+                );
+
+              if (
+                !discoverResponse ||
+                !discoverResponse.ok
+              ) {
+                console.warn(
+                  "[Prediction Bridge] discover rejected:",
+                  taskId,
+                  discoverResponse
+                );
+
+                continue;
+              }
+
+              const response = await bridgeFetch(
+                "/enqueue",
+                "POST",
+                envelope
+              );
 
             const alreadyExists =
               response &&
