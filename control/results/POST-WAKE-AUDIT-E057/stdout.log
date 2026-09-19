@@ -1,0 +1,15 @@
+{
+  "head": "1458e6d test(control): audit post E056 autonomous wake proof",
+  "status": [
+    " M control/browser_bridge.py",
+    " M control/browser_extension/background.js",
+    " M control/browser_extension/content.js",
+    " M control/browser_extension/manifest.json",
+    " M control/executor.py",
+    " M control/jobs/lifecycle_supervisor.py",
+    " D control/tasks/pending/POST-WAKE-AUDIT-E057.json",
+    "?? .gitignore",
+    "?? control/tasks/running/"
+  ],
+  "e056_commits": []
+}

@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "experiments/bridge/e057.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-19T19:57:44.987949+00:00",
+  "hypothesis_id": "CONTROL-NO-SILENT-WAITING",
+  "source_commit": "1458e6d308d0b064f17c7d9bfe0ed51f41c3687a",
+  "started_at": "2026-09-19T19:57:44.957710+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "8e257a2b1ba5e80f31a7790fef8c85b46ba31a558120031de2702190a6c30bef",
+  "task_class": "infrastructure",
+  "task_id": "POST-WAKE-AUDIT-E057"
+}
