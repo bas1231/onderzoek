@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "experiments/bridge/e093.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-19T20:41:16.953236+00:00",
+  "hypothesis_id": "CONTROL-AUTONOMOUS-RESEARCH",
+  "source_commit": "87a5e40bffd38ecbbfc1a95256f1e107f2dc4ee5",
+  "started_at": "2026-09-19T20:41:14.799688+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "b371291e10cb23d5c7d332db7320d35a766804bf165221e66131e8264f2ea419",
+  "task_class": "infrastructure",
+  "task_id": "RUN-MANIFEST-E093"
+}
