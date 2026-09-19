@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "experiments/bridge/e041.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-19T19:43:28.553021+00:00",
+  "hypothesis_id": "CONTROL-NO-SILENT-WAITING",
+  "source_commit": "d82caeaabe36422cbcc6b671d96ae4229549ffd6",
+  "started_at": "2026-09-19T19:43:28.500868+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "e3998f1b0768de8161a7d5c6a7fa07a0a9141fea5bc4e3d477155b29bcffdaea",
+  "task_class": "infrastructure",
+  "task_id": "DISCOVER-VERIFY-E041"
+}
