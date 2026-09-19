@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "experiments/bridge/e135.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-19T21:54:16.986202+00:00",
+  "hypothesis_id": "CONTROL-AUTONOMOUS-RESEARCH",
+  "source_commit": "03478a44f6ede6eb5aabc4a302cc4af8a61bce00",
+  "started_at": "2026-09-19T21:54:13.163795+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "ab36ef8615d6ab25bc8d00208fa1b83d70ad7ce17b149cf3841b3c3fae70b18e",
+  "task_class": "infrastructure",
+  "task_id": "TEST-LOCAL-HOURLY-E135"
+}
