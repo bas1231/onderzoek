@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "experiments/bridge/e064.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-19T20:08:32.001904+00:00",
+  "hypothesis_id": "CONTROL-NO-SILENT-WAITING",
+  "source_commit": "f786fa53c76b8711b21e523e00faab51cd12af8f",
+  "started_at": "2026-09-19T20:08:31.990849+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "05924e3d72f88e818f1d9d765060537dcad8e116637d76011472993d807a832c",
+  "task_class": "infrastructure",
+  "task_id": "TRANSPORT-HEALTH-E064"
+}
