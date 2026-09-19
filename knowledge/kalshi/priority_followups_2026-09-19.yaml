@@ -1,0 +1,170 @@
+schema_version: 1
+as_of: 2026-09-19
+economic_status: NO_PROVEN_EDGE
+records:
+  - id: KAL-DEC-MACRO-001
+    kind: negative_evidence
+    status: TESTED_NEGATIVE
+    claim: "De simpele first-decidability trade waarbij men wacht op een geplande publieke macro-release en daarna nog op Kalshi handelt, is voor de gecontroleerde Fed/CPI/payroll-families niet beschikbaar omdat trading vóór de officiële release sluit."
+    evidence:
+      - "September 2026 FOMC: Kalshi API snapshot close_time 2026-09-16T17:59:00Z; officiële FOMC-statement release 18:00:00Z (2:00 PM EDT)."
+      - "August 2026 CPI monthly: KXCPI-26AUG close 8:25 AM ET; BLS release 8:30 AM ET. CPI YoY close 8:29 AM ET."
+      - "August 2026 payrolls: KXPAYROLLS-26AUG close 8:29 AM ET; BLS Employment Situation release 8:30 AM ET."
+      - "September 2026 payroll snapshot likewise showed a 8:29 AM ET close versus scheduled 8:30 AM ET BLS release."
+    implication: "Geen macro 'read official release then buy stale Kalshi quote' als algemene lane. First-decidability moet worden gezocht in andere contractfamilies waar rule-sufficient public evidence vóór close ontstaat."
+    three_angle_check:
+      rules_semantics: PASS
+      source_timing: PASS
+      execution_window: FAIL_NO_POST_RELEASE_WINDOW
+    provenance:
+      - url: "https://www.federalreserve.gov/newsevents/pressreleases/monetary20260916a.htm"
+        type: primary_source
+      - url: "https://www.bls.gov/schedule/2026/"
+        type: primary_source
+      - url: "https://kalshiview.com/blog/september-2026-fomc-decision-result-kalshi-settlement/"
+        type: dated_api_snapshot_secondary
+      - url: "https://kalshiview.com/blog/august-2026-cpi-release-september-11-kalshi-inflation-market-calendar/"
+        type: dated_api_snapshot_secondary
+      - url: "https://kalshiview.com/blog/august-2026-jobs-report-official-release-kalshi-settlement-check/"
+        type: dated_api_snapshot_secondary
+    related:
+      - KAL-LIVE-002
+      - KAL-TWC-001
+
+  - id: KAL-DEC-GENERAL-001
+    kind: hypothesis
+    status: STRUCTURAL_CANDIDATE
+    claim: "First-decidability kan nog bestaan in contractfamilies waarbij publiek rule-sufficient bewijs ontstaat terwijl het orderboek nog open is, vooral bij niet-geplande of niet-synchroon gesloten gebeurtenissen."
+    rationale:
+      - "Kalshi's eigen FAQ zegt dat een markt open kan blijven nadat een gebeurtenis lijkt te zijn gebeurd en dat trading kan doorgaan terwijl officiële bevestiging wordt afgewacht."
+      - "De nieuwe first/stable-decidability paper definieert precies de rule-evidence clock maar rapporteert nog geen price-layer resultaat."
+    required_data:
+      - "prospectief bevroren exact market/rule version"
+      - "official source objects met retrieval timestamps"
+      - "market lifecycle/close timestamps"
+      - "contemporaneous L2 around first-decidability"
+      - "correction/revision history"
+    falsification:
+      - "Scan open markets en kill families waarin source-sufficient evidence systematisch pas na close ontstaat."
+      - "Kill wanneer alle prospective first-decidability windows al volledig geprijsd zijn na fees/depth."
+      - "Kill wanneer correction/finality risk voorkomt dat een singleton payout vóór close bewezen kan worden."
+    execution_blockers:
+      - "bronlatency"
+      - "rule-version drift"
+      - "market halt/early close"
+      - "correction windows"
+      - "stale/non-executable UI prices"
+    provenance:
+      - url: "https://help.kalshi.com/en/articles/13823821-market-faqs"
+        type: primary_documentation
+      - url: "https://arxiv.org/abs/2609.16642"
+        type: research_paper
+
+  - id: KAL-XVENUE-002
+    kind: hypothesis
+    status: STRUCTURAL_CANDIDATE
+    claim: "Generieke pre-game sports cross-venue arbitrage is laag-prioriteit; exact-equivalent, tragere contracten met kleine-book depth kunnen incidenteel fee-clearing gaps hebben, maar moeten op capital-time return en legging risk worden beoordeeld."
+    evidence:
+      - "Pre-registered study op 855 MLB moneylines + Fed vond bij true alignment geen robuuste fee/spread-clearing edge; apparent edge groeide sterk bij opzettelijke mistiming."
+      - "Vultax 12-13 Sep 2026: NFL 0/7518 pre-game fee-clearing checks; college football 0.1%; Premier League 0%."
+      - "Dezelfde Vultax-run vond tragere markten met fee-clearing gaps, maar typische returns waren <1%, capital lock was groot en de methodologie sloot cost-of-capital, transfers, second-leg failure en Kalshi fee-rounding uit."
+      - "Een eerdere exact-matched Fed pair had een ~5.7c median gap maar gemiddeld slechts ~$14 quote size; dit is een small-depth candidate, geen structureel bewezen edge."
+    required_data:
+      - "strict settlement-equivalence proof"
+      - "sub-second synchronized L2 on both venues"
+      - "real fee schedule + rounding"
+      - "atomicity/legging simulation"
+      - "capital lock / annualized return"
+      - "transfer and settlement risk"
+    falsification:
+      - "Kill sports lane after sufficiently large synchronized prospective corpus if no net-positive fills remain."
+      - "Kill slow-market candidates if annualized return after capital cost <= cash benchmark or legging risk dominates."
+    execution_blockers:
+      - "two-venue funding"
+      - "non-atomic fills"
+      - "semantic non-equivalence"
+      - "capital lock"
+      - "fee rounding"
+    provenance:
+      - url: "https://papers.ssrn.com/sol3/papers.cfm?abstract_id=7175258"
+        type: preregistered_paper
+      - url: "https://vultax.com/research/kalshi-polymarket-arbitrage-gaps-after-fees"
+        type: live_orderbook_study
+    related:
+      - KAL-SEM-001
+
+  - id: KAL-FLB-002
+    kind: hypothesis
+    status: STRUCTURAL_CANDIDATE
+    claim: "De meest verdedigbare FLB-lane is niet blind favorites nemen, maar conditioneel maker/favorite-side quoting testen per price bucket, category, fill timing en adverse-selection regime, eventueel inclusief maker/liquidity incentives."
+    evidence:
+      - "Kalshi study >300k contracts: contracts boven ~70c hadden kleine maar statistisch significante positieve post-fee returns; makers deden gemiddeld beter dan takers, terwijl beide FLB vertoonden."
+      - "Polymarket 588M trades: FLB is sterk aggregation/category-dependent en was in de studie afwezig in Sports."
+      - "Community paper-trading evidence waarschuwt dat favorites aan de ask ondanks hoge winrate kunnen verliezen door spread/adverse selection; anecdotal only."
+    required_data:
+      - "trade-level maker/taker direction"
+      - "entry price bucket"
+      - "category/event grouping"
+      - "queue position and fill timestamp"
+      - "1s/5s/30s post-fill markouts"
+      - "fees and maker/liquidity rewards"
+      - "settlement outcomes"
+    falsification:
+      - "Pre-register buckets and categories; require untouched temporal holdout."
+      - "Compare passive-maker versus taker entry on identical candidate set."
+      - "Kill if gross favorite calibration surplus is consumed by fill selection, fees, spread or inventory risk."
+    execution_blockers:
+      - "adverse selection"
+      - "queue/fill uncertainty"
+      - "bias decay over time"
+      - "category dependence"
+    provenance:
+      - url: "https://cepr.org/voxeu/columns/economics-kalshi-prediction-market"
+        type: academic_summary
+      - url: "https://arxiv.org/abs/2609.12878"
+        type: research_paper
+      - url: "https://www.reddit.com/r/Kalshi/comments/1vobcrl/i_ran_about_40_automated_trading_experiments_on/"
+        type: anecdotal_community
+    related:
+      - KAL-MAKER-001
+      - KAL-MAKER-002
+
+  - id: KAL-WX-INDEX-001
+    kind: observation
+    status: RESEARCH_POSITIVE
+    claim: "Kalshi's current Predictions API documentatie exposeert een publieke Weather Index en calibration timeline; de docs omschrijven de Weather Index als de canonical minute-resolution series achter hourly temperature markets. Dit creëert een mogelijke source-regime change ten opzichte van oudere TWC-only aannames."
+    evidence:
+      - "Kalshi API documentation index lists GET /live_data/weather/{city}: 'Kalshi-computed city temperature index: the canonical minute-resolution series behind hourly temperature markets'."
+      - "Calibration endpoint publishes launch configuration, weekly station-offset calibrations and methodology updates."
+      - "Recent mirrored KXTEMP contract text (Aug/Sep 2026) names Synoptic Data and the Kalshi Weather Index Methodology."
+      - "Kalshi Help Center article dated July 22, 2026 still says hourly markets settle on The Weather Company, so source documentation is internally time-sensitive/conflicting and must be resolved per series/rule version."
+    nonclaim: "Dit bewijst geen trading edge en bewijst niet dat iedere hourly weather series dezelfde source-regime gebruikt."
+    required_data:
+      - "exact live KXTEMP series metadata/rules per city"
+      - "rule-version timestamps"
+      - "weather-index points + receipt_basis/status/contributors"
+      - "calibration timeline"
+      - "contemporaneous KXTEMP L2"
+      - "final settlements"
+    falsification:
+      - "Verify exact series rule text against API endpoint for every active city."
+      - "Replay final settlements against archived index values and rule-defined top-of-hour transformation."
+      - "Test whether index information is already fully incorporated before executable entry windows."
+    execution_blockers:
+      - "documentation/rule-version conflict"
+      - "index backfill points may be settlement-ineligible"
+      - "market may close before final index point becomes public"
+      - "liquidity/fees"
+    provenance:
+      - url: "https://docs.kalshi.com/llms.txt"
+        type: primary_api_documentation
+      - url: "https://help.kalshi.com/en/articles/13823837-weather-markets"
+        type: primary_help_documentation_conflicting
+      - url: "https://www.coinbase.com/en-de/predictions/event/KXTEMPLAXHS-26SEP1706"
+        type: mirrored_contract_text
+      - url: "https://apify.com/gratified_ashram/kalshi-weather-index"
+        type: independent_public_data_tool
+    related:
+      - KAL-TWC-001
+      - KAL-TWC-002
+      - KAL-WX-001
