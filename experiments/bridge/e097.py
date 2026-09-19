@@ -1,0 +1,1 @@
+print('E097_BRIDGE_OK')
