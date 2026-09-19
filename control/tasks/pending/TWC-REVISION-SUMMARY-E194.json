@@ -1,0 +1,13 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/twc_revision_summary.py"
+  ],
+  "hypothesis_id": "H7-SETTLEMENT-BOUNDARY",
+  "live_trading": false,
+  "operation": "python",
+  "task_class": "research",
+  "task_id": "TWC-REVISION-SUMMARY-E194",
+  "timeout_seconds": 45,
+  "working_directory": "."
+}
