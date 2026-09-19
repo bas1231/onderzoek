@@ -1,0 +1,13 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/diag_e023.py"
+  ],
+  "hypothesis_id": "CONTROL-TRANSPORT-INTEGRITY",
+  "live_trading": false,
+  "operation": "python",
+  "task_class": "infrastructure",
+  "task_id": "BRIDGE-DIAG-E024",
+  "timeout_seconds": 60,
+  "working_directory": "."
+}
