@@ -1,0 +1,13 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/install_watchdog_v3.py"
+  ],
+  "hypothesis_id": "CONTROL-WATCHDOG",
+  "live_trading": false,
+  "operation": "python",
+  "task_class": "infrastructure",
+  "task_id": "WATCHDOG-V1-E018",
+  "timeout_seconds": 120,
+  "working_directory": "."
+}
