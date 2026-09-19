@@ -1,0 +1,170 @@
+{
+  "artifact": "knowledge/runs/kalshi-weather-config-discovery-e229.json",
+  "files_scanned": 4655,
+  "hit_count": 132,
+  "summary_hits": [
+    {
+      "path": "/home/leonh/prediction_research/control/TASK_QUEUE.yaml",
+      "matched": [
+        "/live_data/weather/",
+        "config_version"
+      ]
+    },
+    {
+      "path": "/home/leonh/prediction_research/knowledge/runs/kalshi-hourly-source-transition-e212.json",
+      "matched": [
+        "weather index methodology"
+      ]
+    },
+    {
+      "path": "/home/leonh/prediction_research/knowledge/runs/kalshi-hourly-universe-e213.json",
+      "matched": [
+        "weather index methodology"
+      ]
+    },
+    {
+      "path": "/home/leonh/prediction_research/knowledge/runs/kalshi-weather-timeseries-markets-e208.json",
+      "matched": [
+        "chicago-temperature-v1.0-cal-20260914",
+        "nyc-temperature-v1.0-cal-20260914",
+        "miami-temperature-v1.0-cal-20260914",
+        "hf_asos",
+        "config_version"
+      ]
+    },
+    {
+      "path": "/home/leonh/prediction_research/knowledge/runs/hourly-20260920T010000+0200-semantic-review.json",
+      "matched": [
+        "config_version"
+      ]
+    },
+    {
+      "path": "/home/leonh/prediction_research/knowledge/runs/kalshi-weather-index-degraded-e221.json",
+      "matched": [
+        "hf_asos"
+      ]
+    },
+    {
+      "path": "/home/leonh/prediction_research/knowledge/runs/kalshi-hourly-series-e209.json",
+      "matched": [
+        "weather index methodology"
+      ]
+    },
+    {
+      "path": "/home/leonh/prediction_research/knowledge/runs/kalshi-weather-index-methodology-summary-e228.json",
+      "matched": [
+        "chicago-temperature-v1.0-cal-20260914"
+      ]
+    },
+    {
+      "path": "/home/leonh/prediction_research/knowledge/runs/kalshi-hourly-source-transition-e211.json",
+      "matched": [
+        "weather index methodology"
+      ]
+    },
+    {
+      "path": "/home/leonh/prediction_research/knowledge/runs/kalshi-hourly-rules-live-e202.json",
+      "matched": [
+        "config_version"
+      ]
+    },
+    {
+      "path": "/home/leonh/prediction_research/knowledge/runs/kalshi-weather-index-official-docs-e223.json",
+      "matched": [
+        "weather index methodology"
+      ]
+    },
+    {
+      "path": "/home/leonh/prediction_research/knowledge/kalshi/weather_index_source_resolution_2026-09-19.yaml",
+      "matched": [
+        "/live_data/weather/",
+        "config_version",
+        "weather index methodology"
+      ]
+    },
+    {
+      "path": "/home/leonh/prediction_research/knowledge/kalshi/KALSHI_WEATHER_SOURCE_MIGRATION_MISPRICING_HYPOTHESIS_2026-09-19.md",
+      "matched": [
+        "/live_data/weather/",
+        "weather index methodology"
+      ]
+    },
+    {
+      "path": "/home/leonh/prediction_research/knowledge/kalshi/KXTEMPMIAH_PARTICIPATION_REGIME_AROUND_KWI_2026-09-19.md",
+      "matched": [
+        "weather index methodology"
+      ]
+    },
+    {
+      "path": "/home/leonh/prediction_research/knowledge/kalshi/priority_followups_2026-09-19.yaml",
+      "matched": [
+        "/live_data/weather/"
+      ]
+    },
+    {
+      "path": "/home/leonh/prediction_research/knowledge/kalshi/KALSHI_WEATHER_INDEX_FREE_REPLAY_CASE_2026-09-09.md",
+      "matched": [
+        "weather index methodology"
+      ]
+    },
+    {
+      "path": "/home/leonh/prediction_research/knowledge/kalshi/WEATHER_SOURCE_REGIME_DRIFT_SUPERSEDING_CONTEXT_2026-09-19.yaml",
+      "matched": [
+        "weather index methodology"
+      ]
+    },
+    {
+      "path": "/home/leonh/prediction_research/candidates/active/KAL-WX-INDEX-001.yaml",
+      "matched": [
+        "config_version",
+        "weather index methodology"
+      ]
+    },
+    {
+      "path": "/home/leonh/prediction_research/control/weather/kalshi_weather_index_recorder.py",
+      "matched": [
+        "/live_data/weather/",
+        "config_version"
+      ]
+    },
+    {
+      "path": "/home/leonh/prediction_research/control/results/KALSHI-HOURLY-SOURCE-TRANSITION-E211/stdout.log",
+      "matched": [
+        "weather index methodology"
+      ]
+    }
+  ],
+  "endpoint_candidates": [
+    "/live_data/weather/{city",
+    "config_version",
+    "chicago_certification_initial_config",
+    "chicago_public_feed_config_e216",
+    "config_match",
+    "configuration",
+    "configurations.",
+    "configuration/offsets",
+    "config_version/status/receipt_basis",
+    "`/live_data/weather/chicago/calibrations`",
+    "status/config",
+    "calibration/config",
+    "source/config/revision",
+    "/live_data/weather/",
+    "chicago_current_config",
+    "chicago_initial_config",
+    "config_version\\",
+    "configuration."
+  ],
+  "commit": {
+    "rc": 0,
+    "stdout": "[main 4bfebd4] research(weather): discover effective Weather Index config sources\n 1 file changed, 1740 insertions(+)\n create mode 100644 knowledge/runs/kalshi-weather-config-discovery-e229.json",
+    "stderr": ""
+  },
+  "push": {
+    "rc": 0,
+    "stdout": "",
+    "stderr": "To github.com:bas1231/onderzoek.git\n   e3ab030..4bfebd4  HEAD -> main"
+  },
+  "live_trading": false,
+  "paid_actions": false,
+  "wallet_actions": false
+}
