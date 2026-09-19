@@ -191,3 +191,7 @@ Architectuur:
 
 Agentrollen staan in `agents/roles/`.
 
+
+## Stop-check autonomy rule
+
+Before stopping, pausing, or waiting, explicitly check whether stopping is actually necessary. If useful work can safely continue within existing authorization, at zero additional cost, and without live trading or wallet actions, continue autonomously instead of stopping. Stop only for a real blocker, required approval, missing essential input, safety boundary, paid action, live trading, or wallet action.
