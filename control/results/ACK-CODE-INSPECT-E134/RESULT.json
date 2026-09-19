@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "experiments/bridge/e134.py"
+  ],
+  "exit_code": 1,
+  "finished_at": "2026-09-19T21:53:50.835345+00:00",
+  "hypothesis_id": "CONTROL-NO-SILENT-WAITING",
+  "source_commit": "4cf9b5b152ddde8e712a4546e9c1a67895c28038",
+  "started_at": "2026-09-19T21:53:50.825278+00:00",
+  "status": "failed",
+  "stderr_sha256": "2d7dcdc6dd07129fe629a24c7d690e5ce9c03e47c01f0cb4dfd94aa96445fcf6",
+  "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "task_class": "infrastructure",
+  "task_id": "ACK-CODE-INSPECT-E134"
+}
