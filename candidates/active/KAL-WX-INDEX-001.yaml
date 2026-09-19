@@ -1,15 +1,32 @@
-schema_version: 1
+schema_version: 2
 candidate:
   id: KAL-WX-INDEX-001
   venue: kalshi
+  mechanism_id: MECH-WEATHER-INFORMATION-LAG-001
   family: weather_hourly_temperature
+  search_family: hourly_weather_information_lag
   title: "Weather Index innovations predict KXTEMP settlement and repricing"
-  status: STRUCTURAL_CANDIDATE
+  status: PREBUILD_CANDIDATE
   economic_status: NO_PROVEN_EDGE
   created_at: 2026-09-19
 
   thesis: >-
     Publicly observable Kalshi Weather Index state, station composition and calibration state may improve short-horizon prediction of the exact hourly KXTEMP settlement value and may not always be fully reflected in contemporaneous executable market prices.
+
+  build_warrant:
+    evidence_capture: BUILD_APPROVED
+    strategy_model_execution: BUILD_BLOCKED
+    assessment: experiments/prebuild/KAL-WX-PB001-weather-index-build-warrant.yaml
+    reason: >-
+      Point-in-time capture has high information value and low incremental engineering cost, but direct rules proof,
+      cheap empirical replay, economic headroom and execution spotcheck have not yet passed.
+
+  multiple_testing_context:
+    initial_cities: 4
+    preregistered_horizons: 7
+    feature_families: 17
+    independence_unit: "city x local_date x hourly settlement; threshold contracts from one settlement are correlated"
+    rule: "Count inspected city/horizon/feature subgroup searches. Post-hoc survivors require a new experiment version and fresh confirmation data."
 
   scope:
     horizons_minutes: [240, 180, 120, 60, 30, 15, 5]
@@ -19,12 +36,35 @@ candidate:
       - new_york_city
       - chicago
       - los_angeles
-    note: "Cities are starting strata, not guaranteed final scope; every city requires exact rule/source proof."
+    note: "Cities are starting strata, not guaranteed final scope; every city requires exact contract-specific rule/source proof."
+
+  source_migration_context:
+    status: OBSERVED_BUT_NOT_EDGE
+    finding: >-
+      Chicago has a documented 2026-09-10 intra-day cutover from an older TWC-referenced series at 10:00 EDT
+      to a newer Synoptic Data / Kalshi Weather Index Methodology series at 11:00 EDT.
+    negative_evidence:
+      - "Exact same-city x same-settlement-minute old/new overlap is UNPROVEN."
+      - "Adjacent-hour source cutover is not a deterministic cross-source arbitrage pair."
+      - "Public builders already monitor newer KWI/Synoptic semantics, so novelty cannot rely on others using the wrong source."
+    agent_rule: "Never infer source from ticker/title or generic help material; contemporaneous contract-specific rules control."
 
   gates:
+    prebuild_novelty:
+      status: PARTIAL_PASS
+      requirement: "Narrow information-timing/calibration/source-regime mechanism only; generic weather-model-vs-market thesis is not novel enough."
     source_semantics:
       status: PENDING_DIRECT_RULE_CAPTURE
       requirement: "Exact active series/event/market rules and source must be archived point-in-time."
+    cheap_empirical:
+      status: READY_NOT_RUN
+      requirement: "Use known public Weather Index/orderbook corpus for development-only sanity replay; never as untouched holdout."
+    economic_headroom:
+      status: UNPROVEN
+      requirement: "Establish plausible forecast surplus versus executable market large enough to survive unavoidable friction before strategy engineering."
+    execution_spotcheck:
+      status: READY_NOT_RUN
+      requirement: "Use same-time executable L2/fees/trades; continuous WebSocket evidence required for second-level repricing claims."
     signal_edge:
       status: UNTESTED
       requirement: "Index-derived model beats persistence/trend/station baselines out-of-sample on settlement-value probability metrics."
@@ -45,6 +85,7 @@ candidate:
     angle_3_market_execution:
       objective: "Join predictions to same-time executable L2 and measure incremental Brier/log-loss plus realizable net EV."
       failure_mode: "Market already incorporates signal or execution frictions consume it."
+      evidence_requirement: "Continuous orderbook_delta/trade stream before any second-level repricing-lag conclusion."
     optional_angle_4_adversarial:
       objective: "Independent implementation plus source/config/revision counterexample search."
 
@@ -84,6 +125,7 @@ candidate:
     - detailed_station_breakdown
     - calibration_timeline_with_published_at
     - kxtemp_l2_orderbook
+    - websocket_orderbook_sequence
     - trades
     - market_lifecycle
     - final_settlement
@@ -117,18 +159,23 @@ candidate:
     - "Kill market-edge lane if predictive improvement does not beat executable market probability after fees and conservative spread/depth treatment."
     - "Kill any event whose rule/source/version was not captured point-in-time."
     - "Do not rescue a failed lane by post-hoc feature/threshold selection; material changes create a new experiment version."
+    - "Do not use the Chicago adjacent-hour source cutover as same-hour cross-source arbitrage evidence."
 
   execution_blockers:
     - rule_source_conflict_until_direct_capture
+    - strategy_build_not_warranted
     - index_history_may_be_limited
     - receipt_basis_and_backfill_eligibility
     - close_time_relative_to_observation
+    - continuous_websocket_sequence_pending
     - l2_depth
     - fees
     - latency
 
   related:
+    - KAL-WX-PB001
     - KAL-WX-SRC-001
     - KAL-TWC-001
     - KAL-TWC-002
     - KAL-WX-001
+    - KALSHI_WEATHER_SOURCE_MIGRATION_MISPRICING_HYPOTHESIS_2026-09-19
