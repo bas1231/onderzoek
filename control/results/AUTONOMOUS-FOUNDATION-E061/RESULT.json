@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "experiments/bridge/e061.py"
+  ],
+  "exit_code": 1,
+  "finished_at": "2026-09-19T20:00:38.122013+00:00",
+  "hypothesis_id": "CONTROL-AUTONOMOUS-RESEARCH",
+  "source_commit": "5f7630ea5cf8c10e08cecaf4cf605f8e716f967e",
+  "started_at": "2026-09-19T20:00:38.111294+00:00",
+  "status": "failed",
+  "stderr_sha256": "64b00aae628629d7450de01270971836f5ec5cde9fdda9c39346b43fba4605c0",
+  "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "task_class": "infrastructure",
+  "task_id": "AUTONOMOUS-FOUNDATION-E061"
+}
