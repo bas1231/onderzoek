@@ -1,0 +1,4 @@
+  File "/home/leonh/prediction_research/control/jobs/lifecycle_ledger.py", line 13
+    with os.fdopen(fd,'w') as h: json.dump(r,h,indent=2,sort_keys=True); h.write('
+                                                                                 ^
+SyntaxError: unterminated string literal (detected at line 13)

@@ -1,0 +1,17 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/lifecycle_ledger.py",
+    "--self-test"
+  ],
+  "exit_code": 1,
+  "finished_at": "2026-09-19T19:31:20.152386+00:00",
+  "hypothesis_id": "CONTROL-DURABLE-DELIVERY",
+  "source_commit": "6077ebc879e3d1dc8d7380e9c73595ee36724d9d",
+  "started_at": "2026-09-19T19:31:20.142405+00:00",
+  "status": "failed",
+  "stderr_sha256": "2247042a3c2061f059803f18fca476c688ee764d10cfd1aa4571be8d998985bb",
+  "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "task_class": "infrastructure",
+  "task_id": "RELIABILITY-E030"
+}
