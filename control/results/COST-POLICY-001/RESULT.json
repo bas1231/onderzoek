@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/enforce_no_cost_policy.py"
+  ],
+  "exit_code": 1,
+  "finished_at": "2026-09-19T18:28:38.247357+00:00",
+  "hypothesis_id": "CONTROL-GUARDRAILS",
+  "source_commit": "3d153b841e5eb9257c2fff9e8d1d9dc8350a82c8",
+  "started_at": "2026-09-19T18:28:38.233745+00:00",
+  "status": "failed",
+  "stderr_sha256": "afe86c559bde4a9a64335173f767e78f96b374f4803765b553585eeeb5626b3a",
+  "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "task_class": "infrastructure",
+  "task_id": "COST-POLICY-001"
+}

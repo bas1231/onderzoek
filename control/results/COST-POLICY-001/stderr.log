@@ -1,0 +1,4 @@
+  File "/home/leonh/prediction_research/control/jobs/enforce_no_cost_policy.py", line 44
+    path.write_text(text.rstrip() + POLICY + '
+                                             ^
+SyntaxError: unterminated string literal (detected at line 44)
