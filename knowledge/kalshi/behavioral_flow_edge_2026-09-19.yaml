@@ -1,0 +1,254 @@
+schema_version: 1
+as_of: 2026-09-19
+economic_status: NO_PROVEN_EDGE
+research_lane: HUMAN_FACTOR_BEHAVIORAL_FLOW
+scope: >-
+  Legale, passieve exploitatie van publiek observeerbare behavioral pricing/order-flow effecten.
+  Geen manipulatie, misleiding, spoofing, wash trading, collusie, deanonymisering of targeting
+  van kwetsbare individuen. Biases worden alleen als falsifieerbare marktmechanismen behandeld.
+
+records:
+  - id: KAL-BEH-FACT-001
+    kind: fact
+    status: FACT_VERIFIED
+    claim: >-
+      Transaction-level Kalshi research over meer dan 300.000 contracten rapporteert een
+      favorite-longshot patroon: lage prijscontracten presteren slechter dan nodig om na fees
+      break-even te draaien, hoge prijscontracten beter; makers verdienen gemiddeld hogere
+      returns dan takers, maar beide groepen vertonen het patroon.
+    interpretation: >-
+      Dit ondersteunt behavioral/microstructure research, maar bewijst niet dat blind favorites
+      kopen of blind maker zijn winstgevend is. Entry side, fill selection, category, fees en
+      adverse selection blijven noodzakelijk.
+    source:
+      title: "Makers and Takers: The Economics of the Kalshi Prediction Market"
+      url: "https://cepr.org/publications/dp20631"
+      published: 2025-09-08
+      revised: 2026-01-31
+      source_type: academic_discussion_paper
+
+  - id: KAL-BEH-FACT-002
+    kind: fact
+    status: FACT_VERIFIED
+    claim: >-
+      Experimenteel en veldonderzoek naar prediction markets laat partition dependence zien:
+      logisch equivalente kansmassa kan hoger geprijsd worden wanneer zij in expliciete losse
+      states wordt 'unpacked' dan wanneer dezelfde states als één packed interval worden getoond.
+    mechanism: >-
+      Probability judgments worden richting een 1/N-anker getrokken; unpacking verhoogt salience
+      van afzonderlijke states en kan daardoor marktprijzen beïnvloeden.
+    source:
+      title: "How psychological framing affects economic market prices in the lab and field"
+      url: "https://pmc.ncbi.nlm.nih.gov/articles/PMC3718178/"
+      source_type: peer_reviewed
+    nonclaim: >-
+      Dit bewijst geen huidige Kalshi execution-edge; Kalshi-representaties moeten exact semantisch
+      gekoppeld en gelijktijdig op executable L2 getest worden.
+
+  - id: KAL-BEH-FACT-003
+    kind: fact
+    status: FACT_VERIFIED
+    claim: >-
+      Exchange-data uit in-play voetbal laten zien dat marktdeelnemers op relatief verwachte
+      goals kunnen underreacten en op zeer verrassende goals kunnen overreacten; in de onderzochte
+      Betfair-data nam deze bias af en was zij rond vijf minuten na het event verdwenen.
+    source:
+      title: "The role of surprise: Understanding overreaction and underreaction to unanticipated events using in-play soccer betting market"
+      url: "https://www.sciencedirect.com/science/article/pii/S0167268114000481"
+      source_type: peer_reviewed
+    transfer_warning: >-
+      Betfair/soccer evidence is geen Kalshi proof. De relevante vraag is of vergelijkbare clean
+      public shocks op Kalshi een lang genoeg, execution-realistisch effect veroorzaken.
+
+  - id: KAL-BEH-FLOW-001
+    kind: hypothesis
+    status: STRUCTURAL_CANDIDATE
+    priority: HIGH
+    claim: >-
+      De meest kansrijke human-factor lane is conditionele passive liquidity provision tegen
+      behavioral/noise flow: alleen quoten wanneer meetbare behavioral pressure hoog is,
+      informed-flow warnings laag zijn en een onafhankelijke probability/fair-value anchor een
+      voldoende grote netto buffer laat zien.
+    candidate_features:
+      behavioral_pressure:
+        - low-price longshot taker-buy intensity
+        - same-side taker-flow acceleration
+        - repeated aggressive orders zonder gelijktijdige externe information shock
+        - salience/attention spike
+        - partition/framing residual versus equivalent representation
+        - surprise-response residual versus pre-registered event model
+      informed_flow_warnings:
+        - abnormal trade size
+        - fast adverse post-trade markout
+        - simultaneous repricing across related markets/venues
+        - official/news/source update immediately before flow
+        - spread/depth collapse
+        - rapid persistent repricing rather than temporary pressure
+    required_data:
+      - point-in-time Kalshi trades with side/maker-taker role where reconstructable
+      - sequence-safe L2 snapshots/deltas
+      - exact fee schedule per market
+      - queue/fill timestamps and own hypothetical queue assumptions
+      - 1s/5s/30s/5m/settlement markouts
+      - exact settlement outcomes
+      - category/event grouping
+      - independent fair-value/calibration anchor per candidate
+    falsification:
+      - preregister behavioral-pressure and informed-flow feature definitions before outcome inspection
+      - compare passive-maker versus taker entry on the identical candidate set
+      - compare high-behavioral/low-informed regime against matched controls by category, price and time-to-close
+      - require untouched temporal holdout and prospective shadow
+      - kill if gross calibration surplus is consumed by fees, spread, adverse selection, queue loss or inventory risk
+    execution_blockers:
+      - adverse selection
+      - designated/professional market-maker competition
+      - uncertain queue position and fill probability
+      - price/category regime drift
+      - retail network latency for very short-lived effects
+    relations:
+      - KAL-FLB-002
+      - KAL-INCENTIVE-003
+      - Surplus Maker lane
+    nonclaim: "Geen bewezen edge; dit is een testbare researcharchitectuur."
+
+  - id: KAL-BEH-PART-001
+    kind: hypothesis
+    status: STRUCTURAL_CANDIDATE
+    priority: HIGH
+    claim: >-
+      Wanneer dezelfde economische state op Kalshi via verschillende partitions/representaties
+      verhandelbaar is, kan menselijke partition dependence tijdelijk een relative-value residual
+      veroorzaken tussen packed en unpacked representaties.
+    target_structures:
+      - threshold ladder versus exact-value contracts
+      - range/bucket versus union van adjacent ranges
+      - direct contract versus semantisch equivalente synthetic portfolio
+      - primitive states versus combo representation wanneer payoff exact bewijsbaar is
+    required_data:
+      - formal payoff/semantic equivalence or dominance proof
+      - simultaneous sequence-safe L2 for all legs
+      - representation metadata and user-facing framing
+      - fees/depth/slippage per leg
+      - category/time controls
+    falsification:
+      - estimate sign and magnitude prospectively without assuming unpacking direction post-hoc
+      - test whether residual survives executable bid/ask and all fees
+      - test whether effect persists after controlling for liquidity and information arrival
+      - independent implementation of payoff equivalence
+    execution_blockers:
+      - multi-leg fees and legging risk
+      - non-equivalent settlement rules
+      - liquidity differences masquerading as framing
+    relations:
+      - partition dependence literature
+      - Market Algebra / cashflow identity mining
+    nonclaim: "Psychological framing evidence is strong background evidence, not current Kalshi edge proof."
+
+  - id: KAL-BEH-SURPRISE-001
+    kind: hypothesis
+    status: HYPOTHESIS_UNTESTED
+    priority: MEDIUM
+    claim: >-
+      Clean public information shocks may generate directionally predictable short-lived
+      underreaction when the event is expected/moderately surprising and overreaction when it is
+      highly surprising; if a Kalshi-specific effect persists for tens of seconds or minutes it
+      could be execution-realistic without HFT infrastructure.
+    required_data:
+      - pre-event market probability / surprise metric frozen before the shock
+      - authoritative public event timestamp
+      - sub-second or second-level Kalshi L2/trades around the shock
+      - objective post-event fair-value baseline
+      - fees/fills/markouts
+    falsification:
+      - preregister surprise bins and predicted response sign
+      - control for rational information magnitude using an external event model
+      - test multiple sports/event families separately
+      - kill if effect disappears inside retail-observable latency or after fees
+    execution_blockers:
+      - latency race
+      - feed timestamp uncertainty
+      - sport-specific finality/revision risk
+      - informed traders may dominate exactly when surprise is large
+    nonclaim: "Transfer hypothesis from betting-exchange evidence; no current Kalshi edge proof."
+
+  - id: KAL-BEH-SENTIMENT-001
+    kind: hypothesis
+    status: HYPOTHESIS_UNTESTED
+    priority: MEDIUM_LOW
+    claim: >-
+      Public popularity, fandom, salience or attention may condition behavioral pressure, but should
+      be used only as an interaction feature with flow and fair-value residuals, not as a standalone
+      'fade popular outcome' rule.
+    required_data:
+      - pre-trade public attention/sentiment measure with timestamps
+      - market category and entity popularity controls
+      - L2/trade flow and fair-value anchor
+      - forward outcomes and markouts
+    falsification:
+      - compare within-category matched events and time windows
+      - require incremental predictive value over price, liquidity and flow baseline
+      - kill if effect is explained by actual information arrival or bookmaker/exchange structure
+    execution_blockers:
+      - weak transfer from sportsbook evidence to exchange markets
+      - endogenous attention caused by real information
+      - sentiment data latency/noise
+
+  - id: KAL-BEH-INFORMED-001
+    kind: hypothesis
+    status: STRUCTURAL_CANDIDATE
+    priority: HIGH_GUARDRAIL
+    claim: >-
+      Human-factor strategies require an explicit informed-flow veto. The economic objective is not
+      to fade crowds universally, but to distinguish likely noise flow from potentially informed
+      flow and abstain when adverse-selection probability is elevated.
+    testable_vetoes:
+      - abnormal trade-size percentile
+      - rapid cross-contract synchronization
+      - negative 1s/5s maker markouts
+      - official-source information arrival
+      - book depth withdrawal and spread widening
+    falsification:
+      - compare candidate PnL/markouts with and without each veto on untouched data
+      - retain veto only if it improves net expectancy or downside without post-hoc threshold tuning
+    relations:
+      - KAL-BEH-FLOW-001
+      - KAL-EXEC-001
+      - KAL-EXEC-002
+
+  - id: KAL-BEH-LOSSCHASE-001
+    kind: hypothesis
+    status: HYPOTHESIS_UNTESTED
+    priority: LOW
+    claim: >-
+      Aggregate win/loss-chasing could in principle create predictable order-flow pressure, but
+      current direct transfer evidence to Kalshi is weak and individual-level exploitation would
+      be inappropriate. This lane remains low priority unless aggregate point-in-time venue data
+      supports a clean test.
+    safety_rule: >-
+      Never identify, profile or target vulnerable/problem gamblers. Any test must use only
+      aggregated public flow and evaluate a market-level effect.
+    kill_conditions:
+      - no observable aggregate causal feature before entry
+      - effect depends on identifying individual losses or vulnerability
+      - no incremental value after ordinary flow/momentum features
+
+research_design:
+  primary_target: KAL-BEH-FLOW-001
+  preferred_sequence:
+    - freeze feature definitions and candidate universe
+    - collect immutable trades/L2 + public state
+    - reconstruct maker/taker and sequence-safe books
+    - estimate behavioral pressure and informed-flow vetoes without outcomes
+    - historical execution-realistic replay
+    - temporal validation
+    - untouched holdout
+    - prospective shadow
+    - only after separate authorization: micro-live
+  primary_metrics:
+    - net PnL per filled contract after fees
+    - fill rate and queue-adjusted opportunity rate
+    - 1s/5s/30s/5m markout
+    - settlement PnL
+    - Brier/log-loss where probability forecasts are produced
+    - downside tail / inventory drawdown
+  cluster_unit: "underlying economic event; multiple buckets/contracts from one settlement are dependent"
