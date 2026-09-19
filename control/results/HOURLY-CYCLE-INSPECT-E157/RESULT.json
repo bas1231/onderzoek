@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "experiments/bridge/e157.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-19T22:11:12.568273+00:00",
+  "hypothesis_id": "AUTONOMOUS-HOURLY-RESEARCH",
+  "source_commit": "361a0fae724ca968904f4bf2ef34e020b73af310",
+  "started_at": "2026-09-19T22:11:12.550570+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "612dfe5909ba7c984bfa7e78d453308276d9fbf149a2aae731789064c1f5ea68",
+  "task_class": "research",
+  "task_id": "HOURLY-CYCLE-INSPECT-E157"
+}
