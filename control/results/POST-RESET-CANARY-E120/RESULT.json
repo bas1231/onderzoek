@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "experiments/bridge/e120.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-19T21:20:38.722911+00:00",
+  "hypothesis_id": "CONTROL-NO-SILENT-WAITING",
+  "source_commit": "1ce1e961e029e4121cb1db83bf946cd261ff9689",
+  "started_at": "2026-09-19T21:20:38.712623+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "d68217648aebfbc15aeca6c4161af180d9ff7575eb7de5de7eb00a250c31a793",
+  "task_class": "infrastructure",
+  "task_id": "POST-RESET-CANARY-E120"
+}
