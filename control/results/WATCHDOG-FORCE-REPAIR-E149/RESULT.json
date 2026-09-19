@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "experiments/bridge/e149.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-19T22:04:57.445102+00:00",
+  "hypothesis_id": "CONTROL-NO-SILENT-WAITING",
+  "source_commit": "de149206082170139fd1e422694bae5b6848f83a",
+  "started_at": "2026-09-19T22:04:55.180823+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "6f3954a573392778b8696c9152525ca6c798da849293412725046b0eccc8cb8d",
+  "task_class": "infrastructure",
+  "task_id": "WATCHDOG-FORCE-REPAIR-E149"
+}
