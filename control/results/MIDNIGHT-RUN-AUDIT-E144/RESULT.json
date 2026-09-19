@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "experiments/bridge/e144.py"
+  ],
+  "exit_code": 1,
+  "finished_at": "2026-09-19T22:01:26.322161+00:00",
+  "hypothesis_id": "AUTONOMOUS-HOURLY-RESEARCH",
+  "source_commit": "0a9a8db95eb6771430d911c13be5463711d9b8d5",
+  "started_at": "2026-09-19T22:01:26.301423+00:00",
+  "status": "failed",
+  "stderr_sha256": "3ba8ba38dceb2e1dd9b64ad455168951334f48f58152f9d4ad43f1cc7c75b0fc",
+  "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "task_class": "research",
+  "task_id": "MIDNIGHT-RUN-AUDIT-E144"
+}
