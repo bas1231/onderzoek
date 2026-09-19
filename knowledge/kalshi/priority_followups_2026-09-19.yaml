@@ -98,7 +98,7 @@ records:
     status: STRUCTURAL_CANDIDATE
     claim: "De meest verdedigbare FLB-lane is niet blind favorites nemen, maar conditioneel maker/favorite-side quoting testen per price bucket, category, fill timing en adverse-selection regime, eventueel inclusief maker/liquidity incentives."
     evidence:
-      - "Kalshi study >300k contracts: contracts boven ~70c hadden kleine maar statistisch significante positieve post-fee returns; makers deden gemiddeld beter dan takers, terwijl beide FLB vertoonden."
+      - "Kalshi study >300k contracts: makers deden gemiddeld beter dan takers en beide zijden vertoonden favorite-longshot bias; dit is historische beschrijvende evidence, geen turnkey strategy."
       - "Polymarket 588M trades: FLB is sterk aggregation/category-dependent en was in de studie afwezig in Sports."
       - "Community paper-trading evidence waarschuwt dat favorites aan de ask ondanks hoge winrate kunnen verliezen door spread/adverse selection; anecdotal only."
     required_data:
@@ -132,38 +132,40 @@ records:
   - id: KAL-WX-INDEX-001
     kind: observation
     status: RESEARCH_POSITIVE
-    claim: "Kalshi's current Predictions API documentatie exposeert een publieke Weather Index en calibration timeline; de docs omschrijven de Weather Index als de canonical minute-resolution series achter hourly temperature markets. Dit creëert een mogelijke source-regime change ten opzichte van oudere TWC-only aannames."
+    claim: "Kalshi's current Predictions API documentatie exposeert een publieke Weather Index en calibration timeline; de docs omschrijven die index als de canonical minute-resolution series behind hourly temperature markets. Primaire Kalshi-bronnen blijven tegelijk The Weather Company noemen als de officiële settlementbron voor hourly weather. De index moet daarom voorlopig als aparte publieke observatie/signal-laag worden behandeld, niet als vervanging van TWC settlement."
     evidence:
-      - "Kalshi API documentation index lists GET /live_data/weather/{city}: 'Kalshi-computed city temperature index: the canonical minute-resolution series behind hourly temperature markets'."
-      - "Calibration endpoint publishes launch configuration, weekly station-offset calibrations and methodology updates."
-      - "Recent mirrored KXTEMP contract text (Aug/Sep 2026) names Synoptic Data and the Kalshi Weather Index Methodology."
-      - "Kalshi Help Center article dated July 22, 2026 still says hourly markets settle on The Weather Company, so source documentation is internally time-sensitive/conflicting and must be resolved per series/rule version."
-    nonclaim: "Dit bewijst geen trading edge en bewijst niet dat iedere hourly weather series dezelfde source-regime gebruikt."
+      - "Kalshi API docs: GET /live_data/weather/{city} geeft een Kalshi-computed city temperature index, beschreven als de canonical minute-resolution series behind hourly temperature markets."
+      - "Calibration endpoint publiceert launch configuration, weekly station-offset calibrations en methodology updates."
+      - "Kalshi Help Center zegt expliciet dat hourly temperature markets settelen op The Weather Company."
+      - "Kalshi/TWC partnership announcement van 27 Aug 2026 zegt dat TWC authoritative observation data levert voor settlement."
+      - "Actuele Kalshi-marktpagina's voor recente KXTEMP hourly contracts tonen Source: The Weather Company."
+    interpretation: "De publieke Kalshi Weather Index kan een hoogwaardige point-in-time nowcast feature zijn die mogelijk dichter bij de markt/settlementdynamiek ligt dan losse stationsdata, maar een causal/settlementrelatie is nog niet bewezen."
+    nonclaim: "Geen source-regime switch, geen settlement-identiteit en geen trading edge bewezen."
     required_data:
       - "exact live KXTEMP series metadata/rules per city"
-      - "rule-version timestamps"
-      - "weather-index points + receipt_basis/status/contributors"
+      - "weather-index minute points + status/config version"
       - "calibration timeline"
       - "contemporaneous KXTEMP L2"
+      - "TWC preliminary/final values met retrieval timestamps"
       - "final settlements"
     falsification:
-      - "Verify exact series rule text against API endpoint for every active city."
-      - "Replay final settlements against archived index values and rule-defined top-of-hour transformation."
-      - "Test whether index information is already fully incorporated before executable entry windows."
+      - "Meet prospectief of Weather Index de uiteindelijke TWC settlementwaarde conditioneel beter voorspelt dan persistence/METAR/TWC-preliminary baselines."
+      - "Test vervolgens of index innovations/revisions nog voorspellende informatie hebben tegenover executable market prices."
+      - "Kill als index-informatie volledig contemporaneously in executable prijzen zit of geen out-of-sample signal edge toevoegt."
     execution_blockers:
-      - "documentation/rule-version conflict"
-      - "index backfill points may be settlement-ineligible"
-      - "market may close before final index point becomes public"
+      - "onbekende relatie index ↔ TWC final"
+      - "calibration/version changes"
+      - "market close versus observation timing"
       - "liquidity/fees"
     provenance:
       - url: "https://docs.kalshi.com/llms.txt"
         type: primary_api_documentation
       - url: "https://help.kalshi.com/en/articles/13823837-weather-markets"
-        type: primary_help_documentation_conflicting
-      - url: "https://www.coinbase.com/en-de/predictions/event/KXTEMPLAXHS-26SEP1706"
-        type: mirrored_contract_text
-      - url: "https://apify.com/gratified_ashram/kalshi-weather-index"
-        type: independent_public_data_tool
+        type: primary_help_documentation
+      - url: "https://news.kalshi.com/p/kalshi-weather-company-partnership"
+        type: primary_announcement
+      - url: "https://kalshi.com/markets/kx/test/kxtempnych-26jul2501"
+        type: primary_market_page
     related:
       - KAL-TWC-001
       - KAL-TWC-002
