@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/inventory_active_system_e020.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-19T18:54:49.443515+00:00",
+  "hypothesis_id": "CONTROL-POST-ACTIVATION",
+  "source_commit": "df30aaabc567cf6e13f708cc7ad2af5fabecca0d",
+  "started_at": "2026-09-19T18:54:49.324522+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "68b06cdc76ce1bfde854b8554d35a177ff2ddd4c3765ae99593f70e470de4d74",
+  "task_class": "infrastructure",
+  "task_id": "CONTROL-INVENTORY-E020"
+}
