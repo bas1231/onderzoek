@@ -1,0 +1,104 @@
+{
+  "content_type": "application/json",
+  "created_at": "2026-09-19T22:33:53.823031+00:00",
+  "http_status": 200,
+  "interpretation_guard": "Feed status transitions are not assumed to equal Kalshi contract settlement finality.",
+  "live_trading": false,
+  "new_fetchedAt": "2026-09-19T22:30:45.772Z",
+  "new_sha256": "ef47433aeea01ea8d3d2282257b9c93f4e59ab8f808d0414eb7c5c1ff52cbfd5",
+  "new_status_counts": {
+    "settled": 5156
+  },
+  "old_fetchedAt": "2026-09-19T22:24:40.032Z",
+  "old_sha256": "720aa620f533559312c6dbb920fbdf696d52b19599c2cdef3c302b32fb08c757",
+  "paid_actions": false,
+  "tracked": [
+    {
+      "icaoId": "KPVD",
+      "new_status": "settled",
+      "new_tempC": 17.8,
+      "new_tempF": 64,
+      "old_status": "pending",
+      "old_tempC": 17.8,
+      "old_tempF": 64,
+      "reportTimeUTC": "2026-09-19T22:00:00.000Z",
+      "status_changed": true,
+      "temperature_changed": false
+    },
+    {
+      "icaoId": "KSAN",
+      "new_status": "settled",
+      "new_tempC": 24.4,
+      "new_tempF": 75.9,
+      "old_status": "pending",
+      "old_tempC": 24.4,
+      "old_tempF": 75.9,
+      "reportTimeUTC": "2026-09-19T22:00:00.000Z",
+      "status_changed": true,
+      "temperature_changed": false
+    },
+    {
+      "icaoId": "KSDF",
+      "new_status": "settled",
+      "new_tempC": 34.4,
+      "new_tempF": 93.9,
+      "old_status": "pending",
+      "old_tempC": 34.4,
+      "old_tempF": 93.9,
+      "reportTimeUTC": "2026-09-19T22:00:00.000Z",
+      "status_changed": true,
+      "temperature_changed": false
+    },
+    {
+      "icaoId": "KSJC",
+      "new_status": "settled",
+      "new_tempC": 23.3,
+      "new_tempF": 73.9,
+      "old_status": "pending",
+      "old_tempC": 23.3,
+      "old_tempF": 73.9,
+      "reportTimeUTC": "2026-09-19T22:00:00.000Z",
+      "status_changed": true,
+      "temperature_changed": false
+    },
+    {
+      "icaoId": "KSPG",
+      "new_status": "settled",
+      "new_tempC": 26.7,
+      "new_tempF": 80.1,
+      "old_status": "pending",
+      "old_tempC": 26.7,
+      "old_tempF": 80.1,
+      "reportTimeUTC": "2026-09-19T22:00:00.000Z",
+      "status_changed": true,
+      "temperature_changed": false
+    },
+    {
+      "icaoId": "KTPA",
+      "new_status": "settled",
+      "new_tempC": 25.6,
+      "new_tempF": 78.1,
+      "old_status": "pending",
+      "old_tempC": 25.6,
+      "old_tempF": 78.1,
+      "reportTimeUTC": "2026-09-19T22:00:00.000Z",
+      "status_changed": true,
+      "temperature_changed": false
+    },
+    {
+      "icaoId": "KTTN",
+      "new_status": "settled",
+      "new_tempC": 19.4,
+      "new_tempF": 66.9,
+      "old_status": "pending",
+      "old_tempC": 19.4,
+      "old_tempF": 66.9,
+      "reportTimeUTC": "2026-09-19T22:00:00.000Z",
+      "status_changed": true,
+      "temperature_changed": false
+    }
+  ],
+  "tracked_status_transition_count": 7,
+  "tracked_temperature_change_count": 0,
+  "wallet_actions": false
+}
