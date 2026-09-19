@@ -1,0 +1,87 @@
+id: GEM-LIQREWARD-001
+venue: gemini
+mechanism_id: MECH-LIQUIDITY-REWARD-001
+kind: candidate
+status: STRUCTURAL_CANDIDATE
+claim: >-
+  Gemini Predictions exposes a public liquidity-rewards program in which resting
+  orders can earn daily USD rewards even without fills; scoring depends on quote
+  proximity/spread, size, two-sided quoting and uptime. This creates a distinct
+  economic overlay from ordinary maker spread capture and deserves a reward-minus-
+  adverse-selection test, but is not evidence of profitable market making.
+as_of: 2026-09-19
+source_class: PRIMARY
+search_family: incentive_overlay_liquidity_rewards
+multiple_testing_context: >-
+  Discovery arose from a broad multi-venue incentive/mechanism scan; no statistical
+  inference or subgroup promotion has yet been performed.
+provenance:
+  - https://developer.gemini.com/prediction-markets/liquidity-rewards-program
+  - https://developer.gemini.com/prediction-markets-spec/rewards
+facts:
+  - daily USD pools are allocated across qualifying makers
+  - resting quotes can score regardless of whether they execute
+  - scoring uses per-minute order-book snapshots
+  - tighter quotes, size up to a cap, two-sided quoting and uptime affect score
+  - documented current program-wide parameters include maximum 10-cent distance/spread criterion, minimum 10 contracts, 250-contract size cap, 1.5x two-sided multiplier and 50-percent uptime threshold
+  - minimum daily payout is documented as USD 1.00
+  - maker rebates are a separate program and may coexist with liquidity rewards
+hypothesis: >-
+  On sufficiently low-information-flow Gemini events, expected liquidity reward plus
+  maker economics may exceed adverse-selection losses, inventory cost and capital
+  lock for retail-speed quoting; the public pool and qualifying-maker count may allow
+  a conservative upper-bound screen before any strategy build.
+prebuild_gates:
+  gate_0_novelty: PASS
+  gate_1_semantics: PARTIAL
+  gate_2_economic_headroom: UNKNOWN
+  gate_3_cheap_empirical: NOT_RUN
+  gate_4_execution_spotcheck: NOT_RUN
+  gate_5_build_warrant: FAIL
+required_data:
+  - point-in-time public reward event list including daily_pool_usd and qualifying_maker_count
+  - Gemini executable L2 snapshots for eligible contracts
+  - authoritative fee and maker-rebate schedule by category/time
+  - quote-score formula details sufficient to bound expected reward share
+  - fills and post-fill markouts to estimate adverse selection
+  - inventory/collateral and settlement horizon
+falsification:
+  - reward pool per realistically attainable score is below unavoidable spread/adverse-selection/inventory cost
+  - qualifying quote requirements force economically unsafe proximity during informed flow
+  - pool dilution or uptime requirements make attainable expected payout immaterial at retail capital scale
+  - reward configuration is disabled or eligible events are too sparse/short-lived
+execution_blockers:
+  - no prospective L2/fill/markout evidence yet
+  - attainable reward share is endogenous to competing maker scores
+  - queue position, fill probability and adverse selection are unmeasured
+  - capital lock and settlement risk are not yet priced
+kill_reviews:
+  semantic_source_adversary: >-
+    Primary Gemini documentation verifies program mechanics, but current event-level
+    activation and time-varying parameters must be captured point-in-time rather than
+    inferred from examples.
+  statistical_data_adversary: >-
+    Event/day observations will be dependent; selection by high displayed pool or low
+    maker count is adaptive search and must be registered before outcome evaluation.
+  execution_economic_adversary: >-
+    Rewards for resting quotes can be overwhelmed by toxic fills; quote presence is
+    not free because tightness, uptime, inventory, queue and markout jointly determine
+    realized economics.
+improvement_reviews:
+  waste: >-
+    Do not build a maker bot. First query public config/events and compute a generous
+    reward-per-capital upper bound; kill the lane if that cannot cover conservative loss buffers.
+  false_positive: >-
+    Pre-register event selection and evaluate at event/day cluster level; do not cherry-pick
+    high-reward snapshots after seeing markouts.
+  execution: >-
+    Require prospective L2 plus fill/markout shadowing and an informed-flow veto before promotion.
+  transfer: >-
+    Store as venue-agnostic MECH-LIQUIDITY-REWARD-001 applicable to any venue paying for
+    quote presence independent of fills.
+  adversarial_source: >-
+    Archive dated config/event responses because reward parameters and program availability
+    can change and endpoints may return disabled/503 states.
+related:
+  - negative_evidence/LEDGER.md
+  - methodology/EXECUTION_FIRST_DISCOVERY.md
