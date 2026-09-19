@@ -1,0 +1,65 @@
+{
+  "ok": true,
+  "run_id": "corpus-20260919T210033Z",
+  "success_count": 11,
+  "failure_count": 0,
+  "documents": [
+    {
+      "source_id": "kalshi_docs",
+      "ok": true,
+      "chars": 1539
+    },
+    {
+      "source_id": "polymarket_docs",
+      "ok": true,
+      "chars": 2721
+    },
+    {
+      "source_id": "cftc",
+      "ok": true,
+      "chars": 4805
+    },
+    {
+      "source_id": "aviationweather",
+      "ok": true,
+      "chars": 3566
+    },
+    {
+      "source_id": "nws",
+      "ok": true,
+      "chars": 2470
+    },
+    {
+      "source_id": "ecmwf_open",
+      "ok": true,
+      "chars": 26229
+    },
+    {
+      "source_id": "nomads",
+      "ok": true,
+      "chars": 6959
+    },
+    {
+      "source_id": "arxiv",
+      "ok": true,
+      "chars": 5931
+    },
+    {
+      "source_id": "github",
+      "ok": true,
+      "chars": 7669
+    },
+    {
+      "source_id": "reddit",
+      "ok": true,
+      "chars": 6
+    },
+    {
+      "source_id": "youtube",
+      "ok": true,
+      "chars": 203
+    }
+  ],
+  "commit_rc": 0,
+  "push_rc": 0
+}

@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "experiments/bridge/e112.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-19T21:00:35.604352+00:00",
+  "hypothesis_id": "CONTROL-AUTONOMOUS-RESEARCH",
+  "source_commit": "c288c5a23e8cb81c001220f9dea65f83a87d8c1a",
+  "started_at": "2026-09-19T21:00:33.270279+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "6b879e47ea169a120b256439a7abfd741bb7bd1e36ec94fa923e4f3ef1fc07c6",
+  "task_class": "research",
+  "task_id": "FIRST-CORPUS-EXTRACT-E112"
+}
