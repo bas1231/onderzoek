@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "experiments/bridge/e200.py"
+  ],
+  "exit_code": 1,
+  "finished_at": "2026-09-19T22:59:27.438809+00:00",
+  "hypothesis_id": "H7-SETTLEMENT-BOUNDARY",
+  "source_commit": "f64fc2b9f0e14b74f4d6c5a70e846cbedcc52fa4",
+  "started_at": "2026-09-19T22:59:27.422467+00:00",
+  "status": "failed",
+  "stderr_sha256": "f3a4d4d4adc5a77984c8932fa99be2aa0eeac7ea4fc3c38768c6755209246b54",
+  "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "task_class": "research",
+  "task_id": "KALSHI-EXISTING-API-TOOLING-E200"
+}
