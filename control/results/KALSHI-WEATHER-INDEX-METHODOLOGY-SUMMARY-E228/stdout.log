@@ -1,0 +1,20 @@
+{
+  "artifact": "knowledge/runs/kalshi-weather-index-methodology-summary-e228.json",
+  "status": "EVIDENCE_SUMMARY",
+  "chicago_current_config": "chicago-temperature-v1.0-cal-20260914",
+  "chicago_initial_config": "chicago-temperature-v1.1",
+  "interpol_hit": "FALSE_POSITIVE_PDF_IMAGE_METADATA",
+  "commit": {
+    "rc": 0,
+    "stdout": "[main 38daf8c] research(weather): codify official Weather Index methodology\n 1 file changed, 115 insertions(+)\n create mode 100644 knowledge/runs/kalshi-weather-index-methodology-summary-e228.json",
+    "stderr": ""
+  },
+  "push": {
+    "rc": 0,
+    "stdout": "",
+    "stderr": "To github.com:bas1231/onderzoek.git\n   fd594a6..38daf8c  HEAD -> main"
+  },
+  "live_trading": false,
+  "paid_actions": false,
+  "wallet_actions": false
+}
