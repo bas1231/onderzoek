@@ -1,0 +1,13 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "experiments/bridge/e230.py"
+  ],
+  "hypothesis_id": "H7-SETTLEMENT-BOUNDARY",
+  "live_trading": false,
+  "operation": "python",
+  "task_class": "research",
+  "task_id": "KALSHI-WEATHER-CONFIG-CANDIDATE-CONTEXT-E230",
+  "timeout_seconds": 90,
+  "working_directory": "."
+}
