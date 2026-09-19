@@ -1,0 +1,212 @@
+=== control/browser_bridge.py ===
+1: from __future__ import annotations
+2: 
+3: import json
+4: import re
+5: import secrets
+6: import subprocess
+7: import threading
+8: from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
+9: from pathlib import Path
+10: from urllib.parse import urlparse
+11: 
+12: from pydantic import BaseModel, Field, field_validator
+13: 
+14: from validator import Task
+15: from jobs.lifecycle_ledger import update as lifecycle_update
+16: 
+17: 
+18: ROOT = Path(__file__).resolve().parents[1]
+19: 
+20: CONFIG_DIR = Path.home() / ".config/prediction-research"
+21: TOKEN_FILE = CONFIG_DIR / "bridge_token"
+22: STATE_FILE = CONFIG_DIR / "bridge_state.json"
+23: 
+24: PENDING = ROOT / "control/tasks/pending"
+25: RESULTS = ROOT / "control/results"
+26: 
+27: HOST = "127.0.0.1"
+28: PORT = 8765
+29: 
+30: LOCK = threading.RLock()
+31: 
+32: 
+33: class FileWrite(BaseModel):
+34:     path: str
+35:     content: str
+36: 
+37:     @field_validator("path")
+38:     @classmethod
+39:     def validate_path(cls, value: str) -> str:
+40:         path = Path(value)
+41: 
+42:         if path.is_absolute():
+43:             raise ValueError("absolute paths forbidden")
+44: 
+45:         if ".." in path.parts:
+46:             raise ValueError("parent traversal forbidden")
+47: 
+48:         allowed = (
+49:             "experiments/bridge/",
+50:             "control/jobs/",
+51:             "tests/bridge/",
+52:         )
+53: 
+54:         text = path.as_posix()
+55: 
+56:         if not text.startswith(allowed):
+57:             raise ValueError(
+58:                 "bridge file writes restricted to "
+59:                 "experiments/bridge/, control/jobs/, tests/bridge/"
+60:             )
+61: 
+62:         return value
+63: 
+64: 
+65: class BridgeEnvelope(BaseModel):
+66:     bridge_version: int = 1
+67:     commit_message: str = Field(min_length=3, max_length=160)
+68:     files: list[FileWrite] = []
+69:     task: Task
+70: 
+=== control/browser_extension/content.js ===
+1: (() => {
+2:   if (window.__PREDICTION_RESEARCH_BRIDGE_LOADED__) {
+3:     return;
+4:   }
+5: 
+6:   window.__PREDICTION_RESEARCH_BRIDGE_LOADED__ = true;
+7: 
+8:   const LEFT = "<" + "<" + "<";
+9:   const RIGHT = ">" + ">" + ">";
+10: 
+11:   const TASK_START =
+12:     LEFT + "PREDICTION_BRIDGE_TASK" + RIGHT;
+13: 
+14:   const TASK_END =
+15:     LEFT + "END_PREDICTION_BRIDGE_TASK" + RIGHT;
+16: 
+17:   const RESULT_START =
+18:     LEFT + "PREDICTION_BRIDGE_RESULT" + RIGHT;
+19: 
+20:   const RESULT_END =
+21:     LEFT + "END_PREDICTION_BRIDGE_RESULT" + RIGHT;
+22: 
+23:   let scanTimer = null;
+24:   let polling = false;
+25:   let sendingResult = false;
+26:   let scanning = false;
+27: 
+28:   const inFlightTaskIds = new Set();
+29: 
+30:   function normalizedCurrentUrl() {
+31:     return `${location.origin}${location.pathname}`;
+32:   }
+33: 
+34:   function projectKeyFromCurrentUrl() {
+35:     const parts = location.pathname
+36:       .split("/")
+37:       .filter(Boolean);
+38: 
+39:     const projectPart = parts.find(
+40:       part => part.startsWith("g-p-")
+41:     );
+42: 
+43:     return projectPart || "";
+44:   }
+45: 
+46:   async function isArmed() {
+47:     const stored = await chrome.storage.local.get([
+48:       "armedUrl",
+49:       "armedProjectKey"
+50:     ]);
+51: 
+52:     if (
+53:       stored.armedUrl &&
+54:       stored.armedUrl === normalizedCurrentUrl()
+55:     ) {
+56:       return true;
+57:     }
+58: 
+59:     const currentProjectKey =
+60:       projectKeyFromCurrentUrl();
+61: 
+62:     if (
+63:       currentProjectKey &&
+64:       stored.armedProjectKey &&
+65:       currentProjectKey === stored.armedProjectKey
+66:     ) {
+67:       return true;
+68:     }
+69: 
+70:     return false;
+71:   }
+72: 
+73:   async function bridgeFetch(
+74:     path,
+75:     method = "GET",
+76:     body = undefined
+77:   ) {
+78:     return await chrome.runtime.sendMessage({
+79:       type: "bridgeFetch",
+80:       path,
+81:       method,
+82:       body
+83:     });
+84:   }
+85: 
+86:   function assistantMessages() {
+87:     const specific = Array.from(
+88:       document.querySelectorAll(
+89:         '[data-message-author-role="assistant"]'
+90:       )
+91:     );
+92: 
+93:     if (specific.length > 0) {
+94:       return specific;
+95:     }
+96: 
+97:     /*
+98:      * ChatGPT wijzigt geregeld zijn DOM-structuur.
+99:      * Als de specifieke selector niet bestaat, scan dan de
+100:      * zichtbare pagina als fallback.
+101:      */
+102:     return document.body ? [document.body] : [];
+103:   }
+104: 
+105:   function extractTaskBlocks(text) {
+106:     const blocks = [];
+107: 
+108:     let position = 0;
+109: 
+110:     while (true) {
+111:       const start = text.indexOf(
+112:         TASK_START,
+113:         position
+114:       );
+115: 
+116:       if (start === -1) {
+117:         break;
+118:       }
+119: 
+120:       const contentStart =
+121:         start + TASK_START.length;
+122: 
+123:       const end = text.indexOf(
+124:         TASK_END,
+125:         contentStart
+126:       );
+127: 
+128:       if (end === -1) {
+129:         break;
+130:       }
+131: 
+132:       blocks.push(
+133:         text.slice(contentStart, end).trim()
+134:       );
+135: 
+136:       position = end + TASK_END.length;
+137:     }
+138: 
+139:     return blocks;
+140:   }

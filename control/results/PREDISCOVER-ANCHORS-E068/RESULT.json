@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "experiments/bridge/e068.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-19T20:10:18.375951+00:00",
+  "hypothesis_id": "CONTROL-NO-SILENT-WAITING",
+  "source_commit": "cd6bc5f622bb043ed95962b437fb6247902f534f",
+  "started_at": "2026-09-19T20:10:18.358269+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "a07d0f1c856a72371acb2ee6c07ff6b33c1183dd2a24bdd0c4cb281b8e74d153",
+  "task_class": "infrastructure",
+  "task_id": "PREDISCOVER-ANCHORS-E068"
+}
