@@ -1,0 +1,1 @@
+from pathlib import Path;R=Path.cwd();p=R/'control/hourly/hourly_cycle.py';print(p.read_text())
