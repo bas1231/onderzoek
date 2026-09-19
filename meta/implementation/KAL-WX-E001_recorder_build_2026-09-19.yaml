@@ -7,7 +7,7 @@ implementation_status: IMPLEMENTED_LIVE_CAPTURE_PENDING
 source_repo:
   repo: bas1231/proof-hunter
   branch: ai/weather-index-e001-recorder-v0
-  head: 39abe963631cd2b5caefba2f20f27efe98fc80d7
+  head: 11ce9d1277160ab1b7c65b2748a6b6282cf28ad7
   base_branch: ai/phase15-mecnet-discovery-watch-v0
   base_sha: 9dc7dff86485f2764efbb3e4c294f7a7ba264819
 components:
@@ -33,9 +33,15 @@ components:
   - name: orchestrator
     path: proof_hunter/source_lock/weather_index_watch.py
     role: "Shared cycle_id across rules/fees/index/calibration/L2/trades; append-only raw evidence."
+  - name: capture_integrity_validator
+    path: proof_hunter/source_lock/weather_capture_validate.py
+    entrypoint: proof-hunter-weather-validate
+    role: "Fail-closed check for missing evidence classes, error events, non-2xx raw metadata, missing bodies and SHA-256 mismatch. Technical gate only."
   - name: cli
     path: pyproject.toml
-    entrypoint: proof-hunter-weather-watch
+    entrypoints:
+      - proof-hunter-weather-watch
+      - proof-hunter-weather-validate
 capture_policy:
   default_poll_seconds: 60
   weather_index_overlap_seconds: 900
@@ -60,9 +66,10 @@ three_angle_alignment:
     implementation: NOT_STARTED
     blocker: "Requires sufficient immutable point-in-time corpus and semantic gate."
   angle_3_market_execution_edge:
-    evidence_capture_implementation: PRESENT
+    rest_evidence_capture: PRESENT
+    continuous_orderbook_timing: REQUIRED_BEFORE_TEST
     analysis: BLOCKED
-    blocker: "Requires signal gate plus live aligned L2/trades/fee corpus."
+    blocker: "Minute REST snapshots are sufficient for smoke/corpus bootstrap but insufficient alone for a repricing-lag claim. Continuous authenticated WebSocket orderbook_delta plus trade timestamps are required before Angle 3."
   independent_red_team:
     status: READY
     task: TASK-WX-006
@@ -76,15 +83,21 @@ verification:
   live_read_only_smoke:
     status: PENDING_STRIX_OR_KALI
   live_raw_integrity_check:
-    status: PENDING
+    status: IMPLEMENTED_PENDING_LIVE_RUN
+primary_docs_crosscheck:
+  weather_index: "Current Kalshi docs describe Weather Index as the canonical minute-resolution series behind hourly temperature markets."
+  websocket_orderbook: "Authenticated orderbook_delta sends an initial orderbook_snapshot followed by incremental deltas with sid/seq and exchange ts/ts_ms."
+  websocket_trades: "Authenticated WebSocket session can stream public trade notifications immediately after execution with sid/seq and ts/ts_ms."
+  rate_limits: "Predictions Basic Read budget is currently documented as 200 tokens/s; endpoint costs are dynamic and GET /account/endpoint_costs is authoritative for non-default costs."
 important_corrections:
   - "Current orderbook capture must use authenticated read access; older public-client orderbook assumption is not trusted."
   - "Current KXTEMP settlement/source semantics remain event/rule-version gated; no global TWC or Synoptic assumption is promoted."
   - "Calibration published_at/effective_at and Weather Index receipt_basis must remain point-in-time features, never backfilled into earlier decisions."
+  - "REST snapshots alone cannot establish second-level market repricing lag; continuous WebSocket evidence is required for Angle 3."
 next_gate:
   - "Checkout branch on Strix/Kali."
   - "Install project with dev+auth dependencies and run full pytest."
   - "Run one read-only capture cycle for the four preregistered KXTEMP series."
+  - "Run proof-hunter-weather-validate and require PASS_TECHNICAL_CAPTURE_INTEGRITY without changing tests/data."
   - "Inspect direct series/event/market rules and classify current settlement source per event."
-  - "Verify HTTP status, timestamps, hashes, non-empty Weather Index, L2 and fee/trade evidence."
-  - "Only then start corpus collection and Angle 2 development replay."
+  - "Only then start prospective corpus collection and build/validate continuous WebSocket execution evidence before Angle 3."
