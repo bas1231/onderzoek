@@ -1,0 +1,48 @@
+schema_version: 1
+as_of: 2026-09-19
+status: OBSERVED
+economic_status: NO_PROVEN_EDGE
+records:
+  - id: KAL-WX-SOURCE-DRIFT-001
+    kind: observation
+    status: OBSERVED
+    claim: >-
+      Weather settlement-source semantics are regime- and event-rule-dependent in 2026;
+      static mappings such as 'daily=NWS' or 'hourly=TWC' are not safe global rules.
+    related:
+      - KAL-WX-001
+    superseding_context: >-
+      The older KAL-WX-001 negative-evidence conclusion remains valid only as evidence
+      that the examined hourly-vs-daily families were not automatically identical. Its
+      historical explanation ('hourly TWC versus daily NWS') must not be generalized to
+      later 2026 events.
+    evidence:
+      - >-
+        Kalshi's help article dated 2026-07-22 still describes daily high/low settlement
+        as NWS Daily Climate Report and hourly temperature settlement as The Weather Company.
+      - >-
+        Concrete third-party mirrors of KXHIGHNY event rules dated 2026-08-14, 2026-08-15,
+        2026-08-20 and later reproduce The Weather Company as the authoritative daily
+        maximum-temperature source.
+      - >-
+        New KWI hourly products were certified beginning with Miami on 2026-08-12 and
+        additional cities in September; verified later hourly contract rules use
+        Synoptic Data / Kalshi Weather Index Methodology.
+    provenance_quality:
+      help_article: PRIMARY_GENERIC_BUT_POTENTIALLY_STALE
+      cftc_product_filings: PRIMARY_REGULATORY
+      historical_event_rules_mirrors: SECONDARY_RULES_MIRROR
+    agent_rule: >-
+      Determine settlement source, transformation, measurement window and rules version
+      from the exact event/market rules point-in-time. Never infer source from category,
+      series family, ticker prefix, generic help-center text, or a manually assumed
+      global cutover date.
+    identity_implication: >-
+      No daily/hourly payout identity may be asserted until both exact event rules prove
+      the same source, domain, time window, transformation, rounding and exception paths.
+    falsification:
+      - Reconstruct exact archived Kalshi rules for historical events where secondary mirrors are used.
+      - Preserve rules_version and source fields prospectively in every recorder cycle.
+    nonclaim: >-
+      This record does not prove a source-migration market edge, a cross-market arbitrage,
+      or any profitable strategy.
