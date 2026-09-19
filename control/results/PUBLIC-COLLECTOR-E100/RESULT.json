@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "experiments/bridge/e100.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-19T20:56:04.574303+00:00",
+  "hypothesis_id": "CONTROL-AUTONOMOUS-RESEARCH",
+  "source_commit": "f15ef540b044a51fc03680f41f1248850c37f04d",
+  "started_at": "2026-09-19T20:56:02.304199+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "051f7f7b5a207d617008a4a971ca79a50b7959b564e1990ecef798bb0b2d707d",
+  "task_class": "infrastructure",
+  "task_id": "PUBLIC-COLLECTOR-E100"
+}
