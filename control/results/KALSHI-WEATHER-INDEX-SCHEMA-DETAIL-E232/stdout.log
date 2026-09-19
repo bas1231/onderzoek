@@ -1,0 +1,1019 @@
+{
+  "artifact": "knowledge/runs/kalshi-weather-index-schema-detail-e232.json",
+  "latest_manifest": "/home/leonh/.local/state/prediction-research/kalshi_weather_index_manifests/kwi-20260919T234719.084455+0000-8f4e3f94c34a.json",
+  "cities": [
+    {
+      "city": "nyc",
+      "config_version": "nyc-temperature-v1.0-cal-20260914",
+      "timeseries_point_keys": [
+        "contributors",
+        "stations",
+        "status",
+        "t",
+        "v"
+      ],
+      "station_keys": [
+        "code",
+        "received_at_ms",
+        "source",
+        "station_id",
+        "temp_f"
+      ],
+      "status_counts": {
+        "normal": 173,
+        "incomplete": 2
+      },
+      "source_counts": {
+        "hf_asos": 1400
+      },
+      "code_counts": {
+        "ok": 1384,
+        "pending": 16
+      },
+      "degraded_count": 0,
+      "degraded_examples": []
+    },
+    {
+      "city": "miami",
+      "config_version": "miami-temperature-v1.0-cal-20260914",
+      "timeseries_point_keys": [
+        "contributors",
+        "stations",
+        "status",
+        "t",
+        "v"
+      ],
+      "station_keys": [
+        "code",
+        "received_at_ms",
+        "source",
+        "station_id",
+        "temp_f"
+      ],
+      "status_counts": {
+        "normal": 175,
+        "incomplete": 2
+      },
+      "source_counts": {
+        "hf_asos": 885
+      },
+      "code_counts": {
+        "ok": 875,
+        "pending": 10
+      },
+      "degraded_count": 0,
+      "degraded_examples": []
+    },
+    {
+      "city": "chicago",
+      "config_version": "chicago-temperature-v1.0-cal-20260914",
+      "timeseries_point_keys": [
+        "contributors",
+        "stations",
+        "status",
+        "t",
+        "v"
+      ],
+      "station_keys": [
+        "code",
+        "obs_time_ms",
+        "primary_code",
+        "received_at_ms",
+        "source",
+        "station_id",
+        "temp_f"
+      ],
+      "status_counts": {
+        "degraded": 37,
+        "normal": 138,
+        "incomplete": 3
+      },
+      "source_counts": {
+        "hf_asos": 844,
+        "metar": 40,
+        "None": 1
+      },
+      "code_counts": {
+        "ok": 874,
+        "missing": 1,
+        "pending": 10
+      },
+      "degraded_count": 37,
+      "degraded_examples": [
+        {
+          "t": 1789850880000,
+          "v": 70.02,
+          "status": "degraded",
+          "contributors": 5,
+          "station_count": 5,
+          "stations": [
+            {
+              "station_id": "KARR1M",
+              "code": "ok",
+              "source": "hf_asos",
+              "temp_f": 69.8,
+              "received_at_ms": 1789851017091
+            },
+            {
+              "station_id": "KDPA1M",
+              "code": "ok",
+              "source": "metar",
+              "temp_f": 69.08,
+              "received_at_ms": 1789849031269
+            },
+            {
+              "station_id": "KMDW1M",
+              "code": "ok",
+              "source": "hf_asos",
+              "temp_f": 71.6,
+              "received_at_ms": 1789851017713
+            },
+            {
+              "station_id": "KORD1M",
+              "code": "ok",
+              "source": "hf_asos",
+              "temp_f": 69.8,
+              "received_at_ms": 1789851017713
+            },
+            {
+              "station_id": "KPWK1M",
+              "code": "ok",
+              "source": "hf_asos",
+              "temp_f": 69.8,
+              "received_at_ms": 1789851017713
+            }
+          ],
+          "extra_fields": {}
+        },
+        {
+          "t": 1789851120000,
+          "v": 70.02,
+          "status": "degraded",
+          "contributors": 5,
+          "station_count": 5,
+          "stations": [
+            {
+              "station_id": "KARR1M",
+              "code": "ok",
+              "source": "hf_asos",
+              "temp_f": 69.8,
+              "received_at_ms": 1789851253981
+            },
+            {
+              "station_id": "KDPA1M",
+              "code": "ok",
+              "source": "metar",
+              "temp_f": 69.08,
+              "received_at_ms": 1789851371853
+            },
+            {
+              "station_id": "KMDW1M",
+              "code": "ok",
+              "source": "hf_asos",
+              "temp_f": 71.6,
+              "received_at_ms": 1789851255494
+            },
+            {
+              "station_id": "KORD1M",
+              "code": "ok",
+              "source": "hf_asos",
+              "temp_f": 69.8,
+              "received_at_ms": 1789851255494
+            },
+            {
+              "station_id": "KPWK1M",
+              "code": "ok",
+              "source": "hf_asos",
+              "temp_f": 69.8,
+              "received_at_ms": 1789851255494
+            }
+          ],
+          "extra_fields": {}
+        },
+        {
+          "t": 1789851480000,
+          "v": 70.02,
+          "status": "degraded",
+          "contributors": 5,
+          "station_count": 5,
+          "stations": [
+            {
+              "station_id": "KARR1M",
+              "code": "ok",
+              "source": "hf_asos",
+              "temp_f": 69.8,
+              "received_at_ms": 1789851616580
+            },
+            {
+              "station_id": "KDPA1M",
+              "code": "ok",
+              "source": "metar",
+              "temp_f": 69.08,
+              "received_at_ms": 1789851371853
+            },
+            {
+              "station_id": "KMDW1M",
+              "code": "ok",
+              "source": "hf_asos",
+              "temp_f": 71.6,
+              "received_at_ms": 1789851618090
+            },
+            {
+              "station_id": "KORD1M",
+              "code": "ok",
+              "source": "hf_asos",
+              "temp_f": 69.8,
+              "received_at_ms": 1789851618593
+            },
+            {
+              "station_id": "KPWK1M",
+              "code": "ok",
+              "source": "hf_asos",
+              "temp_f": 69.8,
+              "received_at_ms": 1789851618090
+            }
+          ],
+          "extra_fields": {}
+        },
+        {
+          "t": 1789851780000,
+          "v": 69.66,
+          "status": "degraded",
+          "contributors": 5,
+          "station_count": 5,
+          "stations": [
+            {
+              "station_id": "KARR1M",
+              "code": "ok",
+              "source": "hf_asos",
+              "temp_f": 68,
+              "received_at_ms": 1789851935197
+            },
+            {
+              "station_id": "KDPA1M",
+              "code": "ok",
+              "source": "metar",
+              "temp_f": 69.08,
+              "received_at_ms": 1789851371853
+            },
+            {
+              "station_id": "KMDW1M",
+              "code": "ok",
+              "source": "hf_asos",
+              "temp_f": 71.6,
+              "received_at_ms": 1789851937214
+            },
+            {
+              "station_id": "KORD1M",
+              "code": "ok",
+              "source": "hf_asos",
+              "temp_f": 69.8,
+              "received_at_ms": 1789851937214
+            },
+            {
+              "station_id": "KPWK1M",
+              "code": "ok",
+              "source": "hf_asos",
+              "temp_f": 69.8,
+              "received_at_ms": 1789851936707
+            }
+          ],
+          "extra_fields": {}
+        },
+        {
+          "t": 1789852020000,
+          "v": 69.66,
+          "status": "degraded",
+          "contributors": 5,
+          "station_count": 5,
+          "stations": [
+            {
+              "station_id": "KARR1M",
+              "code": "ok",
+              "source": "hf_asos",
+              "temp_f": 68,
+              "received_at_ms": 1789852157719
+            },
+            {
+              "station_id": "KDPA1M",
+              "code": "ok",
+              "source": "metar",
+              "temp_f": 69.08,
+              "received_at_ms": 1789851371853
+            },
+            {
+              "station_id": "KMDW1M",
+              "code": "ok",
+              "source": "hf_asos",
+              "temp_f": 71.6,
+              "received_at_ms": 1789852158224
+            },
+            {
+              "station_id": "KORD1M",
+              "code": "ok",
+              "source": "hf_asos",
+              "temp_f": 69.8,
+              "received_at_ms": 1789852159232
+            },
+            {
+              "station_id": "KPWK1M",
+              "code": "ok",
+              "source": "hf_asos",
+              "temp_f": 69.8,
+              "received_at_ms": 1789852159232
+            }
+          ],
+          "extra_fields": {}
+        },
+        {
+          "t": 1789852260000,
+          "v": 69.66,
+          "status": "degraded",
+          "contributors": 5,
+          "station_count": 5,
+          "stations": [
+            {
+              "station_id": "KARR1M",
+              "code": "ok",
+              "source": "hf_asos",
+              "temp_f": 68,
+              "received_at_ms": 1789852404273
+            },
+            {
+              "station_id": "KDPA1M",
+              "code": "ok",
+              "source": "metar",
+              "temp_f": 69.08,
+              "received_at_ms": 1789851371853
+            },
+            {
+              "station_id": "KMDW1M",
+              "code": "ok",
+              "source": "hf_asos",
+              "temp_f": 71.6,
+              "received_at_ms": 1789852405285
+            },
+            {
+              "station_id": "KORD1M",
+              "code": "ok",
+              "source": "hf_asos",
+              "temp_f": 69.8,
+              "received_at_ms": 1789852405285
+            },
+            {
+              "station_id": "KPWK1M",
+              "code": "ok",
+              "source": "hf_asos",
+              "temp_f": 69.8,
+              "received_at_ms": 1789852405285
+            }
+          ],
+          "extra_fields": {}
+        },
+        {
+          "t": 1789852500000,
+          "v": 69.66,
+          "status": "degraded",
+          "contributors": 5,
+          "station_count": 5,
+          "stations": [
+            {
+              "station_id": "KARR1M",
+              "code": "ok",
+              "source": "hf_asos",
+              "temp_f": 68,
+              "received_at_ms": 1789852656662
+            },
+            {
+              "station_id": "KDPA1M",
+              "code": "ok",
+              "source": "metar",
+              "temp_f": 69.08,
+              "received_at_ms": 1789851371853
+            },
+            {
+              "station_id": "KMDW1M",
+              "code": "ok",
+              "source": "hf_asos",
+              "temp_f": 71.6,
+              "received_at_ms": 1789852657729
+            },
+            {
+              "station_id": "KORD1M",
+              "code": "ok",
+              "source": "hf_asos",
+              "temp_f": 69.8,
+              "received_at_ms": 1789852657729
+            },
+            {
+              "station_id": "KPWK1M",
+              "code": "ok",
+              "source": "hf_asos",
+              "temp_f": 69.8,
+              "received_at_ms": 1789852657729
+            }
+          ],
+          "extra_fields": {}
+        },
+        {
+          "t": 1789852740000,
+          "v": 69.66,
+          "status": "degraded",
+          "contributors": 5,
+          "station_count": 5,
+          "stations": [
+            {
+              "station_id": "KARR1M",
+              "code": "ok",
+              "source": "hf_asos",
+              "temp_f": 68,
+              "received_at_ms": 1789852885352
+            },
+            {
+              "station_id": "KDPA1M",
+              "code": "ok",
+              "source": "metar",
+              "temp_f": 69.08,
+              "received_at_ms": 1789851371853
+            },
+            {
+              "station_id": "KMDW1M",
+              "code": "ok",
+              "source": "hf_asos",
+              "temp_f": 71.6,
+              "received_at_ms": 1789852885859
+            },
+            {
+              "station_id": "KORD1M",
+              "code": "ok",
+              "source": "hf_asos",
+              "temp_f": 69.8,
+              "received_at_ms": 1789852885859
+            },
+            {
+              "station_id": "KPWK1M",
+              "code": "ok",
+              "source": "hf_asos",
+              "temp_f": 69.8,
+              "received_at_ms": 1789852885859
+            }
+          ],
+          "extra_fields": {}
+        },
+        {
+          "t": 1789852980000,
+          "v": 69.66,
+          "status": "degraded",
+          "contributors": 5,
+          "station_count": 5,
+          "stations": [
+            {
+              "station_id": "KARR1M",
+              "code": "ok",
+              "source": "hf_asos",
+              "temp_f": 68,
+              "received_at_ms": 1789853122995
+            },
+            {
+              "station_id": "KDPA1M",
+              "code": "ok",
+              "source": "metar",
+              "temp_f": 69.08,
+              "received_at_ms": 1789851371853
+            },
+            {
+              "station_id": "KMDW1M",
+              "code": "ok",
+              "source": "hf_asos",
+              "temp_f": 71.6,
+              "received_at_ms": 1789853124002
+            },
+            {
+              "station_id": "KORD1M",
+              "code": "ok",
+              "source": "hf_asos",
+              "temp_f": 69.8,
+              "received_at_ms": 1789853124503
+            },
+            {
+              "station_id": "KPWK1M",
+              "code": "ok",
+              "source": "hf_asos",
+              "temp_f": 69.8,
+              "received_at_ms": 1789853124503
+            }
+          ],
+          "extra_fields": {}
+        },
+        {
+          "t": 1789853220000,
+          "v": 69.66,
+          "status": "degraded",
+          "contributors": 5,
+          "station_count": 5,
+          "stations": [
+            {
+              "station_id": "KARR1M",
+              "code": "ok",
+              "source": "hf_asos",
+              "temp_f": 68,
+              "received_at_ms": 1789853365980
+            },
+            {
+              "station_id": "KDPA1M",
+              "code": "ok",
+              "source": "metar",
+              "temp_f": 69.08,
+              "received_at_ms": 1789851371853
+            },
+            {
+              "station_id": "KMDW1M",
+              "code": "ok",
+              "source": "hf_asos",
+              "temp_f": 71.6,
+              "received_at_ms": 1789853367996
+            },
+            {
+              "station_id": "KORD1M",
+              "code": "ok",
+              "source": "hf_asos",
+              "temp_f": 69.8,
+              "received_at_ms": 1789853366989
+            },
+            {
+              "station_id": "KPWK1M",
+              "code": "ok",
+              "source": "hf_asos",
+              "temp_f": 69.8,
+              "received_at_ms": 1789853367494
+            }
+          ],
+          "extra_fields": {}
+        },
+        {
+          "t": 1789853460000,
+          "v": 69.66,
+          "status": "degraded",
+          "contributors": 5,
+          "station_count": 5,
+          "stations": [
+            {
+              "station_id": "KARR1M",
+              "code": "ok",
+              "source": "hf_asos",
+              "temp_f": 68,
+              "received_at_ms": 1789853606395
+            },
+            {
+              "station_id": "KDPA1M",
+              "code": "ok",
+              "source": "metar",
+              "temp_f": 69.08,
+              "received_at_ms": 1789851371853
+            },
+            {
+              "station_id": "KMDW1M",
+              "code": "ok",
+              "source": "hf_asos",
+              "temp_f": 71.6,
+              "received_at_ms": 1789853607911
+            },
+            {
+              "station_id": "KORD1M",
+              "code": "ok",
+              "source": "hf_asos",
+              "temp_f": 69.8,
+              "received_at_ms": 1789853607911
+            },
+            {
+              "station_id": "KPWK1M",
+              "code": "ok",
+              "source": "hf_asos",
+              "temp_f": 69.8,
+              "received_at_ms": 1789853607911
+            }
+          ],
+          "extra_fields": {}
+        },
+        {
+          "t": 1789853700000,
+          "v": 69.66,
+          "status": "degraded",
+          "contributors": 5,
+          "station_count": 5,
+          "stations": [
+            {
+              "station_id": "KARR1M",
+              "code": "ok",
+              "source": "hf_asos",
+              "temp_f": 68,
+              "received_at_ms": 1789853854076
+            },
+            {
+              "station_id": "KDPA1M",
+              "code": "ok",
+              "source": "metar",
+              "temp_f": 69.08,
+              "received_at_ms": 1789851371853
+            },
+            {
+              "station_id": "KMDW1M",
+              "code": "ok",
+              "source": "hf_asos",
+              "temp_f": 71.6,
+              "received_at_ms": 1789853855591
+            },
+            {
+              "station_id": "KORD1M",
+              "code": "ok",
+              "source": "hf_asos",
+              "temp_f": 69.8,
+              "received_at_ms": 1789853855085
+            },
+            {
+              "station_id": "KPWK1M",
+              "code": "ok",
+              "source": "hf_asos",
+              "temp_f": 69.8,
+              "received_at_ms": 1789853856095
+            }
+          ],
+          "extra_fields": {}
+        },
+        {
+          "t": 1789853940000,
+          "v": 69.66,
+          "status": "degraded",
+          "contributors": 5,
+          "station_count": 5,
+          "stations": [
+            {
+              "station_id": "KARR1M",
+              "code": "ok",
+              "source": "hf_asos",
+              "temp_f": 68,
+              "received_at_ms": 1789854073537
+            },
+            {
+              "station_id": "KDPA1M",
+              "code": "ok",
+              "source": "metar",
+              "temp_f": 69.08,
+              "received_at_ms": 1789851371853
+            },
+            {
+              "station_id": "KMDW1M",
+              "code": "ok",
+              "source": "hf_asos",
+              "temp_f": 71.6,
+              "received_at_ms": 1789854073537
+            },
+            {
+              "station_id": "KORD1M",
+              "code": "ok",
+              "source": "hf_asos",
+              "temp_f": 69.8,
+              "received_at_ms": 1789854075047
+            },
+            {
+              "station_id": "KPWK1M",
+              "code": "ok",
+              "source": "hf_asos",
+              "temp_f": 69.8,
+              "received_at_ms": 1789854075047
+            }
+          ],
+          "extra_fields": {}
+        },
+        {
+          "t": 1789854180000,
+          "v": 69.66,
+          "status": "degraded",
+          "contributors": 5,
+          "station_count": 5,
+          "stations": [
+            {
+              "station_id": "KARR1M",
+              "code": "ok",
+              "source": "hf_asos",
+              "temp_f": 68,
+              "received_at_ms": 1789854329999
+            },
+            {
+              "station_id": "KDPA1M",
+              "code": "ok",
+              "source": "metar",
+              "temp_f": 69.08,
+              "received_at_ms": 1789851371853
+            },
+            {
+              "station_id": "KMDW1M",
+              "code": "ok",
+              "source": "hf_asos",
+              "temp_f": 71.6,
+              "received_at_ms": 1789854330635
+            },
+            {
+              "station_id": "KORD1M",
+              "code": "ok",
+              "source": "hf_asos",
+              "temp_f": 69.8,
+              "received_at_ms": 1789854330635
+            },
+            {
+              "station_id": "KPWK1M",
+              "code": "ok",
+              "source": "hf_asos",
+              "temp_f": 69.8,
+              "received_at_ms": 1789854330635
+            }
+          ],
+          "extra_fields": {}
+        },
+        {
+          "t": 1789854300000,
+          "v": 69.3,
+          "status": "degraded",
+          "contributors": 5,
+          "station_count": 5,
+          "stations": [
+            {
+              "station_id": "KARR1M",
+              "code": "ok",
+              "source": "hf_asos",
+              "temp_f": 68,
+              "received_at_ms": 1789854435133
+            },
+            {
+              "station_id": "KDPA1M",
+              "code": "ok",
+              "source": "metar",
+              "temp_f": 69.08,
+              "received_at_ms": 1789851371853
+            },
+            {
+              "station_id": "KMDW1M",
+              "code": "ok",
+              "source": "hf_asos",
+              "temp_f": 71.6,
+              "received_at_ms": 1789854435757
+            },
+            {
+              "station_id": "KORD1M",
+              "code": "ok",
+              "source": "hf_asos",
+              "temp_f": 69.8,
+              "received_at_ms": 1789854436261
+            },
+            {
+              "station_id": "KPWK1M",
+              "code": "ok",
+              "source": "hf_asos",
+              "temp_f": 68,
+              "received_at_ms": 1789854438948
+            }
+          ],
+          "extra_fields": {}
+        },
+        {
+          "t": 1789854540000,
+          "v": 69.3,
+          "status": "degraded",
+          "contributors": 5,
+          "station_count": 5,
+          "stations": [
+            {
+              "station_id": "KARR1M",
+              "code": "ok",
+              "source": "hf_asos",
+              "temp_f": 68,
+              "received_at_ms": 1789854677547
+            },
+            {
+              "station_id": "KDPA1M",
+              "code": "ok",
+              "source": "metar",
+              "temp_f": 69.08,
+              "received_at_ms": 1789851371853
+            },
+            {
+              "station_id": "KMDW1M",
+              "code": "ok",
+              "source": "hf_asos",
+              "temp_f": 71.6,
+              "received_at_ms": 1789854679064
+            },
+            {
+              "station_id": "KORD1M",
+              "code": "ok",
+              "source": "hf_asos",
+              "temp_f": 69.8,
+              "received_at_ms": 1789854679064
+            },
+            {
+              "station_id": "KPWK1M",
+              "code": "ok",
+              "source": "hf_asos",
+              "temp_f": 68,
+              "received_at_ms": 1789854678559
+            }
+          ],
+          "extra_fields": {}
+        },
+        {
+          "t": 1789854780000,
+          "v": 69.4,
+          "status": "degraded",
+          "contributors": 4,
+          "station_count": 5,
+          "stations": [
+            {
+              "station_id": "KARR1M",
+              "code": "ok",
+              "source": "metar",
+              "temp_f": 68,
+              "received_at_ms": 1789854974808
+            },
+            {
+              "station_id": "KDPA1M",
+              "code": "ok",
+              "source": "metar",
+              "temp_f": 69.08,
+              "received_at_ms": 1789854975819
+            },
+            {
+              "station_id": "KMDW1M",
+              "code": "ok",
+              "source": "metar",
+              "temp_f": 71.06,
+              "received_at_ms": 1789854976337
+            },
+            {
+              "station_id": "KORD1M",
+              "code": "missing",
+              "source": null,
+              "temp_f": null,
+              "received_at_ms": null
+            },
+            {
+              "station_id": "KPWK1M",
+              "code": "ok",
+              "source": "metar",
+              "temp_f": 68,
+              "received_at_ms": 1789854976840
+            }
+          ],
+          "extra_fields": {}
+        },
+        {
+          "t": 1789854840000,
+          "v": 68.94,
+          "status": "degraded",
+          "contributors": 5,
+          "station_count": 5,
+          "stations": [
+            {
+              "station_id": "KARR1M",
+              "code": "ok",
+              "source": "hf_asos",
+              "temp_f": 68,
+              "received_at_ms": 1789854977843
+            },
+            {
+              "station_id": "KDPA1M",
+              "code": "ok",
+              "source": "metar",
+              "temp_f": 69.08,
+              "received_at_ms": 1789854975819
+            },
+            {
+              "station_id": "KMDW1M",
+              "code": "ok",
+              "source": "hf_asos",
+              "temp_f": 71.6,
+              "received_at_ms": 1789854979349
+            },
+            {
+              "station_id": "KORD1M",
+              "code": "ok",
+              "source": "hf_asos",
+              "temp_f": 69.8,
+              "received_at_ms": 1789854979349
+            },
+            {
+              "station_id": "KPWK1M",
+              "code": "ok",
+              "source": "hf_asos",
+              "temp_f": 66.2,
+              "received_at_ms": 1789854978345
+            }
+          ],
+          "extra_fields": {}
+        },
+        {
+          "t": 1789855140000,
+          "v": 68.94,
+          "status": "degraded",
+          "contributors": 5,
+          "station_count": 5,
+          "stations": [
+            {
+              "station_id": "KARR1M",
+              "code": "ok",
+              "source": "hf_asos",
+              "temp_f": 68,
+              "received_at_ms": 1789855284896
+            },
+            {
+              "station_id": "KDPA1M",
+              "code": "ok",
+              "source": "metar",
+              "temp_f": 69.08,
+              "received_at_ms": 1789854975819
+            },
+            {
+              "station_id": "KMDW1M",
+              "code": "ok",
+              "source": "hf_asos",
+              "temp_f": 71.6,
+              "received_at_ms": 1789855285917
+            },
+            {
+              "station_id": "KORD1M",
+              "code": "ok",
+              "source": "hf_asos",
+              "temp_f": 69.8,
+              "received_at_ms": 1789855285411
+            },
+            {
+              "station_id": "KPWK1M",
+              "code": "ok",
+              "source": "hf_asos",
+              "temp_f": 66.2,
+              "received_at_ms": 1789855285917
+            }
+          ],
+          "extra_fields": {}
+        },
+        {
+          "t": 1789856160000,
+          "v": 68.94,
+          "status": "degraded",
+          "contributors": 5,
+          "station_count": 5,
+          "stations": [
+            {
+              "station_id": "KARR1M",
+              "code": "ok",
+              "source": "hf_asos",
+              "temp_f": 68,
+              "received_at_ms": 1789856303623
+            },
+            {
+              "station_id": "KDPA1M",
+              "code": "ok",
+              "source": "metar",
+              "temp_f": 69.08,
+              "received_at_ms": 1789854975819
+            },
+            {
+              "station_id": "KMDW1M",
+              "code": "ok",
+              "source": "hf_asos",
+              "temp_f": 71.6,
+              "received_at_ms": 1789856305131
+            },
+            {
+              "station_id": "KORD1M",
+              "code": "ok",
+              "source": "hf_asos",
+              "temp_f": 69.8,
+              "received_at_ms": 1789856303623
+            },
+            {
+              "station_id": "KPWK1M",
+              "code": "ok",
+              "source": "hf_asos",
+              "temp_f": 66.2,
+              "received_at_ms": 1789856303623
+            }
+          ],
+          "extra_fields": {}
+        }
+      ]
+    }
+  ],
+  "commit": {
+    "rc": 0,
+    "stdout": "[main 73d3b74] research(weather): enumerate Weather Index raw schema\n 1 file changed, 1459 insertions(+)\n create mode 100644 knowledge/runs/kalshi-weather-index-schema-detail-e232.json",
+    "stderr": ""
+  },
+  "push": {
+    "rc": 0,
+    "stdout": "",
+    "stderr": "To github.com:bas1231/onderzoek.git\n   250b1be..73d3b74  HEAD -> main"
+  },
+  "live_trading": false,
+  "paid_actions": false,
+  "wallet_actions": false
+}
