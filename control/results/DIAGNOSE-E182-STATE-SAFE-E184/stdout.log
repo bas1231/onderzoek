@@ -1,0 +1,52 @@
+{
+  "task_id": "TWC-POINT-IN-TIME-RECORDER-E182",
+  "git_head": {
+    "rc": 0,
+    "stdout": "ebccfaf",
+    "stderr": ""
+  },
+  "services": {
+    "prediction-research-browser-bridge.service": {
+      "rc": 0,
+      "stdout": "active",
+      "stderr": ""
+    },
+    "prediction-research-executor.service": {
+      "rc": 0,
+      "stdout": "active",
+      "stderr": ""
+    },
+    "prediction-research-lifecycle-supervisor.service": {
+      "rc": 0,
+      "stdout": "active",
+      "stderr": ""
+    }
+  },
+  "repo_targets": {
+    "control/weather/twc_hourly_recorder.py": {
+      "exists": false,
+      "size": null
+    },
+    "control/weather/install_twc_recorder.py": {
+      "exists": false,
+      "size": null
+    }
+  },
+  "unit_targets": {
+    "prediction-research-twc-recorder.service": {
+      "exists": false,
+      "size": null
+    },
+    "prediction-research-twc-recorder.timer": {
+      "exists": false,
+      "size": null
+    }
+  },
+  "state_hits": [
+    {
+      "path": "/home/leonh/.local/state/prediction-research/incidents/TWC-POINT-IN-TIME-RECORDER-E182__NO_ENQUEUE_ACK.json",
+      "size": 583,
+      "preview": "{ \"age_seconds\": 198.5, \"automatic_action\": \"NONE\", \"deliver_to_chat\": true, \"detail\": \"Browser ontdekte de taak, maar binnen de deadline kwam geen duurzame ACCEPTED/enqueue-state.\", \"first_seen_at\": 1789857575.9384828, \"incident_id\": \"TWC-POINT-IN-TIME-RECORDER-E182:NO_ENQUEUE_ACK\", \"last_seen_at\": 1789857681.0383203, \"lifecycle_state\": \"DISCOVERED\", \"live_trading_action\": false, \"paid_action\": false, \"reason\": \"NO_ENQUEUE_ACK\", \"running_task_killed\": false, \"status\": \"OPEN\", \"task_id\": \"TWC-POINT-IN-TIME-RECORDER-E182\", \"wallet_action\": false }"
+    }
+  ]
+}

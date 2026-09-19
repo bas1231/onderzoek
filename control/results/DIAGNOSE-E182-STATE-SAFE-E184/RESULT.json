@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "experiments/bridge/e184.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-19T22:41:26.057375+00:00",
+  "hypothesis_id": "CONTROL-NO-SILENT-WAITING",
+  "source_commit": "ebccfaf6d80b354b3c9bb8296ddeb1a73d4cab15",
+  "started_at": "2026-09-19T22:41:26.009308+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "d1c2510d609d8fcf2cebb08be57e799486c51188c066b6943af5c808ccdf3da8",
+  "task_class": "infrastructure",
+  "task_id": "DIAGNOSE-E182-STATE-SAFE-E184"
+}
