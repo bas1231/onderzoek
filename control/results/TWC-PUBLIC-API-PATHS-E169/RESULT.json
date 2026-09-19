@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "experiments/bridge/e169.py"
+  ],
+  "exit_code": 1,
+  "finished_at": "2026-09-19T22:21:12.039444+00:00",
+  "hypothesis_id": "H7-SETTLEMENT-BOUNDARY",
+  "source_commit": "0a3691b668c4a4fdf476b093ae84989c129fe9b6",
+  "started_at": "2026-09-19T22:21:12.017702+00:00",
+  "status": "failed",
+  "stderr_sha256": "604d75a2dba01fdfdaa57737ebf2fc17064cbf4a1c6ee2ca1a1331a1452fd9ad",
+  "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "task_class": "research",
+  "task_id": "TWC-PUBLIC-API-PATHS-E169"
+}
