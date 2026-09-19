@@ -1,0 +1,1 @@
+from pathlib import Path;p=Path('control/browser_extension/background.js');m=Path('control/browser_extension/manifest.json');print('BACKGROUND');print(p.read_text(errors='replace'));print('MANIFEST');print(m.read_text(errors='replace'))
