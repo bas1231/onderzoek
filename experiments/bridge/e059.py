@@ -1,0 +1,1 @@
+import subprocess,json;run=lambda a:subprocess.run(a,capture_output=True,text=True,check=False);d=run(['git','diff','--check']);print(json.dumps({'rc':d.returncode,'stdout':d.stdout.splitlines(),'stderr':d.stderr.splitlines(),'status':run(['git','status','--short']).stdout.splitlines()},indent=2))
