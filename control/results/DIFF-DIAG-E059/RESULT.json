@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "experiments/bridge/e059.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-19T19:58:56.048109+00:00",
+  "hypothesis_id": "CONTROL-NO-SILENT-WAITING",
+  "source_commit": "38042a019282e7c3901be7656cc0fcf96c6d24f0",
+  "started_at": "2026-09-19T19:58:56.019770+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "61acf97cc6115ae7f821298462726492abc0e5548ecf410c243559ff7524484a",
+  "task_class": "infrastructure",
+  "task_id": "DIFF-DIAG-E059"
+}
