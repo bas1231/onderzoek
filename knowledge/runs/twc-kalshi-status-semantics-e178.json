@@ -1,0 +1,341 @@
+{
+  "created_at": "2026-09-19T22:31:01.005818+00:00",
+  "exact_literal_contexts": {
+    "\"Pending\"": [
+      {
+        "bundle": "1b8f633c09d3e3cff75fefc80a04a7cfafb5756ec6138ad0e6fd2f99d4bba756.bin",
+        "position": 203920,
+        "snippet": "to\"})})]},e))})]})})]},e))}):(0,J.jsxs)(J.Fragment,{children:[(0,J.jsxs)(\"div\",{className:\"space-y-6\",children:[!n&&e.some(e=>\"pending\"===e.status)&&(0,J.jsxs)(\"div\",{className:\"rounded-lg border border-border/50 bg-muted/30 px-4 py-3 text-xs text-muted-foreground\",children:[\"Some stations have not yet completed their local calendar day for\",\" \",(0,J.jsx)(\"span\",{className:\"font-semibold\",children:r}),\". Values marked with an asterisk (*) are \",(0,J.jsx)(\"span\",{className:\"font-medium\",children:\"Pending\"}),\" \u2014 provisional and will be finalized once all observations through midnight local time have been received for each station.\"]}),(()=>{let t=new Map;for(let r of e){let e=r.station.region||\"Other\";t.has(e)||t.set(e,[]),t.get(e).push(r)}return[...i1.filter(e=>t.has(e)),...[...t.keys()].filter(e=>!i1.includes(e))].map(e=>{let r=t.get(e);return(0,J.jsxs)(\"div\",{className:\"rounded-xl border border-border/50 bg-card/50 backdrop-blur-sm overflow-hidden\",children:[(0,J.jsx)(\"div\",{className:\"bg-muted/30 px-6 py-3 border-b border-border/50\",children:(0,J.jsx)(\"h3\",{className:\"font-semibold text-foreground\",children:e})}),(0,J.jsx)(\"div\",{className:\"overflow-x-auto\",children:(0,J.jsxs)(a1,{children:[(0,J.jsx)(a2,{children:(0,J.jsx)(i2,{})}),(0,J.jsx)(a5,{children:r.map(e=>{let t=e.station,r=\"official\"===e.status||\"revised\"===e.status||\"pending\"===e.status,n=\"pending\"===e.status;return"
+      },
+      {
+        "bundle": "1b8f633c09d3e3cff75fefc80a04a7cfafb5756ec6138ad0e6fd2f99d4bba756.bin",
+        "position": 206355,
+        "snippet": "d-foreground\",children:\"\u2014\"})}),(0,J.jsx)(a6,{className:\"text-right\",children:\"official\"===e.status?(0,J.jsx)(il,{className:\"bg-emerald-600 hover:bg-emerald-700 text-xs\",children:\"Final\"}):\"revised\"===e.status?(0,J.jsx)(il,{className:\"bg-emerald-600 hover:bg-emerald-700 text-xs\",title:\"Revised \u2014 a later METAR arrived after this day was finalized, and the value was recalculated from it.\",children:\"Revised\"}):\"pending\"===e.status?(0,J.jsx)(\"span\",{className:\"text-xs text-muted-foreground\",children:\"Pending\"}):(0,J.jsx)(il,{variant:\"outline\",className:\"text-xs text-muted-foreground\",children:\"Unavailable\"})})]},t.id)})})]})})]},e)})})()]}),(0,J.jsx)(i0,{open:!!o,onOpenChange:e=>{e||a(null)},icao:o?.icao??null,city:o?.city??null,country:o?.country??null,date:r},o?.icao??\"closed\")]})}function i3(e){return 0===e.daysWithData?\"no_data\":e.isFinal?\"final\":e.periodOver?\"incomplete\":\"running\"}function i4(e){return null==e?\"\u2014\":String(e)}function i6(e){return null===e?\"-\":\"T\"===e?\"T\":\"number\"==typeof e?e%1==0?e.toString():e.toFixed(2):e}let i8=[{label:\"City\"},{label:\"ID\"},{label:\"Max (F)\",className:\"text-right\"},{label:\"Min (F)\",className:\"text-right\"},{label:\"Daily Mean (F)\",className:\"text-right\"},{label:\"HDD\",className:\"text-right\"},{label:\"Hourly Mean (F)\",className:\"text-right\"},{label:\"Precip (in)\",className:\"text-right\"},{label:\"Snow (in)\",className:\"text-right\"},{label:\"Status\",class"
+      },
+      {
+        "bundle": "1b8f633c09d3e3cff75fefc80a04a7cfafb5756ec6138ad0e6fd2f99d4bba756.bin",
+        "position": 589043,
+        "snippet": "pace-y-2\",children:[(0,J.jsx)(is,{className:\"h-5 w-32\"}),(0,J.jsx)(is,{className:\"h-16 w-full\"})]},e))})})]});if(d||!c)return(0,J.jsx)(la,{className:\"border border-primary/40 bg-card/50 backdrop-blur shadow-[0_0_15px_rgba(44,213,160,0.1)]\",children:(0,J.jsx)(lu,{className:\"py-12 text-center\",children:(0,J.jsx)(\"p\",{className:\"text-destructive\",children:\"Failed to load hourly observations\"})})});let{stations:m,dates:y}=c,v=[...m].sort((e,t)=>e.stationName.localeCompare(t.stationName)),g=lo(),b=e?\"Pending\":\"Preliminary\";return(0,J.jsxs)(la,{className:\"border border-primary/40 bg-card/50 backdrop-blur shadow-[0_0_15px_rgba(44,213,160,0.1)]\",children:[(0,J.jsxs)(li,{className:\"pb-3\",children:[(0,J.jsxs)(\"div\",{className:\"flex items-center flex-wrap gap-3\",children:[(0,J.jsxs)(\"div\",{className:\"flex w-full items-center justify-between gap-2 sm:contents\",children:[(0,J.jsxs)(\"div\",{className:\"flex flex-wrap items-center gap-2 sm:gap-3\",children:[(0,J.jsx)(ll,{className:\"text-lg font-semibold\",children:\"Hourly Temperatures\"}),(0,J.jsxs)(il,{variant:\"outline\",className:\"text-xs\",children:[v.length,\" station\",1===v.length?\"\":\"s\"]})]}),(0,J.jsxs)(ld,{variant:\"ghost\",size:\"sm\",onClick:()=>h(),disabled:p,\"aria-label\":\"Refresh observations\",className:\"h-8 shrink-0 px-2 text-xs gap-1.5 sm:ml-auto\",children:[(0,J.jsx)(sw,{className:`h-3.5 w-3.5 ${p?\"animate-spin\":\"\"}`}),(0,J.jsx)(\"span\",{clas"
+      },
+      {
+        "bundle": "c46f672a09e7d08ad8a19e9de80f382a7cacff36650464d82223b20e6352a77d.bin",
+        "position": 79362,
+        "snippet": "){return el},writeStaticStageResponseIntoCache:function(){return eO}};for(var l in a)Object.defineProperty(r,l,{enumerable:!0,get:a[l]});let u=e.r(65202),i=e.r(76280),o=e.r(19048),s=e.r(90408),c=e.r(760),f=e.r(66290),d=e.r(74369),h=e.r(10410),p=e.r(67703),y=e.r(99900),_=e.r(34046),g=e.r(32669),v=e.r(55855),E=e.r(16358),R=e.r(21644),m=e.r(24551),P=e.r(82670),S=e.r(55845),b=e.r(29504),T=e.r(41045),O=e.r(38757);function w(e){return 1e3*Math.max(e,30)}var A=((n={})[n.Empty=0]=\"Empty\",n[n.Pending=1]=\"Pending\",n[n.Fulfilled=2]=\"Fulfilled\",n[n.Rejected=3]=\"Rejected\",n);let N=[\"\",{},null,\"metadata-only\"],C=(0,p.createCacheMap)(),j=(0,p.createCacheMap)(),M=null,I=0,D=0;function F(){return I}function U(){return D}function L(e,t){I++,D++,(0,v.pingVisibleLinks)(e,t),H(e,t)}function x(e,t){I++,(0,v.pingVisibleLinks)(e,t),H(e,t)}function k(e,t){D++,(0,v.pingVisibleLinks)(e,t),H(e,t)}function H(e,t){if(null!==M){let r=M;for(let n of(M=null,r))(0,s.isPrefetchTaskDirty)(n,e,t)&&function(e){let t=e.onInvalidate;if(null!==t){e.onInvalidate=null;try{t()}catch(e){\"function\"==typeof reportError?reportError(e):console.error(e)}}}(n)}}function B(e,t){let r=(0,c.getRouteVaryPath)(t.pathname,t.search,t.nextUrl),n=(0,p.getFromCacheMap)(e,I,C,r,!1);return null!==n?n:null}function V(e,t){return(0,p.getFromCacheMap)(e,D,j,t,!1)}function $(e){let t=e.promise;return null===t&&(t=e.promise=(0,m.createPromiseWi"
+      }
+    ],
+    "\"Preliminary\"": [
+      {
+        "bundle": "1b8f633c09d3e3cff75fefc80a04a7cfafb5756ec6138ad0e6fd2f99d4bba756.bin",
+        "position": 210361,
+        "snippet": ",{className:\"text-center\",children:\"official\"===e.status?(0,J.jsx)(il,{variant:\"default\",className:\"bg-emerald-600 hover:bg-emerald-700 text-xs\",children:\"Final\"}):\"revised\"===e.status?(0,J.jsx)(il,{variant:\"default\",className:\"bg-emerald-600 hover:bg-emerald-700 text-xs\",title:\"Revised \u2014 a later METAR or official climate report arrived after this day was finalized, and the value was recalculated from it.\",children:\"Revised\"}):(0,J.jsx)(\"span\",{className:\"text-xs text-muted-foreground\",children:\"Preliminary\"})})]}):(0,J.jsxs)(J.Fragment,{children:[(0,J.jsx)(a6,{className:\"text-right text-muted-foreground\",children:\"-\"}),(0,J.jsx)(a6,{className:\"text-right text-muted-foreground\",children:\"-\"}),(0,J.jsx)(a6,{className:\"text-right text-muted-foreground\",children:\"-\"}),(0,J.jsx)(a6,{className:\"text-right text-muted-foreground\",children:\"-\"}),(0,J.jsx)(a6,{className:\"text-right text-muted-foreground\",children:\"-\"}),(0,J.jsx)(a6,{className:\"text-right text-muted-foreground\",children:\"-\"}),(0,J.jsx)(a6,{className:\"text-right text-muted-foreground\",children:\"-\"}),(0,J.jsx)(a6,{className:\"text-center\",children:(0,J.jsx)(il,{variant:\"outline\",className:\"text-xs text-amber-600 border-amber-300\",children:\"No New Report\"})})]})]},`${e.station.id}-${t}`)})})]})}),e.some(e=>\"preliminary\"===e.status)&&(0,J.jsxs)(\"p\",{className:\"text-xs text-muted-foreground text-center\",children:[(0,J.jsx)(\"sp"
+      },
+      {
+        "bundle": "1b8f633c09d3e3cff75fefc80a04a7cfafb5756ec6138ad0e6fd2f99d4bba756.bin",
+        "position": 589053,
+        "snippet": "children:[(0,J.jsx)(is,{className:\"h-5 w-32\"}),(0,J.jsx)(is,{className:\"h-16 w-full\"})]},e))})})]});if(d||!c)return(0,J.jsx)(la,{className:\"border border-primary/40 bg-card/50 backdrop-blur shadow-[0_0_15px_rgba(44,213,160,0.1)]\",children:(0,J.jsx)(lu,{className:\"py-12 text-center\",children:(0,J.jsx)(\"p\",{className:\"text-destructive\",children:\"Failed to load hourly observations\"})})});let{stations:m,dates:y}=c,v=[...m].sort((e,t)=>e.stationName.localeCompare(t.stationName)),g=lo(),b=e?\"Pending\":\"Preliminary\";return(0,J.jsxs)(la,{className:\"border border-primary/40 bg-card/50 backdrop-blur shadow-[0_0_15px_rgba(44,213,160,0.1)]\",children:[(0,J.jsxs)(li,{className:\"pb-3\",children:[(0,J.jsxs)(\"div\",{className:\"flex items-center flex-wrap gap-3\",children:[(0,J.jsxs)(\"div\",{className:\"flex w-full items-center justify-between gap-2 sm:contents\",children:[(0,J.jsxs)(\"div\",{className:\"flex flex-wrap items-center gap-2 sm:gap-3\",children:[(0,J.jsx)(ll,{className:\"text-lg font-semibold\",children:\"Hourly Temperatures\"}),(0,J.jsxs)(il,{variant:\"outline\",className:\"text-xs\",children:[v.length,\" station\",1===v.length?\"\":\"s\"]})]}),(0,J.jsxs)(ld,{variant:\"ghost\",size:\"sm\",onClick:()=>h(),disabled:p,\"aria-label\":\"Refresh observations\",className:\"h-8 shrink-0 px-2 text-xs gap-1.5 sm:ml-auto\",children:[(0,J.jsx)(sw,{className:`h-3.5 w-3.5 ${p?\"animate-spin\":\"\"}`}),(0,J.jsx)(\"span\",{className:\"hid"
+      },
+      {
+        "bundle": "1b8f633c09d3e3cff75fefc80a04a7cfafb5756ec6138ad0e6fd2f99d4bba756.bin",
+        "position": 718862,
+        "snippet": "ver:bg-emerald-600 text-xs h-5 font-medium\",title:\"Revised \u2014 later METAR or official climate reports arrived after these days were finalized, and the values were recalculated from them.\",children:\"Revised\"}),(0,J.jsxs)(\"span\",{children:[u.revisedReports,\" cit\",1!==u.revisedReports?\"ies\":\"y\"]})]}),u.preliminaryReports>0&&(0,J.jsxs)(\"span\",{className:\"flex items-center gap-2\",children:[(0,J.jsx)(il,{variant:\"outline\",className:\"text-xs text-muted-foreground border-border h-5 font-medium\",children:\"Preliminary\"}),(0,J.jsxs)(\"span\",{children:[u.preliminaryReports,\" cit\",1!==u.preliminaryReports?\"ies\":\"y\"]})]}),u.noReports>0&&(0,J.jsxs)(\"span\",{className:\"flex items-center gap-2\",children:[(0,J.jsx)(il,{variant:\"outline\",className:\"text-xs text-amber-500 border-amber-500/50 h-5 font-medium\",children:\"No New Report\"}),(0,J.jsxs)(\"span\",{children:[u.noReports,\" cit\",1!==u.noReports?\"ies\":\"y\"]})]})]})]})]}),o&&(0,J.jsxs)(\"div\",{className:\"space-y-1 pt-2 text-center\",children:[(0,J.jsx)(\"p\",{className:\"text-xs text-muted-foreground\",children:\"Daily values are official Fahrenheit climate-report figures (the value Kalshi settles on); the \u00b0F/\u00b0C toggle applies to hourly observations only.\"}),(0,J.jsxs)(\"p\",{className:\"text-xs text-muted-foreground\",children:[\"Avg is the \",(0,J.jsx)(\"span\",{className:\"font-medium text-foreground\",children:\"Hourly Mean Daily Temperature\"}),\" \u2014 the sum of that"
+      }
+    ],
+    "\"pending\"": [
+      {
+        "bundle": "1b8f633c09d3e3cff75fefc80a04a7cfafb5756ec6138ad0e6fd2f99d4bba756.bin",
+        "position": 71628,
+        "snippet": "ck:i}=t;n&&a&&(r.use=n.concat(a)),o&&i&&(r.fallback=es(o,i))}return r},eF=(0,ee.createContext)({});var eW=e.i(67005);let eB=ef&&window.__SWR_DEVTOOLS_USE__,e$=(eB?window.__SWR_DEVTOOLS_USE__:[]).concat(e=>(t,r,n)=>{let o=r&&((...e)=>{let[n]=eM(t),[,,,o]=en.get(eI);if(n.startsWith(\"$inf$\"))return r(...e);let a=o[n];return el(a)?r(...e):(delete o[n],a)});return e(t,o,n)});eB&&(window.__SWR_DEVTOOLS_REACT__=ee.default);let eU=()=>{},eH=eU(),eY=(new WeakMap,ee.default.use||(e=>{switch(e.status){case\"pending\":throw e;case\"fulfilled\":return e.value;case\"rejected\":throw e.reason;default:throw e.status=\"pending\",e.then(t=>{e.status=\"fulfilled\",e.value=t},t=>{e.status=\"rejected\",e.reason=t}),e}})),eV={dedupe:!0},eq=Promise.resolve(ea),eG=()=>eo;ei.defineProperty(e=>{let{value:t}=e,r=(0,ee.useContext)(eF),n=\"function\"==typeof t,o=(0,ee.useMemo)(()=>n?t(r):t,[n,r,t]),a=(0,ee.useMemo)(()=>n?o:ez(r,o),[n,r,o]),i=o&&o.provider,l=(0,ee.useRef)(ea);i&&!l.current&&(l.current=e_(i(a.cache||eI),o));let s=l.current;return s&&(a.cache=s[0],a.mutate=s[1]),ej(()=>{if(s)return s[2]&&s[2](),s[3]},[]),(0,ee.createElement)(eF.Provider,es(e,{value:a}))},\"defaultValue\",{value:eL});let eX=(t=(e,t,r)=>{let{cache:n,compare:o,suspense:a,fallbackData:i,revalidateOnMount:l,revalidateIfStale:s,refreshInterval:u,refreshWhenHidden:c,refreshWhenOffline:d,keepPreviousData:f,strictServerPrefetchWarning:p}=r,[h,m,y,v]="
+      },
+      {
+        "bundle": "1b8f633c09d3e3cff75fefc80a04a7cfafb5756ec6138ad0e6fd2f99d4bba756.bin",
+        "position": 71730,
+        "snippet": "eW=e.i(67005);let eB=ef&&window.__SWR_DEVTOOLS_USE__,e$=(eB?window.__SWR_DEVTOOLS_USE__:[]).concat(e=>(t,r,n)=>{let o=r&&((...e)=>{let[n]=eM(t),[,,,o]=en.get(eI);if(n.startsWith(\"$inf$\"))return r(...e);let a=o[n];return el(a)?r(...e):(delete o[n],a)});return e(t,o,n)});eB&&(window.__SWR_DEVTOOLS_REACT__=ee.default);let eU=()=>{},eH=eU(),eY=(new WeakMap,ee.default.use||(e=>{switch(e.status){case\"pending\":throw e;case\"fulfilled\":return e.value;case\"rejected\":throw e.reason;default:throw e.status=\"pending\",e.then(t=>{e.status=\"fulfilled\",e.value=t},t=>{e.status=\"rejected\",e.reason=t}),e}})),eV={dedupe:!0},eq=Promise.resolve(ea),eG=()=>eo;ei.defineProperty(e=>{let{value:t}=e,r=(0,ee.useContext)(eF),n=\"function\"==typeof t,o=(0,ee.useMemo)(()=>n?t(r):t,[n,r,t]),a=(0,ee.useMemo)(()=>n?o:ez(r,o),[n,r,o]),i=o&&o.provider,l=(0,ee.useRef)(ea);i&&!l.current&&(l.current=e_(i(a.cache||eI),o));let s=l.current;return s&&(a.cache=s[0],a.mutate=s[1]),ej(()=>{if(s)return s[2]&&s[2](),s[3]},[]),(0,ee.createElement)(eF.Provider,es(e,{value:a}))},\"defaultValue\",{value:eL});let eX=(t=(e,t,r)=>{let{cache:n,compare:o,suspense:a,fallbackData:i,revalidateOnMount:l,revalidateIfStale:s,refreshInterval:u,refreshWhenHidden:c,refreshWhenOffline:d,keepPreviousData:f,strictServerPrefetchWarning:p}=r,[h,m,y,v]=en.get(n),[g,b]=eM(e),x=(0,ee.useRef)(!1),w=(0,ee.useRef)(!1),j=(0,ee.useRef)(g),O=(0,ee.useRef)(t),S="
+      },
+      {
+        "bundle": "1b8f633c09d3e3cff75fefc80a04a7cfafb5756ec6138ad0e6fd2f99d4bba756.bin",
+        "position": 203546,
+        "snippet": "w-12\"})}),(0,J.jsx)(a6,{className:\"text-right\",children:(0,J.jsx)(is,{className:\"h-4 w-12 ml-auto\"})}),(0,J.jsx)(a6,{className:\"text-right\",children:(0,J.jsx)(is,{className:\"h-4 w-12 ml-auto\"})}),(0,J.jsx)(a6,{className:\"text-right\",children:(0,J.jsx)(is,{className:\"h-4 w-12 ml-auto\"})}),(0,J.jsx)(a6,{className:\"text-right\",children:(0,J.jsx)(is,{className:\"h-5 w-16 ml-auto\"})})]},e))})]})})]},e))}):(0,J.jsxs)(J.Fragment,{children:[(0,J.jsxs)(\"div\",{className:\"space-y-6\",children:[!n&&e.some(e=>\"pending\"===e.status)&&(0,J.jsxs)(\"div\",{className:\"rounded-lg border border-border/50 bg-muted/30 px-4 py-3 text-xs text-muted-foreground\",children:[\"Some stations have not yet completed their local calendar day for\",\" \",(0,J.jsx)(\"span\",{className:\"font-semibold\",children:r}),\". Values marked with an asterisk (*) are \",(0,J.jsx)(\"span\",{className:\"font-medium\",children:\"Pending\"}),\" \u2014 provisional and will be finalized once all observations through midnight local time have been received for each station.\"]}),(()=>{let t=new Map;for(let r of e){let e=r.station.region||\"Other\";t.has(e)||t.set(e,[]),t.get(e).push(r)}return[...i1.filter(e=>t.has(e)),...[...t.keys()].filter(e=>!i1.includes(e))].map(e=>{let r=t.get(e);return(0,J.jsxs)(\"div\",{className:\"rounded-xl border border-border/50 bg-card/50 backdrop-blur-sm overflow-hidden\",children:[(0,J.jsx)(\"div\",{className:\"bg-muted/30 px-6 py-3 bo"
+      },
+      {
+        "bundle": "1b8f633c09d3e3cff75fefc80a04a7cfafb5756ec6138ad0e6fd2f99d4bba756.bin",
+        "position": 204770,
+        "snippet": "eturn(0,J.jsxs)(\"div\",{className:\"rounded-xl border border-border/50 bg-card/50 backdrop-blur-sm overflow-hidden\",children:[(0,J.jsx)(\"div\",{className:\"bg-muted/30 px-6 py-3 border-b border-border/50\",children:(0,J.jsx)(\"h3\",{className:\"font-semibold text-foreground\",children:e})}),(0,J.jsx)(\"div\",{className:\"overflow-x-auto\",children:(0,J.jsxs)(a1,{children:[(0,J.jsx)(a2,{children:(0,J.jsx)(i2,{})}),(0,J.jsx)(a5,{children:r.map(e=>{let t=e.station,r=\"official\"===e.status||\"revised\"===e.status||\"pending\"===e.status,n=\"pending\"===e.status;return(0,J.jsxs)(a3,{className:\"border-border/50 hover:bg-muted/30 transition-colors\",children:[(0,J.jsx)(a6,{className:\"font-medium\",children:t.city}),(0,J.jsx)(a6,{className:\"text-muted-foreground\",children:t.country}),(0,J.jsx)(a6,{className:\"font-mono text-xs text-muted-foreground tracking-wider\",children:t.icao}),(0,J.jsx)(a6,{className:\"text-right font-mono\",children:r&&null!==e.maxTemp?(0,J.jsxs)(\"span\",{className:n?\"text-muted-foreground\":\"font-semibold\",children:[e.maxTemp,n?\"*\":\"\"]}):(0,J.jsx)(\"span\",{className:\"text-muted-foreground\",children:\"\u2014\"})}),(0,J.jsx)(a6,{className:\"text-right font-mono\",children:r&&null!==e.minTemp?(0,J.jsxs)(\"span\",{className:n?\"text-muted-foreground\":\"font-semibold\",children:[e.minTemp,n?\"*\":\"\"]}):(0,J.jsx)(\"span\",{className:\"text-muted-foreground\",children:\"\u2014\"})}),(0,J.jsx)(a6,{className:\"text-right font"
+      },
+      {
+        "bundle": "1b8f633c09d3e3cff75fefc80a04a7cfafb5756ec6138ad0e6fd2f99d4bba756.bin",
+        "position": 204793,
+        "snippet": "className:\"rounded-xl border border-border/50 bg-card/50 backdrop-blur-sm overflow-hidden\",children:[(0,J.jsx)(\"div\",{className:\"bg-muted/30 px-6 py-3 border-b border-border/50\",children:(0,J.jsx)(\"h3\",{className:\"font-semibold text-foreground\",children:e})}),(0,J.jsx)(\"div\",{className:\"overflow-x-auto\",children:(0,J.jsxs)(a1,{children:[(0,J.jsx)(a2,{children:(0,J.jsx)(i2,{})}),(0,J.jsx)(a5,{children:r.map(e=>{let t=e.station,r=\"official\"===e.status||\"revised\"===e.status||\"pending\"===e.status,n=\"pending\"===e.status;return(0,J.jsxs)(a3,{className:\"border-border/50 hover:bg-muted/30 transition-colors\",children:[(0,J.jsx)(a6,{className:\"font-medium\",children:t.city}),(0,J.jsx)(a6,{className:\"text-muted-foreground\",children:t.country}),(0,J.jsx)(a6,{className:\"font-mono text-xs text-muted-foreground tracking-wider\",children:t.icao}),(0,J.jsx)(a6,{className:\"text-right font-mono\",children:r&&null!==e.maxTemp?(0,J.jsxs)(\"span\",{className:n?\"text-muted-foreground\":\"font-semibold\",children:[e.maxTemp,n?\"*\":\"\"]}):(0,J.jsx)(\"span\",{className:\"text-muted-foreground\",children:\"\u2014\"})}),(0,J.jsx)(a6,{className:\"text-right font-mono\",children:r&&null!==e.minTemp?(0,J.jsxs)(\"span\",{className:n?\"text-muted-foreground\":\"font-semibold\",children:[e.minTemp,n?\"*\":\"\"]}):(0,J.jsx)(\"span\",{className:\"text-muted-foreground\",children:\"\u2014\"})}),(0,J.jsx)(a6,{className:\"text-right font-mono\",children:null!=="
+      },
+      {
+        "bundle": "1b8f633c09d3e3cff75fefc80a04a7cfafb5756ec6138ad0e6fd2f99d4bba756.bin",
+        "position": 206265,
+        "snippet": "emibold\",children:[e.avgTemp.toFixed(1),n?\"*\":\"\"]}):(0,J.jsx)(\"span\",{className:\"text-muted-foreground\",children:\"\u2014\"})}),(0,J.jsx)(a6,{className:\"text-right\",children:\"official\"===e.status?(0,J.jsx)(il,{className:\"bg-emerald-600 hover:bg-emerald-700 text-xs\",children:\"Final\"}):\"revised\"===e.status?(0,J.jsx)(il,{className:\"bg-emerald-600 hover:bg-emerald-700 text-xs\",title:\"Revised \u2014 a later METAR arrived after this day was finalized, and the value was recalculated from it.\",children:\"Revised\"}):\"pending\"===e.status?(0,J.jsx)(\"span\",{className:\"text-xs text-muted-foreground\",children:\"Pending\"}):(0,J.jsx)(il,{variant:\"outline\",className:\"text-xs text-muted-foreground\",children:\"Unavailable\"})})]},t.id)})})]})})]},e)})})()]}),(0,J.jsx)(i0,{open:!!o,onOpenChange:e=>{e||a(null)},icao:o?.icao??null,city:o?.city??null,country:o?.country??null,date:r},o?.icao??\"closed\")]})}function i3(e){return 0===e.daysWithData?\"no_data\":e.isFinal?\"final\":e.periodOver?\"incomplete\":\"running\"}function i4(e){return null==e?\"\u2014\":String(e)}function i6(e){return null===e?\"-\":\"T\"===e?\"T\":\"number\"==typeof e?e%1==0?e.toString():e.toFixed(2):e}let i8=[{label:\"City\"},{label:\"ID\"},{label:\"Max (F)\",className:\"text-right\"},{label:\"Min (F)\",className:\"text-right\"},{label:\"Daily Mean (F)\",className:\"text-right\"},{label:\"HDD\",className:\"text-right\"},{label:\"Hourly Mean (F)\",className:\"text-right\"},{label:\"Precip (in)"
+      },
+      {
+        "bundle": "1b8f633c09d3e3cff75fefc80a04a7cfafb5756ec6138ad0e6fd2f99d4bba756.bin",
+        "position": 593835,
+        "snippet": ":\"short\",day:\"numeric\"})}),(0,J.jsxs)(lY,{className:\"w-full\",children:[(0,J.jsx)(\"div\",{className:\"flex gap-1\",children:(0,J.jsx)(sX,{delayDuration:200,children:n.map((r,n)=>{let a=((e,t,r)=>{let n=new Date,o=aK(n,r);if(e>o)return!1;if(e===o){let e=parseInt(new Intl.DateTimeFormat(\"en-US\",{timeZone:r,hour:\"2-digit\",hourCycle:\"h23\"}).format(n),10),o=parseInt(new Intl.DateTimeFormat(\"en-US\",{timeZone:r,minute:\"2-digit\"}).format(n),10);if(t>e||t===e&&o<15)return!1}return!0})(t,n,e.timezone),i=!!r&&\"pending\"===r.status,l=!!r&&\"revised\"===r.status;return(0,J.jsxs)(\"div\",{title:i?`${b} \u2014 provisional, may still change`:l?\"Revised \u2014 a later METAR arrived after this hour was finalized, and the value was recalculated from it.\":void 0,className:\"flex flex-col items-center justify-start w-12 shrink-0 py-1 px-0.5 rounded bg-secondary/30\",children:[(0,J.jsx)(\"span\",{className:\"text-[10px] text-muted-foreground tabular-nums leading-tight\",children:0===n?\"12a\":12===n?\"12p\":n<12?`${n}a`:`${n-12}p`}),r?(0,J.jsx)(\"div\",{className:\"relative flex items-center justify-center w-full\",children:(0,J.jsxs)(\"span\",{className:`text-xs font-mono font-semibold tabular-nums ${i?\"text-[#2CD5A0]/50\":(r.tempF,\"text-[#2CD5A0]\")}`,children:[\"F\"===o?Math.round(r.tempF):r.tempC,\"\u00b0\",i&&\"*\",l&&\"\u2020\"]})}):a?(0,J.jsxs)(sK,{children:[(0,J.jsx)(sZ,{asChild:!0,children:(0,J.jsx)(\"span\",{className:\"text-xs font-mono font-sem"
+      },
+      {
+        "bundle": "2b17d0c182d7ed6edef64a994639515e19bb8248ad56f3f301b4989991c83b24.bin",
+        "position": 10421,
+        "snippet": "r p=\"\"===u?\".\":u+\":\";if(E(t))for(var g=0;g<t.length;g++)f=p+A(u=t[g],g),d+=e(u,r,n,f,s);else if(\"function\"==typeof(g=null===(c=t)||\"object\"!=typeof c?null:\"function\"==typeof(c=h&&c[h]||c[\"@@iterator\"])?c:null))for(t=g.call(t),g=0;!(u=t.next()).done;)f=p+A(u=u.value,g++),d+=e(u,r,n,f,s);else if(\"object\"===f){if(\"function\"==typeof t.then)return e(function(e){switch(e.status){case\"fulfilled\":return e.value;case\"rejected\":throw e.reason;default:switch(\"string\"==typeof e.status?e.then(T,T):(e.status=\"pending\",e.then(function(t){\"pending\"===e.status&&(e.status=\"fulfilled\",e.value=t)},function(t){\"pending\"===e.status&&(e.status=\"rejected\",e.reason=t)})),e.status){case\"fulfilled\":return e.value;case\"rejected\":throw e.reason}}throw e}(t),r,n,u,s);throw Error(\"Objects are not valid as a React child (found: \"+(\"[object Object]\"===(r=String(t))?\"object with keys {\"+Object.keys(t).join(\", \")+\"}\":r)+\"). If you meant to render a collection of children, use an array instead.\")}return d}(e,n,\"\",\"\",function(e){return t.call(r,e,u++)}),n}function H(e){if(-1===e._status){var t=(0,e._result)();t.then(function(r){(0===e._status||-1===e._status)&&(e._status=1,e._result=r,void 0===t.status&&(t.status=\"fulfilled\",t.value=r))},function(r){(0===e._status||-1===e._status)&&(e._status=2,e._result=r,void 0===t.status&&(t.status=\"rejected\",t.reason=r))}),-1===e._status&&(e._status=0,e._result=t)}if(1===e._st"
+      }
+    ],
+    "\"preliminary\"": [
+      {
+        "bundle": "1b8f633c09d3e3cff75fefc80a04a7cfafb5756ec6138ad0e6fd2f99d4bba756.bin",
+        "position": 208860,
+        "snippet": "h-4 w-16 mx-auto\"})})]},e))})]})}),(0,J.jsx)(\"p\",{className:\"text-xs text-muted-foreground text-center\",children:\"Official climate data typically arrives between midnight and 4 AM local time, valid for the previous day.\"})]}):e&&0!==e.length?(0,J.jsxs)(\"div\",{className:\"space-y-4\",children:[(0,J.jsx)(\"div\",{className:\"rounded-md border overflow-x-auto\",children:(0,J.jsxs)(a1,{children:[(0,J.jsx)(i7,{}),(0,J.jsx)(a5,{children:e.map((e,t)=>{var r;let n=\"official\"===e.status||\"revised\"===e.status||\"preliminary\"===e.status,o=\"preliminary\"===e.status,a=`text-right tabular-nums ${o?\"text-muted-foreground\":\"font-medium\"}`,i=`text-right tabular-nums ${o?\"text-muted-foreground\":\"\"}`,l=e=>o&&\"-\"!==e?`${e}*`:e;return(0,J.jsxs)(a3,{children:[(0,J.jsx)(a6,{className:\"font-medium whitespace-nowrap\",children:e.station.city}),(0,J.jsx)(a6,{className:\"font-mono text-xs text-muted-foreground\",children:e.station.cliId}),n&&e.data?(0,J.jsxs)(J.Fragment,{children:[(0,J.jsx)(a6,{className:a,children:l(null!==e.data.maxTemp?String(e.data.maxTemp):\"-\")}),(0,J.jsx)(a6,{className:a,children:l(null!==e.data.minTemp?String(e.data.minTemp):\"-\")}),(0,J.jsx)(a6,{className:i,children:l(null!==e.dailyMean?String(e.dailyMean):\"-\")}),(0,J.jsx)(a6,{className:a,children:l(null!==e.hdd?i4(e.hdd):\"-\")}),(0,J.jsx)(a6,{className:i,children:l(null===(r=e.avgTemp)?\"-\":r.toFixed(1))}),(0,J.jsx)(a6,{className:i,children:l"
+      },
+      {
+        "bundle": "1b8f633c09d3e3cff75fefc80a04a7cfafb5756ec6138ad0e6fd2f99d4bba756.bin",
+        "position": 208887,
+        "snippet": "})]})}),(0,J.jsx)(\"p\",{className:\"text-xs text-muted-foreground text-center\",children:\"Official climate data typically arrives between midnight and 4 AM local time, valid for the previous day.\"})]}):e&&0!==e.length?(0,J.jsxs)(\"div\",{className:\"space-y-4\",children:[(0,J.jsx)(\"div\",{className:\"rounded-md border overflow-x-auto\",children:(0,J.jsxs)(a1,{children:[(0,J.jsx)(i7,{}),(0,J.jsx)(a5,{children:e.map((e,t)=>{var r;let n=\"official\"===e.status||\"revised\"===e.status||\"preliminary\"===e.status,o=\"preliminary\"===e.status,a=`text-right tabular-nums ${o?\"text-muted-foreground\":\"font-medium\"}`,i=`text-right tabular-nums ${o?\"text-muted-foreground\":\"\"}`,l=e=>o&&\"-\"!==e?`${e}*`:e;return(0,J.jsxs)(a3,{children:[(0,J.jsx)(a6,{className:\"font-medium whitespace-nowrap\",children:e.station.city}),(0,J.jsx)(a6,{className:\"font-mono text-xs text-muted-foreground\",children:e.station.cliId}),n&&e.data?(0,J.jsxs)(J.Fragment,{children:[(0,J.jsx)(a6,{className:a,children:l(null!==e.data.maxTemp?String(e.data.maxTemp):\"-\")}),(0,J.jsx)(a6,{className:a,children:l(null!==e.data.minTemp?String(e.data.minTemp):\"-\")}),(0,J.jsx)(a6,{className:i,children:l(null!==e.dailyMean?String(e.dailyMean):\"-\")}),(0,J.jsx)(a6,{className:a,children:l(null!==e.hdd?i4(e.hdd):\"-\")}),(0,J.jsx)(a6,{className:i,children:l(null===(r=e.avgTemp)?\"-\":r.toFixed(1))}),(0,J.jsx)(a6,{className:i,children:l(i6(e.data.precipitation))}"
+      },
+      {
+        "bundle": "1b8f633c09d3e3cff75fefc80a04a7cfafb5756ec6138ad0e6fd2f99d4bba756.bin",
+        "position": 211141,
+        "snippet": ".jsx)(a6,{className:\"text-right text-muted-foreground\",children:\"-\"}),(0,J.jsx)(a6,{className:\"text-right text-muted-foreground\",children:\"-\"}),(0,J.jsx)(a6,{className:\"text-right text-muted-foreground\",children:\"-\"}),(0,J.jsx)(a6,{className:\"text-right text-muted-foreground\",children:\"-\"}),(0,J.jsx)(a6,{className:\"text-center\",children:(0,J.jsx)(il,{variant:\"outline\",className:\"text-xs text-amber-600 border-amber-300\",children:\"No New Report\"})})]})]},`${e.station.id}-${t}`)})})]})}),e.some(e=>\"preliminary\"===e.status)&&(0,J.jsxs)(\"p\",{className:\"text-xs text-muted-foreground text-center\",children:[(0,J.jsx)(\"span\",{className:\"font-mono\",children:\"*\"}),\" Preliminary \u2014 provisional figures that may still change.\"]}),(0,J.jsx)(\"p\",{className:\"text-xs text-muted-foreground text-center\",children:\"Official climate data typically arrives between midnight and 4 AM local time, valid for the previous day.\"})]}):(0,J.jsxs)(\"div\",{className:\"space-y-4\",children:[(0,J.jsx)(\"div\",{className:\"rounded-md border p-8 text-center text-muted-foreground\",children:\"No data available. Please select a date.\"}),(0,J.jsx)(\"p\",{className:\"text-xs text-muted-foreground text-center\",children:\"Official climate data typically arrives between midnight and 4 AM local time, valid for the previous day.\"})]})}function le(e){return new Date(e+\"T12:00:00Z\").toLocaleDateString(\"en-US\",{month:\"short\",day:\"numeric\",t"
+      },
+      {
+        "bundle": "1b8f633c09d3e3cff75fefc80a04a7cfafb5756ec6138ad0e6fd2f99d4bba756.bin",
+        "position": 692168,
+        "snippet": "ame:\"text-amber-500\",children:[\"That selection isn't a usable range \u2014 pick a start date, then an end date on or before \",ER({from:n,to:n}),\".\"]}):(0,J.jsxs)(J.Fragment,{children:[\"Reports begin \",ER({from:r,to:r}),\"; earlier dates are unavailable. Up to \",366,\" days.\"]})})]})]})]})}function EB(e){let t=e.slice(0,4).map(le).join(\", \"),r=e.length-4;return r>0?`${t} and ${r} more`:t}function E$(e){var t,r;let n;return t=e.dates,r=e.rows,n=null,t.map(e=>{let t=r[e],o=(t?.state===\"final\"||t?.state===\"preliminary\")&&t?.hdd!=null?t.hdd:null;return null!=o&&(n=(n??0)+o),{date:e,hdd:o,cumulative:n}})}let EU=oB(\"flame\",[[\"path\",{d:\"M12 3q1 4 4 6.5t3 5.5a1 1 0 0 1-14 0 5 5 0 0 1 1-3 1 1 0 0 0 5 0c0-2-1.5-3-1.5-5q0-2 2.5-4\",key:\"1slcih\"}]]),EH=async e=>{let t=await fetch(e);if(!t.ok)throw Error(`Request failed (${t.status})`);return t.json()},EY=\"#2CD5A0\";function EV({label:e,total:t,rangeLabel:r}){let n=i3(t),o=t.gapDates.length>0,a=\"no_data\"!==n;return(0,J.jsxs)(\"div\",{className:\"min-w-[150px] flex-1 rounded-lg border border-primary/30 bg-secondary/20 px-3 py-2.5\",children:[(0,J.jsx)(\"div\",{className:\"text-[10px] font-semibold uppercase tracking-wider text-muted-foreground\",children:e}),(0,J.jsxs)(\"div\",{className:\"flex flex-wrap items-baseline gap-2\",children:[(0,J.jsx)(\"span\",{className:`font-mono text-2xl font-bold leading-tight ${a?\"text-[#2CD5A0]\":\"text-muted-foreground\"}`,children:"
+      },
+      {
+        "bundle": "1b8f633c09d3e3cff75fefc80a04a7cfafb5756ec6138ad0e6fd2f99d4bba756.bin",
+        "position": 696208,
+        "snippet": "ed nothing \u2014 an upstream outage rather than a gap in the record.\"]}):(0,J.jsx)(\"p\",{className:\"mt-1 text-xs text-muted-foreground\",children:\"Every elapsed day in this period lies inside the published history, and not one of them reported \u2014 an upstream outage rather than a gap in the record.\"}),e.gapDates.length>0&&(0,J.jsxs)(\"p\",{className:\"mt-2 text-xs text-amber-500\",children:[\"No report: \",EB(e.gapDates)]})]})})}function EX({date:e,row:t,cumulative:r}){let[n,o]=lt(e).split(\", \"),a=t?.state===\"preliminary\",i=(0,J.jsx)(\"span\",{className:\"inline-block w-1.5 text-left\",children:a?\"*\":\"\"}),l=`px-2 py-1.5 text-right font-mono tabular-nums ${a?\"text-muted-foreground\":\"\"}`,s=ED(e)?e.endsWith(\"-01\")?\"month-start\":aJ(e)===e?\"monday\":\"plain\":\"plain\",u=`border-t transition-colors hover:bg-muted/40 ${\"month-start\"===s?\"border-t-border\":\"monday\"===s?\"border-t-border/60\":\"border-t-border/30\"}`;if(null==t||\"in_progress\"===t.state||\"unavailable\"===t.state){let e=t?.state!==\"in_progress\";return(0,J.jsxs)(\"tr\",{className:u,children:[(0,J.jsxs)(\"th\",{scope:\"row\",className:\"whitespace-nowrap px-2 py-1.5 text-left font-normal text-muted-foreground\",children:[n,\" \",(0,J.jsx)(\"span\",{className:\"opacity-70\",children:o})]}),(0,J.jsx)(\"td\",{className:`px-2 py-1.5 text-right ${e?\"text-amber-500\":\"text-muted-foreground\"}`,colSpan:4,children:e?\"No report\":\"In progress\"}),(0,J.jsx)(\"td\",{className:\"px-2 p"
+      }
+    ],
+    "\"settled\"": [],
+    "status:\"pending\"": [
+      {
+        "bundle": "2ddad95fdf84579aeeb105c375d291bfc7a05a281ddb2251491b7b6e243c8eef.bin",
+        "position": 11690,
+        "snippet": "unction(){return P},emptyVaryParamsAccumulator:function(){return l},finishAccumulatingVaryParams:function(){return _},getMetadataVaryParamsAccumulator:function(){return d},getMetadataVaryParamsThenable:function(){return p},getRootParamsVaryParamsAccumulator:function(){return h},getVaryParamsThenable:function(){return f},getViewportVaryParamsAccumulator:function(){return m}};for(var a in n)Object.defineProperty(r,a,{enumerable:!0,get:n[a]});let o=e.r(79989);function i(){let e={varyParams:new Set,status:\"pending\",value:new Set,then(t){t&&(\"pending\"===e.status?e.resolvers.push(t):t(e.value))},resolvers:[]};return e}let s=new Set,l={varyParams:s,status:\"fulfilled\",value:s,then(e){e&&e(s)},resolvers:[]};function c(){let e=i();return{head:e,rootParams:i(),segments:new Set}}function u(){let e=o.workUnitAsyncStorage.getStore();if(e)switch(e.type){case\"prerender\":case\"prerender-runtime\":{let t=e.varyParamsAccumulator;if(null!==t){let e=i();return t.segments.add(e),e}}}return null}function d(){let e=o.workUnitAsyncStorage.getStore();if(e)switch(e.type){case\"prerender\":case\"prerender-runtime\":{let t=e.varyParamsAccumulator;if(null!==t)return t.head}}return null}function f(e){return e}function p(){let e=d();return null!==e?e:null}let m=d;function h(){let e=o.workUnitAsyncStorage.getStore();if(e)switch(e.type){case\"prerender\":case\"prerender-runtime\":{let t=e.varyParamsAccumulator;if(null!=="
+      },
+      {
+        "bundle": "f8dc053684d09e164886485ad13f1f80abcc45e9c961afbd7f1b2157d3a7865c.bin",
+        "position": 51215,
+        "snippet": "){if(0!=(4194048&e.pendingLanes)){var n=e.transitionTypes;for(null===n&&(n=e.transitionTypes=[]),e=0;e<t.length;e++){var r=t[e];-1===n.indexOf(r)&&n.push(r)}}}var ld=null,lp=null,lm=0,lh=0,lg=null;function lv(){if(0==--lm&&(ld=null,null!==lp)){null!==lg&&(lg.status=\"fulfilled\");var e=lp;lp=null,lh=0,lg=null;for(var t=0;t<e.length;t++)(0,e[t])()}}var ly=W.S;W.S=function(e,t){if(u$=ev(),\"object\"==typeof t&&null!==t&&\"function\"==typeof t.then&&function(e){if(null===lp){var t=lp=[];lm=0,lh=sW(),lg={status:\"pending\",value:void 0,then:function(e){t.push(e)}}}lm++,e.then(lv,lv)}(t),null!==ld)for(var n=sR;null!==n;)lf(n,ld),n=n.next;if(null!==(n=e.types)){for(var r=sR;null!==r;)lf(r,n),r=r.next;if(0!==lh){null===(r=ld)&&(r=ld=[]);for(var l=0;l<n.length;l++){var a=n[l];-1===r.indexOf(a)&&r.push(a)}}}null!==ly&&ly(e,t)};var lb=G(null);function lw(){var e=lb.current;return null!==e?e:ux.pooledCache}function lS(e,t){null===t?Z(lb,lb.current):Z(lb,t.pool)}function lk(){var e=lw();return null===e?null:{parent:lu._currentValue,pool:e}}var lE=Error(u(460)),l_=Error(u(474)),lx=Error(u(542)),lN={then:function(){}};function lP(e){return\"fulfilled\"===(e=e.status)||\"rejected\"===e}function lC(e,t,n){switch(void 0===(n=e[n])?e.push(t):n!==t&&(t.then(tT,tT),t=n),t.status){case\"fulfilled\":return t.value;case\"rejected\":throw lL(e=t.reason),e;default:if(\"string\"==typeof t.status)t.then(tT,tT);else{if(nul"
+      },
+      {
+        "bundle": "f8dc053684d09e164886485ad13f1f80abcc45e9c961afbd7f1b2157d3a7865c.bin",
+        "position": 68055,
+        "snippet": "pshot;e=e.value;try{var n=t();return!nj(e,n)}catch(e){return!0}}function aU(e){var t=rp(e,2);null!==t&&u7(t,e,2)}function aB(e){var t=ax();return\"function\"==typeof e&&(e=e()),t.memoizedState=t.baseState=e,t.queue={pending:null,lanes:0,dispatch:null,lastRenderedReducer:az,lastRenderedState:e},t}function aV(e,t,n,r){return e.baseState=n,aR(e,ai,\"function\"==typeof r?r:az)}function aH(e,t,n,r,l){if(ow(e))throw Error(u(485));if(null!==(e=t.action)){var a={payload:l,action:e,next:null,isTransition:!0,status:\"pending\",value:null,reason:null,listeners:[],then:function(e){a.listeners.push(e)}};null!==W.T?n(!0):a.isTransition=!1,r(a),null===(n=t.pending)?(a.next=t.pending=a,a$(t,a)):(a.next=n.next,t.pending=n.next=a)}}function a$(e,t){var n=t.action,r=t.payload,l=e.state;if(t.isTransition){var a=W.T,o={};o.types=null!==a?a.types:null,W.T=o;try{var i=n(l,r),u=W.S;null!==u&&u(o,i),aQ(e,t,i)}catch(n){aq(e,t,n)}finally{null!==a&&null!==o.types&&(a.types=o.types),W.T=a}}else try{a=n(l,r),aQ(e,t,a)}catch(n){aq(e,t,n)}}function aQ(e,t,n){null!==n&&\"object\"==typeof n&&\"function\"==typeof n.then?n.then(function(n){aW(e,t,n)},function(n){return aq(e,t,n)}):aW(e,t,n)}function aW(e,t,n){t.status=\"fulfilled\",t.value=n,aK(t),e.state=n,null!==(t=e.pending)&&((n=t.next)===t?e.pending=null:(n=n.next,t.next=n,a$(e,n)))}function aq(e,t,n){var r=e.pending;if(e.pending=null,null!==r){r=r.next;do t.status=\"rej"
+      },
+      {
+        "bundle": "f8dc053684d09e164886485ad13f1f80abcc45e9c961afbd7f1b2157d3a7865c.bin",
+        "position": 72308,
+        "snippet": "=(261930&uP)?e.memoizedState=t:(e.memoizedState=n,e=u5(),ao.lanes|=e,uD|=e,n)}function oo(e,t,n,r){return nj(n,t)?n:null!==lZ.current?(nj(e=oa(e,n,r),t)||(oB=!0),e):0==(106&aa)||0!=(0x40000000&aa)&&0==(261930&uP)?(oB=!0,e.memoizedState=n):(e=u5(),ao.lanes|=e,uD|=e,t)}function oi(e,t,n,r,l){var a=q.p;q.p=0!==a&&8>a?a:8;var o=W.T,i={};i.types=null!==o?o.types:null,W.T=i,ob(e,!1,t,n);try{var u=l(),s=W.S;if(null!==s&&s(i,u),null!==u&&\"object\"==typeof u&&\"function\"==typeof u.then){var c,f,d=(c=[],f={status:\"pending\",value:null,reason:null,then:function(e){c.push(e)}},u.then(function(){f.status=\"fulfilled\",f.value=r;for(var e=0;e<c.length;e++)(0,c[e])(r)},function(e){for(f.status=\"rejected\",f.reason=e,e=0;e<c.length;e++)(0,c[e])(void 0)}),f);oy(e,t,d,u8(e))}else oy(e,t,r,u8(e))}catch(n){oy(e,t,{then:function(){},status:\"rejected\",reason:n},u8())}finally{q.p=a,null!==o&&null!==i.types&&(o.types=i.types),W.T=o}}function ou(){}function os(e,t,n,r){if(5!==e.tag)throw Error(u(476));var l=oc(e).queue;oi(e,l,t,K,null===n?ou:function(){return of(e),n(r)})}function oc(e){var t=e.memoizedState;if(null!==t)return t;var n={};return(t={memoizedState:K,baseState:K,baseQueue:null,queue:{pending:null,lanes:0,dispatch:null,lastRenderedReducer:az,lastRenderedState:K},next:null}).next={memoizedState:n,baseState:n,baseQueue:null,queue:{pending:null,lanes:0,dispatch:null,lastRenderedReducer:az,lastRender"
+      }
+    ],
+    "status:\"settled\"": []
+  },
+  "fetchedAt": "2026-09-19T22:24:40.032Z",
+  "interpretation_guard": "TWC feed status is not assumed to equal Kalshi contract settlement finality.",
+  "latest_status_counts": {
+    "pending": 7,
+    "settled": 31
+  },
+  "live_trading": false,
+  "non_settled_count": 7,
+  "non_settled_rows": [
+    {
+      "ageMinutesAtFetch": 24.67,
+      "icaoId": "KPVD",
+      "localDate": "2026-09-19",
+      "localHour": 18,
+      "newerNeighbor": null,
+      "olderNeighbor": {
+        "icaoId": "KPVD",
+        "localDate": "2026-09-19",
+        "localHour": 17,
+        "reportTimeLocal": "Sep 19, 5:00 PM",
+        "reportTimeUTC": "2026-09-19T21:00:00.000Z",
+        "stationName": "Providence",
+        "status": "settled",
+        "tempC": 18.3,
+        "tempF": 64.9
+      },
+      "reportTimeLocal": "Sep 19, 6:00 PM",
+      "reportTimeUTC": "2026-09-19T22:00:00.000Z",
+      "stationName": "Providence",
+      "stationTimezone": "America/New_York",
+      "status": "pending",
+      "tempC": 17.8,
+      "tempF": 64
+    },
+    {
+      "ageMinutesAtFetch": 24.67,
+      "icaoId": "KSAN",
+      "localDate": "2026-09-19",
+      "localHour": 15,
+      "newerNeighbor": null,
+      "olderNeighbor": {
+        "icaoId": "KSAN",
+        "localDate": "2026-09-19",
+        "localHour": 14,
+        "reportTimeLocal": "Sep 19, 2:00 PM",
+        "reportTimeUTC": "2026-09-19T21:00:00.000Z",
+        "stationName": "San Diego",
+        "status": "settled",
+        "tempC": 25,
+        "tempF": 77
+      },
+      "reportTimeLocal": "Sep 19, 3:00 PM",
+      "reportTimeUTC": "2026-09-19T22:00:00.000Z",
+      "stationName": "San Diego",
+      "stationTimezone": "America/Los_Angeles",
+      "status": "pending",
+      "tempC": 24.4,
+      "tempF": 75.9
+    },
+    {
+      "ageMinutesAtFetch": 24.67,
+      "icaoId": "KSDF",
+      "localDate": "2026-09-19",
+      "localHour": 18,
+      "newerNeighbor": null,
+      "olderNeighbor": {
+        "icaoId": "KSDF",
+        "localDate": "2026-09-19",
+        "localHour": 17,
+        "reportTimeLocal": "Sep 19, 5:00 PM",
+        "reportTimeUTC": "2026-09-19T21:00:00.000Z",
+        "stationName": "Louisville",
+        "status": "settled",
+        "tempC": 35,
+        "tempF": 95
+      },
+      "reportTimeLocal": "Sep 19, 6:00 PM",
+      "reportTimeUTC": "2026-09-19T22:00:00.000Z",
+      "stationName": "Louisville",
+      "stationTimezone": "America/New_York",
+      "status": "pending",
+      "tempC": 34.4,
+      "tempF": 93.9
+    },
+    {
+      "ageMinutesAtFetch": 24.67,
+      "icaoId": "KSJC",
+      "localDate": "2026-09-19",
+      "localHour": 15,
+      "newerNeighbor": null,
+      "olderNeighbor": {
+        "icaoId": "KSJC",
+        "localDate": "2026-09-19",
+        "localHour": 14,
+        "reportTimeLocal": "Sep 19, 2:00 PM",
+        "reportTimeUTC": "2026-09-19T21:00:00.000Z",
+        "stationName": "San Jose",
+        "status": "settled",
+        "tempC": 23.3,
+        "tempF": 73.9
+      },
+      "reportTimeLocal": "Sep 19, 3:00 PM",
+      "reportTimeUTC": "2026-09-19T22:00:00.000Z",
+      "stationName": "San Jose",
+      "stationTimezone": "America/Los_Angeles",
+      "status": "pending",
+      "tempC": 23.3,
+      "tempF": 73.9
+    },
+    {
+      "ageMinutesAtFetch": 24.67,
+      "icaoId": "KSPG",
+      "localDate": "2026-09-19",
+      "localHour": 18,
+      "newerNeighbor": null,
+      "olderNeighbor": {
+        "icaoId": "KSPG",
+        "localDate": "2026-09-19",
+        "localHour": 17,
+        "reportTimeLocal": "Sep 19, 5:00 PM",
+        "reportTimeUTC": "2026-09-19T21:00:00.000Z",
+        "stationName": "St. Petersburg",
+        "status": "settled",
+        "tempC": 27.8,
+        "tempF": 82
+      },
+      "reportTimeLocal": "Sep 19, 6:00 PM",
+      "reportTimeUTC": "2026-09-19T22:00:00.000Z",
+      "stationName": "St. Petersburg",
+      "stationTimezone": "America/New_York",
+      "status": "pending",
+      "tempC": 26.7,
+      "tempF": 80.1
+    },
+    {
+      "ageMinutesAtFetch": 24.67,
+      "icaoId": "KTPA",
+      "localDate": "2026-09-19",
+      "localHour": 18,
+      "newerNeighbor": null,
+      "olderNeighbor": {
+        "icaoId": "KTPA",
+        "localDate": "2026-09-19",
+        "localHour": 17,
+        "reportTimeLocal": "Sep 19, 5:00 PM",
+        "reportTimeUTC": "2026-09-19T21:00:00.000Z",
+        "stationName": "Tampa",
+        "status": "settled",
+        "tempC": 23.9,
+        "tempF": 75
+      },
+      "reportTimeLocal": "Sep 19, 6:00 PM",
+      "reportTimeUTC": "2026-09-19T22:00:00.000Z",
+      "stationName": "Tampa",
+      "stationTimezone": "America/New_York",
+      "status": "pending",
+      "tempC": 25.6,
+      "tempF": 78.1
+    },
+    {
+      "ageMinutesAtFetch": 24.67,
+      "icaoId": "KTTN",
+      "localDate": "2026-09-19",
+      "localHour": 18,
+      "newerNeighbor": null,
+      "olderNeighbor": {
+        "icaoId": "KTTN",
+        "localDate": "2026-09-19",
+        "localHour": 17,
+        "reportTimeLocal": "Sep 19, 5:00 PM",
+        "reportTimeUTC": "2026-09-19T21:00:00.000Z",
+        "stationName": "Trenton",
+        "status": "settled",
+        "tempC": 20,
+        "tempF": 68
+      },
+      "reportTimeLocal": "Sep 19, 6:00 PM",
+      "reportTimeUTC": "2026-09-19T22:00:00.000Z",
+      "stationName": "Trenton",
+      "stationTimezone": "America/New_York",
+      "status": "pending",
+      "tempC": 19.4,
+      "tempF": 66.9
+    }
+  ],
+  "paid_actions": false,
+  "raw_file": "720aa620f533559312c6dbb920fbdf696d52b19599c2cdef3c302b32fb08c757.bin",
+  "status_age_minutes": {
+    "pending": {
+      "maxMinutes": 24.67,
+      "medianMinutes": 24.67,
+      "minMinutes": 24.67
+    },
+    "settled": {
+      "maxMinutes": 8304.67,
+      "medianMinutes": 4104.67,
+      "minMinutes": 24.67
+    }
+  },
+  "status_counts": {
+    "pending": 7,
+    "settled": 5149
+  },
+  "wallet_actions": false
+}
