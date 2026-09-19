@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "experiments/bridge/e204.py"
+  ],
+  "exit_code": 1,
+  "finished_at": "2026-09-19T23:05:31.277132+00:00",
+  "hypothesis_id": "CONTROL-HOURLY-RESEARCH-DIRECTOR",
+  "source_commit": "064a88a28b1e27ed6d3328e9b1d5eba6da471376",
+  "started_at": "2026-09-19T23:05:31.259250+00:00",
+  "status": "failed",
+  "stderr_sha256": "4546174bf9bb4402511f74e9f96daaaf880a1ed68271a22ed2a15affa35300ce",
+  "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "task_class": "research",
+  "task_id": "HOURLY-SEMANTIC-BUNDLE-0100-E204"
+}
