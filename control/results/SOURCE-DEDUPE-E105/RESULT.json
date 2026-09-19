@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "experiments/bridge/e105.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-19T20:58:03.431779+00:00",
+  "hypothesis_id": "CONTROL-AUTONOMOUS-RESEARCH",
+  "source_commit": "1524727551f69aaffd12eb349346952f25d23377",
+  "started_at": "2026-09-19T20:58:00.315364+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "41f6c51b53b8aca4ec881dd472aad98d6a4a9a0cf6b574c78e42c3de16a9d9e8",
+  "task_class": "infrastructure",
+  "task_id": "SOURCE-DEDUPE-E105"
+}
