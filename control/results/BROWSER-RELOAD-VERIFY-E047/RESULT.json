@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "experiments/bridge/e047.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-19T19:47:41.771010+00:00",
+  "hypothesis_id": "CONTROL-NO-SILENT-WAITING",
+  "source_commit": "3a3aa8f4708d246b9ff9a35ca017d3d7b7a61ab4",
+  "started_at": "2026-09-19T19:47:41.745698+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "8ab6a44f783f0cee2abba9b0ef92cf9761c276a20c2820fb6562967569020ba3",
+  "task_class": "infrastructure",
+  "task_id": "BROWSER-RELOAD-VERIFY-E047"
+}
