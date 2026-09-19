@@ -1,0 +1,122 @@
+{
+  "artifact": "knowledge/runs/kalshi-weather-index-chicago-degraded-analysis-e233.json",
+  "config_version": "chicago-temperature-v1.0-cal-20260914",
+  "point_count": 178,
+  "status_summary": {
+    "degraded": {
+      "count": 37,
+      "residual_abs": {
+        "count": 37,
+        "min": 0.003999999999990678,
+        "max": 0.3650000000000091,
+        "mean": 0.013756756756752924,
+        "median": 0.003999999999990678
+      },
+      "fallback_points": 37,
+      "missing_points": 1,
+      "primary_nonok_points": 37
+    },
+    "incomplete": {
+      "count": 3,
+      "residual_abs": {
+        "count": 0
+      },
+      "fallback_points": 0,
+      "missing_points": 0,
+      "primary_nonok_points": 0
+    },
+    "normal": {
+      "count": 138,
+      "residual_abs": {
+        "count": 138,
+        "min": 0.0,
+        "max": 0.0,
+        "mean": 0.0,
+        "median": 0.0
+      },
+      "fallback_points": 0,
+      "missing_points": 0,
+      "primary_nonok_points": 0
+    }
+  },
+  "outlier_count": 1,
+  "outliers": [
+    {
+      "t": 1789854780000,
+      "v": 69.4,
+      "raw_mean": 69.035,
+      "residual": 0.3650000000000091,
+      "fallback_station_ids": [
+        "KARR1M",
+        "KDPA1M",
+        "KMDW1M",
+        "KPWK1M"
+      ],
+      "missing_station_ids": [
+        "KORD1M"
+      ],
+      "primary_nonok": [
+        {
+          "station_id": "KARR1M",
+          "primary_code": "missing",
+          "source": "metar",
+          "code": "ok",
+          "obs_time_ms": 1789854720000,
+          "received_at_ms": 1789854974808,
+          "temp_f": 68
+        },
+        {
+          "station_id": "KDPA1M",
+          "primary_code": "missing",
+          "source": "metar",
+          "code": "ok",
+          "obs_time_ms": 1789854720000,
+          "received_at_ms": 1789854975819,
+          "temp_f": 69.08
+        },
+        {
+          "station_id": "KMDW1M",
+          "primary_code": "missing",
+          "source": "metar",
+          "code": "ok",
+          "obs_time_ms": 1789854780000,
+          "received_at_ms": 1789854976337,
+          "temp_f": 71.06
+        },
+        {
+          "station_id": "KPWK1M",
+          "primary_code": "missing",
+          "source": "metar",
+          "code": "ok",
+          "obs_time_ms": 1789854720000,
+          "received_at_ms": 1789854976840,
+          "temp_f": 68
+        }
+      ]
+    }
+  ],
+  "conditional_inference": [
+    {
+      "t": 1789854780000,
+      "missing_station": "KORD1M",
+      "observed_residual_f": 0.3650000000000091,
+      "if_equal_base_weights_and_only_station_offsets_apply": {
+        "implied_missing_station_offset_minus_city_reference_f_equivalent": 1.4600000000000364,
+        "note": "This is a conditional algebraic implication, not an estimate of the current official calibration unless equal weights and the documented offset formula are confirmed for this effective config."
+      }
+    }
+  ],
+  "commit": {
+    "rc": 0,
+    "stdout": "[main f64f65b] research(weather): analyze Chicago degraded index behavior\n 1 file changed, 1609 insertions(+)\n create mode 100644 knowledge/runs/kalshi-weather-index-chicago-degraded-analysis-e233.json",
+    "stderr": ""
+  },
+  "push": {
+    "rc": 0,
+    "stdout": "",
+    "stderr": "To github.com:bas1231/onderzoek.git\n   2b2d3a1..f64f65b  HEAD -> main"
+  },
+  "live_trading": false,
+  "paid_actions": false,
+  "wallet_actions": false
+}
