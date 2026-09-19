@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "experiments/bridge/e074a.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-19T20:22:39.481212+00:00",
+  "hypothesis_id": "CONTROL-NO-SILENT-WAITING",
+  "source_commit": "4ea30e45df9ee0459d169ff9f4bc6375f8559f74",
+  "started_at": "2026-09-19T20:22:39.471265+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "eb021a937e7d973247bdd25e6d5badf75aaf599a4da4c701b9f2815506db5e65",
+  "task_class": "infrastructure",
+  "task_id": "POSTFIX-NORMAL-E074A"
+}
