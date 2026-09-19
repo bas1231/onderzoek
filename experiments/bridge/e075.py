@@ -1,0 +1,1 @@
+print('E075_AUTONOMOUS_OK')
