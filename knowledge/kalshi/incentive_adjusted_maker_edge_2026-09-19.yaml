@@ -1,0 +1,72 @@
+schema_version: 1
+as_of: 2026-09-19
+economic_status: HYPOTHESIS_UNTESTED
+records:
+  - id: KAL-INCENTIVE-001
+    kind: fact
+    status: FACT_VERIFIED
+    claim: "Kalshi heeft voor reguliere in aanmerking komende U.S.-leden een liquidity incentive program dat resting orders beloont, ook wanneer ze niet gevuld worden."
+    mechanics:
+      snapshot_frequency: "een orderbook-snapshot per seconde op een willekeurig moment binnen die seconde"
+      qualification: "beide zijden moeten Target Size halen; orders worden op size en afstand tot Reference Price gescoord"
+      distance_weight: "Discount Factor ^ ticks-away voor niveaus slechter dan de Reference Price"
+      payout: "pro-rata aandeel van qualifying liquidity; headline pool wordt geschaald met aandeel niet-uitgesloten snapshots"
+      daily_reward_range: "$1-$1,000 per market per day volgens actuele helpdocumentatie"
+      minimum_program_payout: "$1"
+    source:
+      url: "https://help.kalshi.com/en/articles/13823851-liquidity-incentive-program"
+      checked_at: "2026-09-19"
+      source_type: primary
+
+  - id: KAL-INCENTIVE-002
+    kind: fact
+    status: FACT_VERIFIED
+    claim: "Kalshi heeft daarnaast een volume incentive program waarbij eligible CLOB-trades in geselecteerde markten pro-rata reward krijgen, met een cap van $0.005 per contract."
+    constraints:
+      eligible_price_range: "$0.03-$0.97 voor prediction contracts"
+      possible_side_filter: "een programma kan maker- of taker-side volume uitsluiten"
+      cap: "$0.005 per contract"
+      international_users: "niet eligible volgens actuele helpdocumentatie"
+    source:
+      url: "https://help.kalshi.com/en/articles/13823850-what-is-the-kalshi-volume-incentive-program"
+      checked_at: "2026-09-19"
+      source_type: primary
+
+  - id: KAL-INCENTIVE-003
+    kind: hypothesis
+    status: STRUCTURAL_CANDIDATE
+    novelty: "Nieuwe research-lane voor deze knowledge base: incentive-adjusted maker economics."
+    claim: "Een makerstrategie die vóór rewards netto negatief of ongeveer break-even lijkt, kan conditioneel positief worden wanneer de verwachte liquidity/volume reward als afzonderlijke cashflow wordt gemodelleerd. Omgekeerd kan een zichtbare rewardpool waardeloos zijn als competitie, two-sided Target Size, adverse selection of eligibility de verwachte reward reduceert."
+    required_data:
+      - "historische en live incentive-program definitions via publieke Trade API"
+      - "Target Size en Discount Factor per programma/periode"
+      - "second-level L2 snapshots of voldoende reconstructie"
+      - "eigen qualifying share versus totale qualifying liquidity"
+      - "fills, maker/taker status, fees en realized adverse-selection markouts"
+      - "uiteindelijke betaalde reward, niet alleen live estimate"
+    falsification:
+      - "Replay rewards exact volgens gepubliceerde snapshot/scoringregels."
+      - "Bereken execution P&L zonder reward en met realized reward afzonderlijk."
+      - "Meet 1s/5s/30s/settlement markouts na fills om adverse selection te kwantificeren."
+      - "Kill lane als reward-adjusted lower-bound na fees, fills, inventory risk en competition niet positief blijft op untouched prospectieve data."
+    execution_risks:
+      - "reward pool en voorwaarden kunnen wijzigen of stoppen"
+      - "twee-zijdige Target Size is nodig voor geldige snapshots"
+      - "score is relatief aan andere deelnemers en dus endogeen"
+      - "resting quotes dragen adverse-selection/inventory risk"
+      - "final rewards worden later verwerkt en live estimates zijn niet definitief"
+      - "eligibility: actuele documentatie sluit internationale gebruikers uit"
+    relations:
+      - "maker-bias / flow-bias research"
+      - "Surplus Maker lane"
+      - "fee-adjusted executable pricing"
+    nonclaim: "Dit is geen bewezen edge en voor een niet-U.S. account mogelijk niet uitvoerbaar; het mechanisme is wel relevant voor marktstructuur en agentonderzoek."
+
+  - id: KAL-INCENTIVE-004
+    kind: fact
+    status: FACT_VERIFIED
+    claim: "De publieke Kalshi Trade API exposeert incentive-program definitions, zodat agents rewardvoorwaarden machineleesbaar naast L2/fee-data kunnen archiveren."
+    source:
+      url: "https://help.kalshi.com/en/articles/16076644-liquidity-and-volume-incentive-programs-where-to-find-them"
+      checked_at: "2026-09-19"
+      source_type: primary
