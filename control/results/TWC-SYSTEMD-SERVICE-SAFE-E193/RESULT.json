@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "experiments/bridge/e193.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-19T22:53:41.242664+00:00",
+  "hypothesis_id": "H7-SETTLEMENT-BOUNDARY",
+  "source_commit": "bfb31418a5c2680bd1ff053c829f4fcf9bf2a4e7",
+  "started_at": "2026-09-19T22:53:40.292930+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "28ec941d9a733a372574046c31c89135e07b94f322824801ed82d86e77151bc2",
+  "task_class": "infrastructure",
+  "task_id": "TWC-SYSTEMD-SERVICE-SAFE-E193"
+}

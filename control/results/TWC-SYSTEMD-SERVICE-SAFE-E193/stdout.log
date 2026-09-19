@@ -1,0 +1,54 @@
+{
+  "manifests_before": 2,
+  "manifests_after": 3,
+  "new_manifest_count": 1,
+  "start": {
+    "rc": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  "service_status": {
+    "rc": 0,
+    "stdout": "Result=success\nExecMainStatus=0\nActiveState=inactive",
+    "stderr": ""
+  },
+  "timer_status": {
+    "rc": 0,
+    "stdout": "NEXT                          LEFT LAST PASSED UNIT                                   ACTIVATES\nSun 2026-09-20 01:05:00 CEST 11min -         - prediction-research-twc-recorder.timer prediction-research-twc-recorder.service\n\n1 timers listed.\nPass --all to see loaded but inactive timers, too.",
+    "stderr": ""
+  },
+  "journal": {
+    "rc": 0,
+    "stdout": "Sep 20 00:53:41 Strix python[592086]: {\nSep 20 00:53:41 Strix python[592086]:   \"added_count\": 0,\nSep 20 00:53:41 Strix python[592086]:   \"bytes\": 2174272,\nSep 20 00:53:41 Strix python[592086]:   \"changes_sample\": [],\nSep 20 00:53:41 Strix python[592086]:   \"common_count\": 5156,\nSep 20 00:53:41 Strix python[592086]:   \"content_type\": \"application/json\",\nSep 20 00:53:41 Strix python[592086]:   \"fetchedAt\": \"2026-09-19T22:53:14.182Z\",\nSep 20 00:53:41 Strix python[592086]:   \"http_status\": 200,\nSep 20 00:53:41 Strix python[592086]:   \"interpretation_guard\": \"TWC feed status is not assumed to equal Kalshi contract settlement finality.\",\nSep 20 00:53:41 Strix python[592086]:   \"live_trading\": false,\nSep 20 00:53:41 Strix python[592086]:   \"manifest_name\": \"twc-hourly-20260919T225340Z-ceb39cb81f8b.json\",\nSep 20 00:53:41 Strix python[592086]:   \"observation_count\": 5156,\nSep 20 00:53:41 Strix python[592086]:   \"paid_actions\": false,\nSep 20 00:53:41 Strix python[592086]:   \"pending_to_settled_count\": 0,\nSep 20 00:53:41 Strix python[592086]:   \"pending_to_settled_temperature_change_count\": 0,\nSep 20 00:53:41 Strix python[592086]:   \"previous_manifest\": \"twc-hourly-20260919T225205Z-1e3bfafc2390.json\",\nSep 20 00:53:41 Strix python[592086]:   \"removed_count\": 0,\nSep 20 00:53:41 Strix python[592086]:   \"retrieved_at\": \"2026-09-19T22:53:40.381047+00:00\",\nSep 20 00:53:41 Strix python[592086]:   \"settled_to_settled_temperature_change_count\": 0,\nSep 20 00:53:41 Strix python[592086]:   \"sha256\": \"ceb39cb81f8b1fdfa4a57f7d84c80e3d8386bacf14e4563cc560ca305ff2a1e5\",\nSep 20 00:53:41 Strix python[592086]:   \"station_count\": 38,\nSep 20 00:53:41 Strix python[592086]:   \"status_change_count\": 0,\nSep 20 00:53:41 Strix python[592086]:   \"status_counts\": {\nSep 20 00:53:41 Strix python[592086]:     \"settled\": 5156\nSep 20 00:53:41 Strix python[592086]:   },\nSep 20 00:53:41 Strix python[592086]:   \"temperature_change_count\": 0,\nSep 20 00:53:41 Strix python[592086]:   \"wallet_actions\": false,\nSep 20 00:53:41 Strix python[592086]:   \"weekStart\": \"2026-09-14\"\nSep 20 00:53:41 Strix python[592086]: }\nSep 20 00:53:41 Strix systemd[334]: Finished prediction-research-twc-recorder.service - Prediction Research TWC hourly point-in-time recorder.",
+    "stderr": ""
+  },
+  "latest_manifest": {
+    "added_count": 0,
+    "bytes": 2174272,
+    "changes_sample": [],
+    "common_count": 5156,
+    "content_type": "application/json",
+    "fetchedAt": "2026-09-19T22:53:14.182Z",
+    "http_status": 200,
+    "interpretation_guard": "TWC feed status is not assumed to equal Kalshi contract settlement finality.",
+    "live_trading": false,
+    "manifest_name": "twc-hourly-20260919T225340Z-ceb39cb81f8b.json",
+    "observation_count": 5156,
+    "paid_actions": false,
+    "pending_to_settled_count": 0,
+    "pending_to_settled_temperature_change_count": 0,
+    "previous_manifest": "twc-hourly-20260919T225205Z-1e3bfafc2390.json",
+    "removed_count": 0,
+    "retrieved_at": "2026-09-19T22:53:40.381047+00:00",
+    "settled_to_settled_temperature_change_count": 0,
+    "sha256": "ceb39cb81f8b1fdfa4a57f7d84c80e3d8386bacf14e4563cc560ca305ff2a1e5",
+    "station_count": 38,
+    "status_change_count": 0,
+    "status_counts": {
+      "settled": 5156
+    },
+    "temperature_change_count": 0,
+    "wallet_actions": false,
+    "weekStart": "2026-09-14"
+  }
+}
