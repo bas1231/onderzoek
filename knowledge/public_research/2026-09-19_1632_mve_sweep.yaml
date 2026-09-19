@@ -1,0 +1,74 @@
+schema_version: 1
+sweep_date: 2026-09-19
+scope: "Kalshi MVE/Combo execution-first follow-up"
+economic_status: NO_PROVEN_EDGE
+records:
+  - id: PUB-KAL-MVE-002
+    kind: paper
+    status: RESEARCH_POSITIVE
+    title: "On-Demand Combinatorial Event Markets on Kalshi: Instantiation, Concentration, and Effective Market Breadth"
+    source_url: "https://arxiv.org/abs/2609.17610"
+    source_date: 2026-09-14
+    source_type: "recent preprint using public Kalshi API census"
+    reported_results:
+      unique_rest_mve_tickers: 7611594
+      exact_event_keys: 5262526
+      selected_leg_primitives: 83701
+      selected_leg_occurrences: 66344938
+      largest_collection_share: "94.82%"
+      objects_with_positive_cumulative_volume_or_open_interest: "35.38%"
+      exact_structural_signature_collision_groups: 0
+    implication: "Market-object count is not economic breadth. Exact side-aware leg signatures and primitive reuse make structural relation indexing preferable to ticker-pair brute force."
+    relation_to_project:
+      - KAL-MVE-003
+      - KAL-MVE-004
+      - "Market Algebra relation-index design"
+    nonclaim: "The paper establishes object/structure scale, not an executable pricing edge."
+
+  - id: PUB-KAL-MVE-MAKER-001
+    kind: third_party_research
+    status: HYPOTHESIS_UNTESTED
+    title: "kalshi-combos-research"
+    source_url: "https://github.com/jsteng19/kalshi-combos-research"
+    source_date: 2026
+    source_type: "public GitHub research pipeline; not independently reproduced"
+    reported_scope:
+      settled_combo_window: "2026-04-03 through 2026-06-01"
+      settled_combos_claimed: "8.93M"
+      contracts_claimed: "8.13B"
+    reported_results:
+      seller_edge_equal_weight: "+3.3 cents per combo"
+      seller_edge_volume_weighted: "+2.1 cents per combo"
+      highest_reported_edge_band: "roughly 20-50 cent combo fills, with a reported peak near 20-35 cents"
+      same_game_reported_edge: "+4.1 cents versus +2.9 cents for all-distinct-event combos"
+      median_fill_to_settlement: "about 4 hours"
+    useful_signal: "If reproducible, this suggests the MVE/RFQ layer may contain economically meaningful pricing surplus rather than only tiny deterministic crosses, and therefore deserves higher research priority."
+    methodology_limits:
+      - "The headline calibration result compares historical fills to eventual resolutions; it is not itself a prospective strategy replay."
+      - "The independent-leg comparison uses previous-minute top-of-book midpoint/candle-style reference data rather than same-instant executable primitive L2."
+      - "Maker fill selection, quote acceptance, inventory/collateral, adverse selection and point-in-time fee state still need independent modelling."
+      - "No claim from this repository is treated as our PROVEN_EDGE without our own untouched replay and prospective shadow."
+    falsification:
+      - "Rebuild a small preregistered settled-combo sample from raw Kalshi data and reproduce the reported calibration signs."
+      - "Replace prior-minute midpoint reference with contemporaneous executable primitive L2/RFQ evidence."
+      - "Separate maker-quoted opportunities from actually accepted/fill-selected opportunities and measure post-quote selection effects."
+      - "Evaluate net return on locked collateral after exact current fee state and settlement duration."
+    relation_to_project:
+      - "Surplus Maker"
+      - "Market Algebra MVE dominance"
+      - "RFQ execution research"
+    economic_status: NO_PROVEN_EDGE
+
+  - id: PUB-KAL-RFQ-001
+    kind: third_party_research
+    status: HYPOTHESIS_UNTESTED
+    title: "Mapping Kalshi's RFQ Layer: A Census of the Bots Behind the Quotes"
+    source_url: "https://www.oddpool.com/research/kalshi-rfq-market-makers"
+    source_date: 2026
+    source_type: "third-party empirical web research; raw evidence not independently verified"
+    reported_observation: "The author reports a small concentrated combo-quoting group and little degradation in quoter count/spread from two through five legs."
+    implication: "RFQ competition appears specialized rather than absent. Nested-combo opportunities, if any, should be tested as quote/orderbook inconsistencies against active professional responders rather than assumed to persist."
+    falsification:
+      - "Measure our own RFQ response counts, quote lifetime and best-price dispersion prospectively."
+      - "Do not infer profitability from maker concentration alone."
+    economic_status: NO_PROVEN_EDGE
