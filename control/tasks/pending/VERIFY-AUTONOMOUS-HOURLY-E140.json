@@ -1,0 +1,13 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "experiments/bridge/e140.py"
+  ],
+  "hypothesis_id": "CONTROL-AUTONOMOUS-RESEARCH",
+  "live_trading": false,
+  "operation": "python",
+  "task_class": "infrastructure",
+  "task_id": "VERIFY-AUTONOMOUS-HOURLY-E140",
+  "timeout_seconds": 30,
+  "working_directory": "."
+}
