@@ -1,0 +1,134 @@
+schema_version: 1
+candidate:
+  id: KAL-WX-INDEX-001
+  venue: kalshi
+  family: weather_hourly_temperature
+  title: "Weather Index innovations predict KXTEMP settlement and repricing"
+  status: STRUCTURAL_CANDIDATE
+  economic_status: NO_PROVEN_EDGE
+  created_at: 2026-09-19
+
+  thesis: >-
+    Publicly observable Kalshi Weather Index state, station composition and calibration state may improve short-horizon prediction of the exact hourly KXTEMP settlement value and may not always be fully reflected in contemporaneous executable market prices.
+
+  scope:
+    horizons_minutes: [240, 180, 120, 60, 30, 15, 5]
+    market_family: KXTEMP
+    initial_cities:
+      - miami
+      - new_york_city
+      - chicago
+      - los_angeles
+    note: "Cities are starting strata, not guaranteed final scope; every city requires exact rule/source proof."
+
+  gates:
+    source_semantics:
+      status: PENDING_DIRECT_RULE_CAPTURE
+      requirement: "Exact active series/event/market rules and source must be archived point-in-time."
+    signal_edge:
+      status: UNTESTED
+      requirement: "Index-derived model beats persistence/trend/station baselines out-of-sample on settlement-value probability metrics."
+    market_edge:
+      status: UNTESTED
+      requirement: "Model probabilities improve on contemporaneous executable market probabilities after fees/spread/depth."
+    execution:
+      status: UNTESTED
+      requirement: "Prospective shadow and later separately authorized micro-live survive fill, latency and slippage constraints."
+
+  three_angle_plan:
+    angle_1_rules_semantics:
+      objective: "Prove exact settlement source, rule transformation, thresholds, timing, rounding, data eligibility and calibration version for each tested event."
+      failure_mode: "Wrong source/rule/version makes all later backtests invalid."
+    angle_2_signal_replay:
+      objective: "Point-in-time replay Weather Index + detailed stations + calibrations against final settlement; compare strong baselines."
+      failure_mode: "Index adds no stable out-of-sample predictive information."
+    angle_3_market_execution:
+      objective: "Join predictions to same-time executable L2 and measure incremental Brier/log-loss plus realizable net EV."
+      failure_mode: "Market already incorporates signal or execution frictions consume it."
+    optional_angle_4_adversarial:
+      objective: "Independent implementation plus source/config/revision counterexample search."
+
+  baselines:
+    - persistence_last_index
+    - linear_trend_15m
+    - linear_trend_30m
+    - station_weighted_current_state
+    - nearest_primary_station
+    - market_implied_probability
+
+  candidate_features:
+    - index_level
+    - index_trend_5m
+    - index_trend_15m
+    - index_trend_30m
+    - index_acceleration
+    - contributor_count
+    - status
+    - receipt_basis
+    - station_dispersion
+    - max_station_age_ms
+    - min_station_age_ms
+    - weighted_station_residuals
+    - config_version
+    - days_since_calibration
+    - calibration_offset_vector
+    - calibration_change_flag
+    - local_hour
+    - solar_time_proxy
+    - threshold_distance
+
+  required_point_in_time_data:
+    - exact_market_rules_and_rules_version
+    - series_event_market_metadata
+    - weather_index_minutes
+    - detailed_station_breakdown
+    - calibration_timeline_with_published_at
+    - kxtemp_l2_orderbook
+    - trades
+    - market_lifecycle
+    - final_settlement
+    - fee_schedule
+
+  primary_metrics:
+    continuous:
+      - MAE
+      - CRPS
+    probability:
+      - Brier_score
+      - log_loss
+      - calibration
+      - sharpness
+    economic:
+      - net_expected_value_per_contract
+      - realized_shadow_fill_bound
+      - return_on_capital_time
+
+  splits:
+    method: temporal_grouped
+    grouping: "city x local_date"
+    sequence:
+      - development
+      - validation
+      - untouched_holdout
+      - prospective_shadow
+
+  preregistered_kill_rules:
+    - "Kill signal lane if index-enhanced model does not beat predeclared baselines on untouched holdout with stable sign across meaningful city/horizon strata."
+    - "Kill market-edge lane if predictive improvement does not beat executable market probability after fees and conservative spread/depth treatment."
+    - "Kill any event whose rule/source/version was not captured point-in-time."
+    - "Do not rescue a failed lane by post-hoc feature/threshold selection; material changes create a new experiment version."
+
+  execution_blockers:
+    - rule_source_conflict_until_direct_capture
+    - index_history_may_be_limited
+    - receipt_basis_and_backfill_eligibility
+    - close_time_relative_to_observation
+    - l2_depth
+    - fees
+    - latency
+
+  related:
+    - KAL-WX-SRC-001
+    - KAL-TWC-001
+    - KAL-TWC-002
+    - KAL-WX-001
