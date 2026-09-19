@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "experiments/bridge/e189.py"
+  ],
+  "exit_code": 1,
+  "finished_at": "2026-09-19T22:50:18.237061+00:00",
+  "hypothesis_id": "H7-SETTLEMENT-BOUNDARY",
+  "source_commit": "4476f831b9399fcd2f725d7f5acb6c13a9529bdc",
+  "started_at": "2026-09-19T22:50:18.221177+00:00",
+  "status": "failed",
+  "stderr_sha256": "1f391ada0144555b4e3d259aeb8bc26158ea30ac9d3fdad0cee108c7667829fc",
+  "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "task_class": "infrastructure",
+  "task_id": "TWC-RECORDER-TIMER-E189"
+}
