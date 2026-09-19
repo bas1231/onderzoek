@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "experiments/bridge/e097.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-19T20:54:53.476622+00:00",
+  "hypothesis_id": "CONTROL-AUTONOMOUS-RESEARCH",
+  "source_commit": "ce0fc045e6b4dbab9a8011c1df64463ad72cb162",
+  "started_at": "2026-09-19T20:54:53.466648+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "f30d8c54d98a5ebaba0e4c50237b369439963afc8f7d69b04c27a9b08ac89c8e",
+  "task_class": "infrastructure",
+  "task_id": "BRIDGE-HEALTH-E097"
+}
