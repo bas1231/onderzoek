@@ -1,0 +1,19 @@
+{
+  "checks": {
+    "diff": true,
+    "bridge": true,
+    "executor": true,
+    "supervisor": true,
+    "background": true,
+    "content": true
+  },
+  "ok": true,
+  "commit_rc": 0,
+  "commit": "[main efb4417] fix(control): consolidate no-silent-waiting reliability stack\n 7 files changed, 243 insertions(+), 3 deletions(-)\n create mode 100644 .gitignore",
+  "push_rc": 0,
+  "head": "efb4417 fix(control): consolidate no-silent-waiting reliability stack",
+  "status": [
+    " D control/tasks/pending/RELIABILITY-CONSOLIDATE-E060.json",
+    "?? control/tasks/running/"
+  ]
+}
