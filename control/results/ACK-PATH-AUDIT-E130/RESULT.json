@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "experiments/bridge/e130.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-19T21:50:54.573274+00:00",
+  "hypothesis_id": "CONTROL-NO-SILENT-WAITING",
+  "source_commit": "328c4c558d15265ba257baa7b20ab8a57d0447e5",
+  "started_at": "2026-09-19T21:50:54.556396+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "bfb3eba0013d8363acdc8757c1f6bd22a8604eea284db072d4a5ce2196c5151a",
+  "task_class": "infrastructure",
+  "task_id": "ACK-PATH-AUDIT-E130"
+}
