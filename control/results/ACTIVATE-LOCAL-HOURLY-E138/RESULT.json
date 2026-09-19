@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "experiments/bridge/e138.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-19T21:55:37.549168+00:00",
+  "hypothesis_id": "CONTROL-AUTONOMOUS-RESEARCH",
+  "source_commit": "b18b62487344f4bd31725240392761037c1c0862",
+  "started_at": "2026-09-19T21:55:33.786601+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "36d107cce5dd9462d8f285b9407ca969ab25a845f5673a081844a601b1e0e128",
+  "task_class": "infrastructure",
+  "task_id": "ACTIVATE-LOCAL-HOURLY-E138"
+}
