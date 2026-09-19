@@ -1,0 +1,13 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "experiments/bridge/e039.py"
+  ],
+  "hypothesis_id": "CONTROL-NO-SILENT-WAITING",
+  "live_trading": false,
+  "operation": "python",
+  "task_class": "infrastructure",
+  "task_id": "SUPERVISOR-STALL-E039",
+  "timeout_seconds": 30,
+  "working_directory": "."
+}
