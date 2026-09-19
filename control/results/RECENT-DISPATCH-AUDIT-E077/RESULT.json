@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "experiments/bridge/e077.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-19T20:26:34.440705+00:00",
+  "hypothesis_id": "CONTROL-NO-SILENT-WAITING",
+  "source_commit": "4f5370cf0efca431f90d4271e04e4baba065022d",
+  "started_at": "2026-09-19T20:26:34.242182+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "ae73b5b55f8b7e0bee5293c1adddef4a0290ae6bb4ef7331b8c1d7e8663a2a80",
+  "task_class": "infrastructure",
+  "task_id": "RECENT-DISPATCH-AUDIT-E077"
+}
