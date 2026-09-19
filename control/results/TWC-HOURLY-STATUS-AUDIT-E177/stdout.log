@@ -1,0 +1,307 @@
+{
+  "counted_observations": 5156,
+  "dates": [
+    "2026-09-14",
+    "2026-09-15",
+    "2026-09-16",
+    "2026-09-17",
+    "2026-09-18",
+    "2026-09-19",
+    "2026-09-20"
+  ],
+  "declared_totalObservations": 5156,
+  "fetchedAt": "2026-09-19T22:24:40.032Z",
+  "latest_observation_sample": [
+    {
+      "icaoId": "KATL",
+      "localDate": "2026-09-19",
+      "localHour": 18,
+      "reportTimeUTC": "2026-09-19T22:00:00.000Z",
+      "stationName": "Atlanta",
+      "status": "settled",
+      "tempC": 32.8,
+      "tempF": 91,
+      "timezone": "America/New_York"
+    },
+    {
+      "icaoId": "KAUS",
+      "localDate": "2026-09-19",
+      "localHour": 17,
+      "reportTimeUTC": "2026-09-19T22:00:00.000Z",
+      "stationName": "Austin",
+      "status": "settled",
+      "tempC": 35.6,
+      "tempF": 96.1,
+      "timezone": "America/Chicago"
+    },
+    {
+      "icaoId": "KBOS",
+      "localDate": "2026-09-19",
+      "localHour": 18,
+      "reportTimeUTC": "2026-09-19T22:00:00.000Z",
+      "stationName": "Boston",
+      "status": "settled",
+      "tempC": 15,
+      "tempF": 59,
+      "timezone": "America/New_York"
+    },
+    {
+      "icaoId": "KCLL",
+      "localDate": "2026-09-19",
+      "localHour": 17,
+      "reportTimeUTC": "2026-09-19T22:00:00.000Z",
+      "stationName": "College Station",
+      "status": "settled",
+      "tempC": 35,
+      "tempF": 95,
+      "timezone": "America/Chicago"
+    },
+    {
+      "icaoId": "KCMH",
+      "localDate": "2026-09-19",
+      "localHour": 18,
+      "reportTimeUTC": "2026-09-19T22:00:00.000Z",
+      "stationName": "Columbus",
+      "status": "settled",
+      "tempC": 22.8,
+      "tempF": 73,
+      "timezone": "America/New_York"
+    },
+    {
+      "icaoId": "KCVG",
+      "localDate": "2026-09-19",
+      "localHour": 18,
+      "reportTimeUTC": "2026-09-19T22:00:00.000Z",
+      "stationName": "Cincinnati / Covington",
+      "status": "settled",
+      "tempC": 31.7,
+      "tempF": 89.1,
+      "timezone": "America/New_York"
+    },
+    {
+      "icaoId": "KDCA",
+      "localDate": "2026-09-19",
+      "localHour": 18,
+      "reportTimeUTC": "2026-09-19T22:00:00.000Z",
+      "stationName": "Washington, DC",
+      "status": "settled",
+      "tempC": 25.6,
+      "tempF": 78.1,
+      "timezone": "America/New_York"
+    },
+    {
+      "icaoId": "KDEN",
+      "localDate": "2026-09-19",
+      "localHour": 16,
+      "reportTimeUTC": "2026-09-19T22:00:00.000Z",
+      "stationName": "Denver",
+      "status": "settled",
+      "tempC": 25,
+      "tempF": 77,
+      "timezone": "America/Denver"
+    },
+    {
+      "icaoId": "KDFW",
+      "localDate": "2026-09-19",
+      "localHour": 17,
+      "reportTimeUTC": "2026-09-19T22:00:00.000Z",
+      "stationName": "Dallas",
+      "status": "settled",
+      "tempC": 35.6,
+      "tempF": 96.1,
+      "timezone": "America/Chicago"
+    },
+    {
+      "icaoId": "KDJT",
+      "localDate": "2026-09-19",
+      "localHour": 18,
+      "reportTimeUTC": "2026-09-19T22:00:00.000Z",
+      "stationName": "West Palm Beach",
+      "status": "settled",
+      "tempC": 28.3,
+      "tempF": 82.9,
+      "timezone": "America/New_York"
+    },
+    {
+      "icaoId": "KEWR",
+      "localDate": "2026-09-19",
+      "localHour": 18,
+      "reportTimeUTC": "2026-09-19T22:00:00.000Z",
+      "stationName": "Newark",
+      "status": "settled",
+      "tempC": 20,
+      "tempF": 68,
+      "timezone": "America/New_York"
+    },
+    {
+      "icaoId": "KGNV",
+      "localDate": "2026-09-19",
+      "localHour": 18,
+      "reportTimeUTC": "2026-09-19T22:00:00.000Z",
+      "stationName": "Gainesville",
+      "status": "settled",
+      "tempC": 26.7,
+      "tempF": 80.1,
+      "timezone": "America/New_York"
+    }
+  ],
+  "null_temp_count": 0,
+  "per_station_count_max": 139,
+  "per_station_count_min": 57,
+  "raw_bytes": 2174272,
+  "raw_file": "720aa620f533559312c6dbb920fbdf696d52b19599c2cdef3c302b32fb08c757.bin",
+  "station_count": 38,
+  "stations_with_non_settled": {
+    "KPVD": {
+      "pending": 1,
+      "settled": 136
+    },
+    "KSAN": {
+      "pending": 1,
+      "settled": 135
+    },
+    "KSDF": {
+      "pending": 1,
+      "settled": 138
+    },
+    "KSJC": {
+      "pending": 1,
+      "settled": 135
+    },
+    "KSPG": {
+      "pending": 1,
+      "settled": 138
+    },
+    "KTPA": {
+      "pending": 1,
+      "settled": 138
+    },
+    "KTTN": {
+      "pending": 1,
+      "settled": 138
+    }
+  },
+  "status_code_snippets": {
+    "final": [
+      {
+        "bundle": "0973c1d64c88adc8e3c950410cb58b288f72118d5965b78049438deb8f2f9683.bin",
+        "position": 103221,
+        "snippet": "ar n=J(e.resolve),a=[],u=0,s=1,c=!1;Ao(t,function(t){var l=u++,h=!1;s++,f(n,e,t).then(function(t){h||c||(c=!0,o(t))},function(t){h||c||(h=!0,a[l]=t,--s||i(new r(a,_m)))})}),--s||i(new r(a,_m))});return a.error&&i(a.value),n.promise}}),Ce({target:\"Promise\",stat:!0},{withResolvers:function(){var t=im.f(this);return{promise:t.promise,resolve:t.resolve,reject:t.reject}}});var Fm=Jy&&Jy.prototype,Bm=!!Jy&&a(function(){Fm.finally.call({then:function(){}},function(){})});if(Ce({target:\"Promise\",proto:!0,real:!0,forced:Bm},{finally:function(t){var e=Cc(this,L(\"Promise\")),r=T(t);return this.then(r?function(r){return Cm(e,t()).then(function(){return r})}:t,r?function(r){return Cm(e,t()).then(function(){throw r})}:t)}}),T(Jy)){var Dm=L(\"Promise\").prototype.finally;Fm.finally!==Dm&&ie(Fm,\"finally\",Dm,{unsafe:!0})}var zm=i.Promise,Wm=!1,qm=!zm||!zm.try||Xy(function(){zm.try(function(t){Wm=8===t},8)}).error||!Wm;Ce({target:\"Promise\",stat:!0,forced:qm},{try:function(t){var e=arguments.length>1?vo(arguments,1):[],r=im.f(this),n=Xy(function(){return Ra(J(t),void 0,e)});return(n.error?r.reject:r.resolve)(n.value),r.promise}}),Ze(\"Promise\",\""
+      },
+      {
+        "bundle": "0973c1d64c88adc8e3c950410cb58b288f72118d5965b78049438deb8f2f9683.bin",
+        "position": 103323,
+        "snippet": "||(c=!0,o(t))},function(t){h||c||(h=!0,a[l]=t,--s||i(new r(a,_m)))})}),--s||i(new r(a,_m))});return a.error&&i(a.value),n.promise}}),Ce({target:\"Promise\",stat:!0},{withResolvers:function(){var t=im.f(this);return{promise:t.promise,resolve:t.resolve,reject:t.reject}}});var Fm=Jy&&Jy.prototype,Bm=!!Jy&&a(function(){Fm.finally.call({then:function(){}},function(){})});if(Ce({target:\"Promise\",proto:!0,real:!0,forced:Bm},{finally:function(t){var e=Cc(this,L(\"Promise\")),r=T(t);return this.then(r?function(r){return Cm(e,t()).then(function(){return r})}:t,r?function(r){return Cm(e,t()).then(function(){throw r})}:t)}}),T(Jy)){var Dm=L(\"Promise\").prototype.finally;Fm.finally!==Dm&&ie(Fm,\"finally\",Dm,{unsafe:!0})}var zm=i.Promise,Wm=!1,qm=!zm||!zm.try||Xy(function(){zm.try(function(t){Wm=8===t},8)}).error||!Wm;Ce({target:\"Promise\",stat:!0,forced:qm},{try:function(t){var e=arguments.length>1?vo(arguments,1):[],r=im.f(this),n=Xy(function(){return Ra(J(t),void 0,e)});return(n.error?r.reject:r.resolve)(n.value),r.promise}}),Ze(\"Promise\",\"finally\");var Hm=\"URLSearchParams\"in self,$m=\"Symbol\"in self&&\"iterator\"in Symbol,Km=\"FileReader\"in se"
+      },
+      {
+        "bundle": "0973c1d64c88adc8e3c950410cb58b288f72118d5965b78049438deb8f2f9683.bin",
+        "position": 103557,
+        "snippet": "olve:t.resolve,reject:t.reject}}});var Fm=Jy&&Jy.prototype,Bm=!!Jy&&a(function(){Fm.finally.call({then:function(){}},function(){})});if(Ce({target:\"Promise\",proto:!0,real:!0,forced:Bm},{finally:function(t){var e=Cc(this,L(\"Promise\")),r=T(t);return this.then(r?function(r){return Cm(e,t()).then(function(){return r})}:t,r?function(r){return Cm(e,t()).then(function(){throw r})}:t)}}),T(Jy)){var Dm=L(\"Promise\").prototype.finally;Fm.finally!==Dm&&ie(Fm,\"finally\",Dm,{unsafe:!0})}var zm=i.Promise,Wm=!1,qm=!zm||!zm.try||Xy(function(){zm.try(function(t){Wm=8===t},8)}).error||!Wm;Ce({target:\"Promise\",stat:!0,forced:qm},{try:function(t){var e=arguments.length>1?vo(arguments,1):[],r=im.f(this),n=Xy(function(){return Ra(J(t),void 0,e)});return(n.error?r.reject:r.resolve)(n.value),r.promise}}),Ze(\"Promise\",\"finally\");var Hm=\"URLSearchParams\"in self,$m=\"Symbol\"in self&&\"iterator\"in Symbol,Km=\"FileReader\"in self&&\"Blob\"in self&&function(){try{return new Blob,!0}catch(t){return!1}}(),Gm=\"FormData\"in self,Vm=\"ArrayBuffer\"in self;if(Vm)var Ym=[\"[object Int8Array]\",\"[object Uint8Array]\",\"[object Uint8ClampedArray]\",\"[object Int16Array]\",\"[obje"
+      },
+      {
+        "bundle": "0973c1d64c88adc8e3c950410cb58b288f72118d5965b78049438deb8f2f9683.bin",
+        "position": 103568,
+        "snippet": "lve,reject:t.reject}}});var Fm=Jy&&Jy.prototype,Bm=!!Jy&&a(function(){Fm.finally.call({then:function(){}},function(){})});if(Ce({target:\"Promise\",proto:!0,real:!0,forced:Bm},{finally:function(t){var e=Cc(this,L(\"Promise\")),r=T(t);return this.then(r?function(r){return Cm(e,t()).then(function(){return r})}:t,r?function(r){return Cm(e,t()).then(function(){throw r})}:t)}}),T(Jy)){var Dm=L(\"Promise\").prototype.finally;Fm.finally!==Dm&&ie(Fm,\"finally\",Dm,{unsafe:!0})}var zm=i.Promise,Wm=!1,qm=!zm||!zm.try||Xy(function(){zm.try(function(t){Wm=8===t},8)}).error||!Wm;Ce({target:\"Promise\",stat:!0,forced:qm},{try:function(t){var e=arguments.length>1?vo(arguments,1):[],r=im.f(this),n=Xy(function(){return Ra(J(t),void 0,e)});return(n.error?r.reject:r.resolve)(n.value),r.promise}}),Ze(\"Promise\",\"finally\");var Hm=\"URLSearchParams\"in self,$m=\"Symbol\"in self&&\"iterator\"in Symbol,Km=\"FileReader\"in self&&\"Blob\"in self&&function(){try{return new Blob,!0}catch(t){return!1}}(),Gm=\"FormData\"in self,Vm=\"ArrayBuffer\"in self;if(Vm)var Ym=[\"[object Int8Array]\",\"[object Uint8Array]\",\"[object Uint8ClampedArray]\",\"[object Int16Array]\",\"[object Uint16Ar"
+      },
+      {
+        "bundle": "0973c1d64c88adc8e3c950410cb58b288f72118d5965b78049438deb8f2f9683.bin",
+        "position": 103589,
+        "snippet": "});var Fm=Jy&&Jy.prototype,Bm=!!Jy&&a(function(){Fm.finally.call({then:function(){}},function(){})});if(Ce({target:\"Promise\",proto:!0,real:!0,forced:Bm},{finally:function(t){var e=Cc(this,L(\"Promise\")),r=T(t);return this.then(r?function(r){return Cm(e,t()).then(function(){return r})}:t,r?function(r){return Cm(e,t()).then(function(){throw r})}:t)}}),T(Jy)){var Dm=L(\"Promise\").prototype.finally;Fm.finally!==Dm&&ie(Fm,\"finally\",Dm,{unsafe:!0})}var zm=i.Promise,Wm=!1,qm=!zm||!zm.try||Xy(function(){zm.try(function(t){Wm=8===t},8)}).error||!Wm;Ce({target:\"Promise\",stat:!0,forced:qm},{try:function(t){var e=arguments.length>1?vo(arguments,1):[],r=im.f(this),n=Xy(function(){return Ra(J(t),void 0,e)});return(n.error?r.reject:r.resolve)(n.value),r.promise}}),Ze(\"Promise\",\"finally\");var Hm=\"URLSearchParams\"in self,$m=\"Symbol\"in self&&\"iterator\"in Symbol,Km=\"FileReader\"in self&&\"Blob\"in self&&function(){try{return new Blob,!0}catch(t){return!1}}(),Gm=\"FormData\"in self,Vm=\"ArrayBuffer\"in self;if(Vm)var Ym=[\"[object Int8Array]\",\"[object Uint8Array]\",\"[object Uint8ClampedArray]\",\"[object Int16Array]\",\"[object Uint16Array]\",\"[object Int32A"
+      }
+    ],
+    "pending": [
+      {
+        "bundle": "1b8f633c09d3e3cff75fefc80a04a7cfafb5756ec6138ad0e6fd2f99d4bba756.bin",
+        "position": 8043,
+        "snippet": "\"<typeof window,a=o?()=>{}:n.useLayoutEffect,i=o?()=>{}:n.useEffect;function l(e){let{headManager:t,reduceComponentsToState:r}=e;function l(){if(t&&t.mountedInstances){let e=n.Children.toArray(Array.from(t.mountedInstances).filter(Boolean));t.updateHead(r(e))}}return o&&(t?.mountedInstances?.add(e.children),l()),a(()=>(t?.mountedInstances?.add(e.children),()=>{t?.mountedInstances?.delete(e.children)})),a(()=>(t&&(t._pendingUpdate=l),()=>{t&&(t._pendingUpdate=l)})),i(()=>(t&&t._pendingUpdate&&(t._pendingUpdate(),t._pendingUpdate=null),()=>{t&&t._pendingUpdate&&(t._pendingUpdate(),t._pendingUpdate=null)})),null}},14603,(e,t,r)=>{\"use strict\";Object.defineProperty(r,\"__esModule\",{value:!0});var n={default:function(){return m},defaultHead:function(){return d}};for(var o in n)Object.defineProperty(r,o,{enumerable:!0,get:n[o]});let a=e.r(81258),i=e.r(44066),l=e.r(72673),s=i._(e.r(73447)),u=a._(e.r(14909)),c=e.r(15066);function d(){return[(0,l.jsx)(\"meta\",{charSet:\"utf-8\"},\"charset\"),(0,l.jsx)(\"meta\",{name:\"viewport\",content:\"width=device-width\"},\"viewport\")]}function f(e,t){return\"string\"==typeof t||\"number\"==typeof t?e:t.type=="
+      },
+      {
+        "bundle": "1b8f633c09d3e3cff75fefc80a04a7cfafb5756ec6138ad0e6fd2f99d4bba756.bin",
+        "position": 8072,
+        "snippet": "useLayoutEffect,i=o?()=>{}:n.useEffect;function l(e){let{headManager:t,reduceComponentsToState:r}=e;function l(){if(t&&t.mountedInstances){let e=n.Children.toArray(Array.from(t.mountedInstances).filter(Boolean));t.updateHead(r(e))}}return o&&(t?.mountedInstances?.add(e.children),l()),a(()=>(t?.mountedInstances?.add(e.children),()=>{t?.mountedInstances?.delete(e.children)})),a(()=>(t&&(t._pendingUpdate=l),()=>{t&&(t._pendingUpdate=l)})),i(()=>(t&&t._pendingUpdate&&(t._pendingUpdate(),t._pendingUpdate=null),()=>{t&&t._pendingUpdate&&(t._pendingUpdate(),t._pendingUpdate=null)})),null}},14603,(e,t,r)=>{\"use strict\";Object.defineProperty(r,\"__esModule\",{value:!0});var n={default:function(){return m},defaultHead:function(){return d}};for(var o in n)Object.defineProperty(r,o,{enumerable:!0,get:n[o]});let a=e.r(81258),i=e.r(44066),l=e.r(72673),s=i._(e.r(73447)),u=a._(e.r(14909)),c=e.r(15066);function d(){return[(0,l.jsx)(\"meta\",{charSet:\"utf-8\"},\"charset\"),(0,l.jsx)(\"meta\",{name:\"viewport\",content:\"width=device-width\"},\"viewport\")]}function f(e,t){return\"string\"==typeof t||\"number\"==typeof t?e:t.type===s.default.Fragment?e.concat("
+      },
+      {
+        "bundle": "1b8f633c09d3e3cff75fefc80a04a7cfafb5756ec6138ad0e6fd2f99d4bba756.bin",
+        "position": 8105,
+        "snippet": "ffect;function l(e){let{headManager:t,reduceComponentsToState:r}=e;function l(){if(t&&t.mountedInstances){let e=n.Children.toArray(Array.from(t.mountedInstances).filter(Boolean));t.updateHead(r(e))}}return o&&(t?.mountedInstances?.add(e.children),l()),a(()=>(t?.mountedInstances?.add(e.children),()=>{t?.mountedInstances?.delete(e.children)})),a(()=>(t&&(t._pendingUpdate=l),()=>{t&&(t._pendingUpdate=l)})),i(()=>(t&&t._pendingUpdate&&(t._pendingUpdate(),t._pendingUpdate=null),()=>{t&&t._pendingUpdate&&(t._pendingUpdate(),t._pendingUpdate=null)})),null}},14603,(e,t,r)=>{\"use strict\";Object.defineProperty(r,\"__esModule\",{value:!0});var n={default:function(){return m},defaultHead:function(){return d}};for(var o in n)Object.defineProperty(r,o,{enumerable:!0,get:n[o]});let a=e.r(81258),i=e.r(44066),l=e.r(72673),s=i._(e.r(73447)),u=a._(e.r(14909)),c=e.r(15066);function d(){return[(0,l.jsx)(\"meta\",{charSet:\"utf-8\"},\"charset\"),(0,l.jsx)(\"meta\",{name:\"viewport\",content:\"width=device-width\"},\"viewport\")]}function f(e,t){return\"string\"==typeof t||\"number\"==typeof t?e:t.type===s.default.Fragment?e.concat(s.default.Children.toArray(t.prop"
+      },
+      {
+        "bundle": "1b8f633c09d3e3cff75fefc80a04a7cfafb5756ec6138ad0e6fd2f99d4bba756.bin",
+        "position": 8124,
+        "snippet": "{let{headManager:t,reduceComponentsToState:r}=e;function l(){if(t&&t.mountedInstances){let e=n.Children.toArray(Array.from(t.mountedInstances).filter(Boolean));t.updateHead(r(e))}}return o&&(t?.mountedInstances?.add(e.children),l()),a(()=>(t?.mountedInstances?.add(e.children),()=>{t?.mountedInstances?.delete(e.children)})),a(()=>(t&&(t._pendingUpdate=l),()=>{t&&(t._pendingUpdate=l)})),i(()=>(t&&t._pendingUpdate&&(t._pendingUpdate(),t._pendingUpdate=null),()=>{t&&t._pendingUpdate&&(t._pendingUpdate(),t._pendingUpdate=null)})),null}},14603,(e,t,r)=>{\"use strict\";Object.defineProperty(r,\"__esModule\",{value:!0});var n={default:function(){return m},defaultHead:function(){return d}};for(var o in n)Object.defineProperty(r,o,{enumerable:!0,get:n[o]});let a=e.r(81258),i=e.r(44066),l=e.r(72673),s=i._(e.r(73447)),u=a._(e.r(14909)),c=e.r(15066);function d(){return[(0,l.jsx)(\"meta\",{charSet:\"utf-8\"},\"charset\"),(0,l.jsx)(\"meta\",{name:\"viewport\",content:\"width=device-width\"},\"viewport\")]}function f(e,t){return\"string\"==typeof t||\"number\"==typeof t?e:t.type===s.default.Fragment?e.concat(s.default.Children.toArray(t.props.children).reduce("
+      },
+      {
+        "bundle": "1b8f633c09d3e3cff75fefc80a04a7cfafb5756ec6138ad0e6fd2f99d4bba756.bin",
+        "position": 8143,
+        "snippet": "reduceComponentsToState:r}=e;function l(){if(t&&t.mountedInstances){let e=n.Children.toArray(Array.from(t.mountedInstances).filter(Boolean));t.updateHead(r(e))}}return o&&(t?.mountedInstances?.add(e.children),l()),a(()=>(t?.mountedInstances?.add(e.children),()=>{t?.mountedInstances?.delete(e.children)})),a(()=>(t&&(t._pendingUpdate=l),()=>{t&&(t._pendingUpdate=l)})),i(()=>(t&&t._pendingUpdate&&(t._pendingUpdate(),t._pendingUpdate=null),()=>{t&&t._pendingUpdate&&(t._pendingUpdate(),t._pendingUpdate=null)})),null}},14603,(e,t,r)=>{\"use strict\";Object.defineProperty(r,\"__esModule\",{value:!0});var n={default:function(){return m},defaultHead:function(){return d}};for(var o in n)Object.defineProperty(r,o,{enumerable:!0,get:n[o]});let a=e.r(81258),i=e.r(44066),l=e.r(72673),s=i._(e.r(73447)),u=a._(e.r(14909)),c=e.r(15066);function d(){return[(0,l.jsx)(\"meta\",{charSet:\"utf-8\"},\"charset\"),(0,l.jsx)(\"meta\",{name:\"viewport\",content:\"width=device-width\"},\"viewport\")]}function f(e,t){return\"string\"==typeof t||\"number\"==typeof t?e:t.type===s.default.Fragment?e.concat(s.default.Children.toArray(t.props.children).reduce((e,t)=>\"string\"==ty"
+      }
+    ],
+    "preliminary": [
+      {
+        "bundle": "1b8f633c09d3e3cff75fefc80a04a7cfafb5756ec6138ad0e6fd2f99d4bba756.bin",
+        "position": 208861,
+        "snippet": "oreground text-center\",children:\"Official climate data typically arrives between midnight and 4 AM local time, valid for the previous day.\"})]}):e&&0!==e.length?(0,J.jsxs)(\"div\",{className:\"space-y-4\",children:[(0,J.jsx)(\"div\",{className:\"rounded-md border overflow-x-auto\",children:(0,J.jsxs)(a1,{children:[(0,J.jsx)(i7,{}),(0,J.jsx)(a5,{children:e.map((e,t)=>{var r;let n=\"official\"===e.status||\"revised\"===e.status||\"preliminary\"===e.status,o=\"preliminary\"===e.status,a=`text-right tabular-nums ${o?\"text-muted-foreground\":\"font-medium\"}`,i=`text-right tabular-nums ${o?\"text-muted-foreground\":\"\"}`,l=e=>o&&\"-\"!==e?`${e}*`:e;return(0,J.jsxs)(a3,{children:[(0,J.jsx)(a6,{className:\"font-medium whitespace-nowrap\",children:e.station.city}),(0,J.jsx)(a6,{className:\"font-mono text-xs text-muted-foreground\",children:e.station.cliId}),n&&e.data?(0,J.jsxs)(J.Fragment,{children:[(0,J.jsx)(a6,{className:a,children:l(null!==e.data.maxTemp?String(e.data.maxTemp):\"-\")}),(0,J.jsx)(a6,{className:a,children:l(null!==e.data.minTemp?String(e.data.minTemp):\"-\")}),(0,J.jsx)(a6,{className:i,children:l(null!==e.dailyMean?String(e.dailyMean):\"-\")}),(0"
+      },
+      {
+        "bundle": "1b8f633c09d3e3cff75fefc80a04a7cfafb5756ec6138ad0e6fd2f99d4bba756.bin",
+        "position": 208888,
+        "snippet": "dren:\"Official climate data typically arrives between midnight and 4 AM local time, valid for the previous day.\"})]}):e&&0!==e.length?(0,J.jsxs)(\"div\",{className:\"space-y-4\",children:[(0,J.jsx)(\"div\",{className:\"rounded-md border overflow-x-auto\",children:(0,J.jsxs)(a1,{children:[(0,J.jsx)(i7,{}),(0,J.jsx)(a5,{children:e.map((e,t)=>{var r;let n=\"official\"===e.status||\"revised\"===e.status||\"preliminary\"===e.status,o=\"preliminary\"===e.status,a=`text-right tabular-nums ${o?\"text-muted-foreground\":\"font-medium\"}`,i=`text-right tabular-nums ${o?\"text-muted-foreground\":\"\"}`,l=e=>o&&\"-\"!==e?`${e}*`:e;return(0,J.jsxs)(a3,{children:[(0,J.jsx)(a6,{className:\"font-medium whitespace-nowrap\",children:e.station.city}),(0,J.jsx)(a6,{className:\"font-mono text-xs text-muted-foreground\",children:e.station.cliId}),n&&e.data?(0,J.jsxs)(J.Fragment,{children:[(0,J.jsx)(a6,{className:a,children:l(null!==e.data.maxTemp?String(e.data.maxTemp):\"-\")}),(0,J.jsx)(a6,{className:a,children:l(null!==e.data.minTemp?String(e.data.minTemp):\"-\")}),(0,J.jsx)(a6,{className:i,children:l(null!==e.dailyMean?String(e.dailyMean):\"-\")}),(0,J.jsx)(a6,{className:a,chi"
+      },
+      {
+        "bundle": "1b8f633c09d3e3cff75fefc80a04a7cfafb5756ec6138ad0e6fd2f99d4bba756.bin",
+        "position": 210362,
+        "snippet": "efault\",className:\"bg-emerald-600 hover:bg-emerald-700 text-xs\",children:\"Final\"}):\"revised\"===e.status?(0,J.jsx)(il,{variant:\"default\",className:\"bg-emerald-600 hover:bg-emerald-700 text-xs\",title:\"Revised \u2014 a later METAR or official climate report arrived after this day was finalized, and the value was recalculated from it.\",children:\"Revised\"}):(0,J.jsx)(\"span\",{className:\"text-xs text-muted-foreground\",children:\"Preliminary\"})})]}):(0,J.jsxs)(J.Fragment,{children:[(0,J.jsx)(a6,{className:\"text-right text-muted-foreground\",children:\"-\"}),(0,J.jsx)(a6,{className:\"text-right text-muted-foreground\",children:\"-\"}),(0,J.jsx)(a6,{className:\"text-right text-muted-foreground\",children:\"-\"}),(0,J.jsx)(a6,{className:\"text-right text-muted-foreground\",children:\"-\"}),(0,J.jsx)(a6,{className:\"text-right text-muted-foreground\",children:\"-\"}),(0,J.jsx)(a6,{className:\"text-right text-muted-foreground\",children:\"-\"}),(0,J.jsx)(a6,{className:\"text-right text-muted-foreground\",children:\"-\"}),(0,J.jsx)(a6,{className:\"text-center\",children:(0,J.jsx)(il,{variant:\"outline\",className:\"text-xs text-amber-600 border-amber-300\",children:\"No New R"
+      },
+      {
+        "bundle": "1b8f633c09d3e3cff75fefc80a04a7cfafb5756ec6138ad0e6fd2f99d4bba756.bin",
+        "position": 211142,
+        "snippet": "6,{className:\"text-right text-muted-foreground\",children:\"-\"}),(0,J.jsx)(a6,{className:\"text-right text-muted-foreground\",children:\"-\"}),(0,J.jsx)(a6,{className:\"text-right text-muted-foreground\",children:\"-\"}),(0,J.jsx)(a6,{className:\"text-center\",children:(0,J.jsx)(il,{variant:\"outline\",className:\"text-xs text-amber-600 border-amber-300\",children:\"No New Report\"})})]})]},`${e.station.id}-${t}`)})})]})}),e.some(e=>\"preliminary\"===e.status)&&(0,J.jsxs)(\"p\",{className:\"text-xs text-muted-foreground text-center\",children:[(0,J.jsx)(\"span\",{className:\"font-mono\",children:\"*\"}),\" Preliminary \u2014 provisional figures that may still change.\"]}),(0,J.jsx)(\"p\",{className:\"text-xs text-muted-foreground text-center\",children:\"Official climate data typically arrives between midnight and 4 AM local time, valid for the previous day.\"})]}):(0,J.jsxs)(\"div\",{className:\"space-y-4\",children:[(0,J.jsx)(\"div\",{className:\"rounded-md border p-8 text-center text-muted-foreground\",children:\"No data available. Please select a date.\"}),(0,J.jsx)(\"p\",{className:\"text-xs text-muted-foreground text-center\",children:\"Official climate data typically arriv"
+      },
+      {
+        "bundle": "1b8f633c09d3e3cff75fefc80a04a7cfafb5756ec6138ad0e6fd2f99d4bba756.bin",
+        "position": 211305,
+        "snippet": "ext-right text-muted-foreground\",children:\"-\"}),(0,J.jsx)(a6,{className:\"text-center\",children:(0,J.jsx)(il,{variant:\"outline\",className:\"text-xs text-amber-600 border-amber-300\",children:\"No New Report\"})})]})]},`${e.station.id}-${t}`)})})]})}),e.some(e=>\"preliminary\"===e.status)&&(0,J.jsxs)(\"p\",{className:\"text-xs text-muted-foreground text-center\",children:[(0,J.jsx)(\"span\",{className:\"font-mono\",children:\"*\"}),\" Preliminary \u2014 provisional figures that may still change.\"]}),(0,J.jsx)(\"p\",{className:\"text-xs text-muted-foreground text-center\",children:\"Official climate data typically arrives between midnight and 4 AM local time, valid for the previous day.\"})]}):(0,J.jsxs)(\"div\",{className:\"space-y-4\",children:[(0,J.jsx)(\"div\",{className:\"rounded-md border p-8 text-center text-muted-foreground\",children:\"No data available. Please select a date.\"}),(0,J.jsx)(\"p\",{className:\"text-xs text-muted-foreground text-center\",children:\"Official climate data typically arrives between midnight and 4 AM local time, valid for the previous day.\"})]})}function le(e){return new Date(e+\"T12:00:00Z\").toLocaleDateString(\"en-US\",{month:\"short\""
+      }
+    ],
+    "settled": [
+      {
+        "bundle": "0973c1d64c88adc8e3c950410cb58b288f72118d5965b78049438deb8f2f9683.bin",
+        "position": 102277,
+        "snippet": "n)})});return o.error&&n(o.value),r.promise}}),Ce({target:\"Promise\",stat:!0,forced:rm.CONSTRUCTOR},{reject:function(t){var e=im.f(this);return(0,e.reject)(t),e.promise}});var Cm=function(t,e){if(kt(t),M(e)&&e.constructor===t)return e;var r=im.f(t);return(0,r.resolve)(e),r.promise};Ce({target:\"Promise\",stat:!0,forced:rm.CONSTRUCTOR},{resolve:function(t){return Cm(this,t)}}),Ce({target:\"Promise\",stat:!0,forced:Lm},{allSettled:function(t){var e=this,r=im.f(e),n=r.resolve,o=r.reject,i=Xy(function(){var r=J(e.resolve),o=[],i=0,a=1;Ao(t,function(t){var u=i++,s=!1;a++,f(r,e,t).then(function(t){s||(s=!0,o[u]={status:\"fulfilled\",value:t},--a||n(o))},function(t){s||(s=!0,o[u]={status:\"rejected\",reason:t},--a||n(o))})}),--a||n(o)});return i.error&&o(i.value),r.promise}});var _m=\"No one promise resolved\";Ce({target:\"Promise\",stat:!0,forced:Lm},{any:function(t){var e=this,r=L(\"AggregateError\"),n=im.f(e),o=n.resolve,i=n.reject,a=Xy(function(){var n=J(e.resolve),a=[],u=0,s=1,c=!1;Ao(t,function(t){var l=u++,h=!1;s++,f(n,e,t).then(function(t){h||c||(c=!0,o(t))},function(t){h||c||(h=!0,a[l]=t,--s||i(new r(a,_m)))})}),--s||i(new r(a,_m))});r"
+      },
+      {
+        "bundle": "1b8f633c09d3e3cff75fefc80a04a7cfafb5756ec6138ad0e6fd2f99d4bba756.bin",
+        "position": 694577,
+        "snippet": "`font-mono text-2xl font-bold leading-tight ${null==t?\"text-muted-foreground\":\"text-[#2CD5A0]\"}`,children:t?.toFixed(1)??\"\u2014\"})}),(0,J.jsx)(\"div\",{className:\"mt-0.5 text-[10px] text-muted-foreground\",children:0===e.daysWithData?\"no days reported\":`over ${e.daysWithData} reported day${1===e.daysWithData?\"\":\"s\"}`})]})}function EG({total:e,range:t,historyStartsAt:r}){let n=t.to<r?\"pre_history\":0===e.daysElapsed?\"not_yet_settled\":\"all_missing\";return(0,J.jsx)(\"div\",{className:\"rounded-lg border border-border/30 bg-secondary/20 px-4 py-10 text-center\",children:\"pre_history\"===n?(0,J.jsxs)(J.Fragment,{children:[(0,J.jsxs)(\"p\",{className:\"text-sm text-muted-foreground\",children:[\"No settled climate data for \",ER(t),\".\"]}),(0,J.jsxs)(\"p\",{className:\"mt-1 text-xs text-muted-foreground\",children:[\"Upstream history begins \",lr(r),\".\"]})]}):\"not_yet_settled\"===n?(0,J.jsxs)(J.Fragment,{children:[(0,J.jsxs)(\"p\",{className:\"text-sm text-muted-foreground\",children:[ER(t),\"hasn't settled yet.\"]}),(0,J.jsx)(\"p\",{className:\"mt-1 text-xs text-muted-foreground\",children:\"HDD needs the day's official Max and Min, which arrive only once the day f"
+      },
+      {
+        "bundle": "1b8f633c09d3e3cff75fefc80a04a7cfafb5756ec6138ad0e6fd2f99d4bba756.bin",
+        "position": 694841,
+        "snippet": "Data} reported day${1===e.daysWithData?\"\":\"s\"}`})]})}function EG({total:e,range:t,historyStartsAt:r}){let n=t.to<r?\"pre_history\":0===e.daysElapsed?\"not_yet_settled\":\"all_missing\";return(0,J.jsx)(\"div\",{className:\"rounded-lg border border-border/30 bg-secondary/20 px-4 py-10 text-center\",children:\"pre_history\"===n?(0,J.jsxs)(J.Fragment,{children:[(0,J.jsxs)(\"p\",{className:\"text-sm text-muted-foreground\",children:[\"No settled climate data for \",ER(t),\".\"]}),(0,J.jsxs)(\"p\",{className:\"mt-1 text-xs text-muted-foreground\",children:[\"Upstream history begins \",lr(r),\".\"]})]}):\"not_yet_settled\"===n?(0,J.jsxs)(J.Fragment,{children:[(0,J.jsxs)(\"p\",{className:\"text-sm text-muted-foreground\",children:[ER(t),\"hasn't settled yet.\"]}),(0,J.jsx)(\"p\",{className:\"mt-1 text-xs text-muted-foreground\",children:\"HDD needs the day's official Max and Min, which arrive only once the day finalizes. Choose a period that includes a day that has ended.\"})]}):(0,J.jsxs)(J.Fragment,{children:[(0,J.jsxs)(\"p\",{className:\"text-sm text-amber-500\",children:[\"No reports arrived for \",ER(t),\".\"]}),t.from<r&&t.to>=r?(0,J.jsxs)(\"p\",{className:\"mt-1 text-xs text-"
+      },
+      {
+        "bundle": "1b8f633c09d3e3cff75fefc80a04a7cfafb5756ec6138ad0e6fd2f99d4bba756.bin",
+        "position": 695006,
+        "snippet": "\"all_missing\";return(0,J.jsx)(\"div\",{className:\"rounded-lg border border-border/30 bg-secondary/20 px-4 py-10 text-center\",children:\"pre_history\"===n?(0,J.jsxs)(J.Fragment,{children:[(0,J.jsxs)(\"p\",{className:\"text-sm text-muted-foreground\",children:[\"No settled climate data for \",ER(t),\".\"]}),(0,J.jsxs)(\"p\",{className:\"mt-1 text-xs text-muted-foreground\",children:[\"Upstream history begins \",lr(r),\".\"]})]}):\"not_yet_settled\"===n?(0,J.jsxs)(J.Fragment,{children:[(0,J.jsxs)(\"p\",{className:\"text-sm text-muted-foreground\",children:[ER(t),\"hasn't settled yet.\"]}),(0,J.jsx)(\"p\",{className:\"mt-1 text-xs text-muted-foreground\",children:\"HDD needs the day's official Max and Min, which arrive only once the day finalizes. Choose a period that includes a day that has ended.\"})]}):(0,J.jsxs)(J.Fragment,{children:[(0,J.jsxs)(\"p\",{className:\"text-sm text-amber-500\",children:[\"No reports arrived for \",ER(t),\".\"]}),t.from<r&&t.to>=r?(0,J.jsxs)(\"p\",{className:\"mt-1 text-xs text-muted-foreground\",children:[\"Coverage begins \",lr(r),\", so the earlier days were never published. The days from then on have ended and still reported nothing \u2014 an up"
+      },
+      {
+        "bundle": "1b8f633c09d3e3cff75fefc80a04a7cfafb5756ec6138ad0e6fd2f99d4bba756.bin",
+        "position": 695134,
+        "snippet": "ren:\"pre_history\"===n?(0,J.jsxs)(J.Fragment,{children:[(0,J.jsxs)(\"p\",{className:\"text-sm text-muted-foreground\",children:[\"No settled climate data for \",ER(t),\".\"]}),(0,J.jsxs)(\"p\",{className:\"mt-1 text-xs text-muted-foreground\",children:[\"Upstream history begins \",lr(r),\".\"]})]}):\"not_yet_settled\"===n?(0,J.jsxs)(J.Fragment,{children:[(0,J.jsxs)(\"p\",{className:\"text-sm text-muted-foreground\",children:[ER(t),\"hasn't settled yet.\"]}),(0,J.jsx)(\"p\",{className:\"mt-1 text-xs text-muted-foreground\",children:\"HDD needs the day's official Max and Min, which arrive only once the day finalizes. Choose a period that includes a day that has ended.\"})]}):(0,J.jsxs)(J.Fragment,{children:[(0,J.jsxs)(\"p\",{className:\"text-sm text-amber-500\",children:[\"No reports arrived for \",ER(t),\".\"]}),t.from<r&&t.to>=r?(0,J.jsxs)(\"p\",{className:\"mt-1 text-xs text-muted-foreground\",children:[\"Coverage begins \",lr(r),\", so the earlier days were never published. The days from then on have ended and still reported nothing \u2014 an upstream outage rather than a gap in the record.\"]}):(0,J.jsx)(\"p\",{className:\"mt-1 text-xs text-muted-foreground\",children:\"Every"
+      }
+    ]
+  },
+  "tempF_fraction_histogram": {
+    "0.0": 2883,
+    "0.1": 2270,
+    "0.2": 2,
+    "0.3": 1
+  },
+  "top_source": "live",
+  "unique_statuses": {
+    "pending": 7,
+    "settled": 5149
+  },
+  "weekEnd": "2026-09-20",
+  "weekStart": "2026-09-14"
+}
