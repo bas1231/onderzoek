@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "experiments/bridge/e103.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-19T20:57:13.609217+00:00",
+  "hypothesis_id": "CONTROL-AUTONOMOUS-RESEARCH",
+  "source_commit": "96d283ce8780b374ed48df7b79cbbce2da55cb5a",
+  "started_at": "2026-09-19T20:57:10.787326+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "72620060f3b9c9ece91b0128367edd0a722390263e2d5c13f921f9261115847e",
+  "task_class": "infrastructure",
+  "task_id": "PRIMARY-FETCH-E103"
+}
