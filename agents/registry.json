@@ -1,0 +1,65 @@
+{
+  "default_status": "UNPROVEN",
+  "live_trading": false,
+  "paid_actions": false,
+  "roles": [
+    {
+      "authority": "DISCOVERY_ONLY",
+      "id": "scout",
+      "purpose": "Broad discovery of new public evidence, venues, papers, code and anomalies"
+    },
+    {
+      "authority": "RESEARCH_ONLY",
+      "id": "weather_twc",
+      "purpose": "Hourly weather, TWC settlement and nowcasting research"
+    },
+    {
+      "authority": "RESEARCH_ONLY",
+      "id": "microstructure",
+      "purpose": "Orderbook, maker-taker, spread, depth and execution research"
+    },
+    {
+      "authority": "RESEARCH_ONLY",
+      "id": "behavioral",
+      "purpose": "Human bias, crowd behaviour and favorite-longshot research"
+    },
+    {
+      "authority": "RESEARCH_ONLY",
+      "id": "informed_flow",
+      "purpose": "Research informed trading and information-flow signatures"
+    },
+    {
+      "authority": "RESEARCH_ONLY",
+      "id": "algebra",
+      "purpose": "Payout identities, portfolio equivalence and formal market algebra"
+    },
+    {
+      "authority": "RESEARCH_ONLY",
+      "id": "settlement",
+      "purpose": "Rules, finality, oracle, settlement and revision research"
+    },
+    {
+      "authority": "VETO_RECOMMENDATION",
+      "id": "prebuild_killer",
+      "purpose": "Attempt to kill ideas before implementation"
+    },
+    {
+      "authority": "VETO_RECOMMENDATION",
+      "id": "chief_falsifier",
+      "purpose": "Adversarially falsify hypotheses and detect leakage"
+    },
+    {
+      "authority": "VALIDATION_ONLY",
+      "id": "independent_reproducer",
+      "purpose": "Reproduce evidence independently before promotion"
+    },
+    {
+      "authority": "RESEARCH_COORDINATION",
+      "id": "research_director",
+      "purpose": "Route evidence, enforce gates and publish hourly status"
+    }
+  ],
+  "valid_null_result": "NO_PROVEN_EDGE",
+  "version": 1,
+  "wallet_actions": false
+}
