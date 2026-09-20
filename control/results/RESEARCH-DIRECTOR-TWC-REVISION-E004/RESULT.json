@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/twc_revision_summary.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-20T20:14:40.557968+00:00",
+  "hypothesis_id": "H4-TWC-FORECAST-REVISIONS",
+  "source_commit": "d4ad8f4c5196c5933a6246a76011857c49be78e3",
+  "started_at": "2026-09-20T20:14:40.527504+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "24de45dde67dd7164da817ac1d1791d14e7474124d01baefabb35631b3646da3",
+  "task_class": "research",
+  "task_id": "RESEARCH-DIRECTOR-TWC-REVISION-E004"
+}
