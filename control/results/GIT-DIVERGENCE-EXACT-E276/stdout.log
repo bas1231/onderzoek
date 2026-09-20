@@ -1,0 +1,23 @@
+CMD git fetch origin
+
+CMD git rev-list --left-right --count HEAD...origin/main
+14	1
+CMD git merge-base HEAD origin/main
+375073c2ccd30ec8ddd5705afe62656db08844d2
+CMD git log --oneline -n 15 origin/main..HEAD
+394c1bb audit exact git divergence E276
+e99f8e6 result(GIT-DIVERGENCE-AUDIT-E275): completed
+ea88e8f inspect git divergence after E274
+d20c9c2 result(HOURLY-EDGE-HUNTER-CLOSE-20260920T0300-E274): failed
+87ce8c0 close 0300 edge hunter semantic review
+01de40a close 0300 edge hunter review E274
+d930e52 result(HOURLY-EDGE-HUNTER-EVIDENCE-20260920T0300-E273): completed
+fa2302b inspect 0300 routed evidence E273
+4e61f9d result(HOURLY-EDGE-HUNTER-INSPECT-20260920T0300-E272): completed
+a689972 inspect 0300 edge hunter packet E272
+022d045 result(HOURLY-EDGE-HUNTER-20260920T0300-E271): completed
+8021ff1 run 0300 edge hunter cycle E271
+9e06548 result(EDGE-HUNTER-PACKET-SMOKE-E270): completed
+8318d8d smoke test candidate edge packet E270
+CMD git log --oneline -n 15 HEAD..origin/main
+590ea55 fix(control): add one-command browser bridge repair

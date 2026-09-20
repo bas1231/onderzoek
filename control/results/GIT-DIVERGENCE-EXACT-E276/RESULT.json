@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/git_divergence_e276.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-20T01:03:36.060749+00:00",
+  "hypothesis_id": "GENERAL-PREDICTION-MARKET-EDGE-HUNTER",
+  "source_commit": "394c1bbb987bf2ca046ebbf6cbf863e1207d8ca4",
+  "started_at": "2026-09-20T01:03:34.408163+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "2e264949347e8de91cd8e598826a72759b82e0840403ab1a56f91261848ba696",
+  "task_class": "infrastructure",
+  "task_id": "GIT-DIVERGENCE-EXACT-E276"
+}
