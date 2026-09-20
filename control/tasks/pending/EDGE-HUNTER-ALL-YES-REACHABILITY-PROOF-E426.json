@@ -1,0 +1,13 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/prove_all_yes_reachability_e426.py"
+  ],
+  "hypothesis_id": "PAYOFF-IDENTITY-MINING-V1",
+  "live_trading": false,
+  "operation": "python",
+  "task_class": "research",
+  "task_id": "EDGE-HUNTER-ALL-YES-REACHABILITY-PROOF-E426",
+  "timeout_seconds": 120,
+  "working_directory": "."
+}
