@@ -1,0 +1,20 @@
+SHOW_RC 0
+Unit=prediction-research-hourly-director.service
+NextElapseUSecRealtime=Sun 2026-09-20 05:00:00 CEST
+NextElapseUSecMonotonic=0
+LastTriggerUSec=Sun 2026-09-20 04:00:19 CEST
+Persistent=yes
+Triggers=prediction-research-hourly-director.service
+LoadState=loaded
+ActiveState=active
+SubState=waiting
+CAT_RC 0
+UNIT_LINE OnCalendar=*-*-* *:00:00
+UNIT_LINE Persistent=true
+UNIT_LINE RandomizedDelaySec=0
+UNIT_LINE Unit=prediction-research-hourly-director.service
+STATUS_RC 0
+STATUS_LINE Loaded: loaded (/home/leonh/.config/systemd/user/prediction-research-hourly-director.timer; enabled; preset: enabled)
+STATUS_LINE Active: active (waiting) since Sun 2026-09-20 02:43:23 CEST; 1h 47min ago
+STATUS_LINE Trigger: Sun 2026-09-20 05:00:00 CEST; 28min left
+HOURLY_TIMER_CADENCE_VERIFY_PASS

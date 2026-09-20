@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/verify_hourly_timer_cadence_e356.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-20T02:31:20.364454+00:00",
+  "hypothesis_id": "ASSET-RANK-MAKER-HEDGE-V1",
+  "source_commit": "5723e5def5e4b6fcf5f1f8786405e0b64ece4293",
+  "started_at": "2026-09-20T02:31:20.321176+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "01ec296042a8c8cc38c6092dc1289db7d576dd7b3a462f6ffd16282daa8595d0",
+  "task_class": "infrastructure",
+  "task_id": "EDGE-HUNTER-ASSET-TIMER-CADENCE-E356"
+}
