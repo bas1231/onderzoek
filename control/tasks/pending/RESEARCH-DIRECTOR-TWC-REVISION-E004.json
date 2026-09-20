@@ -1,0 +1,14 @@
+{
+  "build_authorization": null,
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/twc_revision_summary.py"
+  ],
+  "hypothesis_id": "H4-TWC-FORECAST-REVISIONS",
+  "live_trading": false,
+  "operation": "python",
+  "task_class": "research",
+  "task_id": "RESEARCH-DIRECTOR-TWC-REVISION-E004",
+  "timeout_seconds": 120,
+  "working_directory": "."
+}
