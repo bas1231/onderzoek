@@ -1,0 +1,13 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/screen_e439_statewise_complete_sets_e440.py"
+  ],
+  "hypothesis_id": "PAYOFF-IDENTITY-MINING-V1",
+  "live_trading": false,
+  "operation": "python",
+  "task_class": "research",
+  "task_id": "EDGE-HUNTER-E439-STATEWISE-SCREEN-E440",
+  "timeout_seconds": 300,
+  "working_directory": "."
+}
