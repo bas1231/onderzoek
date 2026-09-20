@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/record_asset_stream_300s_e344.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-20T02:20:34.242698+00:00",
+  "hypothesis_id": "ASSET-RANK-MAKER-HEDGE-V1",
+  "source_commit": "4f004d1735c70dd98f1dcbd0d1c8b2daffaa662b",
+  "started_at": "2026-09-20T02:17:15.098213+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "2c2554d9e41c3b749f43036848afaee5347091f802bd391bda834b9e9f04d53e",
+  "task_class": "research",
+  "task_id": "EDGE-HUNTER-ASSET-STREAM-300S-E344"
+}
