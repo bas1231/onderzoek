@@ -1,0 +1,13 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/inspect_hourly_0700_detail_e431.py"
+  ],
+  "hypothesis_id": "CONTROL-NO-SILENT-WAITING",
+  "live_trading": false,
+  "operation": "python",
+  "task_class": "infrastructure",
+  "task_id": "EDGE-HUNTER-HOURLY-0700-DETAIL-E431",
+  "timeout_seconds": 120,
+  "working_directory": "."
+}
