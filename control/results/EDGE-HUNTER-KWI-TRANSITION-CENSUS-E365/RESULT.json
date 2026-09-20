@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/census_kwi_transitions_e365.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-20T02:37:02.797557+00:00",
+  "hypothesis_id": "KWI-INCOMPLETE-TO-CANONICAL-V1",
+  "source_commit": "7fd9ce6beba7936c8835688b899f526502e81248",
+  "started_at": "2026-09-20T02:37:02.744012+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "f9dfaf4dd319456881063a777ac37ee62df9a6ef5d4d940869ee081148ac39eb",
+  "task_class": "research",
+  "task_id": "EDGE-HUNTER-KWI-TRANSITION-CENSUS-E365"
+}
