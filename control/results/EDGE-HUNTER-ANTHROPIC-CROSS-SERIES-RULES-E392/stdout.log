@@ -1,0 +1,110 @@
+EVENT_PATH 197776 /home/leonh/prediction_research/knowledge/raw/market_rules/polymarket/20260920T025522Z-event-197776.json
+EVENT 197776
+TITLE Anthropic IPO Closing Market Cap (Lower Brackets)
+END_DATE 2028-01-01T04:59:00Z
+NEG_RISK True
+NEG_RISK_AUGMENTED False
+NEG_RISK_MARKET_ID 0x98984cf8b3494532dfd73a5360ab3da456634a2e11df558587347ddee14bb100
+DESCRIPTION_SHA256 2c663ce90df8ec63aabcd52c3c4d9af12545e80c726206441013ec6e4f1eab7a
+MARKET_COUNT 7
+MARKET 1328014
+GROUP_ITEM <100B
+QUESTION Will Anthropic’s market cap be less than $100B at market close on IPO day by December 31, 2027?
+END_DATE_MARKET 2028-01-01T04:59:00Z
+NEG_RISK_MARKET True
+NEG_RISK_OTHER False
+MARKET 1328015
+GROUP_ITEM 100–200B
+QUESTION Will Anthropic’s market cap be between $100B and $200B at market close on IPO day by December 31, 2027?
+END_DATE_MARKET 2028-01-01T04:59:00Z
+NEG_RISK_MARKET True
+NEG_RISK_OTHER False
+MARKET 1328016
+GROUP_ITEM 200–300B
+QUESTION Will Anthropic’s market cap be between $200B and $300B at market close on IPO day by December 31, 2027?
+END_DATE_MARKET 2028-01-01T04:59:00Z
+NEG_RISK_MARKET True
+NEG_RISK_OTHER False
+MARKET 1328017
+GROUP_ITEM 300–400B
+QUESTION Will Anthropic’s market cap be between $300B and $400B at market close on IPO day by December 31, 2027?
+END_DATE_MARKET 2028-01-01T04:59:00Z
+NEG_RISK_MARKET True
+NEG_RISK_OTHER False
+MARKET 1328018
+GROUP_ITEM 400–600B
+QUESTION Will Anthropic’s market cap be between $400B and $600B at market close on IPO day by December 31, 2027?
+END_DATE_MARKET 2028-01-01T04:59:00Z
+NEG_RISK_MARKET True
+NEG_RISK_OTHER False
+MARKET 1328019
+GROUP_ITEM 600B+
+QUESTION Will Anthropic’s market cap be $600B or greater at market close on IPO day by December 31, 2027?
+END_DATE_MARKET 2028-01-01T04:59:00Z
+NEG_RISK_MARKET True
+NEG_RISK_OTHER False
+MARKET 1328020
+GROUP_ITEM No IPO by December 31, 2027
+QUESTION Will Anthropic not IPO by December 31, 2027?
+END_DATE_MARKET 2028-01-01T04:59:00Z
+NEG_RISK_MARKET True
+NEG_RISK_OTHER False
+---
+EVENT_PATH 428957 /home/leonh/prediction_research/knowledge/raw/market_rules/polymarket/20260920T025522Z-event-428957.json
+EVENT 428957
+TITLE Anthropic IPO Closing Market Cap (Middle Brackets)
+END_DATE 2028-01-01T04:59:00Z
+NEG_RISK True
+NEG_RISK_AUGMENTED False
+NEG_RISK_MARKET_ID 0xb2bb5e9e8728bc3779c143ca14e262bcf8d789c3dd3fbfcb5bdba5eab770bc00
+DESCRIPTION_SHA256 2c663ce90df8ec63aabcd52c3c4d9af12545e80c726206441013ec6e4f1eab7a
+MARKET_COUNT 7
+MARKET 2110748
+GROUP_ITEM <0.6T
+QUESTION Will Anthropic’s market cap be less than 0.6T at market close on IPO day by December 31 2027?
+END_DATE_MARKET 2028-01-01T04:59:00Z
+NEG_RISK_MARKET True
+NEG_RISK_OTHER False
+MARKET 2110749
+GROUP_ITEM 0.6–0.9T
+QUESTION Will Anthropic’s market cap be between 0.6T and 0.9T at market close on IPO day by December 31 2027?
+END_DATE_MARKET 2028-01-01T04:59:00Z
+NEG_RISK_MARKET True
+NEG_RISK_OTHER False
+MARKET 2110750
+GROUP_ITEM 0.9–1.2T
+QUESTION Will Anthropic’s market cap be between 0.9T and 1.2T at market close on IPO day by December 31 2027?
+END_DATE_MARKET 2028-01-01T04:59:00Z
+NEG_RISK_MARKET True
+NEG_RISK_OTHER False
+MARKET 2110751
+GROUP_ITEM 1.2–1.5T
+QUESTION Will Anthropic’s market cap be between 1.2T and 1.5T at market close on IPO day by December 31 2027?
+END_DATE_MARKET 2028-01-01T04:59:00Z
+NEG_RISK_MARKET True
+NEG_RISK_OTHER False
+MARKET 2110752
+GROUP_ITEM 1.5–1.8T
+QUESTION Will Anthropic’s market cap be between 1.5T and 1.8T at market close on IPO day by December 31 2027?
+END_DATE_MARKET 2028-01-01T04:59:00Z
+NEG_RISK_MARKET True
+NEG_RISK_OTHER False
+MARKET 2110753
+GROUP_ITEM 1.8T+
+QUESTION Will Anthropic’s market cap be 1.8T or greater at market close on IPO day by December 31 2027?
+END_DATE_MARKET 2028-01-01T04:59:00Z
+NEG_RISK_MARKET True
+NEG_RISK_OTHER False
+MARKET 2110754
+GROUP_ITEM No IPO by December 31, 2027
+QUESTION Will Anthropic not IPO by December 31 2027?
+END_DATE_MARKET 2028-01-01T04:59:00Z
+NEG_RISK_MARKET True
+NEG_RISK_OTHER False
+---
+DESCRIPTION_EXACT_EQUAL True
+END_DATE_EQUAL True
+NEG_RISK_BOTH True
+NON_AUGMENTED_BOTH True
+GROUP_IDS_DIFFER True
+ANTHROPIC_CROSS_SERIES_RULE_CAPTURE_PASS

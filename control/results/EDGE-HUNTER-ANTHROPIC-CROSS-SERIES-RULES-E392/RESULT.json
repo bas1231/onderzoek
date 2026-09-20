@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/capture_anthropic_cross_series_rules_e392.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-20T02:55:22.691302+00:00",
+  "hypothesis_id": "PAYOFF-IDENTITY-MINING-V1",
+  "source_commit": "f29d67ff267f2fc7f3f3529bb795e48878fd21f3",
+  "started_at": "2026-09-20T02:55:22.348612+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "946c9345db13966bf9390a8624742b936c65fcbe97f3c061e595ffe07b088b90",
+  "task_class": "research",
+  "task_id": "EDGE-HUNTER-ANTHROPIC-CROSS-SERIES-RULES-E392"
+}
