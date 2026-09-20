@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/merge_remote_repair_e278.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-20T01:04:47.023082+00:00",
+  "hypothesis_id": "GENERAL-PREDICTION-MARKET-EDGE-HUNTER",
+  "source_commit": "a026c88310c8ed83eff822657c8be0a27889c1a7",
+  "started_at": "2026-09-20T01:04:43.172869+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "6a970e2eeef2cab3517abe622ef4188dbd6f53caa4842b4bf1c35d03fd30acf3",
+  "task_class": "infrastructure",
+  "task_id": "GIT-SAFE-MERGE-REMOTE-REPAIR-E278"
+}

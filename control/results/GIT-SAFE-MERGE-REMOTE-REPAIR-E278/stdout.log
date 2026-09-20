@@ -1,0 +1,18 @@
+CMD git fetch origin
+CMD git diff --name-only HEAD...origin/main
+control/browser_extension/repair_bridge.py
+CMD git log --oneline HEAD..origin/main
+590ea55 fix(control): add one-command browser bridge repair
+REMOTE_ONLY_COMMITS 1
+REMOTE_CHANGED_FILES control/browser_extension/repair_bridge.py
+CMD git merge --no-edit origin/main
+Merge made by the 'ort' strategy.
+ control/browser_extension/repair_bridge.py | 238 +++++++++++++++++++++++++++++
+ 1 file changed, 238 insertions(+)
+ create mode 100644 control/browser_extension/repair_bridge.py
+CMD git push origin main
+To github.com:bas1231/onderzoek.git
+   590ea55..b96db63  main -> main
+CMD git rev-list --left-right --count HEAD...origin/main
+0	0
+GIT_SYNC_PASS
