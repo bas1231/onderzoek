@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/inspect_hourly_0500_results_e402.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-20T03:04:19.881680+00:00",
+  "hypothesis_id": "CONTROL-NO-SILENT-WAITING",
+  "source_commit": "eafd5f2daa93714569a570e8d66b756fa4ea9e31",
+  "started_at": "2026-09-20T03:04:19.860103+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "237d6d80a39eec01d9f93974a39dd79df43407b21883bc4f7b0d975023907895",
+  "task_class": "research",
+  "task_id": "EDGE-HUNTER-HOURLY-0500-RESULTS-E402"
+}
