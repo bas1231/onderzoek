@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/integrate_candidate_triage_e256.py"
+  ],
+  "exit_code": 1,
+  "finished_at": "2026-09-20T00:44:56.611932+00:00",
+  "hypothesis_id": "GENERAL-PREDICTION-MARKET-EDGE-HUNTER",
+  "source_commit": "5b55e991174a16bc79ea1dfe81f01be65d6c650a",
+  "started_at": "2026-09-20T00:44:56.583491+00:00",
+  "status": "failed",
+  "stderr_sha256": "dd2b3e0a62b1a93b2f948633faef34d5657de46842280acabc4353edc7cd9c8d",
+  "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "task_class": "infrastructure",
+  "task_id": "EDGE-HUNTER-CANDIDATE-TRIAGE-E256"
+}
