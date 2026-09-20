@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/neg_risk_manifest_e296.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-20T01:19:01.071885+00:00",
+  "hypothesis_id": "PAYOFF-IDENTITY-MINING-V1",
+  "source_commit": "be4105ce494ed7e07163f3b2673fad2195ad27ec",
+  "started_at": "2026-09-20T01:18:58.973003+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "ff07e958a9fc4018582944ae23e1265080e139534df269de8e8bf0dd22ffb283",
+  "task_class": "research",
+  "task_id": "EDGE-HUNTER-NEG-RISK-MANIFEST-E296"
+}
