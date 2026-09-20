@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/capture_gdp_neg_risk_e299.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-20T01:21:20.839298+00:00",
+  "hypothesis_id": "PAYOFF-IDENTITY-MINING-V1",
+  "source_commit": "693c8947929e64c5a878f9c4fb8b16d73f311044",
+  "started_at": "2026-09-20T01:21:20.543562+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "0d831ce38d1902b089f13ed4d68fe3b7beb598a9e7a066f73c3dbc779b88e6e5",
+  "task_class": "research",
+  "task_id": "EDGE-HUNTER-GDP-NEG-RISK-E299"
+}
