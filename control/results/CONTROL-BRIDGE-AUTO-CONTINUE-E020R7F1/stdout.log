@@ -1,0 +1,16 @@
+..                                                                       [100%]
+2 passed in 0.06s
+
+
+[main bb5aa16] fix: activate durable control auto continuation
+ 2 files changed, 251 insertions(+)
+ create mode 100644 tests/bridge/test_control_auto_continue.py
+
+
+AUTO_CONTINUE_PATCH_PRESENT=PASS
+PY_COMPILE=PASS
+PYTEST=PASS
+OPTIONAL_LEDGER_STAGE=PASS
+BRIDGE_RESTART=PASS
+HEALTH_200=PASS
+HEAD=bb5aa16fe5643fb98003e856a165d11e8f7c2e16
