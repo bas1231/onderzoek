@@ -1,0 +1,12 @@
+{
+  "task_id": "POLICY-EXECUTOR-ATTACK-001",
+  "task_class": "research",
+  "hypothesis_id": "POLICY_EXECUTOR_TEST",
+  "operation": "python",
+  "working_directory": ".",
+  "command": [
+    "python3",
+    "experiments/policy_attack_test.py"
+  ],
+  "timeout_seconds": 30
+}

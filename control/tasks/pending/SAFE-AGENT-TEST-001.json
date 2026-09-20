@@ -1,0 +1,12 @@
+{
+  "task_id": "SAFE-AGENT-TEST-001",
+  "task_class": "research",
+  "hypothesis_id": "SAFE_TEST",
+  "operation": "python",
+  "working_directory": ".",
+  "command": [
+    "python3",
+    "experiments/safe_agent_test.py"
+  ],
+  "timeout_seconds": 30
+}

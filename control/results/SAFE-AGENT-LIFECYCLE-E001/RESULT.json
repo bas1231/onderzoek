@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "experiments/health_check.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-20T19:20:10.233917+00:00",
+  "hypothesis_id": "CONTROL-LIFECYCLE-TEST",
+  "source_commit": "82a26c67dc4be5b19086f53c71f0653bb5b8521c",
+  "started_at": "2026-09-20T19:20:10.196242+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "8ec0e8a7114b5eefff893039c9f8e26fe443975f14be51b30d39b43483bc421b",
+  "task_class": "infrastructure",
+  "task_id": "SAFE-AGENT-LIFECYCLE-E001"
+}
