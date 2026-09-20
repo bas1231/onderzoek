@@ -1,0 +1,13 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/quantify_fed_fees_e312.py"
+  ],
+  "hypothesis_id": "PAYOFF-IDENTITY-MINING-V1",
+  "live_trading": false,
+  "operation": "python",
+  "task_class": "research",
+  "task_id": "EDGE-HUNTER-FED-FEE-QUANT-E312",
+  "timeout_seconds": 120,
+  "working_directory": "."
+}
