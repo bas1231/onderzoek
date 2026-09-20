@@ -1,0 +1,63 @@
+
+
+.F                                                                       [100%]
+=================================== FAILURES ===================================
+____________________ test_ai_ack_consumes_control_continue _____________________
+
+tmp_path = PosixPath('/tmp/pytest-of-leonh/pytest-4/test_ai_ack_consumes_control_c0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x77d9160896a0>
+
+    def test_ai_ack_consumes_control_continue(tmp_path, monkeypatch):
+        bb = load_bridge()
+    
+        state_file = tmp_path / "bridge_state.json"
+        results = tmp_path / "results"
+        task_id = "CONTROL-AUTO-CONTINUE-TEST-002"
+    
+        write_result(results, task_id)
+    
+        # _control_continue_item reads bb.RESULTS immediately, so the
+        # isolated tmp results directory must be active before item creation.
+        monkeypatch.setattr(bb, "RESULTS", results)
+    
+        item = bb._control_continue_item(
+            task_id,
+            "RESULT_ACKED",
+        )
+    
+        state_file.write_text(
+            json.dumps(
+                {
+                    "bridge_tasks": [task_id],
+                    "acked": [task_id],
+                    "ai_acked": [],
+                    "control_continue_seen": [task_id],
+                    "control_continue_queue": [item],
+                }
+            ),
+            encoding="utf-8",
+        )
+    
+        monkeypatch.setattr(bb, "STATE_FILE", state_file)
+        monkeypatch.setattr(bb, "RESULTS", results)
+    
+        offered = bb.next_ai_outbox_item()
+        assert offered["task_id"] == item["task_id"]
+    
+        ack = bb.acknowledge_ai(item["task_id"])
+        assert ack["ok"] is True
+    
+        state = bb.load_state()
+        assert item["task_id"] in state["ai_acked"]
+    
+>       assert bb.next_ai_outbox_item() is None
+E       AssertionError: assert {'kind': 'AI_WORK_BUNDLE', 'schema': 'PVA_AI_CHAT_WORK_V1', 'task_id': 'hourly-research-20260920T1700+0200', 'run_id': 'hourly-20260920T170000+0200', ...} is None
+E        +  where {'kind': 'AI_WORK_BUNDLE', 'schema': 'PVA_AI_CHAT_WORK_V1', 'task_id': 'hourly-research-20260920T1700+0200', 'run_id': 'hourly-20260920T170000+0200', ...} = <function next_ai_outbox_item at 0x77d916096020>()
+E        +    where <function next_ai_outbox_item at 0x77d916096020> = <module 'browser_bridge' from '/home/leonh/prediction_research/control/browser_bridge.py'>.next_ai_outbox_item
+
+tests/bridge/test_control_auto_continue.py:121: AssertionError
+=========================== short test summary info ============================
+FAILED tests/bridge/test_control_auto_continue.py::test_ai_ack_consumes_control_continue
+1 failed, 1 passed in 0.08s
+
+
