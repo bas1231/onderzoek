@@ -1,0 +1,23 @@
+{
+  "build_authorization": {
+    "build_kind": "control_plane",
+    "capabilities": [
+      "commit_local_changes",
+      "run_local_tests",
+      "restart_local_service"
+    ],
+    "mode": "control_plane",
+    "objective": "Finalize the already-tested durable control auto-continuation patch by staging only locally existing files, committing it, restarting the bridge, verifying health, and prospectively proving automatic continuation after this result."
+  },
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/run_auto_continue_e020r7f1.py"
+  ],
+  "hypothesis_id": "CONTROL-NO-SILENT-STOP",
+  "live_trading": false,
+  "operation": "python",
+  "task_class": "infrastructure",
+  "task_id": "CONTROL-BRIDGE-AUTO-CONTINUE-E020R7F1",
+  "timeout_seconds": 180,
+  "working_directory": "."
+}
