@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/inspect_hourly_fill_integration_e353.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-20T02:28:31.960184+00:00",
+  "hypothesis_id": "ASSET-RANK-MAKER-HEDGE-V1",
+  "source_commit": "3c1bb75a0674686475424d595ad9b76ea84c5eb6",
+  "started_at": "2026-09-20T02:28:31.897796+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "1a461e28ccd8327e2df9fa683a45ba8aa9ea310c3219bf5b61b2cfc0fe4e46da",
+  "task_class": "infrastructure",
+  "task_id": "EDGE-HUNTER-ASSET-HOURLY-INTEGRATION-E353"
+}

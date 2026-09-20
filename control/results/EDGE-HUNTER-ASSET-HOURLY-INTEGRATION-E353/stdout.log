@@ -1,0 +1,198 @@
+FILE control/hourly/edge_hunter_cycle.py EXISTS True
+LINE_COUNT 14
+LINE 1 'from pathlib import Path'
+LINE 2 'import runpy'
+LINE 3 'import sys'
+LINE 4 ''
+LINE 5 'ROOT = Path(__file__).resolve().parents[2]'
+LINE 6 'runpy.run_path(str(ROOT / "control/hourly/hourly_cycle.py"), run_name="__main__")'
+LINE 7 'runs = sorted((ROOT / "knowledge/runs").glob("hourly-*.json"), key=lambda p: p.stat().st_mtime)'
+LINE 8 'if not runs:'
+LINE 9 '    raise SystemExit("no hourly run found")'
+LINE 10 'run_id = runs[-1].stem'
+LINE 11 'sys.path.insert(0, str(ROOT / "control/edge_hunter"))'
+LINE 12 'from director import prepare'
+LINE 13 'packet = prepare(run_id)'
+LINE 14 'print("EDGE_HUNTER_PACKET", packet)'
+---
+FILE control/hourly/hourly_cycle.py EXISTS True
+LINE_COUNT 73
+LINE 1 'from pathlib import Path'
+LINE 2 'import importlib.util'
+LINE 3 'import json'
+LINE 4 'import subprocess'
+LINE 5 ''
+LINE 6 'R = Path(__file__).resolve().parents[2]'
+LINE 7 ''
+LINE 8 'def load(name, path):'
+LINE 9 '    spec = importlib.util.spec_from_file_location(name, path)'
+LINE 10 '    mod = importlib.util.module_from_spec(spec)'
+LINE 11 '    spec.loader.exec_module(mod)'
+LINE 12 '    return mod'
+LINE 13 ''
+LINE 14 "runner = load('agent_runner', R / 'control/hourly/agent_runner.py')"
+LINE 15 "sweep = load('source_sweep', R / 'control/hourly/source_sweep.py')"
+LINE 16 "apply_sweep = load('apply_sweep', R / 'control/hourly/apply_sweep.py')"
+LINE 17 "extractor = load('extract_text', R / 'control/hourly/extract_text.py')"
+LINE 18 "quality = load('source_quality', R / 'control/hourly/source_quality.py')"
+LINE 19 "router = load('role_router', R / 'control/hourly/role_router.py')"
+LINE 20 ''
+LINE 21 'run, manifest, report, packets = runner.create_packets()'
+LINE 22 'sweep_path, sweep_data = sweep.sweep(max_workers=4)'
+LINE 23 'apply_sweep.apply()'
+LINE 24 ''
+LINE 25 "for item in sweep_data['results']:"
+LINE 26 "    if not item.get('ok'):"
+LINE 27 '        continue'
+LINE 28 '    try:'
+LINE 29 "        extractor.extract(item['source_id'])"
+LINE 30 '    except Exception:'
+LINE 31 '        pass'
+LINE 32 ''
+LINE 33 "quality_data, quality_path = quality.grade(run['run_id'])"
+LINE 34 "routing = router.route(run['run_id'])"
+LINE 35 "routing_path = R / 'knowledge/runs' / (run['run_id'] + '-routing.json')"
+LINE 36 'routing_path.write_text(json.dumps(routing, indent=2, sort_keys=True) + chr(10))'
+LINE 37 ''
+LINE 38 "run_path = R / 'knowledge/runs' / (run['run_id'] + '.json')"
+LINE 39 'current = json.loads(run_path.read_text())'
+LINE 40 "current['source_quality'] = {"
+LINE 41 "    'usable_count': quality_data.get('usable_count'),"
+LINE 42 "    'low_text_yield_count': quality_data.get('low_text_yield_count'),"
+LINE 43 "    'ref': str(quality_path.relative_to(R)),"
+LINE 44 '}'
+LINE 45 "current['automated_routing'] = {"
+LINE 46 "    role: len(data.get('evidence', []))"
+LINE 47 '    for role, data in routing.items()'
+LINE 48 '}'
+LINE 49 "current['routing_ref'] = str(routing_path.relative_to(R))"
+LINE 50 'run_path.write_text(json.dumps(current, indent=2, sort_keys=True) + chr(10))'
+LINE 51 ''
+LINE 52 "report_path = R / 'hourly-reports' / (run['run_id'] + '.md')"
+LINE 53 "marker = '## Automated preparation'"
+LINE 54 "existing = report_path.read_text(errors='replace') if report_path.exists() else ''"
+LINE 55 'if marker not in existing:'
+LINE 56 "    with report_path.open('a') as handle:"
+LINE 57 '        handle.write(chr(10) + marker + chr(10) + chr(10))'
+LINE 58 "        handle.write('Usable sources: ' + str(quality_data.get('usable_count')) + chr(10))"
+LINE 59 "        handle.write('Low-text-yield sources: ' + str(quality_data.get('low_text_yield_count')) + chr(10))"
+LINE 60 '        for role, data in routing.items():'
+LINE 61 "            handle.write('- ' + role + ': ' + str(len(data.get('evidence', []))) + ' routed evidence items' + chr(10))"
+LINE 62 ''
+LINE 63 'subprocess.run('
+LINE 64 "    [str(R / '.venv/bin/python'), str(R / 'control/hourly/hourly_wake.py')],"
+LINE 65 '    check=False,'
+LINE 66 ')'
+LINE 67 ''
+LINE 68 'print('
+LINE 69 "    run['run_id'],"
+LINE 70 "    sweep_data['success_count'],"
+LINE 71 "    sweep_data['failure_count'],"
+LINE 72 "    quality_data.get('usable_count'),"
+LINE 73 ')'
+---
+FILE control/jobs/evaluate_asset_fill_checkpoint_e352.py EXISTS True
+LINE_COUNT 141
+LINE 61 '        except Exception:'
+LINE 62 '            continue'
+LINE 63 '        if oldest is None or ts<oldest:'
+LINE 64 '            oldest=ts'
+LINE 65 '    if oldest is not None and oldest<credit_epoch:'
+LINE 66 '        break'
+LINE 67 "    next_cursor=pagination.get('next_cursor')"
+LINE 68 '    if not next_cursor:'
+LINE 69 '        break'
+LINE 70 '    cursor=str(next_cursor)'
+LINE 71 '    if cursor in seen_cursors:'
+LINE 72 "        raise SystemExit('cursor_repeat')"
+LINE 73 '    seen_cursors.add(cursor)'
+LINE 74 'else:'
+LINE 75 "    raise SystemExit('pagination_limit_reached')"
+LINE 76 ''
+LINE 77 'volume=dict()'
+LINE 78 'trade_count=dict()'
+LINE 79 'for token in meta:'
+LINE 80 '    volume[token]=0.0'
+LINE 81 '    trade_count[token]=0'
+LINE 82 ''
+LINE 83 'for row in rows:'
+LINE 84 '    if not isinstance(row,dict):'
+LINE 85 '        continue'
+LINE 86 "    token=str(row.get('token_id') or '')"
+LINE 87 '    info=meta.get(token)'
+LINE 88 '    if not info:'
+LINE 89 '        continue'
+LINE 90 '    try:'
+LINE 91 "        ts=int(row.get('timestamp'))"
+LINE 92 "        price=float(row.get('price'))"
+LINE 93 "        size=float(row.get('size'))"
+LINE 94 '    except Exception:'
+LINE 95 '        continue'
+LINE 96 '    if ts<credit_epoch:'
+LINE 97 '        continue'
+LINE 98 "    if str(row.get('side') or '').upper()!='SELL':"
+LINE 99 '        continue'
+LINE 100 "    if abs(price-float(info.get('bid')))>0.0000001:"
+LINE 101 '        continue'
+LINE 102 '    volume[token]=volume.get(token,0.0)+size'
+LINE 103 '    trade_count[token]=trade_count.get(token,0)+1'
+LINE 104 ''
+LINE 105 "stamp=datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%SZ')"
+LINE 106 "outdir=root/'knowledge/raw/market_data/polymarket_fill_checkpoints'"
+LINE 107 'outdir.mkdir(parents=True,exist_ok=True)'
+LINE 108 "out=outdir/(stamp+'106981_fill_checkpoint.json')"
+LINE 109 "result=dict(event_id='106981',baseline=str(baseline_path.relative_to(root)),credit_epoch=credit_epoch,credit_start_effective=datetime.fromtimestamp(credit_epoch,timezone.utc).isoformat(),retrieved_at=datetime.now(timezone.utc).isoformat(),pages=pages,markets=list())"
+LINE 110 ''
+LINE 111 'full_fill_count=0'
+LINE 112 'for token in sorted(meta):'
+LINE 113 '    info=meta.get(token) or dict()'
+LINE 114 "    queue=float(info.get('queue'))"
+LINE 115 '    required=queue+5.0'
+LINE 116 '    consumed=float(volume.get(token,0.0))'
+LINE 117 '    remaining=max(0.0,required-consumed)'
+LINE 118 '    full=consumed>=required'
+LINE 119 '    if full:'
+LINE 120 '        full_fill_count+=1'
+LINE 121 "    item=dict(market_id=info.get('market_id'),yes_token=token,maker_bid=info.get('bid'),initial_queue_ahead=queue,shadow_size=5.0,required_qualifying_volume=required,qualifying_trade_count=trade_count.get(token,0),qualifying_volume=consumed,remaining_to_full_shadow_fill=remaining,full_shadow_fill=full)"
+LINE 122 "    result.get('markets').append(item)"
+LINE 123 "    print('MARKET',item.get('market_id'))"
+LINE 124 "    print('MAKER_BID',item.get('maker_bid'))"
+LINE 125 "    print('INITIAL_QUEUE_AHEAD',item.get('initial_queue_ahead'))"
+LINE 126 "    print('REQUIRED_VOLUME',item.get('required_qualifying_volume'))"
+LINE 127 "    print('QUALIFYING_TRADE_COUNT',item.get('qualifying_trade_count'))"
+LINE 128 "    print('QUALIFYING_VOLUME',item.get('qualifying_volume'))"
+LINE 129 "    print('REMAINING_TO_FILL',item.get('remaining_to_full_shadow_fill'))"
+LINE 130 "    print('FULL_SHADOW_FILL',item.get('full_shadow_fill'))"
+LINE 131 "    print('---')"
+LINE 132 ''
+LINE 133 "result['full_shadow_fill_count']=full_fill_count"
+LINE 134 "out.write_text(json.dumps(result,indent=2,sort_keys=True)+chr(10),encoding='utf-8')"
+LINE 135 "print('BASELINE',baseline_path.name)"
+LINE 136 "print('EFFECTIVE_CREDIT_START',result.get('credit_start_effective'))"
+LINE 137 "print('FETCHED_PAGES',len(pages))"
+LINE 138 "print('FETCHED_ROWS',len(rows))"
+LINE 139 "print('FULL_SHADOW_FILL_COUNT',full_fill_count)"
+LINE 140 "print('PATH',out)"
+LINE 141 "print('ASSET_FILL_CHECKPOINT_PASS')"
+---
+INTEGRATION_HIT control/hourly/__pycache__/edge_hunter_cycle.cpython-312.pyc
+INTEGRATION_HIT control/hourly/systemd/prediction-research-hourly-director.service
+INTEGRATION_HIT control/hourly/systemd/prediction-research-hourly-director.timer
+INTEGRATION_HIT control/jobs/hourly_edge_hunter_e271.py
+INTEGRATION_HIT control/jobs/inspect_edge_hunter_hourly_e265.py
+INTEGRATION_HIT control/jobs/inspect_hourly_fill_integration_e353.py
+INTEGRATION_HIT control/results/EDGE-HUNTER-FOUNDATION-E252/stdout.log
+INTEGRATION_HIT control/results/EDGE-HUNTER-HOURLY-INSPECT-E265/stdout.log
+INTEGRATION_HIT control/results/EDGE-HUNTER-HOURLY-WIRING-E255/stdout.log
+INTEGRATION_HIT control/results/EDGE-HUNTER-MARKET-DATA-INVENTORY-E279/stdout.log
+INTEGRATION_HIT control/results/HOURLY-DIRECTOR-E089/RESULT.json
+INTEGRATION_HIT control/results/HOURLY-DIRECTOR-EVIDENCE-0100-E203/RESULT.json
+INTEGRATION_HIT control/results/HOURLY-TIMER-E088/stdout.log
+INTEGRATION_HIT control/results/SYSTEMD-HOURLY-AUDIT-E136/RESULT.json
+INTEGRATION_HIT control/results/SYSTEMD-HOURLY-AUDIT-E136/stderr.log
+INTEGRATION_HIT control/results/TWC-SYSTEMD-SERVICE-SAFE-E193/stdout.log
+INTEGRATION_HIT control/results/VERIFY-AUTONOMOUS-HOURLY-E140/stdout.log
+INTEGRATION_HIT control/tasks/completed/HOURLY-DIRECTOR-E089.json
+INTEGRATION_HIT control/tasks/completed/HOURLY-DIRECTOR-EVIDENCE-0100-E203.json
+INTEGRATION_HIT control/tasks/failed/SYSTEMD-HOURLY-AUDIT-E136.json
+HOURLY_FILL_INTEGRATION_INSPECTION_PASS
