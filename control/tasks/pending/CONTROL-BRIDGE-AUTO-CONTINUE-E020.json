@@ -1,0 +1,24 @@
+{
+  "build_authorization": {
+    "build_kind": "control_plane",
+    "capabilities": [
+      "modify_repository",
+      "commit_local_changes",
+      "run_local_tests",
+      "restart_local_service"
+    ],
+    "mode": "control_plane",
+    "objective": "Eliminate silent control-plane stops by automatically creating a safe AI continuation wake after every acknowledged completed or failed bridge research/infrastructure result, with CHAT_ACK_STALL fallback, durable dedupe, tests, bridge service restart, and a prospective self-test."
+  },
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/build_control_auto_continue_e020.py"
+  ],
+  "hypothesis_id": "CONTROL-NO-SILENT-STOP",
+  "live_trading": false,
+  "operation": "python",
+  "task_class": "infrastructure",
+  "task_id": "CONTROL-BRIDGE-AUTO-CONTINUE-E020",
+  "timeout_seconds": 240,
+  "working_directory": "."
+}
