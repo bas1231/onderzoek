@@ -1,0 +1,22 @@
+{
+  "build_authorization": {
+    "build_kind": "control_plane",
+    "capabilities": [
+      "modify_repository",
+      "commit_local_changes"
+    ],
+    "mode": "control_plane",
+    "objective": "Persist in AGENTS.md the proven operational lesson that browser bridge tasks must be emitted as ordinary visible assistant chat text and that bridge payloads must remain parser-safe."
+  },
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/persist_bridge_visibility_e016.py"
+  ],
+  "hypothesis_id": "CONTROL-BRIDGE-VISIBILITY",
+  "live_trading": false,
+  "operation": "python",
+  "task_class": "infrastructure",
+  "task_id": "CONTROL-AGENTS-BRIDGE-VISIBILITY-E016",
+  "timeout_seconds": 120,
+  "working_directory": "."
+}
