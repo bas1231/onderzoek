@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/verify_all_yes_collateral_reachability_e425.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-20T03:28:13.747692+00:00",
+  "hypothesis_id": "PAYOFF-IDENTITY-MINING-V1",
+  "source_commit": "93aa146d7e282d2b110c4734a6933c0faf2659cd",
+  "started_at": "2026-09-20T03:28:13.723953+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "b0af2dcd4e9b709b4e59ead80844ad61dfb03ee4dc3450ba54d40079eac7bf0b",
+  "task_class": "research",
+  "task_id": "EDGE-HUNTER-ALL-YES-COLLATERAL-REACHABILITY-E425"
+}

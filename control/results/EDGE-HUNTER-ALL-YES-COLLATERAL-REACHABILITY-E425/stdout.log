@@ -1,0 +1,1325 @@
+SOURCE_COUNT 7
+SOURCE docs__NegRiskAdapter.md /home/leonh/prediction_research/knowledge/raw/reference/polymarket_negrisk_adapter/dd6c4d63773e7323f9b90fd5cd9716d59aab34efb907b56f8843f368a3a06ecd-docs__NegRiskAdapter.md
+SOURCE src__NegRiskAdapter.sol /home/leonh/prediction_research/knowledge/raw/reference/polymarket_negrisk_adapter/f76ace5aa16dad8e71412e4d2b3bd11f9caf28f846c6783dc39d5eb756413656-src__NegRiskAdapter.sol
+SOURCE src__interfaces__INegRiskAdapter.sol /home/leonh/prediction_research/knowledge/raw/reference/polymarket_negrisk_adapter/11af4edc034239ea0de68b55281a54b7fa752daff0470b93859b19aa66bdf630-src__interfaces__INegRiskAdapter.sol
+SOURCE src__test__NegRiskAdapter__ConvertPositions.t.sol /home/leonh/prediction_research/knowledge/raw/reference/polymarket_negrisk_adapter/265ebb42a31682307c0cb09d4165dac43e3c67343687c9f364527f280a730b9e-src__test__NegRiskAdapter__ConvertPositions.t.sol
+SOURCE src__test__NegRiskAdapter__MergePositions.t.sol /home/leonh/prediction_research/knowledge/raw/reference/polymarket_negrisk_adapter/cc8b97e53e72900cf4b4b1f9c5d943e9437a52f72efe9c3b9c70abbe45e7ea8d-src__test__NegRiskAdapter__MergePositions.t.sol
+SOURCE src__test__NegRiskAdapter__SplitPosition.t.sol /home/leonh/prediction_research/knowledge/raw/reference/polymarket_negrisk_adapter/3e6d5f5c7ac77f90d22084c6f87a2ef6560774876fda80a5d07c7389e0681024-src__test__NegRiskAdapter__SplitPosition.t.sol
+SOURCE README.md /home/leonh/prediction_research/knowledge/raw/reference/polymarket_negrisk_adapter/60159f20d834ddc00080c7ed444a9705d3a9bf8f4a8635b485d2107a8a48a302-README.md
+MATCH_BEGIN docs__NegRiskAdapter.md LINES 43 68
+LINE 43 
+LINE 44 ```[solidity]
+LINE 45 address _conditionId,
+LINE 46 uint256 _amount
+LINE 47 ```
+LINE 48 
+LINE 49 Note: Overloaded with a version with a signature matching the equivalent function on the CTF. This ensures that the exchange can be used with this contract without modification.
+LINE 50 
+LINE 51 ## `safeTransferFrom`
+LINE 52 
+LINE 53 Provided to ensure compatibility with contracts that expect to be able to transfer tokens from this contract, e.g., the NegRisk CTFExchange.
+LINE 54 
+LINE 55 In order to transfer tokens this way, the owner must approve this contract _and_ the calling contract.
+LINE 56 
+LINE 57 ## `redeemPositions`
+LINE 58 
+LINE 59 Redeems a pair of YES and NO tokens for their underlying collateral, once the question is resolved.
+LINE 60 
+LINE 61 Unwraps the resulting wrapped collateral into the original collateral before returning to the user.
+LINE 62 
+LINE 63 ### Parameters
+LINE 64 
+LINE 65 ```[solidity]
+LINE 66 address _conditionId,
+LINE 67 uint256[] _amounts
+LINE 68 ```
+MATCH_END
+MATCH_BEGIN docs__NegRiskAdapter.md LINES 74 99
+LINE 74 The user must hold at least `_amount` of each NO token.
+LINE 75 
+LINE 76 If the market has `n` questions, and the user converts `_amount` of `m` NO tokens, the user receive `_amount * (m-1)` collateral and `_amount` each of the complimentary YES tokens.
+LINE 77 
+LINE 78 Supposing that exactly one questions resolves true, these two positions have equivalent final values. In the event that all questions resolve false, the resulting position is worth _less_ than the original position. It is not possible for more than one question to resolve true.
+LINE 79 
+LINE 80 There is an optional `feeRate` market parameter which exists to implement a fee on the conversion. Collected fees are sent to the `vault` address.
+LINE 81 
+LINE 82 It is necessary to synthetically mint wrapped collateral in order to collateralize the resulting YES tokens. Careful book keeping ensures that the value of outstanding YES tokens will never exceed the value of collateral in the wrapped collateral contract. In this process, it is necessary to burn NO tokens; they are sent to an uncontrolled burn address.
+LINE 83 
+LINE 84 ### Parameters
+LINE 85 
+LINE 86 ```[solidity]
+LINE 87 bytes32 _marketId
+LINE 88 uint256 _indexSet
+LINE 89 uint256 _amount
+LINE 90 ```
+LINE 91 
+LINE 92 ## `prepareMarket`
+LINE 93 
+LINE 94 Prepares a negRisk market, initializing the marketId.
+LINE 95 
+LINE 96 ### Parameters
+LINE 97 
+LINE 98 ```[solidity]
+LINE 99 uint256 _feeBips
+MATCH_END
+MATCH_BEGIN src__NegRiskAdapter.sol LINES 106 131
+LINE 106                              SPLIT POSITION
+LINE 107     //////////////////////////////////////////////////////////////*/
+LINE 108 
+LINE 109     /// @notice Splits collateral to a complete set of conditional tokens for a single question
+LINE 110     /// @notice This function signature is the same as the CTF's splitPosition
+LINE 111     /// @param _collateralToken - the collateral token, must be the same as the adapter's collateral token
+LINE 112     /// @param _conditionId - the conditionId for the question
+LINE 113     /// @param _amount - the amount of collateral to split
+LINE 114     function splitPosition(address _collateralToken, bytes32, bytes32 _conditionId, uint256[] calldata, uint256 _amount)
+LINE 115         external
+LINE 116     {
+LINE 117         if (_collateralToken != address(col)) revert UnexpectedCollateralToken();
+LINE 118         splitPosition(_conditionId, _amount);
+LINE 119     }
+LINE 120 
+LINE 121     /// @notice Splits collateral to a complete set of conditional tokens for a single question
+LINE 122     /// @param _conditionId - the conditionId for the question
+LINE 123     /// @param _amount      - the amount of collateral to split
+LINE 124     function splitPosition(bytes32 _conditionId, uint256 _amount) public {
+LINE 125         col.safeTransferFrom(msg.sender, address(this), _amount);
+LINE 126         wcol.wrap(address(this), _amount);
+LINE 127         ctf.splitPosition(address(wcol), bytes32(0), _conditionId, Helpers.partition(), _amount);
+LINE 128         ctf.safeBatchTransferFrom(
+LINE 129             address(this), msg.sender, Helpers.positionIds(address(wcol), _conditionId), Helpers.values(2, _amount), ""
+LINE 130         );
+LINE 131 
+MATCH_END
+MATCH_BEGIN src__NegRiskAdapter.sol LINES 110 135
+LINE 110     /// @notice This function signature is the same as the CTF's splitPosition
+LINE 111     /// @param _collateralToken - the collateral token, must be the same as the adapter's collateral token
+LINE 112     /// @param _conditionId - the conditionId for the question
+LINE 113     /// @param _amount - the amount of collateral to split
+LINE 114     function splitPosition(address _collateralToken, bytes32, bytes32 _conditionId, uint256[] calldata, uint256 _amount)
+LINE 115         external
+LINE 116     {
+LINE 117         if (_collateralToken != address(col)) revert UnexpectedCollateralToken();
+LINE 118         splitPosition(_conditionId, _amount);
+LINE 119     }
+LINE 120 
+LINE 121     /// @notice Splits collateral to a complete set of conditional tokens for a single question
+LINE 122     /// @param _conditionId - the conditionId for the question
+LINE 123     /// @param _amount      - the amount of collateral to split
+LINE 124     function splitPosition(bytes32 _conditionId, uint256 _amount) public {
+LINE 125         col.safeTransferFrom(msg.sender, address(this), _amount);
+LINE 126         wcol.wrap(address(this), _amount);
+LINE 127         ctf.splitPosition(address(wcol), bytes32(0), _conditionId, Helpers.partition(), _amount);
+LINE 128         ctf.safeBatchTransferFrom(
+LINE 129             address(this), msg.sender, Helpers.positionIds(address(wcol), _conditionId), Helpers.values(2, _amount), ""
+LINE 130         );
+LINE 131 
+LINE 132         emit PositionSplit(msg.sender, _conditionId, _amount);
+LINE 133     }
+LINE 134 
+LINE 135     /*//////////////////////////////////////////////////////////////
+MATCH_END
+MATCH_BEGIN src__NegRiskAdapter.sol LINES 116 141
+LINE 116     {
+LINE 117         if (_collateralToken != address(col)) revert UnexpectedCollateralToken();
+LINE 118         splitPosition(_conditionId, _amount);
+LINE 119     }
+LINE 120 
+LINE 121     /// @notice Splits collateral to a complete set of conditional tokens for a single question
+LINE 122     /// @param _conditionId - the conditionId for the question
+LINE 123     /// @param _amount      - the amount of collateral to split
+LINE 124     function splitPosition(bytes32 _conditionId, uint256 _amount) public {
+LINE 125         col.safeTransferFrom(msg.sender, address(this), _amount);
+LINE 126         wcol.wrap(address(this), _amount);
+LINE 127         ctf.splitPosition(address(wcol), bytes32(0), _conditionId, Helpers.partition(), _amount);
+LINE 128         ctf.safeBatchTransferFrom(
+LINE 129             address(this), msg.sender, Helpers.positionIds(address(wcol), _conditionId), Helpers.values(2, _amount), ""
+LINE 130         );
+LINE 131 
+LINE 132         emit PositionSplit(msg.sender, _conditionId, _amount);
+LINE 133     }
+LINE 134 
+LINE 135     /*//////////////////////////////////////////////////////////////
+LINE 136                             MERGE POSITIONS
+LINE 137     //////////////////////////////////////////////////////////////*/
+LINE 138 
+LINE 139     /// @notice Merges a complete set of conditional tokens for a single question to collateral
+LINE 140     /// @notice This function signature is the same as the CTF's mergePositions
+LINE 141     /// @param _collateralToken - the collateral token, must be the same as the adapter's collateral token
+MATCH_END
+MATCH_BEGIN src__NegRiskAdapter.sol LINES 117 142
+LINE 117         if (_collateralToken != address(col)) revert UnexpectedCollateralToken();
+LINE 118         splitPosition(_conditionId, _amount);
+LINE 119     }
+LINE 120 
+LINE 121     /// @notice Splits collateral to a complete set of conditional tokens for a single question
+LINE 122     /// @param _conditionId - the conditionId for the question
+LINE 123     /// @param _amount      - the amount of collateral to split
+LINE 124     function splitPosition(bytes32 _conditionId, uint256 _amount) public {
+LINE 125         col.safeTransferFrom(msg.sender, address(this), _amount);
+LINE 126         wcol.wrap(address(this), _amount);
+LINE 127         ctf.splitPosition(address(wcol), bytes32(0), _conditionId, Helpers.partition(), _amount);
+LINE 128         ctf.safeBatchTransferFrom(
+LINE 129             address(this), msg.sender, Helpers.positionIds(address(wcol), _conditionId), Helpers.values(2, _amount), ""
+LINE 130         );
+LINE 131 
+LINE 132         emit PositionSplit(msg.sender, _conditionId, _amount);
+LINE 133     }
+LINE 134 
+LINE 135     /*//////////////////////////////////////////////////////////////
+LINE 136                             MERGE POSITIONS
+LINE 137     //////////////////////////////////////////////////////////////*/
+LINE 138 
+LINE 139     /// @notice Merges a complete set of conditional tokens for a single question to collateral
+LINE 140     /// @notice This function signature is the same as the CTF's mergePositions
+LINE 141     /// @param _collateralToken - the collateral token, must be the same as the adapter's collateral token
+LINE 142     /// @param _conditionId     - the conditionId for the question
+MATCH_END
+MATCH_BEGIN src__NegRiskAdapter.sol LINES 119 144
+LINE 119     }
+LINE 120 
+LINE 121     /// @notice Splits collateral to a complete set of conditional tokens for a single question
+LINE 122     /// @param _conditionId - the conditionId for the question
+LINE 123     /// @param _amount      - the amount of collateral to split
+LINE 124     function splitPosition(bytes32 _conditionId, uint256 _amount) public {
+LINE 125         col.safeTransferFrom(msg.sender, address(this), _amount);
+LINE 126         wcol.wrap(address(this), _amount);
+LINE 127         ctf.splitPosition(address(wcol), bytes32(0), _conditionId, Helpers.partition(), _amount);
+LINE 128         ctf.safeBatchTransferFrom(
+LINE 129             address(this), msg.sender, Helpers.positionIds(address(wcol), _conditionId), Helpers.values(2, _amount), ""
+LINE 130         );
+LINE 131 
+LINE 132         emit PositionSplit(msg.sender, _conditionId, _amount);
+LINE 133     }
+LINE 134 
+LINE 135     /*//////////////////////////////////////////////////////////////
+LINE 136                             MERGE POSITIONS
+LINE 137     //////////////////////////////////////////////////////////////*/
+LINE 138 
+LINE 139     /// @notice Merges a complete set of conditional tokens for a single question to collateral
+LINE 140     /// @notice This function signature is the same as the CTF's mergePositions
+LINE 141     /// @param _collateralToken - the collateral token, must be the same as the adapter's collateral token
+LINE 142     /// @param _conditionId     - the conditionId for the question
+LINE 143     /// @param _amount          - the amount of collateral to merge
+LINE 144     function mergePositions(
+MATCH_END
+MATCH_BEGIN src__NegRiskAdapter.sol LINES 136 161
+LINE 136                             MERGE POSITIONS
+LINE 137     //////////////////////////////////////////////////////////////*/
+LINE 138 
+LINE 139     /// @notice Merges a complete set of conditional tokens for a single question to collateral
+LINE 140     /// @notice This function signature is the same as the CTF's mergePositions
+LINE 141     /// @param _collateralToken - the collateral token, must be the same as the adapter's collateral token
+LINE 142     /// @param _conditionId     - the conditionId for the question
+LINE 143     /// @param _amount          - the amount of collateral to merge
+LINE 144     function mergePositions(
+LINE 145         address _collateralToken,
+LINE 146         bytes32,
+LINE 147         bytes32 _conditionId,
+LINE 148         uint256[] calldata,
+LINE 149         uint256 _amount
+LINE 150     ) external {
+LINE 151         if (_collateralToken != address(col)) revert UnexpectedCollateralToken();
+LINE 152         mergePositions(_conditionId, _amount);
+LINE 153     }
+LINE 154 
+LINE 155     /// @notice Merges a complete set of conditional tokens for a single question to collateral
+LINE 156     /// @param _conditionId - the conditionId for the question
+LINE 157     /// @param _amount      - the amount of collateral to merge
+LINE 158     function mergePositions(bytes32 _conditionId, uint256 _amount) public {
+LINE 159         uint256[] memory positionIds = Helpers.positionIds(address(wcol), _conditionId);
+LINE 160 
+LINE 161         // get conditional tokens from sender
+MATCH_END
+MATCH_BEGIN src__NegRiskAdapter.sol LINES 144 169
+LINE 144     function mergePositions(
+LINE 145         address _collateralToken,
+LINE 146         bytes32,
+LINE 147         bytes32 _conditionId,
+LINE 148         uint256[] calldata,
+LINE 149         uint256 _amount
+LINE 150     ) external {
+LINE 151         if (_collateralToken != address(col)) revert UnexpectedCollateralToken();
+LINE 152         mergePositions(_conditionId, _amount);
+LINE 153     }
+LINE 154 
+LINE 155     /// @notice Merges a complete set of conditional tokens for a single question to collateral
+LINE 156     /// @param _conditionId - the conditionId for the question
+LINE 157     /// @param _amount      - the amount of collateral to merge
+LINE 158     function mergePositions(bytes32 _conditionId, uint256 _amount) public {
+LINE 159         uint256[] memory positionIds = Helpers.positionIds(address(wcol), _conditionId);
+LINE 160 
+LINE 161         // get conditional tokens from sender
+LINE 162         ctf.safeBatchTransferFrom(msg.sender, address(this), positionIds, Helpers.values(2, _amount), "");
+LINE 163         ctf.mergePositions(address(wcol), bytes32(0), _conditionId, Helpers.partition(), _amount);
+LINE 164         wcol.unwrap(msg.sender, _amount);
+LINE 165 
+LINE 166         emit PositionsMerge(msg.sender, _conditionId, _amount);
+LINE 167     }
+LINE 168 
+LINE 169     /*//////////////////////////////////////////////////////////////
+MATCH_END
+MATCH_BEGIN src__NegRiskAdapter.sol LINES 150 175
+LINE 150     ) external {
+LINE 151         if (_collateralToken != address(col)) revert UnexpectedCollateralToken();
+LINE 152         mergePositions(_conditionId, _amount);
+LINE 153     }
+LINE 154 
+LINE 155     /// @notice Merges a complete set of conditional tokens for a single question to collateral
+LINE 156     /// @param _conditionId - the conditionId for the question
+LINE 157     /// @param _amount      - the amount of collateral to merge
+LINE 158     function mergePositions(bytes32 _conditionId, uint256 _amount) public {
+LINE 159         uint256[] memory positionIds = Helpers.positionIds(address(wcol), _conditionId);
+LINE 160 
+LINE 161         // get conditional tokens from sender
+LINE 162         ctf.safeBatchTransferFrom(msg.sender, address(this), positionIds, Helpers.values(2, _amount), "");
+LINE 163         ctf.mergePositions(address(wcol), bytes32(0), _conditionId, Helpers.partition(), _amount);
+LINE 164         wcol.unwrap(msg.sender, _amount);
+LINE 165 
+LINE 166         emit PositionsMerge(msg.sender, _conditionId, _amount);
+LINE 167     }
+LINE 168 
+LINE 169     /*//////////////////////////////////////////////////////////////
+LINE 170                            ERC1155 OPERATIONS
+LINE 171     //////////////////////////////////////////////////////////////*/
+LINE 172 
+LINE 173     /// @notice Proxies ERC1155 balanceOf to the CTF
+LINE 174     /// @param _owner   - the owner of the tokens
+LINE 175     /// @param _id      - the positionId
+MATCH_END
+MATCH_BEGIN src__NegRiskAdapter.sol LINES 155 180
+LINE 155     /// @notice Merges a complete set of conditional tokens for a single question to collateral
+LINE 156     /// @param _conditionId - the conditionId for the question
+LINE 157     /// @param _amount      - the amount of collateral to merge
+LINE 158     function mergePositions(bytes32 _conditionId, uint256 _amount) public {
+LINE 159         uint256[] memory positionIds = Helpers.positionIds(address(wcol), _conditionId);
+LINE 160 
+LINE 161         // get conditional tokens from sender
+LINE 162         ctf.safeBatchTransferFrom(msg.sender, address(this), positionIds, Helpers.values(2, _amount), "");
+LINE 163         ctf.mergePositions(address(wcol), bytes32(0), _conditionId, Helpers.partition(), _amount);
+LINE 164         wcol.unwrap(msg.sender, _amount);
+LINE 165 
+LINE 166         emit PositionsMerge(msg.sender, _conditionId, _amount);
+LINE 167     }
+LINE 168 
+LINE 169     /*//////////////////////////////////////////////////////////////
+LINE 170                            ERC1155 OPERATIONS
+LINE 171     //////////////////////////////////////////////////////////////*/
+LINE 172 
+LINE 173     /// @notice Proxies ERC1155 balanceOf to the CTF
+LINE 174     /// @param _owner   - the owner of the tokens
+LINE 175     /// @param _id      - the positionId
+LINE 176     /// @return balance - the owner's balance
+LINE 177     function balanceOf(address _owner, uint256 _id) external view returns (uint256) {
+LINE 178         return ctf.balanceOf(_owner, _id);
+LINE 179     }
+LINE 180 
+MATCH_END
+MATCH_BEGIN src__NegRiskAdapter.sol LINES 181 206
+LINE 181     /// @notice Proxies ERC1155 balanceOfBatch to the CTF
+LINE 182     /// @param _owners   - the owners of the tokens
+LINE 183     /// @param _ids      - the positionIds
+LINE 184     /// @return balances - the owners' balances
+LINE 185     function balanceOfBatch(address[] memory _owners, uint256[] memory _ids) external view returns (uint256[] memory) {
+LINE 186         return ctf.balanceOfBatch(_owners, _ids);
+LINE 187     }
+LINE 188 
+LINE 189     /// @notice Proxies ERC1155 safeTransferFrom to the CTF
+LINE 190     /// @notice Can only be called by an admin
+LINE 191     /// @notice Requires this contract to be approved for all
+LINE 192     /// @notice Requires the sender to be approved for all
+LINE 193     /// @param _from  - the owner of the tokens
+LINE 194     /// @param _to    - the recipient of the tokens
+LINE 195     /// @param _id    - the positionId
+LINE 196     /// @param _value - the amount of tokens to transfer
+LINE 197     /// @param _data  - the data to pass to the recipient
+LINE 198     function safeTransferFrom(address _from, address _to, uint256 _id, uint256 _value, bytes calldata _data)
+LINE 199         external
+LINE 200         onlyAdmin
+LINE 201     {
+LINE 202         if (!ctf.isApprovedForAll(_from, msg.sender)) {
+LINE 203             revert NotApprovedForAll();
+LINE 204         }
+LINE 205 
+LINE 206         return ctf.safeTransferFrom(_from, _to, _id, _value, _data);
+MATCH_END
+MATCH_BEGIN src__NegRiskAdapter.sol LINES 190 215
+LINE 190     /// @notice Can only be called by an admin
+LINE 191     /// @notice Requires this contract to be approved for all
+LINE 192     /// @notice Requires the sender to be approved for all
+LINE 193     /// @param _from  - the owner of the tokens
+LINE 194     /// @param _to    - the recipient of the tokens
+LINE 195     /// @param _id    - the positionId
+LINE 196     /// @param _value - the amount of tokens to transfer
+LINE 197     /// @param _data  - the data to pass to the recipient
+LINE 198     function safeTransferFrom(address _from, address _to, uint256 _id, uint256 _value, bytes calldata _data)
+LINE 199         external
+LINE 200         onlyAdmin
+LINE 201     {
+LINE 202         if (!ctf.isApprovedForAll(_from, msg.sender)) {
+LINE 203             revert NotApprovedForAll();
+LINE 204         }
+LINE 205 
+LINE 206         return ctf.safeTransferFrom(_from, _to, _id, _value, _data);
+LINE 207     }
+LINE 208 
+LINE 209     /*//////////////////////////////////////////////////////////////
+LINE 210                             REDEEM POSITION
+LINE 211     //////////////////////////////////////////////////////////////*/
+LINE 212 
+LINE 213     /// @notice Redeem a set of conditional tokens for collateral
+LINE 214     /// @param _conditionId - conditionId of the conditional tokens to redeem
+LINE 215     /// @param _amounts     - amounts of conditional tokens to redeem
+MATCH_END
+MATCH_BEGIN src__NegRiskAdapter.sol LINES 198 223
+LINE 198     function safeTransferFrom(address _from, address _to, uint256 _id, uint256 _value, bytes calldata _data)
+LINE 199         external
+LINE 200         onlyAdmin
+LINE 201     {
+LINE 202         if (!ctf.isApprovedForAll(_from, msg.sender)) {
+LINE 203             revert NotApprovedForAll();
+LINE 204         }
+LINE 205 
+LINE 206         return ctf.safeTransferFrom(_from, _to, _id, _value, _data);
+LINE 207     }
+LINE 208 
+LINE 209     /*//////////////////////////////////////////////////////////////
+LINE 210                             REDEEM POSITION
+LINE 211     //////////////////////////////////////////////////////////////*/
+LINE 212 
+LINE 213     /// @notice Redeem a set of conditional tokens for collateral
+LINE 214     /// @param _conditionId - conditionId of the conditional tokens to redeem
+LINE 215     /// @param _amounts     - amounts of conditional tokens to redeem
+LINE 216     /// _amounts should always have length 2, with the first element being the amount of yes tokens to redeem and the
+LINE 217     /// second element being the amount of no tokens to redeem
+LINE 218     function redeemPositions(bytes32 _conditionId, uint256[] calldata _amounts) public {
+LINE 219         uint256[] memory positionIds = Helpers.positionIds(address(wcol), _conditionId);
+LINE 220 
+LINE 221         // get conditional tokens from sender
+LINE 222         ctf.safeBatchTransferFrom(msg.sender, address(this), positionIds, _amounts, "");
+LINE 223         ctf.redeemPositions(address(wcol), bytes32(0), _conditionId, Helpers.partition());
+MATCH_END
+MATCH_BEGIN src__NegRiskAdapter.sol LINES 236 261
+LINE 236 
+LINE 237     /// @notice Convert a set of no positions to the complementary set of yes positions plus collateral proportional to
+LINE 238     /// (# of no positions - 1)
+LINE 239     /// @notice If the market has a fee, the fee is taken from both collateral and the yes positions
+LINE 240     /// @param _marketId - the marketId
+LINE 241     /// @param _indexSet - the set of positions to convert, expressed as an index set where the least significant bit is
+LINE 242     /// the first question (index zero)
+LINE 243     /// @param _amount   - the amount of tokens to convert
+LINE 244     function convertPositions(bytes32 _marketId, uint256 _indexSet, uint256 _amount) external {
+LINE 245         MarketData md = getMarketData(_marketId);
+LINE 246         uint256 questionCount = md.questionCount();
+LINE 247 
+LINE 248         if (md.oracle() == address(0)) revert MarketNotPrepared();
+LINE 249         if (questionCount <= 1) revert NoConvertiblePositions();
+LINE 250         if (_indexSet == 0) revert InvalidIndexSet();
+LINE 251         if ((_indexSet >> questionCount) > 0) revert InvalidIndexSet();
+LINE 252 
+LINE 253         // if _amount is 0, return early
+LINE 254         if (_amount == 0) {
+LINE 255             return;
+LINE 256         }
+LINE 257 
+LINE 258         uint256 index = 0;
+LINE 259         uint256 noPositionCount;
+LINE 260 
+LINE 261         // count number of no positions
+MATCH_END
+MATCH_BEGIN src__NegRiskAdapter.sol LINES 295 320
+LINE 295                     }
+LINE 296                 } else {
+LINE 297                     // YES
+LINE 298                     yesPositionIds[yesIndex] = getPositionId(questionId, true);
+LINE 299                     accumulatedNoPositionIds[yesIndex] = getPositionId(questionId, false);
+LINE 300 
+LINE 301                     // split position to get yes and no tokens
+LINE 302                     // the no tokens will be discarded
+LINE 303                     _splitPosition(getConditionId(questionId), _amount);
+LINE 304 
+LINE 305                     unchecked {
+LINE 306                         ++yesIndex;
+LINE 307                     }
+LINE 308                 }
+LINE 309                 unchecked {
+LINE 310                     ++index;
+LINE 311                 }
+LINE 312             }
+LINE 313         }
+LINE 314 
+LINE 315         // transfer the caller's no tokens _and_ accumulated no tokens to the burn address
+LINE 316         // these must never be redeemed
+LINE 317         {
+LINE 318             ctf.safeBatchTransferFrom(
+LINE 319                 msg.sender, NO_TOKEN_BURN_ADDRESS, noPositionIds, Helpers.values(noPositionIds.length, _amount), ""
+LINE 320             );
+MATCH_END
+MATCH_BEGIN src__NegRiskAdapter.sol LINES 307 332
+LINE 307                     }
+LINE 308                 }
+LINE 309                 unchecked {
+LINE 310                     ++index;
+LINE 311                 }
+LINE 312             }
+LINE 313         }
+LINE 314 
+LINE 315         // transfer the caller's no tokens _and_ accumulated no tokens to the burn address
+LINE 316         // these must never be redeemed
+LINE 317         {
+LINE 318             ctf.safeBatchTransferFrom(
+LINE 319                 msg.sender, NO_TOKEN_BURN_ADDRESS, noPositionIds, Helpers.values(noPositionIds.length, _amount), ""
+LINE 320             );
+LINE 321             ctf.safeBatchTransferFrom(
+LINE 322                 address(this),
+LINE 323                 NO_TOKEN_BURN_ADDRESS,
+LINE 324                 accumulatedNoPositionIds,
+LINE 325                 Helpers.values(yesPositionCount, _amount),
+LINE 326                 ""
+LINE 327             );
+LINE 328         }
+LINE 329 
+LINE 330         uint256 feeAmount = (_amount * md.feeBips()) / FEE_DENOMINATOR;
+LINE 331         uint256 amountOut = _amount - feeAmount;
+LINE 332 
+MATCH_END
+MATCH_BEGIN src__NegRiskAdapter.sol LINES 411 422
+LINE 411         emit OutcomeReported(NegRiskIdLib.getMarketId(_questionId), _questionId, _outcome);
+LINE 412     }
+LINE 413 
+LINE 414     /*//////////////////////////////////////////////////////////////
+LINE 415                                 INTERNAL
+LINE 416     //////////////////////////////////////////////////////////////*/
+LINE 417 
+LINE 418     /// @dev internal function to avoid stack too deep in convertPositions
+LINE 419     function _splitPosition(bytes32 _conditionId, uint256 _amount) internal {
+LINE 420         ctf.splitPosition(address(wcol), bytes32(0), _conditionId, Helpers.partition(), _amount);
+LINE 421     }
+LINE 422 }
+MATCH_END
+MATCH_BEGIN src__NegRiskAdapter.sol LINES 412 422
+LINE 412     }
+LINE 413 
+LINE 414     /*//////////////////////////////////////////////////////////////
+LINE 415                                 INTERNAL
+LINE 416     //////////////////////////////////////////////////////////////*/
+LINE 417 
+LINE 418     /// @dev internal function to avoid stack too deep in convertPositions
+LINE 419     function _splitPosition(bytes32 _conditionId, uint256 _amount) internal {
+LINE 420         ctf.splitPosition(address(wcol), bytes32(0), _conditionId, Helpers.partition(), _amount);
+LINE 421     }
+LINE 422 }
+MATCH_END
+MATCH_BEGIN src__interfaces__INegRiskAdapter.sol LINES 32 57
+LINE 32 
+LINE 33     function FEE_DENOMINATOR() external view returns (uint256);
+LINE 34     function NO_TOKEN_BURN_ADDRESS() external view returns (address);
+LINE 35     function addAdmin(address admin) external;
+LINE 36     function admins(address) external view returns (uint256);
+LINE 37     function balanceOf(address _owner, uint256 _id) external view returns (uint256);
+LINE 38     function balanceOfBatch(address[] memory _owners, uint256[] memory _ids) external view returns (uint256[] memory);
+LINE 39     function col() external view returns (address);
+LINE 40     function convertPositions(bytes32 _marketId, uint256 _indexSet, uint256 _amount) external;
+LINE 41     function ctf() external view returns (address);
+LINE 42     function getConditionId(bytes32 _questionId) external view returns (bytes32);
+LINE 43     function getDetermined(bytes32 _marketId) external view returns (bool);
+LINE 44     function getFeeBips(bytes32 _marketId) external view returns (uint256);
+LINE 45     function getMarketData(bytes32 _marketId) external view returns (MarketData);
+LINE 46     function getOracle(bytes32 _marketId) external view returns (address);
+LINE 47     function getPositionId(bytes32 _questionId, bool _outcome) external view returns (uint256);
+LINE 48     function getQuestionCount(bytes32 _marketId) external view returns (uint256);
+LINE 49     function getResult(bytes32 _marketId) external view returns (uint256);
+LINE 50     function isAdmin(address addr) external view returns (bool);
+LINE 51     function mergePositions(address _collateralToken, bytes32, bytes32 _conditionId, uint256[] memory, uint256 _amount)
+LINE 52         external;
+LINE 53     function mergePositions(bytes32 _conditionId, uint256 _amount) external;
+LINE 54     function onERC1155BatchReceived(address, address, uint256[] memory, uint256[] memory, bytes memory)
+LINE 55         external
+LINE 56         returns (bytes4);
+LINE 57     function onERC1155Received(address, address, uint256, uint256, bytes memory) external returns (bytes4);
+MATCH_END
+MATCH_BEGIN src__interfaces__INegRiskAdapter.sol LINES 43 68
+LINE 43     function getDetermined(bytes32 _marketId) external view returns (bool);
+LINE 44     function getFeeBips(bytes32 _marketId) external view returns (uint256);
+LINE 45     function getMarketData(bytes32 _marketId) external view returns (MarketData);
+LINE 46     function getOracle(bytes32 _marketId) external view returns (address);
+LINE 47     function getPositionId(bytes32 _questionId, bool _outcome) external view returns (uint256);
+LINE 48     function getQuestionCount(bytes32 _marketId) external view returns (uint256);
+LINE 49     function getResult(bytes32 _marketId) external view returns (uint256);
+LINE 50     function isAdmin(address addr) external view returns (bool);
+LINE 51     function mergePositions(address _collateralToken, bytes32, bytes32 _conditionId, uint256[] memory, uint256 _amount)
+LINE 52         external;
+LINE 53     function mergePositions(bytes32 _conditionId, uint256 _amount) external;
+LINE 54     function onERC1155BatchReceived(address, address, uint256[] memory, uint256[] memory, bytes memory)
+LINE 55         external
+LINE 56         returns (bytes4);
+LINE 57     function onERC1155Received(address, address, uint256, uint256, bytes memory) external returns (bytes4);
+LINE 58     function prepareMarket(uint256 _feeBips, bytes memory _metadata) external returns (bytes32);
+LINE 59     function prepareQuestion(bytes32 _marketId, bytes memory _metadata) external returns (bytes32);
+LINE 60     function redeemPositions(bytes32 _conditionId, uint256[] memory _amounts) external;
+LINE 61     function removeAdmin(address admin) external;
+LINE 62     function renounceAdmin() external;
+LINE 63     function reportOutcome(bytes32 _questionId, bool _outcome) external;
+LINE 64     function safeTransferFrom(address _from, address _to, uint256 _id, uint256 _value, bytes memory _data) external;
+LINE 65     function splitPosition(address _collateralToken, bytes32, bytes32 _conditionId, uint256[] memory, uint256 _amount)
+LINE 66         external;
+LINE 67     function splitPosition(bytes32 _conditionId, uint256 _amount) external;
+LINE 68     function vault() external view returns (address);
+MATCH_END
+MATCH_BEGIN src__interfaces__INegRiskAdapter.sol LINES 45 70
+LINE 45     function getMarketData(bytes32 _marketId) external view returns (MarketData);
+LINE 46     function getOracle(bytes32 _marketId) external view returns (address);
+LINE 47     function getPositionId(bytes32 _questionId, bool _outcome) external view returns (uint256);
+LINE 48     function getQuestionCount(bytes32 _marketId) external view returns (uint256);
+LINE 49     function getResult(bytes32 _marketId) external view returns (uint256);
+LINE 50     function isAdmin(address addr) external view returns (bool);
+LINE 51     function mergePositions(address _collateralToken, bytes32, bytes32 _conditionId, uint256[] memory, uint256 _amount)
+LINE 52         external;
+LINE 53     function mergePositions(bytes32 _conditionId, uint256 _amount) external;
+LINE 54     function onERC1155BatchReceived(address, address, uint256[] memory, uint256[] memory, bytes memory)
+LINE 55         external
+LINE 56         returns (bytes4);
+LINE 57     function onERC1155Received(address, address, uint256, uint256, bytes memory) external returns (bytes4);
+LINE 58     function prepareMarket(uint256 _feeBips, bytes memory _metadata) external returns (bytes32);
+LINE 59     function prepareQuestion(bytes32 _marketId, bytes memory _metadata) external returns (bytes32);
+LINE 60     function redeemPositions(bytes32 _conditionId, uint256[] memory _amounts) external;
+LINE 61     function removeAdmin(address admin) external;
+LINE 62     function renounceAdmin() external;
+LINE 63     function reportOutcome(bytes32 _questionId, bool _outcome) external;
+LINE 64     function safeTransferFrom(address _from, address _to, uint256 _id, uint256 _value, bytes memory _data) external;
+LINE 65     function splitPosition(address _collateralToken, bytes32, bytes32 _conditionId, uint256[] memory, uint256 _amount)
+LINE 66         external;
+LINE 67     function splitPosition(bytes32 _conditionId, uint256 _amount) external;
+LINE 68     function vault() external view returns (address);
+LINE 69     function wcol() external view returns (address);
+LINE 70 }
+MATCH_END
+MATCH_BEGIN src__interfaces__INegRiskAdapter.sol LINES 56 70
+LINE 56         returns (bytes4);
+LINE 57     function onERC1155Received(address, address, uint256, uint256, bytes memory) external returns (bytes4);
+LINE 58     function prepareMarket(uint256 _feeBips, bytes memory _metadata) external returns (bytes32);
+LINE 59     function prepareQuestion(bytes32 _marketId, bytes memory _metadata) external returns (bytes32);
+LINE 60     function redeemPositions(bytes32 _conditionId, uint256[] memory _amounts) external;
+LINE 61     function removeAdmin(address admin) external;
+LINE 62     function renounceAdmin() external;
+LINE 63     function reportOutcome(bytes32 _questionId, bool _outcome) external;
+LINE 64     function safeTransferFrom(address _from, address _to, uint256 _id, uint256 _value, bytes memory _data) external;
+LINE 65     function splitPosition(address _collateralToken, bytes32, bytes32 _conditionId, uint256[] memory, uint256 _amount)
+LINE 66         external;
+LINE 67     function splitPosition(bytes32 _conditionId, uint256 _amount) external;
+LINE 68     function vault() external view returns (address);
+LINE 69     function wcol() external view returns (address);
+LINE 70 }
+MATCH_END
+MATCH_BEGIN src__interfaces__INegRiskAdapter.sol LINES 57 70
+LINE 57     function onERC1155Received(address, address, uint256, uint256, bytes memory) external returns (bytes4);
+LINE 58     function prepareMarket(uint256 _feeBips, bytes memory _metadata) external returns (bytes32);
+LINE 59     function prepareQuestion(bytes32 _marketId, bytes memory _metadata) external returns (bytes32);
+LINE 60     function redeemPositions(bytes32 _conditionId, uint256[] memory _amounts) external;
+LINE 61     function removeAdmin(address admin) external;
+LINE 62     function renounceAdmin() external;
+LINE 63     function reportOutcome(bytes32 _questionId, bool _outcome) external;
+LINE 64     function safeTransferFrom(address _from, address _to, uint256 _id, uint256 _value, bytes memory _data) external;
+LINE 65     function splitPosition(address _collateralToken, bytes32, bytes32 _conditionId, uint256[] memory, uint256 _amount)
+LINE 66         external;
+LINE 67     function splitPosition(bytes32 _conditionId, uint256 _amount) external;
+LINE 68     function vault() external view returns (address);
+LINE 69     function wcol() external view returns (address);
+LINE 70 }
+MATCH_END
+MATCH_BEGIN src__interfaces__INegRiskAdapter.sol LINES 59 70
+LINE 59     function prepareQuestion(bytes32 _marketId, bytes memory _metadata) external returns (bytes32);
+LINE 60     function redeemPositions(bytes32 _conditionId, uint256[] memory _amounts) external;
+LINE 61     function removeAdmin(address admin) external;
+LINE 62     function renounceAdmin() external;
+LINE 63     function reportOutcome(bytes32 _questionId, bool _outcome) external;
+LINE 64     function safeTransferFrom(address _from, address _to, uint256 _id, uint256 _value, bytes memory _data) external;
+LINE 65     function splitPosition(address _collateralToken, bytes32, bytes32 _conditionId, uint256[] memory, uint256 _amount)
+LINE 66         external;
+LINE 67     function splitPosition(bytes32 _conditionId, uint256 _amount) external;
+LINE 68     function vault() external view returns (address);
+LINE 69     function wcol() external view returns (address);
+LINE 70 }
+MATCH_END
+MATCH_BEGIN src__test__NegRiskAdapter__ConvertPositions.t.sol LINES 22 47
+LINE 22             vm.prank(oracle);
+LINE 23             bytes32 questionId = nrAdapter.prepareQuestion(marketId, data);
+LINE 24             bytes32 conditionId = nrAdapter.getConditionId(questionId);
+LINE 25 
+LINE 26             // // split position to alice
+LINE 27             vm.startPrank(alice);
+LINE 28             usdc.mint(alice, _amount);
+LINE 29             usdc.approve(address(nrAdapter), _amount);
+LINE 30             nrAdapter.splitPosition(conditionId, _amount);
+LINE 31             vm.stopPrank();
+LINE 32 
+LINE 33             ++i;
+LINE 34         }
+LINE 35 
+LINE 36         assertEq(nrAdapter.getQuestionCount(marketId), _questionCount);
+LINE 37 
+LINE 38         // send no positions to brian
+LINE 39         {
+LINE 40             i = 0;
+LINE 41 
+LINE 42             while (i < _questionCount) {
+LINE 43                 if (_indexSet & (1 << i) > 0) {
+LINE 44                     uint256 positionId = nrAdapter.getPositionId(NegRiskIdLib.getQuestionId(marketId, i), false);
+LINE 45                     ctf.balanceOf(alice, positionId);
+LINE 46                     vm.prank(alice);
+LINE 47                     ctf.safeTransferFrom(alice, brian, positionId, _amount, "");
+MATCH_END
+MATCH_BEGIN src__test__NegRiskAdapter__ConvertPositions.t.sol LINES 39 64
+LINE 39         {
+LINE 40             i = 0;
+LINE 41 
+LINE 42             while (i < _questionCount) {
+LINE 43                 if (_indexSet & (1 << i) > 0) {
+LINE 44                     uint256 positionId = nrAdapter.getPositionId(NegRiskIdLib.getQuestionId(marketId, i), false);
+LINE 45                     ctf.balanceOf(alice, positionId);
+LINE 46                     vm.prank(alice);
+LINE 47                     ctf.safeTransferFrom(alice, brian, positionId, _amount, "");
+LINE 48                     assertEq(ctf.balanceOf(brian, positionId), _amount);
+LINE 49                 }
+LINE 50                 ++i;
+LINE 51             }
+LINE 52         }
+LINE 53     }
+LINE 54 
+LINE 55     function _after(uint256 _questionCount, uint256 _feeBips, uint256 _indexSet, uint256 _amount) internal {
+LINE 56         // check balances
+LINE 57         {
+LINE 58             uint256 feeAmount = (_amount * _feeBips) / FEE_BIPS_MAX;
+LINE 59             uint256 amountOut = _amount - feeAmount;
+LINE 60 
+LINE 61             uint8 i = 0;
+LINE 62             uint256 noPositionsCount;
+LINE 63             uint256 yesPositionsCount;
+LINE 64 
+MATCH_END
+MATCH_BEGIN src__test__NegRiskAdapter__ConvertPositions.t.sol LINES 65 90
+LINE 65             while (i < _questionCount) {
+LINE 66                 if (_indexSet & (1 << i) > 0) {
+LINE 67                     // NO
+LINE 68                     uint256 yesPositionId = nrAdapter.getPositionId(NegRiskIdLib.getQuestionId(marketId, i), true);
+LINE 69                     uint256 noPositionId = nrAdapter.getPositionId(NegRiskIdLib.getQuestionId(marketId, i), false);
+LINE 70 
+LINE 71                     // brian has no more of the no token
+LINE 72                     assertEq(ctf.balanceOf(brian, noPositionId), 0);
+LINE 73                     // they are all at the no token burn address
+LINE 74                     assertEq(ctf.balanceOf(nrAdapter.NO_TOKEN_BURN_ADDRESS(), noPositionId), _amount);
+LINE 75                     // nr adapter should have no conditional tokens
+LINE 76                     assertEq(ctf.balanceOf(address(nrAdapter), yesPositionId), 0);
+LINE 77                     assertEq(ctf.balanceOf(address(nrAdapter), noPositionId), 0);
+LINE 78                     ++noPositionsCount;
+LINE 79                 } else {
+LINE 80                     // YES
+LINE 81                     uint256 yesPositionId = nrAdapter.getPositionId(NegRiskIdLib.getQuestionId(marketId, i), true);
+LINE 82                     uint256 noPositionId = nrAdapter.getPositionId(NegRiskIdLib.getQuestionId(marketId, i), false);
+LINE 83 
+LINE 84                     // brian has _amount of each yes token, after fees
+LINE 85                     assertEq(ctf.balanceOf(brian, yesPositionId), _amount - feeAmount);
+LINE 86                     // vault has the rest of yes tokens as fees
+LINE 87                     assertEq(ctf.balanceOf(vault, yesPositionId), feeAmount);
+LINE 88                     // no tokens should be at the burn address
+LINE 89                     assertEq(ctf.balanceOf(nrAdapter.NO_TOKEN_BURN_ADDRESS(), noPositionId), _amount);
+LINE 90                     // nr adapter should have no conditional tokens
+MATCH_END
+MATCH_BEGIN src__test__NegRiskAdapter__ConvertPositions.t.sol LINES 80 105
+LINE 80                     // YES
+LINE 81                     uint256 yesPositionId = nrAdapter.getPositionId(NegRiskIdLib.getQuestionId(marketId, i), true);
+LINE 82                     uint256 noPositionId = nrAdapter.getPositionId(NegRiskIdLib.getQuestionId(marketId, i), false);
+LINE 83 
+LINE 84                     // brian has _amount of each yes token, after fees
+LINE 85                     assertEq(ctf.balanceOf(brian, yesPositionId), _amount - feeAmount);
+LINE 86                     // vault has the rest of yes tokens as fees
+LINE 87                     assertEq(ctf.balanceOf(vault, yesPositionId), feeAmount);
+LINE 88                     // no tokens should be at the burn address
+LINE 89                     assertEq(ctf.balanceOf(nrAdapter.NO_TOKEN_BURN_ADDRESS(), noPositionId), _amount);
+LINE 90                     // nr adapter should have no conditional tokens
+LINE 91                     assertEq(ctf.balanceOf(address(nrAdapter), yesPositionId), 0);
+LINE 92                     assertEq(ctf.balanceOf(address(nrAdapter), noPositionId), 0);
+LINE 93                     ++yesPositionsCount;
+LINE 94                 }
+LINE 95                 ++i;
+LINE 96             }
+LINE 97 
+LINE 98             assertEq(noPositionsCount + yesPositionsCount, _questionCount);
+LINE 99 
+LINE 100             // brian should have (noPositionsCount -1) * amountOut USDC
+LINE 101             assertEq(usdc.balanceOf(brian), (noPositionsCount - 1) * amountOut);
+LINE 102 
+LINE 103             // the ctf should have (questionCount + yesPositionCount)*_amount WCOL
+LINE 104             assertEq(wcol.balanceOf(address(ctf)), _amount * (_questionCount + yesPositionsCount));
+LINE 105         }
+MATCH_END
+MATCH_BEGIN src__test__NegRiskAdapter__ConvertPositions.t.sol LINES 100 125
+LINE 100             // brian should have (noPositionsCount -1) * amountOut USDC
+LINE 101             assertEq(usdc.balanceOf(brian), (noPositionsCount - 1) * amountOut);
+LINE 102 
+LINE 103             // the ctf should have (questionCount + yesPositionCount)*_amount WCOL
+LINE 104             assertEq(wcol.balanceOf(address(ctf)), _amount * (_questionCount + yesPositionsCount));
+LINE 105         }
+LINE 106     }
+LINE 107 
+LINE 108     function test_convertPositions(uint256 _questionCount, uint256 _feeBips, uint256 _indexSet, uint128 _amount)
+LINE 109         public
+LINE 110     {
+LINE 111         vm.assume(_amount > 0);
+LINE 112 
+LINE 113         _feeBips = bound(_feeBips, 0, FEE_BIPS_MAX);
+LINE 114         _questionCount = bound(_questionCount, 2, QUESTION_COUNT_MAX); // between 2 and QUESTION_COUNT_MAX questions
+LINE 115         _indexSet = bound(_indexSet, 1, (2 ** _questionCount) - 1);
+LINE 116 
+LINE 117         _before(_questionCount, _feeBips, _indexSet, _amount);
+LINE 118 
+LINE 119         // convert positions
+LINE 120         {
+LINE 121             vm.startPrank(brian);
+LINE 122             ctf.setApprovalForAll(address(nrAdapter), true);
+LINE 123 
+LINE 124             vm.expectEmit();
+LINE 125             emit PositionsConverted(brian, marketId, _indexSet, _amount);
+MATCH_END
+MATCH_BEGIN src__test__NegRiskAdapter__ConvertPositions.t.sol LINES 118 143
+LINE 118 
+LINE 119         // convert positions
+LINE 120         {
+LINE 121             vm.startPrank(brian);
+LINE 122             ctf.setApprovalForAll(address(nrAdapter), true);
+LINE 123 
+LINE 124             vm.expectEmit();
+LINE 125             emit PositionsConverted(brian, marketId, _indexSet, _amount);
+LINE 126             nrAdapter.convertPositions(marketId, _indexSet, _amount);
+LINE 127         }
+LINE 128 
+LINE 129         _after(_questionCount, _feeBips, _indexSet, _amount);
+LINE 130     }
+LINE 131 
+LINE 132     function test_convertPositions_singleIndex(
+LINE 133         uint256 _questionCount,
+LINE 134         uint256 _feeBips,
+LINE 135         uint256 _index,
+LINE 136         uint128 _amount
+LINE 137     ) public {
+LINE 138         vm.assume(_amount > 0);
+LINE 139 
+LINE 140         _feeBips = bound(_feeBips, 0, FEE_BIPS_MAX);
+LINE 141         _questionCount = bound(_questionCount, 2, QUESTION_COUNT_MAX); // between 2 and QUESTION_COUNT_MAX questions
+LINE 142         _index = bound(_index, 0, _questionCount - 1);
+LINE 143         uint256 _indexSet = 1 << _index;
+MATCH_END
+MATCH_BEGIN src__test__NegRiskAdapter__ConvertPositions.t.sol LINES 146 171
+LINE 146 
+LINE 147         // convert positions
+LINE 148         {
+LINE 149             vm.startPrank(brian);
+LINE 150             ctf.setApprovalForAll(address(nrAdapter), true);
+LINE 151 
+LINE 152             vm.expectEmit();
+LINE 153             emit PositionsConverted(brian, marketId, _indexSet, _amount);
+LINE 154             nrAdapter.convertPositions(marketId, _indexSet, _amount);
+LINE 155         }
+LINE 156 
+LINE 157         _after(_questionCount, _feeBips, _indexSet, _amount);
+LINE 158     }
+LINE 159 
+LINE 160     function test_convertPositions_allIndices(uint256 _questionCount, uint256 _feeBips, uint128 _amount) public {
+LINE 161         vm.assume(_amount > 0);
+LINE 162 
+LINE 163         _feeBips = bound(_feeBips, 0, FEE_BIPS_MAX);
+LINE 164         _questionCount = bound(_questionCount, 2, QUESTION_COUNT_MAX); // between 2 and QUESTION_COUNT_MAX questions
+LINE 165         uint256 _indexSet = (2 ** _questionCount) - 1;
+LINE 166 
+LINE 167         _before(_questionCount, _feeBips, _indexSet, _amount);
+LINE 168 
+LINE 169         // convert positions
+LINE 170         {
+LINE 171             vm.startPrank(brian);
+MATCH_END
+MATCH_BEGIN src__test__NegRiskAdapter__ConvertPositions.t.sol LINES 168 193
+LINE 168 
+LINE 169         // convert positions
+LINE 170         {
+LINE 171             vm.startPrank(brian);
+LINE 172             ctf.setApprovalForAll(address(nrAdapter), true);
+LINE 173 
+LINE 174             vm.expectEmit();
+LINE 175             emit PositionsConverted(brian, marketId, _indexSet, _amount);
+LINE 176             nrAdapter.convertPositions(marketId, _indexSet, _amount);
+LINE 177         }
+LINE 178 
+LINE 179         _after(_questionCount, _feeBips, _indexSet, _amount);
+LINE 180     }
+LINE 181 
+LINE 182     function test_convertPositions_zeroAmount(uint256 _a, uint256 _b) public {
+LINE 183         uint256 amount = 0;
+LINE 184 
+LINE 185         uint256 questionCountMax = 32;
+LINE 186         uint256 questionCount = bound(_a, 2, questionCountMax); // between 2 and 16 questions
+LINE 187         uint256 indexSet = bound(_b, 1, (2 ** questionCount) - 1);
+LINE 188 
+LINE 189         _before(questionCount, 0, indexSet, amount);
+LINE 190 
+LINE 191         {
+LINE 192             vm.prank(brian);
+LINE 193 
+MATCH_END
+MATCH_BEGIN src__test__NegRiskAdapter__ConvertPositions.t.sol LINES 186 211
+LINE 186         uint256 questionCount = bound(_a, 2, questionCountMax); // between 2 and 16 questions
+LINE 187         uint256 indexSet = bound(_b, 1, (2 ** questionCount) - 1);
+LINE 188 
+LINE 189         _before(questionCount, 0, indexSet, amount);
+LINE 190 
+LINE 191         {
+LINE 192             vm.prank(brian);
+LINE 193 
+LINE 194             nrAdapter.convertPositions(marketId, indexSet, amount);
+LINE 195         }
+LINE 196     }
+LINE 197 
+LINE 198     function test_revert_convertPositions_marketNotPrepared(bytes32 _marketId) public {
+LINE 199         vm.expectRevert(MarketNotPrepared.selector);
+LINE 200         nrAdapter.convertPositions(_marketId, 0, 0);
+LINE 201     }
+LINE 202 
+LINE 203     function test_revert_convertPositions_noConvertiblePositions() public {
+LINE 204         vm.prank(oracle);
+LINE 205         marketId = nrAdapter.prepareMarket(0, "");
+LINE 206 
+LINE 207         // 0 questions prepared
+LINE 208         vm.expectRevert(NoConvertiblePositions.selector);
+LINE 209         nrAdapter.convertPositions(marketId, 0, 0);
+LINE 210 
+LINE 211         vm.prank(oracle);
+MATCH_END
+MATCH_BEGIN src__test__NegRiskAdapter__ConvertPositions.t.sol LINES 192 217
+LINE 192             vm.prank(brian);
+LINE 193 
+LINE 194             nrAdapter.convertPositions(marketId, indexSet, amount);
+LINE 195         }
+LINE 196     }
+LINE 197 
+LINE 198     function test_revert_convertPositions_marketNotPrepared(bytes32 _marketId) public {
+LINE 199         vm.expectRevert(MarketNotPrepared.selector);
+LINE 200         nrAdapter.convertPositions(_marketId, 0, 0);
+LINE 201     }
+LINE 202 
+LINE 203     function test_revert_convertPositions_noConvertiblePositions() public {
+LINE 204         vm.prank(oracle);
+LINE 205         marketId = nrAdapter.prepareMarket(0, "");
+LINE 206 
+LINE 207         // 0 questions prepared
+LINE 208         vm.expectRevert(NoConvertiblePositions.selector);
+LINE 209         nrAdapter.convertPositions(marketId, 0, 0);
+LINE 210 
+LINE 211         vm.prank(oracle);
+LINE 212         nrAdapter.prepareQuestion(marketId, "");
+LINE 213 
+LINE 214         // 1 question prepared
+LINE 215         vm.expectRevert(NoConvertiblePositions.selector);
+LINE 216         nrAdapter.convertPositions(marketId, 0, 0);
+LINE 217 
+MATCH_END
+MATCH_BEGIN src__test__NegRiskAdapter__ConvertPositions.t.sol LINES 201 226
+LINE 201     }
+LINE 202 
+LINE 203     function test_revert_convertPositions_noConvertiblePositions() public {
+LINE 204         vm.prank(oracle);
+LINE 205         marketId = nrAdapter.prepareMarket(0, "");
+LINE 206 
+LINE 207         // 0 questions prepared
+LINE 208         vm.expectRevert(NoConvertiblePositions.selector);
+LINE 209         nrAdapter.convertPositions(marketId, 0, 0);
+LINE 210 
+LINE 211         vm.prank(oracle);
+LINE 212         nrAdapter.prepareQuestion(marketId, "");
+LINE 213 
+LINE 214         // 1 question prepared
+LINE 215         vm.expectRevert(NoConvertiblePositions.selector);
+LINE 216         nrAdapter.convertPositions(marketId, 0, 0);
+LINE 217 
+LINE 218         vm.prank(oracle);
+LINE 219         nrAdapter.prepareQuestion(marketId, "");
+LINE 220 
+LINE 221         // 2 positions prepared
+LINE 222         vm.expectRevert(InvalidIndexSet.selector);
+LINE 223         nrAdapter.convertPositions(marketId, 0, 0);
+LINE 224     }
+LINE 225 
+LINE 226     function test_revert_convertPositions_invalidIndexSet(uint256 _a, uint256 _b, uint256 _c, uint128 _amount) public {
+MATCH_END
+MATCH_BEGIN src__test__NegRiskAdapter__ConvertPositions.t.sol LINES 208 233
+LINE 208         vm.expectRevert(NoConvertiblePositions.selector);
+LINE 209         nrAdapter.convertPositions(marketId, 0, 0);
+LINE 210 
+LINE 211         vm.prank(oracle);
+LINE 212         nrAdapter.prepareQuestion(marketId, "");
+LINE 213 
+LINE 214         // 1 question prepared
+LINE 215         vm.expectRevert(NoConvertiblePositions.selector);
+LINE 216         nrAdapter.convertPositions(marketId, 0, 0);
+LINE 217 
+LINE 218         vm.prank(oracle);
+LINE 219         nrAdapter.prepareQuestion(marketId, "");
+LINE 220 
+LINE 221         // 2 positions prepared
+LINE 222         vm.expectRevert(InvalidIndexSet.selector);
+LINE 223         nrAdapter.convertPositions(marketId, 0, 0);
+LINE 224     }
+LINE 225 
+LINE 226     function test_revert_convertPositions_invalidIndexSet(uint256 _a, uint256 _b, uint256 _c, uint128 _amount) public {
+LINE 227         vm.assume(_amount > 0);
+LINE 228 
+LINE 229         // 10%
+LINE 230         uint256 feeBips = 10_000;
+LINE 231 
+LINE 232         uint256 questionCountMax = 32;
+LINE 233         uint256 questionCount = bound(_a, 2, questionCountMax); // between 2 and 16 questions
+MATCH_END
+MATCH_BEGIN src__test__NegRiskAdapter__ConvertPositions.t.sol LINES 215 240
+LINE 215         vm.expectRevert(NoConvertiblePositions.selector);
+LINE 216         nrAdapter.convertPositions(marketId, 0, 0);
+LINE 217 
+LINE 218         vm.prank(oracle);
+LINE 219         nrAdapter.prepareQuestion(marketId, "");
+LINE 220 
+LINE 221         // 2 positions prepared
+LINE 222         vm.expectRevert(InvalidIndexSet.selector);
+LINE 223         nrAdapter.convertPositions(marketId, 0, 0);
+LINE 224     }
+LINE 225 
+LINE 226     function test_revert_convertPositions_invalidIndexSet(uint256 _a, uint256 _b, uint256 _c, uint128 _amount) public {
+LINE 227         vm.assume(_amount > 0);
+LINE 228 
+LINE 229         // 10%
+LINE 230         uint256 feeBips = 10_000;
+LINE 231 
+LINE 232         uint256 questionCountMax = 32;
+LINE 233         uint256 questionCount = bound(_a, 2, questionCountMax); // between 2 and 16 questions
+LINE 234         uint256 indexSet = bound(_b, 1, (2 ** questionCount) - 1);
+LINE 235 
+LINE 236         _before(questionCount, feeBips, indexSet, _amount);
+LINE 237 
+LINE 238         uint256 zeroIndexSet = 0;
+LINE 239         vm.expectRevert(InvalidIndexSet.selector);
+LINE 240         nrAdapter.convertPositions(marketId, zeroIndexSet, 0);
+MATCH_END
+MATCH_BEGIN src__test__NegRiskAdapter__ConvertPositions.t.sol LINES 232 246
+LINE 232         uint256 questionCountMax = 32;
+LINE 233         uint256 questionCount = bound(_a, 2, questionCountMax); // between 2 and 16 questions
+LINE 234         uint256 indexSet = bound(_b, 1, (2 ** questionCount) - 1);
+LINE 235 
+LINE 236         _before(questionCount, feeBips, indexSet, _amount);
+LINE 237 
+LINE 238         uint256 zeroIndexSet = 0;
+LINE 239         vm.expectRevert(InvalidIndexSet.selector);
+LINE 240         nrAdapter.convertPositions(marketId, zeroIndexSet, 0);
+LINE 241 
+LINE 242         uint256 invalidIndexSet = bound(_c, 2 ** questionCount, type(uint256).max);
+LINE 243         vm.expectRevert(InvalidIndexSet.selector);
+LINE 244         nrAdapter.convertPositions(marketId, invalidIndexSet, 0);
+LINE 245     }
+LINE 246 }
+MATCH_END
+MATCH_BEGIN src__test__NegRiskAdapter__ConvertPositions.t.sol LINES 236 246
+LINE 236         _before(questionCount, feeBips, indexSet, _amount);
+LINE 237 
+LINE 238         uint256 zeroIndexSet = 0;
+LINE 239         vm.expectRevert(InvalidIndexSet.selector);
+LINE 240         nrAdapter.convertPositions(marketId, zeroIndexSet, 0);
+LINE 241 
+LINE 242         uint256 invalidIndexSet = bound(_c, 2 ** questionCount, type(uint256).max);
+LINE 243         vm.expectRevert(InvalidIndexSet.selector);
+LINE 244         nrAdapter.convertPositions(marketId, invalidIndexSet, 0);
+LINE 245     }
+LINE 246 }
+MATCH_END
+MATCH_BEGIN src__test__NegRiskAdapter__MergePositions.t.sol LINES 21 46
+LINE 21         questionId = nrAdapter.prepareQuestion(marketId, data);
+LINE 22         conditionId = nrAdapter.getConditionId(questionId);
+LINE 23         vm.stopPrank();
+LINE 24 
+LINE 25         // split position to alice
+LINE 26         vm.startPrank(alice);
+LINE 27         usdc.mint(alice, _amount);
+LINE 28         usdc.approve(address(nrAdapter), _amount);
+LINE 29         nrAdapter.splitPosition(conditionId, _amount);
+LINE 30 
+LINE 31         positionIdFalse = nrAdapter.getPositionId(questionId, false);
+LINE 32         ctf.safeTransferFrom(alice, brian, positionIdFalse, _amount, "");
+LINE 33 
+LINE 34         positionIdTrue = nrAdapter.getPositionId(questionId, true);
+LINE 35         ctf.safeTransferFrom(alice, brian, positionIdTrue, _amount, "");
+LINE 36 
+LINE 37         vm.stopPrank();
+LINE 38 
+LINE 39         vm.prank(brian);
+LINE 40         ctf.setApprovalForAll(address(nrAdapter), true);
+LINE 41     }
+LINE 42 
+LINE 43     function _after(uint256 _amount) public {
+LINE 44         assertEq(usdc.balanceOf(brian), _amount);
+LINE 45         assertEq(wcol.totalSupply(), 0);
+LINE 46         assertEq(ctf.balanceOf(brian, positionIdFalse), 0);
+MATCH_END
+MATCH_BEGIN src__test__NegRiskAdapter__MergePositions.t.sol LINES 24 49
+LINE 24 
+LINE 25         // split position to alice
+LINE 26         vm.startPrank(alice);
+LINE 27         usdc.mint(alice, _amount);
+LINE 28         usdc.approve(address(nrAdapter), _amount);
+LINE 29         nrAdapter.splitPosition(conditionId, _amount);
+LINE 30 
+LINE 31         positionIdFalse = nrAdapter.getPositionId(questionId, false);
+LINE 32         ctf.safeTransferFrom(alice, brian, positionIdFalse, _amount, "");
+LINE 33 
+LINE 34         positionIdTrue = nrAdapter.getPositionId(questionId, true);
+LINE 35         ctf.safeTransferFrom(alice, brian, positionIdTrue, _amount, "");
+LINE 36 
+LINE 37         vm.stopPrank();
+LINE 38 
+LINE 39         vm.prank(brian);
+LINE 40         ctf.setApprovalForAll(address(nrAdapter), true);
+LINE 41     }
+LINE 42 
+LINE 43     function _after(uint256 _amount) public {
+LINE 44         assertEq(usdc.balanceOf(brian), _amount);
+LINE 45         assertEq(wcol.totalSupply(), 0);
+LINE 46         assertEq(ctf.balanceOf(brian, positionIdFalse), 0);
+LINE 47         assertEq(ctf.balanceOf(brian, positionIdTrue), 0);
+LINE 48     }
+LINE 49 
+MATCH_END
+MATCH_BEGIN src__test__NegRiskAdapter__MergePositions.t.sol LINES 27 52
+LINE 27         usdc.mint(alice, _amount);
+LINE 28         usdc.approve(address(nrAdapter), _amount);
+LINE 29         nrAdapter.splitPosition(conditionId, _amount);
+LINE 30 
+LINE 31         positionIdFalse = nrAdapter.getPositionId(questionId, false);
+LINE 32         ctf.safeTransferFrom(alice, brian, positionIdFalse, _amount, "");
+LINE 33 
+LINE 34         positionIdTrue = nrAdapter.getPositionId(questionId, true);
+LINE 35         ctf.safeTransferFrom(alice, brian, positionIdTrue, _amount, "");
+LINE 36 
+LINE 37         vm.stopPrank();
+LINE 38 
+LINE 39         vm.prank(brian);
+LINE 40         ctf.setApprovalForAll(address(nrAdapter), true);
+LINE 41     }
+LINE 42 
+LINE 43     function _after(uint256 _amount) public {
+LINE 44         assertEq(usdc.balanceOf(brian), _amount);
+LINE 45         assertEq(wcol.totalSupply(), 0);
+LINE 46         assertEq(ctf.balanceOf(brian, positionIdFalse), 0);
+LINE 47         assertEq(ctf.balanceOf(brian, positionIdTrue), 0);
+LINE 48     }
+LINE 49 
+LINE 50     function test_mergePositions(uint256 _amount) public {
+LINE 51         _before(_amount);
+LINE 52 
+MATCH_END
+MATCH_BEGIN src__test__NegRiskAdapter__MergePositions.t.sol LINES 42 67
+LINE 42 
+LINE 43     function _after(uint256 _amount) public {
+LINE 44         assertEq(usdc.balanceOf(brian), _amount);
+LINE 45         assertEq(wcol.totalSupply(), 0);
+LINE 46         assertEq(ctf.balanceOf(brian, positionIdFalse), 0);
+LINE 47         assertEq(ctf.balanceOf(brian, positionIdTrue), 0);
+LINE 48     }
+LINE 49 
+LINE 50     function test_mergePositions(uint256 _amount) public {
+LINE 51         _before(_amount);
+LINE 52 
+LINE 53         vm.prank(brian);
+LINE 54         nrAdapter.mergePositions(conditionId, _amount);
+LINE 55 
+LINE 56         _after(_amount);
+LINE 57     }
+LINE 58 
+LINE 59     function test_mergePositions_asCtf(uint256 _amount) public {
+LINE 60         _before(_amount);
+LINE 61 
+LINE 62         uint256[] memory partition = new uint256[](2);
+LINE 63         partition[0] = 1;
+LINE 64         partition[1] = 2;
+LINE 65 
+LINE 66         vm.prank(brian);
+LINE 67         IConditionalTokens(address(nrAdapter)).mergePositions(
+MATCH_END
+MATCH_BEGIN src__test__NegRiskAdapter__MergePositions.t.sol LINES 46 71
+LINE 46         assertEq(ctf.balanceOf(brian, positionIdFalse), 0);
+LINE 47         assertEq(ctf.balanceOf(brian, positionIdTrue), 0);
+LINE 48     }
+LINE 49 
+LINE 50     function test_mergePositions(uint256 _amount) public {
+LINE 51         _before(_amount);
+LINE 52 
+LINE 53         vm.prank(brian);
+LINE 54         nrAdapter.mergePositions(conditionId, _amount);
+LINE 55 
+LINE 56         _after(_amount);
+LINE 57     }
+LINE 58 
+LINE 59     function test_mergePositions_asCtf(uint256 _amount) public {
+LINE 60         _before(_amount);
+LINE 61 
+LINE 62         uint256[] memory partition = new uint256[](2);
+LINE 63         partition[0] = 1;
+LINE 64         partition[1] = 2;
+LINE 65 
+LINE 66         vm.prank(brian);
+LINE 67         IConditionalTokens(address(nrAdapter)).mergePositions(
+LINE 68             address(usdc), bytes32(0), conditionId, partition, _amount
+LINE 69         );
+LINE 70 
+LINE 71         _after(_amount);
+MATCH_END
+MATCH_BEGIN src__test__NegRiskAdapter__MergePositions.t.sol LINES 59 84
+LINE 59     function test_mergePositions_asCtf(uint256 _amount) public {
+LINE 60         _before(_amount);
+LINE 61 
+LINE 62         uint256[] memory partition = new uint256[](2);
+LINE 63         partition[0] = 1;
+LINE 64         partition[1] = 2;
+LINE 65 
+LINE 66         vm.prank(brian);
+LINE 67         IConditionalTokens(address(nrAdapter)).mergePositions(
+LINE 68             address(usdc), bytes32(0), conditionId, partition, _amount
+LINE 69         );
+LINE 70 
+LINE 71         _after(_amount);
+LINE 72     }
+LINE 73 
+LINE 74     function test_revert_mergePositions_asCTF_wrongCollateralType(uint256 _amount, address _collateral) public {
+LINE 75         vm.assume(_collateral != address(usdc));
+LINE 76 
+LINE 77         _before(_amount);
+LINE 78 
+LINE 79         uint256[] memory partition = new uint256[](2);
+LINE 80         partition[0] = 1;
+LINE 81         partition[1] = 2;
+LINE 82 
+LINE 83         vm.expectRevert(UnexpectedCollateralToken.selector);
+LINE 84         IConditionalTokens(address(nrAdapter)).mergePositions(_collateral, bytes32(0), conditionId, partition, _amount);
+MATCH_END
+MATCH_BEGIN src__test__NegRiskAdapter__MergePositions.t.sol LINES 76 86
+LINE 76 
+LINE 77         _before(_amount);
+LINE 78 
+LINE 79         uint256[] memory partition = new uint256[](2);
+LINE 80         partition[0] = 1;
+LINE 81         partition[1] = 2;
+LINE 82 
+LINE 83         vm.expectRevert(UnexpectedCollateralToken.selector);
+LINE 84         IConditionalTokens(address(nrAdapter)).mergePositions(_collateral, bytes32(0), conditionId, partition, _amount);
+LINE 85     }
+LINE 86 }
+MATCH_END
+MATCH_BEGIN src__test__NegRiskAdapter__SplitPosition.t.sol LINES 35 60
+LINE 35 
+LINE 36         // check position token balances
+LINE 37         uint256 positionIdFalse = nrAdapter.getPositionId(questionId, false);
+LINE 38         assertEq(ctf.balanceOf(alice, positionIdFalse), _amount);
+LINE 39         uint256 positionIdTrue = nrAdapter.getPositionId(questionId, true);
+LINE 40         assertEq(ctf.balanceOf(alice, positionIdTrue), _amount);
+LINE 41     }
+LINE 42 
+LINE 43     function test_splitPosition(uint256 _amount) public {
+LINE 44         _before(_amount);
+LINE 45 
+LINE 46         vm.prank(alice);
+LINE 47         nrAdapter.splitPosition(conditionId, _amount);
+LINE 48 
+LINE 49         _after(_amount);
+LINE 50     }
+LINE 51 
+LINE 52     function test_splitPosition_asCTF(uint256 _amount) public {
+LINE 53         _before(_amount);
+LINE 54 
+LINE 55         uint256[] memory partition = new uint256[](2);
+LINE 56         partition[0] = 1;
+LINE 57         partition[1] = 2;
+LINE 58 
+LINE 59         vm.prank(alice);
+LINE 60         IConditionalTokens(address(nrAdapter)).splitPosition(address(usdc), bytes32(0), conditionId, partition, _amount);
+MATCH_END
+MATCH_BEGIN src__test__NegRiskAdapter__SplitPosition.t.sol LINES 39 64
+LINE 39         uint256 positionIdTrue = nrAdapter.getPositionId(questionId, true);
+LINE 40         assertEq(ctf.balanceOf(alice, positionIdTrue), _amount);
+LINE 41     }
+LINE 42 
+LINE 43     function test_splitPosition(uint256 _amount) public {
+LINE 44         _before(_amount);
+LINE 45 
+LINE 46         vm.prank(alice);
+LINE 47         nrAdapter.splitPosition(conditionId, _amount);
+LINE 48 
+LINE 49         _after(_amount);
+LINE 50     }
+LINE 51 
+LINE 52     function test_splitPosition_asCTF(uint256 _amount) public {
+LINE 53         _before(_amount);
+LINE 54 
+LINE 55         uint256[] memory partition = new uint256[](2);
+LINE 56         partition[0] = 1;
+LINE 57         partition[1] = 2;
+LINE 58 
+LINE 59         vm.prank(alice);
+LINE 60         IConditionalTokens(address(nrAdapter)).splitPosition(address(usdc), bytes32(0), conditionId, partition, _amount);
+LINE 61 
+LINE 62         _after(_amount);
+LINE 63     }
+LINE 64 
+MATCH_END
+MATCH_BEGIN src__test__NegRiskAdapter__SplitPosition.t.sol LINES 52 77
+LINE 52     function test_splitPosition_asCTF(uint256 _amount) public {
+LINE 53         _before(_amount);
+LINE 54 
+LINE 55         uint256[] memory partition = new uint256[](2);
+LINE 56         partition[0] = 1;
+LINE 57         partition[1] = 2;
+LINE 58 
+LINE 59         vm.prank(alice);
+LINE 60         IConditionalTokens(address(nrAdapter)).splitPosition(address(usdc), bytes32(0), conditionId, partition, _amount);
+LINE 61 
+LINE 62         _after(_amount);
+LINE 63     }
+LINE 64 
+LINE 65     function test_revert_splitPosition_asCTF_wrongCollateralType(uint256 _amount, address _collateral) public {
+LINE 66         vm.assume(_collateral != address(usdc));
+LINE 67 
+LINE 68         _before(_amount);
+LINE 69 
+LINE 70         uint256[] memory partition = new uint256[](2);
+LINE 71         partition[0] = 1;
+LINE 72         partition[1] = 2;
+LINE 73 
+LINE 74         vm.expectRevert(UnexpectedCollateralToken.selector);
+LINE 75         IConditionalTokens(address(nrAdapter)).splitPosition(_collateral, bytes32(0), conditionId, partition, _amount);
+LINE 76     }
+LINE 77 }
+MATCH_END
+MATCH_BEGIN src__test__NegRiskAdapter__SplitPosition.t.sol LINES 67 77
+LINE 67 
+LINE 68         _before(_amount);
+LINE 69 
+LINE 70         uint256[] memory partition = new uint256[](2);
+LINE 71         partition[0] = 1;
+LINE 72         partition[1] = 2;
+LINE 73 
+LINE 74         vm.expectRevert(UnexpectedCollateralToken.selector);
+LINE 75         IConditionalTokens(address(nrAdapter)).splitPosition(_collateral, bytes32(0), conditionId, partition, _amount);
+LINE 76     }
+LINE 77 }
+MATCH_END
+HAS_MERGE_POSITIONS True
+HAS_SPLIT_POSITION True
+HAS_CONVERT_POSITIONS True
+HAS_EXPLICIT_ALL_YES_FUNCTION False
+REASONING Initial inventory: YES token for every question, zero NO tokens, zero extra collateral.
+REASONING mergePositions requires a YES and NO complete pair for one binary condition if implementation and tests confirm that input structure.
+REASONING convertPositions is relevant only if its implementation consumes NO positions.
+REASONING splitPosition requires collateral input and therefore does not extract collateral from an all-YES-only inventory.
+REASONING If no function consumes an all-YES market-wide set, the all-YES payoff equivalence is settlement-value equivalence rather than pre-resolution collateral reachability.
+OUTPUT_PATH /home/leonh/prediction_research/knowledge/raw/reference/polymarket_negrisk_adapter/e425-all-yes-collateral-reachability.json
+ALL_YES_COLLATERAL_REACHABILITY_E425_PASS
