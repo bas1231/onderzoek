@@ -1,0 +1,166 @@
+FUNCTION_BEGIN splitPosition LINES 114 119
+LINE 114     function splitPosition(address _collateralToken, bytes32, bytes32 _conditionId, uint256[] calldata, uint256 _amount)
+LINE 115         external
+LINE 116     {
+LINE 117         if (_collateralToken != address(col)) revert UnexpectedCollateralToken();
+LINE 118         splitPosition(_conditionId, _amount);
+LINE 119     }
+FUNCTION_END splitPosition
+FUNCTION_BEGIN mergePositions LINES 144 153
+LINE 144     function mergePositions(
+LINE 145         address _collateralToken,
+LINE 146         bytes32,
+LINE 147         bytes32 _conditionId,
+LINE 148         uint256[] calldata,
+LINE 149         uint256 _amount
+LINE 150     ) external {
+LINE 151         if (_collateralToken != address(col)) revert UnexpectedCollateralToken();
+LINE 152         mergePositions(_conditionId, _amount);
+LINE 153     }
+FUNCTION_END mergePositions
+FUNCTION_BEGIN redeemPositions LINES 218 231
+LINE 218     function redeemPositions(bytes32 _conditionId, uint256[] calldata _amounts) public {
+LINE 219         uint256[] memory positionIds = Helpers.positionIds(address(wcol), _conditionId);
+LINE 220 
+LINE 221         // get conditional tokens from sender
+LINE 222         ctf.safeBatchTransferFrom(msg.sender, address(this), positionIds, _amounts, "");
+LINE 223         ctf.redeemPositions(address(wcol), bytes32(0), _conditionId, Helpers.partition());
+LINE 224 
+LINE 225         uint256 payout = wcol.balanceOf(address(this));
+LINE 226         if (payout > 0) {
+LINE 227             wcol.unwrap(msg.sender, payout);
+LINE 228         }
+LINE 229 
+LINE 230         emit PayoutRedemption(msg.sender, _conditionId, _amounts, payout);
+LINE 231     }
+FUNCTION_END redeemPositions
+FUNCTION_BEGIN convertPositions LINES 244 359
+LINE 244     function convertPositions(bytes32 _marketId, uint256 _indexSet, uint256 _amount) external {
+LINE 245         MarketData md = getMarketData(_marketId);
+LINE 246         uint256 questionCount = md.questionCount();
+LINE 247 
+LINE 248         if (md.oracle() == address(0)) revert MarketNotPrepared();
+LINE 249         if (questionCount <= 1) revert NoConvertiblePositions();
+LINE 250         if (_indexSet == 0) revert InvalidIndexSet();
+LINE 251         if ((_indexSet >> questionCount) > 0) revert InvalidIndexSet();
+LINE 252 
+LINE 253         // if _amount is 0, return early
+LINE 254         if (_amount == 0) {
+LINE 255             return;
+LINE 256         }
+LINE 257 
+LINE 258         uint256 index = 0;
+LINE 259         uint256 noPositionCount;
+LINE 260 
+LINE 261         // count number of no positions
+LINE 262         while (index < questionCount) {
+LINE 263             unchecked {
+LINE 264                 if ((_indexSet & (1 << index)) > 0) {
+LINE 265                     ++noPositionCount;
+LINE 266                 }
+LINE 267                 ++index;
+LINE 268             }
+LINE 269         }
+LINE 270 
+LINE 271         uint256 yesPositionCount = questionCount - noPositionCount;
+LINE 272         uint256[] memory noPositionIds = new uint256[](noPositionCount);
+LINE 273         uint256[] memory yesPositionIds = new uint256[](yesPositionCount);
+LINE 274         uint256[] memory accumulatedNoPositionIds = new uint256[](yesPositionCount);
+LINE 275 
+LINE 276         // mint the amount of wcol required
+LINE 277         wcol.mint(yesPositionCount * _amount);
+LINE 278 
+LINE 279         // populate noPositionIds and yesPositionIds
+LINE 280         // split yes positions
+LINE 281         {
+LINE 282             uint256 noIndex;
+LINE 283             uint256 yesIndex;
+LINE 284             index = 0;
+LINE 285 
+LINE 286             while (index < questionCount) {
+LINE 287                 bytes32 questionId = NegRiskIdLib.getQuestionId(_marketId, uint8(index));
+LINE 288 
+LINE 289                 if ((_indexSet & (1 << index)) > 0) {
+LINE 290                     // NO
+LINE 291                     noPositionIds[noIndex] = getPositionId(questionId, false);
+LINE 292 
+LINE 293                     unchecked {
+LINE 294                         ++noIndex;
+LINE 295                     }
+LINE 296                 } else {
+LINE 297                     // YES
+LINE 298                     yesPositionIds[yesIndex] = getPositionId(questionId, true);
+LINE 299                     accumulatedNoPositionIds[yesIndex] = getPositionId(questionId, false);
+LINE 300 
+LINE 301                     // split position to get yes and no tokens
+LINE 302                     // the no tokens will be discarded
+LINE 303                     _splitPosition(getConditionId(questionId), _amount);
+LINE 304 
+LINE 305                     unchecked {
+LINE 306                         ++yesIndex;
+LINE 307                     }
+LINE 308                 }
+LINE 309                 unchecked {
+LINE 310                     ++index;
+LINE 311                 }
+LINE 312             }
+LINE 313         }
+LINE 314 
+LINE 315         // transfer the caller's no tokens _and_ accumulated no tokens to the burn address
+LINE 316         // these must never be redeemed
+LINE 317         {
+LINE 318             ctf.safeBatchTransferFrom(
+LINE 319                 msg.sender, NO_TOKEN_BURN_ADDRESS, noPositionIds, Helpers.values(noPositionIds.length, _amount), ""
+LINE 320             );
+LINE 321             ctf.safeBatchTransferFrom(
+LINE 322                 address(this),
+LINE 323                 NO_TOKEN_BURN_ADDRESS,
+LINE 324                 accumulatedNoPositionIds,
+LINE 325                 Helpers.values(yesPositionCount, _amount),
+LINE 326                 ""
+LINE 327             );
+LINE 328         }
+LINE 329 
+LINE 330         uint256 feeAmount = (_amount * md.feeBips()) / FEE_DENOMINATOR;
+LINE 331         uint256 amountOut = _amount - feeAmount;
+LINE 332 
+LINE 333         if (noPositionIds.length > 1) {
+LINE 334             // collateral out is always proportional to the number of no positions minus 1
+LINE 335             uint256 multiplier = noPositionIds.length - 1;
+LINE 336             // transfer collateral fees to vault
+LINE 337             if (feeAmount > 0) {
+LINE 338                 wcol.release(vault, multiplier * feeAmount);
+LINE 339             }
+LINE 340             // transfer collateral to sender
+LINE 341             wcol.release(msg.sender, multiplier * amountOut);
+LINE 342         }
+LINE 343 
+LINE 344         if (yesPositionIds.length > 0) {
+LINE 345             if (feeAmount > 0) {
+LINE 346                 // transfer yes token fees to vault
+LINE 347                 ctf.safeBatchTransferFrom(
+LINE 348                     address(this), vault, yesPositionIds, Helpers.values(yesPositionIds.length, feeAmount), ""
+LINE 349                 );
+LINE 350             }
+LINE 351 
+LINE 352             // transfer yes tokens to sender
+LINE 353             ctf.safeBatchTransferFrom(
+LINE 354                 address(this), msg.sender, yesPositionIds, Helpers.values(yesPositionIds.length, amountOut), ""
+LINE 355             );
+LINE 356         }
+LINE 357 
+LINE 358         emit PositionsConverted(msg.sender, _marketId, _indexSet, _amount);
+LINE 359     }
+FUNCTION_END convertPositions
+SPLIT_CONSUMES_COLLATERAL False
+MERGE_IS_SINGLE_FUNCTION_PATH False
+REDEEM_FUNCTION_PRESENT True
+CONVERT_REFERENCES_NO_SEMANTICS True
+CONVERT_CONSUMES_POSITIONS True
+EXPLICIT_ALL_YES_MARKET_FUNCTION False
+INITIAL_INVENTORY YES token for every question; zero NO tokens; zero extra collateral
+PRE_RESOLUTION_ALL_YES_TO_COLLATERAL_PATH_FOUND False
+VERDICT NO_PATH_FOUND_IN_ADAPTER_API
+LIMITATION Verdict concerns the archived official NegRiskAdapter API and source only; it does not assume off-contract secondary-market liquidation.
+OUTPUT_PATH /home/leonh/prediction_research/knowledge/raw/reference/polymarket_negrisk_adapter/e426-all-yes-reachability-proof.json
+ALL_YES_REACHABILITY_PROOF_E426_PASS

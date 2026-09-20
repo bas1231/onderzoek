@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/prove_all_yes_reachability_e426.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-20T03:29:00.028477+00:00",
+  "hypothesis_id": "PAYOFF-IDENTITY-MINING-V1",
+  "source_commit": "8969305d400f9b9b77048d742a012bac593e7dfd",
+  "started_at": "2026-09-20T03:29:00.006516+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "b455c737903af027d97c51e6b124b340f283d5808028de755c0ea0204e0bd341",
+  "task_class": "research",
+  "task_id": "EDGE-HUNTER-ALL-YES-REACHABILITY-PROOF-E426"
+}
