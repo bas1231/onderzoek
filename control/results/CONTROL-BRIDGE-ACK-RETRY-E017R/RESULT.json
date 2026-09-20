@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/fix_browser_ack_retry_e017r.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-20T21:50:36.206273+00:00",
+  "hypothesis_id": "CONTROL-BRIDGE-RELIABILITY",
+  "source_commit": "76ccc550475671fb0bd6de898dc81fbbaaa4303d",
+  "started_at": "2026-09-20T21:50:33.486788+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "3e8f31aba5e9e4275eed7cd7999bfaaab20df7d553f64dc4483a1c2b507d8279",
+  "task_class": "infrastructure",
+  "task_id": "CONTROL-BRIDGE-ACK-RETRY-E017R"
+}
