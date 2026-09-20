@@ -1,0 +1,5 @@
+Traceback (most recent call last):
+  File "/home/leonh/prediction_research/control/jobs/compute_fed_net_edge_e309.py", line 46, in <module>
+    fee=round(sizerateask*(1.0-ask),5)
+              ^^^^^^^^^^^
+NameError: name 'sizerateask' is not defined

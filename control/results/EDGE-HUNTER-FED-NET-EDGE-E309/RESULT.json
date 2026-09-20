@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/compute_fed_net_edge_e309.py"
+  ],
+  "exit_code": 1,
+  "finished_at": "2026-09-20T01:27:52.068282+00:00",
+  "hypothesis_id": "PAYOFF-IDENTITY-MINING-V1",
+  "source_commit": "774880f40e5defecbab82a4b4f94ab9d73017944",
+  "started_at": "2026-09-20T01:27:51.831255+00:00",
+  "status": "failed",
+  "stderr_sha256": "a7500a3a0db72c2ca80643a508574d3249eaf2fc00e9a932cdc219945bf5e978",
+  "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "task_class": "research",
+  "task_id": "EDGE-HUNTER-FED-NET-EDGE-E309"
+}
