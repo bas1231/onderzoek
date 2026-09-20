@@ -234,3 +234,10 @@ Before stopping, pausing, or waiting, explicitly check whether stopping is actua
 - Als echte fail-fast uitvoering nodig is, plaats de instructies in een afzonderlijk script/subshell zodat een fout hoogstens dat script/subproces beëindigt en **nooit de terminal van de eigenaar**.
 - Commando's voor de eigenaar worden standaard ontworpen volgens: `fout -> duidelijke melding -> terminal blijft open`.
 - Deze regel geldt ook voor installatie-, reparatie-, Git-, systemd-, test- en onderzoeksblokken.
+
+## Browser bridge visible-chat transport
+
+Harde operationele regel: bridge-taken moeten als gewone zichtbare assistant-chattekst worden geplaatst; commentary of tool-output alleen telt niet als verzending.
+Als de gebruiker de taak niet ziet, geldt de taak als NIET VERZONDEN en moet hij opnieuw zichtbaar worden gestuurd.
+Vermijd bridge-sentinelvoorbeelden in gewone uitleg of payloadvelden, omdat de browserparser die als echte taakgrenzen kan interpreteren.
+
