@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/verify_hourly_fill_monitor_e355.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-20T02:30:48.885306+00:00",
+  "hypothesis_id": "ASSET-RANK-MAKER-HEDGE-V1",
+  "source_commit": "4b6b36ca626b503e156d5de2ff953b52df24a04f",
+  "started_at": "2026-09-20T02:30:48.843036+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "d58844d30b1597b60829ff3daee9fe0de2a734b628f1afade5965484c78e563b",
+  "task_class": "infrastructure",
+  "task_id": "EDGE-HUNTER-ASSET-HOURLY-VERIFY-E355"
+}

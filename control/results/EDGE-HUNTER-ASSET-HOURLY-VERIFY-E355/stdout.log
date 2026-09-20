@@ -1,0 +1,17 @@
+FILE control/hourly/edge_hunter_cycle.py EXISTS True
+FILE control/jobs/hourly_asset_fill_checkpoint_e354.py EXISTS True
+FILE control/jobs/evaluate_asset_fill_checkpoint_e352.py EXISTS True
+FILE knowledge/candidates/protocols/ASSET-RANK-MAKER-HEDGE-V1-fill-feasibility-24h-v1.json EXISTS True
+HOOK_PRESENT True
+HOOK_NONBLOCKING True
+SYNTAX_PASS True
+WINDOW_START 2026-09-20T02:26:08.593734+00:00
+WINDOW_END 2026-09-21T02:26:08.593734+00:00
+DURATION_HOURS 24
+UNIT prediction-research-hourly-director.timer ACTIVE active ACTIVE_RC 0 ENABLED enabled ENABLED_RC 0
+UNIT prediction-research-hourly-director.service ACTIVE inactive ACTIVE_RC 3 ENABLED static ENABLED_RC 0
+CHECKPOINT_COUNT 2
+LATEST_CHECKPOINT 20260920T023012Z106981_fill_checkpoint.json
+LATEST_RETRIEVED_AT 2026-09-20T02:30:12.032208+00:00
+LATEST_FULL_FILL_COUNT 0
+HOURLY_FILL_MONITOR_VERIFY_PASS
