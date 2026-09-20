@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/fix_work_cadence_boundary_e007.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-20T20:24:10.602859+00:00",
+  "hypothesis_id": "CONTROL-WORK-CADENCE",
+  "source_commit": "17b260093404075c28e37aa56743d6299c7db7e4",
+  "started_at": "2026-09-20T20:24:08.801964+00:00",
+  "status": "completed",
+  "stderr_sha256": "25c6e6cc80721d0b65d248b63a55dc5aa6232352dc5ac7bf2941bd78b04cb893",
+  "stdout_sha256": "4c43d7b06a48ed1263ff7b70bd16289259e7020b3b74d39b01601b81712f7cf3",
+  "task_class": "infrastructure",
+  "task_id": "CONTROL-WORK-CADENCE-FIX-E007"
+}

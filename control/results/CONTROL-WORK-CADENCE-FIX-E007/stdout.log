@@ -1,0 +1,23 @@
+PRECHECK {"bridge_gate": true, "bridge_loader": true, "executor_gate": true, "executor_loader": true, "test_exists": true}
+COMPILE_RC 0
+TEST_STDOUT WORK_CADENCE_ENFORCEMENT_PASS
+TEST_RC 0
+COMMIT_RC 0
+PUSH_RC 1
+BRIDGE_RESTART_RC 0
+EXECUTOR_RESTART_SCHEDULE_RC 0
+{
+  "bridge_gate": true,
+  "bridge_service": "active",
+  "cooldown_duration_hours": 1,
+  "executor_gate": true,
+  "executor_restart_scheduled": true,
+  "executor_service_before_scheduled_restart": "active",
+  "git_head": "c927bf746aeca10f0f96f43003f1a2b18696b9d7",
+  "passive_recorders_unchanged": true,
+  "push_ok": false,
+  "root_cause_fixed": "COOLDOWN_COMPLETE mode key was overwritten by stale state mode because **state came last",
+  "status": "PASS",
+  "test_marker": "WORK_CADENCE_ENFORCEMENT_PASS",
+  "work_duration_hours": 4
+}
