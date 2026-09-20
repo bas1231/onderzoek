@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/inspect_fed_rule_path_e311.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-20T01:29:05.359557+00:00",
+  "hypothesis_id": "PAYOFF-IDENTITY-MINING-V1",
+  "source_commit": "f616d76eff436de29aa0f0ecb13703c4654e4f2c",
+  "started_at": "2026-09-20T01:29:05.340426+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "57b0ee2cbbbc75c036662e86c06d71d3a036610f8a5c106e47e6078794ade7de",
+  "task_class": "infrastructure",
+  "task_id": "EDGE-HUNTER-FED-RULE-PATH-E311"
+}

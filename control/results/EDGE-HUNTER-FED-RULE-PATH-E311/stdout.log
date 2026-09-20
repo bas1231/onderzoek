@@ -1,0 +1,22 @@
+BASE_EXISTS True
+SCRIPT_EXISTS True
+LINE 1 from pathlib import Path
+LINE 2 import json
+LINE 3 import math
+LINE 4 
+LINE 5 root=Path.cwd()
+LINE 6 book_path=root/'knowledge/raw/market_data/polymarket_neg_risk_partial/20260920T012324Z_51456.json'
+LINE 7 rule_path=root/'knowledge/raw/market_rules/polymarket/20260920T012355Z_event_51456.json'
+LINE 8 if not book_path.exists():
+LINE 9     raise SystemExit('book_snapshot_missing')
+LINE 10 if not rule_path.exists():
+LINE 11     raise SystemExit('rule_snapshot_missing')
+LINE 12 
+LINE 13 snap=json.loads(book_path.read_text(encoding='utf-8'))
+LINE 14 event=json.loads(rule_path.read_text(encoding='utf-8'))
+LINE 15 markets=snap.get('markets') or tuple()
+LINE 16 books=snap.get('books') or tuple()
+LINE 17 live=dict((str(row.get('id')),row) for row in (event.get('markets') or tuple()))
+LINE 18 bookmap=dict((str(row.get('asset_id')),row) for row in books)
+LINE 19 if len(markets)!=13:
+LINE 20     raise SystemExit('market_count_wrong')
