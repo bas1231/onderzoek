@@ -1,0 +1,21 @@
+ASSET_NEG_RISK_CAPTURE_PASS
+TITLE Bitcoin vs. Gold vs. S&P 500 in 2026
+MARKET_COUNT 3
+BOOK_COUNT 6
+COMPLETE True
+MARKET 950852 Will Bitcoin have the best performance in 2026?
+YES {'bid': 0.2, 'bid_size': 158.07, 'ask': 0.21, 'ask_size': 30.0}
+NO {'bid': 0.79, 'bid_size': 30.0, 'ask': 0.8, 'ask_size': 158.07}
+MARKET 950853 Will Gold have the best performance in 2026?
+YES {'bid': 0.21, 'bid_size': 81.06, 'ask': 0.22, 'ask_size': 27.4}
+NO {'bid': 0.78, 'bid_size': 27.4, 'ask': 0.79, 'ask_size': 81.06}
+MARKET 950854 Will the S&P 500 have the best performance in 2026?
+YES {'bid': 0.54, 'bid_size': 70.0, 'ask': 0.55, 'ask_size': 686.93}
+NO {'bid': 0.45, 'bid_size': 686.93, 'ask': 0.46, 'ask_size': 70.0}
+YES_ASK_SUM 0.98
+YES_BID_SUM 0.9500000000000001
+NO_ASK_SUM 2.0500000000000003
+NO_BID_SUM 2.02
+YES_GAP_TO_ONE 0.020000000000000018
+NO_GAP_TO_N_MINUS_ONE -0.050000000000000266
+PATH /home/leonh/prediction_research/knowledge/raw/market_data/polymarket_neg_risk_partial/20260920T013900Z106981.json

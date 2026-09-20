@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/capture_asset_rank_neg_risk_e327.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-20T01:39:00.225894+00:00",
+  "hypothesis_id": "PAYOFF-IDENTITY-MINING-V1",
+  "source_commit": "b44465b3aca3783846c12cb620bf5ff87a359e55",
+  "started_at": "2026-09-20T01:38:59.993474+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "dafb81c11e1d75c2f4901d263ff9e107dd11b4486dfb706df6110b4dbd40708f",
+  "task_class": "research",
+  "task_id": "EDGE-HUNTER-ASSET-NEG-RISK-E327"
+}
