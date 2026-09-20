@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/repair_neg_risk_e294.py"
+  ],
+  "exit_code": 1,
+  "finished_at": "2026-09-20T01:17:36.587125+00:00",
+  "hypothesis_id": "PAYOFF-IDENTITY-MINING-V1",
+  "source_commit": "4682be84d6e2b6b8fda171a84ed8d2d57aee39bd",
+  "started_at": "2026-09-20T01:17:34.215682+00:00",
+  "status": "failed",
+  "stderr_sha256": "ba0c1246f2ee7960c17dbd4cc1cfecb6a28ce6593bbf6c0e444c335bd5a3e7a6",
+  "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "task_class": "research",
+  "task_id": "EDGE-HUNTER-NEG-RISK-BROAD-SCAN-E294"
+}
