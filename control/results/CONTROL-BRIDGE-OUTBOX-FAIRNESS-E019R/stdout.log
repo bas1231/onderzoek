@@ -1,0 +1,13 @@
+[main 80b9df2] fix: make bridge outbox fair
+ 2 files changed, 116 insertions(+), 1 deletion(-)
+ create mode 100644 tests/bridge/test_outbox_fairness.py
+
+
+.                                                                        [100%]
+1 passed in 1.11s
+
+
+OUTBOX_FAIRNESS_PATCH=PASS
+PY_COMPILE=PASS
+PYTEST=PASS
+HEAD=80b9df258af401564590672e4f55ab87a239d9a6

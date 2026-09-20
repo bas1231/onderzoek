@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/fix_outbox_fairness_e019r.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-20T21:59:25.185842+00:00",
+  "hypothesis_id": "CONTROL-BRIDGE-RELIABILITY",
+  "source_commit": "dcf1ccd470e3c356d5037c29dcac9c8f1781926b",
+  "started_at": "2026-09-20T21:59:20.313179+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "025b25e789ac06eb301aeb9f86ff2aa82345abc3f8d6dd0a23cdcd48586e36ff",
+  "task_class": "infrastructure",
+  "task_id": "CONTROL-BRIDGE-OUTBOX-FAIRNESS-E019R"
+}
