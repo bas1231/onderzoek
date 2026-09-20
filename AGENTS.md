@@ -195,3 +195,8 @@ Agentrollen staan in `agents/roles/`.
 ## Stop-check autonomy rule
 
 Before stopping, pausing, or waiting, explicitly check whether stopping is actually necessary. If useful work can safely continue within existing authorization, at zero additional cost, and without live trading or wallet actions, continue autonomously instead of stopping. Stop only for a real blocker, required approval, missing essential input, safety boundary, paid action, live trading, or wallet action.
+
+## Taalregel voor Git-rapportage
+
+- Menselijk leesbare testresultaten, statusupdates en activity-logteksten die voor de eigenaar op Git worden geschreven, moeten in het **Nederlands** staan.
+- Technische identifiers, code, bestandsnamen, commands, schema-velden en letterlijke externe brontermen mogen Engels blijven wanneer vertaling de precisie vermindert.
