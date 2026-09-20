@@ -1,0 +1,56 @@
+ROLE algebra STATUS EVIDENCE_ROUTED
+SOURCE polymarket_docs
+STATE UNCHANGED
+TERM combo
+SNIPPET ils Prices and Order Books Analytics Real-Time Data Chainlink TWAP Prices Trading Overview Place Your First Order Wallets and Authentication Session Keys Beta Place Orders Manage Orders Real-Time Order Updates Positions Combos Wallet Activity Fees Market Making Matching Engine Restarts Bridge Programs Taker Rebate Program Maker Rebates Program Liquidity Rewards Builder Program Referral Program Resources Contracts Data Resources Error Codes 🇺🇸 Looking for Polymarket US documentation? Visit US Docs → Polymarket Documentation Build on the world’s largest prediction market. APIs, SDKs, and tools for prediction market developers. Developer Quickstart Make your first API request in minutes. Learn the basics of the Polymarket platform, f
+---
+ROLE behavioral STATUS NO_EVIDENCE
+ROLE informed_flow STATUS NO_EVIDENCE
+GAP No point-in-time participant identity/flow dataset
+ROLE microstructure STATUS EVIDENCE_ROUTED
+GAP No live orderbook snapshot source in hourly registry
+SOURCE polymarket_docs
+STATE UNCHANGED
+TERM order book
+SNIPPET market 101 SDKs & APIs Core Concepts Markets & Events Negative Risk Markets Prices & Orderbook Positions & Tokens Polymarket USD Order Lifecycle Resolution Market Data Overview Discover Markets Market Details Prices and Order Books Analytics Real-Time Data Chainlink TWAP Prices Trading Overview Place Your First Order Wallets and Authentication Session Keys Beta Place Orders Manage Orders Real-Time Order Updates Positions Combos Wallet Activity Fees Market Making Matching Engine Restarts Bridge Programs Taker Rebate Program Maker Rebates Program Liquidity Rewards Builder Program Referral Program Resources Contracts Data Resources Error Codes 🇺🇸 Looking for Polymarket US documentation? Visit US Docs → Polymarket Documentation Build
+---
+ROLE scout STATUS EVIDENCE_ROUTED
+SOURCE cftc
+STATE CHANGED
+TERM prediction market
+SNIPPET ments of Traders Bank Participation Reports Cotton On-Call Financial Data for FCMS Staff Reports Weekly Swaps Report Cleared Margin Reports Office of the Chief Economist Forms & Submissions Learn & Protect Understanding Prediction Markets and Event Contracts Check Registration & Disciplinary History Submit a Tip or Complaint RED List Office of Proceedings Learning Resources News & Events Press Releases Public Statements & Remarks Events Carousel Rotation On On CFTC and Kansas State University to Host AgCon October 22-23 CFTC Grants Multiple Whistleblower Awards CFTC Issues Advisory on Self-Certifying Incentive Programs for Prediction Markets CFTC Approves Final Rule Concerning Whistleblower Awards Holding Wrongdoers Accountable Wh
+---
+SOURCE kalshi_docs
+STATE UNCHANGED
+TERM prediction market
+SNIPPET king Your First Request Make your first API call and start trading on Kalshi. Demo Environment Build and test safely against the demo environment. API Keys Generate and manage your API credentials. Kalshi Academy New to prediction markets? Explore educational resources and tutorials. Reference Rate Limits Token budgets, tiers, and bursting. Changelog Stay updated with the latest API changes. Glossary Key terms and concepts used across the exchange. Specifications Predictions REST Download openapi.yaml for event-contract REST API integration. Predictions WebSocket Download asyncapi.yaml for event-contract WebSocket integration. Perps REST Download perps_openapi.yaml for perpetual futures REST API integration. Perps WebSocket Downlo
+---
+SOURCE kalshi_weather_rules
+STATE CHANGED
+TERM prediction market
+SNIPPET cally released the following morning. Hourly temperature markets settle on readings from The Weather Company . Always check the specific market’s rules for its source. How Do I Trade on Weather Markets? Kalshi creates a prediction market around a specific temperature threshold for a given location. For example: “Highest temperature in Chicago on April 15, 2025?” ​ Contract prices for temperature ranges may shift as new weather data (e.g., forecasts, model runs, satellite images, observations) becomes available. Note: Not all weather data is the same. Apps like AccuWeather, iOS Weather, or Google Weather may be useful for guidance but do not determine contract outcomes. The only source used for settlement is the one named in the ma
+---
+SOURCE polymarket_docs
+STATE UNCHANGED
+TERM prediction market
+SNIPPET Program Liquidity Rewards Builder Program Referral Program Resources Contracts Data Resources Error Codes 🇺🇸 Looking for Polymarket US documentation? Visit US Docs → Polymarket Documentation Build on the world’s largest prediction market. APIs, SDKs, and tools for prediction market developers. Developer Quickstart Make your first API request in minutes. Learn the basics of the Polymarket platform, fetch market data, place orders, and redeem winning positions. Place Your First Order → TypeScript Python API import { createPublicClient } from "@polymarket/client" ; const client = createPublicClient (); const pages = client . listMarkets ({ closed: false }); const { items : markets } = await pages . firstPage (); from polymarket impor
+---
+ROLE settlement STATUS EVIDENCE_ROUTED
+GAP Venue-specific contract-rule pages may need deeper retrieval than docs landing pages
+SOURCE kalshi_weather_rules
+STATE CHANGED
+TERM settlement
+SNIPPET amounts in specific cities, from New York City to Los Angeles. Traders can take positions on whether a city will reach a certain high temperature or fall within a particular range. Each weather market names its official settlement source in its market rules. Daily high/low temperature markets settle based on the final climate report issued by the National Weather Service (NWS), typically released the following morning. Hourly temperature markets settle on readings from The Weather Company . Always check the specific market’s rules for its source. How Do I Trade on Weather Markets? Kalshi creates a prediction market around a specific temperature threshold for a given location. For example: “Highest temperature in Chicago on April 1
+---
+ROLE weather_twc STATUS EVIDENCE_ROUTED
+GAP No TWC-specific primary source in registry
+SOURCE ecmwf_open
+STATE UNCHANGED
+TERM 2 metre temperature
+SNIPPET d deviation of sub-gridscale orography (step 0) 160 sfc slor Slope of sub-gridscale orography (step 0) 163 sfc tcc Total cloud cover 164 sfc 10u 10 metre U wind component 165 sfc 10v 10 metre V wind component 166 sfc 2t 2 metre temperature 167 sfc 2d 2 metre dewpoint temperature 168 sfc ssrd Surface net short-wave (solar) radiation downwards 169 sfc lsm Land Sea Mask 172 sfc strd Surface net long-wave (thermal) radiation downwards 175 sfc ssr Surface net short-wave (solar) radiation 176 sfc str Surface net long-wave (thermal) radiation 177 sfc ttr Top net long-wave (thermal) radiation 179 sfc ewss Time-integrated eastward turbulent surface stress 180 sfc nsss Time-integrated northward turbulent surface stress 181 sfc ro Runoff 205
+---
+SOURCE kalshi_weather_rules
+STATE CHANGED
+TERM metar
+SNIPPET ing based on the high temperature recorded in the final NWS Daily Climate Report. Market determination may be delayed in the rare instances of a) a high temperature is not consistent with 6-hr or 24-hr highs reported by METAR or b) the final NWS Climate Report high temperature value is lower than previous preliminary report. ​ Hourly Temperature Markets Some temperature markets are hourly - the market title names an exact time, for example “Chicago temperature at 5 PM EDT.” These markets are also directional: each contract resolves on whether the temperature at that time is above or below a specific level, rather than within a range. They settle on the temperature at that exact time as reported by The Weather Company for the stati
+---

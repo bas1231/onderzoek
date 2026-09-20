@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/inspect_routed_evidence_e273.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-20T01:01:57.508135+00:00",
+  "hypothesis_id": "GENERAL-PREDICTION-MARKET-EDGE-HUNTER",
+  "source_commit": "fa2302bdd79eeed330fc28076f5235850184ea18",
+  "started_at": "2026-09-20T01:01:57.488694+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "d5a406bcbff853f213f71039200cf2663075cd0dee40a99c80101552d8293242",
+  "task_class": "research",
+  "task_id": "HOURLY-EDGE-HUNTER-EVIDENCE-20260920T0300-E273"
+}
