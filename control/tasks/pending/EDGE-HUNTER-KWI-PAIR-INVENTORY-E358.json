@@ -1,0 +1,13 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/inventory_kwi_pairs_e358.py"
+  ],
+  "hypothesis_id": "KWI-INCOMPLETE-TO-CANONICAL-V1",
+  "live_trading": false,
+  "operation": "python",
+  "task_class": "research",
+  "task_id": "EDGE-HUNTER-KWI-PAIR-INVENTORY-E358",
+  "timeout_seconds": 120,
+  "working_directory": "."
+}
