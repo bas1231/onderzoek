@@ -1,0 +1,1705 @@
+{
+  "cities": {
+    "chicago": {
+      "complete_events": 31,
+      "first_complete_lag_s": {
+        "count": 31,
+        "max": 379.0879289550781,
+        "mean": 323.9141126905872,
+        "median": 319.08672900390627,
+        "min": 319.07939599609375
+      },
+      "first_incomplete_lag_s": {
+        "count": 22,
+        "max": 139.1004580078125,
+        "mean": 110.4334706698331,
+        "median": 123.91174218750001,
+        "min": 79.07939599609375
+      },
+      "lead_s": {
+        "count": 22,
+        "max": 240.01697485351562,
+        "mean": 208.65370252574576,
+        "median": 195.17279443359377,
+        "min": 179.98335498046876
+      },
+      "paired_incomplete_before_complete": 22,
+      "rows": [
+        {
+          "city": "chicago",
+          "complete_contributors": 5,
+          "complete_status": "normal",
+          "complete_v": 68.72,
+          "first_complete_lag_s": 319.07980615234374,
+          "first_incomplete_lag_s": 113.63239916992187,
+          "incomplete_contributors": null,
+          "incomplete_status": "incomplete",
+          "incomplete_v": null,
+          "lead_s": 205.44740698242188,
+          "t": 1789860180000
+        },
+        {
+          "city": "chicago",
+          "complete_contributors": 5,
+          "complete_status": "normal",
+          "complete_v": 68.72,
+          "first_complete_lag_s": 353.6323991699219,
+          "first_incomplete_lag_s": null,
+          "incomplete_contributors": null,
+          "incomplete_status": null,
+          "incomplete_v": null,
+          "lead_s": null,
+          "t": 1789859940000
+        },
+        {
+          "city": "chicago",
+          "complete_contributors": 5,
+          "complete_status": "normal",
+          "complete_v": 68.72,
+          "first_complete_lag_s": 319.08926708984376,
+          "first_incomplete_lag_s": 134.19108520507814,
+          "incomplete_contributors": null,
+          "incomplete_status": "incomplete",
+          "incomplete_v": null,
+          "lead_s": 184.89818188476562,
+          "t": 1789860240000
+        },
+        {
+          "city": "chicago",
+          "complete_contributors": 5,
+          "complete_status": "normal",
+          "complete_v": 68.72,
+          "first_complete_lag_s": 374.19108520507814,
+          "first_incomplete_lag_s": null,
+          "incomplete_contributors": null,
+          "incomplete_status": null,
+          "incomplete_v": null,
+          "lead_s": null,
+          "t": 1789860000000
+        },
+        {
+          "city": "chicago",
+          "complete_contributors": 5,
+          "complete_status": "normal",
+          "complete_v": 68.72,
+          "first_complete_lag_s": 319.08672900390627,
+          "first_incomplete_lag_s": 79.08792895507813,
+          "incomplete_contributors": null,
+          "incomplete_status": "incomplete",
+          "incomplete_v": null,
+          "lead_s": 239.99880004882812,
+          "t": 1789860360000
+        },
+        {
+          "city": "chicago",
+          "complete_contributors": 5,
+          "complete_status": "normal",
+          "complete_v": 68.72,
+          "first_complete_lag_s": 379.0879289550781,
+          "first_incomplete_lag_s": null,
+          "incomplete_contributors": null,
+          "incomplete_status": null,
+          "incomplete_v": null,
+          "lead_s": null,
+          "t": 1789860060000
+        },
+        {
+          "city": "chicago",
+          "complete_contributors": 5,
+          "complete_status": "normal",
+          "complete_v": 68.72,
+          "first_complete_lag_s": 319.0967810058594,
+          "first_incomplete_lag_s": 79.07980615234375,
+          "incomplete_contributors": null,
+          "incomplete_status": "incomplete",
+          "incomplete_v": null,
+          "lead_s": 240.01697485351562,
+          "t": 1789860420000
+        },
+        {
+          "city": "chicago",
+          "complete_contributors": 5,
+          "complete_status": "normal",
+          "complete_v": 68.72,
+          "first_complete_lag_s": 319.0963388671875,
+          "first_incomplete_lag_s": 79.08926708984374,
+          "incomplete_contributors": null,
+          "incomplete_status": "incomplete",
+          "incomplete_v": null,
+          "lead_s": 240.00707177734375,
+          "t": 1789860480000
+        },
+        {
+          "city": "chicago",
+          "complete_contributors": 5,
+          "complete_status": "degraded",
+          "complete_v": 68.94,
+          "first_complete_lag_s": 319.0887119140625,
+          "first_incomplete_lag_s": null,
+          "incomplete_contributors": null,
+          "incomplete_status": null,
+          "incomplete_v": null,
+          "lead_s": null,
+          "t": 1789860300000
+        },
+        {
+          "city": "chicago",
+          "complete_contributors": 5,
+          "complete_status": "normal",
+          "complete_v": 68.72,
+          "first_complete_lag_s": 319.0802080078125,
+          "first_incomplete_lag_s": 79.08672900390626,
+          "incomplete_contributors": null,
+          "incomplete_status": "incomplete",
+          "incomplete_v": null,
+          "lead_s": 239.99347900390626,
+          "t": 1789860600000
+        },
+        {
+          "city": "chicago",
+          "complete_contributors": 5,
+          "complete_status": "normal",
+          "complete_v": 68.72,
+          "first_complete_lag_s": 319.0795959472656,
+          "first_incomplete_lag_s": 79.08042602539062,
+          "incomplete_contributors": null,
+          "incomplete_status": "incomplete",
+          "incomplete_v": null,
+          "lead_s": 239.999169921875,
+          "t": 1789860780000
+        },
+        {
+          "city": "chicago",
+          "complete_contributors": 5,
+          "complete_status": "degraded",
+          "complete_v": 68.94,
+          "first_complete_lag_s": 319.08042602539064,
+          "first_incomplete_lag_s": null,
+          "incomplete_contributors": null,
+          "incomplete_status": null,
+          "incomplete_v": null,
+          "lead_s": null,
+          "t": 1789860540000
+        },
+        {
+          "city": "chicago",
+          "complete_contributors": 5,
+          "complete_status": "normal",
+          "complete_v": 68.72,
+          "first_complete_lag_s": 319.0797700195312,
+          "first_incomplete_lag_s": 79.07939599609375,
+          "incomplete_contributors": null,
+          "incomplete_status": "incomplete",
+          "incomplete_v": null,
+          "lead_s": 240.0003740234375,
+          "t": 1789860960000
+        },
+        {
+          "city": "chicago",
+          "complete_contributors": 5,
+          "complete_status": "normal",
+          "complete_v": 68.72,
+          "first_complete_lag_s": 319.07939599609375,
+          "first_incomplete_lag_s": null,
+          "incomplete_contributors": null,
+          "incomplete_status": null,
+          "incomplete_v": null,
+          "lead_s": null,
+          "t": 1789860720000
+        },
+        {
+          "city": "chicago",
+          "complete_contributors": 5,
+          "complete_status": "normal",
+          "complete_v": 68.72,
+          "first_complete_lag_s": 319.08427416992185,
+          "first_incomplete_lag_s": 79.07959594726563,
+          "incomplete_contributors": null,
+          "incomplete_status": "incomplete",
+          "incomplete_v": null,
+          "lead_s": 240.00467822265625,
+          "t": 1789861020000
+        },
+        {
+          "city": "chicago",
+          "complete_contributors": 5,
+          "complete_status": "normal",
+          "complete_v": 68.72,
+          "first_complete_lag_s": 319.0923640136719,
+          "first_incomplete_lag_s": 79.09198583984374,
+          "incomplete_contributors": null,
+          "incomplete_status": "incomplete",
+          "incomplete_v": null,
+          "lead_s": 240.00037817382812,
+          "t": 1789861080000
+        },
+        {
+          "city": "chicago",
+          "complete_contributors": 5,
+          "complete_status": "degraded",
+          "complete_v": 68.94,
+          "first_complete_lag_s": 319.0808908691406,
+          "first_incomplete_lag_s": null,
+          "incomplete_contributors": null,
+          "incomplete_status": null,
+          "incomplete_v": null,
+          "lead_s": null,
+          "t": 1789860900000
+        },
+        {
+          "city": "chicago",
+          "complete_contributors": 5,
+          "complete_status": "normal",
+          "complete_v": 68.72,
+          "first_complete_lag_s": 319.0876938476562,
+          "first_incomplete_lag_s": 79.07977001953125,
+          "incomplete_contributors": null,
+          "incomplete_status": "incomplete",
+          "incomplete_v": null,
+          "lead_s": 240.007923828125,
+          "t": 1789861200000
+        },
+        {
+          "city": "chicago",
+          "complete_contributors": 5,
+          "complete_status": "normal",
+          "complete_v": 68.72,
+          "first_complete_lag_s": 319.08001098632815,
+          "first_incomplete_lag_s": 79.08427416992187,
+          "incomplete_contributors": null,
+          "incomplete_status": "incomplete",
+          "incomplete_v": null,
+          "lead_s": 239.99573681640624,
+          "t": 1789861260000
+        },
+        {
+          "city": "chicago",
+          "complete_contributors": 5,
+          "complete_status": "normal",
+          "complete_v": 68.72,
+          "first_complete_lag_s": 319.084455078125,
+          "first_incomplete_lag_s": 139.07929296875,
+          "incomplete_contributors": null,
+          "incomplete_status": "incomplete",
+          "incomplete_v": null,
+          "lead_s": 180.005162109375,
+          "t": 1789861320000
+        },
+        {
+          "city": "chicago",
+          "complete_contributors": 5,
+          "complete_status": "normal",
+          "complete_v": 68.72,
+          "first_complete_lag_s": 319.0913759765625,
+          "first_incomplete_lag_s": 139.08001098632812,
+          "incomplete_contributors": null,
+          "incomplete_status": "incomplete",
+          "incomplete_v": null,
+          "lead_s": 180.01136499023437,
+          "t": 1789861440000
+        },
+        {
+          "city": "chicago",
+          "complete_contributors": 5,
+          "complete_status": "normal",
+          "complete_v": 68.72,
+          "first_complete_lag_s": 319.082873046875,
+          "first_incomplete_lag_s": 139.084455078125,
+          "incomplete_contributors": null,
+          "incomplete_status": "incomplete",
+          "incomplete_v": null,
+          "lead_s": 179.99841796875,
+          "t": 1789861500000
+        },
+        {
+          "city": "chicago",
+          "complete_contributors": 5,
+          "complete_status": "normal",
+          "complete_v": 68.72,
+          "first_complete_lag_s": 319.0845830078125,
+          "first_incomplete_lag_s": 139.09771899414062,
+          "incomplete_contributors": null,
+          "incomplete_status": "incomplete",
+          "incomplete_v": null,
+          "lead_s": 179.98686401367186,
+          "t": 1789861560000
+        },
+        {
+          "city": "chicago",
+          "complete_contributors": 5,
+          "complete_status": "degraded",
+          "complete_v": 68.94,
+          "first_complete_lag_s": 319.0977189941406,
+          "first_incomplete_lag_s": null,
+          "incomplete_contributors": null,
+          "incomplete_status": null,
+          "incomplete_v": null,
+          "lead_s": null,
+          "t": 1789861380000
+        },
+        {
+          "city": "chicago",
+          "complete_contributors": 5,
+          "complete_status": "normal",
+          "complete_v": 68.72,
+          "first_complete_lag_s": 319.0802021484375,
+          "first_incomplete_lag_s": 139.082873046875,
+          "incomplete_contributors": null,
+          "incomplete_status": "incomplete",
+          "incomplete_v": null,
+          "lead_s": 179.9973291015625,
+          "t": 1789861680000
+        },
+        {
+          "city": "chicago",
+          "complete_contributors": 5,
+          "complete_status": "normal",
+          "complete_v": 68.72,
+          "first_complete_lag_s": 319.0878911132813,
+          "first_incomplete_lag_s": 139.0811259765625,
+          "incomplete_contributors": null,
+          "incomplete_status": "incomplete",
+          "incomplete_v": null,
+          "lead_s": 180.00676513671874,
+          "t": 1789861800000
+        },
+        {
+          "city": "chicago",
+          "complete_contributors": 5,
+          "complete_status": "degraded",
+          "complete_v": 68.94,
+          "first_complete_lag_s": 319.0811259765625,
+          "first_incomplete_lag_s": null,
+          "incomplete_contributors": null,
+          "incomplete_status": null,
+          "incomplete_v": null,
+          "lead_s": null,
+          "t": 1789861620000
+        },
+        {
+          "city": "chicago",
+          "complete_contributors": 5,
+          "complete_status": "normal",
+          "complete_v": 68.72,
+          "first_complete_lag_s": 319.0965090332031,
+          "first_incomplete_lag_s": 139.08335595703124,
+          "incomplete_contributors": null,
+          "incomplete_status": "incomplete",
+          "incomplete_v": null,
+          "lead_s": 180.01315307617188,
+          "t": 1789861920000
+        },
+        {
+          "city": "chicago",
+          "complete_contributors": 5,
+          "complete_status": "normal",
+          "complete_v": 68.72,
+          "first_complete_lag_s": 319.0968078613281,
+          "first_incomplete_lag_s": 139.08789111328124,
+          "incomplete_contributors": null,
+          "incomplete_status": "incomplete",
+          "incomplete_v": null,
+          "lead_s": 180.0089167480469,
+          "t": 1789861980000
+        },
+        {
+          "city": "chicago",
+          "complete_contributors": 5,
+          "complete_status": "normal",
+          "complete_v": 68.36,
+          "first_complete_lag_s": 319.08381298828124,
+          "first_incomplete_lag_s": 139.1004580078125,
+          "incomplete_contributors": null,
+          "incomplete_status": "incomplete",
+          "incomplete_v": null,
+          "lead_s": 179.98335498046876,
+          "t": 1789862040000
+        },
+        {
+          "city": "chicago",
+          "complete_contributors": 5,
+          "complete_status": "normal",
+          "complete_v": 68.36,
+          "first_complete_lag_s": 319.0964609375,
+          "first_incomplete_lag_s": 139.09650903320312,
+          "incomplete_contributors": null,
+          "incomplete_status": "incomplete",
+          "incomplete_v": null,
+          "lead_s": 179.99995190429686,
+          "t": 1789862100000
+        }
+      ]
+    },
+    "miami": {
+      "complete_events": 32,
+      "first_complete_lag_s": {
+        "count": 32,
+        "max": 374.19108520507814,
+        "mean": 321.88802457427977,
+        "median": 319.0856560058594,
+        "min": 319.07929296875
+      },
+      "first_incomplete_lag_s": {
+        "count": 25,
+        "max": 199.1004580078125,
+        "mean": 169.07286491210937,
+        "median": 173.63239916992188,
+        "min": 139.07929296875
+      },
+      "lead_s": {
+        "count": 25,
+        "max": 180.00751391601563,
+        "mean": 150.01336409179686,
+        "median": 145.45552978515624,
+        "min": 119.98515405273437
+      },
+      "paired_incomplete_before_complete": 25,
+      "rows": [
+        {
+          "city": "miami",
+          "complete_contributors": 5,
+          "complete_status": "normal",
+          "complete_v": 77.36,
+          "first_complete_lag_s": 319.0879289550781,
+          "first_incomplete_lag_s": 173.63239916992188,
+          "incomplete_contributors": null,
+          "incomplete_status": "incomplete",
+          "incomplete_v": null,
+          "lead_s": 145.45552978515624,
+          "t": 1789860120000
+        },
+        {
+          "city": "miami",
+          "complete_contributors": 5,
+          "complete_status": "normal",
+          "complete_v": 77.36,
+          "first_complete_lag_s": 353.6323991699219,
+          "first_incomplete_lag_s": null,
+          "incomplete_contributors": null,
+          "incomplete_status": null,
+          "incomplete_v": null,
+          "lead_s": null,
+          "t": 1789859940000
+        },
+        {
+          "city": "miami",
+          "complete_contributors": 5,
+          "complete_status": "normal",
+          "complete_v": 77,
+          "first_complete_lag_s": 319.07980615234374,
+          "first_incomplete_lag_s": 194.19108520507814,
+          "incomplete_contributors": null,
+          "incomplete_status": "incomplete",
+          "incomplete_v": null,
+          "lead_s": 124.88872094726563,
+          "t": 1789860180000
+        },
+        {
+          "city": "miami",
+          "complete_contributors": 5,
+          "complete_status": "normal",
+          "complete_v": 77.36,
+          "first_complete_lag_s": 374.19108520507814,
+          "first_incomplete_lag_s": null,
+          "incomplete_contributors": null,
+          "incomplete_status": null,
+          "incomplete_v": null,
+          "lead_s": null,
+          "t": 1789860000000
+        },
+        {
+          "city": "miami",
+          "complete_contributors": 5,
+          "complete_status": "normal",
+          "complete_v": 77,
+          "first_complete_lag_s": 319.0887119140625,
+          "first_incomplete_lag_s": 139.08792895507813,
+          "incomplete_contributors": null,
+          "incomplete_status": "incomplete",
+          "incomplete_v": null,
+          "lead_s": 180.0007829589844,
+          "t": 1789860300000
+        },
+        {
+          "city": "miami",
+          "complete_contributors": 5,
+          "complete_status": "normal",
+          "complete_v": 77,
+          "first_complete_lag_s": 319.08672900390627,
+          "first_incomplete_lag_s": 139.07980615234376,
+          "incomplete_contributors": null,
+          "incomplete_status": "incomplete",
+          "incomplete_v": null,
+          "lead_s": 180.0069228515625,
+          "t": 1789860360000
+        },
+        {
+          "city": "miami",
+          "complete_contributors": 5,
+          "complete_status": "normal",
+          "complete_v": 77,
+          "first_complete_lag_s": 319.0967810058594,
+          "first_incomplete_lag_s": 139.08926708984376,
+          "incomplete_contributors": null,
+          "incomplete_status": "incomplete",
+          "incomplete_v": null,
+          "lead_s": 180.00751391601563,
+          "t": 1789860420000
+        },
+        {
+          "city": "miami",
+          "complete_contributors": 5,
+          "complete_status": "normal",
+          "complete_v": 77,
+          "first_complete_lag_s": 319.08926708984376,
+          "first_incomplete_lag_s": null,
+          "incomplete_contributors": null,
+          "incomplete_status": null,
+          "incomplete_v": null,
+          "lead_s": null,
+          "t": 1789860240000
+        },
+        {
+          "city": "miami",
+          "complete_contributors": 5,
+          "complete_status": "normal",
+          "complete_v": 77,
+          "first_complete_lag_s": 319.08042602539064,
+          "first_incomplete_lag_s": 139.08672900390624,
+          "incomplete_contributors": null,
+          "incomplete_status": "incomplete",
+          "incomplete_v": null,
+          "lead_s": 179.99369702148437,
+          "t": 1789860540000
+        },
+        {
+          "city": "miami",
+          "complete_contributors": 5,
+          "complete_status": "normal",
+          "complete_v": 77,
+          "first_complete_lag_s": 319.0802080078125,
+          "first_incomplete_lag_s": 139.09678100585938,
+          "incomplete_contributors": null,
+          "incomplete_status": "incomplete",
+          "incomplete_v": null,
+          "lead_s": 179.98342700195312,
+          "t": 1789860600000
+        },
+        {
+          "city": "miami",
+          "complete_contributors": 5,
+          "complete_status": "normal",
+          "complete_v": 77,
+          "first_complete_lag_s": 319.0963388671875,
+          "first_incomplete_lag_s": null,
+          "incomplete_contributors": null,
+          "incomplete_status": null,
+          "incomplete_v": null,
+          "lead_s": null,
+          "t": 1789860480000
+        },
+        {
+          "city": "miami",
+          "complete_contributors": 5,
+          "complete_status": "normal",
+          "complete_v": 77,
+          "first_complete_lag_s": 319.07939599609375,
+          "first_incomplete_lag_s": 139.08042602539064,
+          "incomplete_contributors": null,
+          "incomplete_status": "incomplete",
+          "incomplete_v": null,
+          "lead_s": 179.99896997070311,
+          "t": 1789860720000
+        },
+        {
+          "city": "miami",
+          "complete_contributors": 5,
+          "complete_status": "normal",
+          "complete_v": 77.36,
+          "first_complete_lag_s": 319.0808908691406,
+          "first_incomplete_lag_s": 139.07939599609375,
+          "incomplete_contributors": null,
+          "incomplete_status": "incomplete",
+          "incomplete_v": null,
+          "lead_s": 180.00149487304688,
+          "t": 1789860900000
+        },
+        {
+          "city": "miami",
+          "complete_contributors": 5,
+          "complete_status": "normal",
+          "complete_v": 77.36,
+          "first_complete_lag_s": 319.0797700195312,
+          "first_incomplete_lag_s": 139.07959594726563,
+          "incomplete_contributors": null,
+          "incomplete_status": "incomplete",
+          "incomplete_v": null,
+          "lead_s": 180.00017407226562,
+          "t": 1789860960000
+        },
+        {
+          "city": "miami",
+          "complete_contributors": 5,
+          "complete_status": "normal",
+          "complete_v": 77,
+          "first_complete_lag_s": 319.0795959472656,
+          "first_incomplete_lag_s": null,
+          "incomplete_contributors": null,
+          "incomplete_status": null,
+          "incomplete_v": null,
+          "lead_s": null,
+          "t": 1789860780000
+        },
+        {
+          "city": "miami",
+          "complete_contributors": 5,
+          "complete_status": "normal",
+          "complete_v": 77.36,
+          "first_complete_lag_s": 319.08427416992185,
+          "first_incomplete_lag_s": 139.09198583984374,
+          "incomplete_contributors": null,
+          "incomplete_status": "incomplete",
+          "incomplete_v": null,
+          "lead_s": 179.9922883300781,
+          "t": 1789861020000
+        },
+        {
+          "city": "miami",
+          "complete_contributors": 5,
+          "complete_status": "normal",
+          "complete_v": 77,
+          "first_complete_lag_s": 319.07929296875,
+          "first_incomplete_lag_s": 139.07977001953125,
+          "incomplete_contributors": null,
+          "incomplete_status": "incomplete",
+          "incomplete_v": null,
+          "lead_s": 179.99952294921874,
+          "t": 1789861140000
+        },
+        {
+          "city": "miami",
+          "complete_contributors": 5,
+          "complete_status": "normal",
+          "complete_v": 77,
+          "first_complete_lag_s": 319.0876938476562,
+          "first_incomplete_lag_s": 139.08427416992188,
+          "incomplete_contributors": null,
+          "incomplete_status": "incomplete",
+          "incomplete_v": null,
+          "lead_s": 180.00341967773437,
+          "t": 1789861200000
+        },
+        {
+          "city": "miami",
+          "complete_contributors": 5,
+          "complete_status": "normal",
+          "complete_v": 77,
+          "first_complete_lag_s": 319.0923640136719,
+          "first_incomplete_lag_s": null,
+          "incomplete_contributors": null,
+          "incomplete_status": null,
+          "incomplete_v": null,
+          "lead_s": null,
+          "t": 1789861080000
+        },
+        {
+          "city": "miami",
+          "complete_contributors": 5,
+          "complete_status": "normal",
+          "complete_v": 77,
+          "first_complete_lag_s": 319.084455078125,
+          "first_incomplete_lag_s": 139.07929296875,
+          "incomplete_contributors": null,
+          "incomplete_status": "incomplete",
+          "incomplete_v": null,
+          "lead_s": 180.005162109375,
+          "t": 1789861320000
+        },
+        {
+          "city": "miami",
+          "complete_contributors": 5,
+          "complete_status": "normal",
+          "complete_v": 77,
+          "first_complete_lag_s": 319.0977189941406,
+          "first_incomplete_lag_s": 199.08001098632812,
+          "incomplete_contributors": null,
+          "incomplete_status": "incomplete",
+          "incomplete_v": null,
+          "lead_s": 120.0177080078125,
+          "t": 1789861380000
+        },
+        {
+          "city": "miami",
+          "complete_contributors": 5,
+          "complete_status": "normal",
+          "complete_v": 77,
+          "first_complete_lag_s": 319.08001098632815,
+          "first_incomplete_lag_s": null,
+          "incomplete_contributors": null,
+          "incomplete_status": null,
+          "incomplete_v": null,
+          "lead_s": null,
+          "t": 1789861260000
+        },
+        {
+          "city": "miami",
+          "complete_contributors": 5,
+          "complete_status": "normal",
+          "complete_v": 77,
+          "first_complete_lag_s": 319.0913759765625,
+          "first_incomplete_lag_s": 199.084455078125,
+          "incomplete_contributors": null,
+          "incomplete_status": "incomplete",
+          "incomplete_v": null,
+          "lead_s": 120.0069208984375,
+          "t": 1789861440000
+        },
+        {
+          "city": "miami",
+          "complete_contributors": 5,
+          "complete_status": "normal",
+          "complete_v": 77,
+          "first_complete_lag_s": 319.082873046875,
+          "first_incomplete_lag_s": 199.09771899414062,
+          "incomplete_contributors": null,
+          "incomplete_status": "incomplete",
+          "incomplete_v": null,
+          "lead_s": 119.98515405273437,
+          "t": 1789861500000
+        },
+        {
+          "city": "miami",
+          "complete_contributors": 5,
+          "complete_status": "normal",
+          "complete_v": 77,
+          "first_complete_lag_s": 319.0845830078125,
+          "first_incomplete_lag_s": 199.0913759765625,
+          "incomplete_contributors": null,
+          "incomplete_status": "incomplete",
+          "incomplete_v": null,
+          "lead_s": 119.99320703125,
+          "t": 1789861560000
+        },
+        {
+          "city": "miami",
+          "complete_contributors": 5,
+          "complete_status": "normal",
+          "complete_v": 77,
+          "first_complete_lag_s": 319.0811259765625,
+          "first_incomplete_lag_s": 199.082873046875,
+          "incomplete_contributors": null,
+          "incomplete_status": "incomplete",
+          "incomplete_v": null,
+          "lead_s": 119.9982529296875,
+          "t": 1789861620000
+        },
+        {
+          "city": "miami",
+          "complete_contributors": 5,
+          "complete_status": "normal",
+          "complete_v": 77,
+          "first_complete_lag_s": 319.0802021484375,
+          "first_incomplete_lag_s": 199.0845830078125,
+          "incomplete_contributors": null,
+          "incomplete_status": "incomplete",
+          "incomplete_v": null,
+          "lead_s": 119.995619140625,
+          "t": 1789861680000
+        },
+        {
+          "city": "miami",
+          "complete_contributors": 5,
+          "complete_status": "normal",
+          "complete_v": 77,
+          "first_complete_lag_s": 319.0878911132813,
+          "first_incomplete_lag_s": 199.0802021484375,
+          "incomplete_contributors": null,
+          "incomplete_status": "incomplete",
+          "incomplete_v": null,
+          "lead_s": 120.00768896484375,
+          "t": 1789861800000
+        },
+        {
+          "city": "miami",
+          "complete_contributors": 5,
+          "complete_status": "normal",
+          "complete_v": 77,
+          "first_complete_lag_s": 319.0965090332031,
+          "first_incomplete_lag_s": 199.08789111328124,
+          "incomplete_contributors": null,
+          "incomplete_status": "incomplete",
+          "incomplete_v": null,
+          "lead_s": 120.00861791992187,
+          "t": 1789861920000
+        },
+        {
+          "city": "miami",
+          "complete_contributors": 5,
+          "complete_status": "normal",
+          "complete_v": 77,
+          "first_complete_lag_s": 319.0968078613281,
+          "first_incomplete_lag_s": 199.1004580078125,
+          "incomplete_contributors": null,
+          "incomplete_status": "incomplete",
+          "incomplete_v": null,
+          "lead_s": 119.99634985351562,
+          "t": 1789861980000
+        },
+        {
+          "city": "miami",
+          "complete_contributors": 5,
+          "complete_status": "normal",
+          "complete_v": 77,
+          "first_complete_lag_s": 319.08381298828124,
+          "first_incomplete_lag_s": 199.09650903320312,
+          "incomplete_contributors": null,
+          "incomplete_status": "incomplete",
+          "incomplete_v": null,
+          "lead_s": 119.98730395507812,
+          "t": 1789862040000
+        },
+        {
+          "city": "miami",
+          "complete_contributors": 5,
+          "complete_status": "normal",
+          "complete_v": 77,
+          "first_complete_lag_s": 319.0964609375,
+          "first_incomplete_lag_s": 199.09680786132813,
+          "incomplete_contributors": null,
+          "incomplete_status": "incomplete",
+          "incomplete_v": null,
+          "lead_s": 119.99965307617188,
+          "t": 1789862100000
+        }
+      ]
+    },
+    "nyc": {
+      "complete_events": 36,
+      "first_complete_lag_s": {
+        "count": 36,
+        "max": 379.1004580078125,
+        "mean": 378.2440087551541,
+        "median": 379.08451904296874,
+        "min": 353.6323991699219
+      },
+      "first_incomplete_lag_s": {
+        "count": 27,
+        "max": 199.1004580078125,
+        "mean": 169.0733713288484,
+        "median": 173.63239916992188,
+        "min": 139.07929296875
+      },
+      "lead_s": {
+        "count": 27,
+        "max": 240.01842602539062,
+        "mean": 210.01435585756656,
+        "median": 205.44740698242188,
+        "min": 179.98335498046876
+      },
+      "paired_incomplete_before_complete": 27,
+      "rows": [
+        {
+          "city": "nyc",
+          "complete_contributors": 8,
+          "complete_status": "normal",
+          "complete_v": 64.85,
+          "first_complete_lag_s": 379.07980615234374,
+          "first_incomplete_lag_s": 173.63239916992188,
+          "incomplete_contributors": null,
+          "incomplete_status": "incomplete",
+          "incomplete_v": null,
+          "lead_s": 205.44740698242188,
+          "t": 1789860120000
+        },
+        {
+          "city": "nyc",
+          "complete_contributors": 8,
+          "complete_status": "normal",
+          "complete_v": 65.08,
+          "first_complete_lag_s": 353.6323991699219,
+          "first_incomplete_lag_s": null,
+          "incomplete_contributors": null,
+          "incomplete_status": null,
+          "incomplete_v": null,
+          "lead_s": null,
+          "t": 1789859940000
+        },
+        {
+          "city": "nyc",
+          "complete_contributors": 8,
+          "complete_status": "normal",
+          "complete_v": 64.85,
+          "first_complete_lag_s": 379.08926708984376,
+          "first_incomplete_lag_s": 194.19108520507814,
+          "incomplete_contributors": null,
+          "incomplete_status": "incomplete",
+          "incomplete_v": null,
+          "lead_s": 184.89818188476562,
+          "t": 1789860180000
+        },
+        {
+          "city": "nyc",
+          "complete_contributors": 8,
+          "complete_status": "normal",
+          "complete_v": 65.08,
+          "first_complete_lag_s": 374.19108520507814,
+          "first_incomplete_lag_s": null,
+          "incomplete_contributors": null,
+          "incomplete_status": null,
+          "incomplete_v": null,
+          "lead_s": null,
+          "t": 1789860000000
+        },
+        {
+          "city": "nyc",
+          "complete_contributors": 8,
+          "complete_status": "normal",
+          "complete_v": 64.85,
+          "first_complete_lag_s": 379.08672900390627,
+          "first_incomplete_lag_s": 139.08792895507813,
+          "incomplete_contributors": null,
+          "incomplete_status": "incomplete",
+          "incomplete_v": null,
+          "lead_s": 239.99880004882812,
+          "t": 1789860300000
+        },
+        {
+          "city": "nyc",
+          "complete_contributors": 8,
+          "complete_status": "normal",
+          "complete_v": 65.08,
+          "first_complete_lag_s": 379.0879289550781,
+          "first_incomplete_lag_s": null,
+          "incomplete_contributors": null,
+          "incomplete_status": null,
+          "incomplete_v": null,
+          "lead_s": null,
+          "t": 1789860060000
+        },
+        {
+          "city": "nyc",
+          "complete_contributors": 8,
+          "complete_status": "normal",
+          "complete_v": 64.85,
+          "first_complete_lag_s": 379.0967810058594,
+          "first_incomplete_lag_s": 139.07980615234376,
+          "incomplete_contributors": null,
+          "incomplete_status": "incomplete",
+          "incomplete_v": null,
+          "lead_s": 240.01697485351562,
+          "t": 1789860360000
+        },
+        {
+          "city": "nyc",
+          "complete_contributors": 8,
+          "complete_status": "normal",
+          "complete_v": 64.85,
+          "first_complete_lag_s": 379.0963388671875,
+          "first_incomplete_lag_s": 139.08926708984376,
+          "incomplete_contributors": null,
+          "incomplete_status": "incomplete",
+          "incomplete_v": null,
+          "lead_s": 240.00707177734375,
+          "t": 1789860420000
+        },
+        {
+          "city": "nyc",
+          "complete_contributors": 8,
+          "complete_status": "normal",
+          "complete_v": 64.85,
+          "first_complete_lag_s": 379.0887119140625,
+          "first_incomplete_lag_s": null,
+          "incomplete_contributors": null,
+          "incomplete_status": null,
+          "incomplete_v": null,
+          "lead_s": null,
+          "t": 1789860240000
+        },
+        {
+          "city": "nyc",
+          "complete_contributors": 8,
+          "complete_status": "normal",
+          "complete_v": 65.08,
+          "first_complete_lag_s": 379.0802080078125,
+          "first_incomplete_lag_s": 139.08672900390624,
+          "incomplete_contributors": null,
+          "incomplete_status": "incomplete",
+          "incomplete_v": null,
+          "lead_s": 239.99347900390626,
+          "t": 1789860540000
+        },
+        {
+          "city": "nyc",
+          "complete_contributors": 8,
+          "complete_status": "normal",
+          "complete_v": 65.08,
+          "first_complete_lag_s": 379.09172900390627,
+          "first_incomplete_lag_s": 139.09678100585938,
+          "incomplete_contributors": null,
+          "incomplete_status": "incomplete",
+          "incomplete_v": null,
+          "lead_s": 239.99494799804688,
+          "t": 1789860600000
+        },
+        {
+          "city": "nyc",
+          "complete_contributors": 8,
+          "complete_status": "normal",
+          "complete_v": 64.85,
+          "first_complete_lag_s": 379.0795959472656,
+          "first_incomplete_lag_s": 139.08042602539064,
+          "incomplete_contributors": null,
+          "incomplete_status": "incomplete",
+          "incomplete_v": null,
+          "lead_s": 239.999169921875,
+          "t": 1789860720000
+        },
+        {
+          "city": "nyc",
+          "complete_contributors": 8,
+          "complete_status": "normal",
+          "complete_v": 65.08,
+          "first_complete_lag_s": 379.08042602539064,
+          "first_incomplete_lag_s": null,
+          "incomplete_contributors": null,
+          "incomplete_status": null,
+          "incomplete_v": null,
+          "lead_s": null,
+          "t": 1789860480000
+        },
+        {
+          "city": "nyc",
+          "complete_contributors": 8,
+          "complete_status": "normal",
+          "complete_v": 64.85,
+          "first_complete_lag_s": 379.0808908691406,
+          "first_incomplete_lag_s": 139.09172900390624,
+          "incomplete_contributors": null,
+          "incomplete_status": "incomplete",
+          "incomplete_v": null,
+          "lead_s": 239.98916186523437,
+          "t": 1789860840000
+        },
+        {
+          "city": "nyc",
+          "complete_contributors": 8,
+          "complete_status": "normal",
+          "complete_v": 65.08,
+          "first_complete_lag_s": 379.0797700195312,
+          "first_incomplete_lag_s": 139.07939599609375,
+          "incomplete_contributors": null,
+          "incomplete_status": "incomplete",
+          "incomplete_v": null,
+          "lead_s": 240.0003740234375,
+          "t": 1789860900000
+        },
+        {
+          "city": "nyc",
+          "complete_contributors": 8,
+          "complete_status": "normal",
+          "complete_v": 64.85,
+          "first_complete_lag_s": 379.07939599609375,
+          "first_incomplete_lag_s": null,
+          "incomplete_contributors": null,
+          "incomplete_status": null,
+          "incomplete_v": null,
+          "lead_s": null,
+          "t": 1789860660000
+        },
+        {
+          "city": "nyc",
+          "complete_contributors": 8,
+          "complete_status": "normal",
+          "complete_v": 65.08,
+          "first_complete_lag_s": 379.08427416992185,
+          "first_incomplete_lag_s": 139.07959594726563,
+          "incomplete_contributors": null,
+          "incomplete_status": "incomplete",
+          "incomplete_v": null,
+          "lead_s": 240.00467822265625,
+          "t": 1789860960000
+        },
+        {
+          "city": "nyc",
+          "complete_contributors": 8,
+          "complete_status": "normal",
+          "complete_v": 65.08,
+          "first_complete_lag_s": 379.0923640136719,
+          "first_incomplete_lag_s": 139.09198583984374,
+          "incomplete_contributors": null,
+          "incomplete_status": "incomplete",
+          "incomplete_v": null,
+          "lead_s": 240.00037817382812,
+          "t": 1789861020000
+        },
+        {
+          "city": "nyc",
+          "complete_contributors": 8,
+          "complete_status": "normal",
+          "complete_v": 64.85,
+          "first_complete_lag_s": 379.09198583984374,
+          "first_incomplete_lag_s": null,
+          "incomplete_contributors": null,
+          "incomplete_status": null,
+          "incomplete_v": null,
+          "lead_s": null,
+          "t": 1789860780000
+        },
+        {
+          "city": "nyc",
+          "complete_contributors": 8,
+          "complete_status": "normal",
+          "complete_v": 64.85,
+          "first_complete_lag_s": 379.0876938476562,
+          "first_incomplete_lag_s": 139.07977001953125,
+          "incomplete_contributors": null,
+          "incomplete_status": "incomplete",
+          "incomplete_v": null,
+          "lead_s": 240.007923828125,
+          "t": 1789861140000
+        },
+        {
+          "city": "nyc",
+          "complete_contributors": 8,
+          "complete_status": "normal",
+          "complete_v": 64.85,
+          "first_complete_lag_s": 379.08001098632815,
+          "first_incomplete_lag_s": 139.08427416992188,
+          "incomplete_contributors": null,
+          "incomplete_status": "incomplete",
+          "incomplete_v": null,
+          "lead_s": 239.99573681640624,
+          "t": 1789861200000
+        },
+        {
+          "city": "nyc",
+          "complete_contributors": 8,
+          "complete_status": "normal",
+          "complete_v": 64.85,
+          "first_complete_lag_s": 379.0977189941406,
+          "first_incomplete_lag_s": 139.07929296875,
+          "incomplete_contributors": null,
+          "incomplete_status": "incomplete",
+          "incomplete_v": null,
+          "lead_s": 240.01842602539062,
+          "t": 1789861320000
+        },
+        {
+          "city": "nyc",
+          "complete_contributors": 8,
+          "complete_status": "normal",
+          "complete_v": 65.08,
+          "first_complete_lag_s": 379.07929296875,
+          "first_incomplete_lag_s": null,
+          "incomplete_contributors": null,
+          "incomplete_status": null,
+          "incomplete_v": null,
+          "lead_s": null,
+          "t": 1789861080000
+        },
+        {
+          "city": "nyc",
+          "complete_contributors": 8,
+          "complete_status": "normal",
+          "complete_v": 64.85,
+          "first_complete_lag_s": 379.0913759765625,
+          "first_incomplete_lag_s": 199.08001098632812,
+          "incomplete_contributors": null,
+          "incomplete_status": "incomplete",
+          "incomplete_v": null,
+          "lead_s": 180.01136499023437,
+          "t": 1789861380000
+        },
+        {
+          "city": "nyc",
+          "complete_contributors": 8,
+          "complete_status": "normal",
+          "complete_v": 64.85,
+          "first_complete_lag_s": 379.082873046875,
+          "first_incomplete_lag_s": 199.084455078125,
+          "incomplete_contributors": null,
+          "incomplete_status": "incomplete",
+          "incomplete_v": null,
+          "lead_s": 179.99841796875,
+          "t": 1789861440000
+        },
+        {
+          "city": "nyc",
+          "complete_contributors": 8,
+          "complete_status": "normal",
+          "complete_v": 64.85,
+          "first_complete_lag_s": 379.084455078125,
+          "first_incomplete_lag_s": null,
+          "incomplete_contributors": null,
+          "incomplete_status": null,
+          "incomplete_v": null,
+          "lead_s": null,
+          "t": 1789861260000
+        },
+        {
+          "city": "nyc",
+          "complete_contributors": 8,
+          "complete_status": "normal",
+          "complete_v": 65.08,
+          "first_complete_lag_s": 379.0845830078125,
+          "first_incomplete_lag_s": 199.09771899414062,
+          "incomplete_contributors": null,
+          "incomplete_status": "incomplete",
+          "incomplete_v": null,
+          "lead_s": 179.98686401367186,
+          "t": 1789861500000
+        },
+        {
+          "city": "nyc",
+          "complete_contributors": 8,
+          "complete_status": "normal",
+          "complete_v": 65.08,
+          "first_complete_lag_s": 379.0811259765625,
+          "first_incomplete_lag_s": 199.0913759765625,
+          "incomplete_contributors": null,
+          "incomplete_status": "incomplete",
+          "incomplete_v": null,
+          "lead_s": 179.98975,
+          "t": 1789861560000
+        },
+        {
+          "city": "nyc",
+          "complete_contributors": 8,
+          "complete_status": "normal",
+          "complete_v": 65.08,
+          "first_complete_lag_s": 379.0802021484375,
+          "first_incomplete_lag_s": 199.082873046875,
+          "incomplete_contributors": null,
+          "incomplete_status": "incomplete",
+          "incomplete_v": null,
+          "lead_s": 179.9973291015625,
+          "t": 1789861620000
+        },
+        {
+          "city": "nyc",
+          "complete_contributors": 8,
+          "complete_status": "normal",
+          "complete_v": 65.08,
+          "first_complete_lag_s": 379.08335595703124,
+          "first_incomplete_lag_s": 199.0845830078125,
+          "incomplete_contributors": null,
+          "incomplete_status": "incomplete",
+          "incomplete_v": null,
+          "lead_s": 179.99877294921876,
+          "t": 1789861680000
+        },
+        {
+          "city": "nyc",
+          "complete_contributors": 8,
+          "complete_status": "normal",
+          "complete_v": 65.08,
+          "first_complete_lag_s": 379.0878911132813,
+          "first_incomplete_lag_s": 199.0811259765625,
+          "incomplete_contributors": null,
+          "incomplete_status": "incomplete",
+          "incomplete_v": null,
+          "lead_s": 180.00676513671874,
+          "t": 1789861740000
+        },
+        {
+          "city": "nyc",
+          "complete_contributors": 8,
+          "complete_status": "normal",
+          "complete_v": 64.85,
+          "first_complete_lag_s": 379.1004580078125,
+          "first_incomplete_lag_s": 199.0802021484375,
+          "incomplete_contributors": null,
+          "incomplete_status": "incomplete",
+          "incomplete_v": null,
+          "lead_s": 180.020255859375,
+          "t": 1789861800000
+        },
+        {
+          "city": "nyc",
+          "complete_contributors": 8,
+          "complete_status": "normal",
+          "complete_v": 64.85,
+          "first_complete_lag_s": 379.0965090332031,
+          "first_incomplete_lag_s": 199.08335595703124,
+          "incomplete_contributors": null,
+          "incomplete_status": "incomplete",
+          "incomplete_v": null,
+          "lead_s": 180.01315307617188,
+          "t": 1789861860000
+        },
+        {
+          "city": "nyc",
+          "complete_contributors": 8,
+          "complete_status": "normal",
+          "complete_v": 64.85,
+          "first_complete_lag_s": 379.0968078613281,
+          "first_incomplete_lag_s": 199.08789111328124,
+          "incomplete_contributors": null,
+          "incomplete_status": "incomplete",
+          "incomplete_v": null,
+          "lead_s": 180.0089167480469,
+          "t": 1789861920000
+        },
+        {
+          "city": "nyc",
+          "complete_contributors": 8,
+          "complete_status": "normal",
+          "complete_v": 64.85,
+          "first_complete_lag_s": 379.08381298828124,
+          "first_incomplete_lag_s": 199.1004580078125,
+          "incomplete_contributors": null,
+          "incomplete_status": "incomplete",
+          "incomplete_v": null,
+          "lead_s": 179.98335498046876,
+          "t": 1789861980000
+        },
+        {
+          "city": "nyc",
+          "complete_contributors": 8,
+          "complete_status": "normal",
+          "complete_v": 64.85,
+          "first_complete_lag_s": 379.0964609375,
+          "first_incomplete_lag_s": 199.09650903320312,
+          "incomplete_contributors": null,
+          "incomplete_status": "incomplete",
+          "incomplete_v": null,
+          "lead_s": 179.99995190429686,
+          "t": 1789862040000
+        }
+      ]
+    }
+  },
+  "guards": [
+    "Uses archived recorder manifests only.",
+    "Observed first-seen times are bounded by one-minute polling cadence.",
+    "No market prices, network calls, trading, paid actions, or wallet actions.",
+    "NO_PROVEN_EDGE remains in force."
+  ],
+  "live_trading": false,
+  "manifest_count": 37,
+  "manifest_field_samples": {
+    "chicago": {
+      "latest_complete": {
+        "keys": [
+          "contributors",
+          "stations",
+          "status",
+          "t",
+          "v"
+        ],
+        "sample": {
+          "contributors": 5,
+          "stations": [
+            {
+              "code": "ok",
+              "received_at_ms": 1789860086878,
+              "source": "hf_asos",
+              "station_id": "KARR1M",
+              "temp_f": 68
+            },
+            {
+              "code": "ok",
+              "received_at_ms": 1789860033943,
+              "source": "hf_asos",
+              "station_id": "KDPA1M",
+              "temp_f": 68
+            },
+            {
+              "code": "ok",
+              "received_at_ms": 1789860087884,
+              "source": "hf_asos",
+              "station_id": "KMDW1M",
+              "temp_f": 71.6
+            },
+            {
+              "code": "ok",
+              "received_at_ms": 1789860088890,
+              "source": "hf_asos",
+              "station_id": "KORD1M",
+              "temp_f": 69.8
+            },
+            {
+              "code": "ok",
+              "received_at_ms": 1789860087884,
+              "source": "hf_asos",
+              "station_id": "KPWK1M",
+              "temp_f": 66.2
+            }
+          ],
+          "status": "normal",
+          "t": 1789859940000,
+          "v": 68.72
+        }
+      },
+      "latest_incomplete": {
+        "keys": [
+          "stations",
+          "status",
+          "t"
+        ],
+        "sample": {
+          "stations": [
+            {
+              "code": "pending",
+              "received_at_ms": 1789860267593,
+              "source": "hf_asos",
+              "station_id": "KDPA1M",
+              "temp_f": 68
+            }
+          ],
+          "status": "incomplete",
+          "t": 1789860180000
+        }
+      }
+    },
+    "miami": {
+      "latest_complete": {
+        "keys": [
+          "contributors",
+          "stations",
+          "status",
+          "t",
+          "v"
+        ],
+        "sample": {
+          "contributors": 5,
+          "stations": [
+            {
+              "code": "ok",
+              "received_at_ms": 1789860087381,
+              "source": "hf_asos",
+              "station_id": "KFLL1M",
+              "temp_f": 78.8
+            },
+            {
+              "code": "ok",
+              "received_at_ms": 1789860087884,
+              "source": "hf_asos",
+              "station_id": "KFXE1M",
+              "temp_f": 77
+            },
+            {
+              "code": "ok",
+              "received_at_ms": 1789860087884,
+              "source": "hf_asos",
+              "station_id": "KMIA1M",
+              "temp_f": 77
+            },
+            {
+              "code": "ok",
+              "received_at_ms": 1789860087381,
+              "source": "hf_asos",
+              "station_id": "KOPF1M",
+              "temp_f": 75.2
+            },
+            {
+              "code": "ok",
+              "received_at_ms": 1789860088890,
+              "source": "hf_asos",
+              "station_id": "KPMP1M",
+              "temp_f": 78.8
+            }
+          ],
+          "status": "normal",
+          "t": 1789859940000,
+          "v": 77.36
+        }
+      },
+      "latest_incomplete": {
+        "keys": [
+          "stations",
+          "status",
+          "t"
+        ],
+        "sample": {
+          "stations": [
+            {
+              "code": "pending",
+              "received_at_ms": 1789860267593,
+              "source": "hf_asos",
+              "station_id": "KFLL1M",
+              "temp_f": 78.8
+            },
+            {
+              "code": "pending",
+              "received_at_ms": 1789860267593,
+              "source": "hf_asos",
+              "station_id": "KFXE1M",
+              "temp_f": 77
+            },
+            {
+              "code": "pending",
+              "received_at_ms": 1789860268097,
+              "source": "hf_asos",
+              "station_id": "KMIA1M",
+              "temp_f": 77
+            },
+            {
+              "code": "pending",
+              "received_at_ms": 1789860268097,
+              "source": "hf_asos",
+              "station_id": "KOPF1M",
+              "temp_f": 75.2
+            },
+            {
+              "code": "pending",
+              "received_at_ms": 1789860268601,
+              "source": "hf_asos",
+              "station_id": "KPMP1M",
+              "temp_f": 78.8
+            }
+          ],
+          "status": "incomplete",
+          "t": 1789860120000
+        }
+      }
+    },
+    "nyc": {
+      "latest_complete": {
+        "keys": [
+          "contributors",
+          "stations",
+          "status",
+          "t",
+          "v"
+        ],
+        "sample": {
+          "contributors": 8,
+          "stations": [
+            {
+              "code": "ok",
+              "received_at_ms": 1789860087381,
+              "source": "hf_asos",
+              "station_id": "KCDW1M",
+              "temp_f": 66.2
+            },
+            {
+              "code": "ok",
+              "received_at_ms": 1789860087381,
+              "source": "hf_asos",
+              "station_id": "KEWR1M",
+              "temp_f": 68
+            },
+            {
+              "code": "ok",
+              "received_at_ms": 1789860088890,
+              "source": "hf_asos",
+              "station_id": "KFRG1M",
+              "temp_f": 64.4
+            },
+            {
+              "code": "ok",
+              "received_at_ms": 1789860087381,
+              "source": "hf_asos",
+              "station_id": "KHPN1M",
+              "temp_f": 62.6
+            },
+            {
+              "code": "ok",
+              "received_at_ms": 1789860088890,
+              "source": "hf_asos",
+              "station_id": "KISP1M",
+              "temp_f": 62.6
+            },
+            {
+              "code": "ok",
+              "received_at_ms": 1789860087884,
+              "source": "hf_asos",
+              "station_id": "KLGA1M",
+              "temp_f": 66.2
+            },
+            {
+              "code": "ok",
+              "received_at_ms": 1789860089904,
+              "source": "hf_asos",
+              "station_id": "KSMQ1M",
+              "temp_f": 64.4
+            },
+            {
+              "code": "ok",
+              "received_at_ms": 1789860089904,
+              "source": "hf_asos",
+              "station_id": "KTEB1M",
+              "temp_f": 66.2
+            }
+          ],
+          "status": "normal",
+          "t": 1789859940000,
+          "v": 65.08
+        }
+      },
+      "latest_incomplete": {
+        "keys": [
+          "stations",
+          "status",
+          "t"
+        ],
+        "sample": {
+          "stations": [
+            {
+              "code": "pending",
+              "received_at_ms": 1789860267593,
+              "source": "hf_asos",
+              "station_id": "KCDW1M",
+              "temp_f": 66.2
+            },
+            {
+              "code": "pending",
+              "received_at_ms": 1789860267593,
+              "source": "hf_asos",
+              "station_id": "KEWR1M",
+              "temp_f": 66.2
+            },
+            {
+              "code": "pending",
+              "received_at_ms": 1789860267593,
+              "source": "hf_asos",
+              "station_id": "KFRG1M",
+              "temp_f": 64.4
+            },
+            {
+              "code": "pending",
+              "received_at_ms": 1789860268097,
+              "source": "hf_asos",
+              "station_id": "KHPN1M",
+              "temp_f": 62.6
+            },
+            {
+              "code": "pending",
+              "received_at_ms": 1789860268097,
+              "source": "hf_asos",
+              "station_id": "KISP1M",
+              "temp_f": 62.6
+            },
+            {
+              "code": "pending",
+              "received_at_ms": 1789860268097,
+              "source": "hf_asos",
+              "station_id": "KLGA1M",
+              "temp_f": 66.2
+            },
+            {
+              "code": "pending",
+              "received_at_ms": 1789860268601,
+              "source": "hf_asos",
+              "station_id": "KSMQ1M",
+              "temp_f": 64.4
+            },
+            {
+              "code": "pending",
+              "received_at_ms": 1789860268601,
+              "source": "hf_asos",
+              "station_id": "KTEB1M",
+              "temp_f": 66.2
+            }
+          ],
+          "status": "incomplete",
+          "t": 1789860120000
+        }
+      }
+    }
+  },
+  "paid_actions": false,
+  "task_id": "KALSHI-WEATHER-INDEX-LIFECYCLE-E239",
+  "wallet_actions": false
+}
