@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/capture_asset_rank_rules_fees_e328.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-20T01:39:31.899370+00:00",
+  "hypothesis_id": "PAYOFF-IDENTITY-MINING-V1",
+  "source_commit": "31b614b703bd28210c3aadbd2481f6d811c8cae1",
+  "started_at": "2026-09-20T01:39:31.712938+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "4b0399c2924185d6aee7b955a67c6cf820dc1a3e95e68cc13625341a2df7a464",
+  "task_class": "research",
+  "task_id": "EDGE-HUNTER-ASSET-RULES-FEES-E328"
+}
