@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/build_candidate_index_e262.py"
+  ],
+  "exit_code": 1,
+  "finished_at": "2026-09-20T00:54:46.574095+00:00",
+  "hypothesis_id": "GENERAL-PREDICTION-MARKET-EDGE-HUNTER",
+  "source_commit": "3fe31e0d9adc8cf2ee3c1318f2c301eaf4ddab01",
+  "started_at": "2026-09-20T00:54:46.558977+00:00",
+  "status": "failed",
+  "stderr_sha256": "f36b6692a4b47e805cf66d05eecd2fddd61f6bff1423318789dab80f4c4d625f",
+  "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "task_class": "infrastructure",
+  "task_id": "EDGE-HUNTER-CANDIDATE-INDEX-E262"
+}
