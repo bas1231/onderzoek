@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/verify_hourly_run_0600_e429.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-20T04:01:00.976522+00:00",
+  "hypothesis_id": "CONTROL-NO-SILENT-WAITING",
+  "source_commit": "14e73fd2e00da0bed2eb6e43fe1e6d76fc0fda0b",
+  "started_at": "2026-09-20T04:01:00.954679+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "39c3e1d3a720fc2cd9be81000e6a536ffe064bed2ccb88ce87d6316bd4cb4f21",
+  "task_class": "infrastructure",
+  "task_id": "EDGE-HUNTER-HOURLY-0600-VERIFY-E429"
+}

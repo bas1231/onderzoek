@@ -1,0 +1,16 @@
+EXACT_RUN_PATH /home/leonh/prediction_research/knowledge/runs/edge_hunter/edge-hunt-hourly-20260920T060000+0200.json
+EXACT_RUN_EXISTS True
+SIX_OCLOCK_RUN_COUNT 1
+RUN_FILE edge-hunt-hourly-20260920T060000+0200.json MTIME 1789876820.7342913
+HOURLY_0600_RUN_FOUND True
+CHOSEN_RUN /home/leonh/prediction_research/knowledge/runs/edge_hunter/edge-hunt-hourly-20260920T060000+0200.json
+TOP_LEVEL_KEYS ['candidates', 'created_at', 'decision', 'edge_hunter_version', 'lanes', 'live_trading', 'paid_actions', 'run_id', 'system_objective', 'wallet_actions', 'weather_is_one_lane']
+CREATED_AT 2026-09-20T04:00:20.733795+00:00
+DECISION NO_PROVEN_EDGE
+CANDIDATE_COUNT 4
+CANDIDATE ASSET-RANK-MAKER-HEDGE-V1 LANE microstructure STAGE None STATUS None DECISION UNPROVEN
+CANDIDATE KWI-FULL-STATION-PRECANONICAL-V1 LANE weather STAGE None STATUS None DECISION UNPROVEN
+CANDIDATE KWI-INCOMPLETE-TO-CANONICAL-V1 LANE weather STAGE None STATUS None DECISION UNPROVEN
+CANDIDATE PAYOFF-IDENTITY-MINING-V1 LANE market_algebra STAGE None STATUS None DECISION UNPROVEN
+VERDICT EXISTING_0600_RUN_CONFIRMED
+HOURLY_RUN_VERIFY_E429_PASS
