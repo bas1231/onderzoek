@@ -12,6 +12,12 @@ ROOT = Path(__file__).resolve().parents[2]
 REQUEST_ROOT = ROOT / "experiments/bridge/warrant_requests"
 CANDIDATE_DIR = ROOT / "knowledge/candidates"
 WARRANT_DIR = ROOT / "knowledge/warrants"
+REQUEST_FIELDS = {
+    "candidate_id",
+    "build_kind",
+    "objective",
+    "capabilities",
+}
 
 
 def _load_object(path: Path, label: str) -> dict[str, Any]:
@@ -71,6 +77,18 @@ def issue_request(
     stage: bool = True,
 ) -> dict[str, Any]:
     payload = _load_object(request_path, "warrant request")
+
+    missing = REQUEST_FIELDS - set(payload)
+    if missing:
+        raise ValueError(
+            "missing warrant request fields: " + ",".join(sorted(missing))
+        )
+
+    unknown = set(payload) - REQUEST_FIELDS
+    if unknown:
+        raise ValueError(
+            "unknown warrant request fields: " + ",".join(sorted(unknown))
+        )
 
     candidate_id = payload.get("candidate_id")
     if (
