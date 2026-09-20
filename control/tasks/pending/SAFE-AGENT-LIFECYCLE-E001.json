@@ -1,0 +1,21 @@
+{
+  "build_authorization": {
+    "mode": "control_plane",
+    "build_kind": "control_plane",
+    "objective": "Execute bounded lifecycle health check for agent control-plane validation",
+    "capabilities": [
+      "read_repository"
+    ]
+  },
+  "command": [
+    ".venv/bin/python",
+    "experiments/health_check.py"
+  ],
+  "hypothesis_id": "CONTROL-LIFECYCLE-TEST",
+  "live_trading": false,
+  "operation": "health_check",
+  "task_class": "infrastructure",
+  "task_id": "SAFE-AGENT-LIFECYCLE-E001",
+  "timeout_seconds": 60,
+  "working_directory": "."
+}
