@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/inspect_trade_openapi_e349.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-20T02:24:53.159718+00:00",
+  "hypothesis_id": "ASSET-RANK-MAKER-HEDGE-V1",
+  "source_commit": "f033f9daa1cac7f42d55a3f203744ef394e90ccf",
+  "started_at": "2026-09-20T02:24:52.849030+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "b83eb357bdd415165ce373bce95ba05d4f5482b25165bfe2eb1d6e0c1715e962",
+  "task_class": "research",
+  "task_id": "EDGE-HUNTER-ASSET-TRADE-SEMANTICS-E349"
+}
