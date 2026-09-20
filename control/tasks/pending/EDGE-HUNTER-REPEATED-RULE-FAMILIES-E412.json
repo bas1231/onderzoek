@@ -1,0 +1,13 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/mine_repeated_rule_families_e412.py"
+  ],
+  "hypothesis_id": "PAYOFF-IDENTITY-MINING-V1",
+  "live_trading": false,
+  "operation": "python",
+  "task_class": "research",
+  "task_id": "EDGE-HUNTER-REPEATED-RULE-FAMILIES-E412",
+  "timeout_seconds": 180,
+  "working_directory": "."
+}
