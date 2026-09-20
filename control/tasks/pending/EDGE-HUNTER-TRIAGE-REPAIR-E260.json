@@ -1,0 +1,13 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/repair_edge_hunter_triage_e260.py"
+  ],
+  "hypothesis_id": "GENERAL-PREDICTION-MARKET-EDGE-HUNTER",
+  "live_trading": false,
+  "operation": "python",
+  "task_class": "infrastructure",
+  "task_id": "EDGE-HUNTER-TRIAGE-REPAIR-E260",
+  "timeout_seconds": 240,
+  "working_directory": "."
+}
