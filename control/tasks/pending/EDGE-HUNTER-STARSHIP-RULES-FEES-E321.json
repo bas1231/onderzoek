@@ -1,0 +1,13 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/capture_starship_rules_fees_e321.py"
+  ],
+  "hypothesis_id": "PAYOFF-IDENTITY-MINING-V1",
+  "live_trading": false,
+  "operation": "python",
+  "task_class": "research",
+  "task_id": "EDGE-HUNTER-STARSHIP-RULES-FEES-E321",
+  "timeout_seconds": 120,
+  "working_directory": "."
+}
