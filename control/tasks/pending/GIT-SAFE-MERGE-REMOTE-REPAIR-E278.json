@@ -1,0 +1,13 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/merge_remote_repair_e278.py"
+  ],
+  "hypothesis_id": "GENERAL-PREDICTION-MARKET-EDGE-HUNTER",
+  "live_trading": false,
+  "operation": "python",
+  "task_class": "infrastructure",
+  "task_id": "GIT-SAFE-MERGE-REMOTE-REPAIR-E278",
+  "timeout_seconds": 120,
+  "working_directory": "."
+}
