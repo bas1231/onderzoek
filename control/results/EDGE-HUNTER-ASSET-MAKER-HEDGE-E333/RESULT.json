@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/prebuild_asset_maker_hedge_e333.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-20T02:06:41.790405+00:00",
+  "hypothesis_id": "PAYOFF-IDENTITY-MINING-V1",
+  "source_commit": "31149cc5d9dc3064b5a229339e85152f7c11225b",
+  "started_at": "2026-09-20T02:06:41.769807+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "ace4c38757670859865a94ddfcd79dbde20fbcc569cb411724de100d03b5d047",
+  "task_class": "research",
+  "task_id": "EDGE-HUNTER-ASSET-MAKER-HEDGE-E333"
+}
