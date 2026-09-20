@@ -1,0 +1,134 @@
+from __future__ import annotations
+
+from pathlib import Path
+from typing import Any
+import json
+
+
+ROOT = Path.cwd()
+
+
+def load_json(path: Path) -> Any:
+    return json.loads(path.read_text(encoding="utf-8"))
+
+
+def save_json(path: Path, obj: Any) -> None:
+    tmp = path.with_suffix(path.suffix + ".tmp")
+    tmp.write_text(
+        json.dumps(obj, indent=2, sort_keys=True) + "\n",
+        encoding="utf-8",
+    )
+    tmp.replace(path)
+
+
+def evidence_ref(item: dict[str, Any]) -> dict[str, Any]:
+    return {
+        "source_id": item.get("source_id"),
+        "document_sha256": item.get("document_sha256"),
+        "retrieved_at": item.get("retrieved_at"),
+        "source_state": item.get("source_state"),
+        "term": item.get("term"),
+        "snippet": item.get("snippet"),
+    }
+
+
+def hydrate_packet(
+    packet: dict[str, Any],
+    routed: dict[str, Any] | None,
+    routing_path: Path,
+) -> dict[str, Any]:
+
+    if not routed:
+        packet["input_refs"] = []
+        packet["routed_evidence"] = []
+        packet["coverage_gaps"] = []
+        packet["routing_status"] = "NO_ROUTE"
+        return packet
+
+    evidence = [
+        evidence_ref(x)
+        for x in routed.get("evidence", [])
+        if isinstance(x, dict)
+    ]
+
+    packet["routed_evidence"] = evidence
+    packet["coverage_gaps"] = list(
+        routed.get("coverage_gaps", [])
+    )
+    packet["routing_status"] = routed.get(
+        "status",
+        "UNKNOWN",
+    )
+
+    # Reference provenance without inventing files per evidence item.
+    packet["input_refs"] = (
+        [str(routing_path.relative_to(ROOT))]
+        if evidence else []
+    )
+
+    # Re-evaluate states previously assigned before hydration.
+    if packet.get("status") in {
+        "PENDING",
+        "NO_EVIDENCE",
+        "READY",
+    }:
+        packet["status"] = "PENDING"
+
+    packet.pop("orchestrator_reason", None)
+    packet.pop("orchestrator_updated_at_unix", None)
+
+    return packet
+
+
+def hydrate_run(
+    routing_path: Path,
+    packet_dir: Path,
+) -> dict[str, Any]:
+
+    routing_path = routing_path.resolve()
+    packet_dir = packet_dir.resolve()
+
+    routing = load_json(routing_path)
+    changed = []
+
+    for packet_path in sorted(packet_dir.glob("*.json")):
+        if packet_path.name.startswith("_"):
+            continue
+
+        packet = load_json(packet_path)
+        role = str(packet.get("agent_id", ""))
+
+        # Only routed specialist roles are hydrated here.
+        if role not in routing:
+            continue
+
+        packet = hydrate_packet(
+            packet,
+            routing.get(role),
+            routing_path,
+        )
+
+        save_json(packet_path, packet)
+        changed.append(role)
+
+    return {
+        "routing": str(routing_path.relative_to(ROOT)),
+        "packet_dir": str(packet_dir.relative_to(ROOT)),
+        "hydrated_roles": changed,
+    }
+
+
+if __name__ == "__main__":
+    import sys
+
+    if len(sys.argv) != 3:
+        raise SystemExit(
+            "usage: packet_hydrator.py ROUTING_JSON PACKET_DIR"
+        )
+
+    result = hydrate_run(
+        Path(sys.argv[1]),
+        Path(sys.argv[2]),
+    )
+
+    print(json.dumps(result, indent=2, sort_keys=True))

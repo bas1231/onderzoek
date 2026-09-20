@@ -1,4 +1,5 @@
 {
+  "active_experiment_ids": [],
   "candidate_id": "KWI-FULL-STATION-PRECANONICAL-V1",
   "decision": "UNPROVEN",
   "discovery_evidence": {
@@ -13,6 +14,9 @@
   "live_trading": false,
   "market_edge_test": "not started; signal edge must survive first",
   "mechanism": "Possible publication or completion-status lag after all expected station observations are already present.",
+  "needed_data": [],
+  "next_decisive_test": null,
+  "open_question": null,
   "origin": "post-hoc mechanism discovered in KWI-INCOMPLETE-SIGNAL-FEASIBILITY-V1 development data; all pre-cutoff evidence is discovery only",
   "paid_actions": false,
   "phase": "MECHANISM_DEFINED",
@@ -24,9 +28,14 @@
     "later complete v for same city and t used only as target",
     "no pre-cutoff rows count as prospective evidence"
   ],
+  "priority": "P1",
   "prospective_protocols": [
     "knowledge/candidates/protocols/KWI-FULL-STATION-PRECANONICAL-24H-V1.json"
   ],
+  "queue_entered_at": "2026-09-20T15:32:05.855330+00:00",
+  "queue_status": "WAITING_FOR_RESULT",
+  "resume_condition": null,
   "signal_metric": "MAE and RMSE of full-station incomplete arithmetic mean versus later canonical v",
+  "stop_condition": null,
   "wallet_actions": false
 }

@@ -1,4 +1,5 @@
 {
+  "active_experiment_ids": [],
   "candidate_id": "PAYOFF-IDENTITY-MINING-V1",
   "created_at": "2026-09-20T00:42:14.997554+00:00",
   "decision": "UNPROVEN",
@@ -28,14 +29,22 @@
   "live_trading": false,
   "market_edge_test": "Executable portfolio cost versus guaranteed payout",
   "mechanism": "Canonicalize payouts and prove equivalence or dominance before price comparison.",
+  "needed_data": [],
   "negative_evidence": [],
+  "next_decisive_test": null,
+  "open_question": null,
   "paid_actions": false,
   "phase": "DISCOVERED",
   "point_in_time_requirements": [
     "Rules and prices archived at comparison time.",
     "No later settlement interpretation backfilled."
   ],
+  "priority": "P2",
+  "queue_entered_at": "2026-09-20T00:42:14.997558+00:00",
+  "queue_status": "NEEDS_DIRECTOR",
+  "resume_condition": null,
   "signal_metric": "Verified equivalence/dominance count",
+  "stop_condition": null,
   "updated_at": "2026-09-20T00:42:14.997558+00:00",
   "wallet_actions": false
 }

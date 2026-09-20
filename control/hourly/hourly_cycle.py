@@ -34,6 +34,9 @@ def main() -> int:
     quality = load('source_quality', R / 'control/hourly/source_quality.py')
     router = load('role_router', R / 'control/hourly/role_router.py')
     memory = load('memory_context', R / 'control/hourly/memory_context.py')
+    hydrator = load('packet_hydrator', R / 'control/hourly/packet_hydrator.py')
+    orchestrator = load('agent_orchestrator', R / 'control/hourly/agent_orchestrator.py')
+    candidate_queue = load('candidate_queue', R / 'control/hourly/candidate_queue.py')
 
     run, manifest, report, packets = runner.create_packets()
     sweep_path, sweep_data = sweep.sweep(max_workers=4)
@@ -54,6 +57,33 @@ def main() -> int:
 
     memory_data, memory_path = memory.build(run['run_id'])
 
+    # PVA AGENT CONTROL PLANE V1
+    #
+    # Routing evidence is attached to specialist packets first.
+    # The orchestrator then assigns READY/NO_EVIDENCE/etc.
+    # Candidate scheduling remains persistent and non-blocking.
+    # No AI/API call is performed here: ChatGPT remains the
+    # Research Director reasoning layer.
+    packet_dir = R / 'knowledge/runs/agent_packets' / run['run_id']
+
+    hydration_data = hydrator.hydrate_run(
+        routing_path,
+        packet_dir,
+    )
+
+    orchestration_data = orchestrator.orchestrate(
+        packet_dir,
+    )
+
+    queue_data = candidate_queue.build_queue(
+        write_candidates=True,
+    )
+
+    director_handoff_path = candidate_queue.write_handoff(
+        queue_data,
+        run['run_id'],
+    )
+
     run_path = R / 'knowledge/runs' / (run['run_id'] + '.json')
     current = json.loads(run_path.read_text())
     current['cadence'] = {
@@ -72,6 +102,21 @@ def main() -> int:
         for role, data in routing.items()
     }
     current['routing_ref'] = str(routing_path.relative_to(R))
+    current['agent_control_plane'] = {
+        'packet_dir': str(packet_dir.relative_to(R)),
+        'hydrated_roles': hydration_data.get('hydrated_roles', []),
+        'orchestration_ref': str(
+            (packet_dir / '_orchestration.json').relative_to(R)
+        ),
+        'director_handoff_ref': str(
+            director_handoff_path.relative_to(R)
+        ),
+        'queue_count': len(queue_data.get('queue', [])),
+        'default_economic_conclusion': 'NO_PROVEN_EDGE',
+        'live_trading': False,
+        'paid_actions': False,
+        'wallet_actions': False,
+    }
     current['memory_context'] = {
         'ref': str(memory_path.relative_to(R)),
         'matched_memory_count': memory_data.get('matched_memory_count'),
@@ -93,6 +138,23 @@ def main() -> int:
             handle.write('Memory context: ' + str(memory_path.relative_to(R)) + chr(10))
             for role, data in routing.items():
                 handle.write('- ' + role + ': ' + str(len(data.get('evidence', []))) + ' routed evidence items' + chr(10))
+
+            handle.write(chr(10) + '### Agent control plane' + chr(10))
+            handle.write(
+                'Director handoff: '
+                + str(director_handoff_path.relative_to(R))
+                + chr(10)
+            )
+            handle.write(
+                'Persistent candidate queue: '
+                + str(len(queue_data.get('queue', [])))
+                + ' nonterminal candidates'
+                + chr(10)
+            )
+            handle.write(
+                'Economic default: NO_PROVEN_EDGE'
+                + chr(10)
+            )
 
     subprocess.run(
         [str(R / '.venv/bin/python'), str(R / 'control/hourly/hourly_wake.py')],
