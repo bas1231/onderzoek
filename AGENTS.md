@@ -209,3 +209,18 @@ Before stopping, pausing, or waiting, explicitly check whether stopping is actua
 - Maak het blok waar praktisch mogelijk fail-closed met bijvoorbeeld `set -euo pipefail`, expliciete controles en duidelijke statusoutput.
 - Vraag de eigenaar niet eerst nogmaals om code als al duidelijk is welke lokale stap nodig is; lever de uitvoerbare stap meteen mee.
 - Deze regel verandert geen approval gates: betaalde acties, live trading, wallet/crypto-acties en andere afzonderlijk goedkeuringsplichtige handelingen blijven voorafgaande expliciete toestemming vereisen.
+
+## Reboot- en experiment-lifecycle-regel
+
+- Langlopende, geautoriseerde researchprocessen die bedoeld zijn om uren of dagen door te lopen moeten **reboot-bestendig** worden ingericht. Gebruik daarvoor bij voorkeur systemd user-units/timers met expliciete enablement/persistence, zodat een onverwachte reboot, logout of stroomonderbreking het onderzoek niet stil laat verdwijnen.
+- Na een reboot moet de research-control-plane automatisch kunnen hervatten zonder live trading, walletacties, betaalde acties of andere nieuwe approval-gates te omzeilen.
+- Een reboot mag nooit stilzwijgend worden behandeld alsof een prospectief experiment ononderbroken heeft gedraaid. Detecteer en registreer meetgaten/downtime; beoordeel daarna volgens het vooraf vastgelegde protocol of het experiment geldig kan doorgaan, verlengd moet worden of ongeldig is.
+- Ieder tijdelijk of experimenteel proces krijgt een expliciete lifecycle: `start -> running -> completed|failed|aborted -> cleanup`.
+- **Cleanup na mislukking, abort of voltooiing is verplicht.** Tijdelijke experiment-services/timers/workers mogen niet onbeperkt achterblijven nadat hun experiment niet meer actief is.
+- Cleanup omvat waar relevant: experimentele systemd-units/timers stoppen en disablen/verwijderen, verweesde workers/processen beëindigen, tijdelijke runtime/lock/PID-bestanden verwijderen en tijdelijke scratch/cache-data opruimen.
+- Evidence, logs, preregistratie, resultaten, negatieve resultaten en audittrail worden **niet** door cleanup verwijderd. Een mislukt experiment blijft als `TESTED_NEGATIVE`, `FAILED`, `ABORTED` of passende status duurzaam traceerbaar.
+- Raw evidence die volgens het onderzoeksprotocol nodig is voor reproduceerbaarheid mag niet automatisch worden verwijderd enkel omdat een experiment faalde. Cleanup verwijdert operationele rommel, niet het bewijs.
+- Cleanup mag nooit brede destructieve commando's gebruiken zonder een expliciete experiment-scope/allowlist. Geen generieke `rm -rf` op gedeelde researchdirectories.
+- Permanente control-plane componenten worden niet verwijderd door experiment-cleanup. Alleen resources waarvan ownership/provenance expliciet aan het betreffende experiment is gekoppeld mogen automatisch worden opgeruimd.
+- Een experiment geldt pas als operationeel afgesloten wanneer zowel de eindstatus als de cleanup-status zijn geregistreerd.
+- Nieuwe langlopende experimenten moeten daarom vooraf definiëren: owner/experiment-ID, benodigde units/processen, restart/rebootgedrag, evidencepaden, stopconditie en cleanup-plan.
