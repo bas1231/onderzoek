@@ -1,0 +1,5 @@
+Traceback (most recent call last):
+  File "/home/leonh/prediction_research/control/jobs/probe_gamma_keyset_e395.py", line 13, in <module>
+    print('TOP_TYPE',type(data).name)
+                     ^^^^^^^^^^^^^^^
+AttributeError: type object 'dict' has no attribute 'name'
