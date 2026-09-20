@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/reproduce_asset_rank_e334.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-20T02:07:42.741552+00:00",
+  "hypothesis_id": "PAYOFF-IDENTITY-MINING-V1",
+  "source_commit": "d48dfb1de1baf583da378c1315b623549c5ea795",
+  "started_at": "2026-09-20T02:07:42.533116+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "ebba9ec6a9e266b96ecd26b0b41d965248b55faa31e8d2e5307ae7987bdc4e74",
+  "task_class": "research",
+  "task_id": "EDGE-HUNTER-ASSET-REPRODUCTION-E334"
+}
