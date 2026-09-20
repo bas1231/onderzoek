@@ -72,6 +72,15 @@ Doel: append-only overzicht van concrete browser-bridge failures en lessen. Gebr
 - Regressietest: task-result zichtbaar versturen, bridge tijdelijk ACK laten falen, herstellen, en bewijzen dat durable retry uiteindelijk exact eenmaal naar `ACKED` gaat zonder result starvation.
 - Status: OPEN; documentatie remote main bijgewerkt. Geen live/paid/wallet impact.
 
+## 2026-09-20 — E016 RESULT_LATER_DELIVERED
+
+- Laag: end-to-end result delivery.
+- Status task: PASS (`exit_code=0`).
+- Resultaat: `RULE_PRESENT=True`, `CHANGED=False`, `HEAD=c60504d...`.
+- Interpretatie: de visible-chatregel stond al in `AGENTS.md`; E016 was idempotent en hoefde niets meer te wijzigen.
+- Het eerdere `CHAT_ACK_STALL` blokkeerde de uiteindelijke zichtbare levering niet: het normale E016-resultaat verscheen later alsnog in ChatGPT.
+- Belangrijk: dit bewijst niet dat de ACK-reliability-bug is opgelost. Het bewijst alleen dat delayed delivery/retry uiteindelijk werkte voor dit concrete resultaat. De ACK-fix blijft OPEN totdat response-validatie en retry-regressietest zijn gebouwd en geslaagd.
+
 ## Regels voor nieuwe entries
 
 Voeg per incident toe: datum, task-id, foutlaag, exacte foutklasse, bewezen oorzaak versus hypothese, impact, fix/preventie, regressieteststatus en of de oplossing alleen lokaal of ook op remote main staat.
