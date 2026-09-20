@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/install_hourly_kwi_hook_e371.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-20T02:41:41.850145+00:00",
+  "hypothesis_id": "KWI-FULL-STATION-PRECANONICAL-V1",
+  "source_commit": "76bdc2441ddee71252b5e400f0918f099cddb056",
+  "started_at": "2026-09-20T02:41:41.706383+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "75afa09f5877fab1835abedbc7ba8658ed858867dc18a20f5be6d10e413fa865",
+  "task_class": "infrastructure",
+  "task_id": "EDGE-HUNTER-KWI-HOURLY-HOOK-E371"
+}
