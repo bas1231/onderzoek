@@ -100,6 +100,30 @@ def test_safe_request_path_rejects_traversal():
             safe_request_path("../request.json", root=root)
 
 
+def test_unknown_request_field_is_rejected():
+    with tempfile.TemporaryDirectory() as td:
+        root = Path(td)
+        request_path = setup_root(root)
+        payload = json.loads(request_path.read_text())
+        payload["unexpected"] = True
+        request_path.write_text(json.dumps(payload))
+
+        with pytest.raises(ValueError, match="unknown warrant request fields"):
+            issue_request(request_path, root=root, stage=False)
+
+
+def test_missing_request_field_is_rejected():
+    with tempfile.TemporaryDirectory() as td:
+        root = Path(td)
+        request_path = setup_root(root)
+        payload = json.loads(request_path.read_text())
+        payload.pop("objective")
+        request_path.write_text(json.dumps(payload))
+
+        with pytest.raises(ValueError, match="missing warrant request fields"):
+            issue_request(request_path, root=root, stage=False)
+
+
 def test_valid_request_issues_warrant():
     with tempfile.TemporaryDirectory() as td:
         root = Path(td)
