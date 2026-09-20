@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/record_bridge_transport_rules_e014r3.py"
+  ],
+  "exit_code": 1,
+  "finished_at": "2026-09-20T21:33:36.359005+00:00",
+  "hypothesis_id": "CONTROL-BRIDGE-VISIBILITY",
+  "source_commit": "8ee4bf5c7ed8a2c0fcb7d6ce2492c9134cb5c379",
+  "started_at": "2026-09-20T21:33:36.349518+00:00",
+  "status": "failed",
+  "stderr_sha256": "e4353fd51d0c2e351ee805102f4148c18da571979f7b042be8312cc4b134436e",
+  "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "task_class": "infrastructure",
+  "task_id": "CONTROL-AGENTS-BRIDGE-VISIBILITY-E014R3"
+}
