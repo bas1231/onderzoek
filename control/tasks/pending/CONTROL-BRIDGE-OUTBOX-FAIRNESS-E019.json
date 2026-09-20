@@ -1,0 +1,23 @@
+{
+  "build_authorization": {
+    "build_kind": "control_plane",
+    "capabilities": [
+      "modify_repository",
+      "commit_local_changes",
+      "run_local_tests"
+    ],
+    "mode": "control_plane",
+    "objective": "Prevent incident backlogs from starving normal executor results by alternating result and incident delivery, defaulting to a normal result, with an automated regression test."
+  },
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/fix_outbox_fairness_e019.py"
+  ],
+  "hypothesis_id": "CONTROL-BRIDGE-RELIABILITY",
+  "live_trading": false,
+  "operation": "python",
+  "task_class": "infrastructure",
+  "task_id": "CONTROL-BRIDGE-OUTBOX-FAIRNESS-E019",
+  "timeout_seconds": 180,
+  "working_directory": "."
+}
