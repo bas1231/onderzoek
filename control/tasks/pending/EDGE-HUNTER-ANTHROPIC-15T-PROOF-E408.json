@@ -1,0 +1,13 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/prove_anthropic_15t_identities_e408.py"
+  ],
+  "hypothesis_id": "PAYOFF-IDENTITY-MINING-V1",
+  "live_trading": false,
+  "operation": "python",
+  "task_class": "research",
+  "task_id": "EDGE-HUNTER-ANTHROPIC-15T-PROOF-E408",
+  "timeout_seconds": 120,
+  "working_directory": "."
+}
