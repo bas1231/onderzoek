@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/capture_prison_rules_fees_e324.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-20T01:37:20.459693+00:00",
+  "hypothesis_id": "PAYOFF-IDENTITY-MINING-V1",
+  "source_commit": "7f7249e1d951ce7f99ccbe4f874e36974c5bc571",
+  "started_at": "2026-09-20T01:37:20.245112+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "309890fd0aa9cc800499c6bf4750e9fc5f9669a111b1df9b9396c6392d87c98a",
+  "task_class": "research",
+  "task_id": "EDGE-HUNTER-PRISON-RULES-FEES-E324"
+}
