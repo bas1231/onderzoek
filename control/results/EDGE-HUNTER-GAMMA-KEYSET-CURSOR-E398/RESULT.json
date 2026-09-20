@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/verify_gamma_keyset_cursor_e398.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-20T03:00:10.717382+00:00",
+  "hypothesis_id": "PAYOFF-IDENTITY-MINING-V1",
+  "source_commit": "b11de85d7951806c4bb2841d231bae95589dcb46",
+  "started_at": "2026-09-20T03:00:10.071751+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "267e6a4fecf58764f48a83e3c8e26da835c8af5b404ea957251563fa6b335a57",
+  "task_class": "research",
+  "task_id": "EDGE-HUNTER-GAMMA-KEYSET-CURSOR-E398"
+}
