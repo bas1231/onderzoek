@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/verify_negrisk_collateral_recycling_e424.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-20T03:27:23.482063+00:00",
+  "hypothesis_id": "PAYOFF-IDENTITY-MINING-V1",
+  "source_commit": "0024854c7f57f384d6757ea1f4c9280f63ed6ffa",
+  "started_at": "2026-09-20T03:27:14.284972+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "2256246d1151d60818b8f1f6973dd59dfe519a6df4cb5b5b23cfeb5d3a9d7ff9",
+  "task_class": "research",
+  "task_id": "EDGE-HUNTER-NEGRISK-COLLATERAL-RECYCLING-E424"
+}
