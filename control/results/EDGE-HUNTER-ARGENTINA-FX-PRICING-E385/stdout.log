@@ -1,0 +1,65 @@
+HTTP_STATUS 200
+BOOK_COUNT 14
+MARKET 1234161 1600.00+
+YES_TOP {'bid': 0.52, 'bid_size': 55.78, 'ask': 0.87, 'ask_size': 208.91}
+NO_TOP {'bid': 0.13, 'bid_size': 208.91, 'ask': 0.48, 'ask_size': 55.78}
+FEE_SCHEDULE {'enabled': True, 'rate': 0.05, 'exponent': 1, 'takerOnly': True}
+MARKET 1273048 <1600.00
+YES_TOP {'bid': 0.38, 'bid_size': 5.26, 'ask': 0.57, 'ask_size': 105.61}
+NO_TOP {'bid': 0.43, 'bid_size': 105.61, 'ask': 0.62, 'ask_size': 5.26}
+FEE_SCHEDULE {'enabled': True, 'rate': 0.05, 'exponent': 1, 'takerOnly': True}
+MARKET 1273050 1600.00–1699.99
+YES_TOP {'bid': 0.3, 'bid_size': 5.0, 'ask': 0.39, 'ask_size': 45.3}
+NO_TOP {'bid': 0.61, 'bid_size': 45.3, 'ask': 0.7, 'ask_size': 5.0}
+FEE_SCHEDULE {'enabled': True, 'rate': 0.05, 'exponent': 1, 'takerOnly': True}
+MARKET 1273051 1700.00–1799.99
+YES_TOP {'bid': 0.032, 'bid_size': 17.2, 'ask': 0.129, 'ask_size': 11.8}
+NO_TOP {'bid': 0.871, 'bid_size': 11.8, 'ask': 0.968, 'ask_size': 17.2}
+FEE_SCHEDULE {'enabled': True, 'rate': 0.05, 'exponent': 1, 'takerOnly': True}
+MARKET 1273052 1800.00–1899.99
+YES_TOP {'bid': 0.028, 'bid_size': 10.0, 'ask': 0.035, 'ask_size': 33.0}
+NO_TOP {'bid': 0.965, 'bid_size': 33.0, 'ask': 0.972, 'ask_size': 10.0}
+FEE_SCHEDULE {'enabled': True, 'rate': 0.05, 'exponent': 1, 'takerOnly': True}
+MARKET 1273053 1900.00–1999.99
+YES_TOP {'bid': 0.018, 'bid_size': 70.0, 'ask': 0.708, 'ask_size': 191.13}
+NO_TOP {'bid': 0.292, 'bid_size': 191.13, 'ask': 0.982, 'ask_size': 70.0}
+FEE_SCHEDULE {'enabled': True, 'rate': 0.05, 'exponent': 1, 'takerOnly': True}
+MARKET 1273054 2000.00+
+YES_TOP {'bid': 0.03, 'bid_size': 130.17, 'ask': 0.057, 'ask_size': 180.07}
+NO_TOP {'bid': 0.943, 'bid_size': 180.07, 'ask': 0.97, 'ask_size': 130.17}
+FEE_SCHEDULE {'enabled': True, 'rate': 0.05, 'exponent': 1, 'takerOnly': True}
+PATH_NAME CROSS_COMPLEMENT_YES
+COMMON_SIZE 105.61
+ASK_SUM 1.44
+GROSS_PER_SET -0.43999999999999995
+GROSS_TOTAL -46.468399999999995
+FEE_KNOWN True
+TAKER_FEES_TOTAL 1.89147
+NET_TOTAL -48.359869999999994
+NET_ROI -0.3140865807056926
+---
+PATH_NAME CROSS_COMPLEMENT_NO
+COMMON_SIZE 5.26
+ASK_SUM 1.1
+GROSS_PER_SET -0.10000000000000009
+GROSS_TOTAL -0.5260000000000005
+FEE_KNOWN True
+TAKER_FEES_TOTAL 0.1276
+NET_TOTAL -0.6536000000000004
+NET_ROI -0.11052489177489183
+---
+PATH_NAME CROSS_PARTITION_NO_A_PLUS_HIGHER_YES_B
+COMMON_SIZE 11.8
+ASK_SUM 1.799
+GROSS_PER_SET -0.7989999999999999
+GROSS_TOTAL -9.4282
+FEE_KNOWN True
+TAKER_FEES_TOTAL 0.52752
+NET_TOTAL -9.95572
+NET_ROI -0.4576139056763003
+---
+GROSS_POSITIVE_PATHS 0
+NET_POSITIVE_PATHS 0
+RESULT NO_GROSS_EDGE
+SNAPSHOT_PATH /home/leonh/prediction_research/knowledge/raw/market_data/polymarket_cross_series/20260920T025033Z-argentina-fx-178817-189770.json
+ARGENTINA_FX_CROSS_SERIES_PRICING_PASS
