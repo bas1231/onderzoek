@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/read_anthropic_fee_direct_e431.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-20T03:38:47.476025+00:00",
+  "hypothesis_id": "PAYOFF-IDENTITY-MINING-V1",
+  "source_commit": "011ab8281dd4628bd80b20cf1a2d5dbeb51e30eb",
+  "started_at": "2026-09-20T03:38:46.474404+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "4711bb626b67be9786d6112a79c40c19718b092c2651ef157cdef5400c676e82",
+  "task_class": "research",
+  "task_id": "EDGE-HUNTER-ANTHROPIC-FEE-DIRECT-E431"
+}
