@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/continue_gamma_keyset_negrisk_e413.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-20T03:13:38.584384+00:00",
+  "hypothesis_id": "PAYOFF-IDENTITY-MINING-V1",
+  "source_commit": "c81f5d5ab4a10e56af4bbad7fe23381c1d153622",
+  "started_at": "2026-09-20T03:13:24.423316+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "0006da55c8dce5896746ba6d99bcac73be041228f08c8b76af8eb807815974c0",
+  "task_class": "research",
+  "task_id": "EDGE-HUNTER-GAMMA-KEYSET-CONTINUE-E413"
+}
