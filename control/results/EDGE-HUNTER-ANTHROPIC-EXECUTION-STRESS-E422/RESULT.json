@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/falsify_anthropic_execution_stress_e422.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-20T03:24:25.054307+00:00",
+  "hypothesis_id": "PAYOFF-IDENTITY-MINING-V1",
+  "source_commit": "0eed980c37a35e5c62f39206752adb9b020c2194",
+  "started_at": "2026-09-20T03:24:25.030504+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "9af10742a59cca3e0331a89400061e3cdff062946b729e7bb721c9e87da1ee21",
+  "task_class": "research",
+  "task_id": "EDGE-HUNTER-ANTHROPIC-EXECUTION-STRESS-E422"
+}
