@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/compare_openai_ipo_series_e411.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-20T03:12:01.656859+00:00",
+  "hypothesis_id": "PAYOFF-IDENTITY-MINING-V1",
+  "source_commit": "107a4d59916200083f28bc0cb4d2da232d722afe",
+  "started_at": "2026-09-20T03:12:01.192434+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "d1b744847b8204772906725a315a17ef49784d601badc7c2fadac050fd2210d5",
+  "task_class": "research",
+  "task_id": "EDGE-HUNTER-OPENAI-IPO-SERIES-E411"
+}

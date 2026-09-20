@@ -1,0 +1,209 @@
+FETCHED 48292 PATH /home/leonh/prediction_research/knowledge/raw/market_rules/polymarket/20260920T031201Z-event-48292.json
+FETCHED 200252 PATH /home/leonh/prediction_research/knowledge/raw/market_rules/polymarket/20260920T031201Z-event-200252.json
+FETCHED 507875 PATH /home/leonh/prediction_research/knowledge/raw/market_rules/polymarket/20260920T031201Z-event-507875.json
+EVENT_BEGIN 48292
+TITLE OpenAI IPO Closing Market Cap
+END_DATE 2027-01-01T04:59:00Z
+START_DATE 2025-09-23T00:22:55.736268Z
+NEG_RISK True
+NEG_RISK_AUGMENTED False
+NEG_RISK_MARKET_ID 0xd2c21cbb9d2cb407ab3dcf619d93f6d65b7967154cd6ee930f7758baa2b4bf00
+DESCRIPTION_SHA256 a880a8c06e0edd99f87ba7c622b219666e02582a6a5b890a24fe7cb9a0f58310
+DESCRIPTION_TEXT 'This market will resolve based on OpenAI\'s market capitalization at the closing price on its first day of trading.\n\nIf no IPO occurs by December 31, 2026, 11:59 PM ET, the market will resolve to "No IPO by December 31, 2026".\n\nMarket capitalization expresses the monetary value of a company’s outstanding shares, stated in its pricing currency. It is calculated as the number of shares outstanding multiplied by the closing share price on the first trading day.\n\nIf the relevant value falls exactly between two brackets, then this market will resolve to the higher range bracket.\n\nResolution will be based on the primary exchange’s official listing page. In the event that the relevant figure is not displayed, another reliable source will be used.\n\nIn the event of an interruption in the course of the normal trading session on OpenAI’s first day of trading (e.g., a circuit breaker or half-day), the market will resolve according to the official closing price of the abbreviated session. If no such official closing price is published, the market will resolve according to the next trading day on which an official closing price is published, treating that as the first day of trading for purposes of this market.'
+MARKET_COUNT 7
+MARKET 608362
+GROUP_ITEM <500B
+QUESTION Will OpenAI’s market cap be less than $500B at market close on IPO day?
+END_DATE_MARKET 2027-01-01T04:59:00Z
+NEG_RISK_MARKET True
+NEG_RISK_OTHER False
+MARKET_DESCRIPTION_SHA256 a880a8c06e0edd99f87ba7c622b219666e02582a6a5b890a24fe7cb9a0f58310
+MARKET 608363
+GROUP_ITEM 500–750B
+QUESTION Will OpenAI’s market cap be between $500B and $750B at market close on IPO day?
+END_DATE_MARKET 2027-01-01T04:59:00Z
+NEG_RISK_MARKET True
+NEG_RISK_OTHER False
+MARKET_DESCRIPTION_SHA256 a880a8c06e0edd99f87ba7c622b219666e02582a6a5b890a24fe7cb9a0f58310
+MARKET 608364
+GROUP_ITEM 750B–1T
+QUESTION Will OpenAI’s market cap be between $750B and $1T at market close on IPO day?
+END_DATE_MARKET 2027-01-01T04:59:00Z
+NEG_RISK_MARKET True
+NEG_RISK_OTHER False
+MARKET_DESCRIPTION_SHA256 a880a8c06e0edd99f87ba7c622b219666e02582a6a5b890a24fe7cb9a0f58310
+MARKET 608365
+GROUP_ITEM 1T–1.25T
+QUESTION Will OpenAI’s market cap be between $1T and $1.25T at market close on IPO day?
+END_DATE_MARKET 2027-01-01T04:59:00Z
+NEG_RISK_MARKET True
+NEG_RISK_OTHER False
+MARKET_DESCRIPTION_SHA256 a880a8c06e0edd99f87ba7c622b219666e02582a6a5b890a24fe7cb9a0f58310
+MARKET 608366
+GROUP_ITEM 1.25T–1.5T
+QUESTION Will OpenAI’s market cap be between $1.25T and $1.5T at market close on IPO day?
+END_DATE_MARKET 2027-01-01T04:59:00Z
+NEG_RISK_MARKET True
+NEG_RISK_OTHER False
+MARKET_DESCRIPTION_SHA256 a880a8c06e0edd99f87ba7c622b219666e02582a6a5b890a24fe7cb9a0f58310
+MARKET 608367
+GROUP_ITEM 1.5T+
+QUESTION Will OpenAI’s market cap be $1.5T or greater at market close on IPO day?
+END_DATE_MARKET 2027-01-01T04:59:00Z
+NEG_RISK_MARKET True
+NEG_RISK_OTHER False
+MARKET_DESCRIPTION_SHA256 a880a8c06e0edd99f87ba7c622b219666e02582a6a5b890a24fe7cb9a0f58310
+MARKET 608368
+GROUP_ITEM No IPO by December 31, 2026
+QUESTION Will OpenAI not IPO by December 31, 2026?
+END_DATE_MARKET 2027-01-01T04:59:00Z
+NEG_RISK_MARKET True
+NEG_RISK_OTHER False
+MARKET_DESCRIPTION_SHA256 a880a8c06e0edd99f87ba7c622b219666e02582a6a5b890a24fe7cb9a0f58310
+EVENT_END 48292
+EVENT_BEGIN 200252
+TITLE OpenAI IPO Closing Market Cap
+END_DATE 2028-01-01T04:59:00Z
+START_DATE 2026-02-06T23:10:57.249645Z
+NEG_RISK True
+NEG_RISK_AUGMENTED False
+NEG_RISK_MARKET_ID 0x7ac94d1c1826d98f4ccd8463e5a0950f9eb1d3ca0441aaba8d0b83dfaf25eb00
+DESCRIPTION_SHA256 5966df53cd74d1c6e83783f302345cdd076c5217aab92cdfbd881a2a3d89bc16
+DESCRIPTION_TEXT 'This market will resolve based on OpenAI\'s market capitalization at the closing price on its first day of trading.\n\nIf no IPO occurs by December 31, 2027, 11:59 PM ET, the market will resolve to "No IPO by December 31, 2027".\n\nMarket capitalization expresses the monetary value of a company’s outstanding shares, stated in its pricing currency. It is calculated as the number of shares outstanding multiplied by the closing share price on the first trading day.\n\nIf the relevant value falls exactly between two brackets, then this market will resolve to the higher range bracket.\n\nResolution will be based on the primary exchange’s official listing page. In the event that the relevant figure is not displayed, another reliable source will be used.\n\nIn the event of an interruption in the course of the normal trading session on OpenAI’s first day of trading (e.g., a circuit breaker or half-day), the market will resolve according to the official closing price of the abbreviated session. If no such official closing price is published, the market will resolve according to the next trading day on which an official closing price is published, treating that as the first day of trading for purposes of this market.'
+MARKET_COUNT 7
+MARKET 1345229
+GROUP_ITEM <500B
+QUESTION Will OpenAI’s market cap be less than $500B at market close on IPO day by December 31, 2027?
+END_DATE_MARKET 2028-01-01T04:59:00Z
+NEG_RISK_MARKET True
+NEG_RISK_OTHER False
+MARKET_DESCRIPTION_SHA256 5966df53cd74d1c6e83783f302345cdd076c5217aab92cdfbd881a2a3d89bc16
+MARKET 1345230
+GROUP_ITEM 500–750B
+QUESTION Will OpenAI’s market cap be between $500B and $750B at market close on IPO day by December 31, 2027?
+END_DATE_MARKET 2028-01-01T04:59:00Z
+NEG_RISK_MARKET True
+NEG_RISK_OTHER False
+MARKET_DESCRIPTION_SHA256 5966df53cd74d1c6e83783f302345cdd076c5217aab92cdfbd881a2a3d89bc16
+MARKET 1345231
+GROUP_ITEM 750B–1T
+QUESTION Will OpenAI’s market cap be between $750B and $1T at market close on IPO day by December 31, 2027?
+END_DATE_MARKET 2028-01-01T04:59:00Z
+NEG_RISK_MARKET True
+NEG_RISK_OTHER False
+MARKET_DESCRIPTION_SHA256 5966df53cd74d1c6e83783f302345cdd076c5217aab92cdfbd881a2a3d89bc16
+MARKET 1345232
+GROUP_ITEM 1T–1.25T
+QUESTION Will OpenAI’s market cap be between $1T and $1.25T at market close on IPO day by December 31, 2027?
+END_DATE_MARKET 2028-01-01T04:59:00Z
+NEG_RISK_MARKET True
+NEG_RISK_OTHER False
+MARKET_DESCRIPTION_SHA256 5966df53cd74d1c6e83783f302345cdd076c5217aab92cdfbd881a2a3d89bc16
+MARKET 1345233
+GROUP_ITEM 1.25T–1.5T
+QUESTION Will OpenAI’s market cap be between $1.25T and $1.5T at market close on IPO day by December 31, 2027?
+END_DATE_MARKET 2028-01-01T04:59:00Z
+NEG_RISK_MARKET True
+NEG_RISK_OTHER False
+MARKET_DESCRIPTION_SHA256 5966df53cd74d1c6e83783f302345cdd076c5217aab92cdfbd881a2a3d89bc16
+MARKET 1345234
+GROUP_ITEM 1.5T+
+QUESTION Will OpenAI’s market cap be $1.5T or greater at market close on IPO day by December 31, 2027?
+END_DATE_MARKET 2028-01-01T04:59:00Z
+NEG_RISK_MARKET True
+NEG_RISK_OTHER False
+MARKET_DESCRIPTION_SHA256 5966df53cd74d1c6e83783f302345cdd076c5217aab92cdfbd881a2a3d89bc16
+MARKET 1345235
+GROUP_ITEM No IPO by December 31, 2027
+QUESTION Will OpenAI not IPO by December 31, 2027?
+END_DATE_MARKET 2028-01-01T04:59:00Z
+NEG_RISK_MARKET True
+NEG_RISK_OTHER False
+MARKET_DESCRIPTION_SHA256 5966df53cd74d1c6e83783f302345cdd076c5217aab92cdfbd881a2a3d89bc16
+EVENT_END 200252
+EVENT_BEGIN 507875
+TITLE What will OpenAI's IPO valuation be?
+END_DATE 2027-07-01T00:00:00Z
+START_DATE 2026-05-21T17:55:26.112448Z
+NEG_RISK True
+NEG_RISK_AUGMENTED False
+NEG_RISK_MARKET_ID 0x518f518ffbfae8374c72dfb4be1b6b99ee695756bc6230f3a608a8408af62a00
+DESCRIPTION_SHA256 82316f71f347d9a46e28a0990bb9da1ae0b841a6bef446e3bb5268cddec01de3
+DESCRIPTION_TEXT 'This market will resolve according to the implied equity valuation of OpenAI at its initial public offering (IPO) price. \n\nThe IPO valuation is defined as the final IPO price per share multiplied by the total number of shares outstanding on a fully diluted basis, as disclosed in the final prospectus filed with the U.S. Securities and Exchange Commission.\n\nThe IPO price will be the final offering price to the public as stated in the final prospectus. Trading prices after listing, including the opening trade, intraday prices, or closing price on the first day of trading, will not be considered.\n\nIndicated or preliminary price ranges, including any ranges disclosed in earlier filings or amendments, will not be considered.\n\nIf the calculated valuation falls exactly on a boundary between two ranges, this market will resolve to the higher range.\n\nIf OpenAI does not complete an IPO by December 31, 2027, 11:59 PM ET, this market will resolve to the lowest bracket.\n\nThe primary resolution source will be the final prospectus filed with the SEC; however, a consensus of credible reporting may also be used.'
+MARKET_COUNT 8
+MARKET 2316998
+GROUP_ITEM <$1T
+QUESTION Will OpenAI's IPO valuation be less than $1T?
+END_DATE_MARKET 2027-07-01T00:00:00Z
+NEG_RISK_MARKET True
+NEG_RISK_OTHER False
+MARKET_DESCRIPTION_SHA256 82316f71f347d9a46e28a0990bb9da1ae0b841a6bef446e3bb5268cddec01de3
+MARKET 2316999
+GROUP_ITEM $1.0T–$1.25T
+QUESTION Will OpenAI's IPO valuation be between $1.0T and $1.25T?
+END_DATE_MARKET 2027-07-01T00:00:00Z
+NEG_RISK_MARKET True
+NEG_RISK_OTHER False
+MARKET_DESCRIPTION_SHA256 82316f71f347d9a46e28a0990bb9da1ae0b841a6bef446e3bb5268cddec01de3
+MARKET 2317000
+GROUP_ITEM $1.25T–$1.5T
+QUESTION Will OpenAI's IPO valuation be between $1.25T and $1.5T?
+END_DATE_MARKET 2027-07-01T00:00:00Z
+NEG_RISK_MARKET True
+NEG_RISK_OTHER False
+MARKET_DESCRIPTION_SHA256 82316f71f347d9a46e28a0990bb9da1ae0b841a6bef446e3bb5268cddec01de3
+MARKET 2317001
+GROUP_ITEM $1.5T–$1.75T
+QUESTION Will OpenAI's IPO valuation be between $1.5T and $1.75T?
+END_DATE_MARKET 2027-07-01T00:00:00Z
+NEG_RISK_MARKET True
+NEG_RISK_OTHER False
+MARKET_DESCRIPTION_SHA256 82316f71f347d9a46e28a0990bb9da1ae0b841a6bef446e3bb5268cddec01de3
+MARKET 2317002
+GROUP_ITEM $1.75T–$2.0T
+QUESTION Will OpenAI's IPO valuation be between $1.75T and $2.0T?
+END_DATE_MARKET 2027-07-01T00:00:00Z
+NEG_RISK_MARKET True
+NEG_RISK_OTHER False
+MARKET_DESCRIPTION_SHA256 82316f71f347d9a46e28a0990bb9da1ae0b841a6bef446e3bb5268cddec01de3
+MARKET 2317003
+GROUP_ITEM $2.0T–$2.25T
+QUESTION Will OpenAI's IPO valuation be between $2.0T and $2.25T?
+END_DATE_MARKET 2027-07-01T00:00:00Z
+NEG_RISK_MARKET True
+NEG_RISK_OTHER False
+MARKET_DESCRIPTION_SHA256 82316f71f347d9a46e28a0990bb9da1ae0b841a6bef446e3bb5268cddec01de3
+MARKET 2317004
+GROUP_ITEM $2.25T–$2.5T
+QUESTION Will OpenAI's IPO valuation be between $2.25T and $2.5T?
+END_DATE_MARKET 2027-07-01T00:00:00Z
+NEG_RISK_MARKET True
+NEG_RISK_OTHER False
+MARKET_DESCRIPTION_SHA256 82316f71f347d9a46e28a0990bb9da1ae0b841a6bef446e3bb5268cddec01de3
+MARKET 2317005
+GROUP_ITEM $2.5T+
+QUESTION Will OpenAI's IPO valuation be at least $2.5T?
+END_DATE_MARKET 2027-07-01T00:00:00Z
+NEG_RISK_MARKET True
+NEG_RISK_OTHER False
+MARKET_DESCRIPTION_SHA256 82316f71f347d9a46e28a0990bb9da1ae0b841a6bef446e3bb5268cddec01de3
+EVENT_END 507875
+PAIR 48292 200252
+DESCRIPTION_EQUAL False
+END_DATE_EQUAL False
+NEG_RISK_BOTH True
+NON_AUGMENTED_BOTH True
+PAIR 48292 507875
+DESCRIPTION_EQUAL False
+END_DATE_EQUAL False
+NEG_RISK_BOTH True
+NON_AUGMENTED_BOTH True
+PAIR 200252 507875
+DESCRIPTION_EQUAL False
+END_DATE_EQUAL False
+NEG_RISK_BOTH True
+NON_AUGMENTED_BOTH True
+EVENT_MARKET_DESCRIPTION_HASHES 48292 ['a880a8c06e0edd99f87ba7c622b219666e02582a6a5b890a24fe7cb9a0f58310']
+EVENT_MARKET_DESCRIPTION_HASHES 200252 ['5966df53cd74d1c6e83783f302345cdd076c5217aab92cdfbd881a2a3d89bc16']
+EVENT_MARKET_DESCRIPTION_HASHES 507875 ['82316f71f347d9a46e28a0990bb9da1ae0b841a6bef446e3bb5268cddec01de3']
+OPENAI_IPO_SERIES_COMPARE_E411_PASS
