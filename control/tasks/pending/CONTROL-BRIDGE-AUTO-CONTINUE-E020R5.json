@@ -1,0 +1,24 @@
+{
+  "build_authorization": {
+    "build_kind": "control_plane",
+    "capabilities": [
+      "modify_repository",
+      "commit_local_changes",
+      "run_local_tests",
+      "restart_local_service"
+    ],
+    "mode": "control_plane",
+    "objective": "Execute the corrected and remotely verified auto-continuation installer, run its regression tests, activate the bridge change, restart the bridge service, verify health, and prospectively prove that the control plane continues without manual user input."
+  },
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/run_auto_continue_repair_e020r5.py"
+  ],
+  "hypothesis_id": "CONTROL-NO-SILENT-STOP",
+  "live_trading": false,
+  "operation": "python",
+  "task_class": "infrastructure",
+  "task_id": "CONTROL-BRIDGE-AUTO-CONTINUE-E020R5",
+  "timeout_seconds": 300,
+  "working_directory": "."
+}
