@@ -1,0 +1,3 @@
+ValidationError: 1 validation error for Task
+  Value error, build authorization denied: missing_build_authorization [type=value_error, input_value={'command': ['.venv/bin/p...working_directory': '.'}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.13/v/value_error
