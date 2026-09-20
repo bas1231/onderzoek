@@ -1,0 +1,13 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/inspect_kwi_manifest_nested_e364.py"
+  ],
+  "hypothesis_id": "KWI-INCOMPLETE-TO-CANONICAL-V1",
+  "live_trading": false,
+  "operation": "python",
+  "task_class": "research",
+  "task_id": "EDGE-HUNTER-KWI-NESTED-MANIFEST-E364",
+  "timeout_seconds": 120,
+  "working_directory": "."
+}
