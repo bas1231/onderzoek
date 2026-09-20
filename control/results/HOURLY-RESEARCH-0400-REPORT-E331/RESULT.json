@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/inspect_0400_report_e331.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-20T02:03:50.391044+00:00",
+  "hypothesis_id": "CONTROL-NO-SILENT-WAITING",
+  "source_commit": "5a833456098d496b8d587c1aa05898a540acd47c",
+  "started_at": "2026-09-20T02:03:50.371706+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "028ef5a79c4d0c1ff6dcaa811e5f0a32f1d9f3d9b82a3692f0e5aaba31695ee6",
+  "task_class": "infrastructure",
+  "task_id": "HOURLY-RESEARCH-0400-REPORT-E331"
+}
