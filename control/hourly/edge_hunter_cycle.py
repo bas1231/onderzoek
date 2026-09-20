@@ -25,3 +25,21 @@ try:
     print('KWI_FULL_STATION_CHECKPOINT_RC',kwi_checkpoint.returncode)
 except Exception as exc:
     print('KWI_FULL_STATION_CHECKPOINT_ERROR',str(exc))
+
+# AUTO_DURABLE_GIT_CHECKPOINT_V1
+# Publish only durable research metadata after all hourly/KWI checkpoints.
+try:
+    checkpoint = subprocess.run(
+        [
+            str(ROOT / ".venv/bin/python"),
+            str(ROOT / "control/hourly/git_checkpoint.py"),
+        ],
+        cwd=ROOT,
+        check=False,
+    )
+    print("GIT_CHECKPOINT_RC", checkpoint.returncode)
+except Exception as exc:
+    # Research collection must continue even if Git publishing fails.
+    # Publisher itself is fail-closed and never merges/rebases.
+    print("GIT_CHECKPOINT_ERROR", str(exc))
+
