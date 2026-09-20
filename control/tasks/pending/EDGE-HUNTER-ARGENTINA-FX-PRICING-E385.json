@@ -1,0 +1,13 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/price_argentina_fx_cross_series_e385.py"
+  ],
+  "hypothesis_id": "PAYOFF-IDENTITY-MINING-V1",
+  "live_trading": false,
+  "operation": "python",
+  "task_class": "research",
+  "task_id": "EDGE-HUNTER-ARGENTINA-FX-PRICING-E385",
+  "timeout_seconds": 180,
+  "working_directory": "."
+}
