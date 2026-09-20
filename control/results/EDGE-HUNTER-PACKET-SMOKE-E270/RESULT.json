@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/smoke_edge_packet_e270.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-20T01:00:22.469164+00:00",
+  "hypothesis_id": "GENERAL-PREDICTION-MARKET-EDGE-HUNTER",
+  "source_commit": "8318d8dfa3735e209f8f1e9d37eebec29d55427f",
+  "started_at": "2026-09-20T01:00:22.448607+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "eee1e78237da596581e441c73e1a5ccf54aa8b071b9cb32efc81e09c6f0619ce",
+  "task_class": "infrastructure",
+  "task_id": "EDGE-HUNTER-PACKET-SMOKE-E270"
+}
