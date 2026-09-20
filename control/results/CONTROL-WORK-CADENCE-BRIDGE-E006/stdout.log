@@ -1,0 +1,8 @@
+COMPILE_RC 0
+
+Traceback (most recent call last):
+  File "/home/leonh/prediction_research/tests/bridge/test_work_cadence_enforcement.py", line 29, in <module>
+    assert e['allowed'] is True and e['mode'] == 'IDLE'
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError
+

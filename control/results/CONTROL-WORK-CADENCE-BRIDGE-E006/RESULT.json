@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/build_work_cadence_gate_e006.py"
+  ],
+  "exit_code": 3,
+  "finished_at": "2026-09-20T20:22:06.135706+00:00",
+  "hypothesis_id": "CONTROL-WORK-CADENCE",
+  "source_commit": "7042aad583f24a5994624761c0208ecdd1ea67d1",
+  "started_at": "2026-09-20T20:22:06.039536+00:00",
+  "status": "failed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "172242ee2fdf1204d0b0d6bca2c34e22a5f8a3156bedef14d31c87d170cb978b",
+  "task_class": "infrastructure",
+  "task_id": "CONTROL-WORK-CADENCE-BRIDGE-E006"
+}
