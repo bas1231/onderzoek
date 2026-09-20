@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/inventory_remaining_neg_risk_e326.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-20T01:38:18.484658+00:00",
+  "hypothesis_id": "PAYOFF-IDENTITY-MINING-V1",
+  "source_commit": "41b1d481a9f05a009d4b722535be54830bf35bb3",
+  "started_at": "2026-09-20T01:38:18.465271+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "d1e4465cde59a54e28de43aa197967e95b7c4d4113819d24469844f491c4bf4b",
+  "task_class": "research",
+  "task_id": "EDGE-HUNTER-NEG-RISK-INVENTORY-E326"
+}
