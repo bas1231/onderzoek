@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/run_auto_continue_repair_e020r5.py"
+  ],
+  "exit_code": 1,
+  "finished_at": "2026-09-20T22:37:18.765192+00:00",
+  "hypothesis_id": "CONTROL-NO-SILENT-STOP",
+  "source_commit": "0e2a018c52289937017159ca5cee1a0abae7619c",
+  "started_at": "2026-09-20T22:37:14.979727+00:00",
+  "status": "failed",
+  "stderr_sha256": "cb548f28a6f47f072a7cb7e86fbb875a2d28539a5dd52dbb0857a044ab1a9e31",
+  "stdout_sha256": "897fe0105a221c1634f2748787e1280c9bf9db688f74dd78b343cb2363e96dc6",
+  "task_class": "infrastructure",
+  "task_id": "CONTROL-BRIDGE-AUTO-CONTINUE-E020R5"
+}
