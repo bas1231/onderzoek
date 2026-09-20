@@ -1,0 +1,23 @@
+{
+  "build_authorization": {
+    "build_kind": "control_plane",
+    "capabilities": [
+      "modify_repository",
+      "commit_local_changes",
+      "run_local_tests"
+    ],
+    "mode": "control_plane",
+    "objective": "Prevent stale malformed assistant task blocks from repeatedly generating the same TASK_PARSE_FAILURE incident by persisting processed parse fingerprints in Chrome local storage and validating the modified extension syntax."
+  },
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/fix_parse_incident_dedupe_e018.py"
+  ],
+  "hypothesis_id": "CONTROL-BRIDGE-RELIABILITY",
+  "live_trading": false,
+  "operation": "python",
+  "task_class": "infrastructure",
+  "task_id": "CONTROL-BRIDGE-PARSE-DEDUPE-E018",
+  "timeout_seconds": 180,
+  "working_directory": "."
+}
