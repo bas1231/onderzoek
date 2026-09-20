@@ -1,0 +1,13 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/resolve_negrisk_marketdata_abi_e430.py"
+  ],
+  "hypothesis_id": "PAYOFF-IDENTITY-MINING-V1",
+  "live_trading": false,
+  "operation": "python",
+  "task_class": "research",
+  "task_id": "EDGE-HUNTER-NEGRISK-MARKETDATA-ABI-E430",
+  "timeout_seconds": 180,
+  "working_directory": "."
+}
