@@ -1,0 +1,13 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/crawl_gamma_keyset_negrisk_e397.py"
+  ],
+  "hypothesis_id": "PAYOFF-IDENTITY-MINING-V1",
+  "live_trading": false,
+  "operation": "python",
+  "task_class": "research",
+  "task_id": "EDGE-HUNTER-GAMMA-KEYSET-NEGRISK-E397",
+  "timeout_seconds": 300,
+  "working_directory": "."
+}
