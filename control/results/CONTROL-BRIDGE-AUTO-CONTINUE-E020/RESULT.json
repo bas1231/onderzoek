@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/build_control_auto_continue_e020.py"
+  ],
+  "exit_code": 1,
+  "finished_at": "2026-09-20T22:27:00.718537+00:00",
+  "hypothesis_id": "CONTROL-NO-SILENT-STOP",
+  "source_commit": "20e4108e54e689f8ca41716d37a181eb0441c19c",
+  "started_at": "2026-09-20T22:27:00.671106+00:00",
+  "status": "failed",
+  "stderr_sha256": "72f6a251078125cca886eabd18cb2dc9cc877c298cccb9519abba942d661e6f2",
+  "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "task_class": "infrastructure",
+  "task_id": "CONTROL-BRIDGE-AUTO-CONTINUE-E020"
+}
