@@ -1,0 +1,13 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/verify_hourly_timer_cadence_e356.py"
+  ],
+  "hypothesis_id": "ASSET-RANK-MAKER-HEDGE-V1",
+  "live_trading": false,
+  "operation": "python",
+  "task_class": "infrastructure",
+  "task_id": "EDGE-HUNTER-ASSET-TIMER-CADENCE-E356",
+  "timeout_seconds": 120,
+  "working_directory": "."
+}
