@@ -1,0 +1,13 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/measure_asset_queue_feasibility_e348.py"
+  ],
+  "hypothesis_id": "ASSET-RANK-MAKER-HEDGE-V1",
+  "live_trading": false,
+  "operation": "python",
+  "task_class": "research",
+  "task_id": "EDGE-HUNTER-ASSET-QUEUE-FEASIBILITY-E348",
+  "timeout_seconds": 120,
+  "working_directory": "."
+}
