@@ -1,0 +1,479 @@
+SOURCE 197776 /home/leonh/prediction_research/knowledge/raw/market_rules/polymarket/20260920T025522Z-event-197776.json
+SOURCE 428957 /home/leonh/prediction_research/knowledge/raw/market_rules/polymarket/20260920T025522Z-event-428957.json
+SOURCE 548858 /home/leonh/prediction_research/knowledge/raw/market_rules/polymarket/20260920T030752Z-event-548858.json
+EVENT_BEGIN 197776
+EVENT_FIELD id '197776'
+EVENT_FIELD title 'Anthropic IPO Closing Market Cap (Lower Brackets)'
+EVENT_FIELD slug 'anthropic-ipo-closing-market-cap-119'
+EVENT_FIELD description SHA256 2c663ce90df8ec63aabcd52c3c4d9af12545e80c726206441013ec6e4f1eab7a
+EVENT_DESCRIPTION_TEXT 'This market will resolve based on Anthropic\'s market capitalization at the closing price on its first day of trading.\n\nIf no IPO occurs by December 31, 2027, 11:59 PM ET, the market will resolve to "No IPO by December 31, 2027".\n\nMarket capitalization expresses the monetary value of a company’s outstanding shares, stated in its pricing currency. It is calculated as the number of shares outstanding multiplied by the closing share price on the first trading day.\n\nIf the relevant value falls exactly between two brackets, then this market will resolve to the higher range bracket.\n\nResolution will be based on the primary exchange’s official listing page. In the event that the relevant figure is not displayed, another reliable source will be used.\n\nIn the event of an interruption in the course of the normal trading session on Anthropic’s first day of trading (e.g., a circuit breaker or half-day), the market will resolve according to the official closing price of the abbreviated session. If no such official closing price is published, the market will resolve according to the next trading day on which an official closing price is published, treating that as the first day of trading for purposes of this market.'
+EVENT_FIELD resolutionSource ''
+EVENT_FIELD startDate '2026-02-04T18:23:46.77706Z'
+EVENT_FIELD endDate '2028-01-01T04:59:00Z'
+EVENT_FIELD active True
+EVENT_FIELD closed False
+EVENT_FIELD negRisk True
+EVENT_FIELD negRiskAugmented False
+EVENT_FIELD negRiskMarketID '0x98984cf8b3494532dfd73a5360ab3da456634a2e11df558587347ddee14bb100'
+MARKET_COUNT 7
+MARKET_BEGIN 1328014
+MARKET_FIELD groupItemTitle '<100B'
+MARKET_FIELD question 'Will Anthropic’s market cap be less than $100B at market close on IPO day by December 31, 2027?'
+MARKET_FIELD description SHA256 2c663ce90df8ec63aabcd52c3c4d9af12545e80c726206441013ec6e4f1eab7a
+MARKET_DESCRIPTION_TEXT 'This market will resolve based on Anthropic\'s market capitalization at the closing price on its first day of trading.\n\nIf no IPO occurs by December 31, 2027, 11:59 PM ET, the market will resolve to "No IPO by December 31, 2027".\n\nMarket capitalization expresses the monetary value of a company’s outstanding shares, stated in its pricing currency. It is calculated as the number of shares outstanding multiplied by the closing share price on the first trading day.\n\nIf the relevant value falls exactly between two brackets, then this market will resolve to the higher range bracket.\n\nResolution will be based on the primary exchange’s official listing page. In the event that the relevant figure is not displayed, another reliable source will be used.\n\nIn the event of an interruption in the course of the normal trading session on Anthropic’s first day of trading (e.g., a circuit breaker or half-day), the market will resolve according to the official closing price of the abbreviated session. If no such official closing price is published, the market will resolve according to the next trading day on which an official closing price is published, treating that as the first day of trading for purposes of this market.'
+MARKET_FIELD resolutionSource None
+MARKET_FIELD startDate '2026-02-04T18:23:46.77706Z'
+MARKET_FIELD endDate '2028-01-01T04:59:00Z'
+MARKET_FIELD umaEndDate None
+MARKET_FIELD active True
+MARKET_FIELD closed False
+MARKET_FIELD negRisk True
+MARKET_FIELD negRiskOther False
+MARKET_FIELD conditionId '0x84251521e4ddae0bd1b97bc2b9b52222cc47ee8707b5e9afaf786f290b4b88e7'
+MARKET_FIELD questionID '0x98984cf8b3494532dfd73a5360ab3da456634a2e11df558587347ddee14bb100'
+MARKET_FIELD slug 'will-anthropics-market-cap-be-less-than-100b-at-market-close-on-ipo-day-by-december-31-2027'
+MARKET_END
+MARKET_BEGIN 1328015
+MARKET_FIELD groupItemTitle '100–200B'
+MARKET_FIELD question 'Will Anthropic’s market cap be between $100B and $200B at market close on IPO day by December 31, 2027?'
+MARKET_FIELD description SHA256 2c663ce90df8ec63aabcd52c3c4d9af12545e80c726206441013ec6e4f1eab7a
+MARKET_DESCRIPTION_TEXT 'This market will resolve based on Anthropic\'s market capitalization at the closing price on its first day of trading.\n\nIf no IPO occurs by December 31, 2027, 11:59 PM ET, the market will resolve to "No IPO by December 31, 2027".\n\nMarket capitalization expresses the monetary value of a company’s outstanding shares, stated in its pricing currency. It is calculated as the number of shares outstanding multiplied by the closing share price on the first trading day.\n\nIf the relevant value falls exactly between two brackets, then this market will resolve to the higher range bracket.\n\nResolution will be based on the primary exchange’s official listing page. In the event that the relevant figure is not displayed, another reliable source will be used.\n\nIn the event of an interruption in the course of the normal trading session on Anthropic’s first day of trading (e.g., a circuit breaker or half-day), the market will resolve according to the official closing price of the abbreviated session. If no such official closing price is published, the market will resolve according to the next trading day on which an official closing price is published, treating that as the first day of trading for purposes of this market.'
+MARKET_FIELD resolutionSource None
+MARKET_FIELD startDate '2026-02-04T18:23:54.863065Z'
+MARKET_FIELD endDate '2028-01-01T04:59:00Z'
+MARKET_FIELD umaEndDate None
+MARKET_FIELD active True
+MARKET_FIELD closed False
+MARKET_FIELD negRisk True
+MARKET_FIELD negRiskOther False
+MARKET_FIELD conditionId '0x42b6f4d145592c758e7aec35ed1d1f15353d077b7433d15577a059362dfeccce'
+MARKET_FIELD questionID '0x98984cf8b3494532dfd73a5360ab3da456634a2e11df558587347ddee14bb101'
+MARKET_FIELD slug 'will-anthropics-market-cap-be-between-100b-and-200b-at-market-close-on-ipo-day-by-december-31-2027'
+MARKET_END
+MARKET_BEGIN 1328016
+MARKET_FIELD groupItemTitle '200–300B'
+MARKET_FIELD question 'Will Anthropic’s market cap be between $200B and $300B at market close on IPO day by December 31, 2027?'
+MARKET_FIELD description SHA256 2c663ce90df8ec63aabcd52c3c4d9af12545e80c726206441013ec6e4f1eab7a
+MARKET_DESCRIPTION_TEXT 'This market will resolve based on Anthropic\'s market capitalization at the closing price on its first day of trading.\n\nIf no IPO occurs by December 31, 2027, 11:59 PM ET, the market will resolve to "No IPO by December 31, 2027".\n\nMarket capitalization expresses the monetary value of a company’s outstanding shares, stated in its pricing currency. It is calculated as the number of shares outstanding multiplied by the closing share price on the first trading day.\n\nIf the relevant value falls exactly between two brackets, then this market will resolve to the higher range bracket.\n\nResolution will be based on the primary exchange’s official listing page. In the event that the relevant figure is not displayed, another reliable source will be used.\n\nIn the event of an interruption in the course of the normal trading session on Anthropic’s first day of trading (e.g., a circuit breaker or half-day), the market will resolve according to the official closing price of the abbreviated session. If no such official closing price is published, the market will resolve according to the next trading day on which an official closing price is published, treating that as the first day of trading for purposes of this market.'
+MARKET_FIELD resolutionSource None
+MARKET_FIELD startDate '2026-02-04T18:24:00.633832Z'
+MARKET_FIELD endDate '2028-01-01T04:59:00Z'
+MARKET_FIELD umaEndDate None
+MARKET_FIELD active True
+MARKET_FIELD closed False
+MARKET_FIELD negRisk True
+MARKET_FIELD negRiskOther False
+MARKET_FIELD conditionId '0xca8322796d748070cf8c9847443526cc2452a0787ff1c5810a41b5adbaf206f6'
+MARKET_FIELD questionID '0x98984cf8b3494532dfd73a5360ab3da456634a2e11df558587347ddee14bb102'
+MARKET_FIELD slug 'will-anthropics-market-cap-be-between-200b-and-300b-at-market-close-on-ipo-day-by-december-31-2027'
+MARKET_END
+MARKET_BEGIN 1328017
+MARKET_FIELD groupItemTitle '300–400B'
+MARKET_FIELD question 'Will Anthropic’s market cap be between $300B and $400B at market close on IPO day by December 31, 2027?'
+MARKET_FIELD description SHA256 2c663ce90df8ec63aabcd52c3c4d9af12545e80c726206441013ec6e4f1eab7a
+MARKET_DESCRIPTION_TEXT 'This market will resolve based on Anthropic\'s market capitalization at the closing price on its first day of trading.\n\nIf no IPO occurs by December 31, 2027, 11:59 PM ET, the market will resolve to "No IPO by December 31, 2027".\n\nMarket capitalization expresses the monetary value of a company’s outstanding shares, stated in its pricing currency. It is calculated as the number of shares outstanding multiplied by the closing share price on the first trading day.\n\nIf the relevant value falls exactly between two brackets, then this market will resolve to the higher range bracket.\n\nResolution will be based on the primary exchange’s official listing page. In the event that the relevant figure is not displayed, another reliable source will be used.\n\nIn the event of an interruption in the course of the normal trading session on Anthropic’s first day of trading (e.g., a circuit breaker or half-day), the market will resolve according to the official closing price of the abbreviated session. If no such official closing price is published, the market will resolve according to the next trading day on which an official closing price is published, treating that as the first day of trading for purposes of this market.'
+MARKET_FIELD resolutionSource None
+MARKET_FIELD startDate '2026-02-04T18:24:06.685811Z'
+MARKET_FIELD endDate '2028-01-01T04:59:00Z'
+MARKET_FIELD umaEndDate None
+MARKET_FIELD active True
+MARKET_FIELD closed False
+MARKET_FIELD negRisk True
+MARKET_FIELD negRiskOther False
+MARKET_FIELD conditionId '0xba2ca4c6c135e9208beb26c3e8536f70e1bd660bee81100de1d51b3d74efe539'
+MARKET_FIELD questionID '0x98984cf8b3494532dfd73a5360ab3da456634a2e11df558587347ddee14bb103'
+MARKET_FIELD slug 'will-anthropics-market-cap-be-between-300b-and-400b-at-market-close-on-ipo-day-by-december-31-2027'
+MARKET_END
+MARKET_BEGIN 1328018
+MARKET_FIELD groupItemTitle '400–600B'
+MARKET_FIELD question 'Will Anthropic’s market cap be between $400B and $600B at market close on IPO day by December 31, 2027?'
+MARKET_FIELD description SHA256 2c663ce90df8ec63aabcd52c3c4d9af12545e80c726206441013ec6e4f1eab7a
+MARKET_DESCRIPTION_TEXT 'This market will resolve based on Anthropic\'s market capitalization at the closing price on its first day of trading.\n\nIf no IPO occurs by December 31, 2027, 11:59 PM ET, the market will resolve to "No IPO by December 31, 2027".\n\nMarket capitalization expresses the monetary value of a company’s outstanding shares, stated in its pricing currency. It is calculated as the number of shares outstanding multiplied by the closing share price on the first trading day.\n\nIf the relevant value falls exactly between two brackets, then this market will resolve to the higher range bracket.\n\nResolution will be based on the primary exchange’s official listing page. In the event that the relevant figure is not displayed, another reliable source will be used.\n\nIn the event of an interruption in the course of the normal trading session on Anthropic’s first day of trading (e.g., a circuit breaker or half-day), the market will resolve according to the official closing price of the abbreviated session. If no such official closing price is published, the market will resolve according to the next trading day on which an official closing price is published, treating that as the first day of trading for purposes of this market.'
+MARKET_FIELD resolutionSource None
+MARKET_FIELD startDate '2026-02-04T18:24:12.844577Z'
+MARKET_FIELD endDate '2028-01-01T04:59:00Z'
+MARKET_FIELD umaEndDate None
+MARKET_FIELD active True
+MARKET_FIELD closed False
+MARKET_FIELD negRisk True
+MARKET_FIELD negRiskOther False
+MARKET_FIELD conditionId '0x96a641513a2517d8a43b2db928789d72b5d3dedbc0f34b6cba782af44cee9d70'
+MARKET_FIELD questionID '0x98984cf8b3494532dfd73a5360ab3da456634a2e11df558587347ddee14bb104'
+MARKET_FIELD slug 'will-anthropics-market-cap-be-between-400b-and-600b-at-market-close-on-ipo-day-by-december-31-2027'
+MARKET_END
+MARKET_BEGIN 1328019
+MARKET_FIELD groupItemTitle '600B+'
+MARKET_FIELD question 'Will Anthropic’s market cap be $600B or greater at market close on IPO day by December 31, 2027?'
+MARKET_FIELD description SHA256 2c663ce90df8ec63aabcd52c3c4d9af12545e80c726206441013ec6e4f1eab7a
+MARKET_DESCRIPTION_TEXT 'This market will resolve based on Anthropic\'s market capitalization at the closing price on its first day of trading.\n\nIf no IPO occurs by December 31, 2027, 11:59 PM ET, the market will resolve to "No IPO by December 31, 2027".\n\nMarket capitalization expresses the monetary value of a company’s outstanding shares, stated in its pricing currency. It is calculated as the number of shares outstanding multiplied by the closing share price on the first trading day.\n\nIf the relevant value falls exactly between two brackets, then this market will resolve to the higher range bracket.\n\nResolution will be based on the primary exchange’s official listing page. In the event that the relevant figure is not displayed, another reliable source will be used.\n\nIn the event of an interruption in the course of the normal trading session on Anthropic’s first day of trading (e.g., a circuit breaker or half-day), the market will resolve according to the official closing price of the abbreviated session. If no such official closing price is published, the market will resolve according to the next trading day on which an official closing price is published, treating that as the first day of trading for purposes of this market.'
+MARKET_FIELD resolutionSource None
+MARKET_FIELD startDate '2026-02-04T18:24:18.808317Z'
+MARKET_FIELD endDate '2028-01-01T04:59:00Z'
+MARKET_FIELD umaEndDate None
+MARKET_FIELD active True
+MARKET_FIELD closed False
+MARKET_FIELD negRisk True
+MARKET_FIELD negRiskOther False
+MARKET_FIELD conditionId '0xc9540131d858a0e218aa9ec78accf9675501a3d3009fe2d28df10bbbbb9a1179'
+MARKET_FIELD questionID '0x98984cf8b3494532dfd73a5360ab3da456634a2e11df558587347ddee14bb105'
+MARKET_FIELD slug 'will-anthropics-market-cap-be-600b-or-greater-at-market-close-on-ipo-day-by-december-31-2027'
+MARKET_END
+MARKET_BEGIN 1328020
+MARKET_FIELD groupItemTitle 'No IPO by December 31, 2027'
+MARKET_FIELD question 'Will Anthropic not IPO by December 31, 2027?'
+MARKET_FIELD description SHA256 2c663ce90df8ec63aabcd52c3c4d9af12545e80c726206441013ec6e4f1eab7a
+MARKET_DESCRIPTION_TEXT 'This market will resolve based on Anthropic\'s market capitalization at the closing price on its first day of trading.\n\nIf no IPO occurs by December 31, 2027, 11:59 PM ET, the market will resolve to "No IPO by December 31, 2027".\n\nMarket capitalization expresses the monetary value of a company’s outstanding shares, stated in its pricing currency. It is calculated as the number of shares outstanding multiplied by the closing share price on the first trading day.\n\nIf the relevant value falls exactly between two brackets, then this market will resolve to the higher range bracket.\n\nResolution will be based on the primary exchange’s official listing page. In the event that the relevant figure is not displayed, another reliable source will be used.\n\nIn the event of an interruption in the course of the normal trading session on Anthropic’s first day of trading (e.g., a circuit breaker or half-day), the market will resolve according to the official closing price of the abbreviated session. If no such official closing price is published, the market will resolve according to the next trading day on which an official closing price is published, treating that as the first day of trading for purposes of this market.'
+MARKET_FIELD resolutionSource None
+MARKET_FIELD startDate '2026-02-04T18:24:24.724703Z'
+MARKET_FIELD endDate '2028-01-01T04:59:00Z'
+MARKET_FIELD umaEndDate None
+MARKET_FIELD active True
+MARKET_FIELD closed False
+MARKET_FIELD negRisk True
+MARKET_FIELD negRiskOther False
+MARKET_FIELD conditionId '0x1d0cc72a80f7c22f310fe67985edd951972b1d1bd13990314cd3e704a73426d2'
+MARKET_FIELD questionID '0x98984cf8b3494532dfd73a5360ab3da456634a2e11df558587347ddee14bb106'
+MARKET_FIELD slug 'will-anthropic-not-ipo-by-december-31-2027'
+MARKET_END
+EVENT_END 197776
+EVENT_BEGIN 428957
+EVENT_FIELD id '428957'
+EVENT_FIELD title 'Anthropic IPO Closing Market Cap (Middle Brackets)'
+EVENT_FIELD slug 'anthropic-ipo-closing-market-cap-979'
+EVENT_FIELD description SHA256 2c663ce90df8ec63aabcd52c3c4d9af12545e80c726206441013ec6e4f1eab7a
+EVENT_DESCRIPTION_TEXT 'This market will resolve based on Anthropic\'s market capitalization at the closing price on its first day of trading.\n\nIf no IPO occurs by December 31, 2027, 11:59 PM ET, the market will resolve to "No IPO by December 31, 2027".\n\nMarket capitalization expresses the monetary value of a company’s outstanding shares, stated in its pricing currency. It is calculated as the number of shares outstanding multiplied by the closing share price on the first trading day.\n\nIf the relevant value falls exactly between two brackets, then this market will resolve to the higher range bracket.\n\nResolution will be based on the primary exchange’s official listing page. In the event that the relevant figure is not displayed, another reliable source will be used.\n\nIn the event of an interruption in the course of the normal trading session on Anthropic’s first day of trading (e.g., a circuit breaker or half-day), the market will resolve according to the official closing price of the abbreviated session. If no such official closing price is published, the market will resolve according to the next trading day on which an official closing price is published, treating that as the first day of trading for purposes of this market.'
+EVENT_FIELD resolutionSource ''
+EVENT_FIELD startDate '2026-04-30T19:15:58.140786Z'
+EVENT_FIELD endDate '2028-01-01T04:59:00Z'
+EVENT_FIELD active True
+EVENT_FIELD closed False
+EVENT_FIELD negRisk True
+EVENT_FIELD negRiskAugmented False
+EVENT_FIELD negRiskMarketID '0xb2bb5e9e8728bc3779c143ca14e262bcf8d789c3dd3fbfcb5bdba5eab770bc00'
+MARKET_COUNT 7
+MARKET_BEGIN 2110748
+MARKET_FIELD groupItemTitle '<0.6T'
+MARKET_FIELD question 'Will Anthropic’s market cap be less than 0.6T at market close on IPO day by December 31 2027?'
+MARKET_FIELD description SHA256 2c663ce90df8ec63aabcd52c3c4d9af12545e80c726206441013ec6e4f1eab7a
+MARKET_DESCRIPTION_TEXT 'This market will resolve based on Anthropic\'s market capitalization at the closing price on its first day of trading.\n\nIf no IPO occurs by December 31, 2027, 11:59 PM ET, the market will resolve to "No IPO by December 31, 2027".\n\nMarket capitalization expresses the monetary value of a company’s outstanding shares, stated in its pricing currency. It is calculated as the number of shares outstanding multiplied by the closing share price on the first trading day.\n\nIf the relevant value falls exactly between two brackets, then this market will resolve to the higher range bracket.\n\nResolution will be based on the primary exchange’s official listing page. In the event that the relevant figure is not displayed, another reliable source will be used.\n\nIn the event of an interruption in the course of the normal trading session on Anthropic’s first day of trading (e.g., a circuit breaker or half-day), the market will resolve according to the official closing price of the abbreviated session. If no such official closing price is published, the market will resolve according to the next trading day on which an official closing price is published, treating that as the first day of trading for purposes of this market.'
+MARKET_FIELD resolutionSource None
+MARKET_FIELD startDate '2026-04-30T19:15:58.140786Z'
+MARKET_FIELD endDate '2028-01-01T04:59:00Z'
+MARKET_FIELD umaEndDate None
+MARKET_FIELD active True
+MARKET_FIELD closed False
+MARKET_FIELD negRisk True
+MARKET_FIELD negRiskOther False
+MARKET_FIELD conditionId '0xdc8f045babfcacd35d70d9a27ae9b9c621477bf720159a7816560a34e84f2c1f'
+MARKET_FIELD questionID '0xb2bb5e9e8728bc3779c143ca14e262bcf8d789c3dd3fbfcb5bdba5eab770bc00'
+MARKET_FIELD slug 'will-anthropics-market-cap-be-less-than-0pt6t-at-market-close-on-ipo-day-by-december-31-2027'
+MARKET_END
+MARKET_BEGIN 2110749
+MARKET_FIELD groupItemTitle '0.6–0.9T'
+MARKET_FIELD question 'Will Anthropic’s market cap be between 0.6T and 0.9T at market close on IPO day by December 31 2027?'
+MARKET_FIELD description SHA256 2c663ce90df8ec63aabcd52c3c4d9af12545e80c726206441013ec6e4f1eab7a
+MARKET_DESCRIPTION_TEXT 'This market will resolve based on Anthropic\'s market capitalization at the closing price on its first day of trading.\n\nIf no IPO occurs by December 31, 2027, 11:59 PM ET, the market will resolve to "No IPO by December 31, 2027".\n\nMarket capitalization expresses the monetary value of a company’s outstanding shares, stated in its pricing currency. It is calculated as the number of shares outstanding multiplied by the closing share price on the first trading day.\n\nIf the relevant value falls exactly between two brackets, then this market will resolve to the higher range bracket.\n\nResolution will be based on the primary exchange’s official listing page. In the event that the relevant figure is not displayed, another reliable source will be used.\n\nIn the event of an interruption in the course of the normal trading session on Anthropic’s first day of trading (e.g., a circuit breaker or half-day), the market will resolve according to the official closing price of the abbreviated session. If no such official closing price is published, the market will resolve according to the next trading day on which an official closing price is published, treating that as the first day of trading for purposes of this market.'
+MARKET_FIELD resolutionSource None
+MARKET_FIELD startDate '2026-04-30T19:16:01.968876Z'
+MARKET_FIELD endDate '2028-01-01T04:59:00Z'
+MARKET_FIELD umaEndDate None
+MARKET_FIELD active True
+MARKET_FIELD closed False
+MARKET_FIELD negRisk True
+MARKET_FIELD negRiskOther False
+MARKET_FIELD conditionId '0xdebea2ab47315c433eaaa36d005e1063a59dc9119ceacfe1c1545407732e25bf'
+MARKET_FIELD questionID '0xb2bb5e9e8728bc3779c143ca14e262bcf8d789c3dd3fbfcb5bdba5eab770bc01'
+MARKET_FIELD slug 'will-anthropics-market-cap-be-between-0pt6t-and-0pt9t-at-market-close-on-ipo-day-by-december-31-2027'
+MARKET_END
+MARKET_BEGIN 2110750
+MARKET_FIELD groupItemTitle '0.9–1.2T'
+MARKET_FIELD question 'Will Anthropic’s market cap be between 0.9T and 1.2T at market close on IPO day by December 31 2027?'
+MARKET_FIELD description SHA256 2c663ce90df8ec63aabcd52c3c4d9af12545e80c726206441013ec6e4f1eab7a
+MARKET_DESCRIPTION_TEXT 'This market will resolve based on Anthropic\'s market capitalization at the closing price on its first day of trading.\n\nIf no IPO occurs by December 31, 2027, 11:59 PM ET, the market will resolve to "No IPO by December 31, 2027".\n\nMarket capitalization expresses the monetary value of a company’s outstanding shares, stated in its pricing currency. It is calculated as the number of shares outstanding multiplied by the closing share price on the first trading day.\n\nIf the relevant value falls exactly between two brackets, then this market will resolve to the higher range bracket.\n\nResolution will be based on the primary exchange’s official listing page. In the event that the relevant figure is not displayed, another reliable source will be used.\n\nIn the event of an interruption in the course of the normal trading session on Anthropic’s first day of trading (e.g., a circuit breaker or half-day), the market will resolve according to the official closing price of the abbreviated session. If no such official closing price is published, the market will resolve according to the next trading day on which an official closing price is published, treating that as the first day of trading for purposes of this market.'
+MARKET_FIELD resolutionSource None
+MARKET_FIELD startDate '2026-04-30T19:16:06.878238Z'
+MARKET_FIELD endDate '2028-01-01T04:59:00Z'
+MARKET_FIELD umaEndDate None
+MARKET_FIELD active True
+MARKET_FIELD closed False
+MARKET_FIELD negRisk True
+MARKET_FIELD negRiskOther False
+MARKET_FIELD conditionId '0x17459272717ce2de6d4d6aaff53b307381f03c07d44b56e839d38ac2f8b69b3c'
+MARKET_FIELD questionID '0xb2bb5e9e8728bc3779c143ca14e262bcf8d789c3dd3fbfcb5bdba5eab770bc02'
+MARKET_FIELD slug 'will-anthropics-market-cap-be-between-0pt9t-and-1pt2t-at-market-close-on-ipo-day-by-december-31-2027'
+MARKET_END
+MARKET_BEGIN 2110751
+MARKET_FIELD groupItemTitle '1.2–1.5T'
+MARKET_FIELD question 'Will Anthropic’s market cap be between 1.2T and 1.5T at market close on IPO day by December 31 2027?'
+MARKET_FIELD description SHA256 2c663ce90df8ec63aabcd52c3c4d9af12545e80c726206441013ec6e4f1eab7a
+MARKET_DESCRIPTION_TEXT 'This market will resolve based on Anthropic\'s market capitalization at the closing price on its first day of trading.\n\nIf no IPO occurs by December 31, 2027, 11:59 PM ET, the market will resolve to "No IPO by December 31, 2027".\n\nMarket capitalization expresses the monetary value of a company’s outstanding shares, stated in its pricing currency. It is calculated as the number of shares outstanding multiplied by the closing share price on the first trading day.\n\nIf the relevant value falls exactly between two brackets, then this market will resolve to the higher range bracket.\n\nResolution will be based on the primary exchange’s official listing page. In the event that the relevant figure is not displayed, another reliable source will be used.\n\nIn the event of an interruption in the course of the normal trading session on Anthropic’s first day of trading (e.g., a circuit breaker or half-day), the market will resolve according to the official closing price of the abbreviated session. If no such official closing price is published, the market will resolve according to the next trading day on which an official closing price is published, treating that as the first day of trading for purposes of this market.'
+MARKET_FIELD resolutionSource None
+MARKET_FIELD startDate '2026-04-30T19:16:11.119857Z'
+MARKET_FIELD endDate '2028-01-01T04:59:00Z'
+MARKET_FIELD umaEndDate None
+MARKET_FIELD active True
+MARKET_FIELD closed False
+MARKET_FIELD negRisk True
+MARKET_FIELD negRiskOther False
+MARKET_FIELD conditionId '0x510736e7804a288592abab4105eca3399cbd562cd49a6d4e0289362490cc4825'
+MARKET_FIELD questionID '0xb2bb5e9e8728bc3779c143ca14e262bcf8d789c3dd3fbfcb5bdba5eab770bc03'
+MARKET_FIELD slug 'will-anthropics-market-cap-be-between-1pt2t-and-1pt5t-at-market-close-on-ipo-day-by-december-31-2027'
+MARKET_END
+MARKET_BEGIN 2110752
+MARKET_FIELD groupItemTitle '1.5–1.8T'
+MARKET_FIELD question 'Will Anthropic’s market cap be between 1.5T and 1.8T at market close on IPO day by December 31 2027?'
+MARKET_FIELD description SHA256 2c663ce90df8ec63aabcd52c3c4d9af12545e80c726206441013ec6e4f1eab7a
+MARKET_DESCRIPTION_TEXT 'This market will resolve based on Anthropic\'s market capitalization at the closing price on its first day of trading.\n\nIf no IPO occurs by December 31, 2027, 11:59 PM ET, the market will resolve to "No IPO by December 31, 2027".\n\nMarket capitalization expresses the monetary value of a company’s outstanding shares, stated in its pricing currency. It is calculated as the number of shares outstanding multiplied by the closing share price on the first trading day.\n\nIf the relevant value falls exactly between two brackets, then this market will resolve to the higher range bracket.\n\nResolution will be based on the primary exchange’s official listing page. In the event that the relevant figure is not displayed, another reliable source will be used.\n\nIn the event of an interruption in the course of the normal trading session on Anthropic’s first day of trading (e.g., a circuit breaker or half-day), the market will resolve according to the official closing price of the abbreviated session. If no such official closing price is published, the market will resolve according to the next trading day on which an official closing price is published, treating that as the first day of trading for purposes of this market.'
+MARKET_FIELD resolutionSource None
+MARKET_FIELD startDate '2026-04-30T19:16:16.98636Z'
+MARKET_FIELD endDate '2028-01-01T04:59:00Z'
+MARKET_FIELD umaEndDate None
+MARKET_FIELD active True
+MARKET_FIELD closed False
+MARKET_FIELD negRisk True
+MARKET_FIELD negRiskOther False
+MARKET_FIELD conditionId '0x96020960debc2b7b4dc46511bb1f8e63495aa7ecd4a2685e8f8d246adc6ad45b'
+MARKET_FIELD questionID '0xb2bb5e9e8728bc3779c143ca14e262bcf8d789c3dd3fbfcb5bdba5eab770bc04'
+MARKET_FIELD slug 'will-anthropics-market-cap-be-between-1pt5t-and-1pt8t-at-market-close-on-ipo-day-by-december-31-2027'
+MARKET_END
+MARKET_BEGIN 2110753
+MARKET_FIELD groupItemTitle '1.8T+'
+MARKET_FIELD question 'Will Anthropic’s market cap be 1.8T or greater at market close on IPO day by December 31 2027?'
+MARKET_FIELD description SHA256 2c663ce90df8ec63aabcd52c3c4d9af12545e80c726206441013ec6e4f1eab7a
+MARKET_DESCRIPTION_TEXT 'This market will resolve based on Anthropic\'s market capitalization at the closing price on its first day of trading.\n\nIf no IPO occurs by December 31, 2027, 11:59 PM ET, the market will resolve to "No IPO by December 31, 2027".\n\nMarket capitalization expresses the monetary value of a company’s outstanding shares, stated in its pricing currency. It is calculated as the number of shares outstanding multiplied by the closing share price on the first trading day.\n\nIf the relevant value falls exactly between two brackets, then this market will resolve to the higher range bracket.\n\nResolution will be based on the primary exchange’s official listing page. In the event that the relevant figure is not displayed, another reliable source will be used.\n\nIn the event of an interruption in the course of the normal trading session on Anthropic’s first day of trading (e.g., a circuit breaker or half-day), the market will resolve according to the official closing price of the abbreviated session. If no such official closing price is published, the market will resolve according to the next trading day on which an official closing price is published, treating that as the first day of trading for purposes of this market.'
+MARKET_FIELD resolutionSource None
+MARKET_FIELD startDate '2026-04-30T19:16:24.074423Z'
+MARKET_FIELD endDate '2028-01-01T04:59:00Z'
+MARKET_FIELD umaEndDate None
+MARKET_FIELD active True
+MARKET_FIELD closed False
+MARKET_FIELD negRisk True
+MARKET_FIELD negRiskOther False
+MARKET_FIELD conditionId '0x2709a9392fcfe2348ad935b3158d5e4184ef484cf233d536ecdaa3148bda4aad'
+MARKET_FIELD questionID '0xb2bb5e9e8728bc3779c143ca14e262bcf8d789c3dd3fbfcb5bdba5eab770bc05'
+MARKET_FIELD slug 'will-anthropics-market-cap-be-1pt8t-or-greater-at-market-close-on-ipo-day-by-december-31-2027'
+MARKET_END
+MARKET_BEGIN 2110754
+MARKET_FIELD groupItemTitle 'No IPO by December 31, 2027'
+MARKET_FIELD question 'Will Anthropic not IPO by December 31 2027?'
+MARKET_FIELD description SHA256 2c663ce90df8ec63aabcd52c3c4d9af12545e80c726206441013ec6e4f1eab7a
+MARKET_DESCRIPTION_TEXT 'This market will resolve based on Anthropic\'s market capitalization at the closing price on its first day of trading.\n\nIf no IPO occurs by December 31, 2027, 11:59 PM ET, the market will resolve to "No IPO by December 31, 2027".\n\nMarket capitalization expresses the monetary value of a company’s outstanding shares, stated in its pricing currency. It is calculated as the number of shares outstanding multiplied by the closing share price on the first trading day.\n\nIf the relevant value falls exactly between two brackets, then this market will resolve to the higher range bracket.\n\nResolution will be based on the primary exchange’s official listing page. In the event that the relevant figure is not displayed, another reliable source will be used.\n\nIn the event of an interruption in the course of the normal trading session on Anthropic’s first day of trading (e.g., a circuit breaker or half-day), the market will resolve according to the official closing price of the abbreviated session. If no such official closing price is published, the market will resolve according to the next trading day on which an official closing price is published, treating that as the first day of trading for purposes of this market.'
+MARKET_FIELD resolutionSource None
+MARKET_FIELD startDate '2026-04-30T19:16:31.235499Z'
+MARKET_FIELD endDate '2028-01-01T04:59:00Z'
+MARKET_FIELD umaEndDate None
+MARKET_FIELD active True
+MARKET_FIELD closed False
+MARKET_FIELD negRisk True
+MARKET_FIELD negRiskOther False
+MARKET_FIELD conditionId '0x76da168d7d7e6ece329dfefc5c340562180927016f1ba724ce954f8445446db8'
+MARKET_FIELD questionID '0xb2bb5e9e8728bc3779c143ca14e262bcf8d789c3dd3fbfcb5bdba5eab770bc06'
+MARKET_FIELD slug 'will-anthropic-not-ipo-by-december-31-2027-386'
+MARKET_END
+EVENT_END 428957
+EVENT_BEGIN 548858
+EVENT_FIELD id '548858'
+EVENT_FIELD title 'Anthropic IPO Closing Market Cap'
+EVENT_FIELD slug 'anthropic-ipo-closing-market-cap-higher-strikes'
+EVENT_FIELD description SHA256 2c663ce90df8ec63aabcd52c3c4d9af12545e80c726206441013ec6e4f1eab7a
+EVENT_DESCRIPTION_TEXT 'This market will resolve based on Anthropic\'s market capitalization at the closing price on its first day of trading.\n\nIf no IPO occurs by December 31, 2027, 11:59 PM ET, the market will resolve to "No IPO by December 31, 2027".\n\nMarket capitalization expresses the monetary value of a company’s outstanding shares, stated in its pricing currency. It is calculated as the number of shares outstanding multiplied by the closing share price on the first trading day.\n\nIf the relevant value falls exactly between two brackets, then this market will resolve to the higher range bracket.\n\nResolution will be based on the primary exchange’s official listing page. In the event that the relevant figure is not displayed, another reliable source will be used.\n\nIn the event of an interruption in the course of the normal trading session on Anthropic’s first day of trading (e.g., a circuit breaker or half-day), the market will resolve according to the official closing price of the abbreviated session. If no such official closing price is published, the market will resolve according to the next trading day on which an official closing price is published, treating that as the first day of trading for purposes of this market.'
+EVENT_FIELD resolutionSource ''
+EVENT_FIELD startDate '2026-06-01T21:07:04.52879Z'
+EVENT_FIELD endDate '2027-12-31T23:55:00Z'
+EVENT_FIELD active True
+EVENT_FIELD closed False
+EVENT_FIELD negRisk True
+EVENT_FIELD negRiskAugmented False
+EVENT_FIELD negRiskMarketID '0x4bcf7372694cb3ed70e31369f7602502cf80c6194e348bcba13c20b0a8936400'
+MARKET_COUNT 10
+MARKET_BEGIN 2412744
+MARKET_FIELD groupItemTitle '<$1.25T'
+MARKET_FIELD question "Will Anthropic's market cap be less than $1.25T at market close on IPO day?"
+MARKET_FIELD description SHA256 2c663ce90df8ec63aabcd52c3c4d9af12545e80c726206441013ec6e4f1eab7a
+MARKET_DESCRIPTION_TEXT 'This market will resolve based on Anthropic\'s market capitalization at the closing price on its first day of trading.\n\nIf no IPO occurs by December 31, 2027, 11:59 PM ET, the market will resolve to "No IPO by December 31, 2027".\n\nMarket capitalization expresses the monetary value of a company’s outstanding shares, stated in its pricing currency. It is calculated as the number of shares outstanding multiplied by the closing share price on the first trading day.\n\nIf the relevant value falls exactly between two brackets, then this market will resolve to the higher range bracket.\n\nResolution will be based on the primary exchange’s official listing page. In the event that the relevant figure is not displayed, another reliable source will be used.\n\nIn the event of an interruption in the course of the normal trading session on Anthropic’s first day of trading (e.g., a circuit breaker or half-day), the market will resolve according to the official closing price of the abbreviated session. If no such official closing price is published, the market will resolve according to the next trading day on which an official closing price is published, treating that as the first day of trading for purposes of this market.'
+MARKET_FIELD resolutionSource None
+MARKET_FIELD startDate '2026-06-01T21:07:04.52879Z'
+MARKET_FIELD endDate '2026-12-31T23:55:00Z'
+MARKET_FIELD umaEndDate None
+MARKET_FIELD active True
+MARKET_FIELD closed False
+MARKET_FIELD negRisk True
+MARKET_FIELD negRiskOther False
+MARKET_FIELD conditionId '0x800376dc64e4e2376a495ed0df4a789192256c821bb4d1452acdd5931bca2fa5'
+MARKET_FIELD questionID '0x4bcf7372694cb3ed70e31369f7602502cf80c6194e348bcba13c20b0a8936400'
+MARKET_FIELD slug 'will-anthropics-market-cap-be-less-than-1pt25t-at-market-close-on-ipo-day'
+MARKET_END
+MARKET_BEGIN 2412745
+MARKET_FIELD groupItemTitle '$1.25–$1.5T'
+MARKET_FIELD question "Will Anthropic's market cap be between $1.25T and $1.5T at market close on IPO day?"
+MARKET_FIELD description SHA256 2c663ce90df8ec63aabcd52c3c4d9af12545e80c726206441013ec6e4f1eab7a
+MARKET_DESCRIPTION_TEXT 'This market will resolve based on Anthropic\'s market capitalization at the closing price on its first day of trading.\n\nIf no IPO occurs by December 31, 2027, 11:59 PM ET, the market will resolve to "No IPO by December 31, 2027".\n\nMarket capitalization expresses the monetary value of a company’s outstanding shares, stated in its pricing currency. It is calculated as the number of shares outstanding multiplied by the closing share price on the first trading day.\n\nIf the relevant value falls exactly between two brackets, then this market will resolve to the higher range bracket.\n\nResolution will be based on the primary exchange’s official listing page. In the event that the relevant figure is not displayed, another reliable source will be used.\n\nIn the event of an interruption in the course of the normal trading session on Anthropic’s first day of trading (e.g., a circuit breaker or half-day), the market will resolve according to the official closing price of the abbreviated session. If no such official closing price is published, the market will resolve according to the next trading day on which an official closing price is published, treating that as the first day of trading for purposes of this market.'
+MARKET_FIELD resolutionSource None
+MARKET_FIELD startDate '2026-06-01T21:07:09.395496Z'
+MARKET_FIELD endDate '2026-12-31T23:55:00Z'
+MARKET_FIELD umaEndDate None
+MARKET_FIELD active True
+MARKET_FIELD closed False
+MARKET_FIELD negRisk True
+MARKET_FIELD negRiskOther False
+MARKET_FIELD conditionId '0x67644dafb1cb9f5dda7cc1b5666e93c1ca539da38cafb17b4ebca6493a04e25b'
+MARKET_FIELD questionID '0x4bcf7372694cb3ed70e31369f7602502cf80c6194e348bcba13c20b0a8936401'
+MARKET_FIELD slug 'will-anthropics-market-cap-be-between-1pt25t-and-1pt5t-at-market-close-on-ipo-day'
+MARKET_END
+MARKET_BEGIN 2412746
+MARKET_FIELD groupItemTitle '$1.5–$1.75T'
+MARKET_FIELD question "Will Anthropic's market cap be between $1.5T and $1.75T at market close on IPO day?"
+MARKET_FIELD description SHA256 2c663ce90df8ec63aabcd52c3c4d9af12545e80c726206441013ec6e4f1eab7a
+MARKET_DESCRIPTION_TEXT 'This market will resolve based on Anthropic\'s market capitalization at the closing price on its first day of trading.\n\nIf no IPO occurs by December 31, 2027, 11:59 PM ET, the market will resolve to "No IPO by December 31, 2027".\n\nMarket capitalization expresses the monetary value of a company’s outstanding shares, stated in its pricing currency. It is calculated as the number of shares outstanding multiplied by the closing share price on the first trading day.\n\nIf the relevant value falls exactly between two brackets, then this market will resolve to the higher range bracket.\n\nResolution will be based on the primary exchange’s official listing page. In the event that the relevant figure is not displayed, another reliable source will be used.\n\nIn the event of an interruption in the course of the normal trading session on Anthropic’s first day of trading (e.g., a circuit breaker or half-day), the market will resolve according to the official closing price of the abbreviated session. If no such official closing price is published, the market will resolve according to the next trading day on which an official closing price is published, treating that as the first day of trading for purposes of this market.'
+MARKET_FIELD resolutionSource None
+MARKET_FIELD startDate '2026-06-01T21:07:15.600095Z'
+MARKET_FIELD endDate '2026-12-31T23:55:00Z'
+MARKET_FIELD umaEndDate None
+MARKET_FIELD active True
+MARKET_FIELD closed False
+MARKET_FIELD negRisk True
+MARKET_FIELD negRiskOther False
+MARKET_FIELD conditionId '0xe02dadd92c84112fce087b6f260d62c8df1648e071acaef35b0851c8dde64163'
+MARKET_FIELD questionID '0x4bcf7372694cb3ed70e31369f7602502cf80c6194e348bcba13c20b0a8936402'
+MARKET_FIELD slug 'will-anthropics-market-cap-be-between-1pt5t-and-1pt75t-at-market-close-on-ipo-day'
+MARKET_END
+MARKET_BEGIN 2412747
+MARKET_FIELD groupItemTitle '$1.75–$2.0T'
+MARKET_FIELD question "Will Anthropic's market cap be between $1.75T and $2.0T at market close on IPO day?"
+MARKET_FIELD description SHA256 2c663ce90df8ec63aabcd52c3c4d9af12545e80c726206441013ec6e4f1eab7a
+MARKET_DESCRIPTION_TEXT 'This market will resolve based on Anthropic\'s market capitalization at the closing price on its first day of trading.\n\nIf no IPO occurs by December 31, 2027, 11:59 PM ET, the market will resolve to "No IPO by December 31, 2027".\n\nMarket capitalization expresses the monetary value of a company’s outstanding shares, stated in its pricing currency. It is calculated as the number of shares outstanding multiplied by the closing share price on the first trading day.\n\nIf the relevant value falls exactly between two brackets, then this market will resolve to the higher range bracket.\n\nResolution will be based on the primary exchange’s official listing page. In the event that the relevant figure is not displayed, another reliable source will be used.\n\nIn the event of an interruption in the course of the normal trading session on Anthropic’s first day of trading (e.g., a circuit breaker or half-day), the market will resolve according to the official closing price of the abbreviated session. If no such official closing price is published, the market will resolve according to the next trading day on which an official closing price is published, treating that as the first day of trading for purposes of this market.'
+MARKET_FIELD resolutionSource None
+MARKET_FIELD startDate '2026-06-01T21:07:20.876751Z'
+MARKET_FIELD endDate '2026-12-31T23:55:00Z'
+MARKET_FIELD umaEndDate None
+MARKET_FIELD active True
+MARKET_FIELD closed False
+MARKET_FIELD negRisk True
+MARKET_FIELD negRiskOther False
+MARKET_FIELD conditionId '0xdded1086ea6aca11f88b997328ff3b0f5bb9374e5ecb450422c862f67c9f3cbe'
+MARKET_FIELD questionID '0x4bcf7372694cb3ed70e31369f7602502cf80c6194e348bcba13c20b0a8936403'
+MARKET_FIELD slug 'will-anthropics-market-cap-be-between-1pt75t-and-2pt0t-at-market-close-on-ipo-day'
+MARKET_END
+MARKET_BEGIN 2412748
+MARKET_FIELD groupItemTitle '$2.0–$2.25T'
+MARKET_FIELD question "Will Anthropic's market cap be between $2.0T and $2.25T at market close on IPO day?"
+MARKET_FIELD description SHA256 2c663ce90df8ec63aabcd52c3c4d9af12545e80c726206441013ec6e4f1eab7a
+MARKET_DESCRIPTION_TEXT 'This market will resolve based on Anthropic\'s market capitalization at the closing price on its first day of trading.\n\nIf no IPO occurs by December 31, 2027, 11:59 PM ET, the market will resolve to "No IPO by December 31, 2027".\n\nMarket capitalization expresses the monetary value of a company’s outstanding shares, stated in its pricing currency. It is calculated as the number of shares outstanding multiplied by the closing share price on the first trading day.\n\nIf the relevant value falls exactly between two brackets, then this market will resolve to the higher range bracket.\n\nResolution will be based on the primary exchange’s official listing page. In the event that the relevant figure is not displayed, another reliable source will be used.\n\nIn the event of an interruption in the course of the normal trading session on Anthropic’s first day of trading (e.g., a circuit breaker or half-day), the market will resolve according to the official closing price of the abbreviated session. If no such official closing price is published, the market will resolve according to the next trading day on which an official closing price is published, treating that as the first day of trading for purposes of this market.'
+MARKET_FIELD resolutionSource None
+MARKET_FIELD startDate '2026-06-01T21:07:25.714154Z'
+MARKET_FIELD endDate '2026-12-31T23:55:00Z'
+MARKET_FIELD umaEndDate None
+MARKET_FIELD active True
+MARKET_FIELD closed False
+MARKET_FIELD negRisk True
+MARKET_FIELD negRiskOther False
+MARKET_FIELD conditionId '0x3d555d528a9a5f94a733741d75a3f707731f5e42237006aed81e191d9dd43d1d'
+MARKET_FIELD questionID '0x4bcf7372694cb3ed70e31369f7602502cf80c6194e348bcba13c20b0a8936404'
+MARKET_FIELD slug 'will-anthropics-market-cap-be-between-2pt0t-and-2pt25t-at-market-close-on-ipo-day'
+MARKET_END
+MARKET_BEGIN 2412749
+MARKET_FIELD groupItemTitle '$2.25–$2.5T'
+MARKET_FIELD question "Will Anthropic's market cap be between $2.25T and $2.5T at market close on IPO day?"
+MARKET_FIELD description SHA256 2c663ce90df8ec63aabcd52c3c4d9af12545e80c726206441013ec6e4f1eab7a
+MARKET_DESCRIPTION_TEXT 'This market will resolve based on Anthropic\'s market capitalization at the closing price on its first day of trading.\n\nIf no IPO occurs by December 31, 2027, 11:59 PM ET, the market will resolve to "No IPO by December 31, 2027".\n\nMarket capitalization expresses the monetary value of a company’s outstanding shares, stated in its pricing currency. It is calculated as the number of shares outstanding multiplied by the closing share price on the first trading day.\n\nIf the relevant value falls exactly between two brackets, then this market will resolve to the higher range bracket.\n\nResolution will be based on the primary exchange’s official listing page. In the event that the relevant figure is not displayed, another reliable source will be used.\n\nIn the event of an interruption in the course of the normal trading session on Anthropic’s first day of trading (e.g., a circuit breaker or half-day), the market will resolve according to the official closing price of the abbreviated session. If no such official closing price is published, the market will resolve according to the next trading day on which an official closing price is published, treating that as the first day of trading for purposes of this market.'
+MARKET_FIELD resolutionSource None
+MARKET_FIELD startDate '2026-06-01T21:07:30.575337Z'
+MARKET_FIELD endDate '2026-12-31T23:55:00Z'
+MARKET_FIELD umaEndDate None
+MARKET_FIELD active True
+MARKET_FIELD closed False
+MARKET_FIELD negRisk True
+MARKET_FIELD negRiskOther False
+MARKET_FIELD conditionId '0xc52d95f58a395fb61a16c87d96eeac8b4d52b53d48eef9d45df1c7270bd08ad0'
+MARKET_FIELD questionID '0x4bcf7372694cb3ed70e31369f7602502cf80c6194e348bcba13c20b0a8936405'
+MARKET_FIELD slug 'will-anthropics-market-cap-be-between-2pt25t-and-2pt5t-at-market-close-on-ipo-day'
+MARKET_END
+MARKET_BEGIN 2412750
+MARKET_FIELD groupItemTitle '$2.5–$2.75T'
+MARKET_FIELD question "Will Anthropic's market cap be between $2.5T and $2.75T at market close on IPO day?"
+MARKET_FIELD description SHA256 2c663ce90df8ec63aabcd52c3c4d9af12545e80c726206441013ec6e4f1eab7a
+MARKET_DESCRIPTION_TEXT 'This market will resolve based on Anthropic\'s market capitalization at the closing price on its first day of trading.\n\nIf no IPO occurs by December 31, 2027, 11:59 PM ET, the market will resolve to "No IPO by December 31, 2027".\n\nMarket capitalization expresses the monetary value of a company’s outstanding shares, stated in its pricing currency. It is calculated as the number of shares outstanding multiplied by the closing share price on the first trading day.\n\nIf the relevant value falls exactly between two brackets, then this market will resolve to the higher range bracket.\n\nResolution will be based on the primary exchange’s official listing page. In the event that the relevant figure is not displayed, another reliable source will be used.\n\nIn the event of an interruption in the course of the normal trading session on Anthropic’s first day of trading (e.g., a circuit breaker or half-day), the market will resolve according to the official closing price of the abbreviated session. If no such official closing price is published, the market will resolve according to the next trading day on which an official closing price is published, treating that as the first day of trading for purposes of this market.'
+MARKET_FIELD resolutionSource None
+MARKET_FIELD startDate '2026-06-01T21:07:34.418244Z'
+MARKET_FIELD endDate '2026-12-31T23:55:00Z'
+MARKET_FIELD umaEndDate None
+MARKET_FIELD active True
+MARKET_FIELD closed False
+MARKET_FIELD negRisk True
+MARKET_FIELD negRiskOther False
+MARKET_FIELD conditionId '0x76876411a19595cd5881170954806cc1c51ec66528e0739231f2aaabeceadb36'
+MARKET_FIELD questionID '0x4bcf7372694cb3ed70e31369f7602502cf80c6194e348bcba13c20b0a8936406'
+MARKET_FIELD slug 'will-anthropics-market-cap-be-between-2pt5t-and-2pt75t-at-market-close-on-ipo-day'
+MARKET_END
+MARKET_BEGIN 2412751
+MARKET_FIELD groupItemTitle '$2.75–$3.0T'
+MARKET_FIELD question "Will Anthropic's market cap be between $2.75T and $3.0T at market close on IPO day?"
+MARKET_FIELD description SHA256 2c663ce90df8ec63aabcd52c3c4d9af12545e80c726206441013ec6e4f1eab7a
+MARKET_DESCRIPTION_TEXT 'This market will resolve based on Anthropic\'s market capitalization at the closing price on its first day of trading.\n\nIf no IPO occurs by December 31, 2027, 11:59 PM ET, the market will resolve to "No IPO by December 31, 2027".\n\nMarket capitalization expresses the monetary value of a company’s outstanding shares, stated in its pricing currency. It is calculated as the number of shares outstanding multiplied by the closing share price on the first trading day.\n\nIf the relevant value falls exactly between two brackets, then this market will resolve to the higher range bracket.\n\nResolution will be based on the primary exchange’s official listing page. In the event that the relevant figure is not displayed, another reliable source will be used.\n\nIn the event of an interruption in the course of the normal trading session on Anthropic’s first day of trading (e.g., a circuit breaker or half-day), the market will resolve according to the official closing price of the abbreviated session. If no such official closing price is published, the market will resolve according to the next trading day on which an official closing price is published, treating that as the first day of trading for purposes of this market.'
+MARKET_FIELD resolutionSource None
+MARKET_FIELD startDate '2026-06-01T21:07:39.462447Z'
+MARKET_FIELD endDate '2026-12-31T23:55:00Z'
+MARKET_FIELD umaEndDate None
+MARKET_FIELD active True
+MARKET_FIELD closed False
+MARKET_FIELD negRisk True
+MARKET_FIELD negRiskOther False
+MARKET_FIELD conditionId '0x8344e39c752c8d5984f45e3b8e079bb11c239214600eeb1fef0b51b344e99ba2'
+MARKET_FIELD questionID '0x4bcf7372694cb3ed70e31369f7602502cf80c6194e348bcba13c20b0a8936407'
+MARKET_FIELD slug 'will-anthropics-market-cap-be-between-2pt75t-and-3pt0t-at-market-close-on-ipo-day'
+MARKET_END
+MARKET_BEGIN 2412752
+MARKET_FIELD groupItemTitle '$3.0T+'
+MARKET_FIELD question "Will Anthropic's market cap be $3.0T or greater at market close on IPO day?"
+MARKET_FIELD description SHA256 2c663ce90df8ec63aabcd52c3c4d9af12545e80c726206441013ec6e4f1eab7a
+MARKET_DESCRIPTION_TEXT 'This market will resolve based on Anthropic\'s market capitalization at the closing price on its first day of trading.\n\nIf no IPO occurs by December 31, 2027, 11:59 PM ET, the market will resolve to "No IPO by December 31, 2027".\n\nMarket capitalization expresses the monetary value of a company’s outstanding shares, stated in its pricing currency. It is calculated as the number of shares outstanding multiplied by the closing share price on the first trading day.\n\nIf the relevant value falls exactly between two brackets, then this market will resolve to the higher range bracket.\n\nResolution will be based on the primary exchange’s official listing page. In the event that the relevant figure is not displayed, another reliable source will be used.\n\nIn the event of an interruption in the course of the normal trading session on Anthropic’s first day of trading (e.g., a circuit breaker or half-day), the market will resolve according to the official closing price of the abbreviated session. If no such official closing price is published, the market will resolve according to the next trading day on which an official closing price is published, treating that as the first day of trading for purposes of this market.'
+MARKET_FIELD resolutionSource None
+MARKET_FIELD startDate '2026-06-01T21:07:46.667271Z'
+MARKET_FIELD endDate '2026-12-31T23:55:00Z'
+MARKET_FIELD umaEndDate None
+MARKET_FIELD active True
+MARKET_FIELD closed False
+MARKET_FIELD negRisk True
+MARKET_FIELD negRiskOther False
+MARKET_FIELD conditionId '0xb0d2fa1aacbf2e91248f2d69d9364e6ef644177de0141e23313c5b2a28f5cf60'
+MARKET_FIELD questionID '0x4bcf7372694cb3ed70e31369f7602502cf80c6194e348bcba13c20b0a8936408'
+MARKET_FIELD slug 'will-anthropics-market-cap-be-3pt0t-or-greater-at-market-close-on-ipo-day'
+MARKET_END
+MARKET_BEGIN 2412753
+MARKET_FIELD groupItemTitle 'No IPO by December 31, 2027'
+MARKET_FIELD question 'Will Anthropic not IPO by December 31, 2027?'
+MARKET_FIELD description SHA256 2c663ce90df8ec63aabcd52c3c4d9af12545e80c726206441013ec6e4f1eab7a
+MARKET_DESCRIPTION_TEXT 'This market will resolve based on Anthropic\'s market capitalization at the closing price on its first day of trading.\n\nIf no IPO occurs by December 31, 2027, 11:59 PM ET, the market will resolve to "No IPO by December 31, 2027".\n\nMarket capitalization expresses the monetary value of a company’s outstanding shares, stated in its pricing currency. It is calculated as the number of shares outstanding multiplied by the closing share price on the first trading day.\n\nIf the relevant value falls exactly between two brackets, then this market will resolve to the higher range bracket.\n\nResolution will be based on the primary exchange’s official listing page. In the event that the relevant figure is not displayed, another reliable source will be used.\n\nIn the event of an interruption in the course of the normal trading session on Anthropic’s first day of trading (e.g., a circuit breaker or half-day), the market will resolve according to the official closing price of the abbreviated session. If no such official closing price is published, the market will resolve according to the next trading day on which an official closing price is published, treating that as the first day of trading for purposes of this market.'
+MARKET_FIELD resolutionSource None
+MARKET_FIELD startDate '2026-06-01T21:07:50.750942Z'
+MARKET_FIELD endDate '2026-12-31T23:55:00Z'
+MARKET_FIELD umaEndDate None
+MARKET_FIELD active True
+MARKET_FIELD closed False
+MARKET_FIELD negRisk True
+MARKET_FIELD negRiskOther False
+MARKET_FIELD conditionId '0x8e4cfba82d83a14165a4fa84ca61c2ca83975dff28ca4fc65c96ffb6b206beb6'
+MARKET_FIELD questionID '0x4bcf7372694cb3ed70e31369f7602502cf80c6194e348bcba13c20b0a8936409'
+MARKET_FIELD slug 'will-anthropic-not-ipo-by-december-31-2027-539'
+MARKET_END
+EVENT_END 548858
+PAIR 197776 428957
+DESCRIPTION_EQUAL True
+RESOLUTION_SOURCE_EQUAL True
+EVENT_END_EQUAL True
+EVENT_START_EQUAL False
+PAIR 197776 548858
+DESCRIPTION_EQUAL True
+RESOLUTION_SOURCE_EQUAL True
+EVENT_END_EQUAL False
+EVENT_START_EQUAL False
+PAIR 428957 548858
+DESCRIPTION_EQUAL True
+RESOLUTION_SOURCE_EQUAL True
+EVENT_END_EQUAL False
+EVENT_START_EQUAL False
+THIRD_UNIQUE_MARKET_ENDS ['2026-12-31T23:55:00Z']
+THIRD_UNIQUE_MARKET_DESCRIPTION_COUNT 1
+THIRD_MARKET_DESCRIPTION 'This market will resolve based on Anthropic\'s market capitalization at the closing price on its first day of trading.\n\nIf no IPO occurs by December 31, 2027, 11:59 PM ET, the market will resolve to "No IPO by December 31, 2027".\n\nMarket capitalization expresses the monetary value of a company’s outstanding shares, stated in its pricing currency. It is calculated as the number of shares outstanding multiplied by the closing share price on the first trading day.\n\nIf the relevant value falls exactly between two brackets, then this market will resolve to the higher range bracket.\n\nResolution will be based on the primary exchange’s official listing page. In the event that the relevant figure is not displayed, another reliable source will be used.\n\nIn the event of an interruption in the course of the normal trading session on Anthropic’s first day of trading (e.g., a circuit breaker or half-day), the market will resolve according to the official closing price of the abbreviated session. If no such official closing price is published, the market will resolve according to the next trading day on which an official closing price is published, treating that as the first day of trading for purposes of this market.'
+THIRD_UNIQUE_RESOLUTION_SOURCES ['']
+ANTHROPIC_RULE_HORIZON_COMPARE_E407_PASS
