@@ -224,3 +224,13 @@ Before stopping, pausing, or waiting, explicitly check whether stopping is actua
 - Permanente control-plane componenten worden niet verwijderd door experiment-cleanup. Alleen resources waarvan ownership/provenance expliciet aan het betreffende experiment is gekoppeld mogen automatisch worden opgeruimd.
 - Een experiment geldt pas als operationeel afgesloten wanneer zowel de eindstatus als de cleanup-status zijn geregistreerd.
 - Nieuwe langlopende experimenten moeten daarom vooraf definiëren: owner/experiment-ID, benodigde units/processen, restart/rebootgedrag, evidencepaden, stopconditie en cleanup-plan.
+
+## Interactieve-terminal-veiligheidsregel
+
+- Copy-pastebare shellcode voor de eigenaar mag **nooit de interactieve terminal/shell afsluiten**.
+- Gebruik daarom in blokken die rechtstreeks in de bestaande terminal worden geplakt **geen `set -e`, `set -euo pipefail`, `set -o errexit` of equivalente globale fail-fast shellopties**.
+- Gebruik ook geen ongeconditioneerde `exit`, `logout`, `exec`, `kill $$`, `pkill` op de shell/terminal, of andere constructies die de interactieve sessie kunnen beëindigen.
+- Fouten moeten lokaal worden afgehandeld met expliciete controles, bijvoorbeeld `command || { echo "STOP: uitleg"; return 1; }` wanneer dat veilig binnen de huidige shellcontext kan, of met conditionele `if`-blokken.
+- Als echte fail-fast uitvoering nodig is, plaats de instructies in een afzonderlijk script/subshell zodat een fout hoogstens dat script/subproces beëindigt en **nooit de terminal van de eigenaar**.
+- Commando's voor de eigenaar worden standaard ontworpen volgens: `fout -> duidelijke melding -> terminal blijft open`.
+- Deze regel geldt ook voor installatie-, reparatie-, Git-, systemd-, test- en onderzoeksblokken.
