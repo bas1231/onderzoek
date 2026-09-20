@@ -517,6 +517,18 @@ def next_outbox_item() -> dict | None:
     bridge_tasks = state.get("bridge_tasks", [])
     acked = set(state.get("acked", []))
 
+    prefer_incident = bool(
+        state.get("outbox_prefer_incident", False)
+    )
+    has_pending_result = any(
+        (
+            task_id not in acked
+            and (RESULTS / task_id / "RESULT.json").exists()
+        )
+        for task_id in bridge_tasks
+    )
+
+
     # RELIABILITY-E056: deliver local watchdog incidents
     # through the already proven browser result outbox.
     incident_dir = (
@@ -527,7 +539,9 @@ def next_outbox_item() -> dict | None:
         / "incidents"
     )
 
-    if incident_dir.exists():
+    if incident_dir.exists() and (
+        prefer_incident or not has_pending_result
+    ):
         incident_paths = sorted(
             incident_dir.glob("*.json"),
             key=lambda path: path.stat().st_mtime,
@@ -602,6 +616,9 @@ def next_outbox_item() -> dict | None:
                 "incident": incident,
             }
 
+            state["outbox_prefer_incident"] = False
+            save_state(state)
+
             return {
                 "task_id": task_id,
                 "result": result,
@@ -646,6 +663,9 @@ def next_outbox_item() -> dict | None:
             "DELIVERED",
             "bridge outbox exposed result",
         )
+
+        state["outbox_prefer_incident"] = True
+        save_state(state)
 
         return {
             "task_id": task_id,
