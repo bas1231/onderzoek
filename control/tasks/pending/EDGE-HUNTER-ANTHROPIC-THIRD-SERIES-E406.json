@@ -1,0 +1,13 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/inspect_anthropic_third_series_e406.py"
+  ],
+  "hypothesis_id": "PAYOFF-IDENTITY-MINING-V1",
+  "live_trading": false,
+  "operation": "python",
+  "task_class": "research",
+  "task_id": "EDGE-HUNTER-ANTHROPIC-THIRD-SERIES-E406",
+  "timeout_seconds": 180,
+  "working_directory": "."
+}
