@@ -1,0 +1,13 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/prebuild_killer_e417_gross_positive_e418.py"
+  ],
+  "hypothesis_id": "PAYOFF-IDENTITY-MINING-V1",
+  "live_trading": false,
+  "operation": "python",
+  "task_class": "research",
+  "task_id": "EDGE-HUNTER-E417-PREBUILD-KILLER-E418",
+  "timeout_seconds": 180,
+  "working_directory": "."
+}
