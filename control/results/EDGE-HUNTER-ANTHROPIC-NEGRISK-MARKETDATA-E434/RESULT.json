@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/read_anthropic_negrisk_marketdata_e434.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-20T05:07:10.648955+00:00",
+  "hypothesis_id": "PAYOFF-IDENTITY-MINING-V1",
+  "source_commit": "be50277c3c53dda7370040e42f7c44e5cc8c75b1",
+  "started_at": "2026-09-20T05:07:09.206469+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "94a66af13a49e2a9b944a5b83a3bf1a7dc8396f86e59e5e69a53dc14b24e0911",
+  "task_class": "research",
+  "task_id": "EDGE-HUNTER-ANTHROPIC-NEGRISK-MARKETDATA-E434"
+}
