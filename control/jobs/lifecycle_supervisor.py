@@ -4,6 +4,8 @@ import os
 import tempfile
 import time
 
+from experiment_cleanup import scan as cleanup_scan
+
 ROOT = Path.cwd()
 
 LEDGER_DIR = ROOT / "control" / "lifecycle"
@@ -349,6 +351,25 @@ def run_once():
             "wallet_actions_allowed":
                 False,
         },
+    }
+
+    # EXPERIMENT_OWNERSHIP_CLEANUP_V1
+    # Alleen expliciet toegewezen terminale experimentresources opruimen.
+    cleanup_results = cleanup_scan(
+        ROOT / "control/experiments",
+        dry_run=False,
+    )
+
+    status["cleanup"] = {
+        "results_seen": len(cleanup_results),
+        "cleaned": sum(
+            1 for item in cleanup_results
+            if item.get("status") == "CLEANED"
+        ),
+        "already_cleaned": sum(
+            1 for item in cleanup_results
+            if item.get("status") == "ALREADY_CLEANED"
+        ),
     }
 
     atomic_json(
