@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/inventory_extended_neg_risk_e380.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-20T02:46:48.383359+00:00",
+  "hypothesis_id": "PAYOFF-IDENTITY-MINING-V1",
+  "source_commit": "e299797b16cda193559e6cea9501f4f8385ec9a0",
+  "started_at": "2026-09-20T02:46:48.362218+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "8bf900eb704672199e5fd2b9fc23a554a402795c81fc819e227bf85802268213",
+  "task_class": "research",
+  "task_id": "EDGE-HUNTER-NEGRISK-EXTENDED-INVENTORY-E380"
+}
