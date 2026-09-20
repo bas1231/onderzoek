@@ -1,7 +1,9 @@
 from pathlib import Path
-from typing import Literal
+from typing import Literal, Any
 
 from pydantic import BaseModel, Field, field_validator, model_validator
+
+from edge_hunter.build_gate import authorize_task
 
 
 ALLOWED_EXECUTABLES = {
@@ -30,6 +32,7 @@ class Task(BaseModel):
     command: list[str]
     timeout_seconds: int = Field(default=300, ge=1, le=3600)
     live_trading: bool = False
+    build_authorization: dict[str, Any] | None = None
 
     @field_validator("live_trading")
     @classmethod
@@ -133,5 +136,13 @@ class Task(BaseModel):
                 raise ValueError(
                     "pytest must run through python -m pytest"
                 )
+
+        authorization = authorize_task(self.model_dump())
+
+        if not authorization["allowed"]:
+            reasons = ",".join(authorization["reasons"])
+            raise ValueError(
+                "build authorization denied: " + reasons
+            )
 
         return self
