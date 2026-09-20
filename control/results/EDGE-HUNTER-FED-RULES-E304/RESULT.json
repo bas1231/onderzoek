@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/capture_fed_rules_e304.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-20T01:23:55.989649+00:00",
+  "hypothesis_id": "PAYOFF-IDENTITY-MINING-V1",
+  "source_commit": "dc3b6db017a7c1739192e63e2cafb80123a9fdae",
+  "started_at": "2026-09-20T01:23:55.803324+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "a29b85196887b7ad6911a14d8f8daee2c0f788e2437b9158c96f37a0e72a436a",
+  "task_class": "research",
+  "task_id": "EDGE-HUNTER-FED-RULES-E304"
+}
