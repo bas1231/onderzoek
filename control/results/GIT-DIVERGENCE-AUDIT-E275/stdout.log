@@ -1,0 +1,189 @@
+CMD git status --short
+RC 0
+ D control/tasks/pending/GIT-DIVERGENCE-AUDIT-E275.json
+ M hourly-reports/hourly-20260919T230000+0200.md
+ M knowledge/runs/hourly-20260919T230000+0200.json
+?? control/tasks/running/
+?? hourly-reports/hourly-20260920T010000+0200.md
+?? hourly-reports/hourly-20260920T020000+0200.md
+?? knowledge/documents/manifests/arxiv/20260919T215534Z_d7ed6c1e9723.json
+?? knowledge/documents/manifests/arxiv/20260919T220029Z_d7ed6c1e9723.json
+?? knowledge/documents/manifests/arxiv/20260919T230030Z_d7ed6c1e9723.json
+?? knowledge/documents/manifests/arxiv/20260920T000019Z_d7ed6c1e9723.json
+?? knowledge/documents/manifests/arxiv/20260920T003238Z_d7ed6c1e9723.json
+?? knowledge/documents/manifests/arxiv/20260920T010019Z_d7ed6c1e9723.json
+?? knowledge/documents/manifests/arxiv/20260920T010049Z_d7ed6c1e9723.json
+?? knowledge/documents/manifests/aviationweather/20260919T215534Z_dd6e0cc4b237.json
+?? knowledge/documents/manifests/aviationweather/20260919T220029Z_dd6e0cc4b237.json
+?? knowledge/documents/manifests/aviationweather/20260919T230029Z_dd6e0cc4b237.json
+?? knowledge/documents/manifests/cftc/20260919T215534Z_a242112979e0.json
+?? knowledge/documents/manifests/cftc/20260919T220029Z_03c50f4456a2.json
+?? knowledge/documents/manifests/cftc/20260919T230029Z_1b3dc2876eb5.json
+?? knowledge/documents/manifests/cftc/20260920T000019Z_7a3fb05744f8.json
+?? knowledge/documents/manifests/cftc/20260920T003237Z_460f19f42856.json
+?? knowledge/documents/manifests/cftc/20260920T010019Z_d20042cf26ac.json
+?? knowledge/documents/manifests/cftc/20260920T010048Z_015b36096113.json
+?? knowledge/documents/manifests/ecmwf_open/20260919T215534Z_83c3dee07ef5.json
+?? knowledge/documents/manifests/ecmwf_open/20260919T220029Z_83c3dee07ef5.json
+?? knowledge/documents/manifests/ecmwf_open/20260919T230029Z_83c3dee07ef5.json
+?? knowledge/documents/manifests/ecmwf_open/20260920T000019Z_83c3dee07ef5.json
+?? knowledge/documents/manifests/ecmwf_open/20260920T003238Z_83c3dee07ef5.json
+?? knowledge/documents/manifests/ecmwf_open/20260920T010019Z_83c3dee07ef5.json
+?? knowledge/documents/manifests/ecmwf_open/20260920T010049Z_83c3dee07ef5.json
+?? knowledge/documents/manifests/github/20260919T215535Z_61e93a9c2705.json
+?? knowledge/documents/manifests/github/20260919T220030Z_73d9b994f5d3.json
+?? knowledge/documents/manifests/github/20260919T230030Z_f42e282da315.json
+?? knowledge/documents/manifests/github/20260920T000020Z_bc2e988355e4.json
+?? knowledge/documents/manifests/github/20260920T003238Z_9a2b21130f75.json
+?? knowledge/documents/manifests/github/20260920T010020Z_b207c79e2a65.json
+?? knowledge/documents/manifests/github/20260920T010049Z_c2217227fe1c.json
+?? knowledge/documents/manifests/kalshi_docs/20260919T215534Z_94c183be8dd7.json
+?? knowledge/documents/manifests/kalshi_docs/20260919T220029Z_94c183be8dd7.json
+?? knowledge/documents/manifests/kalshi_docs/20260919T230030Z_94c183be8dd7.json
+?? knowledge/documents/manifests/kalshi_docs/20260920T000019Z_94c183be8dd7.json
+?? knowledge/documents/manifests/kalshi_docs/20260920T003238Z_94c183be8dd7.json
+?? knowledge/documents/manifests/kalshi_docs/20260920T010019Z_94c183be8dd7.json
+?? knowledge/documents/manifests/kalshi_docs/20260920T010049Z_94c183be8dd7.json
+?? knowledge/documents/manifests/kalshi_weather_rules/
+?? knowledge/documents/manifests/nomads/20260919T215534Z_32fda37a95c0.json
+?? knowledge/documents/manifests/nomads/20260919T220029Z_ac1877039efb.json
+?? knowledge/documents/manifests/nomads/20260919T230030Z_2767bb0a7329.json
+?? knowledge/documents/manifests/nomads/20260920T000020Z_b2b9d065fcb7.json
+?? knowledge/documents/manifests/nomads/20260920T003238Z_17b612682f1f.json
+?? knowledge/documents/manifests/nomads/20260920T010019Z_c923f06db57b.json
+?? knowledge/documents/manifests/nomads/20260920T010049Z_393d62d09866.json
+?? knowledge/documents/manifests/nws/20260919T215534Z_d16c42159a3d.json
+?? knowledge/documents/manifests/nws/20260919T220029Z_10bbe2ca5942.json
+?? knowledge/documents/manifests/nws/20260919T230029Z_5b5848cbffbf.json
+?? knowledge/documents/manifests/nws/20260920T000019Z_2d82703f79a8.json
+?? knowledge/documents/manifests/nws/20260920T003237Z_313992dd5d1f.json
+?? knowledge/documents/manifests/nws/20260920T010019Z_e7914592db35.json
+?? knowledge/documents/manifests/nws/20260920T010049Z_e7914592db35.json
+?? knowledge/documents/manifests/polymarket_docs/20260919T215534Z_6061d788333a.json
+?? knowledge/documents/manifests/polymarket_docs/20260919T220029Z_6061d788333a.json
+?? knowledge/documents/manifests/polymarket_docs/20260919T230029Z_6061d788333a.json
+?? knowledge/documents/manifests/polymarket_docs/20260920T000019Z_6061d788333a.json
+?? knowledge/documents/manifests/polymarket_docs/20260920T003237Z_6061d788333a.json
+?? knowledge/documents/manifests/polymarket_docs/20260920T010019Z_6061d788333a.json
+?? knowledge/documents/manifests/polymarket_docs/20260920T010049Z_6061d788333a.json
+?? knowledge/documents/manifests/reddit/20260919T215534Z_5620024e66fe.json
+?? knowledge/documents/manifests/reddit/20260919T220030Z_99a9aa759ce8.json
+?? knowledge/documents/manifests/reddit/20260919T230030Z_1f57d31ad528.json
+?? knowledge/documents/manifests/reddit/20260920T000020Z_ce78967db48d.json
+?? knowledge/documents/manifests/reddit/20260920T003238Z_40726502428c.json
+?? knowledge/documents/manifests/reddit/20260920T010019Z_4c42fd38e436.json
+?? knowledge/documents/manifests/reddit/20260920T010049Z_edb3e1bb1d16.json
+?? knowledge/documents/manifests/twc_kalshi/
+?? knowledge/documents/manifests/youtube/20260919T215535Z_37e8087e66de.json
+?? knowledge/documents/manifests/youtube/20260919T220030Z_83be8f6905e1.json
+?? knowledge/documents/manifests/youtube/20260919T230030Z_47401bed1169.json
+?? knowledge/documents/manifests/youtube/20260920T000020Z_b5fd33e08c5f.json
+?? knowledge/documents/manifests/youtube/20260920T003238Z_c1dd6bbb0408.json
+?? knowledge/documents/manifests/youtube/20260920T010020Z_14b2fb4613b9.json
+?? knowledge/documents/manifests/youtube/20260920T010049Z_37a0ec5916c1.json
+?? knowledge/documents/text/cftc/015b36096113b251bc8b134a8cbf318b9872525aa1db32ec629dd9b2f97e6ebb.json
+?? knowledge/documents/text/cftc/03c50f4456a22f805032eed06f72f757985be5ef890fc1fd9ff6954c416f6dd9.json
+?? knowledge/documents/text/cftc/1b3dc2876eb592e88512a72f9add2378d3fa099e7259613715ddfac51ce03777.json
+?? knowledge/documents/text/cftc/460f19f4285617cf8b5f3756603f24c0b555f1afea9750a0fc063ee907b02b84.json
+?? knowledge/documents/text/cftc/7a3fb05744f88a17539b9b6e441fa37cb1343d9674d91aab17be283aa238e25e.json
+?? knowledge/documents/text/cftc/a242112979e030b5ce9dd44cc849684876ab1541faf7f1b33f6326a145cd38b4.json
+?? knowledge/documents/text/cftc/d20042cf26ac911863f4d1e07c649c7b14fdf229720bcf4d80eb88c070a66bd1.json
+?? knowledge/documents/text/github/61e93a9c2705a4d9fed484fecaa6848e493ad126b83796c396f6ee2b854b8afc.json
+?? knowledge/documents/text/github/73d9b994f5d3437449e44d839dfd998612265114638909859972b25ee9bd728b.json
+?? knowledge/documents/text/github/9a2b21130f75229e25c037adfa8ff3261d8979c70a5aaa62a38359635351cf32.json
+?? knowledge/documents/text/github/b207c79e2a651785f9bbb82f27f8119465c5e930956401840d037a5389d3a6cd.json
+?? knowledge/documents/text/github/bc2e988355e4e31b3cbcfbaeab35c68a080bdc2881231f620a29c9aae93d9b3b.json
+?? knowledge/documents/text/github/c2217227fe1ceec4b057754598b385a07a28ccc5d5791a462cd8a34b8ddeddc5.json
+?? knowledge/documents/text/github/f42e282da315700c4c0dca4b515d1630b3441404f69cbf69ed4b7427a57f159a.json
+?? knowledge/documents/text/kalshi_weather_rules/
+?? knowledge/documents/text/nomads/17b612682f1f4373ee6b30132c1a545106c84bc415de5809d6b3696ed6b85c66.json
+?? knowledge/documents/text/nomads/2767bb0a732969e132093208c38b5c7e4cd52a84cf31385a56526a66ee2059db.json
+?? knowledge/documents/text/nomads/32fda37a95c09443ce22a6252549c086065723053e7328dc3bf41e8d024968ab.json
+?? knowledge/documents/text/nomads/393d62d098662fd9f091c1f6c8e9a1049aa30bb8d48da388f62cf4042233e38f.json
+?? knowledge/documents/text/nomads/ac1877039efbe086216ceaaeea58c81471bc265b61a522c191a43a091420525c.json
+?? knowledge/documents/text/nomads/b2b9d065fcb7b7bf682c681b4d5164bcfc32a58ef518da9f2123b44581506f8b.json
+?? knowledge/documents/text/nomads/c923f06db57b0b7f6d4b8bb160e646fd713e72dad51c6360e246e69b2785a500.json
+?? knowledge/documents/text/nws/10bbe2ca5942d63be24e5827f8eaadaa21dc56921632364e08f4a5ceec2618ca.json
+?? knowledge/documents/text/nws/2d82703f79a832e534cce362e1fff9c6beb6b67b2fdbcdb181a5ea2295e96dae.json
+?? knowledge/documents/text/nws/313992dd5d1ffcfb3b35326d9ad4f5abd8d13a799bcb5e6497174fad934160ae.json
+?? knowledge/documents/text/nws/5b5848cbffbfb87436f57d82992af63641dc86d5afbb3410b5563b35926b14d0.json
+?? knowledge/documents/text/nws/e7914592db3538f37354d764bc7b73be9dc6b6449a35283f35dec55f6bff253b.json
+?? knowledge/documents/text/reddit/1f57d31ad5289f981c0be5e87d44eb13d69e2e6b83f89202c2be0617c3acee0d.json
+?? knowledge/documents/text/reddit/40726502428cce9917fff244a039060f4ccc1ccb35290896e255a65319e0f441.json
+?? knowledge/documents/text/reddit/4c42fd38e4361f868c861d2c5a8cb8b43a2f56c79b5bef2584dc264cf53f0289.json
+?? knowledge/documents/text/reddit/5620024e66fe49a82665e45c457adc56daf1e33aec07a122ebd5c0760f504dec.json
+?? knowledge/documents/text/reddit/99a9aa759ce8f30697a42e25f96fd31736d3b14408b87223cd4c8d2597fa2e22.json
+?? knowledge/documents/text/reddit/ce78967db48ddfd0fd1f98c74a342b39636d580af54d47ddc08548f5e76adffc.json
+?? knowledge/documents/text/reddit/edb3e1bb1d16cb777daa4becbbc0f8f85a313461272e1183f50a7e7168844e27.json
+?? knowledge/documents/text/twc_kalshi/
+?? knowledge/documents/text/youtube/14b2fb4613b90626a1a3dacda3bb9d04fed5015c8a5f81e10a1a7531ffe69293.json
+?? knowledge/documents/text/youtube/37a0ec5916c12ef918c47e85038cf5a5b5e7a8db73851744718b435e1111ad47.json
+?? knowledge/documents/text/youtube/37e8087e66de5be0cf8018030a346e143c03b63f91063beca7d41b32326dca1e.json
+?? knowledge/documents/text/youtube/47401bed1169bb9f24c1d4c296b697d8887bed7ebd327a088323e6102174fe4c.json
+?? knowledge/documents/text/youtube/83be8f6905e1893f83fc657fc4710a63ec91597fa9ca51eb89d37829efc5f759.json
+?? knowledge/documents/text/youtube/b5fd33e08c5f3f8b824f4c0780e5fc99bfe4f11d8bf1645a73fcbdf47ae377c8.json
+?? knowledge/documents/text/youtube/c1dd6bbb0408b54bc53a0730e8894977914432885548787e20a4763e6715847e.json
+?? knowledge/runs/agent_packets/hourly-20260920T000000+0200/
+?? knowledge/runs/agent_packets/hourly-20260920T010000+0200/
+?? knowledge/runs/agent_packets/hourly-20260920T020000+0200/
+?? knowledge/runs/agent_packets/hourly-20260920T030000+0200/
+?? knowledge/runs/edge_hunter/
+?? knowledge/runs/hourly-20260920T010000+0200-routing.json
+?? knowledge/runs/hourly-20260920T010000+0200-source-quality.json
+?? knowledge/runs/hourly-20260920T020000+0200-routing.json
+?? knowledge/runs/hourly-20260920T020000+0200-source-quality.json
+?? knowledge/runs/hourly-20260920T020000+0200.json
+?? knowledge/runs/hourly-20260920T030000+0200-routing.json
+?? knowledge/runs/hourly-20260920T030000+0200-source-quality.json
+?? knowledge/runs/source_sweeps/20260919T215533Z.json
+?? knowledge/runs/source_sweeps/20260919T220029Z.json
+?? knowledge/runs/source_sweeps/20260919T230029Z.json
+?? knowledge/runs/source_sweeps/20260920T000019Z.json
+?? knowledge/runs/source_sweeps/20260920T003237Z.json
+?? knowledge/runs/source_sweeps/20260920T010019Z.json
+?? knowledge/runs/source_sweeps/20260920T010048Z.json
+?? knowledge/runs/twc-revision-summary-latest.json
+
+CMD git log --oneline --decorate -n 12
+RC 0
+ea88e8f (HEAD -> main) inspect git divergence after E274
+d20c9c2 result(HOURLY-EDGE-HUNTER-CLOSE-20260920T0300-E274): failed
+87ce8c0 close 0300 edge hunter semantic review
+01de40a close 0300 edge hunter review E274
+d930e52 result(HOURLY-EDGE-HUNTER-EVIDENCE-20260920T0300-E273): completed
+fa2302b inspect 0300 routed evidence E273
+4e61f9d result(HOURLY-EDGE-HUNTER-INSPECT-20260920T0300-E272): completed
+a689972 inspect 0300 edge hunter packet E272
+022d045 result(HOURLY-EDGE-HUNTER-20260920T0300-E271): completed
+8021ff1 run 0300 edge hunter cycle E271
+9e06548 result(EDGE-HUNTER-PACKET-SMOKE-E270): completed
+8318d8d smoke test candidate edge packet E270
+
+CMD git fetch origin
+RC 0
+From github.com:bas1231/onderzoek
+   375073c..590ea55  main       -> origin/main
+
+CMD git rev-list --left-right --count HEAD...origin/main
+RC 0
+12	1
+
+CMD git log --oneline HEAD..origin/main
+RC 0
+590ea55 fix(control): add one-command browser bridge repair
+
+CMD git log --oneline origin/main..HEAD
+RC 0
+ea88e8f inspect git divergence after E274
+d20c9c2 result(HOURLY-EDGE-HUNTER-CLOSE-20260920T0300-E274): failed
+87ce8c0 close 0300 edge hunter semantic review
+01de40a close 0300 edge hunter review E274
+d930e52 result(HOURLY-EDGE-HUNTER-EVIDENCE-20260920T0300-E273): completed
+fa2302b inspect 0300 routed evidence E273
+4e61f9d result(HOURLY-EDGE-HUNTER-INSPECT-20260920T0300-E272): completed
+a689972 inspect 0300 edge hunter packet E272
+022d045 result(HOURLY-EDGE-HUNTER-20260920T0300-E271): completed
+8021ff1 run 0300 edge hunter cycle E271
+9e06548 result(EDGE-HUNTER-PACKET-SMOKE-E270): completed
+8318d8d smoke test candidate edge packet E270
+
