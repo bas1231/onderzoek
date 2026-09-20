@@ -1,0 +1,13 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/finalize_kwi_hourly_monitor_e372.py"
+  ],
+  "hypothesis_id": "KWI-FULL-STATION-PRECANONICAL-V1",
+  "live_trading": false,
+  "operation": "python",
+  "task_class": "infrastructure",
+  "task_id": "EDGE-HUNTER-KWI-FINALIZATION-GUARD-E372",
+  "timeout_seconds": 120,
+  "working_directory": "."
+}
