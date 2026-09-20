@@ -81,6 +81,16 @@ Doel: append-only overzicht van concrete browser-bridge failures en lessen. Gebr
 - Het eerdere `CHAT_ACK_STALL` blokkeerde de uiteindelijke zichtbare levering niet: het normale E016-resultaat verscheen later alsnog in ChatGPT.
 - Belangrijk: dit bewijst niet dat de ACK-reliability-bug is opgelost. Het bewijst alleen dat delayed delivery/retry uiteindelijk werkte voor dit concrete resultaat. De ACK-fix blijft OPEN totdat response-validatie en retry-regressietest zijn gebouwd en geslaagd.
 
+## 2026-09-20 — E017 TASK_PARSE_FAILURE
+
+- Laag: zichtbaar-chat transport / JSON parser.
+- Symptoom: `Expected ',' or '}' after property value in JSON` rond positie 234.
+- Bewezen oorzaak: `files[].content` bevatte opnieuw letterlijke dubbele quotes uit het embedded Python-script. In de gerenderde assistant-DOM kwamen die quotes niet JSON-escaped bij de extension aan, waardoor de outer envelope ongeldig werd.
+- Impact: E017 bereikte `/enqueue` en de executor niet; er is dus geen ACK-retrycode gewijzigd door deze poging.
+- Les: voor bridge file-write payloads mag `files[].content` niet afhankelijk zijn van JSON-escaping van dubbele quotes of complexe multiline broncode. Gebruik bij voorkeur een minimale, éénregelige, parser-safe Python bootstrap met alleen single quotes of voer bestaande lokale code uit.
+- Preventie: volgende retry gebruikt een korte single-line Python job zonder letterlijke dubbele quotes in `content`; daarna aparte runtime/syntaxvalidatie.
+- Status: OPEN; failure remote gedocumenteerd, fix nog niet bewezen.
+
 ## Regels voor nieuwe entries
 
 Voeg per incident toe: datum, task-id, foutlaag, exacte foutklasse, bewezen oorzaak versus hypothese, impact, fix/preventie, regressieteststatus en of de oplossing alleen lokaal of ook op remote main staat.
