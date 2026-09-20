@@ -40,9 +40,10 @@ def inspect_remote_write_safety(
     """Determine whether repository writes are safe relative to origin/main.
 
     The guard never pulls, merges or rebases. It may fetch the remote ref and
-    then classifies the local/remote ancestry. Only an exactly synchronized
-    checkout or a local branch that is strictly ahead of origin/main is safe
-    for another local commit.
+    then classifies local/remote ancestry. Only an exact sync is safe for
+    starting another repository-mutating task. LOCAL_AHEAD is deliberately
+    blocked too: it commonly means an earlier push failed and must be resolved
+    before the worker creates more local commits.
     """
     try:
         branch_probe = _run(
@@ -153,12 +154,12 @@ def inspect_remote_write_safety(
     )
     if remote_is_ancestor.returncode == 0:
         return GitSyncState(
-            True,
+            False,
             "LOCAL_AHEAD",
             branch,
             local_head,
             remote_head,
-            f"local HEAD only contains commits on top of origin/{required_branch}",
+            f"local HEAD contains unpushed commits on top of origin/{required_branch}",
         )
 
     return GitSyncState(
