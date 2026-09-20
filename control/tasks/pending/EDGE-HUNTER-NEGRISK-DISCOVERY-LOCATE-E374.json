@@ -1,0 +1,13 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/locate_neg_risk_discovery_e374.py"
+  ],
+  "hypothesis_id": "PAYOFF-IDENTITY-MINING-V1",
+  "live_trading": false,
+  "operation": "python",
+  "task_class": "research",
+  "task_id": "EDGE-HUNTER-NEGRISK-DISCOVERY-LOCATE-E374",
+  "timeout_seconds": 120,
+  "working_directory": "."
+}
