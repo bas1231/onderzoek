@@ -1,0 +1,13 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/capture_hottest_rules_fees_e314.py"
+  ],
+  "hypothesis_id": "PAYOFF-IDENTITY-MINING-V1",
+  "live_trading": false,
+  "operation": "python",
+  "task_class": "research",
+  "task_id": "EDGE-HUNTER-HOTTEST-RULES-FEES-E314",
+  "timeout_seconds": 120,
+  "working_directory": "."
+}
