@@ -1,0 +1,7 @@
+fatal: pathspec 'control/BRIDGE_INCIDENT_LEDGER.md' did not match any files
+Traceback (most recent call last):
+  File "/home/leonh/prediction_research/control/jobs/install_control_auto_continue_e020r7.py", line 353, in <module>
+    subprocess.run([
+  File "/usr/lib/python3.12/subprocess.py", line 571, in run
+    raise CalledProcessError(retcode, process.args,
+subprocess.CalledProcessError: Command '['git', 'add', 'control/browser_bridge.py', 'tests/bridge/test_control_auto_continue.py', 'control/BRIDGE_INCIDENT_LEDGER.md']' returned non-zero exit status 128.
