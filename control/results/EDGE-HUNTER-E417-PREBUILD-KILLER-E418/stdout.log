@@ -1,0 +1,161 @@
+SCREEN_SOURCE /home/leonh/prediction_research/knowledge/raw/market_data/polymarket_negrisk_gross_screen/20260920T031707Z-e417.json
+SCREEN_RETRIEVED_AT 2026-09-20T03:17:07.049466+00:00
+EVENT_BEGIN 656186
+TITLE What will the median home value in Miami be on September 30?
+DESCRIPTION 'This market will resolve according to the median home value for all property types in Miami, Florida on September 30, 2026.\n\nIf the reported value falls exactly between two brackets, then this market will resolve to the higher range bracket.\n\nThe resolution source will be official data from the Parcl Labs Sales Price Index for Miami City. The settlement price will be calculated by multiplying the published price index value (price per square foot) by 2100, which is the median square footage in Miami. Parcl is set to publish this data on September 30, 2026. If no data for September 30 is released by October 10, 2026, 11:59PM ET, this market will resolve according to the most recently published data. (see: https://app.parcllabs.com/prediction-market-resolutions/47)'
+EVENT_END_DATE 2026-09-30T04:00:00Z
+NEG_RISK True
+NEG_RISK_AUGMENTED False
+MARKET_COUNT 7
+SCREEN_ASK_SUM 0.984
+SCREEN_COMMON_SIZE 7.98
+SCREEN_GROSS_PER_SET 0.016000000000000014
+SCREEN_GROSS_TOTAL 0.12768000000000013
+MARKET 2760530
+GROUP_ITEM <$1.017M
+QUESTION Will the median home value in Miami be less than $1,017,000 on September 30?
+MARKET_END_DATE 2026-09-30T04:00:00Z
+NEG_RISK_OTHER False
+FEE_SCHEDULE {'enabled': True, 'rate': 0.05, 'exponent': 1, 'takerOnly': True}
+MARKET 2760531
+GROUP_ITEM $1.017M - $1.053M
+QUESTION Will the median home value in Miami be between $1,017,000 and $1,053,000 on September 30?
+MARKET_END_DATE 2026-09-30T04:00:00Z
+NEG_RISK_OTHER False
+FEE_SCHEDULE {'enabled': True, 'rate': 0.05, 'exponent': 1, 'takerOnly': True}
+MARKET 2760532
+GROUP_ITEM $1.053M - $1.089M
+QUESTION Will the median home value in Miami be between $1,053,000 and $1,089,000 on September 30?
+MARKET_END_DATE 2026-09-30T04:00:00Z
+NEG_RISK_OTHER False
+FEE_SCHEDULE {'enabled': True, 'rate': 0.05, 'exponent': 1, 'takerOnly': True}
+MARKET 2760533
+GROUP_ITEM $1.089M - $1.125M
+QUESTION Will the median home value in Miami be between $1,089,000 and $1,125,000 on September 30?
+MARKET_END_DATE 2026-09-30T04:00:00Z
+NEG_RISK_OTHER False
+FEE_SCHEDULE {'enabled': True, 'rate': 0.05, 'exponent': 1, 'takerOnly': True}
+MARKET 2760534
+GROUP_ITEM $1.125M - $1.161M
+QUESTION Will the median home value in Miami be between $1,125,000 and $1,161,000 on September 30?
+MARKET_END_DATE 2026-09-30T04:00:00Z
+NEG_RISK_OTHER False
+FEE_SCHEDULE {'enabled': True, 'rate': 0.05, 'exponent': 1, 'takerOnly': True}
+MARKET 2760535
+GROUP_ITEM $1.161M - $1.196M
+QUESTION Will the median home value in Miami be between $1,161,000 and $1,196,000 on September 30?
+MARKET_END_DATE 2026-09-30T04:00:00Z
+NEG_RISK_OTHER False
+FEE_SCHEDULE {'enabled': True, 'rate': 0.05, 'exponent': 1, 'takerOnly': True}
+MARKET 2760536
+GROUP_ITEM $1.196M+
+QUESTION Will the median home value in Miami be at least $1,196,000 on September 30?
+MARKET_END_DATE 2026-09-30T04:00:00Z
+NEG_RISK_OTHER False
+FEE_SCHEDULE {'enabled': True, 'rate': 0.05, 'exponent': 1, 'takerOnly': True}
+LEG_FEE 2760530 ASK 0.006 SIZE 7.98 FEE 0.00238
+LEG_FEE 2760531 ASK 0.009 SIZE 7.98 FEE 0.00356
+LEG_FEE 2760532 ASK 0.003 SIZE 7.98 FEE 0.00119
+LEG_FEE 2760533 ASK 0.16 SIZE 7.98 FEE 0.05363
+LEG_FEE 2760534 ASK 0.524 SIZE 7.98 FEE 0.09952
+LEG_FEE 2760535 ASK 0.257 SIZE 7.98 FEE 0.07619
+LEG_FEE 2760536 ASK 0.025 SIZE 7.98 FEE 0.00973
+ALL_NO_NEG_RISK_OTHER True
+FEE_KNOWN True
+TAKER_FEES_TOTAL 0.24619999999999995
+NET_TOTAL -0.11851999999999982
+NET_ROI -0.014634772773296827
+RULE_COVERAGE_TERMS ['between']
+EVENT_END 656186
+EVENT_BEGIN 688065
+TITLE GPU rental prices (B200) end of 2026?
+DESCRIPTION 'This market will resolve according to the finalized Ornn B200 Index price for December 31, 2026. \n\nIf the recorded data falls exactly between two brackets, this market will resolve to the higher bracket.\n\nThe resolution source for this market is Ornnai.com (ornnai.com), specifically, the B200 Index chart data available at https://dashboard.ornnai.com. The specified finalized daily value shown on the chart will be used for resolution. Daily data will be considered finalized once the following day’s data point is published.\n\nResolution will occur once the specified data point is finalized. If the relevant data is not finalized by the end of the 7th calendar day after the specified date (ET), this market will resolve according to the latest data available at that time. Revisions made after the relevant figure has been finalized will not be considered.'
+EVENT_END_DATE 2026-12-31T23:59:00Z
+NEG_RISK True
+NEG_RISK_AUGMENTED False
+MARKET_COUNT 10
+SCREEN_ASK_SUM 0.984
+SCREEN_COMMON_SIZE 6.0
+SCREEN_GROSS_PER_SET 0.016000000000000014
+SCREEN_GROSS_TOTAL 0.09600000000000009
+MARKET 2870615
+GROUP_ITEM <$3.00
+QUESTION Will the Ornn B200 Index be less than $3.00 on December 31, 2026?
+MARKET_END_DATE 2026-12-31T23:59:00Z
+NEG_RISK_OTHER False
+FEE_SCHEDULE {'enabled': True, 'rate': 0.04, 'exponent': 1, 'takerOnly': True}
+MARKET 2870616
+GROUP_ITEM $3.00-$3.50
+QUESTION Will the Ornn B200 Index be between $3.00 and $3.50 on December 31, 2026?
+MARKET_END_DATE 2026-12-31T23:59:00Z
+NEG_RISK_OTHER False
+FEE_SCHEDULE {'enabled': True, 'rate': 0.04, 'exponent': 1, 'takerOnly': True}
+MARKET 2870617
+GROUP_ITEM $3.50-$4.00
+QUESTION Will the Ornn B200 Index be between $3.50 and $4.00 on December 31, 2026?
+MARKET_END_DATE 2026-12-31T23:59:00Z
+NEG_RISK_OTHER False
+FEE_SCHEDULE {'enabled': True, 'rate': 0.04, 'exponent': 1, 'takerOnly': True}
+MARKET 2870618
+GROUP_ITEM $4.00-$4.50
+QUESTION Will the Ornn B200 Index be between $4.00 and $4.50 on December 31, 2026?
+MARKET_END_DATE 2026-12-31T23:59:00Z
+NEG_RISK_OTHER False
+FEE_SCHEDULE {'enabled': True, 'rate': 0.04, 'exponent': 1, 'takerOnly': True}
+MARKET 2870619
+GROUP_ITEM $4.50-$5.00
+QUESTION Will the Ornn B200 Index be between $4.50 and $5.00 on December 31, 2026?
+MARKET_END_DATE 2026-12-31T23:59:00Z
+NEG_RISK_OTHER False
+FEE_SCHEDULE {'enabled': True, 'rate': 0.04, 'exponent': 1, 'takerOnly': True}
+MARKET 2870620
+GROUP_ITEM $5.00-$5.50
+QUESTION Will the Ornn B200 Index be between $5.00 and $5.50 on December 31, 2026?
+MARKET_END_DATE 2026-12-31T23:59:00Z
+NEG_RISK_OTHER False
+FEE_SCHEDULE {'enabled': True, 'rate': 0.04, 'exponent': 1, 'takerOnly': True}
+MARKET 2870621
+GROUP_ITEM $5.50-$6.00
+QUESTION Will the Ornn B200 Index be between $5.50 and $6.00 on December 31, 2026?
+MARKET_END_DATE 2026-12-31T23:59:00Z
+NEG_RISK_OTHER False
+FEE_SCHEDULE {'enabled': True, 'rate': 0.04, 'exponent': 1, 'takerOnly': True}
+MARKET 2870622
+GROUP_ITEM $6.00-$6.50
+QUESTION Will the Ornn B200 Index be between $6.00 and $6.50 on December 31, 2026?
+MARKET_END_DATE 2026-12-31T23:59:00Z
+NEG_RISK_OTHER False
+FEE_SCHEDULE {'enabled': True, 'rate': 0.04, 'exponent': 1, 'takerOnly': True}
+MARKET 2870623
+GROUP_ITEM $6.50-$7.00
+QUESTION Will the Ornn B200 Index be between $6.50 and $7.00 on December 31, 2026?
+MARKET_END_DATE 2026-12-31T23:59:00Z
+NEG_RISK_OTHER False
+FEE_SCHEDULE {'enabled': True, 'rate': 0.04, 'exponent': 1, 'takerOnly': True}
+MARKET 2870624
+GROUP_ITEM $7.00+
+QUESTION Will the Ornn B200 Index be at least $7.00 on December 31, 2026?
+MARKET_END_DATE 2026-12-31T23:59:00Z
+NEG_RISK_OTHER False
+FEE_SCHEDULE {'enabled': True, 'rate': 0.04, 'exponent': 1, 'takerOnly': True}
+LEG_FEE 2870615 ASK 0.011 SIZE 6.0 FEE 0.00261
+LEG_FEE 2870616 ASK 0.048 SIZE 6.0 FEE 0.01097
+LEG_FEE 2870617 ASK 0.056 SIZE 6.0 FEE 0.01269
+LEG_FEE 2870618 ASK 0.076 SIZE 6.0 FEE 0.01685
+LEG_FEE 2870619 ASK 0.004 SIZE 6.0 FEE 0.00096
+LEG_FEE 2870620 ASK 0.029 SIZE 6.0 FEE 0.00676
+LEG_FEE 2870621 ASK 0.07 SIZE 6.0 FEE 0.01562
+LEG_FEE 2870622 ASK 0.06 SIZE 6.0 FEE 0.01354
+LEG_FEE 2870623 ASK 0.15 SIZE 6.0 FEE 0.0306
+LEG_FEE 2870624 ASK 0.48 SIZE 6.0 FEE 0.0599
+ALL_NO_NEG_RISK_OTHER True
+FEE_KNOWN True
+TAKER_FEES_TOTAL 0.1705
+NET_TOTAL -0.07449999999999993
+NET_ROI -0.012264383899909446
+RULE_COVERAGE_TERMS ['between']
+EVENT_END 688065
+TARGET_COUNT 2
+NET_POSITIVE_COUNT 0
+OUTPUT_PATH /home/leonh/prediction_research/knowledge/raw/market_data/polymarket_negrisk_prebuild_killers/20260920T031759Z-e418.json
+PREBUILD_KILLER_E418_PASS

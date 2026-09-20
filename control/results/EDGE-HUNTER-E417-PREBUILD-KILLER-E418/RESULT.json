@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/prebuild_killer_e417_gross_positive_e418.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-20T03:17:59.503965+00:00",
+  "hypothesis_id": "PAYOFF-IDENTITY-MINING-V1",
+  "source_commit": "d4360fa764563f8f584d7675eb9349397915f669",
+  "started_at": "2026-09-20T03:17:57.820600+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "e3770a177813a5910934a86b9491799846a3ca8f094c4d3de654c1991c0ee3c9",
+  "task_class": "research",
+  "task_id": "EDGE-HUNTER-E417-PREBUILD-KILLER-E418"
+}
