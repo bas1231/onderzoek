@@ -1,0 +1,13 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/screen_all_negrisk_feeaware_e419.py"
+  ],
+  "hypothesis_id": "PAYOFF-IDENTITY-MINING-V1",
+  "live_trading": false,
+  "operation": "python",
+  "task_class": "research",
+  "task_id": "EDGE-HUNTER-ALL-NEGRISK-FEEAWARE-E419",
+  "timeout_seconds": 300,
+  "working_directory": "."
+}
