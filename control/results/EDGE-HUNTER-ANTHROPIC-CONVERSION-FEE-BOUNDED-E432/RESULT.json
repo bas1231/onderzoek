@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/read_anthropic_conversion_fee_bounded_e432.py"
+  ],
+  "exit_code": 1,
+  "finished_at": "2026-09-20T05:05:24.506995+00:00",
+  "hypothesis_id": "PAYOFF-IDENTITY-MINING-V1",
+  "source_commit": "418c62d4652310591ff09e256c4a1666a93f915b",
+  "started_at": "2026-09-20T05:04:58.618825+00:00",
+  "status": "failed",
+  "stderr_sha256": "6f45190bc367564cfce3ed056b5564595f1e7cc58fe9c1c34125df1f69d85d12",
+  "stdout_sha256": "7acdc4f83ce403a65dc6f134b6d1aa0567effa0dac959a32f374720059af7039",
+  "task_class": "research",
+  "task_id": "EDGE-HUNTER-ANTHROPIC-CONVERSION-FEE-BOUNDED-E432"
+}
