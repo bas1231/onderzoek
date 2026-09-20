@@ -1,0 +1,24 @@
+{
+  "agent_id": "research_director",
+  "contract": {
+    "agent": "research_director",
+    "gate": "NO_PROVEN_EDGE_is_valid",
+    "input": "all agent outputs",
+    "live_trading": false,
+    "output": [
+      "hourly_report",
+      "candidate_status",
+      "next_hour_queue"
+    ],
+    "paid_actions": false,
+    "wallet_actions": false
+  },
+  "input_refs": [],
+  "live_trading": false,
+  "notes": [],
+  "output_refs": [],
+  "paid_actions": false,
+  "run_id": "hourly-20260920T010000+0200",
+  "status": "PENDING",
+  "wallet_actions": false
+}

@@ -1,0 +1,99 @@
+{
+  "low_text_yield_count": 3,
+  "rule": "LOW_TEXT_YIELD may not support a research claim",
+  "run_id": "hourly-20260920T160000+0200",
+  "sources": [
+    {
+      "chars": 5931,
+      "document_sha256": "d7ed6c1e9723edcceae8a3d3f258a7ca991bd64f841fad43632caa13a7fad746",
+      "source_id": "arxiv",
+      "status": "USABLE",
+      "text_ref": "knowledge/documents/text/arxiv/d7ed6c1e9723edcceae8a3d3f258a7ca991bd64f841fad43632caa13a7fad746.json"
+    },
+    {
+      "chars": 3566,
+      "document_sha256": "dd6e0cc4b237e05406554eb33d2b7963367175f44a5a0ae0feb4e59f707b0edf",
+      "source_id": "aviationweather",
+      "status": "USABLE",
+      "text_ref": "knowledge/documents/text/aviationweather/dd6e0cc4b237e05406554eb33d2b7963367175f44a5a0ae0feb4e59f707b0edf.json"
+    },
+    {
+      "chars": 4805,
+      "document_sha256": "ff865662c190b16ff985a5dbac58de83c2ec0cd7d85d0fb5175996030c5c0a48",
+      "source_id": "cftc",
+      "status": "USABLE",
+      "text_ref": "knowledge/documents/text/cftc/ff865662c190b16ff985a5dbac58de83c2ec0cd7d85d0fb5175996030c5c0a48.json"
+    },
+    {
+      "chars": 26229,
+      "document_sha256": "f94d6721e36f6a7d8c50571e3c86e0864a473c65e400a712b93ffa6c02c6bbf2",
+      "source_id": "ecmwf_open",
+      "status": "USABLE",
+      "text_ref": "knowledge/documents/text/ecmwf_open/f94d6721e36f6a7d8c50571e3c86e0864a473c65e400a712b93ffa6c02c6bbf2.json"
+    },
+    {
+      "chars": 7669,
+      "document_sha256": "755dd95f0d6b28ce0dba4c15d4c7942921c36913a0ba77d38ae558b9918352f9",
+      "source_id": "github",
+      "status": "USABLE",
+      "text_ref": "knowledge/documents/text/github/755dd95f0d6b28ce0dba4c15d4c7942921c36913a0ba77d38ae558b9918352f9.json"
+    },
+    {
+      "chars": 1539,
+      "document_sha256": "94c183be8dd7141d7c8bee939c2ff1fb07caac3c559161afa319daad968ad5ce",
+      "source_id": "kalshi_docs",
+      "status": "USABLE",
+      "text_ref": "knowledge/documents/text/kalshi_docs/94c183be8dd7141d7c8bee939c2ff1fb07caac3c559161afa319daad968ad5ce.json"
+    },
+    {
+      "chars": 4859,
+      "document_sha256": "2b0f0c5a080a8edb46a48c31533781f3110b341a35f88950bde21ee69df878f4",
+      "source_id": "kalshi_weather_rules",
+      "status": "USABLE",
+      "text_ref": "knowledge/documents/text/kalshi_weather_rules/2b0f0c5a080a8edb46a48c31533781f3110b341a35f88950bde21ee69df878f4.json"
+    },
+    {
+      "chars": 6959,
+      "document_sha256": "9b97f8d1f29fec52770be45fab89ec7c61c0d21b130e74a0a20f725b1530325f",
+      "source_id": "nomads",
+      "status": "USABLE",
+      "text_ref": "knowledge/documents/text/nomads/9b97f8d1f29fec52770be45fab89ec7c61c0d21b130e74a0a20f725b1530325f.json"
+    },
+    {
+      "chars": 2365,
+      "document_sha256": "7c08a6b9c4b8b483361cb2e2933d4db8d195fa010116f38599283f40c0e87d8b",
+      "source_id": "nws",
+      "status": "USABLE",
+      "text_ref": "knowledge/documents/text/nws/7c08a6b9c4b8b483361cb2e2933d4db8d195fa010116f38599283f40c0e87d8b.json"
+    },
+    {
+      "chars": 2721,
+      "document_sha256": "6061d788333a11345f9b58eac43e8ad235ee9315b5bdb7acf8e01b8fc02342b7",
+      "source_id": "polymarket_docs",
+      "status": "USABLE",
+      "text_ref": "knowledge/documents/text/polymarket_docs/6061d788333a11345f9b58eac43e8ad235ee9315b5bdb7acf8e01b8fc02342b7.json"
+    },
+    {
+      "chars": 6,
+      "document_sha256": "782b07c688e68dff8ff10c565ae8f4900f8405cefa786e44b569d8b880eef3c6",
+      "source_id": "reddit",
+      "status": "LOW_TEXT_YIELD",
+      "text_ref": "knowledge/documents/text/reddit/782b07c688e68dff8ff10c565ae8f4900f8405cefa786e44b569d8b880eef3c6.json"
+    },
+    {
+      "chars": 238,
+      "document_sha256": "4778025a622cc00d648ad1ebfac78e365ff990992bf072d18daa05d90a3fb489",
+      "source_id": "twc_kalshi",
+      "status": "LOW_TEXT_YIELD",
+      "text_ref": "knowledge/documents/text/twc_kalshi/4778025a622cc00d648ad1ebfac78e365ff990992bf072d18daa05d90a3fb489.json"
+    },
+    {
+      "chars": 203,
+      "document_sha256": "21e56793ffa784b5d7f0349a6f37a8c99f13904b9c82c7d0b70977b1a291d14c",
+      "source_id": "youtube",
+      "status": "LOW_TEXT_YIELD",
+      "text_ref": "knowledge/documents/text/youtube/21e56793ffa784b5d7f0349a6f37a8c99f13904b9c82c7d0b70977b1a291d14c.json"
+    }
+  ],
+  "usable_count": 10
+}

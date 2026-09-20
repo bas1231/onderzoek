@@ -35,7 +35,25 @@
     "Only pre-completion snapshots.",
     "No late/restated observations."
   ],
+  "prospective_protocols": [
+    "knowledge/candidates/protocols/KWI-INCOMPLETE-SIGNAL-FEASIBILITY-V1.json"
+  ],
   "signal_metric": "MAE/CRPS versus predeclared baseline",
+  "simple_incomplete_mean_status": "REJECTED_IN_DEVELOPMENT",
+  "test_results": [
+    {
+      "baseline_mae": 0.08481481481481465,
+      "city_wins": 2,
+      "conclusion": "simple unweighted incomplete station mean rejected; do not tune station subsets or weights on same data",
+      "evidence": "local state analysis kwi-signal-feasibility-e367.json",
+      "overall_win": false,
+      "primary_mae": 0.20416744475568097,
+      "scorable_pairs": 459,
+      "stage": "DEVELOPMENT_FALSIFICATION",
+      "survival_rule_pass": false,
+      "test_id": "KWI-INCOMPLETE-SIGNAL-FEASIBILITY-V1"
+    }
+  ],
   "updated_at": "2026-09-20T00:42:14.997373+00:00",
   "wallet_actions": false
 }

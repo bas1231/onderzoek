@@ -1,0 +1,122 @@
+{
+  "algebra": {
+    "coverage_gaps": [],
+    "evidence": [
+      {
+        "document_sha256": "6061d788333a11345f9b58eac43e8ad235ee9315b5bdb7acf8e01b8fc02342b7",
+        "retrieved_at": "2026-09-19T20:59:24.454376+00:00",
+        "snippet": "ils Prices and Order Books Analytics Real-Time Data Chainlink TWAP Prices Trading Overview Place Your First Order Wallets and Authentication Session Keys Beta Place Orders Manage Orders Real-Time Order Updates Positions Combos Wallet Activity Fees Market Making Matching Engine Restarts Bridge Programs Taker Rebate Program Maker Rebates Program Liquidity Rewards Builder Program Referral Program Resources Contracts Data Resources Error Codes \ud83c\uddfa\ud83c\uddf8 Looking for Polymarket US documentation? Visit US Docs \u2192 Polymarket Documentation Build on the world\u2019s largest prediction market. APIs, SDKs, and tools for prediction market developers. Developer Quickstart Make your first API request in minutes. Learn the basics of the Polymarket platform, f",
+        "source_id": "polymarket_docs",
+        "source_state": "UNCHANGED",
+        "term": "combo"
+      }
+    ],
+    "status": "EVIDENCE_ROUTED"
+  },
+  "behavioral": {
+    "coverage_gaps": [],
+    "evidence": [],
+    "status": "NO_EVIDENCE"
+  },
+  "informed_flow": {
+    "coverage_gaps": [
+      "No point-in-time participant identity/flow dataset"
+    ],
+    "evidence": [],
+    "status": "NO_EVIDENCE"
+  },
+  "microstructure": {
+    "coverage_gaps": [
+      "No live orderbook snapshot source in hourly registry"
+    ],
+    "evidence": [
+      {
+        "document_sha256": "6061d788333a11345f9b58eac43e8ad235ee9315b5bdb7acf8e01b8fc02342b7",
+        "retrieved_at": "2026-09-19T20:59:24.454376+00:00",
+        "snippet": "market 101 SDKs & APIs Core Concepts Markets & Events Negative Risk Markets Prices & Orderbook Positions & Tokens Polymarket USD Order Lifecycle Resolution Market Data Overview Discover Markets Market Details Prices and Order Books Analytics Real-Time Data Chainlink TWAP Prices Trading Overview Place Your First Order Wallets and Authentication Session Keys Beta Place Orders Manage Orders Real-Time Order Updates Positions Combos Wallet Activity Fees Market Making Matching Engine Restarts Bridge Programs Taker Rebate Program Maker Rebates Program Liquidity Rewards Builder Program Referral Program Resources Contracts Data Resources Error Codes \ud83c\uddfa\ud83c\uddf8 Looking for Polymarket US documentation? Visit US Docs \u2192 Polymarket Documentation Build",
+        "source_id": "polymarket_docs",
+        "source_state": "UNCHANGED",
+        "term": "order book"
+      }
+    ],
+    "status": "EVIDENCE_ROUTED"
+  },
+  "scout": {
+    "coverage_gaps": [],
+    "evidence": [
+      {
+        "document_sha256": "015b36096113b251bc8b134a8cbf318b9872525aa1db32ec629dd9b2f97e6ebb",
+        "retrieved_at": "2026-09-20T01:00:48.931263+00:00",
+        "snippet": "ments of Traders Bank Participation Reports Cotton On-Call Financial Data for FCMS Staff Reports Weekly Swaps Report Cleared Margin Reports Office of the Chief Economist Forms & Submissions Learn & Protect Understanding Prediction Markets and Event Contracts Check Registration & Disciplinary History Submit a Tip or Complaint RED List Office of Proceedings Learning Resources News & Events Press Releases Public Statements & Remarks Events Carousel Rotation On On CFTC and Kansas State University to Host AgCon October 22-23 CFTC Grants Multiple Whistleblower Awards CFTC Issues Advisory on Self-Certifying Incentive Programs for Prediction Markets CFTC Approves Final Rule Concerning Whistleblower Awards Holding Wrongdoers Accountable Wh",
+        "source_id": "cftc",
+        "source_state": "CHANGED",
+        "term": "prediction market"
+      },
+      {
+        "document_sha256": "94c183be8dd7141d7c8bee939c2ff1fb07caac3c559161afa319daad968ad5ce",
+        "retrieved_at": "2026-09-19T20:59:24.774537+00:00",
+        "snippet": "king Your First Request Make your first API call and start trading on Kalshi. Demo Environment Build and test safely against the demo environment. API Keys Generate and manage your API credentials. Kalshi Academy New to prediction markets? Explore educational resources and tutorials. Reference Rate Limits Token budgets, tiers, and bursting. Changelog Stay updated with the latest API changes. Glossary Key terms and concepts used across the exchange. Specifications Predictions REST Download openapi.yaml for event-contract REST API integration. Predictions WebSocket Download asyncapi.yaml for event-contract WebSocket integration. Perps REST Download perps_openapi.yaml for perpetual futures REST API integration. Perps WebSocket Downlo",
+        "source_id": "kalshi_docs",
+        "source_state": "UNCHANGED",
+        "term": "prediction market"
+      },
+      {
+        "document_sha256": "48cb73fffd002b60436f9b34e81593e2b2201f0a0cab201a32aa3aa9e4ca8de1",
+        "retrieved_at": "2026-09-20T01:00:50.201534+00:00",
+        "snippet": "cally released the following morning. Hourly temperature markets settle on readings from The Weather Company . Always check the specific market\u2019s rules for its source. How Do I Trade on Weather Markets? Kalshi creates a prediction market around a specific temperature threshold for a given location. For example: \u201cHighest temperature in Chicago on April 15, 2025?\u201d \u200b Contract prices for temperature ranges may shift as new weather data (e.g., forecasts, model runs, satellite images, observations) becomes available. Note: Not all weather data is the same. Apps like AccuWeather, iOS Weather, or Google Weather may be useful for guidance but do not determine contract outcomes. The only source used for settlement is the one named in the ma",
+        "source_id": "kalshi_weather_rules",
+        "source_state": "CHANGED",
+        "term": "prediction market"
+      },
+      {
+        "document_sha256": "6061d788333a11345f9b58eac43e8ad235ee9315b5bdb7acf8e01b8fc02342b7",
+        "retrieved_at": "2026-09-19T20:59:24.454376+00:00",
+        "snippet": "Program Liquidity Rewards Builder Program Referral Program Resources Contracts Data Resources Error Codes \ud83c\uddfa\ud83c\uddf8 Looking for Polymarket US documentation? Visit US Docs \u2192 Polymarket Documentation Build on the world\u2019s largest prediction market. APIs, SDKs, and tools for prediction market developers. Developer Quickstart Make your first API request in minutes. Learn the basics of the Polymarket platform, fetch market data, place orders, and redeem winning positions. Place Your First Order \u2192 TypeScript Python API import { createPublicClient } from \"@polymarket/client\" ; const client = createPublicClient (); const pages = client . listMarkets ({ closed: false }); const { items : markets } = await pages . firstPage (); from polymarket impor",
+        "source_id": "polymarket_docs",
+        "source_state": "UNCHANGED",
+        "term": "prediction market"
+      }
+    ],
+    "status": "EVIDENCE_ROUTED"
+  },
+  "settlement": {
+    "coverage_gaps": [
+      "Venue-specific contract-rule pages may need deeper retrieval than docs landing pages"
+    ],
+    "evidence": [
+      {
+        "document_sha256": "48cb73fffd002b60436f9b34e81593e2b2201f0a0cab201a32aa3aa9e4ca8de1",
+        "retrieved_at": "2026-09-20T01:00:50.201534+00:00",
+        "snippet": "amounts in specific cities, from New York City to Los Angeles. Traders can take positions on whether a city will reach a certain high temperature or fall within a particular range. Each weather market names its official settlement source in its market rules. Daily high/low temperature markets settle based on the final climate report issued by the National Weather Service (NWS), typically released the following morning. Hourly temperature markets settle on readings from The Weather Company . Always check the specific market\u2019s rules for its source. How Do I Trade on Weather Markets? Kalshi creates a prediction market around a specific temperature threshold for a given location. For example: \u201cHighest temperature in Chicago on April 1",
+        "source_id": "kalshi_weather_rules",
+        "source_state": "CHANGED",
+        "term": "settlement"
+      }
+    ],
+    "status": "EVIDENCE_ROUTED"
+  },
+  "weather_twc": {
+    "coverage_gaps": [
+      "No TWC-specific primary source in registry"
+    ],
+    "evidence": [
+      {
+        "document_sha256": "83c3dee07ef5f6d1a434fb3688a9a39e6aec75080ea93f3c0f9b60cea8df0be0",
+        "retrieved_at": "2026-09-19T20:59:24.830272+00:00",
+        "snippet": "d deviation of sub-gridscale orography (step 0) 160 sfc slor Slope of sub-gridscale orography (step 0) 163 sfc tcc Total cloud cover 164 sfc 10u 10 metre U wind component 165 sfc 10v 10 metre V wind component 166 sfc 2t 2 metre temperature 167 sfc 2d 2 metre dewpoint temperature 168 sfc ssrd Surface net short-wave (solar) radiation downwards 169 sfc lsm Land Sea Mask 172 sfc strd Surface net long-wave (thermal) radiation downwards 175 sfc ssr Surface net short-wave (solar) radiation 176 sfc str Surface net long-wave (thermal) radiation 177 sfc ttr Top net long-wave (thermal) radiation 179 sfc ewss Time-integrated eastward turbulent surface stress 180 sfc nsss Time-integrated northward turbulent surface stress 181 sfc ro Runoff 205",
+        "source_id": "ecmwf_open",
+        "source_state": "UNCHANGED",
+        "term": "2 metre temperature"
+      },
+      {
+        "document_sha256": "48cb73fffd002b60436f9b34e81593e2b2201f0a0cab201a32aa3aa9e4ca8de1",
+        "retrieved_at": "2026-09-20T01:00:50.201534+00:00",
+        "snippet": "ing based on the high temperature recorded in the final NWS Daily Climate Report. Market determination may be delayed in the rare instances of a) a high temperature is not consistent with 6-hr or 24-hr highs reported by METAR or b) the final NWS Climate Report high temperature value is lower than previous preliminary report. \u200b Hourly Temperature Markets Some temperature markets are hourly - the market title names an exact time, for example \u201cChicago temperature at 5 PM EDT.\u201d These markets are also directional: each contract resolves on whether the temperature at that time is above or below a specific level, rather than within a range. They settle on the temperature at that exact time as reported by The Weather Company for the stati",
+        "source_id": "kalshi_weather_rules",
+        "source_state": "CHANGED",
+        "term": "metar"
+      }
+    ],
+    "status": "EVIDENCE_ROUTED"
+  }
+}

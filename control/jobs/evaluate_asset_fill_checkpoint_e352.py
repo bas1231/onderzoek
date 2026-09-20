@@ -21,6 +21,12 @@ if not credit_raw:
     raise SystemExit('credit_start_missing')
 credit_dt=datetime.fromisoformat(credit_raw)
 credit_epoch=int(credit_dt.timestamp())+1
+protocol_path=root/'knowledge/candidates/protocols/ASSET-RANK-MAKER-HEDGE-V1-fill-feasibility-24h-v1.json'
+protocol=json.loads(protocol_path.read_text(encoding='utf-8'))
+window_end_dt=datetime.fromisoformat(str(protocol.get('window_end') or ''))
+window_end_epoch=int(window_end_dt.timestamp())-1
+now_epoch=int(datetime.now(timezone.utc).timestamp())
+upper_credit_epoch=min(now_epoch,window_end_epoch)
 
 meta=dict()
 for row in baseline.get('markets') or tuple():
@@ -95,6 +101,8 @@ for row in rows:
         continue
     if ts<credit_epoch:
         continue
+    if ts>upper_credit_epoch:
+        continue
     if str(row.get('side') or '').upper()!='SELL':
         continue
     if abs(price-float(info.get('bid')))>0.0000001:
@@ -107,6 +115,10 @@ outdir=root/'knowledge/raw/market_data/polymarket_fill_checkpoints'
 outdir.mkdir(parents=True,exist_ok=True)
 out=outdir/(stamp+'106981_fill_checkpoint.json')
 result=dict(event_id='106981',baseline=str(baseline_path.relative_to(root)),credit_epoch=credit_epoch,credit_start_effective=datetime.fromtimestamp(credit_epoch,timezone.utc).isoformat(),retrieved_at=datetime.now(timezone.utc).isoformat(),pages=pages,markets=list())
+result['window_end_effective_epoch']=window_end_epoch
+result['upper_credit_epoch']=upper_credit_epoch
+result['upper_credit_utc']=datetime.fromtimestamp(upper_credit_epoch,timezone.utc).isoformat()
+result['final_window_checkpoint']=now_epoch>window_end_epoch
 
 full_fill_count=0
 for token in sorted(meta):

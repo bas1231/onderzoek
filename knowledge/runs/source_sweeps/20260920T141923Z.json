@@ -1,0 +1,129 @@
+{
+  "failure_count": 0,
+  "finished_at": "2026-09-20T14:19:25.168676+00:00",
+  "live_trading": false,
+  "paid_actions": false,
+  "results": [
+    {
+      "bytes": 38051,
+      "classification": "UNCHANGED",
+      "http_status": 200,
+      "manifest": "/home/leonh/prediction_research/knowledge/documents/manifests/arxiv/20260920T141924Z_d7ed6c1e9723.json",
+      "ok": true,
+      "sha256": "d7ed6c1e9723edcceae8a3d3f258a7ca991bd64f841fad43632caa13a7fad746",
+      "source_id": "arxiv"
+    },
+    {
+      "bytes": 39257,
+      "classification": "UNCHANGED",
+      "http_status": 200,
+      "manifest": "/home/leonh/prediction_research/knowledge/documents/manifests/aviationweather/20260920T141924Z_dd6e0cc4b237.json",
+      "ok": true,
+      "sha256": "dd6e0cc4b237e05406554eb33d2b7963367175f44a5a0ae0feb4e59f707b0edf",
+      "source_id": "aviationweather"
+    },
+    {
+      "bytes": 56369,
+      "classification": "CHANGED",
+      "http_status": 200,
+      "manifest": "/home/leonh/prediction_research/knowledge/documents/manifests/cftc/20260920T141924Z_ff865662c190.json",
+      "ok": true,
+      "sha256": "ff865662c190b16ff985a5dbac58de83c2ec0cd7d85d0fb5175996030c5c0a48",
+      "source_id": "cftc"
+    },
+    {
+      "bytes": 104747,
+      "classification": "UNCHANGED",
+      "http_status": 200,
+      "manifest": "/home/leonh/prediction_research/knowledge/documents/manifests/ecmwf_open/20260920T141924Z_f94d6721e36f.json",
+      "ok": true,
+      "sha256": "f94d6721e36f6a7d8c50571e3c86e0864a473c65e400a712b93ffa6c02c6bbf2",
+      "source_id": "ecmwf_open"
+    },
+    {
+      "bytes": 575803,
+      "classification": "CHANGED",
+      "http_status": 200,
+      "manifest": "/home/leonh/prediction_research/knowledge/documents/manifests/github/20260920T141924Z_755dd95f0d6b.json",
+      "ok": true,
+      "sha256": "755dd95f0d6b28ce0dba4c15d4c7942921c36913a0ba77d38ae558b9918352f9",
+      "source_id": "github"
+    },
+    {
+      "bytes": 219716,
+      "classification": "UNCHANGED",
+      "http_status": 200,
+      "manifest": "/home/leonh/prediction_research/knowledge/documents/manifests/kalshi_docs/20260920T141924Z_94c183be8dd7.json",
+      "ok": true,
+      "sha256": "94c183be8dd7141d7c8bee939c2ff1fb07caac3c559161afa319daad968ad5ce",
+      "source_id": "kalshi_docs"
+    },
+    {
+      "bytes": 82118,
+      "classification": "CHANGED",
+      "http_status": 200,
+      "manifest": "/home/leonh/prediction_research/knowledge/documents/manifests/kalshi_weather_rules/20260920T141925Z_2b0f0c5a080a.json",
+      "ok": true,
+      "sha256": "2b0f0c5a080a8edb46a48c31533781f3110b341a35f88950bde21ee69df878f4",
+      "source_id": "kalshi_weather_rules"
+    },
+    {
+      "bytes": 52105,
+      "classification": "CHANGED",
+      "http_status": 200,
+      "manifest": "/home/leonh/prediction_research/knowledge/documents/manifests/nomads/20260920T141925Z_9b97f8d1f29f.json",
+      "ok": true,
+      "sha256": "9b97f8d1f29fec52770be45fab89ec7c61c0d21b130e74a0a20f725b1530325f",
+      "source_id": "nomads"
+    },
+    {
+      "bytes": 120285,
+      "classification": "CHANGED",
+      "http_status": 200,
+      "manifest": "/home/leonh/prediction_research/knowledge/documents/manifests/nws/20260920T141924Z_7c08a6b9c4b8.json",
+      "ok": true,
+      "sha256": "7c08a6b9c4b8b483361cb2e2933d4db8d195fa010116f38599283f40c0e87d8b",
+      "source_id": "nws"
+    },
+    {
+      "bytes": 445795,
+      "classification": "UNCHANGED",
+      "http_status": 200,
+      "manifest": "/home/leonh/prediction_research/knowledge/documents/manifests/polymarket_docs/20260920T141924Z_6061d788333a.json",
+      "ok": true,
+      "sha256": "6061d788333a11345f9b58eac43e8ad235ee9315b5bdb7acf8e01b8fc02342b7",
+      "source_id": "polymarket_docs"
+    },
+    {
+      "bytes": 8397,
+      "classification": "CHANGED",
+      "http_status": 200,
+      "manifest": "/home/leonh/prediction_research/knowledge/documents/manifests/reddit/20260920T141924Z_782b07c688e6.json",
+      "ok": true,
+      "sha256": "782b07c688e68dff8ff10c565ae8f4900f8405cefa786e44b569d8b880eef3c6",
+      "source_id": "reddit"
+    },
+    {
+      "bytes": 25156,
+      "classification": "UNCHANGED",
+      "http_status": 200,
+      "manifest": "/home/leonh/prediction_research/knowledge/documents/manifests/twc_kalshi/20260920T141925Z_4778025a622c.json",
+      "ok": true,
+      "sha256": "4778025a622cc00d648ad1ebfac78e365ff990992bf072d18daa05d90a3fb489",
+      "source_id": "twc_kalshi"
+    },
+    {
+      "bytes": 750000,
+      "classification": "CHANGED",
+      "http_status": 200,
+      "manifest": "/home/leonh/prediction_research/knowledge/documents/manifests/youtube/20260920T141925Z_21e56793ffa7.json",
+      "ok": true,
+      "sha256": "21e56793ffa784b5d7f0349a6f37a8c99f13904b9c82c7d0b70977b1a291d14c",
+      "source_id": "youtube"
+    }
+  ],
+  "source_count": 13,
+  "started_at": "2026-09-20T14:19:23.735916+00:00",
+  "success_count": 13,
+  "wallet_actions": false
+}

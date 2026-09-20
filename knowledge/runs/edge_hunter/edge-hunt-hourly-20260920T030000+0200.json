@@ -1,0 +1,217 @@
+{
+  "candidates": [
+    {
+      "candidate_id": "KWI-INCOMPLETE-TO-CANONICAL-V1",
+      "created_at": "2026-09-20T00:42:14.997361+00:00",
+      "decision": "UNPROVEN",
+      "disconfirming_evidence": [
+        "Incomplete states lack enough numeric observations.",
+        "Predeclared estimator fails out of sample.",
+        "Signal is already reflected in executable prices."
+      ],
+      "evidence": [],
+      "execution_reality_test": "Prospective replay with fill and latency assumptions",
+      "gates": {
+        "data_ready": "PENDING",
+        "development": "PENDING",
+        "execution_reality": "PENDING",
+        "holdout": "PENDING",
+        "independent_reproduction": "PENDING",
+        "market_edge": "PENDING",
+        "mechanism": "PENDING",
+        "point_in_time": "PENDING",
+        "prebuild_killer": "PENDING",
+        "shadow": "PENDING",
+        "signal_edge": "PENDING",
+        "validation": "PENDING"
+      },
+      "hypothesis": "Incomplete KWI states may predict later canonical value.",
+      "lane": "weather",
+      "live_trading": false,
+      "market_edge_test": "Contemporaneous executable L2 after costs",
+      "mechanism": "Some station observations appear before canonical completion.",
+      "negative_evidence": [],
+      "paid_actions": false,
+      "phase": "DISCOVERED",
+      "point_in_time_requirements": [
+        "Only pre-completion snapshots.",
+        "No late/restated observations."
+      ],
+      "signal_metric": "MAE/CRPS versus predeclared baseline",
+      "updated_at": "2026-09-20T00:42:14.997373+00:00",
+      "wallet_actions": false
+    },
+    {
+      "candidate_id": "PAYOFF-IDENTITY-MINING-V1",
+      "created_at": "2026-09-20T00:42:14.997554+00:00",
+      "decision": "UNPROVEN",
+      "disconfirming_evidence": [
+        "Payout differs in any allowed state.",
+        "Fees/collateral/slippage remove edge.",
+        "Relations are not executable."
+      ],
+      "evidence": [],
+      "execution_reality_test": "Synchronized L2 replay with partial-fill buffer",
+      "gates": {
+        "data_ready": "PENDING",
+        "development": "PENDING",
+        "execution_reality": "PENDING",
+        "holdout": "PENDING",
+        "independent_reproduction": "PENDING",
+        "market_edge": "PENDING",
+        "mechanism": "PENDING",
+        "point_in_time": "PENDING",
+        "prebuild_killer": "PENDING",
+        "shadow": "PENDING",
+        "signal_edge": "PENDING",
+        "validation": "PENDING"
+      },
+      "hypothesis": "Different contract paths may encode identical statewise cashflows at different executable cost.",
+      "lane": "market_algebra",
+      "live_trading": false,
+      "market_edge_test": "Executable portfolio cost versus guaranteed payout",
+      "mechanism": "Canonicalize payouts and prove equivalence or dominance before price comparison.",
+      "negative_evidence": [],
+      "paid_actions": false,
+      "phase": "DISCOVERED",
+      "point_in_time_requirements": [
+        "Rules and prices archived at comparison time.",
+        "No later settlement interpretation backfilled."
+      ],
+      "signal_metric": "Verified equivalence/dominance count",
+      "updated_at": "2026-09-20T00:42:14.997558+00:00",
+      "wallet_actions": false
+    }
+  ],
+  "created_at": "2026-09-20T01:00:50.285962+00:00",
+  "decision": "NO_PROVEN_EDGE",
+  "edge_hunter_version": 1,
+  "lanes": {
+    "behavioral": {
+      "candidate_status": "UNPROVEN",
+      "coverage_gaps": [],
+      "evidence_count": 4,
+      "next_action": "SEMANTIC_REVIEW_AND_FALSIFICATION",
+      "objective": "Test behavioral mispricing hypotheses such as favorite-longshot, optimism, attention and flow bias without assuming persistence.",
+      "primary_tests": [
+        "calibration_by_price_bucket",
+        "out_of_sample_reliability",
+        "maker_vs_taker"
+      ]
+    },
+    "cross_venue": {
+      "candidate_status": "UNPROVEN",
+      "coverage_gaps": [
+        "No live orderbook snapshot source in hourly registry",
+        "Venue-specific contract-rule pages may need deeper retrieval than docs landing pages"
+      ],
+      "evidence_count": 7,
+      "next_action": "SEMANTIC_REVIEW_AND_FALSIFICATION",
+      "objective": "Find economically equivalent payouts across venues only after proving contract identity, settlement compatibility and transfer/collateral reality.",
+      "primary_tests": [
+        "contract_identity",
+        "settlement_identity",
+        "fee_and_transfer_cost",
+        "synchronised_l2"
+      ]
+    },
+    "informed_flow": {
+      "candidate_status": "UNPROVEN",
+      "coverage_gaps": [
+        "No live orderbook snapshot source in hourly registry",
+        "No point-in-time participant identity/flow dataset"
+      ],
+      "evidence_count": 5,
+      "next_action": "SEMANTIC_REVIEW_AND_FALSIFICATION",
+      "objective": "Test whether observable flow patterns contain incremental predictive information without relying on private identity data.",
+      "primary_tests": [
+        "point_in_time_flow_features",
+        "incremental_brier_or_logloss",
+        "execution_lag"
+      ]
+    },
+    "market_algebra": {
+      "candidate_status": "UNPROVEN",
+      "coverage_gaps": [
+        "Venue-specific contract-rule pages may need deeper retrieval than docs landing pages"
+      ],
+      "evidence_count": 6,
+      "next_action": "SEMANTIC_REVIEW_AND_FALSIFICATION",
+      "objective": "Find formally provable payout identities, dominance relations, collateral/netting anomalies, combo/MVE relations and synthetic equivalents.",
+      "primary_tests": [
+        "statewise_payout_equivalence",
+        "dominance",
+        "executable_cost_after_fees"
+      ]
+    },
+    "microstructure": {
+      "candidate_status": "UNPROVEN",
+      "coverage_gaps": [
+        "No live orderbook snapshot source in hourly registry"
+      ],
+      "evidence_count": 5,
+      "next_action": "SEMANTIC_REVIEW_AND_FALSIFICATION",
+      "objective": "Test order-book, maker/taker, queue, spread, depth, partial-fill and adverse-selection hypotheses using executable point-in-time data.",
+      "primary_tests": [
+        "l2_replay",
+        "fees",
+        "slippage",
+        "partial_fill",
+        "adverse_selection"
+      ]
+    },
+    "new_products": {
+      "candidate_status": "UNPROVEN",
+      "coverage_gaps": [
+        "No live orderbook snapshot source in hourly registry",
+        "Venue-specific contract-rule pages may need deeper retrieval than docs landing pages"
+      ],
+      "evidence_count": 7,
+      "next_action": "SEMANTIC_REVIEW_AND_FALSIFICATION",
+      "objective": "Continuously inspect new venues, products, rule changes and market structures for newly testable edge mechanisms.",
+      "primary_tests": [
+        "novelty",
+        "primary_source_provenance",
+        "falsifiable_mechanism"
+      ]
+    },
+    "settlement_rules": {
+      "candidate_status": "UNPROVEN",
+      "coverage_gaps": [
+        "No TWC-specific primary source in registry",
+        "Venue-specific contract-rule pages may need deeper retrieval than docs landing pages"
+      ],
+      "evidence_count": 7,
+      "next_action": "SEMANTIC_REVIEW_AND_FALSIFICATION",
+      "objective": "Find informational or structural gaps in settlement rules, source timing, finality, revisions, rounding and fallback behavior.",
+      "primary_tests": [
+        "rule_machine_readability",
+        "point_in_time_availability",
+        "settlement_replay"
+      ]
+    },
+    "weather": {
+      "candidate_status": "UNPROVEN",
+      "coverage_gaps": [
+        "No TWC-specific primary source in registry",
+        "No live orderbook snapshot source in hourly registry",
+        "Venue-specific contract-rule pages may need deeper retrieval than docs landing pages"
+      ],
+      "evidence_count": 4,
+      "next_action": "SEMANTIC_REVIEW_AND_FALSIFICATION",
+      "objective": "Predict contract settlement values from point-in-time meteorological state and test whether executable market prices underreact.",
+      "primary_tests": [
+        "signal_edge",
+        "market_edge",
+        "settlement_mapping",
+        "regime_holdout"
+      ]
+    }
+  },
+  "live_trading": false,
+  "paid_actions": false,
+  "run_id": "hourly-20260920T030000+0200",
+  "system_objective": "Continuously discover and falsify execution-realistic prediction-market edges across all lanes.",
+  "wallet_actions": false,
+  "weather_is_one_lane": true
+}

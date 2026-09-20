@@ -1,0 +1,32 @@
+{
+  "candidate_id": "KWI-FULL-STATION-PRECANONICAL-V1",
+  "decision": "UNPROVEN",
+  "discovery_evidence": {
+    "station_count_5_mae": 0.004965034965035021,
+    "station_count_5_n": 143,
+    "station_count_8_mae": 0.0027972027972061166,
+    "station_count_8_n": 143
+  },
+  "execution_reality_test": "not started",
+  "hypothesis": "When an incomplete KWI point already contains the full expected set of numeric station temperatures, their arithmetic mean may predict the later canonical value before the status becomes complete.",
+  "lane": "weather",
+  "live_trading": false,
+  "market_edge_test": "not started; signal edge must survive first",
+  "mechanism": "Possible publication or completion-status lag after all expected station observations are already present.",
+  "origin": "post-hoc mechanism discovered in KWI-INCOMPLETE-SIGNAL-FEASIBILITY-V1 development data; all pre-cutoff evidence is discovery only",
+  "paid_actions": false,
+  "phase": "MECHANISM_DEFINED",
+  "point_in_time_requirements": [
+    "first observed incomplete snapshot for target city and t",
+    "config_version visible at observation time",
+    "previous complete point visible at observation time",
+    "expected station count derived only from previous complete contributors for same city and config",
+    "later complete v for same city and t used only as target",
+    "no pre-cutoff rows count as prospective evidence"
+  ],
+  "prospective_protocols": [
+    "knowledge/candidates/protocols/KWI-FULL-STATION-PRECANONICAL-24H-V1.json"
+  ],
+  "signal_metric": "MAE and RMSE of full-station incomplete arithmetic mean versus later canonical v",
+  "wallet_actions": false
+}

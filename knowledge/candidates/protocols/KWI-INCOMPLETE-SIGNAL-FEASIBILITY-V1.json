@@ -1,0 +1,35 @@
+{
+  "correlation_warning": "minute observations are strongly serially correlated and are not independent statistical trials",
+  "created_at": "2026-09-20T02:37:48.596816+00:00",
+  "data_source": "immutable minute manifests and hash-addressed raw payloads recorded before this scoring protocol",
+  "hypothesis_id": "KWI-INCOMPLETE-TO-CANONICAL-V1",
+  "inference_rule": "report descriptive errors only; no p-value or independent-event claim from minute rows",
+  "live_trading": false,
+  "market_edge_rule": "no market edge is inferred from this signal test; executable market data is a separate later gate",
+  "metrics": [
+    "MAE",
+    "RMSE",
+    "mean_signed_error",
+    "median_absolute_error"
+  ],
+  "minimum_numeric_station_count": 1,
+  "missing_data_rule": "fail closed for a pair if target, prior complete persistence, or numeric incomplete station values are unavailable",
+  "next_if_survives": "define temporal development-validation-holdout split before any learned model or market-price test",
+  "no_fit": true,
+  "paid_actions": false,
+  "predictor_baseline": "latest canonical complete v with t strictly earlier than target t that was already visible in the same point-in-time manifest at first incomplete observation",
+  "predictor_primary": "arithmetic mean of all numeric temp_f values in first observed latest_incomplete snapshot for the target t",
+  "protocol_id": "KWI-INCOMPLETE-SIGNAL-FEASIBILITY-V1",
+  "rejection_rule": "if survival_rule fails, reject this simple incomplete-mean signal formulation rather than tuning weights or station subsets on the same data",
+  "revision_rule": "if target same-t revisions are observed, target remains last complete v visible within the immutable recorder window and revisions are reported separately",
+  "stage": "DEVELOPMENT_FALSIFICATION",
+  "station_selection": "none; include every numeric station temp_f present in first incomplete snapshot",
+  "strata": [
+    "city",
+    "numeric_station_count"
+  ],
+  "survival_rule": "primary incomplete-station-mean MAE must be lower than point-in-time previous-canonical persistence MAE overall and in at least two of the three cities",
+  "target": "later canonical complete v for the same city and t; use last observed complete v in recorder window",
+  "unit": "city x weather-index timestamp t",
+  "wallet_actions": false
+}

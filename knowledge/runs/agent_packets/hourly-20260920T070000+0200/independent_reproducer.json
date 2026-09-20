@@ -1,0 +1,23 @@
+{
+  "agent_id": "independent_reproducer",
+  "contract": {
+    "agent": "independent_reproducer",
+    "gate": "independent_confirmation_required",
+    "input": "surviving evidence packages",
+    "live_trading": false,
+    "output": [
+      "reproduction_status",
+      "discrepancies"
+    ],
+    "paid_actions": false,
+    "wallet_actions": false
+  },
+  "input_refs": [],
+  "live_trading": false,
+  "notes": [],
+  "output_refs": [],
+  "paid_actions": false,
+  "run_id": "hourly-20260920T070000+0200",
+  "status": "PENDING",
+  "wallet_actions": false
+}

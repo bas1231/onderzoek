@@ -1,0 +1,362 @@
+{
+  "candidates": [
+    {
+      "candidate_id": "ASSET-RANK-MAKER-HEDGE-V1",
+      "created_at": "2026-09-20T02:10:18.043370+00:00",
+      "decision": "UNPROVEN",
+      "disconfirming_evidence": [
+        "Prospective conservative shadow orders do not fill after accounting for queue ahead.",
+        "Observed maker fills are followed by hedge deterioration that removes the fee-adjusted margin.",
+        "The first executable hedge after a shadow fill has non-positive net value after exact taker fees.",
+        "A one-tick adverse hedge buffer makes the prospective episode non-positive.",
+        "Rules, negative-risk grouping, fee schedule, or one-hot settlement proof changes.",
+        "Required public trade or order-book evidence is insufficient to prove queue depletion without counting cancellations as fills.",
+        "The candidate only appears in discovery data and does not reproduce prospectively."
+      ],
+      "discovery_cutoff": "2026-09-20T02:07:42.741552+00:00",
+      "discovery_event_id": "106981",
+      "discovery_evidence": [
+        "E327 found a 0.98 all-YES executable ask sum on event 106981.",
+        "E328 proved one-hot settlement including deterministic alphabetical tie-breaking and observed a 4 percent taker-only fee schedule.",
+        "E332 showed the pure taker complete set is negative after fees.",
+        "E333 found conditional maker-then-taker arithmetic of about 0.0132 to 0.0165 net per set at size 5, with one adverse tick still positive.",
+        "E334 reproduced the same price structure and conditional arithmetic at a second timepoint about 29 minutes later."
+      ],
+      "evidence": [],
+      "execution_reality_test": "Size is fixed at 5 contracts. A hypothetical maker order joins behind displayed best-bid quantity. Cancellations never count as fills. Fill requires public executed-volume evidence sufficient to consume queue ahead and the shadow order. After fill, hedge using the first point-in-time executable asks with enough depth; missing hedge data is a failed episode.",
+      "fixed_parameters": {
+        "adverse_hedge_buffer_ticks": 1,
+        "cancellation_fill_credit": false,
+        "event_id": "106981",
+        "hedge_rule": "first_executable_asks_on_other_two_YES_legs_with_sufficient_depth",
+        "maker_fee_assumption": "zero_only_when_current_fee_schedule_is_takerOnly_true",
+        "maker_price_rule": "current_best_bid",
+        "maker_queue_rule": "join_behind_full_displayed_best_bid_quantity",
+        "maker_side": "YES",
+        "qualifying_conditional_net_per_set_min": 0.01,
+        "require_positive_after_buffer": true,
+        "shadow_size": 5.0,
+        "taker_fee_source": "point_in_time_market_fee_schedule"
+      },
+      "gates": {
+        "data_ready": "PENDING",
+        "development": "DISCOVERY_COMPLETE",
+        "execution_reality": "PENDING",
+        "holdout": "PENDING",
+        "independent_reproduction": "PENDING",
+        "market_edge": "PENDING",
+        "mechanism": "PASS",
+        "point_in_time": "PENDING_PROSPECTIVE",
+        "prebuild_killer": "PASS_DISCOVERY_ONLY",
+        "shadow": "PENDING",
+        "signal_edge": "PENDING",
+        "validation": "PENDING"
+      },
+      "hypothesis": "For Polymarket event 106981, a passive YES maker fill on one leg followed by immediate taker purchases of the other two YES legs may lock a positive fee-adjusted complete-set payout.",
+      "lane": "microstructure",
+      "live_trading": false,
+      "market_edge_test": "For a prospectively confirmed passive fill, use the first executable asks with sufficient depth on the other two YES legs and exact market fee schedule. Net locked payout must remain positive after a one-tick adverse hedge buffer.",
+      "mechanism": "The three outcomes are a proven one-hot partition. A maker fill can improve one leg by one spread tick while maker fees are zero under the observed taker-only schedule. After a confirmed passive fill, buying the other two YES legs can complete a payout-one portfolio.",
+      "negative_evidence": [],
+      "origin_candidate": "PAYOFF-IDENTITY-MINING-V1",
+      "paid_actions": false,
+      "phase": "MECHANISM_DEFINED",
+      "point_in_time_requirements": [
+        "Only observations strictly after this preregistration timestamp count as prospective evidence.",
+        "Rules, fee schedule, bid, ask, depth, and public fill evidence must be archived with retrieval timestamps.",
+        "Discovery observations E327 through E334 may not be counted as validation or holdout evidence.",
+        "Later settlement interpretation may not be backfilled into earlier decisions.",
+        "Unknown fee, rule, queue, or hedge state fails closed."
+      ],
+      "prospective_cutoff": "2026-09-20T02:10:18.043370+00:00",
+      "prospective_monitoring": {
+        "baseline": "knowledge/raw/market_data/polymarket_shadow_baselines/20260920T022654Z106981_fill_baseline.json",
+        "cadence": "hourly_on_the_hour",
+        "cancellation_fill_credit": false,
+        "checkpoint_directory": "knowledge/raw/market_data/polymarket_fill_checkpoints",
+        "current_full_shadow_fill_count": 0,
+        "fill_credit_rule": "taker SELL executions on exact YES maker bid only",
+        "partial_fill_credit": false,
+        "persistent": true,
+        "protocol": "knowledge/candidates/protocols/ASSET-RANK-MAKER-HEDGE-V1-fill-feasibility-24h-v1.json",
+        "randomized_delay_seconds": 0,
+        "recorded_at": "2026-09-20T02:31:51.779903+00:00",
+        "scheduler_unit": "prediction-research-hourly-director.timer",
+        "scientific_interpretation": "prospective execution feasibility monitoring active; no edge proven",
+        "status": "ACTIVE",
+        "timer_active": true,
+        "timer_enabled": true,
+        "verified_next_trigger_local": "2026-09-20T05:00:00+02:00"
+      },
+      "prospective_protocols": [
+        "knowledge/candidates/protocols/ASSET-RANK-MAKER-HEDGE-V1-fill-feasibility-24h-v1.json"
+      ],
+      "signal_metric": "Conservative shadow fill rate plus realized fee-adjusted locked value per filled 5-contract episode.",
+      "updated_at": "2026-09-20T02:10:18.043370+00:00",
+      "wallet_actions": false
+    },
+    {
+      "candidate_id": "KWI-FULL-STATION-PRECANONICAL-V1",
+      "decision": "UNPROVEN",
+      "discovery_evidence": {
+        "station_count_5_mae": 0.004965034965035021,
+        "station_count_5_n": 143,
+        "station_count_8_mae": 0.0027972027972061166,
+        "station_count_8_n": 143
+      },
+      "execution_reality_test": "not started",
+      "hypothesis": "When an incomplete KWI point already contains the full expected set of numeric station temperatures, their arithmetic mean may predict the later canonical value before the status becomes complete.",
+      "lane": "weather",
+      "live_trading": false,
+      "market_edge_test": "not started; signal edge must survive first",
+      "mechanism": "Possible publication or completion-status lag after all expected station observations are already present.",
+      "origin": "post-hoc mechanism discovered in KWI-INCOMPLETE-SIGNAL-FEASIBILITY-V1 development data; all pre-cutoff evidence is discovery only",
+      "paid_actions": false,
+      "phase": "MECHANISM_DEFINED",
+      "point_in_time_requirements": [
+        "first observed incomplete snapshot for target city and t",
+        "config_version visible at observation time",
+        "previous complete point visible at observation time",
+        "expected station count derived only from previous complete contributors for same city and config",
+        "later complete v for same city and t used only as target",
+        "no pre-cutoff rows count as prospective evidence"
+      ],
+      "prospective_protocols": [
+        "knowledge/candidates/protocols/KWI-FULL-STATION-PRECANONICAL-24H-V1.json"
+      ],
+      "signal_metric": "MAE and RMSE of full-station incomplete arithmetic mean versus later canonical v",
+      "wallet_actions": false
+    },
+    {
+      "candidate_id": "KWI-INCOMPLETE-TO-CANONICAL-V1",
+      "created_at": "2026-09-20T00:42:14.997361+00:00",
+      "decision": "UNPROVEN",
+      "disconfirming_evidence": [
+        "Incomplete states lack enough numeric observations.",
+        "Predeclared estimator fails out of sample.",
+        "Signal is already reflected in executable prices."
+      ],
+      "evidence": [],
+      "execution_reality_test": "Prospective replay with fill and latency assumptions",
+      "gates": {
+        "data_ready": "PENDING",
+        "development": "PENDING",
+        "execution_reality": "PENDING",
+        "holdout": "PENDING",
+        "independent_reproduction": "PENDING",
+        "market_edge": "PENDING",
+        "mechanism": "PENDING",
+        "point_in_time": "PENDING",
+        "prebuild_killer": "PENDING",
+        "shadow": "PENDING",
+        "signal_edge": "PENDING",
+        "validation": "PENDING"
+      },
+      "hypothesis": "Incomplete KWI states may predict later canonical value.",
+      "lane": "weather",
+      "live_trading": false,
+      "market_edge_test": "Contemporaneous executable L2 after costs",
+      "mechanism": "Some station observations appear before canonical completion.",
+      "negative_evidence": [],
+      "paid_actions": false,
+      "phase": "DISCOVERED",
+      "point_in_time_requirements": [
+        "Only pre-completion snapshots.",
+        "No late/restated observations."
+      ],
+      "prospective_protocols": [
+        "knowledge/candidates/protocols/KWI-INCOMPLETE-SIGNAL-FEASIBILITY-V1.json"
+      ],
+      "signal_metric": "MAE/CRPS versus predeclared baseline",
+      "simple_incomplete_mean_status": "REJECTED_IN_DEVELOPMENT",
+      "test_results": [
+        {
+          "baseline_mae": 0.08481481481481465,
+          "city_wins": 2,
+          "conclusion": "simple unweighted incomplete station mean rejected; do not tune station subsets or weights on same data",
+          "evidence": "local state analysis kwi-signal-feasibility-e367.json",
+          "overall_win": false,
+          "primary_mae": 0.20416744475568097,
+          "scorable_pairs": 459,
+          "stage": "DEVELOPMENT_FALSIFICATION",
+          "survival_rule_pass": false,
+          "test_id": "KWI-INCOMPLETE-SIGNAL-FEASIBILITY-V1"
+        }
+      ],
+      "updated_at": "2026-09-20T00:42:14.997373+00:00",
+      "wallet_actions": false
+    },
+    {
+      "candidate_id": "PAYOFF-IDENTITY-MINING-V1",
+      "created_at": "2026-09-20T00:42:14.997554+00:00",
+      "decision": "UNPROVEN",
+      "disconfirming_evidence": [
+        "Payout differs in any allowed state.",
+        "Fees/collateral/slippage remove edge.",
+        "Relations are not executable."
+      ],
+      "evidence": [],
+      "execution_reality_test": "Synchronized L2 replay with partial-fill buffer",
+      "gates": {
+        "data_ready": "PENDING",
+        "development": "PENDING",
+        "execution_reality": "PENDING",
+        "holdout": "PENDING",
+        "independent_reproduction": "PENDING",
+        "market_edge": "PENDING",
+        "mechanism": "PENDING",
+        "point_in_time": "PENDING",
+        "prebuild_killer": "PENDING",
+        "shadow": "PENDING",
+        "signal_edge": "PENDING",
+        "validation": "PENDING"
+      },
+      "hypothesis": "Different contract paths may encode identical statewise cashflows at different executable cost.",
+      "lane": "market_algebra",
+      "live_trading": false,
+      "market_edge_test": "Executable portfolio cost versus guaranteed payout",
+      "mechanism": "Canonicalize payouts and prove equivalence or dominance before price comparison.",
+      "negative_evidence": [],
+      "paid_actions": false,
+      "phase": "DISCOVERED",
+      "point_in_time_requirements": [
+        "Rules and prices archived at comparison time.",
+        "No later settlement interpretation backfilled."
+      ],
+      "signal_metric": "Verified equivalence/dominance count",
+      "updated_at": "2026-09-20T00:42:14.997558+00:00",
+      "wallet_actions": false
+    }
+  ],
+  "created_at": "2026-09-20T03:00:20.837452+00:00",
+  "decision": "NO_PROVEN_EDGE",
+  "edge_hunter_version": 1,
+  "lanes": {
+    "behavioral": {
+      "candidate_status": "UNPROVEN",
+      "coverage_gaps": [],
+      "evidence_count": 4,
+      "next_action": "SEMANTIC_REVIEW_AND_FALSIFICATION",
+      "objective": "Test behavioral mispricing hypotheses such as favorite-longshot, optimism, attention and flow bias without assuming persistence.",
+      "primary_tests": [
+        "calibration_by_price_bucket",
+        "out_of_sample_reliability",
+        "maker_vs_taker"
+      ]
+    },
+    "cross_venue": {
+      "candidate_status": "UNPROVEN",
+      "coverage_gaps": [
+        "No live orderbook snapshot source in hourly registry",
+        "Venue-specific contract-rule pages may need deeper retrieval than docs landing pages"
+      ],
+      "evidence_count": 7,
+      "next_action": "SEMANTIC_REVIEW_AND_FALSIFICATION",
+      "objective": "Find economically equivalent payouts across venues only after proving contract identity, settlement compatibility and transfer/collateral reality.",
+      "primary_tests": [
+        "contract_identity",
+        "settlement_identity",
+        "fee_and_transfer_cost",
+        "synchronised_l2"
+      ]
+    },
+    "informed_flow": {
+      "candidate_status": "UNPROVEN",
+      "coverage_gaps": [
+        "No live orderbook snapshot source in hourly registry",
+        "No point-in-time participant identity/flow dataset"
+      ],
+      "evidence_count": 5,
+      "next_action": "SEMANTIC_REVIEW_AND_FALSIFICATION",
+      "objective": "Test whether observable flow patterns contain incremental predictive information without relying on private identity data.",
+      "primary_tests": [
+        "point_in_time_flow_features",
+        "incremental_brier_or_logloss",
+        "execution_lag"
+      ]
+    },
+    "market_algebra": {
+      "candidate_status": "UNPROVEN",
+      "coverage_gaps": [
+        "Venue-specific contract-rule pages may need deeper retrieval than docs landing pages"
+      ],
+      "evidence_count": 6,
+      "next_action": "SEMANTIC_REVIEW_AND_FALSIFICATION",
+      "objective": "Find formally provable payout identities, dominance relations, collateral/netting anomalies, combo/MVE relations and synthetic equivalents.",
+      "primary_tests": [
+        "statewise_payout_equivalence",
+        "dominance",
+        "executable_cost_after_fees"
+      ]
+    },
+    "microstructure": {
+      "candidate_status": "UNPROVEN",
+      "coverage_gaps": [
+        "No live orderbook snapshot source in hourly registry"
+      ],
+      "evidence_count": 5,
+      "next_action": "SEMANTIC_REVIEW_AND_FALSIFICATION",
+      "objective": "Test order-book, maker/taker, queue, spread, depth, partial-fill and adverse-selection hypotheses using executable point-in-time data.",
+      "primary_tests": [
+        "l2_replay",
+        "fees",
+        "slippage",
+        "partial_fill",
+        "adverse_selection"
+      ]
+    },
+    "new_products": {
+      "candidate_status": "UNPROVEN",
+      "coverage_gaps": [
+        "No live orderbook snapshot source in hourly registry",
+        "Venue-specific contract-rule pages may need deeper retrieval than docs landing pages"
+      ],
+      "evidence_count": 7,
+      "next_action": "SEMANTIC_REVIEW_AND_FALSIFICATION",
+      "objective": "Continuously inspect new venues, products, rule changes and market structures for newly testable edge mechanisms.",
+      "primary_tests": [
+        "novelty",
+        "primary_source_provenance",
+        "falsifiable_mechanism"
+      ]
+    },
+    "settlement_rules": {
+      "candidate_status": "UNPROVEN",
+      "coverage_gaps": [
+        "No TWC-specific primary source in registry",
+        "Venue-specific contract-rule pages may need deeper retrieval than docs landing pages"
+      ],
+      "evidence_count": 8,
+      "next_action": "SEMANTIC_REVIEW_AND_FALSIFICATION",
+      "objective": "Find informational or structural gaps in settlement rules, source timing, finality, revisions, rounding and fallback behavior.",
+      "primary_tests": [
+        "rule_machine_readability",
+        "point_in_time_availability",
+        "settlement_replay"
+      ]
+    },
+    "weather": {
+      "candidate_status": "UNPROVEN",
+      "coverage_gaps": [
+        "No TWC-specific primary source in registry",
+        "No live orderbook snapshot source in hourly registry",
+        "Venue-specific contract-rule pages may need deeper retrieval than docs landing pages"
+      ],
+      "evidence_count": 5,
+      "next_action": "SEMANTIC_REVIEW_AND_FALSIFICATION",
+      "objective": "Predict contract settlement values from point-in-time meteorological state and test whether executable market prices underreact.",
+      "primary_tests": [
+        "signal_edge",
+        "market_edge",
+        "settlement_mapping",
+        "regime_holdout"
+      ]
+    }
+  },
+  "live_trading": false,
+  "paid_actions": false,
+  "run_id": "hourly-20260920T050000+0200",
+  "system_objective": "Continuously discover and falsify execution-realistic prediction-market edges across all lanes.",
+  "wallet_actions": false,
+  "weather_is_one_lane": true
+}

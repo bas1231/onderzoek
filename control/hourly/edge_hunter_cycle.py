@@ -12,3 +12,16 @@ sys.path.insert(0, str(ROOT / "control/edge_hunter"))
 from director import prepare
 packet = prepare(run_id)
 print("EDGE_HUNTER_PACKET", packet)
+
+import subprocess
+try:
+    checkpoint=subprocess.run([str(ROOT / '.venv/bin/python'),str(ROOT / 'control/jobs/hourly_asset_fill_checkpoint_e354.py')],check=False,timeout=180,cwd=str(ROOT))
+    print('ASSET_FILL_CHECKPOINT_RC',checkpoint.returncode)
+except Exception as exc:
+    print('ASSET_FILL_CHECKPOINT_ERROR',str(exc))
+
+try:
+    kwi_checkpoint=subprocess.run([str(ROOT / '.venv/bin/python'),str(ROOT / 'control/jobs/hourly_kwi_full_station_checkpoint_e371.py')],check=False,timeout=180,cwd=str(ROOT))
+    print('KWI_FULL_STATION_CHECKPOINT_RC',kwi_checkpoint.returncode)
+except Exception as exc:
+    print('KWI_FULL_STATION_CHECKPOINT_ERROR',str(exc))
