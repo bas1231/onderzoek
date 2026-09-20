@@ -1,0 +1,13 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/capture_anthropic_cross_series_rules_e392.py"
+  ],
+  "hypothesis_id": "PAYOFF-IDENTITY-MINING-V1",
+  "live_trading": false,
+  "operation": "python",
+  "task_class": "research",
+  "task_id": "EDGE-HUNTER-ANTHROPIC-CROSS-SERIES-RULES-E392",
+  "timeout_seconds": 180,
+  "working_directory": "."
+}
