@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/evaluate_kwi_full_station_checkpoint_e369.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-20T02:40:31.316765+00:00",
+  "hypothesis_id": "KWI-FULL-STATION-PRECANONICAL-V1",
+  "source_commit": "9970028e3f1d52df09cd076a997c83c82394e71e",
+  "started_at": "2026-09-20T02:40:31.273470+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "060eb31ae8b01b692b810b52b0fb4fed510f1cc7bc99b325c6c217f4ae7d3f19",
+  "task_class": "research",
+  "task_id": "EDGE-HUNTER-KWI-FULL-STATION-CHECKPOINT-E369"
+}
