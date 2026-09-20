@@ -1,0 +1,41 @@
+{
+  "candidate_id": "KWI-INCOMPLETE-TO-CANONICAL-V1",
+  "created_at": "2026-09-20T00:42:14.997361+00:00",
+  "decision": "UNPROVEN",
+  "disconfirming_evidence": [
+    "Incomplete states lack enough numeric observations.",
+    "Predeclared estimator fails out of sample.",
+    "Signal is already reflected in executable prices."
+  ],
+  "evidence": [],
+  "execution_reality_test": "Prospective replay with fill and latency assumptions",
+  "gates": {
+    "data_ready": "PENDING",
+    "development": "PENDING",
+    "execution_reality": "PENDING",
+    "holdout": "PENDING",
+    "independent_reproduction": "PENDING",
+    "market_edge": "PENDING",
+    "mechanism": "PENDING",
+    "point_in_time": "PENDING",
+    "prebuild_killer": "PENDING",
+    "shadow": "PENDING",
+    "signal_edge": "PENDING",
+    "validation": "PENDING"
+  },
+  "hypothesis": "Incomplete KWI states may predict later canonical value.",
+  "lane": "weather",
+  "live_trading": false,
+  "market_edge_test": "Contemporaneous executable L2 after costs",
+  "mechanism": "Some station observations appear before canonical completion.",
+  "negative_evidence": [],
+  "paid_actions": false,
+  "phase": "DISCOVERED",
+  "point_in_time_requirements": [
+    "Only pre-completion snapshots.",
+    "No late/restated observations."
+  ],
+  "signal_metric": "MAE/CRPS versus predeclared baseline",
+  "updated_at": "2026-09-20T00:42:14.997373+00:00",
+  "wallet_actions": false
+}
