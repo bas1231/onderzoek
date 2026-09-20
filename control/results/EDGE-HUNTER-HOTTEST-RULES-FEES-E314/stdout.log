@@ -1,0 +1,91 @@
+HOTTEST_RULE_FEE_CAPTURE_PASS
+HTTP 200
+EVENT_ID 79905
+TITLE Where will 2026 rank among the hottest years on record?
+NEG_RISK True
+NEG_RISK_AUGMENTED False
+NEG_RISK_MARKET_ID 0x2d668e0aea6061d4a12f062ddd7d2091594de682ee256c0c75871493233c5500
+DESCRIPTION
+This market will resolve according to the numerical rank of how hot 2026 is when compared against all other years for which the Global Land-Ocean Temperature Index has data.
+
+Years will be ranked in descending order, starting with the hottest as number 1, the second hottest as number 2, etc.
+
+If 2026 ties with any other year, it will resolve according to the place the year it ties with occupies.
+
+This market will resolve immediately once the specified data becomes available, regardless of whether the figure for the relevant years is later revised.
+
+The primary resolution source for this market will be the figure found in the table titled "Land-Ocean Temperature Index (C)" under the column "No_Smoothing" in the row "2026" (https://data.giss.nasa.gov/gistemp/graphs/graph_data/Global_Mean_Estimates_based_on_Land_and_Ocean_Data/graph.txt). If NASA's "Global Temperature Index" is rendered permanently unavailable, other information from NASA may be used. If no information for 2026 is provided by NASA by March 1, 2027, 11:59 PM ET, this market will resolve based on a consensus of credible reporting.
+MARKET_COUNT 6
+MARKET_ID 678686
+QUESTION Will 2026 be the hottest year on record?
+NEG_RISK True
+NEG_RISK_OTHER False
+FEES_ENABLED True
+FEE_SCHEDULE {'exponent': 1, 'rate': 0.05, 'takerOnly': True, 'rebateRate': 0.25}
+FEE_TYPE weather_fees
+ORDER_MIN_SIZE 5
+TICK_SIZE 0.01
+END_DATE 2026-12-31T00:00:00Z
+DESCRIPTION This market will resolve according to the numerical rank of how hot 2026 is when compared against all other years for which the Global Land-Ocean Temperature Index has data.  Years will be ranked in descending order, starting with the hottest as number 1, the second hottest as number 2, etc.  If 2026 ties with any other year, it will resolve according to the place the year it ties with occupies.  This market will resolve immediately once the specified data becomes available, regardless of whether the figure for the relevant years is later revised.  The primary resolution source for this market will be the figure found in the table titled "Land-Ocean Temperature Index (C)" under the column "No_Smoothing" in the row "2026" (https://data.giss.nasa.gov/gistemp/graphs/graph_data/Global_Mean_Estimates_based_on_Land_and_Ocean_Data/graph.txt). If NASA's "Global Temperature Index" is rendered permanently unavailable, other information from NASA may be used. If no information for 2026 is provided by NASA by March 1, 2027, 11:59 PM ET, this market will resolve based on a consensus of credible reporting.
+---
+MARKET_ID 678687
+QUESTION Will 2026 be the second-hottest year on record?
+NEG_RISK True
+NEG_RISK_OTHER False
+FEES_ENABLED True
+FEE_SCHEDULE {'exponent': 1, 'rate': 0.05, 'takerOnly': True, 'rebateRate': 0.25}
+FEE_TYPE weather_fees
+ORDER_MIN_SIZE 5
+TICK_SIZE 0.01
+END_DATE 2026-12-31T00:00:00Z
+DESCRIPTION This market will resolve according to the numerical rank of how hot 2026 is when compared against all other years for which the Global Land-Ocean Temperature Index has data.  Years will be ranked in descending order, starting with the hottest as number 1, the second hottest as number 2, etc.  If 2026 ties with any other year, it will resolve according to the place the year it ties with occupies.  This market will resolve immediately once the specified data becomes available, regardless of whether the figure for the relevant years is later revised.  The primary resolution source for this market will be the figure found in the table titled "Land-Ocean Temperature Index (C)" under the column "No_Smoothing" in the row "2026" (https://data.giss.nasa.gov/gistemp/graphs/graph_data/Global_Mean_Estimates_based_on_Land_and_Ocean_Data/graph.txt). If NASA's "Global Temperature Index" is rendered permanently unavailable, other information from NASA may be used. If no information for 2026 is provided by NASA by March 1, 2027, 11:59 PM ET, this market will resolve based on a consensus of credible reporting.
+---
+MARKET_ID 678688
+QUESTION Will 2026 be the third-hottest year on record?
+NEG_RISK True
+NEG_RISK_OTHER False
+FEES_ENABLED True
+FEE_SCHEDULE {'exponent': 1, 'rate': 0.05, 'takerOnly': True, 'rebateRate': 0.25}
+FEE_TYPE weather_fees
+ORDER_MIN_SIZE 5
+TICK_SIZE 0.001
+END_DATE 2026-12-31T00:00:00Z
+DESCRIPTION This market will resolve according to the numerical rank of how hot 2026 is when compared against all other years for which the Global Land-Ocean Temperature Index has data.  Years will be ranked in descending order, starting with the hottest as number 1, the second hottest as number 2, etc.  If 2026 ties with any other year, it will resolve according to the place the year it ties with occupies.  This market will resolve immediately once the specified data becomes available, regardless of whether the figure for the relevant years is later revised.  The primary resolution source for this market will be the figure found in the table titled "Land-Ocean Temperature Index (C)" under the column "No_Smoothing" in the row "2026" (https://data.giss.nasa.gov/gistemp/graphs/graph_data/Global_Mean_Estimates_based_on_Land_and_Ocean_Data/graph.txt). If NASA's "Global Temperature Index" is rendered permanently unavailable, other information from NASA may be used. If no information for 2026 is provided by NASA by March 1, 2027, 11:59 PM ET, this market will resolve based on a consensus of credible reporting.
+---
+MARKET_ID 678689
+QUESTION Will 2026 be the fourth-hottest year on record?
+NEG_RISK True
+NEG_RISK_OTHER False
+FEES_ENABLED True
+FEE_SCHEDULE {'exponent': 1, 'rate': 0.05, 'takerOnly': True, 'rebateRate': 0.25}
+FEE_TYPE weather_fees
+ORDER_MIN_SIZE 5
+TICK_SIZE 0.001
+END_DATE 2026-12-31T00:00:00Z
+DESCRIPTION This market will resolve according to the numerical rank of how hot 2026 is when compared against all other years for which the Global Land-Ocean Temperature Index has data.  Years will be ranked in descending order, starting with the hottest as number 1, the second hottest as number 2, etc.  If 2026 ties with any other year, it will resolve according to the place the year it ties with occupies.  This market will resolve immediately once the specified data becomes available, regardless of whether the figure for the relevant years is later revised.  The primary resolution source for this market will be the figure found in the table titled "Land-Ocean Temperature Index (C)" under the column "No_Smoothing" in the row "2026" (https://data.giss.nasa.gov/gistemp/graphs/graph_data/Global_Mean_Estimates_based_on_Land_and_Ocean_Data/graph.txt). If NASA's "Global Temperature Index" is rendered permanently unavailable, other information from NASA may be used. If no information for 2026 is provided by NASA by March 1, 2027, 11:59 PM ET, this market will resolve based on a consensus of credible reporting.
+---
+MARKET_ID 678690
+QUESTION Will 2026 be the fifth-hottest year on record?
+NEG_RISK True
+NEG_RISK_OTHER False
+FEES_ENABLED True
+FEE_SCHEDULE {'exponent': 1, 'rate': 0.05, 'takerOnly': True, 'rebateRate': 0.25}
+FEE_TYPE weather_fees
+ORDER_MIN_SIZE 5
+TICK_SIZE 0.001
+END_DATE 2026-12-31T00:00:00Z
+DESCRIPTION This market will resolve according to the numerical rank of how hot 2026 is when compared against all other years for which the Global Land-Ocean Temperature Index has data.  Years will be ranked in descending order, starting with the hottest as number 1, the second hottest as number 2, etc.  If 2026 ties with any other year, it will resolve according to the place the year it ties with occupies.  This market will resolve immediately once the specified data becomes available, regardless of whether the figure for the relevant years is later revised.  The primary resolution source for this market will be the figure found in the table titled "Land-Ocean Temperature Index (C)" under the column "No_Smoothing" in the row "2026" (https://data.giss.nasa.gov/gistemp/graphs/graph_data/Global_Mean_Estimates_based_on_Land_and_Ocean_Data/graph.txt). If NASA's "Global Temperature Index" is rendered permanently unavailable, other information from NASA may be used. If no information for 2026 is provided by NASA by March 1, 2027, 11:59 PM ET, this market will resolve based on a consensus of credible reporting.
+---
+MARKET_ID 678691
+QUESTION Will 2026 rank as the sixth-hottest year on record or lower?
+NEG_RISK True
+NEG_RISK_OTHER False
+FEES_ENABLED True
+FEE_SCHEDULE {'exponent': 1, 'rate': 0.05, 'takerOnly': True, 'rebateRate': 0.25}
+FEE_TYPE weather_fees
+ORDER_MIN_SIZE 5
+TICK_SIZE 0.001
+END_DATE 2026-12-31T00:00:00Z
+DESCRIPTION This market will resolve according to the numerical rank of how hot 2026 is when compared against all other years for which the Global Land-Ocean Temperature Index has data.  Years will be ranked in descending order, starting with the hottest as number 1, the second hottest as number 2, etc.  If 2026 ties with any other year, it will resolve according to the place the year it ties with occupies.  This market will resolve immediately once the specified data becomes available, regardless of whether the figure for the relevant years is later revised.  The primary resolution source for this market will be the figure found in the table titled "Land-Ocean Temperature Index (C)" under the column "No_Smoothing" in the row "2026" (https://data.giss.nasa.gov/gistemp/graphs/graph_data/Global_Mean_Estimates_based_on_Land_and_Ocean_Data/graph.txt). If NASA's "Global Temperature Index" is rendered permanently unavailable, other information from NASA may be used. If no information for 2026 is provided by NASA by March 1, 2027, 11:59 PM ET, this market will resolve based on a consensus of credible reporting.
+---
+PATH /home/leonh/prediction_research/knowledge/raw/market_rules/polymarket/20260920T013119Zevent_79905.json

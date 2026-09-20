@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/capture_hottest_rules_fees_e314.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-20T01:31:19.932601+00:00",
+  "hypothesis_id": "PAYOFF-IDENTITY-MINING-V1",
+  "source_commit": "43877c382da49b5b83c525088b47478b928d3d8c",
+  "started_at": "2026-09-20T01:31:19.710128+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "5fbbb8318b1995dd8ec9f497d54dbd96ec1649466d975ccbfc6d58e443f7619c",
+  "task_class": "research",
+  "task_id": "EDGE-HUNTER-HOTTEST-RULES-FEES-E314"
+}
