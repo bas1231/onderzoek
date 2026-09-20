@@ -1,0 +1,13 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/diagnose_hourly_0700_e430.py"
+  ],
+  "hypothesis_id": "CONTROL-NO-SILENT-WAITING",
+  "live_trading": false,
+  "operation": "python",
+  "task_class": "infrastructure",
+  "task_id": "EDGE-HUNTER-HOURLY-0700-DIAGNOSE-E430",
+  "timeout_seconds": 120,
+  "working_directory": "."
+}
