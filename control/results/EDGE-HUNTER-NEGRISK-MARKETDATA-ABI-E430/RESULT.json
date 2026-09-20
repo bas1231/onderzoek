@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/resolve_negrisk_marketdata_abi_e430.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-20T04:01:56.191597+00:00",
+  "hypothesis_id": "PAYOFF-IDENTITY-MINING-V1",
+  "source_commit": "8ca4085758042d9a0c4287e3384ca8f283dbbe7c",
+  "started_at": "2026-09-20T04:01:50.798720+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "afdb6a5ce77ff1d2af346bb43af050547a1365d7964ae5ca845ddab4d2d9f7e1",
+  "task_class": "research",
+  "task_id": "EDGE-HUNTER-NEGRISK-MARKETDATA-ABI-E430"
+}
