@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/preregister_kwi_signal_test_e366.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-20T02:37:48.599720+00:00",
+  "hypothesis_id": "KWI-INCOMPLETE-TO-CANONICAL-V1",
+  "source_commit": "d154e6323c7f3e4d9e6d4bdad9be60b4d316ffb8",
+  "started_at": "2026-09-20T02:37:48.578860+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "51cfcf432ea8b92e3655d7d9d221fa5e42e8e4ad89744090274cb6904f212af4",
+  "task_class": "research",
+  "task_id": "EDGE-HUNTER-KWI-SIGNAL-PREREG-E366"
+}

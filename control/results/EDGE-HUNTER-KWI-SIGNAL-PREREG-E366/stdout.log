@@ -1,0 +1,8 @@
+PROTOCOL_ID KWI-INCOMPLETE-SIGNAL-FEASIBILITY-V1
+STAGE DEVELOPMENT_FALSIFICATION
+PRIMARY arithmetic mean of all numeric temp_f values in first observed latest_incomplete snapshot for the target t
+BASELINE latest canonical complete v with t strictly earlier than target t that was already visible in the same point-in-time manifest at first incomplete observation
+SURVIVAL_RULE primary incomplete-station-mean MAE must be lower than point-in-time previous-canonical persistence MAE overall and in at least two of the three cities
+NO_FIT True
+PATH /home/leonh/prediction_research/knowledge/candidates/protocols/KWI-INCOMPLETE-SIGNAL-FEASIBILITY-V1.json
+KWI_SIGNAL_PROTOCOL_PREREG_PASS
