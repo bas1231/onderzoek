@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/record_asset_monitor_status_e357.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-20T02:31:51.782749+00:00",
+  "hypothesis_id": "ASSET-RANK-MAKER-HEDGE-V1",
+  "source_commit": "ef2c558f59ce75838e6ac649b3d498b784695454",
+  "started_at": "2026-09-20T02:31:51.762327+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "1bd012f5153537d601f2f35b0b4e7ddbcbd8a8512b2639c7bdec60fb8771e992",
+  "task_class": "research",
+  "task_id": "EDGE-HUNTER-ASSET-MONITOR-STATUS-E357"
+}
