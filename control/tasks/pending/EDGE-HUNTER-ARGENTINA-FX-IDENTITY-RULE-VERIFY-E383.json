@@ -1,0 +1,13 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/verify_argentina_fx_identity_rules_e383.py"
+  ],
+  "hypothesis_id": "PAYOFF-IDENTITY-MINING-V1",
+  "live_trading": false,
+  "operation": "python",
+  "task_class": "research",
+  "task_id": "EDGE-HUNTER-ARGENTINA-FX-IDENTITY-RULE-VERIFY-E383",
+  "timeout_seconds": 120,
+  "working_directory": "."
+}
