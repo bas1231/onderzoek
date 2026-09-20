@@ -1,0 +1,21 @@
+{
+  "build_authorization": {
+    "build_kind": "control_plane",
+    "capabilities": [
+      "read_repository"
+    ],
+    "mode": "control_plane",
+    "objective": "Verify executor policy hook after clean restart"
+  },
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/place_order_test.py"
+  ],
+  "hypothesis_id": "CONTROL-POLICY-TEST",
+  "live_trading": false,
+  "operation": "python",
+  "task_class": "infrastructure",
+  "task_id": "POLICY-EXECUTOR-HOOK-E003",
+  "timeout_seconds": 60,
+  "working_directory": "."
+}
