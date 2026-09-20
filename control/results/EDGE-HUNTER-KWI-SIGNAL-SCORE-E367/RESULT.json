@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/score_kwi_signal_feasibility_e367.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-20T02:38:35.235756+00:00",
+  "hypothesis_id": "KWI-INCOMPLETE-TO-CANONICAL-V1",
+  "source_commit": "8196a22c6c8f36817ec32a9c0d200dd40aebb3ca",
+  "started_at": "2026-09-20T02:38:35.185797+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "fc5601c98adbcd81a17b62b1bd22d792b4cba50eca07271c0abe56b34543f68e",
+  "task_class": "research",
+  "task_id": "EDGE-HUNTER-KWI-SIGNAL-SCORE-E367"
+}
