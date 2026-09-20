@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/capture_prison_neg_risk_e323.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-20T01:36:53.764821+00:00",
+  "hypothesis_id": "PAYOFF-IDENTITY-MINING-V1",
+  "source_commit": "e9ca775675ba9c984abbb107bb71ed9489aacbb2",
+  "started_at": "2026-09-20T01:36:53.557426+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "8ef515707ae6f625d630847835996538d3c118ec778f1f515b9b53e73d5be6da",
+  "task_class": "research",
+  "task_id": "EDGE-HUNTER-PRISON-NEG-RISK-E323"
+}
