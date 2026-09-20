@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/price_anthropic_all_no_conversion_e435.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-20T05:08:30.948469+00:00",
+  "hypothesis_id": "PAYOFF-IDENTITY-MINING-V1",
+  "source_commit": "ad7442fd3cf607db63d1f63a7178ea5bb35ed7fa",
+  "started_at": "2026-09-20T05:08:30.424276+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "88a59872ddfcdc206f40dd5a837e4f2dc2a9a576750108cde6bfebab7fdfd519",
+  "task_class": "research",
+  "task_id": "EDGE-HUNTER-ANTHROPIC-ALL-NO-CONVERSION-E435"
+}
