@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/repair_candidate_triage_e257.py"
+  ],
+  "exit_code": 1,
+  "finished_at": "2026-09-20T00:46:47.134021+00:00",
+  "hypothesis_id": "GENERAL-PREDICTION-MARKET-EDGE-HUNTER",
+  "source_commit": "cfa91adb971d2631603d9f3db7fcfae640d9c8c0",
+  "started_at": "2026-09-20T00:46:47.106188+00:00",
+  "status": "failed",
+  "stderr_sha256": "6940ed03a45634351bf8304be4097484e378de57117ad15e90dcd8558c5ba61f",
+  "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "task_class": "infrastructure",
+  "task_id": "EDGE-HUNTER-CANDIDATE-TRIAGE-REPAIR-E257"
+}
