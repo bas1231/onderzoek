@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/diagnose_hourly_0700_e430.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-20T05:03:02.592932+00:00",
+  "hypothesis_id": "CONTROL-NO-SILENT-WAITING",
+  "source_commit": "c82bdd20602d1013cc5c42261376f9c402d02da5",
+  "started_at": "2026-09-20T05:03:02.559718+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "e8993e259c62a1f03f09088564494e65187c97c25eb7910aad4988017e1f4ff6",
+  "task_class": "infrastructure",
+  "task_id": "EDGE-HUNTER-HOURLY-0700-DIAGNOSE-E430"
+}
