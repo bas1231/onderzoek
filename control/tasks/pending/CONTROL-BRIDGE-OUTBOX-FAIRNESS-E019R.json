@@ -1,0 +1,23 @@
+{
+  "build_authorization": {
+    "build_kind": "control_plane",
+    "capabilities": [
+      "modify_repository",
+      "commit_local_changes",
+      "run_local_tests"
+    ],
+    "mode": "control_plane",
+    "objective": "Retry the bridge outbox fairness fix with small targeted edits, syntax validation, and a regression test proving that when a normal result and an incident are both pending the result is delivered first and the incident second."
+  },
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/fix_outbox_fairness_e019r.py"
+  ],
+  "hypothesis_id": "CONTROL-BRIDGE-RELIABILITY",
+  "live_trading": false,
+  "operation": "python",
+  "task_class": "infrastructure",
+  "task_id": "CONTROL-BRIDGE-OUTBOX-FAIRNESS-E019R",
+  "timeout_seconds": 180,
+  "working_directory": "."
+}
