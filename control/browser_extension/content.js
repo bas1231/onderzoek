@@ -274,6 +274,44 @@
     ).toString(16);
   }
 
+
+  const PARSE_FAILURE_SEEN_KEY =
+    "predictionProcessedParseFailuresV1";
+
+  async function processedParseFailureFingerprints() {
+    const stored = await chrome.storage.local.get([
+      PARSE_FAILURE_SEEN_KEY
+    ]);
+
+    return Array.isArray(stored[PARSE_FAILURE_SEEN_KEY])
+      ? stored[PARSE_FAILURE_SEEN_KEY]
+      : [];
+  }
+
+  async function parseFailureAlreadyReported(fingerprint) {
+    const seen =
+      await processedParseFailureFingerprints();
+
+    return seen.includes(fingerprint);
+  }
+
+  async function markParseFailureReported(fingerprint) {
+    const seen =
+      await processedParseFailureFingerprints();
+
+    if (!seen.includes(fingerprint)) {
+      seen.push(fingerprint);
+    }
+
+    while (seen.length > 500) {
+      seen.shift();
+    }
+
+    await chrome.storage.local.set({
+      [PARSE_FAILURE_SEEN_KEY]: seen
+    });
+  }
+
   function assistantMessages() {
     const specific = Array.from(
       document.querySelectorAll(
@@ -590,6 +628,17 @@
           try {
               envelope = JSON.parse(block);
             } catch (error) {
+              const parseFingerprint =
+                bridgeFingerprint(block);
+
+              if (
+                await parseFailureAlreadyReported(
+                  parseFingerprint
+                )
+              ) {
+                continue;
+              }
+
               console.error(
                 "[Prediction Bridge] TASK_PARSE_FAILURE",
                 {
@@ -638,7 +687,7 @@
                   {
                     incident_id:
                       "browser-task-parse-"
-                      + bridgeFingerprint(block),
+                      + parseFingerprint,
                     reason:
                       "TASK_PARSE_FAILURE",
                     detail:
@@ -648,6 +697,10 @@
                       + " | preview="
                       + block.slice(0, 500)
                   }
+                );
+
+                await markParseFailureReported(
+                  parseFingerprint
                 );
               } catch (incidentError) {
                 console.error(
