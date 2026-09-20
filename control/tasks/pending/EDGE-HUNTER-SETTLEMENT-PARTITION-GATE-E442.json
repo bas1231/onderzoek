@@ -1,4 +1,12 @@
 {
+  "build_authorization": {
+    "mode": "control_plane",
+    "build_kind": "control_plane",
+    "objective": "Execute the generic fail-closed settlement partition gate test E442",
+    "capabilities": [
+      "read_repository"
+    ]
+  },
   "command": [
     ".venv/bin/python",
     "control/jobs/test_settlement_partition_gate_e442.py"

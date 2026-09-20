@@ -76,3 +76,25 @@ Wanneer `queue_status` niet `ACTIVE` is:
 
 Alleen een expliciete hervatting van het prediction-marketonderzoek
 mag de centrale researchqueue activeren.
+
+## Build authorization
+
+Nieuwe `infrastructure`-taken moeten vóór toelating een expliciete
+`build_authorization` bevatten. De canonical uitleg en voorbeelden staan in
+`control/edge_hunter/BUILD_AUTHORIZATION.md`.
+
+Voor generieke safety/reliability/provenance/control-plane-bouw:
+- gebruik `mode: control_plane`;
+- gebruik `build_kind: control_plane`;
+- geef een begrensd `objective` en de werkelijk benodigde `capabilities` op;
+- vraag nooit live trading, order submission, wallet/fund movement, paid actions,
+  credential writes of venue write endpoints aan.
+
+Voor candidate-specifieke bouw:
+- gebruik `mode: candidate`;
+- verwijs met `warrant_ref` naar een bestaand bestand onder `knowledge/warrants/`;
+- build kind, objective en capabilities moeten exact overeenkomen met de warrant;
+- een gewijzigde candidate, policy, build state of request maakt de warrant ongeldig.
+
+Researchtaken zonder code-/infrastructuurbouw gebruiken geen
+`build_authorization` en blijven onder de gewone researchqueue-regels vallen.
