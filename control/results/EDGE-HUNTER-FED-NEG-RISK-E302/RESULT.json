@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/capture_fed_neg_risk_e302.py"
+  ],
+  "exit_code": 1,
+  "finished_at": "2026-09-20T01:22:56.515733+00:00",
+  "hypothesis_id": "PAYOFF-IDENTITY-MINING-V1",
+  "source_commit": "5abe6321f3af210829d6064330942353326cbbac",
+  "started_at": "2026-09-20T01:22:56.265337+00:00",
+  "status": "failed",
+  "stderr_sha256": "17eed6599060e8a3344d331a8fdda6108e2b36ff5718a524374cc0506864a8bf",
+  "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "task_class": "research",
+  "task_id": "EDGE-HUNTER-FED-NEG-RISK-E302"
+}
