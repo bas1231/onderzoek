@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/test_deadline_nesting_e284.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-20T01:09:30.344560+00:00",
+  "hypothesis_id": "PAYOFF-IDENTITY-MINING-V1",
+  "source_commit": "1bc7650179aa7aff3b4b5b9544dd564055f5dfbd",
+  "started_at": "2026-09-20T01:09:30.317084+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "081d47d0e5404d368ec00180122d1c39bd59884f176bafd6f21fcd1d78ffc62f",
+  "task_class": "research",
+  "task_id": "EDGE-HUNTER-DEADLINE-NESTING-E284"
+}
