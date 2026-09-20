@@ -1,0 +1,13 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/discover_cross_series_subjects_e387.py"
+  ],
+  "hypothesis_id": "PAYOFF-IDENTITY-MINING-V1",
+  "live_trading": false,
+  "operation": "python",
+  "task_class": "research",
+  "task_id": "EDGE-HUNTER-CROSS-SERIES-SUBJECT-DISCOVERY-E387",
+  "timeout_seconds": 120,
+  "working_directory": "."
+}
