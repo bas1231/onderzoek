@@ -1,0 +1,13 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/screen_negrisk_complete_sets_e417.py"
+  ],
+  "hypothesis_id": "PAYOFF-IDENTITY-MINING-V1",
+  "live_trading": false,
+  "operation": "python",
+  "task_class": "research",
+  "task_id": "EDGE-HUNTER-NEGRISK-COMPLETE-SET-SCREEN-E417",
+  "timeout_seconds": 300,
+  "working_directory": "."
+}
