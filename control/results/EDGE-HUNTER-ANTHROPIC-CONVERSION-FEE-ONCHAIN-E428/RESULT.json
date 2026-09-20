@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/read_anthropic_conversion_fee_onchain_e428.py"
+  ],
+  "exit_code": 1,
+  "finished_at": "2026-09-20T03:34:06.269505+00:00",
+  "hypothesis_id": "PAYOFF-IDENTITY-MINING-V1",
+  "source_commit": "3112d3c71339fce2f30968f440fe0519ea879a98",
+  "started_at": "2026-09-20T03:33:45.910131+00:00",
+  "status": "failed",
+  "stderr_sha256": "fd5836289a4f9b0585a46af2f8fa19ea6e9d077a6f1381b37749fd9b7f6ee2aa",
+  "stdout_sha256": "08bc3a5a1bf48c019c4bc55fca52f0fddb12e55afd90c098411672ae74210bbc",
+  "task_class": "research",
+  "task_id": "EDGE-HUNTER-ANTHROPIC-CONVERSION-FEE-ONCHAIN-E428"
+}
