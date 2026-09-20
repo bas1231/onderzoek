@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/audit_prior_keyset_pagination_e399.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-20T03:00:42.109834+00:00",
+  "hypothesis_id": "PAYOFF-IDENTITY-MINING-V1",
+  "source_commit": "46745bfc0c8e88d46dba9d5265546d35e7476b10",
+  "started_at": "2026-09-20T03:00:42.026400+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "44826b2e0585c8c2cb5c38ec5109b2f46c0ee5e92aee2c8a6536108a9bbb93bb",
+  "task_class": "research",
+  "task_id": "EDGE-HUNTER-KEYSET-AUDIT-E399"
+}

@@ -1,0 +1,430 @@
+SOURCE_EXISTS True
+SOURCE_LINE_COUNT 48
+SOURCE_LINE 1 'from urllib.request import Request, urlopen'
+SOURCE_LINE 2 'import json'
+SOURCE_LINE 3 ''
+SOURCE_LINE 4 "agent = 'PredictionEdgeHunter/1.0'"
+SOURCE_LINE 5 "base = 'https://gamma-api.polymarket.com/events/keyset?closed=false&limit=100'"
+SOURCE_LINE 6 'cursor = None'
+SOURCE_LINE 7 'rows = []'
+SOURCE_LINE 8 'total = 0'
+SOURCE_LINE 9 ''
+SOURCE_LINE 10 'for page in range(5):'
+SOURCE_LINE 11 '    url = base'
+SOURCE_LINE 12 '    if cursor:'
+SOURCE_LINE 13 "        url = url + '&cursor=' + cursor"
+SOURCE_LINE 14 "    req = Request(url, headers={'User-Agent': agent})"
+SOURCE_LINE 15 '    with urlopen(req, timeout=30) as r:'
+SOURCE_LINE 16 '        data = json.loads(r.read())'
+SOURCE_LINE 17 "    events = data.get('events', [])"
+SOURCE_LINE 18 '    total += len(events)'
+SOURCE_LINE 19 '    for event in events:'
+SOURCE_LINE 20 "        markets = event.get('markets', [])"
+SOURCE_LINE 21 '        neg = []'
+SOURCE_LINE 22 '        other = 0'
+SOURCE_LINE 23 '        for market in markets:'
+SOURCE_LINE 24 "            if market.get('negRisk') is True or market.get('neg_risk') is True:"
+SOURCE_LINE 25 '                neg.append(market)'
+SOURCE_LINE 26 "                if market.get('negRiskOther') is True or market.get('neg_risk_other') is True:"
+SOURCE_LINE 27 '                    other += 1'
+SOURCE_LINE 28 '        if neg:'
+SOURCE_LINE 29 "            rows.append({'event_id': str(event.get('id')), 'title': str(event.get('title','')), 'market_count': len(markets), 'neg_count': len(neg), 'other_count': other})"
+SOURCE_LINE 30 "    cursor = data.get('next_cursor')"
+SOURCE_LINE 31 '    if not cursor:'
+SOURCE_LINE 32 '        break'
+SOURCE_LINE 33 ''
+SOURCE_LINE 34 "print('EVENTS_SCANNED', total)"
+SOURCE_LINE 35 "print('NEG_RISK_EVENTS', len(rows))"
+SOURCE_LINE 36 'if rows:'
+SOURCE_LINE 37 "    sizes = [r['neg_count'] for r in rows]"
+SOURCE_LINE 38 "    print('MIN_NEG_MARKETS', min(sizes))"
+SOURCE_LINE 39 "    print('MAX_NEG_MARKETS', max(sizes))"
+SOURCE_LINE 40 "    print('WITH_OTHER_FLAG', sum(1 for r in rows if r['other_count'] > 0))"
+SOURCE_LINE 41 ''
+SOURCE_LINE 42 "eligible = [r for r in rows if r['neg_count'] >= 3 and r['neg_count'] <= 40]"
+SOURCE_LINE 43 "print('ELIGIBLE_SMALL_GROUPS', len(eligible))"
+SOURCE_LINE 44 "for row in sorted(eligible, key=lambda x: (x['neg_count'], x['event_id']))[:20]:"
+SOURCE_LINE 45 "    print('EVENT', row['event_id'], 'NEG', row['neg_count'], 'OTHER', row['other_count'])"
+SOURCE_LINE 46 "    print('TITLE', row['title'][:220])"
+SOURCE_LINE 47 ''
+SOURCE_LINE 48 "print('NEG_RISK_CENSUS_PASS')"
+EVIDENCE_FILE_COUNT 38
+EVIDENCE_FILE control/tasks/completed/EDGE-HUNTER-GAMMA-KEYSET-CURSOR-E398.json
+EVIDENCE_LINE 4     "control/jobs/verify_gamma_keyset_cursor_e398.py"
+EVIDENCE_LINE 10   "task_id": "EDGE-HUNTER-GAMMA-KEYSET-CURSOR-E398",
+---
+EVIDENCE_FILE control/tasks/completed/EDGE-HUNTER-NEG-RISK-CENSUS-E288.json
+EVIDENCE_LINE 4     "control/jobs/neg_risk_census_e288.py"
+EVIDENCE_LINE 10   "task_id": "EDGE-HUNTER-NEG-RISK-CENSUS-E288",
+---
+EVIDENCE_FILE control/tasks/completed/EDGE-HUNTER-GAMMA-KEYSET-NEGRISK-E397.json
+EVIDENCE_LINE 4     "control/jobs/crawl_gamma_keyset_negrisk_e397.py"
+EVIDENCE_LINE 10   "task_id": "EDGE-HUNTER-GAMMA-KEYSET-NEGRISK-E397",
+---
+EVIDENCE_FILE control/tasks/completed/EDGE-HUNTER-GAMMA-KEYSET-PROBE-E396.json
+EVIDENCE_LINE 4     "control/jobs/probe_gamma_keyset_e396.py"
+EVIDENCE_LINE 10   "task_id": "EDGE-HUNTER-GAMMA-KEYSET-PROBE-E396",
+---
+EVIDENCE_FILE control/tasks/running/EDGE-HUNTER-KEYSET-AUDIT-E399.json
+EVIDENCE_LINE 4     "control/jobs/audit_prior_keyset_pagination_e399.py"
+EVIDENCE_LINE 10   "task_id": "EDGE-HUNTER-KEYSET-AUDIT-E399",
+---
+EVIDENCE_FILE control/tasks/failed/EDGE-HUNTER-GAMMA-KEYSET-PROBE-E395.json
+EVIDENCE_LINE 4     "control/jobs/probe_gamma_keyset_e395.py"
+EVIDENCE_LINE 10   "task_id": "EDGE-HUNTER-GAMMA-KEYSET-PROBE-E395",
+---
+EVIDENCE_FILE control/jobs/audit_prior_keyset_pagination_e399.py
+EVIDENCE_LINE 5 source=root/'control/jobs/neg_risk_census_e288.py'
+EVIDENCE_LINE 13 terms=['EDGE-HUNTER-NEG-RISK-CENSUS-E288','neg_risk_census_e288','NEG_RISK_CENSUS','next_cursor','keyset']
+EVIDENCE_LINE 37         if any(term.lower() in low for term in terms) or 'page' in low or 'cursor' in low or 'events' in low:
+EVIDENCE_LINE 43 print('PRIOR_KEYSET_PAGINATION_AUDIT_PASS')
+---
+EVIDENCE_FILE control/jobs/polymarket_l2_snapshot_e281.py
+EVIDENCE_LINE 9 events_url = 'https://gamma-api.polymarket.com/events/keyset?closed=false&limit=20'
+EVIDENCE_LINE 12 req = Request(events_url, headers={'User-Agent': agent})
+EVIDENCE_LINE 14     events_raw = r.read()
+EVIDENCE_LINE 15     events_status = r.status
+EVIDENCE_LINE 17 events = json.loads(events_raw)
+EVIDENCE_LINE 20 for event in events.get('events', []):
+EVIDENCE_LINE 72     'events_url': events_url,
+EVIDENCE_LINE 73     'events_http_status': events_status,
+EVIDENCE_LINE 74     'events_sha256': hashlib.sha256(events_raw).hexdigest(),
+EVIDENCE_LINE 81     'events_response': events,
+EVIDENCE_LINE 91 print('EVENTS_HTTP', events_status)
+---
+EVIDENCE_FILE control/jobs/evaluate_asset_fill_checkpoint_e352.py
+EVIDENCE_LINE 42 cursor=None
+EVIDENCE_LINE 43 pages=list()
+EVIDENCE_LINE 45 seen_cursors=set()
+EVIDENCE_LINE 46 for page_index in range(20):
+EVIDENCE_LINE 48     if cursor:
+EVIDENCE_LINE 49         url=url+'&cursor='+quote(cursor,safe='')
+EVIDENCE_LINE 57     page_rows=data.get('data') or tuple()
+EVIDENCE_LINE 59     pages.append(dict(url=url,retrieved_at=datetime.now(timezone.utc).isoformat(),response=data))
+EVIDENCE_LINE 60     rows.extend(page_rows)
+EVIDENCE_LINE 62     for row in page_rows:
+EVIDENCE_LINE 73     next_cursor=pagination.get('next_cursor')
+EVIDENCE_LINE 74     if not next_cursor:
+EVIDENCE_LINE 76     cursor=str(next_cursor)
+EVIDENCE_LINE 77     if cursor in seen_cursors:
+EVIDENCE_LINE 78         raise SystemExit('cursor_repeat')
+EVIDENCE_LINE 79     seen_cursors.add(cursor)
+EVIDENCE_LINE 117 result=dict(event_id='106981',baseline=str(baseline_path.relative_to(root)),credit_epoch=credit_epoch,credit_start_effective=datetime.fromtimestamp(credit_epoch,timezone.utc).isoformat(),retrieved_at=datetime.now(timezone.utc).isoformat(),pages=pages,markets=list())
+EVIDENCE_LINE 149 print('FETCHED_PAGES',len(pages))
+---
+EVIDENCE_FILE control/jobs/verify_gamma_keyset_cursor_e398.py
+EVIDENCE_LINE 7 manifest_dir=root/'knowledge/raw/market_data/polymarket_neg_risk_keyset_manifests'
+EVIDENCE_LINE 11     raise SystemExit('keyset_manifest_missing')
+EVIDENCE_LINE 13 pages=manifest.get('pages') or tuple()
+EVIDENCE_LINE 14 if len(pages)<2:
+EVIDENCE_LINE 15     raise SystemExit('need_two_page_summaries')
+EVIDENCE_LINE 18 print('RECORDED_PAGE_COUNT',len(pages))
+EVIDENCE_LINE 19 for row in pages[:3]:
+EVIDENCE_LINE 20     print('RECORDED_PAGE',row.get('page'),'FIRST',row.get('first_id'),'LAST',row.get('last_id'),'SHA',row.get('sha256'))
+EVIDENCE_LINE 22 raw_dir=Path.home()/'.local/state/prediction-research/raw/polymarket_gamma_keyset'
+EVIDENCE_LINE 23 first_sha=str((pages[0] or dict()).get('sha256') or '')
+EVIDENCE_LINE 24 second_sha=str((pages[1] or dict()).get('sha256') or '')
+EVIDENCE_LINE 28     raise SystemExit('raw_page_missing')
+EVIDENCE_LINE 31 cur1=str(first.get('next_cursor') or '')
+EVIDENCE_LINE 32 cur2=str(second.get('next_cursor') or '')
+EVIDENCE_LINE 33 print('FIRST_CURSOR_LENGTH',len(cur1))
+EVIDENCE_LINE 34 print('SECOND_CURSOR_LENGTH',len(cur2))
+EVIDENCE_LINE 35 print('CURSORS_EQUAL',cur1==cur2)
+EVIDENCE_LINE 36 print('FIRST_CURSOR_PREFIX',cur1[:120])
+EVIDENCE_LINE 37 print('SECOND_CURSOR_PREFIX',cur2[:120])
+EVIDENCE_LINE 39 base='https:'+chr(47)+chr(47)+'gamma-api.polymarket.com/events/keyset'
+EVIDENCE_LINE 40 params=dict(active='true',closed='false',limit='100',cursor=cur1)
+EVIDENCE_LINE 47 rows=data.get('events') or tuple()
+EVIDENCE_LINE 49     raise SystemExit('events_shape_bad')
+EVIDENCE_LINE 61 print('ENCODED_NEXT_CURSOR_LENGTH',len(str(data.get('next_cursor') or '')))
+EVIDENCE_LINE 62 recorded_first=str((pages[0] or dict()).get('first_id') or '')
+EVIDENCE_LINE 63 recorded_last=str((pages[0] or dict()).get('last_id') or '')
+EVIDENCE_LINE 65 print('CURSOR_ADVANCED',advanced)
+EVIDENCE_LINE 66 print('GAMMA_KEYSET_CURSOR_VERIFY_PASS')
+---
+EVIDENCE_FILE control/jobs/probe_gamma_keyset_e396.py
+EVIDENCE_LINE 8 url='https:'+chr(47)+chr(47)+'gamma-api.polymarket.com/events/keyset?active=true&closed=false&limit=100'
+EVIDENCE_LINE 15 state=Path.home()/'.local/state/prediction-research/raw/polymarket_gamma_keyset'
+EVIDENCE_LINE 32         rows=data.get('events')
+EVIDENCE_LINE 52     print('NEXT_CURSOR',data.get('next_cursor'))
+EVIDENCE_LINE 53     print('NEXT_CURSOR_ALT',data.get('nextCursor'))
+EVIDENCE_LINE 73 print('GAMMA_KEYSET_PROBE_E396_PASS')
+---
+EVIDENCE_FILE control/jobs/crawl_gamma_keyset_negrisk_e397.py
+EVIDENCE_LINE 10 base='https:'+chr(47)+chr(47)+'gamma-api.polymarket.com/events/keyset?active=true&closed=false&limit=100'
+EVIDENCE_LINE 11 state=Path.home()/'.local/state/prediction-research/raw/polymarket_gamma_keyset'
+EVIDENCE_LINE 30 cursor=None
+EVIDENCE_LINE 31 seen_events=set()
+EVIDENCE_LINE 33 page_summaries=list()
+EVIDENCE_LINE 35 max_pages=25
+EVIDENCE_LINE 37 for page_index in range(1,max_pages+1):
+EVIDENCE_LINE 39     if cursor:
+EVIDENCE_LINE 40         url=url+'&cursor='+cursor
+EVIDENCE_LINE 53             print('PAGE_RETRY',page_index,attempt,last_error)
+EVIDENCE_LINE 57         print('PAGE_FAILED',page_index,last_error)
+EVIDENCE_LINE 66         raise SystemExit('unexpected_keyset_shape')
+EVIDENCE_LINE 67     rows=data.get('events') or tuple()
+EVIDENCE_LINE 69         raise SystemExit('unexpected_events_shape')
+EVIDENCE_LINE 77     page_summaries.append(dict(page=page_index,row_count=len(rows),sha256=sha,first_id=first_id,last_id=last_id))
+EVIDENCE_LINE 78     print('PAGE',page_index,'ROWS',len(rows),'FIRST',first_id,'LAST',last_id,'SHA',sha)
+EVIDENCE_LINE 85         seen_events.add(eid)
+EVIDENCE_LINE 122     cursor=str(data.get('next_cursor') or '')
+EVIDENCE_LINE 123     if not cursor:
+EVIDENCE_LINE 124         print('END_OF_KEYSET',page_index)
+EVIDENCE_LINE 134 outdir=root/'knowledge/raw/market_data/polymarket_neg_risk_keyset_manifests'
+EVIDENCE_LINE 137 payload=dict(retrieved_at=datetime.now(timezone.utc).isoformat(),pages_scanned=len(page_summaries),events_seen=len(seen_events),eligible_group_count=len(eligible),known_group_count=len(known),new_group_count=len(new_groups),raw_bytes_total=raw_bytes_total,next_cursor=cursor,live_trading=False,paid_actions=False,wallet_actions=False,pages=page_summaries,new_groups=new_groups)
+EVIDENCE_LINE 140 print('PAGES_SCANNED',len(page_summaries))
+EVIDENCE_LINE 141 print('EVENTS_SEEN',len(seen_events))
+EVIDENCE_LINE 148 print('NEXT_CURSOR_PRESENT',bool(cursor))
+EVIDENCE_LINE 150 print('GAMMA_KEYSET_NEGRISK_CRAWL_PASS')
+---
+EVIDENCE_FILE control/jobs/capture_neg_risk_group_e289.py
+EVIDENCE_LINE 9 events_url = 'https://gamma-api.polymarket.com/events/keyset?closed=false&limit=100'
+EVIDENCE_LINE 10 req = Request(events_url, headers={'User-Agent': agent})
+EVIDENCE_LINE 12     events_raw = r.read()
+EVIDENCE_LINE 13     events_status = r.status
+EVIDENCE_LINE 15 data = json.loads(events_raw)
+EVIDENCE_LINE 17 for event in data.get('events', []):
+EVIDENCE_LINE 54 payload = {'retrieved_at': datetime.now(timezone.utc).isoformat(), 'venue': 'polymarket', 'event_id': '48292', 'event_title': target.get('title'), 'mode': 'public_read_only', 'live_trading': False, 'paid_actions': False, 'wallet_actions': False, 'events_http_status': events_status, 'events_sha256': hashlib.sha256(events_raw).hexdigest(), 'books_http_status': books_status, 'books_sha256': hashlib.sha256(books_raw).hexdigest(), 'markets': markets, 'books': books}
+---
+EVIDENCE_FILE control/jobs/probe_gamma_keyset_e395.py
+EVIDENCE_LINE 5 url='https:'+chr(47)+chr(47)+'gamma-api.polymarket.com/events/keyset?closed=false&limit=100'
+EVIDENCE_LINE 18         rows=data.get('events')
+EVIDENCE_LINE 36     print('NEXT_CURSOR',data.get('next_cursor'))
+EVIDENCE_LINE 37     print('NEXT_CURSOR_ALT',data.get('nextCursor'))
+EVIDENCE_LINE 50 print('GAMMA_KEYSET_PROBE_PASS')
+---
+EVIDENCE_FILE control/jobs/discover_neg_risk_e287.py
+EVIDENCE_LINE 5 url = 'https://gamma-api.polymarket.com/events/keyset?closed=false&limit=100'
+EVIDENCE_LINE 12 events = data.get('events', [])
+EVIDENCE_LINE 15 print('EVENT_COUNT', len(events))
+EVIDENCE_LINE 17 neg_events = 0
+EVIDENCE_LINE 19 for event in events:
+EVIDENCE_LINE 30     neg_events += 1
+EVIDENCE_LINE 43 print('NEG_EVENTS', neg_events)
+---
+EVIDENCE_FILE control/results/EDGE-HUNTER-NEGRISK-DISCOVERY-LOCATE-E374/stdout.log
+EVIDENCE_LINE 26 LINE 7 url='https:'+chr(47)+chr(47)+'gamma-api.polymarket.com/events/102763'
+EVIDENCE_LINE 35 LINE 7 url='https:'+chr(47)+chr(47)+'gamma-api.polymarket.com/events/106981'
+EVIDENCE_LINE 68 LINE 7 url='https:'+chr(47)+chr(47)+'gamma-api.polymarket.com/events/79905'
+EVIDENCE_LINE 77 LINE 7 url='https:'+chr(47)+chr(47)+'gamma-api.polymarket.com/events/86426'
+EVIDENCE_LINE 90 LINE 7 url='https:'+chr(47)+chr(47)+'gamma-api.polymarket.com/events/85579'
+EVIDENCE_LINE 100 LINE 31         if any(term.lower() in ll for term in terms) or 'gamma' in ll or 'cursor' in ll or 'offset' in ll or 'limit' in ll:
+EVIDENCE_LINE 121 LINE 7 url='https:'+chr(47)+chr(47)+'gamma-api.polymarket.com/events/79137'
+EVIDENCE_LINE 130 LINE 7 url='https:'+chr(47)+chr(47)+'gamma-api.polymarket.com/events/51456'
+EVIDENCE_LINE 143 LINE 9 events_url = 'https://gamma-api.polymarket.com/events/keyset?closed=false&limit=100'
+EVIDENCE_LINE 171 LINE 12     url = 'https://gamma-api.polymarket.com/events?active=true&closed=false&limit=100&offset=' + str(offset)
+EVIDENCE_LINE 179 LINE 8 base='https:'+chr(47)+chr(47)+'gamma-api.polymarket.com/events?active=true&closed=false&limit=100&offset='
+EVIDENCE_LINE 192 LINE 5 url = 'https://gamma-api.polymarket.com/events/keyset?closed=false&limit=100'
+EVIDENCE_LINE 195 FILE control/jobs/neg_risk_census_e288.py
+EVIDENCE_LINE 197 LINE 5 base = 'https://gamma-api.polymarket.com/events/keyset?closed=false&limit=100'
+EVIDENCE_LINE 198 LINE 6 cursor = None
+EVIDENCE_LINE 199 LINE 12     if cursor:
+EVIDENCE_LINE 200 LINE 13         url = url + '&cursor=' + cursor
+EVIDENCE_LINE 203 LINE 30     cursor = data.get('next_cursor')
+EVIDENCE_LINE 204 LINE 31     if not cursor:
+EVIDENCE_LINE 208 LINE 38 �      �        e^dM ee �      �        e^dN ee2�      �        e^dO ee\�      �        e^dP ee]�      �       e\rL eDe\dQ� �#�      Z_ eDe\dR� �#�      Z` e^dSe_dT   e_dI   e_dU   e_d    ddV �        e^dWe`dT   e`dJ   e`dX   e`d    ddV �       e]D ]!  Z? e^dYe?dT   e?dZ   e?dI   e?dJ   e?d    ddV �       �#  e^d[eW�       y# 1 sw Y   ��xY w# e+$ r dZ$Y  ���w xY wc c} w c c}w # 1 sw Y   ���xY w# e+$ r1Z9e3j=                  eed+ e:e9�      jv                  d,��       Y dZ9[9���dZ9[9ww xY wc c}w c c}w c c}w )\�    )�Path)�Request�urlopen)�datetime�timezoneNzPredictionEdgeHunter/1.0i�  �d   zRhttps://gamma-api.polymarket.com/events?active=true&closed=false&limit=100&offset=�
+EVIDENCE_LINE 209 LINE 40    )�timeout�events�id�negRiskT�negRiskAugmented�markets�negRiskMarketID� �
+EVIDENCE_LINE 218 LINE 11 Pass `?cursor=` from a prior response's `next_cursor` to fetch the next page;
+EVIDENCE_LINE 220 LINE 41 SCHEMA_BODY {"description": "One position (`/v2/positions`); a holding in a single outcome token, priced\nand enriched.\n\nThe shape is **uniform across all three arms** (user OPEN/REDEEMABLE, user\nCLOSED, market-anchored): clients never branch on which spine answered. On\nthe CLOSED arm `current_size`/`current_value`/`unrealized_pnl` are ~0 by construction, which is exactly\nwhat a closed position should report.\n\nKeyset-paginated on the active `sort_by` key: follow the response's\n`next_cursor` to page, and expect the ordering to change with `sort_by`.", "properties": {"archived": {"description": "Whether the market is archived; tells a caller using `includeArchived`\nwhich rows the flag surfaced.", "type": "boolean"}, "avg_price": {"description": "Weighted-average entry price per share, in USDC.", "format": "double", "type": "number"}, "condition_id": {"description": "The on-chain condition id.", "type": "string"}, "current_price": {"description": "Live mark per share, in USDC.", "format": "double", "type": "number"}, "current_size": {"description": "The CURRENT holding, in shares (~0 residual on the CLOSED arm).", "format": "double", "type": "number"}, "current_value": {"description": "`current_size \u00d7 current_price`, in USDC.", "format": "double", "type": "number"}, "end_date": {"description": "Market end date, `YYYY-MM-DD`; `1970-01-01` when Gamma has none.", "type": "string"}, "entry_cost_usdc": {"description": "The fee-EXCLUSIVE entry basis.", "format": "double", "type": "number"}, "entry_fees_usdc": {"description": "Attributed BUY-fee total for the position. Disclosure only:\n`entry_cost_usdc` is already fee-exclusive, so never re-deduct this\nfrom a PnL column.", "format": "double", "type": "number"}, "event_id": {"description": "Gamma event id of the parent event.", "type": "string"}, "event_slug": {"description": "Parent event slug.", "type": "string"}, "icon": {"description": "Market icon URL.", "type": "string"}, "last_event_at": {"description": "The row's last economics event, epoch seconds; 0 without native state.", "format": "int64", "type": "integer"}, "mergeable": {"description": "Whether the wallet also holds the opposite outcome, so the pair can\nmerge back into collateral.", "type": "boolean"}, "name": {"description": "Profile display name of the wallet.", "type": "string"}, "negative_risk": {"description": "Whether the market belongs to a neg-risk group.", "type": "boolean"}, "opposite_outcome": {"description": "Label o
+EVIDENCE_LINE 222 LINE 45 SCHEMA_BODY {"description": "`{ data, pagination }` envelope for `/v2/trades`.", "properties": {"data": {"description": "The page's rows.", "items": {"$ref": "#/components/schemas/Trade"}, "type": "array"}, "pagination": {"$ref": "#/components/schemas/Pagination", "description": "Paging envelope: follow `next_cursor` until `null`."}}, "required": ["data", "pagination"], "type": "object"}
+EVIDENCE_LINE 298 LATEST_MANIFEST_KEYS ['eligible_group_count', 'events_seen', 'groups', 'live_trading', 'paid_actions', 'raw_rows_scanned', 'retrieved_at', 'wallet_actions']
+EVIDENCE_LINE 300 FIELD events_seen 500
+---
+EVIDENCE_FILE control/results/EDGE-HUNTER-GAMMA-KEYSET-CURSOR-E398/stdout.log
+EVIDENCE_LINE 2 RECORDED_PAGE_COUNT 25
+EVIDENCE_LINE 3 RECORDED_PAGE 1 FIRST 16183 LAST 57206 SHA 9259c249c640b9a04db51ec0760367ff32a9e4b49842217debc08751f93e6f04
+EVIDENCE_LINE 4 RECORDED_PAGE 2 FIRST 16183 LAST 57206 SHA ca84e489e1dd8daa9471eda5c2e9760b4fa6661a6b477d8bda50dd533c62d2ca
+EVIDENCE_LINE 5 RECORDED_PAGE 3 FIRST 16183 LAST 57206 SHA ca84e489e1dd8daa9471eda5c2e9760b4fa6661a6b477d8bda50dd533c62d2ca
+EVIDENCE_LINE 6 FIRST_CURSOR_LENGTH 214
+EVIDENCE_LINE 7 SECOND_CURSOR_LENGTH 214
+EVIDENCE_LINE 8 CURSORS_EQUAL True
+EVIDENCE_LINE 9 FIRST_CURSOR_PREFIX _WIxoc4B8aciXdad3eo3ZBV76nNRvkDs6pAFURlMoyh7InYiOjEsImsiOiJldmVudHMiLCJvaCI6IjRmNTNjZGExOGMyYmFhMGMwMzU0YmI1ZjlhM2VjYmU1
+EVIDENCE_LINE 10 SECOND_CURSOR_PREFIX _WIxoc4B8aciXdad3eo3ZBV76nNRvkDs6pAFURlMoyh7InYiOjEsImsiOiJldmVudHMiLCJvaCI6IjRmNTNjZGExOGMyYmFhMGMwMzU0YmI1ZjlhM2VjYmU1
+EVIDENCE_LINE 15 ENCODED_NEXT_CURSOR_LENGTH 214
+EVIDENCE_LINE 16 CURSOR_ADVANCED False
+EVIDENCE_LINE 17 GAMMA_KEYSET_CURSOR_VERIFY_PASS
+---
+EVIDENCE_FILE control/results/EDGE-HUNTER-GAMMA-KEYSET-CURSOR-E398/RESULT.json
+EVIDENCE_LINE 4     "control/jobs/verify_gamma_keyset_cursor_e398.py"
+EVIDENCE_LINE 15   "task_id": "EDGE-HUNTER-GAMMA-KEYSET-CURSOR-E398"
+---
+EVIDENCE_FILE control/results/EDGE-HUNTER-ASSET-TRADE-SEMANTICS-E349/stdout.log
+EVIDENCE_LINE 8 TRADE_OPERATION_DESCRIPTION Keyset-paginated trade feed in the standard
+EVIDENCE_LINE 11 Pass `?cursor=` from a prior response's `next_cursor` to fetch the next page;
+EVIDENCE_LINE 12 it carries both the page size and the `(block_timestamp, sequence_id)` seek
+EVIDENCE_LINE 13 anchor, so deep pages cost the same as shallow ones.
+EVIDENCE_LINE 33 RESPONSE_200 {"content": {"application/json": {"schema": {"$ref": "#/components/schemas/TradesPage"}}}, "description": "A page of trades"}
+EVIDENCE_LINE 39 SCHEMA_BODY {"description": "One outcome token's holder group in `/v2/holders`: the `token_id` and its\nholders, top-N by net balance. A multi-market request interleaves tokens\nacross the page, so merge groups by `token_id`, not by array position.", "properties": {"holders": {"description": "Top holders of that token, amount descending (net by default,\nper-side gross with `include_pnl=true`).", "items": {"$ref": "#/components/schemas/Holder"}, "type": "array"}, "token_id": {"description": "The outcome token this group ranks.", "type": "string"}}, "required": ["token_id", "holders"], "type": "object"}
+EVIDENCE_LINE 41 SCHEMA_BODY {"description": "One position (`/v2/positions`); a holding in a single outcome token, priced\nand enriched.\n\nThe shape is **uniform across all three arms** (user OPEN/REDEEMABLE, user\nCLOSED, market-anchored): clients never branch on which spine answered. On\nthe CLOSED arm `current_size`/`current_value`/`unrealized_pnl` are ~0 by construction, which is exactly\nwhat a closed position should report.\n\nKeyset-paginated on the active `sort_by` key: follow the response's\n`next_cursor` to page, and expect the ordering to change with `sort_by`.", "properties": {"archived": {"description": "Whether the market is archived; tells a caller using `includeArchived`\nwhich rows the flag surfaced.", "type": "boolean"}, "avg_price": {"description": "Weighted-average entry price per share, in USDC.", "format": "double", "type": "number"}, "condition_id": {"description": "The on-chain condition id.", "type": "string"}, "current_price": {"description": "Live mark per share, in USDC.", "format": "double", "type": "number"}, "current_size": {"description": "The CURRENT holding, in shares (~0 residual on the CLOSED arm).", "format": "double", "type": "number"}, "current_value": {"description": "`current_size \u00d7 current_price`, in USDC.", "format": "double", "type": "number"}, "end_date": {"description": "Market end date, `YYYY-MM-DD`; `1970-01-01` when Gamma has none.", "type": "string"}, "entry_cost_usdc": {"description": "The fee-EXCLUSIVE entry basis.", "format": "double", "type": "number"}, "entry_fees_usdc": {"description": "Attributed BUY-fee total for the position. Disclosure only:\n`entry_cost_usdc` is already fee-exclusive, so never re-deduct this\nfrom a PnL column.", "format": "double", "type": "number"}, "event_id": {"description": "Gamma event id of the parent event.", "type": "string"}, "event_slug": {"description": "Parent event slug.", "type": "string"}, "icon": {"description": "Market icon URL.", "type": "string"}, "last_event_at": {"description": "The row's last economics event, epoch seconds; 0 without native state.", "format": "int64", "type": "integer"}, "mergeable": {"description": "Whether the wallet also holds the opposite outcome, so the pair can\nmerge back into collateral.", "type": "boolean"}, "name": {"description": "Profile display name of the wallet.", "type": "string"}, "negative_risk": {"description": "Whether the market belongs to a neg-risk group.", "type": "boolean"}, "opposite_outcome": {"description": "Label of the ma
+EVIDENCE_LINE 44 SCHEMA_NAME TradesPage
+EVIDENCE_LINE 45 SCHEMA_BODY {"description": "`{ data, pagination }` envelope for `/v2/trades`.", "properties": {"data": {"description": "The page's rows.", "items": {"$ref": "#/components/schemas/Trade"}, "type": "array"}, "pagination": {"$ref": "#/components/schemas/Pagination", "description": "Paging envelope: follow `next_cursor` until `null`."}}, "required": ["data", "pagination"], "type": "object"}
+---
+EVIDENCE_FILE control/results/EDGE-HUNTER-ASSET-HOURLY-INTEGRATION-E353/stdout.log
+EVIDENCE_LINE 102 LINE 67 "    next_cursor=pagination.get('next_cursor')"
+EVIDENCE_LINE 103 LINE 68 '    if not next_cursor:'
+EVIDENCE_LINE 105 LINE 70 '    cursor=str(next_cursor)'
+EVIDENCE_LINE 106 LINE 71 '    if cursor in seen_cursors:'
+EVIDENCE_LINE 107 LINE 72 "        raise SystemExit('cursor_repeat')"
+EVIDENCE_LINE 108 LINE 73 '    seen_cursors.add(cursor)'
+EVIDENCE_LINE 144 LINE 109 "result=dict(event_id='106981',baseline=str(baseline_path.relative_to(root)),credit_epoch=credit_epoch,credit_start_effective=datetime.fromtimestamp(credit_epoch,timezone.utc).isoformat(),retrieved_at=datetime.now(timezone.utc).isoformat(),pages=pages,markets=list())"
+EVIDENCE_LINE 172 LINE 137 "print('FETCHED_PAGES',len(pages))"
+---
+EVIDENCE_FILE control/results/EDGE-HUNTER-POLYMARKET-NEG-RISK-DISCOVERY-E287/stdout.log
+EVIDENCE_LINE 2 TOP_KEYS $schema,events,next_cursor
+EVIDENCE_LINE 2323 NEG_EVENTS 39
+---
+EVIDENCE_FILE control/results/EDGE-HUNTER-MARKET-DATA-DOCS-E280/stdout.log
+EVIDENCE_LINE 30 ailable pages before exploring further. Skip to main content Polymarket Documentation home page English Search... ⌘ K Get Help Main Site Main Site Search... Navigation Getting Started Overview Predictions Perps API Reference Changelogs Getting Started Overview Polymarket 101 SDKs & APIs Core Concepts Markets & Events Negative Risk Markets Prices & Orderbook Positions & Tokens Polymarket USD Order Lifecycle Resolution Market Data Overview Discover Markets Market Details Prices and Order Books Analytics Real-Time Data Chainlink TWAP Prices Trading Overview Place Your First Order Wallets and Authentication Session Keys Beta Place Orders Manage Orders Real-Time Order Updates Positions Combos Wallet Activity Fees Market Making Matching Engine Restarts Bridge Programs Taker Rebate Program Maker Rebates Program Liquidity Rewards Builder Program Referral Program Resources Contracts Data Resources Error Codes 🇺🇸 Looking for Polymarket US documentation? Visit US Docs → Polymarket Documentation Build on the world’s largest prediction market. APIs, SDKs, and tools for prediction market developers. Developer Quickstart Make your first API request in minutes. Learn the basics of the Polymarket platform, fetch market data, place orders, and rede
+EVIDENCE_LINE 33 e Main Site Search... Navigation Getting Started Overview Predictions Perps API Reference Changelogs Getting Started Overview Polymarket 101 SDKs & APIs Core Concepts Markets & Events Negative Risk Markets Prices & Orderbook Positions & Tokens Polymarket USD Order Lifecycle Resolution Market Data Overview Discover Markets Market Details Prices and Order Books Analytics Real-Time Data Chainlink TWAP Prices Trading Overview Place Your First Order Wallets and Authentication Session Keys Beta Place Orders Manage Orders Real-Time Order Updates Positions Combos Wallet Activity Fees Market Making Matching Engine Restarts Bridge Programs Taker Rebate Program Maker Rebates Program Liquidity Rewards Builder Program Referral Program Resources Contracts Data Resources Error Codes 🇺🇸 Looking for Polymarket US documentation? Visit US Docs → Polymarket Documentation Build on the world’s largest prediction market. APIs, SDKs, and tools for prediction market developers. Developer Quickstart Make your first API request in minutes. Learn the basics of the Polymarket platform, fetch market data, place orders, and redeem winning positions. Place Your First Order → TypeScript Python API import { createPublicClient } from "@polymarket/client" ; const cl
+EVIDENCE_LINE 36 .com/markets/keyset" \ --data-urlencode "closed=false" \ --data-urlencode "limit=5" Get Familiar with Polymarket Learn how Polymarket works, explore the concepts behind markets and trading, or choose how to integrate. Polymarket 101 Learn how prediction markets work and how to use Polymarket. Core Concepts Understand markets and events, prices and order books, positions, orders, and resolution. SDKs & APIs Choose the integration approach that best fits your application. Polymarket Documentation home page x linkedin github discord Explore Builder Program Market Makers Referral Program Polymarket Accuracy Activity Press Careers Help and security Availability Help Center Status Legal Privacy Policy Terms of Service Powered by This documentation is built and hosted on Mintlify, a developer documentation platform
+EVIDENCE_LINE 39 x at: /llms.txt Use this file to discover all available pages before exploring further. Skip to main content Polymarket Documentation home page English Search... ⌘ K Get Help Main Site Main Site Search... Navigation Getting Started Overview Predictions Perps API Reference Changelogs Getting Started Overview Polymarket 101 SDKs & APIs Core Concepts Markets & Events Negative Risk Markets Prices & Orderbook Positions & Tokens Polymarket USD Order Lifecycle Resolution Market Data Overview Discover Markets Market Details Prices and Order Books Analytics Real-Time Data Chainlink TWAP Prices Trading Overview Place Your First Order Wallets and Authentication Session Keys Beta Place Orders Manage Orders Real-Time Order Updates Positions Combos Wallet Activity Fees Market Making Matching Engine Restarts Bridge Programs Taker Rebate Program Maker Rebates Program Liquidity Rewards Builder Program Referral Program Resources Contracts Data Resources Error Codes 🇺🇸 Looking for Polymarket US documentation? Visit US Docs → Polymarket Documentation Build on the world’s largest prediction market. APIs, SDKs, and tools for prediction market developers. Developer Quickstart Make your first API request in minutes. Learn the basics of the Polymarket pla
+EVIDENCE_LINE 42 o discover all available pages before exploring further. Skip to main content Polymarket Documentation home page English Search... ⌘ K Get Help Main Site Main Site Search... Navigation Getting Started Overview Predictions Perps API Reference Changelogs Getting Started Overview Polymarket 101 SDKs & APIs Core Concepts Markets & Events Negative Risk Markets Prices & Orderbook Positions & Tokens Polymarket USD Order Lifecycle Resolution Market Data Overview Discover Markets Market Details Prices and Order Books Analytics Real-Time Data Chainlink TWAP Prices Trading Overview Place Your First Order Wallets and Authentication Session Keys Beta Place Orders Manage Orders Real-Time Order Updates Positions Combos Wallet Activity Fees Market Making Matching Engine Restarts Bridge Programs Taker Rebate Program Maker Rebates Program Liquidity Rewards Builder Program Referral Program Resources Contracts Data Resources Error Codes 🇺🇸 Looking for Polymarket US documentation? Visit US Docs → Polymarket Documentation Build on the world’s largest prediction market. APIs, SDKs, and tools for prediction market developers. Developer Quickstart Make your first API request in minutes. Learn the basics of the Polymarket platform, fetch market data, place
+EVIDENCE_LINE 45 sh Search... ⌘ K Get Help Main Site Main Site Search... Navigation Getting Started Overview Predictions Perps API Reference Changelogs Getting Started Overview Polymarket 101 SDKs & APIs Core Concepts Markets & Events Negative Risk Markets Prices & Orderbook Positions & Tokens Polymarket USD Order Lifecycle Resolution Market Data Overview Discover Markets Market Details Prices and Order Books Analytics Real-Time Data Chainlink TWAP Prices Trading Overview Place Your First Order Wallets and Authentication Session Keys Beta Place Orders Manage Orders Real-Time Order Updates Positions Combos Wallet Activity Fees Market Making Matching Engine Restarts Bridge Programs Taker Rebate Program Maker Rebates Program Liquidity Rewards Builder Program Referral Program Resources Contracts Data Resources Error Codes 🇺🇸 Looking for Polymarket US documentation? Visit US Docs → Polymarket Documentation Build on the world’s largest prediction market. APIs, SDKs, and tools for prediction market developers. Developer Quickstart Make your first API request in minutes. Learn the basics of the Polymarket platform, fetch market data, place orders, and redeem winning positions. Place Your First Order → TypeScript Python API import { createPublicClient } fr
+EVIDENCE_LINE 48 evelopers. Developer Quickstart Make your first API request in minutes. Learn the basics of the Polymarket platform, fetch market data, place orders, and redeem winning positions. Place Your First Order → TypeScript Python API import { createPublicClient } from "@polymarket/client" ; const client = createPublicClient (); const pages = client . listMarkets ({ closed: false }); const { items : markets } = await pages . firstPage (); from polymarket import AsyncPublicClient async with AsyncPublicClient() as client: markets = client.list_markets( closed = False ) async for market in markets.iter_items(): print (market.question) curl -G "https://gamma-api.polymarket.com/markets/keyset" \ --data-urlencode "closed=false" \ --data-urlencode "limit=5" Get Familiar with Polymarket Learn how Polymarket works, explore the concepts behind markets and trading, or choose how to integrate. Polymarket 101 Learn how prediction markets work and how to use Polymarket. Core Concepts Understand markets and events, prices and order books, positions, orders, and resolution. SDKs & APIs Choose the integration approach that best fits your application. Polymarket Documentation home page x linkedin github discord Explore Builder Program Market Makers Referra
+EVIDENCE_LINE 51 st API request in minutes. Learn the basics of the Polymarket platform, fetch market data, place orders, and redeem winning positions. Place Your First Order → TypeScript Python API import { createPublicClient } from "@polymarket/client" ; const client = createPublicClient (); const pages = client . listMarkets ({ closed: false }); const { items : markets } = await pages . firstPage (); from polymarket import AsyncPublicClient async with AsyncPublicClient() as client: markets = client.list_markets( closed = False ) async for market in markets.iter_items(): print (market.question) curl -G "https://gamma-api.polymarket.com/markets/keyset" \ --data-urlencode "closed=false" \ --data-urlencode "limit=5" Get Familiar with Polymarket Learn how Polymarket works, explore the concepts behind markets and trading, or choose how to integrate. Polymarket 101 Learn how prediction markets work and how to use Polymarket. Core Concepts Understand markets and events, prices and order books, positions, orders, and resolution. SDKs & APIs Choose the integration approach that best fits your application. Polymarket Documentation home page x linkedin github discord Explore Builder Program Market Makers Referral Program Polymarket Accuracy Activity Press 
+EVIDENCE_LINE 54  positions. Place Your First Order → TypeScript Python API import { createPublicClient } from "@polymarket/client" ; const client = createPublicClient (); const pages = client . listMarkets ({ closed: false }); const { items : markets } = await pages . firstPage (); from polymarket import AsyncPublicClient async with AsyncPublicClient() as client: markets = client.list_markets( closed = False ) async for market in markets.iter_items(): print (market.question) curl -G "https://gamma-api.polymarket.com/markets/keyset" \ --data-urlencode "closed=false" \ --data-urlencode "limit=5" Get Familiar with Polymarket Learn how Polymarket works, explore the concepts behind markets and trading, or choose how to integrate. Polymarket 101 Learn how prediction markets work and how to use Polymarket. Core Concepts Understand markets and events, prices and order books, positions, orders, and resolution. SDKs & APIs Choose the integration approach that best fits your application. Polymarket Documentation home page x linkedin github discord Explore Builder Program Market Makers Referral Program Polymarket Accuracy Activity Press Careers Help and security Availability Help Center Status Legal Privacy Policy Terms of Service Powered by This documentati
+EVIDENCE_LINE 57  First Order → TypeScript Python API import { createPublicClient } from "@polymarket/client" ; const client = createPublicClient (); const pages = client . listMarkets ({ closed: false }); const { items : markets } = await pages . firstPage (); from polymarket import AsyncPublicClient async with AsyncPublicClient() as client: markets = client.list_markets( closed = False ) async for market in markets.iter_items(): print (market.question) curl -G "https://gamma-api.polymarket.com/markets/keyset" \ --data-urlencode "closed=false" \ --data-urlencode "limit=5" Get Familiar with Polymarket Learn how Polymarket works, explore the concepts behind markets and trading, or choose how to integrate. Polymarket 101 Learn how prediction markets work and how to use Polymarket. Core Concepts Understand markets and events, prices and order books, positions, orders, and resolution. SDKs & APIs Choose the integration approach that best fits your application. Polymarket Documentation home page x linkedin github discord Explore Builder Program Market Makers Referral Program Polymarket Accuracy Activity Press Careers Help and security Availability Help Center Status Legal Privacy Policy Terms of Service Powered by This documentation is built and hosted
+EVIDENCE_LINE 60 createPublicClient } from "@polymarket/client" ; const client = createPublicClient (); const pages = client . listMarkets ({ closed: false }); const { items : markets } = await pages . firstPage (); from polymarket import AsyncPublicClient async with AsyncPublicClient() as client: markets = client.list_markets( closed = False ) async for market in markets.iter_items(): print (market.question) curl -G "https://gamma-api.polymarket.com/markets/keyset" \ --data-urlencode "closed=false" \ --data-urlencode "limit=5" Get Familiar with Polymarket Learn how Polymarket works, explore the concepts behind markets and trading, or choose how to integrate. Polymarket 101 Learn how prediction markets work and how to use Polymarket. Core Concepts Understand markets and events, prices and order books, positions, orders, and resolution. SDKs & APIs Choose the integration approach that best fits your application. Polymarket Documentation home page x linkedin github discord Explore Builder Program Market Makers Referral Program Polymarket Accuracy Activity Press Careers Help and security Availability Help Center Status Legal Privacy Policy Terms of Service Powered by This documentation is built and hosted on Mintlify, a developer documentation platfo
+EVIDENCE_LINE 63 onst pages = client . listMarkets ({ closed: false }); const { items : markets } = await pages . firstPage (); from polymarket import AsyncPublicClient async with AsyncPublicClient() as client: markets = client.list_markets( closed = False ) async for market in markets.iter_items(): print (market.question) curl -G "https://gamma-api.polymarket.com/markets/keyset" \ --data-urlencode "closed=false" \ --data-urlencode "limit=5" Get Familiar with Polymarket Learn how Polymarket works, explore the concepts behind markets and trading, or choose how to integrate. Polymarket 101 Learn how prediction markets work and how to use Polymarket. Core Concepts Understand markets and events, prices and order books, positions, orders, and resolution. SDKs & APIs Choose the integration approach that best fits your application. Polymarket Documentation home page x linkedin github discord Explore Builder Program Market Makers Referral Program Polymarket Accuracy Activity Press Careers Help and security Availability Help Center Status Legal Privacy Policy Terms of Service Powered by This documentation is built and hosted on Mintlify, a developer documentation platform
+EVIDENCE_LINE 66 syncPublicClient() as client: markets = client.list_markets( closed = False ) async for market in markets.iter_items(): print (market.question) curl -G "https://gamma-api.polymarket.com/markets/keyset" \ --data-urlencode "closed=false" \ --data-urlencode "limit=5" Get Familiar with Polymarket Learn how Polymarket works, explore the concepts behind markets and trading, or choose how to integrate. Polymarket 101 Learn how prediction markets work and how to use Polymarket. Core Concepts Understand markets and events, prices and order books, positions, orders, and resolution. SDKs & APIs Choose the integration approach that best fits your application. Polymarket Documentation home page x linkedin github discord Explore Builder Program Market Makers Referral Program Polymarket Accuracy Activity Press Careers Help and security Availability Help Center Status Legal Privacy Policy Terms of Service Powered by This documentation is built and hosted on Mintlify, a developer documentation platform
+EVIDENCE_LINE 69 or market in markets.iter_items(): print (market.question) curl -G "https://gamma-api.polymarket.com/markets/keyset" \ --data-urlencode "closed=false" \ --data-urlencode "limit=5" Get Familiar with Polymarket Learn how Polymarket works, explore the concepts behind markets and trading, or choose how to integrate. Polymarket 101 Learn how prediction markets work and how to use Polymarket. Core Concepts Understand markets and events, prices and order books, positions, orders, and resolution. SDKs & APIs Choose the integration approach that best fits your application. Polymarket Documentation home page x linkedin github discord Explore Builder Program Market Makers Referral Program Polymarket Accuracy Activity Press Careers Help and security Availability Help Center Status Legal Privacy Policy Terms of Service Powered by This documentation is built and hosted on Mintlify, a developer documentation platform
+EVIDENCE_LINE 72 G "https://gamma-api.polymarket.com/markets/keyset" \ --data-urlencode "closed=false" \ --data-urlencode "limit=5" Get Familiar with Polymarket Learn how Polymarket works, explore the concepts behind markets and trading, or choose how to integrate. Polymarket 101 Learn how prediction markets work and how to use Polymarket. Core Concepts Understand markets and events, prices and order books, positions, orders, and resolution. SDKs & APIs Choose the integration approach that best fits your application. Polymarket Documentation home page x linkedin github discord Explore Builder Program Market Makers Referral Program Polymarket Accuracy Activity Press Careers Help and security Availability Help Center Status Legal Privacy Policy Terms of Service Powered by This documentation is built and hosted on Mintlify, a developer documentation platform
+EVIDENCE_LINE 75 le pages before exploring further. Skip to main content Polymarket Documentation home page English Search... ⌘ K Get Help Main Site Main Site Search... Navigation Getting Started Overview Predictions Perps API Reference Changelogs Getting Started Overview Polymarket 101 SDKs & APIs Core Concepts Markets & Events Negative Risk Markets Prices & Orderbook Positions & Tokens Polymarket USD Order Lifecycle Resolution Market Data Overview Discover Markets Market Details Prices and Order Books Analytics Real-Time Data Chainlink TWAP Prices Trading Overview Place Your First Order Wallets and Authentication Session Keys Beta Place Orders Manage Orders Real-Time Order Updates Positions Combos Wallet Activity Fees Market Making Matching Engine Restarts Bridge Programs Taker Rebate Program Maker Rebates Program Liquidity Rewards Builder Program Referral Program Resources Contracts Data Resources Error Codes 🇺🇸 Looking for Polymarket US documentation? Visit US Docs → Polymarket Documentation Build on the world’s largest prediction market. APIs, SDKs, and tools for prediction market developers. Developer Quickstart Make your first API request in minutes. Learn the basics of the Polymarket platform, fetch market data, place orders, and redeem wi
+EVIDENCE_LINE 78  Site Search... Navigation Getting Started Overview Predictions Perps API Reference Changelogs Getting Started Overview Polymarket 101 SDKs & APIs Core Concepts Markets & Events Negative Risk Markets Prices & Orderbook Positions & Tokens Polymarket USD Order Lifecycle Resolution Market Data Overview Discover Markets Market Details Prices and Order Books Analytics Real-Time Data Chainlink TWAP Prices Trading Overview Place Your First Order Wallets and Authentication Session Keys Beta Place Orders Manage Orders Real-Time Order Updates Positions Combos Wallet Activity Fees Market Making Matching Engine Restarts Bridge Programs Taker Rebate Program Maker Rebates Program Liquidity Rewards Builder Program Referral Program Resources Contracts Data Resources Error Codes 🇺🇸 Looking for Polymarket US documentation? Visit US Docs → Polymarket Documentation Build on the world’s largest prediction market. APIs, SDKs, and tools for prediction market developers. Developer Quickstart Make your first API request in minutes. Learn the basics of the Polymarket platform, fetch market data, place orders, and redeem winning positions. Place Your First Order → TypeScript Python API import { createPublicClient } from "@polymarket/client" ; const client =
+EVIDENCE_LINE 81 arkets/keyset" \ --data-urlencode "closed=false" \ --data-urlencode "limit=5" Get Familiar with Polymarket Learn how Polymarket works, explore the concepts behind markets and trading, or choose how to integrate. Polymarket 101 Learn how prediction markets work and how to use Polymarket. Core Concepts Understand markets and events, prices and order books, positions, orders, and resolution. SDKs & APIs Choose the integration approach that best fits your application. Polymarket Documentation home page x linkedin github discord Explore Builder Program Market Makers Referral Program Polymarket Accuracy Activity Press Careers Help and security Availability Help Center Status Legal Privacy Policy Terms of Service Powered by This documentation is built and hosted on Mintlify, a developer documentation platform
+---
+EVIDENCE_FILE control/results/EDGE-HUNTER-GAMMA-KEYSET-NEGRISK-E397/stdout.log
+EVIDENCE_LINE 1 PAGE 1 ROWS 100 FIRST 16183 LAST 57206 SHA 9259c249c640b9a04db51ec0760367ff32a9e4b49842217debc08751f93e6f04
+EVIDENCE_LINE 2 PAGE 2 ROWS 100 FIRST 16183 LAST 57206 SHA ca84e489e1dd8daa9471eda5c2e9760b4fa6661a6b477d8bda50dd533c62d2ca
+EVIDENCE_LINE 3 PAGE 3 ROWS 100 FIRST 16183 LAST 57206 SHA ca84e489e1dd8daa9471eda5c2e9760b4fa6661a6b477d8bda50dd533c62d2ca
+EVIDENCE_LINE 4 PAGE 4 ROWS 100 FIRST 16183 LAST 57206 SHA ca84e489e1dd8daa9471eda5c2e9760b4fa6661a6b477d8bda50dd533c62d2ca
+EVIDENCE_LINE 5 PAGE 5 ROWS 100 FIRST 16183 LAST 57206 SHA ca84e489e1dd8daa9471eda5c2e9760b4fa6661a6b477d8bda50dd533c62d2ca
+EVIDENCE_LINE 6 PAGE 6 ROWS 100 FIRST 16183 LAST 57206 SHA ca84e489e1dd8daa9471eda5c2e9760b4fa6661a6b477d8bda50dd533c62d2ca
+EVIDENCE_LINE 7 PAGE 7 ROWS 100 FIRST 16183 LAST 57206 SHA ca84e489e1dd8daa9471eda5c2e9760b4fa6661a6b477d8bda50dd533c62d2ca
+EVIDENCE_LINE 8 PAGE 8 ROWS 100 FIRST 16183 LAST 57206 SHA ca84e489e1dd8daa9471eda5c2e9760b4fa6661a6b477d8bda50dd533c62d2ca
+EVIDENCE_LINE 9 PAGE 9 ROWS 100 FIRST 16183 LAST 57206 SHA ca84e489e1dd8daa9471eda5c2e9760b4fa6661a6b477d8bda50dd533c62d2ca
+EVIDENCE_LINE 10 PAGE 10 ROWS 100 FIRST 16183 LAST 57206 SHA ca84e489e1dd8daa9471eda5c2e9760b4fa6661a6b477d8bda50dd533c62d2ca
+EVIDENCE_LINE 11 PAGE 11 ROWS 100 FIRST 16183 LAST 57206 SHA ca84e489e1dd8daa9471eda5c2e9760b4fa6661a6b477d8bda50dd533c62d2ca
+EVIDENCE_LINE 12 PAGE 12 ROWS 100 FIRST 16183 LAST 57206 SHA ca84e489e1dd8daa9471eda5c2e9760b4fa6661a6b477d8bda50dd533c62d2ca
+EVIDENCE_LINE 13 PAGE 13 ROWS 100 FIRST 16183 LAST 57206 SHA ca84e489e1dd8daa9471eda5c2e9760b4fa6661a6b477d8bda50dd533c62d2ca
+EVIDENCE_LINE 14 PAGE 14 ROWS 100 FIRST 16183 LAST 57206 SHA ca84e489e1dd8daa9471eda5c2e9760b4fa6661a6b477d8bda50dd533c62d2ca
+EVIDENCE_LINE 15 PAGE 15 ROWS 100 FIRST 16183 LAST 57206 SHA ca84e489e1dd8daa9471eda5c2e9760b4fa6661a6b477d8bda50dd533c62d2ca
+EVIDENCE_LINE 16 PAGE 16 ROWS 100 FIRST 16183 LAST 57206 SHA ca84e489e1dd8daa9471eda5c2e9760b4fa6661a6b477d8bda50dd533c62d2ca
+EVIDENCE_LINE 17 PAGE 17 ROWS 100 FIRST 16183 LAST 57206 SHA ca84e489e1dd8daa9471eda5c2e9760b4fa6661a6b477d8bda50dd533c62d2ca
+EVIDENCE_LINE 18 PAGE 18 ROWS 100 FIRST 16183 LAST 57206 SHA ca84e489e1dd8daa9471eda5c2e9760b4fa6661a6b477d8bda50dd533c62d2ca
+EVIDENCE_LINE 19 PAGE 19 ROWS 100 FIRST 16183 LAST 57206 SHA ca84e489e1dd8daa9471eda5c2e9760b4fa6661a6b477d8bda50dd533c62d2ca
+EVIDENCE_LINE 20 PAGE 20 ROWS 100 FIRST 16183 LAST 57206 SHA ca84e489e1dd8daa9471eda5c2e9760b4fa6661a6b477d8bda50dd533c62d2ca
+EVIDENCE_LINE 21 PAGE 21 ROWS 100 FIRST 16183 LAST 57206 SHA ca84e489e1dd8daa9471eda5c2e9760b4fa6661a6b477d8bda50dd533c62d2ca
+EVIDENCE_LINE 22 PAGE 22 ROWS 100 FIRST 16183 LAST 57206 SHA ca84e489e1dd8daa9471eda5c2e9760b4fa6661a6b477d8bda50dd533c62d2ca
+EVIDENCE_LINE 23 PAGE 23 ROWS 100 FIRST 16183 LAST 57206 SHA ca84e489e1dd8daa9471eda5c2e9760b4fa6661a6b477d8bda50dd533c62d2ca
+EVIDENCE_LINE 24 PAGE 24 ROWS 100 FIRST 16183 LAST 57206 SHA ca84e489e1dd8daa9471eda5c2e9760b4fa6661a6b477d8bda50dd533c62d2ca
+EVIDENCE_LINE 25 PAGE 25 ROWS 100 FIRST 16183 LAST 57206 SHA ca84e489e1dd8daa9471eda5c2e9760b4fa6661a6b477d8bda50dd533c62d2ca
+EVIDENCE_LINE 26 PAGES_SCANNED 25
+EVIDENCE_LINE 27 EVENTS_SEEN 100
+EVIDENCE_LINE 32 NEXT_CURSOR_PRESENT True
+EVIDENCE_LINE 33 PATH /home/leonh/prediction_research/knowledge/raw/market_data/polymarket_neg_risk_keyset_manifests/20260920T025918Z.json
+EVIDENCE_LINE 34 GAMMA_KEYSET_NEGRISK_CRAWL_PASS
+---
+EVIDENCE_FILE control/results/EDGE-HUNTER-GAMMA-KEYSET-NEGRISK-E397/RESULT.json
+EVIDENCE_LINE 4     "control/jobs/crawl_gamma_keyset_negrisk_e397.py"
+EVIDENCE_LINE 15   "task_id": "EDGE-HUNTER-GAMMA-KEYSET-NEGRISK-E397"
+---
+EVIDENCE_FILE control/results/EDGE-HUNTER-GAMMA-KEYSET-PROBE-E396/stdout.log
+EVIDENCE_LINE 4 RAW_PATH /home/leonh/.local/state/prediction-research/raw/polymarket_gamma_keyset/9259c249c640b9a04db51ec0760367ff32a9e4b49842217debc08751f93e6f04.json
+EVIDENCE_LINE 6 TOP_KEYS ['$schema', 'events', 'next_cursor']
+EVIDENCE_LINE 18 NEXT_CURSOR _WIxoc4B8aciXdad3eo3ZBV76nNRvkDs6pAFURlMoyh7InYiOjEsImsiOiJldmVudHMiLCJvaCI6IjRmNTNjZGExOGMyYmFhMGMwMzU0YmI1ZjlhM2VjYmU1ZWQxMmFiNGQ4ZTExYmE4NzNjMmYxMTE2MTIwMmI5NDUiLCJrZXlzIjpbeyJ0Ijoic3RyaW5nIiwidiI6IjU3MjA2In1dfQ
+EVIDENCE_LINE 19 NEXT_CURSOR_ALT None
+EVIDENCE_LINE 20 GAMMA_KEYSET_PROBE_E396_PASS
+---
+EVIDENCE_FILE control/results/EDGE-HUNTER-GAMMA-KEYSET-PROBE-E396/RESULT.json
+EVIDENCE_LINE 4     "control/jobs/probe_gamma_keyset_e396.py"
+EVIDENCE_LINE 15   "task_id": "EDGE-HUNTER-GAMMA-KEYSET-PROBE-E396"
+---
+EVIDENCE_FILE control/results/EDGE-HUNTER-NEG-RISK-CENSUS-E288/stdout.log
+EVIDENCE_LINE 1 EVENTS_SCANNED 500
+EVIDENCE_LINE 2 NEG_RISK_EVENTS 195
+EVIDENCE_LINE 47 NEG_RISK_CENSUS_PASS
+---
+EVIDENCE_FILE control/results/EDGE-HUNTER-NEG-RISK-CENSUS-E288/RESULT.json
+EVIDENCE_LINE 4     "control/jobs/neg_risk_census_e288.py"
+EVIDENCE_LINE 15   "task_id": "EDGE-HUNTER-NEG-RISK-CENSUS-E288"
+---
+EVIDENCE_FILE control/results/EDGE-HUNTER-DEEP-BRACKET-SERIES-E391/stdout.log
+EVIDENCE_LINE 1 PAGE_OK 1500 ROWS 100
+EVIDENCE_LINE 2 PAGE_OK 1600 ROWS 100
+EVIDENCE_LINE 3 PAGE_OK 1700 ROWS 100
+EVIDENCE_LINE 4 PAGE_OK 1800 ROWS 100
+EVIDENCE_LINE 5 PAGE_OK 1900 ROWS 100
+EVIDENCE_LINE 6 PAGE_OK 2000 ROWS 100
+EVIDENCE_LINE 7 PAGE_RETRY 2100 1 http_422 {"type":"validation error","error":"offset too large, use /events/keyset for deeper pagination"}
+EVIDENCE_LINE 9 PAGE_RETRY 2100 2 http_422 {"type":"validation error","error":"offset too large, use /events/keyset for deeper pagination"}
+EVIDENCE_LINE 11 PAGE_RETRY 2100 3 http_422 {"type":"validation error","error":"offset too large, use /events/keyset for deeper pagination"}
+EVIDENCE_LINE 13 PAGE_FAILED 2100 http_422
+EVIDENCE_LINE 14 PAGE_RETRY 2200 1 http_422 {"type":"validation error","error":"offset too large, use /events/keyset for deeper pagination"}
+EVIDENCE_LINE 16 PAGE_RETRY 2200 2 http_422 {"type":"validation error","error":"offset too large, use /events/keyset for deeper pagination"}
+EVIDENCE_LINE 18 PAGE_RETRY 2200 3 http_422 {"type":"validation error","error":"offset too large, use /events/keyset for deeper pagination"}
+EVIDENCE_LINE 20 PAGE_FAILED 2200 http_422
+EVIDENCE_LINE 21 PAGE_RETRY 2300 1 http_422 {"type":"validation error","error":"offset too large, use /events/keyset for deeper pagination"}
+EVIDENCE_LINE 23 PAGE_RETRY 2300 2 http_422 {"type":"validation error","error":"offset too large, use /events/keyset for deeper pagination"}
+EVIDENCE_LINE 25 PAGE_RETRY 2300 3 http_422 {"type":"validation error","error":"offset too large, use /events/keyset for deeper pagination"}
+EVIDENCE_LINE 27 PAGE_FAILED 2300 http_422
+EVIDENCE_LINE 28 PAGE_RETRY 2400 1 http_422 {"type":"validation error","error":"offset too large, use /events/keyset for deeper pagination"}
+EVIDENCE_LINE 30 PAGE_RETRY 2400 2 http_422 {"type":"validation error","error":"offset too large, use /events/keyset for deeper pagination"}
+EVIDENCE_LINE 32 PAGE_RETRY 2400 3 http_422 {"type":"validation error","error":"offset too large, use /events/keyset for deeper pagination"}
+EVIDENCE_LINE 34 PAGE_FAILED 2400 http_422
+EVIDENCE_LINE 35 PAGE_RETRY 2500 1 http_422 {"type":"validation error","error":"offset too large, use /events/keyset for deeper pagination"}
+EVIDENCE_LINE 37 PAGE_RETRY 2500 2 http_422 {"type":"validation error","error":"offset too large, use /events/keyset for deeper pagination"}
+EVIDENCE_LINE 39 PAGE_RETRY 2500 3 http_422 {"type":"validation error","error":"offset too large, use /events/keyset for deeper pagination"}
+EVIDENCE_LINE 41 PAGE_FAILED 2500 http_422
+EVIDENCE_LINE 42 PAGE_RETRY 2600 1 http_422 {"type":"validation error","error":"offset too large, use /events/keyset for deeper pagination"}
+EVIDENCE_LINE 44 PAGE_RETRY 2600 2 http_422 {"type":"validation error","error":"offset too large, use /events/keyset for deeper pagination"}
+EVIDENCE_LINE 46 PAGE_RETRY 2600 3 http_422 {"type":"validation error","error":"offset too large, use /events/keyset for deeper pagination"}
+EVIDENCE_LINE 48 PAGE_FAILED 2600 http_422
+EVIDENCE_LINE 49 PAGE_RETRY 2700 1 http_422 {"type":"validation error","error":"offset too large, use /events/keyset for deeper pagination"}
+EVIDENCE_LINE 51 PAGE_RETRY 2700 2 http_422 {"type":"validation error","error":"offset too large, use /events/keyset for deeper pagination"}
+EVIDENCE_LINE 53 PAGE_RETRY 2700 3 http_422 {"type":"validation error","error":"offset too large, use /events/keyset for deeper pagination"}
+EVIDENCE_LINE 55 PAGE_FAILED 2700 http_422
+EVIDENCE_LINE 56 PAGE_RETRY 2800 1 http_422 {"type":"validation error","error":"offset too large, use /events/keyset for deeper pagination"}
+EVIDENCE_LINE 58 PAGE_RETRY 2800 2 http_422 {"type":"validation error","error":"offset too large, use /events/keyset for deeper pagination"}
+EVIDENCE_LINE 60 PAGE_RETRY 2800 3 http_422 {"type":"validation error","error":"offset too large, use /events/keyset for deeper pagination"}
+EVIDENCE_LINE 62 PAGE_FAILED 2800 http_422
+EVIDENCE_LINE 63 PAGE_RETRY 2900 1 http_422 {"type":"validation error","error":"offset too large, use /events/keyset for deeper pagination"}
+EVIDENCE_LINE 65 PAGE_RETRY 2900 2 http_422 {"type":"validation error","error":"offset too large, use /events/keyset for deeper pagination"}
+EVIDENCE_LINE 67 PAGE_RETRY 2900 3 http_422 {"type":"validation error","error":"offset too large, use /events/keyset for deeper pagination"}
+EVIDENCE_LINE 69 PAGE_FAILED 2900 http_422
+EVIDENCE_LINE 70 PAGES_REQUESTED 15
+EVIDENCE_LINE 71 PAGES_SCANNED 6
+EVIDENCE_LINE 73 UNIQUE_EVENTS_SEEN 600
+---
+EVIDENCE_FILE control/results/EDGE-HUNTER-GAMMA-KEYSET-PROBE-E395/stderr.log
+EVIDENCE_LINE 2   File "/home/leonh/prediction_research/control/jobs/probe_gamma_keyset_e395.py", line 13, in <module>
+---
+EVIDENCE_FILE control/results/EDGE-HUNTER-GAMMA-KEYSET-PROBE-E395/RESULT.json
+EVIDENCE_LINE 4     "control/jobs/probe_gamma_keyset_e395.py"
+EVIDENCE_LINE 15   "task_id": "EDGE-HUNTER-GAMMA-KEYSET-PROBE-E395"
+---
+EVIDENCE_FILE control/results/EDGE-HUNTER-KWI-EVIDENCE-LOCATE-E359/stdout.log
+EVIDENCE_LINE 379 LINE 1 {"openapi":"3.1.0","info":{"title":"Polymarket Data API v2","description":"The Polymarket Data API: wallet portfolios, trade and activity feeds, market state and ranked boards.\n\n## Conventions every endpoint shares\n\n- **Envelope**: every response wraps its payload in `data` (paged routes add `pagination`). A documented miss is `data: null` or an empty list, never an error.\n- **Pagination is cursor-only**: follow `pagination.next_cursor` until `null`; `has_more` is exact, and there is no `offset` query parameter (sending one is a `400`). Cursors are signed, typed per endpoint, and opaque. The feeds (`trades`, `activity`, combo activity) are keyset walks, stable across concurrent writes; the boards, `holders` and most combo-position sorts are offset walks behind the opaque token, so a page taken across a data refresh can skip or repeat rows. Where a cursor binds its cohort (the boards, positions, combo positions), resuming bare is fine, restating the same values is fine, and contradicting them is a `400`. The `trades`/`activity` feed cursors carry only the seek anchor and page size (plus the sort direction on activity): re-send identical filters on every page, because changing one mid-walk re-anchors silently.\n- **Rate limiting**: `429` with `Retry-After` is the busy signal for heavy queries and pool saturation. A heavy query may first be queued briefly for a capacity slot; the `429` arrives only if that short wait ends unserved. Each caller also has a per-client request allowance, and bursts past it get the same `429` with `Retry-After` sized to the remaining wait. Retry after the given delay.\n- **Identifiers**: `condition` (aliases `condition_id`, `conditionId`) is the unified query key for on-chain 0x condition ids; `market_id` fields carry Gamma's own market ids; `event_id` takes Gamma event ids; `token_id` is the CLOB asset id (the key on `/v2/prices-history`).\n- **Params** accept both snake_case and camelCase spellings.\n- **Units**: bare `volume`/`size`
+EVIDENCE_LINE 484 LINE 14 Public final-outcome mirror confirms that `84° or above` (threshold >83.99°F) resolved **No** for this event. Therefore the canonical settlement value was below 84.00°F. Exact numeric settlement value is not asserted here because the public outcome page exposes threshold outcomes, not the exact canonical number.
+EVIDENCE_LINE 513 LINE 58 On 2026-09-19 the official Kalshi page for Miami 11:00 EDT (`KXTEMPMIAH-26SEP1911`) displayed a candidate threshold `83° or above` with a visible Yes buy around 76¢ while the page's displayed chance was around 85% during discovery.
+---
+EVIDENCE_FILE control/lifecycle/EDGE-HUNTER-KEYSET-AUDIT-E399.json
+EVIDENCE_LINE 21   "task_id": "EDGE-HUNTER-KEYSET-AUDIT-E399",
+---
+EVIDENCE_FILE control/lifecycle/EDGE-HUNTER-GAMMA-KEYSET-CURSOR-E398.json
+EVIDENCE_LINE 36   "task_id": "EDGE-HUNTER-GAMMA-KEYSET-CURSOR-E398",
+---
+EVIDENCE_FILE control/lifecycle/EDGE-HUNTER-GAMMA-KEYSET-PROBE-E395.json
+EVIDENCE_LINE 36   "task_id": "EDGE-HUNTER-GAMMA-KEYSET-PROBE-E395",
+---
+EVIDENCE_FILE control/lifecycle/EDGE-HUNTER-NEG-RISK-CENSUS-E288.json
+EVIDENCE_LINE 36   "task_id": "EDGE-HUNTER-NEG-RISK-CENSUS-E288",
+---
+EVIDENCE_FILE control/lifecycle/EDGE-HUNTER-GAMMA-KEYSET-NEGRISK-E397.json
+EVIDENCE_LINE 36   "task_id": "EDGE-HUNTER-GAMMA-KEYSET-NEGRISK-E397",
+---
+EVIDENCE_FILE control/lifecycle/EDGE-HUNTER-GAMMA-KEYSET-PROBE-E396.json
+EVIDENCE_LINE 36   "task_id": "EDGE-HUNTER-GAMMA-KEYSET-PROBE-E396",
+---
+PRIOR_KEYSET_PAGINATION_AUDIT_PASS
