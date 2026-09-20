@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/inspect_hourly_0700_detail_e431.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-20T05:03:53.832181+00:00",
+  "hypothesis_id": "CONTROL-NO-SILENT-WAITING",
+  "source_commit": "ce26b77d0658b40279bc883df0a0501ea6074665",
+  "started_at": "2026-09-20T05:03:53.732037+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "ab163b5070858e7fd4fa00c36a672f564c0f2f141b5fba59bac3f13f8673cdaf",
+  "task_class": "infrastructure",
+  "task_id": "EDGE-HUNTER-HOURLY-0700-DETAIL-E431"
+}
