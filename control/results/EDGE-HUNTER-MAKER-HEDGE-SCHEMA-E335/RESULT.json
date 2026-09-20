@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/inspect_candidate_schema_e335.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-20T02:08:58.264341+00:00",
+  "hypothesis_id": "PAYOFF-IDENTITY-MINING-V1",
+  "source_commit": "449bd5fa9dd875aeeac6d2c78c9f168877101e27",
+  "started_at": "2026-09-20T02:08:58.244092+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "bd0d15ec14eee0722057bf07cfcf25a1bd547a477b137ca7ee1501e1eb527742",
+  "task_class": "infrastructure",
+  "task_id": "EDGE-HUNTER-MAKER-HEDGE-SCHEMA-E335"
+}

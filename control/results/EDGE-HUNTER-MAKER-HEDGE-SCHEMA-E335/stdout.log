@@ -1,0 +1,92 @@
+SCHEMA_PATH /home/leonh/prediction_research/control/edge_hunter/candidate_schema.json
+SCHEMA
+{
+  "allowed_decisions": [
+    "UNPROVEN",
+    "REJECTED",
+    "NO_PROVEN_EDGE",
+    "SURVIVES_STAGE"
+  ],
+  "allowed_phases": [
+    "DISCOVERED",
+    "MECHANISM_DEFINED",
+    "PREBUILD_KILLED",
+    "DATA_READY",
+    "DEVELOPMENT",
+    "VALIDATION",
+    "HOLDOUT",
+    "INDEPENDENT_REPRODUCTION",
+    "EXECUTION_REALITY",
+    "SHADOW",
+    "MICRO_LIVE_ELIGIBLE"
+  ],
+  "hard_gates": {
+    "executable_market_price_required_for_market_edge": true,
+    "formal_or_statistical_evidence_required": true,
+    "live_trading": false,
+    "paid_actions": false,
+    "point_in_time_required": true,
+    "wallet_actions": false
+  },
+  "required_fields": [
+    "candidate_id",
+    "lane",
+    "hypothesis",
+    "mechanism",
+    "disconfirming_evidence",
+    "point_in_time_requirements",
+    "signal_metric",
+    "market_edge_test",
+    "execution_reality_test",
+    "phase",
+    "decision"
+  ],
+  "version": 1
+}
+CANDIDATE_DIR_EXISTS True
+CANDIDATE_FILE KWI-INCOMPLETE-TO-CANONICAL-V1.json ID KWI-INCOMPLETE-TO-CANONICAL-V1 HYPOTHESIS None
+CANDIDATE_FILE PAYOFF-IDENTITY-MINING-V1.json ID PAYOFF-IDENTITY-MINING-V1 HYPOTHESIS None
+REFERENCE_CANDIDATE
+{
+  "candidate_id": "PAYOFF-IDENTITY-MINING-V1",
+  "created_at": "2026-09-20T00:42:14.997554+00:00",
+  "decision": "UNPROVEN",
+  "disconfirming_evidence": [
+    "Payout differs in any allowed state.",
+    "Fees/collateral/slippage remove edge.",
+    "Relations are not executable."
+  ],
+  "evidence": [],
+  "execution_reality_test": "Synchronized L2 replay with partial-fill buffer",
+  "gates": {
+    "data_ready": "PENDING",
+    "development": "PENDING",
+    "execution_reality": "PENDING",
+    "holdout": "PENDING",
+    "independent_reproduction": "PENDING",
+    "market_edge": "PENDING",
+    "mechanism": "PENDING",
+    "point_in_time": "PENDING",
+    "prebuild_killer": "PENDING",
+    "shadow": "PENDING",
+    "signal_edge": "PENDING",
+    "validation": "PENDING"
+  },
+  "hypothesis": "Different contract paths may encode identical statewise cashflows at different executable cost.",
+  "lane": "market_algebra",
+  "live_trading": false,
+  "market_edge_test": "Executable portfolio cost versus guaranteed payout",
+  "mechanism": "Canonicalize payouts and prove equivalence or dominance before price comparison.",
+  "negative_evidence": [],
+  "paid_actions": false,
+  "phase": "DISCOVERED",
+  "point_in_time_requirements": [
+    "Rules and prices archived at comparison time.",
+    "No later settlement interpretation backfilled."
+  ],
+  "signal_metric": "Verified equivalence/dominance count",
+  "updated_at": "2026-09-20T00:42:14.997558+00:00",
+  "wallet_actions": false
+}
+REFERENCE_FOUND True
+CANDIDATE_SCHEMA_INSPECTION_PASS
