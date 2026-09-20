@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/inspect_archived_asset_trades_e346.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-20T02:21:56.470147+00:00",
+  "hypothesis_id": "ASSET-RANK-MAKER-HEDGE-V1",
+  "source_commit": "03800d4a7992f19729d9bf3f5b6ecea26c667501",
+  "started_at": "2026-09-20T02:21:56.448836+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "9ed6cf1e2978340e2437d3c38effa93d014477e8ca940397b591cc82604098a4",
+  "task_class": "research",
+  "task_id": "EDGE-HUNTER-ASSET-TRADE-ARCHIVE-E346"
+}
