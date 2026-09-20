@@ -1,0 +1,21 @@
+{
+  "build_authorization": {
+    "mode": "control_plane",
+    "build_kind": "control_plane",
+    "objective": "Execute the generic fail-closed settlement partition gate test E442",
+    "capabilities": [
+      "read_repository"
+    ]
+  },
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/test_settlement_partition_gate_e442.py"
+  ],
+  "hypothesis_id": "PAYOFF-IDENTITY-MINING-V1",
+  "live_trading": false,
+  "operation": "python",
+  "task_class": "infrastructure",
+  "task_id": "EDGE-HUNTER-SETTLEMENT-PARTITION-GATE-E442",
+  "timeout_seconds": 120,
+  "working_directory": "."
+}

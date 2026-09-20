@@ -1,7 +1,23 @@
 {
-  "cadence": "hourly",
+  "cadence": "hourly_when_work_block_active",
+  "cadence_policy": {
+    "cooldown_hours": 1,
+    "fail_closed_on_invalid_state": true,
+    "passive_local_recorders_may_continue": true,
+    "state_path": "~/.local/state/prediction-research/work_cadence.json",
+    "work_hours": 4
+  },
   "default_candidate_status": "UNPROVEN",
   "live_trading": false,
+  "memory_policy": {
+    "canonical_source": "git",
+    "duplicate_research_should_be_avoided": true,
+    "include_active_candidates": true,
+    "include_negative_evidence": true,
+    "include_recent_hourly_reports": true,
+    "mode": "targeted_relevant_context",
+    "raw_tapes_in_git": false
+  },
   "paid_actions": false,
   "pipeline": [
     "scout",
@@ -16,6 +32,7 @@
     "independent_reproducer",
     "research_director"
   ],
+  "plan_ref": "docs/HOURLY_RESEARCH_FACTORY_PVA.md",
   "report_sections": [
     "run_metadata",
     "source_coverage",
@@ -32,6 +49,6 @@
   "source_policy": "free_public_only",
   "status": "ACTIVE",
   "valid_null_result": "NO_PROVEN_EDGE",
-  "version": 1,
+  "version": 2,
   "wallet_actions": false
 }

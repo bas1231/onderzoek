@@ -195,3 +195,17 @@ Agentrollen staan in `agents/roles/`.
 ## Stop-check autonomy rule
 
 Before stopping, pausing, or waiting, explicitly check whether stopping is actually necessary. If useful work can safely continue within existing authorization, at zero additional cost, and without live trading or wallet actions, continue autonomously instead of stopping. Stop only for a real blocker, required approval, missing essential input, safety boundary, paid action, live trading, or wallet action.
+
+## Taalregel voor Git-rapportage
+
+- Menselijk leesbare testresultaten, statusupdates en activity-logteksten die voor de eigenaar op Git worden geschreven, moeten in het **Nederlands** staan.
+- Technische identifiers, code, bestandsnamen, commands, schema-velden en letterlijke externe brontermen mogen Engels blijven wanneer vertaling de precisie vermindert.
+
+## Uitvoerbare-code-regel voor antwoorden aan de eigenaar
+
+- Wanneer een antwoord een lokale wijziging, controle, installatie, reparatie of vervolgstap op de Strix/WSL vereist, geef **direct in hetzelfde antwoord** de code/commando's die de eigenaar moet uitvoeren.
+- Plaats die commando's bij voorkeur onder de uitleg in **één zo groot mogelijk copy-pastebaar shellblok**, zodat losse handmatige stappen tot een minimum worden beperkt.
+- Splits alleen in meerdere blokken wanneer dat technisch of veiligheidsmatig noodzakelijk is (bijvoorbeeld wanneer output eerst beoordeeld moet worden voordat een volgende muterende stap veilig kan worden uitgevoerd).
+- Maak het blok waar praktisch mogelijk fail-closed met bijvoorbeeld `set -euo pipefail`, expliciete controles en duidelijke statusoutput.
+- Vraag de eigenaar niet eerst nogmaals om code als al duidelijk is welke lokale stap nodig is; lever de uitvoerbare stap meteen mee.
+- Deze regel verandert geen approval gates: betaalde acties, live trading, wallet/crypto-acties en andere afzonderlijk goedkeuringsplichtige handelingen blijven voorafgaande expliciete toestemming vereisen.

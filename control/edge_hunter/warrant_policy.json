@@ -1,0 +1,50 @@
+{
+  "allowed_build_kinds": [
+    "control_plane",
+    "research_instrument",
+    "data_capture",
+    "offline_analysis",
+    "replay",
+    "shadow_analysis"
+  ],
+  "allowed_candidate_decisions": [
+    "UNPROVEN",
+    "SURVIVES_STAGE"
+  ],
+  "forbidden_capabilities": [
+    "live_trading",
+    "order_submission",
+    "wallet_actions",
+    "fund_movement",
+    "paid_actions",
+    "credential_write",
+    "venue_write_endpoint"
+  ],
+  "max_capabilities": 64,
+  "minimum_phase": "PREBUILD_KILLED",
+  "required_build_state_safety_flags": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false
+  },
+  "required_candidate_safety_flags": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false
+  },
+  "required_nonempty_fields": [
+    "candidate_id",
+    "lane",
+    "hypothesis",
+    "mechanism",
+    "disconfirming_evidence",
+    "point_in_time_requirements",
+    "market_edge_test",
+    "execution_reality_test"
+  ],
+  "required_pass_gates": [
+    "mechanism",
+    "prebuild_killer"
+  ],
+  "version": 1
+}
