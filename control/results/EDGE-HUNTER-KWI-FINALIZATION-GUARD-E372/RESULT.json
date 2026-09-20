@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/finalize_kwi_hourly_monitor_e372.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-20T02:42:23.369739+00:00",
+  "hypothesis_id": "KWI-FULL-STATION-PRECANONICAL-V1",
+  "source_commit": "454f9222ef77154109fcd3c7ac999387b811d331",
+  "started_at": "2026-09-20T02:42:23.349385+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "d8c401d4ec21b1a5beaef2dc832dfb831ffafcefdd98fd33446b42c9ad813998",
+  "task_class": "infrastructure",
+  "task_id": "EDGE-HUNTER-KWI-FINALIZATION-GUARD-E372"
+}
