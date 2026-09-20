@@ -1,0 +1,13 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/compare_openai_ipo_series_e411.py"
+  ],
+  "hypothesis_id": "PAYOFF-IDENTITY-MINING-V1",
+  "live_trading": false,
+  "operation": "python",
+  "task_class": "research",
+  "task_id": "EDGE-HUNTER-OPENAI-IPO-SERIES-E411",
+  "timeout_seconds": 180,
+  "working_directory": "."
+}
