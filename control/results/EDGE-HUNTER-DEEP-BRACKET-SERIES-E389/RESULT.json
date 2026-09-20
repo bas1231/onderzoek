@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/search_deeper_bracket_series_e389.py"
+  ],
+  "exit_code": 1,
+  "finished_at": "2026-09-20T02:53:08.622125+00:00",
+  "hypothesis_id": "PAYOFF-IDENTITY-MINING-V1",
+  "source_commit": "8e8b158acc414c8f99ddda1563bebf0effe5570e",
+  "started_at": "2026-09-20T02:53:05.760543+00:00",
+  "status": "failed",
+  "stderr_sha256": "f192f34189a0daf90bc75b76c45a8407cdb84910ead3ffae0a24c2c39eaa0fe5",
+  "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "task_class": "research",
+  "task_id": "EDGE-HUNTER-DEEP-BRACKET-SERIES-E389"
+}
