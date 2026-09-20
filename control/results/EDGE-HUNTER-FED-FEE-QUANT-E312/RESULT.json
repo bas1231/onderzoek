@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/quantify_fed_fees_e312.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-20T01:29:56.397335+00:00",
+  "hypothesis_id": "PAYOFF-IDENTITY-MINING-V1",
+  "source_commit": "aeaaedf2b21c23c2653d956f9addbd01228be5c5",
+  "started_at": "2026-09-20T01:29:56.376151+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "405fd6e23d20dece0c924c7dbe3a89112e2bd597c34a8da61a2f4b5a020fcc67",
+  "task_class": "research",
+  "task_id": "EDGE-HUNTER-FED-FEE-QUANT-E312"
+}
