@@ -1,0 +1,13 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/record_asset_monitor_status_e357.py"
+  ],
+  "hypothesis_id": "ASSET-RANK-MAKER-HEDGE-V1",
+  "live_trading": false,
+  "operation": "python",
+  "task_class": "research",
+  "task_id": "EDGE-HUNTER-ASSET-MONITOR-STATUS-E357",
+  "timeout_seconds": 120,
+  "working_directory": "."
+}
