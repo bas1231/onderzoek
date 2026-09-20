@@ -1,0 +1,166 @@
+EVENT_PATH 178817 /home/leonh/prediction_research/knowledge/raw/market_rules/polymarket/20260920T024806Z-event-178817.json
+EVENT_ID 178817
+EVENT_KEYS ['$schema', 'active', 'archived', 'automaticallyActive', 'closed', 'commentCount', 'competitive', 'createdAt', 'creationDate', 'cumulativeMarkets', 'cyom', 'deploying', 'deployingTimestamp', 'description', 'enableNegRisk', 'enableOrderBook', 'endDate', 'estimateValue', 'eventMetadata', 'featured', 'gmpChartMode', 'icon', 'id', 'image', 'liquidity', 'liquidityClob', 'markets', 'negRisk', 'negRiskAugmented', 'negRiskMarketID', 'new', 'openInterest', 'pendingDeployment', 'requiresTranslation', 'resolutionSource', 'restricted', 'series', 'seriesSlug', 'showAllOutcomes', 'showMarketImages', 'slug', 'startDate', 'tags', 'ticker', 'title', 'updatedAt', 'version', 'volume']
+EVENT_FIELD 178817 title 'Argentina Official USD Exchange Rate end of 2026?'
+EVENT_FIELD 178817 description 'This is a market about Argentina’s official wholesale U.S. dollar exchange rate at market close on the last business day of December 2026, as published by the Central Bank of Argentina (BCRA).\n\nThis market will resolve according to the official wholesale USD to ARS exchange rate (Tipo de Cambio Mayorista, ($ por USD) Com. A 3500 | Referencia) at market close on the final business day of December 2026, as published by the BCRA on its official website (https://www.bcra.gob.ar/).\n\nIf the official rate for that date has not been published by the end of the 7th day after the end of the specified month, the market will resolve according to the most recently published official wholesale rate preceding that date.\n\nThe resolution source for this market will be the official BCRA publication. Resolution will occur once this figure is available.\n\nNote: the resolution source for this market will be the Central Bank of Argentina (BCRA), which reports the Wholesale Exchange Rate to two decimal points (e.g., 1,408.02 ARS per USD). Thus, this is the level of precision that will be used when resolving the market.'
+EVENT_FIELD 178817 resolutionSource ''
+EVENT_FIELD 178817 startDate '2026-01-21T15:27:55.561224Z'
+EVENT_FIELD 178817 endDate '2026-12-31T00:00:00Z'
+EVENT_FIELD 178817 negRisk True
+EVENT_FIELD 178817 negRiskAugmented False
+EVENT_FIELD 178817 negRiskMarketID '0xe3d3ca54234dac19b6a367ed37ad7d55db2097b4211cb0e479223caeb155a000'
+MARKET_COUNT 178817 9
+MARKET_ID 178817 1234153
+MARKET_FIELD 178817 1234153 question 'Will the official USD to ARS exchange rate be less than 1250.00 at the end of December 2026?'
+MARKET_FIELD 178817 1234153 description 'This is a market about Argentina’s official wholesale U.S. dollar exchange rate at market close on the last business day of December 2026, as published by the Central Bank of Argentina (BCRA).\n\nThis market will resolve according to the official wholesale USD to ARS exchange rate (Tipo de Cambio Mayorista, ($ por USD) Com. A 3500 | Referencia) at market close on the final business day of December 2026, as published by the BCRA on its official website (https://www.bcra.gob.ar/).\n\nIf the official rate for that date has not been published by the end of the 7th day after the end of the specified month, the market will resolve according to the most recently published official wholesale rate preceding that date.\n\nThe resolution source for this market will be the official BCRA publication. Resolution will occur once this figure is available.\n\nNote: the resolution source for this market will be the Central Bank of Argentina (BCRA), which reports the Wholesale Exchange Rate to two decimal points (e.g., 1,408.02 ARS per USD). Thus, this is the level of precision that will be used when resolving the market.'
+MARKET_FIELD 178817 1234153 resolutionSource None
+MARKET_FIELD 178817 1234153 endDate '2026-12-31T00:00:00Z'
+MARKET_FIELD 178817 1234153 negRisk True
+MARKET_FIELD 178817 1234153 negRiskOther False
+MARKET_FIELD 178817 1234153 negRiskMarketID '0xe3d3ca54234dac19b6a367ed37ad7d55db2097b4211cb0e479223caeb155a000'
+MARKET_FIELD 178817 1234153 groupItemTitle '<1250.00'
+MARKET_ID 178817 1234154
+MARKET_FIELD 178817 1234154 question 'Will the official USD to ARS exchange rate be between 1250.00 and 1299.99 at the end of December 2026?'
+MARKET_FIELD 178817 1234154 description 'This is a market about Argentina’s official wholesale U.S. dollar exchange rate at market close on the last business day of December 2026, as published by the Central Bank of Argentina (BCRA).\n\nThis market will resolve according to the official wholesale USD to ARS exchange rate (Tipo de Cambio Mayorista, ($ por USD) Com. A 3500 | Referencia) at market close on the final business day of December 2026, as published by the BCRA on its official website (https://www.bcra.gob.ar/).\n\nIf the official rate for that date has not been published by the end of the 7th day after the end of the specified month, the market will resolve according to the most recently published official wholesale rate preceding that date.\n\nThe resolution source for this market will be the official BCRA publication. Resolution will occur once this figure is available.\n\nNote: the resolution source for this market will be the Central Bank of Argentina (BCRA), which reports the Wholesale Exchange Rate to two decimal points (e.g., 1,408.02 ARS per USD). Thus, this is the level of precision that will be used when resolving the market.'
+MARKET_FIELD 178817 1234154 resolutionSource None
+MARKET_FIELD 178817 1234154 endDate '2026-12-31T00:00:00Z'
+MARKET_FIELD 178817 1234154 negRisk True
+MARKET_FIELD 178817 1234154 negRiskOther False
+MARKET_FIELD 178817 1234154 negRiskMarketID '0xe3d3ca54234dac19b6a367ed37ad7d55db2097b4211cb0e479223caeb155a000'
+MARKET_FIELD 178817 1234154 groupItemTitle '1250.00–1299.99'
+MARKET_ID 178817 1234155
+MARKET_FIELD 178817 1234155 question 'Will the official USD to ARS exchange rate be between 1300.00 and 1349.99 at the end of December 2026?'
+MARKET_FIELD 178817 1234155 description 'This is a market about Argentina’s official wholesale U.S. dollar exchange rate at market close on the last business day of December 2026, as published by the Central Bank of Argentina (BCRA).\n\nThis market will resolve according to the official wholesale USD to ARS exchange rate (Tipo de Cambio Mayorista, ($ por USD) Com. A 3500 | Referencia) at market close on the final business day of December 2026, as published by the BCRA on its official website (https://www.bcra.gob.ar/).\n\nIf the official rate for that date has not been published by the end of the 7th day after the end of the specified month, the market will resolve according to the most recently published official wholesale rate preceding that date.\n\nThe resolution source for this market will be the official BCRA publication. Resolution will occur once this figure is available.\n\nNote: the resolution source for this market will be the Central Bank of Argentina (BCRA), which reports the Wholesale Exchange Rate to two decimal points (e.g., 1,408.02 ARS per USD). Thus, this is the level of precision that will be used when resolving the market.'
+MARKET_FIELD 178817 1234155 resolutionSource None
+MARKET_FIELD 178817 1234155 endDate '2026-12-31T00:00:00Z'
+MARKET_FIELD 178817 1234155 negRisk True
+MARKET_FIELD 178817 1234155 negRiskOther False
+MARKET_FIELD 178817 1234155 negRiskMarketID '0xe3d3ca54234dac19b6a367ed37ad7d55db2097b4211cb0e479223caeb155a000'
+MARKET_FIELD 178817 1234155 groupItemTitle '1300.00–1349.99'
+MARKET_ID 178817 1234156
+MARKET_FIELD 178817 1234156 question 'Will the official USD to ARS exchange rate be between 1350.00 and 1399.99 at the end of December 2026?'
+MARKET_FIELD 178817 1234156 description 'This is a market about Argentina’s official wholesale U.S. dollar exchange rate at market close on the last business day of December 2026, as published by the Central Bank of Argentina (BCRA).\n\nThis market will resolve according to the official wholesale USD to ARS exchange rate (Tipo de Cambio Mayorista, ($ por USD) Com. A 3500 | Referencia) at market close on the final business day of December 2026, as published by the BCRA on its official website (https://www.bcra.gob.ar/).\n\nIf the official rate for that date has not been published by the end of the 7th day after the end of the specified month, the market will resolve according to the most recently published official wholesale rate preceding that date.\n\nThe resolution source for this market will be the official BCRA publication. Resolution will occur once this figure is available.\n\nNote: the resolution source for this market will be the Central Bank of Argentina (BCRA), which reports the Wholesale Exchange Rate to two decimal points (e.g., 1,408.02 ARS per USD). Thus, this is the level of precision that will be used when resolving the market.'
+MARKET_FIELD 178817 1234156 resolutionSource None
+MARKET_FIELD 178817 1234156 endDate '2026-12-31T00:00:00Z'
+MARKET_FIELD 178817 1234156 negRisk True
+MARKET_FIELD 178817 1234156 negRiskOther False
+MARKET_FIELD 178817 1234156 negRiskMarketID '0xe3d3ca54234dac19b6a367ed37ad7d55db2097b4211cb0e479223caeb155a000'
+MARKET_FIELD 178817 1234156 groupItemTitle '1350.00–1399.99'
+MARKET_ID 178817 1234157
+MARKET_FIELD 178817 1234157 question 'Will the official USD to ARS exchange rate be between 1400.00 and 1449.99 at the end of December 2026?'
+MARKET_FIELD 178817 1234157 description 'This is a market about Argentina’s official wholesale U.S. dollar exchange rate at market close on the last business day of December 2026, as published by the Central Bank of Argentina (BCRA).\n\nThis market will resolve according to the official wholesale USD to ARS exchange rate (Tipo de Cambio Mayorista, ($ por USD) Com. A 3500 | Referencia) at market close on the final business day of December 2026, as published by the BCRA on its official website (https://www.bcra.gob.ar/).\n\nIf the official rate for that date has not been published by the end of the 7th day after the end of the specified month, the market will resolve according to the most recently published official wholesale rate preceding that date.\n\nThe resolution source for this market will be the official BCRA publication. Resolution will occur once this figure is available.\n\nNote: the resolution source for this market will be the Central Bank of Argentina (BCRA), which reports the Wholesale Exchange Rate to two decimal points (e.g., 1,408.02 ARS per USD). Thus, this is the level of precision that will be used when resolving the market.'
+MARKET_FIELD 178817 1234157 resolutionSource None
+MARKET_FIELD 178817 1234157 endDate '2026-12-31T00:00:00Z'
+MARKET_FIELD 178817 1234157 negRisk True
+MARKET_FIELD 178817 1234157 negRiskOther False
+MARKET_FIELD 178817 1234157 negRiskMarketID '0xe3d3ca54234dac19b6a367ed37ad7d55db2097b4211cb0e479223caeb155a000'
+MARKET_FIELD 178817 1234157 groupItemTitle '1400.00–1449.99'
+MARKET_ID 178817 1234158
+MARKET_FIELD 178817 1234158 question 'Will the official USD to ARS exchange rate be between 1450.00 and 1499.99 at the end of December 2026?'
+MARKET_FIELD 178817 1234158 description 'This is a market about Argentina’s official wholesale U.S. dollar exchange rate at market close on the last business day of December 2026, as published by the Central Bank of Argentina (BCRA).\n\nThis market will resolve according to the official wholesale USD to ARS exchange rate (Tipo de Cambio Mayorista, ($ por USD) Com. A 3500 | Referencia) at market close on the final business day of December 2026, as published by the BCRA on its official website (https://www.bcra.gob.ar/).\n\nIf the official rate for that date has not been published by the end of the 7th day after the end of the specified month, the market will resolve according to the most recently published official wholesale rate preceding that date.\n\nThe resolution source for this market will be the official BCRA publication. Resolution will occur once this figure is available.\n\nNote: the resolution source for this market will be the Central Bank of Argentina (BCRA), which reports the Wholesale Exchange Rate to two decimal points (e.g., 1,408.02 ARS per USD). Thus, this is the level of precision that will be used when resolving the market.'
+MARKET_FIELD 178817 1234158 resolutionSource None
+MARKET_FIELD 178817 1234158 endDate '2026-12-31T00:00:00Z'
+MARKET_FIELD 178817 1234158 negRisk True
+MARKET_FIELD 178817 1234158 negRiskOther False
+MARKET_FIELD 178817 1234158 negRiskMarketID '0xe3d3ca54234dac19b6a367ed37ad7d55db2097b4211cb0e479223caeb155a000'
+MARKET_FIELD 178817 1234158 groupItemTitle '1450.00–1499.99'
+MARKET_ID 178817 1234159
+MARKET_FIELD 178817 1234159 question 'Will the official USD to ARS exchange rate be between 1500.00 and 1549.99 at the end of December 2026?'
+MARKET_FIELD 178817 1234159 description 'This is a market about Argentina’s official wholesale U.S. dollar exchange rate at market close on the last business day of December 2026, as published by the Central Bank of Argentina (BCRA).\n\nThis market will resolve according to the official wholesale USD to ARS exchange rate (Tipo de Cambio Mayorista, ($ por USD) Com. A 3500 | Referencia) at market close on the final business day of December 2026, as published by the BCRA on its official website (https://www.bcra.gob.ar/).\n\nIf the official rate for that date has not been published by the end of the 7th day after the end of the specified month, the market will resolve according to the most recently published official wholesale rate preceding that date.\n\nThe resolution source for this market will be the official BCRA publication. Resolution will occur once this figure is available.\n\nNote: the resolution source for this market will be the Central Bank of Argentina (BCRA), which reports the Wholesale Exchange Rate to two decimal points (e.g., 1,408.02 ARS per USD). Thus, this is the level of precision that will be used when resolving the market.'
+MARKET_FIELD 178817 1234159 resolutionSource None
+MARKET_FIELD 178817 1234159 endDate '2026-12-31T00:00:00Z'
+MARKET_FIELD 178817 1234159 negRisk True
+MARKET_FIELD 178817 1234159 negRiskOther False
+MARKET_FIELD 178817 1234159 negRiskMarketID '0xe3d3ca54234dac19b6a367ed37ad7d55db2097b4211cb0e479223caeb155a000'
+MARKET_FIELD 178817 1234159 groupItemTitle '1500.00–1549.99'
+MARKET_ID 178817 1234160
+MARKET_FIELD 178817 1234160 question 'Will the official USD to ARS exchange rate be between 1550.00 and 1599.99 at the end of December 2026?'
+MARKET_FIELD 178817 1234160 description 'This is a market about Argentina’s official wholesale U.S. dollar exchange rate at market close on the last business day of December 2026, as published by the Central Bank of Argentina (BCRA).\n\nThis market will resolve according to the official wholesale USD to ARS exchange rate (Tipo de Cambio Mayorista, ($ por USD) Com. A 3500 | Referencia) at market close on the final business day of December 2026, as published by the BCRA on its official website (https://www.bcra.gob.ar/).\n\nIf the official rate for that date has not been published by the end of the 7th day after the end of the specified month, the market will resolve according to the most recently published official wholesale rate preceding that date.\n\nThe resolution source for this market will be the official BCRA publication. Resolution will occur once this figure is available.\n\nNote: the resolution source for this market will be the Central Bank of Argentina (BCRA), which reports the Wholesale Exchange Rate to two decimal points (e.g., 1,408.02 ARS per USD). Thus, this is the level of precision that will be used when resolving the market.'
+MARKET_FIELD 178817 1234160 resolutionSource None
+MARKET_FIELD 178817 1234160 endDate '2026-12-31T00:00:00Z'
+MARKET_FIELD 178817 1234160 negRisk True
+MARKET_FIELD 178817 1234160 negRiskOther False
+MARKET_FIELD 178817 1234160 negRiskMarketID '0xe3d3ca54234dac19b6a367ed37ad7d55db2097b4211cb0e479223caeb155a000'
+MARKET_FIELD 178817 1234160 groupItemTitle '1550.00–1599.99'
+MARKET_ID 178817 1234161
+MARKET_FIELD 178817 1234161 question 'Will the official USD to ARS exchange rate be 1600.00 or higher at the end of December 2026?'
+MARKET_FIELD 178817 1234161 description 'This is a market about Argentina’s official wholesale U.S. dollar exchange rate at market close on the last business day of December 2026, as published by the Central Bank of Argentina (BCRA).\n\nThis market will resolve according to the official wholesale USD to ARS exchange rate (Tipo de Cambio Mayorista, ($ por USD) Com. A 3500 | Referencia) at market close on the final business day of December 2026, as published by the BCRA on its official website (https://www.bcra.gob.ar/).\n\nIf the official rate for that date has not been published by the end of the 7th day after the end of the specified month, the market will resolve according to the most recently published official wholesale rate preceding that date.\n\nThe resolution source for this market will be the official BCRA publication. Resolution will occur once this figure is available.\n\nNote: the resolution source for this market will be the Central Bank of Argentina (BCRA), which reports the Wholesale Exchange Rate to two decimal points (e.g., 1,408.02 ARS per USD). Thus, this is the level of precision that will be used when resolving the market.'
+MARKET_FIELD 178817 1234161 resolutionSource None
+MARKET_FIELD 178817 1234161 endDate '2026-12-31T00:00:00Z'
+MARKET_FIELD 178817 1234161 negRisk True
+MARKET_FIELD 178817 1234161 negRiskOther False
+MARKET_FIELD 178817 1234161 negRiskMarketID '0xe3d3ca54234dac19b6a367ed37ad7d55db2097b4211cb0e479223caeb155a000'
+MARKET_FIELD 178817 1234161 groupItemTitle '1600.00+'
+---
+EVENT_PATH 189770 /home/leonh/prediction_research/knowledge/raw/market_rules/polymarket/20260920T024806Z-event-189770.json
+EVENT_ID 189770
+EVENT_KEYS ['$schema', 'active', 'archived', 'automaticallyActive', 'cantEstimate', 'closed', 'commentCount', 'competitive', 'createdAt', 'creationDate', 'cumulativeMarkets', 'cyom', 'deploying', 'deployingTimestamp', 'description', 'enableNegRisk', 'enableOrderBook', 'endDate', 'estimateValue', 'estimatedValue', 'eventMetadata', 'featured', 'gmpChartMode', 'icon', 'id', 'image', 'liquidity', 'liquidityClob', 'markets', 'negRisk', 'negRiskAugmented', 'negRiskMarketID', 'new', 'openInterest', 'pendingDeployment', 'requiresTranslation', 'resolutionSource', 'restricted', 'series', 'seriesSlug', 'showAllOutcomes', 'showMarketImages', 'slug', 'startDate', 'tags', 'ticker', 'title', 'updatedAt', 'version', 'volume']
+EVENT_FIELD 189770 title 'Argentina Official USD Exchange Rate end of 2026? (Higher Brackets)'
+EVENT_FIELD 189770 description 'This is a market about Argentina’s official wholesale U.S. dollar exchange rate at market close on the last business day of December 2026, as published by the Central Bank of Argentina (BCRA).\n\nThis market will resolve according to the official wholesale USD to ARS exchange rate (Tipo de Cambio Mayorista, ($ por USD) Com. A 3500 | Referencia) at market close on the final business day of December 2026, as published by the BCRA on its official website (https://www.bcra.gob.ar/).\n\nIf the official rate for that date has not been published by the end of the 7th day after the end of the specified month, the market will resolve according to the most recently published official wholesale rate preceding that date.\n\nThe resolution source for this market will be the official BCRA publication. Resolution will occur once this figure is available.\n\nNote: the resolution source for this market will be the Central Bank of Argentina (BCRA), which reports the Wholesale Exchange Rate to two decimal points (e.g., 1,408.02 ARS per USD). Thus, this is the level of precision that will be used when resolving the market.'
+EVENT_FIELD 189770 resolutionSource ''
+EVENT_FIELD 189770 startDate '2026-01-26T21:51:03.017969Z'
+EVENT_FIELD 189770 endDate '2026-12-31T00:00:00Z'
+EVENT_FIELD 189770 negRisk True
+EVENT_FIELD 189770 negRiskAugmented False
+EVENT_FIELD 189770 negRiskMarketID '0x5479086eb11a13ace6454674c82fc9e44681a89a7029f45f8710550331a85300'
+MARKET_COUNT 189770 6
+MARKET_ID 189770 1273048
+MARKET_FIELD 189770 1273048 question 'Will the official USD to ARS exchange rate be less than 1600.00 at the end of December 2026?'
+MARKET_FIELD 189770 1273048 description 'This is a market about Argentina’s official wholesale U.S. dollar exchange rate at market close on the last business day of December 2026, as published by the Central Bank of Argentina (BCRA).\n\nThis market will resolve according to the official wholesale USD to ARS exchange rate (Tipo de Cambio Mayorista, ($ por USD) Com. A 3500 | Referencia) at market close on the final business day of December 2026, as published by the BCRA on its official website (https://www.bcra.gob.ar/).\n\nIf the official rate for that date has not been published by the end of the 7th day after the end of the specified month, the market will resolve according to the most recently published official wholesale rate preceding that date.\n\nThe resolution source for this market will be the official BCRA publication. Resolution will occur once this figure is available.\n\nNote: the resolution source for this market will be the Central Bank of Argentina (BCRA), which reports the Wholesale Exchange Rate to two decimal points (e.g., 1,408.02 ARS per USD). Thus, this is the level of precision that will be used when resolving the market.'
+MARKET_FIELD 189770 1273048 resolutionSource ''
+MARKET_FIELD 189770 1273048 endDate '2026-12-31T00:00:00Z'
+MARKET_FIELD 189770 1273048 negRisk True
+MARKET_FIELD 189770 1273048 negRiskOther False
+MARKET_FIELD 189770 1273048 negRiskMarketID '0x5479086eb11a13ace6454674c82fc9e44681a89a7029f45f8710550331a85300'
+MARKET_FIELD 189770 1273048 groupItemTitle '<1600.00'
+MARKET_ID 189770 1273050
+MARKET_FIELD 189770 1273050 question 'Will the official USD to ARS exchange rate be between 1600.00 and 1699.99 at the end of December 2026?'
+MARKET_FIELD 189770 1273050 description 'This is a market about Argentina’s official wholesale U.S. dollar exchange rate at market close on the last business day of December 2026, as published by the Central Bank of Argentina (BCRA).\n\nThis market will resolve according to the official wholesale USD to ARS exchange rate (Tipo de Cambio Mayorista, ($ por USD) Com. A 3500 | Referencia) at market close on the final business day of December 2026, as published by the BCRA on its official website (https://www.bcra.gob.ar/).\n\nIf the official rate for that date has not been published by the end of the 7th day after the end of the specified month, the market will resolve according to the most recently published official wholesale rate preceding that date.\n\nThe resolution source for this market will be the official BCRA publication. Resolution will occur once this figure is available.\n\nNote: the resolution source for this market will be the Central Bank of Argentina (BCRA), which reports the Wholesale Exchange Rate to two decimal points (e.g., 1,408.02 ARS per USD). Thus, this is the level of precision that will be used when resolving the market.'
+MARKET_FIELD 189770 1273050 resolutionSource ''
+MARKET_FIELD 189770 1273050 endDate '2026-12-31T00:00:00Z'
+MARKET_FIELD 189770 1273050 negRisk True
+MARKET_FIELD 189770 1273050 negRiskOther False
+MARKET_FIELD 189770 1273050 negRiskMarketID '0x5479086eb11a13ace6454674c82fc9e44681a89a7029f45f8710550331a85300'
+MARKET_FIELD 189770 1273050 groupItemTitle '1600.00–1699.99'
+MARKET_ID 189770 1273051
+MARKET_FIELD 189770 1273051 question 'Will the official USD to ARS exchange rate be between 1700.00 and 1799.99 at the end of December 2026?'
+MARKET_FIELD 189770 1273051 description 'This is a market about Argentina’s official wholesale U.S. dollar exchange rate at market close on the last business day of December 2026, as published by the Central Bank of Argentina (BCRA).\n\nThis market will resolve according to the official wholesale USD to ARS exchange rate (Tipo de Cambio Mayorista, ($ por USD) Com. A 3500 | Referencia) at market close on the final business day of December 2026, as published by the BCRA on its official website (https://www.bcra.gob.ar/).\n\nIf the official rate for that date has not been published by the end of the 7th day after the end of the specified month, the market will resolve according to the most recently published official wholesale rate preceding that date.\n\nThe resolution source for this market will be the official BCRA publication. Resolution will occur once this figure is available.\n\nNote: the resolution source for this market will be the Central Bank of Argentina (BCRA), which reports the Wholesale Exchange Rate to two decimal points (e.g., 1,408.02 ARS per USD). Thus, this is the level of precision that will be used when resolving the market.'
+MARKET_FIELD 189770 1273051 resolutionSource ''
+MARKET_FIELD 189770 1273051 endDate '2026-12-31T00:00:00Z'
+MARKET_FIELD 189770 1273051 negRisk True
+MARKET_FIELD 189770 1273051 negRiskOther False
+MARKET_FIELD 189770 1273051 negRiskMarketID '0x5479086eb11a13ace6454674c82fc9e44681a89a7029f45f8710550331a85300'
+MARKET_FIELD 189770 1273051 groupItemTitle '1700.00–1799.99'
+MARKET_ID 189770 1273052
+MARKET_FIELD 189770 1273052 question 'Will the official USD to ARS exchange rate be between 1800.00 and 1899.99 at the end of December 2026?'
+MARKET_FIELD 189770 1273052 description 'This is a market about Argentina’s official wholesale U.S. dollar exchange rate at market close on the last business day of December 2026, as published by the Central Bank of Argentina (BCRA).\n\nThis market will resolve according to the official wholesale USD to ARS exchange rate (Tipo de Cambio Mayorista, ($ por USD) Com. A 3500 | Referencia) at market close on the final business day of December 2026, as published by the BCRA on its official website (https://www.bcra.gob.ar/).\n\nIf the official rate for that date has not been published by the end of the 7th day after the end of the specified month, the market will resolve according to the most recently published official wholesale rate preceding that date.\n\nThe resolution source for this market will be the official BCRA publication. Resolution will occur once this figure is available.\n\nNote: the resolution source for this market will be the Central Bank of Argentina (BCRA), which reports the Wholesale Exchange Rate to two decimal points (e.g., 1,408.02 ARS per USD). Thus, this is the level of precision that will be used when resolving the market.'
+MARKET_FIELD 189770 1273052 resolutionSource ''
+MARKET_FIELD 189770 1273052 endDate '2026-12-31T00:00:00Z'
+MARKET_FIELD 189770 1273052 negRisk True
+MARKET_FIELD 189770 1273052 negRiskOther False
+MARKET_FIELD 189770 1273052 negRiskMarketID '0x5479086eb11a13ace6454674c82fc9e44681a89a7029f45f8710550331a85300'
+MARKET_FIELD 189770 1273052 groupItemTitle '1800.00–1899.99'
+MARKET_ID 189770 1273053
+MARKET_FIELD 189770 1273053 question 'Will the official USD to ARS exchange rate be between 1900.00 and 1999.99 at the end of December 2026?'
+MARKET_FIELD 189770 1273053 description 'This is a market about Argentina’s official wholesale U.S. dollar exchange rate at market close on the last business day of December 2026, as published by the Central Bank of Argentina (BCRA).\n\nThis market will resolve according to the official wholesale USD to ARS exchange rate (Tipo de Cambio Mayorista, ($ por USD) Com. A 3500 | Referencia) at market close on the final business day of December 2026, as published by the BCRA on its official website (https://www.bcra.gob.ar/).\n\nIf the official rate for that date has not been published by the end of the 7th day after the end of the specified month, the market will resolve according to the most recently published official wholesale rate preceding that date.\n\nThe resolution source for this market will be the official BCRA publication. Resolution will occur once this figure is available.\n\nNote: the resolution source for this market will be the Central Bank of Argentina (BCRA), which reports the Wholesale Exchange Rate to two decimal points (e.g., 1,408.02 ARS per USD). Thus, this is the level of precision that will be used when resolving the market.'
+MARKET_FIELD 189770 1273053 resolutionSource ''
+MARKET_FIELD 189770 1273053 endDate '2026-12-31T00:00:00Z'
+MARKET_FIELD 189770 1273053 negRisk True
+MARKET_FIELD 189770 1273053 negRiskOther False
+MARKET_FIELD 189770 1273053 negRiskMarketID '0x5479086eb11a13ace6454674c82fc9e44681a89a7029f45f8710550331a85300'
+MARKET_FIELD 189770 1273053 groupItemTitle '1900.00–1999.99'
+MARKET_ID 189770 1273054
+MARKET_FIELD 189770 1273054 question 'Will the official USD to ARS exchange rate be 2000.00 or higher at the end of December 2026?'
+MARKET_FIELD 189770 1273054 description 'This is a market about Argentina’s official wholesale U.S. dollar exchange rate at market close on the last business day of December 2026, as published by the Central Bank of Argentina (BCRA).\n\nThis market will resolve according to the official wholesale USD to ARS exchange rate (Tipo de Cambio Mayorista, ($ por USD) Com. A 3500 | Referencia) at market close on the final business day of December 2026, as published by the BCRA on its official website (https://www.bcra.gob.ar/).\n\nIf the official rate for that date has not been published by the end of the 7th day after the end of the specified month, the market will resolve according to the most recently published official wholesale rate preceding that date.\n\nThe resolution source for this market will be the official BCRA publication. Resolution will occur once this figure is available.\n\nNote: the resolution source for this market will be the Central Bank of Argentina (BCRA), which reports the Wholesale Exchange Rate to two decimal points (e.g., 1,408.02 ARS per USD). Thus, this is the level of precision that will be used when resolving the market.'
+MARKET_FIELD 189770 1273054 resolutionSource ''
+MARKET_FIELD 189770 1273054 endDate '2026-12-31T00:00:00Z'
+MARKET_FIELD 189770 1273054 negRisk True
+MARKET_FIELD 189770 1273054 negRiskOther False
+MARKET_FIELD 189770 1273054 negRiskMarketID '0x5479086eb11a13ace6454674c82fc9e44681a89a7029f45f8710550331a85300'
+MARKET_FIELD 189770 1273054 groupItemTitle '2000.00+'
+---
+EVENT_EQUAL description True
+EVENT_EQUAL resolutionSource True
+EVENT_EQUAL endDate True
+NEG_RISK_GROUP_EQUAL False
+ARGENTINA_FX_RULE_CAPTURE_PASS

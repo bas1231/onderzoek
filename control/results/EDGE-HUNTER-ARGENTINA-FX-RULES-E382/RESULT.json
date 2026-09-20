@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/capture_argentina_fx_rules_e382.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-20T02:48:06.438128+00:00",
+  "hypothesis_id": "PAYOFF-IDENTITY-MINING-V1",
+  "source_commit": "7be8aa77e099916634f7e323ab4b25fea23b3505",
+  "started_at": "2026-09-20T02:48:06.082817+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "c0e4eb6101fea3926f47069e7846814114487c8331e993982df6661303d0c384",
+  "task_class": "research",
+  "task_id": "EDGE-HUNTER-ARGENTINA-FX-RULES-E382"
+}
