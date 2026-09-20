@@ -1,0 +1,1 @@
+import runpy;runpy.run_path('control/hourly/hourly_cycle.py',run_name='main')
