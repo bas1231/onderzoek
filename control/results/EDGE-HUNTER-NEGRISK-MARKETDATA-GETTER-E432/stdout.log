@@ -1,0 +1,996 @@
+SOURCE_COUNT 5
+SOURCE e430-src__modules__MarketDataManager.sol /home/leonh/prediction_research/knowledge/raw/reference/polymarket_negrisk_adapter/1938c37d167c4cda330eb86e615f316086e340fc7d8a73b71a2b266fc8c72536-e430-src__modules__MarketDataManager.sol
+SOURCE e430-src__types__MarketData.sol /home/leonh/prediction_research/knowledge/raw/reference/polymarket_negrisk_adapter/adcdfb9d6636664dc876cb27335e1f640a36e9f35b18ec1f33859a8458ca3e49-e430-src__types__MarketData.sol
+SOURCE e430-src__dev__StorageHelper.sol /home/leonh/prediction_research/knowledge/raw/reference/polymarket_negrisk_adapter/958a3a9983f17c589254487478051358697754f54227802c938eb4cd236a94de-e430-src__dev__StorageHelper.sol
+SOURCE e430-src__interfaces__INegRiskAdapter.sol /home/leonh/prediction_research/knowledge/raw/reference/polymarket_negrisk_adapter/11af4edc034239ea0de68b55281a54b7fa752daff0470b93859b19aa66bdf630-e430-src__interfaces__INegRiskAdapter.sol
+SOURCE src__NegRiskAdapter.sol /home/leonh/prediction_research/knowledge/raw/reference/polymarket_negrisk_adapter/f76ace5aa16dad8e71412e4d2b3bd11f9caf28f846c6783dc39d5eb756413656-e430-src__NegRiskAdapter.sol
+MATCH_BEGIN e430-src__modules__MarketDataManager.sol LINES 1 13
+LINE 1 // SPDX-License-Identifier: MIT
+LINE 2 pragma solidity ^0.8.15;
+LINE 3 
+LINE 4 import {MarketData, MarketDataLib} from "src/types/MarketData.sol";
+LINE 5 import {NegRiskIdLib} from "src/libraries/NegRiskIdLib.sol";
+LINE 6 
+LINE 7 interface IMarketStateManagerEE {
+LINE 8     error IndexOutOfBounds();
+LINE 9     error OnlyOracle();
+LINE 10     error MarketNotPrepared();
+LINE 11     error MarketAlreadyPrepared();
+LINE 12     error MarketAlreadyDetermined();
+LINE 13     error FeeBipsOutOfBounds();
+MATCH_END
+MATCH_BEGIN e430-src__modules__MarketDataManager.sol LINES 15 29
+LINE 15 
+LINE 16 /// @title MarketStateManager
+LINE 17 /// @notice Manages market state on behalf of the NegRiskAdapter
+LINE 18 /// @author Mike Shrieve(mike@polymarket.com)
+LINE 19 abstract contract MarketStateManager is IMarketStateManagerEE {
+LINE 20     mapping(bytes32 _marketId => MarketData) internal marketData;
+LINE 21 
+LINE 22     /*//////////////////////////////////////////////////////////////
+LINE 23                                 GETTERS
+LINE 24     //////////////////////////////////////////////////////////////*/
+LINE 25 
+LINE 26     function getMarketData(bytes32 _marketId) public view returns (MarketData) {
+LINE 27         return marketData[_marketId];
+LINE 28     }
+LINE 29 
+MATCH_END
+MATCH_BEGIN e430-src__modules__MarketDataManager.sol LINES 21 35
+LINE 21 
+LINE 22     /*//////////////////////////////////////////////////////////////
+LINE 23                                 GETTERS
+LINE 24     //////////////////////////////////////////////////////////////*/
+LINE 25 
+LINE 26     function getMarketData(bytes32 _marketId) public view returns (MarketData) {
+LINE 27         return marketData[_marketId];
+LINE 28     }
+LINE 29 
+LINE 30     function getOracle(bytes32 _marketId) external view returns (address) {
+LINE 31         return marketData[_marketId].oracle();
+LINE 32     }
+LINE 33 
+LINE 34     function getQuestionCount(bytes32 _marketId) external view returns (uint256) {
+LINE 35         return marketData[_marketId].questionCount();
+MATCH_END
+MATCH_BEGIN e430-src__modules__MarketDataManager.sol LINES 22 36
+LINE 22     /*//////////////////////////////////////////////////////////////
+LINE 23                                 GETTERS
+LINE 24     //////////////////////////////////////////////////////////////*/
+LINE 25 
+LINE 26     function getMarketData(bytes32 _marketId) public view returns (MarketData) {
+LINE 27         return marketData[_marketId];
+LINE 28     }
+LINE 29 
+LINE 30     function getOracle(bytes32 _marketId) external view returns (address) {
+LINE 31         return marketData[_marketId].oracle();
+LINE 32     }
+LINE 33 
+LINE 34     function getQuestionCount(bytes32 _marketId) external view returns (uint256) {
+LINE 35         return marketData[_marketId].questionCount();
+LINE 36     }
+MATCH_END
+MATCH_BEGIN e430-src__modules__MarketDataManager.sol LINES 26 40
+LINE 26     function getMarketData(bytes32 _marketId) public view returns (MarketData) {
+LINE 27         return marketData[_marketId];
+LINE 28     }
+LINE 29 
+LINE 30     function getOracle(bytes32 _marketId) external view returns (address) {
+LINE 31         return marketData[_marketId].oracle();
+LINE 32     }
+LINE 33 
+LINE 34     function getQuestionCount(bytes32 _marketId) external view returns (uint256) {
+LINE 35         return marketData[_marketId].questionCount();
+LINE 36     }
+LINE 37 
+LINE 38     function getDetermined(bytes32 _marketId) external view returns (bool) {
+LINE 39         return marketData[_marketId].determined();
+LINE 40     }
+MATCH_END
+MATCH_BEGIN e430-src__modules__MarketDataManager.sol LINES 30 44
+LINE 30     function getOracle(bytes32 _marketId) external view returns (address) {
+LINE 31         return marketData[_marketId].oracle();
+LINE 32     }
+LINE 33 
+LINE 34     function getQuestionCount(bytes32 _marketId) external view returns (uint256) {
+LINE 35         return marketData[_marketId].questionCount();
+LINE 36     }
+LINE 37 
+LINE 38     function getDetermined(bytes32 _marketId) external view returns (bool) {
+LINE 39         return marketData[_marketId].determined();
+LINE 40     }
+LINE 41 
+LINE 42     function getResult(bytes32 _marketId) external view returns (uint256) {
+LINE 43         return marketData[_marketId].result();
+LINE 44     }
+MATCH_END
+MATCH_BEGIN e430-src__modules__MarketDataManager.sol LINES 34 48
+LINE 34     function getQuestionCount(bytes32 _marketId) external view returns (uint256) {
+LINE 35         return marketData[_marketId].questionCount();
+LINE 36     }
+LINE 37 
+LINE 38     function getDetermined(bytes32 _marketId) external view returns (bool) {
+LINE 39         return marketData[_marketId].determined();
+LINE 40     }
+LINE 41 
+LINE 42     function getResult(bytes32 _marketId) external view returns (uint256) {
+LINE 43         return marketData[_marketId].result();
+LINE 44     }
+LINE 45 
+LINE 46     function getFeeBips(bytes32 _marketId) external view returns (uint256) {
+LINE 47         return marketData[_marketId].feeBips();
+LINE 48     }
+MATCH_END
+MATCH_BEGIN e430-src__modules__MarketDataManager.sol LINES 38 52
+LINE 38     function getDetermined(bytes32 _marketId) external view returns (bool) {
+LINE 39         return marketData[_marketId].determined();
+LINE 40     }
+LINE 41 
+LINE 42     function getResult(bytes32 _marketId) external view returns (uint256) {
+LINE 43         return marketData[_marketId].result();
+LINE 44     }
+LINE 45 
+LINE 46     function getFeeBips(bytes32 _marketId) external view returns (uint256) {
+LINE 47         return marketData[_marketId].feeBips();
+LINE 48     }
+LINE 49 
+LINE 50     /*//////////////////////////////////////////////////////////////
+LINE 51                                 INTERNAL
+LINE 52     //////////////////////////////////////////////////////////////*/
+MATCH_END
+MATCH_BEGIN e430-src__modules__MarketDataManager.sol LINES 42 56
+LINE 42     function getResult(bytes32 _marketId) external view returns (uint256) {
+LINE 43         return marketData[_marketId].result();
+LINE 44     }
+LINE 45 
+LINE 46     function getFeeBips(bytes32 _marketId) external view returns (uint256) {
+LINE 47         return marketData[_marketId].feeBips();
+LINE 48     }
+LINE 49 
+LINE 50     /*//////////////////////////////////////////////////////////////
+LINE 51                                 INTERNAL
+LINE 52     //////////////////////////////////////////////////////////////*/
+LINE 53 
+LINE 54     /// @notice Prepares market data
+LINE 55     /// @notice The market id depends on the oracle address, feeBips, and market metadata
+LINE 56     /// @param _feeBips  - feeBips out of 10_000
+MATCH_END
+MATCH_BEGIN e430-src__modules__MarketDataManager.sol LINES 57 71
+LINE 57     /// @param _metadata - market metadata
+LINE 58     /// @return marketId - the market id
+LINE 59     function _prepareMarket(uint256 _feeBips, bytes memory _metadata) internal returns (bytes32 marketId) {
+LINE 60         address oracle = msg.sender;
+LINE 61         marketId = NegRiskIdLib.getMarketId(oracle, _feeBips, _metadata);
+LINE 62         MarketData md = marketData[marketId];
+LINE 63 
+LINE 64         if (md.oracle() != address(0)) revert MarketAlreadyPrepared();
+LINE 65         if (_feeBips > 10_000) revert FeeBipsOutOfBounds();
+LINE 66 
+LINE 67         marketData[marketId] = MarketDataLib.initialize(oracle, _feeBips);
+LINE 68     }
+LINE 69 
+LINE 70     /// @notice Prepares a new question for the given market
+LINE 71     /// @param _marketId   - the market for which to prepare a new question
+MATCH_END
+MATCH_BEGIN e430-src__modules__MarketDataManager.sol LINES 62 76
+LINE 62         MarketData md = marketData[marketId];
+LINE 63 
+LINE 64         if (md.oracle() != address(0)) revert MarketAlreadyPrepared();
+LINE 65         if (_feeBips > 10_000) revert FeeBipsOutOfBounds();
+LINE 66 
+LINE 67         marketData[marketId] = MarketDataLib.initialize(oracle, _feeBips);
+LINE 68     }
+LINE 69 
+LINE 70     /// @notice Prepares a new question for the given market
+LINE 71     /// @param _marketId   - the market for which to prepare a new question
+LINE 72     /// @return questionId - the resulting question id
+LINE 73     /// @return index      - the resulting question index
+LINE 74     function _prepareQuestion(bytes32 _marketId) internal returns (bytes32 questionId, uint256 index) {
+LINE 75         MarketData md = marketData[_marketId];
+LINE 76         address oracle = marketData[_marketId].oracle();
+MATCH_END
+MATCH_BEGIN e430-src__modules__MarketDataManager.sol LINES 70 84
+LINE 70     /// @notice Prepares a new question for the given market
+LINE 71     /// @param _marketId   - the market for which to prepare a new question
+LINE 72     /// @return questionId - the resulting question id
+LINE 73     /// @return index      - the resulting question index
+LINE 74     function _prepareQuestion(bytes32 _marketId) internal returns (bytes32 questionId, uint256 index) {
+LINE 75         MarketData md = marketData[_marketId];
+LINE 76         address oracle = marketData[_marketId].oracle();
+LINE 77 
+LINE 78         if (oracle == address(0)) revert MarketNotPrepared();
+LINE 79         if (oracle != msg.sender) revert OnlyOracle();
+LINE 80 
+LINE 81         index = md.questionCount();
+LINE 82         questionId = NegRiskIdLib.getQuestionId(_marketId, uint8(index));
+LINE 83         marketData[_marketId] = md.incrementQuestionCount();
+LINE 84     }
+MATCH_END
+MATCH_BEGIN e430-src__modules__MarketDataManager.sol LINES 71 85
+LINE 71     /// @param _marketId   - the market for which to prepare a new question
+LINE 72     /// @return questionId - the resulting question id
+LINE 73     /// @return index      - the resulting question index
+LINE 74     function _prepareQuestion(bytes32 _marketId) internal returns (bytes32 questionId, uint256 index) {
+LINE 75         MarketData md = marketData[_marketId];
+LINE 76         address oracle = marketData[_marketId].oracle();
+LINE 77 
+LINE 78         if (oracle == address(0)) revert MarketNotPrepared();
+LINE 79         if (oracle != msg.sender) revert OnlyOracle();
+LINE 80 
+LINE 81         index = md.questionCount();
+LINE 82         questionId = NegRiskIdLib.getQuestionId(_marketId, uint8(index));
+LINE 83         marketData[_marketId] = md.incrementQuestionCount();
+LINE 84     }
+LINE 85 
+MATCH_END
+MATCH_BEGIN e430-src__modules__MarketDataManager.sol LINES 78 92
+LINE 78         if (oracle == address(0)) revert MarketNotPrepared();
+LINE 79         if (oracle != msg.sender) revert OnlyOracle();
+LINE 80 
+LINE 81         index = md.questionCount();
+LINE 82         questionId = NegRiskIdLib.getQuestionId(_marketId, uint8(index));
+LINE 83         marketData[_marketId] = md.incrementQuestionCount();
+LINE 84     }
+LINE 85 
+LINE 86     /// @notice Reports the outcome of a question
+LINE 87     /// @notice State is only modified if the outcome is true
+LINE 88     /// @notice Reverts if the market is not prepared
+LINE 89     /// @notice Reverts if msg.sender is not the market's oracle
+LINE 90     /// @notice Reverts if the question index is out of bounds
+LINE 91     /// @notice Reverts if the outcome is true, and the market has already been determined
+LINE 92     function _reportOutcome(bytes32 _questionId, bool _outcome) internal {
+MATCH_END
+MATCH_BEGIN e430-src__modules__MarketDataManager.sol LINES 91 105
+LINE 91     /// @notice Reverts if the outcome is true, and the market has already been determined
+LINE 92     function _reportOutcome(bytes32 _questionId, bool _outcome) internal {
+LINE 93         bytes32 marketId = NegRiskIdLib.getMarketId(_questionId);
+LINE 94         uint256 questionIndex = NegRiskIdLib.getQuestionIndex(_questionId);
+LINE 95 
+LINE 96         MarketData data = marketData[marketId];
+LINE 97         address oracle = data.oracle();
+LINE 98 
+LINE 99         if (oracle == address(0)) revert MarketNotPrepared();
+LINE 100         if (oracle != msg.sender) revert OnlyOracle();
+LINE 101         if (questionIndex >= data.questionCount()) revert IndexOutOfBounds();
+LINE 102 
+LINE 103         if (_outcome == true) {
+LINE 104             if (data.determined()) revert MarketAlreadyDetermined();
+LINE 105             marketData[marketId] = data.determine(questionIndex);
+MATCH_END
+MATCH_BEGIN e430-src__modules__MarketDataManager.sol LINES 100 108
+LINE 100         if (oracle != msg.sender) revert OnlyOracle();
+LINE 101         if (questionIndex >= data.questionCount()) revert IndexOutOfBounds();
+LINE 102 
+LINE 103         if (_outcome == true) {
+LINE 104             if (data.determined()) revert MarketAlreadyDetermined();
+LINE 105             marketData[marketId] = data.determine(questionIndex);
+LINE 106         }
+LINE 107     }
+LINE 108 }
+MATCH_END
+MATCH_BEGIN e430-src__types__MarketData.sol LINES 1 13
+LINE 1 // SPDX-License-Identifier: MIT
+LINE 2 pragma solidity ^0.8.15;
+LINE 3 
+LINE 4 /// @notice the MarketData user-defined type, a zero-cost abstraction over bytes32
+LINE 5 type MarketData is bytes32;
+LINE 6 
+LINE 7 // md[0] = questionCount
+LINE 8 // md[1] = determined
+LINE 9 // md[2] = result
+LINE 10 // md[3:4] = feeBips
+LINE 11 // md[12:32] = oracle
+LINE 12 
+LINE 13 using MarketDataLib for MarketData global;
+MATCH_END
+MATCH_BEGIN e430-src__types__MarketData.sol LINES 1 14
+LINE 1 // SPDX-License-Identifier: MIT
+LINE 2 pragma solidity ^0.8.15;
+LINE 3 
+LINE 4 /// @notice the MarketData user-defined type, a zero-cost abstraction over bytes32
+LINE 5 type MarketData is bytes32;
+LINE 6 
+LINE 7 // md[0] = questionCount
+LINE 8 // md[1] = determined
+LINE 9 // md[2] = result
+LINE 10 // md[3:4] = feeBips
+LINE 11 // md[12:32] = oracle
+LINE 12 
+LINE 13 using MarketDataLib for MarketData global;
+LINE 14 
+MATCH_END
+MATCH_BEGIN e430-src__types__MarketData.sol LINES 8 22
+LINE 8 // md[1] = determined
+LINE 9 // md[2] = result
+LINE 10 // md[3:4] = feeBips
+LINE 11 // md[12:32] = oracle
+LINE 12 
+LINE 13 using MarketDataLib for MarketData global;
+LINE 14 
+LINE 15 /// @title MarketDataLib
+LINE 16 /// @notice Library for dealing with the MarketData user-defined bytes32 type
+LINE 17 /// @author Mike Shrieve (mike@polymarket.com)
+LINE 18 library MarketDataLib {
+LINE 19     error DeterminedFlagAlreadySet();
+LINE 20 
+LINE 21     /// @notice used to increment the questionCount
+LINE 22     uint256 constant INCREMENT = uint256(bytes32(bytes1(0x01)));
+MATCH_END
+MATCH_BEGIN e430-src__types__MarketData.sol LINES 10 24
+LINE 10 // md[3:4] = feeBips
+LINE 11 // md[12:32] = oracle
+LINE 12 
+LINE 13 using MarketDataLib for MarketData global;
+LINE 14 
+LINE 15 /// @title MarketDataLib
+LINE 16 /// @notice Library for dealing with the MarketData user-defined bytes32 type
+LINE 17 /// @author Mike Shrieve (mike@polymarket.com)
+LINE 18 library MarketDataLib {
+LINE 19     error DeterminedFlagAlreadySet();
+LINE 20 
+LINE 21     /// @notice used to increment the questionCount
+LINE 22     uint256 constant INCREMENT = uint256(bytes32(bytes1(0x01)));
+LINE 23 
+LINE 24     /// @notice extracts the oracle address from MarketData
+MATCH_END
+MATCH_BEGIN e430-src__types__MarketData.sol LINES 11 25
+LINE 11 // md[12:32] = oracle
+LINE 12 
+LINE 13 using MarketDataLib for MarketData global;
+LINE 14 
+LINE 15 /// @title MarketDataLib
+LINE 16 /// @notice Library for dealing with the MarketData user-defined bytes32 type
+LINE 17 /// @author Mike Shrieve (mike@polymarket.com)
+LINE 18 library MarketDataLib {
+LINE 19     error DeterminedFlagAlreadySet();
+LINE 20 
+LINE 21     /// @notice used to increment the questionCount
+LINE 22     uint256 constant INCREMENT = uint256(bytes32(bytes1(0x01)));
+LINE 23 
+LINE 24     /// @notice extracts the oracle address from MarketData
+LINE 25     /// @return oracle - the address of the oracle
+MATCH_END
+MATCH_BEGIN e430-src__types__MarketData.sol LINES 13 27
+LINE 13 using MarketDataLib for MarketData global;
+LINE 14 
+LINE 15 /// @title MarketDataLib
+LINE 16 /// @notice Library for dealing with the MarketData user-defined bytes32 type
+LINE 17 /// @author Mike Shrieve (mike@polymarket.com)
+LINE 18 library MarketDataLib {
+LINE 19     error DeterminedFlagAlreadySet();
+LINE 20 
+LINE 21     /// @notice used to increment the questionCount
+LINE 22     uint256 constant INCREMENT = uint256(bytes32(bytes1(0x01)));
+LINE 23 
+LINE 24     /// @notice extracts the oracle address from MarketData
+LINE 25     /// @return oracle - the address of the oracle
+LINE 26     function oracle(MarketData _data) internal pure returns (address) {
+LINE 27         return address(uint160(uint256(MarketData.unwrap(_data))));
+MATCH_END
+MATCH_BEGIN e430-src__types__MarketData.sol LINES 19 33
+LINE 19     error DeterminedFlagAlreadySet();
+LINE 20 
+LINE 21     /// @notice used to increment the questionCount
+LINE 22     uint256 constant INCREMENT = uint256(bytes32(bytes1(0x01)));
+LINE 23 
+LINE 24     /// @notice extracts the oracle address from MarketData
+LINE 25     /// @return oracle - the address of the oracle
+LINE 26     function oracle(MarketData _data) internal pure returns (address) {
+LINE 27         return address(uint160(uint256(MarketData.unwrap(_data))));
+LINE 28     }
+LINE 29 
+LINE 30     /// @notice extracts the questionCount from MarketData
+LINE 31     /// @return questionCount - the number of questions in the market
+LINE 32     function questionCount(MarketData _data) internal pure returns (uint256) {
+LINE 33         return uint256(uint8(MarketData.unwrap(_data)[0]));
+MATCH_END
+MATCH_BEGIN e430-src__types__MarketData.sol LINES 21 35
+LINE 21     /// @notice used to increment the questionCount
+LINE 22     uint256 constant INCREMENT = uint256(bytes32(bytes1(0x01)));
+LINE 23 
+LINE 24     /// @notice extracts the oracle address from MarketData
+LINE 25     /// @return oracle - the address of the oracle
+LINE 26     function oracle(MarketData _data) internal pure returns (address) {
+LINE 27         return address(uint160(uint256(MarketData.unwrap(_data))));
+LINE 28     }
+LINE 29 
+LINE 30     /// @notice extracts the questionCount from MarketData
+LINE 31     /// @return questionCount - the number of questions in the market
+LINE 32     function questionCount(MarketData _data) internal pure returns (uint256) {
+LINE 33         return uint256(uint8(MarketData.unwrap(_data)[0]));
+LINE 34     }
+LINE 35 
+MATCH_END
+MATCH_BEGIN e430-src__types__MarketData.sol LINES 22 36
+LINE 22     uint256 constant INCREMENT = uint256(bytes32(bytes1(0x01)));
+LINE 23 
+LINE 24     /// @notice extracts the oracle address from MarketData
+LINE 25     /// @return oracle - the address of the oracle
+LINE 26     function oracle(MarketData _data) internal pure returns (address) {
+LINE 27         return address(uint160(uint256(MarketData.unwrap(_data))));
+LINE 28     }
+LINE 29 
+LINE 30     /// @notice extracts the questionCount from MarketData
+LINE 31     /// @return questionCount - the number of questions in the market
+LINE 32     function questionCount(MarketData _data) internal pure returns (uint256) {
+LINE 33         return uint256(uint8(MarketData.unwrap(_data)[0]));
+LINE 34     }
+LINE 35 
+LINE 36     /// @notice increments the questionCount
+MATCH_END
+MATCH_BEGIN e430-src__types__MarketData.sol LINES 25 39
+LINE 25     /// @return oracle - the address of the oracle
+LINE 26     function oracle(MarketData _data) internal pure returns (address) {
+LINE 27         return address(uint160(uint256(MarketData.unwrap(_data))));
+LINE 28     }
+LINE 29 
+LINE 30     /// @notice extracts the questionCount from MarketData
+LINE 31     /// @return questionCount - the number of questions in the market
+LINE 32     function questionCount(MarketData _data) internal pure returns (uint256) {
+LINE 33         return uint256(uint8(MarketData.unwrap(_data)[0]));
+LINE 34     }
+LINE 35 
+LINE 36     /// @notice increments the questionCount
+LINE 37     /// @notice does _not_ check to see if the questionCount is already at the maximum value
+LINE 38     /// @return marketData - the modified MarketData
+LINE 39     function incrementQuestionCount(MarketData _data) internal pure returns (MarketData) {
+MATCH_END
+MATCH_BEGIN e430-src__types__MarketData.sol LINES 27 41
+LINE 27         return address(uint160(uint256(MarketData.unwrap(_data))));
+LINE 28     }
+LINE 29 
+LINE 30     /// @notice extracts the questionCount from MarketData
+LINE 31     /// @return questionCount - the number of questions in the market
+LINE 32     function questionCount(MarketData _data) internal pure returns (uint256) {
+LINE 33         return uint256(uint8(MarketData.unwrap(_data)[0]));
+LINE 34     }
+LINE 35 
+LINE 36     /// @notice increments the questionCount
+LINE 37     /// @notice does _not_ check to see if the questionCount is already at the maximum value
+LINE 38     /// @return marketData - the modified MarketData
+LINE 39     function incrementQuestionCount(MarketData _data) internal pure returns (MarketData) {
+LINE 40         bytes32 data = MarketData.unwrap(_data);
+LINE 41         data = bytes32(uint256(data) + INCREMENT);
+MATCH_END
+MATCH_BEGIN e430-src__types__MarketData.sol LINES 28 42
+LINE 28     }
+LINE 29 
+LINE 30     /// @notice extracts the questionCount from MarketData
+LINE 31     /// @return questionCount - the number of questions in the market
+LINE 32     function questionCount(MarketData _data) internal pure returns (uint256) {
+LINE 33         return uint256(uint8(MarketData.unwrap(_data)[0]));
+LINE 34     }
+LINE 35 
+LINE 36     /// @notice increments the questionCount
+LINE 37     /// @notice does _not_ check to see if the questionCount is already at the maximum value
+LINE 38     /// @return marketData - the modified MarketData
+LINE 39     function incrementQuestionCount(MarketData _data) internal pure returns (MarketData) {
+LINE 40         bytes32 data = MarketData.unwrap(_data);
+LINE 41         data = bytes32(uint256(data) + INCREMENT);
+LINE 42         return MarketData.wrap(data);
+MATCH_END
+MATCH_BEGIN e430-src__types__MarketData.sol LINES 33 47
+LINE 33         return uint256(uint8(MarketData.unwrap(_data)[0]));
+LINE 34     }
+LINE 35 
+LINE 36     /// @notice increments the questionCount
+LINE 37     /// @notice does _not_ check to see if the questionCount is already at the maximum value
+LINE 38     /// @return marketData - the modified MarketData
+LINE 39     function incrementQuestionCount(MarketData _data) internal pure returns (MarketData) {
+LINE 40         bytes32 data = MarketData.unwrap(_data);
+LINE 41         data = bytes32(uint256(data) + INCREMENT);
+LINE 42         return MarketData.wrap(data);
+LINE 43     }
+LINE 44 
+LINE 45     /// @notice extracts the determined flag from MarketData
+LINE 46     /// @return determined - true if the market has been determined, i.e. if one of the questions was resolved true
+LINE 47     function determined(MarketData _data) internal pure returns (bool) {
+MATCH_END
+MATCH_BEGIN e430-src__types__MarketData.sol LINES 34 48
+LINE 34     }
+LINE 35 
+LINE 36     /// @notice increments the questionCount
+LINE 37     /// @notice does _not_ check to see if the questionCount is already at the maximum value
+LINE 38     /// @return marketData - the modified MarketData
+LINE 39     function incrementQuestionCount(MarketData _data) internal pure returns (MarketData) {
+LINE 40         bytes32 data = MarketData.unwrap(_data);
+LINE 41         data = bytes32(uint256(data) + INCREMENT);
+LINE 42         return MarketData.wrap(data);
+LINE 43     }
+LINE 44 
+LINE 45     /// @notice extracts the determined flag from MarketData
+LINE 46     /// @return determined - true if the market has been determined, i.e. if one of the questions was resolved true
+LINE 47     function determined(MarketData _data) internal pure returns (bool) {
+LINE 48         return MarketData.unwrap(_data)[1] == 0x00 ? false : true;
+MATCH_END
+MATCH_BEGIN e430-src__types__MarketData.sol LINES 35 49
+LINE 35 
+LINE 36     /// @notice increments the questionCount
+LINE 37     /// @notice does _not_ check to see if the questionCount is already at the maximum value
+LINE 38     /// @return marketData - the modified MarketData
+LINE 39     function incrementQuestionCount(MarketData _data) internal pure returns (MarketData) {
+LINE 40         bytes32 data = MarketData.unwrap(_data);
+LINE 41         data = bytes32(uint256(data) + INCREMENT);
+LINE 42         return MarketData.wrap(data);
+LINE 43     }
+LINE 44 
+LINE 45     /// @notice extracts the determined flag from MarketData
+LINE 46     /// @return determined - true if the market has been determined, i.e. if one of the questions was resolved true
+LINE 47     function determined(MarketData _data) internal pure returns (bool) {
+LINE 48         return MarketData.unwrap(_data)[1] == 0x00 ? false : true;
+LINE 49     }
+MATCH_END
+MATCH_BEGIN e430-src__types__MarketData.sol LINES 37 51
+LINE 37     /// @notice does _not_ check to see if the questionCount is already at the maximum value
+LINE 38     /// @return marketData - the modified MarketData
+LINE 39     function incrementQuestionCount(MarketData _data) internal pure returns (MarketData) {
+LINE 40         bytes32 data = MarketData.unwrap(_data);
+LINE 41         data = bytes32(uint256(data) + INCREMENT);
+LINE 42         return MarketData.wrap(data);
+LINE 43     }
+LINE 44 
+LINE 45     /// @notice extracts the determined flag from MarketData
+LINE 46     /// @return determined - true if the market has been determined, i.e. if one of the questions was resolved true
+LINE 47     function determined(MarketData _data) internal pure returns (bool) {
+LINE 48         return MarketData.unwrap(_data)[1] == 0x00 ? false : true;
+LINE 49     }
+LINE 50 
+LINE 51     /// @notice marks the market as determined
+MATCH_END
+MATCH_BEGIN e430-src__types__MarketData.sol LINES 40 54
+LINE 40         bytes32 data = MarketData.unwrap(_data);
+LINE 41         data = bytes32(uint256(data) + INCREMENT);
+LINE 42         return MarketData.wrap(data);
+LINE 43     }
+LINE 44 
+LINE 45     /// @notice extracts the determined flag from MarketData
+LINE 46     /// @return determined - true if the market has been determined, i.e. if one of the questions was resolved true
+LINE 47     function determined(MarketData _data) internal pure returns (bool) {
+LINE 48         return MarketData.unwrap(_data)[1] == 0x00 ? false : true;
+LINE 49     }
+LINE 50 
+LINE 51     /// @notice marks the market as determined
+LINE 52     /// @param _result - the result of the market, i.e., the index of the question that was resolved true
+LINE 53     /// @return marketData - the modified MarketData
+LINE 54     function determine(MarketData _data, uint256 _result) internal pure returns (MarketData) {
+MATCH_END
+MATCH_BEGIN e430-src__types__MarketData.sol LINES 42 56
+LINE 42         return MarketData.wrap(data);
+LINE 43     }
+LINE 44 
+LINE 45     /// @notice extracts the determined flag from MarketData
+LINE 46     /// @return determined - true if the market has been determined, i.e. if one of the questions was resolved true
+LINE 47     function determined(MarketData _data) internal pure returns (bool) {
+LINE 48         return MarketData.unwrap(_data)[1] == 0x00 ? false : true;
+LINE 49     }
+LINE 50 
+LINE 51     /// @notice marks the market as determined
+LINE 52     /// @param _result - the result of the market, i.e., the index of the question that was resolved true
+LINE 53     /// @return marketData - the modified MarketData
+LINE 54     function determine(MarketData _data, uint256 _result) internal pure returns (MarketData) {
+LINE 55         bytes32 data = MarketData.unwrap(_data);
+LINE 56 
+MATCH_END
+MATCH_BEGIN e430-src__types__MarketData.sol LINES 43 57
+LINE 43     }
+LINE 44 
+LINE 45     /// @notice extracts the determined flag from MarketData
+LINE 46     /// @return determined - true if the market has been determined, i.e. if one of the questions was resolved true
+LINE 47     function determined(MarketData _data) internal pure returns (bool) {
+LINE 48         return MarketData.unwrap(_data)[1] == 0x00 ? false : true;
+LINE 49     }
+LINE 50 
+LINE 51     /// @notice marks the market as determined
+LINE 52     /// @param _result - the result of the market, i.e., the index of the question that was resolved true
+LINE 53     /// @return marketData - the modified MarketData
+LINE 54     function determine(MarketData _data, uint256 _result) internal pure returns (MarketData) {
+LINE 55         bytes32 data = MarketData.unwrap(_data);
+LINE 56 
+LINE 57         if (data[1] != 0x00) revert DeterminedFlagAlreadySet();
+MATCH_END
+MATCH_BEGIN e430-src__types__MarketData.sol LINES 48 62
+LINE 48         return MarketData.unwrap(_data)[1] == 0x00 ? false : true;
+LINE 49     }
+LINE 50 
+LINE 51     /// @notice marks the market as determined
+LINE 52     /// @param _result - the result of the market, i.e., the index of the question that was resolved true
+LINE 53     /// @return marketData - the modified MarketData
+LINE 54     function determine(MarketData _data, uint256 _result) internal pure returns (MarketData) {
+LINE 55         bytes32 data = MarketData.unwrap(_data);
+LINE 56 
+LINE 57         if (data[1] != 0x00) revert DeterminedFlagAlreadySet();
+LINE 58         data |= bytes32(bytes1(0x01)) >> 8;
+LINE 59         data |= bytes32(bytes1(uint8(_result))) >> 16;
+LINE 60 
+LINE 61         return MarketData.wrap(data);
+LINE 62     }
+MATCH_END
+MATCH_BEGIN e430-src__types__MarketData.sol LINES 49 63
+LINE 49     }
+LINE 50 
+LINE 51     /// @notice marks the market as determined
+LINE 52     /// @param _result - the result of the market, i.e., the index of the question that was resolved true
+LINE 53     /// @return marketData - the modified MarketData
+LINE 54     function determine(MarketData _data, uint256 _result) internal pure returns (MarketData) {
+LINE 55         bytes32 data = MarketData.unwrap(_data);
+LINE 56 
+LINE 57         if (data[1] != 0x00) revert DeterminedFlagAlreadySet();
+LINE 58         data |= bytes32(bytes1(0x01)) >> 8;
+LINE 59         data |= bytes32(bytes1(uint8(_result))) >> 16;
+LINE 60 
+LINE 61         return MarketData.wrap(data);
+LINE 62     }
+LINE 63 
+MATCH_END
+MATCH_BEGIN e430-src__types__MarketData.sol LINES 50 64
+LINE 50 
+LINE 51     /// @notice marks the market as determined
+LINE 52     /// @param _result - the result of the market, i.e., the index of the question that was resolved true
+LINE 53     /// @return marketData - the modified MarketData
+LINE 54     function determine(MarketData _data, uint256 _result) internal pure returns (MarketData) {
+LINE 55         bytes32 data = MarketData.unwrap(_data);
+LINE 56 
+LINE 57         if (data[1] != 0x00) revert DeterminedFlagAlreadySet();
+LINE 58         data |= bytes32(bytes1(0x01)) >> 8;
+LINE 59         data |= bytes32(bytes1(uint8(_result))) >> 16;
+LINE 60 
+LINE 61         return MarketData.wrap(data);
+LINE 62     }
+LINE 63 
+LINE 64     /// @notice initializes the MarketData type
+MATCH_END
+MATCH_BEGIN e430-src__types__MarketData.sol LINES 56 70
+LINE 56 
+LINE 57         if (data[1] != 0x00) revert DeterminedFlagAlreadySet();
+LINE 58         data |= bytes32(bytes1(0x01)) >> 8;
+LINE 59         data |= bytes32(bytes1(uint8(_result))) >> 16;
+LINE 60 
+LINE 61         return MarketData.wrap(data);
+LINE 62     }
+LINE 63 
+LINE 64     /// @notice initializes the MarketData type
+LINE 65     /// @param _oracle - the address of the oracle
+LINE 66     /// @param _feeBips - the feeBips, out of 10_000
+LINE 67     /// @return marketData - the initialized MarketData
+LINE 68     function initialize(address _oracle, uint256 _feeBips) internal pure returns (MarketData) {
+LINE 69         bytes32 data;
+LINE 70         data |= bytes32(bytes2(uint16(_feeBips))) >> 24;
+MATCH_END
+MATCH_BEGIN e430-src__types__MarketData.sol LINES 59 73
+LINE 59         data |= bytes32(bytes1(uint8(_result))) >> 16;
+LINE 60 
+LINE 61         return MarketData.wrap(data);
+LINE 62     }
+LINE 63 
+LINE 64     /// @notice initializes the MarketData type
+LINE 65     /// @param _oracle - the address of the oracle
+LINE 66     /// @param _feeBips - the feeBips, out of 10_000
+LINE 67     /// @return marketData - the initialized MarketData
+LINE 68     function initialize(address _oracle, uint256 _feeBips) internal pure returns (MarketData) {
+LINE 69         bytes32 data;
+LINE 70         data |= bytes32(bytes2(uint16(_feeBips))) >> 24;
+LINE 71         data |= bytes32(uint256(uint160(_oracle)));
+LINE 72         return MarketData.wrap(data);
+LINE 73     }
+MATCH_END
+MATCH_BEGIN e430-src__types__MarketData.sol LINES 62 76
+LINE 62     }
+LINE 63 
+LINE 64     /// @notice initializes the MarketData type
+LINE 65     /// @param _oracle - the address of the oracle
+LINE 66     /// @param _feeBips - the feeBips, out of 10_000
+LINE 67     /// @return marketData - the initialized MarketData
+LINE 68     function initialize(address _oracle, uint256 _feeBips) internal pure returns (MarketData) {
+LINE 69         bytes32 data;
+LINE 70         data |= bytes32(bytes2(uint16(_feeBips))) >> 24;
+LINE 71         data |= bytes32(uint256(uint160(_oracle)));
+LINE 72         return MarketData.wrap(data);
+LINE 73     }
+LINE 74 
+LINE 75     /// @notice extracts the result from MarketData, i.e., the index of the question that was resolved true
+LINE 76     /// @notice if the market has not been determined, returns zero
+MATCH_END
+MATCH_BEGIN e430-src__types__MarketData.sol LINES 63 77
+LINE 63 
+LINE 64     /// @notice initializes the MarketData type
+LINE 65     /// @param _oracle - the address of the oracle
+LINE 66     /// @param _feeBips - the feeBips, out of 10_000
+LINE 67     /// @return marketData - the initialized MarketData
+LINE 68     function initialize(address _oracle, uint256 _feeBips) internal pure returns (MarketData) {
+LINE 69         bytes32 data;
+LINE 70         data |= bytes32(bytes2(uint16(_feeBips))) >> 24;
+LINE 71         data |= bytes32(uint256(uint160(_oracle)));
+LINE 72         return MarketData.wrap(data);
+LINE 73     }
+LINE 74 
+LINE 75     /// @notice extracts the result from MarketData, i.e., the index of the question that was resolved true
+LINE 76     /// @notice if the market has not been determined, returns zero
+LINE 77     /// @return result - the index of the question that was resolved true, or zero
+MATCH_END
+MATCH_BEGIN e430-src__types__MarketData.sol LINES 67 81
+LINE 67     /// @return marketData - the initialized MarketData
+LINE 68     function initialize(address _oracle, uint256 _feeBips) internal pure returns (MarketData) {
+LINE 69         bytes32 data;
+LINE 70         data |= bytes32(bytes2(uint16(_feeBips))) >> 24;
+LINE 71         data |= bytes32(uint256(uint160(_oracle)));
+LINE 72         return MarketData.wrap(data);
+LINE 73     }
+LINE 74 
+LINE 75     /// @notice extracts the result from MarketData, i.e., the index of the question that was resolved true
+LINE 76     /// @notice if the market has not been determined, returns zero
+LINE 77     /// @return result - the index of the question that was resolved true, or zero
+LINE 78     function result(MarketData _data) internal pure returns (uint256) {
+LINE 79         return uint256(uint8(MarketData.unwrap(_data)[2]));
+LINE 80     }
+LINE 81 
+MATCH_END
+MATCH_BEGIN e430-src__types__MarketData.sol LINES 70 84
+LINE 70         data |= bytes32(bytes2(uint16(_feeBips))) >> 24;
+LINE 71         data |= bytes32(uint256(uint160(_oracle)));
+LINE 72         return MarketData.wrap(data);
+LINE 73     }
+LINE 74 
+LINE 75     /// @notice extracts the result from MarketData, i.e., the index of the question that was resolved true
+LINE 76     /// @notice if the market has not been determined, returns zero
+LINE 77     /// @return result - the index of the question that was resolved true, or zero
+LINE 78     function result(MarketData _data) internal pure returns (uint256) {
+LINE 79         return uint256(uint8(MarketData.unwrap(_data)[2]));
+LINE 80     }
+LINE 81 
+LINE 82     /// @notice extracts the feeBips from MarketData, out of 10_000
+LINE 83     /// @return feeBips - the feeBips
+LINE 84     function feeBips(MarketData _data) internal pure returns (uint256) {
+MATCH_END
+MATCH_BEGIN e430-src__types__MarketData.sol LINES 73 87
+LINE 73     }
+LINE 74 
+LINE 75     /// @notice extracts the result from MarketData, i.e., the index of the question that was resolved true
+LINE 76     /// @notice if the market has not been determined, returns zero
+LINE 77     /// @return result - the index of the question that was resolved true, or zero
+LINE 78     function result(MarketData _data) internal pure returns (uint256) {
+LINE 79         return uint256(uint8(MarketData.unwrap(_data)[2]));
+LINE 80     }
+LINE 81 
+LINE 82     /// @notice extracts the feeBips from MarketData, out of 10_000
+LINE 83     /// @return feeBips - the feeBips
+LINE 84     function feeBips(MarketData _data) internal pure returns (uint256) {
+LINE 85         return uint256(uint16(bytes2(MarketData.unwrap(_data) << 24)));
+LINE 86     }
+LINE 87 }
+MATCH_END
+MATCH_BEGIN e430-src__types__MarketData.sol LINES 74 87
+LINE 74 
+LINE 75     /// @notice extracts the result from MarketData, i.e., the index of the question that was resolved true
+LINE 76     /// @notice if the market has not been determined, returns zero
+LINE 77     /// @return result - the index of the question that was resolved true, or zero
+LINE 78     function result(MarketData _data) internal pure returns (uint256) {
+LINE 79         return uint256(uint8(MarketData.unwrap(_data)[2]));
+LINE 80     }
+LINE 81 
+LINE 82     /// @notice extracts the feeBips from MarketData, out of 10_000
+LINE 83     /// @return feeBips - the feeBips
+LINE 84     function feeBips(MarketData _data) internal pure returns (uint256) {
+LINE 85         return uint256(uint16(bytes2(MarketData.unwrap(_data) << 24)));
+LINE 86     }
+LINE 87 }
+MATCH_END
+MATCH_BEGIN e430-src__types__MarketData.sol LINES 77 87
+LINE 77     /// @return result - the index of the question that was resolved true, or zero
+LINE 78     function result(MarketData _data) internal pure returns (uint256) {
+LINE 79         return uint256(uint8(MarketData.unwrap(_data)[2]));
+LINE 80     }
+LINE 81 
+LINE 82     /// @notice extracts the feeBips from MarketData, out of 10_000
+LINE 83     /// @return feeBips - the feeBips
+LINE 84     function feeBips(MarketData _data) internal pure returns (uint256) {
+LINE 85         return uint256(uint16(bytes2(MarketData.unwrap(_data) << 24)));
+LINE 86     }
+LINE 87 }
+MATCH_END
+MATCH_BEGIN e430-src__types__MarketData.sol LINES 79 87
+LINE 79         return uint256(uint8(MarketData.unwrap(_data)[2]));
+LINE 80     }
+LINE 81 
+LINE 82     /// @notice extracts the feeBips from MarketData, out of 10_000
+LINE 83     /// @return feeBips - the feeBips
+LINE 84     function feeBips(MarketData _data) internal pure returns (uint256) {
+LINE 85         return uint256(uint16(bytes2(MarketData.unwrap(_data) << 24)));
+LINE 86     }
+LINE 87 }
+MATCH_END
+MATCH_BEGIN e430-src__types__MarketData.sol LINES 80 87
+LINE 80     }
+LINE 81 
+LINE 82     /// @notice extracts the feeBips from MarketData, out of 10_000
+LINE 83     /// @return feeBips - the feeBips
+LINE 84     function feeBips(MarketData _data) internal pure returns (uint256) {
+LINE 85         return uint256(uint16(bytes2(MarketData.unwrap(_data) << 24)));
+LINE 86     }
+LINE 87 }
+MATCH_END
+MATCH_BEGIN e430-src__dev__StorageHelper.sol LINES 17 31
+LINE 17             _amount
+LINE 18         );
+LINE 19     }
+LINE 20 
+LINE 21     function _dealERC20(address _erc20, address _account, uint256 _amount) internal {
+LINE 22         uint256 storageSlot = getStorageSlot(_erc20, "balanceOf(address)", address(_account));
+LINE 23         vm.store(_erc20, bytes32(storageSlot), bytes32(_amount));
+LINE 24     }
+LINE 25 
+LINE 26     function _setOperator(address _exchange, address _operator) internal {
+LINE 27         uint256 storageSlot = getStorageSlot(_exchange, "operators(address)", _operator);
+LINE 28         vm.store(_exchange, bytes32(storageSlot), bytes32(uint256(1)));
+LINE 29     }
+LINE 30 
+LINE 31     function _setAdmin(address _exchange, address _admin) internal {
+MATCH_END
+MATCH_BEGIN e430-src__dev__StorageHelper.sol LINES 18 32
+LINE 18         );
+LINE 19     }
+LINE 20 
+LINE 21     function _dealERC20(address _erc20, address _account, uint256 _amount) internal {
+LINE 22         uint256 storageSlot = getStorageSlot(_erc20, "balanceOf(address)", address(_account));
+LINE 23         vm.store(_erc20, bytes32(storageSlot), bytes32(_amount));
+LINE 24     }
+LINE 25 
+LINE 26     function _setOperator(address _exchange, address _operator) internal {
+LINE 27         uint256 storageSlot = getStorageSlot(_exchange, "operators(address)", _operator);
+LINE 28         vm.store(_exchange, bytes32(storageSlot), bytes32(uint256(1)));
+LINE 29     }
+LINE 30 
+LINE 31     function _setAdmin(address _exchange, address _admin) internal {
+LINE 32         uint256 storageSlot = getStorageSlot(_exchange, "admins(address)", _admin);
+MATCH_END
+MATCH_BEGIN e430-src__dev__StorageHelper.sol LINES 22 35
+LINE 22         uint256 storageSlot = getStorageSlot(_erc20, "balanceOf(address)", address(_account));
+LINE 23         vm.store(_erc20, bytes32(storageSlot), bytes32(_amount));
+LINE 24     }
+LINE 25 
+LINE 26     function _setOperator(address _exchange, address _operator) internal {
+LINE 27         uint256 storageSlot = getStorageSlot(_exchange, "operators(address)", _operator);
+LINE 28         vm.store(_exchange, bytes32(storageSlot), bytes32(uint256(1)));
+LINE 29     }
+LINE 30 
+LINE 31     function _setAdmin(address _exchange, address _admin) internal {
+LINE 32         uint256 storageSlot = getStorageSlot(_exchange, "admins(address)", _admin);
+LINE 33         vm.store(_exchange, bytes32(storageSlot), bytes32(uint256(1)));
+LINE 34     }
+LINE 35 }
+MATCH_END
+MATCH_BEGIN e430-src__dev__StorageHelper.sol LINES 23 35
+LINE 23         vm.store(_erc20, bytes32(storageSlot), bytes32(_amount));
+LINE 24     }
+LINE 25 
+LINE 26     function _setOperator(address _exchange, address _operator) internal {
+LINE 27         uint256 storageSlot = getStorageSlot(_exchange, "operators(address)", _operator);
+LINE 28         vm.store(_exchange, bytes32(storageSlot), bytes32(uint256(1)));
+LINE 29     }
+LINE 30 
+LINE 31     function _setAdmin(address _exchange, address _admin) internal {
+LINE 32         uint256 storageSlot = getStorageSlot(_exchange, "admins(address)", _admin);
+LINE 33         vm.store(_exchange, bytes32(storageSlot), bytes32(uint256(1)));
+LINE 34     }
+LINE 35 }
+MATCH_END
+MATCH_BEGIN e430-src__dev__StorageHelper.sol LINES 27 35
+LINE 27         uint256 storageSlot = getStorageSlot(_exchange, "operators(address)", _operator);
+LINE 28         vm.store(_exchange, bytes32(storageSlot), bytes32(uint256(1)));
+LINE 29     }
+LINE 30 
+LINE 31     function _setAdmin(address _exchange, address _admin) internal {
+LINE 32         uint256 storageSlot = getStorageSlot(_exchange, "admins(address)", _admin);
+LINE 33         vm.store(_exchange, bytes32(storageSlot), bytes32(uint256(1)));
+LINE 34     }
+LINE 35 }
+MATCH_END
+MATCH_BEGIN e430-src__dev__StorageHelper.sol LINES 28 35
+LINE 28         vm.store(_exchange, bytes32(storageSlot), bytes32(uint256(1)));
+LINE 29     }
+LINE 30 
+LINE 31     function _setAdmin(address _exchange, address _admin) internal {
+LINE 32         uint256 storageSlot = getStorageSlot(_exchange, "admins(address)", _admin);
+LINE 33         vm.store(_exchange, bytes32(storageSlot), bytes32(uint256(1)));
+LINE 34     }
+LINE 35 }
+MATCH_END
+MATCH_BEGIN e430-src__interfaces__INegRiskAdapter.sol LINES 1 14
+LINE 1 // SPDX-License-Identifier: MIT
+LINE 2 pragma solidity ^0.8.15;
+LINE 3 
+LINE 4 interface INegRiskAdapter {
+LINE 5     type MarketData is bytes32;
+LINE 6 
+LINE 7     error DeterminedFlagAlreadySet();
+LINE 8     error FeeBipsOutOfBounds();
+LINE 9     error IndexOutOfBounds();
+LINE 10     error InvalidIndexSet();
+LINE 11     error LengthMismatch();
+LINE 12     error MarketAlreadyDetermined();
+LINE 13     error MarketAlreadyPrepared();
+LINE 14     error MarketNotPrepared();
+MATCH_END
+MATCH_BEGIN e430-src__interfaces__INegRiskAdapter.sol LINES 40 54
+LINE 40     function convertPositions(bytes32 _marketId, uint256 _indexSet, uint256 _amount) external;
+LINE 41     function ctf() external view returns (address);
+LINE 42     function getConditionId(bytes32 _questionId) external view returns (bytes32);
+LINE 43     function getDetermined(bytes32 _marketId) external view returns (bool);
+LINE 44     function getFeeBips(bytes32 _marketId) external view returns (uint256);
+LINE 45     function getMarketData(bytes32 _marketId) external view returns (MarketData);
+LINE 46     function getOracle(bytes32 _marketId) external view returns (address);
+LINE 47     function getPositionId(bytes32 _questionId, bool _outcome) external view returns (uint256);
+LINE 48     function getQuestionCount(bytes32 _marketId) external view returns (uint256);
+LINE 49     function getResult(bytes32 _marketId) external view returns (uint256);
+LINE 50     function isAdmin(address addr) external view returns (bool);
+LINE 51     function mergePositions(address _collateralToken, bytes32, bytes32 _conditionId, uint256[] memory, uint256 _amount)
+LINE 52         external;
+LINE 53     function mergePositions(bytes32 _conditionId, uint256 _amount) external;
+LINE 54     function onERC1155BatchReceived(address, address, uint256[] memory, uint256[] memory, bytes memory)
+MATCH_END
+MATCH_BEGIN src__NegRiskAdapter.sol LINES 3 17
+LINE 3 
+LINE 4 import {ERC1155TokenReceiver} from "lib/solmate/src/tokens/ERC1155.sol";
+LINE 5 import {ERC20} from "lib/solmate/src/tokens/ERC20.sol";
+LINE 6 import {SafeTransferLib} from "lib/solmate/src/utils/SafeTransferLib.sol";
+LINE 7 import {WrappedCollateral} from "src/WrappedCollateral.sol";
+LINE 8 import {MarketData, MarketStateManager, IMarketStateManagerEE} from "src/modules/MarketDataManager.sol";
+LINE 9 import {CTHelpers} from "src/libraries/CTHelpers.sol";
+LINE 10 import {Helpers} from "src/libraries/Helpers.sol";
+LINE 11 import {NegRiskIdLib} from "src/libraries/NegRiskIdLib.sol";
+LINE 12 import {IConditionalTokens} from "src/interfaces/IConditionalTokens.sol";
+LINE 13 import {Auth} from "src/modules/Auth.sol";
+LINE 14 import {IAuthEE} from "src/modules/interfaces/IAuth.sol";
+LINE 15 
+LINE 16 /// @title INegRiskAdapterEE
+LINE 17 /// @notice NegRiskAdapter Errors and Events
+MATCH_END
+MATCH_BEGIN src__NegRiskAdapter.sol LINES 32 46
+LINE 32     );
+LINE 33     event PayoutRedemption(address indexed redeemer, bytes32 indexed conditionId, uint256[] amounts, uint256 payout);
+LINE 34 }
+LINE 35 
+LINE 36 /// @title NegRiskAdapter
+LINE 37 /// @notice Adapter for the CTF enabling the linking of a set binary markets where only one can resolve true
+LINE 38 /// @notice The adapter prevents more than one question in the same multi-outcome market from resolving true
+LINE 39 /// @notice And the adapter allows for the conversion of a set of no positions, to collateral plus the set of
+LINE 40 /// complementary yes positions
+LINE 41 /// @author Mike Shrieve (mike@polymarket.com)
+LINE 42 contract NegRiskAdapter is ERC1155TokenReceiver, MarketStateManager, INegRiskAdapterEE, Auth {
+LINE 43     using SafeTransferLib for ERC20;
+LINE 44 
+LINE 45     /*//////////////////////////////////////////////////////////////
+LINE 46                                  STATE
+MATCH_END
+MATCH_BEGIN src__NegRiskAdapter.sol LINES 240 254
+LINE 240     /// @param _marketId - the marketId
+LINE 241     /// @param _indexSet - the set of positions to convert, expressed as an index set where the least significant bit is
+LINE 242     /// the first question (index zero)
+LINE 243     /// @param _amount   - the amount of tokens to convert
+LINE 244     function convertPositions(bytes32 _marketId, uint256 _indexSet, uint256 _amount) external {
+LINE 245         MarketData md = getMarketData(_marketId);
+LINE 246         uint256 questionCount = md.questionCount();
+LINE 247 
+LINE 248         if (md.oracle() == address(0)) revert MarketNotPrepared();
+LINE 249         if (questionCount <= 1) revert NoConvertiblePositions();
+LINE 250         if (_indexSet == 0) revert InvalidIndexSet();
+LINE 251         if ((_indexSet >> questionCount) > 0) revert InvalidIndexSet();
+LINE 252 
+LINE 253         // if _amount is 0, return early
+LINE 254         if (_amount == 0) {
+MATCH_END
+MANAGER_HAS_GETMARKETDATA True
+MANAGER_HAS_MAPPING True
+MANAGER_HAS_PUBLIC_TOKEN True
+MANAGER_HAS_EXTERNAL_TOKEN True
+MANAGER_HAS_INTERNAL_TOKEN True
+MANAGER_FUNCTION getMarketData DECL function getMarketData(bytes32 _marketId) public view returns (MarketData) {
+MANAGER_FUNCTION getOracle DECL function getOracle(bytes32 _marketId) external view returns (address) {
+MANAGER_FUNCTION getQuestionCount DECL function getQuestionCount(bytes32 _marketId) external view returns (uint256) {
+MANAGER_FUNCTION getDetermined DECL function getDetermined(bytes32 _marketId) external view returns (bool) {
+MANAGER_FUNCTION getResult DECL function getResult(bytes32 _marketId) external view returns (uint256) {
+MANAGER_FUNCTION getFeeBips DECL function getFeeBips(bytes32 _marketId) external view returns (uint256) {
+MANAGER_FUNCTION _prepareMarket DECL function _prepareMarket(uint256 _feeBips, bytes memory _metadata) internal returns (bytes32 marketId) {
+MANAGER_FUNCTION _prepareQuestion DECL function _prepareQuestion(bytes32 _marketId) internal returns (bytes32 questionId, uint256 index) {
+MANAGER_FUNCTION _reportOutcome DECL function _reportOutcome(bytes32 _questionId, bool _outcome) internal {
+OUTPUT_PATH /home/leonh/prediction_research/knowledge/raw/reference/polymarket_negrisk_adapter/e432-negrisk-marketdata-getter-layout.json
+NEGRISK_MARKETDATA_GETTER_LAYOUT_E432_PASS
