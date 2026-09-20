@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/preregister_kwi_full_station_lag_e368.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-20T02:39:35.687663+00:00",
+  "hypothesis_id": "KWI-FULL-STATION-PRECANONICAL-V1",
+  "source_commit": "fc3703e930b234ef2dd8d4f3a72f92692c82a0db",
+  "started_at": "2026-09-20T02:39:35.666636+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "cb584bb3dda1fd81b9bf44b1a7ddef34895ad9931f6e497283b9aa33e0423f0c",
+  "task_class": "research",
+  "task_id": "EDGE-HUNTER-KWI-FULL-STATION-PREREG-E368"
+}
