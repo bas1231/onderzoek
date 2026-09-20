@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/smoke_asset_market_stream_e337.py"
+  ],
+  "exit_code": 1,
+  "finished_at": "2026-09-20T02:11:48.211800+00:00",
+  "hypothesis_id": "ASSET-RANK-MAKER-HEDGE-V1",
+  "source_commit": "e1982871e3c00417d2033ab7d507fe3f7615812a",
+  "started_at": "2026-09-20T02:11:48.164045+00:00",
+  "status": "failed",
+  "stderr_sha256": "658ed7702ed48eea5ee1e7fc840cd288dabcfb113ee1298eb4125702fe729bdb",
+  "stdout_sha256": "95d8dbf580abc547acad55ce2f91b40c7a234063a0167caa66025ce3e8cec9f3",
+  "task_class": "research",
+  "task_id": "EDGE-HUNTER-ASSET-STREAM-SMOKE-E337"
+}
