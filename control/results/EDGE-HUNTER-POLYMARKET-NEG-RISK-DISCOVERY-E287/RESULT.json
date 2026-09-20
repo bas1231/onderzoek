@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/discover_neg_risk_e287.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-20T01:11:30.135532+00:00",
+  "hypothesis_id": "PAYOFF-IDENTITY-MINING-V1",
+  "source_commit": "2a9a77837dacf98160e2d416b975257eb7d1f0e6",
+  "started_at": "2026-09-20T01:11:29.653321+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "285a1a90c0fa8850f72ff9ff8d62efbd7edae6bc7d7af7236d04c60fb9d1360d",
+  "task_class": "research",
+  "task_id": "EDGE-HUNTER-POLYMARKET-NEG-RISK-DISCOVERY-E287"
+}
