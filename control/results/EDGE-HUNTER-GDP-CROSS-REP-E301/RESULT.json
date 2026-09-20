@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/test_gdp_cross_rep_e301.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-20T01:22:20.226896+00:00",
+  "hypothesis_id": "PAYOFF-IDENTITY-MINING-V1",
+  "source_commit": "cea1abed116c2f253787ff0cd76d53414c917bc3",
+  "started_at": "2026-09-20T01:22:20.206460+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "d9a1fd34a1f794bfa390565507b73663f1e00ec8157e3d039ce2cae16c3d57f9",
+  "task_class": "research",
+  "task_id": "EDGE-HUNTER-GDP-CROSS-REP-E301"
+}
