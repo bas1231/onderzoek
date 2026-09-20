@@ -1,0 +1,13 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/evaluate_kwi_full_station_checkpoint_e369.py"
+  ],
+  "hypothesis_id": "KWI-FULL-STATION-PRECANONICAL-V1",
+  "live_trading": false,
+  "operation": "python",
+  "task_class": "research",
+  "task_id": "EDGE-HUNTER-KWI-FULL-STATION-CHECKPOINT-E369",
+  "timeout_seconds": 120,
+  "working_directory": "."
+}
