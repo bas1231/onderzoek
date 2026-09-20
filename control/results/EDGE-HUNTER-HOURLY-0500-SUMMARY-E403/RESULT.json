@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/summarize_hourly_0500_e403.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-20T03:04:59.976923+00:00",
+  "hypothesis_id": "CONTROL-NO-SILENT-WAITING",
+  "source_commit": "19ccba5ecba0d57444ca795a3a50d1cb13d26292",
+  "started_at": "2026-09-20T03:04:59.955817+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "49e9d228832d69de274b2aedf7e0bff237f273245444b58959bbfe46a4c151a8",
+  "task_class": "research",
+  "task_id": "EDGE-HUNTER-HOURLY-0500-SUMMARY-E403"
+}

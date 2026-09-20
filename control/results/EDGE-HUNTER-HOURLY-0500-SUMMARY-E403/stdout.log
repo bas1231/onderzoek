@@ -1,0 +1,41 @@
+RUN_ID hourly-20260920T050000+0200
+CREATED_AT 2026-09-20T03:00:20.837452+00:00
+DECISION NO_PROVEN_EDGE
+CANDIDATE_COUNT 4
+CANDIDATE ASSET-RANK-MAKER-HEDGE-V1 LANE microstructure PHASE MECHANISM_DEFINED DECISION UNPROVEN
+MAKER_MONITOR {'baseline': 'knowledge/raw/market_data/polymarket_shadow_baselines/20260920T022654Z106981_fill_baseline.json', 'cadence': 'hourly_on_the_hour', 'cancellation_fill_credit': False, 'checkpoint_directory': 'knowledge/raw/market_data/polymarket_fill_checkpoints', 'current_full_shadow_fill_count': 0, 'fill_credit_rule': 'taker SELL executions on exact YES maker bid only', 'partial_fill_credit': False, 'persistent': True, 'protocol': 'knowledge/candidates/protocols/ASSET-RANK-MAKER-HEDGE-V1-fill-feasibility-24h-v1.json', 'randomized_delay_seconds': 0, 'recorded_at': '2026-09-20T02:31:51.779903+00:00', 'scheduler_unit': 'prediction-research-hourly-director.timer', 'scientific_interpretation': 'prospective execution feasibility monitoring active; no edge proven', 'status': 'ACTIVE', 'timer_active': True, 'timer_enabled': True, 'verified_next_trigger_local': '2026-09-20T05:00:00+02:00'}
+CANDIDATE KWI-FULL-STATION-PRECANONICAL-V1 LANE weather PHASE MECHANISM_DEFINED DECISION UNPROVEN
+KWI_PROTOCOLS ['knowledge/candidates/protocols/KWI-FULL-STATION-PRECANONICAL-24H-V1.json']
+CANDIDATE KWI-INCOMPLETE-TO-CANONICAL-V1 LANE weather PHASE DISCOVERED DECISION UNPROVEN
+CANDIDATE PAYOFF-IDENTITY-MINING-V1 LANE market_algebra PHASE DISCOVERED DECISION UNPROVEN
+MAKER_DIR /home/leonh/prediction_research/knowledge/raw/market_data/polymarket_fill_checkpoints EXISTS True
+MAKER_DIR /home/leonh/.local/state/prediction-research/analysis/polymarket_fill_checkpoints EXISTS False
+MAKER_CHECKPOINT_COUNT 3
+MAKER_LATEST /home/leonh/prediction_research/knowledge/raw/market_data/polymarket_fill_checkpoints/20260920T030021Z106981_fill_checkpoint.json
+MAKER_KEYS ['baseline', 'credit_epoch', 'credit_start_effective', 'event_id', 'final_window_checkpoint', 'full_shadow_fill_count', 'markets', 'pages', 'retrieved_at', 'upper_credit_epoch', 'upper_credit_utc', 'window_end_effective_epoch']
+MAKER_MARKET_COUNT 3
+MAKER_MARKET 950852 SHADOW_BID None INITIAL_QUEUE 158.07 QUALIFYING_SIZE None REQUIRED_SIZE None FULL_FILL None
+MAKER_MARKET 950854 SHADOW_BID None INITIAL_QUEUE 70.0 QUALIFYING_SIZE None REQUIRED_SIZE None FULL_FILL None
+MAKER_MARKET 950853 SHADOW_BID None INITIAL_QUEUE 81.06 QUALIFYING_SIZE None REQUIRED_SIZE None FULL_FILL None
+MAKER_FIELD retrieved_at 2026-09-20T03:00:21.172355+00:00
+MAKER_FIELD credit_start_effective 2026-09-20T02:26:55+00:00
+MAKER_FIELD upper_credit_epoch 1789873220
+MAKER_FIELD window_finished None
+MAKER_FIELD full_fill_count None
+KWI_CHECKPOINT_COUNT 4
+KWI_LATEST /home/leonh/.local/state/prediction-research/analysis/kwi_full_station_checkpoints/20260920T030021Z-kwi-full-station-checkpoint.json
+KWI_SCORABLE 34
+KWI_OPEN 2
+KWI_QUALIFIED_CITY_COUNT 0
+KWI_WINDOW_FINISHED False
+KWI_SURVIVAL_EVALUABLE False
+KWI_SURVIVAL_PASS None
+KWI_OVERALL_N 34
+KWI_PRIMARY_MAE 0.002058823529411146
+KWI_BASELINE_MAE 0.03882352941176451
+KWI_PRIMARY_RMSE 0.003208444739595821
+KWI_BASELINE_RMSE 0.09241848554584817
+KWI_CITY chicago N 0 PRIMARY_MAE None BASELINE_MAE None LEAD_MEAN None
+KWI_CITY miami N 17 PRIMARY_MAE 0.0 BASELINE_MAE 0.0 LEAD_MEAN 134.12049506692324
+KWI_CITY nyc N 17 PRIMARY_MAE 0.004117647058822292 BASELINE_MAE 0.07764705882352901 LEAD_MEAN 134.12049506692324
+HOURLY_0500_SUMMARY_E403_PASS
