@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/wire_edge_hunter_hourly_e255.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-20T00:43:25.338352+00:00",
+  "hypothesis_id": "GENERAL-PREDICTION-MARKET-EDGE-HUNTER",
+  "source_commit": "0f9b95a99c68850eaeb7b9b08843137d2acbad5e",
+  "started_at": "2026-09-20T00:43:23.004196+00:00",
+  "status": "completed",
+  "stderr_sha256": "894ecfddc48c18752496a24ae4403736043c3afa2df00388b4f0551b1c444b67",
+  "stdout_sha256": "b7d631eaad5c15163e6bbe1edbbd97ea9b221a3df163570dec516dde0221c19d",
+  "task_class": "infrastructure",
+  "task_id": "EDGE-HUNTER-HOURLY-WIRING-E255"
+}

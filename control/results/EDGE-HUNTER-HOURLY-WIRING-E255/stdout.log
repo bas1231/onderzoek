@@ -1,0 +1,6 @@
+[main f4b5351] wire edge hunter into hourly director
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+EDGE_HUNTER_HOURLY_WIRED
+TIMER_ACTIVE active
+TIMER_ENABLED enabled
+EXECSTART control/hourly/edge_hunter_cycle.py
