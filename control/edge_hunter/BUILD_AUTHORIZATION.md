@@ -21,6 +21,42 @@ Use this only for generic safety, reliability, provenance, validation or researc
 
 Control-plane authorization still fails closed when the build state is frozen or when a forbidden capability is requested.
 
+## Issuing a candidate warrant
+
+Write a JSON request under `experiments/bridge/warrant_requests/` that follows `control/edge_hunter/warrant_request_schema.json`.
+
+Example request:
+
+```json
+{
+  "candidate_id": "PAYOFF-IDENTITY-MINING-V1",
+  "build_kind": "offline_analysis",
+  "objective": "Build a bounded offline equivalence analyser",
+  "capabilities": ["read_repository"]
+}
+```
+
+Run the issuer as an `infrastructure` task with `mode: control_plane`:
+
+```json
+{
+  "operation": "python",
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/issue_prebuild_warrant.py",
+    "experiments/bridge/warrant_requests/<request>.json"
+  ],
+  "build_authorization": {
+    "mode": "control_plane",
+    "build_kind": "control_plane",
+    "objective": "Evaluate and issue one bounded candidate pre-build warrant",
+    "capabilities": ["read_repository", "write_warrant", "stage_warrant"]
+  }
+}
+```
+
+The issuer creates a warrant only when the candidate currently passes the pre-build policy. The exact warrant file is then staged with `git add`; the normal executor result commit therefore preserves the warrant itself in Git provenance. A denied request creates no warrant.
+
 ## Candidate-specific build
 
 Candidate code requires a previously issued pre-build warrant under `knowledge/warrants/` and must use the exact same build kind, objective and capability set that was evaluated by that warrant.
