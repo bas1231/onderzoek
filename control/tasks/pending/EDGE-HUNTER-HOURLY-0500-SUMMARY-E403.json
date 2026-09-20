@@ -1,0 +1,13 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/summarize_hourly_0500_e403.py"
+  ],
+  "hypothesis_id": "CONTROL-NO-SILENT-WAITING",
+  "live_trading": false,
+  "operation": "python",
+  "task_class": "research",
+  "task_id": "EDGE-HUNTER-HOURLY-0500-SUMMARY-E403",
+  "timeout_seconds": 120,
+  "working_directory": "."
+}
