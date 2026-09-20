@@ -1,0 +1,13 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/inspect_0400_report_e331.py"
+  ],
+  "hypothesis_id": "CONTROL-NO-SILENT-WAITING",
+  "live_trading": false,
+  "operation": "python",
+  "task_class": "infrastructure",
+  "task_id": "HOURLY-RESEARCH-0400-REPORT-E331",
+  "timeout_seconds": 120,
+  "working_directory": "."
+}
