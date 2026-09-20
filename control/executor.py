@@ -8,6 +8,7 @@ import time
 from datetime import datetime, timezone
 from pathlib import Path
 
+from git_sync_guard import inspect_remote_write_safety
 from validator import Task
 from jobs.lifecycle_ledger import (
     load_record as lifecycle_load,
@@ -114,6 +115,16 @@ def task_is_committed(task_file: Path) -> bool:
 
 
 def process_task(task_file: Path) -> str:
+    sync_state = inspect_remote_write_safety(root=ROOT)
+
+    if not sync_state.safe_to_write:
+        print(
+            f"{task_file.stem}: git sync guard blocked task; "
+            f"status={sync_state.status}; "
+            f"detail={sync_state.detail}"
+        )
+        return "git_sync_blocked"
+
     raw = json.loads(task_file.read_text())
     task = Task.model_validate(raw)
 
@@ -343,6 +354,7 @@ def main() -> None:
 
         paused_seen = False
         awaiting_accept_seen = False
+        git_sync_blocked_seen = False
 
         for task_file in tasks:
             if not task_is_committed(task_file):
@@ -355,6 +367,8 @@ def main() -> None:
                     paused_seen = True
                 elif outcome == "awaiting_accept":
                     awaiting_accept_seen = True
+                elif outcome == "git_sync_blocked":
+                    git_sync_blocked_seen = True
 
             except Exception as exc:
                 print(
@@ -367,7 +381,9 @@ def main() -> None:
                     exc,
                 )
 
-        if paused_seen:
+        if git_sync_blocked_seen:
+            time.sleep(30)
+        elif paused_seen:
             time.sleep(30)
         elif awaiting_accept_seen:
             time.sleep(5)
