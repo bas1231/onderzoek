@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/price_anthropic_three_series_e410.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-20T03:11:14.699323+00:00",
+  "hypothesis_id": "PAYOFF-IDENTITY-MINING-V1",
+  "source_commit": "b180b3de00b413288a6517950b7284f1b7d50ceb",
+  "started_at": "2026-09-20T03:11:14.423661+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "9dc25285d5f490d5c450f7b0ea282aafe967aff25b3229919aa1ea6c23250b55",
+  "task_class": "research",
+  "task_id": "EDGE-HUNTER-ANTHROPIC-THREE-SERIES-PRICING-E410"
+}
