@@ -35,6 +35,130 @@
 
   const inFlightTaskIds = new Set();
 
+  const RESULT_ACK_QUEUE_KEY =
+    "predictionPendingResultAcksV1";
+
+  async function loadPendingResultAcks() {
+    const stored = await chrome.storage.local.get([
+      RESULT_ACK_QUEUE_KEY
+    ]);
+
+    const queue = stored[RESULT_ACK_QUEUE_KEY];
+
+    return (
+      queue &&
+      typeof queue === "object" &&
+      !Array.isArray(queue)
+    )
+      ? queue
+      : {};
+  }
+
+  async function savePendingResultAcks(queue) {
+    await chrome.storage.local.set({
+      [RESULT_ACK_QUEUE_KEY]: queue
+    });
+  }
+
+  async function rememberPendingResultAck(taskId) {
+    const queue = await loadPendingResultAcks();
+    const current = queue[taskId] || {};
+
+    queue[taskId] = {
+      firstQueuedAt:
+        current.firstQueuedAt || Date.now(),
+      updatedAt: Date.now(),
+      attempts: Number(current.attempts || 0),
+      nextRetryAt: Number(current.nextRetryAt || 0),
+      lastError: current.lastError || ""
+    };
+
+    await savePendingResultAcks(queue);
+  }
+
+  async function flushPendingResultAcks() {
+    if (!(await isArmed())) {
+      return;
+    }
+
+    const queue = await loadPendingResultAcks();
+    const now = Date.now();
+    let changed = false;
+
+    for (const [taskId, record] of Object.entries(queue)) {
+      if (!taskId || !record || typeof record !== "object") {
+        delete queue[taskId];
+        changed = true;
+        continue;
+      }
+
+      if (Number(record.nextRetryAt || 0) > now) {
+        continue;
+      }
+
+      try {
+        const ack = await bridgeFetch(
+          "/ack",
+          "POST",
+          {
+            task_id: taskId
+          }
+        );
+
+        if (ack && ack.ok) {
+          delete queue[taskId];
+          changed = true;
+          console.log(
+            "[Prediction Bridge] durable result ACK accepted:",
+            taskId
+          );
+          continue;
+        }
+
+        record.attempts = Number(record.attempts || 0) + 1;
+        record.updatedAt = Date.now();
+        record.lastError =
+          "ACK rejected status="
+          + String(ack && ack.status);
+      } catch (error) {
+        record.attempts = Number(record.attempts || 0) + 1;
+        record.updatedAt = Date.now();
+        record.lastError = String(error);
+      }
+
+      const cappedAttempts = Math.min(
+        Number(record.attempts || 0),
+        6
+      );
+
+      record.nextRetryAt =
+        Date.now()
+        + Math.min(
+          60000,
+          1000 * (2 ** cappedAttempts)
+        );
+
+      queue[taskId] = record;
+      changed = true;
+
+      console.warn(
+        "[Prediction Bridge] result ACK pending retry:",
+        taskId,
+        record.lastError
+      );
+    }
+
+    if (changed) {
+      await savePendingResultAcks(queue);
+    }
+  }
+
+  async function resultAckPending(taskId) {
+    const queue = await loadPendingResultAcks();
+    return Boolean(queue[taskId]);
+  }
+
+
   function normalizedCurrentUrl() {
     return `${location.origin}${location.pathname}`;
   }
@@ -981,20 +1105,28 @@
         return;
       }
 
+      await rememberPendingResultAck(
+        item.task_id
+      );
+
       await new Promise(
         resolve => setTimeout(resolve, 1000)
       );
 
-      await bridgeFetch(
-        "/ack",
-        "POST",
-        {
-          task_id: item.task_id
-        }
-      );
+      await flushPendingResultAcks();
+
+      if (
+        await resultAckPending(item.task_id)
+      ) {
+        console.warn(
+          "[Prediction Bridge] result sent but ACK pending:",
+          item.task_id
+        );
+        return;
+      }
 
       console.log(
-        "[Prediction Bridge] result returned:",
+        "[Prediction Bridge] result returned and ACKED:",
         item.task_id
       );
 
@@ -1037,6 +1169,7 @@
   setInterval(
     () => {
       scanForTasks();
+      flushPendingResultAcks();
       pollAiOutbox();
       pollOutbox();
     },
