@@ -1,0 +1,25 @@
+{
+  "build_authorization": {
+    "build_kind": "control_plane",
+    "capabilities": [
+      "read_repository",
+      "write_repository",
+      "run_local_tests",
+      "restart_browser_bridge",
+      "schedule_executor_restart"
+    ],
+    "mode": "control_plane",
+    "objective": "Enforce the existing four-hour work block and one-hour cooldown fail-closed at both browser task intake and executor claim, test exact boundary behavior and corrupt-state fail-closed behavior, preserve passive recorders, activate the browser gate immediately, and schedule executor reload after the current infrastructure task has safely finished"
+  },
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/build_work_cadence_gate_e006.py"
+  ],
+  "hypothesis_id": "CONTROL-WORK-CADENCE",
+  "live_trading": false,
+  "operation": "python",
+  "task_class": "infrastructure",
+  "task_id": "CONTROL-WORK-CADENCE-BRIDGE-E006",
+  "timeout_seconds": 180,
+  "working_directory": "."
+}
