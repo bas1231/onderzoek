@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/price_anthropic_cross_series_e394.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-20T02:57:03.411783+00:00",
+  "hypothesis_id": "PAYOFF-IDENTITY-MINING-V1",
+  "source_commit": "7327afabb295ee2ad3b3b57808d6b406e4abc112",
+  "started_at": "2026-09-20T02:57:03.146675+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "bac67b3f8db2b191d29302fb0db9b0d1809631d804d285cf743b1b8af99b0c8a",
+  "task_class": "research",
+  "task_id": "EDGE-HUNTER-ANTHROPIC-PRICING-E394"
+}
