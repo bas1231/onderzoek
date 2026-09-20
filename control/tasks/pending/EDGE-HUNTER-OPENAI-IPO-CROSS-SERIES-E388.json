@@ -1,0 +1,13 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/inspect_openai_ipo_cross_series_e388.py"
+  ],
+  "hypothesis_id": "PAYOFF-IDENTITY-MINING-V1",
+  "live_trading": false,
+  "operation": "python",
+  "task_class": "research",
+  "task_id": "EDGE-HUNTER-OPENAI-IPO-CROSS-SERIES-E388",
+  "timeout_seconds": 120,
+  "working_directory": "."
+}
