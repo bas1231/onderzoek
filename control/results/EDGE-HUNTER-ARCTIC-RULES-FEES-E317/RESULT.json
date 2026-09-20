@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/capture_arctic_rules_fees_e317.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-20T01:33:04.337708+00:00",
+  "hypothesis_id": "PAYOFF-IDENTITY-MINING-V1",
+  "source_commit": "560954c80761ca9333da887f4a7488c81167f0a1",
+  "started_at": "2026-09-20T01:33:04.136920+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "d9fc6d6601e16fed2bdf7ba8ba03daab5c433f3d6ddf7b754e6d0f351a76a5e0",
+  "task_class": "research",
+  "task_id": "EDGE-HUNTER-ARCTIC-RULES-FEES-E317"
+}

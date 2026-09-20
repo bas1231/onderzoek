@@ -1,0 +1,101 @@
+ARCTIC_RULE_FEE_CAPTURE_PASS
+HTTP 200
+EVENT_ID 86426
+TITLE Min Arctic sea ice extent this summer?
+NEG_RISK True
+NEG_RISK_AUGMENTED False
+NEG_RISK_MARKET_ID 0xa34e00065950bc32cade4faed3bdf05ac7cac0ad9961a106517df2fb94876a00
+DESCRIPTION
+This market will resolve according to the minimum Arctic sea ice extent for all days between August 1, 2026 and October 1, 2026, as published by the National Snow and Ice Data Center.
+
+This market will remain open until data has been published for October 1, 2026, at which point it will resolve immediately. Any revisions to sea ice extent recorded after data is published for October 1, 2026 will not be considered.
+
+The resolution source for this market measures temperatures to thousands of square kilometers (e.g. 4.255 million sq km). Thus, this is the level of precision that will be used when resolving the market.
+
+The resolution source for this market will be information from the National Snow and Ice Data Center, specifically the minimum value recorded for any day between August 1, 2026 and October 1, 2026 in the “NH-Daily-Extent” tab of the “Sea Ice Index Daily Extent” data set, available at https://nsidc.org/sea-ice-today/sea-ice-tools. If this resolution source becomes unavailable, another resolution source will be chosen.
+MARKET_COUNT 7
+MARKET_ID 693869
+QUESTION Will the minimum Arctic sea ice extent this summer be less than 4m square kilometers?
+NEG_RISK True
+NEG_RISK_OTHER False
+FEES_ENABLED True
+FEE_SCHEDULE {'exponent': 1, 'rate': 0.05, 'takerOnly': True, 'rebateRate': 0.25}
+FEE_TYPE weather_fees
+ORDER_MIN_SIZE 5
+TICK_SIZE 0.001
+END_DATE 2026-10-01T00:00:00Z
+DESCRIPTION This market will resolve according to the minimum Arctic sea ice extent for all days between August 1, 2026 and October 1, 2026, as published by the National Snow and Ice Data Center.  This market will remain open until data has been published for October 1, 2026, at which point it will resolve immediately. Any revisions to sea ice extent recorded after data is published for October 1, 2026 will not be considered.  The resolution source for this market measures temperatures to thousands of square kilometers (e.g. 4.255 million sq km). Thus, this is the level of precision that will be used when resolving the market.  The resolution source for this market will be information from the National Snow and Ice Data Center, specifically the minimum value recorded for any day between August 1, 2026 and October 1, 2026 in the “NH-Daily-Extent” tab of the “Sea Ice Index Daily Extent” data set, available at https://nsidc.org/sea-ice-today/sea-ice-tools. If this resolution source becomes unavailable, another resolution source will be chosen.
+---
+MARKET_ID 693870
+QUESTION Will the minimum Arctic sea ice extent this summer be between 4.0m & 4.2m square kilometers?
+NEG_RISK True
+NEG_RISK_OTHER False
+FEES_ENABLED True
+FEE_SCHEDULE {'exponent': 1, 'rate': 0.05, 'takerOnly': True, 'rebateRate': 0.25}
+FEE_TYPE weather_fees
+ORDER_MIN_SIZE 5
+TICK_SIZE 0.001
+END_DATE 2026-10-01T00:00:00Z
+DESCRIPTION This market will resolve according to the minimum Arctic sea ice extent for all days between August 1, 2026 and October 1, 2026, as published by the National Snow and Ice Data Center.  This market will remain open until data has been published for October 1, 2026, at which point it will resolve immediately. Any revisions to sea ice extent recorded after data is published for October 1, 2026 will not be considered.  The resolution source for this market measures temperatures to thousands of square kilometers (e.g. 4.255 million sq km). Thus, this is the level of precision that will be used when resolving the market.  The resolution source for this market will be information from the National Snow and Ice Data Center, specifically the minimum value recorded for any day between August 1, 2026 and October 1, 2026 in the “NH-Daily-Extent” tab of the “Sea Ice Index Daily Extent” data set, available at https://nsidc.org/sea-ice-today/sea-ice-tools. If this resolution source becomes unavailable, another resolution source will be chosen.
+---
+MARKET_ID 693871
+QUESTION Will the minimum Arctic sea ice extent this summer be between 4.2m & 4.4m square kilometers?
+NEG_RISK True
+NEG_RISK_OTHER False
+FEES_ENABLED True
+FEE_SCHEDULE {'exponent': 1, 'rate': 0.05, 'takerOnly': True, 'rebateRate': 0.25}
+FEE_TYPE weather_fees
+ORDER_MIN_SIZE 5
+TICK_SIZE 0.001
+END_DATE 2026-10-01T00:00:00Z
+DESCRIPTION This market will resolve according to the minimum Arctic sea ice extent for all days between August 1, 2026 and October 1, 2026, as published by the National Snow and Ice Data Center.  This market will remain open until data has been published for October 1, 2026, at which point it will resolve immediately. Any revisions to sea ice extent recorded after data is published for October 1, 2026 will not be considered.  The resolution source for this market measures temperatures to thousands of square kilometers (e.g. 4.255 million sq km). Thus, this is the level of precision that will be used when resolving the market.  The resolution source for this market will be information from the National Snow and Ice Data Center, specifically the minimum value recorded for any day between August 1, 2026 and October 1, 2026 in the “NH-Daily-Extent” tab of the “Sea Ice Index Daily Extent” data set, available at https://nsidc.org/sea-ice-today/sea-ice-tools. If this resolution source becomes unavailable, another resolution source will be chosen.
+---
+MARKET_ID 693872
+QUESTION Will the minimum Arctic sea ice extent this summer be between 4.4m & 4.6m square kilometers?
+NEG_RISK True
+NEG_RISK_OTHER False
+FEES_ENABLED True
+FEE_SCHEDULE {'exponent': 1, 'rate': 0.05, 'takerOnly': True, 'rebateRate': 0.25}
+FEE_TYPE weather_fees
+ORDER_MIN_SIZE 5
+TICK_SIZE 0.001
+END_DATE 2026-10-01T00:00:00Z
+DESCRIPTION This market will resolve according to the minimum Arctic sea ice extent for all days between August 1, 2026 and October 1, 2026, as published by the National Snow and Ice Data Center.  This market will remain open until data has been published for October 1, 2026, at which point it will resolve immediately. Any revisions to sea ice extent recorded after data is published for October 1, 2026 will not be considered.  The resolution source for this market measures temperatures to thousands of square kilometers (e.g. 4.255 million sq km). Thus, this is the level of precision that will be used when resolving the market.  The resolution source for this market will be information from the National Snow and Ice Data Center, specifically the minimum value recorded for any day between August 1, 2026 and October 1, 2026 in the “NH-Daily-Extent” tab of the “Sea Ice Index Daily Extent” data set, available at https://nsidc.org/sea-ice-today/sea-ice-tools. If this resolution source becomes unavailable, another resolution source will be chosen.
+---
+MARKET_ID 693873
+QUESTION Will the minimum Arctic sea ice extent this summer be between 4.6m & 4.8m square kilometers?
+NEG_RISK True
+NEG_RISK_OTHER False
+FEES_ENABLED True
+FEE_SCHEDULE {'exponent': 1, 'rate': 0.05, 'takerOnly': True, 'rebateRate': 0.25}
+FEE_TYPE weather_fees
+ORDER_MIN_SIZE 5
+TICK_SIZE 0.001
+END_DATE 2026-10-01T00:00:00Z
+DESCRIPTION This market will resolve according to the minimum Arctic sea ice extent for all days between August 1, 2026 and October 1, 2026, as published by the National Snow and Ice Data Center.  This market will remain open until data has been published for October 1, 2026, at which point it will resolve immediately. Any revisions to sea ice extent recorded after data is published for October 1, 2026 will not be considered.  The resolution source for this market measures temperatures to thousands of square kilometers (e.g. 4.255 million sq km). Thus, this is the level of precision that will be used when resolving the market.  The resolution source for this market will be information from the National Snow and Ice Data Center, specifically the minimum value recorded for any day between August 1, 2026 and October 1, 2026 in the “NH-Daily-Extent” tab of the “Sea Ice Index Daily Extent” data set, available at https://nsidc.org/sea-ice-today/sea-ice-tools. If this resolution source becomes unavailable, another resolution source will be chosen.
+---
+MARKET_ID 693874
+QUESTION Will the minimum Arctic sea ice extent this summer be between 4.8m & 5m square kilometers?
+NEG_RISK True
+NEG_RISK_OTHER False
+FEES_ENABLED True
+FEE_SCHEDULE {'exponent': 1, 'rate': 0.05, 'takerOnly': True, 'rebateRate': 0.25}
+FEE_TYPE weather_fees
+ORDER_MIN_SIZE 5
+TICK_SIZE 0.001
+END_DATE 2026-10-01T00:00:00Z
+DESCRIPTION This market will resolve according to the minimum Arctic sea ice extent for all days between August 1, 2026 and October 1, 2026, as published by the National Snow and Ice Data Center.  This market will remain open until data has been published for October 1, 2026, at which point it will resolve immediately. Any revisions to sea ice extent recorded after data is published for October 1, 2026 will not be considered.  The resolution source for this market measures temperatures to thousands of square kilometers (e.g. 4.255 million sq km). Thus, this is the level of precision that will be used when resolving the market.  The resolution source for this market will be information from the National Snow and Ice Data Center, specifically the minimum value recorded for any day between August 1, 2026 and October 1, 2026 in the “NH-Daily-Extent” tab of the “Sea Ice Index Daily Extent” data set, available at https://nsidc.org/sea-ice-today/sea-ice-tools. If this resolution source becomes unavailable, another resolution source will be chosen.
+---
+MARKET_ID 693875
+QUESTION Will the minimum Arctic sea ice extent this summer be at least 5m square kilometers?
+NEG_RISK True
+NEG_RISK_OTHER False
+FEES_ENABLED True
+FEE_SCHEDULE {'exponent': 1, 'rate': 0.05, 'takerOnly': True, 'rebateRate': 0.25}
+FEE_TYPE weather_fees
+ORDER_MIN_SIZE 5
+TICK_SIZE 0.001
+END_DATE 2026-10-01T00:00:00Z
+DESCRIPTION This market will resolve according to the minimum Arctic sea ice extent for all days between August 1, 2026 and October 1, 2026, as published by the National Snow and Ice Data Center.  This market will remain open until data has been published for October 1, 2026, at which point it will resolve immediately. Any revisions to sea ice extent recorded after data is published for October 1, 2026 will not be considered.  The resolution source for this market measures temperatures to thousands of square kilometers (e.g. 4.255 million sq km). Thus, this is the level of precision that will be used when resolving the market.  The resolution source for this market will be information from the National Snow and Ice Data Center, specifically the minimum value recorded for any day between August 1, 2026 and October 1, 2026 in the “NH-Daily-Extent” tab of the “Sea Ice Index Daily Extent” data set, available at https://nsidc.org/sea-ice-today/sea-ice-tools. If this resolution source becomes unavailable, another resolution source will be chosen.
+---
+PATH /home/leonh/prediction_research/knowledge/raw/market_rules/polymarket/20260920T013304Zevent_86426.json
