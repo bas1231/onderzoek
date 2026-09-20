@@ -1,0 +1,13 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/evaluate_asset_fill_checkpoint_e352.py"
+  ],
+  "hypothesis_id": "ASSET-RANK-MAKER-HEDGE-V1",
+  "live_trading": false,
+  "operation": "python",
+  "task_class": "research",
+  "task_id": "EDGE-HUNTER-ASSET-FILL-CHECKPOINT-E352",
+  "timeout_seconds": 120,
+  "working_directory": "."
+}
