@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/inspect_fed_fee_path_e307.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-20T01:26:24.284368+00:00",
+  "hypothesis_id": "PAYOFF-IDENTITY-MINING-V1",
+  "source_commit": "9152bc6bdf5d4b3643c6bb94cca7b86954e9f821",
+  "started_at": "2026-09-20T01:26:24.265920+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "1b499a3a5542a85a95506180bcef574a71177377eba6c3fc84e9dfd1fadcfb48",
+  "task_class": "infrastructure",
+  "task_id": "EDGE-HUNTER-FED-FEE-PATH-INSPECT-E307"
+}
