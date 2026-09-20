@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/kill_test_fed_fees_e306.py"
+  ],
+  "exit_code": 1,
+  "finished_at": "2026-09-20T01:25:57.720085+00:00",
+  "hypothesis_id": "PAYOFF-IDENTITY-MINING-V1",
+  "source_commit": "818a4f124cc4a1b9938b9d70ccb23fdcafb94b2b",
+  "started_at": "2026-09-20T01:25:57.681903+00:00",
+  "status": "failed",
+  "stderr_sha256": "f8479ae722eec20ae81d4512a33345145db4c4c6e1e74c04ec4d9e10f530d370",
+  "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "task_class": "research",
+  "task_id": "EDGE-HUNTER-FED-FEE-KILL-E306"
+}
