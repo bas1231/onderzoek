@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/inspect_market_data_docs_e280.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-20T01:05:40.149336+00:00",
+  "hypothesis_id": "GENERAL-PREDICTION-MARKET-EDGE-HUNTER",
+  "source_commit": "f8dc5b9ce4feb25bf3c5af1e24accb528db78d8a",
+  "started_at": "2026-09-20T01:05:40.128667+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "a2ca7a0435a3066e4ac1a180cfdd2241b181e3f70b3debdce2d1ff33c89e3a32",
+  "task_class": "research",
+  "task_id": "EDGE-HUNTER-MARKET-DATA-DOCS-E280"
+}
