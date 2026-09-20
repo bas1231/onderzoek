@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/count_post_prereg_asset_trades_e347.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-20T02:22:46.913387+00:00",
+  "hypothesis_id": "ASSET-RANK-MAKER-HEDGE-V1",
+  "source_commit": "b6e76c889b6394625be8eb73452ae0b854d6e20e",
+  "started_at": "2026-09-20T02:22:46.892086+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "287fbdb8bba0033c0523139118eaa287fbfe5f46a3529aca804fe33b5cc1f65d",
+  "task_class": "research",
+  "task_id": "EDGE-HUNTER-ASSET-POST-PREREG-TRADES-E347"
+}
