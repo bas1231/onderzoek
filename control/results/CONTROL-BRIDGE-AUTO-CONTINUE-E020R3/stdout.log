@@ -1,0 +1,69 @@
+
+
+.F                                                                       [100%]
+=================================== FAILURES ===================================
+____________________ test_ai_ack_consumes_control_continue _____________________
+
+tmp_path = PosixPath('/tmp/pytest-of-leonh/pytest-3/test_ai_ack_consumes_control_c0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7f841d7496d0>
+
+    def test_ai_ack_consumes_control_continue(tmp_path, monkeypatch):
+        bb = load_bridge()
+    
+        state_file = tmp_path / "bridge_state.json"
+        results = tmp_path / "results"
+        task_id = "CONTROL-AUTO-CONTINUE-TEST-002"
+    
+        write_result(results, task_id)
+    
+        item = bb._control_continue_item(
+            task_id,
+            "RESULT_ACKED",
+        )
+    
+        state_file.write_text(
+            json.dumps(
+                {
+                    "bridge_tasks": [task_id],
+                    "acked": [task_id],
+                    "ai_acked": [],
+                    "control_continue_seen": [task_id],
+                    "control_continue_queue": [item],
+                }
+            ),
+            encoding="utf-8",
+        )
+    
+        monkeypatch.setattr(bb, "STATE_FILE", state_file)
+        monkeypatch.setattr(bb, "RESULTS", results)
+    
+>       offered = bb.next_ai_outbox_item()
+                  ^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/bridge/test_control_auto_continue.py:108: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+control/browser_bridge.py:906: in next_ai_outbox_item
+    control_item = _next_control_continue_item(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+state = {'bridge_tasks': ['CONTROL-AUTO-CONTINUE-TEST-002'], 'acked': ['CONTROL-AUTO-CONTINUE-TEST-002'], 'ai_acked': [], 'control_continue_seen': ['CONTROL-AUTO-CONTINUE-TEST-002'], ...}
+ai_acked = set()
+
+    def _next_control_continue_item(
+        state: dict,
+        ai_acked: set[str],
+    ) -> dict | None:
+        for item in state.get(
+            "control_continue_queue",
+            [],
+        ):
+>           task_id = str(item.get("task_id") or "")
+                          ^^^^^^^^
+E           AttributeError: 'NoneType' object has no attribute 'get'
+
+control/browser_bridge.py:890: AttributeError
+=========================== short test summary info ============================
+FAILED tests/bridge/test_control_auto_continue.py::test_ai_ack_consumes_control_continue
+1 failed, 1 passed in 0.10s
+
+

@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/run_auto_continue_installer_e020r3.py"
+  ],
+  "exit_code": 1,
+  "finished_at": "2026-09-20T22:35:17.603035+00:00",
+  "hypothesis_id": "CONTROL-NO-SILENT-STOP",
+  "source_commit": "0986c0e62dc1b4cb5b8a2b8eed830b184b67f2d2",
+  "started_at": "2026-09-20T22:35:15.626880+00:00",
+  "status": "failed",
+  "stderr_sha256": "cb548f28a6f47f072a7cb7e86fbb875a2d28539a5dd52dbb0857a044ab1a9e31",
+  "stdout_sha256": "460fe6a4951fcb86e72972c055084db780c2f5c049cbed9648b8d7bcc8a1c6f5",
+  "task_class": "infrastructure",
+  "task_id": "CONTROL-BRIDGE-AUTO-CONTINUE-E020R3"
+}
