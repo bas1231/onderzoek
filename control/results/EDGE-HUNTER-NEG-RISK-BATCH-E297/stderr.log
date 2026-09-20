@@ -1,0 +1,5 @@
+Traceback (most recent call last):
+  File "/home/leonh/prediction_research/control/jobs/price_neg_risk_batch_e297.py", line 76, in <module>
+    print('GROUP',row['event_id'],row['status'],row['title'][:160])
+                                                ~~~~~~~~~~~~^^^^^^
+KeyError: slice(None, 160, None)

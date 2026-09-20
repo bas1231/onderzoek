@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/price_neg_risk_batch_e297.py"
+  ],
+  "exit_code": 1,
+  "finished_at": "2026-09-20T01:19:57.953868+00:00",
+  "hypothesis_id": "PAYOFF-IDENTITY-MINING-V1",
+  "source_commit": "1fad99aafe8d101f98d1756973af67c2598b2e6a",
+  "started_at": "2026-09-20T01:19:57.018974+00:00",
+  "status": "failed",
+  "stderr_sha256": "cf4be9baae919f0cce31291fa3a29d59b885694ca8034f768e533f065ea1ad56",
+  "stdout_sha256": "fea924260739cbd4f1e863a34fba0bd3822d702cc2f83299e0ec14edcf92e36b",
+  "task_class": "research",
+  "task_id": "EDGE-HUNTER-NEG-RISK-BATCH-E297"
+}
