@@ -1,0 +1,13 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/search_deeper_bracket_series_e389.py"
+  ],
+  "hypothesis_id": "PAYOFF-IDENTITY-MINING-V1",
+  "live_trading": false,
+  "operation": "python",
+  "task_class": "research",
+  "task_id": "EDGE-HUNTER-DEEP-BRACKET-SERIES-E389",
+  "timeout_seconds": 180,
+  "working_directory": "."
+}
