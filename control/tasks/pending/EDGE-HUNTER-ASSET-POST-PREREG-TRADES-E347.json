@@ -1,0 +1,13 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/count_post_prereg_asset_trades_e347.py"
+  ],
+  "hypothesis_id": "ASSET-RANK-MAKER-HEDGE-V1",
+  "live_trading": false,
+  "operation": "python",
+  "task_class": "research",
+  "task_id": "EDGE-HUNTER-ASSET-POST-PREREG-TRADES-E347",
+  "timeout_seconds": 120,
+  "working_directory": "."
+}
