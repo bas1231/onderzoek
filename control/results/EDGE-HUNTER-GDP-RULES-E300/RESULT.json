@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/capture_gdp_rules_e300.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-20T01:21:48.614948+00:00",
+  "hypothesis_id": "PAYOFF-IDENTITY-MINING-V1",
+  "source_commit": "79fb8baf7119e326bda3070d1ce75e6efd6c1695",
+  "started_at": "2026-09-20T01:21:48.358864+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "755bfc698931eba8158bcb9d6b135f68b6100801e8b54e70774293660b18b14a",
+  "task_class": "research",
+  "task_id": "EDGE-HUNTER-GDP-RULES-E300"
+}
