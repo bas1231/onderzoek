@@ -102,6 +102,17 @@ Doel: append-only overzicht van concrete browser-bridge failures en lessen. Gebr
 - Vervolg: E019R gebruikt opnieuw gegenereerde en vooraf geparste Python-bron plus dezelfde regressie-eis: met tegelijk een normaal resultaat en een incident komt eerst het normale resultaat, daarna het incident.
 - Status: FAILED_SAFE; fairness-fix nog niet geïmplementeerd.
 
+## 2026-09-20 — E019R CHAT_ACK_STALL_AFTER_E017R
+
+- Laag: runtime activation / acknowledgement.
+- Task: `CONTROL-BRIDGE-OUTBOX-FAIRNESS-E019R`.
+- Symptoom: watchdog meldde opnieuw `CHAT_ACK_STALL` terwijl lifecycle al `DELIVERED` was, ongeveer 180 seconden na aanbieding.
+- Belangrijk bewijs: E017R had de durable ACK-retrycode succesvol in `control/browser_extension/content.js` geschreven en syntactisch gevalideerd, maar dit incident toont dat die bronwijziging op zichzelf niet voldoende bewijs is dat de reeds draaiende browser-extension/runtime de nieuwe code daadwerkelijk gebruikt.
+- Exacte oorzaak: nog niet bewezen. Mogelijkheden zijn onder meer dat de bestaande content-scriptinstantie nog oude code draaide, dat de extension niet opnieuw geladen was, of dat de ACK-route ondanks de nieuwe code nog een andere failure mode heeft.
+- Les: voor browser-extensionfixes zijn vanaf nu twee afzonderlijke gates nodig: `SOURCE_VALIDATED` en `RUNTIME_ACTIVATED_AND_PROSPECTIVELY_PROVEN`.
+- Status E017R: source fix PASS, runtime effect nog UNPROVEN.
+- Status E019R: het normale task-resultaat was door de bridge aangeboden (`DELIVERED`), maar de uiteindelijke taskstatus moet uit het normale E019R-resultaat worden gelezen; dit incident alleen zegt niet of de fairness-regressietest PASS of FAIL was.
+
 ## Regels voor nieuwe entries
 
 Voeg per incident toe: datum, task-id, foutlaag, exacte foutklasse, bewezen oorzaak versus hypothese, impact, fix/preventie, regressieteststatus en of de oplossing alleen lokaal of ook op remote main staat.
