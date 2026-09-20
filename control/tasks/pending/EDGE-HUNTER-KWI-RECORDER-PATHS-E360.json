@@ -1,0 +1,13 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/locate_kwi_recorder_paths_e360.py"
+  ],
+  "hypothesis_id": "KWI-INCOMPLETE-TO-CANONICAL-V1",
+  "live_trading": false,
+  "operation": "python",
+  "task_class": "research",
+  "task_id": "EDGE-HUNTER-KWI-RECORDER-PATHS-E360",
+  "timeout_seconds": 120,
+  "working_directory": "."
+}
