@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/capture_hottest_neg_risk_e313.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-20T01:30:43.332936+00:00",
+  "hypothesis_id": "PAYOFF-IDENTITY-MINING-V1",
+  "source_commit": "c166790bd0d688c7b97009705eebc47a5d07504d",
+  "started_at": "2026-09-20T01:30:43.096866+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "c4e767b32460b5634af28fbc7c24d1cc08418bc6fb34993f81cd8c725bb4788b",
+  "task_class": "research",
+  "task_id": "EDGE-HUNTER-HOTTEST-NEG-RISK-E313"
+}
