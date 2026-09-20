@@ -1,0 +1,13 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/falsify_anthropic_execution_stress_e422.py"
+  ],
+  "hypothesis_id": "PAYOFF-IDENTITY-MINING-V1",
+  "live_trading": false,
+  "operation": "python",
+  "task_class": "research",
+  "task_id": "EDGE-HUNTER-ANTHROPIC-EXECUTION-STRESS-E422",
+  "timeout_seconds": 120,
+  "working_directory": "."
+}
