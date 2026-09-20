@@ -1,0 +1,153 @@
+PAGE_OK 1500 ROWS 100
+PAGE_OK 1600 ROWS 100
+PAGE_OK 1700 ROWS 100
+PAGE_OK 1800 ROWS 100
+PAGE_OK 1900 ROWS 100
+PAGE_OK 2000 ROWS 100
+PAGE_RETRY 2100 1 http_422 {"type":"validation error","error":"offset too large, use /events/keyset for deeper pagination"}
+
+PAGE_RETRY 2100 2 http_422 {"type":"validation error","error":"offset too large, use /events/keyset for deeper pagination"}
+
+PAGE_RETRY 2100 3 http_422 {"type":"validation error","error":"offset too large, use /events/keyset for deeper pagination"}
+
+PAGE_FAILED 2100 http_422
+PAGE_RETRY 2200 1 http_422 {"type":"validation error","error":"offset too large, use /events/keyset for deeper pagination"}
+
+PAGE_RETRY 2200 2 http_422 {"type":"validation error","error":"offset too large, use /events/keyset for deeper pagination"}
+
+PAGE_RETRY 2200 3 http_422 {"type":"validation error","error":"offset too large, use /events/keyset for deeper pagination"}
+
+PAGE_FAILED 2200 http_422
+PAGE_RETRY 2300 1 http_422 {"type":"validation error","error":"offset too large, use /events/keyset for deeper pagination"}
+
+PAGE_RETRY 2300 2 http_422 {"type":"validation error","error":"offset too large, use /events/keyset for deeper pagination"}
+
+PAGE_RETRY 2300 3 http_422 {"type":"validation error","error":"offset too large, use /events/keyset for deeper pagination"}
+
+PAGE_FAILED 2300 http_422
+PAGE_RETRY 2400 1 http_422 {"type":"validation error","error":"offset too large, use /events/keyset for deeper pagination"}
+
+PAGE_RETRY 2400 2 http_422 {"type":"validation error","error":"offset too large, use /events/keyset for deeper pagination"}
+
+PAGE_RETRY 2400 3 http_422 {"type":"validation error","error":"offset too large, use /events/keyset for deeper pagination"}
+
+PAGE_FAILED 2400 http_422
+PAGE_RETRY 2500 1 http_422 {"type":"validation error","error":"offset too large, use /events/keyset for deeper pagination"}
+
+PAGE_RETRY 2500 2 http_422 {"type":"validation error","error":"offset too large, use /events/keyset for deeper pagination"}
+
+PAGE_RETRY 2500 3 http_422 {"type":"validation error","error":"offset too large, use /events/keyset for deeper pagination"}
+
+PAGE_FAILED 2500 http_422
+PAGE_RETRY 2600 1 http_422 {"type":"validation error","error":"offset too large, use /events/keyset for deeper pagination"}
+
+PAGE_RETRY 2600 2 http_422 {"type":"validation error","error":"offset too large, use /events/keyset for deeper pagination"}
+
+PAGE_RETRY 2600 3 http_422 {"type":"validation error","error":"offset too large, use /events/keyset for deeper pagination"}
+
+PAGE_FAILED 2600 http_422
+PAGE_RETRY 2700 1 http_422 {"type":"validation error","error":"offset too large, use /events/keyset for deeper pagination"}
+
+PAGE_RETRY 2700 2 http_422 {"type":"validation error","error":"offset too large, use /events/keyset for deeper pagination"}
+
+PAGE_RETRY 2700 3 http_422 {"type":"validation error","error":"offset too large, use /events/keyset for deeper pagination"}
+
+PAGE_FAILED 2700 http_422
+PAGE_RETRY 2800 1 http_422 {"type":"validation error","error":"offset too large, use /events/keyset for deeper pagination"}
+
+PAGE_RETRY 2800 2 http_422 {"type":"validation error","error":"offset too large, use /events/keyset for deeper pagination"}
+
+PAGE_RETRY 2800 3 http_422 {"type":"validation error","error":"offset too large, use /events/keyset for deeper pagination"}
+
+PAGE_FAILED 2800 http_422
+PAGE_RETRY 2900 1 http_422 {"type":"validation error","error":"offset too large, use /events/keyset for deeper pagination"}
+
+PAGE_RETRY 2900 2 http_422 {"type":"validation error","error":"offset too large, use /events/keyset for deeper pagination"}
+
+PAGE_RETRY 2900 3 http_422 {"type":"validation error","error":"offset too large, use /events/keyset for deeper pagination"}
+
+PAGE_FAILED 2900 http_422
+PAGES_REQUESTED 15
+PAGES_SCANNED 6
+RAW_ROWS_SCANNED 600
+UNIQUE_EVENTS_SEEN 600
+FAILURE_COUNT 9
+FAILURE 2100 http_422
+FAILURE 2200 http_422
+FAILURE 2300 http_422
+FAILURE 2400 http_422
+FAILURE 2500 http_422
+FAILURE 2600 http_422
+FAILURE 2700 http_422
+FAILURE 2800 http_422
+FAILURE 2900 http_422
+MATCH_COUNT 6
+EVENT 428507
+TITLE Will Anthropic flip BTC by December 31?
+OFFSET 1600
+END_DATE 2027-01-01T04:59:00Z
+NEG_RISK None
+NEG_RISK_AUGMENTED False
+NEG_RISK_MARKET_ID None
+MARKET_COUNT 1
+NEG_MARKET_COUNT 0
+---
+EVENT 428957
+TITLE Anthropic IPO Closing Market Cap (Middle Brackets)
+OFFSET 1700
+END_DATE 2028-01-01T04:59:00Z
+NEG_RISK True
+NEG_RISK_AUGMENTED False
+NEG_RISK_MARKET_ID 0xb2bb5e9e8728bc3779c143ca14e262bcf8d789c3dd3fbfcb5bdba5eab770bc00
+MARKET_COUNT 7
+NEG_MARKET_COUNT 7
+MARKET 2110748 <0.6T Will Anthropic’s market cap be less than 0.6T at market close on IPO day by December 31 2027?
+MARKET 2110749 0.6–0.9T Will Anthropic’s market cap be between 0.6T and 0.9T at market close on IPO day by December 31 2027?
+MARKET 2110750 0.9–1.2T Will Anthropic’s market cap be between 0.9T and 1.2T at market close on IPO day by December 31 2027?
+MARKET 2110751 1.2–1.5T Will Anthropic’s market cap be between 1.2T and 1.5T at market close on IPO day by December 31 2027?
+MARKET 2110752 1.5–1.8T Will Anthropic’s market cap be between 1.5T and 1.8T at market close on IPO day by December 31 2027?
+MARKET 2110753 1.8T+ Will Anthropic’s market cap be 1.8T or greater at market close on IPO day by December 31 2027?
+MARKET 2110754 No IPO by December 31, 2027 Will Anthropic not IPO by December 31 2027?
+---
+EVENT 500753
+TITLE Will Anthropic’s valuation hit __ by December 31?
+OFFSET 1900
+END_DATE 2027-01-01T12:00:00Z
+NEG_RISK False
+NEG_RISK_AUGMENTED False
+NEG_RISK_MARKET_ID None
+MARKET_COUNT 13
+NEG_MARKET_COUNT 0
+---
+EVENT 502667
+TITLE Anthropic vs OpenAI - higher valuation on December 31?
+OFFSET 1900
+END_DATE 2027-01-05T04:59:00Z
+NEG_RISK None
+NEG_RISK_AUGMENTED False
+NEG_RISK_MARKET_ID None
+MARKET_COUNT 1
+NEG_MARKET_COUNT 0
+---
+EVENT 502834
+TITLE OpenAI + Anthropic vs Google - higher valuation on December 31?
+OFFSET 1900
+END_DATE 2027-01-05T04:59:00Z
+NEG_RISK None
+NEG_RISK_AUGMENTED False
+NEG_RISK_MARKET_ID None
+MARKET_COUNT 1
+NEG_MARKET_COUNT 0
+---
+EVENT 502850
+TITLE Anthropic + OpenAI vs Microsoft - higher valuation on December 31?
+OFFSET 1900
+END_DATE 2027-01-05T04:59:00Z
+NEG_RISK None
+NEG_RISK_AUGMENTED False
+NEG_RISK_MARKET_ID None
+MARKET_COUNT 1
+NEG_MARKET_COUNT 0
+---
+PATH /home/leonh/prediction_research/knowledge/raw/market_data/polymarket_cross_series_discovery/20260920T025445Z-deep-bracket-search-e391.json
+DEEP_BRACKET_SERIES_SEARCH_E391_PASS
