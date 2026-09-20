@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/analyze_polymarket_l2_e282.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-20T01:08:07.736895+00:00",
+  "hypothesis_id": "GENERAL-PREDICTION-MARKET-EDGE-HUNTER",
+  "source_commit": "981a4916eea636e124725b534cbc5b416b05964b",
+  "started_at": "2026-09-20T01:08:07.715167+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "2bec68f06038d24a8736f2af33480bea27cc2fb450d0fc381d2bb85afa00db4f",
+  "task_class": "research",
+  "task_id": "EDGE-HUNTER-POLYMARKET-L2-ANALYZE-E282"
+}
