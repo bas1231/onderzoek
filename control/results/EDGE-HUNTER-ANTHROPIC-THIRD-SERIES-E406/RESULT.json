@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/inspect_anthropic_third_series_e406.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-20T03:07:52.485351+00:00",
+  "hypothesis_id": "PAYOFF-IDENTITY-MINING-V1",
+  "source_commit": "b758de680405f6118bb02292a25ca897aa28c874",
+  "started_at": "2026-09-20T03:07:52.247836+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "0a6cdd553271e8e395744139a6ef4a9ace48d30b5217d803d81db85f4eab042d",
+  "task_class": "research",
+  "task_id": "EDGE-HUNTER-ANTHROPIC-THIRD-SERIES-E406"
+}
