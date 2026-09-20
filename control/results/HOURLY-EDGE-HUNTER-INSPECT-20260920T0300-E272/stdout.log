@@ -1,0 +1,119 @@
+DECISION NO_PROVEN_EDGE
+LANE_COUNT 8
+CANDIDATES
+KWI-INCOMPLETE-TO-CANONICAL-V1 weather DISCOVERED UNPROVEN
+PAYOFF-IDENTITY-MINING-V1 market_algebra DISCOVERED UNPROVEN
+LANES
+behavioral evidence 4 gaps 0 next SEMANTIC_REVIEW_AND_FALSIFICATION
+cross_venue evidence 7 gaps 2 next SEMANTIC_REVIEW_AND_FALSIFICATION
+GAP cross_venue No live orderbook snapshot source in hourly registry
+GAP cross_venue Venue-specific contract-rule pages may need deeper retrieval than docs landing pages
+informed_flow evidence 5 gaps 2 next SEMANTIC_REVIEW_AND_FALSIFICATION
+GAP informed_flow No live orderbook snapshot source in hourly registry
+GAP informed_flow No point-in-time participant identity/flow dataset
+market_algebra evidence 6 gaps 1 next SEMANTIC_REVIEW_AND_FALSIFICATION
+GAP market_algebra Venue-specific contract-rule pages may need deeper retrieval than docs landing pages
+microstructure evidence 5 gaps 1 next SEMANTIC_REVIEW_AND_FALSIFICATION
+GAP microstructure No live orderbook snapshot source in hourly registry
+new_products evidence 7 gaps 2 next SEMANTIC_REVIEW_AND_FALSIFICATION
+GAP new_products No live orderbook snapshot source in hourly registry
+GAP new_products Venue-specific contract-rule pages may need deeper retrieval than docs landing pages
+settlement_rules evidence 7 gaps 2 next SEMANTIC_REVIEW_AND_FALSIFICATION
+GAP settlement_rules No TWC-specific primary source in registry
+GAP settlement_rules Venue-specific contract-rule pages may need deeper retrieval than docs landing pages
+weather evidence 4 gaps 3 next SEMANTIC_REVIEW_AND_FALSIFICATION
+GAP weather No TWC-specific primary source in registry
+GAP weather No live orderbook snapshot source in hourly registry
+GAP weather Venue-specific contract-rule pages may need deeper retrieval than docs landing pages
+SOURCE_SUCCESS 12
+SOURCE_FAILURE 1
+GATES {"execution_reality": "PENDING", "falsification": "PENDING", "market_edge": "PENDING", "point_in_time": "PENDING", "reproduction": "PENDING", "signal_edge": "PENDING", "source_provenance": "PASS"}
+REPORT
+# Hourly Research Report
+
+Run: hourly-20260920T030000+0200
+Started: 2026-09-20T03:00:19.105159+02:00
+
+## Run metadata
+Status: STARTED
+
+## Source coverage
+PENDING
+
+## New evidence
+PENDING
+
+## Candidate hypotheses
+UNPROVEN
+
+## Negative evidence
+PENDING
+
+## Falsification
+PENDING
+
+## Reproduction
+PENDING
+
+## Coverage gaps
+PENDING
+
+## Incidents
+NONE YET
+
+## Decision
+NO_PROVEN_EDGE
+
+## Next hour
+PENDING
+
+## Source sweep update
+
+Success: 12
+Failure: 1
+Sweep: knowledge/runs/source_sweeps/20260920T010019Z.json
+- arxiv: UNCHANGED
+- aviationweather: FAILED
+- cftc: CHANGED
+- ecmwf_open: UNCHANGED
+- github: CHANGED
+- kalshi_docs: UNCHANGED
+- kalshi_weather_rules: CHANGED
+- nomads: CHANGED
+- nws: CHANGED
+- polymarket_docs: UNCHANGED
+- reddit: CHANGED
+- twc_kalshi: UNCHANGED
+- youtube: CHANGED
+
+## Automated preparation
+
+Usable sources: 9
+Low-text-yield sources: 3
+- algebra: 1 routed evidence items
+- behavioral: 0 routed evidence items
+- informed_flow: 0 routed evidence items
+- microstructure: 1 routed evidence items
+- scout: 4 routed evidence items
+- settlement: 1 routed evidence items
+- weather_twc: 2 routed evidence items
+
+## Source sweep update
+
+Success: 12
+Failure: 1
+Sweep: knowledge/runs/source_sweeps/20260920T010048Z.json
+- arxiv: UNCHANGED
+- aviationweather: FAILED
+- cftc: CHANGED
+- ecmwf_open: UNCHANGED
+- github: CHANGED
+- kalshi_docs: UNCHANGED
+- kalshi_weather_rules: CHANGED
+- nomads: CHANGED
+- nws: UNCHANGED
+- polymarket_docs: UNCHANGED
+- reddit: CHANGED
+- twc_kalshi: UNCHANGED
+- youtube: CHANGED
+

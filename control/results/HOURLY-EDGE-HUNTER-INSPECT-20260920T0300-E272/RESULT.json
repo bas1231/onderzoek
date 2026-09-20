@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/inspect_edge_hunter_e272.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-20T01:01:31.383084+00:00",
+  "hypothesis_id": "GENERAL-PREDICTION-MARKET-EDGE-HUNTER",
+  "source_commit": "a6899728b8b6e8a5acf543c08ba2a024ab9504da",
+  "started_at": "2026-09-20T01:01:31.362998+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "b9079d75f5f9f47d361b1f29e226737fdc355aa6a339f631490ea79275579350",
+  "task_class": "research",
+  "task_id": "HOURLY-EDGE-HUNTER-INSPECT-20260920T0300-E272"
+}
