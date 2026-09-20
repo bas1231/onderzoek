@@ -1,0 +1,5 @@
+Traceback (most recent call last):
+  File "/home/leonh/prediction_research/control/jobs/inspect_asset_trade_feed_e345.py", line 23, in <module>
+    print('TOP_TYPE',type(data).name)
+                     ^^^^^^^^^^^^^^^
+AttributeError: type object 'dict' has no attribute 'name'
