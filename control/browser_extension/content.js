@@ -287,6 +287,134 @@
       }
     }
 
+    async function flushDurableQueue() {
+      if (!(await isArmed())) {
+        return;
+      }
+
+      const queue = await loadDurableQueue();
+      const processed = new Set(
+        await processedTaskIds()
+      );
+
+      for (
+        const [taskId, record] of Object.entries(queue)
+      ) {
+        if (
+          !taskId ||
+          !record ||
+          typeof record !== "object" ||
+          !record.envelope
+        ) {
+          continue;
+        }
+
+        if (
+          processed.has(taskId)
+        ) {
+          await removeDurableEnvelope(taskId);
+          continue;
+        }
+
+        if (inFlightTaskIds.has(taskId)) {
+          continue;
+        }
+
+        inFlightTaskIds.add(taskId);
+
+        try {
+          const discoverResponse =
+            await bridgeFetch(
+              "/discover",
+              "POST",
+              {
+                task_id: taskId
+              }
+            );
+
+          if (
+            !discoverResponse ||
+            !discoverResponse.ok
+          ) {
+            record.attempts =
+              Number(record.attempts || 0) + 1;
+            record.updatedAt = Date.now();
+            record.lastError =
+              "discover rejected";
+
+            queue[taskId] = record;
+            await saveDurableQueue(queue);
+
+            continue;
+          }
+
+          const response = await bridgeFetch(
+            "/enqueue",
+            "POST",
+            record.envelope
+          );
+
+          const alreadyExists =
+            response &&
+            response.status === 409 &&
+            response.data &&
+            response.data.error ===
+              "task_id already exists";
+
+          if (
+            response &&
+            (
+              response.ok ||
+              alreadyExists
+            )
+          ) {
+            await markTaskProcessed(taskId);
+            processed.add(taskId);
+            await removeDurableEnvelope(taskId);
+
+            console.log(
+              "[Prediction Bridge] durable task accepted:",
+              taskId,
+              response.status
+            );
+          } else {
+            record.attempts =
+              Number(record.attempts || 0) + 1;
+            record.updatedAt = Date.now();
+            record.lastError =
+              "enqueue rejected";
+
+            queue[taskId] = record;
+            await saveDurableQueue(queue);
+
+            console.warn(
+              "[Prediction Bridge] durable task rejected:",
+              taskId,
+              response
+            );
+          }
+
+        } catch (error) {
+          record.attempts =
+            Number(record.attempts || 0) + 1;
+          record.updatedAt = Date.now();
+          record.lastError = String(error);
+
+          queue[taskId] = record;
+          await saveDurableQueue(queue);
+
+          console.warn(
+            "[Prediction Bridge] durable task exception:",
+            taskId,
+            error
+          );
+
+        } finally {
+          inFlightTaskIds.delete(taskId);
+        }
+      }
+    }
+
 
   async function scanForTasks() {
     if (scanning) {
@@ -501,6 +629,7 @@
             ) {
               await markTaskProcessed(taskId);
               processed.add(taskId);
+              await removeDurableEnvelope(taskId);
 
               console.log(
                 "[Prediction Bridge] task accepted:",
