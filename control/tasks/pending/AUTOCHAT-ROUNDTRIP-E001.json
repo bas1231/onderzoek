@@ -1,0 +1,21 @@
+{
+  "task_id": "AUTOCHAT-ROUNDTRIP-E001",
+  "hypothesis_id": "CONTROL-AUTOCHAT-TEST",
+  "task_class": "infrastructure",
+  "operation": "health_check",
+  "working_directory": ".",
+  "command": [
+    ".venv/bin/python",
+    "experiments/health_check.py"
+  ],
+  "timeout_seconds": 60,
+  "live_trading": false,
+  "build_authorization": {
+    "mode": "control_plane",
+    "build_kind": "control_plane",
+    "objective": "Verify complete auto-chat roundtrip",
+    "capabilities": [
+      "read_repository"
+    ]
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/inspect_hourly_0700_detail_e431.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-20T20:04:49.159712+00:00",
+  "hypothesis_id": "CONTROL-RESEARCH-DIRECTOR",
+  "source_commit": "f9e5e61d5ffff15e3f421652af604c4487c9dcbf",
+  "started_at": "2026-09-20T20:04:49.060315+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "d2b02126cd130da940a19df067645c01063a6e9fec005ee5025efba51ca5fd22",
+  "task_class": "infrastructure",
+  "task_id": "RESEARCH-DIRECTOR-SANDBOX-E002"
+}
