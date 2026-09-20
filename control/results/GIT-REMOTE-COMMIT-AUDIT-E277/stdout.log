@@ -1,0 +1,16 @@
+CMD git show --stat --oneline origin/main
+590ea55 fix(control): add one-command browser bridge repair
+ control/browser_extension/repair_bridge.py | 238 +++++++++++++++++++++++++++++
+ 1 file changed, 238 insertions(+)
+CMD git show --name-status --format=fuller origin/main
+commit 590ea55d35da7ece5c75083ee1d93b1ca23017fd
+Author:     bas1231 <stuff.leon1@gmail.com>
+AuthorDate: Sun Sep 20 02:59:47 2026 +0200
+Commit:     bas1231 <stuff.leon1@gmail.com>
+CommitDate: Sun Sep 20 02:59:47 2026 +0200
+
+    fix(control): add one-command browser bridge repair
+
+A	control/browser_extension/repair_bridge.py
+CMD git diff --name-only 375073c..origin/main
+control/browser_extension/repair_bridge.py
