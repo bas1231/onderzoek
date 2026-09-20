@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/neg_risk_census_e288.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-20T01:12:33.799184+00:00",
+  "hypothesis_id": "PAYOFF-IDENTITY-MINING-V1",
+  "source_commit": "4bb941fc5f167d5cfcf2f293b2095ad8629f990d",
+  "started_at": "2026-09-20T01:12:31.233108+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "6c3e6a348e78c2557de6b92a9e01aa2f7402584e356045fe1dc28b823aac86cf",
+  "task_class": "research",
+  "task_id": "EDGE-HUNTER-NEG-RISK-CENSUS-E288"
+}
