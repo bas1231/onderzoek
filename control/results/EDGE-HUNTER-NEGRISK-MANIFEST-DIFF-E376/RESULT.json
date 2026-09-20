@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/diff_neg_risk_manifests_e376.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-20T02:44:45.802124+00:00",
+  "hypothesis_id": "PAYOFF-IDENTITY-MINING-V1",
+  "source_commit": "bb10ce97608dbaa5a7515ce4ec39208de6bd7ec5",
+  "started_at": "2026-09-20T02:44:45.780362+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "cc91cb42048661eedd2ef340983339f826ec407a3c6b2355a8f3aad7217bf626",
+  "task_class": "research",
+  "task_id": "EDGE-HUNTER-NEGRISK-MANIFEST-DIFF-E376"
+}
