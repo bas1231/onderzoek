@@ -1,0 +1,13 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/read_anthropic_conversion_fee_chunked_e429.py"
+  ],
+  "hypothesis_id": "PAYOFF-IDENTITY-MINING-V1",
+  "live_trading": false,
+  "operation": "python",
+  "task_class": "research",
+  "task_id": "EDGE-HUNTER-ANTHROPIC-CONVERSION-FEE-ONCHAIN-E429",
+  "timeout_seconds": 240,
+  "working_directory": "."
+}
