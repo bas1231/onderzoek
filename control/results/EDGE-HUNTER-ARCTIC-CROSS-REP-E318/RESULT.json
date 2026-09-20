@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/test_arctic_cross_rep_e318.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-20T01:33:45.915716+00:00",
+  "hypothesis_id": "PAYOFF-IDENTITY-MINING-V1",
+  "source_commit": "7458b360c5a9cc3bff8cbf019037744ddfbbfe21",
+  "started_at": "2026-09-20T01:33:45.895046+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "effd2fc871439103a374e89a7424b8888d0b4984f238b7b9f6081e809110440c",
+  "task_class": "research",
+  "task_id": "EDGE-HUNTER-ARCTIC-CROSS-REP-E318"
+}
