@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/test_fed_identities_e305.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-20T01:24:36.916054+00:00",
+  "hypothesis_id": "PAYOFF-IDENTITY-MINING-V1",
+  "source_commit": "12a5a7197896dad29eb4b39f80d2c5b7d5de0ab6",
+  "started_at": "2026-09-20T01:24:36.893030+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "1228569970af0f182ed473233c3edbe13c1281de648f3c3e5aa6ff801d5673bc",
+  "task_class": "research",
+  "task_id": "EDGE-HUNTER-FED-IDENTITY-E305"
+}
