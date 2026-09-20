@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/inspect_polymarket_neg_risk_e285.py"
+  ],
+  "exit_code": 1,
+  "finished_at": "2026-09-20T01:10:26.397991+00:00",
+  "hypothesis_id": "PAYOFF-IDENTITY-MINING-V1",
+  "source_commit": "75a9784cd6944f3147941d564ddb7022cf192b12",
+  "started_at": "2026-09-20T01:10:26.387402+00:00",
+  "status": "failed",
+  "stderr_sha256": "0d41069ba34829cab5ad192b0637c0eab3546f65c8e58c92dc41126af69ef25c",
+  "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "task_class": "research",
+  "task_id": "EDGE-HUNTER-POLYMARKET-NEG-RISK-E285"
+}

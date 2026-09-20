@@ -1,0 +1,4 @@
+  File "/home/leonh/prediction_research/control/jobs/inspect_polymarket_neg_risk_e285.py", line 35
+    book_neg = any(next((b.get('neg_risk') for b in books if str(b.get('asset_id')) in ids), False) for ,ids in matched)
+                                                                                                        ^
+SyntaxError: invalid syntax
