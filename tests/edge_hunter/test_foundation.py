@@ -10,7 +10,7 @@ def test_lane_registry_is_general():
     assert "market_algebra" in lanes
     assert "microstructure" in lanes
     assert "settlement_rules" in lanes
-    assert len(lanes) >= 8
+    assert len(lanes) == 8
     assert "Weather is one lane" in data["purpose"]
 
 def test_candidate_schema_fail_closed():
