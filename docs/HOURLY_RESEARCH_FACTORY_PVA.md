@@ -194,7 +194,49 @@ Ongewijzigde harde grenzen:
 - geen operationeel misbruik van securitykwetsbaarheden;
 - `ILLEGAL = HARD STOP`.
 
-## 8. Promotion path
+## 8. Permanente parallelle onderzoeksqueue en no-starvation
+
+De Research Factory behandelt serieuze survivors als **stateful onderzoeksprojecten**. Een kandidaat mag nooit verdwijnen of worden afgewezen uitsluitend omdat de Research Director op dat moment onvoldoende tijd heeft.
+
+Harde regels:
+
+- iedere plausibele kandidaat die de goedkope kill-gates overleeft krijgt een persistent candidate record en blijft in de queue totdat er een inhoudelijke eindstatus is;
+- gebrek aan Director-capaciteit is **geen** geldige reden voor `KILL`;
+- meerdere experimenten mogen parallel lopen wanneer zij elkaar niet contamineren en voldoende lokale capaciteit beschikbaar is;
+- lange gratis lokale berekeningen, recorders en reeds gestarte experimenten mogen zelfstandig doorlopen zonder actieve ChatGPT-tijd, ook tijdens Director-cooldown, zolang zij geen betaalde actie, live trading, walletactie of OpenAI/ChatGPT-verkeer veroorzaken;
+- de Director besteedt actieve tijd primair aan beslissingen, interpretatie, ontwerp van falsificatietests en analyse van gereedgekomen resultaten; wachten op rekentijd blokkeert ander onderzoek niet;
+- nieuwe kandidaten mogen oudere survivors niet onbeperkt verdringen: iedere survivor krijgt uiteindelijk opnieuw onderzoekstijd (**no-starvation**);
+- iedere extra onderzoeksronde moet een concrete onbeantwoorde vraag hebben die de status of een gate kan veranderen; als verdere arbeid geen beslissende informatiewaarde meer heeft, wordt de kandidaat inhoudelijk `PARK`, niet stil vergeten;
+- discovery-evidence, development, validation, holdout en prospective evidence blijven strikt gescheiden; parallelisme mag de onderzoeksprotocollen niet vervuilen.
+
+### Queue-statussen
+
+Minimaal ondersteunde operationele toestanden:
+
+- `QUEUED` — geregistreerd en wacht op eerste/volgende onderzoekstaak;
+- `NEEDS_DIRECTOR` — menselijke/Director-redenering of experimentontwerp nodig;
+- `EXPERIMENT_REQUIRED` — concrete beslissende test is gespecificeerd maar nog niet gestart;
+- `RUNNING` — lokaal experiment/recorder/replay loopt;
+- `WAITING_FOR_DATA` — vooraf gespecificeerde evidence of prospectieve observaties worden verzameld;
+- `WAITING_FOR_RESULT` — computationele taak loopt; geen Director-tijd nodig;
+- `RESULT_READY` — resultaat staat klaar voor Director-beoordeling;
+- `NEEDS_REVISION` — test/tooling bleek onvoldoende; wijziging moet expliciet worden gemotiveerd zonder post-hoc winstoptimalisatie;
+- `PARKED` — inhoudelijk onvoldoende informatiewaarde of momenteel niet testbaar, met expliciete hervattingsvoorwaarde;
+- `CLOSED_NEGATIVE` — overtuigend gefalsificeerd;
+- `PROMOTION_CANDIDATE` — voldoende bewijs voor de volgende formele researchgate, niet gelijk aan bewezen edge.
+
+Iedere niet-terminale kandidaat bewaart minimaal: stable candidate ID, hypothese/mechanisme, huidige researchfase, queue-status, reeds uitgevoerde tests, relevante negative evidence, open vraag, **next decisive test**, benodigde data, actieve experiment-ID's, timestamps en hervattings-/stopvoorwaarde.
+
+### Prioritering
+
+Prioriteit bepaalt **wanneer**, niet **of**, een survivor wordt onderzocht. De Director mag prioriteren op informatiewaarde, economische betekenis, tijdgevoeligheid, kosten/duur van de volgende falsificatietest en afhankelijkheden. Periodiek wordt expliciet gecontroleerd op oude kandidaten die te lang geen inhoudelijke voortgang kregen. Een kandidaat blijft alleen gesloten na een inhoudelijke terminale beslissing; queue-druk is nooit terminal evidence.
+
+### Parallelle experimenten
+
+Een kandidaat kan meerdere onafhankelijke experimenten hebben en meerdere kandidaten kunnen tegelijk `RUNNING` of `WAITING_*` zijn. De Director hoeft niet te wachten op experiment A voordat kandidaat B wordt onderzocht. Gereedgekomen experimenten gaan naar `RESULT_READY` en worden in een volgende actieve Director-run beoordeeld vanaf het opgeslagen checkpoint.
+
+
+## 9. Promotion path
 
 ```text
 DISCOVERED
@@ -213,7 +255,7 @@ Iedere stap kan eindigen in `TESTED_NEGATIVE`, `EXECUTION_BLOCKED`, `INSUFFICIEN
 
 Geen micro-live zonder afzonderlijke expliciete toestemming voor de specifieke geld/kostenactie.
 
-## 9. Hourly report contract
+## 10. Hourly report contract
 
 Het rapport bevat minimaal:
 
@@ -230,7 +272,7 @@ Het rapport bevat minimaal:
 
 Rapporteer herhaalde evidence niet opnieuw als nieuwe vondst.
 
-## 10. Scheduler tijdens defecte Chrome-extension
+## 11. Scheduler tijdens defecte Chrome-extension
 
 Zolang de lokale Chrome/bridge-control tijdelijk niet werkt:
 
@@ -250,7 +292,7 @@ Zodra de bridge hersteld is:
 6. bevestigen dat cooldown-run werkelijk `COOLDOWN_SKIP` geeft;
 7. tijdelijke ChatGPT scheduler verwijderen als de lokale route dezelfde functie betrouwbaar overneemt.
 
-## 11. Acceptatiecriteria V1
+## 12. Acceptatiecriteria V1
 
 ### A. Cadence
 - eerste taak start 4h block;
@@ -287,9 +329,13 @@ Zodra de bridge hersteld is:
 - memory-context file;
 - hourly report;
 - durable finding/negative indien materieel;
-- default decision `NO_PROVEN_EDGE`.
+- default decision `NO_PROVEN_EDGE`;
+- iedere niet-terminale survivor is terugvindbaar in de persistente queue;
+- `RUNNING`/`WAITING_*` kandidaten worden niet als vergeten of afgerond behandeld;
+- no-starvation-audit detecteert survivors zonder tijdige inhoudelijke voortgang;
+- capaciteitstekort kan nooit zelfstandig een kandidaat naar `KILL`/`CLOSED_NEGATIVE` brengen.
 
-## 12. Richting na V1
+## 13. Richting na V1
 
 ### Milestone 1 — betrouwbare hourly factory
 Cadence, discovery, memory, routing en rapportage foutvrij en reproduceerbaar.
@@ -309,7 +355,7 @@ Untouched holdout, reproduction en prospective shadow.
 ### Milestone 6 — micro-live eligibility
 Alleen bij bewezen signal + market + execution edge en alleen na expliciete menselijke toestemming voor echte geldactie.
 
-## 13. Succesdefinitie
+## 14. Succesdefinitie
 
 Het systeem is succesvol wanneer het:
 
