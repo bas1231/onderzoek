@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "experiments/health_check.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-20T21:30:12.134419+00:00",
+  "hypothesis_id": "CONTROL-BRIDGE-HEALTH",
+  "source_commit": "f08f43a48f332a7616dee6f5b074f7cd7724dec4",
+  "started_at": "2026-09-20T21:30:12.104289+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "c9bcf916210692b9f71f9d93e1013b21896b9f288bdde139de2a8b2213cc481a",
+  "task_class": "research",
+  "task_id": "CONTROL-BRIDGE-MINIMAL-E012"
+}
