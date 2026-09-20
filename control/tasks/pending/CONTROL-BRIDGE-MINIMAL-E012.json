@@ -1,0 +1,14 @@
+{
+  "build_authorization": null,
+  "command": [
+    ".venv/bin/python",
+    "experiments/health_check.py"
+  ],
+  "hypothesis_id": "CONTROL-BRIDGE-HEALTH",
+  "live_trading": false,
+  "operation": "health_check",
+  "task_class": "research",
+  "task_id": "CONTROL-BRIDGE-MINIMAL-E012",
+  "timeout_seconds": 60,
+  "working_directory": "."
+}
