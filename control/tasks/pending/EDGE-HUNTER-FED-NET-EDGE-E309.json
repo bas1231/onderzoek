@@ -1,0 +1,13 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/compute_fed_net_edge_e309.py"
+  ],
+  "hypothesis_id": "PAYOFF-IDENTITY-MINING-V1",
+  "live_trading": false,
+  "operation": "python",
+  "task_class": "research",
+  "task_id": "EDGE-HUNTER-FED-NET-EDGE-E309",
+  "timeout_seconds": 120,
+  "working_directory": "."
+}
