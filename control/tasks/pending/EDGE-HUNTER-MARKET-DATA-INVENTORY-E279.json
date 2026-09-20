@@ -1,0 +1,13 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/inventory_market_data_e279.py"
+  ],
+  "hypothesis_id": "GENERAL-PREDICTION-MARKET-EDGE-HUNTER",
+  "live_trading": false,
+  "operation": "python",
+  "task_class": "infrastructure",
+  "task_id": "EDGE-HUNTER-MARKET-DATA-INVENTORY-E279",
+  "timeout_seconds": 120,
+  "working_directory": "."
+}
