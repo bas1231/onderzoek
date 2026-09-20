@@ -60,6 +60,18 @@ Doel: append-only overzicht van concrete browser-bridge failures en lessen. Gebr
 - Resultaat: `RULE_PRESENT True`, `CHANGED True`, lokale commit `912f5cb...`.
 - Let op: remote GitHub main kan achterlopen bij push-divergentie; verifieer remote apart.
 
+## 2026-09-20 — E016 CHAT_ACK_STALL
+
+- Laag: result delivery / acknowledgement.
+- Symptoom: lifecycle bleef `DELIVERED`; watchdog meldde `CHAT_ACK_STALL` na ongeveer 208 seconden met detail `Resultaat werd aangeboden maar niet tijdig ACKED.`
+- Bewezen gedrag in `content.js`: `pollOutbox()` klikt eerst het ChatGPT-sendknopje via `insertAndSend()`, wacht 1 seconde en doet daarna `POST /ack`.
+- Belangrijk defect: de returnwaarde van `POST /ack` wordt niet gecontroleerd; de code logt daarna altijd `result returned`, ook als ACK faalt of niet wordt opgeslagen.
+- Waarschijnlijke failure modes: tijdelijke localhost/extension-fout tijdens ACK, ACK-response niet-ok, of te vroege ACK-semantiek rond UI-send. Exacte oorzaak van dit concrete incident is nog niet bewezen.
+- Impact: het resultaat kan zichtbaar in ChatGPT zijn terwijl de bridge lifecycle niet naar `ACKED` gaat; watchdog genereert dan een incident en dezelfde outbox-item kan opnieuw aangeboden worden.
+- Gewenste fix: controleer `ack && ack.ok`, retry ACK met bounded backoff, bewaar pending ACKs durable, en log/incident onderscheid tussen `CHAT_SEND_FAILED`, `ACK_HTTP_FAILED` en `ACK_REJECTED`.
+- Regressietest: task-result zichtbaar versturen, bridge tijdelijk ACK laten falen, herstellen, en bewijzen dat durable retry uiteindelijk exact eenmaal naar `ACKED` gaat zonder result starvation.
+- Status: OPEN; documentatie remote main bijgewerkt. Geen live/paid/wallet impact.
+
 ## Regels voor nieuwe entries
 
 Voeg per incident toe: datum, task-id, foutlaag, exacte foutklasse, bewezen oorzaak versus hypothese, impact, fix/preventie, regressieteststatus en of de oplossing alleen lokaal of ook op remote main staat.
