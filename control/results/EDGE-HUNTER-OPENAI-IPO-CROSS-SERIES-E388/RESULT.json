@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/inspect_openai_ipo_cross_series_e388.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-20T02:52:15.527551+00:00",
+  "hypothesis_id": "PAYOFF-IDENTITY-MINING-V1",
+  "source_commit": "ad0a21187aebb071c8eeb7881843f9054eb6c82b",
+  "started_at": "2026-09-20T02:52:15.505602+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "6a00c3b374f165801b04eb48630a20cd35192bb84c0510f3b304df64a2fbb622",
+  "task_class": "research",
+  "task_id": "EDGE-HUNTER-OPENAI-IPO-CROSS-SERIES-E388"
+}
