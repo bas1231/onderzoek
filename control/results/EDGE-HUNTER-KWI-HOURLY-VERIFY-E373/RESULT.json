@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/verify_kwi_hourly_monitor_e373.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-20T02:42:54.912229+00:00",
+  "hypothesis_id": "KWI-FULL-STATION-PRECANONICAL-V1",
+  "source_commit": "8b778532bacaec76cf776d05fa78883fc72de7e2",
+  "started_at": "2026-09-20T02:42:54.797474+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "aeb4cd594edda8124beb8c81671618d20c8667aefcd2fbdca8d9a3eea942c556",
+  "task_class": "infrastructure",
+  "task_id": "EDGE-HUNTER-KWI-HOURLY-VERIFY-E373"
+}
