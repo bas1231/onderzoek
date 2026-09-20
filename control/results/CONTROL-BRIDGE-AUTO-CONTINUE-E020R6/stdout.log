@@ -1,0 +1,50 @@
+
+
+F.                                                                       [100%]
+=================================== FAILURES ===================================
+_____________________ test_ack_queues_and_ai_ack_consumes ______________________
+
+tmp_path = PosixPath('/tmp/pytest-of-leonh/pytest-6/test_ack_queues_and_ai_ack_con0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x75c9252c7200>
+
+    def test_ack_queues_and_ai_ack_consumes(tmp_path, monkeypatch):
+        bb = load_bridge()
+        state_file = tmp_path / "bridge_state.json"
+        results = tmp_path / "results"
+        task_id = "CONTROL-AUTO-CONTINUE-TEST-001"
+    
+        write_result(results, task_id)
+        state_file.write_text(json.dumps(base_state(task_id)), encoding="utf-8")
+    
+        monkeypatch.setattr(bb, "STATE_FILE", state_file)
+        monkeypatch.setattr(bb, "RESULTS", results)
+        monkeypatch.setattr(bb, "lifecycle_update", lambda *args, **kwargs: None)
+    
+        ack = bb.acknowledge(task_id)
+        assert ack["ok"] is True
+    
+        state = bb.load_state()
+        assert state["control_continue_seen"] == [task_id]
+        assert len(state["control_continue_queue"]) == 1
+    
+        offered = bb.next_ai_outbox_item()
+        assert offered is not None
+        assert offered["kind"] == "AI_WORK_BUNDLE"
+        assert offered["schema"] == "PVA_CONTROL_CONTINUE_V1"
+        assert offered["bundle"]["source_task_id"] == task_id
+        assert offered["guardrails"]["direct_executor_route"] is False
+    
+        ai_ack = bb.acknowledge_ai(offered["task_id"])
+        assert ai_ack["ok"] is True
+        assert offered["task_id"] in bb.load_state()["ai_acked"]
+>       assert bb.next_ai_outbox_item() is None
+E       AssertionError: assert {'kind': 'AI_WORK_BUNDLE', 'schema': 'PVA_AI_CHAT_WORK_V1', 'task_id': 'hourly-research-20260920T1700+0200', 'run_id': 'hourly-20260920T170000+0200', ...} is None
+E        +  where {'kind': 'AI_WORK_BUNDLE', 'schema': 'PVA_AI_CHAT_WORK_V1', 'task_id': 'hourly-research-20260920T1700+0200', 'run_id': 'hourly-20260920T170000+0200', ...} = <function next_ai_outbox_item at 0x75c924846160>()
+E        +    where <function next_ai_outbox_item at 0x75c924846160> = <module 'browser_bridge' from '/home/leonh/prediction_research/control/browser_bridge.py'>.next_ai_outbox_item
+
+tests/bridge/test_control_auto_continue.py:70: AssertionError
+=========================== short test summary info ============================
+FAILED tests/bridge/test_control_auto_continue.py::test_ack_queues_and_ai_ack_consumes
+1 failed, 1 passed in 0.08s
+
+
