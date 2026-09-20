@@ -1,0 +1,43 @@
+{
+  "allowed_decisions": [
+    "UNPROVEN",
+    "REJECTED",
+    "NO_PROVEN_EDGE",
+    "SURVIVES_STAGE"
+  ],
+  "allowed_phases": [
+    "DISCOVERED",
+    "MECHANISM_DEFINED",
+    "PREBUILD_KILLED",
+    "DATA_READY",
+    "DEVELOPMENT",
+    "VALIDATION",
+    "HOLDOUT",
+    "INDEPENDENT_REPRODUCTION",
+    "EXECUTION_REALITY",
+    "SHADOW",
+    "MICRO_LIVE_ELIGIBLE"
+  ],
+  "hard_gates": {
+    "executable_market_price_required_for_market_edge": true,
+    "formal_or_statistical_evidence_required": true,
+    "live_trading": false,
+    "paid_actions": false,
+    "point_in_time_required": true,
+    "wallet_actions": false
+  },
+  "required_fields": [
+    "candidate_id",
+    "lane",
+    "hypothesis",
+    "mechanism",
+    "disconfirming_evidence",
+    "point_in_time_requirements",
+    "signal_metric",
+    "market_edge_test",
+    "execution_reality_test",
+    "phase",
+    "decision"
+  ],
+  "version": 1
+}

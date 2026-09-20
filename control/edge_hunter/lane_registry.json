@@ -1,0 +1,116 @@
+{
+  "default_decision": "NO_PROVEN_EDGE",
+  "lanes": {
+    "behavioral": {
+      "evidence_roles": [
+        "behavioral",
+        "scout"
+      ],
+      "objective": "Test behavioral mispricing hypotheses such as favorite-longshot, optimism, attention and flow bias without assuming persistence.",
+      "primary_tests": [
+        "calibration_by_price_bucket",
+        "out_of_sample_reliability",
+        "maker_vs_taker"
+      ]
+    },
+    "cross_venue": {
+      "evidence_roles": [
+        "algebra",
+        "settlement",
+        "microstructure",
+        "scout"
+      ],
+      "objective": "Find economically equivalent payouts across venues only after proving contract identity, settlement compatibility and transfer/collateral reality.",
+      "primary_tests": [
+        "contract_identity",
+        "settlement_identity",
+        "fee_and_transfer_cost",
+        "synchronised_l2"
+      ]
+    },
+    "informed_flow": {
+      "evidence_roles": [
+        "informed_flow",
+        "microstructure",
+        "scout"
+      ],
+      "objective": "Test whether observable flow patterns contain incremental predictive information without relying on private identity data.",
+      "primary_tests": [
+        "point_in_time_flow_features",
+        "incremental_brier_or_logloss",
+        "execution_lag"
+      ]
+    },
+    "market_algebra": {
+      "evidence_roles": [
+        "algebra",
+        "settlement",
+        "scout"
+      ],
+      "objective": "Find formally provable payout identities, dominance relations, collateral/netting anomalies, combo/MVE relations and synthetic equivalents.",
+      "primary_tests": [
+        "statewise_payout_equivalence",
+        "dominance",
+        "executable_cost_after_fees"
+      ]
+    },
+    "microstructure": {
+      "evidence_roles": [
+        "microstructure",
+        "scout"
+      ],
+      "objective": "Test order-book, maker/taker, queue, spread, depth, partial-fill and adverse-selection hypotheses using executable point-in-time data.",
+      "primary_tests": [
+        "l2_replay",
+        "fees",
+        "slippage",
+        "partial_fill",
+        "adverse_selection"
+      ]
+    },
+    "new_products": {
+      "evidence_roles": [
+        "scout",
+        "settlement",
+        "microstructure",
+        "algebra"
+      ],
+      "objective": "Continuously inspect new venues, products, rule changes and market structures for newly testable edge mechanisms.",
+      "primary_tests": [
+        "novelty",
+        "primary_source_provenance",
+        "falsifiable_mechanism"
+      ]
+    },
+    "settlement_rules": {
+      "evidence_roles": [
+        "settlement",
+        "scout",
+        "weather_twc"
+      ],
+      "objective": "Find informational or structural gaps in settlement rules, source timing, finality, revisions, rounding and fallback behavior.",
+      "primary_tests": [
+        "rule_machine_readability",
+        "point_in_time_availability",
+        "settlement_replay"
+      ]
+    },
+    "weather": {
+      "evidence_roles": [
+        "weather_twc",
+        "settlement",
+        "microstructure"
+      ],
+      "objective": "Predict contract settlement values from point-in-time meteorological state and test whether executable market prices underreact.",
+      "primary_tests": [
+        "signal_edge",
+        "market_edge",
+        "settlement_mapping",
+        "regime_holdout"
+      ]
+    }
+  },
+  "promotion_rule": "No candidate may advance on narrative plausibility alone; each promotion requires predefined falsifiable evidence.",
+  "purpose": "General prediction-market edge discovery. Weather is one lane, not the system objective.",
+  "version": 1
+}
