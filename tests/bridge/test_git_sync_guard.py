@@ -63,13 +63,13 @@ def test_synced_main_is_safe(tmp_path):
     assert state.local_head == state.remote_head
 
 
-def test_local_ahead_is_safe(tmp_path):
+def test_local_ahead_is_blocked(tmp_path):
     _, local, _ = make_pair(tmp_path)
     commit_file(local, "local.txt", "local\n", "local ahead")
 
     state = inspect_remote_write_safety(root=local)
 
-    assert state.safe_to_write is True
+    assert state.safe_to_write is False
     assert state.status == "LOCAL_AHEAD"
     assert state.local_head != state.remote_head
 
@@ -114,4 +114,12 @@ def test_require_guard_raises_on_behind(tmp_path):
     git(peer, "push", "-q", "origin", "main")
 
     with pytest.raises(RuntimeError, match="LOCAL_BEHIND"):
+        require_remote_write_safety(root=local)
+
+
+def test_require_guard_raises_on_local_ahead(tmp_path):
+    _, local, _ = make_pair(tmp_path)
+    commit_file(local, "local.txt", "local\n", "local ahead")
+
+    with pytest.raises(RuntimeError, match="LOCAL_AHEAD"):
         require_remote_write_safety(root=local)
