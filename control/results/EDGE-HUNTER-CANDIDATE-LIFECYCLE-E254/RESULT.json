@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/build_candidate_lifecycle_e254.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-20T00:42:17.305203+00:00",
+  "hypothesis_id": "GENERAL-PREDICTION-MARKET-EDGE-HUNTER",
+  "source_commit": "83f79b292c081da7937379406bfc26d93e10f516",
+  "started_at": "2026-09-20T00:42:14.795849+00:00",
+  "status": "completed",
+  "stderr_sha256": "ad330b3b0229f6c0d179033686fd2a082c32abb0d03af40ff325aa6bc84cf400",
+  "stdout_sha256": "081ce1002310ae9fafba8ff07a1806895a7ad1778fb9dbddfaba98ddc4769cd2",
+  "task_class": "infrastructure",
+  "task_id": "EDGE-HUNTER-CANDIDATE-LIFECYCLE-E254"
+}

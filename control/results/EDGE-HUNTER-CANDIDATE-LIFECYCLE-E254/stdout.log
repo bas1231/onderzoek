@@ -1,0 +1,11 @@
+[main 0afb7f6] add fail-closed edge candidate lifecycle
+ 4 files changed, 200 insertions(+)
+ create mode 100644 control/edge_hunter/candidate_store.py
+ create mode 100644 knowledge/candidates/KWI-INCOMPLETE-TO-CANONICAL-V1.json
+ create mode 100644 knowledge/candidates/PAYOFF-IDENTITY-MINING-V1.json
+ create mode 100644 tests/edge_hunter/test_candidate_store.py
+....                                                                     [100%]
+4 passed in 0.01s
+SEEDED KWI-INCOMPLETE-TO-CANONICAL-V1
+SEEDED PAYOFF-IDENTITY-MINING-V1
+EDGE_CANDIDATE_LIFECYCLE_READY
