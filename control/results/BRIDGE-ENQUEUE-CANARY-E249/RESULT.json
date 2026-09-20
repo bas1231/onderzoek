@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/bridge_canary_e249.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-20T00:32:15.266322+00:00",
+  "hypothesis_id": "CONTROL-NO-SILENT-WAITING",
+  "source_commit": "0e51ffdd6a4cef9e400455d1a69b4efb61cd6b06",
+  "started_at": "2026-09-20T00:32:15.256320+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "549ba5e408f7b435c6482223229760fb5df469c121b1fdcfa7e121dcbd431d8c",
+  "task_class": "infrastructure",
+  "task_id": "BRIDGE-ENQUEUE-CANARY-E249"
+}
