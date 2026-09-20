@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/inspect_neg_risk_batch_e298.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-20T01:20:29.643272+00:00",
+  "hypothesis_id": "PAYOFF-IDENTITY-MINING-V1",
+  "source_commit": "d8c13c20fa29c0b95a98606396da845335ca605f",
+  "started_at": "2026-09-20T01:20:29.623372+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "236091478b90f3c936c4f1c609504c3de1128d74ddf592754c3384ad74a6421a",
+  "task_class": "research",
+  "task_id": "EDGE-HUNTER-NEG-RISK-BATCH-INSPECT-E298"
+}
