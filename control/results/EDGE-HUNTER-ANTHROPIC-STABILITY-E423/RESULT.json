@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/prospect_anthropic_stability_e423.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-20T03:25:45.025096+00:00",
+  "hypothesis_id": "PAYOFF-IDENTITY-MINING-V1",
+  "source_commit": "257a5829d3688eabed7200205a0230db45f35632",
+  "started_at": "2026-09-20T03:25:15.155980+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "2337994e5fbd118590cf813c0febbac754d2fa963b5efa7800eaccf8705b42d9",
+  "task_class": "research",
+  "task_id": "EDGE-HUNTER-ANTHROPIC-STABILITY-E423"
+}
