@@ -1,0 +1,94 @@
+{
+  "artifact": "knowledge/runs/kalshi-weather-index-lifecycle-e239.json",
+  "manifest_count": 37,
+  "cities": {
+    "chicago": {
+      "complete_events": 31,
+      "paired_incomplete_before_complete": 22,
+      "first_incomplete_lag_s": {
+        "count": 22,
+        "min": 79.07939599609375,
+        "median": 123.91174218750001,
+        "mean": 110.4334706698331,
+        "max": 139.1004580078125
+      },
+      "first_complete_lag_s": {
+        "count": 31,
+        "min": 319.07939599609375,
+        "median": 319.08672900390627,
+        "mean": 323.9141126905872,
+        "max": 379.0879289550781
+      },
+      "lead_s": {
+        "count": 22,
+        "min": 179.98335498046876,
+        "median": 195.17279443359377,
+        "mean": 208.65370252574576,
+        "max": 240.01697485351562
+      }
+    },
+    "miami": {
+      "complete_events": 32,
+      "paired_incomplete_before_complete": 25,
+      "first_incomplete_lag_s": {
+        "count": 25,
+        "min": 139.07929296875,
+        "median": 173.63239916992188,
+        "mean": 169.07286491210937,
+        "max": 199.1004580078125
+      },
+      "first_complete_lag_s": {
+        "count": 32,
+        "min": 319.07929296875,
+        "median": 319.0856560058594,
+        "mean": 321.88802457427977,
+        "max": 374.19108520507814
+      },
+      "lead_s": {
+        "count": 25,
+        "min": 119.98515405273437,
+        "median": 145.45552978515624,
+        "mean": 150.01336409179686,
+        "max": 180.00751391601563
+      }
+    },
+    "nyc": {
+      "complete_events": 36,
+      "paired_incomplete_before_complete": 27,
+      "first_incomplete_lag_s": {
+        "count": 27,
+        "min": 139.07929296875,
+        "median": 173.63239916992188,
+        "mean": 169.0733713288484,
+        "max": 199.1004580078125
+      },
+      "first_complete_lag_s": {
+        "count": 36,
+        "min": 353.6323991699219,
+        "median": 379.08451904296874,
+        "mean": 378.2440087551541,
+        "max": 379.1004580078125
+      },
+      "lead_s": {
+        "count": 27,
+        "min": 179.98335498046876,
+        "median": 205.44740698242188,
+        "mean": 210.01435585756656,
+        "max": 240.01842602539062
+      }
+    }
+  },
+  "commit": {
+    "rc": 0,
+    "stdout": "[main c09ba32] research(weather): reconstruct manifest lifecycle E239\n 1 file changed, 1705 insertions(+)\n create mode 100644 knowledge/runs/kalshi-weather-index-lifecycle-e239.json",
+    "stderr": ""
+  },
+  "push": {
+    "rc": 0,
+    "stdout": "",
+    "stderr": "To github.com:bas1231/onderzoek.git\n   dd13768..c09ba32  HEAD -> main"
+  },
+  "live_trading": false,
+  "paid_actions": false,
+  "wallet_actions": false
+}
