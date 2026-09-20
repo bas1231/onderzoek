@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/locate_proof_hunter_kwi_storage_e361.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-20T02:34:22.421789+00:00",
+  "hypothesis_id": "KWI-INCOMPLETE-TO-CANONICAL-V1",
+  "source_commit": "124887ed19bc79b2f9fb3abe067aa96d87b1f6cc",
+  "started_at": "2026-09-20T02:34:22.403003+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "af00cc06c04ab1371afc97632b988e34bb505aac33c259e73bfb0a7682364412",
+  "task_class": "research",
+  "task_id": "EDGE-HUNTER-KWI-STORAGE-LOCATE-E361"
+}
