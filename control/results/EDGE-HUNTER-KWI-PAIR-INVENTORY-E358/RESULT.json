@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/inventory_kwi_pairs_e358.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-20T02:32:37.358261+00:00",
+  "hypothesis_id": "KWI-INCOMPLETE-TO-CANONICAL-V1",
+  "source_commit": "7bfcb09fdb53212c208fc4b8003de8aaffa80f0a",
+  "started_at": "2026-09-20T02:32:37.335582+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "069177980e6a746822bee83c61cd889081f6ada3e6178b0e61d48594ed1b8416",
+  "task_class": "research",
+  "task_id": "EDGE-HUNTER-KWI-PAIR-INVENTORY-E358"
+}
