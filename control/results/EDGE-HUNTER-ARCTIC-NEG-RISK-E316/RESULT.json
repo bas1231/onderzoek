@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/capture_arctic_neg_risk_e316.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-20T01:32:32.450278+00:00",
+  "hypothesis_id": "PAYOFF-IDENTITY-MINING-V1",
+  "source_commit": "ebdffe8b1e1ca4145dad4a73230728afae7c14ed",
+  "started_at": "2026-09-20T01:32:32.195643+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "03d3c75d9f15d6ff67b27bc6bfd280c523adea02686eef6b99636d789e64e370",
+  "task_class": "research",
+  "task_id": "EDGE-HUNTER-ARCTIC-NEG-RISK-E316"
+}
