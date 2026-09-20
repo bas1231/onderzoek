@@ -1,0 +1,9 @@
+HANDSHAKE_STATUS HTTP/1.1 101 Switching Protocols
+TEXT_FRAMES 10
+PONG_TEXT 4
+EVENT_COUNT book 3
+EVENT_COUNT new_market 3
+EVENT_COUNT price_change 2
+PATH /home/leonh/prediction_research/knowledge/raw/market_data/polymarket_shadow_smoke/20260920T021521Z106981.jsonl
+AFTER_PREREG 2026-09-20T02:16:06.958168+00:00
+ASSET_STDLIB_WS_SMOKE_PASS

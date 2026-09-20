@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/smoke_asset_stdlib_ws_e342.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-20T02:16:06.964302+00:00",
+  "hypothesis_id": "ASSET-RANK-MAKER-HEDGE-V1",
+  "source_commit": "9de93ccdf6b333f1eac7271bd70cadd58f57ab97",
+  "started_at": "2026-09-20T02:15:21.591766+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "61d6d7e362132efb411a51a265d9c085e2427730817cf12015dd66064179456d",
+  "task_class": "research",
+  "task_id": "EDGE-HUNTER-ASSET-STDLIB-WS-E342"
+}
