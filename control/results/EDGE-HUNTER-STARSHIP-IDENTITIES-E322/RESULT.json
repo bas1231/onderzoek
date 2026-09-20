@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/test_starship_identities_e322.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-20T01:36:17.148193+00:00",
+  "hypothesis_id": "PAYOFF-IDENTITY-MINING-V1",
+  "source_commit": "d947266079cbf0a5ea19d1ba75a6c9b282072b6c",
+  "started_at": "2026-09-20T01:36:17.126178+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "da592a814c08334f8f770d8056540f08f6f9793eaf2da38b43e171c6d77d57ba",
+  "task_class": "research",
+  "task_id": "EDGE-HUNTER-STARSHIP-IDENTITIES-E322"
+}
