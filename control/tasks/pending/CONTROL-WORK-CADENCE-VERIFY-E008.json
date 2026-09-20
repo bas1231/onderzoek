@@ -1,0 +1,22 @@
+{
+  "build_authorization": {
+    "build_kind": "control_plane",
+    "capabilities": [
+      "read_repository",
+      "run_local_tests"
+    ],
+    "mode": "control_plane",
+    "objective": "Read-only verification that the four-hour work and one-hour cooldown gate is present at browser intake and executor claim, that the restarted services are active, and report current cadence and Git divergence before any research resumes"
+  },
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/verify_work_cadence_e008.py"
+  ],
+  "hypothesis_id": "CONTROL-WORK-CADENCE",
+  "live_trading": false,
+  "operation": "python",
+  "task_class": "infrastructure",
+  "task_id": "CONTROL-WORK-CADENCE-VERIFY-E008",
+  "timeout_seconds": 120,
+  "working_directory": "."
+}
