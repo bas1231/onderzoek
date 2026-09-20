@@ -1,0 +1,13 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/locate_proof_hunter_kwi_storage_e361.py"
+  ],
+  "hypothesis_id": "KWI-INCOMPLETE-TO-CANONICAL-V1",
+  "live_trading": false,
+  "operation": "python",
+  "task_class": "research",
+  "task_id": "EDGE-HUNTER-KWI-STORAGE-LOCATE-E361",
+  "timeout_seconds": 120,
+  "working_directory": "."
+}
