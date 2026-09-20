@@ -98,3 +98,22 @@ Voor candidate-specifieke bouw:
 
 Researchtaken zonder code-/infrastructuurbouw gebruiken geen
 `build_authorization` en blijven onder de gewone researchqueue-regels vallen.
+
+## Git sync guard
+
+De lokale executor mag een nieuwe pending task alleen claimen wanneer de
+checkout op branch `main` exact gelijk is aan de zojuist gefetchte
+`origin/main`.
+
+De guard in `control/git_sync_guard.py` trekt, merget en rebaset nooit
+automatisch. De volgende toestanden blokkeren fail-closed:
+- `LOCAL_BEHIND`: GitHub bevat commits die lokaal ontbreken;
+- `LOCAL_AHEAD`: lokaal bestaan nog commits die niet op GitHub staan;
+- `DIVERGED`: lokaal en remote zijn beide onafhankelijk vooruitgelopen;
+- `WRONG_BRANCH` of detached/unknown branch;
+- fetch-, ref- of probe-fouten.
+
+Bij blokkade blijft de pending task staan en mag de executor geen lifecycle-
+of repositorymutatie voor die task starten. Synchronisatie of herstel van de
+Git-toestand gebeurt bewust buiten de executor; de worker lost een divergentie
+nooit zelfstandig op.
