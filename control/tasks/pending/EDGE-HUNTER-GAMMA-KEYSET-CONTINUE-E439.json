@@ -1,0 +1,13 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/continue_gamma_keyset_e439.py"
+  ],
+  "hypothesis_id": "PAYOFF-IDENTITY-MINING-V1",
+  "live_trading": false,
+  "operation": "python",
+  "task_class": "research",
+  "task_id": "EDGE-HUNTER-GAMMA-KEYSET-CONTINUE-E439",
+  "timeout_seconds": 300,
+  "working_directory": "."
+}
