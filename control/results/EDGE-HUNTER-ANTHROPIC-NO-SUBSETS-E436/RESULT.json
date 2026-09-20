@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/search_anthropic_no_subsets_e436.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-20T05:09:50.113300+00:00",
+  "hypothesis_id": "PAYOFF-IDENTITY-MINING-V1",
+  "source_commit": "4d1f600475e5581873876ea25dc42553b34b73d2",
+  "started_at": "2026-09-20T05:09:49.500530+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "effbece4c84551065ed042f8ff27b9761b3aa65323b4363a7bb7d60e5bd3fef9",
+  "task_class": "research",
+  "task_id": "EDGE-HUNTER-ANTHROPIC-NO-SUBSETS-E436"
+}
