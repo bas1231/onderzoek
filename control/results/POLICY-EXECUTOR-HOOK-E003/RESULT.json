@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/place_order_test.py"
+  ],
+  "execution_provenance": {
+    "command_text": ".venv/bin/python control/jobs/place_order_test.py",
+    "executor_commit": "673102ca6d088ae4208b42f34893225a4f99cb14",
+    "policy_reason": ".venv/bin/python control/jobs/place_order_test.py matches blocked action order",
+    "policy_status": "BLOCKED_BY_POLICY"
+  },
+  "reason": ".venv/bin/python control/jobs/place_order_test.py matches blocked action order",
+  "status": "BLOCKED_BY_POLICY",
+  "task_id": "POLICY-EXECUTOR-HOOK-E003",
+  "timestamp": "2026-09-20T19:34:53.775869+00:00"
+}
