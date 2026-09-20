@@ -1,0 +1,25 @@
+{
+  "build_authorization": {
+    "build_kind": "control_plane",
+    "capabilities": [
+      "read_repository",
+      "write_repository",
+      "run_local_tests",
+      "restart_browser_bridge",
+      "schedule_executor_restart"
+    ],
+    "mode": "control_plane",
+    "objective": "Fix the discovered cooldown boundary state-overwrite bug, verify the already-written E006 browser and executor cadence gates, run exact 4h/1h boundary and corrupt-state tests, commit only after tests pass, activate the bridge gate, and schedule executor reload after this infrastructure task completes"
+  },
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/fix_work_cadence_boundary_e007.py"
+  ],
+  "hypothesis_id": "CONTROL-WORK-CADENCE",
+  "live_trading": false,
+  "operation": "python",
+  "task_class": "infrastructure",
+  "task_id": "CONTROL-WORK-CADENCE-FIX-E007",
+  "timeout_seconds": 180,
+  "working_directory": "."
+}
