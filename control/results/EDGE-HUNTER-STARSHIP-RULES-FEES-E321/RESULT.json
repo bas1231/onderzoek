@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/capture_starship_rules_fees_e321.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-20T01:35:26.428399+00:00",
+  "hypothesis_id": "PAYOFF-IDENTITY-MINING-V1",
+  "source_commit": "b22302cebfc915878360fa0a6414fde2ca01db35",
+  "started_at": "2026-09-20T01:35:26.203272+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "8952bfa7dd15c9d13507caf13c989c34ebf56948ac0695152c66f9d4044ea8c0",
+  "task_class": "research",
+  "task_id": "EDGE-HUNTER-STARSHIP-RULES-FEES-E321"
+}
