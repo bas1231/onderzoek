@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/trace_negrisk_conversion_fee_e427.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-20T03:31:14.278023+00:00",
+  "hypothesis_id": "PAYOFF-IDENTITY-MINING-V1",
+  "source_commit": "3b647b5f55e3fef62c53c8e93f58a6cb5d7c4336",
+  "started_at": "2026-09-20T03:31:13.047432+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "a5615290c515c61f879b1821afd644fc923404d77d3189ae94ca0902b27a0170",
+  "task_class": "research",
+  "task_id": "EDGE-HUNTER-NEGRISK-CONVERSION-FEE-E427"
+}

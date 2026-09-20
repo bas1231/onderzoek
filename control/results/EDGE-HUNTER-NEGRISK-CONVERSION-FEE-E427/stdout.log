@@ -1,0 +1,489 @@
+ADAPTER_SOURCE /home/leonh/prediction_research/knowledge/raw/reference/polymarket_negrisk_adapter/f76ace5aa16dad8e71412e4d2b3bd11f9caf28f846c6783dc39d5eb756413656-src__NegRiskAdapter.sol
+ADAPTER_MATCH_BEGIN 21 31
+LINE 21     error UnexpectedCollateralToken();
+LINE 22     error NoConvertiblePositions();
+LINE 23     error NotApprovedForAll();
+LINE 24 
+LINE 25     event MarketPrepared(bytes32 indexed marketId, address indexed oracle, uint256 feeBips, bytes data);
+LINE 26     event QuestionPrepared(bytes32 indexed marketId, bytes32 indexed questionId, uint256 index, bytes data);
+LINE 27     event OutcomeReported(bytes32 indexed marketId, bytes32 indexed questionId, bool outcome);
+LINE 28     event PositionSplit(address indexed stakeholder, bytes32 indexed conditionId, uint256 amount);
+LINE 29     event PositionsMerge(address indexed stakeholder, bytes32 indexed conditionId, uint256 amount);
+LINE 30     event PositionsConverted(
+LINE 31         address indexed stakeholder, bytes32 indexed marketId, uint256 indexed indexSet, uint256 amount
+ADAPTER_MATCH_END
+ADAPTER_MATCH_BEGIN 51 61
+LINE 51     WrappedCollateral public immutable wcol;
+LINE 52     address public immutable vault;
+LINE 53 
+LINE 54     address public constant NO_TOKEN_BURN_ADDRESS = address(bytes20(bytes32(keccak256("NO_TOKEN_BURN_ADDRESS"))));
+LINE 55     uint256 public constant FEE_DENOMINATOR = 10_000;
+LINE 56 
+LINE 57     /*//////////////////////////////////////////////////////////////
+LINE 58                               CONSTRUCTOR
+LINE 59     //////////////////////////////////////////////////////////////*/
+LINE 60 
+LINE 61     /// @param _ctf        - ConditionalTokens address
+ADAPTER_MATCH_END
+ADAPTER_MATCH_BEGIN 241 251
+LINE 241     /// @param _indexSet - the set of positions to convert, expressed as an index set where the least significant bit is
+LINE 242     /// the first question (index zero)
+LINE 243     /// @param _amount   - the amount of tokens to convert
+LINE 244     function convertPositions(bytes32 _marketId, uint256 _indexSet, uint256 _amount) external {
+LINE 245         MarketData md = getMarketData(_marketId);
+LINE 246         uint256 questionCount = md.questionCount();
+LINE 247 
+LINE 248         if (md.oracle() == address(0)) revert MarketNotPrepared();
+LINE 249         if (questionCount <= 1) revert NoConvertiblePositions();
+LINE 250         if (_indexSet == 0) revert InvalidIndexSet();
+LINE 251         if ((_indexSet >> questionCount) > 0) revert InvalidIndexSet();
+ADAPTER_MATCH_END
+ADAPTER_MATCH_BEGIN 326 336
+LINE 326                 ""
+LINE 327             );
+LINE 328         }
+LINE 329 
+LINE 330         uint256 feeAmount = (_amount * md.feeBips()) / FEE_DENOMINATOR;
+LINE 331         uint256 amountOut = _amount - feeAmount;
+LINE 332 
+LINE 333         if (noPositionIds.length > 1) {
+LINE 334             // collateral out is always proportional to the number of no positions minus 1
+LINE 335             uint256 multiplier = noPositionIds.length - 1;
+LINE 336             // transfer collateral fees to vault
+ADAPTER_MATCH_END
+ADAPTER_MATCH_BEGIN 362 372
+LINE 362                              PREPARE MARKET
+LINE 363     //////////////////////////////////////////////////////////////*/
+LINE 364 
+LINE 365     /// @notice Prepare a multi-outcome market
+LINE 366     /// @param _feeBips  - the fee for the market, out of 10_000
+LINE 367     /// @param _metadata     - metadata for the market
+LINE 368     /// @return marketId - the marketId
+LINE 369     function prepareMarket(uint256 _feeBips, bytes calldata _metadata) external returns (bytes32) {
+LINE 370         bytes32 marketId = _prepareMarket(_feeBips, _metadata);
+LINE 371 
+LINE 372         emit MarketPrepared(marketId, msg.sender, _feeBips, _metadata);
+ADAPTER_MATCH_END
+ADAPTER_MATCH_BEGIN 365 375
+LINE 365     /// @notice Prepare a multi-outcome market
+LINE 366     /// @param _feeBips  - the fee for the market, out of 10_000
+LINE 367     /// @param _metadata     - metadata for the market
+LINE 368     /// @return marketId - the marketId
+LINE 369     function prepareMarket(uint256 _feeBips, bytes calldata _metadata) external returns (bytes32) {
+LINE 370         bytes32 marketId = _prepareMarket(_feeBips, _metadata);
+LINE 371 
+LINE 372         emit MarketPrepared(marketId, msg.sender, _feeBips, _metadata);
+LINE 373 
+LINE 374         return marketId;
+LINE 375     }
+ADAPTER_MATCH_END
+ADAPTER_MATCH_BEGIN 366 376
+LINE 366     /// @param _feeBips  - the fee for the market, out of 10_000
+LINE 367     /// @param _metadata     - metadata for the market
+LINE 368     /// @return marketId - the marketId
+LINE 369     function prepareMarket(uint256 _feeBips, bytes calldata _metadata) external returns (bytes32) {
+LINE 370         bytes32 marketId = _prepareMarket(_feeBips, _metadata);
+LINE 371 
+LINE 372         emit MarketPrepared(marketId, msg.sender, _feeBips, _metadata);
+LINE 373 
+LINE 374         return marketId;
+LINE 375     }
+LINE 376 
+ADAPTER_MATCH_END
+ADAPTER_MATCH_BEGIN 368 378
+LINE 368     /// @return marketId - the marketId
+LINE 369     function prepareMarket(uint256 _feeBips, bytes calldata _metadata) external returns (bytes32) {
+LINE 370         bytes32 marketId = _prepareMarket(_feeBips, _metadata);
+LINE 371 
+LINE 372         emit MarketPrepared(marketId, msg.sender, _feeBips, _metadata);
+LINE 373 
+LINE 374         return marketId;
+LINE 375     }
+LINE 376 
+LINE 377     /*//////////////////////////////////////////////////////////////
+LINE 378                             PREPARE QUESTION
+ADAPTER_MATCH_END
+EVENT_SOURCE /home/leonh/.local/state/prediction-research/raw/polymarket_gamma_events/7a44b62cbf5380ad3a6cc6975792d03e7ef2e4243121a9b5449ab3c5a9de0f27.json
+EVENT_ID 548858
+NEG_RISK_MARKET_ID 0x4bcf7372694cb3ed70e31369f7602502cf80c6194e348bcba13c20b0a8936400
+EVENT_FIELD event.negRisk VALUE True
+EVENT_FIELD event.negRiskMarketID VALUE 0x4bcf7372694cb3ed70e31369f7602502cf80c6194e348bcba13c20b0a8936400
+EVENT_FIELD event.markets[0].makerBaseFee VALUE 1000
+EVENT_FIELD event.markets[0].takerBaseFee VALUE 1000
+EVENT_FIELD event.markets[0].negRisk VALUE True
+EVENT_FIELD event.markets[0].negRiskMarketID VALUE 0x4bcf7372694cb3ed70e31369f7602502cf80c6194e348bcba13c20b0a8936400
+EVENT_FIELD event.markets[0].negRiskRequestID VALUE 0x37713cb6310f65d0a7d40f8bb58e3aac10974b0784a14d35631597aa42662afa
+EVENT_FIELD event.markets[0].negRiskOther VALUE False
+EVENT_FIELD event.markets[0].feesEnabled VALUE True
+EVENT_FIELD event.markets[0].feeType VALUE finance_prices_fees
+EVENT_FIELD event.markets[0].feeSchedule VALUE {'exponent': 1, 'rate': 0.04, 'takerOnly': True, 'rebateRate': 0.25}
+EVENT_FIELD event.markets[1].makerBaseFee VALUE 1000
+EVENT_FIELD event.markets[1].takerBaseFee VALUE 1000
+EVENT_FIELD event.markets[1].negRisk VALUE True
+EVENT_FIELD event.markets[1].negRiskMarketID VALUE 0x4bcf7372694cb3ed70e31369f7602502cf80c6194e348bcba13c20b0a8936400
+EVENT_FIELD event.markets[1].negRiskRequestID VALUE 0x1d4c12d11ce6f5d79d622ab78f758e123f029ee6cac418b5348f2255f6189934
+EVENT_FIELD event.markets[1].negRiskOther VALUE False
+EVENT_FIELD event.markets[1].feesEnabled VALUE True
+EVENT_FIELD event.markets[1].feeType VALUE finance_prices_fees
+EVENT_FIELD event.markets[1].feeSchedule VALUE {'exponent': 1, 'rate': 0.04, 'takerOnly': True, 'rebateRate': 0.25}
+EVENT_FIELD event.markets[2].makerBaseFee VALUE 1000
+EVENT_FIELD event.markets[2].takerBaseFee VALUE 1000
+EVENT_FIELD event.markets[2].negRisk VALUE True
+EVENT_FIELD event.markets[2].negRiskMarketID VALUE 0x4bcf7372694cb3ed70e31369f7602502cf80c6194e348bcba13c20b0a8936400
+EVENT_FIELD event.markets[2].negRiskRequestID VALUE 0xf6c06546553d8ad762222241bb3aba4006a6f3116b38ba1a79f8e7c0bc555406
+EVENT_FIELD event.markets[2].negRiskOther VALUE False
+EVENT_FIELD event.markets[2].feesEnabled VALUE True
+EVENT_FIELD event.markets[2].feeType VALUE finance_prices_fees
+EVENT_FIELD event.markets[2].feeSchedule VALUE {'exponent': 1, 'rate': 0.04, 'takerOnly': True, 'rebateRate': 0.25}
+EVENT_FIELD event.markets[3].makerBaseFee VALUE 1000
+EVENT_FIELD event.markets[3].takerBaseFee VALUE 1000
+EVENT_FIELD event.markets[3].negRisk VALUE True
+EVENT_FIELD event.markets[3].negRiskMarketID VALUE 0x4bcf7372694cb3ed70e31369f7602502cf80c6194e348bcba13c20b0a8936400
+EVENT_FIELD event.markets[3].negRiskRequestID VALUE 0x53f57b5d4db63b12c6189c445f89908ec2510b098a69afee9b7ee45b32c87060
+EVENT_FIELD event.markets[3].negRiskOther VALUE False
+EVENT_FIELD event.markets[3].feesEnabled VALUE True
+EVENT_FIELD event.markets[3].feeType VALUE finance_prices_fees
+EVENT_FIELD event.markets[3].feeSchedule VALUE {'exponent': 1, 'rate': 0.04, 'takerOnly': True, 'rebateRate': 0.25}
+EVENT_FIELD event.markets[4].makerBaseFee VALUE 1000
+EVENT_FIELD event.markets[4].takerBaseFee VALUE 1000
+EVENT_FIELD event.markets[4].negRisk VALUE True
+EVENT_FIELD event.markets[4].negRiskMarketID VALUE 0x4bcf7372694cb3ed70e31369f7602502cf80c6194e348bcba13c20b0a8936400
+EVENT_FIELD event.markets[4].negRiskRequestID VALUE 0x08260b6aa50d3cf2c5e500d40071a1299bdfbe45f7f1b8196cbc9780b87b40b9
+EVENT_FIELD event.markets[4].negRiskOther VALUE False
+EVENT_FIELD event.markets[4].feesEnabled VALUE True
+EVENT_FIELD event.markets[4].feeType VALUE finance_prices_fees
+EVENT_FIELD event.markets[4].feeSchedule VALUE {'exponent': 1, 'rate': 0.04, 'takerOnly': True, 'rebateRate': 0.25}
+EVENT_FIELD event.markets[5].makerBaseFee VALUE 1000
+EVENT_FIELD event.markets[5].takerBaseFee VALUE 1000
+EVENT_FIELD event.markets[5].negRisk VALUE True
+EVENT_FIELD event.markets[5].negRiskMarketID VALUE 0x4bcf7372694cb3ed70e31369f7602502cf80c6194e348bcba13c20b0a8936400
+EVENT_FIELD event.markets[5].negRiskRequestID VALUE 0x4ca9e8ef190236a81fcd277ba9cd89327c04fe17cdf416b0d76af200ab7b61cc
+EVENT_FIELD event.markets[5].negRiskOther VALUE False
+EVENT_FIELD event.markets[5].feesEnabled VALUE True
+EVENT_FIELD event.markets[5].feeType VALUE finance_prices_fees
+EVENT_FIELD event.markets[5].feeSchedule VALUE {'exponent': 1, 'rate': 0.04, 'takerOnly': True, 'rebateRate': 0.25}
+EVENT_FIELD event.markets[6].makerBaseFee VALUE 1000
+EVENT_FIELD event.markets[6].takerBaseFee VALUE 1000
+EVENT_FIELD event.markets[6].negRisk VALUE True
+EVENT_FIELD event.markets[6].negRiskMarketID VALUE 0x4bcf7372694cb3ed70e31369f7602502cf80c6194e348bcba13c20b0a8936400
+EVENT_FIELD event.markets[6].negRiskRequestID VALUE 0xbf3dc8b44e56892fb152d2d8ecac19bd357f1a0131db41b352b41800f28e0810
+EVENT_FIELD event.markets[6].negRiskOther VALUE False
+EVENT_FIELD event.markets[6].feesEnabled VALUE True
+EVENT_FIELD event.markets[6].feeType VALUE finance_prices_fees
+EVENT_FIELD event.markets[6].feeSchedule VALUE {'exponent': 1, 'rate': 0.04, 'takerOnly': True, 'rebateRate': 0.25}
+EVENT_FIELD event.markets[7].makerBaseFee VALUE 1000
+EVENT_FIELD event.markets[7].takerBaseFee VALUE 1000
+EVENT_FIELD event.markets[7].negRisk VALUE True
+EVENT_FIELD event.markets[7].negRiskMarketID VALUE 0x4bcf7372694cb3ed70e31369f7602502cf80c6194e348bcba13c20b0a8936400
+EVENT_FIELD event.markets[7].negRiskRequestID VALUE 0x0292051ef5af8c444a31af51cb87c67d66eeb57f16fe56e1cee0056635e53a2f
+EVENT_FIELD event.markets[7].negRiskOther VALUE False
+EVENT_FIELD event.markets[7].feesEnabled VALUE True
+EVENT_FIELD event.markets[7].feeType VALUE finance_prices_fees
+EVENT_FIELD event.markets[7].feeSchedule VALUE {'exponent': 1, 'rate': 0.04, 'takerOnly': True, 'rebateRate': 0.25}
+EVENT_FIELD event.markets[8].makerBaseFee VALUE 1000
+EVENT_FIELD event.markets[8].takerBaseFee VALUE 1000
+EVENT_FIELD event.markets[8].negRisk VALUE True
+EVENT_FIELD event.markets[8].negRiskMarketID VALUE 0x4bcf7372694cb3ed70e31369f7602502cf80c6194e348bcba13c20b0a8936400
+EVENT_FIELD event.markets[8].negRiskRequestID VALUE 0x77781cae763be7b7285c7520e00c0276a502ccceb7f03e7c480d8ceedc250889
+EVENT_FIELD event.markets[8].negRiskOther VALUE False
+EVENT_FIELD event.markets[8].feesEnabled VALUE True
+EVENT_FIELD event.markets[8].feeType VALUE finance_prices_fees
+EVENT_FIELD event.markets[8].feeSchedule VALUE {'exponent': 1, 'rate': 0.04, 'takerOnly': True, 'rebateRate': 0.25}
+EVENT_FIELD event.markets[9].makerBaseFee VALUE 1000
+EVENT_FIELD event.markets[9].takerBaseFee VALUE 1000
+EVENT_FIELD event.markets[9].negRisk VALUE True
+EVENT_FIELD event.markets[9].negRiskMarketID VALUE 0x4bcf7372694cb3ed70e31369f7602502cf80c6194e348bcba13c20b0a8936400
+EVENT_FIELD event.markets[9].negRiskRequestID VALUE 0x384535d665d264374556ce774f7d34d4d8562c84c1ed777de5ee4a782c1e083f
+EVENT_FIELD event.markets[9].negRiskOther VALUE False
+EVENT_FIELD event.markets[9].feesEnabled VALUE True
+EVENT_FIELD event.markets[9].feeType VALUE finance_prices_fees
+EVENT_FIELD event.markets[9].feeSchedule VALUE {'exponent': 1, 'rate': 0.04, 'takerOnly': True, 'rebateRate': 0.25}
+EVENT_FIELD event.enableNegRisk VALUE True
+EVENT_FIELD event.negRiskAugmented VALUE False
+ARCHIVE_REFERENCE 03d5169ade2351364cc09ea12593bf660d90df640bc8f500509690c945f2e4b5-src__test__NegRiskOperator.t.sol LINE 73     function test_prepareMarket(uint256 _feeBips, bytes memory _data) public {
+ARCHIVE_REFERENCE 03d5169ade2351364cc09ea12593bf660d90df640bc8f500509690c945f2e4b5-src__test__NegRiskOperator.t.sol LINE 74         _feeBips = bound(_feeBips, 0, 10_000);
+ARCHIVE_REFERENCE 03d5169ade2351364cc09ea12593bf660d90df640bc8f500509690c945f2e4b5-src__test__NegRiskOperator.t.sol LINE 77         emit MarketPrepared(NegRiskIdLib.getMarketId(address(nrOperator), _feeBips, _data), _feeBips, _data);
+ARCHIVE_REFERENCE 03d5169ade2351364cc09ea12593bf660d90df640bc8f500509690c945f2e4b5-src__test__NegRiskOperator.t.sol LINE 80         bytes32 marketId = nrOperator.prepareMarket(_feeBips, _data);
+ARCHIVE_REFERENCE 03d5169ade2351364cc09ea12593bf660d90df640bc8f500509690c945f2e4b5-src__test__NegRiskOperator.t.sol LINE 82         assertEq(marketId, NegRiskIdLib.getMarketId(address(nrOperator), _feeBips, _data));
+ARCHIVE_REFERENCE 03d5169ade2351364cc09ea12593bf660d90df640bc8f500509690c945f2e4b5-src__test__NegRiskOperator.t.sol LINE 83         assertEq(nrAdapter.getFeeBips(marketId), _feeBips);
+ARCHIVE_REFERENCE 03d5169ade2351364cc09ea12593bf660d90df640bc8f500509690c945f2e4b5-src__test__NegRiskOperator.t.sol LINE 94         uint256 feeBips = 0;
+ARCHIVE_REFERENCE 03d5169ade2351364cc09ea12593bf660d90df640bc8f500509690c945f2e4b5-src__test__NegRiskOperator.t.sol LINE 97         bytes32 marketId = nrOperator.prepareMarket(feeBips, data);
+ARCHIVE_REFERENCE 03d5169ade2351364cc09ea12593bf660d90df640bc8f500509690c945f2e4b5-src__test__NegRiskOperator.t.sol LINE 110         uint256 feeBips = 0;
+ARCHIVE_REFERENCE 03d5169ade2351364cc09ea12593bf660d90df640bc8f500509690c945f2e4b5-src__test__NegRiskOperator.t.sol LINE 113         bytes32 marketId1 = nrOperator.prepareMarket(feeBips, "market1");
+ARCHIVE_REFERENCE 03d5169ade2351364cc09ea12593bf660d90df640bc8f500509690c945f2e4b5-src__test__NegRiskOperator.t.sol LINE 119         bytes32 marketId2 = nrOperator.prepareMarket(feeBips, "market2");
+ARCHIVE_REFERENCE 03d5169ade2351364cc09ea12593bf660d90df640bc8f500509690c945f2e4b5-src__test__NegRiskOperator.t.sol LINE 132         uint256 feeBips = 0;
+ARCHIVE_REFERENCE 03d5169ade2351364cc09ea12593bf660d90df640bc8f500509690c945f2e4b5-src__test__NegRiskOperator.t.sol LINE 135         bytes32 marketId = nrOperator.prepareMarket(feeBips, data);
+ARCHIVE_REFERENCE 03d5169ade2351364cc09ea12593bf660d90df640bc8f500509690c945f2e4b5-src__test__NegRiskOperator.t.sol LINE 193         uint256 feeBips = 0;
+ARCHIVE_REFERENCE 03d5169ade2351364cc09ea12593bf660d90df640bc8f500509690c945f2e4b5-src__test__NegRiskOperator.t.sol LINE 196         bytes32 marketId = nrOperator.prepareMarket(feeBips, data);
+ARCHIVE_REFERENCE 03d5169ade2351364cc09ea12593bf660d90df640bc8f500509690c945f2e4b5-src__test__NegRiskOperator.t.sol LINE 215         uint256 feeBips = 0;
+ARCHIVE_REFERENCE 03d5169ade2351364cc09ea12593bf660d90df640bc8f500509690c945f2e4b5-src__test__NegRiskOperator.t.sol LINE 218         bytes32 marketId = nrOperator.prepareMarket(feeBips, data);
+ARCHIVE_REFERENCE 03d5169ade2351364cc09ea12593bf660d90df640bc8f500509690c945f2e4b5-src__test__NegRiskOperator.t.sol LINE 240         uint256 feeBips = 0;
+ARCHIVE_REFERENCE 03d5169ade2351364cc09ea12593bf660d90df640bc8f500509690c945f2e4b5-src__test__NegRiskOperator.t.sol LINE 243         bytes32 marketId = nrOperator.prepareMarket(feeBips, data);
+ARCHIVE_REFERENCE 03d5169ade2351364cc09ea12593bf660d90df640bc8f500509690c945f2e4b5-src__test__NegRiskOperator.t.sol LINE 256         uint256 feeBips = 0;
+ARCHIVE_REFERENCE 03d5169ade2351364cc09ea12593bf660d90df640bc8f500509690c945f2e4b5-src__test__NegRiskOperator.t.sol LINE 259         bytes32 marketId = nrOperator.prepareMarket(feeBips, data);
+ARCHIVE_REFERENCE 03d5169ade2351364cc09ea12593bf660d90df640bc8f500509690c945f2e4b5-src__test__NegRiskOperator.t.sol LINE 335         uint256 feeBips = 0;
+ARCHIVE_REFERENCE 03d5169ade2351364cc09ea12593bf660d90df640bc8f500509690c945f2e4b5-src__test__NegRiskOperator.t.sol LINE 338         bytes32 marketId = nrOperator.prepareMarket(feeBips, data);
+ARCHIVE_REFERENCE 04e673c62ac441e3a103ffcf89b281b5f3534dfbc0dfa48244cdd156789cc9c6-src__NegRiskOperator.sol LINE 26     event MarketPrepared(bytes32 indexed marketId, uint256 feeBips, bytes data);
+ARCHIVE_REFERENCE 04e673c62ac441e3a103ffcf89b281b5f3534dfbc0dfa48244cdd156789cc9c6-src__NegRiskOperator.sol LINE 95     /// @param _feeBips  - the market's fee rate out of 10_000
+ARCHIVE_REFERENCE 04e673c62ac441e3a103ffcf89b281b5f3534dfbc0dfa48244cdd156789cc9c6-src__NegRiskOperator.sol LINE 98     function prepareMarket(uint256 _feeBips, bytes calldata _data) external onlyAdmin returns (bytes32) {
+ARCHIVE_REFERENCE 04e673c62ac441e3a103ffcf89b281b5f3534dfbc0dfa48244cdd156789cc9c6-src__NegRiskOperator.sol LINE 99         bytes32 marketId = nrAdapter.prepareMarket(_feeBips, _data);
+ARCHIVE_REFERENCE 04e673c62ac441e3a103ffcf89b281b5f3534dfbc0dfa48244cdd156789cc9c6-src__NegRiskOperator.sol LINE 100         emit MarketPrepared(marketId, _feeBips, _data);
+ARCHIVE_REFERENCE 11af4edc034239ea0de68b55281a54b7fa752daff0470b93859b19aa66bdf630-src__interfaces__INegRiskAdapter.sol LINE 8     error FeeBipsOutOfBounds();
+ARCHIVE_REFERENCE 11af4edc034239ea0de68b55281a54b7fa752daff0470b93859b19aa66bdf630-src__interfaces__INegRiskAdapter.sol LINE 21     event MarketPrepared(bytes32 indexed marketId, address indexed oracle, uint256 feeBips, bytes data);
+ARCHIVE_REFERENCE 11af4edc034239ea0de68b55281a54b7fa752daff0470b93859b19aa66bdf630-src__interfaces__INegRiskAdapter.sol LINE 44     function getFeeBips(bytes32 _marketId) external view returns (uint256);
+ARCHIVE_REFERENCE 11af4edc034239ea0de68b55281a54b7fa752daff0470b93859b19aa66bdf630-src__interfaces__INegRiskAdapter.sol LINE 45     function getMarketData(bytes32 _marketId) external view returns (MarketData);
+ARCHIVE_REFERENCE 11af4edc034239ea0de68b55281a54b7fa752daff0470b93859b19aa66bdf630-src__interfaces__INegRiskAdapter.sol LINE 58     function prepareMarket(uint256 _feeBips, bytes memory _metadata) external returns (bytes32);
+ARCHIVE_REFERENCE 1b0911ac932685248a7e8c8ff80d2e07e9d6b8817316e6a56b72e45e60578369-src__test__NegRiskAdapter__PrepareMarket.t.sol LINE 8     function test_prepareMarket(uint256 _feeBips, bytes memory _data) public {
+ARCHIVE_REFERENCE 1b0911ac932685248a7e8c8ff80d2e07e9d6b8817316e6a56b72e45e60578369-src__test__NegRiskAdapter__PrepareMarket.t.sol LINE 9         _feeBips = bound(_feeBips, 0, FEE_BIPS_MAX);
+ARCHIVE_REFERENCE 1b0911ac932685248a7e8c8ff80d2e07e9d6b8817316e6a56b72e45e60578369-src__test__NegRiskAdapter__PrepareMarket.t.sol LINE 11         bytes32 expectedMarketId = NegRiskIdLib.getMarketId(oracle, _feeBips, _data);
+ARCHIVE_REFERENCE 1b0911ac932685248a7e8c8ff80d2e07e9d6b8817316e6a56b72e45e60578369-src__test__NegRiskAdapter__PrepareMarket.t.sol LINE 14         emit MarketPrepared(expectedMarketId, oracle, _feeBips, _data);
+ARCHIVE_REFERENCE 1b0911ac932685248a7e8c8ff80d2e07e9d6b8817316e6a56b72e45e60578369-src__test__NegRiskAdapter__PrepareMarket.t.sol LINE 17         bytes32 marketId = nrAdapter.prepareMarket(_feeBips, _data);
+ARCHIVE_REFERENCE 1b0911ac932685248a7e8c8ff80d2e07e9d6b8817316e6a56b72e45e60578369-src__test__NegRiskAdapter__PrepareMarket.t.sol LINE 20         assertEq(nrAdapter.getFeeBips(marketId), _feeBips);
+ARCHIVE_REFERENCE 1b0911ac932685248a7e8c8ff80d2e07e9d6b8817316e6a56b72e45e60578369-src__test__NegRiskAdapter__PrepareMarket.t.sol LINE 27     function test_revert_prepareMarketTwice(bytes memory _data, uint256 _feeBips) public {
+ARCHIVE_REFERENCE 1b0911ac932685248a7e8c8ff80d2e07e9d6b8817316e6a56b72e45e60578369-src__test__NegRiskAdapter__PrepareMarket.t.sol LINE 28         _feeBips = bound(_feeBips, 0, FEE_BIPS_MAX);
+ARCHIVE_REFERENCE 1b0911ac932685248a7e8c8ff80d2e07e9d6b8817316e6a56b72e45e60578369-src__test__NegRiskAdapter__PrepareMarket.t.sol LINE 31         nrAdapter.prepareMarket(_feeBips, _data);
+ARCHIVE_REFERENCE 1b0911ac932685248a7e8c8ff80d2e07e9d6b8817316e6a56b72e45e60578369-src__test__NegRiskAdapter__PrepareMarket.t.sol LINE 34         nrAdapter.prepareMarket(_feeBips, _data);
+ARCHIVE_REFERENCE 1b0911ac932685248a7e8c8ff80d2e07e9d6b8817316e6a56b72e45e60578369-src__test__NegRiskAdapter__PrepareMarket.t.sol LINE 37     function test_revert_feeBipsOutOfBounds(bytes memory _data, uint256 _feeBips) public {
+ARCHIVE_REFERENCE 1b0911ac932685248a7e8c8ff80d2e07e9d6b8817316e6a56b72e45e60578369-src__test__NegRiskAdapter__PrepareMarket.t.sol LINE 38         _feeBips = bound(_feeBips, FEE_BIPS_MAX + 1, type(uint256).max);
+ARCHIVE_REFERENCE 1b0911ac932685248a7e8c8ff80d2e07e9d6b8817316e6a56b72e45e60578369-src__test__NegRiskAdapter__PrepareMarket.t.sol LINE 40         vm.expectRevert(FeeBipsOutOfBounds.selector);
+ARCHIVE_REFERENCE 1b0911ac932685248a7e8c8ff80d2e07e9d6b8817316e6a56b72e45e60578369-src__test__NegRiskAdapter__PrepareMarket.t.sol LINE 42         nrAdapter.prepareMarket(_feeBips, _data);
+ARCHIVE_REFERENCE 20260920T032723Z-e424-summary.json LINE 1139         "        MarketData md = getMarketData(_marketId);"
+ARCHIVE_REFERENCE 20260920T032723Z-e424-summary.json LINE 1150         "        MarketData md = getMarketData(_marketId);",
+ARCHIVE_REFERENCE 20260920T032723Z-e424-summary.json LINE 1667         "    event MarketPrepared(bytes32 indexed marketId, address indexed oracle, uint256 feeBips, bytes data);"
+ARCHIVE_REFERENCE 20260920T032723Z-e424-summary.json LINE 1735         "    function getMarketData(bytes32 _marketId) external view returns (MarketData);",
+ARCHIVE_REFERENCE 20260920T032723Z-e424-summary.json LINE 1771         "    function prepareMarket(uint256 _feeBips, bytes memory _metadata) external returns (bytes32);",
+ARCHIVE_REFERENCE 20260920T032723Z-e424-summary.json LINE 1895         "        uint256 feeBips = 0;"
+ARCHIVE_REFERENCE 20260920T032723Z-e424-summary.json LINE 1955         "        uint256 feeBips = 0;"
+ARCHIVE_REFERENCE 20260920T032723Z-e424-summary.json LINE 2015         "        uint256 feeBips = 0;"
+ARCHIVE_REFERENCE 20260920T032723Z-e424-summary.json LINE 2075         "        uint256 feeBips = 0;"
+ARCHIVE_REFERENCE 20260920T032723Z-e424-summary.json LINE 2135         "        uint256 feeBips = 0;"
+ARCHIVE_REFERENCE 20260920T032723Z-e424-summary.json LINE 2195         "        uint256 feeBips = 0;"
+ARCHIVE_REFERENCE 20260920T032723Z-e424-summary.json LINE 2255         "        uint256 feeBips = 0;"
+ARCHIVE_REFERENCE 20260920T032723Z-e424-summary.json LINE 2315         "        uint256 feeBips = 0;"
+ARCHIVE_REFERENCE 20260920T032723Z-e424-summary.json LINE 2769         "    function test_convertPositions(uint256 _questionCount, uint256 _feeBips, uint256 _indexSet, uint128 _amount)",
+ARCHIVE_REFERENCE 20260920T032723Z-e424-summary.json LINE 2779         "        _before(_questionCount, _feeBips, _indexSet, _amount);",
+ARCHIVE_REFERENCE 20260920T032723Z-e424-summary.json LINE 2819         "        uint256 _feeBips,"
+ARCHIVE_REFERENCE 20260920T032723Z-e424-summary.json LINE 2827         "        _before(_questionCount, _feeBips, _indexSet, _amount);",
+ARCHIVE_REFERENCE 20260920T032723Z-e424-summary.json LINE 2865         "    function test_convertPositions_allIndices(uint256 _questionCount, uint256 _feeBips, uint128 _amount) public {",
+ARCHIVE_REFERENCE 20260920T032723Z-e424-summary.json LINE 2875         "        _before(_questionCount, _feeBips, _indexSet, _amount);",
+ARCHIVE_REFERENCE 20260920T032723Z-e424-summary.json LINE 5339         "        uint256 feeBips = 0;"
+ARCHIVE_REFERENCE 20260920T032723Z-e424-summary.json LINE 6296         "        MarketData md = getMarketData(_marketId);"
+ARCHIVE_REFERENCE 20260920T032723Z-e424-summary.json LINE 6309         "        MarketData md = getMarketData(_marketId);"
+ARCHIVE_REFERENCE 20260920T032723Z-e424-summary.json LINE 6321         "        MarketData md = getMarketData(_marketId);",
+ARCHIVE_REFERENCE 20260920T032723Z-e424-summary.json LINE 6334         "        MarketData md = getMarketData(_marketId);",
+ARCHIVE_REFERENCE 20260920T032723Z-e424-summary.json LINE 6630         "    function prepareMarket(uint256 _feeBips, bytes memory _metadata) external returns (bytes32);",
+ARCHIVE_REFERENCE 20260920T032723Z-e424-summary.json LINE 6738         "        uint256 feeBips = 0;"
+ARCHIVE_REFERENCE 20260920T032723Z-e424-summary.json LINE 6790         "        uint256 feeBips = 0;"
+ARCHIVE_REFERENCE 20260920T032723Z-e424-summary.json LINE 6803         "        uint256 feeBips = 0;"
+ARCHIVE_REFERENCE 20260920T032723Z-e424-summary.json LINE 6881         "        uint256 feeBips = 0;"
+ARCHIVE_REFERENCE 20260920T032723Z-e424-summary.json LINE 6894         "        uint256 feeBips = 0;"
+ARCHIVE_REFERENCE 20260920T032723Z-e424-summary.json LINE 6972         "        uint256 feeBips = 0;"
+ARCHIVE_REFERENCE 20260920T032723Z-e424-summary.json LINE 6985         "        uint256 feeBips = 0;"
+ARCHIVE_REFERENCE 20260920T032723Z-e424-summary.json LINE 7063         "        uint256 feeBips = 0;"
+ARCHIVE_REFERENCE 20260920T032723Z-e424-summary.json LINE 7076         "        uint256 feeBips = 0;"
+ARCHIVE_REFERENCE 20260920T032723Z-e424-summary.json LINE 7154         "        uint256 feeBips = 0;"
+ARCHIVE_REFERENCE 20260920T032723Z-e424-summary.json LINE 7167         "        uint256 feeBips = 0;"
+ARCHIVE_REFERENCE 20260920T032723Z-e424-summary.json LINE 7245         "        uint256 feeBips = 0;"
+ARCHIVE_REFERENCE 20260920T032723Z-e424-summary.json LINE 7258         "        uint256 feeBips = 0;"
+ARCHIVE_REFERENCE 20260920T032723Z-e424-summary.json LINE 7336         "        uint256 feeBips = 0;"
+ARCHIVE_REFERENCE 20260920T032723Z-e424-summary.json LINE 7349         "        uint256 feeBips = 0;"
+ARCHIVE_REFERENCE 20260920T032723Z-e424-summary.json LINE 7438         "    function test_convertPositions(uint256 _questionCount, uint256 _feeBips, uint256 _indexSet, uint128 _amount)",
+ARCHIVE_REFERENCE 20260920T032723Z-e424-summary.json LINE 7451         "    function test_convertPositions(uint256 _questionCount, uint256 _feeBips, uint256 _indexSet, uint128 _amount)",
+ARCHIVE_REFERENCE 20260920T032723Z-e424-summary.json LINE 7462         "        _before(_questionCount, _feeBips, _indexSet, _amount);",
+ARCHIVE_REFERENCE 20260920T032723Z-e424-summary.json LINE 7531         "        uint256 _feeBips,"
+ARCHIVE_REFERENCE 20260920T032723Z-e424-summary.json LINE 7544         "        uint256 _feeBips,"
+ARCHIVE_REFERENCE 20260920T032723Z-e424-summary.json LINE 7553         "        _before(_questionCount, _feeBips, _indexSet, _amount);",
+ARCHIVE_REFERENCE 20260920T032723Z-e424-summary.json LINE 7620         "    function test_convertPositions_allIndices(uint256 _questionCount, uint256 _feeBips, uint128 _amount) public {",
+ARCHIVE_REFERENCE 20260920T032723Z-e424-summary.json LINE 7633         "    function test_convertPositions_allIndices(uint256 _questionCount, uint256 _feeBips, uint128 _amount) public {",
+ARCHIVE_REFERENCE 20260920T032723Z-e424-summary.json LINE 7644         "        _before(_questionCount, _feeBips, _indexSet, _amount);",
+ARCHIVE_REFERENCE 20260920T032723Z-e424-summary.json LINE 8844         "        uint256 feeBips = 0;"
+ARCHIVE_REFERENCE 22aa98f38eecae9c1661e410e35897e1a37729900a35c54067d17772728ae117-src__test__NegRiskAdapter__RedeemPositions.t.sol LINE 15         uint256 feeBips = 0;
+ARCHIVE_REFERENCE 22aa98f38eecae9c1661e410e35897e1a37729900a35c54067d17772728ae117-src__test__NegRiskAdapter__RedeemPositions.t.sol LINE 21             marketId = nrAdapter.prepareMarket(feeBips, data);
+ARCHIVE_REFERENCE 25ee8fbd59f235f8dae299335cd60ada348ddc841e228883dc8e6665dc6c1372-docs__NegRiskOperator.md LINE 34 uint256 _feeBips
+ARCHIVE_REFERENCE 265ebb42a31682307c0cb09d4165dac43e3c67343687c9f364527f280a730b9e-src__test__NegRiskAdapter__ConvertPositions.t.sol LINE 11     function _before(uint256 _questionCount, uint256 _feeBips, uint256 _indexSet, uint256 _amount) internal {
+ARCHIVE_REFERENCE 265ebb42a31682307c0cb09d4165dac43e3c67343687c9f364527f280a730b9e-src__test__NegRiskAdapter__ConvertPositions.t.sol LINE 16         marketId = nrAdapter.prepareMarket(_feeBips, data);
+ARCHIVE_REFERENCE 265ebb42a31682307c0cb09d4165dac43e3c67343687c9f364527f280a730b9e-src__test__NegRiskAdapter__ConvertPositions.t.sol LINE 55     function _after(uint256 _questionCount, uint256 _feeBips, uint256 _indexSet, uint256 _amount) internal {
+ARCHIVE_REFERENCE 265ebb42a31682307c0cb09d4165dac43e3c67343687c9f364527f280a730b9e-src__test__NegRiskAdapter__ConvertPositions.t.sol LINE 58             uint256 feeAmount = (_amount * _feeBips) / FEE_BIPS_MAX;
+ARCHIVE_REFERENCE 265ebb42a31682307c0cb09d4165dac43e3c67343687c9f364527f280a730b9e-src__test__NegRiskAdapter__ConvertPositions.t.sol LINE 108     function test_convertPositions(uint256 _questionCount, uint256 _feeBips, uint256 _indexSet, uint128 _amount)
+ARCHIVE_REFERENCE 265ebb42a31682307c0cb09d4165dac43e3c67343687c9f364527f280a730b9e-src__test__NegRiskAdapter__ConvertPositions.t.sol LINE 113         _feeBips = bound(_feeBips, 0, FEE_BIPS_MAX);
+ARCHIVE_REFERENCE 265ebb42a31682307c0cb09d4165dac43e3c67343687c9f364527f280a730b9e-src__test__NegRiskAdapter__ConvertPositions.t.sol LINE 117         _before(_questionCount, _feeBips, _indexSet, _amount);
+ARCHIVE_REFERENCE 265ebb42a31682307c0cb09d4165dac43e3c67343687c9f364527f280a730b9e-src__test__NegRiskAdapter__ConvertPositions.t.sol LINE 129         _after(_questionCount, _feeBips, _indexSet, _amount);
+ARCHIVE_REFERENCE 265ebb42a31682307c0cb09d4165dac43e3c67343687c9f364527f280a730b9e-src__test__NegRiskAdapter__ConvertPositions.t.sol LINE 134         uint256 _feeBips,
+ARCHIVE_REFERENCE 265ebb42a31682307c0cb09d4165dac43e3c67343687c9f364527f280a730b9e-src__test__NegRiskAdapter__ConvertPositions.t.sol LINE 140         _feeBips = bound(_feeBips, 0, FEE_BIPS_MAX);
+ARCHIVE_REFERENCE 265ebb42a31682307c0cb09d4165dac43e3c67343687c9f364527f280a730b9e-src__test__NegRiskAdapter__ConvertPositions.t.sol LINE 145         _before(_questionCount, _feeBips, _indexSet, _amount);
+ARCHIVE_REFERENCE 265ebb42a31682307c0cb09d4165dac43e3c67343687c9f364527f280a730b9e-src__test__NegRiskAdapter__ConvertPositions.t.sol LINE 157         _after(_questionCount, _feeBips, _indexSet, _amount);
+ARCHIVE_REFERENCE 265ebb42a31682307c0cb09d4165dac43e3c67343687c9f364527f280a730b9e-src__test__NegRiskAdapter__ConvertPositions.t.sol LINE 160     function test_convertPositions_allIndices(uint256 _questionCount, uint256 _feeBips, uint128 _amount) public {
+ARCHIVE_REFERENCE 265ebb42a31682307c0cb09d4165dac43e3c67343687c9f364527f280a730b9e-src__test__NegRiskAdapter__ConvertPositions.t.sol LINE 163         _feeBips = bound(_feeBips, 0, FEE_BIPS_MAX);
+ARCHIVE_REFERENCE 265ebb42a31682307c0cb09d4165dac43e3c67343687c9f364527f280a730b9e-src__test__NegRiskAdapter__ConvertPositions.t.sol LINE 167         _before(_questionCount, _feeBips, _indexSet, _amount);
+ARCHIVE_REFERENCE 265ebb42a31682307c0cb09d4165dac43e3c67343687c9f364527f280a730b9e-src__test__NegRiskAdapter__ConvertPositions.t.sol LINE 179         _after(_questionCount, _feeBips, _indexSet, _amount);
+ARCHIVE_REFERENCE 265ebb42a31682307c0cb09d4165dac43e3c67343687c9f364527f280a730b9e-src__test__NegRiskAdapter__ConvertPositions.t.sol LINE 230         uint256 feeBips = 10_000;
+ARCHIVE_REFERENCE 265ebb42a31682307c0cb09d4165dac43e3c67343687c9f364527f280a730b9e-src__test__NegRiskAdapter__ConvertPositions.t.sol LINE 236         _before(questionCount, feeBips, indexSet, _amount);
+ARCHIVE_REFERENCE 3e6d5f5c7ac77f90d22084c6f87a2ef6560774876fda80a5d07c7389e0681024-src__test__NegRiskAdapter__SplitPosition.t.sol LINE 13         uint256 feeBips = 0;
+ARCHIVE_REFERENCE 3e6d5f5c7ac77f90d22084c6f87a2ef6560774876fda80a5d07c7389e0681024-src__test__NegRiskAdapter__SplitPosition.t.sol LINE 18         marketId = nrAdapter.prepareMarket(feeBips, data);
+ARCHIVE_REFERENCE 88349f43aa940c07f36197755207dd80867ebbf6950c5d66c995ccaa1aef5431-src__libraries__NegRiskIdLib.sol LINE 6 /// @notice MarketIds are the keccak256 hash of the oracle, feeBips, and metadata, with the final 8 bits set to 0
+ARCHIVE_REFERENCE 88349f43aa940c07f36197755207dd80867ebbf6950c5d66c995ccaa1aef5431-src__libraries__NegRiskIdLib.sol LINE 13     /// @notice Returns the MarketId for a given oracle, feeBips, and metadata
+ARCHIVE_REFERENCE 88349f43aa940c07f36197755207dd80867ebbf6950c5d66c995ccaa1aef5431-src__libraries__NegRiskIdLib.sol LINE 15     /// @param _feeBips  - the feeBips, out of 10_000
+ARCHIVE_REFERENCE 88349f43aa940c07f36197755207dd80867ebbf6950c5d66c995ccaa1aef5431-src__libraries__NegRiskIdLib.sol LINE 18     function getMarketId(address _oracle, uint256 _feeBips, bytes memory _metadata) internal pure returns (bytes32) {
+ARCHIVE_REFERENCE 88349f43aa940c07f36197755207dd80867ebbf6950c5d66c995ccaa1aef5431-src__libraries__NegRiskIdLib.sol LINE 19         return keccak256(abi.encode(_oracle, _feeBips, _metadata)) & MASK;
+ARCHIVE_REFERENCE 98bf9269665d48a3ab8a7ed307680f212b62ee124dcf74c40f6709805636c577-src__snapshots__NegRiskAdapter.snap.sol LINE 29         uint256 feeBips = 1_00;
+ARCHIVE_REFERENCE 98bf9269665d48a3ab8a7ed307680f212b62ee124dcf74c40f6709805636c577-src__snapshots__NegRiskAdapter.snap.sol LINE 35         nrAdapter.prepareMarket(feeBips, data);
+ARCHIVE_REFERENCE 98bf9269665d48a3ab8a7ed307680f212b62ee124dcf74c40f6709805636c577-src__snapshots__NegRiskAdapter.snap.sol LINE 40         uint256 feeBips = 1_00;
+ARCHIVE_REFERENCE 98bf9269665d48a3ab8a7ed307680f212b62ee124dcf74c40f6709805636c577-src__snapshots__NegRiskAdapter.snap.sol LINE 44         bytes32 marketId = nrAdapter.prepareMarket(feeBips, data);
+ARCHIVE_REFERENCE 98bf9269665d48a3ab8a7ed307680f212b62ee124dcf74c40f6709805636c577-src__snapshots__NegRiskAdapter.snap.sol LINE 61         uint256 feeBips = 0;
+ARCHIVE_REFERENCE 98bf9269665d48a3ab8a7ed307680f212b62ee124dcf74c40f6709805636c577-src__snapshots__NegRiskAdapter.snap.sol LINE 66         bytes32 marketId = nrAdapter.prepareMarket(feeBips, data);
+ARCHIVE_REFERENCE 98bf9269665d48a3ab8a7ed307680f212b62ee124dcf74c40f6709805636c577-src__snapshots__NegRiskAdapter.snap.sol LINE 86         uint256 feeBips = 0;
+ARCHIVE_REFERENCE 98bf9269665d48a3ab8a7ed307680f212b62ee124dcf74c40f6709805636c577-src__snapshots__NegRiskAdapter.snap.sol LINE 91         bytes32 marketId = nrAdapter.prepareMarket(feeBips, data);
+ARCHIVE_REFERENCE 98bf9269665d48a3ab8a7ed307680f212b62ee124dcf74c40f6709805636c577-src__snapshots__NegRiskAdapter.snap.sol LINE 111         uint256 feeBips = 0;
+ARCHIVE_REFERENCE 98bf9269665d48a3ab8a7ed307680f212b62ee124dcf74c40f6709805636c577-src__snapshots__NegRiskAdapter.snap.sol LINE 116         bytes32 marketId = nrAdapter.prepareMarket(feeBips, data);
+ARCHIVE_REFERENCE 98bf9269665d48a3ab8a7ed307680f212b62ee124dcf74c40f6709805636c577-src__snapshots__NegRiskAdapter.snap.sol LINE 145         uint256 feeBips = 0;
+ARCHIVE_REFERENCE 98bf9269665d48a3ab8a7ed307680f212b62ee124dcf74c40f6709805636c577-src__snapshots__NegRiskAdapter.snap.sol LINE 150         bytes32 marketId = nrAdapter.prepareMarket(feeBips, data);
+ARCHIVE_REFERENCE 98bf9269665d48a3ab8a7ed307680f212b62ee124dcf74c40f6709805636c577-src__snapshots__NegRiskAdapter.snap.sol LINE 179         uint256 feeBips = 0;
+ARCHIVE_REFERENCE 98bf9269665d48a3ab8a7ed307680f212b62ee124dcf74c40f6709805636c577-src__snapshots__NegRiskAdapter.snap.sol LINE 184         bytes32 marketId = nrAdapter.prepareMarket(feeBips, data);
+ARCHIVE_REFERENCE 98bf9269665d48a3ab8a7ed307680f212b62ee124dcf74c40f6709805636c577-src__snapshots__NegRiskAdapter.snap.sol LINE 213         uint256 feeBips = 0;
+ARCHIVE_REFERENCE 98bf9269665d48a3ab8a7ed307680f212b62ee124dcf74c40f6709805636c577-src__snapshots__NegRiskAdapter.snap.sol LINE 218         bytes32 marketId = nrAdapter.prepareMarket(feeBips, data);
+ARCHIVE_REFERENCE 98bf9269665d48a3ab8a7ed307680f212b62ee124dcf74c40f6709805636c577-src__snapshots__NegRiskAdapter.snap.sol LINE 246         uint256 feeBips = 0;
+ARCHIVE_REFERENCE 98bf9269665d48a3ab8a7ed307680f212b62ee124dcf74c40f6709805636c577-src__snapshots__NegRiskAdapter.snap.sol LINE 251         bytes32 marketId = nrAdapter.prepareMarket(feeBips, data);
+ARCHIVE_REFERENCE 98bf9269665d48a3ab8a7ed307680f212b62ee124dcf74c40f6709805636c577-src__snapshots__NegRiskAdapter.snap.sol LINE 280         uint256 feeBips = 0;
+ARCHIVE_REFERENCE 98bf9269665d48a3ab8a7ed307680f212b62ee124dcf74c40f6709805636c577-src__snapshots__NegRiskAdapter.snap.sol LINE 285         bytes32 marketId = nrAdapter.prepareMarket(feeBips, data);
+ARCHIVE_REFERENCE afd74d5e7f23bdde755d3f4f15ebeff24e73fafba8acd7cf33817f2b0ae6a207-src__test__NegRiskAdapter__ReportOutcome.t.sol LINE 14         uint256 feeBips = 0;
+ARCHIVE_REFERENCE afd74d5e7f23bdde755d3f4f15ebeff24e73fafba8acd7cf33817f2b0ae6a207-src__test__NegRiskAdapter__ReportOutcome.t.sol LINE 18         marketId = nrAdapter.prepareMarket(feeBips, data);
+ARCHIVE_REFERENCE cababdc9007816f6ddf09850fa5da19f46d87088ee29dd01d9408c18176d5b73-src__test__NegRiskAdapter__PrepareQuestion.t.sol LINE 9         uint256 feeBips = 0;
+ARCHIVE_REFERENCE cababdc9007816f6ddf09850fa5da19f46d87088ee29dd01d9408c18176d5b73-src__test__NegRiskAdapter__PrepareQuestion.t.sol LINE 12         bytes32 marketId = nrAdapter.prepareMarket(feeBips, "market");
+ARCHIVE_REFERENCE cababdc9007816f6ddf09850fa5da19f46d87088ee29dd01d9408c18176d5b73-src__test__NegRiskAdapter__PrepareQuestion.t.sol LINE 40         uint256 feeBips = 0;
+ARCHIVE_REFERENCE cababdc9007816f6ddf09850fa5da19f46d87088ee29dd01d9408c18176d5b73-src__test__NegRiskAdapter__PrepareQuestion.t.sol LINE 43         bytes32 marketId = nrAdapter.prepareMarket(feeBips, "market");
+ARCHIVE_REFERENCE cababdc9007816f6ddf09850fa5da19f46d87088ee29dd01d9408c18176d5b73-src__test__NegRiskAdapter__PrepareQuestion.t.sol LINE 70         uint256 feeBips = 0;
+ARCHIVE_REFERENCE cababdc9007816f6ddf09850fa5da19f46d87088ee29dd01d9408c18176d5b73-src__test__NegRiskAdapter__PrepareQuestion.t.sol LINE 74         bytes32 marketId = nrAdapter.prepareMarket(feeBips, data);
+ARCHIVE_REFERENCE cc8b97e53e72900cf4b4b1f9c5d943e9437a52f72efe9c3b9c70abbe45e7ea8d-src__test__NegRiskAdapter__MergePositions.t.sol LINE 16         uint256 feeBips = 0;
+ARCHIVE_REFERENCE cc8b97e53e72900cf4b4b1f9c5d943e9437a52f72efe9c3b9c70abbe45e7ea8d-src__test__NegRiskAdapter__MergePositions.t.sol LINE 20         marketId = nrAdapter.prepareMarket(feeBips, data);
+ARCHIVE_REFERENCE dd6c4d63773e7323f9b90fd5cd9716d59aab34efb907b56f8843f368a3a06ecd-docs__NegRiskAdapter.md LINE 99 uint256 _feeBips
+ARCHIVE_REFERENCE e425-all-yes-collateral-reachability.json LINE 65         "uint256 _feeBips"
+ARCHIVE_REFERENCE e425-all-yes-collateral-reachability.json LINE 478         "        MarketData md = getMarketData(_marketId);",
+ARCHIVE_REFERENCE e425-all-yes-collateral-reachability.json LINE 558         "        uint256 feeAmount = (_amount * md.feeBips()) / FEE_DENOMINATOR;",
+ARCHIVE_REFERENCE e425-all-yes-collateral-reachability.json LINE 617         "    function getFeeBips(bytes32 _marketId) external view returns (uint256);",
+ARCHIVE_REFERENCE e425-all-yes-collateral-reachability.json LINE 618         "    function getMarketData(bytes32 _marketId) external view returns (MarketData);",
+ARCHIVE_REFERENCE e425-all-yes-collateral-reachability.json LINE 639         "    function getFeeBips(bytes32 _marketId) external view returns (uint256);",
+ARCHIVE_REFERENCE e425-all-yes-collateral-reachability.json LINE 640         "    function getMarketData(bytes32 _marketId) external view returns (MarketData);",
+ARCHIVE_REFERENCE e425-all-yes-collateral-reachability.json LINE 653         "    function prepareMarket(uint256 _feeBips, bytes memory _metadata) external returns (bytes32);",
+ARCHIVE_REFERENCE e425-all-yes-collateral-reachability.json LINE 671         "    function getMarketData(bytes32 _marketId) external view returns (MarketData);",
+ARCHIVE_REFERENCE e425-all-yes-collateral-reachability.json LINE 684         "    function prepareMarket(uint256 _feeBips, bytes memory _metadata) external returns (bytes32);",
+ARCHIVE_REFERENCE e425-all-yes-collateral-reachability.json LINE 706         "    function prepareMarket(uint256 _feeBips, bytes memory _metadata) external returns (bytes32);",
+ARCHIVE_REFERENCE e425-all-yes-collateral-reachability.json LINE 727         "    function prepareMarket(uint256 _feeBips, bytes memory _metadata) external returns (bytes32);",
+ARCHIVE_REFERENCE e425-all-yes-collateral-reachability.json LINE 815         "    function _after(uint256 _questionCount, uint256 _feeBips, uint256 _indexSet, uint256 _amount) internal {",
+ARCHIVE_REFERENCE e425-all-yes-collateral-reachability.json LINE 818         "            uint256 feeAmount = (_amount * _feeBips) / FEE_BIPS_MAX;",
+ARCHIVE_REFERENCE e425-all-yes-collateral-reachability.json LINE 906         "    function test_convertPositions(uint256 _questionCount, uint256 _feeBips, uint256 _indexSet, uint128 _amount)",
+ARCHIVE_REFERENCE e425-all-yes-collateral-reachability.json LINE 911         "        _feeBips = bound(_feeBips, 0, FEE_BIPS_MAX);",
+ARCHIVE_REFERENCE e425-all-yes-collateral-reachability.json LINE 915         "        _before(_questionCount, _feeBips, _indexSet, _amount);",
+ARCHIVE_REFERENCE e425-all-yes-collateral-reachability.json LINE 942         "        _after(_questionCount, _feeBips, _indexSet, _amount);",
+ARCHIVE_REFERENCE e425-all-yes-collateral-reachability.json LINE 947         "        uint256 _feeBips,",
+ARCHIVE_REFERENCE e425-all-yes-collateral-reachability.json LINE 953         "        _feeBips = bound(_feeBips, 0, FEE_BIPS_MAX);",
+ARCHIVE_REFERENCE e425-all-yes-collateral-reachability.json LINE 975         "        _after(_questionCount, _feeBips, _indexSet, _amount);",
+ARCHIVE_REFERENCE e425-all-yes-collateral-reachability.json LINE 978         "    function test_convertPositions_allIndices(uint256 _questionCount, uint256 _feeBips, uint128 _amount) public {",
+ARCHIVE_REFERENCE e425-all-yes-collateral-reachability.json LINE 981         "        _feeBips = bound(_feeBips, 0, FEE_BIPS_MAX);",
+ARCHIVE_REFERENCE e425-all-yes-collateral-reachability.json LINE 985         "        _before(_questionCount, _feeBips, _indexSet, _amount);",
+ARCHIVE_REFERENCE e425-all-yes-collateral-reachability.json LINE 1008         "        _after(_questionCount, _feeBips, _indexSet, _amount);",
+ARCHIVE_REFERENCE e425-all-yes-collateral-reachability.json LINE 1151         "        uint256 feeBips = 10_000;",
+ARCHIVE_REFERENCE e425-all-yes-collateral-reachability.json LINE 1177         "        uint256 feeBips = 10_000;",
+ARCHIVE_REFERENCE e425-all-yes-collateral-reachability.json LINE 1183         "        _before(questionCount, feeBips, indexSet, _amount);",
+ARCHIVE_REFERENCE e425-all-yes-collateral-reachability.json LINE 1199         "        _before(questionCount, feeBips, indexSet, _amount);",
+ARCHIVE_REFERENCE e425-all-yes-collateral-reachability.json LINE 1217         "        _before(questionCount, feeBips, indexSet, _amount);",
+ARCHIVE_REFERENCE f76ace5aa16dad8e71412e4d2b3bd11f9caf28f846c6783dc39d5eb756413656-src__NegRiskAdapter.sol LINE 25     event MarketPrepared(bytes32 indexed marketId, address indexed oracle, uint256 feeBips, bytes data);
+ARCHIVE_REFERENCE f76ace5aa16dad8e71412e4d2b3bd11f9caf28f846c6783dc39d5eb756413656-src__NegRiskAdapter.sol LINE 245         MarketData md = getMarketData(_marketId);
+ARCHIVE_REFERENCE f76ace5aa16dad8e71412e4d2b3bd11f9caf28f846c6783dc39d5eb756413656-src__NegRiskAdapter.sol LINE 330         uint256 feeAmount = (_amount * md.feeBips()) / FEE_DENOMINATOR;
+ARCHIVE_REFERENCE f76ace5aa16dad8e71412e4d2b3bd11f9caf28f846c6783dc39d5eb756413656-src__NegRiskAdapter.sol LINE 366     /// @param _feeBips  - the fee for the market, out of 10_000
+ARCHIVE_REFERENCE f76ace5aa16dad8e71412e4d2b3bd11f9caf28f846c6783dc39d5eb756413656-src__NegRiskAdapter.sol LINE 369     function prepareMarket(uint256 _feeBips, bytes calldata _metadata) external returns (bytes32) {
+ARCHIVE_REFERENCE f76ace5aa16dad8e71412e4d2b3bd11f9caf28f846c6783dc39d5eb756413656-src__NegRiskAdapter.sol LINE 370         bytes32 marketId = _prepareMarket(_feeBips, _metadata);
+ARCHIVE_REFERENCE f76ace5aa16dad8e71412e4d2b3bd11f9caf28f846c6783dc39d5eb756413656-src__NegRiskAdapter.sol LINE 372         emit MarketPrepared(marketId, msg.sender, _feeBips, _metadata);
+MARKET_DATA_PATH_COUNT 4
+MARKET_DATA_PATH docs/MarketDataManager.md
+MARKET_DATA_PATH src/modules/MarketDataManager.sol
+MARKET_DATA_PATH src/test/MarketData.t.sol
+MARKET_DATA_PATH src/types/MarketData.sol
+FETCHED_REFERENCE docs/MarketDataManager.md LINE 1 # MarketDataManager
+FETCHED_REFERENCE docs/MarketDataManager.md LINE 3 Module managing market state. Each market's state is encapsulated in a single bytes32 `MarketData` value.
+FETCHED_REFERENCE docs/MarketDataManager.md LINE 7 Stores the initial marketData setting the oracle to `msg.sender` and the feeBips to `_feeBips`.
+FETCHED_REFERENCE docs/MarketDataManager.md LINE 14 uint256 _feeBips
+FETCHED_REFERENCE src/modules/MarketDataManager.sol LINE 4 import {MarketData, MarketDataLib} from "src/types/MarketData.sol";
+FETCHED_REFERENCE src/modules/MarketDataManager.sol LINE 13     error FeeBipsOutOfBounds();
+FETCHED_REFERENCE src/modules/MarketDataManager.sol LINE 20     mapping(bytes32 _marketId => MarketData) internal marketData;
+FETCHED_REFERENCE src/modules/MarketDataManager.sol LINE 26     function getMarketData(bytes32 _marketId) public view returns (MarketData) {
+FETCHED_REFERENCE src/modules/MarketDataManager.sol LINE 27         return marketData[_marketId];
+FETCHED_REFERENCE src/modules/MarketDataManager.sol LINE 31         return marketData[_marketId].oracle();
+FETCHED_REFERENCE src/modules/MarketDataManager.sol LINE 35         return marketData[_marketId].questionCount();
+FETCHED_REFERENCE src/modules/MarketDataManager.sol LINE 39         return marketData[_marketId].determined();
+FETCHED_REFERENCE src/modules/MarketDataManager.sol LINE 43         return marketData[_marketId].result();
+FETCHED_REFERENCE src/modules/MarketDataManager.sol LINE 46     function getFeeBips(bytes32 _marketId) external view returns (uint256) {
+FETCHED_REFERENCE src/modules/MarketDataManager.sol LINE 47         return marketData[_marketId].feeBips();
+FETCHED_REFERENCE src/modules/MarketDataManager.sol LINE 55     /// @notice The market id depends on the oracle address, feeBips, and market metadata
+FETCHED_REFERENCE src/modules/MarketDataManager.sol LINE 56     /// @param _feeBips  - feeBips out of 10_000
+FETCHED_REFERENCE src/modules/MarketDataManager.sol LINE 59     function _prepareMarket(uint256 _feeBips, bytes memory _metadata) internal returns (bytes32 marketId) {
+FETCHED_REFERENCE src/modules/MarketDataManager.sol LINE 61         marketId = NegRiskIdLib.getMarketId(oracle, _feeBips, _metadata);
+FETCHED_REFERENCE src/modules/MarketDataManager.sol LINE 62         MarketData md = marketData[marketId];
+FETCHED_REFERENCE src/modules/MarketDataManager.sol LINE 65         if (_feeBips > 10_000) revert FeeBipsOutOfBounds();
+FETCHED_REFERENCE src/modules/MarketDataManager.sol LINE 67         marketData[marketId] = MarketDataLib.initialize(oracle, _feeBips);
+FETCHED_REFERENCE src/modules/MarketDataManager.sol LINE 75         MarketData md = marketData[_marketId];
+FETCHED_REFERENCE src/modules/MarketDataManager.sol LINE 76         address oracle = marketData[_marketId].oracle();
+FETCHED_REFERENCE src/modules/MarketDataManager.sol LINE 83         marketData[_marketId] = md.incrementQuestionCount();
+FETCHED_REFERENCE src/modules/MarketDataManager.sol LINE 96         MarketData data = marketData[marketId];
+FETCHED_REFERENCE src/modules/MarketDataManager.sol LINE 105             marketData[marketId] = data.determine(questionIndex);
+FETCHED_REFERENCE src/test/MarketData.t.sol LINE 5 import {MarketData, MarketDataLib} from "src/types/MarketData.sol";
+FETCHED_REFERENCE src/test/MarketData.t.sol LINE 7 contract MarketDataTest is TestHelper {
+FETCHED_REFERENCE src/test/MarketData.t.sol LINE 8     using MarketDataLib for MarketData;
+FETCHED_REFERENCE src/test/MarketData.t.sol LINE 10     function test_initialize(address _oracle, uint256 _feeBips) public {
+FETCHED_REFERENCE src/test/MarketData.t.sol LINE 11         uint256 feeBips = bound(_feeBips, 0, 10_000);
+FETCHED_REFERENCE src/test/MarketData.t.sol LINE 12         MarketData md = MarketDataLib.initialize(_oracle, feeBips);
+FETCHED_REFERENCE src/test/MarketData.t.sol LINE 15         assertEq(md.feeBips(), feeBips);
+FETCHED_REFERENCE src/test/MarketData.t.sol LINE 20         MarketData md = MarketData.wrap(bytes32(0));
+FETCHED_REFERENCE src/test/MarketData.t.sol LINE 27     function test_initializeAndDetermine(address _oracle, uint256 _feeBips, uint8 _result) public {
+FETCHED_REFERENCE src/test/MarketData.t.sol LINE 28         uint256 feeBips = bound(_feeBips, 0, 10_000);
+FETCHED_REFERENCE src/test/MarketData.t.sol LINE 30         MarketData md = MarketDataLib.initialize(_oracle, feeBips);
+FETCHED_REFERENCE src/test/MarketData.t.sol LINE 36         assertEq(md.feeBips(), feeBips);
+FETCHED_REFERENCE src/test/MarketData.t.sol LINE 43         MarketData md = MarketData.wrap(d);
+FETCHED_REFERENCE src/test/MarketData.t.sol LINE 54     function test_integration(address _oracle, uint256 _feeBips, uint8 _result, uint8 _questionCount) public {
+FETCHED_REFERENCE src/test/MarketData.t.sol LINE 57         uint256 feeBips = bound(_feeBips, 0, 10_000);
+FETCHED_REFERENCE src/test/MarketData.t.sol LINE 59         MarketData md = MarketDataLib.initialize(_oracle, feeBips);
+FETCHED_REFERENCE src/test/MarketData.t.sol LINE 61         bytes32 d = MarketData.unwrap(md);
+FETCHED_REFERENCE src/test/MarketData.t.sol LINE 64         md = MarketData.wrap(d);
+FETCHED_REFERENCE src/test/MarketData.t.sol LINE 70         assertEq(md.feeBips(), feeBips);
+FETCHED_REFERENCE src/test/MarketData.t.sol LINE 78         assertEq(md.feeBips(), feeBips);
+FETCHED_REFERENCE src/test/MarketData.t.sol LINE 86         assertEq(md.feeBips(), feeBips);
+FETCHED_REFERENCE src/types/MarketData.sol LINE 4 /// @notice the MarketData user-defined type, a zero-cost abstraction over bytes32
+FETCHED_REFERENCE src/types/MarketData.sol LINE 5 type MarketData is bytes32;
+FETCHED_REFERENCE src/types/MarketData.sol LINE 10 // md[3:4] = feeBips
+FETCHED_REFERENCE src/types/MarketData.sol LINE 13 using MarketDataLib for MarketData global;
+FETCHED_REFERENCE src/types/MarketData.sol LINE 15 /// @title MarketDataLib
+FETCHED_REFERENCE src/types/MarketData.sol LINE 16 /// @notice Library for dealing with the MarketData user-defined bytes32 type
+FETCHED_REFERENCE src/types/MarketData.sol LINE 18 library MarketDataLib {
+FETCHED_REFERENCE src/types/MarketData.sol LINE 24     /// @notice extracts the oracle address from MarketData
+FETCHED_REFERENCE src/types/MarketData.sol LINE 26     function oracle(MarketData _data) internal pure returns (address) {
+FETCHED_REFERENCE src/types/MarketData.sol LINE 27         return address(uint160(uint256(MarketData.unwrap(_data))));
+FETCHED_REFERENCE src/types/MarketData.sol LINE 30     /// @notice extracts the questionCount from MarketData
+FETCHED_REFERENCE src/types/MarketData.sol LINE 32     function questionCount(MarketData _data) internal pure returns (uint256) {
+FETCHED_REFERENCE src/types/MarketData.sol LINE 33         return uint256(uint8(MarketData.unwrap(_data)[0]));
+FETCHED_REFERENCE src/types/MarketData.sol LINE 38     /// @return marketData - the modified MarketData
+FETCHED_REFERENCE src/types/MarketData.sol LINE 39     function incrementQuestionCount(MarketData _data) internal pure returns (MarketData) {
+FETCHED_REFERENCE src/types/MarketData.sol LINE 40         bytes32 data = MarketData.unwrap(_data);
+FETCHED_REFERENCE src/types/MarketData.sol LINE 42         return MarketData.wrap(data);
+FETCHED_REFERENCE src/types/MarketData.sol LINE 45     /// @notice extracts the determined flag from MarketData
+FETCHED_REFERENCE src/types/MarketData.sol LINE 47     function determined(MarketData _data) internal pure returns (bool) {
+FETCHED_REFERENCE src/types/MarketData.sol LINE 48         return MarketData.unwrap(_data)[1] == 0x00 ? false : true;
+FETCHED_REFERENCE src/types/MarketData.sol LINE 53     /// @return marketData - the modified MarketData
+FETCHED_REFERENCE src/types/MarketData.sol LINE 54     function determine(MarketData _data, uint256 _result) internal pure returns (MarketData) {
+FETCHED_REFERENCE src/types/MarketData.sol LINE 55         bytes32 data = MarketData.unwrap(_data);
+FETCHED_REFERENCE src/types/MarketData.sol LINE 61         return MarketData.wrap(data);
+FETCHED_REFERENCE src/types/MarketData.sol LINE 64     /// @notice initializes the MarketData type
+FETCHED_REFERENCE src/types/MarketData.sol LINE 66     /// @param _feeBips - the feeBips, out of 10_000
+FETCHED_REFERENCE src/types/MarketData.sol LINE 67     /// @return marketData - the initialized MarketData
+FETCHED_REFERENCE src/types/MarketData.sol LINE 68     function initialize(address _oracle, uint256 _feeBips) internal pure returns (MarketData) {
+FETCHED_REFERENCE src/types/MarketData.sol LINE 70         data |= bytes32(bytes2(uint16(_feeBips))) >> 24;
+FETCHED_REFERENCE src/types/MarketData.sol LINE 72         return MarketData.wrap(data);
+FETCHED_REFERENCE src/types/MarketData.sol LINE 75     /// @notice extracts the result from MarketData, i.e., the index of the question that was resolved true
+FETCHED_REFERENCE src/types/MarketData.sol LINE 78     function result(MarketData _data) internal pure returns (uint256) {
+FETCHED_REFERENCE src/types/MarketData.sol LINE 79         return uint256(uint8(MarketData.unwrap(_data)[2]));
+FETCHED_REFERENCE src/types/MarketData.sol LINE 82     /// @notice extracts the feeBips from MarketData, out of 10_000
+FETCHED_REFERENCE src/types/MarketData.sol LINE 83     /// @return feeBips - the feeBips
+FETCHED_REFERENCE src/types/MarketData.sol LINE 84     function feeBips(MarketData _data) internal pure returns (uint256) {
+FETCHED_REFERENCE src/types/MarketData.sol LINE 85         return uint256(uint16(bytes2(MarketData.unwrap(_data) << 24)));
+FETCHED_MARKET_DATA_FILES 4
+CONVERSION_FORMULA_PRESENT True
+GAMMA_FEE_RELATED_FIELD_COUNT 94
+TRACE_NEGRISK_CONVERSION_FEE_E427_PASS
