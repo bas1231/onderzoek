@@ -9,6 +9,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 from validator import Task
+from policy_check import check_action
 from jobs.lifecycle_ledger import (
     load_record as lifecycle_load,
     update as lifecycle_update,
@@ -156,6 +157,46 @@ def process_task(task_file: Path) -> str:
     stderr = ""
     exit_code = None
     status = "failed"
+
+    command_text = " ".join(task.command)
+
+    policy_result = check_action(command_text)
+
+    execution_provenance = {
+        "executor_commit": current_commit(),
+        "policy_status": policy_result["status"],
+        "policy_reason": policy_result["reason"],
+        "command_text": command_text,
+    }
+
+    if policy_result["status"] == "BLOCKED_BY_POLICY":
+        result_dir = RESULTS / task.task_id
+        result_dir.mkdir(parents=True, exist_ok=True)
+
+        blocked_result = {
+            "task_id": task.task_id,
+            "status": "BLOCKED_BY_POLICY",
+            "reason": policy_result["reason"],
+            "command": task.command,
+            "execution_provenance": execution_provenance,
+            "timestamp": now_iso()
+        }
+
+        (result_dir / "RESULT.json").write_text(
+            json.dumps(
+                blocked_result,
+                indent=2,
+                sort_keys=True
+            ) + "\n"
+        )
+
+        lifecycle_update(
+            task.task_id,
+            "BLOCKED_BY_POLICY",
+            policy_result["reason"],
+        )
+
+        return "blocked"
 
     try:
         proc = subprocess.run(
