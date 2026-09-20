@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/inspect_fed_books_e303.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-20T01:23:24.228790+00:00",
+  "hypothesis_id": "PAYOFF-IDENTITY-MINING-V1",
+  "source_commit": "24cacd43cb971c09c058d7b8626b8b215c943cac",
+  "started_at": "2026-09-20T01:23:23.978089+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "13e51bb6b8182abfa042e43b76178c9891a2d3566f80a26e51a219669aa134ea",
+  "task_class": "research",
+  "task_id": "EDGE-HUNTER-FED-BOOK-INSPECT-E303"
+}
