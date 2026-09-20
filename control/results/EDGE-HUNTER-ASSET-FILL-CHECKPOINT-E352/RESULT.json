@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/evaluate_asset_fill_checkpoint_e352.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-20T02:27:55.633265+00:00",
+  "hypothesis_id": "ASSET-RANK-MAKER-HEDGE-V1",
+  "source_commit": "2204d28170ee1aa51de2d18e94effd5e60caf71a",
+  "started_at": "2026-09-20T02:27:55.288730+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "4ff2c4d6fe07273279543cf60bd1b84a46d9af54baf63b1a83d9edf63717723b",
+  "task_class": "research",
+  "task_id": "EDGE-HUNTER-ASSET-FILL-CHECKPOINT-E352"
+}
