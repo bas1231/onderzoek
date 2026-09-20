@@ -1,0 +1,21 @@
+{
+  "build_authorization": {
+    "build_kind": "control_plane",
+    "capabilities": [
+      "read_repository"
+    ],
+    "mode": "control_plane",
+    "objective": "Read existing research evidence and runtime status for a bounded Research Director sandbox review; no external, paid, trading, wallet, or system-changing actions"
+  },
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/inspect_hourly_0700_detail_e431.py"
+  ],
+  "hypothesis_id": "CONTROL-RESEARCH-DIRECTOR",
+  "live_trading": false,
+  "operation": "python",
+  "task_class": "infrastructure",
+  "task_id": "RESEARCH-DIRECTOR-SANDBOX-E002",
+  "timeout_seconds": 120,
+  "working_directory": "."
+}
