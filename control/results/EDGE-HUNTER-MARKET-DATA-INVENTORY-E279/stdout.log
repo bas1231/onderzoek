@@ -1,0 +1,1331 @@
+FILE control/validator.py
+HITS bid,ask
+class Task(BaseModel):
+    task_id: str = Field(min_length=3, max_length=120)
+    task_class: Literal[
+            raise ValueError("live trading is forbidden")
+            raise ValueError("absolute working directories are forbidden")
+            raise ValueError("parent traversal is forbidden")
+        forbidden = {
+            if item in forbidden:
+                    f"forbidden command element: {item}"
+                    "python -c / -m style execution is forbidden"
+                raise ValueError("Python task must execute a .py file")
+END_FILE
+FILE control/browser_bridge.py
+HITS bid,ask
+from validator import Task
+PENDING = ROOT / "control/tasks/pending"
+            raise ValueError("absolute paths forbidden")
+            raise ValueError("parent traversal forbidden")
+    task: Task
+            raise ValueError("multiline commit message forbidden")
+    queue = ROOT / "control/TASK_QUEUE.yaml"
+            "bridge_tasks": [],
+            "bridge_tasks": [],
+def task_exists(task_id: str) -> bool:
+        ROOT / "control/tasks/pending",
+        ROOT / "control/tasks/running",
+        ROOT / "control/tasks/completed",
+        ROOT / "control/tasks/failed",
+        if (location / f"{task_id}.json").exists():
+        if (location / task_id).exists():
+            "control/tasks",
+TASK_ID_RE = re.compile(
+def discover(task_id: str) -> dict:
+    if not TASK_ID_RE.fullmatch(task_id):
+            "error": "invalid task_id",
+        task_id,
+        "browser discovered task marker",
+        "task_id": task_id,
+    task = envelope.task
+            task.task_class == "research"
+        task_rel = (
+            "control/tasks/pending/"
+            + task.task_id
+        task_path = ROOT / task_rel
+        ] + [task_rel]
+        if task_exists(task.task_id):
+            detail = "existing task"
+            if task_path.exists():
+                    "HEAD:" + task_rel,
+                            f"task_id={task.task_id} "
+                        "existing committed task"
+                task.task_id
+                not in state["bridge_tasks"]
+                state["bridge_tasks"].append(
+                    task.task_id
+                task.task_id,
+                f"task_id={task.task_id} "
+                "task_id": task.task_id,
+            f".{task.task_id}.tmp"
+                task.model_dump(),
+        tmp_path.replace(task_path)
+                f"task_id={task.task_id} "
+            task.task_id
+            not in state["bridge_tasks"]
+            state["bridge_tasks"].append(
+                task.task_id
+            task.task_id,
+            f"task_id={task.task_id}"
+            "task_id": task.task_id,
+    bridge_tasks = state.get("bridge_tasks", [])
+            raw_task_id = (
+            task_id = "".join(
+                for ch in raw_task_id
+            if task_id in acked:
+            bridge_tasks = state.setdefault(
+                "bridge_tasks",
+            if task_id not in bridge_tasks:
+                bridge_tasks.append(task_id)
+                "task_id": task_id,
+                "task_class": "infrastructure",
+                "task_id": task_id,
+    for task_id in bridge_tasks:
+        if task_id in acked:
+        result_dir = RESULTS / task_id
+            task_id,
+            "task_id": task_id,
+def acknowledge(task_id: str) -> dict:
+    if task_id not in state.get("bridge_tasks", []):
+            "error": "unknown bridge task",
+    if task_id not in acked:
+        acked.append(task_id)
+        task_id,
+        "task_id": task_id,
+            task_id = path[len("/result/"):]
+                not task_id
+                or len(task_id) > 160
+                or any(ch not in allowed for ch in task_id)
+                    {"error": "invalid task_id"},
+            result_dir = RESULTS / task_id
+                        "task_id": task_id,
+                    "task_id": task_id,
+                            "task_id": safe_id,
+                            "running_task_killed": False,
+                    task_id = str(
+                        payload.get("task_id", "")
+                    result = discover(task_id)
+                    task_id = str(payload.get("task_id", ""))
+                    result = acknowledge(task_id)
+END_FILE
+FILE control/executor.py
+HITS ask
+from validator import Task
+PENDING = ROOT / "control/tasks/pending"
+RUNNING = ROOT / "control/tasks/running"
+COMPLETED = ROOT / "control/tasks/completed"
+FAILED = ROOT / "control/tasks/failed"
+TASK_QUEUE = ROOT / "control/TASK_QUEUE.yaml"
+    if not TASK_QUEUE.exists():
+    for line in TASK_QUEUE.read_text().splitlines():
+def task_is_committed(task_file: Path) -> bool:
+    Process a task only after the task file exists in Git HEAD.
+    that is still creating/staging/committing the task.
+        relative = task_file.relative_to(ROOT).as_posix()
+def process_task(task_file: Path) -> str:
+    raw = json.loads(task_file.read_text())
+    task = Task.model_validate(raw)
+    if task.task_class == "research" and research_queue_paused():
+            f"{task.task_id}: research queue paused; "
+            "task left pending"
+    lifecycle = lifecycle_load(task.task_id)
+            f"{task.task_id}: waiting for durable "
+    running_file = RUNNING / task_file.name
+    shutil.move(task_file, running_file)
+        task.task_id,
+        "executor claimed pending task",
+    workdir = (ROOT / task.working_directory).resolve()
+            task.command,
+            timeout=task.timeout_seconds,
+        stderr = (exc.stderr or "") + "\nTASK TIMEOUT"
+    result_dir = RESULTS / task.task_id
+        "task_id": task.task_id,
+        "hypothesis_id": task.hypothesis_id,
+        "task_class": task.task_class,
+        "command": task.command,
+        task.task_id,
+        "executor finished task",
+        "control/tasks",
+            f"result({task.task_id}): {status}",
+        f"{task.task_id}: {status} "
+    task_file: Path,
+        running_file = RUNNING / task_file.name
+            else task_file
+        destination = FAILED / task_file.name
+        error_dir = RESULTS / task_file.stem
+            "control/tasks",
+                    f"result({task_file.stem}): "
+        tasks = sorted(PENDING.glob("*.json"))
+        if not tasks:
+        for task_file in tasks:
+            if not task_is_committed(task_file):
+                outcome = process_task(task_file)
+                    f"{task_file.name}: {exc}"
+                    task_file,
+END_FILE
+FILE control/browser_extension/repair_bridge.py
+HITS ask
+ANCHOR = '''    async function removeDurableEnvelope(taskId) {
+      if (queue[taskId]) {
+        delete queue[taskId];
+  async function scanForTasks() {'''
+FLUSH = r'''    async function removeDurableEnvelope(taskId) {
+      if (queue[taskId]) {
+        delete queue[taskId];
+        await processedTaskIds()
+      for (const [taskId, record] of Object.entries(queue)) {
+          delete queue[taskId];
+        if (processed.has(taskId)) {
+          delete queue[taskId];
+              task_id: taskId
+            await markTaskProcessed(taskId);
+            processed.add(taskId);
+            delete queue[taskId];
+              "[Prediction Bridge] durable task accepted:",
+              taskId,
+            taskId,
+  async function scanForTasks() {'''
+END_FILE
+FILE control/hourly/hourly_wake.py
+HITS ask
+        "task_id": iid,
+        "running_task_killed": False,
+END_FILE
+FILE control/jobs/inventory_active_system_e020.py
+HITS ask
+from pathlib import Path;import subprocess,json,py_compile;root=Path.cwd();run=lambda a:subprocess.run(a,cwd=root,capture_output=True,text=True,check=False,timeout=30);tracked=run(['git','ls-files']).stdout.splitlines();keys=('hourly','agent','timer','service','watchdog','research');files=[p for p in tracked if any(k in p.lower() for k in keys)];pending=[];pdir=root/'control/tasks/pending';pending=[str(p.relative_to(root)) for p in sorted(pdir.glob('*.json'))] if pdir.exists() else [];units=run(
+except Exception as e: wd_compile='FAIL: '+repr(e);agents=(root/'AGENTS.md').read_text(encoding='utf-8',errors='replace') if (root/'AGENTS.md').exists() else '';local=(root/'control/LOCAL_EXECUTION_RULES.md').read_text(encoding='utf-8',errors='replace') if (root/'control/LOCAL_EXECUTION_RULES.md').exists() else '';print(json.dumps({'status':'ok','task_id':'CONTROL-INVENTORY-E020','queue_status':'ACTIVE','pending_tasks':pending,'repo_agent_hourly_timer_service_files':files,'user_units':[x for x i
+END_FILE
+FILE control/jobs/activate_research_e019.py
+HITS bid,ask
+from pathlib import Path;import subprocess,json,datetime;root=Path.cwd();q=root/'control/TASK_QUEUE.yaml';t=q.read_text(encoding='utf-8');lines=t.splitlines();lines=[('queue_status: ACTIVE' if x.strip().startswith('queue_status:') else x) for x in lines];q.write_text(chr(10).join(lines)+chr(10),encoding='utf-8');log=root/'control/RESEARCH_ACTIVATION_LOG.md';stamp=datetime.datetime.now(datetime.timezone.utc).isoformat();old=log.read_text(encoding='utf-8') if log.exists() else '# Research activati
+END_FILE
+FILE control/jobs/repair_candidate_triage_e258.py
+HITS l2
+import base64;exec(base64.b64decode('ZnJvbSBwYXRobGliIGltcG9ydCBQYXRoCmltcG9ydCBzdWJwcm9jZXNzCmltcG9ydCBweV9jb21waWxlCgpST09UID0gUGF0aC5jd2QoKQpGSUxFUyA9IHsiY29udHJvbC9lZGdlX2h1bnRlci9jYW5kaWRhdGVfaW5kZXgucHkiOiAnZnJvbSBwYXRobGliIGltcG9ydCBQYXRoXG5pbXBvcnQganNvblxuXG5ST09UID0gUGF0aChfX2ZpbGVfXykucmVzb2x2ZSgpLnBhcmVudHNbMl1cbkNBTkRJREFURV9ESVIgPSBST09UIC8gImtub3dsZWRnZS9jYW5kaWRhdGVzIlxuXG5kZWYgc3VtbWFyaXplKCk6XG4gICAgcm93cyA9IFtdXG4gICAgaWYgbm90IENDQU5ESURBVEVfRElSLmV4aXN0cygpOlxuICAgICAgICByZXR
+END_FILE
+FILE control/jobs/close_edge_hunter_0300_e274.py
+HITS orderbook,l2
+    'No live executable orderbook snapshot source is present in the hourly registry.',
+    'Add free read-only executable L2 capture and deeper venue-specific rule retrieval.',
+END_FILE
+FILE control/jobs/wire_edge_hunter_hourly_e255.py
+HITS l2
+import base64;exec(base64.b64decode('CmZyb20gcGF0aGxpYiBpbXBvcnQgUGF0aAppbXBvcnQgc3VicHJvY2VzcwppbXBvcnQgcHlfY29tcGlsZQoKUk9PVCA9IFBhdGguY3dkKCkKSE9NRSA9IFBhdGguaG9tZSgpClNFUlZJQ0UgPSBIT01FIC8gIi5jb25maWcvc3lzdGVtZC91c2VyL3ByZWRpY3Rpb24tcmVzZWFyY2gtaG91cmx5LWRpcmVjdG9yLnNlcnZpY2UiClJFUE9fU0VSVklDRSA9IFJPT1QgLyAiY29udHJvbC9ob3VybHkvc3lzdGVtZC9wcmVkaWN0aW9uLXJlc2VhcmNoLWhvdXJseS1kaXJlY3Rvci5zZXJ2aWNlIgpUQVJHRVQgPSAiJWgvcHJlZGljdGlvbl9yZXNlYXJjaC8udmVudi9iaW4vcHl0aG9uICVoL3ByZWRpY3Rpb25fcmVzZWFyY2g
+END_FILE
+FILE control/jobs/lifecycle_supervisor.py
+HITS ask
+def task_definition(task_id):
+        ROOT / "control/tasks/pending",
+        ROOT / "control/tasks/running",
+        ROOT / "control/tasks/completed",
+        ROOT / "control/tasks/failed",
+        path = directory / f"{task_id}.json"
+def incident_path(task_id, reason):
+        task_id.replace("/", "_")
+    task_id,
+        task_id,
+            f"{task_id}:{reason}"
+        "task_id": task_id,
+        "running_task_killed": False,
+        task_id,
+    task_id = str(
+        record.get("task_id")
+                task_id,
+                task_id,
+                    "Task bleef langer dan "
+        task = task_definition(task_id) or {}
+            task.get("timeout_seconds")
+                    task_id,
+                    "TASK_RUNTIME_EXCEEDED",
+                        "Task staat langer in RUNNING "
+                task_id,
+                task_id,
+            "running_task_kill_allowed":
+END_FILE
+FILE control/jobs/enforce_no_cost_policy.py
+HITS trade,ask
+No agent, worker, script, research task, build task, or execution component may perform, enable, invoke, recommend-as-an-execution-step, or authorize any action that may create monetary cost unless the user has given prior explicit permission for that specific cost-bearing action.
+- trades, orders, exchange fees, or transaction fees;
+If there is uncertainty about whether an action can cost money, the system MUST fail closed, mark the action AWAITING_APPROVAL, and ask the user before execution.
+ 'trades',
+END_FILE
+FILE control/jobs/install_watchdog_v3.py
+HITS ask
+from pathlib import Path; import subprocess,time,json; ROOT=Path(file).resolve().parents[2]; PY=ROOT/'.venv/bin/python'; WD=ROOT/'control/jobs/watchdog_v1.py'; TEST=ROOT/'tests/bridge/test_watchdog_v1.py'; UNITDIR=Path.home()/'.config/systemd/user'; UNIT=UNITDIR/'prediction-research-watchdog.service'; STATUS=Path.home()/'.local/state/prediction-research/watchdog/status.json'; run=lambda a: subprocess.run(a,cwd=ROOT,check=True,capture_output=True,text=True,timeout=90); run([str(PY),'-m','py_compi
+END_FILE
+FILE control/jobs/build_candidate_lifecycle_e254.py
+HITS l2
+import base64;exec(base64.b64decode('CmZyb20gcGF0aGxpYiBpbXBvcnQgUGF0aAppbXBvcnQgc3VicHJvY2VzcwppbXBvcnQgcHlfY29tcGlsZQppbXBvcnQganNvbgoKUk9PVCA9IFBhdGguY3dkKCkKCmNhbmRpZGF0ZV9zdG9yZSA9IHInJydmcm9tIF9fZnV0dXJlX18gaW1wb3J0IGFubm90YXRpb25zCmZyb20gZGF0ZXRpbWUgaW1wb3J0IGRhdGV0aW1lLCB0aW1lem9uZQpmcm9tIHBhdGhsaWIgaW1wb3J0IFBhdGgKaW1wb3J0IGpzb24KaW1wb3J0IHJlCgpST09UID0gUGF0aChfX2ZpbGVfXykucmVzb2x2ZSgpLnBhcmVudHNbMl0KQ0FORElEQVRFX0RJUiA9IFJPT1QgLyAia25vd2xlZGdlL2NhbmRpZGF0ZXMiClBIQVNFUyA9IFsiRElTQ09WRVJ
+END_FILE
+FILE control/jobs/lifecycle_ledger.py
+HITS ask
+def record_path(task_id):
+    return LEDGER_DIR / f"{task_id}.json"
+def load_record(task_id):
+    path = record_path(task_id)
+        "task_id": task_id,
+    target = record_path(record["task_id"])
+        prefix=f".{record['task_id']}.",
+def update(task_id, state, detail=""):
+        record = load_record(task_id)
+    task_id = "__LEDGER_SELFTEST__"
+    path = record_path(task_id)
+        task_id,
+        task_id,
+END_FILE
+FILE control/jobs/audit_failed_triage_e259.py
+HITS l2
+import base64;exec(base64.b64decode('CmZyb20gcGF0aGxpYiBpbXBvcnQgUGF0aAppbXBvcnQgc3VicHJvY2VzcwppbXBvcnQgcHlfY29tcGlsZQoKcm9vdCA9IFBhdGguY3dkKCkKdGFyZ2V0cyA9IFsKICAgICJjb250cm9sL2VkZ2VfaHVudGVyL2RpcmVjdG9yLnB5IiwKICAgICJjb250cm9sL2VkZ2VfaHVudGVyL2NhbmRpZGF0ZV9pbmRleC5weSIsCiAgICAidGVzdHMvZWRnZV9odW50ZXIvdGVzdF9jYW5kaWRhdGVfaW5kZXgucHkiLApdCnByaW50KCJHSVRfU1RBVFVTIikKc3RhdHVzID0gc3VicHJvY2Vzcy5ydW4oWyJnaXQiLCJzdGF0dXMiLCItLXBvcmNlbGFpbiJdLCBjd2Q9cm9vdCwgY2FwdHVyZV9vdXRwdXQ9VHJ1ZSwgdGV4dD1UcnVlLCB
+END_FILE
+FILE control/jobs/repair_edge_hunter_triage_e260.py
+HITS l2
+import base64;exec(base64.b64decode('ZnJvbSBwYXRobGliIGltcG9ydCBQYXRoCmltcG9ydCBiYXNlNjQKaW1wb3J0IHB5X2NvbXBpbGUKaW1wb3J0IHN1YnByb2Nlc3MKaW1wb3J0IGltcG9ydGxpYi51dGlsCmltcG9ydCBzeXMKClJPT1QgPSBQYXRoLmN3ZCgpCmZpbGVzID0gewogICAgImNvbnRyb2wvZWRnZV9odW50ZXIvY2FuZGlkYXRlX2luZGV4LnB5IjogIlpuSnZiU0J3WVhSb2JHbGlJR2x0Y0c5eWRDQlFZWFJvQ21sdGNHOXlkQ0JxYzI5dUNncFNUMDlVSUQwZ1VHRjBhQ2hmWDJacGJHVmZYeWt1Y21WemIyeDJaU2dwTG5CaGNtVnVkSE5iTWwwS1EwRk9SRWxFUVZSRlgwUkpVaUE5SUZKUFRUUWdMeUFpYTI1dmQyeGxaR2RsTDJOaGJtUnBaR0Y
+END_FILE
+FILE control/jobs/build_candidate_index_e262.py
+HITS l2
+import base64;exec(base64.b64decode('ZnJvbSBwYXRobGliIGltcG9ydCBQYXRoCmltcG9ydCBiYXNlNjQKaW1wb3J0IHB5X2NvbXBpbGUKaW1wb3J0IHN1YnByb2Nlc3MKClJPT1QgPSBQYXRoLmN3ZCgpCkZJTEVTID0gewogICAgImNvbnRybC9lZGdlX2h1bnRlci9jYW5kaWRhdGVfaW5kZXgucHkiOiAnWm5KdmJTQndZWFJvYkdsaUlHbHRjRzl5ZENCUVlYUm9DbWx0Y0c5eWRDQnFjMjl1Q2dwU1QwOVVJRDBnVUdGMGFDaGZYMlpwYkdWZlh5a3VjbVZ6YjJ4MlpTZ3BMbkJoY21WdWRITmJNazBLUTBGT1JFbEVRVlJGWDBSSlVpQTlJRkpQVDFRZ0x5QWlhMjV2ZDJ4bFpHZGxMMk5oYm1ScFpHRjBaWE1pQ2dwa1pXWWdjM1Z0YldGeWFYcGxLQ2s2Q2lBZ0l
+END_FILE
+FILE control/jobs/watchdog_v1.py
+HITS ask
+ path = ROOT / 'control/TASK_QUEUE.yaml'
+ pending = ROOT / 'control/tasks/pending'
+ task = load_json(path, {})
+ task_id = str(task.get('task_id') or path.stem)
+ task_class = str(task.get('task_class') or '')
+ if task_class == 'research' and qstatus != 'ACTIVE':
+ task_age = age(path, ts)
+ if task_age <= PENDING_STALE_SECONDS:
+ 'task_id': task_id,
+ 'task_class': task_class,
+ 'age_seconds': task_age,
+ if is_committed and task_class == 'infrastructure':
+ key = 'pending:' + task_id
+ bridge_state = load_json(BRIDGE_STATE, {'bridge_tasks': [], 'acked': []})
+ for task_id in bridge_state.get('bridge_tasks', []):
+ if task_id in acked:
+ result_file = ROOT / 'control/results' / task_id / 'RESULT.json'
+ 'task_id': task_id,
+ 'running_task_kill_allowed': False,
+END_FILE
+FILE control/jobs/audit_edge_hunter_e253.py
+HITS l2
+import base64;exec(base64.b64decode('CmZyb20gcGF0aGxpYiBpbXBvcnQgUGF0aAppbXBvcnQganNvbgppbXBvcnQgcHlfY29tcGlsZQppbXBvcnQgc3VicHJvY2VzcwoKUk9PVCA9IFBhdGguY3dkKCkKcmVnaXN0cnlfcGF0aCA9IFJPT1QgLyAiY29udHJvbC9lZGdlX2h1bnRlci9sYW5lX3JlZ2lzdHJ5Lmpzb24iCnJlZ2lzdHJ5ID0ganNvbi5sb2FkcyhyZWdpc3RyeV9wYXRoLnJlYWRfdGV4dChlbmNvZGluZz0idXRmLTgiKSkKbGFuZXMgPSByZWdpc3RyeVsibGFuZXMiXQpleHBlY3RlZCA9IHsKICAgICJtYXJrZXRfYWxnZWJyYSIsCiAgICAic2V0dGxlbWVudF9ydWxlcyIsCiAgICAibWljcm9zdHJ1Y3R1cmUiLAogICAgImJlaGF2aW9yYWwiLAo
+END_FILE
+FILE control/jobs/twc_revision_summary.py
+HITS l2
+import base64;exec(base64.b64decode('CmZyb20gcGF0aGxpYiBpbXBvcnQgUGF0aApmcm9tIGRhdGV0aW1lIGltcG9ydCBkYXRldGltZSwgdGltZXpvbmUKaW1wb3J0IGpzb24KCkhPTUUgPSBQYXRoLmhvbWUoKQpNQU5JRkVTVF9ESVIgPSBIT01FIC8gIi5sb2NhbC9zdGF0ZS9wcmVkaWN0aW9uLXJlc2VhcmNoL3R3Y19ob3VybHlfbWFuaWZlc3RzIgpST09UID0gUGF0aC5jd2QoKQpPVVQgPSBST09UIC8gImtub3dsZWRnZS9ydW5zIgpPVVQubWtkaXIocGFyZW50cz1UcnVlLCBleGlzdF9vaz1UcnVlKQoKZmlsZXMgPSBzb3J0ZWQoW3AgZm9yIHAgaW4gTUFOSUZFU1RfRElSLml0ZXJkaXIoKSBpZiBwLmlzX2ZpbGUoKSBhbmQgcC5zdWZmaXggPT0gIi5
+END_FILE
+FILE control/jobs/diag_e021.py
+HITS ask
+from pathlib import Path;import subprocess,json;root=Path.cwd();tid='TRANSPORT-SAFE-E021';hits=[];bases=['control/tasks/pending','control/tasks/running','control/tasks/completed','control/tasks/failed','control/results'];[(hits.append(str(p.relative_to(root))) if p.is_file() and tid.lower() in p.name.lower() else None) for b in bases for p in ((root/b).rglob('*') if (root/b).exists() else [])];log=subprocess.run(['git','log','--all','--oneline','--decorate','--grep',tid,'-20'],cwd=root,capture_o
+END_FILE
+FILE control/jobs/repair_candidate_triage_e257.py
+HITS l2
+import base64;exec(base64.b64decode('CmZyb20gcGF0aGxpYiBpbXBvcnQgUGF0aAppbXBvcnQgc3VicHJvY2VzcwppbXBvcnQgcHlfY29tcGlsZQppbXBvcnQganNvbgoKUk9PVCA9IFBhdGguY3dkKCkKCmNhbmRpZGF0ZV9pbmRleCA9ICcnJ2Zyb20gcGF0aGxpYiBpbXBvcnQgUGF0aAppbXBvcnQganNvbgoKUk9PVCA9IFBhdGgoX19maWxlX18pLnJlc29sdmUoKS5wYXJlbnRzWzJdCkNBTkRJREFURV9ESVIgPSBST09UIC8gImtub3dsZWRnZS9jYW5kaWRhdGVzIgoKZGVmIHN1bW1hcml6ZSgpOgogICAgcm93cyA9IFtdCiAgICBpZiBub3QgQ0FORElEQVRFX0RJUi5leGlzdHMoKToKICAgICAgICByZXR1cm4gcm93cwogICAgZm9yIHBhdGggaW4gc29
+END_FILE
+FILE control/jobs/inventory_market_data_e279.py
+HITS orderbook,order_book,l2,websocket,kalshi,polymarket,trade,bid,ask
+terms = ['orderbook','order_book','l2','websocket','kalshi','polymarket','trade','bid','ask']
+END_FILE
+FILE control/jobs/build_edge_hunter_e252.py
+HITS l2,bid
+import base64;exec(base64.b64decode('ZnJvbSBwYXRobGliIGltcG9ydCBQYXRoCmltcG9ydCBzdWJwcm9jZXNzCmltcG9ydCBweV9jb21waWxlCgpST09UID0gUGF0aC5jd2QoKQpGSUxFUyA9IHt9CkZJTEVTWydjb250cm9sL2VkZ2VfaHVudGVyL2xhbmVfcmVnaXN0cnkuanNvbiddID0gJ3tcbiAgImRlZmF1bHRfZGVjaXNpb24iOiAiTk9fUFJPVkVOX0VER0UiLFxuICAibGFuZXMiOiB7XG4gICAgImJlaGF2aW9yYWwiOiB7XG4gICAgICAiZXZpZGVuY2Vfcm9sZXMiOiBbXG4gICAgICAgICJiZWhhdmlvcmFsIixcbiAgICAgICAgInNjb3V0IlxuICAgICAgXSxcbiAgICAgICJvYmplY3RpdmUiOiAiVGVzdCBiZWhhdmlvcmFsIG1pc3ByaWNpbmcgaHl
+END_FILE
+FILE control/jobs/restore_edge_hunter_e261.py
+HITS l2
+import base64;exec(base64.b64decode('ZnJvbSBwYXRobGliIGltcG9ydCBQYXRoCmltcG9ydCBzdWJwcm9jZXNzCmltcG9ydCBweV9jb21waWxlCgpyb290ID0gUGF0aC5jd2QoKQpnb29kID0gImY0YjUzNTEiCgpkZWYgZ2l0KCphcmdzLCBjaGVjaz1UcnVlKToKICAgIHJldHVybiBzdWJwcm9jZXNzLnJ1bihbImdpdCIsICphcmdzXSwgY3dkPXJvb3QsIGNhcHR1cmVfb3V0cHV0PVRydWUsIHRleHQ9VHJ1ZSwgY2hlY2s9Y2hlY2spCgpkaXJlY3RvciA9IGdpdCgic2hvdyIsIGdvb2QgKyAiOmNvbnRyb2wvZWRnZV9odW50ZXIvZGlyZWN0b3IucHkiKS5zdGRvdXQKcGF0aCA9IHJvb3QgLyAiY29udHJvbC9lZGdlX2h1bnRlci9kaXJlY3Rvci5weSIKcGF
+END_FILE
+FILE control/jobs/integrate_candidate_triage_e256.py
+HITS l2
+import base64;exec(base64.b64decode('CmZyb20gcGF0aGxpYiBpbXBvcnQgUGF0aAppbXBvcnQgc3VicHJvY2VzcwppbXBvcnQgcHlfY29tcGlsZQppbXBvcnQganNvbgppbXBvcnQgaW1wb3J0bGliLnV0aWwKClJPT1QgPSBQYXRoLmN3ZCgpCgpjYW5kaWRhdGVfaW5kZXggPSByJycnZnJvbSBwYXRobGliIGltcG9ydCBQYXRoCmltcG9ydCBqc29uCgpST09UID0gUGF0aChfX2ZpbGVfXykucmVzb2x2ZSgpLnBhcmVudHNbMl0KQ0FORElEQVRFX0RJUiA9IFJPT1QgLyAia25vd2xlZGdlL2NhbmRpZGF0ZXMiCgpkZWYgc3VtbWFyaXplKCk6CiAgICByb3dzID0gW10KICAgIGlmIG5vdCBDQU5ESURBVEVfRElSLmV4aXN0cygpOgogICAgICAgIHJldHVybiB
+END_FILE
+FILE control/jobs/install_watchdog_v2.py
+HITS ask
+ 'running_task_kill_allowed',
+print('PASS: no running-task kill allowed')
+END_FILE
+FILE control/jobs/diag_e023.py
+HITS ask
+from pathlib import Path;import subprocess,json;root=Path.cwd();tid='TRANSPORT-SAFE-E023';hits=[str(p.relative_to(root)) for b in ['control/tasks/pending','control/tasks/running','control/tasks/completed','control/tasks/failed','control/results'] for p in ((root/b).rglob('*') if (root/b).exists() else []) if p.is_file() and tid.lower() in p.name.lower()];log=subprocess.run(['git','log','--all','--oneline','--grep',tid,'-10'],cwd=root,capture_output=True,text=True).stdout.splitlines();print(json.
+END_FILE
+FILE control/jobs/install_watchdog_v1.py
+HITS bid
+print('PASS: research auto-resume forbidden')
+print('PASS: paid actions forbidden')
+print('PASS: live trading and wallet actions forbidden')
+END_FILE
+FILE control/backups/e040_bridge_20260919T194311Z.py
+HITS bid,ask
+from validator import Task
+PENDING = ROOT / "control/tasks/pending"
+            raise ValueError("absolute paths forbidden")
+            raise ValueError("parent traversal forbidden")
+    task: Task
+            raise ValueError("multiline commit message forbidden")
+    queue = ROOT / "control/TASK_QUEUE.yaml"
+            "bridge_tasks": [],
+            "bridge_tasks": [],
+def task_exists(task_id: str) -> bool:
+        ROOT / "control/tasks/pending",
+        ROOT / "control/tasks/running",
+        ROOT / "control/tasks/completed",
+        ROOT / "control/tasks/failed",
+        if (location / f"{task_id}.json").exists():
+        if (location / task_id).exists():
+            "control/tasks",
+    task = envelope.task
+            task.task_class == "research"
+        task_rel = (
+            "control/tasks/pending/"
+            + task.task_id
+        task_path = ROOT / task_rel
+        ] + [task_rel]
+        if task_exists(task.task_id):
+            detail = "existing task"
+            if task_path.exists():
+                    "HEAD:" + task_rel,
+                            f"task_id={task.task_id} "
+                        "existing committed task"
+                task.task_id
+                not in state["bridge_tasks"]
+                state["bridge_tasks"].append(
+                    task.task_id
+                f"task_id={task.task_id} "
+                "task_id": task.task_id,
+            f".{task.task_id}.tmp"
+                task.model_dump(),
+        tmp_path.replace(task_path)
+                f"task_id={task.task_id} "
+            task.task_id
+            not in state["bridge_tasks"]
+            state["bridge_tasks"].append(
+                task.task_id
+            task.task_id,
+            f"task_id={task.task_id}"
+            "task_id": task.task_id,
+    bridge_tasks = state.get("bridge_tasks", [])
+    for task_id in bridge_tasks:
+        if task_id in acked:
+        result_dir = RESULTS / task_id
+            task_id,
+            "task_id": task_id,
+def acknowledge(task_id: str) -> dict:
+    if task_id not in state.get("bridge_tasks", []):
+            "error": "unknown bridge task",
+    if task_id not in acked:
+        acked.append(task_id)
+        task_id,
+        "task_id": task_id,
+            task_id = path[len("/result/"):]
+                not task_id
+                or len(task_id) > 160
+                or any(ch not in allowed for ch in task_id)
+                    {"error": "invalid task_id"},
+            result_dir = RESULTS / task_id
+                        "task_id": task_id,
+                    "task_id": task_id,
+                    task_id = str(payload.get("task_id", ""))
+                    result = acknowledge(task_id)
+END_FILE
+FILE control/backups/e052_supervisor_20260919T195106Z.py
+HITS ask
+def task_definition(task_id):
+        ROOT / "control/tasks/pending",
+        ROOT / "control/tasks/running",
+        ROOT / "control/tasks/completed",
+        ROOT / "control/tasks/failed",
+        path = directory / f"{task_id}.json"
+def incident_path(task_id, reason):
+        task_id.replace("/", "_")
+    task_id,
+        task_id,
+            f"{task_id}:{reason}"
+        "task_id": task_id,
+        "running_task_killed": False,
+        task_id,
+    task_id = str(
+        record.get("task_id")
+                task_id,
+                    "Task bleef langer dan "
+        task = task_definition(task_id) or {}
+            task.get("timeout_seconds")
+                    task_id,
+                    "TASK_RUNTIME_EXCEEDED",
+                        "Task staat langer in RUNNING "
+                task_id,
+                task_id,
+            "running_task_kill_allowed":
+END_FILE
+FILE control/weather/kalshi_weather_index_recorder.py
+HITS kalshi,trade
+RAW = STATE / "raw" / "kalshi_weather_index"
+MANIFESTS = STATE / "kalshi_weather_index_manifests"
+BASE = "https://api.elections.kalshi.com/trade-api/v2"
+            "Public Kalshi weather timeseries availability does not by itself prove contract settlement equivalence.",
+    "source": "Kalshi public live_data weather endpoint",
+END_FILE
+FILE control/weather/twc_hourly_recorder.py
+HITS kalshi
+url = "https://weather.com/kalshi/api/metar?primary=true&weekStart=" + week_start
+    "interpretation_guard": "TWC feed status is not assumed to equal Kalshi contract settlement finality."
+END_FILE
+FILE control/backups/e034_accept_order_20260919T193954Z/browser_bridge.py
+HITS bid,ask
+from validator import Task
+PENDING = ROOT / "control/tasks/pending"
+            raise ValueError("absolute paths forbidden")
+            raise ValueError("parent traversal forbidden")
+    task: Task
+            raise ValueError("multiline commit message forbidden")
+    queue = ROOT / "control/TASK_QUEUE.yaml"
+            "bridge_tasks": [],
+            "bridge_tasks": [],
+def task_exists(task_id: str) -> bool:
+        ROOT / "control/tasks/pending",
+        ROOT / "control/tasks/running",
+        ROOT / "control/tasks/completed",
+        ROOT / "control/tasks/failed",
+        if (location / f"{task_id}.json").exists():
+        if (location / task_id).exists():
+            "control/tasks",
+    task = envelope.task
+            task.task_class == "research"
+        task_rel = (
+            "control/tasks/pending/"
+            + task.task_id
+        task_path = ROOT / task_rel
+        ] + [task_rel]
+        if task_exists(task.task_id):
+            detail = "existing task"
+            if task_path.exists():
+                    "HEAD:" + task_rel,
+                            f"task_id={task.task_id} "
+                        "existing committed task"
+                task.task_id
+                not in state["bridge_tasks"]
+                state["bridge_tasks"].append(
+                    task.task_id
+                f"task_id={task.task_id} "
+                "task_id": task.task_id,
+            f".{task.task_id}.tmp"
+                task.model_dump(),
+        tmp_path.replace(task_path)
+                f"task_id={task.task_id} "
+            task.task_id
+            not in state["bridge_tasks"]
+            state["bridge_tasks"].append(
+                task.task_id
+            task.task_id,
+            f"task_id={task.task_id}"
+            "task_id": task.task_id,
+    bridge_tasks = state.get("bridge_tasks", [])
+    for task_id in bridge_tasks:
+        if task_id in acked:
+        result_dir = RESULTS / task_id
+            task_id,
+            "task_id": task_id,
+def acknowledge(task_id: str) -> dict:
+    if task_id not in state.get("bridge_tasks", []):
+            "error": "unknown bridge task",
+    if task_id not in acked:
+        acked.append(task_id)
+        task_id,
+        "task_id": task_id,
+            task_id = path[len("/result/"):]
+                not task_id
+                or len(task_id) > 160
+                or any(ch not in allowed for ch in task_id)
+                    {"error": "invalid task_id"},
+            result_dir = RESULTS / task_id
+                        "task_id": task_id,
+                    "task_id": task_id,
+                    task_id = str(payload.get("task_id", ""))
+                    result = acknowledge(task_id)
+END_FILE
+FILE control/backups/e034_accept_order_20260919T193954Z/executor.py
+HITS ask
+from validator import Task
+PENDING = ROOT / "control/tasks/pending"
+RUNNING = ROOT / "control/tasks/running"
+COMPLETED = ROOT / "control/tasks/completed"
+FAILED = ROOT / "control/tasks/failed"
+TASK_QUEUE = ROOT / "control/TASK_QUEUE.yaml"
+    if not TASK_QUEUE.exists():
+    for line in TASK_QUEUE.read_text().splitlines():
+def task_is_committed(task_file: Path) -> bool:
+    Process a task only after the task file exists in Git HEAD.
+    that is still creating/staging/committing the task.
+        relative = task_file.relative_to(ROOT).as_posix()
+def process_task(task_file: Path) -> str:
+    raw = json.loads(task_file.read_text())
+    task = Task.model_validate(raw)
+    if task.task_class == "research" and research_queue_paused():
+            f"{task.task_id}: research queue paused; "
+            "task left pending"
+    running_file = RUNNING / task_file.name
+    shutil.move(task_file, running_file)
+        task.task_id,
+        "executor claimed pending task",
+    workdir = (ROOT / task.working_directory).resolve()
+            task.command,
+            timeout=task.timeout_seconds,
+        stderr = (exc.stderr or "") + "\nTASK TIMEOUT"
+    result_dir = RESULTS / task.task_id
+        "task_id": task.task_id,
+        "hypothesis_id": task.hypothesis_id,
+        "task_class": task.task_class,
+        "command": task.command,
+        task.task_id,
+        "executor finished task",
+        "control/tasks",
+            f"result({task.task_id}): {status}",
+        f"{task.task_id}: {status} "
+    task_file: Path,
+        running_file = RUNNING / task_file.name
+            else task_file
+        destination = FAILED / task_file.name
+        error_dir = RESULTS / task_file.stem
+            "control/tasks",
+                    f"result({task_file.stem}): "
+        tasks = sorted(PENDING.glob("*.json"))
+        if not tasks:
+        for task_file in tasks:
+            if not task_is_committed(task_file):
+                outcome = process_task(task_file)
+                    f"{task_file.name}: {exc}"
+                    task_file,
+END_FILE
+FILE control/backups/e031c_20260919T193806Z/lifecycle_ledger.py
+HITS ask
+def record_path(task_id):
+    return LEDGER_DIR / f"{task_id}.json"
+def load_record(task_id):
+    path = record_path(task_id)
+        "task_id": task_id,
+    target = record_path(record["task_id"])
+        prefix=f".{record['task_id']}.",
+def update(task_id, state, detail=""):
+    record = load_record(task_id)
+    task_id = "__LEDGER_SELFTEST__"
+    path = record_path(task_id)
+        task_id,
+        task_id,
+END_FILE
+FILE control/backups/e031c_20260919T193806Z/browser_bridge.py
+HITS bid,ask
+from validator import Task
+PENDING = ROOT / "control/tasks/pending"
+            raise ValueError("absolute paths forbidden")
+            raise ValueError("parent traversal forbidden")
+    task: Task
+            raise ValueError("multiline commit message forbidden")
+    queue = ROOT / "control/TASK_QUEUE.yaml"
+            "bridge_tasks": [],
+            "bridge_tasks": [],
+def task_exists(task_id: str) -> bool:
+        ROOT / "control/tasks/pending",
+        ROOT / "control/tasks/running",
+        ROOT / "control/tasks/completed",
+        ROOT / "control/tasks/failed",
+        if (location / f"{task_id}.json").exists():
+        if (location / task_id).exists():
+            "control/tasks",
+    task = envelope.task
+            task.task_class == "research"
+        task_rel = (
+            "control/tasks/pending/"
+            + task.task_id
+        task_path = ROOT / task_rel
+        ] + [task_rel]
+        if task_exists(task.task_id):
+            detail = "existing task"
+            if task_path.exists():
+                    "HEAD:" + task_rel,
+                            f"task_id={task.task_id} "
+                        "existing committed task"
+                task.task_id
+                not in state["bridge_tasks"]
+                state["bridge_tasks"].append(
+                    task.task_id
+                f"task_id={task.task_id} "
+                "task_id": task.task_id,
+            f".{task.task_id}.tmp"
+                task.model_dump(),
+        tmp_path.replace(task_path)
+                f"task_id={task.task_id} "
+            task.task_id
+            not in state["bridge_tasks"]
+            state["bridge_tasks"].append(
+                task.task_id
+            f"task_id={task.task_id}"
+            "task_id": task.task_id,
+    bridge_tasks = state.get("bridge_tasks", [])
+    for task_id in bridge_tasks:
+        if task_id in acked:
+        result_dir = RESULTS / task_id
+            "task_id": task_id,
+def acknowledge(task_id: str) -> dict:
+    if task_id not in state.get("bridge_tasks", []):
+            "error": "unknown bridge task",
+    if task_id not in acked:
+        acked.append(task_id)
+        "task_id": task_id,
+            task_id = path[len("/result/"):]
+                not task_id
+                or len(task_id) > 160
+                or any(ch not in allowed for ch in task_id)
+                    {"error": "invalid task_id"},
+            result_dir = RESULTS / task_id
+                        "task_id": task_id,
+                    "task_id": task_id,
+                    task_id = str(payload.get("task_id", ""))
+                    result = acknowledge(task_id)
+END_FILE
+FILE control/backups/e031c_20260919T193806Z/executor.py
+HITS ask
+from validator import Task
+PENDING = ROOT / "control/tasks/pending"
+RUNNING = ROOT / "control/tasks/running"
+COMPLETED = ROOT / "control/tasks/completed"
+FAILED = ROOT / "control/tasks/failed"
+TASK_QUEUE = ROOT / "control/TASK_QUEUE.yaml"
+    if not TASK_QUEUE.exists():
+    for line in TASK_QUEUE.read_text().splitlines():
+def task_is_committed(task_file: Path) -> bool:
+    Process a task only after the task file exists in Git HEAD.
+    that is still creating/staging/committing the task.
+        relative = task_file.relative_to(ROOT).as_posix()
+def process_task(task_file: Path) -> str:
+    raw = json.loads(task_file.read_text())
+    task = Task.model_validate(raw)
+    if task.task_class == "research" and research_queue_paused():
+            f"{task.task_id}: research queue paused; "
+            "task left pending"
+    running_file = RUNNING / task_file.name
+    shutil.move(task_file, running_file)
+    workdir = (ROOT / task.working_directory).resolve()
+            task.command,
+            timeout=task.timeout_seconds,
+        stderr = (exc.stderr or "") + "\nTASK TIMEOUT"
+    result_dir = RESULTS / task.task_id
+        "task_id": task.task_id,
+        "hypothesis_id": task.hypothesis_id,
+        "task_class": task.task_class,
+        "command": task.command,
+        "control/tasks",
+            f"result({task.task_id}): {status}",
+        f"{task.task_id}: {status} "
+    task_file: Path,
+        running_file = RUNNING / task_file.name
+            else task_file
+        destination = FAILED / task_file.name
+        error_dir = RESULTS / task_file.stem
+            "control/tasks",
+                    f"result({task_file.stem}): "
+        tasks = sorted(PENDING.glob("*.json"))
+        if not tasks:
+        for task_file in tasks:
+            if not task_is_committed(task_file):
+                outcome = process_task(task_file)
+                    f"{task_file.name}: {exc}"
+                    task_file,
+END_FILE
+FILE control/backups/e056_chat_incident_20260919T195716Z/lifecycle_supervisor.py
+HITS ask
+def task_definition(task_id):
+        ROOT / "control/tasks/pending",
+        ROOT / "control/tasks/running",
+        ROOT / "control/tasks/completed",
+        ROOT / "control/tasks/failed",
+        path = directory / f"{task_id}.json"
+def incident_path(task_id, reason):
+        task_id.replace("/", "_")
+    task_id,
+        task_id,
+            f"{task_id}:{reason}"
+        "task_id": task_id,
+        "running_task_killed": False,
+        task_id,
+    task_id = str(
+        record.get("task_id")
+                task_id,
+                task_id,
+                    "Task bleef langer dan "
+        task = task_definition(task_id) or {}
+            task.get("timeout_seconds")
+                    task_id,
+                    "TASK_RUNTIME_EXCEEDED",
+                        "Task staat langer in RUNNING "
+                task_id,
+                task_id,
+            "running_task_kill_allowed":
+END_FILE
+FILE control/backups/e056_chat_incident_20260919T195716Z/browser_bridge.py
+HITS bid,ask
+from validator import Task
+PENDING = ROOT / "control/tasks/pending"
+            raise ValueError("absolute paths forbidden")
+            raise ValueError("parent traversal forbidden")
+    task: Task
+            raise ValueError("multiline commit message forbidden")
+    queue = ROOT / "control/TASK_QUEUE.yaml"
+            "bridge_tasks": [],
+            "bridge_tasks": [],
+def task_exists(task_id: str) -> bool:
+        ROOT / "control/tasks/pending",
+        ROOT / "control/tasks/running",
+        ROOT / "control/tasks/completed",
+        ROOT / "control/tasks/failed",
+        if (location / f"{task_id}.json").exists():
+        if (location / task_id).exists():
+            "control/tasks",
+TASK_ID_RE = re.compile(
+def discover(task_id: str) -> dict:
+    if not TASK_ID_RE.fullmatch(task_id):
+            "error": "invalid task_id",
+        task_id,
+        "browser discovered task marker",
+        "task_id": task_id,
+    task = envelope.task
+            task.task_class == "research"
+        task_rel = (
+            "control/tasks/pending/"
+            + task.task_id
+        task_path = ROOT / task_rel
+        ] + [task_rel]
+        if task_exists(task.task_id):
+            detail = "existing task"
+            if task_path.exists():
+                    "HEAD:" + task_rel,
+                            f"task_id={task.task_id} "
+                        "existing committed task"
+                task.task_id
+                not in state["bridge_tasks"]
+                state["bridge_tasks"].append(
+                    task.task_id
+                f"task_id={task.task_id} "
+                "task_id": task.task_id,
+            f".{task.task_id}.tmp"
+                task.model_dump(),
+        tmp_path.replace(task_path)
+                f"task_id={task.task_id} "
+            task.task_id
+            not in state["bridge_tasks"]
+            state["bridge_tasks"].append(
+                task.task_id
+            task.task_id,
+            f"task_id={task.task_id}"
+            "task_id": task.task_id,
+    bridge_tasks = state.get("bridge_tasks", [])
+    for task_id in bridge_tasks:
+        if task_id in acked:
+        result_dir = RESULTS / task_id
+            task_id,
+            "task_id": task_id,
+def acknowledge(task_id: str) -> dict:
+    if task_id not in state.get("bridge_tasks", []):
+            "error": "unknown bridge task",
+    if task_id not in acked:
+        acked.append(task_id)
+        task_id,
+        "task_id": task_id,
+            task_id = path[len("/result/"):]
+                not task_id
+                or len(task_id) > 160
+                or any(ch not in allowed for ch in task_id)
+                    {"error": "invalid task_id"},
+            result_dir = RESULTS / task_id
+                        "task_id": task_id,
+                    "task_id": task_id,
+                    task_id = str(
+                        payload.get("task_id", "")
+                    result = discover(task_id)
+                    task_id = str(payload.get("task_id", ""))
+                    result = acknowledge(task_id)
+END_FILE
+FILE control/backups/e074_reliability_20260919T202222Z/browser_bridge.py
+HITS bid,ask
+from validator import Task
+PENDING = ROOT / "control/tasks/pending"
+            raise ValueError("absolute paths forbidden")
+            raise ValueError("parent traversal forbidden")
+    task: Task
+            raise ValueError("multiline commit message forbidden")
+    queue = ROOT / "control/TASK_QUEUE.yaml"
+            "bridge_tasks": [],
+            "bridge_tasks": [],
+def task_exists(task_id: str) -> bool:
+        ROOT / "control/tasks/pending",
+        ROOT / "control/tasks/running",
+        ROOT / "control/tasks/completed",
+        ROOT / "control/tasks/failed",
+        if (location / f"{task_id}.json").exists():
+        if (location / task_id).exists():
+            "control/tasks",
+TASK_ID_RE = re.compile(
+def discover(task_id: str) -> dict:
+    if not TASK_ID_RE.fullmatch(task_id):
+            "error": "invalid task_id",
+        task_id,
+        "browser discovered task marker",
+        "task_id": task_id,
+    task = envelope.task
+            task.task_class == "research"
+        task_rel = (
+            "control/tasks/pending/"
+            + task.task_id
+        task_path = ROOT / task_rel
+        ] + [task_rel]
+        if task_exists(task.task_id):
+            detail = "existing task"
+            if task_path.exists():
+                    "HEAD:" + task_rel,
+                            f"task_id={task.task_id} "
+                        "existing committed task"
+                task.task_id
+                not in state["bridge_tasks"]
+                state["bridge_tasks"].append(
+                    task.task_id
+                f"task_id={task.task_id} "
+                "task_id": task.task_id,
+            f".{task.task_id}.tmp"
+                task.model_dump(),
+        tmp_path.replace(task_path)
+                f"task_id={task.task_id} "
+            task.task_id
+            not in state["bridge_tasks"]
+            state["bridge_tasks"].append(
+                task.task_id
+            task.task_id,
+            f"task_id={task.task_id}"
+            "task_id": task.task_id,
+    bridge_tasks = state.get("bridge_tasks", [])
+            raw_task_id = (
+            task_id = "".join(
+                for ch in raw_task_id
+            if task_id in acked:
+            bridge_tasks = state.setdefault(
+                "bridge_tasks",
+            if task_id not in bridge_tasks:
+                bridge_tasks.append(task_id)
+                "task_id": task_id,
+                "task_class": "infrastructure",
+                "task_id": task_id,
+    for task_id in bridge_tasks:
+        if task_id in acked:
+        result_dir = RESULTS / task_id
+            task_id,
+            "task_id": task_id,
+def acknowledge(task_id: str) -> dict:
+    if task_id not in state.get("bridge_tasks", []):
+            "error": "unknown bridge task",
+    if task_id not in acked:
+        acked.append(task_id)
+        task_id,
+        "task_id": task_id,
+            task_id = path[len("/result/"):]
+                not task_id
+                or len(task_id) > 160
+                or any(ch not in allowed for ch in task_id)
+                    {"error": "invalid task_id"},
+            result_dir = RESULTS / task_id
+                        "task_id": task_id,
+                    "task_id": task_id,
+                    task_id = str(
+                        payload.get("task_id", "")
+                    result = discover(task_id)
+                    task_id = str(payload.get("task_id", ""))
+                    result = acknowledge(task_id)
+END_FILE
+FILE control/backups/e074_reliability_20260919T202222Z/executor.py
+HITS ask
+from validator import Task
+PENDING = ROOT / "control/tasks/pending"
+RUNNING = ROOT / "control/tasks/running"
+COMPLETED = ROOT / "control/tasks/completed"
+FAILED = ROOT / "control/tasks/failed"
+TASK_QUEUE = ROOT / "control/TASK_QUEUE.yaml"
+    if not TASK_QUEUE.exists():
+    for line in TASK_QUEUE.read_text().splitlines():
+def task_is_committed(task_file: Path) -> bool:
+    Process a task only after the task file exists in Git HEAD.
+    that is still creating/staging/committing the task.
+        relative = task_file.relative_to(ROOT).as_posix()
+def process_task(task_file: Path) -> str:
+    raw = json.loads(task_file.read_text())
+    task = Task.model_validate(raw)
+    if task.task_class == "research" and research_queue_paused():
+            f"{task.task_id}: research queue paused; "
+            "task left pending"
+    lifecycle = lifecycle_load(task.task_id)
+            f"{task.task_id}: waiting for durable "
+    running_file = RUNNING / task_file.name
+    shutil.move(task_file, running_file)
+        task.task_id,
+        "executor claimed pending task",
+    workdir = (ROOT / task.working_directory).resolve()
+            task.command,
+            timeout=task.timeout_seconds,
+        stderr = (exc.stderr or "") + "\nTASK TIMEOUT"
+    result_dir = RESULTS / task.task_id
+        "task_id": task.task_id,
+        "hypothesis_id": task.hypothesis_id,
+        "task_class": task.task_class,
+        "command": task.command,
+        task.task_id,
+        "executor finished task",
+        "control/tasks",
+            f"result({task.task_id}): {status}",
+        f"{task.task_id}: {status} "
+    task_file: Path,
+        running_file = RUNNING / task_file.name
+            else task_file
+        destination = FAILED / task_file.name
+        error_dir = RESULTS / task_file.stem
+            "control/tasks",
+                    f"result({task_file.stem}): "
+        tasks = sorted(PENDING.glob("*.json"))
+        if not tasks:
+        for task_file in tasks:
+            if not task_is_committed(task_file):
+                outcome = process_task(task_file)
+                    f"{task_file.name}: {exc}"
+                    task_file,
+END_FILE
+FILE experiments/bridge/e234.py
+HITS l2
+import base64;exec(base64.b64decode('CmZyb20gcGF0aGxpYiBpbXBvcnQgUGF0aApmcm9tIGRhdGV0aW1lIGltcG9ydCBkYXRldGltZSwgdGltZXpvbmUKaW1wb3J0IGpzb24sIHN1YnByb2Nlc3MsIHN0YXRpc3RpY3MKClJPT1QgPSBQYXRoLmN3ZCgpCkhPTUUgPSBQYXRoLmhvbWUoKQpTVEFURSA9IEhPTUUgLyAiLmxvY2FsIiAvICJzdGF0ZSIgLyAicHJlZGljdGlvbi1yZXNlYXJjaCIKTUFOID0gU1RBVEUgLyAia2Fsc2hpX3dlYXRoZXJfaW5kZXhfbWFuaWZlc3RzIgpSQVcgPSBTVEFURSAvICJyYXciIC8gImthbHNoaV93ZWF0aGVyX2luZGV4IgpPVVQgPSBST09UIC8gImtub3dsZWRnZSIgLyAicnVucyIgLyAia2Fsc2hpLXdlYXRoZXItaW5kZXg
+END_FILE
+FILE experiments/bridge/e103.py
+HITS kalshi
+source=sources['kalshi_docs']
+classification=change.classify('kalshi_docs')
+out={'ok':status==200 and len(body)>0 and d.returncode==0,'source':'kalshi_docs','bytes':len(body),'http_status':status,'sha256':manifest['sha256'],'is_new_content':manifest['is_new_content'],'classification':classification}
+ run(['git','add','knowledge/documents/manifests/kalshi_docs']);c=run(['git','commit','-m','test(hourly): archive first primary source']);p=run(['git','push','origin','HEAD:main']);out['commit_rc']=c.returncode;out['push_rc']=p.returncode;out['head']=run(['git','log','-1','--oneline']).stdout.strip()
+END_FILE
+FILE experiments/bridge/e041.py
+HITS ask
+import json;from pathlib import Path;from urllib.request import Request,urlopen;token=(Path.home()/'.config/prediction-research/bridge_token').read_text().strip();tid='DISCOVER_VERIFY_E041';req=Request('http://127.0.0.1:8765/discover',data=json.dumps({'task_id':tid}).encode(),headers={'Authorization':'Bearer '+token,'Content-Type':'application/json'},method='POST');resp=urlopen(req,timeout=5).read().decode();p=Path('control/lifecycle')/(tid+'.json');d=json.loads(p.read_text()) if p.exists() else
+END_FILE
+FILE experiments/bridge/e073.py
+HITS ask
+for r in [Path('control/tasks'),Path('control/results'),Path('control/lifecycle')]: hits += [str(p) for p in r.rglob('*') if tid in p.name]
+print(json.dumps({'task':tid,'hits':hits},indent=2))
+END_FILE
+FILE experiments/bridge/e153.py
+HITS polymarket,ask
+review=dict(weather_twc=dict(status='NO_EVIDENCE',reason='Meteorological source availability only; no TWC settlement mapping or market-edge evidence.'),microstructure=dict(status='NO_EVIDENCE',reason='Keyword routing produced generic regulatory and false-positive ask matches; no executable microstructure edge.'),behavioral=dict(status='NO_EVIDENCE',reason='Bias match referred to bias-corrected weather products, not behavioral prediction-market bias.'),informed_flow=dict(status='NO_EVIDENCE',reas
+END_FILE
+FILE experiments/bridge/e215.py
+HITS l2
+import base64;exec(base64.b64decode('CmZyb20gcGF0aGxpYiBpbXBvcnQgUGF0aAppbXBvcnQganNvbgppbXBvcnQgc3VicHJvY2VzcwoKcm9vdCA9IFBhdGguY3dkKCkKc3JjX3BhdGggPSByb290IC8gImtub3dsZWRnZSIgLyAicnVucyIgLyAia2Fsc2hpLWhvdXJseS11bml2ZXJzZS1lMjEzLmpzb24iCm91dF9wYXRoID0gcm9vdCAvICJrbm93bGVkZ2UiIC8gInJ1bnMiIC8gImthbHNoaS1ob3VybHktdW5pdmVyc2Utc3RyaWN0LWUyMTUuanNvbiIKZGF0YSA9IGpzb24ubG9hZHMoc3JjX3BhdGgucmVhZF90ZXh0KGVuY29kaW5nPSJ1dGYtOCIpKQpyb3dzID0gZGF0YS5nZXQoImhvdXJseV93ZWF0aGVyX3NlcmllcyIpIG9yIFtdCgpkZWYgdGFnc19
+END_FILE
+FILE experiments/bridge/e187.py
+HITS l2
+import base64;exec(base64.b64decode('CmZyb20gcGF0aGxpYiBpbXBvcnQgUGF0aAppbXBvcnQganNvbgoKcm9vdCA9IFBhdGguY3dkKCkKbmVlZGxlcyA9ICgiZW5xdWV1ZSIsICJhbGxvd2VkIiwgInJlc3RyaWN0ZWQiLCAiZmlsZXMiLCAicGF0aCIsICI0MDAiKQpoaXRzID0gW10KZm9yIHAgaW4gcm9vdC5yZ2xvYigiKi5weSIpOgogICAgaWYgbm90IHAuaXNfZmlsZSgpOgogICAgICAgIGNvbnRpbnVlCiAgICB0cnk6CiAgICAgICAgdGV4dCA9IHAucmVhZF90ZXh0KGVycm9ycz0icmVwbGFjZSIpCiAgICBleGNlcHQgRXhjZXB0aW9uOgogICAgICAgIGNvbnRpbnVlCiAgICBsb3cgPSB0ZXh0Lmxvd2VyKCkKICAgIGlmICIvZW5xdWV1ZSIgaW4gbG9
+END_FILE
+FILE experiments/bridge/e216.py
+HITS l2
+import base64;exec(base64.b64decode('CmZyb20gcGF0aGxpYiBpbXBvcnQgUGF0aAppbXBvcnQganNvbgppbXBvcnQgc3VicHJvY2VzcwoKUk9PVCA9IFBhdGguY3dkKCkKVEFSR0VUID0gUk9PVCAvICJjb250cm9sIiAvICJ3ZWF0aGVyIiAvICJrYWxzaGlfd2VhdGhlcl9pbmRleF9yZWNvcmRlci5weSIKUEFZTE9BRCA9ICdcbmZyb20gcGF0aGxpYiBpbXBvcnQgUGF0aFxuZnJvbSBkYXRldGltZSBpbXBvcnQgZGF0ZXRpbWUsIHRpbWV6b25lXG5mcm9tIHVybGxpYi5wYXJzZSBpbXBvcnQgdXJsZW5jb2RlXG5pbXBvcnQgdXJsbGliLnJlcXVlc3RcbmltcG9ydCBqc29uXG5pbXBvcnQgaGFzaGxpYlxuXG5IT01FID0gUGF0aC5ob21lKClcblNUQVRFID0
+END_FILE
+FILE experiments/bridge/e166.py
+HITS l2
+import base64;exec(base64.b64decode('ZnJvbSBwYXRobGliIGltcG9ydCBQYXRoCmltcG9ydCBqc29uCgpSID0gUGF0aC5jd2QoKQptZGlyID0gUiAvICdrbm93bGVkZ2UvZG9jdW1lbnRzL21hbmlmZXN0cy90d2Nfa2Fsc2hpJwptYW5pZmVzdHMgPSBzb3J0ZWQobWRpci5nbG9iKCcqLmpzb24nKSkKbWFuaWZlc3QgPSBqc29uLmxvYWRzKG1hbmlmZXN0c1stMV0ucmVhZF90ZXh0KCkpCnNoYSA9IG1hbmlmZXN0LmdldCgnc2hhMjU2JykKcmF3ID0gUGF0aC5ob21lKCkgLyAnLmxvY2FsL3N0YXRlL3ByZWRpY3Rpb24tcmVzZWFyY2gvcmF3L3R3Y19rYWxzaGknIC8gKHNoYSArICcuYmluJykKYm9keSA9IHJhdy5yZWFkX2J5dGVzKCkKdGV4dCA9IGJvZHk
+END_FILE
+FILE experiments/bridge/e045.py
+HITS ask
+from pathlib import Path;import subprocess,json;p=Path('control/browser_extension/content.js');t=p.read_text();j=subprocess.run(['journalctl','--user','-u','prediction-research-browser-bridge.service','--since','10 minutes ago','--no-pager'],capture_output=True,text=True).stdout;print(json.dumps({'durable_key':'predictionDurableTaskQueueV1' in t,'discover_literal':'/discover' in t,'persist_helper':'persistDurableEnvelope' in t,'discover_posts':j.count('POST /discover'),'enqueue_posts':j.count('P
+END_FILE
+FILE experiments/bridge/e229.py
+HITS l2
+import base64;exec(base64.b64decode('CmZyb20gcGF0aGxpYiBpbXBvcnQgUGF0aAppbXBvcnQganNvbiwgc3VicHJvY2VzcwoKUk9PVCA9IFBhdGguY3dkKCkKSE9NRSA9IFBhdGguaG9tZSgpClNUQVRFID0gSE9NRSAvICIubG9jYWwiIC8gInN0YXRlIiAvICJwcmVkaWN0aW9uLXJlc2VhcmNoIgpPVVQgPSBST09UIC8gImtub3dsZWRnZSIgLyAicnVucyIgLyAia2Fsc2hpLXdlYXRoZXItY29uZmlnLWRpc2NvdmVyeS1lMjI5Lmpzb24iCgpuZWVkbGVzID0gWwogICAgImNoaWNhZ28tdGVtcGVyYXR1cmUtdjEuMC1jYWwtMjAyNjA5MTQiLAogICAgIm55Yy10ZW1wZXJhdHVyZS12MS4wLWNhbC0yMDI2MDkxNCIsCiAgICAibWlhbWktdGVtcGVyYXR1cmU
+END_FILE
+FILE experiments/bridge/e236.py
+HITS l2
+import base64;exec(base64.b64decode('ZnJvbSBwYXRobGliIGltcG9ydCBQYXRoCmZyb20gZGF0ZXRpbWUgaW1wb3J0IGRhdGV0aW1lCmltcG9ydCBqc29uLCBzdWJwcm9jZXNzLCBzdGF0aXN0aWNzCgpST09UID0gUGF0aC5jd2QoKQpIT01FID0gUGF0aC5ob21lKCkKTUFOID0gSE9NRSAvICIubG9jYWwiIC8gInN0YXRlIiAvICJwcmVkaWN0aW9uLXJlc2VhcmNoIiAvICJrYWxzaGlfd2VhdGhlcl9pbmRleF9tYW5pZmVzdHMiCk9VVCA9IFJPT1QgLyAia25vd2xlZGdlIiAvICJydW5zIiAvICJrYWxzaGktd2VhdGhlci1pbmRleC1maXJzdC1zZWVuLWUyMzYuanNvbiIKCmRlZiBpc29fbXMocyk6CiAgICByZXR1cm4gZGF0ZXRpbWUuZnJvbWlzb2Zvcm1
+END_FILE
+FILE experiments/bridge/e218.py
+HITS l2
+import base64;exec(base64.b64decode('CmZyb20gcGF0aGxpYiBpbXBvcnQgUGF0aAppbXBvcnQganNvbiwgbWF0aCwgc3VicHJvY2VzcwoKSE9NRSA9IFBhdGguaG9tZSgpClJPT1QgPSBQYXRoLmN3ZCgpClNUQVRFID0gSE9NRSAvICIubG9jYWwiIC8gInN0YXRlIiAvICJwcmVkaWN0aW9uLXJlc2VhcmNoIgpNQU5JRkVTVFMgPSBTVEFURSAvICJrYWxzaGlfd2VhdGhlcl9pbmRleF9tYW5pZmVzdHMiClJBVyA9IFNUQVRFIC8gInJhdyIgLyAia2Fsc2hpX3dlYXRoZXJfaW5kZXgiCgpwYXRocyA9IHNvcnRlZChNQU5JRkVTVFMuZ2xvYigia3dpLSouanNvbiIpKQpyZWNlbnQgPSBwYXRoc1stODpdCm1hbmlmZXN0X3Jvd3MgPSBbXQpmb3IgcCBpbiByZWN
+END_FILE
+FILE experiments/bridge/e154.py
+HITS orderbook,kalshi,polymarket
+policy={'weather_twc':{'evidence_sources':['aviationweather','nws','ecmwf_open','nomads'],'coverage_gaps':['No TWC-specific primary source in registry']},'microstructure':{'evidence_sources':['kalshi_docs','polymarket_docs','cftc'],'coverage_gaps':['No live orderbook snapshot source in hourly registry']},'behavioral':{'evidence_sources':['arxiv'],'discovery_sources':['reddit','youtube'],'coverage_gaps':[]},'informed_flow':{'evidence_sources':['arxiv','cftc'],'discovery_sources':['reddit','youtub
+END_FILE
+FILE experiments/bridge/e071.py
+HITS ask
+q=Path('control/tasks/pending/SCANNER-RECOVERY-E065.json')
+END_FILE
+FILE experiments/bridge/e175.py
+HITS l2
+import base64;exec(base64.b64decode('CmZyb20gcGF0aGxpYiBpbXBvcnQgUGF0aAppbXBvcnQganNvbgppbXBvcnQgdXJsbGliLnJlcXVlc3QKaW1wb3J0IHVybGxpYi5lcnJvcgoKQlVORExFUyA9IFBhdGguaG9tZSgpIC8gJy5sb2NhbC9zdGF0ZS9wcmVkaWN0aW9uLXJlc2VhcmNoL3Jhdy90d2Nfa2Fsc2hpX2J1bmRsZXMnCgp0b2tlbnMgPSAoCiAgICAnZnVuY3Rpb24gYUooJywKICAgICdhSj0nLAogICAgJ2Z1bmN0aW9uIGFaKCcsCiAgICAnYVo9JywKICAgICd3ZWVrU3RhcnQ6JywKICAgICdvbldlZWtTdGFydENoYW5nZScsCikKCm1hdGNoZXMgPSBbXQpmb3IgcGF0aCBpbiBzb3J0ZWQoQlVORExFUy5nbG9iKCcqLmJpbicpKToKICAgIHRleHQ
+END_FILE
+FILE experiments/bridge/e230.py
+HITS l2
+import base64;exec(base64.b64decode('CmZyb20gcGF0aGxpYiBpbXBvcnQgUGF0aAppbXBvcnQganNvbiwgc3VicHJvY2VzcwoKUk9PVCA9IFBhdGguY3dkKCkKUlVOUyA9IFJPT1QgLyAia25vd2xlZGdlIiAvICJydW5zIgpTUkMgPSBSVU5TIC8gImthbHNoaS13ZWF0aGVyLWNvbmZpZy1kaXNjb3ZlcnktZTIyOS5qc29uIgpPVVQgPSBSVU5TIC8gImthbHNoaS13ZWF0aGVyLWNvbmZpZy1jYW5kaWRhdGUtY29udGV4dC1lMjMwLmpzb24iCgpkYXRhID0ganNvbi5sb2FkcyhTUkMucmVhZF90ZXh0KGVuY29kaW5nPSJ1dGYtOCIpKQpuZWVkbGVzID0gWwogICAgIi9saXZlX2RhdGEvd2VhdGhlci9jaGljYWdvL2NhbGlicmF0aW9ucyIsCiAgICAiY29uZml
+END_FILE
+FILE experiments/bridge/e184.py
+HITS l2
+import base64;exec(base64.b64decode('ZnJvbSBwYXRobGliIGltcG9ydCBQYXRoCmltcG9ydCBqc29uCmltcG9ydCBzdWJwcm9jZXNzCgp0YXNrX2lkID0gIlRXQy1QT0lOVC1JTi1USU1FLVJFQ09SREVSLUUxODIiCmhvbWUgPSBQYXRoLmhvbWUoKQpyZXBvID0gaG9tZSAvICJwcmVkaWN0aW9uX3Jlc2VhcmNoIgpzdGF0ZSA9IGhvbWUgLyAiLmxvY2FsL3N0YXRlL3ByZWRpY3Rpb24tcmVzZWFyY2giCgpkZWYgcnVuKGFyZ3MpOgogICAgcCA9IHN1YnByb2Nlc3MucnVuKGFyZ3MsIGNhcHR1cmVfb3V0cHV0PVRydWUsIHRleHQ9VHJ1ZSwgY2hlY2s9RmFsc2UpCiAgICByZXR1cm4geyJyYyI6IHAucmV0dXJuY29kZSwgInN0ZG91dCI6IHAuc3Rkb3V0LnN
+END_FILE
+FILE experiments/bridge/e168.py
+HITS l2,bid
+import base64;exec(base64.b64decode('ZnJvbSBwYXRobGliIGltcG9ydCBQYXRoCmZyb20gaHRtbC5wYXJzZXIgaW1wb3J0IEhUTUxQYXJzZXIKZnJvbSB1cmxsaWIucGFyc2UgaW1wb3J0IHVybGpvaW4KaW1wb3J0IGhhc2hsaWIKaW1wb3J0IGpzb24KaW1wb3J0IHVybGxpYi5yZXF1ZXN0CgpSID0gUGF0aC5jd2QoKQptZGlyID0gUiAvICdrbm93bGVkZ2UvZG9jdW1lbnRzL21hbmlmZXN0cy90d2Nfa2Fsc2hpJwptcCA9IG1heChtZGlyLmdsb2IoJyouanNvbicpKQptYW5pZmVzdCA9IGpzb24ubG9hZHMobXAucmVhZF90ZXh0KCkpCnNoYSA9IG1hbmlmZXN0LmdldCgnc2hhMjU2JykKcmF3ID0gUGF0aC5ob21lKCkgLyAnLmxvY2FsL3N0YXRlL3ByZWR
+END_FILE
+FILE experiments/bridge/e212.py
+HITS l2
+import base64;exec(base64.b64decode('CmZyb20gcGF0aGxpYiBpbXBvcnQgUGF0aApmcm9tIGRhdGV0aW1lIGltcG9ydCBkYXRldGltZSwgdGltZXpvbmUKZnJvbSB1cmxsaWIucGFyc2UgaW1wb3J0IHVybGVuY29kZQppbXBvcnQgdXJsbGliLnJlcXVlc3QsIHVybGxpYi5lcnJvcgppbXBvcnQganNvbiwgaGFzaGxpYiwgc3VicHJvY2VzcwoKUk9PVCA9IFBhdGguY3dkKCkKSE9NRSA9IFBhdGguaG9tZSgpClJVTlMgPSBST09UIC8gImtub3dsZWRnZSIgLyAicnVucyIKUkFXID0gSE9NRSAvICIubG9jYWwiIC8gInN0YXRlIiAvICJwcmVkaWN0aW9uLXJlc2VhcmNoIiAvICJyYXciIC8gImthbHNoaV9ob3VybHlfdHJhbnNpdGlvbl9lMjEyIgpSQVcubWt
+END_FILE
+FILE experiments/bridge/e174.py
+HITS l2
+import base64;exec(base64.b64decode('CmZyb20gcGF0aGxpYiBpbXBvcnQgUGF0aAppbXBvcnQganNvbgppbXBvcnQgdXJsbGliLnJlcXVlc3QKaW1wb3J0IHVybGxpYi5lcnJvcgoKQlVORExFUyA9IFBhdGguaG9tZSgpIC8gJy5sb2NhbC9zdGF0ZS9wcmVkaWN0aW9uLXJlc2VhcmNoL3Jhdy90d2Nfa2Fsc2hpX2J1bmRsZXMnCm5lZWRsZSA9ICd3ZWVrU3RhcnQ9JwpzbmlwcGV0cyA9IFtdCgpmb3IgcGF0aCBpbiBzb3J0ZWQoQlVORExFUy5nbG9iKCcqLmJpbicpKToKICAgIHRleHQgPSBwYXRoLnJlYWRfdGV4dChlcnJvcnM9J3JlcGxhY2UnKQogICAgcG9zID0gMAogICAgd2hpbGUgVHJ1ZToKICAgICAgICBmb3VuZCA9IHRleHQuZmluZChuZWVkbGU
+END_FILE
+FILE experiments/bridge/e226.py
+HITS l2
+import base64;exec(base64.b64decode('CmZyb20gcGF0aGxpYiBpbXBvcnQgUGF0aAppbXBvcnQganNvbiwgc3VicHJvY2Vzcywgc2h1dGlsLCBpbXBvcnRsaWIudXRpbCwgaGFzaGxpYgoKUk9PVCA9IFBhdGguY3dkKCkKUlVOUyA9IFJPT1QgLyAia25vd2xlZGdlIiAvICJydW5zIgpTUkMgPSBSVU5TIC8gImthbHNoaS13ZWF0aGVyLWluZGV4LW9mZmljaWFsLWRvY3MtZTIyMy5qc29uIgpPVVQgPSBSVU5TIC8gImthbHNoaS13ZWF0aGVyLWluZGV4LXBkZi1wcm9iZS1lMjI2Lmpzb24iCgpkYXRhID0ganNvbi5sb2FkcyhTUkMucmVhZF90ZXh0KGVuY29kaW5nPSJ1dGYtOCIpKQpkb2NzID0gZGF0YS5nZXQoIm9mZmljaWFsX2RvY3MiKSBvciBbXQoKbW9
+END_FILE
+FILE experiments/bridge/e208.py
+HITS l2
+import base64;exec(base64.b64decode('CmZyb20gcGF0aGxpYiBpbXBvcnQgUGF0aApmcm9tIGRhdGV0aW1lIGltcG9ydCBkYXRldGltZSwgdGltZXpvbmUKZnJvbSB1cmxsaWIucGFyc2UgaW1wb3J0IHVybGVuY29kZQppbXBvcnQgdXJsbGliLnJlcXVlc3QKaW1wb3J0IHVybGxpYi5lcnJvcgppbXBvcnQganNvbgppbXBvcnQgaGFzaGxpYgppbXBvcnQgc3VicHJvY2VzcwoKUk9PVCA9IFBhdGguY3dkKCkKSE9NRSA9IFBhdGguaG9tZSgpClJBVyA9IEhPTUUgLyAiLmxvY2FsL3N0YXRlL3ByZWRpY3Rpb24tcmVzZWFyY2gvcmF3L2thbHNoaV9wdWJsaWNfd2VhdGhlcl9lMjA4IgpSQVcubWtkaXIocGFyZW50cz1UcnVlLCBleGlzdF9vaz1UcnVlKQpSVU5
+END_FILE
+FILE experiments/bridge/e233.py
+HITS l2
+import base64;exec(base64.b64decode('CmZyb20gcGF0aGxpYiBpbXBvcnQgUGF0aAppbXBvcnQganNvbiwgc3VicHJvY2Vzcywgc3RhdGlzdGljcywgY29sbGVjdGlvbnMKClJPT1QgPSBQYXRoLmN3ZCgpCkhPTUUgPSBQYXRoLmhvbWUoKQpTVEFURSA9IEhPTUUgLyAiLmxvY2FsIiAvICJzdGF0ZSIgLyAicHJlZGljdGlvbi1yZXNlYXJjaCIKTUFOID0gU1RBVEUgLyAia2Fsc2hpX3dlYXRoZXJfaW5kZXhfbWFuaWZlc3RzIgpSQVcgPSBTVEFURSAvICJyYXciIC8gImthbHNoaV93ZWF0aGVyX2luZGV4IiAvICJjaGljYWdvIgpPVVQgPSBST09UIC8gImtub3dsZWRnZSIgLyAicnVucyIgLyAia2Fsc2hpLXdlYXRoZXItaW5kZXgtY2hpY2Fnby1kZWdyYWR
+END_FILE
+FILE experiments/bridge/e221.py
+HITS l2,bid
+import base64;exec(base64.b64decode('CmZyb20gcGF0aGxpYiBpbXBvcnQgUGF0aAppbXBvcnQganNvbiwgaGFzaGxpYiwgc3VicHJvY2VzcwoKSE9NRSA9IFBhdGguaG9tZSgpClJPT1QgPSBQYXRoLmN3ZCgpClJBVyA9IEhPTUUgLyAiLmxvY2FsIiAvICJzdGF0ZSIgLyAicHJlZGljdGlvbi1yZXNlYXJjaCIgLyAicmF3IiAvICJrYWxzaGlfd2VhdGhlcl9pbmRleCIgLyAiY2hpY2FnbyIKT1VUID0gUk9PVCAvICJrbm93bGVkZ2UiIC8gInJ1bnMiIC8gImthbHNoaS13ZWF0aGVyLWluZGV4LWRlZ3JhZGVkLWUyMjEuanNvbiIKVEFSR0VUX1QgPSAxNzg5ODU0NzgwMDAwCgpkZWYgc3VtbWFyaXplX3BvaW50KHB0KToKICAgIHN0YXRpb25zID0gcHQuZ2V
+END_FILE
+FILE experiments/bridge/e092.py
+HITS orderbook
+'microstructure':{'input':'venue and orderbook evidence','output':['execution_constraints','market_hypotheses','negative_evidence'],'gate':'executable_evidence_required'},
+END_FILE
+FILE experiments/bridge/e091.py
+HITS bid
+protocol={'version':1,'research_only':True,'gates':['source_provenance','point_in_time','signal_edge','market_edge','execution_reality','prebuild_killer','chief_falsifier','independent_reproducer'],'promotion_rule':'No candidate may be called proven unless every required gate passes out of sample.','null_result':'NO_PROVEN_EDGE','evidence_priority':['official_primary','academic_primary','reputable_secondary','code_repository','community_discovery'],'community_rule':'Community and video sources a
+END_FILE
+FILE experiments/bridge/e235.py
+HITS l2
+import base64;exec(base64.b64decode('CmZyb20gcGF0aGxpYiBpbXBvcnQgUGF0aAppbXBvcnQganNvbiwgc3VicHJvY2VzcwoKUk9PVCA9IFBhdGguY3dkKCkKSE9NRSA9IFBhdGguaG9tZSgpCk1BTiA9IEhPTUUgLyAiLmxvY2FsIiAvICJzdGF0ZSIgLyAicHJlZGljdGlvbi1yZXNlYXJjaCIgLyAia2Fsc2hpX3dlYXRoZXJfaW5kZXhfbWFuaWZlc3RzIgpPVVQgPSBST09UIC8gImtub3dsZWRnZSIgLyAicnVucyIgLyAia2Fsc2hpLXdlYXRoZXItaW5kZXgtbWFuaWZlc3Qtc2NoZW1hLWUyMzUuanNvbiIKCnBhdGhzID0gc29ydGVkKE1BTi5nbG9iKCJrd2ktKi5qc29uIikpCnNhbXBsZXMgPSBbXQpmb3IgcGF0aCBpbiBwYXRoc1stODpdOgogICAgdHJ
+END_FILE
+FILE experiments/bridge/e237.py
+HITS l2
+import base64;exec(base64.b64decode('CmZyb20gcGF0aGxpYiBpbXBvcnQgUGF0aApmcm9tIGRhdGV0aW1lIGltcG9ydCBkYXRldGltZQppbXBvcnQganNvbiwgc3VicHJvY2Vzcywgc3RhdGlzdGljcwoKUk9PVCA9IFBhdGguY3dkKCkKSE9NRSA9IFBhdGguaG9tZSgpClNUQVRFID0gSE9NRSAvICIubG9jYWwiIC8gInN0YXRlIiAvICJwcmVkaWN0aW9uLXJlc2VhcmNoIgpNQU4gPSBTVEFURSAvICJrYWxzaGlfd2VhdGhlcl9pbmRleF9tYW5pZmVzdHMiClJBVyA9IFNUQVRFIC8gInJhdyIgLyAia2Fsc2hpX3dlYXRoZXJfaW5kZXgiCk9VVCA9IFJPT1QgLyAia25vd2xlZGdlIiAvICJydW5zIiAvICJrYWxzaGktd2VhdGhlci1pbmRleC1saWZlY3ljbGU
+END_FILE
+FILE experiments/bridge/e077.py
+HITS ask
+ for root in [Path('control/tasks'),Path('control/results'),Path('control/lifecycle')]:
+END_FILE
+FILE experiments/bridge/e189.py
+HITS l2
+import base64;exec(base64.b64decode('CmZyb20gcGF0aGxpYiBpbXBvcnQgUGF0aAppbXBvcnQganNvbgppbXBvcnQgc3VicHJvY2VzcwoKcm9vdCA9IFBhdGguY3dkKCkKaG9tZSA9IFBhdGguaG9tZSgpCnJlcG9fdW5pdF9kaXIgPSByb290IC8gImNvbnRyb2wvd2VhdGhlci9zeXN0ZW1kIgp1c2VyX3VuaXRfZGlyID0gaG9tZSAvICIuY29uZmlnL3N5c3RlbWQvdXNlciIKcmVwb191bml0X2Rpci5ta2RpcihwYXJlbnRzPVRydWUsIGV4aXN0X29rPVRydWUpCnVzZXJfdW5pdF9kaXIubWtkaXIocGFyZW50cz1UcnVlLCBleGlzdF9vaz1UcnVlKQoKc2VydmljZV9uYW1lID0gInByZWRpY3Rpb24tcmVzZWFyY2gtdHdjLXJlY29yZGVyLnNlcnZpY2UiCnR
+END_FILE
+FILE experiments/bridge/e065.py
+HITS ask
+for root in [Path('control/tasks'),Path('control/results'),Path('control/lifecycle')]:
+END_FILE
+FILE experiments/bridge/e066.py
+HITS ask
+ if 'JSON.parse' in l or '/discover' in l or 'extractTaskBlocks' in l or 'TASK_PARSE_FAILURE' in l: print(i,l[:220])
+END_FILE
+FILE experiments/bridge/e206.py
+HITS l2,bid
+import base64;exec(base64.b64decode('CmZyb20gcGF0aGxpYiBpbXBvcnQgUGF0aApmcm9tIGRhdGV0aW1lIGltcG9ydCBkYXRldGltZSwgdGltZXpvbmUKaW1wb3J0IGpzb24KaW1wb3J0IHN1YnByb2Nlc3MKCnJvb3QgPSBQYXRoLmN3ZCgpCnJ1bl9pZCA9ICJob3VybHktMjAyNjA5MjBUMDEwMDAwKzAyMDAiCnJ1bnMgPSByb290IC8gImtub3dsZWRnZSIgLyAicnVucyIKcnVuX3BhdGggPSBydW5zIC8gKHJ1bl9pZCArICIuanNvbiIpCnJvdXRpbmdfcGF0aCA9IHJ1bnMgLyAocnVuX2lkICsgIi1yb3V0aW5nLmpzb24iKQp0d2NfcGF0aCA9IHJ1bnMgLyAidHdjLXJldmlzaW9uLXN1bW1hcnktbGF0ZXN0Lmpzb24iCmUyMDJfcGF0aCA9IHJ1bnMgLyA
+END_FILE
+FILE experiments/bridge/e123.py
+HITS ask
+ for base in [ROOT/'control/tasks',ROOT/'control/results',ROOT/'control/lifecycle']:
+END_FILE
+FILE experiments/bridge/e162.py
+HITS l2
+import base64;exec(base64.b64decode('ZnJvbSBwYXRobGliIGltcG9ydCBQYXRoCmltcG9ydCBqc29uCgpSID0gUGF0aC5jd2QoKQppdGVtcyA9IFtdCgpmb3IgcCBpbiBSLnJnbG9iKCcqJyk6CiAgICBpZiBub3QgcC5pc19maWxlKCk6CiAgICAgICAgY29udGludWUKICAgIG5hbWUgPSBwLm5hbWUubG93ZXIoKQogICAgaWYgKCdzb3VyY2UnIGluIG5hbWUgYW5kICdyZWdpc3RyeScgaW4gbmFtZSkgb3IgcC5hc19wb3NpeCgpLmVuZHN3aXRoKCdjb250cm9sL2hvdXJseS9zb3VyY2Vfc3dlZXAucHknKToKICAgICAgICB0cnk6CiAgICAgICAgICAgIHRleHQgPSBwLnJlYWRfdGV4dChlcnJvcnM9J3JlcGxhY2UnKQogICAgICAgIGV4Y2VwdCBFeGNlcHR
+END_FILE
+FILE experiments/bridge/e178.py
+HITS l2,bid
+import base64;exec(base64.b64decode('CmZyb20gcGF0aGxpYiBpbXBvcnQgUGF0aApmcm9tIGRhdGV0aW1lIGltcG9ydCBkYXRldGltZSwgdGltZXpvbmUKZnJvbSBjb2xsZWN0aW9ucyBpbXBvcnQgQ291bnRlcgppbXBvcnQganNvbgppbXBvcnQgc3VicHJvY2VzcwoKUiA9IFBhdGguY3dkKCkKUkFXID0gUGF0aC5ob21lKCkgLyAnLmxvY2FsL3N0YXRlL3ByZWRpY3Rpb24tcmVzZWFyY2gvcmF3L3R3Y19rYWxzaGlfYXBpJwpCVU5ETEVTID0gUGF0aC5ob21lKCkgLyAnLmxvY2FsL3N0YXRlL3ByZWRpY3Rpb24tcmVzZWFyY2gvcmF3L3R3Y19rYWxzaGlfYnVuZGxlcycKT1VUID0gUiAvICdrbm93bGVkZ2UvcnVucycKT1VULm1rZGlyKHBhcmVudHM9VHJ
+END_FILE
+FILE experiments/bridge/e176.py
+HITS l2,bid
+import base64;exec(base64.b64decode('CmZyb20gcGF0aGxpYiBpbXBvcnQgUGF0aApmcm9tIGRhdGV0aW1lIGltcG9ydCBkYXRldGltZSwgdGltZXpvbmUKaW1wb3J0IGhhc2hsaWIKaW1wb3J0IGpzb24KaW1wb3J0IHN1YnByb2Nlc3MKaW1wb3J0IHVybGxpYi5yZXF1ZXN0CgpSID0gUGF0aC5jd2QoKQpSQVcgPSBQYXRoLmhvbWUoKSAvICcubG9jYWwvc3RhdGUvcHJlZGljdGlvbi1yZXNlYXJjaC9yYXcvdHdjX2thbHNoaV9hcGknCk9VVCA9IFIgLyAna25vd2xlZGdlL3J1bnMnClJBVy5ta2RpcihwYXJlbnRzPVRydWUsIGV4aXN0X29rPVRydWUpCk9VVC5ta2RpcihwYXJlbnRzPVRydWUsIGV4aXN0X29rPVRydWUpCgp3ZWVrX3N0YXJ0ID0gJzIwMjY
+END_FILE
+FILE experiments/bridge/e039.py
+HITS ask
+import json,time,subprocess;from pathlib import Path;root=Path.cwd();tid='STALL_TEST_E039';p=root/'control/lifecycle'/(tid+'.json');old=time.time()-120;p.write_text(json.dumps({'task_id':tid,'created_at':old,'updated_at':old,'state':'ACCEPTED','history':[{'state':'ACCEPTED','at':old,'detail':'failure injection'}]},indent=2));subprocess.run(['.venv/bin/python','control/jobs/lifecycle_supervisor.py','--once'],check=True,capture_output=True,text=True);i=Path.home()/'.local/state/prediction-research
+END_FILE
+FILE experiments/bridge/e232.py
+HITS l2
+import base64;exec(base64.b64decode('CmZyb20gcGF0aGxpYiBpbXBvcnQgUGF0aAppbXBvcnQganNvbiwgc3VicHJvY2VzcywgY29sbGVjdGlvbnMKClJPT1QgPSBQYXRoLmN3ZCgpCkhPTUUgPSBQYXRoLmhvbWUoKQpTVEFURSA9IEhPTUUgLyAiLmxvY2FsIiAvICJzdGF0ZSIgLyAicHJlZGljdGlvbi1yZXNlYXJjaCIKTUFOID0gU1RBVEUgLyAia2Fsc2hpX3dlYXRoZXJfaW5kZXhfbWFuaWZlc3RzIgpSQVcgPSBTVEFURSAvICJyYXciIC8gImthbHNoaV93ZWF0aGVyX2luZGV4IgpPVVQgPSBST09UIC8gImtub3dsZWRnZSIgLyAicnVucyIgLyAia2Fsc2hpLXdlYXRoZXItaW5kZXgtc2NoZW1hLWRldGFpbC1lMjMyLmpzb24iCgpwYXRocyA9IHNvcnR
+END_FILE
+FILE experiments/bridge/e084.py
+HITS kalshi,polymarket
+rows=[('kalshi_docs','Kalshi documentation',h+'docs.kalshi.com/','official_venue','primary','hourly'),('polymarket_docs','Polymarket documentation',h+'docs.polymarket.com/','official_venue','primary','hourly'),('cftc','CFTC',h+'www.cftc.gov/','regulator','primary','daily'),('aviationweather','Aviation Weather Center',h+'aviationweather.gov/','meteorology','primary','hourly'),('nws','National Weather Service',h+'www.weather.gov/','meteorology','primary','hourly'),('ecmwf_open','ECMWF Open Data',h
+END_FILE
+FILE experiments/bridge/e081.py
+HITS ask
+ tid=str(d.get('task_id',''))
+ if tid in ['STALL_TEST_E039','CHAT_WAKE_TEST_E056','NO_ENQUEUE_TEST_E052','SCANNER-RECOVERY-E065'] or tid.startswith('browser-task-parse-'):
+END_FILE
+FILE experiments/bridge/e228.py
+HITS l2,bid
+import base64;exec(base64.b64decode('ZnJvbSBwYXRobGliIGltcG9ydCBQYXRoCmltcG9ydCBqc29uLCBzdWJwcm9jZXNzClJPT1Q9UGF0aC5jd2QoKQpPVVQ9Uk9PVC8ia25vd2xlZGdlIi8icnVucyIvImthbHNoaS13ZWF0aGVyLWluZGV4LW1ldGhvZG9sb2d5LXN1bW1hcnktZTIyOC5qc29uIgpEQVRBPSd7XG4gICJjcm9zc19jaGVja3MiOiB7XG4gICAgImNoaWNhZ29fY2VydGlmaWNhdGlvbl9pbml0aWFsX2NvbmZpZyI6ICJjaGljYWdvLXRlbXBlcmF0dXJlLXYxLjEiLFxuICAgICJjaGljYWdvX3B1YmxpY19mZWVkX2NvbmZpZ19lMjE2IjogImNoaWNhZ28tdGVtcGVyYXR1cmUtdjEuMC1jYWwtMjAyNjA5MTQiLFxuICAgICJjb25maWdfbWF0Y2g
+END_FILE
+FILE experiments/bridge/e180.py
+HITS l2
+import base64;exec(base64.b64decode('CmZyb20gcGF0aGxpYiBpbXBvcnQgUGF0aApmcm9tIGRhdGV0aW1lIGltcG9ydCBkYXRldGltZSwgdGltZXpvbmUKaW1wb3J0IGhhc2hsaWIKaW1wb3J0IGpzb24KaW1wb3J0IHN1YnByb2Nlc3MKaW1wb3J0IHVybGxpYi5yZXF1ZXN0CgpSID0gUGF0aC5jd2QoKQpSQVcgPSBQYXRoLmhvbWUoKSAvICcubG9jYWwvc3RhdGUvcHJlZGljdGlvbi1yZXNlYXJjaC9yYXcvdHdjX2thbHNoaV9hcGknCk9VVCA9IFIgLyAna25vd2xlZGdlL3J1bnMnClJBVy5ta2RpcihwYXJlbnRzPVRydWUsIGV4aXN0X29rPVRydWUpCk9VVC5ta2RpcihwYXJlbnRzPVRydWUsIGV4aXN0X29rPVRydWUpCgpvbGRfcGF0aCA9IFJBVyAvICc
+END_FILE
+FILE experiments/bridge/e158.py
+HITS l2
+from pathlib import Path;import base64,subprocess,importlib.util;R=Path.cwd();q=R/'control/hourly/source_quality.py';c=R/'control/hourly/hourly_cycle.py';q.write_bytes(base64.b64decode('ZnJvbSBwYXRobGliIGltcG9ydCBQYXRoCmltcG9ydCBqc29uCgpSID0gUGF0aChfX2ZpbGVfXykucmVzb2x2ZSgpLnBhcmVudHNbMl0KCmRlZiBncmFkZShydW5faWQpOgogICAgcnVuX3BhdGggPSBSIC8gJ2tub3dsZWRnZS9ydW5zJyAvIChydW5faWQgKyAnLmpzb24nKQogICAgcnVuID0ganNvbi5sb2FkcyhydW5fcGF0aC5yZWFkX3RleHQoKSkKICAgIHJvd3MgPSBbXQogICAgZm9yIHNvdXJjZV9pZCwgbWFuaW
+END_FILE
+FILE experiments/bridge/e173.py
+HITS l2
+import base64;exec(base64.b64decode('CmZyb20gcGF0aGxpYiBpbXBvcnQgUGF0aApmcm9tIGRhdGV0aW1lIGltcG9ydCBkYXRldGltZSwgdGltZXpvbmUKaW1wb3J0IGhhc2hsaWIKaW1wb3J0IGpzb24KaW1wb3J0IHN1YnByb2Nlc3MKaW1wb3J0IHVybGxpYi5yZXF1ZXN0CgpSID0gUGF0aC5jd2QoKQpSQVcgPSBQYXRoLmhvbWUoKSAvICcubG9jYWwvc3RhdGUvcHJlZGljdGlvbi1yZXNlYXJjaC9yYXcvdHdjX2thbHNoaV9hcGknCk9VVCA9IFIgLyAna25vd2xlZGdlL3J1bnMnClJBVy5ta2RpcihwYXJlbnRzPVRydWUsIGV4aXN0X29rPVRydWUpCk9VVC5ta2RpcihwYXJlbnRzPVRydWUsIGV4aXN0X29rPVRydWUpCgp1cmwgPSAnaHR0cHM6Ly93ZWF
+END_FILE
+FILE experiments/bridge/e105.py
+HITS kalshi
+source=sources['kalshi_docs']
+classification=change.classify('kalshi_docs')
+ r(['git','add','knowledge/documents/manifests/kalshi_docs']);c=r(['git','commit','-m','test(hourly): prove source dedupe']);p=r(['git','push','origin','HEAD:main']);out['commit_rc']=c.returncode;out['push_rc']=p.returncode
+END_FILE
+FILE experiments/bridge/e179.py
+HITS l2
+import base64;exec(base64.b64decode('CmZyb20gcGF0aGxpYiBpbXBvcnQgUGF0aApmcm9tIGRhdGV0aW1lIGltcG9ydCBkYXRldGltZSwgdGltZXpvbmUKaW1wb3J0IGhhc2hsaWIKaW1wb3J0IGpzb24KaW1wb3J0IHN1YnByb2Nlc3MKaW1wb3J0IHVybGxpYi5yZXF1ZXN0CgpSID0gUGF0aC5jd2QoKQpSQVcgPSBQYXRoLmhvbWUoKSAvICcubG9jYWwvc3RhdGUvcHJlZGljdGlvbi1yZXNlYXJjaC9yYXcvdHdjX2thbHNoaV9hcGknCk9VVCA9IFIgLyAna25vd2xlZGdlL3J1bnMnClJBVy5ta2RpcihwYXJlbnRzPVRydWUsIGV4aXN0X29rPVRydWUpCk9VVC5ta2RpcihwYXJlbnRzPVRydWUsIGV4aXN0X29rPVRydWUpCgpvbGRfcGF0aCA9IFJBVyAvICc
+END_FILE
+FILE experiments/bridge/e128.py
+HITS ask
+for b in [R/'control/tasks',R/'control/results',R/'control/lifecycle']:
+END_FILE
+FILE experiments/bridge/e213.py
+HITS l2
+import base64;exec(base64.b64decode('CmZyb20gcGF0aGxpYiBpbXBvcnQgUGF0aApmcm9tIGRhdGV0aW1lIGltcG9ydCBkYXRldGltZSwgdGltZXpvbmUKZnJvbSB1cmxsaWIucGFyc2UgaW1wb3J0IHVybGVuY29kZQppbXBvcnQgdXJsbGliLnJlcXVlc3QKaW1wb3J0IHVybGxpYi5lcnJvcgppbXBvcnQganNvbgppbXBvcnQgaGFzaGxpYgppbXBvcnQgc3VicHJvY2VzcwoKUk9PVCA9IFBhdGguY3dkKCkKSE9NRSA9IFBhdGguaG9tZSgpClJVTlMgPSBST09UIC8gImtub3dsZWRnZSIgLyAicnVucyIKUkFXID0gSE9NRSAvICIubG9jYWwiIC8gInN0YXRlIiAvICJwcmVkaWN0aW9uLXJlc2VhcmNoIiAvICJyYXciIC8gImthbHNoaV9ob3VybHlfdW5pdmV
+END_FILE
+FILE experiments/bridge/e160.py
+HITS l2
+import base64;exec(base64.b64decode('ZnJvbSBwYXRobGliIGltcG9ydCBQYXRoCmltcG9ydCBqc29uLCB1cmxsaWIucmVxdWVzdAoKdXJscyA9ICgKICAgICdodHRwczovL2hlbHAua2Fsc2hpLmNvbS9lbi9hcnRpY2xlcy8xMzgyMzgzNy13ZWF0aGVyLW1hcmtldHMnLAogICAgJ2h0dHBzOi8vZGV2ZWxvcGVyLndlYXRoZXIuY29tL2RvY3Mvb3BlbmFwaS9zaXRlLWJhc2VkLW9ic2VydmF0aW9ucy0xLTAnLAogICAgJ2h0dHBzOi8vZGV2ZWxvcGVyLndlYXRoZXIuY29tL2RvY3Mvb3BlbmFwaS90aW1lLXNlcmllcy1vYnNlcnZhdGlvbnMtY3VycmVudC1ob3Vycy1wYXN0LTI0LTAtMCcsCiAgICAnaHR0cHM6Ly9kZXZlbG9wZXIud2VhdGhlci5jb20vZG9
+END_FILE
+FILE experiments/bridge/e131.py
+HITS l2
+from pathlib import Path;import base64,subprocess;R=Path.cwd();p=R/'control/hourly/hourly_cycle.py';p.write_bytes(base64.b64decode('ZnJvbSBwYXRobGliIGltcG9ydCBQYXRoCmltcG9ydCBpbXBvcnRsaWIudXRpbAppbXBvcnQgc3VicHJvY2VzcwoKUiA9IFBhdGgoX19maWxlX18pLnJlc29sdmUoKS5wYXJlbnRzWzJdCgpkZWYgbG9hZChuYW1lLCBwYXRoKToKICAgIHNwZWMgPSBpbXBvcnRsaWIudXRpbC5zcGVjX2Zyb21fZmlsZV9sb2NhdGlvbihuYW1lLCBwYXRoKQogICAgbW9kID0gaW1wb3J0bGliLnV0aWwubW9kdWxlX2Zyb21fc3BlYyhzcGVjKQogICAgc3BlYy5sb2FkZXIuZXhlY19tb2R1bGUobW9kKQogICAg
+END_FILE
+FILE experiments/bridge/e098.py
+HITS ask
+ for root in [Path('control/tasks'),Path('control/results'),Path('control/lifecycle')]:
+END_FILE
+FILE experiments/bridge/e220.py
+HITS l2
+import base64;exec(base64.b64decode('CmZyb20gcGF0aGxpYiBpbXBvcnQgUGF0aAppbXBvcnQganNvbgppbXBvcnQgaGFzaGxpYgppbXBvcnQgc3VicHJvY2VzcwoKSE9NRSA9IFBhdGguaG9tZSgpClJPT1QgPSBQYXRoLmN3ZCgpClJBVyA9IEhPTUUgLyAiLmxvY2FsIiAvICJzdGF0ZSIgLyAicHJlZGljdGlvbi1yZXNlYXJjaCIgLyAicmF3IiAvICJrYWxzaGlfd2VhdGhlcl9pbmRleCIgLyAiY2hpY2FnbyIKT1VUID0gUk9PVCAvICJrbm93bGVkZ2UiIC8gInJ1bnMiIC8gImthbHNoaS13ZWF0aGVyLWluZGV4LWRlZ3JhZGVkLWUyMjAuanNvbiIKVEFSR0VUX1QgPSAxNzg5ODU0NzgwMDAwCgpkZWYgbWVhbih2YWxzKToKICAgIHJldHVybiBzdW0odmF
+END_FILE
+FILE experiments/bridge/e211.py
+HITS l2
+import base64;exec(base64.b64decode('CmZyb20gcGF0aGxpYiBpbXBvcnQgUGF0aApmcm9tIGRhdGV0aW1lIGltcG9ydCBkYXRldGltZSwgdGltZXpvbmUKZnJvbSB1cmxsaWIucGFyc2UgaW1wb3J0IHVybGVuY29kZQppbXBvcnQgdXJsbGliLnJlcXVlc3QKaW1wb3J0IHVybGxpYi5lcnJvcgppbXBvcnQganNvbgppbXBvcnQgaGFzaGxpYgppbXBvcnQgc3VicHJvY2VzcwoKUk9PVCA9IFBhdGguY3dkKCkKSE9NRSA9IFBhdGguaG9tZSgpClJVTlMgPSBST09UIC8gImtub3dsZWRnZSIgLyAicnVucyIKRTIwOSA9IFJVTlMgLyAia2Fsc2hpLWhvdXJseS1zZXJpZXMtZTIwOS5qc29uIgpSQVcyMDkgPSBIT01FIC8gIi5sb2NhbCIgLyAic3RhdGUiIC8gInB
+END_FILE
+FILE experiments/bridge/e172.py
+HITS l2,bid
+import base64;exec(base64.b64decode('ZnJvbSBwYXRobGliIGltcG9ydCBQYXRoCmZyb20gZGF0ZXRpbWUgaW1wb3J0IGRhdGV0aW1lLCB0aW1lem9uZQppbXBvcnQgaGFzaGxpYgppbXBvcnQganNvbgppbXBvcnQgc3VicHJvY2VzcwppbXBvcnQgdXJsbGliLnJlcXVlc3QKClIgPSBQYXRoLmN3ZCgpClJBVyA9IFBhdGguaG9tZSgpIC8gJy5sb2NhbC9zdGF0ZS9wcmVkaWN0aW9uLXJlc2VhcmNoL3Jhdy90d2Nfa2Fsc2hpX2FwaScKT1VUID0gUiAvICdrbm93bGVkZ2UvcnVucycKUkFXLm1rZGlyKHBhcmVudHM9VHJ1ZSwgZXhpc3Rfb2s9VHJ1ZSkKT1VULm1rZGlyKHBhcmVudHM9VHJ1ZSwgZXhpc3Rfb2s9VHJ1ZSkKCnRhcmdldHMgPSAoCiAgICAoJ3B
+END_FILE
+FILE experiments/bridge/e188.py
+HITS l2
+import base64;exec(base64.b64decode('ZnJvbSBwYXRobGliIGltcG9ydCBQYXRoCmltcG9ydCBiYXNlNjQKaW1wb3J0IGpzb24KaW1wb3J0IHN1YnByb2Nlc3MKaW1wb3J0IHN5cwoKcm9vdCA9IFBhdGguY3dkKCkKdGFyZ2V0ID0gcm9vdCAvICJjb250cm9sL3dlYXRoZXIvdHdjX2hvdXJseV9yZWNvcmRlci5weSIKdGFyZ2V0LnBhcmVudC5ta2RpcihwYXJlbnRzPVRydWUsIGV4aXN0X29rPVRydWUpCnRhcmdldC53cml0ZV9ieXRlcyhiYXNlNjQuYjY0ZGVjb2RlKCJabkp2YlNCd1lYUm9iR2xpSUdsdGNHOXlkQ0JRWVhSb0NtWnliMjBnWkdGMFpYUnBiV1VnYVcxd2IzSjBJR1JoZEdWMGFXMWxMQ0IwYVcxbGVtOXVaU3dnZEdsdFpXUmxiSFJoQ21aeWI
+END_FILE
+FILE experiments/bridge/e069.py
+HITS ask
+ for root in [Path('control/tasks'),Path('control/results'),Path('control/lifecycle')]:
+END_FILE
+FILE experiments/bridge/e190.py
+HITS l2
+import base64;exec(base64.b64decode('CmZyb20gcGF0aGxpYiBpbXBvcnQgUGF0aAppbXBvcnQganNvbgppbXBvcnQgc3VicHJvY2VzcwoKcm9vdCA9IFBhdGguY3dkKCkKaG9tZSA9IFBhdGguaG9tZSgpCnJlcG9fdW5pdF9kaXIgPSByb290IC8gImNvbnRyb2wvd2VhdGhlci9zeXN0ZW1kIgp1c2VyX3VuaXRfZGlyID0gaG9tZSAvICIuY29uZmlnL3N5c3RlbWQvdXNlciIKcmVwb191bml0X2Rpci5ta2RpcihwYXJlbnRzPVRydWUsIGV4aXN0X29rPVRydWUpCnVzZXJfdW5pdF9kaXIubWtkaXIocGFyZW50cz1UcnVlLCBleGlzdF9vaz1UcnVlKQoKc2VydmljZV9uYW1lID0gInByZWRpY3Rpb24tcmVzZWFyY2gtdHdjLXJlY29yZGVyLnNlcnZpY2UiCnR
+END_FILE
+FILE experiments/bridge/e197.py
+HITS l2
+import base64;exec(base64.b64decode('CmZyb20gcGF0aGxpYiBpbXBvcnQgUGF0aAppbXBvcnQgc3VicHJvY2Vzcwpyb290PVBhdGguY3dkKCkKaG9tZT1QYXRoLmhvbWUoKQpuYW1lPSJwcmVkaWN0aW9uLXJlc2VhcmNoLXR3Yy1yZWNvcmRlci5zZXJ2aWNlIgpyZXBvPXJvb3QvImNvbnRyb2wvd2VhdGhlci9zeXN0ZW1kIi9uYW1lCnVzZXI9aG9tZS8iLmNvbmZpZy9zeXN0ZW1kL3VzZXIiL25hbWUKcG9zdD0iRXhlY1N0YXJ0UG9zdD0laC9wcmVkaWN0aW9uX3Jlc2VhcmNoLy52ZW52L2Jpbi9weXRob24gJWgvcHJlZGljdGlvbl9yZXNlYXJjaC9jb250cm9sL2pvYnMvdHdjX3JldmlzaW9uX3N1bW1hcnkucHkiCmxpbmVzPVt4IGZvciB4IGluIHJlcG8
+END_FILE
+FILE experiments/bridge/e231.py
+HITS l2
+import base64;exec(base64.b64decode('CmZyb20gcGF0aGxpYiBpbXBvcnQgUGF0aAppbXBvcnQganNvbiwgc3VicHJvY2VzcywgY29sbGVjdGlvbnMKClJPT1QgPSBQYXRoLmN3ZCgpCkhPTUUgPSBQYXRoLmhvbWUoKQpTVEFURSA9IEhPTUUgLyAiLmxvY2FsIiAvICJzdGF0ZSIgLyAicHJlZGljdGlvbi1yZXNlYXJjaCIKTUFOID0gU1RBVEUgLyAia2Fsc2hpX3dlYXRoZXJfaW5kZXhfbWFuaWZlc3RzIgpSQVcgPSBTVEFURSAvICJyYXciIC8gImthbHNoaV93ZWF0aGVyX2luZGV4IgpPVVQgPSBST09UIC8gImtub3dsZWRnZSIgLyAicnVucyIgLyAia2Fsc2hpLXdlYXRoZXItaW5kZXgtc2NoZW1hLWUyMzEuanNvbiIKCnBhdGhzID0gc29ydGVkKE1BTi5
+END_FILE
+FILE experiments/bridge/e209.py
+HITS l2
+import base64;exec(base64.b64decode('CmZyb20gcGF0aGxpYiBpbXBvcnQgUGF0aApmcm9tIGRhdGV0aW1lIGltcG9ydCBkYXRldGltZSwgdGltZXpvbmUKZnJvbSB1cmxsaWIucGFyc2UgaW1wb3J0IHVybGVuY29kZQppbXBvcnQgdXJsbGliLnJlcXVlc3QKaW1wb3J0IHVybGxpYi5lcnJvcgppbXBvcnQganNvbgppbXBvcnQgaGFzaGxpYgppbXBvcnQgc3VicHJvY2VzcwoKUk9PVCA9IFBhdGguY3dkKCkKSE9NRSA9IFBhdGguaG9tZSgpClJBVyA9IEhPTUUgLyAiLmxvY2FsL3N0YXRlL3ByZWRpY3Rpb24tcmVzZWFyY2gvcmF3L2thbHNoaV9ob3VybHlfc2VyaWVzX2UyMDkiClJBVy5ta2RpcihwYXJlbnRzPVRydWUsIGV4aXN0X29rPVRydWUpClJVTlM
+END_FILE
+FILE experiments/bridge/e165.py
+HITS l2
+import base64;exec(base64.b64decode('ZnJvbSBwYXRobGliIGltcG9ydCBQYXRoCmltcG9ydCBqc29uLCByZQoKUiA9IFBhdGguY3dkKCkKbWRpciA9IFIgLyAna25vd2xlZGdlL2RvY3VtZW50cy9tYW5pZmVzdHMvdHdjX2thbHNoaScKbWFuaWZlc3RzID0gc29ydGVkKG1kaXIuZ2xvYignKi5qc29uJykpCm1hbmlmZXN0ID0ganNvbi5sb2FkcyhtYW5pZmVzdHNbLTFdLnJlYWRfdGV4dCgpKQpzaGEgPSBtYW5pZmVzdC5nZXQoJ3NoYTI1NicpCnJhdyA9IFBhdGguaG9tZSgpIC8gJy5sb2NhbC9zdGF0ZS9wcmVkaWN0aW9uLXJlc2VhcmNoL3Jhdy90d2Nfa2Fsc2hpJyAvIChzaGEgKyAnLmJpbicpCmJvZHkgPSByYXcucmVhZF9ieXRlcygpCnRleHQgPSB
+END_FILE
+FILE experiments/bridge/e217.py
+HITS l2
+import base64;exec(base64.b64decode('CmZyb20gcGF0aGxpYiBpbXBvcnQgUGF0aAppbXBvcnQganNvbgppbXBvcnQgc3VicHJvY2VzcwoKcm9vdCA9IFBhdGguY3dkKCkKaG9tZSA9IFBhdGguaG9tZSgpCnJlcG9fc3lzdGVtZCA9IHJvb3QgLyAiY29udHJvbCIgLyAid2VhdGhlciIgLyAic3lzdGVtZCIKcmVwb19zeXN0ZW1kLm1rZGlyKHBhcmVudHM9VHJ1ZSwgZXhpc3Rfb2s9VHJ1ZSkKdXNlcl9zeXN0ZW1kID0gaG9tZSAvICIuY29uZmlnIiAvICJzeXN0ZW1kIiAvICJ1c2VyIgp1c2VyX3N5c3RlbWQubWtkaXIocGFyZW50cz1UcnVlLCBleGlzdF9vaz1UcnVlKQoKc2VydmljZV9uYW1lID0gInByZWRpY3Rpb24tcmVzZWFyY2gta2Fsc2hpLXdlYXR
+END_FILE
+FILE experiments/bridge/e088.py
+HITS ask
+lines=['from pathlib import Path','from datetime import datetime','import json','import time','','def main():','    now = datetime.now().astimezone()','    stamp = now.strftime("%Y%m%dT%H00%z")','    iid = "hourly-research-" + stamp','    idir = Path.home() / ".local/state/prediction-research/incidents"','    idir.mkdir(parents=True, exist_ok=True)','    path = idir / (iid + "__HOURLY_RESEARCH_WAKE.json")','    if path.exists():','        return','    ts = time.time()','    data = {','        "i
+END_FILE
+FILE experiments/bridge/e224.py
+HITS l2
+import base64;exec(base64.b64decode('CmZyb20gcGF0aGxpYiBpbXBvcnQgUGF0aAppbXBvcnQganNvbiwgc3VicHJvY2VzcywgcmUKClJPT1QgPSBQYXRoLmN3ZCgpCkhPTUUgPSBQYXRoLmhvbWUoKQpSVU5TID0gUk9PVCAvICJrbm93bGVkZ2UiIC8gInJ1bnMiClNSQyA9IFJVTlMgLyAia2Fsc2hpLXdlYXRoZXItaW5kZXgtb2ZmaWNpYWwtZG9jcy1lMjIzLmpzb24iCk9VVCA9IFJVTlMgLyAia2Fsc2hpLXdlYXRoZXItaW5kZXgtb2ZmaWNpYWwtZG9jcy10ZXh0LWUyMjQuanNvbiIKCmRhdGEgPSBqc29uLmxvYWRzKFNSQy5yZWFkX3RleHQoZW5jb2Rpbmc9InV0Zi04IikpCmRvY3MgPSBkYXRhLmdldCgib2ZmaWNpYWxfZG9jcyIpIG9yIFtdCgpiYWN
+END_FILE
+FILE experiments/bridge/e210.py
+HITS l2
+import base64;exec(base64.b64decode('CmZyb20gcGF0aGxpYiBpbXBvcnQgUGF0aApmcm9tIGRhdGV0aW1lIGltcG9ydCBkYXRldGltZSwgdGltZXpvbmUKZnJvbSB1cmxsaWIucGFyc2UgaW1wb3J0IHVybGVuY29kZQppbXBvcnQgdXJsbGliLnJlcXVlc3QKaW1wb3J0IHVybGxpYi5lcnJvcgppbXBvcnQganNvbgppbXBvcnQgaGFzaGxpYgppbXBvcnQgc3VicHJvY2VzcwoKUk9PVCA9IFBhdGguY3dkKCkKSE9NRSA9IFBhdGguaG9tZSgpClJVTlMgPSBST09UIC8gImtub3dsZWRnZS9ydW5zIgpFMjA5ID0gUlVOUyAvICJrYWxzaGktaG91cmx5LXNlcmllcy1lMjA5Lmpzb24iClJBVzIwOSA9IEhPTUUgLyAiLmxvY2FsL3N0YXRlL3ByZWRpY3Rpb24tcmV
+END_FILE
+FILE experiments/bridge/e225.py
+HITS l2
+import base64;exec(base64.b64decode('CmZyb20gcGF0aGxpYiBpbXBvcnQgUGF0aAppbXBvcnQganNvbiwgc3VicHJvY2Vzcywgc2h1dGlsLCBoYXNobGliCgpST09UID0gUGF0aC5jd2QoKQpIT01FID0gUGF0aC5ob21lKCkKUlVOUyA9IFJPT1QgLyAia25vd2xlZGdlIiAvICJydW5zIgpTUkMgPSBSVU5TIC8gImthbHNoaS13ZWF0aGVyLWluZGV4LW9mZmljaWFsLWRvY3MtZTIyMy5qc29uIgpPVVQgPSBSVU5TIC8gImthbHNoaS13ZWF0aGVyLWluZGV4LXBkZi1leHRyYWN0LWUyMjUuanNvbiIKCmRhdGEgPSBqc29uLmxvYWRzKFNSQy5yZWFkX3RleHQoZW5jb2Rpbmc9InV0Zi04IikpCmRvY3MgPSBkYXRhLmdldCgib2ZmaWNpYWxfZG9jcyIpIG9yIFt
+END_FILE
+FILE experiments/bridge/e142.py
+HITS l2
+import base64;exec(base64.b64decode('ZnJvbSBwYXRobGliIGltcG9ydCBQYXRoCmltcG9ydCBzdWJwcm9jZXNzLCBzaHV0aWwK'+'Uj1QYXRoLmN3ZCgpCmNwPVIvJ2NvbnRyb2wvYnJvd3Nlcl9leHRlbnNpb24vY29udGVudC5qcycKYnA9Ui8nY29udHJvbC9icm93c2VyX2V4dGVuc2lvbi9iYWNrZ3JvdW5kLmpzJwpjPWNwLnJlYWRfdGV4dCgpCmI9YnAucmVhZF90ZXh0KCkKb2xkX3RvcD0nKCgpID0+IHtcbiAgaWYgKHdpbmRvdy5fX1BSRURJQ1RJT05fUkVTRUFSQ0hfQlJJREdFX0xPQURFRF9fKSB7XG4gICAgcmV0dXJuO1xuICB9XG5cbiAgd2luZG93Ll9fUFJFRElDVElPTl9SRVNFQVJDSF9CUklER0VfTE9BREVEX18gPSB0cnVlO1xuJwpuZXdf
+END_FILE
+FILE experiments/bridge/e087.py
+HITS orderbook
+{'id':'microstructure','purpose':'Orderbook, maker-taker, spread, depth and execution research','authority':'RESEARCH_ONLY'},
+END_FILE
+FILE experiments/bridge/e183.py
+HITS l2
+import base64;exec(base64.b64decode('CmZyb20gcGF0aGxpYiBpbXBvcnQgUGF0aAppbXBvcnQganNvbgppbXBvcnQgc3VicHJvY2VzcwoKdGFza19pZCA9ICJUV0MtUE9JTlQtSU4tVElNRS1SRUNPUkRFUi1FMTgyIgpcbmhvbWUgPSBQYXRoLmhvbWUoKQpyZXBvID0gaG9tZSAvICJwcmVkaWN0aW9uX3Jlc2VhcmNoIgpzdGF0ZSA9IGhvbWUgLyAiLmxvY2FsL3N0YXRlL3ByZWRpY3Rpb24tcmVzZWFyY2giCgpkZWYgcnVuKGFyZ3MpOgogICAgcCA9IHN1YnByb2Nlc3MucnVuKGFyZ3MsIGNhcHR1cmVfb3V0cHV0PVRydWUsIHRleHQ9VHJ1ZSwgY2hlY2s9RmFsc2UpCiAgICByZXR1cm4geyJyYyI6IHAucmV0dXJuY29kZSwgInN0ZG91dCI6IHAuc3Rkb3V
+END_FILE
+FILE experiments/bridge/e202.py
+HITS l2
+import base64;exec(base64.b64decode('CmZyb20gcGF0aGxpYiBpbXBvcnQgUGF0aApmcm9tIGRhdGV0aW1lIGltcG9ydCBkYXRldGltZSwgdGltZXpvbmUKZnJvbSB1cmxsaWIucGFyc2UgaW1wb3J0IHVybGVuY29kZQppbXBvcnQgdXJsbGliLnJlcXVlc3QKaW1wb3J0IGpzb24KaW1wb3J0IGhhc2hsaWIKaW1wb3J0IHN1YnByb2Nlc3MKClJPT1QgPSBQYXRoLmN3ZCgpCkhPTUUgPSBQYXRoLmhvbWUoKQpSQVcgPSBIT01FIC8gIi5sb2NhbC9zdGF0ZS9wcmVkaWN0aW9uLXJlc2VhcmNoL3Jhdy9rYWxzaGlfcHVibGljX2g3IgpSQVcubWtkaXIocGFyZW50cz1UcnVlLCBleGlzdF9vaz1UcnVlKQpPVVQgPSBST09UIC8gImtub3dsZWRnZS9ydW5zIgpPVVQ
+END_FILE
+FILE experiments/bridge/e171.py
+HITS l2
+import base64;exec(base64.b64decode('ZnJvbSBwYXRobGliIGltcG9ydCBQYXRoCmZyb20gZGF0ZXRpbWUgaW1wb3J0IGRhdGV0aW1lLCB0aW1lem9uZQppbXBvcnQgaGFzaGxpYgppbXBvcnQganNvbgppbXBvcnQgc3VicHJvY2VzcwppbXBvcnQgdXJsbGliLnJlcXVlc3QKClIgPSBQYXRoLmN3ZCgpClJBVyA9IFBhdGguaG9tZSgpIC8gJy5sb2NhbC9zdGF0ZS9wcmVkaWN0aW9uLXJlc2VhcmNoL3Jhdy90d2Nfa2Fsc2hpX2FwaScKT1VUID0gUiAvICdrbm93bGVkZ2UvcnVucycKUkFXLm1rZGlyKHBhcmVudHM9VHJ1ZSwgZXhpc3Rfb2s9VHJ1ZSkKT1VULm1rZGlyKHBhcmVudHM9VHJ1ZSwgZXhpc3Rfb2s9VHJ1ZSkKCnRhcmdldHMgPSAoCiAgICAoJ3B
+END_FILE
+FILE experiments/bridge/e164.py
+HITS l2
+import base64;exec(base64.b64decode('ZnJvbSBwYXRobGliIGltcG9ydCBQYXRoCmltcG9ydCBpbXBvcnRsaWIudXRpbAppbXBvcnQganNvbgppbXBvcnQgc3VicHJvY2VzcwoKUiA9IFBhdGguY3dkKCkKCmRlZiBsb2FkKG5hbWUsIHBhdGgpOgogICAgc3BlYyA9IGltcG9ydGxpYi51dGlsLnNwZWNfZnJvbV9maWxlX2xvY2F0aW9uKG5hbWUsIHBhdGgpCiAgICBtb2QgPSBpbXBvcnRsaWIudXRpbC5tb2R1bGVfZnJvbV9zcGVjKHNwZWMpCiAgICBzcGVjLmxvYWRlci5leGVjX21vZHVsZShtb2QpCiAgICByZXR1cm4gbW9kCgpyZWdpc3RyeV9wYXRoID0gUiAvICdrbm93bGVkZ2Uvc291cmNlcy9yZWdpc3RyeS5qc29uJwpwb2xpY3lfcGF0aCA9IFIgLyA
+END_FILE
+FILE experiments/bridge/e196.py
+HITS l2
+import base64;exec(base64.b64decode('CmZyb20gcGF0aGxpYiBpbXBvcnQgUGF0aAppbXBvcnQganNvbgppbXBvcnQgc3VicHJvY2VzcwoKcm9vdCA9IFBhdGguY3dkKCkKaG9tZSA9IFBhdGguaG9tZSgpCm5hbWUgPSAicHJlZGljdGlvbi1yZXNlYXJjaC10d2MtcmVjb3JkZXIuc2VydmljZSIKcmVwbyA9IHJvb3QgLyAiY29udHJvbC93ZWF0aGVyL3N5c3RlbWQiIC8gbmFtZQp1c2VyID0gaG9tZSAvICIuY29uZmlnL3N5c3RlbWQvdXNlciIgLyBuYW1lCgp0ZXh0ID0gcmVwby5yZWFkX3RleHQoZW5jb2Rpbmc9InV0Zi04IikKcG9zdCA9ICJFeGVjU3RhcnRQb3N0PSVoL3ByZWRpY3Rpb25fcmVzZWFyY2gvLnZlbnYvYmluL3B5dGhvbiAlaC9wcmVkaWN
+END_FILE
+FILE experiments/bridge/e156.py
+HITS l2,bid
+from pathlib import Path;import base64,subprocess;R=Path.cwd();p=R/'control/hourly/role_router.py';p.write_bytes(base64.b64decode('ZnJvbSBwYXRobGliIGltcG9ydCBQYXRoCmltcG9ydCBqc29uCgpSID0gUGF0aC5jd2QoKQpQT0xJQ1kgPSBqc29uLmxvYWRzKChSIC8gJ2NvbnRyb2wvaG91cmx5L3JvbGVfc291cmNlX3BvbGljeS5qc29uJykucmVhZF90ZXh0KCkpClRFUk1TID0gewogICAgJ3dlYXRoZXJfdHdjJzogWydtZXRhcicsICcyIG1ldHJlIHRlbXBlcmF0dXJlJywgJ2Rld3BvaW50JywgJ3dpbmQgY29tcG9uZW50JywgJ3RlbXBlcmF0dXJlIGZvcmVjYXN0J10sCiAgICAnbWljcm9zdHJ1Y3R1cmUnOiBbJ29yZ
+END_FILE
+FILE experiments/bridge/e227.py
+HITS l2
+import base64;exec(base64.b64decode('CmZyb20gcGF0aGxpYiBpbXBvcnQgUGF0aAppbXBvcnQganNvbiwgc3VicHJvY2VzcwoKUk9PVCA9IFBhdGguY3dkKCkKUlVOUyA9IFJPT1QgLyAia25vd2xlZGdlIiAvICJydW5zIgpTUkMgPSBSVU5TIC8gImthbHNoaS13ZWF0aGVyLWluZGV4LW9mZmljaWFsLWRvY3MtZTIyMy5qc29uIgpPVVQgPSBSVU5TIC8gImthbHNoaS13ZWF0aGVyLWluZGV4LW1pYW1pLWludGVycG9sLWUyMjcuanNvbiIKCmRhdGEgPSBqc29uLmxvYWRzKFNSQy5yZWFkX3RleHQoZW5jb2Rpbmc9InV0Zi04IikpCmRvY3MgPSBkYXRhLmdldCgib2ZmaWNpYWxfZG9jcyIpIG9yIFtdCnRhcmdldCA9IE5vbmUKZm9yIGQgaW4gZG9jczoKICA
+END_FILE
+FILE experiments/bridge/e181.py
+HITS l2
+import base64;exec(base64.b64decode('CmZyb20gcGF0aGxpYiBpbXBvcnQgUGF0aAppbXBvcnQganNvbgppbXBvcnQgc3VicHJvY2VzcwoKUiA9IFBhdGguY3dkKCkKUkFXID0gUGF0aC5ob21lKCkgLyAnLmxvY2FsL3N0YXRlL3ByZWRpY3Rpb24tcmVzZWFyY2gvcmF3L3R3Y19rYWxzaGlfYXBpJwpPVVQgPSBSIC8gJ2tub3dsZWRnZS9ydW5zJwpPVVQubWtkaXIocGFyZW50cz1UcnVlLCBleGlzdF9vaz1UcnVlKQoKb2xkX3BhdGggPSBSQVcgLyAnNzIwYWE2MjBmNTMzNTU5MzEyYzZkYmI5MjBmYmRmNjk2ZDUyYjE5NTk5YzJjZGVmM2MzMDJiMzJmYjA4Yzc1Ny5iaW4nCm5ld19wYXRoID0gUkFXIC8gJ2VmNDc0MzNhZWVhMDFlYThkM2QyMjgyMjU3Yjl
+END_FILE
+FILE experiments/bridge/e201.py
+HITS l2
+import base64;exec(base64.b64decode('CmZyb20gcGF0aGxpYiBpbXBvcnQgUGF0aAppbXBvcnQganNvbgoKaG9tZSA9IFBhdGguaG9tZSgpCnJvb3RzID0gW10KZm9yIHBhdHRlcm4gaW4gKCJzdXJwbHVzX21ha2VyIiwgInByb29mX2h1bnRlcioiLCAicHJlZGljdGlvbmJvdF9zY2FuIik6CiAgICBmb3IgcCBpbiBob21lLmdsb2IocGF0dGVybik6CiAgICAgICAgaWYgcC5pc19kaXIoKToKICAgICAgICAgICAgcm9vdHMuYXBwZW5kKHApCgp0ZXJtcyA9ICgKICAgICJhcGkuZWxlY3Rpb25zLmthbHNoaS5jb20iLAogICAgInRyYWRlLWFwaSIsCiAgICAiL21hcmtldHMiLAogICAgIi9ldmVudHMiLAogICAgIi9zZXJpZXMiLAogICAgInJ1bGVzX3ByaW1
+END_FILE
+FILE experiments/bridge/e204.py
+HITS l2
+import base64;exec(base64.b64decode('CmZyb20gcGF0aGxpYiBpbXBvcnQgUGF0aAppbXBvcnQganNvbgoKcm9vdCA9IFBhdGguY3dkKCkKcnVuX2lkID0gImhvdXJseS0yMDI2MDkyMFQwMTAwMDArMDIwMCIKcnVuX3BhdGggPSByb290IC8gImtub3dsZWRnZS9ydW5zIiAvIChydW5faWQgKyAiLmpzb24iKQpyb3V0aW5nX3BhdGggPSByb290IC8gImtub3dsZWRnZS9ydW5zIiAvIChydW5faWQgKyAiLXJvdXRpbmcuanNvbiIpCnF1YWxpdHlfcGF0aCA9IHJvb3QgLyAia25vd2xlZGdlL3J1bnMiIC8gKHJ1bl9pZCArICItc291cmNlLXF1YWxpdHkuanNvbiIpCnR3Y19wYXRoID0gcm9vdCAvICJrbm93bGVkZ2UvcnVucy90d2MtcmV2aXNpb24tc3VtbWF
+END_FILE
+FILE experiments/bridge/e200.py
+HITS l2
+import base64;exec(base64.b64decode('CmZyb20gcGF0aGxpYiBpbXBvcnQgUGF0aAppbXBvcnQganNvbgoKaG9tZSA9IFBhdGguaG9tZSgpCnJvb3RzID0gW10KZm9yIHBhdHRlcm4gaW4gKCJzdXJwbHVzX21ha2VyIiwgInByb29mX2h1bnRlcioiLCAicHJlZGljdGlvbmJvdF9zY2FuIik6CiAgICBmb3IgcCBpbiBob21lLmdsb2IocGF0dGVybik6CiAgICAgICAgaWYgcC5pc19kaXIoKToKICAgICAgICAgICAgcm9vdHMuYXBwZW5kKHApCgp0ZXJtcyA9ICgKICAgICJhcGkuZWxlY3Rpb25zLmthbHNoaS5jb20iLAogICAgInRyYWRlLWFwaSIsCiAgICAiL21hcmtldHMiLAogICAgIi9ldmVudHMiLAogICAgIi9zZXJpZXMiLAogICAgInJ1bGVzX3ByaW1
+END_FILE
+FILE experiments/bridge/e152.py
+HITS l2
+import base64;exec(base64.b64decode('ZnJvbSBwYXRobGliIGltcG9ydCBQYXRoCmltcG9ydCBqc29uLHJlLHN1YnByb2Nlc3MKUj1QYXRoLmN3ZCgpCnJ1bl9pZD0naG91cmx5LTIwMjYwOTIwVDAwMDAwMCswMjAwJwpxPWpzb24ubG9hZHMoKFIvJ2tub3dsZWRnZS9ydW5zL2hvdXJseS0yMDI2MDkyMFQwMDAwMDArMDIwMC1zb3VyY2UtcXVhbGl0eS5qc29uJykucmVhZF90ZXh0KCkpCnJ1bj1qc29uLmxvYWRzKChSLydrbm93bGVkZ2UvcnVucy9ob3VybHktMjAyNjA5MjBUMDAwMDAwKzAyMDAuanNvbicpLnJlYWRfdGV4dCgpKQpyb2xlcz17Cid3ZWF0aGVyX3R3Yyc6KCd3ZWF0aGVyJywndGVtcGVyYXR1cmUnLCdtZXRhcicsJ2ZvcmVjYXN0JywnZWN
+END_FILE
