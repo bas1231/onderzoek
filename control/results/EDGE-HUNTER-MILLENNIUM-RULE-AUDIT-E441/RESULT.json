@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/audit_millennium_problem_rules_e441.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-20T05:17:36.647339+00:00",
+  "hypothesis_id": "PAYOFF-IDENTITY-MINING-V1",
+  "source_commit": "b18bed81b307397d86695dba720d09409128a728",
+  "started_at": "2026-09-20T05:17:36.380135+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "5d425539e54a5b72ef72b5706fff8e73af46527b01a871551feb826ab31cf1cb",
+  "task_class": "research",
+  "task_id": "EDGE-HUNTER-MILLENNIUM-RULE-AUDIT-E441"
+}

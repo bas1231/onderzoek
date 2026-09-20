@@ -1,0 +1,131 @@
+HTTP_STATUS 200
+RAW_SHA256 d73a836575aa1495d83218777a0d46be29c4971cb0c5b1a792a6bc4500881a94
+RAW_PATH /home/leonh/prediction_research/knowledge/raw/market_rules/polymarket/20260920T051736Z-event-995361-e441.json
+EVENT_ID 995361
+TITLE Which Millennium Prize Problem will AI solve next?
+ACTIVE True
+CLOSED False
+START_DATE 2026-09-09T19:43:54Z
+END_DATE 2028-01-01T04:59:00Z
+NEG_RISK True
+NEG_RISK_AUGMENTED False
+NEG_RISK_MARKET_ID 0xc4e951cc3557b53ce4a18d0380006a210135975a9953218a987065907775f900
+EVENT_RESOLUTION_SOURCE 
+EVENT_DESCRIPTION_SHA256 3a449ba69e9ca368d33aabe7fca05825dba10b90e9b898ed464a11a3f3f2fd8e
+EVENT_DESCRIPTION 'This market will resolve according to the first qualifying Millennium Prize Problem for which an eligible AI lab announces a solution by December 31, 2027, 11:59 PM ET.\n\nIf no eligible AI lab announces a solution to a qualifying problem by December 31, 2027, 11:59 PM ET, this market will resolve to "No solution by Dec 31, 2027". If solutions to two or more qualifying problems are announced on the same calendar day (ET), this market will resolve to the problem whose name, as listed below, comes first in alphabetical order.\n\nThe qualifying problems are, in alphabetical order, the Birch and Swinnerton-Dyer Conjecture, the Hodge Conjecture, P versus NP, the Riemann Hypothesis, and the Yang-Mills existence and mass gap problem (https://www.claymath.org/millennium-problems/). Announcements concerning the Navier-Stokes existence and smoothness problem will not qualify.\n\nA qualifying announcement must be made by an eligible AI lab or an official representative of the lab, and must express that the problem has been solved; announcements of partial results or progress toward a solution will not qualify. The announcement must present the solution as the work of the lab, its researchers, or its models, alone or jointly with outside researchers. An announcement that only credits or congratulates outside researchers, including researchers who used the lab\'s models, compute, or research credits, will not qualify. No further confirmation from Clay Math Institute or any other organization is required.\n\nThe eligible AI labs are Anthropic, Google, SpaceXAI, Alibaba, OpenAI, Baidu, Z.ai, Xiaomi, Moonshot, Meta, Nvidia, DeepSeek, MiniMax, Meituan, Amazon, ByteDance, Mistral, Tencent, StepFun, Microsoft, Harmonic, Axiom Math, Math Inc, Safe Superintelligence, Thinking Machines Lab, Reflection AI, Periodic Labs, Apple, IBM, Huawei, Samsung, Oracle, Salesforce, Cohere, AI21 Labs, Reka, Sakana AI, Poolside, Magic, Perplexity, Anysphere, Kuaishou, SenseTime, iFlytek, Baichuan, and 01.AI, together with their subsidiaries and research divisions, and any other company with a model listed on the MMLU-pro leaderboard (https://huggingface.co/spaces/TIGER-Lab/MMLU-Pro) at the time of the announcement. Announcements by any other company, organization, or individual will not qualify.\n\nThe primary resolution source for this market will be official information from the eligible AI labs and/or their official representatives; however, a consensus of credible reporting may also be used.'
+MARKET_COUNT_ALL 6
+MARKET_COUNT_NEGRISK 6
+MARKET_BEGIN 4418517
+GROUP_ITEM Birch and Swinnerton-Dyer
+QUESTION Will the Birch and Swinnerton-Dyer Conjecture be the next Millennium Prize Problem solved by AI?
+ACTIVE_MARKET True
+CLOSED_MARKET False
+END_DATE_MARKET 2028-01-01T04:59:00Z
+NEG_RISK_MARKET True
+NEG_RISK_OTHER False
+NEG_RISK_MARKET_ID_MARKET 0xc4e951cc3557b53ce4a18d0380006a210135975a9953218a987065907775f900
+RESOLUTION_SOURCE 
+OUTCOMES ["Yes", "No"]
+DESCRIPTION_SHA256 3a449ba69e9ca368d33aabe7fca05825dba10b90e9b898ed464a11a3f3f2fd8e
+DESCRIPTION 'This market will resolve according to the first qualifying Millennium Prize Problem for which an eligible AI lab announces a solution by December 31, 2027, 11:59 PM ET.\n\nIf no eligible AI lab announces a solution to a qualifying problem by December 31, 2027, 11:59 PM ET, this market will resolve to "No solution by Dec 31, 2027". If solutions to two or more qualifying problems are announced on the same calendar day (ET), this market will resolve to the problem whose name, as listed below, comes first in alphabetical order.\n\nThe qualifying problems are, in alphabetical order, the Birch and Swinnerton-Dyer Conjecture, the Hodge Conjecture, P versus NP, the Riemann Hypothesis, and the Yang-Mills existence and mass gap problem (https://www.claymath.org/millennium-problems/). Announcements concerning the Navier-Stokes existence and smoothness problem will not qualify.\n\nA qualifying announcement must be made by an eligible AI lab or an official representative of the lab, and must express that the problem has been solved; announcements of partial results or progress toward a solution will not qualify. The announcement must present the solution as the work of the lab, its researchers, or its models, alone or jointly with outside researchers. An announcement that only credits or congratulates outside researchers, including researchers who used the lab\'s models, compute, or research credits, will not qualify. No further confirmation from Clay Math Institute or any other organization is required.\n\nThe eligible AI labs are Anthropic, Google, SpaceXAI, Alibaba, OpenAI, Baidu, Z.ai, Xiaomi, Moonshot, Meta, Nvidia, DeepSeek, MiniMax, Meituan, Amazon, ByteDance, Mistral, Tencent, StepFun, Microsoft, Harmonic, Axiom Math, Math Inc, Safe Superintelligence, Thinking Machines Lab, Reflection AI, Periodic Labs, Apple, IBM, Huawei, Samsung, Oracle, Salesforce, Cohere, AI21 Labs, Reka, Sakana AI, Poolside, Magic, Perplexity, Anysphere, Kuaishou, SenseTime, iFlytek, Baichuan, and 01.AI, together with their subsidiaries and research divisions, and any other company with a model listed on the MMLU-pro leaderboard (https://huggingface.co/spaces/TIGER-Lab/MMLU-Pro) at the time of the announcement. Announcements by any other company, organization, or individual will not qualify.\n\nThe primary resolution source for this market will be official information from the eligible AI labs and/or their official representatives; however, a consensus of credible reporting may also be used.'
+MARKET_END 4418517
+MARKET_BEGIN 4418518
+GROUP_ITEM Hodge Conjecture
+QUESTION Will the Hodge Conjecture be the next Millennium Prize Problem solved by AI?
+ACTIVE_MARKET True
+CLOSED_MARKET False
+END_DATE_MARKET 2028-01-01T04:59:00Z
+NEG_RISK_MARKET True
+NEG_RISK_OTHER False
+NEG_RISK_MARKET_ID_MARKET 0xc4e951cc3557b53ce4a18d0380006a210135975a9953218a987065907775f900
+RESOLUTION_SOURCE 
+OUTCOMES ["Yes", "No"]
+DESCRIPTION_SHA256 3a449ba69e9ca368d33aabe7fca05825dba10b90e9b898ed464a11a3f3f2fd8e
+DESCRIPTION 'This market will resolve according to the first qualifying Millennium Prize Problem for which an eligible AI lab announces a solution by December 31, 2027, 11:59 PM ET.\n\nIf no eligible AI lab announces a solution to a qualifying problem by December 31, 2027, 11:59 PM ET, this market will resolve to "No solution by Dec 31, 2027". If solutions to two or more qualifying problems are announced on the same calendar day (ET), this market will resolve to the problem whose name, as listed below, comes first in alphabetical order.\n\nThe qualifying problems are, in alphabetical order, the Birch and Swinnerton-Dyer Conjecture, the Hodge Conjecture, P versus NP, the Riemann Hypothesis, and the Yang-Mills existence and mass gap problem (https://www.claymath.org/millennium-problems/). Announcements concerning the Navier-Stokes existence and smoothness problem will not qualify.\n\nA qualifying announcement must be made by an eligible AI lab or an official representative of the lab, and must express that the problem has been solved; announcements of partial results or progress toward a solution will not qualify. The announcement must present the solution as the work of the lab, its researchers, or its models, alone or jointly with outside researchers. An announcement that only credits or congratulates outside researchers, including researchers who used the lab\'s models, compute, or research credits, will not qualify. No further confirmation from Clay Math Institute or any other organization is required.\n\nThe eligible AI labs are Anthropic, Google, SpaceXAI, Alibaba, OpenAI, Baidu, Z.ai, Xiaomi, Moonshot, Meta, Nvidia, DeepSeek, MiniMax, Meituan, Amazon, ByteDance, Mistral, Tencent, StepFun, Microsoft, Harmonic, Axiom Math, Math Inc, Safe Superintelligence, Thinking Machines Lab, Reflection AI, Periodic Labs, Apple, IBM, Huawei, Samsung, Oracle, Salesforce, Cohere, AI21 Labs, Reka, Sakana AI, Poolside, Magic, Perplexity, Anysphere, Kuaishou, SenseTime, iFlytek, Baichuan, and 01.AI, together with their subsidiaries and research divisions, and any other company with a model listed on the MMLU-pro leaderboard (https://huggingface.co/spaces/TIGER-Lab/MMLU-Pro) at the time of the announcement. Announcements by any other company, organization, or individual will not qualify.\n\nThe primary resolution source for this market will be official information from the eligible AI labs and/or their official representatives; however, a consensus of credible reporting may also be used.'
+MARKET_END 4418518
+MARKET_BEGIN 4418519
+GROUP_ITEM P versus NP
+QUESTION Will P versus NP be the next Millennium Prize Problem solved by AI?
+ACTIVE_MARKET True
+CLOSED_MARKET False
+END_DATE_MARKET 2028-01-01T04:59:00Z
+NEG_RISK_MARKET True
+NEG_RISK_OTHER False
+NEG_RISK_MARKET_ID_MARKET 0xc4e951cc3557b53ce4a18d0380006a210135975a9953218a987065907775f900
+RESOLUTION_SOURCE 
+OUTCOMES ["Yes", "No"]
+DESCRIPTION_SHA256 3a449ba69e9ca368d33aabe7fca05825dba10b90e9b898ed464a11a3f3f2fd8e
+DESCRIPTION 'This market will resolve according to the first qualifying Millennium Prize Problem for which an eligible AI lab announces a solution by December 31, 2027, 11:59 PM ET.\n\nIf no eligible AI lab announces a solution to a qualifying problem by December 31, 2027, 11:59 PM ET, this market will resolve to "No solution by Dec 31, 2027". If solutions to two or more qualifying problems are announced on the same calendar day (ET), this market will resolve to the problem whose name, as listed below, comes first in alphabetical order.\n\nThe qualifying problems are, in alphabetical order, the Birch and Swinnerton-Dyer Conjecture, the Hodge Conjecture, P versus NP, the Riemann Hypothesis, and the Yang-Mills existence and mass gap problem (https://www.claymath.org/millennium-problems/). Announcements concerning the Navier-Stokes existence and smoothness problem will not qualify.\n\nA qualifying announcement must be made by an eligible AI lab or an official representative of the lab, and must express that the problem has been solved; announcements of partial results or progress toward a solution will not qualify. The announcement must present the solution as the work of the lab, its researchers, or its models, alone or jointly with outside researchers. An announcement that only credits or congratulates outside researchers, including researchers who used the lab\'s models, compute, or research credits, will not qualify. No further confirmation from Clay Math Institute or any other organization is required.\n\nThe eligible AI labs are Anthropic, Google, SpaceXAI, Alibaba, OpenAI, Baidu, Z.ai, Xiaomi, Moonshot, Meta, Nvidia, DeepSeek, MiniMax, Meituan, Amazon, ByteDance, Mistral, Tencent, StepFun, Microsoft, Harmonic, Axiom Math, Math Inc, Safe Superintelligence, Thinking Machines Lab, Reflection AI, Periodic Labs, Apple, IBM, Huawei, Samsung, Oracle, Salesforce, Cohere, AI21 Labs, Reka, Sakana AI, Poolside, Magic, Perplexity, Anysphere, Kuaishou, SenseTime, iFlytek, Baichuan, and 01.AI, together with their subsidiaries and research divisions, and any other company with a model listed on the MMLU-pro leaderboard (https://huggingface.co/spaces/TIGER-Lab/MMLU-Pro) at the time of the announcement. Announcements by any other company, organization, or individual will not qualify.\n\nThe primary resolution source for this market will be official information from the eligible AI labs and/or their official representatives; however, a consensus of credible reporting may also be used.'
+MARKET_END 4418519
+MARKET_BEGIN 4418520
+GROUP_ITEM Riemann Hypothesis
+QUESTION Will the Riemann Hypothesis be the next Millennium Prize Problem solved by AI?
+ACTIVE_MARKET True
+CLOSED_MARKET False
+END_DATE_MARKET 2028-01-01T04:59:00Z
+NEG_RISK_MARKET True
+NEG_RISK_OTHER False
+NEG_RISK_MARKET_ID_MARKET 0xc4e951cc3557b53ce4a18d0380006a210135975a9953218a987065907775f900
+RESOLUTION_SOURCE 
+OUTCOMES ["Yes", "No"]
+DESCRIPTION_SHA256 3a449ba69e9ca368d33aabe7fca05825dba10b90e9b898ed464a11a3f3f2fd8e
+DESCRIPTION 'This market will resolve according to the first qualifying Millennium Prize Problem for which an eligible AI lab announces a solution by December 31, 2027, 11:59 PM ET.\n\nIf no eligible AI lab announces a solution to a qualifying problem by December 31, 2027, 11:59 PM ET, this market will resolve to "No solution by Dec 31, 2027". If solutions to two or more qualifying problems are announced on the same calendar day (ET), this market will resolve to the problem whose name, as listed below, comes first in alphabetical order.\n\nThe qualifying problems are, in alphabetical order, the Birch and Swinnerton-Dyer Conjecture, the Hodge Conjecture, P versus NP, the Riemann Hypothesis, and the Yang-Mills existence and mass gap problem (https://www.claymath.org/millennium-problems/). Announcements concerning the Navier-Stokes existence and smoothness problem will not qualify.\n\nA qualifying announcement must be made by an eligible AI lab or an official representative of the lab, and must express that the problem has been solved; announcements of partial results or progress toward a solution will not qualify. The announcement must present the solution as the work of the lab, its researchers, or its models, alone or jointly with outside researchers. An announcement that only credits or congratulates outside researchers, including researchers who used the lab\'s models, compute, or research credits, will not qualify. No further confirmation from Clay Math Institute or any other organization is required.\n\nThe eligible AI labs are Anthropic, Google, SpaceXAI, Alibaba, OpenAI, Baidu, Z.ai, Xiaomi, Moonshot, Meta, Nvidia, DeepSeek, MiniMax, Meituan, Amazon, ByteDance, Mistral, Tencent, StepFun, Microsoft, Harmonic, Axiom Math, Math Inc, Safe Superintelligence, Thinking Machines Lab, Reflection AI, Periodic Labs, Apple, IBM, Huawei, Samsung, Oracle, Salesforce, Cohere, AI21 Labs, Reka, Sakana AI, Poolside, Magic, Perplexity, Anysphere, Kuaishou, SenseTime, iFlytek, Baichuan, and 01.AI, together with their subsidiaries and research divisions, and any other company with a model listed on the MMLU-pro leaderboard (https://huggingface.co/spaces/TIGER-Lab/MMLU-Pro) at the time of the announcement. Announcements by any other company, organization, or individual will not qualify.\n\nThe primary resolution source for this market will be official information from the eligible AI labs and/or their official representatives; however, a consensus of credible reporting may also be used.'
+MARKET_END 4418520
+MARKET_BEGIN 4418521
+GROUP_ITEM Yang-Mills
+QUESTION Will the Yang-Mills existence and mass gap problem be the next Millennium Prize Problem solved by AI?
+ACTIVE_MARKET True
+CLOSED_MARKET False
+END_DATE_MARKET 2028-01-01T04:59:00Z
+NEG_RISK_MARKET True
+NEG_RISK_OTHER False
+NEG_RISK_MARKET_ID_MARKET 0xc4e951cc3557b53ce4a18d0380006a210135975a9953218a987065907775f900
+RESOLUTION_SOURCE 
+OUTCOMES ["Yes", "No"]
+DESCRIPTION_SHA256 3a449ba69e9ca368d33aabe7fca05825dba10b90e9b898ed464a11a3f3f2fd8e
+DESCRIPTION 'This market will resolve according to the first qualifying Millennium Prize Problem for which an eligible AI lab announces a solution by December 31, 2027, 11:59 PM ET.\n\nIf no eligible AI lab announces a solution to a qualifying problem by December 31, 2027, 11:59 PM ET, this market will resolve to "No solution by Dec 31, 2027". If solutions to two or more qualifying problems are announced on the same calendar day (ET), this market will resolve to the problem whose name, as listed below, comes first in alphabetical order.\n\nThe qualifying problems are, in alphabetical order, the Birch and Swinnerton-Dyer Conjecture, the Hodge Conjecture, P versus NP, the Riemann Hypothesis, and the Yang-Mills existence and mass gap problem (https://www.claymath.org/millennium-problems/). Announcements concerning the Navier-Stokes existence and smoothness problem will not qualify.\n\nA qualifying announcement must be made by an eligible AI lab or an official representative of the lab, and must express that the problem has been solved; announcements of partial results or progress toward a solution will not qualify. The announcement must present the solution as the work of the lab, its researchers, or its models, alone or jointly with outside researchers. An announcement that only credits or congratulates outside researchers, including researchers who used the lab\'s models, compute, or research credits, will not qualify. No further confirmation from Clay Math Institute or any other organization is required.\n\nThe eligible AI labs are Anthropic, Google, SpaceXAI, Alibaba, OpenAI, Baidu, Z.ai, Xiaomi, Moonshot, Meta, Nvidia, DeepSeek, MiniMax, Meituan, Amazon, ByteDance, Mistral, Tencent, StepFun, Microsoft, Harmonic, Axiom Math, Math Inc, Safe Superintelligence, Thinking Machines Lab, Reflection AI, Periodic Labs, Apple, IBM, Huawei, Samsung, Oracle, Salesforce, Cohere, AI21 Labs, Reka, Sakana AI, Poolside, Magic, Perplexity, Anysphere, Kuaishou, SenseTime, iFlytek, Baichuan, and 01.AI, together with their subsidiaries and research divisions, and any other company with a model listed on the MMLU-pro leaderboard (https://huggingface.co/spaces/TIGER-Lab/MMLU-Pro) at the time of the announcement. Announcements by any other company, organization, or individual will not qualify.\n\nThe primary resolution source for this market will be official information from the eligible AI labs and/or their official representatives; however, a consensus of credible reporting may also be used.'
+MARKET_END 4418521
+MARKET_BEGIN 4418522
+GROUP_ITEM No solution by Dec 31, 2027
+QUESTION Will no Millennium Prize Problem be solved by AI by December 31, 2027?
+ACTIVE_MARKET True
+CLOSED_MARKET False
+END_DATE_MARKET 2028-01-01T04:59:00Z
+NEG_RISK_MARKET True
+NEG_RISK_OTHER False
+NEG_RISK_MARKET_ID_MARKET 0xc4e951cc3557b53ce4a18d0380006a210135975a9953218a987065907775f900
+RESOLUTION_SOURCE 
+OUTCOMES ["Yes", "No"]
+DESCRIPTION_SHA256 3a449ba69e9ca368d33aabe7fca05825dba10b90e9b898ed464a11a3f3f2fd8e
+DESCRIPTION 'This market will resolve according to the first qualifying Millennium Prize Problem for which an eligible AI lab announces a solution by December 31, 2027, 11:59 PM ET.\n\nIf no eligible AI lab announces a solution to a qualifying problem by December 31, 2027, 11:59 PM ET, this market will resolve to "No solution by Dec 31, 2027". If solutions to two or more qualifying problems are announced on the same calendar day (ET), this market will resolve to the problem whose name, as listed below, comes first in alphabetical order.\n\nThe qualifying problems are, in alphabetical order, the Birch and Swinnerton-Dyer Conjecture, the Hodge Conjecture, P versus NP, the Riemann Hypothesis, and the Yang-Mills existence and mass gap problem (https://www.claymath.org/millennium-problems/). Announcements concerning the Navier-Stokes existence and smoothness problem will not qualify.\n\nA qualifying announcement must be made by an eligible AI lab or an official representative of the lab, and must express that the problem has been solved; announcements of partial results or progress toward a solution will not qualify. The announcement must present the solution as the work of the lab, its researchers, or its models, alone or jointly with outside researchers. An announcement that only credits or congratulates outside researchers, including researchers who used the lab\'s models, compute, or research credits, will not qualify. No further confirmation from Clay Math Institute or any other organization is required.\n\nThe eligible AI labs are Anthropic, Google, SpaceXAI, Alibaba, OpenAI, Baidu, Z.ai, Xiaomi, Moonshot, Meta, Nvidia, DeepSeek, MiniMax, Meituan, Amazon, ByteDance, Mistral, Tencent, StepFun, Microsoft, Harmonic, Axiom Math, Math Inc, Safe Superintelligence, Thinking Machines Lab, Reflection AI, Periodic Labs, Apple, IBM, Huawei, Samsung, Oracle, Salesforce, Cohere, AI21 Labs, Reka, Sakana AI, Poolside, Magic, Perplexity, Anysphere, Kuaishou, SenseTime, iFlytek, Baichuan, and 01.AI, together with their subsidiaries and research divisions, and any other company with a model listed on the MMLU-pro leaderboard (https://huggingface.co/spaces/TIGER-Lab/MMLU-Pro) at the time of the announcement. Announcements by any other company, organization, or individual will not qualify.\n\nThe primary resolution source for this market will be official information from the eligible AI labs and/or their official representatives; however, a consensus of credible reporting may also be used.'
+MARKET_END 4418522
+GROUP_ID_COUNT 1
+GROUP_IDS ['0xc4e951cc3557b53ce4a18d0380006a210135975a9953218a987065907775f900']
+NEG_RISK_OTHER_COUNT 0
+MARKET_DESCRIPTION_HASH_COUNT 1
+ALL_MARKET_DESCRIPTIONS_MATCH_EVENT True
+EVENT_PHRASE none False
+EVENT_PHRASE no problem False
+EVENT_PHRASE if no True
+EVENT_PHRASE does not solve False
+EVENT_PHRASE doesn t solve False
+EVENT_PHRASE by december True
+EVENT_PHRASE by january False
+EVENT_PHRASE deadline False
+EVENT_PHRASE first True
+EVENT_PHRASE next False
+EVENT_PHRASE simultaneous False
+EVENT_PHRASE same time False
+EVENT_PHRASE tie False
+EVENT_PHRASE all resolve False
+EVENT_PHRASE resolve no False
+EVENT_PHRASE no solution True
+EVENT_PHRASE unsolved False
+MARKET_PHRASES 4418517 ['if no', 'by december', 'first', 'next', 'no solution']
+MARKET_PHRASES 4418518 ['if no', 'by december', 'first', 'next', 'no solution']
+MARKET_PHRASES 4418519 ['if no', 'by december', 'first', 'next', 'no solution']
+MARKET_PHRASES 4418520 ['if no', 'by december', 'first', 'next', 'no solution']
+MARKET_PHRASES 4418521 ['if no', 'by december', 'first', 'next', 'no solution']
+MARKET_PHRASES 4418522 ['if no', 'by december', 'first', 'no solution']
+RULE_AUDIT_NOTE No payoff identity is asserted here. Exact exhaustiveness requires rules to exclude an all-false state or explicitly assign it to one outcome.
+MILLENNIUM_RULE_AUDIT_E441_PASS
