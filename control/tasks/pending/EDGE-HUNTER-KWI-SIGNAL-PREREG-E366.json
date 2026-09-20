@@ -1,0 +1,13 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/preregister_kwi_signal_test_e366.py"
+  ],
+  "hypothesis_id": "KWI-INCOMPLETE-TO-CANONICAL-V1",
+  "live_trading": false,
+  "operation": "python",
+  "task_class": "research",
+  "task_id": "EDGE-HUNTER-KWI-SIGNAL-PREREG-E366",
+  "timeout_seconds": 120,
+  "working_directory": "."
+}
