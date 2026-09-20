@@ -1,0 +1,14 @@
+To github.com:bas1231/onderzoek.git
+ ! [rejected]        main -> main (fetch first)
+error: failed to push some refs to 'github.com:bas1231/onderzoek.git'
+hint: Updates were rejected because the remote contains work that you do not
+hint: have locally. This is usually caused by another repository pushing to
+hint: the same ref. If you want to integrate the remote changes, use
+hint: 'git pull' before pushing again.
+hint: See the 'Note about fast-forwards' in 'git push --help' for details.
+Traceback (most recent call last):
+  File "/home/leonh/prediction_research/control/jobs/close_edge_hunter_0300_e274.py", line 75, in <module>
+    subprocess.run(['git','push'], cwd=root, check=True)
+  File "/usr/lib/python3.12/subprocess.py", line 571, in run
+    raise CalledProcessError(retcode, process.args,
+subprocess.CalledProcessError: Command '['git', 'push']' returned non-zero exit status 1.

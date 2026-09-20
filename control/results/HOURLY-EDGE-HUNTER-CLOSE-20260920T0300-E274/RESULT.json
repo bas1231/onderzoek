@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/close_edge_hunter_0300_e274.py"
+  ],
+  "exit_code": 1,
+  "finished_at": "2026-09-20T01:02:40.509999+00:00",
+  "hypothesis_id": "GENERAL-PREDICTION-MARKET-EDGE-HUNTER",
+  "source_commit": "01de40aa05819996b008419b025e126c7bbc83c4",
+  "started_at": "2026-09-20T01:02:38.688932+00:00",
+  "status": "failed",
+  "stderr_sha256": "d472e310b09f173e9128896104aa5cebe01882b0eadd75ba3d69acf210d7b5a1",
+  "stdout_sha256": "4f91517001a9e34ff17d7b92b0b6312f49b8c21a328859e41446b90a3ab77304",
+  "task_class": "research",
+  "task_id": "HOURLY-EDGE-HUNTER-CLOSE-20260920T0300-E274"
+}
