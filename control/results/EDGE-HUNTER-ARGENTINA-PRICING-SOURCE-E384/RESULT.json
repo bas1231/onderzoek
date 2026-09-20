@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/inspect_proven_polymarket_pricing_e384.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-20T02:49:23.079775+00:00",
+  "hypothesis_id": "PAYOFF-IDENTITY-MINING-V1",
+  "source_commit": "244214a56b26300c19a14aeb90fd7ad45e6a833b",
+  "started_at": "2026-09-20T02:49:23.061046+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "4b39707c2fbefaca45a3d9b3bbde8a51822b560cc4a03d3a8b9985ab966dbe30",
+  "task_class": "research",
+  "task_id": "EDGE-HUNTER-ARGENTINA-PRICING-SOURCE-E384"
+}

@@ -1,0 +1,234 @@
+FILE control/jobs/capture_asset_rank_neg_risk_e327.py
+LINE_COUNT 90
+LINE 1 'from pathlib import Path'
+LINE 2 'from urllib.request import Request,urlopen'
+LINE 3 'from datetime import datetime,timezone'
+LINE 4 'import json'
+LINE 5 ''
+LINE 6 'root=Path.cwd()'
+LINE 7 "base=root/'knowledge/raw/market_data/polymarket_neg_risk_manifests'"
+LINE 8 'files=list()'
+LINE 9 'if base.exists():'
+LINE 10 '    for p in base.iterdir():'
+LINE 11 "        if p.is_file() and p.suffix=='.json':"
+LINE 12 '            files.append(p)'
+LINE 13 'files.sort(key=lambda p:p.stat().st_mtime)'
+LINE 14 'if not files:'
+LINE 15 "    raise SystemExit('no_manifest')"
+LINE 16 "manifest=json.loads(files[-1].read_text(encoding='utf-8'))"
+LINE 17 'group=None'
+LINE 18 "for row in manifest.get('groups') or tuple():"
+LINE 19 "    if str(row.get('event_id'))=='106981':"
+LINE 20 '        group=row'
+LINE 21 '        break'
+LINE 22 'if group is None:'
+LINE 23 "    raise SystemExit('target_group_missing')"
+LINE 24 ''
+LINE 25 "markets=group.get('markets') or tuple()"
+LINE 26 'tokens=list()'
+LINE 27 'for market in markets:'
+LINE 28 "    tokens.append(dict(token_id=str(market.get('yes_token'))))"
+LINE 29 "    tokens.append(dict(token_id=str(market.get('no_token'))))"
+LINE 30 ''
+LINE 31 "url='https:'+chr(47)+chr(47)+'clob.polymarket.com/books'"
+LINE 32 "body=json.dumps(tokens).encode('utf-8')"
+LINE 33 "req=Request(url,data=body,headers={'Content-Type':'application/json','User-Agent':'PredictionEdgeHunter/1.0'},method='POST')"
+LINE 34 'with urlopen(req,timeout=30) as r:'
+LINE 35 '    books=json.loads(r.read())'
+LINE 36 '    status=r.status'
+LINE 37 "bookmap=dict((str(book.get('asset_id')),book) for book in books)"
+LINE 38 ''
+LINE 39 'def top(token):'
+LINE 40 '    book=bookmap.get(str(token))'
+LINE 41 '    if not book:'
+LINE 42 '        return None'
+LINE 43 "    bids=book.get('bids') or tuple()"
+LINE 44 "    asks=book.get('asks') or tuple()"
+LINE 45 '    out=dict()'
+LINE 46 '    if bids:'
+LINE 47 "        bid=max(bids,key=lambda x:float(x.get('price',0)))"
+LINE 48 "        out.update(bid=float(bid.get('price')),bid_size=float(bid.get('size',0)))"
+LINE 49 '    if asks:'
+LINE 50 "        ask=min(asks,key=lambda x:float(x.get('price',9)))"
+LINE 51 "        out.update(ask=float(ask.get('price')),ask_size=float(ask.get('size',0)))"
+LINE 52 '    return out'
+LINE 53 ''
+LINE 54 'priced=list()'
+LINE 55 'complete=True'
+LINE 56 'for market in markets:'
+LINE 57 "    yes=top(market.get('yes_token'))"
+LINE 58 "    no=top(market.get('no_token'))"
+LINE 59 "    if not yes or not no or yes.get('bid') is None or yes.get('ask') is None or no.get('bid') is None or no.get('ask') is None:"
+LINE 60 '        complete=False'
+LINE 61 "    priced.append(dict(market_id=str(market.get('market_id')),question=str(market.get('question') or ''),yes=yes,no=no))"
+LINE 62 ''
+LINE 63 "stamp=datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%SZ')"
+LINE 64 "outdir=root/'knowledge/raw/market_data/polymarket_neg_risk_partial'"
+LINE 65 'outdir.mkdir(parents=True,exist_ok=True)'
+LINE 66 "out=outdir/(stamp+'106981.json')"
+LINE 67 "payload=dict(retrieved_at=datetime.now(timezone.utc).isoformat(),event_id='106981',title=str(group.get('title') or ''),market_count=len(markets),http_status=status,live_trading=False,paid_actions=False,wallet_actions=False,complete=complete,priced=priced,books=books,markets=markets)"
+LINE 68 "out.write_text(json.dumps(payload,indent=2,sort_keys=True)+chr(10),encoding='utf-8')"
+LINE 69 ''
+LINE 70 "print('ASSET_NEG_RISK_CAPTURE_PASS')"
+LINE 71 "print('TITLE',group.get('title'))"
+LINE 72 "print('MARKET_COUNT',len(markets))"
+LINE 73 "print('BOOK_COUNT',len(books))"
+LINE 74 "print('COMPLETE',complete)"
+LINE 75 'for row in priced:'
+LINE 76 "    print('MARKET',row.get('market_id'),row.get('question'))"
+LINE 77 "    print('YES',row.get('yes'))"
+LINE 78 "    print('NO',row.get('no'))"
+LINE 79 'if complete:'
+LINE 80 "    yes_ask=sum(row.get('yes').get('ask') for row in priced)"
+LINE 81 "    yes_bid=sum(row.get('yes').get('bid') for row in priced)"
+LINE 82 "    no_ask=sum(row.get('no').get('ask') for row in priced)"
+LINE 83 "    no_bid=sum(row.get('no').get('bid') for row in priced)"
+LINE 84 "    print('YES_ASK_SUM',yes_ask)"
+LINE 85 "    print('YES_BID_SUM',yes_bid)"
+LINE 86 "    print('NO_ASK_SUM',no_ask)"
+LINE 87 "    print('NO_BID_SUM',no_bid)"
+LINE 88 "    print('YES_GAP_TO_ONE',1.0-yes_ask)"
+LINE 89 "    print('NO_GAP_TO_N_MINUS_ONE',float(len(priced)-1)-no_ask)"
+LINE 90 "print('PATH',out)"
+---
+FILE control/jobs/test_asset_rank_identity_fees_e332.py
+LINE_COUNT 137
+LINE 1 'from pathlib import Path'
+LINE 2 'import json'
+LINE 3 'import math'
+LINE 4 ''
+LINE 5 'root=Path.cwd()'
+LINE 6 "price_path=root/'knowledge/raw/market_data/polymarket_neg_risk_partial/20260920T013900Z106981.json'"
+LINE 7 "rule_path=root/'knowledge/raw/market_rules/polymarket/20260920T013931Zevent_106981.json'"
+LINE 8 'if not price_path.exists():'
+LINE 9 "    raise SystemExit('price_snapshot_missing')"
+LINE 10 'if not rule_path.exists():'
+LINE 11 "    raise SystemExit('rule_snapshot_missing')"
+LINE 12 ''
+LINE 13 "snap=json.loads(price_path.read_text(encoding='utf-8'))"
+LINE 14 "event=json.loads(rule_path.read_text(encoding='utf-8'))"
+LINE 15 "rows=snap.get('priced') or tuple()"
+LINE 16 "rules=event.get('markets') or tuple()"
+LINE 17 'if len(rows)!=3 or len(rules)!=3:'
+LINE 18 "    raise SystemExit('market_count_wrong')"
+LINE 19 "if event.get('negRisk') is not True:"
+LINE 20 "    raise SystemExit('event_not_neg_risk')"
+LINE 21 "if event.get('negRiskAugmented') is not False:"
+LINE 22 "    raise SystemExit('event_augmented')"
+LINE 23 "if not event.get('negRiskMarketID'):"
+LINE 24 "    raise SystemExit('group_missing')"
+LINE 25 ''
+LINE 26 "rulemap=dict((str(row.get('id')),row) for row in rules)"
+LINE 27 'for row in rows:'
+LINE 28 "    mid=str(row.get('market_id'))"
+LINE 29 '    rule=rulemap.get(mid) or dict()'
+LINE 30 "    if rule.get('negRisk') is not True:"
+LINE 31 "        raise SystemExit('market_not_neg_risk')"
+LINE 32 "    if rule.get('negRiskOther') is not False:"
+LINE 33 "        raise SystemExit('unexpected_other_flag')"
+LINE 34 "    if rule.get('feesEnabled') is not True:"
+LINE 35 "        raise SystemExit('fees_not_enabled')"
+LINE 36 "    schedule=rule.get('feeSchedule') or dict()"
+LINE 37 "    if float(schedule.get('rate') or 0)!=0.04:"
+LINE 38 "        raise SystemExit('fee_rate_unexpected')"
+LINE 39 "    if float(schedule.get('exponent') or 0)!=1.0:"
+LINE 40 "        raise SystemExit('fee_exponent_unexpected')"
+LINE 41 "    if schedule.get('takerOnly') is not True:"
+LINE 42 "        raise SystemExit('taker_flag_unexpected')"
+LINE 43 ''
+LINE 44 'for state in range(3):'
+LINE 45 '    yes_total=0'
+LINE 46 '    no_total=0'
+LINE 47 '    for i in range(3):'
+LINE 48 '        yes=1 if i==state else 0'
+LINE 49 '        yes_total+=yes'
+LINE 50 '        no_total+=1-yes'
+LINE 51 '    if yes_total!=1 or no_total!=2:'
+LINE 52 "        raise SystemExit('partition_proof_failed')"
+LINE 53 '    for i in range(3):'
+LINE 54 '        direct_no=0 if i==state else 1'
+LINE 55 '        synth_no=0'
+LINE 56 '        for j in range(3):'
+LINE 57 '            if j!=i and j==state:'
+LINE 58 '                synth_no+=1'
+LINE 59 '        if direct_no!=synth_no:'
+LINE 60 "            raise SystemExit('cross_rep_proof_failed')"
+LINE 61 ''
+LINE 62 "size=min(float((row.get('yes') or dict()).get('ask_size')) for row in rows)"
+LINE 63 "ask_sum=sum(float((row.get('yes') or dict()).get('ask')) for row in rows)"
+LINE 64 'gross_per_set=1.0-ask_sum'
+LINE 65 'fee_total=0.0'
+LINE 66 'for row in rows:'
+LINE 67 "    yes=row.get('yes') or dict()"
+LINE 68 "    price=float(yes.get('ask'))"
+LINE 69 '    fee=round(math.prod((size,0.04,price,1.0-price)),5)'
+LINE 70 '    fee_total+=fee'
+LINE 71 "    print('BASKET_LEG',row.get('market_id'),'ASK',price,'SIZE',yes.get('ask_size'),'FEE',fee)"
+LINE 72 ''
+LINE 73 'gross_total=math.prod((gross_per_set,size))'
+LINE 74 'net_total=gross_total-fee_total'
+LINE 75 'capital=math.prod((ask_sum,size))+fee_total'
+LINE 76 'roi=net_total/capital if capital>0 else 0'
+LINE 77 ''
+LINE 78 "print('ASSET_STATEWISE_PROOF_PASS')"
+LINE 79 "print('COMMON_SIZE',size)"
+LINE 80 "print('YES_ASK_SUM',ask_sum)"
+LINE 81 "print('GROSS_PER_SET',gross_per_set)"
+LINE 82 "print('GROSS_TOTAL',gross_total)"
+LINE 83 "print('TAKER_FEES_TOTAL',fee_total)"
+LINE 84 "print('NET_TOTAL',net_total)"
+LINE 85 "print('NET_ROI',roi)"
+LINE 86 ''
+LINE 87 'best_gross=-999.0'
+LINE 88 'best_net=-999.0'
+LINE 89 'positive_gross=0'
+LINE 90 'positive_net=0'
+LINE 91 'for i,row in enumerate(rows):'
+LINE 92 "    no=row.get('no') or dict()"
+LINE 93 '    synth_cost=0.0'
+LINE 94 '    synth_sizes=list()'
+LINE 95 '    for j,other in enumerate(rows):'
+LINE 96 '        if j==i:'
+LINE 97 '            continue'
+LINE 98 "        oy=other.get('yes') or dict()"
+LINE 99 "        synth_cost+=float(oy.get('ask'))"
+LINE 100 "        synth_sizes.append(float(oy.get('ask_size')))"
+LINE 101 "    direct_bid=float(no.get('bid'))"
+LINE 102 "    xsize=min(min(synth_sizes),float(no.get('bid_size')))"
+LINE 103 '    gross=direct_bid-synth_cost'
+LINE 104 '    fees=0.0'
+LINE 105 '    for j,other in enumerate(rows):'
+LINE 106 '        if j==i:'
+LINE 107 '            continue'
+LINE 108 "        p=float((other.get('yes') or dict()).get('ask'))"
+LINE 109 '        fees+=round(math.prod((xsize,0.04,p,1.0-p)),5)'
+LINE 110 '    fees+=round(math.prod((xsize,0.04,direct_bid,1.0-direct_bid)),5)'
+LINE 111 '    net=math.prod((gross,xsize))-fees'
+LINE 112 '    best_gross=max(best_gross,gross)'
+LINE 113 '    best_net=max(best_net,net)'
+LINE 114 '    if gross>0:'
+LINE 115 '        positive_gross+=1'
+LINE 116 '    if net>0:'
+LINE 117 '        positive_net+=1'
+LINE 118 "    print('IDENTITY',row.get('market_id'))"
+LINE 119 "    print('QUESTION',row.get('question'))"
+LINE 120 "    print('SYNTH_NO_ASK',synth_cost)"
+LINE 121 "    print('DIRECT_NO_BID',direct_bid)"
+LINE 122 "    print('GROSS_EDGE',gross)"
+LINE 123 "    print('EXECUTABLE_SIZE',xsize)"
+LINE 124 "    print('TAKER_FEES',fees)"
+LINE 125 "    print('NET_AT_SIZE',net)"
+LINE 126 ''
+LINE 127 "print('GROSS_POSITIVE_IDENTITIES',positive_gross)"
+LINE 128 "print('NET_POSITIVE_IDENTITIES',positive_net)"
+LINE 129 "print('BEST_GROSS_IDENTITY',best_gross)"
+LINE 130 "print('BEST_NET_IDENTITY',best_net)"
+LINE 131 'if net_total>0 or positive_net>0:'
+LINE 132 "    print('RESULT','NET_CANDIDATE_SURVIVES_FEE_GATE')"
+LINE 133 'elif gross_per_set>0 or positive_gross>0:'
+LINE 134 "    print('RESULT','GROSS_EDGE_KILLED_BY_TAKER_FEES')"
+LINE 135 'else:'
+LINE 136 "    print('RESULT','NO_GROSS_EDGE')"
+LINE 137 "print('ASSET_IDENTITY_FEE_TEST_PASS')"
+---
+PROVEN_POLYMARKET_PRICING_INSPECTION_PASS
