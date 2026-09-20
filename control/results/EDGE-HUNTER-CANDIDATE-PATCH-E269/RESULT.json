@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/patch_director_e269.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-20T00:59:41.387197+00:00",
+  "hypothesis_id": "GENERAL-PREDICTION-MARKET-EDGE-HUNTER",
+  "source_commit": "de8673d882a44c05d10c83d38beab5d8185c108d",
+  "started_at": "2026-09-20T00:59:39.177304+00:00",
+  "status": "completed",
+  "stderr_sha256": "a0d8d497e0d2722926aeb564a5b351f02fd2776386bc32c0bd3aac9cc6994bc3",
+  "stdout_sha256": "5aeec132620282c0fc80a41fb2e35e05a4d7f0e4f1c8599a80033056673eef73",
+  "task_class": "infrastructure",
+  "task_id": "EDGE-HUNTER-CANDIDATE-PATCH-E269"
+}
