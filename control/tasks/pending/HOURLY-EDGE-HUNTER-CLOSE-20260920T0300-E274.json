@@ -1,0 +1,13 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/close_edge_hunter_0300_e274.py"
+  ],
+  "hypothesis_id": "GENERAL-PREDICTION-MARKET-EDGE-HUNTER",
+  "live_trading": false,
+  "operation": "python",
+  "task_class": "research",
+  "task_id": "HOURLY-EDGE-HUNTER-CLOSE-20260920T0300-E274",
+  "timeout_seconds": 120,
+  "working_directory": "."
+}
