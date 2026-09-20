@@ -1,0 +1,13 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/mine_exact_rule_families_5000_e416.py"
+  ],
+  "hypothesis_id": "PAYOFF-IDENTITY-MINING-V1",
+  "live_trading": false,
+  "operation": "python",
+  "task_class": "research",
+  "task_id": "EDGE-HUNTER-EXACT-RULE-FAMILIES-5000-E416",
+  "timeout_seconds": 180,
+  "working_directory": "."
+}
