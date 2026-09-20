@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/audit_failed_triage_e259.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-20T00:49:09.889891+00:00",
+  "hypothesis_id": "GENERAL-PREDICTION-MARKET-EDGE-HUNTER",
+  "source_commit": "70fa6e68377c21ace8aecbb8ef6c151ddbdf9763",
+  "started_at": "2026-09-20T00:49:09.851466+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "d52d14f00175fc4f56084897e15b3737980d0ae36c32a487646e680fcd4c4356",
+  "task_class": "infrastructure",
+  "task_id": "EDGE-HUNTER-TRIAGE-AUDIT-E259"
+}
