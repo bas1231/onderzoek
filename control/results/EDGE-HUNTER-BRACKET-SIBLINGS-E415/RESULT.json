@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/mine_bracket_sibling_families_e415.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-20T03:15:05.579374+00:00",
+  "hypothesis_id": "PAYOFF-IDENTITY-MINING-V1",
+  "source_commit": "997b4a14e1d9e7801694ce724a87ee054c361907",
+  "started_at": "2026-09-20T03:15:03.291852+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "98e9193b0a7a1f4e096041dbd522ed24bd620d05273d65d5df5983bbe63e538d",
+  "task_class": "research",
+  "task_id": "EDGE-HUNTER-BRACKET-SIBLINGS-E415"
+}
