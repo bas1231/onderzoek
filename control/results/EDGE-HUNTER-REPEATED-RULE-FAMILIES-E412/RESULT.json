@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/mine_repeated_rule_families_e412.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-20T03:12:42.883489+00:00",
+  "hypothesis_id": "PAYOFF-IDENTITY-MINING-V1",
+  "source_commit": "c3aa93f65767fec9f472f672fec598a52310e76b",
+  "started_at": "2026-09-20T03:12:42.054773+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "fc384343310d164ee725fcff94f7464e5cf89464a6711fd6277e304d7013ae8a",
+  "task_class": "research",
+  "task_id": "EDGE-HUNTER-REPEATED-RULE-FAMILIES-E412"
+}
