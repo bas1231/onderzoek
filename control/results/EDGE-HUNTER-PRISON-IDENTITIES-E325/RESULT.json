@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/test_prison_identities_e325.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-20T01:37:56.945868+00:00",
+  "hypothesis_id": "PAYOFF-IDENTITY-MINING-V1",
+  "source_commit": "399bf1999d7fc3e82bf6d6f1f769642840721e35",
+  "started_at": "2026-09-20T01:37:56.924366+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "1418910273cf0aaf7078f97b5c8e9f09a0719d6ffdd8ccd05a0a5442d82ec677",
+  "task_class": "research",
+  "task_id": "EDGE-HUNTER-PRISON-IDENTITIES-E325"
+}
