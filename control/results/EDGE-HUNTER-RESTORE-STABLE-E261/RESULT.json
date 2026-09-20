@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/restore_edge_hunter_e261.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-20T00:53:40.086407+00:00",
+  "hypothesis_id": "GENERAL-PREDICTION-MARKET-EDGE-HUNTER",
+  "source_commit": "e982b8935ac786c484a32e819464a6216d73609a",
+  "started_at": "2026-09-20T00:53:39.871221+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "24713aca54df1f39c5b44af99067a2381d65f7cfe3902dacc0e321981bc15c62",
+  "task_class": "infrastructure",
+  "task_id": "EDGE-HUNTER-RESTORE-STABLE-E261"
+}
