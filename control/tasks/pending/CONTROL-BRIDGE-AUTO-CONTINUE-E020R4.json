@@ -1,0 +1,24 @@
+{
+  "build_authorization": {
+    "build_kind": "control_plane",
+    "capabilities": [
+      "modify_repository",
+      "commit_local_changes",
+      "run_local_tests",
+      "restart_local_service"
+    ],
+    "mode": "control_plane",
+    "objective": "Repair the isolated auto-continuation regression test, install the permanent server-side continuation mechanism, limit ACK-stall fallback replay, run syntax and pytest gates, restart the local bridge, verify health, and prospectively prove automatic continuation after this task result."
+  },
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/run_auto_continue_repair_e020r4.py"
+  ],
+  "hypothesis_id": "CONTROL-NO-SILENT-STOP",
+  "live_trading": false,
+  "operation": "python",
+  "task_class": "infrastructure",
+  "task_id": "CONTROL-BRIDGE-AUTO-CONTINUE-E020R4",
+  "timeout_seconds": 300,
+  "working_directory": "."
+}
