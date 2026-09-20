@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/probe_gamma_keyset_e396.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-20T02:58:16.872025+00:00",
+  "hypothesis_id": "PAYOFF-IDENTITY-MINING-V1",
+  "source_commit": "b771a9c2590e0b06eecea3f085fa8dc4e1026be5",
+  "started_at": "2026-09-20T02:58:16.351708+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "3596d71f0bac23241b0c0ad7469dc04426e7ca75a2b5aa40b2de6fc651e5c8a9",
+  "task_class": "research",
+  "task_id": "EDGE-HUNTER-GAMMA-KEYSET-PROBE-E396"
+}
