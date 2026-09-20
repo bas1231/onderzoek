@@ -1,0 +1,31 @@
+SCRIPT_EXISTS True
+LINE_COUNT 185
+LINE 68 "    payload=recv_exact(sock,size) if size else b''"
+LINE 69 '    if masked and mask is not None:'
+LINE 70 '        payload=bytes(value ^ mask[index % 4] for index,value in enumerate(payload))'
+LINE 71 '    return opcode,payload'
+LINE 72 ''
+LINE 73 'raw_sock=socket.create_connection((host,443),timeout=10)'
+LINE 74 'ctx=ssl.create_default_context()'
+LINE 75 'sock=ctx.wrap_socket(raw_sock,server_hostname=host)'
+LINE 76 'sock.settimeout(1.0)'
+LINE 77 "key=base64.b64encode(os.urandom(16)).decode('ascii')"
+LINE 78 "request='GET '+path+' HTTP/1.1"
+LINE 79 "Host: '+host+'"
+LINE 80 'Upgrade: websocket'
+LINE 81 'Connection: Upgrade'
+LINE 82 "Sec-WebSocket-Key: '+key+'"
+LINE 83 'Sec-WebSocket-Version: 13'
+LINE 84 'User-Agent: PredictionEdgeHunter/1.0'
+LINE 85 ''
+LINE 86 "'"
+LINE 87 "sock.sendall(request.encode('ascii'))"
+LINE 88 "header=b''"
+LINE 89 "while b'"
+LINE 90 ''
+LINE 91 "' not in header:"
+LINE 92 '    part=sock.recv(4096)'
+LINE 93 '    if not part:'
+LINE 94 "        raise SystemExit('handshake_closed')"
+LINE 95 '    header+=part'
+STDLIB_WS_CORRUPTION_INSPECTION_PASS

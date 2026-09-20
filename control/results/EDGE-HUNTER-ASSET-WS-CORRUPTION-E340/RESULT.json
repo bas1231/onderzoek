@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/inspect_stdlib_ws_corruption_e340.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-20T02:13:46.550757+00:00",
+  "hypothesis_id": "ASSET-RANK-MAKER-HEDGE-V1",
+  "source_commit": "2be5ba27fc5eabf7c8d852744d8d4ee11598899a",
+  "started_at": "2026-09-20T02:13:46.531960+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "91e091a5c5bb36997cd5a9a3c35f942af8e4fd82b55640aaa9bfc5a5a9b34096",
+  "task_class": "infrastructure",
+  "task_id": "EDGE-HUNTER-ASSET-WS-CORRUPTION-E340"
+}
