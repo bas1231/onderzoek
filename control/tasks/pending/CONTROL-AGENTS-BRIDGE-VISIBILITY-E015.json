@@ -1,0 +1,22 @@
+{
+  "build_authorization": {
+    "build_kind": "control_plane",
+    "capabilities": [
+      "modify_repository",
+      "commit_local_changes"
+    ],
+    "mode": "control_plane",
+    "objective": "Verify and if necessary persist the visible-chat browser bridge transport rule in AGENTS.md using a parser-safe single-line job."
+  },
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/ensure_bridge_visibility_rule_e015.py"
+  ],
+  "hypothesis_id": "CONTROL-BRIDGE-VISIBILITY",
+  "live_trading": false,
+  "operation": "python",
+  "task_class": "infrastructure",
+  "task_id": "CONTROL-AGENTS-BRIDGE-VISIBILITY-E015",
+  "timeout_seconds": 120,
+  "working_directory": "."
+}
