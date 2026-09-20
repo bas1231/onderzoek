@@ -1,0 +1,667 @@
+FILE hourly-reports/hourly-20260920T020000+0200.md
+# Hourly Research Report
+
+Run: hourly-20260920T020000+0200
+Started: 2026-09-20T02:00:19.099371+02:00
+
+## Run metadata
+Status: STARTED
+
+## Source coverage
+PENDING
+
+## New evidence
+PENDING
+
+## Candidate hypotheses
+UNPROVEN
+
+## Negative evidence
+PENDING
+
+## Falsification
+PENDING
+
+## Reproduction
+PENDING
+
+## Coverage gaps
+PENDING
+
+## Incidents
+NONE YET
+
+## Decision
+NO_PROVEN_EDGE
+
+## Next hour
+PENDING
+
+## Source sweep update
+
+Success: 12
+Failure: 1
+Sweep: knowledge/runs/source_sweeps/20260920T000019Z.json
+- arxiv: UNCHANGED
+- aviationweather: FAILED
+- cftc: CHANGED
+- ecmwf_open: UNCHANGED
+- github: CHANGED
+- kalshi_docs: UNCHANGED
+- kalshi_weather_rules: CHANGED
+- nomads: CHANGED
+- nws: CHANGED
+- polymarket_docs: UNCHANGED
+- reddit: CHANGED
+- twc_kalshi: UNCHANGED
+- youtube: CHANGED
+
+## Automated preparation
+
+Usable sources: 9
+Low-text-yield sources: 3
+- algebra: 1 routed evidence items
+- behavioral: 0 routed evidence items
+- informed_flow: 0 routed evidence items
+- microstructure: 1 routed evidence items
+- scout: 4 routed evidence items
+- settlement: 1 routed evidence items
+- weather_twc: 2 routed evidence items
+
+## Source sweep update
+
+Success: 12
+Failure: 1
+Sweep: knowledge/runs/source_sweeps/20260920T003237Z.json
+- arxiv: UNCHANGED
+- aviationweather: FAILED
+- cftc: CHANGED
+- ecmwf_open: UNCHANGED
+- github: CHANGED
+- kalshi_docs: UNCHANGED
+- kalshi_weather_rules: CHANGED
+- nomads: CHANGED
+- nws: CHANGED
+- polymarket_docs: UNCHANGED
+- reddit: CHANGED
+- twc_kalshi: UNCHANGED
+- youtube: CHANGED
+
+FILE knowledge/runs/hourly-20260920T020000+0200.json
+{
+  "agents": {
+    "algebra": "PENDING",
+    "behavioral": "PENDING",
+    "chief_falsifier": "PENDING",
+    "independent_reproducer": "PENDING",
+    "informed_flow": "PENDING",
+    "microstructure": "PENDING",
+    "prebuild_killer": "PENDING",
+    "research_director": "PENDING",
+    "scout": "PENDING",
+    "settlement": "PENDING",
+    "weather_twc": "PENDING"
+  },
+  "automated_routing": {
+    "algebra": 1,
+    "behavioral": 0,
+    "informed_flow": 0,
+    "microstructure": 1,
+    "scout": 4,
+    "settlement": 1,
+    "weather_twc": 2
+  },
+  "candidate_status": "UNPROVEN",
+  "decision": "NO_PROVEN_EDGE",
+  "gates": {
+    "execution_reality": "PENDING",
+    "falsification": "PENDING",
+    "market_edge": "PENDING",
+    "point_in_time": "PENDING",
+    "reproduction": "PENDING",
+    "signal_edge": "PENDING",
+    "source_provenance": "PASS"
+  },
+  "live_trading": false,
+  "paid_actions": false,
+  "routing_ref": "knowledge/runs/hourly-20260920T020000+0200-routing.json",
+  "run_id": "hourly-20260920T020000+0200",
+  "source_failure_count": 1,
+  "source_manifests": {
+    "arxiv": "/home/leonh/prediction_research/knowledge/documents/manifests/arxiv/20260920T003238Z_d7ed6c1e9723.json",
+    "cftc": "/home/leonh/prediction_research/knowledge/documents/manifests/cftc/20260920T003237Z_460f19f42856.json",
+    "ecmwf_open": "/home/leonh/prediction_research/knowledge/documents/manifests/ecmwf_open/20260920T003238Z_83c3dee07ef5.json",
+    "github": "/home/leonh/prediction_research/knowledge/documents/manifests/github/20260920T003238Z_9a2b21130f75.json",
+    "kalshi_docs": "/home/leonh/prediction_research/knowledge/documents/manifests/kalshi_docs/20260920T003238Z_94c183be8dd7.json",
+    "kalshi_weather_rules": "/home/leonh/prediction_research/knowledge/documents/manifests/kalshi_weather_rules/20260920T003238Z_633803fc9af9.json",
+    "nomads": "/home/leonh/prediction_research/knowledge/documents/manifests/nomads/20260920T003238Z_17b612682f1f.json",
+    "nws": "/home/leonh/prediction_research/knowledge/documents/manifests/nws/20260920T003237Z_313992dd5d1f.json",
+    "polymarket_docs": "/home/leonh/prediction_research/knowledge/documents/manifests/polymarket_docs/20260920T003237Z_6061d788333a.json",
+    "reddit": "/home/leonh/prediction_research/knowledge/documents/manifests/reddit/20260920T003238Z_40726502428c.json",
+    "twc_kalshi": "/home/leonh/prediction_research/knowledge/documents/manifests/twc_kalshi/20260920T003238Z_4778025a622c.json",
+    "youtube": "/home/leonh/prediction_research/knowledge/documents/manifests/youtube/20260920T003238Z_c1dd6bbb0408.json"
+  },
+  "source_quality": {
+    "low_text_yield_count": 3,
+    "ref": "knowledge/runs/hourly-20260920T020000+0200-source-quality.json",
+    "usable_count": 9
+  },
+  "source_success_count": 12,
+  "source_sweep_ref": "knowledge/runs/source_sweeps/20260920T003237Z.json",
+  "sources": {
+    "arxiv": "UNCHANGED",
+    "aviationweather": "FAILED",
+    "cftc": "CHANGED",
+    "ecmwf_open": "UNCHANGED",
+    "github": "CHANGED",
+    "kalshi_docs": "UNCHANGED",
+    "kalshi_weather_rules": "CHANGED",
+    "nomads": "CHANGED",
+    "nws": "CHANGED",
+    "polymarket_docs": "UNCHANGED",
+    "reddit": "CHANGED",
+    "twc_kalshi": "UNCHANGED",
+    "youtube": "CHANGED"
+  },
+  "started_at": "2026-09-20T02:00:19.099371+02:00",
+  "status": "STARTED",
+  "wallet_actions": false
+}
+
+FILE knowledge/runs/hourly-20260920T020000+0200-source-quality.json
+{
+  "low_text_yield_count": 3,
+  "rule": "LOW_TEXT_YIELD may not support a research claim",
+  "run_id": "hourly-20260920T020000+0200",
+  "sources": [
+    {
+      "chars": 5931,
+      "document_sha256": "d7ed6c1e9723edcceae8a3d3f258a7ca991bd64f841fad43632caa13a7fad746",
+      "source_id": "arxiv",
+      "status": "USABLE",
+      "text_ref": "knowledge/documents/text/arxiv/d7ed6c1e9723edcceae8a3d3f258a7ca991bd64f841fad43632caa13a7fad746.json"
+    },
+    {
+      "chars": 4805,
+      "document_sha256": "460f19f4285617cf8b5f3756603f24c0b555f1afea9750a0fc063ee907b02b84",
+      "source_id": "cftc",
+      "status": "USABLE",
+      "text_ref": "knowledge/documents/text/cftc/460f19f4285617cf8b5f3756603f24c0b555f1afea9750a0fc063ee907b02b84.json"
+    },
+    {
+      "chars": 26229,
+      "document_sha256": "83c3dee07ef5f6d1a434fb3688a9a39e6aec75080ea93f3c0f9b60cea8df0be0",
+      "source_id": "ecmwf_open",
+      "status": "USABLE",
+      "text_ref": "knowledge/documents/text/ecmwf_open/83c3dee07ef5f6d1a434fb3688a9a39e6aec75080ea93f3c0f9b60cea8df0be0.json"
+    },
+    {
+      "chars": 7669,
+      "document_sha256": "9a2b21130f75229e25c037adfa8ff3261d8979c70a5aaa62a38359635351cf32",
+      "source_id": "github",
+      "status": "USABLE",
+      "text_ref": "knowledge/documents/text/github/9a2b21130f75229e25c037adfa8ff3261d8979c70a5aaa62a38359635351cf32.json"
+    },
+    {
+      "chars": 1539,
+      "document_sha256": "94c183be8dd7141d7c8bee939c2ff1fb07caac3c559161afa319daad968ad5ce",
+      "source_id": "kalshi_docs",
+      "status": "USABLE",
+      "text_ref": "knowledge/documents/text/kalshi_docs/94c183be8dd7141d7c8bee939c2ff1fb07caac3c559161afa319daad968ad5ce.json"
+    },
+    {
+      "chars": 4859,
+      "document_sha256": "633803fc9af9ded172b8f985a053ad41ba67bf385f538f9ea00f995a6564472b",
+      "source_id": "kalshi_weather_rules",
+      "status": "USABLE",
+      "text_ref": "knowledge/documents/text/kalshi_weather_rules/633803fc9af9ded172b8f985a053ad41ba67bf385f538f9ea00f995a6564472b.json"
+    },
+    {
+      "chars": 6959,
+      "document_sha256": "17b612682f1f4373ee6b30132c1a545106c84bc415de5809d6b3696ed6b85c66",
+      "source_id": "nomads",
+      "status": "USABLE",
+      "text_ref": "knowledge/documents/text/nomads/17b612682f1f4373ee6b30132c1a545106c84bc415de5809d6b3696ed6b85c66.json"
+    },
+    {
+      "chars": 2407,
+      "document_sha256": "313992dd5d1ffcfb3b35326d9ad4f5abd8d13a799bcb5e6497174fad934160ae",
+      "source_id": "nws",
+      "status": "USABLE",
+      "text_ref": "knowledge/documents/text/nws/313992dd5d1ffcfb3b35326d9ad4f5abd8d13a799bcb5e6497174fad934160ae.json"
+    },
+    {
+      "chars": 2721,
+      "document_sha256": "6061d788333a11345f9b58eac43e8ad235ee9315b5bdb7acf8e01b8fc02342b7",
+      "source_id": "polymarket_docs",
+      "status": "USABLE",
+      "text_ref": "knowledge/documents/text/polymarket_docs/6061d788333a11345f9b58eac43e8ad235ee9315b5bdb7acf8e01b8fc02342b7.json"
+    },
+    {
+      "chars": 6,
+      "document_sha256": "40726502428cce9917fff244a039060f4ccc1ccb35290896e255a65319e0f441",
+      "source_id": "reddit",
+      "status": "LOW_TEXT_YIELD",
+      "text_ref": "knowledge/documents/text/reddit/40726502428cce9917fff244a039060f4ccc1ccb35290896e255a65319e0f441.json"
+    },
+    {
+      "chars": 238,
+      "document_sha256": "4778025a622cc00d648ad1ebfac78e365ff990992bf072d18daa05d90a3fb489",
+      "source_id": "twc_kalshi",
+      "status": "LOW_TEXT_YIELD",
+      "text_ref": "knowledge/documents/text/twc_kalshi/4778025a622cc00d648ad1ebfac78e365ff990992bf072d18daa05d90a3fb489.json"
+    },
+    {
+      "chars": 203,
+      "document_sha256": "c1dd6bbb0408b54bc53a0730e8894977914432885548787e20a4763e6715847e",
+      "source_id": "youtube",
+      "status": "LOW_TEXT_YIELD",
+      "text_ref": "knowledge/documents/text/youtube/c1dd6bbb0408b54bc53a0730e8894977914432885548787e20a4763e6715847e.json"
+    }
+  ],
+  "usable_count": 9
+}
+
+FILE knowledge/runs/hourly-20260920T020000+0200-routing.json
+{
+  "algebra": {
+    "coverage_gaps": [],
+    "evidence": [
+      {
+        "document_sha256": "6061d788333a11345f9b58eac43e8ad235ee9315b5bdb7acf8e01b8fc02342b7",
+        "retrieved_at": "2026-09-19T20:59:24.454376+00:00",
+        "snippet": "ils Prices and Order Books Analytics Real-Time Data Chainlink TWAP Prices Trading Overview Place Your First Order Wallets and Authentication Session Keys Beta Place Orders Manage Orders Real-Time Order Updates Positions Combos Wallet Activity Fees Market Making Matching Engine Restarts Bridge Programs Taker Rebate Program Maker Rebates Program Liquidity Rewards Builder Program Referral Program Resources Contracts Data Resources Error Codes \ud83c\uddfa\ud83c\uddf8 Looking for Polymarket US documentation? Visit US Docs \u2192 Polymarket Documentation Build on the world\u2019s largest prediction market. APIs, SDKs, and tools for prediction market developers. Developer Quickstart Make your first API request in minutes. Learn the basics of the Polymarket platform, f",
+        "source_id": "polymarket_docs",
+        "source_state": "UNCHANGED",
+        "term": "combo"
+      }
+    ],
+    "status": "EVIDENCE_ROUTED"
+  },
+  "behavioral": {
+    "coverage_gaps": [],
+    "evidence": [],
+    "status": "NO_EVIDENCE"
+  },
+  "informed_flow": {
+    "coverage_gaps": [
+      "No point-in-time participant identity/flow dataset"
+    ],
+    "evidence": [],
+    "status": "NO_EVIDENCE"
+  },
+  "microstructure": {
+    "coverage_gaps": [
+      "No live orderbook snapshot source in hourly registry"
+    ],
+    "evidence": [
+      {
+        "document_sha256": "6061d788333a11345f9b58eac43e8ad235ee9315b5bdb7acf8e01b8fc02342b7",
+        "retrieved_at": "2026-09-19T20:59:24.454376+00:00",
+        "snippet": "market 101 SDKs & APIs Core Concepts Markets & Events Negative Risk Markets Prices & Orderbook Positions & Tokens Polymarket USD Order Lifecycle Resolution Market Data Overview Discover Markets Market Details Prices and Order Books Analytics Real-Time Data Chainlink TWAP Prices Trading Overview Place Your First Order Wallets and Authentication Session Keys Beta Place Orders Manage Orders Real-Time Order Updates Positions Combos Wallet Activity Fees Market Making Matching Engine Restarts Bridge Programs Taker Rebate Program Maker Rebates Program Liquidity Rewards Builder Program Referral Program Resources Contracts Data Resources Error Codes \ud83c\uddfa\ud83c\uddf8 Looking for Polymarket US documentation? Visit US Docs \u2192 Polymarket Documentation Build",
+        "source_id": "polymarket_docs",
+        "source_state": "UNCHANGED",
+        "term": "order book"
+      }
+    ],
+    "status": "EVIDENCE_ROUTED"
+  },
+  "scout": {
+    "coverage_gaps": [],
+    "evidence": [
+      {
+        "document_sha256": "460f19f4285617cf8b5f3756603f24c0b555f1afea9750a0fc063ee907b02b84",
+        "retrieved_at": "2026-09-20T00:32:37.679537+00:00",
+        "snippet": "ments of Traders Bank Participation Reports Cotton On-Call Financial Data for FCMS Staff Reports Weekly Swaps Report Cleared Margin Reports Office of the Chief Economist Forms & Submissions Learn & Protect Understanding Prediction Markets and Event Contracts Check Registration & Disciplinary History Submit a Tip or Complaint RED List Office of Proceedings Learning Resources News & Events Press Releases Public Statements & Remarks Events Carousel Rotation On On CFTC and Kansas State University to Host AgCon October 22-23 CFTC Grants Multiple Whistleblower Awards CFTC Issues Advisory on Self-Certifying Incentive Programs for Prediction Markets CFTC Approves Final Rule Concerning Whistleblower Awards Holding Wrongdoers Accountable Wh",
+        "source_id": "cftc",
+        "source_state": "CHANGED",
+        "term": "prediction market"
+      },
+      {
+        "document_sha256": "94c183be8dd7141d7c8bee939c2ff1fb07caac3c559161afa319daad968ad5ce",
+        "retrieved_at": "2026-09-19T20:59:24.774537+00:00",
+        "snippet": "king Your First Request Make your first API call and start trading on Kalshi. Demo Environment Build and test safely against the demo environment. API Keys Generate and manage your API credentials. Kalshi Academy New to prediction markets? Explore educational resources and tutorials. Reference Rate Limits Token budgets, tiers, and bursting. Changelog Stay updated with the latest API changes. Glossary Key terms and concepts used across the exchange. Specifications Predictions REST Download openapi.yaml for event-contract REST API integration. Predictions WebSocket Download asyncapi.yaml for event-contract WebSocket integration. Perps REST Download perps_openapi.yaml for perpetual futures REST API integration. Perps WebSocket Downlo",
+        "source_id": "kalshi_docs",
+        "source_state": "UNCHANGED",
+        "term": "prediction market"
+      },
+      {
+        "document_sha256": "633803fc9af9ded172b8f985a053ad41ba67bf385f538f9ea00f995a6564472b",
+        "retrieved_at": "2026-09-20T00:32:38.975435+00:00",
+        "snippet": "cally released the following morning. Hourly temperature markets settle on readings from The Weather Company . Always check the specific market\u2019s rules for its source. How Do I Trade on Weather Markets? Kalshi creates a prediction market around a specific temperature threshold for a given location. For example: \u201cHighest temperature in Chicago on April 15, 2025?\u201d \u200b Contract prices for temperature ranges may shift as new weather data (e.g., forecasts, model runs, satellite images, observations) becomes available. Note: Not all weather data is the same. Apps like AccuWeather, iOS Weather, or Google Weather may be useful for guidance but do not determine contract outcomes. The only source used for settlement is the one named in the ma",
+        "source_id": "kalshi_weather_rules",
+        "source_state": "CHANGED",
+        "term": "prediction market"
+      },
+      {
+        "document_sha256": "6061d788333a11345f9b58eac43e8ad235ee9315b5bdb7acf8e01b8fc02342b7",
+        "retrieved_at": "2026-09-19T20:59:24.454376+00:00",
+        "snippet": "Program Liquidity Rewards Builder Program Referral Program Resources Contracts Data Resources Error Codes \ud83c\uddfa\ud83c\uddf8 Looking for Polymarket US documentation? Visit US Docs \u2192 Polymarket Documentation Build on the world\u2019s largest prediction market. APIs, SDKs, and tools for prediction market developers. Developer Quickstart Make your first API request in minutes. Learn the basics of the Polymarket platform, fetch market data, place orders, and redeem winning positions. Place Your First Order \u2192 TypeScript Python API import { createPublicClient } from \"@polymarket/client\" ; const client = createPublicClient (); const pages = client . listMarkets ({ closed: false }); const { items : markets } = await pages . firstPage (); from polymarket impor",
+        "source_id": "polymarket_docs",
+        "source_state": "UNCHANGED",
+        "term": "prediction market"
+      }
+    ],
+    "status": "EVIDENCE_ROUTED"
+  },
+  "settlement": {
+    "coverage_gaps": [
+      "Venue-specific contract-rule pages may need deeper retrieval than docs landing pages"
+    ],
+    "evidence": [
+      {
+        "document_sha256": "633803fc9af9ded172b8f985a053ad41ba67bf385f538f9ea00f995a6564472b",
+        "retrieved_at": "2026-09-20T00:32:38.975435+00:00",
+        "snippet": "amounts in specific cities, from New York City to Los Angeles. Traders can take positions on whether a city will reach a certain high temperature or fall within a particular range. Each weather market names its official settlement source in its market rules. Daily high/low temperature markets settle based on the final climate report issued by the National Weather Service (NWS), typically released the following morning. Hourly temperature markets settle on readings from The Weather Company . Always check the specific market\u2019s rules for its source. How Do I Trade on Weather Markets? Kalshi creates a prediction market around a specific temperature threshold for a given location. For example: \u201cHighest temperature in Chicago on April 1",
+        "source_id": "kalshi_weather_rules",
+        "source_state": "CHANGED",
+        "term": "settlement"
+      }
+    ],
+    "status": "EVIDENCE_ROUTED"
+  },
+  "weather_twc": {
+    "coverage_gaps": [
+      "No TWC-specific primary source in registry"
+    ],
+    "evidence": [
+      {
+        "document_sha256": "83c3dee07ef5f6d1a434fb3688a9a39e6aec75080ea93f3c0f9b60cea8df0be0",
+        "retrieved_at": "2026-09-19T20:59:24.830272+00:00",
+        "snippet": "d deviation of sub-gridscale orography (step 0) 160 sfc slor Slope of sub-gridscale orography (step 0) 163 sfc tcc Total cloud cover 164 sfc 10u 10 metre U wind component 165 sfc 10v 10 metre V wind component 166 sfc 2t 2 metre temperature 167 sfc 2d 2 metre dewpoint temperature 168 sfc ssrd Surface net short-wave (solar) radiation downwards 169 sfc lsm Land Sea Mask 172 sfc strd Surface net long-wave (thermal) radiation downwards 175 sfc ssr Surface net short-wave (solar) radiation 176 sfc str Surface net long-wave (thermal) radiation 177 sfc ttr Top net long-wave (thermal) radiation 179 sfc ewss Time-integrated eastward turbulent surface stress 180 sfc nsss Time-integrated northward turbulent surface stress 181 sfc ro Runoff 205",
+        "source_id": "ecmwf_open",
+        "source_state": "UNCHANGED",
+        "term": "2 metre temperature"
+      },
+      {
+        "document_sha256": "633803fc9af9ded172b8f985a053ad41ba67bf385f538f9ea00f995a6564472b",
+        "retrieved_at": "2026-09-20T00:32:38.975435+00:00",
+        "snippet": "ing based on the high temperature recorded in the final NWS Daily Climate Report. Market determination may be delayed in the rare instances of a) a high temperature is not consistent with 6-hr or 24-hr highs reported by METAR or b) the final NWS Climate Report high temperature value is lower than previous preliminary report. \u200b Hourly Temperature Markets Some temperature markets are hourly - the market title names an exact time, for example \u201cChicago temperature at 5 PM EDT.\u201d These markets are also directional: each contract resolves on whether the temperature at that time is above or below a specific level, rather than within a range. They settle on the temperature at that exact time as reported by The Weather Company for the stati",
+        "source_id": "kalshi_weather_rules",
+        "source_state": "CHANGED",
+        "term": "metar"
+      }
+    ],
+    "status": "EVIDENCE_ROUTED"
+  }
+}
+
+FILE knowledge/runs/agent_packets/hourly-20260920T020000+0200/algebra.json
+{
+  "agent_id": "algebra",
+  "contract": {
+    "agent": "algebra",
+    "gate": "statewise_payout_proof_required",
+    "input": "contract and payout structures",
+    "live_trading": false,
+    "output": [
+      "candidate_identities",
+      "formal_conditions"
+    ],
+    "paid_actions": false,
+    "wallet_actions": false
+  },
+  "input_refs": [],
+  "live_trading": false,
+  "notes": [],
+  "output_refs": [],
+  "paid_actions": false,
+  "run_id": "hourly-20260920T020000+0200",
+  "status": "PENDING",
+  "wallet_actions": false
+}
+
+FILE knowledge/runs/agent_packets/hourly-20260920T020000+0200/weather_twc.json
+{
+  "agent_id": "weather_twc",
+  "contract": {
+    "agent": "weather_twc",
+    "gate": "signal_edge_only_until_market_test",
+    "input": "weather and settlement leads",
+    "live_trading": false,
+    "output": [
+      "signal_hypotheses",
+      "point_in_time_risks",
+      "negative_evidence"
+    ],
+    "paid_actions": false,
+    "wallet_actions": false
+  },
+  "input_refs": [],
+  "live_trading": false,
+  "notes": [],
+  "output_refs": [],
+  "paid_actions": false,
+  "run_id": "hourly-20260920T020000+0200",
+  "status": "PENDING",
+  "wallet_actions": false
+}
+
+FILE knowledge/runs/agent_packets/hourly-20260920T020000+0200/microstructure.json
+{
+  "agent_id": "microstructure",
+  "contract": {
+    "agent": "microstructure",
+    "gate": "executable_evidence_required",
+    "input": "venue and orderbook evidence",
+    "live_trading": false,
+    "output": [
+      "execution_constraints",
+      "market_hypotheses",
+      "negative_evidence"
+    ],
+    "paid_actions": false,
+    "wallet_actions": false
+  },
+  "input_refs": [],
+  "live_trading": false,
+  "notes": [],
+  "output_refs": [],
+  "paid_actions": false,
+  "run_id": "hourly-20260920T020000+0200",
+  "status": "PENDING",
+  "wallet_actions": false
+}
+
+FILE knowledge/runs/agent_packets/hourly-20260920T020000+0200/chief_falsifier.json
+{
+  "agent_id": "chief_falsifier",
+  "contract": {
+    "agent": "chief_falsifier",
+    "gate": "reject_on_unresolved_leakage",
+    "input": "surviving candidates",
+    "live_trading": false,
+    "output": [
+      "falsification_tests",
+      "leakage_checks"
+    ],
+    "paid_actions": false,
+    "wallet_actions": false
+  },
+  "input_refs": [],
+  "live_trading": false,
+  "notes": [],
+  "output_refs": [],
+  "paid_actions": false,
+  "run_id": "hourly-20260920T020000+0200",
+  "status": "PENDING",
+  "wallet_actions": false
+}
+
+FILE knowledge/runs/agent_packets/hourly-20260920T020000+0200/prebuild_killer.json
+{
+  "agent_id": "prebuild_killer",
+  "contract": {
+    "agent": "prebuild_killer",
+    "gate": "attempt_rejection_first",
+    "input": "all new candidates",
+    "live_trading": false,
+    "output": [
+      "kill_tests",
+      "fatal_flaws"
+    ],
+    "paid_actions": false,
+    "wallet_actions": false
+  },
+  "input_refs": [],
+  "live_trading": false,
+  "notes": [],
+  "output_refs": [],
+  "paid_actions": false,
+  "run_id": "hourly-20260920T020000+0200",
+  "status": "PENDING",
+  "wallet_actions": false
+}
+
+FILE knowledge/runs/agent_packets/hourly-20260920T020000+0200/settlement.json
+{
+  "agent_id": "settlement",
+  "contract": {
+    "agent": "settlement",
+    "gate": "primary_rules_preferred",
+    "input": "rules and oracle evidence",
+    "live_trading": false,
+    "output": [
+      "settlement_constraints",
+      "finality_risks"
+    ],
+    "paid_actions": false,
+    "wallet_actions": false
+  },
+  "input_refs": [],
+  "live_trading": false,
+  "notes": [],
+  "output_refs": [],
+  "paid_actions": false,
+  "run_id": "hourly-20260920T020000+0200",
+  "status": "PENDING",
+  "wallet_actions": false
+}
+
+FILE knowledge/runs/agent_packets/hourly-20260920T020000+0200/research_director.json
+{
+  "agent_id": "research_director",
+  "contract": {
+    "agent": "research_director",
+    "gate": "NO_PROVEN_EDGE_is_valid",
+    "input": "all agent outputs",
+    "live_trading": false,
+    "output": [
+      "hourly_report",
+      "candidate_status",
+      "next_hour_queue"
+    ],
+    "paid_actions": false,
+    "wallet_actions": false
+  },
+  "input_refs": [],
+  "live_trading": false,
+  "notes": [],
+  "output_refs": [],
+  "paid_actions": false,
+  "run_id": "hourly-20260920T020000+0200",
+  "status": "PENDING",
+  "wallet_actions": false
+}
+
+FILE knowledge/runs/agent_packets/hourly-20260920T020000+0200/independent_reproducer.json
+{
+  "agent_id": "independent_reproducer",
+  "contract": {
+    "agent": "independent_reproducer",
+    "gate": "independent_confirmation_required",
+    "input": "surviving evidence packages",
+    "live_trading": false,
+    "output": [
+      "reproduction_status",
+      "discrepancies"
+    ],
+    "paid_actions": false,
+    "wallet_actions": false
+  },
+  "input_refs": [],
+  "live_trading": false,
+  "notes": [],
+  "output_refs": [],
+  "paid_actions": false,
+  "run_id": "hourly-20260920T020000+0200",
+  "status": "PENDING",
+  "wallet_actions": false
+}
+
+FILE knowledge/runs/agent_packets/hourly-20260920T020000+0200/informed_flow.json
+{
+  "agent_id": "informed_flow",
+  "contract": {
+    "agent": "informed_flow",
+    "gate": "no_insider_assumption_as_fact",
+    "input": "flow evidence",
+    "live_trading": false,
+    "output": [
+      "flow_hypotheses",
+      "confounders"
+    ],
+    "paid_actions": false,
+    "wallet_actions": false
+  },
+  "input_refs": [],
+  "live_trading": false,
+  "notes": [],
+  "output_refs": [],
+  "paid_actions": false,
+  "run_id": "hourly-20260920T020000+0200",
+  "status": "PENDING",
+  "wallet_actions": false
+}
+
+FILE knowledge/runs/agent_packets/hourly-20260920T020000+0200/behavioral.json
+{
+  "agent_id": "behavioral",
+  "contract": {
+    "agent": "behavioral",
+    "gate": "no_unverified_generalization",
+    "input": "behavioral evidence",
+    "live_trading": false,
+    "output": [
+      "bias_hypotheses",
+      "counterevidence"
+    ],
+    "paid_actions": false,
+    "wallet_actions": false
+  },
+  "input_refs": [],
+  "live_trading": false,
+  "notes": [],
+  "output_refs": [],
+  "paid_actions": false,
+  "run_id": "hourly-20260920T020000+0200",
+  "status": "PENDING",
+  "wallet_actions": false
+}
+
+FILE knowledge/runs/agent_packets/hourly-20260920T020000+0200/scout.json
+{
+  "agent_id": "scout",
+  "contract": {
+    "agent": "scout",
+    "gate": "discovery_only",
+    "input": "source registry plus prior hour state",
+    "live_trading": false,
+    "output": [
+      "leads",
+      "source_changes",
+      "coverage_gaps"
+    ],
+    "paid_actions": false,
+    "wallet_actions": false
+  },
+  "input_refs": [],
+  "live_trading": false,
+  "notes": [],
+  "output_refs": [],
+  "paid_actions": false,
+  "run_id": "hourly-20260920T020000+0200",
+  "status": "PENDING",
+  "wallet_actions": false
+}
+

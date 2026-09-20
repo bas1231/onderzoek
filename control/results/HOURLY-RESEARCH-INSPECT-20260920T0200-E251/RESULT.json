@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/inspect_hourly_e251.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-20T00:34:14.960242+00:00",
+  "hypothesis_id": "HOURLY-RESEARCH-CYCLE",
+  "source_commit": "940852ebef1177b66bf727831bb7b7b56d6e94bb",
+  "started_at": "2026-09-20T00:34:14.852774+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "ed89c2b71c530c7cb085240d447e7dd3e7a71b723df80158bd5ccfde1d123759",
+  "task_class": "research",
+  "task_id": "HOURLY-RESEARCH-INSPECT-20260920T0200-E251"
+}
