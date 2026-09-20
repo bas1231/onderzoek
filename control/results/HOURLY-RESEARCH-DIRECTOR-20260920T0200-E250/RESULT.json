@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/hourly_cycle_e250.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-20T00:32:39.084682+00:00",
+  "hypothesis_id": "HOURLY-RESEARCH-CYCLE",
+  "source_commit": "6ea03d4ed644970160cdc1b87ec42fbe89fd2114",
+  "started_at": "2026-09-20T00:32:37.360048+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "388738d599d864ef27251715d758623cbc449b35235f25037e55ee1d71a5acf1",
+  "task_class": "research",
+  "task_id": "HOURLY-RESEARCH-DIRECTOR-20260920T0200-E250"
+}
