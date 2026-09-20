@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/ensure_bridge_visibility_rule_e015.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-20T21:34:55.599251+00:00",
+  "hypothesis_id": "CONTROL-BRIDGE-VISIBILITY",
+  "source_commit": "4183bd7995fbf9210822eff34384af0d26478e7b",
+  "started_at": "2026-09-20T21:34:55.533537+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "0e6ceb0d55aa6b25f41402ab845b70e6959b577332ee8e76437e1ea47c8740b9",
+  "task_class": "infrastructure",
+  "task_id": "CONTROL-AGENTS-BRIDGE-VISIBILITY-E015"
+}
