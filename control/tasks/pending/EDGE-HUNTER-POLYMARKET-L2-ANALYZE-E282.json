@@ -1,0 +1,13 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/analyze_polymarket_l2_e282.py"
+  ],
+  "hypothesis_id": "GENERAL-PREDICTION-MARKET-EDGE-HUNTER",
+  "live_trading": false,
+  "operation": "python",
+  "task_class": "research",
+  "task_id": "EDGE-HUNTER-POLYMARKET-L2-ANALYZE-E282",
+  "timeout_seconds": 120,
+  "working_directory": "."
+}
