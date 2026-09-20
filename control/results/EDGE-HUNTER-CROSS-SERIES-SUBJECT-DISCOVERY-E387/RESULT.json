@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/discover_cross_series_subjects_e387.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-20T02:51:44.288004+00:00",
+  "hypothesis_id": "PAYOFF-IDENTITY-MINING-V1",
+  "source_commit": "58cf7060d00fec80b925308f2ccb44f3371e1d9d",
+  "started_at": "2026-09-20T02:51:44.266238+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "26e79071586b27725d143c83a2ab613c67723c2e29cee55c46f5825952cbf535",
+  "task_class": "research",
+  "task_id": "EDGE-HUNTER-CROSS-SERIES-SUBJECT-DISCOVERY-E387"
+}
