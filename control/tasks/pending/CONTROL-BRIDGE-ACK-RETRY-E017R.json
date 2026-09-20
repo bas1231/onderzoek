@@ -1,0 +1,23 @@
+{
+  "build_authorization": {
+    "build_kind": "control_plane",
+    "capabilities": [
+      "modify_repository",
+      "commit_local_changes",
+      "run_local_tests"
+    ],
+    "mode": "control_plane",
+    "objective": "Implement durable browser result ACK retry using a parser-safe bootstrap, validate JavaScript syntax, and commit the local bridge reliability fix."
+  },
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/fix_browser_ack_retry_e017r.py"
+  ],
+  "hypothesis_id": "CONTROL-BRIDGE-RELIABILITY",
+  "live_trading": false,
+  "operation": "python",
+  "task_class": "infrastructure",
+  "task_id": "CONTROL-BRIDGE-ACK-RETRY-E017R",
+  "timeout_seconds": 180,
+  "working_directory": "."
+}
