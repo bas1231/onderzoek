@@ -1,0 +1,13 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/inspect_routed_evidence_e273.py"
+  ],
+  "hypothesis_id": "GENERAL-PREDICTION-MARKET-EDGE-HUNTER",
+  "live_trading": false,
+  "operation": "python",
+  "task_class": "research",
+  "task_id": "HOURLY-EDGE-HUNTER-EVIDENCE-20260920T0300-E273",
+  "timeout_seconds": 120,
+  "working_directory": "."
+}
