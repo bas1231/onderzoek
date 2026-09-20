@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/persist_bridge_visibility_e016.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-20T21:36:56.871364+00:00",
+  "hypothesis_id": "CONTROL-BRIDGE-VISIBILITY",
+  "source_commit": "c60504df7c459e94faf72f40ae8f9e4e5622429d",
+  "started_at": "2026-09-20T21:36:56.846300+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "049b12c7deb554510d3a46594edc289570059fecb689afedcbac135a113c92a0",
+  "task_class": "infrastructure",
+  "task_id": "CONTROL-AGENTS-BRIDGE-VISIBILITY-E016"
+}
