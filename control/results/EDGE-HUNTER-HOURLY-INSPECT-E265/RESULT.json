@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/inspect_edge_hunter_hourly_e265.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-20T00:57:04.662684+00:00",
+  "hypothesis_id": "GENERAL-PREDICTION-MARKET-EDGE-HUNTER",
+  "source_commit": "c5d8b60a26407f46ae533edaa9d2e135310bc2eb",
+  "started_at": "2026-09-20T00:57:04.636273+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "4a60b7842bcffb21fe71d94b4dd6fd2ae5b7eb573406f9fb966838c82a6f9c33",
+  "task_class": "infrastructure",
+  "task_id": "EDGE-HUNTER-HOURLY-INSPECT-E265"
+}
