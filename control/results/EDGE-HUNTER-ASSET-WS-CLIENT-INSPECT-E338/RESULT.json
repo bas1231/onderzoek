@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/inspect_ws_clients_e338.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-20T02:12:19.650696+00:00",
+  "hypothesis_id": "ASSET-RANK-MAKER-HEDGE-V1",
+  "source_commit": "7ad9d7766785a31af70798efeca03b1632c4587a",
+  "started_at": "2026-09-20T02:12:19.616003+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "12f111e358db56c968e755efa4fedd75aec7f9c4bbd852033ea5b009bc99e222",
+  "task_class": "infrastructure",
+  "task_id": "EDGE-HUNTER-ASSET-WS-CLIENT-INSPECT-E338"
+}

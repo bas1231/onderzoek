@@ -1,0 +1,14 @@
+MODULE websockets AVAILABLE False
+MODULE websocket AVAILABLE False
+MODULE aiohttp AVAILABLE False
+MODULE httpx AVAILABLE False
+MODULE requests AVAILABLE False
+DEPENDENCY_FILE pyproject.toml EXISTS False
+DEPENDENCY_FILE requirements.txt EXISTS False
+DEPENDENCY_FILE requirements-dev.txt EXISTS False
+CODE_HIT_COUNT 4
+CODE_HIT control/jobs/inspect_market_data_docs_e280.py
+CODE_HIT control/jobs/inspect_ws_clients_e338.py
+CODE_HIT control/jobs/inventory_market_data_e279.py
+CODE_HIT control/jobs/smoke_asset_market_stream_e337.py
+WS_CLIENT_INSPECTION_PASS
