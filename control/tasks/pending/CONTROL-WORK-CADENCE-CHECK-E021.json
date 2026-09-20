@@ -1,0 +1,22 @@
+{
+  "build_authorization": {
+    "build_kind": "control_plane",
+    "capabilities": [
+      "read_local_state",
+      "run_local_tests"
+    ],
+    "mode": "control_plane",
+    "objective": "Read the current work/cooldown cadence state without mutating or starting a new work block, before any further autonomous research is scheduled."
+  },
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/check_current_work_cadence_e021.py"
+  ],
+  "hypothesis_id": "CONTROL-WORK-CADENCE",
+  "live_trading": false,
+  "operation": "python",
+  "task_class": "infrastructure",
+  "task_id": "CONTROL-WORK-CADENCE-CHECK-E021",
+  "timeout_seconds": 60,
+  "working_directory": "."
+}

@@ -1,0 +1,1 @@
+import json,sys; from pathlib import Path; sys.path.insert(0,str(Path('control/hourly').resolve())); import work_cadence; print(json.dumps(work_cadence.check(start_if_idle=False,mutate=False),indent=2,sort_keys=True))
