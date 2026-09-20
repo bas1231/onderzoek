@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/read_anthropic_negrisk_getters_e433.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-20T04:04:15.031111+00:00",
+  "hypothesis_id": "PAYOFF-IDENTITY-MINING-V1",
+  "source_commit": "514e90a7dc276b9a1a8277f1ca162705e74ad33d",
+  "started_at": "2026-09-20T04:04:13.443228+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "e373c2df3e86bb39d4916289c239526946f471e68eb29606cf179416e80514c8",
+  "task_class": "research",
+  "task_id": "EDGE-HUNTER-ANTHROPIC-NEGRISK-GETTERS-E433"
+}
