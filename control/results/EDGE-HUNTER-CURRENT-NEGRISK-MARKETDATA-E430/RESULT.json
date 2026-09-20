@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/read_current_negrisk_marketdata_e430.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-20T03:37:51.493234+00:00",
+  "hypothesis_id": "PAYOFF-IDENTITY-MINING-V1",
+  "source_commit": "c9220a244b166e4e367559cafcd7e49d9ef6dd15",
+  "started_at": "2026-09-20T03:37:29.504717+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "f67c0c9623ce5aa5bea55727007f85007d1211bf1f2496c02217e129c34810e7",
+  "task_class": "research",
+  "task_id": "EDGE-HUNTER-CURRENT-NEGRISK-MARKETDATA-E430"
+}
