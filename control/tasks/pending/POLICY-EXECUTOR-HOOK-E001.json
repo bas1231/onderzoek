@@ -1,0 +1,21 @@
+{
+  "task_id": "POLICY-EXECUTOR-HOOK-E001",
+  "hypothesis_id": "CONTROL-POLICY-TEST",
+  "task_class": "infrastructure",
+  "operation": "python",
+  "working_directory": ".",
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/place_order_test.py"
+  ],
+  "timeout_seconds": 60,
+  "live_trading": false,
+  "build_authorization": {
+    "mode": "control_plane",
+    "build_kind": "control_plane",
+    "objective": "Test executor policy hook",
+    "capabilities": [
+      "read_repository"
+    ]
+  }
+}
