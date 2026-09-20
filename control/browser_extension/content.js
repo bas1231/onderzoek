@@ -20,9 +20,16 @@
   const RESULT_END =
     LEFT + "END_PREDICTION_BRIDGE_RESULT" + RIGHT;
 
+  const AI_WORK_START =
+    LEFT + "PREDICTION_AI_WORK_BUNDLE" + RIGHT;
+
+  const AI_WORK_END =
+    LEFT + "END_PREDICTION_AI_WORK_BUNDLE" + RIGHT;
+
   let scanTimer = null;
   let polling = false;
   let sendingResult = false;
+  let sendingAiWork = false;
   let scanning = false;
   let scanStartedAt = 0;
 
@@ -678,6 +685,136 @@
     );
   }
 
+  function aiWorkMessage(item) {
+    const compact = {
+      kind: item.kind,
+      schema: item.schema,
+      task_id: item.task_id,
+      run_id: item.run_id,
+      bundle_ref: item.bundle_ref,
+      bundle: item.bundle,
+      response_contract: item.response_contract,
+      instruction: item.instruction,
+      guardrails: item.guardrails
+    };
+
+    return (
+      AI_WORK_START +
+      "\n" +
+      JSON.stringify(
+        compact,
+        null,
+        2
+      ) +
+      "\n" +
+      AI_WORK_END
+    );
+  }
+
+  async function pollAiOutbox() {
+    if (
+      polling ||
+      sendingResult ||
+      sendingAiWork
+    ) {
+      return;
+    }
+
+    if (!(await isArmed())) {
+      return;
+    }
+
+    sendingAiWork = true;
+
+    try {
+      const response = await bridgeFetch(
+        "/ai-outbox",
+        "GET"
+      );
+
+      const item =
+        response &&
+        response.ok &&
+        response.data &&
+        response.data.item;
+
+      if (!item) {
+        return;
+      }
+
+      if (item.kind !== "AI_WORK_BUNDLE") {
+        console.warn(
+          "[Prediction Bridge] rejected non-AI item",
+          item.kind
+        );
+        return;
+      }
+
+      const guardrails =
+        item.guardrails || {};
+
+      if (
+        guardrails.direct_executor_route !== false ||
+        guardrails.live_trading !== false ||
+        guardrails.paid_actions !== false ||
+        guardrails.wallet_actions !== false ||
+        guardrails.openai_api !== false
+      ) {
+        console.warn(
+          "[Prediction Bridge] rejected unsafe AI item",
+          item.task_id
+        );
+        return;
+      }
+
+      const sent = await insertAndSend(
+        aiWorkMessage(item)
+      );
+
+      if (!sent) {
+        console.warn(
+          "[Prediction Bridge] AI send failed; not acking",
+          item.task_id
+        );
+        return;
+      }
+
+      await new Promise(
+        resolve => setTimeout(resolve, 1000)
+      );
+
+      const ack = await bridgeFetch(
+        "/ai-ack",
+        "POST",
+        {
+          task_id: item.task_id
+        }
+      );
+
+      if (!(ack && ack.ok)) {
+        console.warn(
+          "[Prediction Bridge] AI item sent but ack failed",
+          item.task_id
+        );
+        return;
+      }
+
+      console.log(
+        "[Prediction Bridge] AI work delivered:",
+        item.task_id
+      );
+
+    } catch (error) {
+      console.warn(
+        "[Prediction Bridge] AI outbox error:",
+        error
+      );
+
+    } finally {
+      sendingAiWork = false;
+    }
+  }
+
   async function pollOutbox() {
     if (polling || sendingResult) {
       return;
@@ -771,6 +908,7 @@
   setInterval(
     () => {
       scanForTasks();
+      pollAiOutbox();
       pollOutbox();
     },
     4000
