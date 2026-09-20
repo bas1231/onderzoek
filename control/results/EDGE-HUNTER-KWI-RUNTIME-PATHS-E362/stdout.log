@@ -1,0 +1,1138 @@
+REPO_PATH_HITS
+MATCHING_FILES 151
+FILE knowledge/sources/registry.json
+LINE 107       "id": "kalshi_weather_rules",
+---
+FILE knowledge/runs/kalshi-hourly-source-transition-e212.json
+LINE 38           "source_label": "SYNOPTIC+KALSHI_WEATHER_INDEX",
+LINE 51           "source_label": "SYNOPTIC+KALSHI_WEATHER_INDEX",
+LINE 64           "source_label": "SYNOPTIC+KALSHI_WEATHER_INDEX",
+LINE 77           "source_label": "SYNOPTIC+KALSHI_WEATHER_INDEX",
+LINE 90           "source_label": "SYNOPTIC+KALSHI_WEATHER_INDEX",
+LINE 103           "source_label": "SYNOPTIC+KALSHI_WEATHER_INDEX",
+LINE 111         "SYNOPTIC+KALSHI_WEATHER_INDEX": 10
+LINE 233           "source_label": "SYNOPTIC+KALSHI_WEATHER_INDEX",
+LINE 240           "SYNOPTIC+KALSHI_WEATHER_INDEX": 10
+LINE 256           "source_label": "SYNOPTIC+KALSHI_WEATHER_INDEX",
+LINE 263           "SYNOPTIC+KALSHI_WEATHER_INDEX": 10
+LINE 279           "source_label": "SYNOPTIC+KALSHI_WEATHER_INDEX",
+LINE 286           "SYNOPTIC+KALSHI_WEATHER_INDEX": 10
+---
+FILE knowledge/runs/hourly-20260920T010000+0200-source-quality.json
+LINE 51       "source_id": "kalshi_weather_rules",
+LINE 53       "text_ref": "knowledge/documents/text/kalshi_weather_rules/1c1c1110d5aaa97eba247056c3cd9e877b546e618c7a2326d16e259df34a7246.json"
+---
+FILE knowledge/runs/kalshi-weather-config-discovery-e229.json
+ABS_PATH /home/leonh/.local/state/prediction-research/kalshi_weather_index_manifests/kwi-20260919T232453.632399
+ABS_PATH /home/leonh/.local/state/prediction-research/kalshi_weather_index_manifests/kwi-20260919T232614.191085
+ABS_PATH /home/leonh/.local/state/prediction-research/kalshi_weather_index_manifests/kwi-20260919T232615.489349
+ABS_PATH /home/leonh/.local/state/prediction-research/kalshi_weather_index_manifests/kwi-20260919T232719.087929
+ABS_PATH /home/leonh/.local/state/prediction-research/kalshi_weather_index_manifests/kwi-20260919T232819.079806
+ABS_PATH /home/leonh/.local/state/prediction-research/kalshi_weather_index_manifests/kwi-20260919T232919.089267
+ABS_PATH /home/leonh/.local/state/prediction-research/kalshi_weather_index_manifests/kwi-20260919T233019.088712
+ABS_PATH /home/leonh/.local/state/prediction-research/kalshi_weather_index_manifests/kwi-20260919T233119.086729
+ABS_PATH /home/leonh/.local/state/prediction-research/kalshi_weather_index_manifests/kwi-20260919T233219.096781
+ABS_PATH /home/leonh/.local/state/prediction-research/kalshi_weather_index_manifests/kwi-20260919T233319.096339
+ABS_PATH /home/leonh/.local/state/prediction-research/kalshi_weather_index_manifests/kwi-20260919T233419.080426
+ABS_PATH /home/leonh/.local/state/prediction-research/kalshi_weather_index_manifests/kwi-20260919T233519.080208
+ABS_PATH /home/leonh/.local/state/prediction-research/kalshi_weather_index_manifests/kwi-20260919T233619.091729
+ABS_PATH /home/leonh/.local/state/prediction-research/kalshi_weather_index_manifests/kwi-20260919T233719.079396
+ABS_PATH /home/leonh/.local/state/prediction-research/kalshi_weather_index_manifests/kwi-20260919T233819.079596
+ABS_PATH /home/leonh/.local/state/prediction-research/kalshi_weather_index_manifests/kwi-20260919T233919.091986
+ABS_PATH /home/leonh/.local/state/prediction-research/kalshi_weather_index_manifests/kwi-20260919T234019.080891
+ABS_PATH /home/leonh/.local/state/prediction-research/kalshi_weather_index_manifests/kwi-20260919T234119.079770
+ABS_PATH /home/leonh/.local/state/prediction-research/kalshi_weather_index_manifests/kwi-20260919T234219.084274
+ABS_PATH /home/leonh/.local/state/prediction-research/kalshi_weather_index_manifests/kwi-20260919T234319.092364
+LINE 4     "/live_data/weather/{city",
+LINE 5     "config_version",
+LINE 12     "config_version/status/receipt_basis",
+LINE 13     "`/live_data/weather/chicago/calibrations`",
+LINE 17     "/live_data/weather/",
+LINE 20     "config_version\\",
+LINE 29           "excerpt": "_lock/weather_index_watch.py\n    acceptance:\n      - \"At least one active event per initial city captured from direct Kalshi API/source.\"\n      - \"Archive retrieval timestamp, close time, comparator/strike, source agency, rule text/version where exposed.\"\n      - \"No secondary mirror used as authority.\"\n      - \"Classify source per contemporaneous event/rule version; do not assume global TWC or Synoptic semantics.\"\n    output: \"agents/rules/findings/\"\n\n  - id: TASK-WX-002\n    candidate: KAL-WX-INDEX-001\n    assigned_role: DATA\n    priority: P0\n    status: IN_PROGRESS\n    depends_on: [TASK-WX-000, TASK-WX-001]\n    objective: \"Build and prospectively run immutable Weather Index recorder using /live_data/weather/{city} and calibration endpoint.\"\n    implementation:\n      status: IMPLEMENTED_LIVE_CAPTURE_PENDING\n      repo: bas1231/proof-hunter\n      branch: ai/weather-index-e001-recorder-v0\n      paths:\n        - proof_hunter/venues/kalshi_weather.py\n        - proof_hunter/source_lock/weather_capture.py\n        - proof_hunter/source_lock/weather_index_watch.py\n        - proof_hunter/source_lock/weather_capture_validate.py\n    capture:\n      - \"raw JSON body\"\n      - \"retrieval timestamp\"\n      - \"city\"\n      - \"config_version\"\n      - \"t/v/status/contributors/receipt_basis\"\n      - \"detailed station readings\"\n      - \"calibration timeline snapshots\"\n      - \"content hash\"\n    note: \"Large raw data outside knowledge Git; Git stores manifests/hashes/schema only. Calibration published_at/effective_at and receipt_basis are point-in-time fields and must not be backfilled.\"\n\n  - id: TASK-WX-003\n    candidate: KAL-WX-INDEX-001\n    assigned_role: MICROSTRUCTURE\n    priority: P0\n    status: IN_PROGRESS\n    depends_on: [TASK-WX-000, TASK-WX-001]\n    objective: \"Record contemporaneous KXTEMP L2, trades, lifecycle and fee provenance for the same cycles as Weather Index observations.\"\n    implementation:\n      status: IMPLEMENTED_LIVE_CAPTURE_PENDING\n      repo: bas1231/proof-hunter\n      branch: ai/weather-index-e001-recorder-v0\n      paths:\n        - proof_hunter/source_lock/weather_l2_capture.py\n        - proof_hunter/source_lock/weather_trade_capture.py\n        - proof_hunter/source_lock/weather_fee_capture.py\n        - proof_hunter/venues/kalshi_fees.py\n        - proof_hunter/venues/kalshi_trades.py\n        - proof_hunter/source_lock/weather_index_watch.py\n    capture:\n      - \"authenticated batched full relevant REST L2\"\n      - \"orderbook/local receive timestamps\"\n",
+LINE 30           "needle": "/live_data/weather/"
+LINE 33           "excerpt": "DATA\n    priority: P0\n    status: IN_PROGRESS\n    depends_on: [TASK-WX-000, TASK-WX-001]\n    objective: \"Build and prospectively run immutable Weather Index recorder using /live_data/weather/{city} and calibration endpoint.\"\n    implementation:\n      status: IMPLEMENTED_LIVE_CAPTURE_PENDING\n      repo: bas1231/proof-hunter\n      branch: ai/weather-index-e001-recorder-v0\n      paths:\n        - proof_hunter/venues/kalshi_weather.py\n        - proof_hunter/source_lock/weather_capture.py\n        - proof_hunter/source_lock/weather_index_watch.py\n        - proof_hunter/source_lock/weather_capture_validate.py\n    capture:\n      - \"raw JSON body\"\n      - \"retrieval timestamp\"\n      - \"city\"\n      - \"config_version\"\n      - \"t/v/status/contributors/receipt_basis\"\n      - \"detailed station readings\"\n      - \"calibration timeline snapshots\"\n      - \"content hash\"\n    note: \"Large raw data outside knowledge Git; Git stores manifests/hashes/schema only. Calibration published_at/effective_at and receipt_basis are point-in-time fields and must not be backfilled.\"\n\n  - id: TASK-WX-003\n    candidate: KAL-WX-INDEX-001\n    assigned_role: MICROSTRUCTURE\n    priority: P0\n    status: IN_PROGRESS\n    depends_on: [TASK-WX-000, TASK-WX-001]\n    objective: \"Record contemporaneous KXTEMP L2, trades, lifecycle and fee provenance for the same cycles as Weather Index observations.\"\n    implementation:\n      status: IMPLEMENTED_LIVE_CAPTURE_PENDING\n      repo: bas1231/proof-hunter\n      branch: ai/weather-index-e001-recorder-v0\n      paths:\n        - proof_hunter/source_lock/weather_l2_capture.py\n        - proof_hunter/source_lock/weather_trade_capture.py\n        - proof_hunter/source_lock/weather_fee_capture.py\n        - proof_hunter/venues/kalshi_fees.py\n        - proof_hunter/venues/kalshi_trades.py\n        - proof_hunter/source_lock/weather_index_watch.py\n    capture:\n      - \"authenticated batched full relevant REST L2\"\n      - \"orderbook/local receive timestamps\"\n      - \"overlapping public trade tape with downstream trade-id deduplication\"\n      - \"market lifecycle/rules snapshots\"\n      - \"series fee history and event fee overrides\"\n      - \"close timestamp\"\n    correction: \"Current orderbook reads are treated as authenticated; the older public-orderbook assumption is not trusted.\"\n\n  - id: TASK-WX-003B\n    candidate: KAL-WX-INDEX-001\n    assigned_role: MICROSTRUCTURE\n    priority: P1\n    status: BLOCKED\n    depends_on: [TASK-WX-000, TASK-WX-003]\n    objective: \"Add continuous au",
+LINE 34           "needle": "config_version"
+LINE 38         "/live_data/weather/",
+LINE 39         "config_version"
+LINE 41       "path": "/home/leonh/prediction_research/control/TASK_QUEUE.yaml",
+LINE 47           "excerpt": " \"KXTEMPMIAH-26SEP1920\": 10\n      },\n      \"http_status\": 200,\n      \"market_count\": 10,\n      \"sample\": [\n        {\n          \"close_time\": \"2026-09-20T00:00:00Z\",\n          \"event_ticker\": \"KXTEMPMIAH-26SEP1920\",\n          \"expected_expiration_time\": \"2026-09-20T00:05:00Z\",\n          \"floor_strike\": 80.99,\n          \"result\": \"\",\n          \"rules_primary\": \"If the temperature recorded at Miami, FL for Sep 19, 2026 at 8 PM EDT as reported by Synoptic Data, is above 80.99\\u00b0, then the market resolves to Yes.\",\n          \"rules_secondary\": \"The official final value for this market is determined strictly by the temperature reported by Synoptic Data, calculated in accordance with the Kalshi Weather Index Methodology. Alternative sources\\u2014such as NWS Climatological Reports or Google Weather\\u2014may serve as references, but are not authoritative and will not be used for market resolution.\",\n          \"source_label\": \"SYNOPTIC+KALSHI_WEATHER_INDEX\",\n          \"status\": \"active\",\n          \"ticker\": \"KXTEMPMIAH-26SEP1920-T80.99\",\n          \"title\": \"Will the temp in Miami be above 80.99\\u00b0 on Sep 19, 2026 at 8pm EDT?\"\n        },\n        {\n          \"close_time\": \"2026-09-20T00:00:00Z\",\n          \"event_ticker\": \"KXTEMPMIAH-26SEP1920\",\n          \"expected_expiration_time\": \"2026-09-20T00:05:00Z\",\n          \"floor_strike\": 79.99,\n          \"result\": \"\",\n          \"rules_primary\": \"If the temperature recorded at Miami, FL for Sep 19, 2026 at 8 PM EDT as reported by Synoptic Data, is above 79.99\\u00b0, then the market resolves to Yes.\",\n          \"rules_secondary\": \"The official final value for this market is determined strictly by the temperature reported by Synoptic Data, calculated in accordance with the Kalshi Weather Index Methodology. Alternative sources\\u2014such as NWS Climatological Reports or Google Weather\\u2014may serve as references, but are not authoritative and will not be used for market resolution.\",\n          \"source_label\": \"SYNOPTIC+KALSHI_WEATHER_INDEX\",\n          \"status\": \"active\",\n          \"ticker\": \"KXTEMPMIAH-26SEP1920-T79.99\",\n          \"title\": \"Will the temp in Miami be above 79.99\\u00b0 on Sep 19, 2026 at 8pm EDT?\"\n        },\n        {\n          \"close_time\": \"2026-09-20T00:00:00Z\",\n          \"event_ticker\": \"KXTEMPMIAH-26SEP1920\",\n          \"expected_expiration_time\": \"2026-09-20T00:05:00Z\",\n          \"floor_strike\": 78.99,\n          \"result\": \"\",\n          \"rules_primary\": \"If the temperature recorded at Miami, FL for Sep 1",
+LINE 54       "path": "/home/leonh/prediction_research/knowledge/runs/kalshi-hourly-source-transition-e212.json",
+LINE 60           "excerpt": "\": \"4ec50b92f484fbe0980e50faeb7303a67d785b96a9461cdb3e2d177048f50504\",\n      \"open_query_status\": 200,\n      \"sample\": [\n        {\n          \"close_time\": \"2026-09-20T00:00:00Z\",\n          \"event_ticker\": \"KXTEMPCHIHS-26SEP1920\",\n          \"expected_expiration_time\": \"2026-09-20T00:05:00Z\",\n          \"floor_strike\": 71.99,\n          \"rules_primary\": \"If the temperature recorded at Chicago Metro Area for Sep 19, 2026 at 8 PM EDT as reported by Synoptic Data, is above 71.99\\u00b0, then the market resolves to Yes.\",\n          \"rules_secondary\": \"The official final value for this market is determined strictly by the temperature reported by Synoptic Data, calculated in accordance with the Kalshi Weather Index Methodology. Alternative sources\\u2014such as NWS Climatological Reports or Google Weather\\u2014may serve as references, but are not authoritative and will not be used for market resolution.\",\n          \"source_label\": \"SYNOPTIC+KALSHI_WEATHER_INDEX\",\n          \"status\": \"active\",\n          \"ticker\": \"KXTEMPCHIHS-26SEP1920-T71.99\",\n          \"title\": \"Will the temp in Chicago Metro Area be above 71.99\\u00b0 on Sep 19, 2026 at 8pm EDT?\"\n        },\n        {\n          \"close_time\": \"2026-09-20T00:00:00Z\",\n          \"event_ticker\": \"KXTEMPCHIHS-26SEP1920\",\n          \"expected_expiration_time\": \"2026-09-20T00:05:00Z\",\n          \"floor_strike\": 70.99,\n          \"rules_primary\": \"If the temperature recorded at Chicago Metro Area for Sep 19, 2026 at 8 PM EDT as reported by Synoptic Data, is above 70.99\\u00b0, then the market resolves to Yes.\",\n          \"rules_secondary\": \"The official final value for this market is determined strictly by the temperature reported by Synoptic Data, calculated in accordance with the Kalshi Weather Index Methodology. Alternative sources\\u2014such as NWS Climatological Reports or Google Weather\\u2014may serve as references, but are not authoritative and will not be used for market resolution.\",\n          \"source_label\": \"SYNOPTIC+KALSHI_WEATHER_INDEX\",\n          \"status\": \"active\",\n          \"ticker\": \"KXTEMPCHIHS-26SEP1920-T70.99\",\n          \"title\": \"Will the temp in Chicago Metro Area be above 70.99\\u00b0 on Sep 19, 2026 at 8pm EDT?\"\n        },\n        {\n          \"close_time\": \"2026-09-20T00:00:00Z\",\n          \"event_ticker\": \"KXTEMPCHIHS-26SEP1920\",\n          \"expected_expiration_time\": \"2026-09-20T00:05:00Z\",\n          \"floor_strike\": 69.99,\n          \"rules_primary\": \"If the temperature recorded at Chicago Metro Area for Sep 1",
+LINE 67       "path": "/home/leonh/prediction_research/knowledge/runs/kalshi-hourly-universe-e213.json",
+LINE 73           "excerpt": "ived_at_ms\": 1789859427873,\n            \"source\": \"hf_asos\",\n            \"station_id\": \"KPMP1M\",\n            \"temp_f\": 80.6\n          }\n        ],\n        \"status\": \"incomplete\",\n        \"t\": 1789859280000\n      },\n      \"point_keys\": [\n        \"contributors\",\n        \"stations\",\n        \"status\",\n        \"t\",\n        \"v\"\n      ],\n      \"sha256\": \"392ee94579c50b965a9e33826d6d163fe3900b8486d61bdbfd615f0c1975857e\",\n      \"status\": 200,\n      \"timeseries_count\": 116,\n      \"top_keys\": [\n        \"city\",\n        \"config_version\",\n        \"timeseries\",\n        \"units\"\n      ],\n      \"units\": \"fahrenheit\"\n    },\n    {\n      \"city\": \"chicago\",\n      \"city_field\": \"chicago\",\n      \"config_version\": \"chicago-temperature-v1.0-cal-20260914\",\n      \"first_point\": {\n        \"contributors\": 5,\n        \"stations\": [\n          {\n            \"code\": \"ok\",\n            \"received_at_ms\": 1789852462486,\n            \"source\": \"hf_asos\",\n            \"station_id\": \"KARR1M\",\n            \"temp_f\": 68\n          },\n          {\n            \"code\": \"ok\",\n            \"received_at_ms\": 1789852404778,\n            \"source\": \"hf_asos\",\n            \"station_id\": \"KDPA1M\",\n            \"temp_f\": 69.8\n          },\n          {\n            \"code\": \"ok\",\n            \"received_at_ms\": 1789852469050,\n            \"source\": \"hf_asos\",\n            \"station_id\": \"KMDW1M\",\n            \"temp_f\": 71.6\n          },\n          {\n            \"code\": \"ok\",\n            \"received_at_ms\": 1789852462990,\n            \"source\": \"hf_asos\",\n            \"station_id\": \"KORD1M\",\n            \"temp_f\": 69.8\n          },\n          {\n            \"code\": \"ok\",\n            \"received_at_ms\": 1789852461981,\n            \"source\": \"hf_asos\",\n            \"station_id\": \"KPWK1M\",\n            \"temp_f\": 69.8\n          }\n        ],\n        \"status\": \"normal\",\n        \"t\": 1789852320000,\n        \"v\": 69.8\n      },\n      \"last_point\": {\n        \"stations\": [\n          {\n            \"code\": \"pending\",\n            \"received_at_ms\": 1789859426363,\n            \"source\": \"hf_asos\",\n            \"station_id\": \"KDPA1M\",\n            \"temp_f\": 69.8\n          }\n        ],\n        \"status\": \"incomplete\",\n        \"t\": 1789859340000\n      },\n      \"point_keys\": [\n        \"contributors\",\n        \"stations\",\n        \"status\",\n        \"t\",\n        \"v\"\n      ],\n      \"sha256\": \"4abea168d246c259a084284c8042ecb3add01eba2b535273728be7459f3208ec\",\n      \"status\": 200,\n      \"timeseries_count\": 117,\n      \"top_keys\": [\n        \"city\",\n        \"config_version\",\n  ",
+LINE 77           "excerpt": ": \"2026-09-19T23:11:33.795111+00:00\",\n  \"guards\": [\n    \"Keyword discovery is not settlement proof.\",\n    \"Public weather timeseries availability does not prove it is the settlement source.\",\n    \"Market rules override generic documentation.\",\n    \"No market edge is inferred without point-in-time executable orderbook evidence.\"\n  ],\n  \"live_trading\": false,\n  \"open_market_count\": 12000,\n  \"open_market_pages\": 12,\n  \"paid_actions\": false,\n  \"source\": \"Kalshi public Trade API v2\",\n  \"wallet_actions\": false,\n  \"weather_temperature_candidate_count\": 0,\n  \"weather_temperature_candidates\": [],\n  \"weather_timeseries\": [\n    {\n      \"city\": \"nyc\",\n      \"city_field\": \"nyc\",\n      \"config_version\": \"nyc-temperature-v1.0-cal-20260914\",\n      \"first_point\": {\n        \"contributors\": 8,\n        \"stations\": [\n          {\n            \"code\": \"ok\",\n            \"received_at_ms\": 1789852462486,\n            \"source\": \"hf_asos\",\n            \"station_id\": \"KCDW1M\",\n            \"temp_f\": 69.8\n          },\n          {\n            \"code\": \"ok\",\n            \"received_at_ms\": 1789852462486,\n            \"source\": \"hf_asos\",\n            \"station_id\": \"KEWR1M\",\n            \"temp_f\": 68\n          },\n          {\n            \"code\": \"ok\",\n            \"received_at_ms\": 1789852461981,\n            \"source\": \"hf_asos\",\n            \"station_id\": \"KFRG1M\",\n            \"temp_f\": 66.2\n          },\n          {\n            \"code\": \"ok\",\n            \"received_at_ms\": 1789852461981,\n            \"source\": \"hf_asos\",\n            \"station_id\": \"KHPN1M\",\n            \"temp_f\": 66.2\n          },\n          {\n            \"code\": \"ok\",\n            \"received_at_ms\": 1789852461476,\n            \"source\": \"hf_asos\",\n            \"station_id\": \"KISP1M\",\n            \"temp_f\": 66.2\n          },\n          {\n            \"code\": \"ok\",\n            \"received_at_ms\": 1789852461476,\n            \"source\": \"hf_asos\",\n            \"station_id\": \"KLGA1M\",\n            \"temp_f\": 69.8\n          },\n          {\n            \"code\": \"ok\",\n            \"received_at_ms\": 1789852469554,\n            \"source\": \"hf_asos\",\n            \"station_id\": \"KSMQ1M\",\n            \"temp_f\": 68\n          },\n          {\n            \"code\": \"ok\",\n            \"received_at_ms\": 1789852462990,\n            \"source\": \"hf_asos\",\n            \"station_id\": \"KTEB1M\",\n            \"temp_f\": 69.8\n          }\n        ],\n        \"status\": \"normal\",\n        \"t\": 1789852320000,\n        \"v\": 68\n      },\n      \"last_point\": {\n        \"stations\": [\n          {\n            \"",
+LINE 81           "excerpt": "received_at_ms\": 1789859427873,\n            \"source\": \"hf_asos\",\n            \"station_id\": \"KTEB1M\",\n            \"temp_f\": 66.2\n          }\n        ],\n        \"status\": \"incomplete\",\n        \"t\": 1789859280000\n      },\n      \"point_keys\": [\n        \"contributors\",\n        \"stations\",\n        \"status\",\n        \"t\",\n        \"v\"\n      ],\n      \"sha256\": \"5d78bd07c50c2d7869cf5fb0ca44bd2f4abe4b8310279f10bad61a67b0a12293\",\n      \"status\": 200,\n      \"timeseries_count\": 115,\n      \"top_keys\": [\n        \"city\",\n        \"config_version\",\n        \"timeseries\",\n        \"units\"\n      ],\n      \"units\": \"fahrenheit\"\n    },\n    {\n      \"city\": \"miami\",\n      \"city_field\": \"miami\",\n      \"config_version\": \"miami-temperature-v1.0-cal-20260914\",\n      \"first_point\": {\n        \"contributors\": 5,\n        \"stations\": [\n          {\n            \"code\": \"ok\",\n            \"received_at_ms\": 1789852469050,\n            \"source\": \"hf_asos\",\n            \"station_id\": \"KFLL1M\",\n            \"temp_f\": 78.8\n          },\n          {\n            \"code\": \"ok\",\n            \"received_at_ms\": 1789852462486,\n            \"source\": \"hf_asos\",\n            \"station_id\": \"KFXE1M\",\n            \"temp_f\": 82.4\n          },\n          {\n            \"code\": \"ok\",\n            \"received_at_ms\": 1789852462990,\n            \"source\": \"hf_asos\",\n            \"station_id\": \"KMIA1M\",\n            \"temp_f\": 84.2\n          },\n          {\n            \"code\": \"ok\",\n            \"received_at_ms\": 1789852469050,\n            \"source\": \"hf_asos\",\n            \"station_id\": \"KOPF1M\",\n            \"temp_f\": 84.2\n          },\n          {\n            \"code\": \"ok\",\n            \"received_at_ms\": 1789852461981,\n            \"source\": \"hf_asos\",\n            \"station_id\": \"KPMP1M\",\n            \"temp_f\": 82.4\n          }\n        ],\n        \"status\": \"normal\",\n        \"t\": 1789852320000,\n        \"v\": 82.4\n      },\n      \"last_point\": {\n        \"stations\": [\n          {\n            \"code\": \"pending\",\n            \"received_at_ms\": 1789859426867,\n            \"source\": \"hf_asos\",\n            \"station_id\": \"KFLL1M\",\n            \"temp_f\": 78.8\n          },\n          {\n            \"code\": \"pending\",\n            \"received_at_ms\": 1789859426867,\n            \"source\": \"hf_asos\",\n            \"station_id\": \"KFXE1M\",\n            \"temp_f\": 78.8\n          },\n          {\n            \"code\": \"pending\",\n            \"received_at_ms\": 1789859426867,\n            \"source\": \"hf_asos\",\n            \"station_id\": \"KMIA1M\",\n            \"temp_f\": 77\n          },\n    ",
+---
+FILE knowledge/runs/kalshi-weather-index-schema-e231.json
+ABS_PATH /home/leonh/.local/state/prediction-research/kalshi_weather_index_manifests/kwi-20260919T234619.080011
+ABS_PATH /home/leonh/.local/state/prediction-research/raw/kalshi_weather_index/chicago/63a2ce5164e83c1e33daaf4c1452011b374301dabe347d5f0ba96e151fe17d97.json
+ABS_PATH /home/leonh/.local/state/prediction-research/raw/kalshi_weather_index/miami/2e676ded2abd124ad05e022a5cf56db2de471d7433304d6c2927d620af62e133.json
+ABS_PATH /home/leonh/.local/state/prediction-research/raw/kalshi_weather_index/nyc/781b8d5d41e74ade8035b923d5bffec15021815abebafdab7b9b8a58129067cb.json
+LINE 5       "config_version": "nyc-temperature-v1.0-cal-20260914",
+LINE 10           "key": "config_version",
+LINE 11           "path": "$.config_version",
+LINE 3137           "config_version",
+LINE 3149       "raw_path": "/home/leonh/.local/state/prediction-research/raw/kalshi_weather_index/nyc/781b8d5d41e74ade8035b923d5bffec15021815abebafdab7b9b8a58129067cb.json",
+LINE 3153         "config_version",
+LINE 3161       "config_version": "miami-temperature-v1.0-cal-20260914",
+LINE 3166           "key": "config_version",
+LINE 3167           "path": "$.config_version",
+LINE 6329           "config_version",
+LINE 6341       "raw_path": "/home/leonh/.local/state/prediction-research/raw/kalshi_weather_index/miami/2e676ded2abd124ad05e022a5cf56db2de471d7433304d6c2927d620af62e133.json",
+LINE 6345         "config_version",
+LINE 6353       "config_version": "chicago-temperature-v1.0-cal-20260914",
+LINE 6358           "key": "config_version",
+LINE 6359           "path": "$.config_version",
+LINE 9529           "config_version",
+LINE 9541       "raw_path": "/home/leonh/.local/state/prediction-research/raw/kalshi_weather_index/chicago/63a2ce5164e83c1e33daaf4c1452011b374301dabe347d5f0ba96e151fe17d97.json",
+LINE 9545         "config_version",
+LINE 9553     "goal": "Inspect only already archived public Weather Index JSON for explicit configuration, calibration, offset, weighting, QC, receipt, or fallback metadata before inventing any endpoint.",
+LINE 9556   "latest_manifest": "/home/leonh/.local/state/prediction-research/kalshi_weather_index_manifests/kwi-20260919T234619.080011+0000-852847b46788.json",
+---
+FILE knowledge/runs/kalshi-hourly-universe-e213.json
+LINE 572           "source_label": "SYNOPTIC+KALSHI_WEATHER_INDEX",
+LINE 584           "source_label": "SYNOPTIC+KALSHI_WEATHER_INDEX",
+LINE 596           "source_label": "SYNOPTIC+KALSHI_WEATHER_INDEX",
+LINE 625         "SYNOPTIC+KALSHI_WEATHER_INDEX": 10
+LINE 764           "source_label": "SYNOPTIC+KALSHI_WEATHER_INDEX",
+LINE 776           "source_label": "SYNOPTIC+KALSHI_WEATHER_INDEX",
+LINE 788           "source_label": "SYNOPTIC+KALSHI_WEATHER_INDEX",
+LINE 817         "SYNOPTIC+KALSHI_WEATHER_INDEX": 10
+LINE 836           "source_label": "SYNOPTIC+KALSHI_WEATHER_INDEX",
+LINE 848           "source_label": "SYNOPTIC+KALSHI_WEATHER_INDEX",
+LINE 860           "source_label": "SYNOPTIC+KALSHI_WEATHER_INDEX",
+LINE 889         "SYNOPTIC+KALSHI_WEATHER_INDEX": 10
+LINE 939           "source_label": "SYNOPTIC+KALSHI_WEATHER_INDEX",
+LINE 951           "source_label": "SYNOPTIC+KALSHI_WEATHER_INDEX",
+LINE 963           "source_label": "SYNOPTIC+KALSHI_WEATHER_INDEX",
+LINE 992         "SYNOPTIC+KALSHI_WEATHER_INDEX": 10
+---
+FILE knowledge/runs/hourly-20260920T010000+0200.json
+ABS_PATH /home/leonh/prediction_research/knowledge/documents/manifests/arxiv/20260919T230030Z_d7ed6c1e9723.json
+ABS_PATH /home/leonh/prediction_research/knowledge/documents/manifests/aviationweather/20260919T230029Z_dd6e0cc4b237.json
+ABS_PATH /home/leonh/prediction_research/knowledge/documents/manifests/cftc/20260919T230029Z_1b3dc2876eb5.json
+ABS_PATH /home/leonh/prediction_research/knowledge/documents/manifests/ecmwf_open/20260919T230029Z_83c3dee07ef5.json
+ABS_PATH /home/leonh/prediction_research/knowledge/documents/manifests/github/20260919T230030Z_f42e282da315.json
+ABS_PATH /home/leonh/prediction_research/knowledge/documents/manifests/kalshi_docs/20260919T230030Z_94c183be8dd7.json
+ABS_PATH /home/leonh/prediction_research/knowledge/documents/manifests/kalshi_weather_rules/20260919T230030Z_1c1c1110d5aa.json
+ABS_PATH /home/leonh/prediction_research/knowledge/documents/manifests/nomads/20260919T230030Z_2767bb0a7329.json
+ABS_PATH /home/leonh/prediction_research/knowledge/documents/manifests/nws/20260919T230029Z_5b5848cbffbf.json
+ABS_PATH /home/leonh/prediction_research/knowledge/documents/manifests/polymarket_docs/20260919T230029Z_6061d788333a.json
+ABS_PATH /home/leonh/prediction_research/knowledge/documents/manifests/reddit/20260919T230030Z_1f57d31ad528.json
+ABS_PATH /home/leonh/prediction_research/knowledge/documents/manifests/twc_kalshi/20260919T230030Z_4778025a622c.json
+ABS_PATH /home/leonh/prediction_research/knowledge/documents/manifests/youtube/20260919T230030Z_47401bed1169.json
+LINE 49     "arxiv": "/home/leonh/prediction_research/knowledge/documents/manifests/arxiv/20260919T230030Z_d7ed6c1e9723.json",
+LINE 50     "aviationweather": "/home/leonh/prediction_research/knowledge/documents/manifests/aviationweather/20260919T230029Z_dd6e0cc4b237.json",
+LINE 51     "cftc": "/home/leonh/prediction_research/knowledge/documents/manifests/cftc/20260919T230029Z_1b3dc2876eb5.json",
+LINE 52     "ecmwf_open": "/home/leonh/prediction_research/knowledge/documents/manifests/ecmwf_open/20260919T230029Z_83c3dee07ef5.json",
+LINE 53     "github": "/home/leonh/prediction_research/knowledge/documents/manifests/github/20260919T230030Z_f42e282da315.json",
+LINE 54     "kalshi_docs": "/home/leonh/prediction_research/knowledge/documents/manifests/kalshi_docs/20260919T230030Z_94c183be8dd7.json",
+LINE 55     "kalshi_weather_rules": "/home/leonh/prediction_research/knowledge/documents/manifests/kalshi_weather_rules/20260919T230030Z_1c1c1110d5aa.json",
+LINE 56     "nomads": "/home/leonh/prediction_research/knowledge/documents/manifests/nomads/20260919T230030Z_2767bb0a7329.json",
+LINE 57     "nws": "/home/leonh/prediction_research/knowledge/documents/manifests/nws/20260919T230029Z_5b5848cbffbf.json",
+LINE 58     "polymarket_docs": "/home/leonh/prediction_research/knowledge/documents/manifests/polymarket_docs/20260919T230029Z_6061d788333a.json",
+LINE 59     "reddit": "/home/leonh/prediction_research/knowledge/documents/manifests/reddit/20260919T230030Z_1f57d31ad528.json",
+LINE 60     "twc_kalshi": "/home/leonh/prediction_research/knowledge/documents/manifests/twc_kalshi/20260919T230030Z_4778025a622c.json",
+LINE 61     "youtube": "/home/leonh/prediction_research/knowledge/documents/manifests/youtube/20260919T230030Z_47401bed1169.json"
+LINE 77     "kalshi_weather_rules": "CHANGED",
+---
+FILE knowledge/runs/hourly-20260920T020000+0200.json
+ABS_PATH /home/leonh/prediction_research/knowledge/documents/manifests/arxiv/20260920T003238Z_d7ed6c1e9723.json
+ABS_PATH /home/leonh/prediction_research/knowledge/documents/manifests/cftc/20260920T003237Z_460f19f42856.json
+ABS_PATH /home/leonh/prediction_research/knowledge/documents/manifests/ecmwf_open/20260920T003238Z_83c3dee07ef5.json
+ABS_PATH /home/leonh/prediction_research/knowledge/documents/manifests/github/20260920T003238Z_9a2b21130f75.json
+ABS_PATH /home/leonh/prediction_research/knowledge/documents/manifests/kalshi_docs/20260920T003238Z_94c183be8dd7.json
+ABS_PATH /home/leonh/prediction_research/knowledge/documents/manifests/kalshi_weather_rules/20260920T003238Z_633803fc9af9.json
+ABS_PATH /home/leonh/prediction_research/knowledge/documents/manifests/nomads/20260920T003238Z_17b612682f1f.json
+ABS_PATH /home/leonh/prediction_research/knowledge/documents/manifests/nws/20260920T003237Z_313992dd5d1f.json
+ABS_PATH /home/leonh/prediction_research/knowledge/documents/manifests/polymarket_docs/20260920T003237Z_6061d788333a.json
+ABS_PATH /home/leonh/prediction_research/knowledge/documents/manifests/reddit/20260920T003238Z_40726502428c.json
+ABS_PATH /home/leonh/prediction_research/knowledge/documents/manifests/twc_kalshi/20260920T003238Z_4778025a622c.json
+ABS_PATH /home/leonh/prediction_research/knowledge/documents/manifests/youtube/20260920T003238Z_c1dd6bbb0408.json
+LINE 41     "arxiv": "/home/leonh/prediction_research/knowledge/documents/manifests/arxiv/20260920T003238Z_d7ed6c1e9723.json",
+LINE 42     "cftc": "/home/leonh/prediction_research/knowledge/documents/manifests/cftc/20260920T003237Z_460f19f42856.json",
+LINE 43     "ecmwf_open": "/home/leonh/prediction_research/knowledge/documents/manifests/ecmwf_open/20260920T003238Z_83c3dee07ef5.json",
+LINE 44     "github": "/home/leonh/prediction_research/knowledge/documents/manifests/github/20260920T003238Z_9a2b21130f75.json",
+LINE 45     "kalshi_docs": "/home/leonh/prediction_research/knowledge/documents/manifests/kalshi_docs/20260920T003238Z_94c183be8dd7.json",
+LINE 46     "kalshi_weather_rules": "/home/leonh/prediction_research/knowledge/documents/manifests/kalshi_weather_rules/20260920T003238Z_633803fc9af9.json",
+LINE 47     "nomads": "/home/leonh/prediction_research/knowledge/documents/manifests/nomads/20260920T003238Z_17b612682f1f.json",
+LINE 48     "nws": "/home/leonh/prediction_research/knowledge/documents/manifests/nws/20260920T003237Z_313992dd5d1f.json",
+LINE 49     "polymarket_docs": "/home/leonh/prediction_research/knowledge/documents/manifests/polymarket_docs/20260920T003237Z_6061d788333a.json",
+LINE 50     "reddit": "/home/leonh/prediction_research/knowledge/documents/manifests/reddit/20260920T003238Z_40726502428c.json",
+LINE 51     "twc_kalshi": "/home/leonh/prediction_research/knowledge/documents/manifests/twc_kalshi/20260920T003238Z_4778025a622c.json",
+LINE 52     "youtube": "/home/leonh/prediction_research/knowledge/documents/manifests/youtube/20260920T003238Z_c1dd6bbb0408.json"
+LINE 68     "kalshi_weather_rules": "CHANGED",
+---
+FILE knowledge/runs/kalshi-weather-timeseries-markets-e208.json
+LINE 22       "config_version": "nyc-temperature-v1.0-cal-20260914",
+LINE 161         "config_version",
+LINE 170       "config_version": "miami-temperature-v1.0-cal-20260914",
+LINE 267         "config_version",
+LINE 276       "config_version": "chicago-temperature-v1.0-cal-20260914",
+LINE 345         "config_version",
+---
+FILE knowledge/runs/kalshi-weather-index-lifecycle-e239.json
+LINE 1373     "Uses archived recorder manifests only.",
+LINE 1434       "latest_incomplete": {
+LINE 1508       "latest_incomplete": {
+LINE 1631       "latest_incomplete": {
+LINE 1703   "task_id": "KALSHI-WEATHER-INDEX-LIFECYCLE-E239",
+---
+FILE knowledge/runs/hourly-20260920T010000+0200-semantic-review.json
+LINE 12     "weather_index_public_probes": [
+LINE 21           "config_version",
+LINE 34           "config_version",
+LINE 47           "config_version",
+LINE 85       "Weather-index availability and documentation changes are not an edge."
+---
+FILE knowledge/runs/kalshi-weather-index-first-seen-e236.json
+LINE 1032   "task_id": "KALSHI-WEATHER-INDEX-FIRST-SEEN-E236",
+---
+FILE knowledge/runs/kalshi-hourly-universe-strict-e215.json
+LINE 13         "SYNOPTIC+KALSHI_WEATHER_INDEX": 10
+LINE 28         "SYNOPTIC+KALSHI_WEATHER_INDEX": 10
+LINE 43         "SYNOPTIC+KALSHI_WEATHER_INDEX": 10
+LINE 58         "SYNOPTIC+KALSHI_WEATHER_INDEX": 10
+LINE 123         "SYNOPTIC+KALSHI_WEATHER_INDEX": 10
+LINE 182         "SYNOPTIC+KALSHI_WEATHER_INDEX": 10
+LINE 197         "SYNOPTIC+KALSHI_WEATHER_INDEX": 10
+LINE 223         "SYNOPTIC+KALSHI_WEATHER_INDEX": 10
+---
+FILE knowledge/runs/kalshi-weather-index-methodology-summary-e228.json
+LINE 11     "This artifact is a structured research summary of official Kalshi certifications already archived in E223.",
+LINE 28       "archived_sha256_e223": "d64de13586308c90bed771ec1ddf494c13f51972fda5b92d83d9031a561d4afb",
+LINE 70       "archived_sha256_e223": "f9239740141bf38c95708fc7b954a1b44ecb40a517fe12ebe975597540eeb4b1",
+LINE 113   "task_id": "KALSHI-WEATHER-INDEX-METHODOLOGY-SUMMARY-E228",
+---
+FILE knowledge/runs/hourly-20260920T040000+0200-source-quality.json
+LINE 51       "source_id": "kalshi_weather_rules",
+LINE 53       "text_ref": "knowledge/documents/text/kalshi_weather_rules/87f6e9aa1d94ad0dc9e8b4d9ad4e53a2b555ffa09a472e6675780f61fd654737.json"
+---
+FILE knowledge/runs/kalshi-weather-config-candidate-context-e230.json
+ABS_PATH /home/leonh/prediction_research/candidates/active/KAL-WX-INDEX-001.yaml
+ABS_PATH /home/leonh/prediction_research/control/results/KALSHI-HOURLY-SOURCE-TRANSITION-E211/stdout.log
+ABS_PATH /home/leonh/prediction_research/control/results/KALSHI-WEATHER-CONFIG-DISCOVERY-E229/stdout.log
+ABS_PATH /home/leonh/prediction_research/control/weather/kalshi_weather_index_recorder.py
+ABS_PATH /home/leonh/prediction_research/hourly-reports/2026-09-19/1654_prediction_edge_watch.md
+ABS_PATH /home/leonh/prediction_research/knowledge/kalshi/KALSHI_WEATHER_INDEX_FREE_REPLAY_CASE_2026-09-09.md
+ABS_PATH /home/leonh/prediction_research/knowledge/kalshi/KALSHI_WEATHER_INDEX_PREPUBLICATION_HYPOTHESIS_2026-09-19.md
+ABS_PATH /home/leonh/prediction_research/knowledge/kalshi/KALSHI_WEATHER_SOURCE_MIGRATION_MISPRICING_HYPOTHESIS_2026-09-19.md
+ABS_PATH /home/leonh/prediction_research/knowledge/kalshi/weather_index_source_resolution_2026-09-19.yaml
+ABS_PATH /home/leonh/prediction_research/knowledge/runs/kalshi-weather-config-discovery-e229.json
+ABS_PATH /home/leonh/prediction_research/knowledge/runs/kalshi-weather-index-methodology-summary-e228.json
+LINE 4       "excerpt": "{\n  \"bytes_scanned\": 93802163,\n  \"endpoint_candidates\": [\n    \"/live_data/weather/{city\",\n    \"config_version\",\n    \"chicago_certification_initial_config\",\n    \"chicago_public_feed_config_e216\",\n    \"config_match\",\n    \"configuration\",\n    \"configurations.\",\n    \"configuration/offsets\",\n    \"config_version/status/receipt_basis\",\n    \"`/live_data/weather/chicago/calibrations`\",\n    \"status/config\",\n    \"calibration/config\",\n    \"source/config/revision\",\n    \"/live_data/weather/\",\n    \"chicago_current_config\",\n    \"chicago_initial_config\",\n    \"config_version\\\\\",\n    \"configuration.\"\n  ],\n  \"files_scanned\": 4655,\n  \"hit_count\": 132,\n  \"hits\": [\n    {\n      \"excerpts\": [\n        {\n          \"excerpt\": \"_lock/weather_index_watch.py\\n    acceptance:\\n      - \\\"At least one active event per initial city captured from direct Kalshi API/source.\\\"\\n      - \\\"Archive retrieval timestamp, close time, comparator/strike, source agency, rule text/version where exposed.\\\"\\n      - \\\"No secondary mirror used as authority.\\\"\\n      - \\\"Classify source per contemporaneous event/rule version; do not assume global TWC or Synoptic semantics.\\\"\\n    output: \\\"agents/rules/findings/\\\"\\n\\n  - id: TASK-WX-002\\n    candidate: KAL-WX-INDEX-001\\n    assigned_role: DATA\\n    priority: P0\\n    status: IN_PROGRESS\\n    depends_on: [TASK-WX-000, TASK-WX-001]\\n    objective: \\\"Build and prospectively run immutable Weather Index recorder using /live_data/weather/{city} and calibration endpoint.\\\"\\n    implementation:\\n      status: IMPLEMENTED_LIVE_CAPTURE_PENDING\\n      repo: bas1231/proof-hunter\\n      branch: ai/weather-index-e001-recorder-v0\\n      paths:\\n        - proof_hunter/venues/kalshi_weather.py\\n        - proof_hunter/source_lock/weather_capture.py\\n        - proof_hunter/source_lock/weather_index_watch.py\\n        - proof_hunter/source_lock/weather_capture_validate.py\\n    capture:\\n      - \\\"raw JSON body\\\"\\n      - \\\"retrieval timestamp\\\"\\n      - \\\"city\\\"\\n      - \\\"config_version\\\"\\n      - \\\"t/v/status/contributors/receipt_basis\\\"\\n      - \\\"detailed station readings\\\"\\n      - \\\"calibration timeline snapshots\\\"\\n      - \\\"content hash\\\"\\n    note: \\\"La",
+LINE 5       "needle": "/live_data/weather/chicago/calibrations",
+LINE 6       "path": "/home/leonh/prediction_research/knowledge/runs/kalshi-weather-config-discovery-e229.json"
+LINE 9       "excerpt": "9\u00b0C \u2248 75.0\u00b0F`;\n- difference \u2248 **1.08\u00b0F**.\n\nThese are not settlement-value comparisons because observation minutes differ slightly and KWI is a calibrated multi-station index. They do establish that **metro spatial dispersion can easily cross one or more integer contract strikes**, so using a single-airport proxy can be materially wrong.\n\nA secondary KWI tool labels Chicago with KMDW as its city reference/mapping, but this must **not** be interpreted as `KWI = KMDW`. Indeed, the 2026-09-10 11:00 EDT new-series outcomes imply the KWI settlement was between roughly **71.00\u00b0F and 71.99\u00b0F**, while KMDW's nearby 14:53 UTC METAR was about **73.9\u00b0F**. This is direct warning evidence that the exact multi-station calibration/weights are essential.\n\n**Open semantic blocker:** exact Chicago KWI calibration members, weights, offsets, effective version and publication timestamp still require primary `/live_data/weather/chicago/calibrations` or equivalent CFTC methodology evidence. No geographic-divergence model may be promoted without this.\n\nAgent rule: contract-specific rules and contemporaneous rules/version always override generic help-center descriptions. No market may be assigned TWC or Synoptic semantics from ticker/title alone.\n\n## Angle 2 \u2014 independent/adversarial evidence\nThe semantic difference is discoverable by other builders. Public project/research status has already referenced KXTEMPMIAH Synoptic/MIAWINDEX work. Therefore 'nobody else noticed the source change' is not an acceptable mechanism assumption.\n\nHistorical market-activity summaries show substantial automated order-book activity in hourly weather markets. This is only observational and must not be causally attributed to the source transition, but it argues against assuming a persistent untouched semantic error.\n\nThe Chicago cutover itself does **not** show an impossible discontinuity: old 10:00 TWC threshold outcomes imply a final value between roughly 70.00\u00b0F and 70.99\u00b0F, while new 11:00 KWI outcomes imply roughly 71.00\u00b0F to 71.99\u00b0F. One hour of normal daytime warming can explain that difference, so it is not evidence of source-divergence mispricing.\n\nThe station-spread example above strengthens only the **mechanistic plausibility** that source/geometry matters around thresholds. It does not establish that Kalshi prices used the wrong source or that any executable edge existed.\n\n## Angle 3 \u2014 required market/execution test\nTo test genuine source-migration mispricing, archive for each contract/event:\n1. exact point-in-time contract rules/source/version;\n2. a TWC-implied probability distribution using only contemporaneously available TWC information;\n3. a KWI-implied probability distribution using only contemporaneously available can",
+LINE 10       "needle": "/live_data/weather/chicago/calibrations",
+LINE 11       "path": "/home/leonh/prediction_research/knowledge/kalshi/KALSHI_WEATHER_SOURCE_MIGRATION_MISPRICING_HYPOTHESIS_2026-09-19.md"
+LINE 14       "excerpt": "\n      ]\n    },\n    {\n      \"path\": \"/home/leonh/prediction_research/candidates/active/KAL-WX-INDEX-001.yaml\",\n      \"matched\": [\n        \"config_version\",\n        \"weather index methodology\"\n      ]\n    },\n    {\n      \"path\": \"/home/leonh/prediction_research/control/weather/kalshi_weather_index_recorder.py\",\n      \"matched\": [\n        \"/live_data/weather/\",\n        \"config_version\"\n      ]\n    },\n    {\n      \"path\": \"/home/leonh/prediction_research/control/results/KALSHI-HOURLY-SOURCE-TRANSITION-E211/stdout.log\",\n      \"matched\": [\n        \"weather index methodology\"\n      ]\n    }\n  ],\n  \"endpoint_candidates\": [\n    \"/live_data/weather/{city\",\n    \"config_version\",\n    \"chicago_certification_initial_config\",\n    \"chicago_public_feed_config_e216\",\n    \"config_match\",\n    \"configuration\",\n    \"configurations.\",\n    \"configuration/offsets\",\n    \"config_version/status/receipt_basis\",\n    \"`/live_data/weather/chicago/calibrations`\",\n    \"status/config\",\n    \"calibration/config\",\n    \"source/config/revision\",\n    \"/live_data/weather/\",\n    \"chicago_current_config\",\n    \"chicago_initial_config\",\n    \"config_version\\\\\",\n    \"configuration.\"\n  ],\n  \"commit\": {\n    \"rc\": 0,\n    \"stdout\": \"[main 4bfebd4] research(weather): discover effective Weather Index config sources\\n 1 file changed, 1740 insertions(+)\\n create mode 100644 knowledge/runs/kalshi-weather-config-discovery-e229.json\",\n    \"stderr\": \"\"\n  },\n  \"push\": {\n    \"rc\": 0,\n    \"stdout\": \"\",\n    \"stderr\": \"To github.com:bas1231/onderzoek.git\\n   e3ab030..4bfebd4  HEAD -> main\"\n  },\n  \"live_trading\": false,\n  \"paid_actions\": false,\n  \"wallet_actions\": false\n}\n",
+LINE 15       "needle": "/live_data/weather/chicago/calibrations",
+LINE 16       "path": "/home/leonh/prediction_research/control/results/KALSHI-WEATHER-CONFIG-DISCOVERY-E229/stdout.log"
+LINE 19       "excerpt": "{\n  \"bytes_scanned\": 93802163,\n  \"endpoint_candidates\": [\n    \"/live_data/weather/{city\",\n    \"config_version\",\n    \"chicago_certification_initial_config\",\n    \"chicago_public_feed_config_e216\",\n    \"config_match\",\n    \"configuration\",\n    \"configurations.\",\n    \"configuration/offsets\",\n    \"config_version/status/receipt_basis\",\n    \"`/live_data/weather/chicago/calibrations`\",\n    \"status/config\",\n    \"calibration/config\",\n    \"source/config/revision\",\n    \"/live_data/weather/\",\n    \"chicago_current_config\",\n    \"chicago_initial_config\",\n    \"config_version\\\\\",\n    \"configuration.\"\n  ],\n  \"files_scanned\": 4655,\n  \"hit_count\": 132,\n  \"hits\": [\n    {\n      \"excerpts\": [\n        {\n          \"excerpt\": \"_lock/weather_index_watch.py\\n    acceptance:\\n      - \\\"At least one active event per initial city captured from direct Kalshi API/source.\\\"\\n      - \\\"Archive retrieval timestamp, close time, comparator/strike, source agency, rule text/version where exposed.\\\"\\n      - \\\"No secondary mirror used as authority.\\\"\\n      - \\\"Classify source per contemporaneous event/rule version; do not assume global TWC or Synoptic semantics.\\\"\\n    output: \\\"agents/rules/findings/\\\"\\n\\n  - id: TASK-WX-002\\n    candidate: KAL-WX-INDEX-001\\n    assigned_role: DATA\\n    priority: P0\\n    status: IN_PROGRESS\\n    depends_on: [TASK-WX-000, TASK-WX-001]\\n    objective: \\\"Build and prospectively run immutable Weather Index recorder using /live_data/weather/{city} and calibration endpoint.\\\"\\n    implementation:\\n      status: IMPLEMENTED_LIVE_CAPTURE_PENDING\\n      repo: bas1231/proof-hunter\\n      branch: ai/weather-index-e001-recorder-v0\\n      paths:\\n        - proof_hunter/venues/kalshi_weather.py\\n        - proof_hunter/source_lock/weather_capture.py\\n        - proof_hunter/source_lock/weather_index_watch.py\\n        - proof_hunter/source_lock/weather_capture_validate.py\\n    capture:\\n      - \\\"raw JSON body\\\"\\n      - \\\"retrieval timestamp\\\"\\n      - \\\"city\\\"\\n      - \\\"config_version\\\"\\n      - \\\"t/v/status/contributors/receipt_basis\\\"\\n      - \\\"detailed station readi",
+LINE 21       "path": "/home/leonh/prediction_research/knowledge/runs/kalshi-weather-config-discovery-e229.json"
+LINE 24       "excerpt": "y offset refreshes are explicitly prospective.\"\n  },\n  \"guards\": [\n    \"This artifact is a structured research summary of official Kalshi certifications already archived in E223.\",\n    \"Initial configuration parameters are not assumed to equal later effective calibrated configurations.\",\n    \"No trading, paid action, or wallet action is performed.\"\n  ],\n  \"live_trading\": false,\n  \"paid_actions\": false,\n  \"research_date\": \"2026-09-20\",\n  \"research_implications\": [\n    \"Simple arithmetic station averaging is falsified as the general model.\",\n    \"The index is a deterministic offset-adjusted weighted network estimate with source hierarchy and QC.\",\n    \"Missing primary data can trigger fallback/substitution while still producing a degraded canonical value.\",\n    \"The Chicago anomaly in E221 is now qualitatively explained by methodology, but exact numeric reproduction requires the effective configuration/offsets and exact selected source values for that minute.\",\n    \"Canonical point finality makes point-in-time capture essential; late observations cannot be substituted retrospectively for settlement research.\",\n    \"NO_PROVEN_EDGE remains the correct market conclusion until signal superiority and contemporaneous executable pricing are tested.\"\n  ],\n  \"sources\": {\n    \"chicago\": {\n      \"archived_sha256_e223\": \"d64de13586308c90bed771ec1ddf494c13f51972fda5b92d83d9031a561d4afb\",\n      \"base_weight_each\": 0.2,\n      \"eligibility_deadline_seconds\": 300,\n      \"fallback\": \"hierarchy including prior-minute HF-ASOS and official ASOS METAR/SPECI, bounded to max age 75 minutes\",\n      \"finality\": \"canonical observation once published governs contract; later restatements are not used for expiration value/outcome under this contract\",\n      \"formula\": {\n        \"adjusted_station\": \"z_i(t) = x_i(t) - b_i + B_c\",\n        \"city_reference\": \"B_c = sum over configured M of w_i*b_i\",\n        \"index\": \"Index_c(t) = sum over accepted A(t) of w_i*z_i(t) / sum over accepted A(t) of w_i\"\n      },\n      \"initial_city_reference_c\": 0.0,\n      \"initial_configuration_identifier\": \"chicago-temperature-v1.1\",\n      \"initial_offsets_c\": {\n        \"KARR\": -1.0,\n        \"KDPA\": -0.5,\n        \"KMDW\": 1.0,\n        \"KORD\": 0.5,\n        \"KPWK\": 0.0\n      },\n      \"members\": [\n        \"KMDW\",\n        \"KORD\",\n        \"KPWK\",\n        \"KDPA\",\n        \"KARR\"\n      ],\n      \"methodology_version\": \"1.0\",\n      \"official_pdf_url\": \"https://assets.kalshi.com/regulatory/product-certifications/CHIMETROWINDEX.pdf\",\n      \"primary\": \"one-minute HF-ASOS via Synoptic Data, exact event minute\",\n      \"quorum\": {\n        \"minimum_members\": 4,\n        \"minimum_weight_share\": 0.8\n      },\n      \"rounding\": \"calculate in C at full",
+LINE 26       "path": "/home/leonh/prediction_research/knowledge/runs/kalshi-weather-index-methodology-summary-e228.json"
+LINE 29       "excerpt": "_2026-09-19.yaml\",\n      \"matched\": [\n        \"weather index methodology\"\n      ]\n    },\n    {\n      \"path\": \"/home/leonh/prediction_research/candidates/active/KAL-WX-INDEX-001.yaml\",\n      \"matched\": [\n        \"config_version\",\n        \"weather index methodology\"\n      ]\n    },\n    {\n      \"path\": \"/home/leonh/prediction_research/control/weather/kalshi_weather_index_recorder.py\",\n      \"matched\": [\n        \"/live_data/weather/\",\n        \"config_version\"\n      ]\n    },\n    {\n      \"path\": \"/home/leonh/prediction_research/control/results/KALSHI-HOURLY-SOURCE-TRANSITION-E211/stdout.log\",\n      \"matched\": [\n        \"weather index methodology\"\n      ]\n    }\n  ],\n  \"endpoint_candidates\": [\n    \"/live_data/weather/{city\",\n    \"config_version\",\n    \"chicago_certification_initial_config\",\n    \"chicago_public_feed_config_e216\",\n    \"config_match\",\n    \"configuration\",\n    \"configurations.\",\n    \"configuration/offsets\",\n    \"config_version/status/receipt_basis\",\n    \"`/live_data/weather/chicago/calibrations`\",\n    \"status/config\",\n    \"calibration/config\",\n    \"source/config/revision\",\n    \"/live_data/weather/\",\n    \"chicago_current_config\",\n    \"chicago_initial_config\",\n    \"config_version\\\\\",\n    \"configuration.\"\n  ],\n  \"commit\": {\n    \"rc\": 0,\n    \"stdout\": \"[main 4bfebd4] research(weather): discover effective Weather Index config sources\\n 1 file changed, 1740 insertions(+)\\n create mode 100644 knowledge/runs/kalshi-weather-config-discovery-e229.json\",\n    \"stderr\": \"\"\n  },\n  \"push\": {\n    \"rc\": 0,\n    \"stdout\": \"\",\n    \"stderr\": \"To github.com:bas1231/onderzoek.git\\n   e3ab030..4bfebd4  HEAD -> main\"\n  },\n  \"live_trading\": false,\n  \"paid_actions\": false,\n  \"wallet_actions\": false\n}\n",
+LINE 31       "path": "/home/leonh/prediction_research/control/results/KALSHI-WEATHER-CONFIG-DISCOVERY-E229/stdout.log"
+LINE 34       "excerpt": "{\n  \"bytes_scanned\": 93802163,\n  \"endpoint_candidates\": [\n    \"/live_data/weather/{city\",\n    \"config_version\",\n    \"chicago_certification_initial_config\",\n    \"chicago_public_feed_config_e216\",\n    \"config_match\",\n    \"configuration\",\n    \"configurations.\",\n    \"configuration/offsets\",\n    \"config_version/status/receipt_basis\",\n    \"`/live_data/weather/chicago/calibrations`\",\n    \"status/config\",\n    \"calibration/config\",\n    \"source/config/revision\",\n    \"/live_data/weather/\",\n    \"chicago_current_config\",\n    \"chicago_initial_config\",\n    \"config_version\\\\\",\n    \"configuration.\"\n  ],\n  \"files_scanned\": 4655,\n  \"hit_count\": 132,\n  \"hits\": [\n    {\n      \"excerpts\": [\n        {\n          \"excerpt\": \"_lock/weather_index_watch.py\\n    acceptance:\\n      - \\\"At least one active event per initial city captured from direct Kalshi API/source.\\\"\\n      - \\\"Archive retrieval timestamp, close time, comparator/strike, source agency, rule text/version where exposed.\\\"\\n      - \\\"No secondary mirror used as authority.\\\"\\n      - \\\"Classify source per contemporaneous event/rule version; do not assume global TWC or Synoptic semantics.\\\"\\n    output: \\\"agents/rules/findings/\\\"\\n\\n  - id: TASK-WX-002\\n    candidate: KAL-WX-INDEX-001\\n    assigned_role: DATA\\n    priority: P0\\n    status: IN_PROGRESS\\n    depends_on: [TASK-WX-000, TASK-WX-001]\\n    objective: \\\"Build and prospectively run immutable Weather Index recorder using /live_data/weather/{city} and calibration endpoint.\\\"\\n    implementation:\\n      status: IMPLEMENTED_LIVE_CAPTURE_PENDING\\n      repo: bas1231/proof-hunter\\n      branch: ai/weather-index-e001-recorder-v0\\n      paths:\\n        - proof_hunter/venues/kalshi_weather.py\\n        - proof_hunter/source_lock/weather_capture.py\\n        - proof_hunter/source_lock/weather_index_watch.py\\n        - proof_hunter/source_lock/weather_capture_validate.py\\n    capture:\\n      - \\\"raw JSON body\\\"\\n      - \\\"retrieval timestamp\\\"\\n      - \\\"city\\\"\\n      - \\\"config_version\\\"\\n      - \\\"t/v/status/contributors/receipt_basis\\\"\\n      - \\\"detailed station readings\\\"\\n      - \\\"calibration timeline snapshots\\\"\\n      - \\\"content hash\\\"\\n    note: \\\"Large raw data outside knowledge Git; Git stores m",
+LINE 36       "path": "/home/leonh/prediction_research/knowledge/runs/kalshi-weather-config-discovery-e229.json"
+LINE 39       "excerpt": "positive result must distinguish **model edge** from **premium-feed latency edge**. If profitability requires privileged/commercial feed speed that normal market makers also consume and the advantage disappears at realistic Starlink/order-arrival latency, this lane should be classified non-robust or non-executable for this project.\n\n## Market/execution evidence\nPublic third-party historical summary for KXTEMPMIAH indicates substantial trading activity, many L2 updates and recent quoted spreads often in the high-single-digit cent range. This only establishes that the market is active enough to justify an execution test. It does not establish a stale-price window or profitable edge.\n\n## Three-angle test plan\n### Angle 1 \u2014 semantic / source proof\nFor every settlement event:\n1. archive exact Kalshi contract/rules/settlement minute/Last Trading Time;\n2. archive Kalshi weather-index response, calibration/config version and contributor/QC detail;\n3. archive the exact station set and fallback/QC outcome used by the canonical point;\n4. fail closed on config drift, unavailable quorum, Rule 7.1 ambiguity, source mismatch or unmatched settlement semantics.\n\n### Angle 2 \u2014 signal / independent reconstruction\nProspectively collect raw HF-ASOS arrivals with **local receipt timestamps** for the five Miami stations.\nAt frozen decision timestamps before close, compare models that use only information truly available then:\n- last published canonical point (baseline);\n- persistence/trend on canonical index history;\n- freshest raw-station state available at decision time, especially S-5 through S-2;\n- station dispersion and 1/2/5/10-minute trend;\n- fallback/QC-aware weighted reconstruction;\n- optional simple calibrated residual distribution.\n\nPrimary question: does the freshest legally/publicly available raw state improve prediction of S out-of-sample versus the last published canonical index and simple trend baselines?\n\nMetrics: MAE/CRPS for the continuous index and Brier/log-loss/calibration for contract thresholds, with temporal/event grouping and untouched holdout.\n\n### Angle 3 \u2014 market / execution proof\nAt exactly the same frozen timestamps archive contemporaneous executable Kalshi bid/ask/full L2 for the complete threshold ladder.\nMeasure:\n- whether price already reflects the fresher station information;\n- executable size and depth walking;\n- exact fees/version;\n- partial fill and stale-book rejection;\n- signal-to-order arrival latency under the actual network path;\n- edge decay from raw-data receipt to hypothetical fill;\n- settlement/capital lock-up.\n\nNo UI chance, midpoint or last-trade fills.\n\n## Primary falsification questions\n1. At the last realistically executable timestamps, are",
+LINE 41       "path": "/home/leonh/prediction_research/knowledge/kalshi/KALSHI_WEATHER_INDEX_PREPUBLICATION_HYPOTHESIS_2026-09-19.md"
+LINE 44       "excerpt": "UTC. Trading continued into 15:59 UTC, with nonzero quoted spread and depth.\n\nThese are historical observations, not executable fill claims for a strategy. Minute aggregates do not establish queue position or an order-arrival fill.\n\n## Why this case matters\nThe episode is compatible with several mutually exclusive explanations:\n1. new weather/index information became available and was incorporated by the market;\n2. ordinary order flow/liquidity caused the move;\n3. a threshold-crossing probability changed from already-published canonical trend;\n4. raw-station information arrived before canonical publication;\n5. market makers repriced for reasons unrelated to a reproducible weather signal.\n\nNo explanation is promoted without point-in-time index/station evidence.\n\n## Required three-angle replay\n### 1. Semantic/source\n- exact threshold comparator and settlement minute;\n- exact point-in-time calibration/config version;\n- final canonical settlement value if obtainable from authoritative/public index archive;\n- contributor/QC/fallback state around the settlement minute.\n\n### 2. Signal/reconstruction\nUsing only information available at each historical decision time (e.g. 15:30, 15:35, 15:38, 15:40 UTC), reconstruct:\n- last published canonical index;\n- canonical 1/2/5/10/15-minute trend;\n- distance to 82.99/83.99 thresholds;\n- station dispersion/raw-state only where receipt-time evidence exists.\n\nPredefine prediction rule before evaluating additional cases. This inspected case may be development/sanity only, never untouched holdout.\n\n### 3. Execution\nUse raw L2/trades, not minute midpoint or close, to test:\n- contemporaneous executable ask/bid and depth;\n- spread/depth immediately before the price jump;\n- realistic order-arrival delay;\n- fees and partial fill;\n- whether any positive signal existed before the price had already moved.\n\n## Current conclusion\nThis case proves only that substantial late repricing occurred in an active Miami Weather Index threshold contract and that trading remained open close to the settlement minute. It does **not** prove that the move was forecastable or executable from a weather signal.\n\nEconomic status remains **NO_PROVEN_EDGE**.\n\n## Public provenance\n- Coinbase prediction page for `KXTEMPMIAH-26SEP0912`: threshold outcomes and Synoptic/Kalshi Weather Index rules.\n- CryptoStruct KXTEMPMIAH public archive/free sample: contract-level and minute-level trades/order-book summaries.\n",
+---
+FILE knowledge/runs/hourly-20260920T030000+0200.json
+ABS_PATH /home/leonh/prediction_research/knowledge/documents/manifests/arxiv/20260920T010049Z_d7ed6c1e9723.json
+ABS_PATH /home/leonh/prediction_research/knowledge/documents/manifests/cftc/20260920T010048Z_015b36096113.json
+ABS_PATH /home/leonh/prediction_research/knowledge/documents/manifests/ecmwf_open/20260920T010049Z_83c3dee07ef5.json
+ABS_PATH /home/leonh/prediction_research/knowledge/documents/manifests/github/20260920T010049Z_c2217227fe1c.json
+ABS_PATH /home/leonh/prediction_research/knowledge/documents/manifests/kalshi_docs/20260920T010049Z_94c183be8dd7.json
+ABS_PATH /home/leonh/prediction_research/knowledge/documents/manifests/kalshi_weather_rules/20260920T010050Z_48cb73fffd00.json
+ABS_PATH /home/leonh/prediction_research/knowledge/documents/manifests/nomads/20260920T010049Z_393d62d09866.json
+ABS_PATH /home/leonh/prediction_research/knowledge/documents/manifests/nws/20260920T010049Z_e7914592db35.json
+ABS_PATH /home/leonh/prediction_research/knowledge/documents/manifests/polymarket_docs/20260920T010049Z_6061d788333a.json
+ABS_PATH /home/leonh/prediction_research/knowledge/documents/manifests/reddit/20260920T010049Z_edb3e1bb1d16.json
+ABS_PATH /home/leonh/prediction_research/knowledge/documents/manifests/twc_kalshi/20260920T010049Z_4778025a622c.json
+ABS_PATH /home/leonh/prediction_research/knowledge/documents/manifests/youtube/20260920T010049Z_37a0ec5916c1.json
+LINE 41     "arxiv": "/home/leonh/prediction_research/knowledge/documents/manifests/arxiv/20260920T010049Z_d7ed6c1e9723.json",
+LINE 42     "cftc": "/home/leonh/prediction_research/knowledge/documents/manifests/cftc/20260920T010048Z_015b36096113.json",
+LINE 43     "ecmwf_open": "/home/leonh/prediction_research/knowledge/documents/manifests/ecmwf_open/20260920T010049Z_83c3dee07ef5.json",
+LINE 44     "github": "/home/leonh/prediction_research/knowledge/documents/manifests/github/20260920T010049Z_c2217227fe1c.json",
+LINE 45     "kalshi_docs": "/home/leonh/prediction_research/knowledge/documents/manifests/kalshi_docs/20260920T010049Z_94c183be8dd7.json",
+LINE 46     "kalshi_weather_rules": "/home/leonh/prediction_research/knowledge/documents/manifests/kalshi_weather_rules/20260920T010050Z_48cb73fffd00.json",
+LINE 47     "nomads": "/home/leonh/prediction_research/knowledge/documents/manifests/nomads/20260920T010049Z_393d62d09866.json",
+LINE 48     "nws": "/home/leonh/prediction_research/knowledge/documents/manifests/nws/20260920T010049Z_e7914592db35.json",
+LINE 49     "polymarket_docs": "/home/leonh/prediction_research/knowledge/documents/manifests/polymarket_docs/20260920T010049Z_6061d788333a.json",
+LINE 50     "reddit": "/home/leonh/prediction_research/knowledge/documents/manifests/reddit/20260920T010049Z_edb3e1bb1d16.json",
+LINE 51     "twc_kalshi": "/home/leonh/prediction_research/knowledge/documents/manifests/twc_kalshi/20260920T010049Z_4778025a622c.json",
+LINE 52     "youtube": "/home/leonh/prediction_research/knowledge/documents/manifests/youtube/20260920T010049Z_37a0ec5916c1.json"
+LINE 68     "kalshi_weather_rules": "CHANGED",
+---
+FILE knowledge/runs/hourly-20260920T010000+0200-routing.json
+LINE 67         "source_id": "kalshi_weather_rules",
+LINE 91         "source_id": "kalshi_weather_rules",
+LINE 106         "snippet": "n Sign in Weather Observations GFA FORECAST Ceiling & Visibility Clouds Precipitation Thunderstorms Temperature Winds Turbulence Icing Products SIGMET G-AIRMET Center Weather Adv Prog charts TAF map Forecast Discussions METAR/TAF data PIREP/AIREP data Wind/temp data ITWS data WAFS grids SigWx charts TCF/eTCF/ECFP Tools Terminal Weather Dashboard Winter Weather Dashboard Ceiling & Visibility Dashboard Pre-Duty Weather Briefings CWSU Status Advanced Map Decision support imagery Traffic Flow Management Portal Fax charts Archive View Data API Status Submit a PIREP Edit Gate Forecast Connect About AWC Recent changes Upcoming changes Outreach SIGMET Preview TCF Whiteboard Aviation Weather Testbed Sign in Settings Admin Auto Dark Light P",
+LINE 123         "source_id": "kalshi_weather_rules",
+---
+FILE knowledge/runs/hourly-20260920T020000+0200-source-quality.json
+LINE 44       "source_id": "kalshi_weather_rules",
+LINE 46       "text_ref": "knowledge/documents/text/kalshi_weather_rules/633803fc9af9ded172b8f985a053ad41ba67bf385f538f9ea00f995a6564472b.json"
+---
+FILE knowledge/runs/kalshi-weather-index-pdf-probe-e226.json
+ABS_PATH /home/leonh/.local/state/prediction-research/raw/kalshi_weather_docs_e223/1ecb1894612b75e64b65a1da52abde163c61500278f4da01a2289e7302bc8575.bin
+ABS_PATH /home/leonh/.local/state/prediction-research/raw/kalshi_weather_docs_e223/7a92d3bca455d904942c7c6a3b079c1825de298acf44d820238933c522892a28.bin
+ABS_PATH /home/leonh/.local/state/prediction-research/raw/kalshi_weather_docs_e223/b160d8e38e6dc4ce15c837d990b69b96ca0f40ee0dd010b0f2b78c642038583d.bin
+ABS_PATH /home/leonh/.local/state/prediction-research/raw/kalshi_weather_docs_e223/ce86fe7a3e3c8f1d1363e5e99238772bd1d4ead726e57fb4097441dc2cf64eb1.bin
+ABS_PATH /home/leonh/.local/state/prediction-research/raw/kalshi_weather_docs_e223/d568fa6f87f1321884d7e7051e5ec0c4b84d52b92e40fffd156771ea94d07aca.bin
+ABS_PATH /home/leonh/.local/state/prediction-research/raw/kalshi_weather_docs_e223/d64de13586308c90bed771ec1ddf494c13f51972fda5b92d83d9031a561d4afb.bin
+ABS_PATH /home/leonh/.local/state/prediction-research/raw/kalshi_weather_docs_e223/f7acb398f739ef0b4745e9ae4cbf19b9834676ca4316a81af5c7e3c2c4d20a87.bin
+ABS_PATH /home/leonh/.local/state/prediction-research/raw/kalshi_weather_docs_e223/f9239740141bf38c95708fc7b954a1b44ecb40a517fe12ebe975597540eeb4b1.bin
+LINE 18       "raw_path": "/home/leonh/.local/state/prediction-research/raw/kalshi_weather_docs_e223/d64de13586308c90bed771ec1ddf494c13f51972fda5b92d83d9031a561d4afb.bin",
+LINE 39       "raw_path": "/home/leonh/.local/state/prediction-research/raw/kalshi_weather_docs_e223/1ecb1894612b75e64b65a1da52abde163c61500278f4da01a2289e7302bc8575.bin",
+LINE 60       "raw_path": "/home/leonh/.local/state/prediction-research/raw/kalshi_weather_docs_e223/b160d8e38e6dc4ce15c837d990b69b96ca0f40ee0dd010b0f2b78c642038583d.bin",
+LINE 81       "raw_path": "/home/leonh/.local/state/prediction-research/raw/kalshi_weather_docs_e223/d568fa6f87f1321884d7e7051e5ec0c4b84d52b92e40fffd156771ea94d07aca.bin",
+LINE 113       "raw_path": "/home/leonh/.local/state/prediction-research/raw/kalshi_weather_docs_e223/f9239740141bf38c95708fc7b954a1b44ecb40a517fe12ebe975597540eeb4b1.bin",
+LINE 134       "raw_path": "/home/leonh/.local/state/prediction-research/raw/kalshi_weather_docs_e223/f7acb398f739ef0b4745e9ae4cbf19b9834676ca4316a81af5c7e3c2c4d20a87.bin",
+LINE 155       "raw_path": "/home/leonh/.local/state/prediction-research/raw/kalshi_weather_docs_e223/ce86fe7a3e3c8f1d1363e5e99238772bd1d4ead726e57fb4097441dc2cf64eb1.bin",
+LINE 176       "raw_path": "/home/leonh/.local/state/prediction-research/raw/kalshi_weather_docs_e223/7a92d3bca455d904942c7c6a3b079c1825de298acf44d820238933c522892a28.bin",
+LINE 184     "Only already archived official Kalshi PDFs from E223 are parsed.",
+---
+FILE knowledge/runs/kalshi-weather-index-chicago-degraded-analysis-e233.json
+LINE 13   "config_version": "chicago-temperature-v1.0-cal-20260914",
+LINE 1607   "task_id": "KALSHI-WEATHER-INDEX-CHICAGO-DEGRADED-E233",
+---
+FILE knowledge/runs/kalshi-weather-index-manifest-schema-e235.json
+ABS_PATH /home/leonh/.local/state/prediction-research/kalshi_weather_index_manifests/kwi-20260919T234619.080011
+ABS_PATH /home/leonh/.local/state/prediction-research/kalshi_weather_index_manifests/kwi-20260919T234719.084455
+ABS_PATH /home/leonh/.local/state/prediction-research/kalshi_weather_index_manifests/kwi-20260919T234819.097719
+ABS_PATH /home/leonh/.local/state/prediction-research/kalshi_weather_index_manifests/kwi-20260919T234919.091376
+ABS_PATH /home/leonh/.local/state/prediction-research/kalshi_weather_index_manifests/kwi-20260919T235019.082873
+ABS_PATH /home/leonh/.local/state/prediction-research/kalshi_weather_index_manifests/kwi-20260919T235119.084583
+ABS_PATH /home/leonh/.local/state/prediction-research/kalshi_weather_index_manifests/kwi-20260919T235219.081126
+ABS_PATH /home/leonh/.local/state/prediction-research/kalshi_weather_index_manifests/kwi-20260919T235319.080202
+LINE 3     "This task only inspects already archived manifest metadata.",
+LINE 15           "config_version": "nyc-temperature-v1.0-cal-20260914",
+LINE 19             "config_version",
+LINE 26             "latest_incomplete",
+LINE 38           "config_version": "miami-temperature-v1.0-cal-20260914",
+LINE 42             "config_version",
+LINE 49             "latest_incomplete",
+LINE 61           "config_version": "chicago-temperature-v1.0-cal-20260914",
+LINE 65             "config_version",
+LINE 72             "latest_incomplete",
+LINE 84       "path": "/home/leonh/.local/state/prediction-research/kalshi_weather_index_manifests/kwi-20260919T234619.080011+0000-852847b46788.json",
+LINE 101           "config_version": "nyc-temperature-v1.0-cal-20260914",
+LINE 105             "config_version",
+LINE 112             "latest_incomplete",
+LINE 124           "config_version": "miami-temperature-v1.0-cal-20260914",
+LINE 128             "config_version",
+LINE 135             "latest_incomplete",
+LINE 147           "config_version": "chicago-temperature-v1.0-cal-20260914",
+LINE 151             "config_version",
+LINE 158             "latest_incomplete",
+---
+FILE knowledge/runs/twc-kalshi-full-revision-audit-e181.json
+LINE 10   "kalshi_weather_rules_snippets": {
+---
+FILE knowledge/runs/hourly-20260920T030000+0200-source-quality.json
+LINE 44       "source_id": "kalshi_weather_rules",
+LINE 46       "text_ref": "knowledge/documents/text/kalshi_weather_rules/48cb73fffd002b60436f9b34e81593e2b2201f0a0cab201a32aa3aa9e4ca8de1.json"
+---
+FILE knowledge/runs/hourly-20260920T040000+0200.json
+ABS_PATH /home/leonh/prediction_research/knowledge/documents/manifests/arxiv/20260920T020019Z_d7ed6c1e9723.json
+ABS_PATH /home/leonh/prediction_research/knowledge/documents/manifests/aviationweather/20260920T020019Z_dd6e0cc4b237.json
+ABS_PATH /home/leonh/prediction_research/knowledge/documents/manifests/cftc/20260920T020019Z_7f2da4d5eb2d.json
+ABS_PATH /home/leonh/prediction_research/knowledge/documents/manifests/ecmwf_open/20260920T020019Z_83c3dee07ef5.json
+ABS_PATH /home/leonh/prediction_research/knowledge/documents/manifests/github/20260920T020020Z_a31cbc529db6.json
+ABS_PATH /home/leonh/prediction_research/knowledge/documents/manifests/kalshi_docs/20260920T020019Z_94c183be8dd7.json
+ABS_PATH /home/leonh/prediction_research/knowledge/documents/manifests/kalshi_weather_rules/20260920T020020Z_87f6e9aa1d94.json
+ABS_PATH /home/leonh/prediction_research/knowledge/documents/manifests/nomads/20260920T020019Z_81a9b969321d.json
+ABS_PATH /home/leonh/prediction_research/knowledge/documents/manifests/nws/20260920T020019Z_6e376a4be8c9.json
+ABS_PATH /home/leonh/prediction_research/knowledge/documents/manifests/polymarket_docs/20260920T020019Z_6061d788333a.json
+ABS_PATH /home/leonh/prediction_research/knowledge/documents/manifests/reddit/20260920T020019Z_208c023c0c9c.json
+ABS_PATH /home/leonh/prediction_research/knowledge/documents/manifests/twc_kalshi/20260920T020020Z_4778025a622c.json
+ABS_PATH /home/leonh/prediction_research/knowledge/documents/manifests/youtube/20260920T020020Z_07e32ab80b8b.json
+LINE 41     "arxiv": "/home/leonh/prediction_research/knowledge/documents/manifests/arxiv/20260920T020019Z_d7ed6c1e9723.json",
+LINE 42     "aviationweather": "/home/leonh/prediction_research/knowledge/documents/manifests/aviationweather/20260920T020019Z_dd6e0cc4b237.json",
+LINE 43     "cftc": "/home/leonh/prediction_research/knowledge/documents/manifests/cftc/20260920T020019Z_7f2da4d5eb2d.json",
+LINE 44     "ecmwf_open": "/home/leonh/prediction_research/knowledge/documents/manifests/ecmwf_open/20260920T020019Z_83c3dee07ef5.json",
+LINE 45     "github": "/home/leonh/prediction_research/knowledge/documents/manifests/github/20260920T020020Z_a31cbc529db6.json",
+LINE 46     "kalshi_docs": "/home/leonh/prediction_research/knowledge/documents/manifests/kalshi_docs/20260920T020019Z_94c183be8dd7.json",
+LINE 47     "kalshi_weather_rules": "/home/leonh/prediction_research/knowledge/documents/manifests/kalshi_weather_rules/20260920T020020Z_87f6e9aa1d94.json",
+LINE 48     "nomads": "/home/leonh/prediction_research/knowledge/documents/manifests/nomads/20260920T020019Z_81a9b969321d.json",
+LINE 49     "nws": "/home/leonh/prediction_research/knowledge/documents/manifests/nws/20260920T020019Z_6e376a4be8c9.json",
+LINE 50     "polymarket_docs": "/home/leonh/prediction_research/knowledge/documents/manifests/polymarket_docs/20260920T020019Z_6061d788333a.json",
+LINE 51     "reddit": "/home/leonh/prediction_research/knowledge/documents/manifests/reddit/20260920T020019Z_208c023c0c9c.json",
+LINE 52     "twc_kalshi": "/home/leonh/prediction_research/knowledge/documents/manifests/twc_kalshi/20260920T020020Z_4778025a622c.json",
+LINE 53     "youtube": "/home/leonh/prediction_research/knowledge/documents/manifests/youtube/20260920T020020Z_07e32ab80b8b.json"
+LINE 69     "kalshi_weather_rules": "CHANGED",
+---
+FILE knowledge/runs/hourly-20260920T040000+0200-routing.json
+LINE 67         "source_id": "kalshi_weather_rules",
+LINE 91         "source_id": "kalshi_weather_rules",
+LINE 106         "snippet": "n Sign in Weather Observations GFA FORECAST Ceiling & Visibility Clouds Precipitation Thunderstorms Temperature Winds Turbulence Icing Products SIGMET G-AIRMET Center Weather Adv Prog charts TAF map Forecast Discussions METAR/TAF data PIREP/AIREP data Wind/temp data ITWS data WAFS grids SigWx charts TCF/eTCF/ECFP Tools Terminal Weather Dashboard Winter Weather Dashboard Ceiling & Visibility Dashboard Pre-Duty Weather Briefings CWSU Status Advanced Map Decision support imagery Traffic Flow Management Portal Fax charts Archive View Data API Status Submit a PIREP Edit Gate Forecast Connect About AWC Recent changes Upcoming changes Outreach SIGMET Preview TCF Whiteboard Aviation Weather Testbed Sign in Settings Admin Auto Dark Light P",
+LINE 123         "source_id": "kalshi_weather_rules",
+---
+FILE knowledge/runs/hourly-20260920T020000+0200-routing.json
+LINE 67         "source_id": "kalshi_weather_rules",
+LINE 91         "source_id": "kalshi_weather_rules",
+LINE 115         "source_id": "kalshi_weather_rules",
+---
+FILE knowledge/runs/kalshi-weather-index-miami-interpol-e227.json
+ABS_PATH /home/leonh/.local/state/prediction-research/raw/kalshi_weather_docs_e223/f9239740141bf38c95708fc7b954a1b44ecb40a517fe12ebe975597540eeb4b1.bin
+LINE 12   "raw_path": "/home/leonh/.local/state/prediction-research/raw/kalshi_weather_docs_e223/f9239740141bf38c95708fc7b954a1b44ecb40a517fe12ebe975597540eeb4b1.bin",
+LINE 13   "source_artifact": "knowledge/runs/kalshi-weather-index-official-docs-e223.json",
+---
+FILE knowledge/runs/kalshi-hourly-rules-live-e202.json
+LINE 8     "Weather-index availability does not btself prove it is the settlement source.",
+LINE 18   "weather_index_public_probes": [
+LINE 27         "config_version",
+LINE 40         "config_version",
+LINE 53         "config_version",
+---
+FILE knowledge/runs/kalshi-weather-index-schema-detail-e232.json
+ABS_PATH /home/leonh/.local/state/prediction-research/kalshi_weather_index_manifests/kwi-20260919T234719.084455
+ABS_PATH /home/leonh/.local/state/prediction-research/raw/kalshi_weather_index/chicago/e50080f899c7b703a518295d20f4ad86756afc53fffcd9a1a56071733052a842.json
+ABS_PATH /home/leonh/.local/state/prediction-research/raw/kalshi_weather_index/miami/51f1c55fdc94a6d0e967190eddf7266b58368545571fde03d984784fd6de3c7f.json
+ABS_PATH /home/leonh/.local/state/prediction-research/raw/kalshi_weather_index/nyc/080f34ca20db0eaa7a73f99488d4839eb6ee749b7eb78632ee0d8c8d311b9a61.json
+LINE 6         "$.config_version",
+LINE 25       "config_version": "nyc-temperature-v1.0-cal-20260914",
+LINE 164       "raw_path": "/home/leonh/.local/state/prediction-research/raw/kalshi_weather_index/nyc/080f34ca20db0eaa7a73f99488d4839eb6ee749b7eb78632ee0d8c8d311b9a61.json",
+LINE 199         "config_version",
+LINE 212         "$.config_version",
+LINE 231       "config_version": "miami-temperature-v1.0-cal-20260914",
+LINE 328       "raw_path": "/home/leonh/.local/state/prediction-research/raw/kalshi_weather_index/miami/51f1c55fdc94a6d0e967190eddf7266b58368545571fde03d984784fd6de3c7f.json",
+LINE 360         "config_version",
+LINE 373         "$.config_version",
+LINE 395       "config_version": "chicago-temperature-v1.0-cal-20260914",
+LINE 1403       "raw_path": "/home/leonh/.local/state/prediction-research/raw/kalshi_weather_index/chicago/e50080f899c7b703a518295d20f4ad86756afc53fffcd9a1a56071733052a842.json",
+LINE 1440         "config_version",
+LINE 1454   "latest_manifest": "/home/leonh/.local/state/prediction-research/kalshi_weather_index_manifests/kwi-20260919T234719.084455+0000-8f4e3f94c34a.json",
+LINE 1457   "task_id": "KALSHI-WEATHER-INDEX-SCHEMA-DETAIL-E232",
+---
+FILE knowledge/runs/kalshi-weather-index-official-docs-e223.json
+ABS_PATH /home/leonh/.local/state/prediction-research/raw/kalshi_weather_docs_e223/1ecb1894612b75e64b65a1da52abde163c61500278f4da01a2289e7302bc8575.bin
+ABS_PATH /home/leonh/.local/state/prediction-research/raw/kalshi_weather_docs_e223/7a92d3bca455d904942c7c6a3b079c1825de298acf44d820238933c522892a28.bin
+ABS_PATH /home/leonh/.local/state/prediction-research/raw/kalshi_weather_docs_e223/b160d8e38e6dc4ce15c837d990b69b96ca0f40ee0dd010b0f2b78c642038583d.bin
+ABS_PATH /home/leonh/.local/state/prediction-research/raw/kalshi_weather_docs_e223/ce86fe7a3e3c8f1d1363e5e99238772bd1d4ead726e57fb4097441dc2cf64eb1.bin
+ABS_PATH /home/leonh/.local/state/prediction-research/raw/kalshi_weather_docs_e223/d568fa6f87f1321884d7e7051e5ec0c4b84d52b92e40fffd156771ea94d07aca.bin
+ABS_PATH /home/leonh/.local/state/prediction-research/raw/kalshi_weather_docs_e223/d64de13586308c90bed771ec1ddf494c13f51972fda5b92d83d9031a561d4afb.bin
+ABS_PATH /home/leonh/.local/state/prediction-research/raw/kalshi_weather_docs_e223/f7acb398f739ef0b4745e9ae4cbf19b9834676ca4316a81af5c7e3c2c4d20a87.bin
+ABS_PATH /home/leonh/.local/state/prediction-research/raw/kalshi_weather_docs_e223/f9239740141bf38c95708fc7b954a1b44ecb40a517fe12ebe975597540eeb4b1.bin
+LINE 14       "raw_path": "/home/leonh/.local/state/prediction-research/raw/kalshi_weather_docs_e223/d64de13586308c90bed771ec1ddf494c13f51972fda5b92d83d9031a561d4afb.bin",
+LINE 25       "raw_path": "/home/leonh/.local/state/prediction-research/raw/kalshi_weather_docs_e223/1ecb1894612b75e64b65a1da52abde163c61500278f4da01a2289e7302bc8575.bin",
+LINE 36       "raw_path": "/home/leonh/.local/state/prediction-research/raw/kalshi_weather_docs_e223/b160d8e38e6dc4ce15c837d990b69b96ca0f40ee0dd010b0f2b78c642038583d.bin",
+LINE 47       "raw_path": "/home/leonh/.local/state/prediction-research/raw/kalshi_weather_docs_e223/d568fa6f87f1321884d7e7051e5ec0c4b84d52b92e40fffd156771ea94d07aca.bin",
+LINE 58       "raw_path": "/home/leonh/.local/state/prediction-research/raw/kalshi_weather_docs_e223/f9239740141bf38c95708fc7b954a1b44ecb40a517fe12ebe975597540eeb4b1.bin",
+LINE 69       "raw_path": "/home/leonh/.local/state/prediction-research/raw/kalshi_weather_docs_e223/f7acb398f739ef0b4745e9ae4cbf19b9834676ca4316a81af5c7e3c2c4d20a87.bin",
+LINE 80       "raw_path": "/home/leonh/.local/state/prediction-research/raw/kalshi_weather_docs_e223/ce86fe7a3e3c8f1d1363e5e99238772bd1d4ead726e57fb4097441dc2cf64eb1.bin",
+LINE 91       "raw_path": "/home/leonh/.local/state/prediction-research/raw/kalshi_weather_docs_e223/7a92d3bca455d904942c7c6a3b079c1825de298acf44d820238933c522892a28.bin",
+LINE 111           "source_label": "SYNOPTIC+KALSHI_WEATHER_INDEX",
+LINE 123           "source_label": "SYNOPTIC+KALSHI_WEATHER_INDEX",
+LINE 135           "source_label": "SYNOPTIC+KALSHI_WEATHER_INDEX",
+LINE 160           "source_label": "SYNOPTIC+KALSHI_WEATHER_INDEX",
+LINE 172           "source_label": "SYNOPTIC+KALSHI_WEATHER_INDEX",
+LINE 184           "source_label": "SYNOPTIC+KALSHI_WEATHER_INDEX",
+LINE 209           "source_label": "SYNOPTIC+KALSHI_WEATHER_INDEX",
+LINE 221           "source_label": "SYNOPTIC+KALSHI_WEATHER_INDEX",
+LINE 233           "source_label": "SYNOPTIC+KALSHI_WEATHER_INDEX",
+LINE 258           "source_label": "SYNOPTIC+KALSHI_WEATHER_INDEX",
+LINE 270           "source_label": "SYNOPTIC+KALSHI_WEATHER_INDEX",
+LINE 282           "source_label": "SYNOPTIC+KALSHI_WEATHER_INDEX",
+---
+FILE knowledge/runs/kalshi-weather-index-official-docs-text-e224.json
+ABS_PATH /home/leonh/.local/state/prediction-research/raw/kalshi_weather_docs_e223/1ecb1894612b75e64b65a1da52abde163c61500278f4da01a2289e7302bc8575.bin
+ABS_PATH /home/leonh/.local/state/prediction-research/raw/kalshi_weather_docs_e223/7a92d3bca455d904942c7c6a3b079c1825de298acf44d820238933c522892a28.bin
+ABS_PATH /home/leonh/.local/state/prediction-research/raw/kalshi_weather_docs_e223/b160d8e38e6dc4ce15c837d990b69b96ca0f40ee0dd010b0f2b78c642038583d.bin
+ABS_PATH /home/leonh/.local/state/prediction-research/raw/kalshi_weather_docs_e223/ce86fe7a3e3c8f1d1363e5e99238772bd1d4ead726e57fb4097441dc2cf64eb1.bin
+ABS_PATH /home/leonh/.local/state/prediction-research/raw/kalshi_weather_docs_e223/d568fa6f87f1321884d7e7051e5ec0c4b84d52b92e40fffd156771ea94d07aca.bin
+ABS_PATH /home/leonh/.local/state/prediction-research/raw/kalshi_weather_docs_e223/d64de13586308c90bed771ec1ddf494c13f51972fda5b92d83d9031a561d4afb.bin
+ABS_PATH /home/leonh/.local/state/prediction-research/raw/kalshi_weather_docs_e223/f7acb398f739ef0b4745e9ae4cbf19b9834676ca4316a81af5c7e3c2c4d20a87.bin
+ABS_PATH /home/leonh/.local/state/prediction-research/raw/kalshi_weather_docs_e223/f9239740141bf38c95708fc7b954a1b44ecb40a517fe12ebe975597540eeb4b1.bin
+LINE 12       "raw_path": "/home/leonh/.local/state/prediction-research/raw/kalshi_weather_docs_e223/d64de13586308c90bed771ec1ddf494c13f51972fda5b92d83d9031a561d4afb.bin",
+LINE 23       "raw_path": "/home/leonh/.local/state/prediction-research/raw/kalshi_weather_docs_e223/1ecb1894612b75e64b65a1da52abde163c61500278f4da01a2289e7302bc8575.bin",
+LINE 34       "raw_path": "/home/leonh/.local/state/prediction-research/raw/kalshi_weather_docs_e223/b160d8e38e6dc4ce15c837d990b69b96ca0f40ee0dd010b0f2b78c642038583d.bin",
+LINE 45       "raw_path": "/home/leonh/.local/state/prediction-research/raw/kalshi_weather_docs_e223/d568fa6f87f1321884d7e7051e5ec0c4b84d52b92e40fffd156771ea94d07aca.bin",
+LINE 60       "raw_path": "/home/leonh/.local/state/prediction-research/raw/kalshi_weather_docs_e223/f9239740141bf38c95708fc7b954a1b44ecb40a517fe12ebe975597540eeb4b1.bin",
+LINE 71       "raw_path": "/home/leonh/.local/state/prediction-research/raw/kalshi_weather_docs_e223/f7acb398f739ef0b4745e9ae4cbf19b9834676ca4316a81af5c7e3c2c4d20a87.bin",
+LINE 82       "raw_path": "/home/leonh/.local/state/prediction-research/raw/kalshi_weather_docs_e223/ce86fe7a3e3c8f1d1363e5e99238772bd1d4ead726e57fb4097441dc2cf64eb1.bin",
+LINE 93       "raw_path": "/home/leonh/.local/state/prediction-research/raw/kalshi_weather_docs_e223/7a92d3bca455d904942c7c6a3b079c1825de298acf44d820238933c522892a28.bin",
+LINE 102     "Only already-archived official Kalshi PDFs from E223 are parsed.",
+---
+FILE knowledge/runs/hourly-20260920T030000+0200-routing.json
+LINE 67         "source_id": "kalshi_weather_rules",
+LINE 91         "source_id": "kalshi_weather_rules",
+LINE 115         "source_id": "kalshi_weather_rules",
+---
+FILE knowledge/runs/source_sweeps/20260919T230029Z.json
+ABS_PATH /home/leonh/prediction_research/knowledge/documents/manifests/arxiv/20260919T230030Z_d7ed6c1e9723.json
+ABS_PATH /home/leonh/prediction_research/knowledge/documents/manifests/aviationweather/20260919T230029Z_dd6e0cc4b237.json
+ABS_PATH /home/leonh/prediction_research/knowledge/documents/manifests/cftc/20260919T230029Z_1b3dc2876eb5.json
+ABS_PATH /home/leonh/prediction_research/knowledge/documents/manifests/ecmwf_open/20260919T230029Z_83c3dee07ef5.json
+ABS_PATH /home/leonh/prediction_research/knowledge/documents/manifests/github/20260919T230030Z_f42e282da315.json
+ABS_PATH /home/leonh/prediction_research/knowledge/documents/manifests/kalshi_docs/20260919T230030Z_94c183be8dd7.json
+ABS_PATH /home/leonh/prediction_research/knowledge/documents/manifests/kalshi_weather_rules/20260919T230030Z_1c1c1110d5aa.json
+ABS_PATH /home/leonh/prediction_research/knowledge/documents/manifests/nomads/20260919T230030Z_2767bb0a7329.json
+ABS_PATH /home/leonh/prediction_research/knowledge/documents/manifests/nws/20260919T230029Z_5b5848cbffbf.json
+ABS_PATH /home/leonh/prediction_research/knowledge/documents/manifests/polymarket_docs/20260919T230029Z_6061d788333a.json
+ABS_PATH /home/leonh/prediction_research/knowledge/documents/manifests/reddit/20260919T230030Z_1f57d31ad528.json
+ABS_PATH /home/leonh/prediction_research/knowledge/documents/manifests/twc_kalshi/20260919T230030Z_4778025a622c.json
+ABS_PATH /home/leonh/prediction_research/knowledge/documents/manifests/youtube/20260919T230030Z_47401bed1169.json
+LINE 11       "manifest": "/home/leonh/prediction_research/knowledge/documents/manifests/arxiv/20260919T230030Z_d7ed6c1e9723.json",
+LINE 20       "manifest": "/home/leonh/prediction_research/knowledge/documents/manifests/aviationweather/20260919T230029Z_dd6e0cc4b237.json",
+LINE 29       "manifest": "/home/leonh/prediction_research/knowledge/documents/manifests/cftc/20260919T230029Z_1b3dc2876eb5.json",
+LINE 38       "manifest": "/home/leonh/prediction_research/knowledge/documents/manifests/ecmwf_open/20260919T230029Z_83c3dee07ef5.json",
+LINE 47       "manifest": "/home/leonh/prediction_research/knowledge/documents/manifests/github/20260919T230030Z_f42e282da315.json",
+LINE 56       "manifest": "/home/leonh/prediction_research/knowledge/documents/manifests/kalshi_docs/20260919T230030Z_94c183be8dd7.json",
+LINE 65       "manifest": "/home/leonh/prediction_research/knowledge/documents/manifests/kalshi_weather_rules/20260919T230030Z_1c1c1110d5aa.json",
+LINE 68       "source_id": "kalshi_weather_rules"
+LINE 74       "manifest": "/home/leonh/prediction_research/knowledge/documents/manifests/nomads/20260919T230030Z_2767bb0a7329.json",
+LINE 83       "manifest": "/home/leonh/prediction_research/knowledge/documents/manifests/nws/20260919T230029Z_5b5848cbffbf.json",
+LINE 92       "manifest": "/home/leonh/prediction_research/knowledge/documents/manifests/polymarket_docs/20260919T230029Z_6061d788333a.json",
+LINE 101       "manifest": "/home/leonh/prediction_research/knowledge/documents/manifests/reddit/20260919T230030Z_1f57d31ad528.json",
+LINE 110       "manifest": "/home/leonh/prediction_research/knowledge/documents/manifests/twc_kalshi/20260919T230030Z_4778025a622c.json",
+LINE 119       "manifest": "/home/leonh/prediction_research/knowledge/documents/manifests/youtube/20260919T230030Z_47401bed1169.json",
+---
+FILE knowledge/runs/source_sweeps/20260920T003237Z.json
+ABS_PATH /home/leonh/prediction_research/knowledge/documents/manifests/arxiv/20260920T003238Z_d7ed6c1e9723.json
+ABS_PATH /home/leonh/prediction_research/knowledge/documents/manifests/cftc/20260920T003237Z_460f19f42856.json
+ABS_PATH /home/leonh/prediction_research/knowledge/documents/manifests/ecmwf_open/20260920T003238Z_83c3dee07ef5.json
+ABS_PATH /home/leonh/prediction_research/knowledge/documents/manifests/github/20260920T003238Z_9a2b21130f75.json
+ABS_PATH /home/leonh/prediction_research/knowledge/documents/manifests/kalshi_docs/20260920T003238Z_94c183be8dd7.json
+ABS_PATH /home/leonh/prediction_research/knowledge/documents/manifests/kalshi_weather_rules/20260920T003238Z_633803fc9af9.json
+ABS_PATH /home/leonh/prediction_research/knowledge/documents/manifests/nomads/20260920T003238Z_17b612682f1f.json
+ABS_PATH /home/leonh/prediction_research/knowledge/documents/manifests/nws/20260920T003237Z_313992dd5d1f.json
+ABS_PATH /home/leonh/prediction_research/knowledge/documents/manifests/polymarket_docs/20260920T003237Z_6061d788333a.json
+ABS_PATH /home/leonh/prediction_research/knowledge/documents/manifests/reddit/20260920T003238Z_40726502428c.json
+ABS_PATH /home/leonh/prediction_research/knowledge/documents/manifests/twc_kalshi/20260920T003238Z_4778025a622c.json
+ABS_PATH /home/leonh/prediction_research/knowledge/documents/manifests/youtube/20260920T003238Z_c1dd6bbb0408.json
+LINE 11       "manifest": "/home/leonh/prediction_research/knowledge/documents/manifests/arxiv/20260920T003238Z_d7ed6c1e9723.json",
+LINE 25       "manifest": "/home/leonh/prediction_research/knowledge/documents/manifests/cftc/20260920T003237Z_460f19f42856.json",
+LINE 34       "manifest": "/home/leonh/prediction_research/knowledge/documents/manifests/ecmwf_open/20260920T003238Z_83c3dee07ef5.json",
+LINE 43       "manifest": "/home/leonh/prediction_research/knowledge/documents/manifests/github/20260920T003238Z_9a2b21130f75.json",
+LINE 52       "manifest": "/home/leonh/prediction_research/knowledge/documents/manifests/kalshi_docs/20260920T003238Z_94c183be8dd7.json",
+LINE 61       "manifest": "/home/leonh/prediction_research/knowledge/documents/manifests/kalshi_weather_rules/20260920T003238Z_633803fc9af9.json",
+LINE 64       "source_id": "kalshi_weather_rules"
+LINE 70       "manifest": "/home/leonh/prediction_research/knowledge/documents/manifests/nomads/20260920T003238Z_17b612682f1f.json",
+LINE 79       "manifest": "/home/leonh/prediction_research/knowledge/documents/manifests/nws/20260920T003237Z_313992dd5d1f.json",
+LINE 88       "manifest": "/home/leonh/prediction_research/knowledge/documents/manifests/polymarket_docs/20260920T003237Z_6061d788333a.json",
+LINE 97       "manifest": "/home/leonh/prediction_research/knowledge/documents/manifests/reddit/20260920T003238Z_40726502428c.json",
+LINE 106       "manifest": "/home/leonh/prediction_research/knowledge/documents/manifests/twc_kalshi/20260920T003238Z_4778025a622c.json",
+LINE 115       "manifest": "/home/leonh/prediction_research/knowledge/documents/manifests/youtube/20260920T003238Z_c1dd6bbb0408.json",
+---
+FILE knowledge/runs/source_sweeps/20260920T010048Z.json
+ABS_PATH /home/leonh/prediction_research/knowledge/documents/manifests/arxiv/20260920T010049Z_d7ed6c1e9723.json
+ABS_PATH /home/leonh/prediction_research/knowledge/documents/manifests/cftc/20260920T010048Z_015b36096113.json
+ABS_PATH /home/leonh/prediction_research/knowledge/documents/manifests/ecmwf_open/20260920T010049Z_83c3dee07ef5.json
+ABS_PATH /home/leonh/prediction_research/knowledge/documents/manifests/github/20260920T010049Z_c2217227fe1c.json
+ABS_PATH /home/leonh/prediction_research/knowledge/documents/manifests/kalshi_docs/20260920T010049Z_94c183be8dd7.json
+ABS_PATH /home/leonh/prediction_research/knowledge/documents/manifests/kalshi_weather_rules/20260920T010050Z_48cb73fffd00.json
+ABS_PATH /home/leonh/prediction_research/knowledge/documents/manifests/nomads/20260920T010049Z_393d62d09866.json
+ABS_PATH /home/leonh/prediction_research/knowledge/documents/manifests/nws/20260920T010049Z_e7914592db35.json
+ABS_PATH /home/leonh/prediction_research/knowledge/documents/manifests/polymarket_docs/20260920T010049Z_6061d788333a.json
+ABS_PATH /home/leonh/prediction_research/knowledge/documents/manifests/reddit/20260920T010049Z_edb3e1bb1d16.json
+ABS_PATH /home/leonh/prediction_research/knowledge/documents/manifests/twc_kalshi/20260920T010049Z_4778025a622c.json
+ABS_PATH /home/leonh/prediction_research/knowledge/documents/manifests/youtube/20260920T010049Z_37a0ec5916c1.json
+LINE 11       "manifest": "/home/leonh/prediction_research/knowledge/documents/manifests/arxiv/20260920T010049Z_d7ed6c1e9723.json",
+LINE 25       "manifest": "/home/leonh/prediction_research/knowledge/documents/manifests/cftc/20260920T010048Z_015b36096113.json",
+LINE 34       "manifest": "/home/leonh/prediction_research/knowledge/documents/manifests/ecmwf_open/20260920T010049Z_83c3dee07ef5.json",
+LINE 43       "manifest": "/home/leonh/prediction_research/knowledge/documents/manifests/github/20260920T010049Z_c2217227fe1c.json",
+LINE 52       "manifest": "/home/leonh/prediction_research/knowledge/documents/manifests/kalshi_docs/20260920T010049Z_94c183be8dd7.json",
+LINE 61       "manifest": "/home/leonh/prediction_research/knowledge/documents/manifests/kalshi_weather_rules/20260920T010050Z_48cb73fffd00.json",
+LINE 64       "source_id": "kalshi_weather_rules"
+LINE 70       "manifest": "/home/leonh/prediction_research/knowledge/documents/manifests/nomads/20260920T010049Z_393d62d09866.json",
+LINE 79       "manifest": "/home/leonh/prediction_research/knowledge/documents/manifests/nws/20260920T010049Z_e7914592db35.json",
+LINE 88       "manifest": "/home/leonh/prediction_research/knowledge/documents/manifests/polymarket_docs/20260920T010049Z_6061d788333a.json",
+LINE 97       "manifest": "/home/leonh/prediction_research/knowledge/documents/manifests/reddit/20260920T010049Z_edb3e1bb1d16.json",
+LINE 106       "manifest": "/home/leonh/prediction_research/knowledge/documents/manifests/twc_kalshi/20260920T010049Z_4778025a622c.json",
+LINE 115       "manifest": "/home/leonh/prediction_research/knowledge/documents/manifests/youtube/20260920T010049Z_37a0ec5916c1.json",
+---
+FILE knowledge/runs/source_sweeps/20260920T010019Z.json
+ABS_PATH /home/leonh/prediction_research/knowledge/documents/manifests/arxiv/20260920T010019Z_d7ed6c1e9723.json
+ABS_PATH /home/leonh/prediction_research/knowledge/documents/manifests/cftc/20260920T010019Z_d20042cf26ac.json
+ABS_PATH /home/leonh/prediction_research/knowledge/documents/manifests/ecmwf_open/20260920T010019Z_83c3dee07ef5.json
+ABS_PATH /home/leonh/prediction_research/knowledge/documents/manifests/github/20260920T010020Z_b207c79e2a65.json
+ABS_PATH /home/leonh/prediction_research/knowledge/documents/manifests/kalshi_docs/20260920T010019Z_94c183be8dd7.json
+ABS_PATH /home/leonh/prediction_research/knowledge/documents/manifests/kalshi_weather_rules/20260920T010020Z_50f008134d66.json
+ABS_PATH /home/leonh/prediction_research/knowledge/documents/manifests/nomads/20260920T010019Z_c923f06db57b.json
+ABS_PATH /home/leonh/prediction_research/knowledge/documents/manifests/nws/20260920T010019Z_e7914592db35.json
+ABS_PATH /home/leonh/prediction_research/knowledge/documents/manifests/polymarket_docs/20260920T010019Z_6061d788333a.json
+ABS_PATH /home/leonh/prediction_research/knowledge/documents/manifests/reddit/20260920T010019Z_4c42fd38e436.json
+ABS_PATH /home/leonh/prediction_research/knowledge/documents/manifests/twc_kalshi/20260920T010020Z_4778025a622c.json
+ABS_PATH /home/leonh/prediction_research/knowledge/documents/manifests/youtube/20260920T010020Z_14b2fb4613b9.json
+LINE 11       "manifest": "/home/leonh/prediction_research/knowledge/documents/manifests/arxiv/20260920T010019Z_d7ed6c1e9723.json",
+LINE 25       "manifest": "/home/leonh/prediction_research/knowledge/documents/manifests/cftc/20260920T010019Z_d20042cf26ac.json",
+LINE 34       "manifest": "/home/leonh/prediction_research/knowledge/documents/manifests/ecmwf_open/20260920T010019Z_83c3dee07ef5.json",
+LINE 43       "manifest": "/home/leonh/prediction_research/knowledge/documents/manifests/github/20260920T010020Z_b207c79e2a65.json",
+LINE 52       "manifest": "/home/leonh/prediction_research/knowledge/documents/manifests/kalshi_docs/20260920T010019Z_94c183be8dd7.json",
+LINE 61       "manifest": "/home/leonh/prediction_research/knowledge/documents/manifests/kalshi_weather_rules/20260920T010020Z_50f008134d66.json",
+LINE 64       "source_id": "kalshi_weather_rules"
+LINE 70       "manifest": "/home/leonh/prediction_research/knowledge/documents/manifests/nomads/20260920T010019Z_c923f06db57b.json",
+LINE 79       "manifest": "/home/leonh/prediction_research/knowledge/documents/manifests/nws/20260920T010019Z_e7914592db35.json",
+LINE 88       "manifest": "/home/leonh/prediction_research/knowledge/documents/manifests/polymarket_docs/20260920T010019Z_6061d788333a.json",
+LINE 97       "manifest": "/home/leonh/prediction_research/knowledge/documents/manifests/reddit/20260920T010019Z_4c42fd38e436.json",
+LINE 106       "manifest": "/home/leonh/prediction_research/knowledge/documents/manifests/twc_kalshi/20260920T010020Z_4778025a622c.json",
+LINE 115       "manifest": "/home/leonh/prediction_research/knowledge/documents/manifests/youtube/20260920T010020Z_14b2fb4613b9.json",
+---
+FILE knowledge/runs/source_sweeps/20260920T020019Z.json
+ABS_PATH /home/leonh/prediction_research/knowledge/documents/manifests/arxiv/20260920T020019Z_d7ed6c1e9723.json
+ABS_PATH /home/leonh/prediction_research/knowledge/documents/manifests/aviationweather/20260920T020019Z_dd6e0cc4b237.json
+ABS_PATH /home/leonh/prediction_research/knowledge/documents/manifests/cftc/20260920T020019Z_7f2da4d5eb2d.json
+ABS_PATH /home/leonh/prediction_research/knowledge/documents/manifests/ecmwf_open/20260920T020019Z_83c3dee07ef5.json
+ABS_PATH /home/leonh/prediction_research/knowledge/documents/manifests/github/20260920T020020Z_a31cbc529db6.json
+ABS_PATH /home/leonh/prediction_research/knowledge/documents/manifests/kalshi_docs/20260920T020019Z_94c183be8dd7.json
+ABS_PATH /home/leonh/prediction_research/knowledge/documents/manifests/kalshi_weather_rules/20260920T020020Z_87f6e9aa1d94.json
+ABS_PATH /home/leonh/prediction_research/knowledge/documents/manifests/nomads/20260920T020019Z_81a9b969321d.json
+ABS_PATH /home/leonh/prediction_research/knowledge/documents/manifests/nws/20260920T020019Z_6e376a4be8c9.json
+ABS_PATH /home/leonh/prediction_research/knowledge/documents/manifests/polymarket_docs/20260920T020019Z_6061d788333a.json
+ABS_PATH /home/leonh/prediction_research/knowledge/documents/manifests/reddit/20260920T020019Z_208c023c0c9c.json
+ABS_PATH /home/leonh/prediction_research/knowledge/documents/manifests/twc_kalshi/20260920T020020Z_4778025a622c.json
+ABS_PATH /home/leonh/prediction_research/knowledge/documents/manifests/youtube/20260920T020020Z_07e32ab80b8b.json
+LINE 11       "manifest": "/home/leonh/prediction_research/knowledge/documents/manifests/arxiv/20260920T020019Z_d7ed6c1e9723.json",
+LINE 20       "manifest": "/home/leonh/prediction_research/knowledge/documents/manifests/aviationweather/20260920T020019Z_dd6e0cc4b237.json",
+LINE 29       "manifest": "/home/leonh/prediction_research/knowledge/documents/manifests/cftc/20260920T020019Z_7f2da4d5eb2d.json",
+LINE 38       "manifest": "/home/leonh/prediction_research/knowledge/documents/manifests/ecmwf_open/20260920T020019Z_83c3dee07ef5.json",
+LINE 47       "manifest": "/home/leonh/prediction_research/knowledge/documents/manifests/github/20260920T020020Z_a31cbc529db6.json",
+LINE 56       "manifest": "/home/leonh/prediction_research/knowledge/documents/manifests/kalshi_docs/20260920T020019Z_94c183be8dd7.json",
+LINE 65       "manifest": "/home/leonh/prediction_research/knowledge/documents/manifests/kalshi_weather_rules/20260920T020020Z_87f6e9aa1d94.json",
+LINE 68       "source_id": "kalshi_weather_rules"
+LINE 74       "manifest": "/home/leonh/prediction_research/knowledge/documents/manifests/nomads/20260920T020019Z_81a9b969321d.json",
+LINE 83       "manifest": "/home/leonh/prediction_research/knowledge/documents/manifests/nws/20260920T020019Z_6e376a4be8c9.json",
+LINE 92       "manifest": "/home/leonh/prediction_research/knowledge/documents/manifests/polymarket_docs/20260920T020019Z_6061d788333a.json",
+LINE 101       "manifest": "/home/leonh/prediction_research/knowledge/documents/manifests/reddit/20260920T020019Z_208c023c0c9c.json",
+LINE 110       "manifest": "/home/leonh/prediction_research/knowledge/documents/manifests/twc_kalshi/20260920T020020Z_4778025a622c.json",
+LINE 119       "manifest": "/home/leonh/prediction_research/knowledge/documents/manifests/youtube/20260920T020020Z_07e32ab80b8b.json",
+---
+FILE knowledge/runs/source_sweeps/20260920T000019Z.json
+ABS_PATH /home/leonh/prediction_research/knowledge/documents/manifests/arxiv/20260920T000019Z_d7ed6c1e9723.json
+ABS_PATH /home/leonh/prediction_research/knowledge/documents/manifests/cftc/20260920T000019Z_7a3fb05744f8.json
+ABS_PATH /home/leonh/prediction_research/knowledge/documents/manifests/ecmwf_open/20260920T000019Z_83c3dee07ef5.json
+ABS_PATH /home/leonh/prediction_research/knowledge/documents/manifests/github/20260920T000020Z_bc2e988355e4.json
+ABS_PATH /home/leonh/prediction_research/knowledge/documents/manifests/kalshi_docs/20260920T000019Z_94c183be8dd7.json
+ABS_PATH /home/leonh/prediction_research/knowledge/documents/manifests/kalshi_weather_rules/20260920T000020Z_ed4856f1dc65.json
+ABS_PATH /home/leonh/prediction_research/knowledge/documents/manifests/nomads/20260920T000020Z_b2b9d065fcb7.json
+ABS_PATH /home/leonh/prediction_research/knowledge/documents/manifests/nws/20260920T000019Z_2d82703f79a8.json
+ABS_PATH /home/leonh/prediction_research/knowledge/documents/manifests/polymarket_docs/20260920T000019Z_6061d788333a.json
+ABS_PATH /home/leonh/prediction_research/knowledge/documents/manifests/reddit/20260920T000020Z_ce78967db48d.json
+ABS_PATH /home/leonh/prediction_research/knowledge/documents/manifests/twc_kalshi/20260920T000020Z_4778025a622c.json
+ABS_PATH /home/leonh/prediction_research/knowledge/documents/manifests/youtube/20260920T000020Z_b5fd33e08c5f.json
+LINE 11       "manifest": "/home/leonh/prediction_research/knowledge/documents/manifests/arxiv/20260920T000019Z_d7ed6c1e9723.json",
+LINE 25       "manifest": "/home/leonh/prediction_research/knowledge/documents/manifests/cftc/20260920T000019Z_7a3fb05744f8.json",
+LINE 34       "manifest": "/home/leonh/prediction_research/knowledge/documents/manifests/ecmwf_open/20260920T000019Z_83c3dee07ef5.json",
+LINE 43       "manifest": "/home/leonh/prediction_research/knowledge/documents/manifests/github/20260920T000020Z_bc2e988355e4.json",
+LINE 52       "manifest": "/home/leonh/prediction_research/knowledge/documents/manifests/kalshi_docs/20260920T000019Z_94c183be8dd7.json",
+LINE 61       "manifest": "/home/leonh/prediction_research/knowledge/documents/manifests/kalshi_weather_rules/20260920T000020Z_ed4856f1dc65.json",
+LINE 64       "source_id": "kalshi_weather_rules"
+LINE 70       "manifest": "/home/leonh/prediction_research/knowledge/documents/manifests/nomads/20260920T000020Z_b2b9d065fcb7.json",
+LINE 79       "manifest": "/home/leonh/prediction_research/knowledge/documents/manifests/nws/20260920T000019Z_2d82703f79a8.json",
+LINE 88       "manifest": "/home/leonh/prediction_research/knowledge/documents/manifests/polymarket_docs/20260920T000019Z_6061d788333a.json",
+LINE 97       "manifest": "/home/leonh/prediction_research/knowledge/documents/manifests/reddit/20260920T000020Z_ce78967db48d.json",
+LINE 106       "manifest": "/home/leonh/prediction_research/knowledge/documents/manifests/twc_kalshi/20260920T000020Z_4778025a622c.json",
+LINE 115       "manifest": "/home/leonh/prediction_research/knowledge/documents/manifests/youtube/20260920T000020Z_b5fd33e08c5f.json",
+---
+FILE knowledge/documents/manifests/kalshi_weather_rules/20260920T010050Z_48cb73fffd00.json
+LINE 11   "source_id": "kalshi_weather_rules"
+---
+FILE knowledge/documents/manifests/kalshi_weather_rules/20260919T230030Z_1c1c1110d5aa.json
+LINE 11   "source_id": "kalshi_weather_rules"
+---
+FILE knowledge/documents/manifests/kalshi_weather_rules/20260919T221729Z_ed25de24cd74.json
+LINE 11   "source_id": "kalshi_weather_rules"
+---
+FILE knowledge/documents/manifests/kalshi_weather_rules/20260920T010020Z_50f008134d66.json
+LINE 11   "source_id": "kalshi_weather_rules"
+---
+FILE knowledge/documents/manifests/kalshi_weather_rules/20260920T020020Z_87f6e9aa1d94.json
+LINE 11   "source_id": "kalshi_weather_rules"
+---
+FILE knowledge/documents/manifests/kalshi_weather_rules/20260920T003238Z_633803fc9af9.json
+LINE 11   "source_id": "kalshi_weather_rules"
+---
+FILE knowledge/documents/manifests/kalshi_weather_rules/20260920T000020Z_ed4856f1dc65.json
+LINE 11   "source_id": "kalshi_weather_rules"
+---
+FILE knowledge/documents/text/kalshi_weather_rules/87f6e9aa1d94ad0dc9e8b4d9ad4e53a2b555ffa09a472e6675780f61fd654737.json
+LINE 4   "manifest_ref": "knowledge/documents/manifests/kalshi_weather_rules/20260920T020020Z_87f6e9aa1d94.json",
+LINE 6   "source_id": "kalshi_weather_rules",
+---
+FILE knowledge/documents/text/kalshi_weather_rules/633803fc9af9ded172b8f985a053ad41ba67bf385f538f9ea00f995a6564472b.json
+LINE 4   "manifest_ref": "knowledge/documents/manifests/kalshi_weather_rules/20260920T003238Z_633803fc9af9.json",
+LINE 6   "source_id": "kalshi_weather_rules",
+---
+FILE knowledge/documents/text/kalshi_weather_rules/1c1c1110d5aaa97eba247056c3cd9e877b546e618c7a2326d16e259df34a7246.json
+LINE 4   "manifest_ref": "knowledge/documents/manifests/kalshi_weather_rules/20260919T230030Z_1c1c1110d5aa.json",
+LINE 6   "source_id": "kalshi_weather_rules",
+---
+FILE knowledge/documents/text/kalshi_weather_rules/ed25de24cd741654b83c4a4e3998402b4528b3bfb304697874a41cabacabd614.json
+LINE 4   "manifest_ref": "knowledge/documents/manifests/kalshi_weather_rules/20260919T221729Z_ed25de24cd74.json",
+LINE 6   "source_id": "kalshi_weather_rules",
+---
+FILE knowledge/documents/text/kalshi_weather_rules/ed4856f1dc651640e9e43309f1bddb21726bc06b61d20f774b6c5acd575e32a4.json
+LINE 4   "manifest_ref": "knowledge/documents/manifests/kalshi_weather_rules/20260920T000020Z_ed4856f1dc65.json",
+LINE 6   "source_id": "kalshi_weather_rules",
+---
+FILE knowledge/documents/text/kalshi_weather_rules/50f008134d660aeae541e57e18d288862193423c02c9bdcbe182e115f53f0bd8.json
+LINE 4   "manifest_ref": "knowledge/documents/manifests/kalshi_weather_rules/20260920T010020Z_50f008134d66.json",
+LINE 6   "source_id": "kalshi_weather_rules",
+---
+FILE knowledge/documents/text/kalshi_weather_rules/48cb73fffd002b60436f9b34e81593e2b2201f0a0cab201a32aa3aa9e4ca8de1.json
+LINE 4   "manifest_ref": "knowledge/documents/manifests/kalshi_weather_rules/20260920T010050Z_48cb73fffd00.json",
+LINE 6   "source_id": "kalshi_weather_rules",
+---
+FILE knowledge/kalshi/KALSHI_WEATHER_INDEX_PREPUBLICATION_HYPOTHESIS_2026-09-19.md
+LINE 54 1. archive exact Kalshi contract/rules/settlement minute/Last Trading Time;
+LINE 55 2. archive Kalshi weather-index response, calibration/config version and contributor/QC detail;
+LINE 56 3. archive the exact station set and fallback/QC outcome used by the canonical point;
+LINE 74 At exactly the same frozen timestamps archive contemporaneous executable Kalshi bid/ask/full L2 for the complete threshold ladder.
+---
+FILE knowledge/kalshi/weather_index_source_resolution_2026-09-19.yaml
+LINE 11       - "Kalshi Predictions API documenteert GET /live_data/weather/{city} als de Kalshi-computed city temperature index en noemt deze de canonical minute-resolution series behind hourly temperature markets."
+LINE 12       - "De API exposeert per indexpunt status, contributors, receipt_basis en optioneel per-station readings; config_version wordt meegeleverd."
+LINE 23       - "Weather Index minute points met config_version/status/receipt_basis"
+LINE 34       - url: "https://docs.kalshi.com/api-reference/live-data/get-weather-index"
+LINE 36       - url: "https://docs.kalshi.com/api-reference/live-data/get-weather-index-calibrations"
+---
+FILE knowledge/kalshi/KALSHI_WEATHER_SOURCE_MIGRATION_MISPRICING_HYPOTHESIS_2026-09-19.md
+LINE 43 **Open semantic blocker:** exact Chicago KWI calibration members, weights, offsets, effective version and publication timestamp still require primary `/live_data/weather/chicago/calibrations` or equivalent CFTC methodology evidence. No geographic-divergence model may be promoted without this.
+LINE 57 To test genuine source-migration mispricing, archive for each contract/event:
+---
+FILE knowledge/kalshi/priority_followups_2026-09-19.yaml
+LINE 137       - "Kalshi API docs: GET /live_data/weather/{city} geeft een Kalshi-computed city temperature index, beschreven als de canonical minute-resolution series behind hourly temperature markets."
+LINE 146       - "weather-index minute points + status/config version"
+---
+FILE knowledge/kalshi/weather_index_bootstrap_corpus_2026-09-19.yaml
+LINE 10       - "Een publieke Apify archive beschrijft complete city-hour Weather Index records vanaf 2026-09-03, met minute values/status/contributors/configVersion en een CC BY 4.0 archive."
+LINE 15       index_archive_start: "2026-09-03"
+LINE 35       - url: "https://apify.com/gratified_ashram/kalshi-weather-index"
+---
+FILE candidates/active/KAL-WX-INDEX-001.yaml
+LINE 19     assessment: experiments/prebuild/KAL-WX-PB001-weather-index-build-warrant.yaml
+LINE 58       requirement: "Exact active series/event/market rules and source must be archived point-in-time."
+LINE 108     - receipt_basis
+LINE 113     - config_version
+LINE 124     - weather_index_minutes
+LINE 168     - receipt_basis_and_backfill_eligibility
+LINE 181     - KALSHI_WEATHER_SOURCE_MIGRATION_MISPRICING_HYPOTHESIS_2026-09-19
+---
+FILE hourly-reports/hourly-20260920T040000+0200.md
+LINE 50 - kalshi_weather_rules: CHANGED
+---
+FILE hourly-reports/hourly-20260920T010000+0200.md
+LINE 50 - kalshi_weather_rules: CHANGED
+---
+FILE hourly-reports/hourly-20260920T020000+0200.md
+LINE 50 - kalshi_weather_rules: CHANGED
+LINE 81 - kalshi_weather_rules: CHANGED
+---
+FILE meta/RESEARCH_STOP_HANDOFF_2026-09-19.md
+LINE 28 - Durable record: `knowledge/kalshi/KALSHI_WEATHER_INDEX_SOURCE_TRANSITION_2026-09-19.md`.
+LINE 35 - Durable record: `knowledge/kalshi/KALSHI_WEATHER_INDEX_PREPUBLICATION_HYPOTHESIS_2026-09-19.md`.
+LINE 43 - Durable record: `knowledge/kalshi/KALSHI_WEATHER_SOURCE_MIGRATION_MISPRICING_HYPOTHESIS_2026-09-19.md`.
+LINE 50 - Durable record: `knowledge/kalshi/KALSHI_WEATHER_INDEX_FREE_REPLAY_CASE_2026-09-09.md`.
+---
+FILE meta/implementation/KAL-WX-E001_recorder_build_2026-09-19.yaml
+LINE 9   branch: ai/weather-index-e001-recorder-v0
+LINE 14   - name: weather_index_adapter
+LINE 15     path: proof_hunter/venues/kalshi_weather.py
+LINE 34     path: proof_hunter/source_lock/weather_index_watch.py
+LINE 37     path: proof_hunter/source_lock/weather_capture_validate.py
+LINE 47   weather_index_overlap_seconds: 900
+LINE 52   raw_storage: "append-only filesystem archive with exact response bytes, local retrieval timestamp and SHA-256"
+LINE 88   weather_index: "Current Kalshi docs describe Weather Index as the canonical minute-resolution series behind hourly temperature markets."
+LINE 95   - "Calibration published_at/effective_at and Weather Index receipt_basis must remain point-in-time features, never backfilled into earlier decisions."
+---
+FILE control/TASK_QUEUE.yaml
+LINE 17       branch: ai/weather-index-e001-recorder-v0
+LINE 24       - "Confirm raw archive files, metadata, SHA-256, HTTP status and append-only event log."
+LINE 37       branch: ai/weather-index-e001-recorder-v0
+LINE 40         - proof_hunter/source_lock/weather_index_watch.py
+LINE 43       - "Archive retrieval timestamp, close time, comparator/strike, source agency, rule text/version where exposed."
+LINE 54     objective: "Build and prospectively run immutable Weather Index recorder using /live_data/weather/{city} and calibration endpoint."
+LINE 58       branch: ai/weather-index-e001-recorder-v0
+LINE 60         - proof_hunter/venues/kalshi_weather.py
+LINE 61         - proof_hunter/source_lock/weather_capture.py
+LINE 62         - proof_hunter/source_lock/weather_index_watch.py
+LINE 63         - proof_hunter/source_lock/weather_capture_validate.py
+LINE 68       - "config_version"
+LINE 69       - "t/v/status/contributors/receipt_basis"
+LINE 73     note: "Large raw data outside knowledge Git; Git stores manifests/hashes/schema only. Calibration published_at/effective_at and receipt_basis are point-in-time fields and must not be backfilled."
+LINE 85       branch: ai/weather-index-e001-recorder-v0
+LINE 92         - proof_hunter/source_lock/weather_index_watch.py
+LINE 145     objective: "Attack experiment for leakage, source-regime drift, receipt_basis/backfill leakage, timestamp mismatch, > versus >= errors, calibration effective/published-time leakage, correlated threshold double-counting, stale-book assumptions, authentication gaps, REST sampling artefacts, WebSocket sequence gaps and trade-window deduplication errors."
+---
+FILE control/tasks/completed/KALSHI-WEATHER-INDEX-AUDIT-E218.json
+LINE 10   "task_id": "KALSHI-WEATHER-INDEX-AUDIT-E218",
+---
+FILE control/tasks/completed/KALSHI-WEATHER-INDEX-LIFECYCLE-E239.json
+LINE 10   "task_id": "KALSHI-WEATHER-INDEX-LIFECYCLE-E239",
+---
+FILE control/tasks/completed/KALSHI-WEATHER-INDEX-RECORDER-E216.json
+LINE 10   "task_id": "KALSHI-WEATHER-INDEX-RECORDER-E216",
+---
+FILE control/tasks/completed/KALSHI-WEATHER-INDEX-SCHEMA-DETAIL-E232.json
+LINE 10   "task_id": "KALSHI-WEATHER-INDEX-SCHEMA-DETAIL-E232",
+---
+FILE control/tasks/completed/KALSHI-WEATHER-INDEX-TIMER-E217.json
+LINE 10   "task_id": "KALSHI-WEATHER-INDEX-TIMER-E217",
+---
+FILE control/tasks/completed/KALSHI-WEATHER-INDEX-MANIFEST-SCHEMA-E235.json
+LINE 10   "task_id": "KALSHI-WEATHER-INDEX-MANIFEST-SCHEMA-E235",
+---
+FILE control/tasks/completed/KALSHI-WEATHER-INDEX-METHODOLOGY-SUMMARY-E228.json
+LINE 10   "task_id": "KALSHI-WEATHER-INDEX-METHODOLOGY-SUMMARY-E228",
+---
+FILE control/tasks/completed/KALSHI-WEATHER-INDEX-FIRST-SEEN-E236.json
+LINE 10   "task_id": "KALSHI-WEATHER-INDEX-FIRST-SEEN-E236",
+---
+FILE control/tasks/completed/KALSHI-WEATHER-INDEX-CHICAGO-DEGRADED-E233.json
+LINE 10   "task_id": "KALSHI-WEATHER-INDEX-CHICAGO-DEGRADED-E233",
+---
+FILE control/tasks/completed/KALSHI-WEATHER-INDEX-MIAMI-INTERPOL-E227.json
+LINE 10   "task_id": "KALSHI-WEATHER-INDEX-MIAMI-INTERPOL-E227",
+---
+FILE control/tasks/completed/KALSHI-WEATHER-INDEX-OFFICIAL-DOCS-E223.json
+LINE 10   "task_id": "KALSHI-WEATHER-INDEX-OFFICIAL-DOCS-E223",
+---
+FILE control/tasks/completed/KALSHI-WEATHER-INDEX-PDF-PROBE-E226.json
+LINE 10   "task_id": "KALSHI-WEATHER-INDEX-PDF-PROBE-E226",
+---
+FILE control/tasks/completed/KALSHI-WEATHER-INDEX-DEGRADED-E221.json
+LINE 10   "task_id": "KALSHI-WEATHER-INDEX-DEGRADED-E221",
+---
+FILE control/tasks/completed/KALSHI-WEATHER-INDEX-PDF-TEXT-E224.json
+LINE 10   "task_id": "KALSHI-WEATHER-INDEX-PDF-TEXT-E224",
+---
+FILE control/tasks/completed/KALSHI-WEATHER-INDEX-SCHEMA-E231.json
+LINE 10   "task_id": "KALSHI-WEATHER-INDEX-SCHEMA-E231",
+---
+FILE control/tasks/failed/KALSHI-WEATHER-INDEX-METHODOLOGY-E222.json
+LINE 10   "task_id": "KALSHI-WEATHER-INDEX-METHODOLOGY-E222",
+---
+FILE control/tasks/failed/KALSHI-WEATHER-INDEX-LIFECYCLE-E237.json
+LINE 10   "task_id": "KALSHI-WEATHER-INDEX-LIFECYCLE-E237",
+---
+FILE control/tasks/failed/KALSHI-WEATHER-INDEX-DEGRADED-E219.json
+LINE 10   "task_id": "KALSHI-WEATHER-INDEX-DEGRADED-E219",
+---
+FILE control/tasks/failed/KALSHI-WEATHER-INDEX-DEGRADED-E220.json
+LINE 10   "task_id": "KALSHI-WEATHER-INDEX-DEGRADED-E220",
+---
+FILE control/tasks/failed/KALSHI-WEATHER-INDEX-FIRST-SEEN-LATENCY-E234.json
+LINE 10   "task_id": "KALSHI-WEATHER-INDEX-FIRST-SEEN-LATENCY-E234",
+---
+FILE control/tasks/failed/KALSHI-WEATHER-INDEX-PDF-EXTRACT-E225.json
+LINE 10   "task_id": "KALSHI-WEATHER-INDEX-PDF-EXTRACT-E225",
+---
+FILE control/hourly/role_source_policy.json
+LINE 61       "kalshi_weather_rules",
+LINE 72       "kalshi_weather_rules",
+LINE 85       "kalshi_weather_rules",
+---
+FILE control/jobs/locate_kwi_recorder_paths_e360.py
+LINE 7     'latest_incomplete',
+LINE 8     'weather_index_watch.py',
+LINE 9     'weather_capture.py',
+LINE 10     'weather_capture_validate.py',
+LINE 14     'receipt_basis',
+LINE 15     'config_version'
+---
+FILE control/jobs/inventory_kwi_pairs_e358.py
+LINE 17         if 'kwi' in rel_low or 'weather_index' in rel_low or 'live_data' in rel_low:
+LINE 73         for key in ['city','status','state','timestamp','retrieved_at','observed_at','latest_incomplete','canonical','complete']:
+---
+FILE control/jobs/trace_kwi_runtime_paths_e362.py
+LINE 8 terms=['weather_index','weather-index','live_data/weather','latest_incomplete','kalshi_weather','weather_capture','receipt_basis','config_version']
+LINE 26         abs_paths=sorted(set(re.findall(r'/home/[A-Za-z0-9_./-]+',text)))
+LINE 30             if any(term in ll for term in terms) or '/home/' in line or 'data_dir' in ll or 'raw_dir' in ll or 'archive' in ll:
+---
+FILE control/jobs/locate_proof_hunter_kwi_storage_e361.py
+LINE 19         repo/'proof_hunter/source_lock/weather_index_watch.py',
+LINE 20         repo/'proof_hunter/source_lock/weather_capture.py',
+LINE 21         repo/'proof_hunter/source_lock/weather_capture_validate.py',
+LINE 22         repo/'proof_hunter/venues/kalshi_weather.py'
+LINE 30         needles=['raw','archive','capture','weather_index','output','data_dir','root','path','mkdir','jsonl','snapshot','manifest']
+LINE 41 print('TOP_LEVEL_POSSIBLE_DATA_DIRS')
+---
+FILE control/jobs/locate_kwi_evidence_e359.py
+LINE 7     'latest_incomplete',
+LINE 8     '/live_data/weather/',
+---
+FILE control/results/KALSHI-HOURLY-SOURCE-TRANSITION-E212/stdout.log
+LINE 139           "SYNOPTIC+KALSHI_WEATHER_INDEX": 10
+LINE 152           "source_label": "SYNOPTIC+KALSHI_WEATHER_INDEX"
+LINE 162           "SYNOPTIC+KALSHI_WEATHER_INDEX": 10
+LINE 175           "source_label": "SYNOPTIC+KALSHI_WEATHER_INDEX"
+LINE 185           "SYNOPTIC+KALSHI_WEATHER_INDEX": 10
+LINE 198           "source_label": "SYNOPTIC+KALSHI_WEATHER_INDEX"
+LINE 237         "SYNOPTIC+KALSHI_WEATHER_INDEX": 10
+LINE 254           "source_label": "SYNOPTIC+KALSHI_WEATHER_INDEX"
+LINE 267           "source_label": "SYNOPTIC+KALSHI_WEATHER_INDEX"
+LINE 280           "source_label": "SYNOPTIC+KALSHI_WEATHER_INDEX"
+LINE 293           "source_label": "SYNOPTIC+KALSHI_WEATHER_INDEX"
+LINE 306           "source_label": "SYNOPTIC+KALSHI_WEATHER_INDEX"
+LINE 319           "source_label": "SYNOPTIC+KALSHI_WEATHER_INDEX"
+---
+FILE control/results/KALSHI-WEATHER-INDEX-DEGRADED-E221/stdout.log
+LINE 2   "artifact": "knowledge/runs/kalshi-weather-index-degraded-e221.json",
+LINE 7   "target_revised_across_archived_raws": false,
+LINE 534     "stdout": "[main 2f9e313] research(weather): inspect degraded Weather Index point\n 1 file changed, 539 insertions(+)\n create mode 100644 knowledge/runs/kalshi-weather-index-degraded-e221.json",
+---
+FILE control/results/KALSHI-WEATHER-INDEX-DEGRADED-E221/RESULT.json
+LINE 15   "task_id": "KALSHI-WEATHER-INDEX-DEGRADED-E221"
+---
+FILE control/results/KALSHI-WEATHER-INDEX-AUDIT-E218/stdout.log
+ABS_PATH /home/leonh/.local/state/prediction-research/kalshi_weather_index_manifests/kwi-20260919T232453.632399
+ABS_PATH /home/leonh/.local/state/prediction-research/kalshi_weather_index_manifests/kwi-20260919T232614.191085
+ABS_PATH /home/leonh/.local/state/prediction-research/kalshi_weather_index_manifests/kwi-20260919T232615.489349
+ABS_PATH /home/leonh/.local/state/prediction-research/kalshi_weather_index_manifests/kwi-20260919T232719.087929
+LINE 5       "path": "/home/leonh/.local/state/prediction-research/kalshi_weather_index_manifests/kwi-20260919T232453.632399+0000-1b37b1771461.json",
+LINE 41       "path": "/home/leonh/.local/state/prediction-research/kalshi_weather_index_manifests/kwi-20260919T232614.191085+0000-da33e7f9b167.json",
+LINE 77       "path": "/home/leonh/.local/state/prediction-research/kalshi_weather_index_manifests/kwi-20260919T232615.489349+0000-731d3909e5bb.json",
+LINE 113       "path": "/home/leonh/.local/state/prediction-research/kalshi_weather_index_manifests/kwi-20260919T232719.087929+0000-afcaeaf79527.json",
+LINE 149   "latest_manifest": "/home/leonh/.local/state/prediction-research/kalshi_weather_index_manifests/kwi-20260919T232719.087929+0000-afcaeaf79527.json",
+LINE 154       "config_version": "nyc-temperature-v1.0-cal-20260914",
+LINE 182       "config_version": "miami-temperature-v1.0-cal-20260914",
+LINE 210       "config_version": "chicago-temperature-v1.0-cal-20260914",
+LINE 259       "stdout": "NEXT                         LEFT LAST                          PASSED UNIT                                                    ACTIVATES\nSun 2026-09-20 01:28:15 CEST  40s Sun 2026-09-20 01:27:19 CEST 15s ago prediction-research-kalshi-weather-index-recorder.timer prediction-research-kalshi-weather-index-recorder.service\n\n1 timers listed.\nPass --all to see loaded but inactive timers, too.",
+LINE 269       "stdout": "Sep 20 01:27:20 Strix python[595433]:       \"guards\": [\nSep 20 01:27:20 Strix python[595433]:         \"Public Kalshi weather timeseries availability does not by itself prove contract settlement equivalence.\",\nSep 20 01:27:20 Strix python[595433]:         \"Incomplete points are not treated as final.\",\nSep 20 01:27:20 Strix python[595433]:         \"No market edge is inferred without contemporaneous executable market data.\"\nSep 20 01:27:20 Strix python[595433]:       ]\nSep 20 01:27:20 Strix python[595433]:     }\nSep 20 01:27:20 Strix python[595433]:   ],\nSep 20 01:27:20 Strix python[595433]:   \"live_trading\": false,\nSep 20 01:27:20 Strix python[595433]:   \"paid_actions\": false,\nSep 20 01:27:20 Strix python[595433]:   \"wallet_actions\": false\nSep 20 01:27:20 Strix python[595433]: }\nSep 20 01:27:20 Strix systemd[334]: Finished prediction-research-kalshi-weather-index-recorder.service - Prediction Research Kalshi Weather Index recorder.",
+---
+FILE control/results/KALSHI-WEATHER-INDEX-AUDIT-E218/RESULT.json
+LINE 15   "task_id": "KALSHI-WEATHER-INDEX-AUDIT-E218"
+---
+FILE control/results/KALSHI-WEATHER-INDEX-PDF-EXTRACT-E225/RESULT.json
+LINE 15   "task_id": "KALSHI-WEATHER-INDEX-PDF-EXTRACT-E225"
+---
+FILE control/results/KALSHI-WEATHER-INDEX-FIRST-SEEN-LATENCY-E234/RESULT.json
+LINE 15   "task_id": "KALSHI-WEATHER-INDEX-FIRST-SEEN-LATENCY-E234"
+---
+FILE control/results/KALSHI-HOURLY-LIVE-RULES-E202/stdout.log
+LINE 7   "weather_index_public_probes": [
+LINE 14         "config_version",
+LINE 27         "config_version",
+LINE 40         "config_version",
+---
+FILE control/results/HOURLY-EDGE-HUNTER-INSPECT-20260920T0300-E272/stdout.log
+LINE 81 - kalshi_weather_rules: CHANGED
+LINE 112 - kalshi_weather_rules: CHANGED
+---
+FILE control/results/EDGE-HUNTER-KWI-RECORDER-PATHS-E360/stdout.log
+ABS_PATH /home/leonh
+ABS_PATH /home/leonh/.local/state/prediction-research/kalshi_weather_index_manifests/kwi-20260919T232453.632399
+ABS_PATH /home/leonh/prediction_research
+ABS_PATH /home/leonh/prediction_research/candidates/active/KAL-WX-INDEX-001.yaml
+ABS_PATH /home/leonh/prediction_research/control/results/KALSHI-HOURLY-SOURCE-TRANSITION-E211/stdout.log
+ABS_PATH /home/leonh/prediction_research/control/weather/kalshi_weather_index_recorder.py
+LINE 7 MATCHED latest_incomplete,weather_index_watch.py,weather_capture.py,weather_capture_validate.py,TASK-WX-002,IMPLEMENTED_LIVE_CAPTURE_PENDING,receipt_basis,config_version
+LINE 8 LINE 5     "config_version",
+LINE 9 LINE 12     "config_version/status/receipt_basis",
+LINE 10 LINE 20     "config_version\\",
+LINE 11 LINE 29           "excerpt": "_lock/weather_index_watch.py\n    acceptance:\n      - \"At least one active event per initial city captured from direct Kalshi API/source.\"\n      - \"Archive retrieval timestamp, close time, comparator/strike, source agency, rule text/version where exposed.\"\n      - \"No secondary mirror used as authority.\"\n      - \"Classify source per contemporaneous event/rule version; do not assume global TWC or Synoptic semantics.\"\n    output: \"agents/rules/findings/\"\n\n  - id: TASK-WX-002\n    candidate: KAL-WX-INDEX-001\n    assigned_role: DATA\n    priority: P0\n    status: IN_PROGRESS\n    depends_on: [TASK-WX-000, TASK-WX-001]\n    objective: \"Build and prospectively run immutable Weather Index recorder using /live_data/weather/{city} and calibration endpoint.\"\n    implementation:\n      status: IMPLEMENTED_LIVE_CAPTURE_PENDING\n      repo: bas1231/proof-hunter\n      branch: ai/weather-index-e001-recorder-v0\n      paths:\n        - proof_hunter/venues/kalshi_weather.py\n        - proof_hunter/source_lock/weather_capture.py\n        - proof_hunter/source_lock/weather_index_watch.py\n        - proof_hunter/source_lock/weather_capture_validate.py\n    capture:\n      - \"raw JSON body\"\n      - \"retrieval timestamp\"\n      - \"city\"\n      - \"config_version\"\n      - \"t/v/status/contributors/receipt_basis\"\n      - \"detailed station readings\"\n      - \"calibration timeline snapshots\"\n      - \"content hash\"\n    note: \"Large raw data outside knowledge Git; Git stores manifests/hashes/schema only. Calibration published_at/effective_at and receipt_basis are point-in-time fields and must not be backfilled.\"\n\n  - id: TASK-WX-003\n    candidate: KAL-WX-INDEX-001\n    assigned_role: MICROSTRUCTURE\n    priority: P0\n    status: IN_PROGRESS\n    depends_on: [TASK-WX-000, TASK-WX-001]\n    objective: \"Record contemporaneous KXTEMP L2, trades, lifecycle and fee provenance for the same cycles as Weather Index observations.\"\n    implementation:\n      status: IMPLEMENTED_LIVE_CAPTURE_PENDING\n      repo: bas1231/proof-hunter\n      branch: ai/weather-index-e001-recorder-v0\n      paths:\n        - proof_hunter/source_lock/weather_l2_capture.py\n        - proof_hunter/source_lock/weather_trade_capture.py\n        - proof_hunter/source_lock/weather_fee_capture.py\n        - proof_hunter/venues/kalshi_fees.py\n        - proof_hunter/venues/kalshi_trades.py\n        - proof_hunter/source_lock/weather_index_watch.py\n    capture:\n      - \"authenticated batched full relevant REST L2\"\n      - \"orderbook/local receive timestamps\"\n",
+LINE 12 LINE 33           "excerpt": "DATA\n    priority: P0\n    status: IN_PROGRESS\n    depends_on: [TASK-WX-000, TASK-WX-001]\n    objective: \"Build and prospectively run immutable Weather Index recorder using /live_data/weather/{city} and calibration endpoint.\"\n    implementation:\n      status: IMPLEMENTED_LIVE_CAPTURE_PENDING\n      repo: bas1231/proof-hunter\n      branch: ai/weather-index-e001-recorder-v0\n      paths:\n        - proof_hunter/venues/kalshi_weather.py\n        - proof_hunter/source_lock/weather_capture.py\n        - proof_hunter/source_lock/weather_index_watch.py\n        - proof_hunter/source_lock/weather_capture_validate.py\n    capture:\n      - \"raw JSON body\"\n      - \"retrieval timestamp\"\n      - \"city\"\n      - \"config_version\"\n      - \"t/v/status/contributors/receipt_basis\"\n      - \"detailed station readings\"\n      - \"calibration timeline snapshots\"\n      - \"content hash\"\n    note: \"Large raw data outside knowledge Git; Git stores manifests/hashes/schema only. Calibration published_at/effective_at and receipt_basis are point-in-time fields and must not be backfilled.\"\n\n  - id: TASK-WX-003\n    candidate: KAL-WX-INDEX-001\n    assigned_role: MICROSTRUCTURE\n    priority: P0\n    status: IN_PROGRESS\n    depends_on: [TASK-WX-000, TASK-WX-001]\n    objective: \"Record contemporaneous KXTEMP L2, trades, lifecycle and fee provenance for the same cycles as Weather Index observations.\"\n    implementation:\n      status: IMPLEMENTED_LIVE_CAPTURE_PENDING\n      repo: bas1231/proof-hunter\n      branch: ai/weather-index-e001-recorder-v0\n      paths:\n        - proof_hunter/source_lock/weather_l2_capture.py\n        - proof_hunter/source_lock/weather_trade_capture.py\n        - proof_hunter/source_lock/weather_fee_capture.py\n        - proof_hunter/venues/kalshi_fees.py\n        - proof_hunter/venues/kalshi_trades.py\n        - proof_hunter/source_lock/weather_index_watch.py\n    capture:\n      - \"authenticated batched full relevant REST L2\"\n      - \"orderbook/local receive timestamps\"\n      - \"overlapping public trade tape with downstream trade-id deduplication\"\n      - \"market lifecycle/rules snapshots\"\n      - \"series fee history and event fee overrides\"\n      - \"close timestamp\"\n    correction: \"Current orderbook reads are treated as authenticated; the older public-orderbook assumption is not trusted.\"\n\n  - id: TASK-WX-003B\n    candidate: KAL-WX-INDEX-001\n    assigned_role: MICROSTRUCTURE\n    priority: P1\n    status: BLOCKED\n    depends_on: [TASK-WX-000, TASK-WX-003]\n    objective: \"Add continuous au",
+LINE 13 LINE 34           "needle": "config_version"
+LINE 14 LINE 39         "config_version"
+LINE 15 LINE 73           "excerpt": "ived_at_ms\": 1789859427873,\n            \"source\": \"hf_asos\",\n            \"station_id\": \"KPMP1M\",\n            \"temp_f\": 80.6\n          }\n        ],\n        \"status\": \"incomplete\",\n        \"t\": 1789859280000\n      },\n      \"point_keys\": [\n        \"contributors\",\n        \"stations\",\n        \"status\",\n        \"t\",\n        \"v\"\n      ],\n      \"sha256\": \"392ee94579c50b965a9e33826d6d163fe3900b8486d61bdbfd615f0c1975857e\",\n      \"status\": 200,\n      \"timeseries_count\": 116,\n      \"top_keys\": [\n        \"city\",\n        \"config_version\",\n        \"timeseries\",\n        \"units\"\n      ],\n      \"units\": \"fahrenheit\"\n    },\n    {\n      \"city\": \"chicago\",\n      \"city_field\": \"chicago\",\n      \"config_version\": \"chicago-temperature-v1.0-cal-20260914\",\n      \"first_point\": {\n        \"contributors\": 5,\n        \"stations\": [\n          {\n            \"code\": \"ok\",\n            \"received_at_ms\": 1789852462486,\n            \"source\": \"hf_asos\",\n            \"station_id\": \"KARR1M\",\n            \"temp_f\": 68\n          },\n          {\n            \"code\": \"ok\",\n            \"received_at_ms\": 1789852404778,\n            \"source\": \"hf_asos\",\n            \"station_id\": \"KDPA1M\",\n            \"temp_f\": 69.8\n          },\n          {\n            \"code\": \"ok\",\n            \"received_at_ms\": 1789852469050,\n            \"source\": \"hf_asos\",\n            \"station_id\": \"KMDW1M\",\n            \"temp_f\": 71.6\n          },\n          {\n            \"code\": \"ok\",\n            \"received_at_ms\": 1789852462990,\n            \"source\": \"hf_asos\",\n            \"station_id\": \"KORD1M\",\n            \"temp_f\": 69.8\n          },\n          {\n            \"code\": \"ok\",\n            \"received_at_ms\": 1789852461981,\n            \"source\": \"hf_asos\",\n            \"station_id\": \"KPWK1M\",\n            \"temp_f\": 69.8\n          }\n        ],\n        \"status\": \"normal\",\n        \"t\": 1789852320000,\n        \"v\": 69.8\n      },\n      \"last_point\": {\n        \"stations\": [\n          {\n            \"code\": \"pending\",\n            \"received_at_ms\": 1789859426363,\n            \"source\": \"hf_asos\",\n            \"station_id\": \"KDPA1M\",\n            \"temp_f\": 69.8\n          }\n        ],\n        \"status\": \"incomplete\",\n        \"t\": 1789859340000\n      },\n      \"point_keys\": [\n        \"contributors\",\n        \"stations\",\n        \"status\",\n        \"t\",\n        \"v\"\n      ],\n      \"sha256\": \"4abea168d246c259a084284c8042ecb3add01eba2b535273728be7459f3208ec\",\n      \"status\": 200,\n      \"timeseries_count\": 117,\n      \"top_keys\": [\n        \"city\",\n        \"config_version\",\n  ",
+LINE 16 LINE 77           "excerpt": ": \"2026-09-19T23:11:33.795111+00:00\",\n  \"guards\": [\n    \"Keyword discovery is not settlement proof.\",\n    \"Public weather timeseries availability does not prove it is the settlement source.\",\n    \"Market rules override generic documentation.\",\n    \"No market edge is inferred without point-in-time executable orderbook evidence.\"\n  ],\n  \"live_trading\": false,\n  \"open_market_count\": 12000,\n  \"open_market_pages\": 12,\n  \"paid_actions\": false,\n  \"source\": \"Kalshi public Trade API v2\",\n  \"wallet_actions\": false,\n  \"weather_temperature_candidate_count\": 0,\n  \"weather_temperature_candidates\": [],\n  \"weather_timeseries\": [\n    {\n      \"city\": \"nyc\",\n      \"city_field\": \"nyc\",\n      \"config_version\": \"nyc-temperature-v1.0-cal-20260914\",\n      \"first_point\": {\n        \"contributors\": 8,\n        \"stations\": [\n          {\n            \"code\": \"ok\",\n            \"received_at_ms\": 1789852462486,\n            \"source\": \"hf_asos\",\n            \"station_id\": \"KCDW1M\",\n            \"temp_f\": 69.8\n          },\n          {\n            \"code\": \"ok\",\n            \"received_at_ms\": 1789852462486,\n            \"source\": \"hf_asos\",\n            \"station_id\": \"KEWR1M\",\n            \"temp_f\": 68\n          },\n          {\n            \"code\": \"ok\",\n            \"received_at_ms\": 1789852461981,\n            \"source\": \"hf_asos\",\n            \"station_id\": \"KFRG1M\",\n            \"temp_f\": 66.2\n          },\n          {\n            \"code\": \"ok\",\n            \"received_at_ms\": 1789852461981,\n            \"source\": \"hf_asos\",\n            \"station_id\": \"KHPN1M\",\n            \"temp_f\": 66.2\n          },\n          {\n            \"code\": \"ok\",\n            \"received_at_ms\": 1789852461476,\n            \"source\": \"hf_asos\",\n            \"station_id\": \"KISP1M\",\n            \"temp_f\": 66.2\n          },\n          {\n            \"code\": \"ok\",\n            \"received_at_ms\": 1789852461476,\n            \"source\": \"hf_asos\",\n            \"station_id\": \"KLGA1M\",\n            \"temp_f\": 69.8\n          },\n          {\n            \"code\": \"ok\",\n            \"received_at_ms\": 1789852469554,\n            \"source\": \"hf_asos\",\n            \"station_id\": \"KSMQ1M\",\n            \"temp_f\": 68\n          },\n          {\n            \"code\": \"ok\",\n            \"received_at_ms\": 1789852462990,\n            \"source\": \"hf_asos\",\n            \"station_id\": \"KTEB1M\",\n            \"temp_f\": 69.8\n          }\n        ],\n        \"status\": \"normal\",\n        \"t\": 1789852320000,\n        \"v\": 68\n      },\n      \"last_point\": {\n        \"stations\": [\n          {\n            \"",
+LINE 17 LINE 81           "excerpt": "received_at_ms\": 1789859427873,\n            \"source\": \"hf_asos\",\n            \"station_id\": \"KTEB1M\",\n            \"temp_f\": 66.2\n          }\n        ],\n        \"status\": \"incomplete\",\n        \"t\": 1789859280000\n      },\n      \"point_keys\": [\n        \"contributors\",\n        \"stations\",\n        \"status\",\n        \"t\",\n        \"v\"\n      ],\n      \"sha256\": \"5d78bd07c50c2d7869cf5fb0ca44bd2f4abe4b8310279f10bad61a67b0a12293\",\n      \"status\": 200,\n      \"timeseries_count\": 115,\n      \"top_keys\": [\n        \"city\",\n        \"config_version\",\n        \"timeseries\",\n        \"units\"\n      ],\n      \"units\": \"fahrenheit\"\n    },\n    {\n      \"city\": \"miami\",\n      \"city_field\": \"miami\",\n      \"config_version\": \"miami-temperature-v1.0-cal-20260914\",\n      \"first_point\": {\n        \"contributors\": 5,\n        \"stations\": [\n          {\n            \"code\": \"ok\",\n            \"received_at_ms\": 1789852469050,\n            \"source\": \"hf_asos\",\n            \"station_id\": \"KFLL1M\",\n            \"temp_f\": 78.8\n          },\n          {\n            \"code\": \"ok\",\n            \"received_at_ms\": 1789852462486,\n            \"source\": \"hf_asos\",\n            \"station_id\": \"KFXE1M\",\n            \"temp_f\": 82.4\n          },\n          {\n            \"code\": \"ok\",\n            \"received_at_ms\": 1789852462990,\n            \"source\": \"hf_asos\",\n            \"station_id\": \"KMIA1M\",\n            \"temp_f\": 84.2\n          },\n          {\n            \"code\": \"ok\",\n            \"received_at_ms\": 1789852469050,\n            \"source\": \"hf_asos\",\n            \"station_id\": \"KOPF1M\",\n            \"temp_f\": 84.2\n          },\n          {\n            \"code\": \"ok\",\n            \"received_at_ms\": 1789852461981,\n            \"source\": \"hf_asos\",\n            \"station_id\": \"KPMP1M\",\n            \"temp_f\": 82.4\n          }\n        ],\n        \"status\": \"normal\",\n        \"t\": 1789852320000,\n        \"v\": 82.4\n      },\n      \"last_point\": {\n        \"stations\": [\n          {\n            \"code\": \"pending\",\n            \"received_at_ms\": 1789859426867,\n            \"source\": \"hf_asos\",\n            \"station_id\": \"KFLL1M\",\n            \"temp_f\": 78.8\n          },\n          {\n            \"code\": \"pending\",\n            \"received_at_ms\": 1789859426867,\n            \"source\": \"hf_asos\",\n            \"station_id\": \"KFXE1M\",\n            \"temp_f\": 78.8\n          },\n          {\n            \"code\": \"pending\",\n            \"received_at_ms\": 1789859426867,\n            \"source\": \"hf_asos\",\n            \"station_id\": \"KMIA1M\",\n            \"temp_f\": 77\n          },\n    ",
+LINE 18 LINE 85           "excerpt": "ride generic documentation.\",\n    \"No market edge is inferred without point-in-time executable orderbook evidence.\"\n  ],\n  \"live_trading\": false,\n  \"open_market_count\": 12000,\n  \"open_market_pages\": 12,\n  \"paid_actions\": false,\n  \"source\": \"Kalshi public Trade API v2\",\n  \"wallet_actions\": false,\n  \"weather_temperature_candidate_count\": 0,\n  \"weather_temperature_candidates\": [],\n  \"weather_timeseries\": [\n    {\n      \"city\": \"nyc\",\n      \"city_field\": \"nyc\",\n      \"config_version\": \"nyc-temperature-v1.0-cal-20260914\",\n      \"first_point\": {\n        \"contributors\": 8,\n        \"stations\": [\n          {\n            \"code\": \"ok\",\n            \"received_at_ms\": 1789852462486,\n            \"source\": \"hf_asos\",\n            \"station_id\": \"KCDW1M\",\n            \"temp_f\": 69.8\n          },\n          {\n            \"code\": \"ok\",\n            \"received_at_ms\": 1789852462486,\n            \"source\": \"hf_asos\",\n            \"station_id\": \"KEWR1M\",\n            \"temp_f\": 68\n          },\n          {\n            \"code\": \"ok\",\n            \"received_at_ms\": 1789852461981,\n            \"source\": \"hf_asos\",\n            \"station_id\": \"KFRG1M\",\n            \"temp_f\": 66.2\n          },\n          {\n            \"code\": \"ok\",\n            \"received_at_ms\": 1789852461981,\n            \"source\": \"hf_asos\",\n            \"station_id\": \"KHPN1M\",\n            \"temp_f\": 66.2\n          },\n          {\n            \"code\": \"ok\",\n            \"received_at_ms\": 1789852461476,\n            \"source\": \"hf_asos\",\n            \"station_id\": \"KISP1M\",\n            \"temp_f\": 66.2\n          },\n          {\n            \"code\": \"ok\",\n            \"received_at_ms\": 1789852461476,\n            \"source\": \"hf_asos\",\n            \"station_id\": \"KLGA1M\",\n            \"temp_f\": 69.8\n          },\n          {\n            \"code\": \"ok\",\n            \"received_at_ms\": 1789852469554,\n            \"source\": \"hf_asos\",\n            \"station_id\": \"KSMQ1M\",\n            \"temp_f\": 68\n          },\n          {\n            \"code\": \"ok\",\n            \"received_at_ms\": 1789852462990,\n            \"source\": \"hf_asos\",\n            \"station_id\": \"KTEB1M\",\n            \"temp_f\": 69.8\n          }\n        ],\n        \"status\": \"normal\",\n        \"t\": 1789852320000,\n        \"v\": 68\n      },\n      \"last_point\": {\n        \"stations\": [\n          {\n            \"code\": \"pending\",\n            \"received_at_ms\": 1789859426363,\n            \"source\": \"hf_asos\",\n            \"station_id\": \"KCDW1M\",\n            \"temp_f\": 66.2\n          },\n          {\n            \"code\": \"pending\",",
+LINE 19 LINE 89           "excerpt": "se,\n  \"created_at\": \"2026-09-19T23:11:33.795111+00:00\",\n  \"guards\": [\n    \"Keyword discovery is not settlement proof.\",\n    \"Public weather timeseries availability does not prove it is the settlement source.\",\n    \"Market rules override generic documentation.\",\n    \"No market edge is inferred without point-in-time executable orderbook evidence.\"\n  ],\n  \"live_trading\": false,\n  \"open_market_count\": 12000,\n  \"open_market_pages\": 12,\n  \"paid_actions\": false,\n  \"source\": \"Kalshi public Trade API v2\",\n  \"wallet_actions\": false,\n  \"weather_temperature_candidate_count\": 0,\n  \"weather_temperature_candidates\": [],\n  \"weather_timeseries\": [\n    {\n      \"city\": \"nyc\",\n      \"city_field\": \"nyc\",\n      \"config_version\": \"nyc-temperature-v1.0-cal-20260914\",\n      \"first_point\": {\n        \"contributors\": 8,\n        \"stations\": [\n          {\n            \"code\": \"ok\",\n            \"received_at_ms\": 1789852462486,\n            \"source\": \"hf_asos\",\n            \"station_id\": \"KCDW1M\",\n            \"temp_f\": 69.8\n          },\n          {\n            \"code\": \"ok\",\n            \"received_at_ms\": 1789852462486,\n            \"source\": \"hf_asos\",\n            \"station_id\": \"KEWR1M\",\n            \"temp_f\": 68\n          },\n          {\n            \"code\": \"ok\",\n            \"received_at_ms\": 1789852461981,\n            \"source\": \"hf_asos\",\n            \"station_id\": \"KFRG1M\",\n            \"temp_f\": 66.2\n          },\n          {\n            \"code\": \"ok\",\n            \"received_at_ms\": 1789852461981,\n            \"source\": \"hf_asos\",\n            \"station_id\": \"KHPN1M\",\n            \"temp_f\": 66.2\n          },\n          {\n            \"code\": \"ok\",\n            \"received_at_ms\": 1789852461476,\n            \"source\": \"hf_asos\",\n            \"station_id\": \"KISP1M\",\n            \"temp_f\": 66.2\n          },\n          {\n            \"code\": \"ok\",\n            \"received_at_ms\": 1789852461476,\n            \"source\": \"hf_asos\",\n            \"station_id\": \"KLGA1M\",\n            \"temp_f\": 69.8\n          },\n          {\n            \"code\": \"ok\",\n            \"received_at_ms\": 1789852469554,\n            \"source\": \"hf_asos\",\n            \"station_id\": \"KSMQ1M\",\n            \"temp_f\": 68\n          },\n          {\n            \"code\": \"ok\",\n            \"received_at_ms\": 1789852462990,\n            \"source\": \"hf_asos\",\n            \"station_id\": \"KTEB1M\",\n            \"temp_f\": 69.8\n          }\n        ],\n        \"status\": \"normal\",\n        \"t\": 1789852320000,\n        \"v\": 68\n      },\n      \"last_point\": {\n        \"stations\": [\n       ",
+LINE 20 LINE 90           "needle": "config_version"
+LINE 21 LINE 98         "config_version"
+LINE 22 LINE 106           "excerpt": "etadata updates rather than predictive or executable advantage.\",\n    \"status\": \"NO_SURVIVING_CANDIDATE\"\n  },\n  \"decision\": \"NO_PROVEN_EDGE\",\n  \"e202_followup\": {\n    \"artifact_ref\": \"knowledge/runs/kalshi-hourly-rules-live-e202.json\",\n    \"assessment\": \"The public Kalshi weather endpoint is a research lead only. E202 did not establish concrete hourly market rules or settlement equivalence.\",\n    \"candidate_count\": 0,\n    \"weather_index_public_probes\": [\n      {\n        \"city\": \"nyc\",\n        \"point_count\": 0,\n        \"sample\": null,\n        \"sha256\": \"9ec4f191acff8aa99fb579ae0240eb887ca8942fdce0c821616d65597de6efbe\",\n        \"status\": 200,\n        \"top_keys\": [\n          \"city\",\n          \"config_version\",\n          \"timeseries\",\n          \"units\"\n        ]\n      },\n      {\n        \"city\": \"miami\",\n        \"point_count\": 0,\n        \"sample\": null,\n        \"sha256\": \"606b59c44dd9c31c92d55aa61db90f7f83e1ccbb46c47b57857e4672bc364e1a\",\n        \"status\": 200,\n        \"top_keys\": [\n          \"city\",\n          \"config_version\",\n          \"timeseries\",\n          \"units\"\n        ]\n      },\n      {\n        \"city\": \"chicago\",\n        \"point_count\": 0,\n        \"sample\": null,\n        \"sha256\": \"3ef253fd8a4a64a508ad83024e7b4c61db90d4a8c3e09d74244859a2341a70a6\",\n        \"status\": 200,\n        \"top_keys\": [\n          \"city\",\n          \"config_version\",\n          \"timeseries\",\n          \"units\"\n        ]\n      },\n      {\n        \"city\": \"lax\",\n        \"error\": \"<HTTPError 400: 'Bad Request'>\"\n      }\n    ]\n  },\n  \"guards\": [\n    \"No live trading.\",\n    \"No paid actions.\",\n    \"No wallet actions.\",\n    \"No market edge inferred without point-in-time executable market data.\",\n    \"No TWC feed status assumed equivalent to Kalshi contract finality.\"\n  ],\n  \"h7_revision_evidence\": {\n    \"assessment\": \"Prospective collection is operating, but the current sample is too small to establish or globally falsify H7. Metadata/payload changes are not treated as temperature revisions.\",\n    \"h7_state\": \"NO_TEMPERATURE_REVISION_OBSERVED\",\n    \"payload_change_intervals\": 2,\n    \"snapshot_count\": 5,\n    \"summary_ref\": \"knowledge/runs/twc-revision-summary-latest.json\",\n    \"total_pending_to_settled\": 0,\n    \"total_pending_to_settled_temperature_changes\": 0,\n    \"total_status_changes\": 0,\n    \"total_temperature_changes\": 0\n  },\n  \"independent_reproducer\": {\n    \"finding\": \"No candidate passed the pre-build and falsification gates, so independent reproduction is not applicable this hour.\",\n  ",
+LINE 23 LINE 107           "needle": "config_version"
+LINE 24 LINE 111         "config_version"
+LINE 25 LINE 171           "excerpt": " market rules override generic help/docs.\",\n    \"Weather-index availability does not btself prove it is the settlement source.\",\n    \"No market edge is inferred without point-in-time executable orderbook evidence.\"\n  ],\n  \"hourly_temperature_candidate_count\": 0,\n  \"hourly_temperature_candidates\": [],\n  \"live_trading\": false,\n  \"paid_actions\": false,\n  \"series_pages\": 1,\n  \"source\": \"Kalshi public Trade API v2\",\n  \"wallet_actions\": false,\n  \"weather_index_public_probes\": [\n    {\n      \"city\": \"nyc\",\n      \"point_count\": 0,\n      \"sample\": null,\n      \"sha256\": \"9ec4f191acff8aa99fb579ae0240eb887ca8942fdce0c821616d65597de6efbe\",\n      \"status\": 200,\n      \"top_keys\": [\n        \"city\",\n        \"config_version\",\n        \"timeseries\",\n        \"units\"\n      ]\n    },\n    {\n      \"city\": \"miami\",\n      \"point_count\": 0,\n      \"sample\": null,\n      \"sha256\": \"606b59c44dd9c31c92d55aa61db90f7f83e1ccbb46c47b57857e4672bc364e1a\",\n      \"status\": 200,\n      \"top_keys\": [\n        \"city\",\n        \"config_version\",\n        \"timeseries\",\n        \"units\"\n      ]\n    },\n    {\n      \"city\": \"chicago\",\n      \"point_count\": 0,\n      \"sample\": null,\n      \"sha256\": \"3ef253fd8a4a64a508ad83024e7b4c61db90d4a8c3e09d74244859a2341a70a6\",\n      \"status\": 200,\n      \"top_keys\": [\n        \"city\",\n        \"config_version\",\n        \"timeseries\",\n        \"units\"\n      ]\n    },\n    {\n      \"city\": \"lax\",\n      \"error\": \"<HTTPError 400: 'Bad Request'>\"\n    }\n  ]\n}\n",
+LINE 26 LINE 172           "needle": "config_version"
+---
+FILE control/results/KALSHI-WEATHER-INDEX-OFFICIAL-DOCS-E223/stdout.log
+LINE 2   "artifact": "knowledge/runs/kalshi-weather-index-official-docs-e223.json",
+LINE 117     "stdout": "[main 94c9a61] research(weather): inspect official Weather Index documents\n 1 file changed, 298 insertions(+)\n create mode 100644 knowledge/runs/kalshi-weather-index-official-docs-e223.json",
+---
+FILE control/results/KALSHI-WEATHER-INDEX-OFFICIAL-DOCS-E223/RESULT.json
+LINE 15   "task_id": "KALSHI-WEATHER-INDEX-OFFICIAL-DOCS-E223"
+---
+FILE control/results/KALSHI-WEATHER-TIMESERIES-MARKETS-E208/stdout.log
+LINE 10         "config_version",
+LINE 15       "config_version": "nyc-temperature-v1.0-cal-20260914",
+LINE 158         "config_version",
+LINE 163       "config_version": "miami-temperature-v1.0-cal-20260914",
+LINE 264         "config_version",
+LINE 269       "config_version": "chicago-temperature-v1.0-cal-20260914",
+---
+FILE control/results/KALSHI-WEATHER-INDEX-METHODOLOGY-SUMMARY-E228/stdout.log
+LINE 2   "artifact": "knowledge/runs/kalshi-weather-index-methodology-summary-e228.json",
+LINE 9     "stdout": "[main 38daf8c] research(weather): codify official Weather Index methodology\n 1 file changed, 115 insertions(+)\n create mode 100644 knowledge/runs/kalshi-weather-index-methodology-summary-e228.json",
+---
+FILE control/results/KALSHI-WEATHER-INDEX-METHODOLOGY-SUMMARY-E228/RESULT.json
+LINE 15   "task_id": "KALSHI-WEATHER-INDEX-METHODOLOGY-SUMMARY-E228"
+---
+FILE control/results/EDGE-HUNTER-TRIAGE-AUDIT-E259/stdout.log
+ABS_PATH /home/leonh/prediction_research/control/edge_hunter/director.py
+LINE 38 ?? knowledge/documents/manifests/kalshi_weather_rules/
+LINE 75 ?? knowledge/documents/text/kalshi_weather_rules/
+LINE 112 COMPILE control/edge_hunter/director.py FAIL PyCompileError   File "/home/leonh/prediction_research/control/edge_hunter/director.py", line 49
+---
+FILE control/results/KALSHI-WEATHER-INDEX-PDF-PROBE-E226/stdout.log
+LINE 2   "artifact": "knowledge/runs/kalshi-weather-index-pdf-probe-e226.json",
+LINE 90     "stdout": "[main 7013966] research(weather): probe local PDF extraction backends\n 1 file changed, 209 insertions(+)\n create mode 100644 knowledge/runs/kalshi-weather-index-pdf-probe-e226.json",
+---
+FILE control/results/KALSHI-WEATHER-INDEX-PDF-PROBE-E226/RESULT.json
+LINE 15   "task_id": "KALSHI-WEATHER-INDEX-PDF-PROBE-E226"
+---
+FILE control/results/KALSHI-HOURLY-UNIVERSE-E213/stdout.log
+LINE 597         "SYNOPTIC+KALSHI_WEATHER_INDEX": 10
+LINE 613           "source_label": "SYNOPTIC+KALSHI_WEATHER_INDEX"
+LINE 625           "source_label": "SYNOPTIC+KALSHI_WEATHER_INDEX"
+LINE 637           "source_label": "SYNOPTIC+KALSHI_WEATHER_INDEX"
+LINE 789         "SYNOPTIC+KALSHI_WEATHER_INDEX": 10
+LINE 805           "source_label": "SYNOPTIC+KALSHI_WEATHER_INDEX"
+LINE 817           "source_label": "SYNOPTIC+KALSHI_WEATHER_INDEX"
+LINE 829           "source_label": "SYNOPTIC+KALSHI_WEATHER_INDEX"
+LINE 861         "SYNOPTIC+KALSHI_WEATHER_INDEX": 10
+LINE 877           "source_label": "SYNOPTIC+KALSHI_WEATHER_INDEX"
+LINE 889           "source_label": "SYNOPTIC+KALSHI_WEATHER_INDEX"
+LINE 901           "source_label": "SYNOPTIC+KALSHI_WEATHER_INDEX"
+LINE 964         "SYNOPTIC+KALSHI_WEATHER_INDEX": 10
+LINE 980           "source_label": "SYNOPTIC+KALSHI_WEATHER_INDEX"
+LINE 992           "source_label": "SYNOPTIC+KALSHI_WEATHER_INDEX"
+LINE 1004           "source_label": "SYNOPTIC+KALSHI_WEATHER_INDEX"
+---
+FILE control/results/KALSHI-WEATHER-INDEX-LIFECYCLE-E237/RESULT.json
+LINE 15   "task_id": "KALSHI-WEATHER-INDEX-LIFECYCLE-E237"
+---
+FILE control/results/KALSHI-WEATHER-INDEX-RECORDER-E216/stdout.log
+ABS_PATH /home/leonh/.local/state/prediction-research/kalshi_weather_index_manifests/kwi-20260919T232453.632399
+LINE 2   "target": "control/weather/kalshi_weather_index_recorder.py",
+LINE 6     "stdout": "{\n  \"manifest\": \"/home/leonh/.local/state/prediction-research/kalshi_weather_index_manifests/kwi-20260919T232453.632399+0000-1b37b1771461.json\",\n  \"retrieved_at\": \"2026-09-19T23:24:53.632399+00:00\",\n  \"cities\": [\n    {\n      \"city\": \"nyc\",\n      \"status\": 200,\n      \"content_type\": \"application/json; charset=utf-8\",\n      \"sha256\": \"3452861163ccfa1a85399519b7d2ee02ad5f297888db5589da43055116e000bd\",\n      \"bytes\": 154859,\n      \"config_version\": \"nyc-temperature-v1.0-cal-20260914\",\n      \"units\": \"fahrenheit\",\n      \"timeseries_count\": 177,\n      \"latest_any\": {\n        \"stations\": [\n          {\n            \"code\": \"pending\",\n            \"received_at_ms\": 1789860267593,\n            \"source\": \"hf_asos\",\n            \"station_id\": \"KCDW1M\",\n            \"temp_f\": 66.2\n          },\n          {\n            \"code\": \"pending\",\n            \"received_at_ms\": 1789860267593,\n            \"source\": \"hf_asos\",\n            \"station_id\": \"KEWR1M\",\n            \"temp_f\": 66.2\n          },\n          {\n            \"code\": \"pending\",\n            \"received_at_ms\": 1789860267593,\n            \"source\": \"hf_asos\",\n            \"station_id\": \"KFRG1M\",\n            \"temp_f\": 64.4\n          },\n          {\n            \"code\": \"pending\",\n            \"received_at_ms\": 1789860268097,\n            \"source\": \"hf_asos\",\n            \"station_id\": \"KHPN1M\",\n            \"temp_f\": 62.6\n          },\n          {\n            \"code\": \"pending\",\n            \"received_at_ms\": 1789860268097,\n            \"source\": \"hf_asos\",\n            \"station_id\": \"KISP1M\",\n            \"temp_f\": 62.6\n          },\n          {\n            \"code\": \"pending\",\n            \"received_at_ms\": 1789860268097,\n            \"source\": \"hf_asos\",\n            \"station_id\": \"KLGA1M\",\n            \"temp_f\": 66.2\n          },\n          {\n            \"code\": \"pending\",\n            \"received_at_ms\": 1789860268601,\n            \"source\": \"hf_asos\",\n            \"station_id\": \"KSMQ1M\",\n            \"temp_f\": 64.4\n          },\n          {\n            \"code\": \"pending\",\n            \"received_at_ms\": 1789860268601,\n            \"source\": \"hf_asos\",\n            \"station_id\": \"KTEB1M\",\n            \"temp_f\": 66.2\n          }\n        ],\n        \"status\": \"incomplete\",\n        \"t\": 1789860120000\n      },\n      \"latest_complete\": {\n        \"contributors\": 8,\n        \"stations\": [\n          {\n            \"code\": \"ok\",\n            \"received_at_ms\": 1789860087381,\n            \"source\": \"hf_asos\",\n            \"station_id\": \"KCDW1M\",\n            \"temp_f\": 66.2\n          },\n          {\n            \"code\": \"ok\",\n            \"received_at_ms\": 1789860087381,\n            \"source\": \"hf_asos\",\n            \"station_id\": \"KEWR1M\",\n            \"temp_f\
+LINE 11     "stdout": "[main e2cfb82] build(weather): add Kalshi Weather Index recorder\n 1 file changed, 120 insertions(+)\n create mode 100644 control/weather/kalshi_weather_index_recorder.py",
+---
+FILE control/results/KALSHI-WEATHER-INDEX-RECORDER-E216/RESULT.json
+LINE 15   "task_id": "KALSHI-WEATHER-INDEX-RECORDER-E216"
+---
+FILE control/results/HOURLY-RESEARCH-INSPECT-20260920T0200-E251/stdout.log
+ABS_PATH /home/leonh/prediction_research/knowledge/documents/manifests/arxiv/20260920T003238Z_d7ed6c1e9723.json
+ABS_PATH /home/leonh/prediction_research/knowledge/documents/manifests/cftc/20260920T003237Z_460f19f42856.json
+ABS_PATH /home/leonh/prediction_research/knowledge/documents/manifests/ecmwf_open/20260920T003238Z_83c3dee07ef5.json
+ABS_PATH /home/leonh/prediction_research/knowledge/documents/manifests/github/20260920T003238Z_9a2b21130f75.json
+ABS_PATH /home/leonh/prediction_research/knowledge/documents/manifests/kalshi_docs/20260920T003238Z_94c183be8dd7.json
+ABS_PATH /home/leonh/prediction_research/knowledge/documents/manifests/kalshi_weather_rules/20260920T003238Z_633803fc9af9.json
+ABS_PATH /home/leonh/prediction_research/knowledge/documents/manifests/nomads/20260920T003238Z_17b612682f1f.json
+ABS_PATH /home/leonh/prediction_research/knowledge/documents/manifests/nws/20260920T003237Z_313992dd5d1f.json
+ABS_PATH /home/leonh/prediction_research/knowledge/documents/manifests/polymarket_docs/20260920T003237Z_6061d788333a.json
+ABS_PATH /home/leonh/prediction_research/knowledge/documents/manifests/reddit/20260920T003238Z_40726502428c.json
+ABS_PATH /home/leonh/prediction_research/knowledge/documents/manifests/twc_kalshi/20260920T003238Z_4778025a622c.json
+ABS_PATH /home/leonh/prediction_research/knowledge/documents/manifests/youtube/20260920T003238Z_c1dd6bbb0408.json
+LINE 51 - kalshi_weather_rules: CHANGED
+LINE 82 - kalshi_weather_rules: CHANGED
+LINE 131     "arxiv": "/home/leonh/prediction_research/knowledge/documents/manifests/arxiv/20260920T003238Z_d7ed6c1e9723.json",
+LINE 132     "cftc": "/home/leonh/prediction_research/knowledge/documents/manifests/cftc/20260920T003237Z_460f19f42856.json",
+LINE 133     "ecmwf_open": "/home/leonh/prediction_research/knowledge/documents/manifests/ecmwf_open/20260920T003238Z_83c3dee07ef5.json",
+LINE 134     "github": "/home/leonh/prediction_research/knowledge/documents/manifests/github/20260920T003238Z_9a2b21130f75.json",
+LINE 135     "kalshi_docs": "/home/leonh/prediction_research/knowledge/documents/manifests/kalshi_docs/20260920T003238Z_94c183be8dd7.json",
+LINE 136     "kalshi_weather_rules": "/home/leonh/prediction_research/knowledge/documents/manifests/kalshi_weather_rules/20260920T003238Z_633803fc9af9.json",
+LINE 137     "nomads": "/home/leonh/prediction_research/knowledge/documents/manifests/nomads/20260920T003238Z_17b612682f1f.json",
+LINE 138     "nws": "/home/leonh/prediction_research/knowledge/documents/manifests/nws/20260920T003237Z_313992dd5d1f.json",
+LINE 139     "polymarket_docs": "/home/leonh/prediction_research/knowledge/documents/manifests/polymarket_docs/20260920T003237Z_6061d788333a.json",
+LINE 140     "reddit": "/home/leonh/prediction_research/knowledge/documents/manifests/reddit/20260920T003238Z_40726502428c.json",
+LINE 141     "twc_kalshi": "/home/leonh/prediction_research/knowledge/documents/manifests/twc_kalshi/20260920T003238Z_4778025a622c.json",
+LINE 142     "youtube": "/home/leonh/prediction_research/knowledge/documents/manifests/youtube/20260920T003238Z_c1dd6bbb0408.json"
+LINE 158     "kalshi_weather_rules": "CHANGED",
+LINE 215       "source_id": "kalshi_weather_rules",
+LINE 217       "text_ref": "knowledge/documents/text/kalshi_weather_rules/633803fc9af9ded172b8f985a053ad41ba67bf385f538f9ea00f995a6564472b.json"
+LINE 332         "source_id": "kalshi_weather_rules",
+LINE 356         "source_id": "kalshi_weather_rules",
+LINE 380         "source_id": "kalshi_weather_rules",
+---
+FILE control/results/KALSHI-HOURLY-UNIVERSE-SUMMARY-E215/stdout.log
+LINE 22         "SYNOPTIC+KALSHI_WEATHER_INDEX": 10
+LINE 37         "SYNOPTIC+KALSHI_WEATHER_INDEX": 10
+LINE 52         "SYNOPTIC+KALSHI_WEATHER_INDEX": 10
+LINE 67         "SYNOPTIC+KALSHI_WEATHER_INDEX": 10
+LINE 128         "SYNOPTIC+KALSHI_WEATHER_INDEX": 10
+LINE 187         "SYNOPTIC+KALSHI_WEATHER_INDEX": 10
+LINE 202         "SYNOPTIC+KALSHI_WEATHER_INDEX": 10
+LINE 228         "SYNOPTIC+KALSHI_WEATHER_INDEX": 10
+---
+FILE control/results/KALSHI-WEATHER-INDEX-CHICAGO-DEGRADED-E233/stdout.log
+LINE 2   "artifact": "knowledge/runs/kalshi-weather-index-chicago-degraded-analysis-e233.json",
+LINE 3   "config_version": "chicago-temperature-v1.0-cal-20260914",
+LINE 111     "stdout": "[main f64f65b] research(weather): analyze Chicago degraded index behavior\n 1 file changed, 1609 insertions(+)\n create mode 100644 knowledge/runs/kalshi-weather-index-chicago-degraded-analysis-e233.json",
+---
+FILE control/results/KALSHI-WEATHER-INDEX-CHICAGO-DEGRADED-E233/RESULT.json
+LINE 15   "task_id": "KALSHI-WEATHER-INDEX-CHICAGO-DEGRADED-E233"
+---
+FILE control/results/KALSHI-WEATHER-INDEX-DEGRADED-E219/RESULT.json
+LINE 15   "task_id": "KALSHI-WEATHER-INDEX-DEGRADED-E219"
+---
+FILE control/results/KALSHI-WEATHER-INDEX-SCHEMA-DETAIL-E232/stdout.log
+ABS_PATH /home/leonh/.local/state/prediction-research/kalshi_weather_index_manifests/kwi-20260919T234719.084455
+LINE 2   "artifact": "knowledge/runs/kalshi-weather-index-schema-detail-e232.json",
+LINE 3   "latest_manifest": "/home/leonh/.local/state/prediction-research/kalshi_weather_index_manifests/kwi-20260919T234719.084455+0000-8f4e3f94c34a.json",
+LINE 7       "config_version": "nyc-temperature-v1.0-cal-20260914",
+LINE 38       "config_version": "miami-temperature-v1.0-cal-20260914",
+LINE 69       "config_version": "chicago-temperature-v1.0-cal-20260914",
+LINE 1008     "stdout": "[main 73d3b74] research(weather): enumerate Weather Index raw schema\n 1 file changed, 1459 insertions(+)\n create mode 100644 knowledge/runs/kalshi-weather-index-schema-detail-e232.json",
+---
+SYSTEMD_USER_UNITS
+UNIT_FILE prediction-research-browser-bridge.service
+UNIT_LINE 7 WorkingDirectory=%h/prediction_research
+UNIT_LINE 8 ExecStart=%h/prediction_research/.venv/bin/python %h/prediction_research/control/browser_bridge.py
+UNIT_LINE 9 Environment=PYTHONUNBUFFERED=1
+---
+UNIT_FILE prediction-research-executor.service
+UNIT_LINE 7 WorkingDirectory=%h/prediction_research
+UNIT_LINE 8 ExecStart=%h/prediction_research/.venv/bin/python %h/prediction_research/control/executor.py
+---
+UNIT_FILE prediction-research-hourly-director.service
+UNIT_LINE 6 WorkingDirectory=/home/leonh/prediction_research
+UNIT_LINE 7 ExecStart=%h/prediction_research/.venv/bin/python %h/prediction_research/control/hourly/edge_hunter_cycle.py
+---
+UNIT_FILE prediction-research-hourly-director.timer
+---
+UNIT_FILE prediction-research-kalshi-weather-index-recorder.service
+UNIT_LINE 2 Description=Prediction Research Kalshi Weather Index recorder
+UNIT_LINE 7 WorkingDirectory=%h/prediction_research
+UNIT_LINE 8 ExecStart=%h/prediction_research/.venv/bin/python %h/prediction_research/control/weather/kalshi_weather_index_recorder.py
+---
+UNIT_FILE prediction-research-kalshi-weather-index-recorder.timer
+UNIT_LINE 2 Description=Run Kalshi Weather Index recorder every minute
+---
+UNIT_FILE prediction-research-lifecycle-supervisor.service
+UNIT_LINE 7 WorkingDirectory=%h/prediction_research
+UNIT_LINE 8 ExecStart=%h/prediction_research/.venv/bin/python %h/prediction_research/control/jobs/lifecycle_supervisor.py
+---
+UNIT_FILE prediction-research-twc-recorder.service
+UNIT_LINE 7 WorkingDirectory=%h/prediction_research
+UNIT_LINE 8 ExecStart=%h/prediction_research/.venv/bin/python %h/prediction_research/control/weather/twc_hourly_recorder.py
+---
+UNIT_FILE prediction-research-twc-recorder.timer
+UNIT_LINE 2 Description=Record public TWC/Kalshi hourly observations every 15 minutes
+---
+ACTIVE_WEATHER_UNITS
+UNIT_STATUS prediction-research-kalshi-weather-index-recorder.service                                                                                                                    loaded    inactive dead      Prediction Research Kalshi Weather Index recorder
+UNIT_STATUS prediction-research-twc-recorder.service                                                                                                                                     loaded    inactive dead      Prediction Research TWC hourly point-in-time recorder
+UNIT_STATUS prediction-research-kalshi-weather-index-recorder.timer                                                                                                                      loaded    active   waiting   Run Kalshi Weather Index recorder every minute
+UNIT_STATUS prediction-research-twc-recorder.timer                                                                                                                                       loaded    active   waiting   Record public TWC/Kalshi hourly observations every 15 minutes
+TOP_LEVEL_REPO_DIRS
+DIR .git
+DIR .pytest_cache
+DIR .venv
+DIR agents
+DIR candidates
+DIR control
+DIR database
+DIR decisions
+DIR docs
+DIR evidence
+DIR experiments
+DIR failures
+DIR hourly-reports
+DIR hypotheses
+DIR knowledge
+DIR meta
+DIR methodology
+DIR negative_evidence
+DIR projects
+DIR reports
+DIR tests
+KWI_RUNTIME_PATH_TRACE_PASS

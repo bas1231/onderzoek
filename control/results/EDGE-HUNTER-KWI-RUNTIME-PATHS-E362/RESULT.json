@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/trace_kwi_runtime_paths_e362.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-20T02:34:58.930901+00:00",
+  "hypothesis_id": "KWI-INCOMPLETE-TO-CANONICAL-V1",
+  "source_commit": "248bed666098c989f87b5cc8471d84132416bf4f",
+  "started_at": "2026-09-20T02:34:58.787002+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "8ee3227dc4b3813a5cb2e88b38fe9f8e01b470182db0ad023be267a1f0c73780",
+  "task_class": "research",
+  "task_id": "EDGE-HUNTER-KWI-RUNTIME-PATHS-E362"
+}
