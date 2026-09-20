@@ -59,6 +59,25 @@ def load_ai_transport():
 
 AI_TRANSPORT = load_ai_transport()
 
+def load_work_cadence():
+    path = ROOT / 'control/hourly/work_cadence.py'
+    spec = importlib.util.spec_from_file_location(
+        'prediction_research_work_cadence',
+        path,
+    )
+    if spec is None or spec.loader is None:
+        raise ImportError(f'cannot load work cadence from {path}')
+    mod = importlib.util.module_from_spec(spec)
+    sys.modules[spec.name] = mod
+    try:
+        spec.loader.exec_module(mod)
+    except Exception:
+        sys.modules.pop(spec.name, None)
+        raise
+    return mod
+
+WORK_CADENCE = load_work_cadence()
+
 
 class FileWrite(BaseModel):
     path: str
@@ -388,6 +407,24 @@ def enqueue(envelope: BridgeEnvelope) -> dict:
                 "recovered": recovered,
                 "git": detail,
                 "queue_status": queue_status(),
+            }
+
+        cadence_result = WORK_CADENCE.check(
+            reason=f'bridge_task:{task.task_id}',
+        )
+        if not cadence_result.get('allowed'):
+            reason = str(cadence_result.get('reason', 'CADENCE_BLOCKED'))
+            lifecycle_update(
+                task.task_id,
+                'FAILED',
+                'bridge blocked by work cadence: ' + reason,
+            )
+            return {
+                'ok': False,
+                'error': 'work cadence blocked',
+                'reason': reason,
+                'cadence': cadence_result,
+                'queue_status': queue_status(),
             }
 
         for file_write in envelope.files:

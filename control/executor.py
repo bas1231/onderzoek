@@ -1,9 +1,11 @@
 from __future__ import annotations
 
 import hashlib
+import importlib.util
 import json
 import shutil
 import subprocess
+import sys
 import time
 from datetime import datetime, timezone
 from pathlib import Path
@@ -24,6 +26,25 @@ COMPLETED = ROOT / "control/tasks/completed"
 FAILED = ROOT / "control/tasks/failed"
 RESULTS = ROOT / "control/results"
 TASK_QUEUE = ROOT / "control/TASK_QUEUE.yaml"
+
+def load_work_cadence():
+    path = ROOT / 'control/hourly/work_cadence.py'
+    spec = importlib.util.spec_from_file_location(
+        'prediction_research_executor_work_cadence',
+        path,
+    )
+    if spec is None or spec.loader is None:
+        raise ImportError(f'cannot load work cadence from {path}')
+    mod = importlib.util.module_from_spec(spec)
+    sys.modules[spec.name] = mod
+    try:
+        spec.loader.exec_module(mod)
+    except Exception:
+        sys.modules.pop(spec.name, None)
+        raise
+    return mod
+
+WORK_CADENCE = load_work_cadence()
 
 
 def now_iso() -> str:
@@ -126,6 +147,16 @@ def process_task(task_file: Path) -> str:
         return "paused"
 
     lifecycle = lifecycle_load(task.task_id)
+
+    cadence_result = WORK_CADENCE.check(
+        reason=f'executor_task:{task.task_id}',
+    )
+    if not cadence_result.get('allowed'):
+        reason = str(cadence_result.get('reason', 'CADENCE_BLOCKED'))
+        print(
+            f'{task.task_id}: executor blocked by work cadence: {reason}'
+        )
+        return 'cadence_blocked'
 
     if lifecycle.get("state") != "ACCEPTED":
         print(

@@ -154,11 +154,11 @@ def check(
 
     if not start_if_idle:
         return {
+            **state,
             "allowed": True,
             "mode": "IDLE",
             "reason": "COOLDOWN_COMPLETE",
             "state_path": str(state_path),
-            **state,
         }
 
     state = _new_work_state(current, reason)

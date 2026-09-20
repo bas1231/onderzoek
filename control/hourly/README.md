@@ -18,3 +18,4 @@ Key rules:
 - Passive local recorders that do not use ChatGPT/OpenAI may continue.
 - New evidence is compared with negative evidence, active candidates and recent research through `memory_context.py`.
 - `NO_PROVEN_EDGE` remains the default economic conclusion.
+- Nieuwe browser-bridge taken en executor-claims worden fail-closed door dezelfde `work_cadence.py` gate gecontroleerd; reeds lopende taken mogen afronden en passieve recorders blijven buiten deze gate.
