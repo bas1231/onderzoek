@@ -1,0 +1,13 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/audit_millennium_problem_rules_e441.py"
+  ],
+  "hypothesis_id": "PAYOFF-IDENTITY-MINING-V1",
+  "live_trading": false,
+  "operation": "python",
+  "task_class": "research",
+  "task_id": "EDGE-HUNTER-MILLENNIUM-RULE-AUDIT-E441",
+  "timeout_seconds": 120,
+  "working_directory": "."
+}
