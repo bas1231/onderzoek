@@ -682,9 +682,157 @@ def next_outbox_item() -> dict | None:
     return None
 
 
+def _control_continue_result(task_id: str) -> dict | None:
+    result_file = RESULTS / task_id / "RESULT.json"
+    if not result_file.exists():
+        return None
+    try:
+        result = json.loads(result_file.read_text(encoding="utf-8"))
+    except Exception:
+        return None
+    if result.get("status") not in {"completed", "failed"}:
+        return None
+    if result.get("task_class") not in {"research", "infrastructure"}:
+        return None
+    return result
+
+
+def _control_continue_item(source_task_id: str, reason: str) -> dict | None:
+    result = _control_continue_result(source_task_id)
+    if result is None:
+        return None
+
+    safe_source = "".join(
+        ch if (ch.isalnum() or ch in "._:-") else "_"
+        for ch in source_task_id
+    )[:120]
+    wake_id = ("control-continue-" + safe_source)[:150]
+
+    return {
+        "kind": "AI_WORK_BUNDLE",
+        "schema": "PVA_CONTROL_CONTINUE_V1",
+        "task_id": wake_id,
+        "run_id": "control-" + safe_source,
+        "bundle_ref": "control/results/" + source_task_id + "/RESULT.json",
+        "bundle": {
+            "schema": "PVA_CONTROL_CONTINUE_BUNDLE_V1",
+            "source_task_id": source_task_id,
+            "source_result": {
+                "status": result.get("status"),
+                "task_class": result.get("task_class"),
+                "hypothesis_id": result.get("hypothesis_id"),
+                "exit_code": result.get("exit_code"),
+                "source_commit": result.get("source_commit"),
+            },
+            "wake_reason": reason,
+            "continuation_policy": {
+                "do_not_wait_for_manual_continue": True,
+                "inspect_source_of_truth_first": True,
+                "advance_after_pass": True,
+                "diagnose_and_repair_after_failure": True,
+                "respect_work_cadence": True,
+                "no_live_trading": True,
+                "no_paid_actions": True,
+                "no_wallet_actions": True,
+                "no_openai_api": True,
+            },
+        },
+        "response_contract": {
+            "schema": "PVA_CONTROL_CONTINUE_RESPONSE_V1",
+            "direct_execution_allowed": False,
+            "economic_conclusion": "NO_PROVEN_EDGE",
+        },
+        "instruction": (
+            "Continue the currently authorized Prediction research and control-plane work "
+            "autonomously from this completed bridge result. Inspect the returned result "
+            "and repository state first. If it passed, advance to the next planned gate "
+            "or research task. If it failed, diagnose and repair it. Do not stop merely "
+            "to wait for the user to say continue. If a work-cadence cooldown or an "
+            "authorization boundary blocks further work, report that instead. Never "
+            "perform live trading, paid actions, wallet actions or OpenAI API calls."
+        ),
+        "guardrails": {
+            "live_trading": False,
+            "paid_actions": False,
+            "wallet_actions": False,
+            "openai_api": False,
+            "direct_executor_route": False,
+        },
+    }
+
+
+def _queue_control_continue(state: dict, source_task_id: str, reason: str) -> bool:
+    seen = state.setdefault("control_continue_seen", [])
+    if source_task_id in seen:
+        return False
+
+    item = _control_continue_item(source_task_id, reason)
+    if item is None:
+        return False
+
+    queue = state.setdefault("control_continue_queue", [])
+    queue.append(item)
+    seen.append(source_task_id)
+
+    while len(queue) > 100:
+        queue.pop(0)
+    while len(seen) > 500:
+        seen.pop(0)
+    return True
+
+
+def _sync_recent_ack_stall_fallbacks(state: dict) -> bool:
+    incident_dir = Path.home() / ".local" / "state" / "prediction-research" / "incidents"
+    if not incident_dir.exists():
+        return False
+
+    paths = sorted(
+        incident_dir.glob("*__CHAT_ACK_STALL.json"),
+        key=lambda path: path.stat().st_mtime,
+        reverse=True,
+    )[:1]
+    if not paths:
+        return False
+
+    try:
+        incident = json.loads(paths[0].read_text(encoding="utf-8"))
+    except Exception:
+        return False
+
+    if incident.get("reason") != "CHAT_ACK_STALL":
+        return False
+
+    last_seen = float(incident.get("last_seen_at") or incident.get("first_seen_at") or 0)
+    if last_seen and time.time() - last_seen > 1800:
+        return False
+
+    source_task_id = str(incident.get("task_id") or "")
+    if not source_task_id:
+        return False
+
+    return _queue_control_continue(state, source_task_id, "CHAT_ACK_STALL_FALLBACK")
+
+
+def _next_control_continue_item(state: dict, ai_acked: set[str]) -> dict | None:
+    for item in state.get("control_continue_queue", []):
+        if not isinstance(item, dict):
+            continue
+        task_id = str(item.get("task_id") or "")
+        if not task_id or task_id in ai_acked:
+            continue
+        return item
+    return None
+
 def next_ai_outbox_item() -> dict | None:
     state = load_state()
     ai_acked = set(state.get("ai_acked", []))
+
+    if _sync_recent_ack_stall_fallbacks(state):
+        save_state(state)
+
+    control_item = _next_control_continue_item(state, ai_acked)
+    if control_item is not None:
+        return control_item
 
     incident_dir = (
         Path.home()
@@ -815,6 +963,8 @@ def acknowledge(task_id: str) -> dict:
 
     if task_id not in acked:
         acked.append(task_id)
+
+    _queue_control_continue(state, task_id, "RESULT_ACKED")
 
     save_state(state)
 
