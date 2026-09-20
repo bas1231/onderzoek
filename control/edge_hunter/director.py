@@ -24,6 +24,7 @@ def prepare(run_id):
         "live_trading": False,
         "paid_actions": False,
         "wallet_actions": False,
+        "candidates": [load_json(path) for path in sorted((ROOT / "knowledge/candidates").glob("*.json"))],
         "lanes": {}
     }
     for lane, spec in registry["lanes"].items():
