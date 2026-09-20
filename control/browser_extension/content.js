@@ -1160,6 +1160,7 @@
       await Promise.allSettled([
         scanForTasks(),
         flushDurableQueue(),
+        pollAiOutbox(),
         pollOutbox()
       ]);
     } catch (error) {
