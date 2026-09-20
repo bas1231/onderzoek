@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/inspect_kwi_local_state_e363.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-20T02:35:30.512812+00:00",
+  "hypothesis_id": "KWI-INCOMPLETE-TO-CANONICAL-V1",
+  "source_commit": "3de9feb3e69c26030625d942074b0796c42cc9dd",
+  "started_at": "2026-09-20T02:35:30.490905+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "f29c5bc27143c2f1d8798d184b0cfcab2bd3f6c32859e1af668e7fecb5030350",
+  "task_class": "research",
+  "task_id": "EDGE-HUNTER-KWI-LOCAL-STATE-E363"
+}
