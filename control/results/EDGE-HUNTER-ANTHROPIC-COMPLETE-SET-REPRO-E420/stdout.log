@@ -1,0 +1,49 @@
+EVENT_HTTP_STATUS 200
+EVENT_SHA256 7a44b62cbf5380ad3a6cc6975792d03e7ef2e4243121a9b5449ab3c5a9de0f27
+EVENT_RAW_PATH /home/leonh/.local/state/prediction-research/raw/polymarket_gamma_events/7a44b62cbf5380ad3a6cc6975792d03e7ef2e4243121a9b5449ab3c5a9de0f27.json
+EVENT_ID 548858
+TITLE Anthropic IPO Closing Market Cap
+NEG_RISK True
+NEG_RISK_AUGMENTED False
+EVENT_GROUP_ID 0x4bcf7372694cb3ed70e31369f7602502cf80c6194e348bcba13c20b0a8936400
+EVENT_END_DATE 2027-12-31T23:55:00Z
+DESCRIPTION 'This market will resolve based on Anthropic\'s market capitalization at the closing price on its first day of trading.\n\nIf no IPO occurs by December 31, 2027, 11:59 PM ET, the market will resolve to "No IPO by December 31, 2027".\n\nMarket capitalization expresses the monetary value of a company’s outstanding shares, stated in its pricing currency. It is calculated as the number of shares outstanding multiplied by the closing share price on the first trading day.\n\nIf the relevant value falls exactly between two brackets, then this market will resolve to the higher range bracket.\n\nResolution will be based on the primary exchange’s official listing page. In the event that the relevant figure is not displayed, another reliable source will be used.\n\nIn the event of an interruption in the course of the normal trading session on Anthropic’s first day of trading (e.g., a circuit breaker or half-day), the market will resolve according to the official closing price of the abbreviated session. If no such official closing price is published, the market will resolve according to the next trading day on which an official closing price is published, treating that as the first day of trading for purposes of this market.'
+MARKET_COUNT 10
+GROUP_ID_COUNT 1
+GROUP_IDS ['0x4bcf7372694cb3ed70e31369f7602502cf80c6194e348bcba13c20b0a8936400']
+ALL_NO_NEG_RISK_OTHER True
+ALL_MARKET_DESCRIPTIONS_EQUAL_EVENT True
+DESCRIPTION_SHA256 2c663ce90df8ec63aabcd52c3c4d9af12545e80c726206441013ec6e4f1eab7a
+EXPECTED_LABEL_COUNT 10
+ACTUAL_LABELS ['<$1.25T', '$1.25–$1.5T', '$1.5–$1.75T', '$1.75–$2.0T', '$2.0–$2.25T', '$2.25–$2.5T', '$2.5–$2.75T', '$2.75–$3.0T', '$3.0T+', 'No IPO by December 31, 2027']
+LABEL_SET_MATCH True
+BOOKS_HTTP_STATUS 200
+BOOKS_SHA256 07878be4887ac482871b7a82506a87067235d70a6d6b19f9ca2e860c425f16f5
+BOOKS_RAW_PATH /home/leonh/.local/state/prediction-research/raw/polymarket_clob_books/07878be4887ac482871b7a82506a87067235d70a6d6b19f9ca2e860c425f16f5.json
+BOOK_COUNT 10
+LEG 2412744 LABEL <$1.25T ASK 0.01 ASK_SIZE 1294.92 BID 0.004 BID_SIZE 255.99 FEE 0.00198 SCHEDULE True 0.04 1 True
+LEG 2412745 LABEL $1.25–$1.5T ASK 0.019 ASK_SIZE 185.94 BID 0.016 BID_SIZE 160.0 FEE 0.00373 SCHEDULE True 0.04 1 True
+LEG 2412746 LABEL $1.5–$1.75T ASK 0.109 ASK_SIZE 278.72 BID 0.097 BID_SIZE 210.0 FEE 0.01942 SCHEDULE True 0.04 1 True
+LEG 2412747 LABEL $1.75–$2.0T ASK 0.19 ASK_SIZE 260.47 BID 0.17 BID_SIZE 510.4 FEE 0.03078 SCHEDULE True 0.04 1 True
+LEG 2412748 LABEL $2.0–$2.25T ASK 0.242 ASK_SIZE 266.51 BID 0.234 BID_SIZE 1911.42 FEE 0.03669 SCHEDULE True 0.04 1 True
+LEG 2412749 LABEL $2.25–$2.5T ASK 0.15 ASK_SIZE 343.45 BID 0.14 BID_SIZE 280.0 FEE 0.0255 SCHEDULE True 0.04 1 True
+LEG 2412750 LABEL $2.5–$2.75T ASK 0.143 ASK_SIZE 435.5 BID 0.142 BID_SIZE 360.0 FEE 0.02451 SCHEDULE True 0.04 1 True
+LEG 2412751 LABEL $2.75–$3.0T ASK 0.023 ASK_SIZE 184.78 BID 0.011 BID_SIZE 40.0 FEE 0.00449 SCHEDULE True 0.04 1 True
+LEG 2412752 LABEL $3.0T+ ASK 0.028 ASK_SIZE 681.73 BID 0.017 BID_SIZE 220.0 FEE 0.00544 SCHEDULE True 0.04 1 True
+LEG 2412753 LABEL No IPO by December 31, 2027 ASK 0.036 ASK_SIZE 5.0 BID 0.033 BID_SIZE 180.0 FEE 0.00694 SCHEDULE True 0.04 1 True
+ASK_SUM 0.95
+COMMON_SIZE 5.0
+GROSS_PER_SET 0.050000000000000044
+GROSS_TOTAL 0.2500000000000002
+FEE_KNOWN True
+TAKER_FEES_TOTAL 0.15947999999999998
+NET_TOTAL 0.09052000000000024
+NET_ROI 0.01843779789305593
+NET_POSITIVE True
+PRIOR_E419_FOUND True
+PRIOR_ASK_SUM 0.95
+PRIOR_COMMON_SIZE 5.0
+PRIOR_NET_TOTAL 0.09052000000000024
+PRIOR_NET_ROI 0.01843779789305593
+OUTPUT_PATH /home/leonh/prediction_research/knowledge/raw/market_data/polymarket_reproductions/20260920T032111Z-anthropic-548858-e420.json
+ANTHROPIC_COMPLETE_SET_REPRO_E420_PASS

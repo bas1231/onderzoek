@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/reproduce_anthropic_complete_set_e420.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-20T03:21:11.499537+00:00",
+  "hypothesis_id": "PAYOFF-IDENTITY-MINING-V1",
+  "source_commit": "51ec0aa20c70748262b50086046cd2496dfea720",
+  "started_at": "2026-09-20T03:21:11.033060+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "7cd6f25a0ec30c7a8869a0fde7681262fb0ec6af11f4ac0eef2e20437c53aa05",
+  "task_class": "research",
+  "task_id": "EDGE-HUNTER-ANTHROPIC-COMPLETE-SET-REPRO-E420"
+}
