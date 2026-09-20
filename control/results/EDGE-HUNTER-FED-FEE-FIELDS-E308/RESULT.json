@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/inspect_fed_fee_fields_e308.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-20T01:27:06.115688+00:00",
+  "hypothesis_id": "PAYOFF-IDENTITY-MINING-V1",
+  "source_commit": "dcc2b5fd0a80090fefb07bc8a565ec9b743ce433",
+  "started_at": "2026-09-20T01:27:05.899403+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "aa9a04cd77d1e7ded85c4318ee77e837eed949ad4a99efc090cbcfb2c0b592c4",
+  "task_class": "research",
+  "task_id": "EDGE-HUNTER-FED-FEE-FIELDS-E308"
+}
