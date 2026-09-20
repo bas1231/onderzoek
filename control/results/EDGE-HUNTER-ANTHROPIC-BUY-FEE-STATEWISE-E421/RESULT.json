@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/recompute_anthropic_buy_fee_statewise_e421.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-20T03:23:19.845052+00:00",
+  "hypothesis_id": "PAYOFF-IDENTITY-MINING-V1",
+  "source_commit": "81c394393599265fbdcf43a1c2603f480eff3e6e",
+  "started_at": "2026-09-20T03:23:19.823639+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "568f6f975e64bafa9ffc7537086b0336e6c701268f32d2d6fa0f71704a8fe93f",
+  "task_class": "research",
+  "task_id": "EDGE-HUNTER-ANTHROPIC-BUY-FEE-STATEWISE-E421"
+}
