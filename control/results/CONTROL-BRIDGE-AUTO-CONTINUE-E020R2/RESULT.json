@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/bootstrap_auto_continue_e020r2.py"
+  ],
+  "exit_code": 1,
+  "finished_at": "2026-09-20T22:34:22.859072+00:00",
+  "hypothesis_id": "CONTROL-NO-SILENT-STOP",
+  "source_commit": "ad3c57b6368e94549f3ed22b214e4eac338b5adb",
+  "started_at": "2026-09-20T22:34:19.907262+00:00",
+  "status": "failed",
+  "stderr_sha256": "cb548f28a6f47f072a7cb7e86fbb875a2d28539a5dd52dbb0857a044ab1a9e31",
+  "stdout_sha256": "df54ec0d535d730c4869b17ec3a8b5209c407bbbc0423367372fdf16a2536a86",
+  "task_class": "infrastructure",
+  "task_id": "CONTROL-BRIDGE-AUTO-CONTINUE-E020R2"
+}
