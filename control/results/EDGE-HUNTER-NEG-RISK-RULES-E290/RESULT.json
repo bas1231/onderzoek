@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/capture_neg_risk_rules_e290.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-20T01:14:12.741929+00:00",
+  "hypothesis_id": "PAYOFF-IDENTITY-MINING-V1",
+  "source_commit": "66ad2c65e559c0e664f79c6a0ff1721b12db0db9",
+  "started_at": "2026-09-20T01:14:12.535488+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "6ee8fbe1cc45272e9daa70b24c0942d9954b699de9b02a725c29b0d3fdcf24d5",
+  "task_class": "research",
+  "task_id": "EDGE-HUNTER-NEG-RISK-RULES-E290"
+}
