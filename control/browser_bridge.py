@@ -1,9 +1,11 @@
 from __future__ import annotations
 
+import importlib.util
 import json
 import re
 import secrets
 import subprocess
+import sys
 import threading
 import time
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
@@ -29,6 +31,33 @@ HOST = "127.0.0.1"
 PORT = 8765
 
 LOCK = threading.RLock()
+
+
+def load_ai_transport():
+    path = ROOT / "control/hourly/ai_transport.py"
+    spec = importlib.util.spec_from_file_location(
+        "prediction_research_ai_transport",
+        path,
+    )
+
+    if spec is None or spec.loader is None:
+        raise ImportError(
+            f"cannot load AI transport from {path}"
+        )
+
+    mod = importlib.util.module_from_spec(spec)
+    sys.modules[spec.name] = mod
+
+    try:
+        spec.loader.exec_module(mod)
+    except Exception:
+        sys.modules.pop(spec.name, None)
+        raise
+
+    return mod
+
+
+AI_TRANSPORT = load_ai_transport()
 
 
 class FileWrite(BaseModel):
@@ -480,6 +509,15 @@ def next_outbox_item() -> dict | None:
             if not incident.get("deliver_to_chat"):
                 continue
 
+            # Hourly research wakes have a dedicated AI-only
+            # transport. Never expose them as ordinary executor
+            # result messages as well.
+            if (
+                incident.get("reason")
+                == "HOURLY_RESEARCH_WAKE"
+            ):
+                continue
+
             raw_task_id = (
                 "INCIDENT-"
                 + incident_path.stem
@@ -587,6 +625,126 @@ def next_outbox_item() -> dict | None:
     return None
 
 
+def next_ai_outbox_item() -> dict | None:
+    state = load_state()
+    ai_acked = set(state.get("ai_acked", []))
+
+    incident_dir = (
+        Path.home()
+        / ".local"
+        / "state"
+        / "prediction-research"
+        / "incidents"
+    )
+
+    if not incident_dir.exists():
+        return None
+
+    incident_paths = sorted(
+        incident_dir.glob(
+            "*__HOURLY_RESEARCH_WAKE.json"
+        ),
+        key=lambda path: path.stat().st_mtime,
+    )
+
+    # Prefer newest valid hourly bundle.
+    for incident_path in reversed(incident_paths):
+        try:
+            incident = json.loads(
+                incident_path.read_text(
+                    encoding="utf-8"
+                )
+            )
+        except Exception:
+            continue
+
+        task_id = str(
+            incident.get("task_id") or ""
+        )
+
+        if not task_id or task_id in ai_acked:
+            continue
+
+        if not AI_TRANSPORT.should_offer_ai_work(
+            incident
+        ):
+            continue
+
+        try:
+            item = AI_TRANSPORT.build_chat_item(
+                incident
+            )
+        except Exception:
+            continue
+
+        # Explicitly fail closed against accidental executor
+        # semantics.
+        forbidden = {
+            "command",
+            "shell",
+            "argv",
+            "exec",
+            "executable",
+        }
+
+        if forbidden.intersection(item):
+            continue
+
+        if item.get("kind") != "AI_WORK_BUNDLE":
+            continue
+
+        guardrails = item.get("guardrails") or {}
+
+        if (
+            guardrails.get("direct_executor_route")
+            is not False
+        ):
+            continue
+
+        return item
+
+    return None
+
+
+def acknowledge_ai(task_id: str) -> dict:
+    state = load_state()
+
+    item = next_ai_outbox_item()
+
+    if (
+        not item
+        or item.get("task_id") != task_id
+    ):
+        if task_id in set(
+            state.get("ai_acked", [])
+        ):
+            return {
+                "ok": True,
+                "task_id": task_id,
+                "already_acked": True,
+            }
+
+        return {
+            "ok": False,
+            "error": "unknown AI work item",
+        }
+
+    ai_acked = state.setdefault(
+        "ai_acked",
+        [],
+    )
+
+    if task_id not in ai_acked:
+        ai_acked.append(task_id)
+
+    save_state(state)
+
+    return {
+        "ok": True,
+        "task_id": task_id,
+    }
+
+
 def acknowledge(task_id: str) -> dict:
     state = load_state()
 
@@ -681,6 +839,15 @@ class Handler(BaseHTTPRequestHandler):
                 200,
                 {
                     "item": next_outbox_item()
+                },
+            )
+            return
+
+        if path == "/ai-outbox":
+            self.send_json(
+                200,
+                {
+                    "item": next_ai_outbox_item()
                 },
             )
             return
@@ -905,6 +1072,16 @@ class Handler(BaseHTTPRequestHandler):
                 if path == "/ack":
                     task_id = str(payload.get("task_id", ""))
                     result = acknowledge(task_id)
+
+                    self.send_json(
+                        200 if result.get("ok") else 404,
+                        result,
+                    )
+                    return
+
+                if path == "/ai-ack":
+                    task_id = str(payload.get("task_id", ""))
+                    result = acknowledge_ai(task_id)
 
                     self.send_json(
                         200 if result.get("ok") else 404,
