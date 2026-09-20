@@ -1,0 +1,13 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/preregister_kwi_full_station_lag_e368.py"
+  ],
+  "hypothesis_id": "KWI-FULL-STATION-PRECANONICAL-V1",
+  "live_trading": false,
+  "operation": "python",
+  "task_class": "research",
+  "task_id": "EDGE-HUNTER-KWI-FULL-STATION-PREREG-E368",
+  "timeout_seconds": 120,
+  "working_directory": "."
+}
