@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/place_order_test.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-20T19:26:34.681437+00:00",
+  "hypothesis_id": "CONTROL-POLICY-TEST",
+  "source_commit": "7f94eecc30b2349e29477113bcd231c1cf3dbd74",
+  "started_at": "2026-09-20T19:26:34.666604+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "7772a44f2061b652971b1ed7a1103a01158171bcec73d944ce7e489c1daa6c61",
+  "task_class": "infrastructure",
+  "task_id": "POLICY-EXECUTOR-HOOK-E001"
+}
