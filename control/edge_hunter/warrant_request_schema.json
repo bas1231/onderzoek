@@ -1,0 +1,41 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "build_kind": {
+      "enum": [
+        "research_instrument",
+        "data_capture",
+        "offline_analysis",
+        "replay",
+        "shadow_analysis"
+      ],
+      "type": "string"
+    },
+    "candidate_id": {
+      "minLength": 3,
+      "type": "string"
+    },
+    "capabilities": {
+      "items": {
+        "minLength": 1,
+        "type": "string"
+      },
+      "maxItems": 64,
+      "type": "array",
+      "uniqueItems": true
+    },
+    "objective": {
+      "minLength": 3,
+      "type": "string"
+    }
+  },
+  "required": [
+    "candidate_id",
+    "build_kind",
+    "objective",
+    "capabilities"
+  ],
+  "title": "Edge Hunter Pre-build Warrant Request",
+  "type": "object",
+  "version": 1
+}
