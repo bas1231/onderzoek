@@ -1,0 +1,1 @@
+print('BRIDGE_ENQUEUE_CANARY_OK')

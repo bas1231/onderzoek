@@ -1,0 +1,13 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/bridge_canary_e249.py"
+  ],
+  "hypothesis_id": "CONTROL-NO-SILENT-WAITING",
+  "live_trading": false,
+  "operation": "python",
+  "task_class": "infrastructure",
+  "task_id": "BRIDGE-ENQUEUE-CANARY-E249",
+  "timeout_seconds": 30,
+  "working_directory": "."
+}
