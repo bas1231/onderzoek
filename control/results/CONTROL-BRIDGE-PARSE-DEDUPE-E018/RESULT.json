@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/fix_parse_incident_dedupe_e018.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-20T21:52:30.966253+00:00",
+  "hypothesis_id": "CONTROL-BRIDGE-RELIABILITY",
+  "source_commit": "4ae8212b0b2b4b222650db66492c62946c66bf39",
+  "started_at": "2026-09-20T21:52:29.311736+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "41b69daa4cfa70576344b9ef51fee1754e9288e2c48f452811fd3463595a849b",
+  "task_class": "infrastructure",
+  "task_id": "CONTROL-BRIDGE-PARSE-DEDUPE-E018"
+}
