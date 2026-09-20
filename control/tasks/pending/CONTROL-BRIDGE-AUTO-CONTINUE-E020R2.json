@@ -1,0 +1,24 @@
+{
+  "build_authorization": {
+    "build_kind": "control_plane",
+    "capabilities": [
+      "modify_repository",
+      "commit_local_changes",
+      "run_local_tests",
+      "restart_local_service"
+    ],
+    "mode": "control_plane",
+    "objective": "Install and verify permanent server-side auto-continuation so completed or failed bridge work automatically wakes the Research Director instead of waiting for a manual continue message."
+  },
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/bootstrap_auto_continue_e020r2.py"
+  ],
+  "hypothesis_id": "CONTROL-NO-SILENT-STOP",
+  "live_trading": false,
+  "operation": "python",
+  "task_class": "infrastructure",
+  "task_id": "CONTROL-BRIDGE-AUTO-CONTINUE-E020R2",
+  "timeout_seconds": 300,
+  "working_directory": "."
+}
