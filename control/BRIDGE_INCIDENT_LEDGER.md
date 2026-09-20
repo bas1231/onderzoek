@@ -91,6 +91,17 @@ Doel: append-only overzicht van concrete browser-bridge failures en lessen. Gebr
 - Preventie: volgende retry gebruikt een korte single-line Python job zonder letterlijke dubbele quotes in `content`; daarna aparte runtime/syntaxvalidatie.
 - Status: OPEN; failure remote gedocumenteerd, fix nog niet bewezen.
 
+## 2026-09-20 — E019 OUTBOX_FAIRNESS_PATCH_FAILURE
+
+- Laag: lokale patchgenerator / Python syntax.
+- Task: `CONTROL-BRIDGE-OUTBOX-FAIRNESS-E019`.
+- Symptoom: `SyntaxError` in gegenereerde `control/browser_bridge.py` op `if task_id not `in tracked_tasks:`.
+- Bewezen oorzaak: de base64-bron voor de vervangende `next_outbox_item()` bevatte één verdwaalde backtick vóór `in`; de fout zat dus in de gegenereerde patchtekst, niet in de bestaande bridge.
+- Veilig gedrag: de patchjob detecteerde de syntaxfout via `py_compile`, herstelde daarna de oorspronkelijke `browser_bridge.py` en herstelde/verwijderde ook de tijdelijke test. Er is geen defecte fairness-code gecommit.
+- Les: ook base64-bootstrapcode moet vóór verzending lokaal syntactisch worden gegenereerd/gevalideerd; transportveilig betekent niet automatisch broncode-correct.
+- Vervolg: E019R gebruikt opnieuw gegenereerde en vooraf geparste Python-bron plus dezelfde regressie-eis: met tegelijk een normaal resultaat en een incident komt eerst het normale resultaat, daarna het incident.
+- Status: FAILED_SAFE; fairness-fix nog niet geïmplementeerd.
+
 ## Regels voor nieuwe entries
 
 Voeg per incident toe: datum, task-id, foutlaag, exacte foutklasse, bewezen oorzaak versus hypothese, impact, fix/preventie, regressieteststatus en of de oplossing alleen lokaal of ook op remote main staat.
