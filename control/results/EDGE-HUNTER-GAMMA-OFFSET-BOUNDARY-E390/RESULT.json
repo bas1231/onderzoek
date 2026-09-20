@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/diagnose_gamma_offset_boundary_e390.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-20T02:53:43.111028+00:00",
+  "hypothesis_id": "PAYOFF-IDENTITY-MINING-V1",
+  "source_commit": "ad565bbc2c8678b0133e515cf7817cecb0750bd6",
+  "started_at": "2026-09-20T02:53:39.883514+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "72112bccedef098449d0b86cd31833391e15eb93b3f7e3defbfef29654d7014e",
+  "task_class": "research",
+  "task_id": "EDGE-HUNTER-GAMMA-OFFSET-BOUNDARY-E390"
+}
