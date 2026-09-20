@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/locate_kwi_recorder_paths_e360.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-20T02:33:45.838274+00:00",
+  "hypothesis_id": "KWI-INCOMPLETE-TO-CANONICAL-V1",
+  "source_commit": "c98618b8da03c52ffa5dc6734522fd4cffb8ac61",
+  "started_at": "2026-09-20T02:33:45.709058+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "09ffb28d13b9927cb47a33149e419ae04fab2996f21c326ac5441cb1bb5220a3",
+  "task_class": "research",
+  "task_id": "EDGE-HUNTER-KWI-RECORDER-PATHS-E360"
+}
