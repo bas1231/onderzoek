@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/inspect_kwi_manifest_nested_e364.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-20T02:36:02.267008+00:00",
+  "hypothesis_id": "KWI-INCOMPLETE-TO-CANONICAL-V1",
+  "source_commit": "34e470e025e29c0d8298a18686a4bcc17878e3a3",
+  "started_at": "2026-09-20T02:36:02.235808+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "42eb9537f2e1fb3ded7fbcefd7b59bb78b97e3bfaa818e39d5e7c06b9578d1f8",
+  "task_class": "research",
+  "task_id": "EDGE-HUNTER-KWI-NESTED-MANIFEST-E364"
+}

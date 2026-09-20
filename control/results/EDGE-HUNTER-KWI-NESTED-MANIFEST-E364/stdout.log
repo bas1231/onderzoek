@@ -1,0 +1,285 @@
+MANIFEST kwi-20260920T023519.097924+0000-815b5a3d3589.json
+RETRIEVED_AT 2026-09-20T02:35:19.097924+00:00
+CITIES_KIND LIST
+CITY_ENTRY_COUNT 3
+CITY_ENTRY 0
+KEYS ['bytes', 'city', 'config_version', 'content_type', 'guards', 'latest_any', 'latest_complete', 'latest_complete_t_changed', 'latest_complete_v_changed_for_same_t', 'latest_incomplete', 'payload_changed', 'previous_sha256', 'sha256', 'status', 'timeseries_count', 'units']
+FIELD bytes 155348
+FIELD city nyc
+FIELD config_version nyc-temperature-v1.0-cal-20260914
+FIELD content_type application/json; charset=utf-8
+FIELD guards ["Public Kalshi weather timeseries availability does not by itself prove contract settlement equivalence.", "Incomplete points are not treated as final.", "No market edge is inferred without contemporaneous executable market data."]
+FIELD latest_any {"stations": [{"code": "pending", "received_at_ms": 1789871661833, "source": "hf_asos", "station_id": "KCDW1M", "temp_f": 64.4}, {"code": "pending", "received_at_ms": 1789871663162, "source": "hf_asos", "station_id": "KEWR1M", "temp_f": 66.2}, {"code": "pending", "received_at_ms": 1789871663162, "source": "hf_asos", "station_id": "KFRG1M", "temp_f": 64.4}, {"code": "pending", "received_at_ms": 1789871663162, "source": "hf_asos", "station_id": "KHPN1M", "temp_f": 62.6}, {"code": "pending", "received_at_ms": 1789871663162, "source": "hf_asos", "station_id": "KISP1M", "temp_f": 62.6}, {"code": "pending", "received_at_ms": 1789871663162, "source": "hf_asos", "station_id": "KLGA1M", "temp_f": 66.2}, {"code": "pending", "received_at_ms": 1789871663713, "source": "hf_asos", "station_id": "KSMQ1M", "temp_f": 64.4}, {"code": "pending", "received_at_ms": 1789871663713, "source": "hf_asos", "station_id": "KTEB1M", "temp_f": 66.2}], "status": "incomplete", "t": 1789871520000}
+FIELD latest_complete {"contributors": 8, "stations": [{"code": "ok", "received_at_ms": 1789871544323, "source": "hf_asos", "station_id": "KCDW1M", "temp_f": 64.4}, {"code": "ok", "received_at_ms": 1789871542716, "source": "hf_asos", "station_id": "KEWR1M", "temp_f": 66.2}, {"code": "ok", "received_at_ms": 1789871545984, "source": "hf_asos", "station_id": "KFRG1M", "temp_f": 64.4}, {"code": "ok", "received_at_ms": 1789871545478, "source": "hf_asos", "station_id": "KHPN1M", "temp_f": 62.6}, {"code": "ok", "received_at_ms": 1789871542716, "source": "hf_asos", "station_id": "KISP1M", "temp_f": 62.6}, {"code": "ok", "received_at_ms": 1789871545984, "source": "hf_asos", "station_id": "KLGA1M", "temp_f": 66.2}, {"code": "ok", "received_at_ms": 1789871543816, "source": "hf_asos", "station_id": "KSMQ1M", "temp_f": 64.4}, {"code": "ok", "received_at_ms": 1789871543816, "source": "hf_asos", "station_id": "KTEB1M", "temp_f": 66.2}], "status": "normal", "t": 1789871400000, "v": 64.63}
+FIELD latest_complete_t_changed True
+FIELD latest_complete_v_changed_for_same_t False
+FIELD latest_incomplete {"stations": [{"code": "pending", "received_at_ms": 1789871661833, "source": "hf_asos", "station_id": "KCDW1M", "temp_f": 64.4}, {"code": "pending", "received_at_ms": 1789871663162, "source": "hf_asos", "station_id": "KEWR1M", "temp_f": 66.2}, {"code": "pending", "received_at_ms": 1789871663162, "source": "hf_asos", "station_id": "KFRG1M", "temp_f": 64.4}, {"code": "pending", "received_at_ms": 1789871663162, "source": "hf_asos", "station_id": "KHPN1M", "temp_f": 62.6}, {"code": "pending", "received_at_ms": 1789871663162, "source": "hf_asos", "station_id": "KISP1M", "temp_f": 62.6}, {"code": "pending", "received_at_ms": 1789871663162, "source": "hf_asos", "station_id": "KLGA1M", "temp_f": 66.2}, {"code": "pending", "received_at_ms": 1789871663713, "source": "hf_asos", "station_id": "KSMQ1M", "temp_f": 64.4}, {"code": "pending", "received_at_ms": 1789871663713, "source": "hf_asos", "station_id": "KTEB1M", "temp_f": 66.2}], "status": "incomplete", "t": 1789871520000}
+FIELD payload_changed True
+FIELD previous_sha256 a472217484185dcd6b0f2f0e55595e6cd15e31a3fd293b10f891b46da875312d
+FIELD sha256 d0e08476d3448a6ceff03202664ee093b6cb26509166754b8238dd6598d79593
+FIELD status 200
+FIELD timeseries_count 177
+FIELD units fahrenheit
+---
+CITY_ENTRY 1
+KEYS ['bytes', 'city', 'config_version', 'content_type', 'guards', 'latest_any', 'latest_complete', 'latest_complete_t_changed', 'latest_complete_v_changed_for_same_t', 'latest_incomplete', 'payload_changed', 'previous_sha256', 'sha256', 'status', 'timeseries_count', 'units']
+FIELD bytes 101777
+FIELD city miami
+FIELD config_version miami-temperature-v1.0-cal-20260914
+FIELD content_type application/json; charset=utf-8
+FIELD guards ["Public Kalshi weather timeseries availability does not by itself prove contract settlement equivalence.", "Incomplete points are not treated as final.", "No market edge is inferred without contemporaneous executable market data."]
+FIELD latest_any {"stations": [{"code": "pending", "received_at_ms": 1789871663162, "source": "hf_asos", "station_id": "KFLL1M", "temp_f": 75.2}, {"code": "pending", "received_at_ms": 1789871663162, "source": "hf_asos", "station_id": "KFXE1M", "temp_f": 75.2}, {"code": "pending", "received_at_ms": 1789871663713, "source": "hf_asos", "station_id": "KMIA1M", "temp_f": 77}, {"code": "pending", "received_at_ms": 1789871663162, "source": "hf_asos", "station_id": "KOPF1M", "temp_f": 75.2}, {"code": "pending", "received_at_ms": 1789871663713, "source": "hf_asos", "station_id": "KPMP1M", "temp_f": 75.2}], "status": "incomplete", "t": 1789871520000}
+FIELD latest_complete {"contributors": 5, "stations": [{"code": "ok", "received_at_ms": 1789871542716, "source": "hf_asos", "station_id": "KFLL1M", "temp_f": 75.2}, {"code": "ok", "received_at_ms": 1789871545984, "source": "hf_asos", "station_id": "KFXE1M", "temp_f": 75.2}, {"code": "ok", "received_at_ms": 1789871545984, "source": "hf_asos", "station_id": "KMIA1M", "temp_f": 77}, {"code": "ok", "received_at_ms": 1789871543816, "source": "hf_asos", "station_id": "KOPF1M", "temp_f": 75.2}, {"code": "ok", "received_at_ms": 1789871545984, "source": "hf_asos", "station_id": "KPMP1M", "temp_f": 77}], "status": "normal", "t": 1789871400000, "v": 75.92}
+FIELD latest_complete_t_changed True
+FIELD latest_complete_v_changed_for_same_t False
+FIELD latest_incomplete {"stations": [{"code": "pending", "received_at_ms": 1789871663162, "source": "hf_asos", "station_id": "KFLL1M", "temp_f": 75.2}, {"code": "pending", "received_at_ms": 1789871663162, "source": "hf_asos", "station_id": "KFXE1M", "temp_f": 75.2}, {"code": "pending", "received_at_ms": 1789871663713, "source": "hf_asos", "station_id": "KMIA1M", "temp_f": 77}, {"code": "pending", "received_at_ms": 1789871663162, "source": "hf_asos", "station_id": "KOPF1M", "temp_f": 75.2}, {"code": "pending", "received_at_ms": 1789871663713, "source": "hf_asos", "station_id": "KPMP1M", "temp_f": 75.2}], "status": "incomplete", "t": 1789871520000}
+FIELD payload_changed True
+FIELD previous_sha256 e61e752d78c675f94c051a571ef38ab7de3c5cbdde93cd796baf58b0a62a9136
+FIELD sha256 31e25de8a5c55f7a06cdea75a33ab9f16fb1b2debf54f6401e7dc6ef203eca87
+FIELD status 200
+FIELD timeseries_count 177
+FIELD units fahrenheit
+---
+CITY_ENTRY 2
+KEYS ['bytes', 'city', 'config_version', 'content_type', 'guards', 'latest_any', 'latest_complete', 'latest_complete_t_changed', 'latest_complete_v_changed_for_same_t', 'latest_incomplete', 'payload_changed', 'previous_sha256', 'sha256', 'status', 'timeseries_count', 'units']
+FIELD bytes 101983
+FIELD city chicago
+FIELD config_version chicago-temperature-v1.0-cal-20260914
+FIELD content_type application/json; charset=utf-8
+FIELD guards ["Public Kalshi weather timeseries availability does not by itself prove contract settlement equivalence.", "Incomplete points are not treated as final.", "No market edge is inferred without contemporaneous executable market data."]
+FIELD latest_any {"stations": [{"code": "pending", "received_at_ms": 1789871661833, "source": "hf_asos", "station_id": "KDPA1M", "temp_f": 68}], "status": "incomplete", "t": 1789871580000}
+FIELD latest_complete {"contributors": 5, "stations": [{"code": "ok", "received_at_ms": 1789871542716, "source": "hf_asos", "station_id": "KARR1M", "temp_f": 69.8}, {"code": "ok", "received_at_ms": 1789871481671, "source": "hf_asos", "station_id": "KDPA1M", "temp_f": 68}, {"code": "ok", "received_at_ms": 1789871545984, "source": "hf_asos", "station_id": "KMDW1M", "temp_f": 69.8}, {"code": "ok", "received_at_ms": 1789871543816, "source": "hf_asos", "station_id": "KORD1M", "temp_f": 68}, {"code": "ok", "received_at_ms": 1789871545984, "source": "hf_asos", "station_id": "KPWK1M", "temp_f": 66.2}], "status": "normal", "t": 1789871400000, "v": 68.36}
+FIELD latest_complete_t_changed True
+FIELD latest_complete_v_changed_for_same_t False
+FIELD latest_incomplete {"stations": [{"code": "pending", "received_at_ms": 1789871661833, "source": "hf_asos", "station_id": "KDPA1M", "temp_f": 68}], "status": "incomplete", "t": 1789871580000}
+FIELD payload_changed True
+FIELD previous_sha256 2e86668d68f14626b290c4362fe12224c83f4d3ba6d9313ae5570eec2dce9f58
+FIELD sha256 22ac614a9740c2b5051cd4e8f11e68ad36aacc1859b81dd4ac934e5f86d50219
+FIELD status 200
+FIELD timeseries_count 178
+FIELD units fahrenheit
+---
+RAW_EXISTS True
+RAW_DIR .
+RAW_DIR cftc
+RAW_FILE cftc/015b36096113b251bc8b134a8cbf318b9872525aa1db32ec629dd9b2f97e6ebb.bin SIZE 56369
+RAW_FILE cftc/03c50f4456a22f805032eed06f72f757985be5ef890fc1fd9ff6954c416f6dd9.bin SIZE 56369
+RAW_FILE cftc/160b4a17edbedd96600b546ca0dd2b24ea719348a72d25a866659eb899255e7b.bin SIZE 56369
+RAW_FILE cftc/1b3dc2876eb592e88512a72f9add2378d3fa099e7259613715ddfac51ce03777.bin SIZE 56369
+RAW_FILE cftc/460f19f4285617cf8b5f3756603f24c0b555f1afea9750a0fc063ee907b02b84.bin SIZE 56369
+RAW_FILE cftc/7a3fb05744f88a17539b9b6e441fa37cb1343d9674d91aab17be283aa238e25e.bin SIZE 56369
+RAW_FILE cftc/7eda46ec96f63845772095154b42005234750ca09bbc62dfb1a0a95ae001ad86.bin SIZE 56369
+RAW_FILE cftc/7f2da4d5eb2d671697956e5a88da290cbfdd57a53f336269c8617ca4ee502cf7.bin SIZE 56369
+RAW_FILE cftc/a242112979e030b5ce9dd44cc849684876ab1541faf7f1b33f6326a145cd38b4.bin SIZE 56369
+RAW_FILE cftc/d20042cf26ac911863f4d1e07c649c7b14fdf229720bcf4d80eb88c070a66bd1.bin SIZE 56369
+RAW_DIR kalshi_weather_rules
+RAW_FILE kalshi_weather_rules/1c1c1110d5aaa97eba247056c3cd9e877b546e618c7a2326d16e259df34a7246.bin SIZE 82130
+RAW_FILE kalshi_weather_rules/48cb73fffd002b60436f9b34e81593e2b2201f0a0cab201a32aa3aa9e4ca8de1.bin SIZE 82130
+RAW_FILE kalshi_weather_rules/50f008134d660aeae541e57e18d288862193423c02c9bdcbe182e115f53f0bd8.bin SIZE 82130
+RAW_FILE kalshi_weather_rules/633803fc9af9ded172b8f985a053ad41ba67bf385f538f9ea00f995a6564472b.bin SIZE 82148
+RAW_FILE kalshi_weather_rules/87f6e9aa1d94ad0dc9e8b4d9ad4e53a2b555ffa09a472e6675780f61fd654737.bin SIZE 82142
+RAW_FILE kalshi_weather_rules/ed25de24cd741654b83c4a4e3998402b4528b3bfb304697874a41cabacabd614.bin SIZE 82130
+RAW_FILE kalshi_weather_rules/ed4856f1dc651640e9e43309f1bddb21726bc06b61d20f774b6c5acd575e32a4.bin SIZE 82124
+RAW_DIR polymarket_docs
+RAW_FILE polymarket_docs/6061d788333a11345f9b58eac43e8ad235ee9315b5bdb7acf8e01b8fc02342b7.bin SIZE 445795
+RAW_DIR kalshi_hourly_transition_e212
+RAW_FILE kalshi_hourly_transition_e212/0544a6f75c918b5c1393b16856233d88ae728a46f8b9353359cbff5b42dbace4.json SIZE 19529
+RAW_FILE kalshi_hourly_transition_e212/080fca3502fe2ef58064cd7844fbe78d5b16b6916634479042be46cb3028628d.json SIZE 19540
+RAW_FILE kalshi_hourly_transition_e212/3aaab47ec53467910922d3fe40018b2fc1ddb8e108869d7c142c75c7f4a230d6.json SIZE 19529
+RAW_FILE kalshi_hourly_transition_e212/50699ea1db13415ea46ec367dcfa58decd9660083271c5dc061561f38337fbac.json SIZE 27
+RAW_FILE kalshi_hourly_transition_e212/59ee89e53dc5afeb184d5d6c5f98e87a4492d426f850ec49b81bb012f1e7f79b.json SIZE 21034
+RAW_FILE kalshi_hourly_transition_e212/681bd3c532eba369fac4314256845c5e73b0ac26c048230652e3423e6fc075e1.json SIZE 21192
+RAW_FILE kalshi_hourly_transition_e212/9a344903ef2dba834fccabb632519bfc58b3c2bd1caedbc1aa5d6a87696f8e2e.json SIZE 20968
+RAW_FILE kalshi_hourly_transition_e212/c8b4a18488f8e92c4b0c8c87d5438fc062c33e1dbc6d8fad7656c180551e5095.json SIZE 18596
+RAW_DIR kalshi_docs
+RAW_FILE kalshi_docs/94c183be8dd7141d7c8bee939c2ff1fb07caac3c559161afa319daad968ad5ce.bin SIZE 219716
+RAW_DIR aviationweather
+RAW_FILE aviationweather/dd6e0cc4b237e05406554eb33d2b7963367175f44a5a0ae0feb4e59f707b0edf.bin SIZE 39257
+RAW_DIR youtube
+RAW_FILE youtube/07e32ab80b8b33a8e1fd31908468b70b7851cdb75ff30506359d6d3b30ab8365.bin SIZE 750000
+RAW_FILE youtube/14b2fb4613b90626a1a3dacda3bb9d04fed5015c8a5f81e10a1a7531ffe69293.bin SIZE 750000
+RAW_FILE youtube/37a0ec5916c12ef918c47e85038cf5a5b5e7a8db73851744718b435e1111ad47.bin SIZE 750000
+RAW_FILE youtube/37e8087e66de5be0cf8018030a346e143c03b63f91063beca7d41b32326dca1e.bin SIZE 750000
+RAW_FILE youtube/47401bed1169bb9f24c1d4c296b697d8887bed7ebd327a088323e6102174fe4c.bin SIZE 750000
+RAW_FILE youtube/5abbf3c6ad885db177b7f04d4fbc0bd9392b8df7a2076f2f6b21f47d0b96fd58.bin SIZE 750000
+RAW_FILE youtube/83be8f6905e1893f83fc657fc4710a63ec91597fa9ca51eb89d37829efc5f759.bin SIZE 750000
+RAW_FILE youtube/841c9ee3fd889d9a9386b7843ae5ecf39e72d53203a1a7729215cae4d9c66612.bin SIZE 750000
+RAW_FILE youtube/b5fd33e08c5f3f8b824f4c0780e5fc99bfe4f11d8bf1645a73fcbdf47ae377c8.bin SIZE 750000
+RAW_FILE youtube/c1dd6bbb0408b54bc53a0730e8894977914432885548787e20a4763e6715847e.bin SIZE 750000
+RAW_DIR ecmwf_open
+RAW_FILE ecmwf_open/83c3dee07ef5f6d1a434fb3688a9a39e6aec75080ea93f3c0f9b60cea8df0be0.bin SIZE 104747
+RAW_DIR nomads
+RAW_FILE nomads/17b612682f1f4373ee6b30132c1a545106c84bc415de5809d6b3696ed6b85c66.bin SIZE 52105
+RAW_FILE nomads/2767bb0a732969e132093208c38b5c7e4cd52a84cf31385a56526a66ee2059db.bin SIZE 52105
+RAW_FILE nomads/32fda37a95c09443ce22a6252549c086065723053e7328dc3bf41e8d024968ab.bin SIZE 52105
+RAW_FILE nomads/393d62d098662fd9f091c1f6c8e9a1049aa30bb8d48da388f62cf4042233e38f.bin SIZE 52105
+RAW_FILE nomads/4082f3d055b79ec791859f5b977787eddd736135c1b2f23e1ed58d3753bda363.bin SIZE 52105
+RAW_FILE nomads/81a9b969321db87acfee4c13406f5b1bad540e6222671ef2f6fcd09d030e79be.bin SIZE 52105
+RAW_FILE nomads/abe08f22b730ccaefadbfaa211550c1ffe77efb68dffeb2329548aead291bfcc.bin SIZE 52105
+RAW_FILE nomads/ac1877039efbe086216ceaaeea58c81471bc265b61a522c191a43a091420525c.bin SIZE 52105
+RAW_FILE nomads/b2b9d065fcb7b7bf682c681b4d5164bcfc32a58ef518da9f2123b44581506f8b.bin SIZE 52105
+RAW_FILE nomads/c923f06db57b0b7f6d4b8bb160e646fd713e72dad51c6360e246e69b2785a500.bin SIZE 52105
+RAW_DIR kalshi_hourly_series_e209
+RAW_FILE kalshi_hourly_series_e209/41310dd55b3b1bbf326bbac244c914e8ec7cc1f05e6a959ae80ff679d1794966.json SIZE 2090426
+RAW_FILE kalshi_hourly_series_e209/4a80a7e6af6b591d860fac2da89bbf0a426a47b848bfea1aa879714b6c8fe22f.json SIZE 1948391
+RAW_FILE kalshi_hourly_series_e209/5298a32a5d8f46b6870f594ec2ccdf1a3df0ce06ea61647b4ecd16c37fae4540.json SIZE 2098896
+RAW_FILE kalshi_hourly_series_e209/65ad1e94b8b8bbf2bcc75d87b88b27b991d3dfab759d67421cedb103828753f6.json SIZE 2112552
+RAW_FILE kalshi_hourly_series_e209/7284465a447af00200e8b173eb36e6586a9f1fcf98ce2f36288eec54ee2a0506.json SIZE 1219
+RAW_FILE kalshi_hourly_series_e209/c1df43127778c890977829956ff151bf15f30addded4c9f648437d0e90ed000b.json SIZE 1221
+RAW_FILE kalshi_hourly_series_e209/d278a246b6f4bad551e5a99f5e7f6c73e66ffb1f765c901c8b28ab722d7581ee.json SIZE 1227
+RAW_FILE kalshi_hourly_series_e209/d3d58b8ef78c828a258964e5d22f3eda5b6ff8b03b644401179bf3c31670b5e5.json SIZE 1138
+RAW_DIR reddit
+RAW_FILE reddit/0cf599cc5338ed27c3a328f733cfa4c1b771da1e97b700a6430d47b8d2b4b7ac.bin SIZE 8397
+RAW_FILE reddit/1f57d31ad5289f981c0be5e87d44eb13d69e2e6b83f89202c2be0617c3acee0d.bin SIZE 8397
+RAW_FILE reddit/208c023c0c9c1e87968d48a9ad25150c58bcda41adc545a2dfc6d50f4f64b5c2.bin SIZE 8397
+RAW_FILE reddit/40726502428cce9917fff244a039060f4ccc1ccb35290896e255a65319e0f441.bin SIZE 8397
+RAW_FILE reddit/4c42fd38e4361f868c861d2c5a8cb8b43a2f56c79b5bef2584dc264cf53f0289.bin SIZE 8397
+RAW_FILE reddit/5620024e66fe49a82665e45c457adc56daf1e33aec07a122ebd5c0760f504dec.bin SIZE 8397
+RAW_FILE reddit/99a9aa759ce8f30697a42e25f96fd31736d3b14408b87223cd4c8d2597fa2e22.bin SIZE 8397
+RAW_FILE reddit/ce78967db48ddfd0fd1f98c74a342b39636d580af54d47ddc08548f5e76adffc.bin SIZE 8397
+RAW_FILE reddit/edb3e1bb1d16cb777daa4becbbc0f8f85a313461272e1183f50a7e7168844e27.bin SIZE 8397
+RAW_FILE reddit/fadd1892faab68e2f91bfea90729dd12e3b5c86e73a2ac80e2d6bf7fd97a6cf1.bin SIZE 8397
+RAW_DIR kalshi_public_weather_e208
+RAW_FILE kalshi_public_weather_e208/03c60e5a3b45cef8213b2ffd41e874f1ad673f2dba2fc56ab9a6bdefbeb97f67.json SIZE 4040132
+RAW_FILE kalshi_public_weather_e208/0a8f334b4a9d26ed9734b56f95f127913a740de242f68687341072695d2496d8.json SIZE 4140725
+RAW_FILE kalshi_public_weather_e208/392ee94579c50b965a9e33826d6d163fe3900b8486d61bdbfd615f0c1975857e.json SIZE 67062
+RAW_FILE kalshi_public_weather_e208/4abea168d246c259a084284c8042ecb3add01eba2b535273728be7459f3208ec.json SIZE 68406
+RAW_FILE kalshi_public_weather_e208/557913a42ad7d0bd8cfda81c087bc523868e3be455882acc8da79f4724aa2d3a.json SIZE 4182653
+RAW_FILE kalshi_public_weather_e208/5d78bd07c50c2d7869cf5fb0ca44bd2f4abe4b8310279f10bad61a67b0a12293.json SIZE 100570
+RAW_FILE kalshi_public_weather_e208/8b3ab1b0b96942ae289ae5cfc3ce1a7f1d9bec226b85d6ef66a4dfb876007506.json SIZE 4147458
+RAW_FILE kalshi_public_weather_e208/9bc78e68c0bf62dbeafe9677709e333133261509a36b3adf11de3c399c521511.json SIZE 4157660
+RAW_FILE kalshi_public_weather_e208/bd8baae36d6bb8ee0bbb4b0bf4d1319b4e27b310d3f896f3e77090609cee4d41.json SIZE 4284698
+RAW_FILE kalshi_public_weather_e208/c9e3ae021469562d38bacdb49623fc6261e584501cba30dc9fc8a8dcc2577444.json SIZE 4230722
+RAW_FILE kalshi_public_weather_e208/d742bfa1bbf52f99d4155943fd30d318ac10c335e46e3e2eaa08f5e44fe9eded.json SIZE 4157188
+RAW_FILE kalshi_public_weather_e208/e00a3b8f28ca78c030ee2f60545c8fb222ace687edf396382a5182465d58be2b.json SIZE 4152026
+RAW_FILE kalshi_public_weather_e208/e3137e1c60e0a93ba5900be568526725b6b592a7caa324a1c5bb136f6b511786.json SIZE 4218529
+RAW_FILE kalshi_public_weather_e208/ed128a107da84936034935df5a50aaf44cec25f3f1a93dfe4866a66b56256b64.json SIZE 4206846
+RAW_FILE kalshi_public_weather_e208/f943caf092e4f697c15feb603096f9a8d9a54e7e581e88d0977193d272abd25c.json SIZE 4052583
+RAW_DIR arxiv
+RAW_FILE arxiv/d7ed6c1e9723edcceae8a3d3f258a7ca991bd64f841fad43632caa13a7fad746.bin SIZE 38051
+RAW_DIR kalshi_weather_index
+RAW_DIR kalshi_weather_index/chicago
+RAW_FILE kalshi_weather_index/chicago/0082db2f2d987a794acc5eded18ccc546c73f29eb98acb4d589cacb187e098df.json SIZE 103593
+RAW_FILE kalshi_weather_index/chicago/00eae32e2de43fc1521a10082679d0d5215024fe724b6f32423eda09a7971021.json SIZE 103617
+RAW_FILE kalshi_weather_index/chicago/00efceb145837f254011f456969bdb7cc1a3d090de7ab189c810c61af6e6ac6c.json SIZE 103024
+RAW_FILE kalshi_weather_index/chicago/028f6f627d42f13b6966ef0c69b15d771791d833ef6d4a7da9298eb59b3a0cfc.json SIZE 103778
+RAW_FILE kalshi_weather_index/chicago/06208401efe20e084ebaf9e9024b074929cf9d0a76cd91f4fbb0678b60f9595f.json SIZE 102845
+RAW_FILE kalshi_weather_index/chicago/06273c7fb98cac4691558905c7cf7312ef26e3bfd94a07706a447c2b145406ac.json SIZE 102848
+RAW_FILE kalshi_weather_index/chicago/071ae8a14c7a33132a7c834a3229a23f9d0add6d0117208c69ac3974e074942a.json SIZE 103967
+RAW_FILE kalshi_weather_index/chicago/09a0db7499442f38b0e9d023fbd2c9405267f91ae89a44f7bc1169e3e94f61f6.json SIZE 103870
+RAW_FILE kalshi_weather_index/chicago/09e04050222ffa02713a3e18e02482b1fbb3bbbf790d856053ebfb77f8ed9c58.json SIZE 104200
+RAW_FILE kalshi_weather_index/chicago/0c833435973c3506792f5f068980094f5f5ecead5946851afe605cb865e78dad.json SIZE 103405
+RAW_FILE kalshi_weather_index/chicago/0c8d0408bbd2d5ef327148c2d82c323d981ecde9eb9e0db664a54f186619148d.json SIZE 104715
+RAW_FILE kalshi_weather_index/chicago/0dda534fcf70b86a2abf953c2077f0dd7d799f955126570c67183095d6553dcd.json SIZE 103289
+RAW_FILE kalshi_weather_index/chicago/0eae3f04264ba4336251c73f93c88c8995990319cc210805274be94c377e43b2.json SIZE 102622
+RAW_FILE kalshi_weather_index/chicago/0f934e224e23b1c0e336a7f695876bcba8da9045fca30d566198f7a1c685e616.json SIZE 102951
+RAW_FILE kalshi_weather_index/chicago/10b672b8bc78ea27df315474e6c90398af31f9adb87259cafb0b726c0bc28461.json SIZE 102047
+RAW_FILE kalshi_weather_index/chicago/1319271139fe77c49aba5ed42b3a21ee3c2dd4d737f1fc1e7e9ce742eb9c8226.json SIZE 103501
+RAW_FILE kalshi_weather_index/chicago/1545841b2716fbf1e50d81c4395580ec70d303e4efcd591246a0dff646e73ed1.json SIZE 104186
+RAW_FILE kalshi_weather_index/chicago/17e6c4074783859dcd8412ecb7e50c7208cd28c478889231f0a5bd373ee3b7b9.json SIZE 104439
+RAW_FILE kalshi_weather_index/chicago/1a43609f573c29a13d186969e8f222fbb5d4aa49c5735245c604dbe854aa766b.json SIZE 102047
+RAW_FILE kalshi_weather_index/chicago/1addf58ec56c902771c890834b683e259ea96097e9e80ca99c40880a6d18f0aa.json SIZE 103459
+RAW_FILE kalshi_weather_index/chicago/1b333c29fb6268dff26438e35c24273e10f143875f12bbf7457fa324afd0da44.json SIZE 104025
+RAW_FILE kalshi_weather_index/chicago/1c36825152e3b81c37d2226b12672e0bb819eb08a5af42b3ab28bbc6e5c97197.json SIZE 104162
+RAW_FILE kalshi_weather_index/chicago/1dc39c3007fab0fe10c37b0a8299fa76e54a130c7ac6a80f8fdd46b53e6d8bd8.json SIZE 103596
+RAW_FILE kalshi_weather_index/chicago/1ee5b0ccd6391966c72adf6eaa976fd7b42915ce737d40dd4501ae098aa4dc27.json SIZE 104725
+RAW_FILE kalshi_weather_index/chicago/1fa077db1fe1a271572ea06c733c1db83707fa0b4f7478ebe25771e1082f4886.json SIZE 104256
+RAW_FILE kalshi_weather_index/chicago/21ab778c848f50fb30615cdd6de76e5397815230246b33757a2b8c339ad336f8.json SIZE 104445
+RAW_FILE kalshi_weather_index/chicago/21e54c1d6da38c5fcb93ae5a6b9c165c670db4356433f050b72c366c197e6275.json SIZE 104677
+RAW_FILE kalshi_weather_index/chicago/22ac614a9740c2b5051cd4e8f11e68ad36aacc1859b81dd4ac934e5f86d50219.json SIZE 101983
+RAW_FILE kalshi_weather_index/chicago/231b9cc9fdd1025d988244da5a01b9f085e816b0121e3ab141d8666f8f16e2da.json SIZE 102566
+RAW_FILE kalshi_weather_index/chicago/293876b4c369c854c268105e81f5b9e5b6eb568e258e1ec81bdba42bd32ce735.json SIZE 102048
+RAW_FILE kalshi_weather_index/chicago/29434894534f63c4d6987332f6294c71fe372e0f0aeed9cc27678a5013d9b7b2.json SIZE 102477
+RAW_FILE kalshi_weather_index/chicago/29df19ba510c249c8bd09092ef2d739ad7e370b63371466178d124466b8352f1.json SIZE 103696
+RAW_FILE kalshi_weather_index/chicago/2b78456612a183fc7ee6a2acc5dff7c62e793a0f1917b9e4dfff889029bfd077.json SIZE 103419
+RAW_FILE kalshi_weather_index/chicago/2d5d49ce5589a30fe6052253127644c191cb24b997c8a97748da329ee9f09f6c.json SIZE 104163
+RAW_FILE kalshi_weather_index/chicago/2def5c16365fb730019645a8fc472f851c6a90f27ed8e66485670af3c44d46eb.json SIZE 102626
+RAW_FILE kalshi_weather_index/chicago/2e86668d68f14626b290c4362fe12224c83f4d3ba6d9313ae5570eec2dce9f58.json SIZE 102039
+RAW_FILE kalshi_weather_index/chicago/2f2eee395a983e1b961ca4d9dc5f0c47bfffff8ae0973c3466789961e27b9352.json SIZE 104104
+RAW_FILE kalshi_weather_index/chicago/300c113115622202774c81a219cf982eadad49011c7ff89e2044595e82e25435.json SIZE 104481
+RAW_FILE kalshi_weather_index/chicago/306849db8c8d87e9840fe864d46e87d445d8fa496df022971835d5ccc4a18ce0.json SIZE 103460
+RAW_FILE kalshi_weather_index/chicago/30c898f6b998bc17931b77584fe250f86ad61c6c55882460bdae4db12ee553ab.json SIZE 102895
+RAW_FILE kalshi_weather_index/chicago/3189d543266251f2a55c7dae34fc1bfaec55f0e3e613cbd65d661d02fb8016f5.json SIZE 103460
+RAW_FILE kalshi_weather_index/chicago/329bb7c3cccdb166cf60fe669990dc59ad0047ecbdc785d026007434da364df0.json SIZE 103149
+RAW_FILE kalshi_weather_index/chicago/3332c92eedadd28b5f7766292aaf99e16349ed13e16b78226bcf68d9ec89027f.json SIZE 102630
+RAW_FILE kalshi_weather_index/chicago/334db55596d16b582f2848946fc5862ee05b890e11f26addb242781a2783fb6a.json SIZE 104536
+RAW_FILE kalshi_weather_index/chicago/33717eb20bf31558eabc7348e24b208a6783cd5b27b2d69034f22d20ebe627db.json SIZE 103894
+RAW_FILE kalshi_weather_index/chicago/33c4d6a13df6738aeaff500ca523b3a8a9accb2ff5765c1b76f603cb19db9ea3.json SIZE 104039
+RAW_FILE kalshi_weather_index/chicago/349103d881b3dd2ffe5d3247129653c90f423dfcd94375f5b12d7f3f371d4213.json SIZE 102966
+RAW_FILE kalshi_weather_index/chicago/381e47509b81cf3a2ce3994c32fe09d3dada3f327f5662f0fd5072b8d2f7db63.json SIZE 104102
+RAW_FILE kalshi_weather_index/chicago/39fe53d2e8e5a631e9661261327e4f7b39ad83c8589d4220d4461be29bb17155.json SIZE 104479
+RAW_FILE kalshi_weather_index/chicago/3b42acf1773796705664a746aa5e1ff5d61981bd12ea64f73942d0c777ac9203.json SIZE 104153
+RAW_FILE kalshi_weather_index/chicago/3c2f5819fb143a97a0e474afa7a32fe9c2c23ae0d6fe1df5ab88194687909816.json SIZE 104089
+RAW_FILE kalshi_weather_index/chicago/3d786befee2b81324aa4c53e869e7c48bbab2cb41adc50f7e85fe0c41fd519e7.json SIZE 103961
+RAW_FILE kalshi_weather_index/chicago/3d8ac1bf0ce202717e5f0a786c275bef1d7423985554dfbfcf3bad2245f783d5.json SIZE 103261
+RAW_FILE kalshi_weather_index/chicago/3de2b26550e954ecb6a9884b03a8d2342ea96a402f565efa2b1d497336d6a30a.json SIZE 104092
+RAW_FILE kalshi_weather_index/chicago/400cab6edd352edf5dcdc3eb40fa19f8443ed0b574b93d379c89bd2faf857fb1.json SIZE 103587
+RAW_FILE kalshi_weather_index/chicago/4282d737031a53453396c18ef35e884c9f93ba16dd3f45a0929a3a74aa61580b.json SIZE 103934
+RAW_FILE kalshi_weather_index/chicago/42fbadd21f5fc20761d315f12353aed80bc8c7554edebcbd57eea22b7ed8d126.json SIZE 102899
+RAW_FILE kalshi_weather_index/chicago/437549296643216bca1985d1b111ccba00bc1301a1664b63dd4531462935e647.json SIZE 103395
+RAW_FILE kalshi_weather_index/chicago/4390dd54053850ce92e71954bc9be3f1cd545084fd332917ffae2d147b1c160f.json SIZE 104224
+RAW_FILE kalshi_weather_index/chicago/43b12eb1a50a95a1422691173616afc56d954f326e7b07fd6db854c25101d583.json SIZE 104225
+RAW_FILE kalshi_weather_index/chicago/45d2c78b4dd689a5107c054bb8674b0458286baad867c524a9f262f0d267c845.json SIZE 103463
+RAW_FILE kalshi_weather_index/chicago/46e7dfc65bfb98fd13e8fd1bc562e0a1d082fc0232deed57d287bab2570ced3d.json SIZE 103940
+RAW_FILE kalshi_weather_index/chicago/46fb91fab3a5acd28709f83c6cc61d62b1afc5f3473f17e4b0c0b78b10893c5f.json SIZE 103846
+RAW_FILE kalshi_weather_index/chicago/4a0718491b6cad9531c2bd0d5beea3b112d6e1404d9a85c4fe034a596b07cafc.json SIZE 102642
+RAW_FILE kalshi_weather_index/chicago/4a2bb29dd2a2af9045bae726172da1287bfe9c727c0946e509e4726b5aa7f878.json SIZE 103616
+RAW_FILE kalshi_weather_index/chicago/4a997138e436bffc862426e3c07424ca596c547645d93c758f52c8468b61a58a.json SIZE 104088
+RAW_FILE kalshi_weather_index/chicago/4b8387b10191a6471c7385eab875e9d23dfd284e24cce569206d4ad4bc687e62.json SIZE 103675
+RAW_FILE kalshi_weather_index/chicago/5098e4631b2cb657f090281b36432301d4df8baef29fa16f8a86319a2093e9f9.json SIZE 104071
+RAW_FILE kalshi_weather_index/chicago/54e655ef19f35fc30979915f7814384568f0494e224de82641e5b2eae235d5ce.json SIZE 104275
+RAW_FILE kalshi_weather_index/chicago/5a64d0575225f862be4ed303849f956fcbb0215fff1a2db55c7fd8e3a55ea731.json SIZE 104154
+RAW_FILE kalshi_weather_index/chicago/5aa39c69abc59d42dac8b46e1592eec2aabc6213caeb673c2dcdea86a781463c.json SIZE 104102
+RAW_FILE kalshi_weather_index/chicago/5ccef2170f41aa6051fe7071945baf7984f87e1c284792f14509cb74f76da739.json SIZE 102597
+RAW_FILE kalshi_weather_index/chicago/5cea6ff02b25b8796505aaedde3f7bce99bbbbf631f9e9950f3d8caa489ec560.json SIZE 102222
+RAW_FILE kalshi_weather_index/chicago/5d717b9720327fc07a9860ad28eff1e3ab61efa236d44f5dfc568ce803717289.json SIZE 103935
+RAW_FILE kalshi_weather_index/chicago/5f60178b09b5caca5a1c884efd79a04e5c2d6ee67a9ddaa382a845e1b21aad71.json SIZE 103327
+RAW_FILE kalshi_weather_index/chicago/63177a5f4a3e8192019861c4520384b11e6c747df6a697def6f5612c71861a43.json SIZE 103887
+RAW_FILE kalshi_weather_index/chicago/63a2ce5164e83c1e33daaf4c1452011b374301dabe347d5f0ba96e151fe17d97.json SIZE 104206
+RAW_FILE kalshi_weather_index/chicago/665cbc41a3301a2b4ff0dc69180022cec3a5aa7f303507addcff6cafa93ec2a8.json SIZE 102262
+RAW_FILE kalshi_weather_index/chicago/67f8501f5c65523c95afe6d2c6d01568205650e0e763b7b384d3a1d59517860e.json SIZE 103519
+RAW_FILE kalshi_weather_index/chicago/6845bf95a46d98df16c60021365af0d7234ce182ef72a027c3dfb35cbcdf18e3.json SIZE 104442
+RAW_FILE kalshi_weather_index/chicago/6853cc6cd32245903d209fa7d2105d9f77909dc0d28df5fb2de1f836dc416824.json SIZE 104038
+RAW_FILE kalshi_weather_index/chicago/6a31f4f4d8e2ef9c7ffedd17cea1de8e153a3a8ecc8ff814b2b126dba91e0e80.json SIZE 104207
+RAW_FILE kalshi_weather_index/chicago/6ac88f2f9fd6f68e453d92f6916ea022a081d49f8fb947f0ae8b7f8cc400f017.json SIZE 102343
+RAW_FILE kalshi_weather_index/chicago/6c51fde8dc43c8d71c3f6bb2bfba08c6fc182db6a47f2411f79a8766f5203ced.json SIZE 104440
+RAW_FILE kalshi_weather_index/chicago/6cc0d09c91612e72ae3caed24ecf269ecec5f04e4e57665bbc85a5058afb8654.json SIZE 102508
+RAW_FILE kalshi_weather_index/chicago/6e4d1fd4d723be948316c0c6f548003a5c6af8f93b4983068a6968cf3a3df64a.json SIZE 103091
+RAW_FILE kalshi_weather_index/chicago/7153b2390d1fa92d4b28979a012da95c8f6795156f916f35c1a3dc03a33e13c9.json SIZE 103216
+RAW_FILE kalshi_weather_index/chicago/723ca8de2ea4b8096ab11927abb835f719b435628111b3528c74b40040309600.json SIZE 104152
+RAW_FILE kalshi_weather_index/chicago/73bf7227f9f2cfe4c484874cc42d96e2c5da4bff3245db394379c36db8cfb1a4.json SIZE 104136
+RAW_FILE kalshi_weather_index/chicago/742bb8f1bb263f029b297c1ff09655e4d0cee0191f25f01cd845dfe9fdc33eb1.json SIZE 102341
+RAW_FILE kalshi_weather_index/chicago/770354a5570858589d90e7cd7949ee5294cfe2562661211de8fef8a5588b68f5.json SIZE 103929
+RAW_FILE kalshi_weather_index/chicago/79705385ef136c5a1cbee859147a18466d0fa8d84e9c3839183451a8a3c40e7d.json SIZE 103515
+RAW_FILE kalshi_weather_index/chicago/797908a41fef85e601713b5d3d7bc072c540278ac96dfa8432effbab5aa7fe9a.json SIZE 103504
+RAW_FILE kalshi_weather_index/chicago/797c36446158fa78c535049dcf80b45f1a0d49da6ed6224555ab3cf913163239.json SIZE 102582
+RAW_FILE kalshi_weather_index/chicago/7b298565f57fcaf379f978f616b33bec9221441b09f66b776a075df18cae8f3b.json SIZE 103749
+RAW_FILE kalshi_weather_index/chicago/7b2c5e0ed750239eb3694c737d8323f44213ea8c935a3a70fb259d5d5908c3f5.json SIZE 104681
+RAW_FILE kalshi_weather_index/chicago/7c3c6e3c7a2265dbaa6e909678a02bd1d3c55e1c8f5afed7fb82da1ec84cdaf0.json SIZE 104024
+RAW_FILE kalshi_weather_index/chicago/7e20804f82c330570e09966ad086957c8cbc1806b171decb224c3cdc0c26769f.json SIZE 103010
+RAW_FILE kalshi_weather_index/chicago/7e417e1dff649b62772eacf1603fee4b58edc39942998670aa7a6c2d1fdff1f9.json SIZE 102688
+RAW_FILE kalshi_weather_index/chicago/84564a892dd9b38b0153495041a4809e78fa6ad734d0f1c233cf9d77e6e53b49.json SIZE 103586
+RAW_FILE kalshi_weather_index/chicago/8496dfbd03884f4c985576ac2ba9b48a87c062dbf6f883f262f2bedaaad08a37.json SIZE 103975
+RAW_FILE kalshi_weather_index/chicago/863cb26c359a03b9919881ec98e053e20f3b9374fe06a951d0dba0c0a505062f.json SIZE 102384
+RAW_FILE kalshi_weather_index/chicago/86e91d7f48c1e5a5b6119fa48e2c04c5909eb945a9d7d773561afc65f34b06e4.json SIZE 103725
+RAW_FILE kalshi_weather_index/chicago/8744120892aeb21cc57bb29bc6bd041662ea9772665a80e558e3bfbb98bcfc02.json SIZE 102632
+RAW_FILE kalshi_weather_index/chicago/880d776413f952e6b0328f94f2eb9c4e6542f396c1e05f16442e5b225610ad95.json SIZE 103032
+RAW_FILE kalshi_weather_index/chicago/88952274b69d9cf9f670140af15bce30554e89e077acbea2f51cc31681a46288.json SIZE 103416
+RAW_FILE kalshi_weather_index/chicago/894d1d2cc9d16b3ff1a720a9a809bba65632ad1d633ab68917589c15bcf0af77.json SIZE 103407
+RAW_FILE kalshi_weather_index/chicago/89f5030ff5760f8b28104596a6da8b93b5f187f0f31bb3e7947428d7fbebcee8.json SIZE 104167
+RAW_FILE kalshi_weather_index/chicago/8a9d5d66baae522564c0c0438b10d1b2ea19c74bf42a95c07e9ff60f09ea8680.json SIZE 104112
+RAW_FILE kalshi_weather_index/chicago/8b2fcaba4a048f53ad93695c6f15f4de3dfd51f1471b168cb0bb3f4e2c89cd46.json SIZE 102504
+RAW_FILE kalshi_weather_index/chicago/8e27bf8ded2e53b60a45cbab8979038bb9a618d6a1b90ee88b9c8d48ad0e1b95.json SIZE 104034
+RAW_FILE kalshi_weather_index/chicago/8e889d2298ae16816ae23a88953382e4d501fde7788f138dfbaeec69e3792d95.json SIZE 103458
+RAW_FILE kalshi_weather_index/chicago/8fbd1bc32a18177b386e1ad42c793f9150c1aabbeabb25754ce19fc5eccaeeaa.json SIZE 103307
+RAW_FILE kalshi_weather_index/chicago/936e9b3e92eb27f14af11821edc351d04263e62b4e07ed97f5730877ffecf842.json SIZE 104509
+RAW_FILE kalshi_weather_index/chicago/94039b4e6c17ad4a5468c7c8774408943746d5216f37c9d64c899e9756d714dc.json SIZE 102206
+RAW_FILE kalshi_weather_index/chicago/9673543bfc31159565e1cf4ae36696b7aec225d0dd5ac9368f1f4d452548e2b4.json SIZE 104089
+RAW_FILE kalshi_weather_index/chicago/9967e8d8c112847167cbea12176dd19f6aa37033588117da91be1fc961913073.json SIZE 102333
+RAW_FILE kalshi_weather_index/chicago/9a5f93b2470d175a01a6cae458da138472057a2ba746f6dbbd50016fe9ce5f80.json SIZE 102262
+RAW_FILE kalshi_weather_index/chicago/9cb25292e1d9839a81bf6d040fc93289ad9de7ffbb5d4c33c9e7157216a6276e.json SIZE 103957
+RAW_FILE kalshi_weather_index/chicago/9e64fb65a054b6253302b14749c75f13581af1e4dcd82cbde8fc23e8ead8eecc.json SIZE 104030
+RAW_FILE kalshi_weather_index/chicago/a05facb19dc2d3e22aae20eb855cd32a171304523e28550d66aad08271bf4cfc.json SIZE 103205
+RAW_DIR_COUNT 28
+RAW_FILE_COUNT 729
+KWI_NESTED_MANIFEST_INSPECTION_PASS
