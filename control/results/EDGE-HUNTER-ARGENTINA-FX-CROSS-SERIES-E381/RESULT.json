@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/inspect_argentina_fx_cross_series_e381.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-20T02:47:19.791013+00:00",
+  "hypothesis_id": "PAYOFF-IDENTITY-MINING-V1",
+  "source_commit": "6b01471872f2ee4634f4aded0975f0cdcc417ac6",
+  "started_at": "2026-09-20T02:47:19.769488+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "919618d203c419d90e27050b68f98fefd75c0ace928b0c7993ed86e3b8c0ac7d",
+  "task_class": "research",
+  "task_id": "EDGE-HUNTER-ARGENTINA-FX-CROSS-SERIES-E381"
+}
