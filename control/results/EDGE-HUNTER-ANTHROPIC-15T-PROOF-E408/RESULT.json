@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/prove_anthropic_15t_identities_e408.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-20T03:09:29.042956+00:00",
+  "hypothesis_id": "PAYOFF-IDENTITY-MINING-V1",
+  "source_commit": "9e357770eea53bb448585c52a4e864a069a0e256",
+  "started_at": "2026-09-20T03:09:29.019257+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "ea181f6bd2d946ae7a8e4e8d2011f1b30fb19600f403dcd73a0d4540999fa248",
+  "task_class": "research",
+  "task_id": "EDGE-HUNTER-ANTHROPIC-15T-PROOF-E408"
+}
