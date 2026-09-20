@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/crawl_gamma_keyset_negrisk_e405.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-20T03:07:16.063491+00:00",
+  "hypothesis_id": "PAYOFF-IDENTITY-MINING-V1",
+  "source_commit": "ab8dd397555f1ba1654d1c1e8a7328d65aed21cd",
+  "started_at": "2026-09-20T03:07:05.833234+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "6367a492f152df1cfbc5b093ee7ce046fd1ccc141cee5102637e3360e7fc134e",
+  "task_class": "research",
+  "task_id": "EDGE-HUNTER-GAMMA-KEYSET-NEGRISK-E405"
+}
