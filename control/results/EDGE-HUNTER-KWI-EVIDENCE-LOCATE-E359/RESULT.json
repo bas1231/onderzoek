@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/locate_kwi_evidence_e359.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-20T02:33:09.062508+00:00",
+  "hypothesis_id": "KWI-INCOMPLETE-TO-CANONICAL-V1",
+  "source_commit": "941f87ef01480baf84f6ce84296c1dd267400207",
+  "started_at": "2026-09-20T02:33:08.930500+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "dedc828bfced20170dc1593139c287900ed598d96a144a2079990dbd1bff9c25",
+  "task_class": "research",
+  "task_id": "EDGE-HUNTER-KWI-EVIDENCE-LOCATE-E359"
+}

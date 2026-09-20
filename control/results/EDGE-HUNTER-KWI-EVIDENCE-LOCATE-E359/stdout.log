@@ -1,0 +1,881 @@
+SCANNED_FILES 2203
+MATCHING_FILES 147
+FILE AGENTS.md
+MATCHED canonical
+LINE 185 - Git is de canonical source of truth en audit trail.
+---
+FILE knowledge/candidates/KWI-INCOMPLETE-TO-CANONICAL-V1.json
+MATCHED KWI-INCOMPLETE-TO-CANONICAL-V1,canonical,incomplete
+LINE 2   "candidate_id": "KWI-INCOMPLETE-TO-CANONICAL-V1",
+LINE 6     "Incomplete states lack enough numeric observations.",
+LINE 26   "hypothesis": "Incomplete KWI states may predict later canonical value.",
+LINE 30   "mechanism": "Some station observations appear before canonical completion.",
+---
+FILE knowledge/candidates/PAYOFF-IDENTITY-MINING-V1.json
+MATCHED canonical
+LINE 30   "mechanism": "Canonicalize payouts and prove equivalence or dominance before price comparison.",
+---
+FILE knowledge/runs/kalshi-hourly-source-transition-e212.json
+MATCHED chicago,miami,nyc
+LINE 36           "rules_primary": "If the temperature recorded at Miami, FL for Sep 19, 2026 at 8 PM EDT as reported by Synoptic Data, is above 80.99\u00b0, then the market resolves to Yes.",
+LINE 41           "title": "Will the temp in Miami be above 80.99\u00b0 on Sep 19, 2026 at 8pm EDT?"
+LINE 49           "rules_primary": "If the temperature recorded at Miami, FL for Sep 19, 2026 at 8 PM EDT as reported by Synoptic Data, is above 79.99\u00b0, then the market resolves to Yes.",
+LINE 54           "title": "Will the temp in Miami be above 79.99\u00b0 on Sep 19, 2026 at 8pm EDT?"
+LINE 62           "rules_primary": "If the temperature recorded at Miami, FL for Sep 19, 2026 at 8 PM EDT as reported by Synoptic Data, is above 78.99\u00b0, then the market resolves to Yes.",
+LINE 67           "title": "Will the temp in Miami be above 78.99\u00b0 on Sep 19, 2026 at 8pm EDT?"
+LINE 75           "rules_primary": "If the temperature recorded at Miami, FL for Sep 19, 2026 at 8 PM EDT as reported by Synoptic Data, is above 77.99\u00b0, then the market resolves to Yes.",
+LINE 80           "title": "Will the temp in Miami be above 77.99\u00b0 on Sep 19, 2026 at 8pm EDT?"
+LINE 88           "rules_primary": "If the temperature recorded at Miami, FL for Sep 19, 2026 at 8 PM EDT as reported by Synoptic Data, is above 76.99\u00b0, then the market resolves to Yes.",
+LINE 93           "title": "Will the temp in Miami be above 76.99\u00b0 on Sep 19, 2026 at 8pm EDT?"
+LINE 101           "rules_primary": "If the temperature recorded at Miami, FL for Sep 19, 2026 at 8 PM EDT as reported by Synoptic Data, is above 75.99\u00b0, then the market resolves to Yes.",
+LINE 106           "title": "Will the temp in Miami be above 75.99\u00b0 on Sep 19, 2026 at 8pm EDT?"
+---
+FILE knowledge/runs/twc-kalshi-status-semantics-e178.json
+MATCHED incomplete
+LINE 13         "snippet": "d-foreground\",children:\"\u2014\"})}),(0,J.jsx)(a6,{className:\"text-right\",children:\"official\"===e.status?(0,J.jsx)(il,{className:\"bg-emerald-600 hover:bg-emerald-700 text-xs\",children:\"Final\"}):\"revised\"===e.status?(0,J.jsx)(il,{className:\"bg-emerald-600 hover:bg-emerald-700 text-xs\",title:\"Revised \u2014 a later METAR arrived after this day was finalized, and the value was recalculated from it.\",children:\"Revised\"}):\"pending\"===e.status?(0,J.jsx)(\"span\",{className:\"text-xs text-muted-foreground\",children:\"Pending\"}):(0,J.jsx)(il,{variant:\"outline\",className:\"text-xs text-muted-foreground\",children:\"Unavailable\"})})]},t.id)})})]})})]},e)})})()]}),(0,J.jsx)(i0,{open:!!o,onOpenChange:e=>{e||a(null)},icao:o?.icao??null,city:o?.city??null,country:o?.country??null,date:r},o?.icao??\"closed\")]})}function i3(e){return 0===e.daysWithData?\"no_data\":e.isFinal?\"final\":e.periodOver?\"incomplete\":\"running\"}function i4(e){return null==e?\"\u2014\":String(e)}function i6(e){return null===e?\"-\":\"T\"===e?\"T\":\"number\"==typeof e?e%1==0?e.toString():e.toFixed(2):e}let i8=[{label:\"City\"},{label:\"ID\"},{label:\"Max (F)\",className:\"text-right\"},{label:\"Min (F)\",className:\"text-right\"},{label:\"Daily Mean (F)\",className:\"text-right\"},{label:\"HDD\",className:\"text-right\"},{label:\"Hourly Mean (F)\",className:\"text-right\"},{label:\"Precip (in)\",className:\"text-right\"},{label:\"Snow (in)\",className:\"text-right\"},{label:\"Status\",class"
+LINE 72         "snippet": "emibold\",children:[e.avgTemp.toFixed(1),n?\"*\":\"\"]}):(0,J.jsx)(\"span\",{className:\"text-muted-foreground\",children:\"\u2014\"})}),(0,J.jsx)(a6,{className:\"text-right\",children:\"official\"===e.status?(0,J.jsx)(il,{className:\"bg-emerald-600 hover:bg-emerald-700 text-xs\",children:\"Final\"}):\"revised\"===e.status?(0,J.jsx)(il,{className:\"bg-emerald-600 hover:bg-emerald-700 text-xs\",title:\"Revised \u2014 a later METAR arrived after this day was finalized, and the value was recalculated from it.\",children:\"Revised\"}):\"pending\"===e.status?(0,J.jsx)(\"span\",{className:\"text-xs text-muted-foreground\",children:\"Pending\"}):(0,J.jsx)(il,{variant:\"outline\",className:\"text-xs text-muted-foreground\",children:\"Unavailable\"})})]},t.id)})})]})})]},e)})})()]}),(0,J.jsx)(i0,{open:!!o,onOpenChange:e=>{e||a(null)},icao:o?.icao??null,city:o?.city??null,country:o?.country??null,date:r},o?.icao??\"closed\")]})}function i3(e){return 0===e.daysWithData?\"no_data\":e.isFinal?\"final\":e.periodOver?\"incomplete\":\"running\"}function i4(e){return null==e?\"\u2014\":String(e)}function i6(e){return null===e?\"-\":\"T\"===e?\"T\":\"number\"==typeof e?e%1==0?e.toString():e.toFixed(2):e}let i8=[{label:\"City\"},{label:\"ID\"},{label:\"Max (F)\",className:\"text-right\"},{label:\"Min (F)\",className:\"text-right\"},{label:\"Daily Mean (F)\",className:\"text-right\"},{label:\"HDD\",className:\"text-right\"},{label:\"Hourly Mean (F)\",className:\"text-right\"},{label:\"Precip (in)"
+---
+FILE knowledge/runs/kalshi-weather-config-discovery-e229.json
+MATCHED latest_incomplete,/live_data/weather/,canonical,incomplete,chicago,miami,nyc
+LINE 4     "/live_data/weather/{city",
+LINE 6     "chicago_certification_initial_config",
+LINE 7     "chicago_public_feed_config_e216",
+LINE 13     "`/live_data/weather/chicago/calibrations`",
+LINE 17     "/live_data/weather/",
+LINE 18     "chicago_current_config",
+LINE 19     "chicago_initial_config",
+LINE 29           "excerpt": "_lock/weather_index_watch.py\n    acceptance:\n      - \"At least one active event per initial city captured from direct Kalshi API/source.\"\n      - \"Archive retrieval timestamp, close time, comparator/strike, source agency, rule text/version where exposed.\"\n      - \"No secondary mirror used as authority.\"\n      - \"Classify source per contemporaneous event/rule version; do not assume global TWC or Synoptic semantics.\"\n    output: \"agents/rules/findings/\"\n\n  - id: TASK-WX-002\n    candidate: KAL-WX-INDEX-001\n    assigned_role: DATA\n    priority: P0\n    status: IN_PROGRESS\n    depends_on: [TASK-WX-000, TASK-WX-001]\n    objective: \"Build and prospectively run immutable Weather Index recorder using /live_data/weather/{city} and calibration endpoint.\"\n    implementation:\n      status: IMPLEMENTED_LIVE_CAPTURE_PENDING\n      repo: bas1231/proof-hunter\n      branch: ai/weather-index-e001-recorder-v0\n      paths:\n        - proof_hunter/venues/kalshi_weather.py\n        - proof_hunter/source_lock/weather_capture.py\n        - proof_hunter/source_lock/weather_index_watch.py\n        - proof_hunter/source_lock/weather_capture_validate.py\n    capture:\n      - \"raw JSON body\"\n      - \"retrieval timestamp\"\n      - \"city\"\n      - \"config_version\"\n      - \"t/v/status/contributors/receipt_basis\"\n      - \"detailed station readings\"\n      - \"calibration timeline snapshots\"\n      - \"content hash\"\n    note: \"Large raw data outside knowledge Git; Git stores manifests/hashes/schema only. Calibration published_at/effective_at and receipt_basis are point-in-time fields and must not be backfilled.\"\n\n  - id: TASK-WX-003\n    candidate: KAL-WX-INDEX-001\n    assigned_role: MICROSTRUCTURE\n    priority: P0\n    status: IN_PROGRESS\n    depends_on: [TASK-WX-000, TASK-WX-001]\n    objective: \"Record contemporaneous KXTEMP L2, trades, lifecycle and fee provenance for the same cycles as Weather Index observations.\"\n  
+LINE 30           "needle": "/live_data/weather/"
+LINE 33           "excerpt": "DATA\n    priority: P0\n    status: IN_PROGRESS\n    depends_on: [TASK-WX-000, TASK-WX-001]\n    objective: \"Build and prospectively run immutable Weather Index recorder using /live_data/weather/{city} and calibration endpoint.\"\n    implementation:\n      status: IMPLEMENTED_LIVE_CAPTURE_PENDING\n      repo: bas1231/proof-hunter\n      branch: ai/weather-index-e001-recorder-v0\n      paths:\n        - proof_hunter/venues/kalshi_weather.py\n        - proof_hunter/source_lock/weather_capture.py\n        - proof_hunter/source_lock/weather_index_watch.py\n        - proof_hunter/source_lock/weather_capture_validate.py\n    capture:\n      - \"raw JSON body\"\n      - \"retrieval timestamp\"\n      - \"city\"\n      - \"config_version\"\n      - \"t/v/status/contributors/receipt_basis\"\n      - \"detailed station readings\"\n      - \"calibration timeline snapshots\"\n      - \"content hash\"\n    note: \"Large raw data outside knowledge Git; Git stores manifests/hashes/schema only. Calibration published_at/effective_at and receipt_basis are point-in-time fields and must not be backfilled.\"\n\n  - id: TASK-WX-003\n    candidate: KAL-WX-INDEX-001\n    assigned_role: MICROSTRUCTURE\n    priority: P0\n    status: IN_PROGRESS\n    depends_on: [TASK-WX-000, TASK-WX-001]\n    objective: \"Record contemporaneous KXTEMP L2, trades, lifecycle and fee provenance for the same cycles as Weather Index observations.\"\n    implementation:\n      status: IMPLEMENTED_LIVE_CAPTURE_PENDING\n      repo: bas1231/proof-hunter\n      branch: ai/weather-index-e001-recorder-v0\n      paths:\n        - proof_hunter/source_lock/weather_l2_capture.py\n        - proof_hunter/source_lock/weather_trade_capture.py\n        - proof_hunter/source_lock/weather_fee_capture.py\n        - proof_hunter/venues/kalshi_fees.py\n        - proof_hunter/venues/kalshi_trades.py\n        - proof_hunter/source_lock/weather_index_watch.py\n    capture:\n      - \"authenticated batched full re
+LINE 38         "/live_data/weather/",
+LINE 47           "excerpt": " \"KXTEMPMIAH-26SEP1920\": 10\n      },\n      \"http_status\": 200,\n      \"market_count\": 10,\n      \"sample\": [\n        {\n          \"close_time\": \"2026-09-20T00:00:00Z\",\n          \"event_ticker\": \"KXTEMPMIAH-26SEP1920\",\n          \"expected_expiration_time\": \"2026-09-20T00:05:00Z\",\n          \"floor_strike\": 80.99,\n          \"result\": \"\",\n          \"rules_primary\": \"If the temperature recorded at Miami, FL for Sep 19, 2026 at 8 PM EDT as reported by Synoptic Data, is above 80.99\\u00b0, then the market resolves to Yes.\",\n          \"rules_secondary\": \"The official final value for this market is determined strictly by the temperature reported by Synoptic Data, calculated in accordance with the Kalshi Weather Index Methodology. Alternative sources\\u2014such as NWS Climatological Reports or Google Weather\\u2014may serve as references, but are not authoritative and will not be used for market resolution.\",\n          \"source_label\": \"SYNOPTIC+KALSHI_WEATHER_INDEX\",\n          \"status\": \"active\",\n          \"ticker\": \"KXTEMPMIAH-26SEP1920-T80.99\",\n          \"title\": \"Will the temp in Miami be above 80.99\\u00b0 on Sep 19, 2026 at 8pm EDT?\"\n        },\n        {\n          \"close_time\": \"2026-09-20T00:00:00Z\",\n          \"event_ticker\": \"KXTEMPMIAH-26SEP1920\",\n          \"expected_expiration_time\": \"2026-09-20T00:05:00Z\",\n          \"floor_strike\": 79.99,\n          \"result\": \"\",\n          \"rules_primary\": \"If the temperature recorded at Miami, FL for Sep 19, 2026 at 8 PM EDT as reported by Synoptic Data, is above 79.99\\u00b0, then the market resolves to Yes.\",\n          \"rules_secondary\": \"The official final value for this market is determined strictly by the temperature reported by Synoptic Data, calculated in accordance with the Kalshi Weather Index Methodology. Alternative sources\\u2014such as NWS Climatological Reports or Google Weather\\u2014may serve as refe
+---
+FILE knowledge/runs/kalshi-weather-index-schema-e231.json
+MATCHED chicago,miami,nyc
+LINE 4       "city": "nyc",
+LINE 5       "config_version": "nyc-temperature-v1.0-cal-20260914",
+LINE 12           "value_sample": "nyc-temperature-v1.0-cal-20260914",
+LINE 3149       "raw_path": "/home/leonh/.local/state/prediction-research/raw/kalshi_weather_index/nyc/781b8d5d41e74ade8035b923d5bffec15021815abebafdab7b9b8a58129067cb.json",
+LINE 3160       "city": "miami",
+LINE 3161       "config_version": "miami-temperature-v1.0-cal-20260914",
+LINE 3168           "value_sample": "miami-temperature-v1.0-cal-20260914",
+LINE 6341       "raw_path": "/home/leonh/.local/state/prediction-research/raw/kalshi_weather_index/miami/2e676ded2abd124ad05e022a5cf56db2de471d7433304d6c2927d620af62e133.json",
+LINE 6352       "city": "chicago",
+LINE 6353       "config_version": "chicago-temperature-v1.0-cal-20260914",
+LINE 6360           "value_sample": "chicago-temperature-v1.0-cal-20260914",
+LINE 9541       "raw_path": "/home/leonh/.local/state/prediction-research/raw/kalshi_weather_index/chicago/63a2ce5164e83c1e33daaf4c1452011b374301dabe347d5f0ba96e151fe17d97.json",
+---
+FILE knowledge/runs/kalshi-hourly-universe-e213.json
+MATCHED chicago,miami,nyc
+LINE 260         "title": "Hourly Directional NYC Temperature"
+LINE 552         "title": "Hourly Directional Chicago Temperature"
+LINE 570           "rules_primary": "If the temperature recorded at Chicago Metro Area for Sep 19, 2026 at 8 PM EDT as reported by Synoptic Data, is above 71.99\u00b0, then the market resolves to Yes.",
+LINE 575           "title": "Will the temp in Chicago Metro Area be above 71.99\u00b0 on Sep 19, 2026 at 8pm EDT?"
+LINE 582           "rules_primary": "If the temperature recorded at Chicago Metro Area for Sep 19, 2026 at 8 PM EDT as reported by Synoptic Data, is above 70.99\u00b0, then the market resolves to Yes.",
+LINE 587           "title": "Will the temp in Chicago Metro Area be above 70.99\u00b0 on Sep 19, 2026 at 8pm EDT?"
+LINE 594           "rules_primary": "If the temperature recorded at Chicago Metro Area for Sep 19, 2026 at 8 PM EDT as reported by Synoptic Data, is above 69.99\u00b0, then the market resolves to Yes.",
+LINE 599           "title": "Will the temp in Chicago Metro Area be above 69.99\u00b0 on Sep 19, 2026 at 8pm EDT?"
+LINE 622         "title": "Hourly Directional Chicago Metro Temperature"
+LINE 653         "title": "Hourly Directional Chicago Metro Temperature"
+LINE 834           "rules_primary": "If the temperature recorded at Miami, FL for Sep 19, 2026 at 8 PM EDT as reported by Synoptic Data, is above 80.99\u00b0, then the market resolves to Yes.",
+LINE 839           "title": "Will the temp in Miami be above 80.99\u00b0 on Sep 19, 2026 at 8pm EDT?"
+---
+FILE knowledge/runs/kalshi-weather-timeseries-markets-e208.json
+MATCHED incomplete,chicago,miami,nyc
+LINE 20       "city": "nyc",
+LINE 21       "city_field": "nyc",
+LINE 22       "config_version": "nyc-temperature-v1.0-cal-20260914",
+LINE 146         "status": "incomplete",
+LINE 168       "city": "miami",
+LINE 169       "city_field": "miami",
+LINE 170       "config_version": "miami-temperature-v1.0-cal-20260914",
+LINE 252         "status": "incomplete",
+LINE 274       "city": "chicago",
+LINE 275       "city_field": "chicago",
+LINE 276       "config_version": "chicago-temperature-v1.0-cal-20260914",
+LINE 330         "status": "incomplete",
+---
+FILE knowledge/runs/kalshi-weather-index-lifecycle-e239.json
+MATCHED latest_incomplete,incomplete,chicago,miami,nyc
+LINE 3     "chicago": {
+LINE 12       "first_incomplete_lag_s": {
+LINE 26       "paired_incomplete_before_complete": 22,
+LINE 29           "city": "chicago",
+LINE 34           "first_incomplete_lag_s": 113.63239916992187,
+LINE 35           "incomplete_contributors": null,
+LINE 36           "incomplete_status": "incomplete",
+LINE 37           "incomplete_v": null,
+LINE 42           "city": "chicago",
+LINE 47           "first_incomplete_lag_s": null,
+LINE 48           "incomplete_contributors": null,
+LINE 49           "incomplete_status": null,
+---
+FILE knowledge/runs/hourly-20260920T010000+0200-semantic-review.json
+MATCHED chicago,miami,nyc
+LINE 14         "city": "nyc",
+LINE 27         "city": "miami",
+LINE 40         "city": "chicago",
+---
+FILE knowledge/runs/kalshi-weather-index-degraded-e221.json
+MATCHED chicago
+LINE 2   "chicago_raw_file_count": 6,
+---
+FILE knowledge/runs/kalshi-weather-index-first-seen-e236.json
+MATCHED chicago,miami,nyc
+LINE 3     "chicago": {
+LINE 26           "city": "chicago",
+LINE 37           "city": "chicago",
+LINE 48           "city": "chicago",
+LINE 59           "city": "chicago",
+LINE 70           "city": "chicago",
+LINE 81           "city": "chicago",
+LINE 92           "city": "chicago",
+LINE 103           "city": "chicago",
+LINE 114           "city": "chicago",
+LINE 125           "city": "chicago",
+LINE 136           "city": "chicago",
+---
+FILE knowledge/runs/kalshi-hourly-universe-strict-e215.json
+MATCHED chicago,miami,nyc
+LINE 16       "title": "Hourly Directional Chicago Metro Temperature"
+LINE 46       "title": "Hourly Directional Miami Temperature"
+LINE 51         "KXTEMPNYCHS-26SEP1920": 10
+LINE 60       "ticker": "KXTEMPNYCHS",
+LINE 61       "title": "Hourly Directional NYC Temperature"
+LINE 78       "title": "Hourly Directional NYC Temperature"
+LINE 111       "title": "Hourly Directional Chicago Temperature"
+LINE 126       "title": "Hourly Directional Chicago Metro Temperature"
+LINE 137       "title": "Hourly Directional Chicago Metro Temperature"
+LINE 200       "title": "Hourly Directional Miami Temperature"
+LINE 210       "ticker": "KXTEMPNYCH",
+LINE 211       "title": "Hourly Directional NYC Temperature"
+---
+FILE knowledge/runs/kalshi-hourly-series-e209.json
+MATCHED chicago,miami,nyc
+LINE 20           "event_ticker": "KXTEMPNYCH-26SEP1010",
+LINE 30           "rules_primary": "If the temperature recorded at Central Park, New York City for Sep 10, 2026 10 AM EDT as reported by The Weather Company (for coordinates KNYC), is above 79.99\u00b0, then the market resolves to Yes.",
+LINE 36           "ticker": "KXTEMPNYCH-26SEP1010-T79.99",
+LINE 44           "event_ticker": "KXTEMPNYCH-26SEP1010",
+LINE 54           "rules_primary": "If the temperature recorded at Central Park, New York City for Sep 10, 2026 10 AM EDT as reported by The Weather Company (for coordinates KNYC), is above 78.99\u00b0, then the market resolves to Yes.",
+LINE 60           "ticker": "KXTEMPNYCH-26SEP1010-T78.99",
+LINE 68           "event_ticker": "KXTEMPNYCH-26SEP1010",
+LINE 78           "rules_primary": "If the temperature recorded at Central Park, New York City for Sep 10, 2026 10 AM EDT as reported by The Weather Company (for coordinates KNYC), is above 77.99\u00b0, then the market resolves to Yes.",
+LINE 84           "ticker": "KXTEMPNYCH-26SEP1010-T77.99",
+LINE 92           "event_ticker": "KXTEMPNYCH-26SEP1010",
+LINE 102           "rules_primary": "If the temperature recorded at Central Park, New York City for Sep 10, 2026 10 AM EDT as reported by The Weather Company (for coordinates KNYC), is above 76.99\u00b0, then the market resolves to Yes.",
+LINE 108           "ticker": "KXTEMPNYCH-26SEP1010-T76.99",
+---
+FILE knowledge/runs/twc-revision-summary-latest.json
+MATCHED nyc
+LINE 238           "icaoId": "KNYC",
+LINE 631           "icaoId": "KNYC",
+---
+FILE knowledge/runs/kalshi-weather-index-methodology-summary-e228.json
+MATCHED canonical,chicago,miami
+LINE 3     "chicago_certification_initial_config": "chicago-temperature-v1.1",
+LINE 4     "chicago_public_feed_config_e216": "chicago-temperature-v1.0-cal-20260914",
+LINE 21     "Missing primary data can trigger fallback/substitution while still producing a degraded canonical value.",
+LINE 22     "The Chicago anomaly in E221 is now qualitatively explained by methodology, but exact numeric reproduction requires the effective configuration/offsets and exact selected source values for that minute.",
+LINE 23     "Canonical point finality makes point-in-time capture essential; late observations cannot be substituted retrospectively for settlement research.",
+LINE 27     "chicago": {
+LINE 32       "finality": "canonical observation once published governs contract; later restatements are not used for expiration value/outcome under this contract",
+LINE 39       "initial_configuration_identifier": "chicago-temperature-v1.1",
+LINE 62       "settlement": "for at-contract, after S+300s select greatest canonical event time t<=S, contract requires t no more than 60 minutes before S",
+LINE 66         "unavailable": "quorum not met; no numeric canonical observation"
+LINE 69     "miami": {
+LINE 74       "finality": "canonical observation once published governs contract; later restatements are not used for expiration value/outcome under this contract",
+---
+FILE knowledge/runs/kalshi-weather-config-candidate-context-e230.json
+MATCHED /live_data/weather/,canonical,incomplete,chicago,miami,nyc
+LINE 4       "excerpt": "{\n  \"bytes_scanned\": 93802163,\n  \"endpoint_candidates\": [\n    \"/live_data/weather/{city\",\n    \"config_version\",\n    \"chicago_certification_initial_config\",\n    \"chicago_public_feed_config_e216\",\n    \"config_match\",\n    \"configuration\",\n    \"configurations.\",\n    \"configuration/offsets\",\n    \"config_version/status/receipt_basis\",\n    \"`/live_data/weather/chicago/calibrations`\",\n    \"status/config\",\n    \"calibration/config\",\n    \"source/config/revision\",\n    \"/live_data/weather/\",\n    \"chicago_current_config\",\n    \"chicago_initial_config\",\n    \"config_version\\\\\",\n    \"configuration.\"\n  ],\n  \"files_scanned\": 4655,\n  \"hit_count\": 132,\n  \"hits\": [\n    {\n      \"excerpts\": [\n        {\n          \"excerpt\": \"_lock/weather_index_watch.py\\n    acceptance:\\n      - \\\"At least one active event per initial city captured from direct Kalshi API/source.\\\"\\n      - \\\"Archive retrieval timestamp, close time, comparator/strike, source agency, rule text/version where exposed.\\\"\\n      - \\\"No secondary mirror used as authority.\\\"\\n      - \\\"Classify source per contemporaneous event/rule version; do not assume global TWC or Synoptic semantics.\\\"\\n    output: \\\"agents/rules/findings/\\\"\\n\\n  - id: TASK-WX-002\\n    candidate: KAL-WX-INDEX-001\\n    assigned_role: DATA\\n    priority: P0\\n    status: IN_PROGRESS\\n    depends_on: [TASK-WX-000, TASK-WX-001]\\n    objective: \\\"Build and prospectively run immutable Weather Index recorder using /live_data/weather/{city} and calibration endpoint.\\\"\\n    implementation:\\n      status: IMPLEMENTED_LIVE_CAPTURE_PENDING\\n      repo: bas1231/proof-hunter\\n      branch: ai/weather-index-e001-recorder-v0\\n      paths:\\n        - proof_hunter/venues/kalshi_weather.py\\n        - proof_hunter/source_lock/weather_capture.py\\n        - proof_hunter/source_lock/weather_index_watch.py\\n        - proof_hunter/source_lock/w
+LINE 5       "needle": "/live_data/weather/chicago/calibrations",
+LINE 9       "excerpt": "9\u00b0C \u2248 75.0\u00b0F`;\n- difference \u2248 **1.08\u00b0F**.\n\nThese are not settlement-value comparisons because observation minutes differ slightly and KWI is a calibrated multi-station index. They do establish that **metro spatial dispersion can easily cross one or more integer contract strikes**, so using a single-airport proxy can be materially wrong.\n\nA secondary KWI tool labels Chicago with KMDW as its city reference/mapping, but this must **not** be interpreted as `KWI = KMDW`. Indeed, the 2026-09-10 11:00 EDT new-series outcomes imply the KWI settlement was between roughly **71.00\u00b0F and 71.99\u00b0F**, while KMDW's nearby 14:53 UTC METAR was about **73.9\u00b0F**. This is direct warning evidence that the exact multi-station calibration/weights are essential.\n\n**Open semantic blocker:** exact Chicago KWI calibration members, weights, offsets, effective version and publication timestamp still require primary `/live_data/weather/chicago/calibrations` or equivalent CFTC methodology evidence. No geographic-divergence model may be promoted without this.\n\nAgent rule: contract-specific rules and contemporaneous rules/version always override generic help-center descriptions. No market may be assigned TWC or Synoptic semantics from ticker/title alone.\n\n## Angle 2 \u2014 independent/adversarial evidence\nThe semantic difference is discoverable by other builders. Public project/research status has already referenced KXTEMPMIAH Synoptic/MIAWINDEX work. Therefore 'nobody else noticed the source change' is not an acceptable mechanism assumption.\n\nHistorical market-activity summaries show substantial automated order-book activity in hourly weather markets. This is only observational and must not be causally attributed to the source transition, but it argues against assuming a persistent untouched semantic error.\n\nThe Chicago cutover itself does **not** show an impossible discontinuity: old 10:00 TWC threshold outcomes imply a fina
+LINE 10       "needle": "/live_data/weather/chicago/calibrations",
+LINE 14       "excerpt": "\n      ]\n    },\n    {\n      \"path\": \"/home/leonh/prediction_research/candidates/active/KAL-WX-INDEX-001.yaml\",\n      \"matched\": [\n        \"config_version\",\n        \"weather index methodology\"\n      ]\n    },\n    {\n      \"path\": \"/home/leonh/prediction_research/control/weather/kalshi_weather_index_recorder.py\",\n      \"matched\": [\n        \"/live_data/weather/\",\n        \"config_version\"\n      ]\n    },\n    {\n      \"path\": \"/home/leonh/prediction_research/control/results/KALSHI-HOURLY-SOURCE-TRANSITION-E211/stdout.log\",\n      \"matched\": [\n        \"weather index methodology\"\n      ]\n    }\n  ],\n  \"endpoint_candidates\": [\n    \"/live_data/weather/{city\",\n    \"config_version\",\n    \"chicago_certification_initial_config\",\n    \"chicago_public_feed_config_e216\",\n    \"config_match\",\n    \"configuration\",\n    \"configurations.\",\n    \"configuration/offsets\",\n    \"config_version/status/receipt_basis\",\n    \"`/live_data/weather/chicago/calibrations`\",\n    \"status/config\",\n    \"calibration/config\",\n    \"source/config/revision\",\n    \"/live_data/weather/\",\n    \"chicago_current_config\",\n    \"chicago_initial_config\",\n    \"config_version\\\\\",\n    \"configuration.\"\n  ],\n  \"commit\": {\n    \"rc\": 0,\n    \"stdout\": \"[main 4bfebd4] research(weather): discover effective Weather Index config sources\\n 1 file changed, 1740 insertions(+)\\n create mode 100644 knowledge/runs/kalshi-weather-config-discovery-e229.json\",\n    \"stderr\": \"\"\n  },\n  \"push\": {\n    \"rc\": 0,\n    \"stdout\": \"\",\n    \"stderr\": \"To github.com:bas1231/onderzoek.git\\n   e3ab030..4bfebd4  HEAD -> main\"\n  },\n  \"live_trading\": false,\n  \"paid_actions\": false,\n  \"wallet_actions\": false\n}\n",
+LINE 15       "needle": "/live_data/weather/chicago/calibrations",
+LINE 19       "excerpt": "{\n  \"bytes_scanned\": 93802163,\n  \"endpoint_candidates\": [\n    \"/live_data/weather/{city\",\n    \"config_version\",\n    \"chicago_certification_initial_config\",\n    \"chicago_public_feed_config_e216\",\n    \"config_match\",\n    \"configuration\",\n    \"configurations.\",\n    \"configuration/offsets\",\n    \"config_version/status/receipt_basis\",\n    \"`/live_data/weather/chicago/calibrations`\",\n    \"status/config\",\n    \"calibration/config\",\n    \"source/config/revision\",\n    \"/live_data/weather/\",\n    \"chicago_current_config\",\n    \"chicago_initial_config\",\n    \"config_version\\\\\",\n    \"configuration.\"\n  ],\n  \"files_scanned\": 4655,\n  \"hit_count\": 132,\n  \"hits\": [\n    {\n      \"excerpts\": [\n        {\n          \"excerpt\": \"_lock/weather_index_watch.py\\n    acceptance:\\n      - \\\"At least one active event per initial city captured from direct Kalshi API/source.\\\"\\n      - \\\"Archive retrieval timestamp, close time, comparator/strike, source agency, rule text/version where exposed.\\\"\\n      - \\\"No secondary mirror used as authority.\\\"\\n      - \\\"Classify source per contemporaneous event/rule version; do not assume global TWC or Synoptic semantics.\\\"\\n    output: \\\"agents/rules/findings/\\\"\\n\\n  - id: TASK-WX-002\\n    candidate: KAL-WX-INDEX-001\\n    assigned_role: DATA\\n    priority: P0\\n    status: IN_PROGRESS\\n    depends_on: [TASK-WX-000, TASK-WX-001]\\n    objective: \\\"Build and prospectively run immutable Weather Index recorder using /live_data/weather/{city} and calibration endpoint.\\\"\\n    implementation:\\n      status: IMPLEMENTED_LIVE_CAPTURE_PENDING\\n      repo: bas1231/proof-hunter\\n      branch: ai/weather-index-e001-recorder-v0\\n      paths:\\n        - proof_hunter/venues/kalshi_weather.py\\n        - proof_hunter/source_lock/weather_capture.py\\n        - proof_hunter/source_lock/weather_index_watch.py\\n        - proof_hunter/source_lock/w
+LINE 24       "excerpt": "y offset refreshes are explicitly prospective.\"\n  },\n  \"guards\": [\n    \"This artifact is a structured research summary of official Kalshi certifications already archived in E223.\",\n    \"Initial configuration parameters are not assumed to equal later effective calibrated configurations.\",\n    \"No trading, paid action, or wallet action is performed.\"\n  ],\n  \"live_trading\": false,\n  \"paid_actions\": false,\n  \"research_date\": \"2026-09-20\",\n  \"research_implications\": [\n    \"Simple arithmetic station averaging is falsified as the general model.\",\n    \"The index is a deterministic offset-adjusted weighted network estimate with source hierarchy and QC.\",\n    \"Missing primary data can trigger fallback/substitution while still producing a degraded canonical value.\",\n    \"The Chicago anomaly in E221 is now qualitatively explained by methodology, but exact numeric reproduction requires the effective configuration/offsets and exact selected source values for that minute.\",\n    \"Canonical point finality makes point-in-time capture essential; late observations cannot be substituted retrospectively for settlement research.\",\n    \"NO_PROVEN_EDGE remains the correct market conclusion until signal superiority and contemporaneous executable pricing are tested.\"\n  ],\n  \"sources\": {\n    \"chicago\": {\n      \"archived_sha256_e223\": \"d64de13586308c90bed771ec1ddf494c13f51972fda5b92d83d9031a561d4afb\",\n      \"base_weight_each\": 0.2,\n      \"eligibility_deadline_seconds\": 300,\n      \"fallback\": \"hierarchy including prior-minute HF-ASOS and official ASOS METAR/SPECI, bounded to max age 75 minutes\",\n      \"finality\": \"canonical observation once published governs contract; later restatements are not used for expiration value/outcome under this contract\",\n      \"formula\": {\n        \"adjusted_station\": \"z_i(t) = x_i(t) - b_i + B_c\",\n        \"city_reference\": \"B_c = sum over configured M of w_i*b_i\"
+LINE 29       "excerpt": "_2026-09-19.yaml\",\n      \"matched\": [\n        \"weather index methodology\"\n      ]\n    },\n    {\n      \"path\": \"/home/leonh/prediction_research/candidates/active/KAL-WX-INDEX-001.yaml\",\n      \"matched\": [\n        \"config_version\",\n        \"weather index methodology\"\n      ]\n    },\n    {\n      \"path\": \"/home/leonh/prediction_research/control/weather/kalshi_weather_index_recorder.py\",\n      \"matched\": [\n        \"/live_data/weather/\",\n        \"config_version\"\n      ]\n    },\n    {\n      \"path\": \"/home/leonh/prediction_research/control/results/KALSHI-HOURLY-SOURCE-TRANSITION-E211/stdout.log\",\n      \"matched\": [\n        \"weather index methodology\"\n      ]\n    }\n  ],\n  \"endpoint_candidates\": [\n    \"/live_data/weather/{city\",\n    \"config_version\",\n    \"chicago_certification_initial_config\",\n    \"chicago_public_feed_config_e216\",\n    \"config_match\",\n    \"configuration\",\n    \"configurations.\",\n    \"configuration/offsets\",\n    \"config_version/status/receipt_basis\",\n    \"`/live_data/weather/chicago/calibrations`\",\n    \"status/config\",\n    \"calibration/config\",\n    \"source/config/revision\",\n    \"/live_data/weather/\",\n    \"chicago_current_config\",\n    \"chicago_initial_config\",\n    \"config_version\\\\\",\n    \"configuration.\"\n  ],\n  \"commit\": {\n    \"rc\": 0,\n    \"stdout\": \"[main 4bfebd4] research(weather): discover effective Weather Index config sources\\n 1 file changed, 1740 insertions(+)\\n create mode 100644 knowledge/runs/kalshi-weather-config-discovery-e229.json\",\n    \"stderr\": \"\"\n  },\n  \"push\": {\n    \"rc\": 0,\n    \"stdout\": \"\",\n    \"stderr\": \"To github.com:bas1231/onderzoek.git\\n   e3ab030..4bfebd4  HEAD -> main\"\n  },\n  \"live_trading\": false,\n  \"paid_actions\": false,\n  \"wallet_actions\": false\n}\n",
+LINE 34       "excerpt": "{\n  \"bytes_scanned\": 93802163,\n  \"endpoint_candidates\": [\n    \"/live_data/weather/{city\",\n    \"config_version\",\n    \"chicago_certification_initial_config\",\n    \"chicago_public_feed_config_e216\",\n    \"config_match\",\n    \"configuration\",\n    \"configurations.\",\n    \"configuration/offsets\",\n    \"config_version/status/receipt_basis\",\n    \"`/live_data/weather/chicago/calibrations`\",\n    \"status/config\",\n    \"calibration/config\",\n    \"source/config/revision\",\n    \"/live_data/weather/\",\n    \"chicago_current_config\",\n    \"chicago_initial_config\",\n    \"config_version\\\\\",\n    \"configuration.\"\n  ],\n  \"files_scanned\": 4655,\n  \"hit_count\": 132,\n  \"hits\": [\n    {\n      \"excerpts\": [\n        {\n          \"excerpt\": \"_lock/weather_index_watch.py\\n    acceptance:\\n      - \\\"At least one active event per initial city captured from direct Kalshi API/source.\\\"\\n      - \\\"Archive retrieval timestamp, close time, comparator/strike, source agency, rule text/version where exposed.\\\"\\n      - \\\"No secondary mirror used as authority.\\\"\\n      - \\\"Classify source per contemporaneous event/rule version; do not assume global TWC or Synoptic semantics.\\\"\\n    output: \\\"agents/rules/findings/\\\"\\n\\n  - id: TASK-WX-002\\n    candidate: KAL-WX-INDEX-001\\n    assigned_role: DATA\\n    priority: P0\\n    status: IN_PROGRESS\\n    depends_on: [TASK-WX-000, TASK-WX-001]\\n    objective: \\\"Build and prospectively run immutable Weather Index recorder using /live_data/weather/{city} and calibration endpoint.\\\"\\n    implementation:\\n      status: IMPLEMENTED_LIVE_CAPTURE_PENDING\\n      repo: bas1231/proof-hunter\\n      branch: ai/weather-index-e001-recorder-v0\\n      paths:\\n        - proof_hunter/venues/kalshi_weather.py\\n        - proof_hunter/source_lock/weather_capture.py\\n        - proof_hunter/source_lock/weather_index_watch.py\\n        - proof_hunter/source_lock/w
+LINE 39       "excerpt": "positive result must distinguish **model edge** from **premium-feed latency edge**. If profitability requires privileged/commercial feed speed that normal market makers also consume and the advantage disappears at realistic Starlink/order-arrival latency, this lane should be classified non-robust or non-executable for this project.\n\n## Market/execution evidence\nPublic third-party historical summary for KXTEMPMIAH indicates substantial trading activity, many L2 updates and recent quoted spreads often in the high-single-digit cent range. This only establishes that the market is active enough to justify an execution test. It does not establish a stale-price window or profitable edge.\n\n## Three-angle test plan\n### Angle 1 \u2014 semantic / source proof\nFor every settlement event:\n1. archive exact Kalshi contract/rules/settlement minute/Last Trading Time;\n2. archive Kalshi weather-index response, calibration/config version and contributor/QC detail;\n3. archive the exact station set and fallback/QC outcome used by the canonical point;\n4. fail closed on config drift, unavailable quorum, Rule 7.1 ambiguity, source mismatch or unmatched settlement semantics.\n\n### Angle 2 \u2014 signal / independent reconstruction\nProspectively collect raw HF-ASOS arrivals with **local receipt timestamps** for the five Miami stations.\nAt frozen decision timestamps before close, compare models that use only information truly available then:\n- last published canonical point (baseline);\n- persistence/trend on canonical index history;\n- freshest raw-station state available at decision time, especially S-5 through S-2;\n- station dispersion and 1/2/5/10-minute trend;\n- fallback/QC-aware weighted reconstruction;\n- optional simple calibrated residual distribution.\n\nPrimary question: does the freshest legally/publicly available raw state improve prediction of S out-of-sample versus the last published canonical index and simple trend baselines?\n\nMetrics: MAE/C
+LINE 44       "excerpt": "UTC. Trading continued into 15:59 UTC, with nonzero quoted spread and depth.\n\nThese are historical observations, not executable fill claims for a strategy. Minute aggregates do not establish queue position or an order-arrival fill.\n\n## Why this case matters\nThe episode is compatible with several mutually exclusive explanations:\n1. new weather/index information became available and was incorporated by the market;\n2. ordinary order flow/liquidity caused the move;\n3. a threshold-crossing probability changed from already-published canonical trend;\n4. raw-station information arrived before canonical publication;\n5. market makers repriced for reasons unrelated to a reproducible weather signal.\n\nNo explanation is promoted without point-in-time index/station evidence.\n\n## Required three-angle replay\n### 1. Semantic/source\n- exact threshold comparator and settlement minute;\n- exact point-in-time calibration/config version;\n- final canonical settlement value if obtainable from authoritative/public index archive;\n- contributor/QC/fallback state around the settlement minute.\n\n### 2. Signal/reconstruction\nUsing only information available at each historical decision time (e.g. 15:30, 15:35, 15:38, 15:40 UTC), reconstruct:\n- last published canonical index;\n- canonical 1/2/5/10/15-minute trend;\n- distance to 82.99/83.99 thresholds;\n- station dispersion/raw-state only where receipt-time evidence exists.\n\nPredefine prediction rule before evaluating additional cases. This inspected case may be development/sanity only, never untouched holdout.\n\n### 3. Execution\nUse raw L2/trades, not minute midpoint or close, to test:\n- contemporaneous executable ask/bid and depth;\n- spread/depth immediately before the price jump;\n- realistic order-arrival delay;\n- fees and partial fill;\n- whether any positive signal existed before the price had already moved.\n\n## Current conclusion\nThis case proves only that substantial late repricing occurred i
+---
+FILE knowledge/runs/hourly-20260920T010000+0200-routing.json
+MATCHED chicago
+LINE 66         "snippet": "cally released the following morning. Hourly temperature markets settle on readings from The Weather Company . Always check the specific market\u2019s rules for its source. How Do I Trade on Weather Markets? Kalshi creates a prediction market around a specific temperature threshold for a given location. For example: \u201cHighest temperature in Chicago on April 15, 2025?\u201d \u200b Contract prices for temperature ranges may shift as new weather data (e.g., forecasts, model runs, satellite images, observations) becomes available. Note: Not all weather data is the same. Apps like AccuWeather, iOS Weather, or Google Weather may be useful for guidance but do not determine contract outcomes. The only source used for settlement is the one named in the ma",
+LINE 90         "snippet": "amounts in specific cities, from New York City to Los Angeles. Traders can take positions on whether a city will reach a certain high temperature or fall within a particular range. Each weather market names its official settlement source in its market rules. Daily high/low temperature markets settle based on the final climate report issued by the National Weather Service (NWS), typically released the following morning. Hourly temperature markets settle on readings from The Weather Company . Always check the specific market\u2019s rules for its source. How Do I Trade on Weather Markets? Kalshi creates a prediction market around a specific temperature threshold for a given location. For example: \u201cHighest temperature in Chicago on April 1",
+LINE 122         "snippet": "ing based on the high temperature recorded in the final NWS Daily Climate Report. Market determination may be delayed in the rare instances of a) a high temperature is not consistent with 6-hr or 24-hr highs reported by METAR or b) the final NWS Climate Report high temperature value is lower than previous preliminary report. \u200b Hourly Temperature Markets Some temperature markets are hourly - the market title names an exact time, for example \u201cChicago temperature at 5 PM EDT.\u201d These markets are also directional: each contract resolves on whether the temperature at that time is above or below a specific level, rather than within a range. They settle on the temperature at that exact time as reported by The Weather Company for the stati",
+---
+FILE knowledge/runs/kalshi-hourly-source-transition-e211.json
+MATCHED chicago,miami,nyc
+LINE 24           "event_ticker": "KXTEMPNYCH-26SEP1009",
+LINE 31           "rules_primary": "If the temperature recorded at Central Park, New York City for Sep 10, 2026 9 AM EDT as reported by The Weather Company (for coordinates KNYC), is above 68.99\u00b0, then the market resolves to Yes.",
+LINE 37           "ticker": "KXTEMPNYCH-26SEP1009-T68.99",
+LINE 43           "event_ticker": "KXTEMPNYCH-26SEP1009",
+LINE 50           "rules_primary": "If the temperature recorded at Central Park, New York City for Sep 10, 2026 9 AM EDT as reported by The Weather Company (for coordinates KNYC), is above 67.99\u00b0, then the market resolves to Yes.",
+LINE 56           "ticker": "KXTEMPNYCH-26SEP1009-T67.99",
+LINE 62           "event_ticker": "KXTEMPNYCH-26SEP1010",
+LINE 69           "rules_primary": "If the temperature recorded at Central Park, New York City for Sep 10, 2026 10 AM EDT as reported by The Weather Company (for coordinates KNYC), is above 79.99\u00b0, then the market resolves to Yes.",
+LINE 75           "ticker": "KXTEMPNYCH-26SEP1010-T79.99",
+LINE 81           "event_ticker": "KXTEMPNYCH-26SEP1010",
+LINE 88           "rules_primary": "If the temperature recorded at Central Park, New York City for Sep 10, 2026 10 AM EDT as reported by The Weather Company (for coordinates KNYC), is above 78.99\u00b0, then the market resolves to Yes.",
+LINE 94           "ticker": "KXTEMPNYCH-26SEP1010-T78.99",
+---
+FILE knowledge/runs/kalshi-weather-index-pdf-probe-e226.json
+MATCHED nyc
+LINE 159       "ticker": "KXTEMPNYCHS"
+LINE 180       "ticker": "KXTEMPNYCHS"
+---
+FILE knowledge/runs/kalshi-weather-index-chicago-degraded-analysis-e233.json
+MATCHED canonical,incomplete,chicago
+LINE 13   "config_version": "chicago-temperature-v1.0-cal-20260914",
+LINE 17     "('incomplete', (), (), ())": 3,
+LINE 1456     "Fallback METAR usage alone does not imply a large canonical-value residual versus the raw station mean.",
+LINE 1584     "incomplete": {
+LINE 1607   "task_id": "KALSHI-WEATHER-INDEX-CHICAGO-DEGRADED-E233",
+---
+FILE knowledge/runs/kalshi-weather-index-manifest-schema-e235.json
+MATCHED latest_incomplete,incomplete,chicago,miami,nyc
+LINE 14           "city": "nyc",
+LINE 15           "config_version": "nyc-temperature-v1.0-cal-20260914",
+LINE 26             "latest_incomplete",
+LINE 37           "city": "miami",
+LINE 38           "config_version": "miami-temperature-v1.0-cal-20260914",
+LINE 49             "latest_incomplete",
+LINE 60           "city": "chicago",
+LINE 61           "config_version": "chicago-temperature-v1.0-cal-20260914",
+LINE 72             "latest_incomplete",
+LINE 100           "city": "nyc",
+LINE 101           "config_version": "nyc-temperature-v1.0-cal-20260914",
+LINE 112             "latest_incomplete",
+---
+FILE knowledge/runs/twc-kalshi-full-revision-audit-e181.json
+MATCHED chicago
+LINE 12       "no-margin intercom-interblocks-align-left\"><p>Kalshi offers a wide variety of weather-related markets that allow users to trade contracts based on temperature movements or precipitation amounts in specific cities, from New York City to Los Angeles. Traders can take positions on whether a city will reach a certain high temperature or fall within a particular range. Each weather market names its official settlement source in its market rules. Daily high/low temperature markets settle based on the final climate report issued by the National Weather Service (NWS), typically released the following morning. Hourly temperature markets settle on readings from <a href=\"https://weather.com/kalshi\" target=\"_blank\" rel=\"nofollow noopener noreferrer\">The Weather Company</a>. Always check the specific market\u2019s rules for its source.</p></div><div class=\"intercom-interblocks-paragraph no-margin intercom-interblocks-align-left\"><p> </p></div><div class=\"intercom-interblocks-heading intercom-interblocks-align-left\"><h1 id=\"h_13a85c056f\">How Do I Trade on Weather Markets?</h1></div><div class=\"intercom-interblocks-paragraph no-margin intercom-interblocks-align-left\"><p>Kalshi creates a prediction market around a specific temperature threshold for a given location. For example: \u201cHighest temperature in Chicago on April 15, 2025?\u201d<br/>\u200b<br/>Contract prices for temperature ranges may shift as new weather data (e.g., forecasts, model runs, satellite images, observations) becomes available.</p></div>",
+LINE 13       "arkets</h3></div><div class=\"intercom-interblocks-paragraph no-margin intercom-interblocks-align-left\"><p>Daily weather markets are typically ranges: contracts resolve on the day\u2019s highest (or lowest) temperature at the listed station, offered as a set of temperature ranges plus \u201cor above\u201d / \u201cor below\u201d levels.<br/>\u200b</p></div><div class=\"intercom-interblocks-paragraph no-margin intercom-interblocks-align-left\"><p>These markets settle the next morning based on the high temperature recorded in the final NWS Daily Climate Report. Market determination may be delayed in the rare instances of a) a high temperature is not consistent with 6-hr or 24-hr highs reported by METAR or b) the final NWS Climate Report high temperature value is lower than previous preliminary report.<br/>\u200b</p></div><div class=\"intercom-interblocks-subheading3 intercom-interblocks-align-left\"><h3 id=\"h_e3c3987fb7\">Hourly Temperature Markets</h3></div><div class=\"intercom-interblocks-paragraph no-margin intercom-interblocks-align-left\"><p>Some temperature markets are hourly - the market title names an exact time, for example \u201cChicago temperature at 5 PM EDT.\u201d These markets are also directional: each contract resolves on whether the temperature at that time is above or below a specific level, rather than within a range. They settle on the temperature at that exact time as reported by The Weather Company for the station coordinates named in the market rules (for example, KORD for Chicago).<br/>\u200b</p></div><div clas",
+LINE 14       "st (or lowest) temperature at the listed station, offered as a set of temperature ranges plus \u201cor above\u201d / \u201cor below\u201d levels.<br/>\u200b</p></div><div class=\"intercom-interblocks-paragraph no-margin intercom-interblocks-align-left\"><p>These markets settle the next morning based on the high temperature recorded in the final NWS Daily Climate Report. Market determination may be delayed in the rare instances of a) a high temperature is not consistent with 6-hr or 24-hr highs reported by METAR or b) the final NWS Climate Report high temperature value is lower than previous preliminary report.<br/>\u200b</p></div><div class=\"intercom-interblocks-subheading3 intercom-interblocks-align-left\"><h3 id=\"h_e3c3987fb7\">Hourly Temperature Markets</h3></div><div class=\"intercom-interblocks-paragraph no-margin intercom-interblocks-align-left\"><p>Some temperature markets are hourly - the market title names an exact time, for example \u201cChicago temperature at 5 PM EDT.\u201d These markets are also directional: each contract resolves on whether the temperature at that time is above or below a specific level, rather than within a range. They settle on the temperature at that exact time as reported by The Weather Company for the station coordinates named in the market rules (for example, KORD for Chicago).<br/>\u200b</p></div><div class=\"intercom-interblocks-paragraph no-margin intercom-interblocks-align-left\"><p>For these markets, The Weather Company\u2019s reported value is official and final. NWS Climatological Reports,",
+LINE 15       "ts are also directional: each contract resolves on whether the temperature at that time is above or below a specific level, rather than within a range. They settle on the temperature at that exact time as reported by The Weather Company for the station coordinates named in the market rules (for example, KORD for Chicago).<br/>\u200b</p></div><div class=\"intercom-interblocks-paragraph no-margin intercom-interblocks-align-left\"><p>For these markets, The Weather Company\u2019s reported value is official and final. NWS Climatological Reports, Google Weather, and other services may be useful references, but they are not authoritative for settlement. Preliminary Weather Company readings may differ from the final reported value due to rounding and conversion, so use caution when interpreting preliminary readings.<br/>\u200b</p></div><div class=\"intercom-interblocks-paragraph no-margin intercom-interblocks-align-left\"><p>Settlement processes approximately 25-35 minutes after the market closes to ensure accurate data retrieval from the official source - a short delay after close is normal. Historical readings and market data are available at <a href=\"https://weather.com/kalshi\" target=\"_blank\" rel=\"nofollow noopener noreferrer\">weather.com/kalshi</a>.<br/>\u200b</p></div><div class=\"intercom-interblocks-subheading3 intercom-interblocks-align-left\"><h3 id=\"h_43c2973c54\">Daylight Savings Time</h3></div><div class=\"intercom-interblocks-paragraph no-margin intercom-interblocks-align-left\"><p>The NWS Climate",
+LINE 16       "e as reported by The Weather Company for the station coordinates named in the market rules (for example, KORD for Chicago).<br/>\u200b</p></div><div class=\"intercom-interblocks-paragraph no-margin intercom-interblocks-align-left\"><p>For these markets, The Weather Company\u2019s reported value is official and final. NWS Climatological Reports, Google Weather, and other services may be useful references, but they are not authoritative for settlement. Preliminary Weather Company readings may differ from the final reported value due to rounding and conversion, so use caution when interpreting preliminary readings.<br/>\u200b</p></div><div class=\"intercom-interblocks-paragraph no-margin intercom-interblocks-align-left\"><p>Settlement processes approximately 25-35 minutes after the market closes to ensure accurate data retrieval from the official source - a short delay after close is normal. Historical readings and market data are available at <a href=\"https://weather.com/kalshi\" target=\"_blank\" rel=\"nofollow noopener noreferrer\">weather.com/kalshi</a>.<br/>\u200b</p></div><div class=\"intercom-interblocks-subheading3 intercom-interblocks-align-left\"><h3 id=\"h_43c2973c54\">Daylight Savings Time</h3></div><div class=\"intercom-interblocks-paragraph no-margin intercom-interblocks-align-left\"><p>The NWS Climate Reports (used for daily temperature markets) use local standard time when reporting daily high temperatures. This means that during Daylight Saving Time, the high temperature will be recorded between"
+LINE 19       "low users to trade contracts based on temperature movements or precipitation amounts in specific cities, from New York City to Los Angeles. Traders can take positions on whether a city will reach a certain high temperature or fall within a particular range. Each weather market names its official settlement source in its market rules. Daily high/low temperature markets settle based on the final climate report issued by the National Weather Service (NWS), typically released the following morning. Hourly temperature markets settle on readings from <a href=\"https://weather.com/kalshi\" target=\"_blank\" rel=\"nofollow noopener noreferrer\">The Weather Company</a>. Always check the specific market\u2019s rules for its source.</p></div><div class=\"intercom-interblocks-paragraph no-margin intercom-interblocks-align-left\"><p> </p></div><div class=\"intercom-interblocks-heading intercom-interblocks-align-left\"><h1 id=\"h_13a85c056f\">How Do I Trade on Weather Markets?</h1></div><div class=\"intercom-interblocks-paragraph no-margin intercom-interblocks-align-left\"><p>Kalshi creates a prediction market around a specific temperature threshold for a given location. For example: \u201cHighest temperature in Chicago on April 15, 2025?\u201d<br/>\u200b<br/>Contract prices for temperature ranges may shift as new weather data (e.g., forecasts, model runs, satellite images, observations) becomes available.</p></div><div class=\"intercom-interblocks-callout\" style=\"background-color:#feedaf80;border-color:#fbc91633\"><div clas",
+LINE 21       "erblocks-align-left\"><p>These markets settle the next morning based on the high temperature recorded in the final NWS Daily Climate Report. Market determination may be delayed in the rare instances of a) a high temperature is not consistent with 6-hr or 24-hr highs reported by METAR or b) the final NWS Climate Report high temperature value is lower than previous preliminary report.<br/>\u200b</p></div><div class=\"intercom-interblocks-subheading3 intercom-interblocks-align-left\"><h3 id=\"h_e3c3987fb7\">Hourly Temperature Markets</h3></div><div class=\"intercom-interblocks-paragraph no-margin intercom-interblocks-align-left\"><p>Some temperature markets are hourly - the market title names an exact time, for example \u201cChicago temperature at 5 PM EDT.\u201d These markets are also directional: each contract resolves on whether the temperature at that time is above or below a specific level, rather than within a range. They settle on the temperature at that exact time as reported by The Weather Company for the station coordinates named in the market rules (for example, KORD for Chicago).<br/>\u200b</p></div><div class=\"intercom-interblocks-paragraph no-margin intercom-interblocks-align-left\"><p>For these markets, The Weather Company\u2019s reported value is official and final. NWS Climatological Reports, Google Weather, and other services may be useful references, but they are not authoritative for settlement. Preliminary Weather Company readings may differ from the final reported value due to rounding and",
+LINE 22       "ation may be delayed in the rare instances of a) a high temperature is not consistent with 6-hr or 24-hr highs reported by METAR or b) the final NWS Climate Report high temperature value is lower than previous preliminary report.<br/>\u200b</p></div><div class=\"intercom-interblocks-subheading3 intercom-interblocks-align-left\"><h3 id=\"h_e3c3987fb7\">Hourly Temperature Markets</h3></div><div class=\"intercom-interblocks-paragraph no-margin intercom-interblocks-align-left\"><p>Some temperature markets are hourly - the market title names an exact time, for example \u201cChicago temperature at 5 PM EDT.\u201d These markets are also directional: each contract resolves on whether the temperature at that time is above or below a specific level, rather than within a range. They settle on the temperature at that exact time as reported by The Weather Company for the station coordinates named in the market rules (for example, KORD for Chicago).<br/>\u200b</p></div><div class=\"intercom-interblocks-paragraph no-margin intercom-interblocks-align-left\"><p>For these markets, The Weather Company\u2019s reported value is official and final. NWS Climatological Reports, Google Weather, and other services may be useful references, but they are not authoritative for settlement. Preliminary Weather Company readings may differ from the final reported value due to rounding and conversion, so use caution when interpreting preliminary readings.<br/>\u200b</p></div><div class=\"intercom-interblocks-paragraph no-margin intercom-interblock",
+LINE 26       "emperature ranges plus \u201cor above\u201d / \u201cor below\u201d levels.<br/>\u200b</p></div><div class=\"intercom-interblocks-paragraph no-margin intercom-interblocks-align-left\"><p>These markets settle the next morning based on the high temperature recorded in the final NWS Daily Climate Report. Market determination may be delayed in the rare instances of a) a high temperature is not consistent with 6-hr or 24-hr highs reported by METAR or b) the final NWS Climate Report high temperature value is lower than previous preliminary report.<br/>\u200b</p></div><div class=\"intercom-interblocks-subheading3 intercom-interblocks-align-left\"><h3 id=\"h_e3c3987fb7\">Hourly Temperature Markets</h3></div><div class=\"intercom-interblocks-paragraph no-margin intercom-interblocks-align-left\"><p>Some temperature markets are hourly - the market title names an exact time, for example \u201cChicago temperature at 5 PM EDT.\u201d These markets are also directional: each contract resolves on whether the temperature at that time is above or below a specific level, rather than within a range. They settle on the temperature at that exact time as reported by The Weather Company for the station coordinates named in the market rules (for example, KORD for Chicago).<br/>\u200b</p></div><div class=\"intercom-interblocks-paragraph no-margin intercom-interblocks-align-left\"><p>For these markets, The Weather Company\u2019s reported value is official and final. NWS Climatological Reports, Google Weather, and other services may be useful references, but they",
+LINE 27       "a range. They settle on the temperature at that exact time as reported by The Weather Company for the station coordinates named in the market rules (for example, KORD for Chicago).<br/>\u200b</p></div><div class=\"intercom-interblocks-paragraph no-margin intercom-interblocks-align-left\"><p>For these markets, The Weather Company\u2019s reported value is official and final. NWS Climatological Reports, Google Weather, and other services may be useful references, but they are not authoritative for settlement. Preliminary Weather Company readings may differ from the final reported value due to rounding and conversion, so use caution when interpreting preliminary readings.<br/>\u200b</p></div><div class=\"intercom-interblocks-paragraph no-margin intercom-interblocks-align-left\"><p>Settlement processes approximately 25-35 minutes after the market closes to ensure accurate data retrieval from the official source - a short delay after close is normal. Historical readings and market data are available at <a href=\"https://weather.com/kalshi\" target=\"_blank\" rel=\"nofollow noopener noreferrer\">weather.com/kalshi</a>.<br/>\u200b</p></div><div class=\"intercom-interblocks-subheading3 intercom-interblocks-align-left\"><h3 id=\"h_43c2973c54\">Daylight Savings Time</h3></div><div class=\"intercom-interblocks-paragraph no-margin intercom-interblocks-align-left\"><p>The NWS Climate Reports (used for daily temperature markets) use local standard time when reporting daily high temperatures. This means that during Daylight Sa",
+LINE 28       "ules (for example, KORD for Chicago).<br/>\u200b</p></div><div class=\"intercom-interblocks-paragraph no-margin intercom-interblocks-align-left\"><p>For these markets, The Weather Company\u2019s reported value is official and final. NWS Climatological Reports, Google Weather, and other services may be useful references, but they are not authoritative for settlement. Preliminary Weather Company readings may differ from the final reported value due to rounding and conversion, so use caution when interpreting preliminary readings.<br/>\u200b</p></div><div class=\"intercom-interblocks-paragraph no-margin intercom-interblocks-align-left\"><p>Settlement processes approximately 25-35 minutes after the market closes to ensure accurate data retrieval from the official source - a short delay after close is normal. Historical readings and market data are available at <a href=\"https://weather.com/kalshi\" target=\"_blank\" rel=\"nofollow noopener noreferrer\">weather.com/kalshi</a>.<br/>\u200b</p></div><div class=\"intercom-interblocks-subheading3 intercom-interblocks-align-left\"><h3 id=\"h_43c2973c54\">Daylight Savings Time</h3></div><div class=\"intercom-interblocks-paragraph no-margin intercom-interblocks-align-left\"><p>The NWS Climate Reports (used for daily temperature markets) use local standard time when reporting daily high temperatures. This means that during Daylight Saving Time, the high temperature will be recorded between 1:00 AM and 12:59 AM local time the following day - not based on the standard midnight",
+LINE 29       "he listed station, offered as a set of temperature ranges plus \u201cor above\u201d / \u201cor below\u201d levels.\\u003cbr\\u003e\",\"class\":\"no-margin\"},{\"type\":\"paragraph\",\"text\":\"These markets settle the next morning based on the high temperature recorded in the final NWS Daily Climate Report. Market determination may be delayed in the rare instances of a) a high temperature is not consistent with 6-hr or 24-hr highs reported by METAR or b) the final NWS Climate Report high temperature value is lower than previous preliminary report.\\u003cbr\\u003e\u200b\",\"class\":\"no-margin\"},{\"type\":\"subheading3\",\"text\":\"Hourly Temperature Markets\",\"idAttribute\":\"h_e3c3987fb7\"},{\"type\":\"paragraph\",\"text\":\"Some temperature markets are hourly - the market title names an exact time, for example \u201cChicago temperature at 5 PM EDT.\u201d These markets are also directional: each contract resolves on whether the temperature at that time is above or below a specific level, rather than within a range. They settle on the temperature at that exact time as reported by The Weather Company for the station coordinates named in the market rules (for example, KORD for Chicago).\\u003cbr\\u003e\u200b\",\"class\":\"no-margin\"},{\"type\":\"paragraph\",\"text\":\"For these markets, The Weather Company\u2019s reported value is official and final. NWS Climatological Reports, Google Weather, and other services may be useful references, but they are not authoritative for settlement. Preliminary Weather Company readings may differ from the final reported value due to roun",
+---
+FILE knowledge/runs/twc-kalshi-metar-listonly-e172.json
+MATCHED chicago
+LINE 22           "timezone": "America/Chicago"
+LINE 32           "timezone": "America/Chicago"
+---
+FILE knowledge/runs/hourly-20260920T040000+0200-routing.json
+MATCHED chicago
+LINE 66         "snippet": "cally released the following morning. Hourly temperature markets settle on readings from The Weather Company . Always check the specific market\u2019s rules for its source. How Do I Trade on Weather Markets? Kalshi creates a prediction market around a specific temperature threshold for a given location. For example: \u201cHighest temperature in Chicago on April 15, 2025?\u201d \u200b Contract prices for temperature ranges may shift as new weather data (e.g., forecasts, model runs, satellite images, observations) becomes available. Note: Not all weather data is the same. Apps like AccuWeather, iOS Weather, or Google Weather may be useful for guidance but do not determine contract outcomes. The only source used for settlement is the one named in the ma",
+LINE 90         "snippet": "amounts in specific cities, from New York City to Los Angeles. Traders can take positions on whether a city will reach a certain high temperature or fall within a particular range. Each weather market names its official settlement source in its market rules. Daily high/low temperature markets settle based on the final climate report issued by the National Weather Service (NWS), typically released the following morning. Hourly temperature markets settle on readings from The Weather Company . Always check the specific market\u2019s rules for its source. How Do I Trade on Weather Markets? Kalshi creates a prediction market around a specific temperature threshold for a given location. For example: \u201cHighest temperature in Chicago on April 1",
+LINE 122         "snippet": "ing based on the high temperature recorded in the final NWS Daily Climate Report. Market determination may be delayed in the rare instances of a) a high temperature is not consistent with 6-hr or 24-hr highs reported by METAR or b) the final NWS Climate Report high temperature value is lower than previous preliminary report. \u200b Hourly Temperature Markets Some temperature markets are hourly - the market title names an exact time, for example \u201cChicago temperature at 5 PM EDT.\u201d These markets are also directional: each contract resolves on whether the temperature at that time is above or below a specific level, rather than within a range. They settle on the temperature at that exact time as reported by The Weather Company for the stati",
+---
+FILE knowledge/runs/hourly-20260920T020000+0200-routing.json
+MATCHED chicago
+LINE 66         "snippet": "cally released the following morning. Hourly temperature markets settle on readings from The Weather Company . Always check the specific market\u2019s rules for its source. How Do I Trade on Weather Markets? Kalshi creates a prediction market around a specific temperature threshold for a given location. For example: \u201cHighest temperature in Chicago on April 15, 2025?\u201d \u200b Contract prices for temperature ranges may shift as new weather data (e.g., forecasts, model runs, satellite images, observations) becomes available. Note: Not all weather data is the same. Apps like AccuWeather, iOS Weather, or Google Weather may be useful for guidance but do not determine contract outcomes. The only source used for settlement is the one named in the ma",
+LINE 90         "snippet": "amounts in specific cities, from New York City to Los Angeles. Traders can take positions on whether a city will reach a certain high temperature or fall within a particular range. Each weather market names its official settlement source in its market rules. Daily high/low temperature markets settle based on the final climate report issued by the National Weather Service (NWS), typically released the following morning. Hourly temperature markets settle on readings from The Weather Company . Always check the specific market\u2019s rules for its source. How Do I Trade on Weather Markets? Kalshi creates a prediction market around a specific temperature threshold for a given location. For example: \u201cHighest temperature in Chicago on April 1",
+LINE 114         "snippet": "ing based on the high temperature recorded in the final NWS Daily Climate Report. Market determination may be delayed in the rare instances of a) a high temperature is not consistent with 6-hr or 24-hr highs reported by METAR or b) the final NWS Climate Report high temperature value is lower than previous preliminary report. \u200b Hourly Temperature Markets Some temperature markets are hourly - the market title names an exact time, for example \u201cChicago temperature at 5 PM EDT.\u201d These markets are also directional: each contract resolves on whether the temperature at that time is above or below a specific level, rather than within a range. They settle on the temperature at that exact time as reported by The Weather Company for the stati",
+---
+FILE knowledge/runs/kalshi-hourly-rules-live-e202.json
+MATCHED chicago,miami,nyc
+LINE 20       "city": "nyc",
+LINE 33       "city": "miami",
+LINE 46       "city": "chicago",
+---
+FILE knowledge/runs/kalshi-weather-index-schema-detail-e232.json
+MATCHED incomplete,chicago,miami,nyc
+LINE 20       "city": "nyc",
+LINE 25       "config_version": "nyc-temperature-v1.0-cal-20260914",
+LINE 29       "incomplete_count": 2,
+LINE 30       "incomplete_examples": [
+LINE 93           "status": "incomplete",
+LINE 159           "status": "incomplete",
+LINE 164       "raw_path": "/home/leonh/.local/state/prediction-research/raw/kalshi_weather_index/nyc/080f34ca20db0eaa7a73f99488d4839eb6ee749b7eb78632ee0d8c8d311b9a61.json",
+LINE 187         "incomplete": 2,
+LINE 226       "city": "miami",
+LINE 231       "config_version": "miami-temperature-v1.0-cal-20260914",
+LINE 235       "incomplete_count": 2,
+LINE 236       "incomplete_examples": [
+---
+FILE knowledge/runs/kalshi-weather-index-official-docs-e223.json
+MATCHED chicago,miami,nyc
+LINE 83       "ticker": "KXTEMPNYCHS",
+LINE 84       "url": "https://assets.kalshi.com/regulatory/product-certifications/NYCWINDEX.pdf"
+LINE 94       "ticker": "KXTEMPNYCHS",
+LINE 95       "url": "https://assets.kalshi.com/contract_terms/NYCWINDEX.pdf"
+LINE 109           "rules_primary": "If the temperature recorded at Chicago Metro Area for Sep 19, 2026 at 8 PM EDT as reported by Synoptic Data, is above 71.99\u00b0, then the market resolves to Yes.",
+LINE 114           "title": "Will the temp in Chicago Metro Area be above 71.99\u00b0 on Sep 19, 2026 at 8pm EDT?"
+LINE 121           "rules_primary": "If the temperature recorded at Chicago Metro Area for Sep 19, 2026 at 8 PM EDT as reported by Synoptic Data, is above 70.99\u00b0, then the market resolves to Yes.",
+LINE 126           "title": "Will the temp in Chicago Metro Area be above 70.99\u00b0 on Sep 19, 2026 at 8pm EDT?"
+LINE 133           "rules_primary": "If the temperature recorded at Chicago Metro Area for Sep 19, 2026 at 8 PM EDT as reported by Synoptic Data, is above 69.99\u00b0, then the market resolves to Yes.",
+LINE 138           "title": "Will the temp in Chicago Metro Area be above 69.99\u00b0 on Sep 19, 2026 at 8pm EDT?"
+LINE 147       "title": "Hourly Directional Chicago Metro Temperature"
+LINE 207           "rules_primary": "If the temperature recorded at Miami, FL for Sep 19, 2026 at 8 PM EDT as reported by Synoptic Data, is above 80.99\u00b0, then the market resolves to Yes.",
+---
+FILE knowledge/runs/kalshi-weather-index-official-docs-text-e224.json
+MATCHED nyc
+LINE 86       "ticker": "KXTEMPNYCHS",
+LINE 87       "url": "https://assets.kalshi.com/regulatory/product-certifications/NYCWINDEX.pdf"
+LINE 97       "ticker": "KXTEMPNYCHS",
+LINE 98       "url": "https://assets.kalshi.com/contract_terms/NYCWINDEX.pdf"
+---
+FILE knowledge/runs/hourly-20260920T030000+0200-routing.json
+MATCHED chicago
+LINE 66         "snippet": "cally released the following morning. Hourly temperature markets settle on readings from The Weather Company . Always check the specific market\u2019s rules for its source. How Do I Trade on Weather Markets? Kalshi creates a prediction market around a specific temperature threshold for a given location. For example: \u201cHighest temperature in Chicago on April 15, 2025?\u201d \u200b Contract prices for temperature ranges may shift as new weather data (e.g., forecasts, model runs, satellite images, observations) becomes available. Note: Not all weather data is the same. Apps like AccuWeather, iOS Weather, or Google Weather may be useful for guidance but do not determine contract outcomes. The only source used for settlement is the one named in the ma",
+LINE 90         "snippet": "amounts in specific cities, from New York City to Los Angeles. Traders can take positions on whether a city will reach a certain high temperature or fall within a particular range. Each weather market names its official settlement source in its market rules. Daily high/low temperature markets settle based on the final climate report issued by the National Weather Service (NWS), typically released the following morning. Hourly temperature markets settle on readings from The Weather Company . Always check the specific market\u2019s rules for its source. How Do I Trade on Weather Markets? Kalshi creates a prediction market around a specific temperature threshold for a given location. For example: \u201cHighest temperature in Chicago on April 1",
+LINE 114         "snippet": "ing based on the high temperature recorded in the final NWS Daily Climate Report. Market determination may be delayed in the rare instances of a) a high temperature is not consistent with 6-hr or 24-hr highs reported by METAR or b) the final NWS Climate Report high temperature value is lower than previous preliminary report. \u200b Hourly Temperature Markets Some temperature markets are hourly - the market title names an exact time, for example \u201cChicago temperature at 5 PM EDT.\u201d These markets are also directional: each contract resolves on whether the temperature at that time is above or below a specific level, rather than within a range. They settle on the temperature at that exact time as reported by The Weather Company for the stati",
+---
+FILE knowledge/runs/edge_hunter/edge-hunt-hourly-20260920T030000+0200.json
+MATCHED KWI-INCOMPLETE-TO-CANONICAL-V1,canonical,incomplete
+LINE 4       "candidate_id": "KWI-INCOMPLETE-TO-CANONICAL-V1",
+LINE 8         "Incomplete states lack enough numeric observations.",
+LINE 28       "hypothesis": "Incomplete KWI states may predict later canonical value.",
+LINE 32       "mechanism": "Some station observations appear before canonical completion.",
+LINE 73       "mechanism": "Canonicalize payouts and prove equivalence or dominance before price comparison.",
+---
+FILE knowledge/runs/edge_hunter/edge-hunt-hourly-20260920T040000+0200.json
+MATCHED KWI-INCOMPLETE-TO-CANONICAL-V1,canonical,incomplete
+LINE 4       "candidate_id": "KWI-INCOMPLETE-TO-CANONICAL-V1",
+LINE 8         "Incomplete states lack enough numeric observations.",
+LINE 28       "hypothesis": "Incomplete KWI states may predict later canonical value.",
+LINE 32       "mechanism": "Some station observations appear before canonical completion.",
+LINE 73       "mechanism": "Canonicalize payouts and prove equivalence or dominance before price comparison.",
+---
+FILE knowledge/documents/text/kalshi_weather_rules/87f6e9aa1d94ad0dc9e8b4d9ad4e53a2b555ffa09a472e6675780f61fd654737.json
+MATCHED chicago,nyc
+LINE 7   "text": "Weather Markets | Kalshi Help Center Copyright (c) 2023, Intercom, Inc. ( [email protected] ) with Reserved Font Name \"Inter\". This Font Software is licensed under the SIL Open Font License, Version 1.1. Copyright (c) 2023, Intercom, Inc. ( [email protected] ) with Reserved Font Name \"Inter\". This Font Software is licensed under the SIL Open Font License, Version 1.1. Skip to main content Search for articles... All Collections Markets Popular Markets Weather Markets Weather Markets July 22, 2026 Table of contents How do weather markets work? Kalshi offers a wide variety of weather-related markets that allow users to trade contracts based on temperature movements or precipitation amounts in specific cities, from New York City to Los Angeles. Traders can take positions on whether a city will reach a certain high temperature or fall within a particular range. Each weather market names its official settlement source in its market rules. Daily high/low temperature markets settle based on the final climate report issued by the National Weather Service (NWS), typically released the following morning. Hourly temperature markets settle on readings from The Weather Company . Always check the specific market\u2019s rules for its source. How Do I Trade on Weather Markets? Kalshi creates a prediction market around a specific temperature threshold for a given location. For example: \u201cHighest temperature in Chicago on April 15, 2025?\u201d \u200b Contract prices for temperature ranges may shift as new weather data (e.g., forecasts, model runs, satellite images, observations) becomes available. Note: Not all weather data is the same. Apps like AccuWeather, iOS Weather, or Google Weather may be useful for guidance but do not determine contract outcomes. The only source used for settlement is the one named in the market\u2019s rules - the NWS Daily Climate Report for daily temperature markets, or The Weather Company for hourly temperature markets. Daily Temperature
+---
+FILE knowledge/documents/text/kalshi_weather_rules/633803fc9af9ded172b8f985a053ad41ba67bf385f538f9ea00f995a6564472b.json
+MATCHED chicago,nyc
+LINE 7   "text": "Weather Markets | Kalshi Help Center Copyright (c) 2023, Intercom, Inc. ( [email protected] ) with Reserved Font Name \"Inter\". This Font Software is licensed under the SIL Open Font License, Version 1.1. Copyright (c) 2023, Intercom, Inc. ( [email protected] ) with Reserved Font Name \"Inter\". This Font Software is licensed under the SIL Open Font License, Version 1.1. Skip to main content Search for articles... All Collections Markets Popular Markets Weather Markets Weather Markets July 22, 2026 Table of contents How do weather markets work? Kalshi offers a wide variety of weather-related markets that allow users to trade contracts based on temperature movements or precipitation amounts in specific cities, from New York City to Los Angeles. Traders can take positions on whether a city will reach a certain high temperature or fall within a particular range. Each weather market names its official settlement source in its market rules. Daily high/low temperature markets settle based on the final climate report issued by the National Weather Service (NWS), typically released the following morning. Hourly temperature markets settle on readings from The Weather Company . Always check the specific market\u2019s rules for its source. How Do I Trade on Weather Markets? Kalshi creates a prediction market around a specific temperature threshold for a given location. For example: \u201cHighest temperature in Chicago on April 15, 2025?\u201d \u200b Contract prices for temperature ranges may shift as new weather data (e.g., forecasts, model runs, satellite images, observations) becomes available. Note: Not all weather data is the same. Apps like AccuWeather, iOS Weather, or Google Weather may be useful for guidance but do not determine contract outcomes. The only source used for settlement is the one named in the market\u2019s rules - the NWS Daily Climate Report for daily temperature markets, or The Weather Company for hourly temperature markets. Daily Temperature
+---
+FILE knowledge/documents/text/kalshi_weather_rules/1c1c1110d5aaa97eba247056c3cd9e877b546e618c7a2326d16e259df34a7246.json
+MATCHED chicago,nyc
+LINE 7   "text": "Weather Markets | Kalshi Help Center Copyright (c) 2023, Intercom, Inc. ( [email protected] ) with Reserved Font Name \"Inter\". This Font Software is licensed under the SIL Open Font License, Version 1.1. Copyright (c) 2023, Intercom, Inc. ( [email protected] ) with Reserved Font Name \"Inter\". This Font Software is licensed under the SIL Open Font License, Version 1.1. Skip to main content Search for articles... All Collections Markets Popular Markets Weather Markets Weather Markets July 22, 2026 Table of contents How do weather markets work? Kalshi offers a wide variety of weather-related markets that allow users to trade contracts based on temperature movements or precipitation amounts in specific cities, from New York City to Los Angeles. Traders can take positions on whether a city will reach a certain high temperature or fall within a particular range. Each weather market names its official settlement source in its market rules. Daily high/low temperature markets settle based on the final climate report issued by the National Weather Service (NWS), typically released the following morning. Hourly temperature markets settle on readings from The Weather Company . Always check the specific market\u2019s rules for its source. How Do I Trade on Weather Markets? Kalshi creates a prediction market around a specific temperature threshold for a given location. For example: \u201cHighest temperature in Chicago on April 15, 2025?\u201d \u200b Contract prices for temperature ranges may shift as new weather data (e.g., forecasts, model runs, satellite images, observations) becomes available. Note: Not all weather data is the same. Apps like AccuWeather, iOS Weather, or Google Weather may be useful for guidance but do not determine contract outcomes. The only source used for settlement is the one named in the market\u2019s rules - the NWS Daily Climate Report for daily temperature markets, or The Weather Company for hourly temperature markets. Daily Temperature
+---
+FILE knowledge/documents/text/kalshi_weather_rules/ed25de24cd741654b83c4a4e3998402b4528b3bfb304697874a41cabacabd614.json
+MATCHED chicago,nyc
+LINE 7   "text": "Weather Markets | Kalshi Help Center Copyright (c) 2023, Intercom, Inc. ( [email protected] ) with Reserved Font Name \"Inter\". This Font Software is licensed under the SIL Open Font License, Version 1.1. Copyright (c) 2023, Intercom, Inc. ( [email protected] ) with Reserved Font Name \"Inter\". This Font Software is licensed under the SIL Open Font License, Version 1.1. Skip to main content Search for articles... All Collections Markets Popular Markets Weather Markets Weather Markets July 22, 2026 Table of contents How do weather markets work? Kalshi offers a wide variety of weather-related markets that allow users to trade contracts based on temperature movements or precipitation amounts in specific cities, from New York City to Los Angeles. Traders can take positions on whether a city will reach a certain high temperature or fall within a particular range. Each weather market names its official settlement source in its market rules. Daily high/low temperature markets settle based on the final climate report issued by the National Weather Service (NWS), typically released the following morning. Hourly temperature markets settle on readings from The Weather Company . Always check the specific market\u2019s rules for its source. How Do I Trade on Weather Markets? Kalshi creates a prediction market around a specific temperature threshold for a given location. For example: \u201cHighest temperature in Chicago on April 15, 2025?\u201d \u200b Contract prices for temperature ranges may shift as new weather data (e.g., forecasts, model runs, satellite images, observations) becomes available. Note: Not all weather data is the same. Apps like AccuWeather, iOS Weather, or Google Weather may be useful for guidance but do not determine contract outcomes. The only source used for settlement is the one named in the market\u2019s rules - the NWS Daily Climate Report for daily temperature markets, or The Weather Company for hourly temperature markets. Daily Temperature
+---
+FILE knowledge/documents/text/kalshi_weather_rules/ed4856f1dc651640e9e43309f1bddb21726bc06b61d20f774b6c5acd575e32a4.json
+MATCHED chicago,nyc
+LINE 7   "text": "Weather Markets | Kalshi Help Center Copyright (c) 2023, Intercom, Inc. ( [email protected] ) with Reserved Font Name \"Inter\". This Font Software is licensed under the SIL Open Font License, Version 1.1. Copyright (c) 2023, Intercom, Inc. ( [email protected] ) with Reserved Font Name \"Inter\". This Font Software is licensed under the SIL Open Font License, Version 1.1. Skip to main content Search for articles... All Collections Markets Popular Markets Weather Markets Weather Markets July 22, 2026 Table of contents How do weather markets work? Kalshi offers a wide variety of weather-related markets that allow users to trade contracts based on temperature movements or precipitation amounts in specific cities, from New York City to Los Angeles. Traders can take positions on whether a city will reach a certain high temperature or fall within a particular range. Each weather market names its official settlement source in its market rules. Daily high/low temperature markets settle based on the final climate report issued by the National Weather Service (NWS), typically released the following morning. Hourly temperature markets settle on readings from The Weather Company . Always check the specific market\u2019s rules for its source. How Do I Trade on Weather Markets? Kalshi creates a prediction market around a specific temperature threshold for a given location. For example: \u201cHighest temperature in Chicago on April 15, 2025?\u201d \u200b Contract prices for temperature ranges may shift as new weather data (e.g., forecasts, model runs, satellite images, observations) becomes available. Note: Not all weather data is the same. Apps like AccuWeather, iOS Weather, or Google Weather may be useful for guidance but do not determine contract outcomes. The only source used for settlement is the one named in the market\u2019s rules - the NWS Daily Climate Report for daily temperature markets, or The Weather Company for hourly temperature markets. Daily Temperature
+---
+FILE knowledge/documents/text/kalshi_weather_rules/50f008134d660aeae541e57e18d288862193423c02c9bdcbe182e115f53f0bd8.json
+MATCHED chicago,nyc
+LINE 7   "text": "Weather Markets | Kalshi Help Center Copyright (c) 2023, Intercom, Inc. ( [email protected] ) with Reserved Font Name \"Inter\". This Font Software is licensed under the SIL Open Font License, Version 1.1. Copyright (c) 2023, Intercom, Inc. ( [email protected] ) with Reserved Font Name \"Inter\". This Font Software is licensed under the SIL Open Font License, Version 1.1. Skip to main content Search for articles... All Collections Markets Popular Markets Weather Markets Weather Markets July 22, 2026 Table of contents How do weather markets work? Kalshi offers a wide variety of weather-related markets that allow users to trade contracts based on temperature movements or precipitation amounts in specific cities, from New York City to Los Angeles. Traders can take positions on whether a city will reach a certain high temperature or fall within a particular range. Each weather market names its official settlement source in its market rules. Daily high/low temperature markets settle based on the final climate report issued by the National Weather Service (NWS), typically released the following morning. Hourly temperature markets settle on readings from The Weather Company . Always check the specific market\u2019s rules for its source. How Do I Trade on Weather Markets? Kalshi creates a prediction market around a specific temperature threshold for a given location. For example: \u201cHighest temperature in Chicago on April 15, 2025?\u201d \u200b Contract prices for temperature ranges may shift as new weather data (e.g., forecasts, model runs, satellite images, observations) becomes available. Note: Not all weather data is the same. Apps like AccuWeather, iOS Weather, or Google Weather may be useful for guidance but do not determine contract outcomes. The only source used for settlement is the one named in the market\u2019s rules - the NWS Daily Climate Report for daily temperature markets, or The Weather Company for hourly temperature markets. Daily Temperature
+---
+FILE knowledge/documents/text/kalshi_weather_rules/48cb73fffd002b60436f9b34e81593e2b2201f0a0cab201a32aa3aa9e4ca8de1.json
+MATCHED chicago,nyc
+LINE 7   "text": "Weather Markets | Kalshi Help Center Copyright (c) 2023, Intercom, Inc. ( [email protected] ) with Reserved Font Name \"Inter\". This Font Software is licensed under the SIL Open Font License, Version 1.1. Copyright (c) 2023, Intercom, Inc. ( [email protected] ) with Reserved Font Name \"Inter\". This Font Software is licensed under the SIL Open Font License, Version 1.1. Skip to main content Search for articles... All Collections Markets Popular Markets Weather Markets Weather Markets July 22, 2026 Table of contents How do weather markets work? Kalshi offers a wide variety of weather-related markets that allow users to trade contracts based on temperature movements or precipitation amounts in specific cities, from New York City to Los Angeles. Traders can take positions on whether a city will reach a certain high temperature or fall within a particular range. Each weather market names its official settlement source in its market rules. Daily high/low temperature markets settle based on the final climate report issued by the National Weather Service (NWS), typically released the following morning. Hourly temperature markets settle on readings from The Weather Company . Always check the specific market\u2019s rules for its source. How Do I Trade on Weather Markets? Kalshi creates a prediction market around a specific temperature threshold for a given location. For example: \u201cHighest temperature in Chicago on April 15, 2025?\u201d \u200b Contract prices for temperature ranges may shift as new weather data (e.g., forecasts, model runs, satellite images, observations) becomes available. Note: Not all weather data is the same. Apps like AccuWeather, iOS Weather, or Google Weather may be useful for guidance but do not determine contract outcomes. The only source used for settlement is the one named in the market\u2019s rules - the NWS Daily Climate Report for daily temperature markets, or The Weather Company for hourly temperature markets. Daily Temperature
+---
+FILE knowledge/raw/platform_docs/polymarket/20260920T022453Zdata_api_openapi.json
+MATCHED canonical
+LINE 1 {"openapi":"3.1.0","info":{"title":"Polymarket Data API v2","description":"The Polymarket Data API: wallet portfolios, trade and activity feeds, market state and ranked boards.\n\n## Conventions every endpoint shares\n\n- **Envelope**: every response wraps its payload in `data` (paged routes add `pagination`). A documented miss is `data: null` or an empty list, never an error.\n- **Pagination is cursor-only**: follow `pagination.next_cursor` until `null`; `has_more` is exact, and there is no `offset` query parameter (sending one is a `400`). Cursors are signed, typed per endpoint, and opaque. The feeds (`trades`, `activity`, combo activity) are keyset walks, stable across concurrent writes; the boards, `holders` and most combo-position sorts are offset walks behind the opaque token, so a page taken across a data refresh can skip or repeat rows. Where a cursor binds its cohort (the boards, positions, combo positions), resuming bare is fine, restating the same values is fine, and contradicting them is a `400`. The `trades`/`activity` feed cursors carry only the seek anchor and page size (plus the sort direction on activity): re-send identical filters on every page, because changing one mid-walk re-anchors silently.\n- **Rate limiting**: `429` with `Retry-After` is the busy signal for heavy queries and pool saturation. A heavy query may first be queued briefly for a capacity slot; the `429` arrives only if that short wait ends unserved. Each caller also has a per-client request allowance, and bursts past it get the same `429` with `Retry-After` sized to the remaining wait. Retry after the given delay.\n- **Identifiers**: `condition` (aliases `condition_id`, `conditionId`) is the unified query key for on-chain 0x condition ids; `market_id` fields carry Gamma's own market ids; `event_id` takes Gamma event ids; `token_id` is the CLOB asset id (the key on `/v2/prices-history`).\n- **Params** accept both snake_case and camelCase spellings.\n- **Units**: bare `volume`/`size`
+---
+FILE knowledge/raw/market_rules/polymarket/20260920T013720Zevent_85579.json
+MATCHED miami
+LINE 1 {"$schema":"https://gamma-api.polymarket.com/schemas/Event.json","id":"85579","ticker":"jack-doherty-prison-time","slug":"jack-doherty-prison-time","title":"Jack Doherty Prison Time?","description":"YouTuber Jack Doherty was recently arrested in Miami, Florida and charged with possession of a controlled substance (amphetamine), possession of 20 grams or less of marijuana, and resisting an officer without violence.\n\nThis market will resolve according to the prison sentence, if any, imposed on Jack Doherty in relation to these charges by October 31, 2026, 11:59 PM ET.\n\nThis market will resolve immediately based on the first sentence rendered in relation to these charges, regardless of any appeals. If the charges are tried separately, this market will stay open until the first sentence has been rendered for all three charges and will resolve based on the cumulative sentence imposed across all three charges. If sentencing has taken place for some, but not all, of these charges on October 31, 2026, 11:59 PM ET, this market will resolve based on sentencing up to that point.\n\nIf Doherty is found not guilty, there is a mistrial, or if his sentencing does not include any jail or prison time, this market will resolve to \"No Prison Time.\"\n\nIf no sentencing takes place by October 31, 2026, 11:59 PM ET, this market will also resolve to \"No Prison Time.\"\n\nIf the sentence falls exactly between two brackets, then this market will resolve to the higher range bracket.\n\nFor the purposes of this market, it does not matter whether the sentence is concurrent or consecutive to any existing sentence Doherty is already serving. The market will resolve based on the total prison sentence imposed in this case.\n\nThe primary resolution source for this market will be official information from the Florida court system or other involved U.S. government sources; however, a consensus of credible reporting may also be used.","resolutionSource":"","startDate":"2025-11-20T23:01:43.2589
+---
+FILE knowledge/kalshi/KALSHI_FIRST_STABLE_DECIDABILITY_PAPER_2026-09-19.md
+MATCHED canonical
+LINE 47 - Novelty: **NEW relative to current canonical KB**
+---
+FILE knowledge/kalshi/INDEX_THRESHOLD_RANGE_CROSS_REPRESENTATION_2026-09-19.md
+MATCHED canonical
+LINE 185 2. canonical underlying identifier;
+LINE 214 Canonicaliseer ieder indexcontract naar minimaal:
+LINE 220 1. indexeer threshold-contracten per canonical settlement key;
+---
+FILE knowledge/kalshi/claims.yaml
+MATCHED canonical
+LINE 20     agent_rule: "Measurement start/end, comparator, strike, source-transform en exceptions moeten in de canonical contract AST."
+LINE 123     claim: "Een echte KXHIGHNY event-instance kon uit structured-strike velden naar zes canonical predicates worden gecompileerd; alle 15 unordered pairs waren formeel DISJOINT."
+---
+FILE knowledge/kalshi/KALSHI_WEATHER_INDEX_PREPUBLICATION_HYPOTHESIS_2026-09-19.md
+MATCHED canonical,miami
+LINE 6 For Kalshi hourly Weather Index contracts, a trader may be able to use **low-latency HF-ASOS observations from the final few minutes before settlement (for example S-2/S-3)** to improve the prediction of settlement-minute index value S beyond the last already-published Kalshi canonical point.
+LINE 11 The stronger initial idea was that the raw HF-ASOS observations for settlement minute S could be obtained and used to reconstruct the canonical S value before trading ended.
+LINE 15 Primary contract rules state that for a single-minute `at` contract, Last Trading Time is the end of the specified time period / settlement minute. The underlying one-minute HF-ASOS observation normally arrives about 2–5 minutes after observation time, while Kalshi's canonical eligibility/publication process for minute S runs to S+300 seconds. Therefore the raw S observation is normally available only after the trading deadline and cannot safely be treated as pre-close information.
+LINE 17 The remaining hypothesis is narrower: before the end of S, low-latency raw observations for S-2/S-3 may sometimes be available while the most recent published canonical index is older (roughly around S-5). Those fresher observations may improve the forecast of S.
+LINE 23 - Miami Index uses five ASOS members: KMIA, KOPF, KFLL, KFXE, KPMP, equal base weights 0.20.
+LINE 26 - Eligibility deadline is event minute t + 300 seconds; observations arriving later are excluded from canonical calculation.
+LINE 27 - Canonical point is calculated/published at t+300s and is final for settlement once published, subject only to Rule 7.1 outcome review.
+LINE 29 - Miami v1.0 offsets in the filing: KMIA 0.0C; KOPF -0.5C; KFLL 0.0C; KFXE 0.0C; KPMP 0.0C; city reference B=-0.10C. Configuration can be updated prospectively and must therefore be version-locked point-in-time.
+LINE 30 - `At` contracts settle on the latest canonical point at or before the settlement minute, max 60 minutes old.
+LINE 33 ### Algebraic simplification for Miami
+LINE 34 When all five members are accepted, the calibration offsets cancel in the weighted-index formula and the Miami Index equals the arithmetic mean of the five raw station temperatures, subject to the official QC/eligibility process and final rounding.
+LINE 56 3. archive the exact station set and fallback/QC outcome used by the canonical point;
+---
+FILE knowledge/kalshi/CRYPTO_RANGE_THRESHOLD_ROBUST_FLOOR_2026-09-19.md
+MATCHED canonical
+LINE 36 Voor een canonical lower/range/upper structuur:
+LINE 194 2. canonicalize alle threshold/range predicates;
+---
+FILE knowledge/kalshi/mve_nested_dominance_2026-09-19.yaml
+MATCHED canonical
+LINE 93       - "Represent each combo by a canonical sorted set of (event_ticker, market_ticker, side)."
+---
+FILE knowledge/kalshi/weather_index_source_resolution_2026-09-19.yaml
+MATCHED /live_data/weather/,canonical,nyc
+LINE 11       - "Kalshi Predictions API documenteert GET /live_data/weather/{city} als de Kalshi-computed city temperature index en noemt deze de canonical minute-resolution series behind hourly temperature markets."
+LINE 46       - url: "https://www.coinrithm.com/en/prediction-markets/kalshi/kxtempnychs-26sep1901"
+---
+FILE knowledge/kalshi/KALSHI_WEATHER_SOURCE_MIGRATION_MISPRICING_HYPOTHESIS_2026-09-19.md
+MATCHED /live_data/weather/,canonical,chicago
+LINE 16 ### Chicago cutover case
+LINE 17 A sharper historical transition is documented for Chicago on **2026-09-10**:
+LINE 19 - `KXTEMPCHIHS-26SEP1011` (11:00 EDT) names **Synoptic Data / Kalshi Weather Index Methodology** for **Chicago Metro Area**.
+LINE 29 A contemporaneous public METAR cross-check on 2026-09-10 shows that nearby Chicago stations can differ by contract-relevant amounts:
+LINE 41 A secondary KWI tool labels Chicago with KMDW as its city reference/mapping, but this must **not** be interpreted as `KWI = KMDW`. Indeed, the 2026-09-10 11:00 EDT new-series outcomes imply the KWI settlement was between roughly **71.00°F and 71.99°F**, while KMDW's nearby 14:53 UTC METAR was about **73.9°F**. This is direct warning evidence that the exact multi-station calibration/weights are essential.
+LINE 43 **Open semantic blocker:** exact Chicago KWI calibration members, weights, offsets, effective version and publication timestamp still require primary `/live_data/weather/chicago/calibrations` or equivalent CFTC methodology evidence. No geographic-divergence model may be promoted without this.
+LINE 52 The Chicago cutover itself does **not** show an impossible discontinuity: old 10:00 TWC threshold outcomes imply a final value between roughly 70.00°F and 70.99°F, while new 11:00 KWI outcomes imply roughly 71.00°F to 71.99°F. One hour of normal daytime warming can explain that difference, so it is not evidence of source-divergence mispricing.
+LINE 60 3. a KWI-implied probability distribution using only contemporaneously available canonical information and exact calibration version;
+LINE 81 - Exact same-hour old/new Chicago overlap is not established.
+LINE 83 - `Chicago reference = KMDW` from a secondary tool does **not** mean `KWI = KMDW`; the observed Sep-10 outcomes contradict such a simplification.
+LINE 86 The source/documentation mismatch, Chicago intra-day cutover and observed ~1–2°F spatial station dispersion make source/geometry divergence a **structurally plausible conditional research lane**. There is still no evidence that executable market prices systematically follow the wrong source, exact Chicago KWI calibration remains unresolved, and no same-hour cross-source arbitrage pair has been proven.
+---
+FILE knowledge/kalshi/KXTEMPMIAH_PARTICIPATION_REGIME_AROUND_KWI_2026-09-19.md
+MATCHED miami
+LINE 14 - The CFTC product list shows the Miami Kalshi Weather Index product certified on 2026-08-12.
+---
+FILE knowledge/kalshi/priority_followups_2026-09-19.yaml
+MATCHED /live_data/weather/,canonical,nyc
+LINE 135     claim: "Kalshi's current Predictions API documentatie exposeert een publieke Weather Index en calibration timeline; de docs omschrijven die index als de canonical minute-resolution series behind hourly temperature markets. Primaire Kalshi-bronnen blijven tegelijk The Weather Company noemen als de officiële settlementbron voor hourly weather. De index moet daarom voorlopig als aparte publieke observatie/signal-laag worden behandeld, niet als vervanging van TWC settlement."
+LINE 137       - "Kalshi API docs: GET /live_data/weather/{city} geeft een Kalshi-computed city temperature index, beschreven als de canonical minute-resolution series behind hourly temperature markets."
+LINE 167       - url: "https://kalshi.com/markets/kx/test/kxtempnych-26jul2501"
+---
+FILE knowledge/kalshi/INDEX_RANGE_THRESHOLD_DOMINANCE_2026-09-19.md
+MATCHED canonical
+LINE 64 - de canonical contract parser bewijzen dat `R => A` voor iedere toegestane Expiration Value en iedere relevante exception branch.
+LINE 162 Canonical pair key:
+LINE 168 1. zoek lower-thresholds `A` binnen dezelfde canonical key;
+LINE 199 De juiste volgende gate is prospectieve simultaneous L2 capture over canonical matching S&P/Nasdaq range-threshold pairs.
+---
+FILE knowledge/kalshi/CRYPTO_CROSS_REPRESENTATION_UNIVERSE_2026-09-19.yaml
+MATCHED canonical
+LINE 47       For a canonical same-settlement lower threshold A, upper threshold H and intervening range R
+LINE 88     canonical_settlement_key:
+LINE 95     canonical_predicate_fields:
+---
+FILE knowledge/kalshi/KALSHI_KWI_BOUNDARY_NOWCAST_EXPERIMENT_2026-09-19.md
+MATCHED canonical,incomplete,miami
+LINE 9 For hourly Kalshi Weather Index contracts, the next settlement-minute KWI value may be forecast more accurately 5–30 minutes ahead from the already-published canonical KWI path than by a persistence baseline. If such signal improvement exists, a later and separate experiment may test whether executable Kalshi threshold prices underreact to it.
+LINE 14 The exact settlement-minute HF-ASOS observation generally arrives too late to create a clean pre-close information advantage. This experiment therefore deliberately avoids reliance on privileged/fast raw-feed access and uses only canonical KWI points that would already have been public by the decision timestamp.
+LINE 17 A KWI point for observation minute `t` may only be used at decision times at or after its documented canonical publication time. For the current KWI methodology, the conservative default is `t + 300 seconds` unless contemporaneous evidence proves a different publication timestamp.
+LINE 32 - final canonical KWI point used for the hourly settlement at minute `S`.
+LINE 41 Predict `KWI_S` as the most recent canonical KWI point point-in-time available at the decision timestamp.
+LINE 44 OLS slope over the most recent 5 point-in-time-available canonical minutes; extrapolate to S.
+LINE 58 - no future canonical point used;
+LINE 61 - no silent interpolation across unavailable/incomplete canonical minutes;
+LINE 66 Verify contract settlement minute, KWI source/rules/config and conservative publication timing. Reconstruct exactly which canonical points existed at each decision timestamp.
+LINE 77 Historical KWI data may be used for development only if its canonical values are final/reproducible and point-in-time availability is reconstructed conservatively.
+LINE 84 The 2026-09-09 Miami 12:00 case has already been inspected qualitatively and is therefore **not** untouched evidence; it remains development/example material only.
+---
+FILE knowledge/kalshi/KALSHI_WEATHER_INDEX_FREE_REPLAY_CASE_2026-09-09.md
+MATCHED canonical,incomplete,miami
+LINE 1 # Kalshi Weather Index free replay case — Miami 2026-09-09 12:00 EDT
+LINE 3 Status: **OBSERVED / REPLAY_INCOMPLETE / NO_PROVEN_EDGE**
+LINE 14 Public final-outcome mirror confirms that `84° or above` (threshold >83.99°F) resolved **No** for this event. Therefore the canonical settlement value was below 84.00°F. Exact numeric settlement value is not asserted here because the public outcome page exposes threshold outcomes, not the exact canonical number.
+LINE 27 3. a threshold-crossing probability changed from already-published canonical trend;
+LINE 28 4. raw-station information arrived before canonical publication;
+LINE 37 - final canonical settlement value if obtainable from authoritative/public index archive;
+LINE 42 - last published canonical index;
+LINE 43 - canonical 1/2/5/10/15-minute trend;
+LINE 58 This case proves only that substantial late repricing occurred in an active Miami Weather Index threshold contract and that trading remained open close to the settlement minute. It does **not** prove that the move was forecastable or executable from a weather signal.
+---
+FILE knowledge/kalshi/SHORT_HORIZON_REDUCED_FEE_INDEX_ALGEBRA_2026-09-19.md
+MATCHED canonical
+LINE 131 - veel thresholds kunnen lokaal op de i9 worden gecanonicaliseerd en gepaard;
+---
+FILE knowledge/kalshi/WEATHER_SOURCE_REGIME_DRIFT_SUPERSEDING_CONTEXT_2026-09-19.yaml
+MATCHED miami
+LINE 28         New KWI hourly products were certified beginning with Miami on 2026-08-12 and
+---
+FILE knowledge/kalshi/KALSHI_WEATHER_INDEX_SOURCE_TRANSITION_2026-09-19.md
+MATCHED canonical,miami,nyc
+LINE 14 ### Miami
+LINE 18 - Methodology Version 1.0, initial configuration `miami-temperature-v1.0`.
+LINE 20   - KMIA — Miami International Airport
+LINE 21   - KOPF — Miami-Opa Locka Executive Airport
+LINE 27 - Eligibility deadline is event minute `t + 300s`; later-arriving observations are excluded from canonical calculation.
+LINE 39 - Rulebook: `NYCWINDEX`.
+LINE 40 - Methodology Version 1.0, initial configuration `nyc-temperature-v1.0`.
+LINE 42 - Same 5-minute eligibility deadline / canonical publication architecture; NYC-specific fallback and QC parameters apply.
+LINE 50 For an `at` contract, the Index Settlement Value is the latest canonical observation whose event time is at or before the settlement time and no more than 60 minutes earlier. Determination occurs no earlier than 5 minutes after settlement time.
+LINE 52 A canonical Index observation, once initially published, is final for contract purposes; later restatements/corrections/removals are not used, subject to the Market Outcome Review Process under Rule 7.1.
+LINE 54 If there is no qualifying canonical observation in the permitted window, or an Expiration Value otherwise cannot be determined, Rule 7.1 applies. Therefore a raw station value or forecast is never by itself a settlement proof.
+LINE 58 On 2026-09-19 the official Kalshi page for Miami 11:00 EDT (`KXTEMPMIAH-26SEP1911`) displayed a candidate threshold `83° or above` with a visible Yes buy around 76¢ while the page's displayed chance was around 85% during discovery.
+---
+FILE knowledge/kalshi/THRESHOLD_EXACT_EXECUTION_FIRST_2026-09-19.md
+MATCHED canonical
+LINE 163 1. canonicaliseer settlementsemantiek;
+LINE 171 De Strix/i9 is goed geschikt om veel ladders en exact-series lokaal te canonicaliseren en te vergelijken; de strategie mag niet afhankelijk zijn van colocatie of microseconde-races.
+---
+FILE knowledge/kalshi/weather_index_bootstrap_corpus_2026-09-19.yaml
+MATCHED chicago,miami,nyc
+LINE 12       - "Mostly Right publiceert recorded KXTEMP order books voor Miami, NYC, LA en Chicago; de zichtbare hourly tables bevatten tienduizenden tot >100k rows en timestamps/orderbook depth fields."
+LINE 18         - miami
+LINE 21         - chicago
+---
+FILE knowledge/kalshi/FEE_FREE_PARTITION_EXECUTION_2026-09-19.md
+MATCHED canonical
+LINE 185 2. event partitions en nested deadline-relaties canonicaliseert;
+---
+FILE candidates/active/KAL-WX-INDEX-001.yaml
+MATCHED chicago,miami
+LINE 35       - miami
+LINE 37       - chicago
+LINE 44       Chicago has a documented 2026-09-10 intra-day cutover from an older TWC-referenced series at 10:00 EDT
+LINE 162     - "Do not use the Chicago adjacent-hour source cutover as same-hour cross-source arbitrage evidence."
+---
+FILE hourly-reports/hourly-20260920T030000+0200.md
+MATCHED KWI-INCOMPLETE-TO-CANONICAL-V1,canonical,incomplete
+LINE 15 KWI-INCOMPLETE-TO-CANONICAL-V1 remains DISCOVERED and UNPROVEN.
+---
+FILE hourly-reports/2026-09-19_1733_news_weak_signal.md
+MATCHED canonical,chicago
+LINE 5 ## Canonical-memory check
+LINE 6 Recent repository commits were reviewed before external search. The repository already contains current work on Weather Index pre-build gates, maker/fee regimes, public strategy claims and abuse lessons, index algebra, Chicago geographic divergence and event-driven live momentum. Existing public-research notes already cover maker/taker differences, incentives, relation mining, adjudication basis, informed-flow veto, settlement endogeneity and legal bounty. Those mechanisms were treated as known and not re-reported as discoveries.
+LINE 27 - Community strategy claims found in search were either already represented in canonical public-research notes or too weak/duplicative to store.
+---
+FILE hourly-reports/2026-09-19T1758-news-weak-signal-strategy.md
+MATCHED canonical
+LINE 9 ## Canonical Git changes noticed before scan
+---
+FILE hourly-reports/2026-09-19_1753_news_weak_signals.md
+MATCHED canonical
+LINE 5 ## Canonical-memory check
+---
+FILE hourly-reports/2026-09-19/1654_prediction_edge_watch.md
+MATCHED canonical,miami
+LINE 4 Canonical KB: `bas1231/onderzoek`. Git reviewed first, then fresh public research. Deduplication performed against the recent canonical commits visible at run time.
+LINE 11 Most important new mechanism: for Miami hourly Weather Index contracts, the hypothesis is no longer generic weather forecasting. It is a narrow **pre-publication reconstruction** test: prospectively ingest the five HF-ASOS members and current calibration/config, estimate the still-unpublished canonical point, and ask whether any 1–5 minute information window exists before last executable market time.
+LINE 13 The canonical note records Miami members KMIA/KOPF/KFLL/KFXE/KPMP, an eligibility deadline of event minute +300 seconds, >=4-member / >=0.80-weight quorum, fallback semantics, and point-in-time config requirements. Economic status remains `NO_PROVEN_EDGE`.
+LINE 44 - Kalshi/CESifo maker-taker FLB paper: already represented in canonical hypotheses; duplicate/background.
+---
+FILE meta/RESEARCH_STOP_HANDOFF_2026-09-19.md
+MATCHED canonical,chicago,miami
+LINE 26 - Miami KWI uses multiple ASOS stations and a published deterministic methodology.
+LINE 33 - Remaining narrower hypothesis: fresher S-2 / S-3 station state may improve the forecast of settlement minute S versus the last already-published canonical index.
+LINE 40 - Chicago on 2026-09-10 provides evidence of an intra-day regime transition: old TWC-style series at an earlier hour, new KWI/Synoptic series at a later hour.
+LINE 46 - Miami, 2026-09-09, 12:00 EDT was frozen as a replay case before further tuning.
+LINE 49 - The open question is whether canonical KWI state available before the repricing would have predicted it prospectively.
+LINE 55 - Primary baseline: persistence / last published canonical KWI.
+LINE 73 Can published canonical KWI history 30/15/10/5 minutes before settlement predict the next settlement-hour index materially better than persistence, especially near integer contract boundaries?
+LINE 76 - immutable canonical KWI history with configVersion/contributor metadata;
+LINE 111 - `b825b81` — frozen Miami free replay case.
+---
+FILE meta/implementation/KAL-WX-E001_recorder_build_2026-09-19.yaml
+MATCHED canonical
+LINE 60   note: "No credentials are stored in this public/canonical knowledge record."
+LINE 88   weather_index: "Current Kalshi docs describe Weather Index as the canonical minute-resolution series behind hourly temperature markets."
+---
+FILE meta/hourly_reports/2026-09-19_1600_CEST.md
+MATCHED canonical
+LINE 13 - `a8a30d4` — Bootstrap canonical prediction-market research knowledge base.
+---
+FILE meta/hourly_reports/2026-09-19_1632_CEST.md
+MATCHED canonical
+LINE 35 - canonicaliseer ieder combo als gesorteerde set `(event_ticker, market_ticker, side)`;
+---
+FILE control/validator.py
+MATCHED canonical,incomplete
+LINE 96                     "health_check command must use the canonical health script"
+LINE 130                 raise ValueError("pytest command incomplete")
+---
+FILE control/TASK_QUEUE.yaml
+MATCHED /live_data/weather/
+LINE 54     objective: "Build and prospectively run immutable Weather Index recorder using /live_data/weather/{city} and calibration endpoint."
+---
+FILE control/__pycache__/director.cpython-312.pyc
+MATCHED canonical
+LINE 193 N�PREDICTION_RESEARCH_MODEL�model�default�effort�	reasoning�	developer�	bootstrap)�role�content�userzvInspect the following canonical repository context and propose only the next safe infrastructure/control-plane step.
+---
+FILE control/__pycache__/validator.cpython-312.pyc
+MATCHED canonical,incomplete
+LINE 81    zexperiments/health_check.pyz9health_check command must use the canonical health scriptr	   �   z"python operation requires a scriptr   �-z+python -c / -m style execution is forbiddenr,   zunsafe Python script path)z
+LINE 83 control/jobs/z<Python scripts must live under experiments/ or control/jobs/z.pyz#Python task must execute a .py filer   r   zpytest command incompletez-mz(pytest must run through python -m pytest)
+---
+FILE control/tasks/completed/KALSHI-WEATHER-INDEX-CHICAGO-DEGRADED-E233.json
+MATCHED chicago
+LINE 10   "task_id": "KALSHI-WEATHER-INDEX-CHICAGO-DEGRADED-E233",
+---
+FILE control/tasks/completed/KALSHI-WEATHER-INDEX-MIAMI-INTERPOL-E227.json
+MATCHED miami
+LINE 10   "task_id": "KALSHI-WEATHER-INDEX-MIAMI-INTERPOL-E227",
+---
+FILE control/tasks/completed/EDGE-HUNTER-KWI-PAIR-INVENTORY-E358.json
+MATCHED KWI-INCOMPLETE-TO-CANONICAL-V1,canonical,incomplete
+LINE 6   "hypothesis_id": "KWI-INCOMPLETE-TO-CANONICAL-V1",
+---
+FILE control/tasks/running/EDGE-HUNTER-KWI-EVIDENCE-LOCATE-E359.json
+MATCHED KWI-INCOMPLETE-TO-CANONICAL-V1,canonical,incomplete
+LINE 6   "hypothesis_id": "KWI-INCOMPLETE-TO-CANONICAL-V1",
+---
+FILE control/jobs/close_edge_hunter_0300_e274.py
+MATCHED KWI-INCOMPLETE-TO-CANONICAL-V1,canonical,incomplete
+LINE 38     'KWI-INCOMPLETE-TO-CANONICAL-V1 remains DISCOVERED and UNPROVEN.',
+---
+FILE control/jobs/enforce_no_cost_policy.py
+MATCHED canonical
+LINE 47 canonical = ROOT / 'control' / 'NO_COST_POLICY.md'
+LINE 48 canonical.write_text(
+LINE 55 for path in [*TARGETS, canonical]:
+---
+FILE control/jobs/capture_hottest_neg_risk_e313.py
+MATCHED incomplete
+LINE 56         raise SystemExit('incomplete_book')
+---
+FILE control/jobs/capture_gdp_neg_risk_e299.py
+MATCHED incomplete
+LINE 50         raise SystemExit('incomplete_book')
+---
+FILE control/jobs/inventory_kwi_pairs_e358.py
+MATCHED latest_incomplete,canonical,incomplete
+LINE 50         if 'incomplete' in text or 'canonical' in text or 'complete' in text:
+LINE 73         for key in ['city','status','state','timestamp','retrieved_at','observed_at','latest_incomplete','canonical','complete']:
+---
+FILE control/jobs/capture_starship_neg_risk_e319.py
+MATCHED incomplete
+LINE 56         raise SystemExit('incomplete_book')
+---
+FILE control/jobs/price_neg_risk_batch_e297.py
+MATCHED incomplete
+LINE 59         results.append({'event_id':group,'title':group,'status':'INCOMPLETE_BOOKS','market_count':len(group['markets']),'returned_books':len(books)})
+---
+FILE control/jobs/capture_fed_neg_risk_e302.py
+MATCHED incomplete
+LINE 50         raise SystemExit('incomplete_book')
+---
+FILE control/jobs/scan_neg_risk_identities_e292.py
+MATCHED incomplete
+LINE 107         results.append({'event_id':event,'title':event,'status':'INCOMPLETE_BOOKS','market_count':len(event['markets'])})
+---
+FILE control/jobs/capture_arctic_neg_risk_e316.py
+MATCHED incomplete
+LINE 56         raise SystemExit('incomplete_book')
+---
+FILE control/jobs/smoke_edge_packet_e270.py
+MATCHED KWI-INCOMPLETE-TO-CANONICAL-V1,canonical,incomplete
+LINE 25 required = {'KWI-INCOMPLETE-TO-CANONICAL-V1', 'PAYOFF-IDENTITY-MINING-V1'}
+---
+FILE control/jobs/locate_kwi_evidence_e359.py
+MATCHED KWI-INCOMPLETE-TO-CANONICAL-V1,latest_incomplete,/live_data/weather/,canonical,incomplete,chicago,miami,nyc
+LINE 6     'KWI-INCOMPLETE-TO-CANONICAL-V1',
+LINE 7     'latest_incomplete',
+LINE 8     '/live_data/weather/',
+LINE 9     'canonical',
+LINE 10     'incomplete',
+LINE 11     'chicago',
+LINE 12     'miami',
+LINE 13     'nyc'
+---
+FILE control/jobs/capture_asset_fill_baseline_e351.py
+MATCHED incomplete
+LINE 56         raise SystemExit('incomplete_book')
+---
+FILE control/jobs/__pycache__/scan_neg_risk_identities_e292.cpython-312.pyc
+MATCHED incomplete
+LINE 50    �status�error�asset_id)r   r   )r   r   �bids�asksc                 �8   � t        | j                  dd�      �      S )N�pricer   ��float�getr"   s    r$   r%   r%   d   �   � ��a�e�e�G�A�.>�(?� r&   c                 �8   � t        | j                  dd�      �      S )Nr3   �	   r4   r"   s    r$   r%   r%   e   r7   r&   r3   �size)�bid�bid_size�ask�ask_size�INCOMPLETE_BOOKS)r
+---
+FILE control/results/KALSHI-HOURLY-SOURCE-TRANSITION-E211/stdout.log
+MATCHED chicago,miami,nyc
+LINE 6       "series_ticker": "KXTEMPNYCH",
+LINE 15           "ticker": "KXTEMPNYCH-26SEP1010-T75.99",
+LINE 16           "event_ticker": "KXTEMPNYCH-26SEP1010",
+LINE 25           "rules_primary": "If the temperature recorded at Central Park, New York City for Sep 10, 2026 10 AM EDT as reported by The Weather Company (for coordinates KNYC), is above 75.99\u00b0, then the market resolves to Yes.",
+LINE 34           "ticker": "KXTEMPNYCH-26SEP1010-T74.99",
+LINE 35           "event_ticker": "KXTEMPNYCH-26SEP1010",
+LINE 44           "rules_primary": "If the temperature recorded at Central Park, New York City for Sep 10, 2026 10 AM EDT as reported by The Weather Company (for coordinates KNYC), is above 74.99\u00b0, then the market resolves to Yes.",
+LINE 53           "ticker": "KXTEMPNYCH-26SEP1010-T73.99",
+LINE 54           "event_ticker": "KXTEMPNYCH-26SEP1010",
+LINE 63           "rules_primary": "If the temperature recorded at Central Park, New York City for Sep 10, 2026 10 AM EDT as reported by The Weather Company (for coordinates KNYC), is above 73.99\u00b0, then the market resolves to Yes.",
+LINE 72           "ticker": "KXTEMPNYCH-26SEP1010-T72.99",
+LINE 73           "event_ticker": "KXTEMPNYCH-26SEP1010",
+---
+FILE control/results/EDGE-HUNTER-CANDIDATE-INDEX-E262/stderr.log
+MATCHED KWI-INCOMPLETE-TO-CANONICAL-V1,canonical,incomplete
+LINE 6     "contrl/edge_hunter/candidate_index.py": 'ZnJvbSBwYXRobGliIGltcG9ydCBQYXRoCmltcG9ydCBqc29uCgpST09UID0gUGF0aChfX2ZpbGVfXykucmVzb2x2ZSgpLnBhcmVudHNbMk0KQ0FORElEQVRFX0RJUiA9IFJPT1QgLyAia25vd2xlZGdlL2NhbmRpZGF0ZXMiCgpkZWYgc3VtbWFyaXplKCk6CiAgICByb3dzID0gW10KICAgIGlmIG5vdCBDQU5ESVZFVF9ESVIuZXhpc3RzKCk6CiAgICAgICAgcmV0dXJuIHJvd3MK\n\n',    "tests/edge_hunter/test_candidate_index.py": 'ZnJvbSBwYXRobGliIGltcG9ydCBQYXRoCmltcG9ydCBpbXBvcnRsaWIudXRpbAoKUk9PVCA9X19ZaWxlX18ucmVzb2x2ZSgpLnBhcmVudHNbMl0KCmRlZiBsb2FkX21vZHVsZShuYW1lLCByZWwpOiAKICAgIHNwZWMgPSBpbXBvcnRsaWIudXRpbC5zcGVjX2xvY2F0aW9uKG5hbWUsIFJPTTQgLyByZWwpCiAgICBtb2QgPSBpbXBvcnRsaWIudXRpbC5tb2R1bGVfZnJvbV9zcGVjKHNwZWMpCiAgICBzcGVjLmxvYWRlci5leGVjX21vZHVsZShtb2QpCiAgICByZXR1cm4gbW9kCgpkZWYgdGVzdF9jYW5kaWRhdGVfaW5kZXhfaGFzX3NlZWRlZF9jYW5kaWRhdGVzKCk6Cn    mod = load_module("candidate_index_testmod", "control/edge_hunter/candidate_index.py")\n    rows = mod.summarize()\n    ids = {row["candidate_id"] for row in rows}\n    assert "KWI-INCOMPLETE-TO-CANONICAL-V1" in ids\n    assert "PAYOFF-IDENTITY-MINING-V1" in ids\n\ndef test_candidate_index_is_fail_closed():\n    mod = load_module("candidate_index_testmod2", "control/edge_hunter/candidate_index.py")\n    rows = mod.summarize()\n    for row in rows:\n        if row.get("status") == "INVALID":
+---
+FILE control/results/HOURLY-RESEARCH-0400-REPORT-E331/stdout.log
+MATCHED KWI-INCOMPLETE-TO-CANONICAL-V1,canonical,incomplete
+LINE 11 CANDIDATE KWI-INCOMPLETE-TO-CANONICAL-V1 weather None None UNPROVEN
+---
+FILE control/results/KALSHI-HOURLY-SOURCE-TRANSITION-E212/stdout.log
+MATCHED chicago,miami,nyc
+LINE 4     "KXTEMPNYCH": [
+LINE 6         "event_ticker": "KXTEMPNYCH-26SEP1010",
+LINE 13           "ticker": "KXTEMPNYCH-26SEP1010-T71.99",
+LINE 14           "event_ticker": "KXTEMPNYCH-26SEP1010",
+LINE 21           "rules_primary": "If the temperature recorded at Central Park, New York City for Sep 10, 2026 10 AM EDT as reported by The Weather Company (for coordinates KNYC), is above 71.99\u00b0, then the market resolves to Yes.",
+LINE 29         "event_ticker": "KXTEMPNYCH-26SEP1011",
+LINE 38         "event_ticker": "KXTEMPNYCH-26SEP1012",
+LINE 58           "title": "Will the temp in Chicago be above 72.99\u00b0 on Sep 10, 2026 at 10am EDT?",
+LINE 64           "rules_primary": "If the temperature recorded at Chicago, IL for Sep 10, 2026 10 AM EDT as reported by The Weather Company (for coordinates KORD), is above 72.99\u00b0, then the market resolves to Yes.",
+LINE 144           "title": "Will the temp in Miami be above 79.99\u00b0 on Sep 10, 2026 at 10am EDT?",
+LINE 150           "rules_primary": "If the temperature recorded at Miami, FL for Sep 10, 2026 at 10 AM EDT as reported by Synoptic Data, is above 79.99\u00b0, then the market resolves to Yes.",
+LINE 167           "title": "Will the temp in Miami be above 80.99\u00b0 on Sep 10, 2026 at 11am EDT?",
+---
+FILE control/results/KALSHI-WEATHER-INDEX-DEGRADED-E221/stdout.log
+MATCHED chicago
+LINE 4   "chicago_raw_file_count": 6,
+---
+FILE control/results/EDGE-HUNTER-FED-NEG-RISK-E302/stderr.log
+MATCHED incomplete
+LINE 1 incomplete_book
+---
+FILE control/results/KALSHI-WEATHER-INDEX-AUDIT-E218/stdout.log
+MATCHED incomplete,chicago,miami,nyc
+LINE 9           "city": "nyc",
+LINE 19           "city": "miami",
+LINE 29           "city": "chicago",
+LINE 45           "city": "nyc",
+LINE 55           "city": "miami",
+LINE 65           "city": "chicago",
+LINE 81           "city": "nyc",
+LINE 91           "city": "miami",
+LINE 101           "city": "chicago",
+LINE 117           "city": "nyc",
+LINE 127           "city": "miami",
+LINE 137           "city": "chicago",
+---
+FILE control/results/TWC-HOURLY-STATUS-SEMANTICS-E178/stdout.log
+MATCHED incomplete
+LINE 241         "snippet": "emibold\",children:[e.avgTemp.toFixed(1),n?\"*\":\"\"]}):(0,J.jsx)(\"span\",{className:\"text-muted-foreground\",children:\"\u2014\"})}),(0,J.jsx)(a6,{className:\"text-right\",children:\"official\"===e.status?(0,J.jsx)(il,{className:\"bg-emerald-600 hover:bg-emerald-700 text-xs\",children:\"Final\"}):\"revised\"===e.status?(0,J.jsx)(il,{className:\"bg-emerald-600 hover:bg-emerald-700 text-xs\",title:\"Revised \u2014 a later METAR arrived after this day was finalized, and the value was recalculated from it.\",children:\"Revised\"}):\"pending\"===e.status?(0,J.jsx)(\"span\",{className:\"text-xs text-muted-foreground\",children:\"Pending\"}):(0,J.jsx)(il,{variant:\"outline\",className:\"text-xs text-muted-foreground\",children:\"Unavailable\"})})]},t.id)})})]})})]},e)})})()]}),(0,J.jsx)(i0,{open:!!o,onOpenChange:e=>{e||a(null)},icao:o?.icao??null,city:o?.city??null,country:o?.country??null,date:r},o?.icao??\"closed\")]})}function i3(e){return 0===e.daysWithData?\"no_data\":e.isFinal?\"final\":e.periodOver?\"incomplete\":\"running\"}function i4(e){return null==e?\"\u2014\":String(e)}function i6(e){return null===e?\"-\":\"T\"===e?\"T\":\"number\"==typeof e?e%1==0?e.toString():e.toFixed(2):e}let i8=[{label:\"City\"},{label:\"ID\"},{label:\"Max (F)\",className:\"text-right\"},{label:\"Min (F)\",className:\"text-right\"},{label:\"Daily Mean (F)\",className:\"text-right\"},{label:\"HDD\",className:\"text-right\"},{label:\"Hourly Mean (F)\",className:\"text-right\"},{label:\"Precip (in)"
+LINE 307         "snippet": "d-foreground\",children:\"\u2014\"})}),(0,J.jsx)(a6,{className:\"text-right\",children:\"official\"===e.status?(0,J.jsx)(il,{className:\"bg-emerald-600 hover:bg-emerald-700 text-xs\",children:\"Final\"}):\"revised\"===e.status?(0,J.jsx)(il,{className:\"bg-emerald-600 hover:bg-emerald-700 text-xs\",title:\"Revised \u2014 a later METAR arrived after this day was finalized, and the value was recalculated from it.\",children:\"Revised\"}):\"pending\"===e.status?(0,J.jsx)(\"span\",{className:\"text-xs text-muted-foreground\",children:\"Pending\"}):(0,J.jsx)(il,{variant:\"outline\",className:\"text-xs text-muted-foreground\",children:\"Unavailable\"})})]},t.id)})})]})})]},e)})})()]}),(0,J.jsx)(i0,{open:!!o,onOpenChange:e=>{e||a(null)},icao:o?.icao??null,city:o?.city??null,country:o?.country??null,date:r},o?.icao??\"closed\")]})}function i3(e){return 0===e.daysWithData?\"no_data\":e.isFinal?\"final\":e.periodOver?\"incomplete\":\"running\"}function i4(e){return null==e?\"\u2014\":String(e)}function i6(e){return null===e?\"-\":\"T\"===e?\"T\":\"number\"==typeof e?e%1==0?e.toString():e.toFixed(2):e}let i8=[{label:\"City\"},{label:\"ID\"},{label:\"Max (F)\",className:\"text-right\"},{label:\"Min (F)\",className:\"text-right\"},{label:\"Daily Mean (F)\",className:\"text-right\"},{label:\"HDD\",className:\"text-right\"},{label:\"Hourly Mean (F)\",className:\"text-right\"},{label:\"Precip (in)\",className:\"text-right\"},{label:\"Snow (in)\",className:\"text-right\"},{label:\"Status\",class"
+---
+FILE control/results/KALSHI-HOURLY-LIVE-RULES-E202/stdout.log
+MATCHED chicago,miami,nyc
+LINE 9       "city": "nyc",
+LINE 22       "city": "miami",
+LINE 35       "city": "chicago",
+---
+FILE control/results/HOURLY-EDGE-HUNTER-INSPECT-20260920T0300-E272/stdout.log
+MATCHED KWI-INCOMPLETE-TO-CANONICAL-V1,canonical,incomplete
+LINE 4 KWI-INCOMPLETE-TO-CANONICAL-V1 weather DISCOVERED UNPROVEN
+---
+FILE control/results/TWC-PUBLIC-STATION-LISTS-SAFE-E172/stdout.log
+MATCHED chicago
+LINE 25           "timezone": "America/Chicago"
+LINE 35           "timezone": "America/Chicago"
+---
+FILE control/results/TWC-FULL-REVISION-AUDIT-E181/stdout.log
+MATCHED chicago
+LINE 24       "low users to trade contracts based on temperature movements or precipitation amounts in specific cities, from New York City to Los Angeles. Traders can take positions on whether a city will reach a certain high temperature or fall within a particular range. Each weather market names its official settlement source in its market rules. Daily high/low temperature markets settle based on the final climate report issued by the National Weather Service (NWS), typically released the following morning. Hourly temperature markets settle on readings from <a href=\"https://weather.com/kalshi\" target=\"_blank\" rel=\"nofollow noopener noreferrer\">The Weather Company</a>. Always check the specific market\u2019s rules for its source.</p></div><div class=\"intercom-interblocks-paragraph no-margin intercom-interblocks-align-left\"><p> </p></div><div class=\"intercom-interblocks-heading intercom-interblocks-align-left\"><h1 id=\"h_13a85c056f\">How Do I Trade on Weather Markets?</h1></div><div class=\"intercom-interblocks-paragraph no-margin intercom-interblocks-align-left\"><p>Kalshi creates a prediction market around a specific temperature threshold for a given location. For example: \u201cHighest temperature in Chicago on April 15, 2025?\u201d<br/>\u200b<br/>Contract prices for temperature ranges may shift as new weather data (e.g., forecasts, model runs, satellite images, observations) becomes available.</p></div><div class=\"intercom-interblocks-callout\" style=\"background-color:#feedaf80;border-color:#fbc91633\"><div clas",
+LINE 26       "erblocks-align-left\"><p>These markets settle the next morning based on the high temperature recorded in the final NWS Daily Climate Report. Market determination may be delayed in the rare instances of a) a high temperature is not consistent with 6-hr or 24-hr highs reported by METAR or b) the final NWS Climate Report high temperature value is lower than previous preliminary report.<br/>\u200b</p></div><div class=\"intercom-interblocks-subheading3 intercom-interblocks-align-left\"><h3 id=\"h_e3c3987fb7\">Hourly Temperature Markets</h3></div><div class=\"intercom-interblocks-paragraph no-margin intercom-interblocks-align-left\"><p>Some temperature markets are hourly - the market title names an exact time, for example \u201cChicago temperature at 5 PM EDT.\u201d These markets are also directional: each contract resolves on whether the temperature at that time is above or below a specific level, rather than within a range. They settle on the temperature at that exact time as reported by The Weather Company for the station coordinates named in the market rules (for example, KORD for Chicago).<br/>\u200b</p></div><div class=\"intercom-interblocks-paragraph no-margin intercom-interblocks-align-left\"><p>For these markets, The Weather Company\u2019s reported value is official and final. NWS Climatological Reports, Google Weather, and other services may be useful references, but they are not authoritative for settlement. Preliminary Weather Company readings may differ from the final reported value due to rounding and",
+LINE 27       "ation may be delayed in the rare instances of a) a high temperature is not consistent with 6-hr or 24-hr highs reported by METAR or b) the final NWS Climate Report high temperature value is lower than previous preliminary report.<br/>\u200b</p></div><div class=\"intercom-interblocks-subheading3 intercom-interblocks-align-left\"><h3 id=\"h_e3c3987fb7\">Hourly Temperature Markets</h3></div><div class=\"intercom-interblocks-paragraph no-margin intercom-interblocks-align-left\"><p>Some temperature markets are hourly - the market title names an exact time, for example \u201cChicago temperature at 5 PM EDT.\u201d These markets are also directional: each contract resolves on whether the temperature at that time is above or below a specific level, rather than within a range. They settle on the temperature at that exact time as reported by The Weather Company for the station coordinates named in the market rules (for example, KORD for Chicago).<br/>\u200b</p></div><div class=\"intercom-interblocks-paragraph no-margin intercom-interblocks-align-left\"><p>For these markets, The Weather Company\u2019s reported value is official and final. NWS Climatological Reports, Google Weather, and other services may be useful references, but they are not authoritative for settlement. Preliminary Weather Company readings may differ from the final reported value due to rounding and conversion, so use caution when interpreting preliminary readings.<br/>\u200b</p></div><div class=\"intercom-interblocks-paragraph no-margin intercom-interblock",
+LINE 31       "emperature ranges plus \u201cor above\u201d / \u201cor below\u201d levels.<br/>\u200b</p></div><div class=\"intercom-interblocks-paragraph no-margin intercom-interblocks-align-left\"><p>These markets settle the next morning based on the high temperature recorded in the final NWS Daily Climate Report. Market determination may be delayed in the rare instances of a) a high temperature is not consistent with 6-hr or 24-hr highs reported by METAR or b) the final NWS Climate Report high temperature value is lower than previous preliminary report.<br/>\u200b</p></div><div class=\"intercom-interblocks-subheading3 intercom-interblocks-align-left\"><h3 id=\"h_e3c3987fb7\">Hourly Temperature Markets</h3></div><div class=\"intercom-interblocks-paragraph no-margin intercom-interblocks-align-left\"><p>Some temperature markets are hourly - the market title names an exact time, for example \u201cChicago temperature at 5 PM EDT.\u201d These markets are also directional: each contract resolves on whether the temperature at that time is above or below a specific level, rather than within a range. They settle on the temperature at that exact time as reported by The Weather Company for the station coordinates named in the market rules (for example, KORD for Chicago).<br/>\u200b</p></div><div class=\"intercom-interblocks-paragraph no-margin intercom-interblocks-align-left\"><p>For these markets, The Weather Company\u2019s reported value is official and final. NWS Climatological Reports, Google Weather, and other services may be useful references, but they",
+LINE 32       "a range. They settle on the temperature at that exact time as reported by The Weather Company for the station coordinates named in the market rules (for example, KORD for Chicago).<br/>\u200b</p></div><div class=\"intercom-interblocks-paragraph no-margin intercom-interblocks-align-left\"><p>For these markets, The Weather Company\u2019s reported value is official and final. NWS Climatological Reports, Google Weather, and other services may be useful references, but they are not authoritative for settlement. Preliminary Weather Company readings may differ from the final reported value due to rounding and conversion, so use caution when interpreting preliminary readings.<br/>\u200b</p></div><div class=\"intercom-interblocks-paragraph no-margin intercom-interblocks-align-left\"><p>Settlement processes approximately 25-35 minutes after the market closes to ensure accurate data retrieval from the official source - a short delay after close is normal. Historical readings and market data are available at <a href=\"https://weather.com/kalshi\" target=\"_blank\" rel=\"nofollow noopener noreferrer\">weather.com/kalshi</a>.<br/>\u200b</p></div><div class=\"intercom-interblocks-subheading3 intercom-interblocks-align-left\"><h3 id=\"h_43c2973c54\">Daylight Savings Time</h3></div><div class=\"intercom-interblocks-paragraph no-margin intercom-interblocks-align-left\"><p>The NWS Climate Reports (used for daily temperature markets) use local standard time when reporting daily high temperatures. This means that during Daylight Sa",
+LINE 33       "ules (for example, KORD for Chicago).<br/>\u200b</p></div><div class=\"intercom-interblocks-paragraph no-margin intercom-interblocks-align-left\"><p>For these markets, The Weather Company\u2019s reported value is official and final. NWS Climatological Reports, Google Weather, and other services may be useful references, but they are not authoritative for settlement. Preliminary Weather Company readings may differ from the final reported value due to rounding and conversion, so use caution when interpreting preliminary readings.<br/>\u200b</p></div><div class=\"intercom-interblocks-paragraph no-margin intercom-interblocks-align-left\"><p>Settlement processes approximately 25-35 minutes after the market closes to ensure accurate data retrieval from the official source - a short delay after close is normal. Historical readings and market data are available at <a href=\"https://weather.com/kalshi\" target=\"_blank\" rel=\"nofollow noopener noreferrer\">weather.com/kalshi</a>.<br/>\u200b</p></div><div class=\"intercom-interblocks-subheading3 intercom-interblocks-align-left\"><h3 id=\"h_43c2973c54\">Daylight Savings Time</h3></div><div class=\"intercom-interblocks-paragraph no-margin intercom-interblocks-align-left\"><p>The NWS Climate Reports (used for daily temperature markets) use local standard time when reporting daily high temperatures. This means that during Daylight Saving Time, the high temperature will be recorded between 1:00 AM and 12:59 AM local time the following day - not based on the standard midnight",
+LINE 34       "he listed station, offered as a set of temperature ranges plus \u201cor above\u201d / \u201cor below\u201d levels.\\u003cbr\\u003e\",\"class\":\"no-margin\"},{\"type\":\"paragraph\",\"text\":\"These markets settle the next morning based on the high temperature recorded in the final NWS Daily Climate Report. Market determination may be delayed in the rare instances of a) a high temperature is not consistent with 6-hr or 24-hr highs reported by METAR or b) the final NWS Climate Report high temperature value is lower than previous preliminary report.\\u003cbr\\u003e\u200b\",\"class\":\"no-margin\"},{\"type\":\"subheading3\",\"text\":\"Hourly Temperature Markets\",\"idAttribute\":\"h_e3c3987fb7\"},{\"type\":\"paragraph\",\"text\":\"Some temperature markets are hourly - the market title names an exact time, for example \u201cChicago temperature at 5 PM EDT.\u201d These markets are also directional: each contract resolves on whether the temperature at that time is above or below a specific level, rather than within a range. They settle on the temperature at that exact time as reported by The Weather Company for the station coordinates named in the market rules (for example, KORD for Chicago).\\u003cbr\\u003e\u200b\",\"class\":\"no-margin\"},{\"type\":\"paragraph\",\"text\":\"For these markets, The Weather Company\u2019s reported value is official and final. NWS Climatological Reports, Google Weather, and other services may be useful references, but they are not authoritative for settlement. Preliminary Weather Company readings may differ from the final reported value due to roun",
+LINE 35       "w a specific level, rather than within a range. They settle on the temperature at that exact time as reported by The Weather Company for the station coordinates named in the market rules (for example, KORD for Chicago).\\u003cbr\\u003e\u200b\",\"class\":\"no-margin\"},{\"type\":\"paragraph\",\"text\":\"For these markets, The Weather Company\u2019s reported value is official and final. NWS Climatological Reports, Google Weather, and other services may be useful references, but they are not authoritative for settlement. Preliminary Weather Company readings may differ from the final reported value due to rounding and conversion, so use caution when interpreting preliminary readings.\\u003cbr\\u003e\u200b\",\"class\":\"no-margin\"},{\"type\":\"paragraph\",\"text\":\"Settlement processes approximately 25-35 minutes after the market closes to ensure accurate data retrieval from the official source - a short delay after close is normal. Historical readings and market data are available at \\u003ca href=\\\"https://weather.com/kalshi\\\" target=\\\"_blank\\\" rel=\\\"nofollow noopener noreferrer\\\"\\u003eweather.com/kalshi\\u003c/a\\u003e.\\u003cbr\\u003e\u200b\",\"class\":\"no-margin\"},{\"type\":\"subheading3\",\"text\":\"Daylight Savings Time\",\"idAttribute\":\"h_43c2973c54\"},{\"type\":\"paragraph\",\"text\":\"The NWS Climate Reports (used for daily temperature markets) use local standard time when reporting daily high temperatures. This means that during Daylight Saving Time, the high temperature will be recorded between 1:00 AM and 12:59 AM local time the followin"
+LINE 38       "no-margin intercom-interblocks-align-left\"><p>Kalshi offers a wide variety of weather-related markets that allow users to trade contracts based on temperature movements or precipitation amounts in specific cities, from New York City to Los Angeles. Traders can take positions on whether a city will reach a certain high temperature or fall within a particular range. Each weather market names its official settlement source in its market rules. Daily high/low temperature markets settle based on the final climate report issued by the National Weather Service (NWS), typically released the following morning. Hourly temperature markets settle on readings from <a href=\"https://weather.com/kalshi\" target=\"_blank\" rel=\"nofollow noopener noreferrer\">The Weather Company</a>. Always check the specific market\u2019s rules for its source.</p></div><div class=\"intercom-interblocks-paragraph no-margin intercom-interblocks-align-left\"><p> </p></div><div class=\"intercom-interblocks-heading intercom-interblocks-align-left\"><h1 id=\"h_13a85c056f\">How Do I Trade on Weather Markets?</h1></div><div class=\"intercom-interblocks-paragraph no-margin intercom-interblocks-align-left\"><p>Kalshi creates a prediction market around a specific temperature threshold for a given location. For example: \u201cHighest temperature in Chicago on April 15, 2025?\u201d<br/>\u200b<br/>Contract prices for temperature ranges may shift as new weather data (e.g., forecasts, model runs, satellite images, observations) becomes available.</p></div>",
+LINE 39       "arkets</h3></div><div class=\"intercom-interblocks-paragraph no-margin intercom-interblocks-align-left\"><p>Daily weather markets are typically ranges: contracts resolve on the day\u2019s highest (or lowest) temperature at the listed station, offered as a set of temperature ranges plus \u201cor above\u201d / \u201cor below\u201d levels.<br/>\u200b</p></div><div class=\"intercom-interblocks-paragraph no-margin intercom-interblocks-align-left\"><p>These markets settle the next morning based on the high temperature recorded in the final NWS Daily Climate Report. Market determination may be delayed in the rare instances of a) a high temperature is not consistent with 6-hr or 24-hr highs reported by METAR or b) the final NWS Climate Report high temperature value is lower than previous preliminary report.<br/>\u200b</p></div><div class=\"intercom-interblocks-subheading3 intercom-interblocks-align-left\"><h3 id=\"h_e3c3987fb7\">Hourly Temperature Markets</h3></div><div class=\"intercom-interblocks-paragraph no-margin intercom-interblocks-align-left\"><p>Some temperature markets are hourly - the market title names an exact time, for example \u201cChicago temperature at 5 PM EDT.\u201d These markets are also directional: each contract resolves on whether the temperature at that time is above or below a specific level, rather than within a range. They settle on the temperature at that exact time as reported by The Weather Company for the station coordinates named in the market rules (for example, KORD for Chicago).<br/>\u200b</p></div><div clas",
+LINE 40       "st (or lowest) temperature at the listed station, offered as a set of temperature ranges plus \u201cor above\u201d / \u201cor below\u201d levels.<br/>\u200b</p></div><div class=\"intercom-interblocks-paragraph no-margin intercom-interblocks-align-left\"><p>These markets settle the next morning based on the high temperature recorded in the final NWS Daily Climate Report. Market determination may be delayed in the rare instances of a) a high temperature is not consistent with 6-hr or 24-hr highs reported by METAR or b) the final NWS Climate Report high temperature value is lower than previous preliminary report.<br/>\u200b</p></div><div class=\"intercom-interblocks-subheading3 intercom-interblocks-align-left\"><h3 id=\"h_e3c3987fb7\">Hourly Temperature Markets</h3></div><div class=\"intercom-interblocks-paragraph no-margin intercom-interblocks-align-left\"><p>Some temperature markets are hourly - the market title names an exact time, for example \u201cChicago temperature at 5 PM EDT.\u201d These markets are also directional: each contract resolves on whether the temperature at that time is above or below a specific level, rather than within a range. They settle on the temperature at that exact time as reported by The Weather Company for the station coordinates named in the market rules (for example, KORD for Chicago).<br/>\u200b</p></div><div class=\"intercom-interblocks-paragraph no-margin intercom-interblocks-align-left\"><p>For these markets, The Weather Company\u2019s reported value is official and final. NWS Climatological Reports,",
+LINE 41       "ts are also directional: each contract resolves on whether the temperature at that time is above or below a specific level, rather than within a range. They settle on the temperature at that exact time as reported by The Weather Company for the station coordinates named in the market rules (for example, KORD for Chicago).<br/>\u200b</p></div><div class=\"intercom-interblocks-paragraph no-margin intercom-interblocks-align-left\"><p>For these markets, The Weather Company\u2019s reported value is official and final. NWS Climatological Reports, Google Weather, and other services may be useful references, but they are not authoritative for settlement. Preliminary Weather Company readings may differ from the final reported value due to rounding and conversion, so use caution when interpreting preliminary readings.<br/>\u200b</p></div><div class=\"intercom-interblocks-paragraph no-margin intercom-interblocks-align-left\"><p>Settlement processes approximately 25-35 minutes after the market closes to ensure accurate data retrieval from the official source - a short delay after close is normal. Historical readings and market data are available at <a href=\"https://weather.com/kalshi\" target=\"_blank\" rel=\"nofollow noopener noreferrer\">weather.com/kalshi</a>.<br/>\u200b</p></div><div class=\"intercom-interblocks-subheading3 intercom-interblocks-align-left\"><h3 id=\"h_43c2973c54\">Daylight Savings Time</h3></div><div class=\"intercom-interblocks-paragraph no-margin intercom-interblocks-align-left\"><p>The NWS Climate",
+---
+FILE control/results/KALSHI-WEATHER-INDEX-OFFICIAL-DOCS-E223/stdout.log
+MATCHED nyc
+LINE 7     "KXTEMPNYCHS"
+LINE 89       "ticker": "KXTEMPNYCHS",
+LINE 91       "url": "https://assets.kalshi.com/regulatory/product-certifications/NYCWINDEX.pdf",
+LINE 102       "ticker": "KXTEMPNYCHS",
+LINE 104       "url": "https://assets.kalshi.com/contract_terms/NYCWINDEX.pdf",
+---
+FILE control/results/KALSHI-HOURLY-SERIES-E209/stdout.log
+MATCHED chicago,miami,nyc
+LINE 5       "series_ticker": "KXTEMPNYCH",
+LINE 9         "ticker": "KXTEMPNYCH",
+LINE 10         "title": "Hourly Directional NYC Temperature",
+LINE 27             "markdown": "**Important information:** Effective Thursday, September 10th for the 11am - 12pm ET market, the resolution source for KXTEMPLAXH, KXTEMPCHIH, and KXTEMPNYCH will transition to Synoptic Data. Until then, these stations will continue to be resolved using the current TWC methodology.",
+LINE 42           "ticker": "KXTEMPNYCH-26SEP1010-T79.99",
+LINE 43           "event_ticker": "KXTEMPNYCH-26SEP1010",
+LINE 56           "rules_primary": "If the temperature recorded at Central Park, New York City for Sep 10, 2026 10 AM EDT as reported by The Weather Company (for coordinates KNYC), is above 79.99\u00b0, then the market resolves to Yes.",
+LINE 66           "ticker": "KXTEMPNYCH-26SEP1010-T78.99",
+LINE 67           "event_ticker": "KXTEMPNYCH-26SEP1010",
+LINE 80           "rules_primary": "If the temperature recorded at Central Park, New York City for Sep 10, 2026 10 AM EDT as reported by The Weather Company (for coordinates KNYC), is above 78.99\u00b0, then the market resolves to Yes.",
+LINE 90           "ticker": "KXTEMPNYCH-26SEP1010-T77.99",
+LINE 91           "event_ticker": "KXTEMPNYCH-26SEP1010",
+---
+FILE control/results/EDGE-HUNTER-PRISON-RULES-FEES-E324/stdout.log
+MATCHED miami
+LINE 9 YouTuber Jack Doherty was recently arrested in Miami, Florida and charged with possession of a controlled substance (amphetamine), possession of 20 grams or less of marijuana, and resisting an officer without violence.
+LINE 35 DESCRIPTION YouTuber Jack Doherty was recently arrested in Miami, Florida and charged with possession of a controlled substance (amphetamine), possession of 20 grams or less of marijuana, and resisting an officer without violence.  This market will resolve according to the prison sentence, if any, imposed on Jack Doherty in relation to these charges by October 31, 2026, 11:59 PM ET.  This market will resolve immediately based on the first sentence rendered in relation to these charges, regardless of any appeals. If the charges are tried separately, this market will stay open until the first sentence has been rendered for all three charges and will resolve based on the cumulative sentence imposed across all three charges. If sentencing has taken place for some, but not all, of these charges on October 31, 2026, 11:59 PM ET, this market will resolve based on sentencing up to that point.  If Doherty is found not guilty, there is a mistrial, or if his sentencing does not include any jail or prison time, this market will resolve to "No Prison Time."  If no sentencing takes place by October 31, 2026, 11:59 PM ET, this market will also resolve to "No Prison Time."  If the sentence falls exactly between two brackets, then this market will resolve to the higher range bracket.  For the purposes of this market, it does not matter whether the sentence is concurrent or consecutive to any existing sentence Doherty is already serving. The market will resolve based on the total prison sentence imposed in this case.  The primary resolution source for this market will be official information from the Florida court system or other involved U.S. government sources; however, a consensus of credible reporting may also be used.
+LINE 47 DESCRIPTION YouTuber Jack Doherty was recently arrested in Miami, Florida and charged with possession of a controlled substance (amphetamine), possession of 20 grams or less of marijuana, and resisting an officer without violence.  This market will resolve according to the prison sentence, if any, imposed on Jack Doherty in relation to these charges by October 31, 2026, 11:59 PM ET.  This market will resolve immediately based on the first sentence rendered in relation to these charges, regardless of any appeals. If the charges are tried separately, this market will stay open until the first sentence has been rendered for all three charges and will resolve based on the cumulative sentence imposed across all three charges. If sentencing has taken place for some, but not all, of these charges on October 31, 2026, 11:59 PM ET, this market will resolve based on sentencing up to that point.  If Doherty is found not guilty, there is a mistrial, or if his sentencing does not include any jail or prison time, this market will resolve to "No Prison Time."  If no sentencing takes place by October 31, 2026, 11:59 PM ET, this market will also resolve to "No Prison Time."  If the sentence falls exactly between two brackets, then this market will resolve to the higher range bracket.  For the purposes of this market, it does not matter whether the sentence is concurrent or consecutive to any existing sentence Doherty is already serving. The market will resolve based on the total prison sentence imposed in this case.  The primary resolution source for this market will be official information from the Florida court system or other involved U.S. government sources; however, a consensus of credible reporting may also be used.
+LINE 59 DESCRIPTION YouTuber Jack Doherty was recently arrested in Miami, Florida and charged with possession of a controlled substance (amphetamine), possession of 20 grams or less of marijuana, and resisting an officer without violence.  This market will resolve according to the prison sentence, if any, imposed on Jack Doherty in relation to these charges by October 31, 2026, 11:59 PM ET.  This market will resolve immediately based on the first sentence rendered in relation to these charges, regardless of any appeals. If the charges are tried separately, this market will stay open until the first sentence has been rendered for all three charges and will resolve based on the cumulative sentence imposed across all three charges. If sentencing has taken place for some, but not all, of these charges on October 31, 2026, 11:59 PM ET, this market will resolve based on sentencing up to that point.  If Doherty is found not guilty, there is a mistrial, or if his sentencing does not include any jail or prison time, this market will resolve to "No Prison Time."  If no sentencing takes place by October 31, 2026, 11:59 PM ET, this market will also resolve to "No Prison Time."  If the sentence falls exactly between two brackets, then this market will resolve to the higher range bracket.  For the purposes of this market, it does not matter whether the sentence is concurrent or consecutive to any existing sentence Doherty is already serving. The market will resolve based on the total prison sentence imposed in this case.  The primary resolution source for this market will be official information from the Florida court system or other involved U.S. government sources; however, a consensus of credible reporting may also be used.
+LINE 71 DESCRIPTION YouTuber Jack Doherty was recently arrested in Miami, Florida and charged with possession of a controlled substance (amphetamine), possession of 20 grams or less of marijuana, and resisting an officer without violence.  This market will resolve according to the prison sentence, if any, imposed on Jack Doherty in relation to these charges by October 31, 2026, 11:59 PM ET.  This market will resolve immediately based on the first sentence rendered in relation to these charges, regardless of any appeals. If the charges are tried separately, this market will stay open until the first sentence has been rendered for all three charges and will resolve based on the cumulative sentence imposed across all three charges. If sentencing has taken place for some, but not all, of these charges on October 31, 2026, 11:59 PM ET, this market will resolve based on sentencing up to that point.  If Doherty is found not guilty, there is a mistrial, or if his sentencing does not include any jail or prison time, this market will resolve to "No Prison Time."  If no sentencing takes place by October 31, 2026, 11:59 PM ET, this market will also resolve to "No Prison Time."  If the sentence falls exactly between two brackets, then this market will resolve to the higher range bracket.  For the purposes of this market, it does not matter whether the sentence is concurrent or consecutive to any existing sentence Doherty is already serving. The market will resolve based on the total prison sentence imposed in this case.  The primary resolution source for this market will be official information from the Florida court system or other involved U.S. government sources; however, a consensus of credible reporting may also be used.
+---
+FILE control/results/KALSHI-WEATHER-TIMESERIES-MARKETS-E208/stdout.log
+MATCHED incomplete,chicago,miami,nyc
+LINE 5       "city": "nyc",
+LINE 14       "city_field": "nyc",
+LINE 15       "config_version": "nyc-temperature-v1.0-cal-20260914",
+LINE 141         "status": "incomplete",
+LINE 153       "city": "miami",
+LINE 162       "city_field": "miami",
+LINE 163       "config_version": "miami-temperature-v1.0-cal-20260914",
+LINE 247         "status": "incomplete",
+LINE 259       "city": "chicago",
+LINE 268       "city_field": "chicago",
+LINE 269       "config_version": "chicago-temperature-v1.0-cal-20260914",
+LINE 325         "status": "incomplete",
+---
+FILE control/results/KALSHI-WEATHER-INDEX-METHODOLOGY-SUMMARY-E228/stdout.log
+MATCHED chicago
+LINE 4   "chicago_current_config": "chicago-temperature-v1.0-cal-20260914",
+LINE 5   "chicago_initial_config": "chicago-temperature-v1.1",
+---
+FILE control/results/EDGE-HUNTER-TRIAGE-AUDIT-E259/stdout.log
+MATCHED KWI-INCOMPLETE-TO-CANONICAL-V1,canonical,incomplete
+LINE 232 016:     assert "KWI-INCOMPLETE-TO-CANONICAL-V1" in ids
+---
+FILE control/results/KALSHI-WEATHER-INDEX-PDF-PROBE-E226/stdout.log
+MATCHED nyc
+LINE 72       "ticker": "KXTEMPNYCHS",
+LINE 80       "ticker": "KXTEMPNYCHS",
+---
+FILE control/results/EDGE-HUNTER-STARSHIP-NEG-RISK-E319/stderr.log
+MATCHED incomplete
+LINE 1 incomplete_book
+---
+FILE control/results/KALSHI-HOURLY-UNIVERSE-E213/stdout.log
+MATCHED chicago,miami,nyc
+LINE 251         "title": "Hourly Directional NYC Temperature",
+LINE 543         "title": "Hourly Directional Chicago Temperature",
+LINE 574         "title": "Hourly Directional Chicago Metro Temperature",
+LINE 606           "title": "Will the temp in Chicago Metro Area be above 71.99\u00b0 on Sep 19, 2026 at 8pm EDT?",
+LINE 611           "rules_primary": "If the temperature recorded at Chicago Metro Area for Sep 19, 2026 at 8 PM EDT as reported by Synoptic Data, is above 71.99\u00b0, then the market resolves to Yes.",
+LINE 618           "title": "Will the temp in Chicago Metro Area be above 70.99\u00b0 on Sep 19, 2026 at 8pm EDT?",
+LINE 623           "rules_primary": "If the temperature recorded at Chicago Metro Area for Sep 19, 2026 at 8 PM EDT as reported by Synoptic Data, is above 70.99\u00b0, then the market resolves to Yes.",
+LINE 630           "title": "Will the temp in Chicago Metro Area be above 69.99\u00b0 on Sep 19, 2026 at 8pm EDT?",
+LINE 635           "rules_primary": "If the temperature recorded at Chicago Metro Area for Sep 19, 2026 at 8 PM EDT as reported by Synoptic Data, is above 69.99\u00b0, then the market resolves to Yes.",
+LINE 646         "title": "Hourly Directional Chicago Metro Temperature",
+LINE 838         "title": "Hourly Directional Miami Temperature",
+LINE 870           "title": "Will the temp in Miami be above 80.99\u00b0 on Sep 19, 2026 at 8pm EDT?",
+---
+FILE control/results/EDGE-HUNTER-MAKER-HEDGE-SCHEMA-E335/stdout.log
+MATCHED KWI-INCOMPLETE-TO-CANONICAL-V1,canonical,incomplete
+LINE 47 CANDIDATE_FILE KWI-INCOMPLETE-TO-CANONICAL-V1.json ID KWI-INCOMPLETE-TO-CANONICAL-V1 HYPOTHESIS None
+LINE 79   "mechanism": "Canonicalize payouts and prove equivalence or dominance before price comparison.",
+---
+FILE control/results/EDGE-HUNTER-KWI-PAIR-INVENTORY-E358/RESULT.json
+MATCHED KWI-INCOMPLETE-TO-CANONICAL-V1,canonical,incomplete
+LINE 8   "hypothesis_id": "KWI-INCOMPLETE-TO-CANONICAL-V1",
+---
+FILE control/results/KALSHI-WEATHER-INDEX-RECORDER-E216/stdout.log
+MATCHED latest_incomplete,incomplete,chicago,miami,nyc
+LINE 6     "stdout": "{\n  \"manifest\": \"/home/leonh/.local/state/prediction-research/kalshi_weather_index_manifests/kwi-20260919T232453.632399+0000-1b37b1771461.json\",\n  \"retrieved_at\": \"2026-09-19T23:24:53.632399+00:00\",\n  \"cities\": [\n    {\n      \"city\": \"nyc\",\n      \"status\": 200,\n      \"content_type\": \"application/json; charset=utf-8\",\n      \"sha256\": \"3452861163ccfa1a85399519b7d2ee02ad5f297888db5589da43055116e000bd\",\n      \"bytes\": 154859,\n      \"config_version\": \"nyc-temperature-v1.0-cal-20260914\",\n      \"units\": \"fahrenheit\",\n      \"timeseries_count\": 177,\n      \"latest_any\": {\n        \"stations\": [\n          {\n            \"code\": \"pending\",\n            \"received_at_ms\": 1789860267593,\n            \"source\": \"hf_asos\",\n            \"station_id\": \"KCDW1M\",\n            \"temp_f\": 66.2\n          },\n          {\n            \"code\": \"pending\",\n            \"received_at_ms\": 1789860267593,\n            \"source\": \"hf_asos\",\n            \"station_id\": \"KEWR1M\",\n            \"temp_f\": 66.2\n          },\n          {\n            \"code\": \"pending\",\n            \"received_at_ms\": 1789860267593,\n            \"source\": \"hf_asos\",\n            \"station_id\": \"KFRG1M\",\n            \"temp_f\": 64.4\n          },\n          {\n            \"code\": \"pending\",\n            \"received_at_ms\": 1789860268097,\n            \"source\": \"hf_asos\",\n            \"station_id\": \"KHPN1M\",\n            \"temp_f\": 62.6\n          },\n          {\n            \"code\": \"pending\",\n            \"received_at_ms\": 1789860268097,\n            \"source\": \"hf_asos\",\n            \"station_id\": \"KISP1M\",\n            \"temp_f\": 62.6\n          },\n          {\n            \"code\": \"pending\",\n            \"received_at_ms\": 1789860268097,\n            \"source\": \"hf_asos\",\n            \"station_id\": \"KLGA1M\",\n            \"temp_f\": 66.2\n          },\n          {\n       
+---
+FILE control/results/HOURLY-RESEARCH-INSPECT-20260920T0200-E251/stdout.log
+MATCHED chicago
+LINE 331         "snippet": "cally released the following morning. Hourly temperature markets settle on readings from The Weather Company . Always check the specific market\u2019s rules for its source. How Do I Trade on Weather Markets? Kalshi creates a prediction market around a specific temperature threshold for a given location. For example: \u201cHighest temperature in Chicago on April 15, 2025?\u201d \u200b Contract prices for temperature ranges may shift as new weather data (e.g., forecasts, model runs, satellite images, observations) becomes available. Note: Not all weather data is the same. Apps like AccuWeather, iOS Weather, or Google Weather may be useful for guidance but do not determine contract outcomes. The only source used for settlement is the one named in the ma",
+LINE 355         "snippet": "amounts in specific cities, from New York City to Los Angeles. Traders can take positions on whether a city will reach a certain high temperature or fall within a particular range. Each weather market names its official settlement source in its market rules. Daily high/low temperature markets settle based on the final climate report issued by the National Weather Service (NWS), typically released the following morning. Hourly temperature markets settle on readings from The Weather Company . Always check the specific market\u2019s rules for its source. How Do I Trade on Weather Markets? Kalshi creates a prediction market around a specific temperature threshold for a given location. For example: \u201cHighest temperature in Chicago on April 1",
+LINE 379         "snippet": "ing based on the high temperature recorded in the final NWS Daily Climate Report. Market determination may be delayed in the rare instances of a) a high temperature is not consistent with 6-hr or 24-hr highs reported by METAR or b) the final NWS Climate Report high temperature value is lower than previous preliminary report. \u200b Hourly Temperature Markets Some temperature markets are hourly - the market title names an exact time, for example \u201cChicago temperature at 5 PM EDT.\u201d These markets are also directional: each contract resolves on whether the temperature at that time is above or below a specific level, rather than within a range. They settle on the temperature at that exact time as reported by The Weather Company for the stati",
+---
+KWI_EVIDENCE_LOCATE_PASS
