@@ -1,0 +1,13 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/smoke_asset_market_stream_e337.py"
+  ],
+  "hypothesis_id": "ASSET-RANK-MAKER-HEDGE-V1",
+  "live_trading": false,
+  "operation": "python",
+  "task_class": "research",
+  "task_id": "EDGE-HUNTER-ASSET-STREAM-SMOKE-E337",
+  "timeout_seconds": 120,
+  "working_directory": "."
+}
