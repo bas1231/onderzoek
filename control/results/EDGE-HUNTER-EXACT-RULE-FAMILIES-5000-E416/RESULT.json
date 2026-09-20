@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/mine_exact_rule_families_5000_e416.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-20T03:15:38.914978+00:00",
+  "hypothesis_id": "PAYOFF-IDENTITY-MINING-V1",
+  "source_commit": "d50cf51f048d0cbf82f71450497cec3126e77241",
+  "started_at": "2026-09-20T03:15:36.695553+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "ce310702572dba7475d7be77ce55e51a478247c055a6cbce2aa6c51fcaa9f850",
+  "task_class": "research",
+  "task_id": "EDGE-HUNTER-EXACT-RULE-FAMILIES-5000-E416"
+}
