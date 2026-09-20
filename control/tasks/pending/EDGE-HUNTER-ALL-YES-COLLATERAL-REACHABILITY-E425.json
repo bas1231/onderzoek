@@ -1,0 +1,13 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/verify_all_yes_collateral_reachability_e425.py"
+  ],
+  "hypothesis_id": "PAYOFF-IDENTITY-MINING-V1",
+  "live_trading": false,
+  "operation": "python",
+  "task_class": "research",
+  "task_id": "EDGE-HUNTER-ALL-YES-COLLATERAL-REACHABILITY-E425",
+  "timeout_seconds": 120,
+  "working_directory": "."
+}
