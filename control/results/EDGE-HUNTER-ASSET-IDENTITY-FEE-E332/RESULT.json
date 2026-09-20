@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/test_asset_rank_identity_fees_e332.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-20T02:04:32.049425+00:00",
+  "hypothesis_id": "PAYOFF-IDENTITY-MINING-V1",
+  "source_commit": "93452236b3fed7eb37c092dbec24910c3cb9bd48",
+  "started_at": "2026-09-20T02:04:32.028741+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "c21652a27eb09b670e83f671194ee56e62cf1f46ab9971d52ca71501822f0562",
+  "task_class": "research",
+  "task_id": "EDGE-HUNTER-ASSET-IDENTITY-FEE-E332"
+}
