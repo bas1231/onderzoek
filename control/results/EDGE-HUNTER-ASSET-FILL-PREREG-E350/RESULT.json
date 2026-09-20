@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/preregister_asset_fill_window_e350.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-20T02:26:08.596638+00:00",
+  "hypothesis_id": "ASSET-RANK-MAKER-HEDGE-V1",
+  "source_commit": "76baf2d84c3c9eb9fc43b8cd3c9675849f68b973",
+  "started_at": "2026-09-20T02:26:08.578676+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "405e8eda0c8757aba58bd1b397058575716d8ee7cd2ba84dfda9921f4c338ce8",
+  "task_class": "research",
+  "task_id": "EDGE-HUNTER-ASSET-FILL-PREREG-E350"
+}
