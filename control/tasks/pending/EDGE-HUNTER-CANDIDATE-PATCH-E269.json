@@ -1,0 +1,13 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/patch_director_e269.py"
+  ],
+  "hypothesis_id": "GENERAL-PREDICTION-MARKET-EDGE-HUNTER",
+  "live_trading": false,
+  "operation": "python",
+  "task_class": "infrastructure",
+  "task_id": "EDGE-HUNTER-CANDIDATE-PATCH-E269",
+  "timeout_seconds": 120,
+  "working_directory": "."
+}
