@@ -1,0 +1,24 @@
+{
+  "build_authorization": {
+    "build_kind": "control_plane",
+    "capabilities": [
+      "modify_repository",
+      "commit_local_changes",
+      "run_local_tests",
+      "restart_local_service"
+    ],
+    "mode": "control_plane",
+    "objective": "Install and activate robust server-side automatic control-plane continuation after every completed or failed bridge result, with ACK-stall fallback, malformed-queue tolerance, regression tests, bridge restart and health verification."
+  },
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/run_auto_continue_e020r6.py"
+  ],
+  "hypothesis_id": "CONTROL-NO-SILENT-STOP",
+  "live_trading": false,
+  "operation": "python",
+  "task_class": "infrastructure",
+  "task_id": "CONTROL-BRIDGE-AUTO-CONTINUE-E020R6",
+  "timeout_seconds": 300,
+  "working_directory": "."
+}
