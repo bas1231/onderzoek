@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/run_extended_neg_risk_e379.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-20T02:46:16.889827+00:00",
+  "hypothesis_id": "PAYOFF-IDENTITY-MINING-V1",
+  "source_commit": "699c02a65dd44b5787ab5c18962b36506fa90d61",
+  "started_at": "2026-09-20T02:46:12.441183+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "87c8e4201dc315e501322666b4003a34ffa72b97fc6133db04d1bdd59cffac04",
+  "task_class": "research",
+  "task_id": "EDGE-HUNTER-NEGRISK-EXTENDED-E379"
+}
