@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/audit_edge_hunter_e253.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-20T00:39:14.692315+00:00",
+  "hypothesis_id": "GENERAL-PREDICTION-MARKET-EDGE-HUNTER",
+  "source_commit": "94f5b977fba97f7d5196c7f2e818ac68db1c19d9",
+  "started_at": "2026-09-20T00:39:12.188053+00:00",
+  "status": "completed",
+  "stderr_sha256": "ff92d95391f5f29022f27dab5f0b187339a9ee09b403207b4a4007e9b007d580",
+  "stdout_sha256": "81ea462c89ec0fc1ee7dc5521d50aa5358a9e27b8e7f669b70de57d11101b038",
+  "task_class": "infrastructure",
+  "task_id": "EDGE-HUNTER-FOUNDATION-AUDIT-E253"
+}
