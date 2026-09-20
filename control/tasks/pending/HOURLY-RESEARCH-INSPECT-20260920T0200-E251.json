@@ -1,0 +1,13 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/inspect_hourly_e251.py"
+  ],
+  "hypothesis_id": "HOURLY-RESEARCH-CYCLE",
+  "live_trading": false,
+  "operation": "python",
+  "task_class": "research",
+  "task_id": "HOURLY-RESEARCH-INSPECT-20260920T0200-E251",
+  "timeout_seconds": 120,
+  "working_directory": "."
+}
