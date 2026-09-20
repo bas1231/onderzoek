@@ -1,0 +1,33 @@
+NEG_RISK_GROUP_CAPTURE_PASS
+EVENT OpenAI IPO Closing Market Cap
+MARKET_COUNT 7
+BOOK_COUNT 14
+MARKET 608362 Will OpenAI’s market cap be less than $500B at market close on IPO day?
+OTHER False
+OUTCOME Yes BID 0.006 ASK 0.01
+OUTCOME No BID 0.99 ASK 0.994
+MARKET 608363 Will OpenAI’s market cap be between $500B and $750B at market close on IPO day?
+OTHER False
+OUTCOME Yes BID 0.002 ASK 0.005
+OUTCOME No BID 0.995 ASK 0.998
+MARKET 608364 Will OpenAI’s market cap be between $750B and $1T at market close on IPO day?
+OTHER False
+OUTCOME Yes BID 0.005 ASK 0.008
+OUTCOME No BID 0.992 ASK 0.995
+MARKET 608365 Will OpenAI’s market cap be between $1T and $1.25T at market close on IPO day?
+OTHER False
+OUTCOME Yes BID 0.003 ASK 0.005
+OUTCOME No BID 0.995 ASK 0.997
+MARKET 608366 Will OpenAI’s market cap be between $1.25T and $1.5T at market close on IPO day?
+OTHER False
+OUTCOME Yes BID 0.004 ASK 0.01
+OUTCOME No BID 0.99 ASK 0.996
+MARKET 608367 Will OpenAI’s market cap be $1.5T or greater at market close on IPO day?
+OTHER False
+OUTCOME Yes BID 0.008 ASK 0.014
+OUTCOME No BID 0.986 ASK 0.992
+MARKET 608368 Will OpenAI not IPO by December 31, 2026?
+OTHER False
+OUTCOME Yes BID 0.964 ASK 0.965
+OUTCOME No BID 0.035 ASK 0.036
+PATH /home/leonh/prediction_research/knowledge/raw/market_data/polymarket_neg_risk/20260920T011330Z48292.json
