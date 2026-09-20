@@ -1,0 +1,21 @@
+{
+  "build_authorization": {
+    "build_kind": "control_plane",
+    "capabilities": [
+      "read_repository"
+    ],
+    "mode": "control_plane",
+    "objective": "Read the existing E008 local result, lifecycle, cadence state, service state and Git divergence without changing research state or performing external, paid, trading or wallet actions"
+  },
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/inspect_e008_failure_e009.py"
+  ],
+  "hypothesis_id": "CONTROL-WORK-CADENCE",
+  "live_trading": false,
+  "operation": "python",
+  "task_class": "infrastructure",
+  "task_id": "CONTROL-WORK-CADENCE-DIAG-E009",
+  "timeout_seconds": 60,
+  "working_directory": "."
+}
