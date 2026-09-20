@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/locate_neg_risk_discovery_e374.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-20T02:43:40.288037+00:00",
+  "hypothesis_id": "PAYOFF-IDENTITY-MINING-V1",
+  "source_commit": "7d21243b6cb7507c2502638040960be3ec738a4e",
+  "started_at": "2026-09-20T02:43:40.209103+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "b4c33972d2cc7790a8b1c59a0e0857fd22a72dab6cc4dc548027a73c00fd3a25",
+  "task_class": "research",
+  "task_id": "EDGE-HUNTER-NEGRISK-DISCOVERY-LOCATE-E374"
+}

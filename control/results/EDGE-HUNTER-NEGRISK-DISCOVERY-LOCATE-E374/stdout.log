@@ -1,0 +1,308 @@
+CONTROL_MATCH_COUNT 41
+FILE control/tasks/completed/EDGE-HUNTER-NEG-RISK-MANIFEST-E296.json
+MATCHED E296
+LINE 4     "control/jobs/neg_risk_manifest_e296.py"
+LINE 10   "task_id": "EDGE-HUNTER-NEG-RISK-MANIFEST-E296",
+---
+FILE control/tasks/running/EDGE-HUNTER-NEGRISK-DISCOVERY-LOCATE-E374.json
+MATCHED negRisk
+LINE 10   "task_id": "EDGE-HUNTER-NEGRISK-DISCOVERY-LOCATE-E374",
+---
+FILE control/jobs/test_hottest_identity_fees_e315.py
+MATCHED negRisk
+LINE 47     if rule.get('negRisk') is not True:
+LINE 49     if rule.get('negRiskOther') is not False:
+---
+FILE control/jobs/test_asset_rank_identity_fees_e332.py
+MATCHED negRisk
+LINE 19 if event.get('negRisk') is not True:
+LINE 21 if event.get('negRiskAugmented') is not False:
+LINE 23 if not event.get('negRiskMarketID'):
+LINE 30     if rule.get('negRisk') is not True:
+LINE 32     if rule.get('negRiskOther') is not False:
+---
+FILE control/jobs/capture_starship_rules_fees_e321.py
+MATCHED negRisk
+LINE 7 url='https:'+chr(47)+chr(47)+'gamma-api.polymarket.com/events/102763'
+LINE 24 print('NEG_RISK',event.get('negRisk'))
+LINE 25 print('NEG_RISK_AUGMENTED',event.get('negRiskAugmented'))
+LINE 26 print('NEG_RISK_MARKET_ID',event.get('negRiskMarketID'))
+LINE 34     print('NEG_RISK',market.get('negRisk'))
+LINE 35     print('NEG_RISK_OTHER',market.get('negRiskOther'))
+---
+FILE control/jobs/capture_asset_rank_rules_fees_e328.py
+MATCHED negRisk
+LINE 7 url='https:'+chr(47)+chr(47)+'gamma-api.polymarket.com/events/106981'
+LINE 24 print('NEG_RISK',event.get('negRisk'))
+LINE 25 print('NEG_RISK_AUGMENTED',event.get('negRiskAugmented'))
+LINE 26 print('NEG_RISK_MARKET_ID',event.get('negRiskMarketID'))
+LINE 34     print('NEG_RISK',market.get('negRisk'))
+LINE 35     print('NEG_RISK_OTHER',market.get('negRiskOther'))
+---
+FILE control/jobs/inspect_polymarket_neg_risk_e285.py
+MATCHED negRisk
+LINE 34     neg = any((m.get('negRisk') is True or m.get('neg_risk') is True) for m,_ in matched)
+---
+FILE control/jobs/capture_asset_rank_neg_risk_e327.py
+MATCHED neg_risk_manifests
+LINE 7 base=root/'knowledge/raw/market_data/polymarket_neg_risk_manifests'
+---
+FILE control/jobs/capture_hottest_neg_risk_e313.py
+MATCHED neg_risk_manifests
+LINE 7 base=root/'knowledge/raw/market_data/polymarket_neg_risk_manifests'
+---
+FILE control/jobs/capture_gdp_neg_risk_e299.py
+MATCHED neg_risk_manifests
+LINE 7 files=sorted((root/'knowledge/raw/market_data/polymarket_neg_risk_manifests').glob('*.json'),key=lambda p:p.stat().st_mtime)
+---
+FILE control/jobs/capture_prison_neg_risk_e323.py
+MATCHED neg_risk_manifests
+LINE 7 base=root/'knowledge/raw/market_data/polymarket_neg_risk_manifests'
+---
+FILE control/jobs/inspect_fed_books_e303.py
+MATCHED neg_risk_manifests
+LINE 7 files=sorted((root/'knowledge/raw/market_data/polymarket_neg_risk_manifests').glob('*.json'),key=lambda p:p.stat().st_mtime)
+---
+FILE control/jobs/capture_hottest_rules_fees_e314.py
+MATCHED negRisk
+LINE 7 url='https:'+chr(47)+chr(47)+'gamma-api.polymarket.com/events/79905'
+LINE 24 print('NEG_RISK',event.get('negRisk'))
+LINE 25 print('NEG_RISK_AUGMENTED',event.get('negRiskAugmented'))
+LINE 26 print('NEG_RISK_MARKET_ID',event.get('negRiskMarketID'))
+LINE 34     print('NEG_RISK',market.get('negRisk'))
+LINE 35     print('NEG_RISK_OTHER',market.get('negRiskOther'))
+---
+FILE control/jobs/capture_arctic_rules_fees_e317.py
+MATCHED negRisk
+LINE 7 url='https:'+chr(47)+chr(47)+'gamma-api.polymarket.com/events/86426'
+LINE 24 print('NEG_RISK',event.get('negRisk'))
+LINE 25 print('NEG_RISK_AUGMENTED',event.get('negRiskAugmented'))
+LINE 26 print('NEG_RISK_MARKET_ID',event.get('negRiskMarketID'))
+LINE 34     print('NEG_RISK',market.get('negRisk'))
+LINE 35     print('NEG_RISK_OTHER',market.get('negRiskOther'))
+---
+FILE control/jobs/capture_starship_neg_risk_e319.py
+MATCHED neg_risk_manifests
+LINE 7 base=root/'knowledge/raw/market_data/polymarket_neg_risk_manifests'
+---
+FILE control/jobs/capture_prison_rules_fees_e324.py
+MATCHED negRisk
+LINE 7 url='https:'+chr(47)+chr(47)+'gamma-api.polymarket.com/events/85579'
+LINE 24 print('NEG_RISK',event.get('negRisk'))
+LINE 25 print('NEG_RISK_AUGMENTED',event.get('negRiskAugmented'))
+LINE 26 print('NEG_RISK_MARKET_ID',event.get('negRiskMarketID'))
+LINE 34     print('NEG_RISK',market.get('negRisk'))
+LINE 35     print('NEG_RISK_OTHER',market.get('negRiskOther'))
+---
+FILE control/jobs/locate_neg_risk_discovery_e374.py
+MATCHED E296,neg_risk_manifests,negRisk,negative_risk,non-augmented,non_augmented
+LINE 6 terms=['E296','neg_risk_manifests','negRisk','negative_risk','non-augmented','non_augmented']
+LINE 31         if any(term.lower() in ll for term in terms) or 'gamma' in ll or 'cursor' in ll or 'offset' in ll or 'limit' in ll:
+LINE 38 manifest_dir=root/'knowledge/raw/market_data/polymarket_neg_risk_manifests'
+---
+FILE control/jobs/inventory_remaining_neg_risk_e326.py
+MATCHED neg_risk_manifests
+LINE 5 base=root/'knowledge/raw/market_data/polymarket_neg_risk_manifests'
+---
+FILE control/jobs/test_prison_identities_e325.py
+MATCHED negRisk
+LINE 19 if event.get('negRisk') is not True:
+LINE 21 if event.get('negRiskAugmented') is not False:
+LINE 23 if not event.get('negRiskMarketID'):
+LINE 30     if rule.get('negRisk') is not True:
+LINE 32     if rule.get('negRiskOther') is not False:
+---
+FILE control/jobs/price_neg_risk_batch_e297.py
+MATCHED neg_risk_manifests
+LINE 7 files=sorted((root/'knowledge/raw/market_data/polymarket_neg_risk_manifests').glob('*.json'),key=lambda p:p.stat().st_mtime)
+---
+FILE control/jobs/capture_gdp_rules_e300.py
+MATCHED negRisk
+LINE 7 url='https:'+chr(47)+chr(47)+'gamma-api.polymarket.com/events/79137'
+LINE 24 print('NEG_RISK',event.get('negRisk'))
+LINE 25 print('NEG_RISK_AUGMENTED',event.get('negRiskAugmented'))
+LINE 26 print('NEG_RISK_MARKET_ID',event.get('negRiskMarketID'))
+LINE 34     print('NEG_RISK',market.get('negRisk'))
+LINE 35     print('NEG_RISK_OTHER',market.get('negRiskOther'))
+---
+FILE control/jobs/capture_fed_rules_e304.py
+MATCHED negRisk
+LINE 7 url='https:'+chr(47)+chr(47)+'gamma-api.polymarket.com/events/51456'
+LINE 24 print('NEG_RISK',event.get('negRisk'))
+LINE 25 print('NEG_RISK_AUGMENTED',event.get('negRiskAugmented'))
+LINE 26 print('NEG_RISK_MARKET_ID',event.get('negRiskMarketID'))
+LINE 34     print('NEG_RISK',market.get('negRisk'))
+LINE 35     print('NEG_RISK_OTHER',market.get('negRiskOther'))
+---
+FILE control/jobs/inspect_starship_books_e320.py
+MATCHED neg_risk_manifests
+LINE 7 base=root/'knowledge/raw/market_data/polymarket_neg_risk_manifests'
+---
+FILE control/jobs/capture_neg_risk_group_e289.py
+MATCHED negRisk
+LINE 9 events_url = 'https://gamma-api.polymarket.com/events/keyset?closed=false&limit=100'
+LINE 27     if market.get('negRisk') is not True:
+LINE 35     markets.append({'id': market.get('id'), 'question': market.get('question'), 'outcomes': outcomes, 'tokens': ids, 'negRisk': market.get('negRisk'), 'negRiskOther': market.get('negRiskOther')})
+LINE 64     print('OTHER', market['negRiskOther'])
+---
+FILE control/jobs/test_arctic_cross_rep_e318.py
+MATCHED negRisk
+LINE 19 if event.get('negRisk') is not True:
+LINE 21 if event.get('negRiskAugmented') is not False:
+LINE 23 group=str(event.get('negRiskMarketID') or '')
+LINE 27     if rule.get('negRisk') is not True:
+LINE 29     if rule.get('negRiskOther') is not False:
+---
+FILE control/jobs/capture_fed_neg_risk_e302.py
+MATCHED neg_risk_manifests
+LINE 7 files=sorted((root/'knowledge/raw/market_data/polymarket_neg_risk_manifests').glob('*.json'),key=lambda p:p.stat().st_mtime)
+---
+FILE control/jobs/test_starship_identities_e322.py
+MATCHED negRisk
+LINE 20 if event.get('negRisk') is not True:
+LINE 22 if event.get('negRiskAugmented') is not False:
+LINE 24 if not event.get('negRiskMarketID'):
+LINE 32     if rule.get('negRisk') is not True:
+LINE 34     if rule.get('negRiskOther') is not False:
+---
+FILE control/jobs/scan_neg_risk_identities_e292.py
+MATCHED negRisk
+LINE 11 for offset in range(0,500,100):
+LINE 12     url = 'https://gamma-api.polymarket.com/events?active=true&closed=false&limit=100&offset=' + str(offset)
+LINE 29     if event.get('negRisk') is not True:
+LINE 31     if event.get('negRiskAugmented') is True:
+LINE 38         if market.get('negRisk') is not True:
+LINE 40         rid = str(market.get('negRiskMarketID') or '')
+---
+FILE control/jobs/neg_risk_manifest_e296.py
+MATCHED neg_risk_manifests,negRisk
+LINE 8 base='https:'+chr(47)+chr(47)+'gamma-api.polymarket.com/events?active=true&closed=false&limit=100&offset='
+LINE 25         if event.get('negRisk') is not True:
+LINE 27         if event.get('negRiskAugmented') is True:
+LINE 32             if market.get('negRisk') is not True:
+LINE 47             gid=str(market.get('negRiskMarketID') or '')
+LINE 55 outdir=root/'knowledge/raw/market_data/polymarket_neg_risk_manifests'
+---
+FILE control/jobs/capture_arctic_neg_risk_e316.py
+MATCHED neg_risk_manifests
+LINE 7 base=root/'knowledge/raw/market_data/polymarket_neg_risk_manifests'
+---
+FILE control/jobs/discover_neg_risk_e287.py
+MATCHED negRisk
+LINE 5 url = 'https://gamma-api.polymarket.com/events/keyset?closed=false&limit=100'
+LINE 22         if market.get('negRisk') is True or market.get('neg_risk') is True:
+---
+FILE control/jobs/neg_risk_census_e288.py
+MATCHED negRisk
+LINE 5 base = 'https://gamma-api.polymarket.com/events/keyset?closed=false&limit=100'
+LINE 6 cursor = None
+LINE 12     if cursor:
+LINE 13         url = url + '&cursor=' + cursor
+LINE 24             if market.get('negRisk') is True or market.get('neg_risk') is True:
+LINE 26                 if market.get('negRiskOther') is True or market.get('neg_risk_other') is True:
+LINE 30     cursor = data.get('next_cursor')
+LINE 31     if not cursor:
+---
+FILE control/jobs/__pycache__/scan_neg_risk_identities_e292.cpython-312.pyc
+MATCHED negRisk
+LINE 38 �      �        e^dM ee �      �        e^dN ee2�      �        e^dO ee\�      �        e^dP ee]�      �       e\rL eDe\dQ� �#�      Z_ eDe\dR� �#�      Z` e^dSe_dT   e_dI   e_dU   e_d    ddV �        e^dWe`dT   e`dJ   e`dX   e`d    ddV �       e]D ]!  Z? e^dYe?dT   e?dZ   e?dI   e?dJ   e?d    ddV �       �#  e^d[eW�       y# 1 sw Y   ��xY w# e+$ r dZ$Y  ���w xY wc c} w c c}w # 1 sw Y   ���xY w# e+$ r1Z9e3j=                  eed+ e:e9�      jv                  d,��       Y dZ9[9���dZ9[9ww xY wc c}w c c}w c c}w )\�    )�Path)�Request�urlopen)�datetime�timezoneNzPredictionEdgeHunter/1.0i�  �d   zRhttps://gamma-api.polymarket.com/events?active=true&closed=false&limit=100&offset=�
+LINE 40    )�timeout�events�id�negRiskT�negRiskAugmented�markets�negRiskMarketID� �
+LINE 72    �set�seen�range�offset�str�url�reqrE   �loads�readr*   �
+---
+FILE control/results/E065-ACCEPT-DIAG-E071/RESULT.json
+MATCHED E296
+LINE 9   "source_commit": "5bf4c2e6e461c85b909cdaf499f29e9cccb0e296",
+---
+FILE control/results/EDGE-HUNTER-ASSET-TRADE-SEMANTICS-E349/stdout.log
+MATCHED negative_risk
+LINE 11 Pass `?cursor=` from a prior response's `next_cursor` to fetch the next page;
+LINE 35 SCHEMA_BODY {"description": "One activity-feed event (`/v2/activity`); a trade, split, merge, redeem, \u2026", "properties": {"bio": {"description": "Profile bio text.", "type": "string"}, "condition_id": {"description": "On-chain condition id of the market (`0x` hex).", "type": "string"}, "event_slug": {"description": "Parent event slug.", "type": "string"}, "icon": {"description": "Market icon URL.", "type": "string"}, "is_combo": {"description": "Flag only, on V2/V3 combo trade rows. Combo detail lives on the combos\nendpoints; omitted from non-combo rows.", "type": "boolean"}, "name": {"description": "Profile display name of the wallet.", "type": "string"}, "outcome": {"description": "Label of the outcome (e.g. `Yes`).", "type": "string"}, "outcome_index": {"description": "Index of the outcome within the market; `999` means the outcome\ncould not be labeled.", "format": "int32", "type": "integer"}, "price": {"description": "Price per share in USDC (trades; `0` where no price applies).", "format": "double", "type": "number"}, "profile_image": {"description": "Profile image URL.", "type": "string"}, "profile_image_optimized": {"description": "Resized profile image URL, when one exists.", "type": "string"}, "proxy_wallet": {"description": "Proxy wallet the row belongs to; the address every wallet-keyed\nendpoint accepts as `user`.", "type": "string"}, "pseudonym": {"description": "Generated fallback handle for profiles without a display name.", "type": "string"}, "side": {"description": "`BUY` or `SELL` on trade rows, from this wallet's perspective; empty\nwhere a side does not apply.", "type": "string"}, "size": {"description": "Share quantity of the action; bare sizes are shares, never USD.", "format": "double", "type": "number"}, "slug": {"description": "Market slug; the URL segment on polymarket.com.", "type": "string"}, "timestamp": {"description": "Block timestamp of the action, epoch seconds.", "format": "int64", "type": "integer"}, "title": {"description": "Market question title (Gamma enrichment; empty when unenriched).", "type": "string"}, "token_id": {"description": "CLOB asset id of the outcome token the action touched.", "type": "string"}, "transaction_hash": {"description": "Hash of the settling transaction.", "type": "string"}, "type": {"description": "TRADE, SPLIT, MERGE, REDEEM, REWARD, CONVERSION, \u2026", "type": "string"}, "usdc_size": {"description": "Cash value of the action in USDC.", "format": "double", "type": "number"}}, "require
+LINE 41 SCHEMA_BODY {"description": "One position (`/v2/positions`); a holding in a single outcome token, priced\nand enriched.\n\nThe shape is **uniform across all three arms** (user OPEN/REDEEMABLE, user\nCLOSED, market-anchored): clients never branch on which spine answered. On\nthe CLOSED arm `current_size`/`current_value`/`unrealized_pnl` are ~0 by construction, which is exactly\nwhat a closed position should report.\n\nKeyset-paginated on the active `sort_by` key: follow the response's\n`next_cursor` to page, and expect the ordering to change with `sort_by`.", "properties": {"archived": {"description": "Whether the market is archived; tells a caller using `includeArchived`\nwhich rows the flag surfaced.", "type": "boolean"}, "avg_price": {"description": "Weighted-average entry price per share, in USDC.", "format": "double", "type": "number"}, "condition_id": {"description": "The on-chain condition id.", "type": "string"}, "current_price": {"description": "Live mark per share, in USDC.", "format": "double", "type": "number"}, "current_size": {"description": "The CURRENT holding, in shares (~0 residual on the CLOSED arm).", "format": "double", "type": "number"}, "current_value": {"description": "`current_size \u00d7 current_price`, in USDC.", "format": "double", "type": "number"}, "end_date": {"description": "Market end date, `YYYY-MM-DD`; `1970-01-01` when Gamma has none.", "type": "string"}, "entry_cost_usdc": {"description": "The fee-EXCLUSIVE entry basis.", "format": "double", "type": "number"}, "entry_fees_usdc": {"description": "Attributed BUY-fee total for the position. Disclosure only:\n`entry_cost_usdc` is already fee-exclusive, so never re-deduct this\nfrom a PnL column.", "format": "double", "type": "number"}, "event_id": {"description": "Gamma event id of the parent event.", "type": "string"}, "event_slug": {"description": "Parent event slug.", "type": "string"}, "icon": {"description": "Market icon URL.", "type": "string"}, "last_event_at": {"description": "The row's last economics event, epoch seconds; 0 without native state.", "format": "int64", "type": "integer"}, "mergeable": {"description": "Whether the wallet also holds the opposite outcome, so the pair can\nmerge back into collateral.", "type": "boolean"}, "name": {"description": "Profile display name of the wallet.", "type": "string"}, "negative_risk": {"description": "Whether the market belongs to a neg-risk group.", "type": "boolean"}, "opposite_outcome": {"description": "Label of the ma
+LINE 43 SCHEMA_BODY {"description": "A trade (`/v2/trades`).", "properties": {"bio": {"description": "Profile bio text.", "type": "string"}, "condition_id": {"description": "On-chain condition id of the market (`0x` hex).", "type": "string"}, "event_slug": {"description": "Parent event slug.", "type": "string"}, "icon": {"description": "Market icon URL.", "type": "string"}, "name": {"description": "Profile display name of the wallet.", "type": "string"}, "outcome": {"description": "Label of the traded outcome (e.g. `Yes`).", "type": "string"}, "outcome_index": {"description": "Index of the traded outcome within the market; `999` means the\noutcome could not be labeled.", "format": "int32", "type": "integer"}, "price": {"description": "Execution price per share, in USDC.", "format": "double", "type": "number"}, "profile_image": {"description": "Profile image URL.", "type": "string"}, "profile_image_optimized": {"description": "Resized profile image URL, when one exists.", "type": "string"}, "proxy_wallet": {"description": "Proxy wallet the row belongs to; the address every wallet-keyed\nendpoint accepts as `user`.", "type": "string"}, "pseudonym": {"description": "Generated fallback handle for profiles without a display name.", "type": "string"}, "side": {"description": "`BUY` or `SELL`, from this wallet's perspective.", "type": "string"}, "size": {"description": "Filled quantity in shares; bare sizes are shares, never USD.", "format": "double", "type": "number"}, "slug": {"description": "Market slug; the URL segment on polymarket.com.", "type": "string"}, "timestamp": {"description": "Block timestamp of the fill, epoch seconds.", "format": "int64", "type": "integer"}, "title": {"description": "Market question title (Gamma enrichment; empty when unenriched).", "type": "string"}, "token_id": {"description": "CLOB asset id of the traded outcome token.", "type": "string"}, "transaction_hash": {"description": "Hash of the settling transaction.", "type": "string"}}, "required": ["proxy_wallet", "side", "token_id", "condition_id", "size", "price", "timestamp", "title", "slug", "icon", "event_slug", "outcome", "outcome_index", "name", "pseudonym", "bio", "profile_image", "profile_image_optimized", "transaction_hash"], "type": "object"}
+LINE 45 SCHEMA_BODY {"description": "`{ data, pagination }` envelope for `/v2/trades`.", "properties": {"data": {"description": "The page's rows.", "items": {"$ref": "#/components/schemas/Trade"}, "type": "array"}, "pagination": {"$ref": "#/components/schemas/Pagination", "description": "Paging envelope: follow `next_cursor` until `null`."}}, "required": ["data", "pagination"], "type": "object"}
+---
+FILE control/results/EDGE-HUNTER-NEG-RISK-MANIFEST-E296/stdout.log
+MATCHED neg_risk_manifests
+LINE 20 PATH /home/leonh/prediction_research/knowledge/raw/market_data/polymarket_neg_risk_manifests/20260920T011901Z.json
+---
+FILE control/results/EDGE-HUNTER-NEG-RISK-MANIFEST-E296/RESULT.json
+MATCHED E296
+LINE 4     "control/jobs/neg_risk_manifest_e296.py"
+LINE 15   "task_id": "EDGE-HUNTER-NEG-RISK-MANIFEST-E296"
+---
+FILE control/results/EDGE-HUNTER-NEG-RISK-RULES-E290/stdout.log
+MATCHED negRisk
+LINE 4 EVENT_KEYS $schema,active,archived,automaticallyActive,closed,commentCount,competitive,createdAt,creationDate,cumulativeMarkets,cyom,deploying,deployingTimestamp,description,enableNegRisk,enableOrderBook,endDate,estimateValue,eventMetadata,featured,gmpChartMode,icon,id,image,liquidity,liquidityClob,markets,negRisk,negRiskAugmented,negRiskMarketID,new,openInterest,pendingDeployment,requiresTranslation,resolutionSource,restricted,series,seriesSlug,showAllOutcomes,showMarketImages,slug,startDate,tags,ticker,title,updatedAt,version,volume,volume1mo,volume1wk,volume1yr,volume24hr
+LINE 16 EVENT_FIELD enableNegRisk True
+LINE 17 EVENT_FIELD negRisk True
+LINE 18 EVENT_FIELD negRiskAugmented False
+LINE 19 EVENT_FIELD negRiskMarketID 0xd2c21cbb9d2cb407ab3dcf619d93f6d65b7967154cd6ee930f7758baa2b4bf00
+LINE 27 FIELD negRisk True
+LINE 28 FIELD negRiskMarketID 0xd2c21cbb9d2cb407ab3dcf619d93f6d65b7967154cd6ee930f7758baa2b4bf00
+LINE 29 FIELD negRiskOther False
+LINE 30 FIELD negRiskRequestID 0x7c7d84f725ce3f3f56b310e99d72b40de51306638f47736b0f4a84a37bb5a606
+LINE 40 FIELD negRisk True
+LINE 41 FIELD negRiskMarketID 0xd2c21cbb9d2cb407ab3dcf619d93f6d65b7967154cd6ee930f7758baa2b4bf00
+LINE 42 FIELD negRiskOther False
+LINE 43 FIELD negRiskRequestID 0xa3437a11fe5553ee5cc71da95c58be2e8ce85c6a11cdf3403e26ed088fc66bf3
+LINE 53 FIELD negRisk True
+LINE 54 FIELD negRiskMarketID 0xd2c21cbb9d2cb407ab3dcf619d93f6d65b7967154cd6ee930f7758baa2b4bf00
+LINE 55 FIELD negRiskOther False
+LINE 56 FIELD negRiskRequestID 0x02cfa83bf674f5c8de6c027f45d13c44287bb6a17a9b37b6a9d65dd6423ca58f
+LINE 66 FIELD negRisk True
+LINE 67 FIELD negRiskMarketID 0xd2c21cbb9d2cb407ab3dcf619d93f6d65b7967154cd6ee930f7758baa2b4bf00
+LINE 68 FIELD negRiskOther False
+LINE 69 FIELD negRiskRequestID 0x678a9525ab6a9459612046731951eda7f80dd780a18fbd34a65fea0e5485acf6
+LINE 79 FIELD negRisk True
+LINE 80 FIELD negRiskMarketID 0xd2c21cbb9d2cb407ab3dcf619d93f6d65b7967154cd6ee930f7758baa2b4bf00
+LINE 81 FIELD negRiskOther False
+LINE 82 FIELD negRiskRequestID 0x9bf88932ebb5986858286fa7bdd22e0a5efc09a963d1182b7ebeba1fa879d371
+LINE 92 FIELD negRisk True
+LINE 93 FIELD negRiskMarketID 0xd2c21cbb9d2cb407ab3dcf619d93f6d65b7967154cd6ee930f7758baa2b4bf00
+LINE 94 FIELD negRiskOther False
+LINE 95 FIELD negRiskRequestID 0x27905582cc6d9ca299e0eaa4c3283522ade011d8a0e1daa0df32d07af916e019
+LINE 105 FIELD negRisk True
+LINE 106 FIELD negRiskMarketID 0xd2c21cbb9d2cb407ab3dcf619d93f6d65b7967154cd6ee930f7758baa2b4bf00
+LINE 107 FIELD negRiskOther False
+LINE 108 FIELD negRiskRequestID 0x30c43c0042d80e663e85954ef3882dab59e3bdde317627fd35e01d2c62eee58d
+---
+FILE control/results/EDGE-HUNTER-POLYMARKET-NEG-RISK-E286/stdout.log
+MATCHED negRisk
+LINE 14 RISK_FIELD negRisk False
+LINE 15 RISK_FIELD negRiskOther False
+LINE 20 RISK_FIELD negRisk False
+LINE 21 RISK_FIELD negRiskOther False
+LINE 26 RISK_FIELD negRisk False
+LINE 27 RISK_FIELD negRiskOther False
+LINE 32 RISK_FIELD negRisk False
+LINE 33 RISK_FIELD negRiskOther False
+LINE 34 RISK_FIELD negRiskRequestID 
+LINE 46 RISK_FIELD negRisk False
+LINE 47 RISK_FIELD negRiskOther False
+LINE 48 RISK_FIELD negRiskRequestID 
+LINE 53 RISK_FIELD negRisk False
+LINE 54 RISK_FIELD negRiskOther False
+LINE 55 RISK_FIELD negRiskRequestID 
+---
+FILE control/lifecycle/EDGE-HUNTER-NEG-RISK-MANIFEST-E296.json
+MATCHED E296
+LINE 36   "task_id": "EDGE-HUNTER-NEG-RISK-MANIFEST-E296",
+---
+FILE control/lifecycle/EDGE-HUNTER-NEGRISK-DISCOVERY-LOCATE-E374.json
+MATCHED negRisk
+LINE 21   "task_id": "EDGE-HUNTER-NEGRISK-DISCOVERY-LOCATE-E374",
+---
+MANIFEST_DIR_EXISTS True
+MANIFEST_COUNT 1
+MANIFEST 20260920T011901Z.json SIZE 74192
+LATEST_MANIFEST_KEYS ['eligible_group_count', 'events_seen', 'groups', 'live_trading', 'paid_actions', 'raw_rows_scanned', 'retrieved_at', 'wallet_actions']
+FIELD eligible_group_count 18
+FIELD events_seen 500
+FIELD groups LIST_LEN 18
+FIELD_FIRST_KEYS groups ['event_id', 'market_count', 'markets', 'neg_risk_market_id', 'title']
+FIELD live_trading False
+FIELD paid_actions False
+FIELD raw_rows_scanned 500
+FIELD retrieved_at 2026-09-20T01:19:01.061221+00:00
+FIELD wallet_actions False
+NEG_RISK_DISCOVERY_LOCATE_PASS
