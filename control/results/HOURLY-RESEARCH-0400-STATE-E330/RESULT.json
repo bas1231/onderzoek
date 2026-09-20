@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/inspect_0400_run_e330.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-20T02:03:18.880109+00:00",
+  "hypothesis_id": "CONTROL-NO-SILENT-WAITING",
+  "source_commit": "41e3baafa7af9bbcb17bd03292dcb16f6a8ef5d8",
+  "started_at": "2026-09-20T02:03:18.861891+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "7615cc4b93df014c5f262db6969b9c71496885cdc94a3ecf23191cd65227c452",
+  "task_class": "infrastructure",
+  "task_id": "HOURLY-RESEARCH-0400-STATE-E330"
+}
