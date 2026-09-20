@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/test_hottest_identity_fees_e315.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-20T01:32:05.689746+00:00",
+  "hypothesis_id": "PAYOFF-IDENTITY-MINING-V1",
+  "source_commit": "39917537054928be79958491133cda1dfa001b7e",
+  "started_at": "2026-09-20T01:32:05.669640+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "dd9c9bf04305917fdcee6ede4f138818a4711bb8e1bc8b79be8d001343a3f776",
+  "task_class": "research",
+  "task_id": "EDGE-HUNTER-HOTTEST-IDENTITY-FEE-E315"
+}
