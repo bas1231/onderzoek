@@ -1,0 +1,13 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/verify_negrisk_collateral_recycling_e424.py"
+  ],
+  "hypothesis_id": "PAYOFF-IDENTITY-MINING-V1",
+  "live_trading": false,
+  "operation": "python",
+  "task_class": "research",
+  "task_id": "EDGE-HUNTER-NEGRISK-COLLATERAL-RECYCLING-E424",
+  "timeout_seconds": 180,
+  "working_directory": "."
+}
