@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/capture_asset_fill_baseline_e351.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-20T02:26:54.576168+00:00",
+  "hypothesis_id": "ASSET-RANK-MAKER-HEDGE-V1",
+  "source_commit": "bc4be04c29bbad1d0c7ab7bc30eeb9583edab53b",
+  "started_at": "2026-09-20T02:26:54.025061+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "c5438a460c9d0dab3f8dd5ca2402ff9a94e05795d15550cb192011d9648419fb",
+  "task_class": "research",
+  "task_id": "EDGE-HUNTER-ASSET-FILL-BASELINE-E351"
+}
