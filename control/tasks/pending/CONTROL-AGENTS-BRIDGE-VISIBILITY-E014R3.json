@@ -1,0 +1,22 @@
+{
+  "build_authorization": {
+    "build_kind": "control_plane",
+    "capabilities": [
+      "modify_repository",
+      "commit_local_changes"
+    ],
+    "mode": "control_plane",
+    "objective": "Persist the proven browser bridge transport rules: tasks must be visible in ordinary assistant chat text, and raw bridge sentinels must never be embedded inside payload fields because they can truncate parser extraction."
+  },
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/record_bridge_transport_rules_e014r3.py"
+  ],
+  "hypothesis_id": "CONTROL-BRIDGE-VISIBILITY",
+  "live_trading": false,
+  "operation": "python",
+  "task_class": "infrastructure",
+  "task_id": "CONTROL-AGENTS-BRIDGE-VISIBILITY-E014R3",
+  "timeout_seconds": 120,
+  "working_directory": "."
+}
