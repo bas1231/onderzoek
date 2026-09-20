@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/test_polymarket_complements_e283.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-20T01:08:48.759400+00:00",
+  "hypothesis_id": "PAYOFF-IDENTITY-MINING-V1",
+  "source_commit": "1bcd8bf235ec0570e544cbafb55fa66c4e73a9e5",
+  "started_at": "2026-09-20T01:08:48.735341+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "2672d38c7a7fd84f8b64be9c7cc364c262c1de8bb6d2c81e46cbd443b7641029",
+  "task_class": "research",
+  "task_id": "EDGE-HUNTER-POLYMARKET-COMPLEMENT-E283"
+}
