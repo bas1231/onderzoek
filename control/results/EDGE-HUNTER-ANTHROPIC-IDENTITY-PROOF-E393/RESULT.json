@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/prove_anthropic_cross_series_identities_e393.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-20T02:56:07.893740+00:00",
+  "hypothesis_id": "PAYOFF-IDENTITY-MINING-V1",
+  "source_commit": "b919c525fdee30e32259b55028a58e60480c618a",
+  "started_at": "2026-09-20T02:56:07.870780+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "f72e8c2580f355e19988a7e722049e87d51ae0011c00166d8ce45911957ad334",
+  "task_class": "research",
+  "task_id": "EDGE-HUNTER-ANTHROPIC-IDENTITY-PROOF-E393"
+}
