@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/check_current_work_cadence_e021.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-20T22:47:18.842522+00:00",
+  "hypothesis_id": "CONTROL-WORK-CADENCE",
+  "source_commit": "d5e0e3490fba0144576f53c0123a1b3962bc8056",
+  "started_at": "2026-09-20T22:47:18.813771+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "b3646a1e6d266dbdfd593ca809131a716c63d035939ad107ee1327f85e4b47a1",
+  "task_class": "infrastructure",
+  "task_id": "CONTROL-WORK-CADENCE-CHECK-E021"
+}
