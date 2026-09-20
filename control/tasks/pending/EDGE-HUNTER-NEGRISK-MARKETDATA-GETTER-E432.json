@@ -1,0 +1,13 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/extract_negrisk_marketdata_getter_e432.py"
+  ],
+  "hypothesis_id": "PAYOFF-IDENTITY-MINING-V1",
+  "live_trading": false,
+  "operation": "python",
+  "task_class": "research",
+  "task_id": "EDGE-HUNTER-NEGRISK-MARKETDATA-GETTER-E432",
+  "timeout_seconds": 120,
+  "working_directory": "."
+}
