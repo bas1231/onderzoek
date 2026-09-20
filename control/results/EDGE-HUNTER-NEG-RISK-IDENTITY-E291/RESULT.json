@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/prove_neg_risk_identities_e291.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-20T01:15:03.862772+00:00",
+  "hypothesis_id": "PAYOFF-IDENTITY-MINING-V1",
+  "source_commit": "7299711083e37b744c233a943908394b0499cfd3",
+  "started_at": "2026-09-20T01:15:03.842360+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "20e3c62d981e9bda7a169b4a9d31190f1e6690aad85ca1760ef5b625af1d3bfd",
+  "task_class": "research",
+  "task_id": "EDGE-HUNTER-NEG-RISK-IDENTITY-E291"
+}
