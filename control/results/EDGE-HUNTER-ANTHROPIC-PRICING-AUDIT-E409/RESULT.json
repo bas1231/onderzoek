@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/audit_anthropic_pricing_e409.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-20T03:10:00.398031+00:00",
+  "hypothesis_id": "PAYOFF-IDENTITY-MINING-V1",
+  "source_commit": "3737850b9fa0bfea84b1c9aa4fcb3ed46e90d0f7",
+  "started_at": "2026-09-20T03:10:00.309632+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "af728158184cfd29648c10a2c9369dc3988b96f229ee9c8e0bef0b4a834523df",
+  "task_class": "research",
+  "task_id": "EDGE-HUNTER-ANTHROPIC-PRICING-AUDIT-E409"
+}
