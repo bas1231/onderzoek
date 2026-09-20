@@ -1,0 +1,13 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/verify_gamma_after_cursor_e404.py"
+  ],
+  "hypothesis_id": "PAYOFF-IDENTITY-MINING-V1",
+  "live_trading": false,
+  "operation": "python",
+  "task_class": "research",
+  "task_id": "EDGE-HUNTER-GAMMA-AFTER-CURSOR-E404",
+  "timeout_seconds": 120,
+  "working_directory": "."
+}
