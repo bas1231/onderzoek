@@ -1,0 +1,13 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/screen_universe_no_conversion_upper_bound_e437.py"
+  ],
+  "hypothesis_id": "PAYOFF-IDENTITY-MINING-V1",
+  "live_trading": false,
+  "operation": "python",
+  "task_class": "research",
+  "task_id": "EDGE-HUNTER-UNIVERSE-NO-CONVERSION-UPPER-BOUND-E437",
+  "timeout_seconds": 300,
+  "working_directory": "."
+}
