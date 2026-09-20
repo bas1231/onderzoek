@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/measure_asset_queue_feasibility_e348.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-20T02:23:47.347976+00:00",
+  "hypothesis_id": "ASSET-RANK-MAKER-HEDGE-V1",
+  "source_commit": "b6a2166b8705923c8a6f79ac395df8176dd96177",
+  "started_at": "2026-09-20T02:23:47.325331+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "0676a1042d2ee07d49e854333230ae12d3f3b4769bf24acc437ea54a76d20e3c",
+  "task_class": "research",
+  "task_id": "EDGE-HUNTER-ASSET-QUEUE-FEASIBILITY-E348"
+}
