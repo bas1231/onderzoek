@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/inspect_neg_scan_e295.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-20T01:18:12.447235+00:00",
+  "hypothesis_id": "PAYOFF-IDENTITY-MINING-V1",
+  "source_commit": "28cdfc2ebab837341237c812ddd0edfd087e6397",
+  "started_at": "2026-09-20T01:18:12.428275+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "cbf9e0d54877e7acee8e456281bfab9e0f5e66b2e8d8d75d4c6f6a18d2235842",
+  "task_class": "infrastructure",
+  "task_id": "EDGE-HUNTER-NEG-RISK-SCAN-INSPECT-E295"
+}

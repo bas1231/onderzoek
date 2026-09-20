@@ -1,0 +1,36 @@
+65         continue
+66     eligible.append({'event_id':str(event.get('id')),'title':str(event.get('title') or ''),'markets':neg,'neg_risk_market_id':next(iter(market_ids))})
+67 
+68 eligible.sort(key=lambda x:(len(x['markets']),x['event_id']))
+69 selected = eligible[:30]
+70 results = []
+71 
+72 for event in selected:
+73     tokens = []
+74     for market in event['markets']:
+75         tokens.append({'token_id':market})
+76         tokens.append({'token_id':market})
+77     body = json.dumps(tokens).encode('utf-8')
+78     req = Request('https://clob.polymarket.com/books', data=body, headers={'Content-Type':'application/json','User-Agent':agent}, method='POST')
+79     try:
+80         with urlopen(req, timeout=30) as r:
+81             books = json.loads(r.read())
+82     except Exception as exc:
+83         results.append({'event_id':event,'title':event,'status':'BOOK_FETCH_FAILED','error':type(exc).name})
+84         continue
+85     bookmap = {str(b.get('asset_id')):b for b in books}
+86     rows = []
+87     complete = True
+88     for market in event['markets']:
+89         row = {'id':market,'question':market}
+90         for side in ['yes','no']:
+91             book = bookmap.get(market[side])
+92             if not book:
+93                 complete = False
+94                 break
+95             bids = book.get('bids') or []
+96             asks = book.get('asks') or []
+97             if not bids or not asks:
+98                 complete = False
+99                 break
+100             bid = max(bids,key=lambda x:float(x.get('price',0)))
