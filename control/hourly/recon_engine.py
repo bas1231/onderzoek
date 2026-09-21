@@ -177,8 +177,23 @@ def resurrect_if_kill_condition_changed(old: dict[str, Any], fresh: dict[str, An
 def update_watchlist(findings: list[dict[str, Any]]) -> dict[str, Any]:
     watch = load_json(WATCHLIST, {"version": 1, "items": []})
     old = {x["id"]: x for x in watch.get("items", [])}
+    fresh_by_id = {f["id"]: f for f in findings}
     added = 0
     changed = 0
+    demoted = 0
+
+    # V1 may have persisted generic keyword hits as WATCH. Re-evaluate any
+    # currently observed legacy item with the V2 quality gate and demote it
+    # out of persistent state when it is now classified as DISCOVER noise.
+    for fid, fresh in fresh_by_id.items():
+        if fresh.get("status") != "DISCOVER" or fid not in old:
+            continue
+        prev = old[fid]
+        if prev.get("status") == "WATCH":
+            old.pop(fid)
+            demoted += 1
+            changed += 1
+
     for f in findings:
         if f.get("status") == "DISCOVER":
             continue
@@ -201,12 +216,21 @@ def update_watchlist(findings: list[dict[str, Any]]) -> dict[str, Any]:
     watch["items"] = sorted(old.values(), key=lambda x: x["id"])
     watch["updated_at"] = datetime.now(timezone.utc).isoformat()
     save_json(WATCHLIST, watch)
-    return {"added": added, "changed": changed, "total": len(watch["items"])}
+    return {"added": added, "changed": changed, "demoted_noise": demoted, "total": len(watch["items"])}
 
 def update_graph(findings: list[dict[str, Any]]) -> dict[str, Any]:
     graph = load_json(GRAPH, {"version": 1, "nodes": [], "edges": []})
     nodes = {x["id"]: x for x in graph.get("nodes", [])}
     edges = {(x["from"], x["to"], x["type"]): x for x in graph.get("edges", [])}
+
+    # Remove legacy graph nodes/edges when a currently observed V1 WATCH is
+    # reclassified as DISCOVER by the V2 quality gate.
+    demoted_ids = {f["id"] for f in findings if f.get("status") == "DISCOVER" and f["id"] in nodes}
+    for fid in demoted_ids:
+        nodes.pop(fid, None)
+    if demoted_ids:
+        edges = {k: v for k, v in edges.items() if v.get("from") not in demoted_ids and v.get("to") not in demoted_ids}
+
     for f in findings:
         if f.get("status") == "DISCOVER":
             continue
