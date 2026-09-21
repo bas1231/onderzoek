@@ -63,6 +63,38 @@ def load_capture(path: Path, ticker: str):
     return states, trades, gaps, coverage
 
 
+def partition_kwi_events(events):
+    """Separate independent primary events from same-target revisions.
+
+    E401's preregistered independence unit is city x target KWI minute. Only the
+    first_decision_eligible event may count toward the primary evidence sample.
+    Revisions are retained for diagnostics but must never inflate the >=30 gate.
+    Unknown kinds fail closed into ignored_nonprimary.
+    """
+    primary, revisions, ignored_nonprimary = [], [], []
+    for event in events:
+        kind = event.get("kind") if isinstance(event, dict) else None
+        if kind == "first_decision_eligible":
+            primary.append(event)
+        elif kind == "revision":
+            revisions.append(event)
+        else:
+            ignored_nonprimary.append(event)
+    return primary, revisions, ignored_nonprimary
+
+
+def analyze_events(events, states, trades, gaps, coverage, *, window_ms, max_pre_age_ms, max_state_gap_ms):
+    return [
+        analyze_reaction(
+            event, states, trades, gaps, coverage,
+            window_ms=window_ms,
+            max_pre_age_ms=max_pre_age_ms,
+            max_state_gap_ms=max_state_gap_ms,
+        )
+        for event in events
+    ]
+
+
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--kwi-manifest-dir", type=Path, required=True)
@@ -76,31 +108,43 @@ def main() -> int:
     args = ap.parse_args()
 
     manifests = load_jsons(args.kwi_manifest_dir)
-    kwi_events = extract_kwi_events(manifests, args.city)
+    all_kwi_events = extract_kwi_events(manifests, args.city)
+    primary_events, revision_events, ignored_nonprimary = partition_kwi_events(all_kwi_events)
     states, trades, gaps, coverage = load_capture(args.market_log, args.ticker)
-    results = [
-        analyze_reaction(
-            event, states, trades, gaps, coverage,
-            window_ms=args.window_ms,
-            max_pre_age_ms=args.max_pre_age_ms,
-            max_state_gap_ms=args.max_state_gap_ms,
-        )
-        for event in kwi_events
-    ]
+
+    primary_results = analyze_events(
+        primary_events, states, trades, gaps, coverage,
+        window_ms=args.window_ms,
+        max_pre_age_ms=args.max_pre_age_ms,
+        max_state_gap_ms=args.max_state_gap_ms,
+    )
+    revision_results = analyze_events(
+        revision_events, states, trades, gaps, coverage,
+        window_ms=args.window_ms,
+        max_pre_age_ms=args.max_pre_age_ms,
+        max_state_gap_ms=args.max_state_gap_ms,
+    )
+
     report = {
-        "schema": "KAL_WX_MARKET_REACTION_E401_V1",
+        "schema": "KAL_WX_MARKET_REACTION_E401_V2",
         "candidate": "KAL-WX-INDEX-001",
         "city": args.city,
         "ticker": args.ticker,
         "window_ms": args.window_ms,
-        "events_total": len(results),
-        "results": results,
+        "events_total": len(primary_results),
+        "primary_events_total": len(primary_results),
+        "revision_events_total": len(revision_results),
+        "ignored_nonprimary_events_total": len(ignored_nonprimary),
+        "sample_count_semantics": "events_total counts first_decision_eligible primary events only; revisions are non-independent diagnostics",
+        "results": primary_results,
+        "revision_results": revision_results,
         "economic_conclusion": "NO_PROVEN_EDGE",
         "guards": [
             "Reaction latency is not profitability.",
             "KWI public availability does not by itself prove settlement equivalence.",
             "Capture gaps and inadequate pre/post coverage fail closed.",
             "No hindsight data may be used as point-in-time evidence.",
+            "Same-target revisions never count as independent primary evidence.",
         ],
     }
     text = json.dumps(report, indent=2, sort_keys=True) + "\n"
