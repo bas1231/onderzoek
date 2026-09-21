@@ -5,6 +5,9 @@ from control.research_os_v1.candidate_view import canonicalize
 from control.research_os_v1.contracts import validate_task
 from control.research_os_v1.scheduler import fanout_cap, schedule
 from control.research_os_v1.shadow_cycle import build_shadow_plan
+from control.research_os_v1.legacy_adapter import packet_to_task
+from control.research_os_v1.shadow_cli import build_from_paths
+import json
 
 
 def base_task(task_id="T1", parallelism="HIGH", dependency="INDEPENDENT"):
@@ -107,3 +110,35 @@ def test_shadow_cycle_never_mutates_or_promotes():
     assert out["economic_conclusion"] == "NO_PROVEN_EDGE"
     assert out["scheduled"]["selected"] == ["T1"]
     assert out["scheduled"]["tasks"][0]["fanout_cap"] == 5
+
+
+def test_legacy_settlement_becomes_sequential_mechanics():
+    packet = {
+        "agent_id": "settlement",
+        "status": "READY",
+        "input_refs": ["knowledge/routing.json"],
+        "next_decisive_question": "Are settlement rules identical?",
+    }
+    task = packet_to_task(packet, "R1")
+    assert task["worker_domain"] == "mechanics"
+    assert task["task_shape"]["dependency_shape"] == "SEQUENTIAL"
+    assert task["constraints"]["live_trading"] is False
+
+
+def test_falsifier_and_reproducer_are_blinded():
+    f = packet_to_task({"agent_id":"chief_falsifier","status":"READY","candidate_ids":["C1"]}, "R")
+    r = packet_to_task({"agent_id":"independent_reproducer","status":"READY","candidate_ids":["C1"]}, "R")
+    assert f["constraints"]["blind_to_origin_reasoning"] is True
+    assert r["constraints"]["blind_to_origin_reasoning"] is True
+
+
+def test_shadow_cli_reads_current_shapes_without_writes(tmp_path):
+    cdir = tmp_path / "candidates"; pdir = tmp_path / "packets" / "RUN1"
+    cdir.mkdir(); pdir.mkdir(parents=True)
+    (cdir/"c.json").write_text(json.dumps({"candidate_id":"C1","hypothesis":"h","decision":"UNPROVEN","gates":{}}))
+    (pdir/"settlement.json").write_text(json.dumps({"agent_id":"settlement","status":"READY","input_refs":["x"]}))
+    out = build_from_paths(cdir, pdir, "abc")
+    assert out["mode"] == "SHADOW_READ_ONLY"
+    assert out["input_summary"]["candidate_count"] == 1
+    assert out["input_summary"]["packet_count"] == 1
+    assert out["scheduled"]["selected"] == ["RUN1:settlement"]
