@@ -1,6 +1,16 @@
 {
-  "schema_version": 1,
-  "status": "PREREGISTERED_BEFORE_V1_IMPLEMENTATION",
+  "schema_version": 2,
+  "status": "PREREGISTERED_BEFORE_UNSEEN_SHADOW_DATA",
+  "amendment": {
+    "timing": "before_first_unseen_shadow_observation",
+    "reason": "Fail-closed anti-gaming hardening discovered during static architecture audit before unseen benchmark data were collected.",
+    "changes": [
+      "Require identical preregistered case IDs for baseline and challenger.",
+      "Require every case ID to be present and unique.",
+      "Treat missing or zero metric denominators as UNKNOWN rather than favorable zero values.",
+      "Require both baseline and challenger to satisfy the minimum observation set before replacement can pass."
+    ]
+  },
   "baseline": "current_hourly_factory_single_chatgpt_turn",
   "challenger": "research_os_v1_shadow",
   "minimum_observation_set": {
@@ -8,7 +18,10 @@
     "active_hour_cycles": 10,
     "require_multiple_task_shapes": true,
     "require_at_least_one_survivor_case": true,
-    "require_at_least_one_decisive_negative_case": true
+    "require_at_least_one_decisive_negative_case": true,
+    "case_id_required": true,
+    "case_id_unique": true,
+    "baseline_and_challenger_same_case_set": true
   },
   "primary_metrics": [
     {"id":"M1","name":"unique_relevant_evidence_per_worker_run","direction":"HIGHER_IS_BETTER"},
@@ -24,6 +37,12 @@
     {"id":"M11","name":"coordination_overhead","direction":"LOWER_IS_BETTER_CONDITIONAL_ON_QUALITY"},
     {"id":"M12","name":"plan_usage_consumption_if_observable","direction":"LOWER_IS_BETTER_CONDITIONAL_ON_QUALITY"}
   ],
+  "missing_metric_policy": {
+    "missing_denominator": "UNKNOWN",
+    "zero_denominator": "UNKNOWN",
+    "unknown_metric_may_count_as_improvement": false,
+    "unknown_no_regression_metric_may_pass_gate": false
+  },
   "hard_fail_conditions": [
     "Any paid action without specific user approval.",
     "Any live order/trade or wallet action without specific user approval.",
@@ -31,11 +50,16 @@
     "Any point-in-time leakage accepted as valid evidence.",
     "Any deleted/suppressed negative evidence used to improve a thesis.",
     "Any known survivor benchmark killed solely because it was waiting for data.",
-    "Any independent-reproduction pass where shared upstream evidence was knowingly ignored."
+    "Any independent-reproduction pass where shared upstream evidence was knowingly ignored.",
+    "Any baseline/challenger comparison performed on different preregistered case sets.",
+    "Any missing metric denominator interpreted as zero to improve a comparison."
   ],
   "replacement_rule": [
     "All hard-fail conditions must remain false.",
+    "Both baseline and challenger must satisfy the minimum observation set.",
+    "Baseline and challenger must contain the exact same unique preregistered case IDs.",
     "V1 must show no material regression in survivor preservation, false-survivor control, or provenance completeness.",
+    "Unknown or denominatorless metrics cannot satisfy an improvement or no-regression requirement.",
     "V1 must show a strict improvement in at least two of: unique evidence efficiency, duplicate reduction, decisive falsification efficiency, contradiction detection, source-family coverage.",
     "If quality improves only by materially increasing usage/coordination, retain the simpler baseline unless the gain is operationally important and documented.",
     "If results differ by task shape, adopt task-shape-specific concurrency rather than forcing one global worker count."
@@ -44,6 +68,10 @@
     "metrics_frozen_before_unseen_shadow_data": true,
     "no_post_hoc_case_removal": true,
     "no_relabeling_failed_candidate_as_out_of_scope_after_result": true,
-    "no_generated_text_volume_metric": true
+    "no_generated_text_volume_metric": true,
+    "case_ids_required_and_unique": true,
+    "baseline_and_challenger_identical_case_ids": true,
+    "missing_denominators_are_unknown_not_zero": true,
+    "both_sides_must_meet_minimum_observation_set": true
   }
 }
