@@ -8,6 +8,9 @@ from .candidate_view import canonicalize
 from .failure_memory import pattern_index
 from .governor import classify
 from .scheduler import fanout_cap
+from .hypothesis_accounting import adaptive_search_flags
+from .promotion import evaluate as evaluate_promotion
+from .reproducer import source_independence
 
 BASE = Path(__file__).resolve().parent
 
@@ -23,6 +26,13 @@ RUNTIME_FILES = [
     "shadow_cycle.py",
     "legacy_adapter.py",
     "shadow_cli.py",
+    "hypothesis_accounting.py",
+    "discovery_coverage.py",
+    "promotion.py",
+    "resurrection.py",
+    "red_team.py",
+    "reproducer.py",
+    "shadow_benchmark.py",
 ]
 
 
@@ -51,6 +61,10 @@ def main() -> int:
             errors.append("GOVERNOR_UNKNOWN_ACTION_NOT_BLOCKED")
         if not classify({"kind": "paid_action"}).requires_user_approval:
             errors.append("GOVERNOR_PAID_ACTION_NOT_APPROVAL_GATED")
+        if not classify({"kind": "live_order_or_trade"}).requires_user_approval:
+            errors.append("GOVERNOR_LIVE_ACTION_NOT_APPROVAL_GATED")
+        if not classify({"kind": "wallet_or_fund_movement"}).requires_user_approval:
+            errors.append("GOVERNOR_WALLET_ACTION_NOT_APPROVAL_GATED")
     except Exception as exc:
         errors.append(f"GOVERNOR_SMOKE_FAIL:{exc}")
 
@@ -70,6 +84,35 @@ def main() -> int:
             errors.append("SEQUENTIAL_FANOUT_NOT_ONE")
     except Exception as exc:
         errors.append(f"SCHEDULER_SMOKE_FAIL:{exc}")
+
+    try:
+        flags = adaptive_search_flags({
+            "id": "SMOKE", "hypotheses_examined": 2, "parameterizations_examined": 0,
+            "post_hoc_mutations": 0, "untouched_evidence_remaining": True,
+        })
+        if flags.get("discovery_evidence_may_promote_directly") is not False:
+            errors.append("ADAPTIVE_SEARCH_NOT_DOWNGRADED")
+    except Exception as exc:
+        errors.append(f"HYPOTHESIS_ACCOUNTING_SMOKE_FAIL:{exc}")
+
+    try:
+        gates = {g: "PASS" for g in [
+            "source_provenance", "point_in_time", "mechanism", "signal_edge",
+            "market_edge", "execution_reality", "prebuild_killer", "chief_falsifier",
+            "validation", "independent_reproduction", "shadow",
+        ]}
+        verdict = evaluate_promotion({"required_gates": gates})
+        if verdict.get("live_trading_authorized") is not False:
+            errors.append("PROMOTION_AUTHORIZED_LIVE_TRADING")
+    except Exception as exc:
+        errors.append(f"PROMOTION_SMOKE_FAIL:{exc}")
+
+    try:
+        indep = source_independence(["same"], ["same"])
+        if indep.get("counts_as_independent_reproduction") is not False:
+            errors.append("SHARED_SOURCE_COUNTED_AS_INDEPENDENT")
+    except Exception as exc:
+        errors.append(f"REPRODUCTION_SMOKE_FAIL:{exc}")
 
     out = {
         "validator": "RESEARCH_OS_V1_RUNTIME",
