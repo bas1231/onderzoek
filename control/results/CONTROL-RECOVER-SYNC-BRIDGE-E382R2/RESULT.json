@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/launch_e382_r2.py"
+  ],
+  "exit_code": 1,
+  "finished_at": "2026-09-21T07:15:04.834595+00:00",
+  "hypothesis_id": "CONTROL-NO-SILENT-WAITING",
+  "source_commit": "baf82f143884d291dda02250b629c267e72cdfb9",
+  "started_at": "2026-09-21T07:15:04.761569+00:00",
+  "status": "failed",
+  "stderr_sha256": "4c9215466b6dd5c515fd2d77c3af00e499ff81857127606bb4b30916d79d4fc8",
+  "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "task_class": "infrastructure",
+  "task_id": "CONTROL-RECOVER-SYNC-BRIDGE-E382R2"
+}

@@ -1,0 +1,12 @@
+The following paths are ignored by one of your .gitignore files:
+control/lifecycle
+hint: Use -f if you really want to add them.
+hint: Turn this message off by running
+hint: "git config advice.addIgnoredFile false"
+Traceback (most recent call last):
+  File "/home/leonh/prediction_research/control/jobs/launch_e382_r2.py", line 1, in <module>
+    import pathlib,subprocess,sys,tempfile; r=pathlib.Path.cwd(); tid='CONTROL-RECOVER-SYNC-BRIDGE-E382R2'; subprocess.run(['git','add','-u'],cwd=r,check=True); [subprocess.run(['git','add',str(p)],cwd=r,check=True) for p in [r/'control/tasks/running'/f'{tid}.json',r/'control/lifecycle'/f'{tid}.json'] if p.exists()]; q=subprocess.run(['git','diff','--cached','--quiet'],cwd=r); subprocess.run(['git','commit','-m','control: checkpoint before E382 recovery'],cwd=r,check=True) if q.returncode else None; subprocess.run(['git','fetch','origin','main'],cwd=r,check=True); b=subprocess.run(['git','show','origin/main:control/jobs/recover_sync_bridge_e382.py'],cwd=r,stdout=subprocess.PIPE,check=True).stdout; d=tempfile.TemporaryDirectory(); p=pathlib.Path(d.name)/'e382.py'; p.write_bytes(b); sys.exit(subprocess.run([sys.executable,str(p)],cwd=r).returncode)
+                                                                                                                                                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/subprocess.py", line 571, in run
+    raise CalledProcessError(retcode, process.args,
+subprocess.CalledProcessError: Command '['git', 'add', '/home/leonh/prediction_research/control/lifecycle/CONTROL-RECOVER-SYNC-BRIDGE-E382R2.json']' returned non-zero exit status 1.

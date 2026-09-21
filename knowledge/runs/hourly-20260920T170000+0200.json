@@ -1,4 +1,23 @@
 {
+  "agent_control_plane": {
+    "default_economic_conclusion": "NO_PROVEN_EDGE",
+    "director_handoff_ref": "knowledge/runs/hourly-20260920T170000+0200-director-handoff.json",
+    "hydrated_roles": [
+      "algebra",
+      "behavioral",
+      "informed_flow",
+      "microstructure",
+      "scout",
+      "settlement",
+      "weather_twc"
+    ],
+    "live_trading": false,
+    "orchestration_ref": "knowledge/runs/agent_packets/hourly-20260920T170000+0200/_orchestration.json",
+    "packet_dir": "knowledge/runs/agent_packets/hourly-20260920T170000+0200",
+    "paid_actions": false,
+    "queue_count": 4,
+    "wallet_actions": false
+  },
   "agents": {
     "algebra": "PENDING",
     "behavioral": "PENDING",
@@ -21,6 +40,12 @@
     "settlement": 1,
     "weather_twc": 3
   },
+  "cadence": {
+    "cooldown_until": "2026-09-20T20:34:07.558208Z",
+    "mode": "WORK",
+    "work_started_at": "2026-09-20T15:34:07.558208Z",
+    "work_until": "2026-09-20T19:34:07.558208Z"
+  },
   "candidate_status": "UNPROVEN",
   "decision": "NO_PROVEN_EDGE",
   "gates": {
@@ -33,24 +58,30 @@
     "source_provenance": "PASS"
   },
   "live_trading": false,
+  "memory_context": {
+    "active_candidate_count": 1,
+    "matched_memory_count": 80,
+    "recent_report_count": 3,
+    "ref": "knowledge/runs/hourly-20260920T170000+0200-memory-context.json"
+  },
   "paid_actions": false,
   "routing_ref": "knowledge/runs/hourly-20260920T170000+0200-routing.json",
   "run_id": "hourly-20260920T170000+0200",
   "source_failure_count": 0,
   "source_manifests": {
-    "arxiv": "/home/leonh/prediction_research/knowledge/documents/manifests/arxiv/20260920T150017Z_d7ed6c1e9723.json",
-    "aviationweather": "/home/leonh/prediction_research/knowledge/documents/manifests/aviationweather/20260920T150017Z_dd6e0cc4b237.json",
-    "cftc": "/home/leonh/prediction_research/knowledge/documents/manifests/cftc/20260920T150017Z_f8c1a004d060.json",
-    "ecmwf_open": "/home/leonh/prediction_research/knowledge/documents/manifests/ecmwf_open/20260920T150017Z_f94d6721e36f.json",
-    "github": "/home/leonh/prediction_research/knowledge/documents/manifests/github/20260920T150018Z_f8e3ad136447.json",
-    "kalshi_docs": "/home/leonh/prediction_research/knowledge/documents/manifests/kalshi_docs/20260920T150017Z_94c183be8dd7.json",
-    "kalshi_weather_rules": "/home/leonh/prediction_research/knowledge/documents/manifests/kalshi_weather_rules/20260920T150018Z_7a7654d540c6.json",
-    "nomads": "/home/leonh/prediction_research/knowledge/documents/manifests/nomads/20260920T150017Z_a1a6a1d8f1f5.json",
-    "nws": "/home/leonh/prediction_research/knowledge/documents/manifests/nws/20260920T150017Z_9b81f45b7b13.json",
-    "polymarket_docs": "/home/leonh/prediction_research/knowledge/documents/manifests/polymarket_docs/20260920T150017Z_6061d788333a.json",
-    "reddit": "/home/leonh/prediction_research/knowledge/documents/manifests/reddit/20260920T150018Z_7978efb3077f.json",
-    "twc_kalshi": "/home/leonh/prediction_research/knowledge/documents/manifests/twc_kalshi/20260920T150018Z_4778025a622c.json",
-    "youtube": "/home/leonh/prediction_research/knowledge/documents/manifests/youtube/20260920T150018Z_87a98e602535.json"
+    "arxiv": "/home/leonh/prediction_research/knowledge/documents/manifests/arxiv/20260920T153455Z_d7ed6c1e9723.json",
+    "aviationweather": "/home/leonh/prediction_research/knowledge/documents/manifests/aviationweather/20260920T153455Z_dd6e0cc4b237.json",
+    "cftc": "/home/leonh/prediction_research/knowledge/documents/manifests/cftc/20260920T153455Z_615ebb079ecf.json",
+    "ecmwf_open": "/home/leonh/prediction_research/knowledge/documents/manifests/ecmwf_open/20260920T153455Z_f94d6721e36f.json",
+    "github": "/home/leonh/prediction_research/knowledge/documents/manifests/github/20260920T153455Z_ba14a0aed121.json",
+    "kalshi_docs": "/home/leonh/prediction_research/knowledge/documents/manifests/kalshi_docs/20260920T153455Z_94c183be8dd7.json",
+    "kalshi_weather_rules": "/home/leonh/prediction_research/knowledge/documents/manifests/kalshi_weather_rules/20260920T153456Z_d2f1e8491642.json",
+    "nomads": "/home/leonh/prediction_research/knowledge/documents/manifests/nomads/20260920T153455Z_9ba424e28d7a.json",
+    "nws": "/home/leonh/prediction_research/knowledge/documents/manifests/nws/20260920T153455Z_9ef1abd88b25.json",
+    "polymarket_docs": "/home/leonh/prediction_research/knowledge/documents/manifests/polymarket_docs/20260920T153455Z_6061d788333a.json",
+    "reddit": "/home/leonh/prediction_research/knowledge/documents/manifests/reddit/20260920T153455Z_74aed6aeda16.json",
+    "twc_kalshi": "/home/leonh/prediction_research/knowledge/documents/manifests/twc_kalshi/20260920T153456Z_4778025a622c.json",
+    "youtube": "/home/leonh/prediction_research/knowledge/documents/manifests/youtube/20260920T153456Z_add499019aa0.json"
   },
   "source_quality": {
     "low_text_yield_count": 3,
@@ -58,7 +89,7 @@
     "usable_count": 10
   },
   "source_success_count": 13,
-  "source_sweep_ref": "knowledge/runs/source_sweeps/20260920T150017Z.json",
+  "source_sweep_ref": "knowledge/runs/source_sweeps/20260920T153454Z.json",
   "sources": {
     "arxiv": "UNCHANGED",
     "aviationweather": "UNCHANGED",

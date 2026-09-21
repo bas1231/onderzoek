@@ -45,8 +45,8 @@
     "coverage_gaps": [],
     "evidence": [
       {
-        "document_sha256": "f8c1a004d060ba72554a102b07dfc363bf9738eaf6def495ae5e84d736615ce0",
-        "retrieved_at": "2026-09-20T15:00:17.391089+00:00",
+        "document_sha256": "615ebb079ecf68c9b0e78187cd3e06955846e0824d9d201689a38f68fee32414",
+        "retrieved_at": "2026-09-20T15:34:55.175900+00:00",
         "snippet": "ments of Traders Bank Participation Reports Cotton On-Call Financial Data for FCMS Staff Reports Weekly Swaps Report Cleared Margin Reports Office of the Chief Economist Forms & Submissions Learn & Protect Understanding Prediction Markets and Event Contracts Check Registration & Disciplinary History Submit a Tip or Complaint RED List Office of Proceedings Learning Resources News & Events Press Releases Public Statements & Remarks Events Carousel Rotation On On CFTC and Kansas State University to Host AgCon October 22-23 CFTC Grants Multiple Whistleblower Awards CFTC Issues Advisory on Self-Certifying Incentive Programs for Prediction Markets CFTC Approves Final Rule Concerning Whistleblower Awards Holding Wrongdoers Accountable Wh",
         "source_id": "cftc",
         "source_state": "CHANGED",
@@ -61,8 +61,8 @@
         "term": "prediction market"
       },
       {
-        "document_sha256": "7a7654d540c604b4f17836cad16a1bb28abe15800208c23e7ebdc44ff0789cf7",
-        "retrieved_at": "2026-09-20T15:00:18.766367+00:00",
+        "document_sha256": "d2f1e8491642ec25186dd4dbe11ab31cc92e584335c36c7e5faefbd19fcdd08c",
+        "retrieved_at": "2026-09-20T15:34:56.459199+00:00",
         "snippet": "cally released the following morning. Hourly temperature markets settle on readings from The Weather Company . Always check the specific market\u2019s rules for its source. How Do I Trade on Weather Markets? Kalshi creates a prediction market around a specific temperature threshold for a given location. For example: \u201cHighest temperature in Chicago on April 15, 2025?\u201d \u200b Contract prices for temperature ranges may shift as new weather data (e.g., forecasts, model runs, satellite images, observations) becomes available. Note: Not all weather data is the same. Apps like AccuWeather, iOS Weather, or Google Weather may be useful for guidance but do not determine contract outcomes. The only source used for settlement is the one named in the ma",
         "source_id": "kalshi_weather_rules",
         "source_state": "CHANGED",
@@ -85,8 +85,8 @@
     ],
     "evidence": [
       {
-        "document_sha256": "7a7654d540c604b4f17836cad16a1bb28abe15800208c23e7ebdc44ff0789cf7",
-        "retrieved_at": "2026-09-20T15:00:18.766367+00:00",
+        "document_sha256": "d2f1e8491642ec25186dd4dbe11ab31cc92e584335c36c7e5faefbd19fcdd08c",
+        "retrieved_at": "2026-09-20T15:34:56.459199+00:00",
         "snippet": "amounts in specific cities, from New York City to Los Angeles. Traders can take positions on whether a city will reach a certain high temperature or fall within a particular range. Each weather market names its official settlement source in its market rules. Daily high/low temperature markets settle based on the final climate report issued by the National Weather Service (NWS), typically released the following morning. Hourly temperature markets settle on readings from The Weather Company . Always check the specific market\u2019s rules for its source. How Do I Trade on Weather Markets? Kalshi creates a prediction market around a specific temperature threshold for a given location. For example: \u201cHighest temperature in Chicago on April 1",
         "source_id": "kalshi_weather_rules",
         "source_state": "CHANGED",
@@ -117,8 +117,8 @@
         "term": "2 metre temperature"
       },
       {
-        "document_sha256": "7a7654d540c604b4f17836cad16a1bb28abe15800208c23e7ebdc44ff0789cf7",
-        "retrieved_at": "2026-09-20T15:00:18.766367+00:00",
+        "document_sha256": "d2f1e8491642ec25186dd4dbe11ab31cc92e584335c36c7e5faefbd19fcdd08c",
+        "retrieved_at": "2026-09-20T15:34:56.459199+00:00",
         "snippet": "ing based on the high temperature recorded in the final NWS Daily Climate Report. Market determination may be delayed in the rare instances of a) a high temperature is not consistent with 6-hr or 24-hr highs reported by METAR or b) the final NWS Climate Report high temperature value is lower than previous preliminary report. \u200b Hourly Temperature Markets Some temperature markets are hourly - the market title names an exact time, for example \u201cChicago temperature at 5 PM EDT.\u201d These markets are also directional: each contract resolves on whether the temperature at that time is above or below a specific level, rather than within a range. They settle on the temperature at that exact time as reported by The Weather Company for the stati",
         "source_id": "kalshi_weather_rules",
         "source_state": "CHANGED",
