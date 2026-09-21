@@ -54,12 +54,33 @@ class Handler(_CoreHandler):
             self.send_json(200, result)
         except Exception as exc:
             detail = str(exc)
-            status = 409 if "conflicting" in detail.lower() else 400
+            exc_name = type(exc).__name__
+
+            # Client/AI validation failures are terminal for that exact
+            # response block. Unexpected runtime failures are retryable so
+            # the browser capture does not permanently discard valid work.
+            validation_error = (
+                isinstance(
+                    exc,
+                    AI_RESPONSE_RECEIVER.ResponseReceiverError,
+                )
+                or exc_name == "ValidationError"
+                or isinstance(exc, json.JSONDecodeError)
+            )
+
+            if "conflicting" in detail.lower():
+                status = 409
+            elif validation_error:
+                status = 400
+            else:
+                status = 500
+
             self.send_json(
                 status,
                 {
-                    "error": type(exc).__name__,
+                    "error": exc_name,
                     "detail": detail,
+                    "retryable": status >= 500,
                     "live_trading": False,
                     "paid_actions": False,
                     "wallet_actions": False,
