@@ -7,6 +7,13 @@ from control.research_os_v1.scheduler import fanout_cap, schedule
 from control.research_os_v1.shadow_cycle import build_shadow_plan
 from control.research_os_v1.legacy_adapter import packet_to_task
 from control.research_os_v1.shadow_cli import build_from_paths
+from control.research_os_v1.hypothesis_accounting import adaptive_search_flags
+from control.research_os_v1.discovery_coverage import summarize as summarize_coverage
+from control.research_os_v1.promotion import evaluate as evaluate_promotion
+from control.research_os_v1.resurrection import evaluate as evaluate_resurrection
+from control.research_os_v1.red_team import build_blind_packet
+from control.research_os_v1.reproducer import source_independence
+from control.research_os_v1.shadow_benchmark import summarize as summarize_benchmark, replacement_check
 import json
 
 
@@ -142,3 +149,77 @@ def test_shadow_cli_reads_current_shapes_without_writes(tmp_path):
     assert out["input_summary"]["candidate_count"] == 1
     assert out["input_summary"]["packet_count"] == 1
     assert out["scheduled"]["selected"] == ["RUN1:settlement"]
+
+
+def test_adaptive_search_requires_untouched_validation():
+    flags = adaptive_search_flags({
+        "id":"F1", "hypotheses_examined":4, "parameterizations_examined":3,
+        "post_hoc_mutations":1, "untouched_evidence_remaining":True,
+    })
+    assert flags["adaptive_search"] is True
+    assert flags["requires_untouched_validation"] is True
+    assert flags["discovery_evidence_may_promote_directly"] is False
+
+
+def test_discovery_coverage_measures_overlap_and_gaps():
+    p=[{"source_id":"a","document_sha256":"1","source_family":"OFFICIAL","source_authority":"OFFICIAL_PRIMARY","relevant":True}]
+    r=[{"source_id":"a","document_sha256":"1","source_family":"COMMUNITY","source_class":"COMMUNITY","relevant":True}]
+    out=summarize_coverage(p,r,["OFFICIAL"],["OFFICIAL","CODE"])
+    assert out["duplicate_cross_scout_keys"] == 1
+    assert out["coverage_gaps"] == ["CODE"]
+    assert out["raw_item_count_is_success_metric"] is False
+
+
+def test_promotion_cannot_override_failed_gate_or_authorize_trading():
+    candidate={"required_gates":{g:"PASS" for g in [
+        "source_provenance","point_in_time","mechanism","signal_edge","market_edge",
+        "execution_reality","prebuild_killer","chief_falsifier","validation",
+        "independent_reproduction","shadow"]}}
+    candidate["required_gates"]["execution_reality"]="FAIL"
+    out=evaluate_promotion(candidate)
+    assert out["eligible"] is False
+    assert out["director_override_allowed"] is False
+    assert out["live_trading_authorized"] is False
+
+
+def test_promotion_candidate_still_does_not_authorize_live():
+    candidate={"required_gates":{g:"PASS" for g in [
+        "source_provenance","point_in_time","mechanism","signal_edge","market_edge",
+        "execution_reality","prebuild_killer","chief_falsifier","validation",
+        "independent_reproduction","shadow"]}}
+    out=evaluate_promotion(candidate)
+    assert out["status"] == "PROMOTION_CANDIDATE"
+    assert out["live_trading_authorized"] is False
+
+
+def test_resurrection_requires_stored_changed_condition_and_resets_validation():
+    c={"candidate_id":"C","queue_status":"CLOSED_NEGATIVE","economic_status":"TESTED_NEGATIVE","phase":"VALIDATION","resurrection_conditions":["reward_active"],"required_gates":{"mechanism":"PASS","execution_reality":"PASS"}}
+    out=evaluate_resurrection(c,["reward_active"],"2026-09-21T00:00:00Z")
+    assert out["resurrected"] is True
+    assert out["old_validation_inherited"] is False
+    assert out["candidate"]["required_gates"]["execution_reality"] == "PENDING"
+
+
+def test_red_team_packet_excludes_origin_reasoning():
+    p=build_blind_packet({"candidate_id":"C","hypothesis":"h","supporting_evidence":["e1"],"required_gates":{}})
+    assert p["origin_reasoning_included"] is False
+    assert p["economic_promotion_authority"] is False
+    assert p["attack_order"][0] == "SEMANTIC_SOURCE"
+
+
+def test_reproduction_with_shared_upstream_is_not_independent():
+    out=source_independence(["raw:a","derived:b"],["derived:b","new:c"])
+    assert out["status"] == "PARTIAL"
+    assert out["counts_as_independent_reproduction"] is False
+
+
+def test_shadow_benchmark_has_no_composite_score_and_no_auto_activation():
+    base=[]; challenger=[]
+    for i in range(20):
+        cls="SURVIVOR" if i == 0 else "DECISIVE_NEGATIVE"
+        row={"active_hour_id":f"H{i//2}","task_shape":"PARALLEL" if i%2 else "SEQUENTIAL","ground_truth_class":cls,"decision":"KEEP" if cls=="SURVIVOR" else "KILL","worker_runs":2,"unique_relevant_evidence":2,"research_items":3,"duplicate_research_items":1,"contradictions_found":1,"applicable_known_failure_patterns":1,"failure_patterns_before_expensive_work":1,"point_in_time_and_provenance_complete":True,"queue_starvation_events":0,"steps_to_decisive_falsification":2,"source_families_covered":["OFFICIAL","CODE"],"hard_failures":[]}
+        base.append(dict(row)); better=dict(row); better["unique_relevant_evidence"]=3; better["duplicate_research_items"]=0; challenger.append(better)
+    b=summarize_benchmark(base); c=summarize_benchmark(challenger); verdict=replacement_check(b,c)
+    assert verdict["strict_improvement_count"] >= 2
+    assert verdict["scientific_replacement_gate_met"] is True
+    assert verdict["automatic_runtime_replacement_authorized"] is False
