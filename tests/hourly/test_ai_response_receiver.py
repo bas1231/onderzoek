@@ -7,6 +7,7 @@ import pytest
 
 
 ROOT = Path.cwd()
+TOKEN = "a" * 64
 
 
 def load_from(path, name):
@@ -76,6 +77,7 @@ def write_bundle_and_packets(runs, packets, run_id):
     (runs / f"{run_id}-ai-work-bundle.json").write_text(json.dumps({
         "schema": "PVA_AI_WORK_BUNDLE_V1",
         "run_id": run_id,
+        "response_token": TOKEN,
         "ready_roles": [
             {"agent_id": "algebra"},
             {"agent_id": "research_director"},
@@ -83,7 +85,7 @@ def write_bundle_and_packets(runs, packets, run_id):
     }))
 
 
-def response(run_id, include_director=True):
+def response(run_id, include_director=True, token=TOKEN):
     roles = [{
         "agent_id": "algebra",
         "status": "COMPLETED",
@@ -107,12 +109,28 @@ def response(run_id, include_director=True):
         })
     return {
         "run_id": run_id,
+        "response_token": token,
         "role_results": roles,
         "candidate_decisions": [],
         "director_decision": "Keep WATCH at triage only.",
         "economic_conclusion": "NO_PROVEN_EDGE",
         "local_tasks": [],
     }
+
+
+def test_wrong_response_token_is_rejected_before_write(tmp_path, monkeypatch):
+    mod = load_receiver()
+    runs, packets = configure_tmp_receiver(mod, tmp_path, monkeypatch)
+    run_id = "hourly-20260921T190000+0200"
+    write_bundle_and_packets(runs, packets, run_id)
+
+    with pytest.raises(mod.ResponseReceiverError, match="response_token mismatch"):
+        mod.receive({
+            "run_id": run_id,
+            "response": response(run_id, token="b" * 64),
+        })
+
+    assert not (runs / f"{run_id}-ai-response.json").exists()
 
 
 def test_missing_ready_role_is_rejected(tmp_path, monkeypatch):
