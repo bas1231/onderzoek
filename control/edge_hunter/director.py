@@ -2,11 +2,34 @@ from pathlib import Path
 import json
 from datetime import datetime, timezone
 
+import yaml
+
 ROOT = Path(__file__).resolve().parents[2]
 LANE_REGISTRY = ROOT / "control/edge_hunter/lane_registry.json"
+ACTIVE_CANDIDATE_DIR = ROOT / "candidates/active"
+
 
 def load_json(path):
     return json.loads(Path(path).read_text(encoding="utf-8"))
+
+
+def load_yaml(path):
+    data = yaml.safe_load(Path(path).read_text(encoding="utf-8"))
+    if not isinstance(data, dict):
+        raise ValueError(f"candidate file must contain a mapping: {path}")
+    return data
+
+
+def load_active_candidates():
+    rows = []
+    if not ACTIVE_CANDIDATE_DIR.exists():
+        return rows
+    for path in sorted(ACTIVE_CANDIDATE_DIR.glob("*.yaml")):
+        row = dict(load_yaml(path))
+        row["_source_path"] = str(path.relative_to(ROOT))
+        rows.append(row)
+    return rows
+
 
 def prepare(run_id):
     run_path = ROOT / "knowledge/runs" / (run_id + ".json")
@@ -25,6 +48,7 @@ def prepare(run_id):
         "paid_actions": False,
         "wallet_actions": False,
         "candidates": [load_json(path) for path in sorted((ROOT / "knowledge/candidates").glob("*.json"))],
+        "active_candidates": load_active_candidates(),
         "lanes": {}
     }
     for lane, spec in registry["lanes"].items():
@@ -46,6 +70,7 @@ def prepare(run_id):
     out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text(json.dumps(packet, indent=2, sort_keys=True) + "\n", encoding="utf-8")
     return out
+
 
 if __name__ == "__main__":
     import sys
