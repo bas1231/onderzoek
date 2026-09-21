@@ -5,13 +5,17 @@ import py_compile
 from pathlib import Path
 
 from .candidate_view import canonicalize
+from .contracts import validate_task
+from .discovery_coverage import summarize as summarize_coverage
+from .evidence_graph import EvidenceGraph
 from .failure_memory import pattern_index
 from .governor import classify
-from .scheduler import fanout_cap
-from .hypothesis_accounting import adaptive_search_flags
+from .hypothesis_accounting import adaptive_search_flags, normalize as normalize_search_family
+from .legacy_adapter import packet_to_task
 from .promotion import evaluate as evaluate_promotion
 from .reproducer import source_independence
 from .resurrection import evaluate as evaluate_resurrection
+from .scheduler import fanout_cap, schedule
 from .shadow_benchmark import summarize as summarize_benchmark, replacement_check
 
 BASE = Path(__file__).resolve().parent
@@ -36,6 +40,46 @@ RUNTIME_FILES = [
     "reproducer.py",
     "shadow_benchmark.py",
 ]
+
+
+def _valid_task(task_id: str = "SMOKE") -> dict:
+    return {
+        "task_id": task_id,
+        "worker_domain": "discovery",
+        "objective": "smoke test",
+        "state": "READY",
+        "task_shape": {
+            "parallelism": "LOW",
+            "dependency_shape": "SEQUENTIAL",
+            "uncertainty_type": "SOURCE",
+            "time_sensitivity": "LOW",
+            "novelty": "INCREMENTAL",
+            "decision_relevance": "LOW",
+        },
+        "inputs": {},
+        "constraints": {
+            "live_trading": False,
+            "paid_actions": False,
+            "wallet_actions": False,
+            "source_policy": "LOCAL_EXISTING_ONLY",
+        },
+        "expected_output": {
+            "artifact_type": "DISCOVERY_FINDING",
+            "required_fields": ["evidence"],
+        },
+        "scheduling": {
+            "uncertainty_reduction": "LOW",
+            "dependency_unlock_value": "NONE",
+            "evidence_cost": "LOW",
+            "model_cost": "LOW",
+            "duplication_risk": "LOW",
+        },
+        "proposed_action": {
+            "kind": "free_public_read_only_research",
+            "provenance": True,
+            "point_in_time": True,
+        },
+    }
 
 
 def _benchmark_rows(*, better: bool = False, case_prefix: str = "CASE") -> list[dict]:
@@ -98,12 +142,7 @@ def main() -> int:
 
     try:
         candidate = canonicalize(
-            {
-                "candidate_id": "SMOKE",
-                "hypothesis": "h",
-                "decision": "UNPROVEN",
-                "gates": {},
-            },
+            {"candidate_id": "SMOKE", "hypothesis": "h", "decision": "UNPROVEN", "gates": {}},
             source_commit="smoke",
         )
         if candidate["economic_status"] != "NO_PROVEN_EDGE":
@@ -113,10 +152,8 @@ def main() -> int:
             {
                 "candidate_id": "SMOKE-CANON",
                 "hypothesis": "h",
-                "required_gates": {
-                    "mechanism": "PASS",
-                    "execution_reality": "FAIL",
-                },
+                "required_gates": {"mechanism": "PASS", "execution_reality": "FAIL"},
+                "gates": {},
                 "queue_status": "CLOSED_NEGATIVE",
             },
             source_commit="smoke",
@@ -129,16 +166,62 @@ def main() -> int:
         errors.append(f"CANDIDATE_SMOKE_FAIL:{exc}")
 
     try:
-        task = {
-            "task_shape": {
-                "parallelism": "LOW",
-                "dependency_shape": "SEQUENTIAL",
-            }
-        }
-        if fanout_cap(task) != 1:
+        valid = _valid_task()
+        if validate_task(valid):
+            errors.append("VALID_TASK_REJECTED")
+        if fanout_cap(valid) != 1:
             errors.append("SEQUENTIAL_FANOUT_NOT_ONE")
+        if schedule([valid]).get("selected") != ["SMOKE"]:
+            errors.append("VALID_READY_TASK_NOT_SCHEDULED")
+
+        malformed = _valid_task("MALFORMED")
+        malformed.pop("proposed_action")
+        malformed_plan = schedule([malformed])
+        if malformed_plan.get("selected"):
+            errors.append("MALFORMED_TASK_SCHEDULED")
+        if not malformed_plan.get("blocked") or malformed_plan["blocked"][0].get("decision") != "BLOCK_INVALID_CONTRACT":
+            errors.append("MALFORMED_TASK_NOT_CONTRACT_BLOCKED")
+
+        blocked_task = _valid_task("BLOCKED")
+        blocked_task["state"] = "BLOCKED"
+        blocked_plan = schedule([blocked_task])
+        if blocked_plan.get("selected"):
+            errors.append("BLOCKED_STATE_TASK_SCHEDULED")
     except Exception as exc:
-        errors.append(f"SCHEDULER_SMOKE_FAIL:{exc}")
+        errors.append(f"SCHEDULER_CONTRACT_SMOKE_FAIL:{exc}")
+
+    try:
+        unknown_status = packet_to_task(
+            {"agent_id": "settlement", "status": "MYSTERY_STATE", "input_refs": ["x"]},
+            "SMOKE-RUN",
+        )
+        if unknown_status is None or unknown_status.get("state") != "BLOCKED":
+            errors.append("UNKNOWN_LEGACY_STATUS_NOT_BLOCKED")
+        if unknown_status is not None and schedule([unknown_status]).get("selected"):
+            errors.append("UNKNOWN_LEGACY_STATUS_SCHEDULED")
+    except Exception as exc:
+        errors.append(f"LEGACY_ADAPTER_SMOKE_FAIL:{exc}")
+
+    try:
+        node = {
+            "id": "e1",
+            "type": "evidence",
+            "status": "OK",
+            "created_at": "2026-09-21T00:00:00Z",
+            "producer": "smoke",
+        }
+        try:
+            EvidenceGraph({
+                "schema_version": 1,
+                "nodes": [node, {**node, "status": "CONFLICT"}],
+                "edges": [],
+            })
+            errors.append("CONFLICTING_GRAPH_NODE_ACCEPTED")
+        except ValueError as exc:
+            if "conflicting_node" not in str(exc):
+                errors.append(f"GRAPH_CONFLICT_WRONG_FAILURE:{exc}")
+    except Exception as exc:
+        errors.append(f"EVIDENCE_GRAPH_SMOKE_FAIL:{exc}")
 
     try:
         flags = adaptive_search_flags({
@@ -150,24 +233,44 @@ def main() -> int:
         })
         if flags.get("discovery_evidence_may_promote_directly") is not False:
             errors.append("ADAPTIVE_SEARCH_NOT_DOWNGRADED")
+
+        try:
+            normalize_search_family({
+                "id": "BADBOOL",
+                "hypotheses_examined": 1,
+                "parameterizations_examined": 0,
+                "post_hoc_mutations": 0,
+                "untouched_evidence_remaining": "false",
+            })
+            errors.append("STRING_BOOLEAN_ACCEPTED_IN_SEARCH_ACCOUNTING")
+        except ValueError:
+            pass
     except Exception as exc:
         errors.append(f"HYPOTHESIS_ACCOUNTING_SMOKE_FAIL:{exc}")
+
+    try:
+        zero = summarize_coverage([], [], [], [])
+        if zero.get("primary_source_ratio") is not None or zero.get("duplicate_cross_scout_ratio") is not None:
+            errors.append("ZERO_DISCOVERY_DENOMINATOR_NOT_UNKNOWN")
+
+        mirrored = summarize_coverage(
+            [{"source_id": "a", "document_sha256": "ABC", "source_family": "official", "retrieval_succeeded": True}],
+            [{"source_id": "b", "document_sha256": "abc", "source_family": "community", "retrieval_succeeded": True}],
+            ["official"],
+            ["official"],
+        )
+        if mirrored.get("duplicate_cross_scout_keys") != 1:
+            errors.append("MIRRORED_CONTENT_NOT_DEDUPED")
+    except Exception as exc:
+        errors.append(f"DISCOVERY_COVERAGE_SMOKE_FAIL:{exc}")
 
     try:
         gates = {
             g: "PASS"
             for g in [
-                "source_provenance",
-                "point_in_time",
-                "mechanism",
-                "signal_edge",
-                "market_edge",
-                "execution_reality",
-                "prebuild_killer",
-                "chief_falsifier",
-                "validation",
-                "independent_reproduction",
-                "shadow",
+                "source_provenance", "point_in_time", "mechanism", "signal_edge",
+                "market_edge", "execution_reality", "prebuild_killer",
+                "chief_falsifier", "validation", "independent_reproduction", "shadow",
             ]
         }
         verdict = evaluate_promotion({"required_gates": gates})
@@ -175,10 +278,7 @@ def main() -> int:
             errors.append("PROMOTION_AUTHORIZED_LIVE_TRADING")
 
         gates["signal_edge"] = "PENDING"
-        no_signal = evaluate_promotion(
-            {"required_gates": gates},
-            signal_required=False,
-        )
+        no_signal = evaluate_promotion({"required_gates": gates}, signal_required=False)
         if no_signal.get("eligible") is not False:
             errors.append("NO_SIGNAL_ROUTE_SKIPPED_UNRESOLVED_SIGNAL_GATE")
     except Exception as exc:
@@ -188,11 +288,9 @@ def main() -> int:
         same = source_independence(["same"], ["same"])
         if same.get("counts_as_independent_reproduction") is not False:
             errors.append("SHARED_SOURCE_COUNTED_AS_INDEPENDENT")
-
         opaque = source_independence(["derived:a"], ["derived:b"])
         if opaque.get("status") != "UNKNOWN":
             errors.append("OPAQUE_DERIVED_REFS_COUNTED_AS_SOURCE_INDEPENDENCE")
-
         explicit = source_independence(
             [{"ref": "a", "upstream_source_ids": ["source:a"]}],
             [{"ref": "b", "upstream_source_ids": ["source:b"]}],
@@ -209,10 +307,7 @@ def main() -> int:
                 "queue_status": "CLOSED_NEGATIVE",
                 "economic_status": "TESTED_NEGATIVE",
                 "resurrection_conditions": ["regime_change"],
-                "required_gates": {
-                    "source_provenance": "PASS",
-                    "mechanism": "PASS",
-                },
+                "required_gates": {"source_provenance": "PASS", "mechanism": "PASS"},
             },
             ["regime_change"],
             "2026-09-21T00:00:00Z",
@@ -229,9 +324,7 @@ def main() -> int:
         if replacement.get("scientific_replacement_gate_met") is not True:
             errors.append("MATCHED_BENCHMARK_REPLACEMENT_CHECK_FAILED")
 
-        mismatched = summarize_benchmark(
-            _benchmark_rows(better=True, case_prefix="OTHER")
-        )
+        mismatched = summarize_benchmark(_benchmark_rows(better=True, case_prefix="OTHER"))
         mismatch_verdict = replacement_check(baseline, mismatched)
         if mismatch_verdict.get("scientific_replacement_gate_met") is not False:
             errors.append("MISMATCHED_CASE_SET_ALLOWED_REPLACEMENT")
@@ -249,7 +342,7 @@ def main() -> int:
     out = {
         "validator": "RESEARCH_OS_V1_RUNTIME",
         "runtime_files_checked": len(RUNTIME_FILES),
-        "errors": errors,
+        "errors": sorted(set(errors)),
         "status": "PASS" if not errors else "FAIL_CLOSED",
         "runtime_mutation": False,
         "network_calls": False,
