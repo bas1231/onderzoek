@@ -999,21 +999,31 @@ def acknowledge_ai(task_id: str) -> dict:
 def acknowledge(task_id: str) -> dict:
     state = load_state()
 
-    if task_id not in state.get("bridge_tasks", []):
+    if not TASK_ID_RE.fullmatch(task_id):
+        return {
+            "ok": False,
+            "error": "invalid task_id",
+        }
+
+    bridge_tasks = state.setdefault("bridge_tasks", [])
+    known = task_id in bridge_tasks
+    result_exists = (RESULTS / task_id / "RESULT.json").exists()
+    incident_item = task_id.startswith("INCIDENT-")
+
+    if not (known or result_exists or incident_item):
         return {
             "ok": False,
             "error": "unknown bridge task",
         }
 
-    acked = state.setdefault("acked", [])
+    if task_id not in bridge_tasks:
+        bridge_tasks.append(task_id)
 
+    acked = state.setdefault("acked", [])
     if task_id not in acked:
         acked.append(task_id)
 
-    _queue_control_continue(state, task_id, "RESULT_ACKED")
-
     save_state(state)
-
     lifecycle_update(
         task_id,
         "ACKED",
@@ -1023,335 +1033,8 @@ def acknowledge(task_id: str) -> dict:
     return {
         "ok": True,
         "task_id": task_id,
+        "recovered": not known,
     }
-
-
-class Handler(BaseHTTPRequestHandler):
-    server_version = "PredictionResearchBridge/0.1"
-
-    def log_message(self, fmt, *args):
-        print(
-            "%s - %s"
-            % (
-                self.address_string(),
-                fmt % args,
-            )
-        )
-
-    def send_json(self, status: int, payload: dict):
-        body = json.dumps(
-            payload,
-            indent=2,
-            ensure_ascii=False,
-        ).encode()
-
-        self.send_response(status)
-        self.send_header("Content-Type", "application/json")
-        self.send_header("Content-Length", str(len(body)))
-        self.send_header("Cache-Control", "no-store")
-        self.end_headers()
-        self.wfile.write(body)
-
-    def authorized(self) -> bool:
-        expected = f"Bearer {TOKEN}"
-        return self.headers.get("Authorization", "") == expected
-
-    def read_json(self) -> dict:
-        length = int(self.headers.get("Content-Length", "0"))
-
-        if length <= 0 or length > 2_000_000:
-            raise ValueError("invalid request size")
-
-        body = self.rfile.read(length)
-        return json.loads(body)
-
-    def do_GET(self):
-        path = urlparse(self.path).path
-
-        if path == "/health":
-            self.send_json(
-                200,
-                {
-                    "status": "ok",
-                    "queue_status": queue_status(),
-                    "git_head": git(
-                        "rev-parse",
-                        "--short",
-                        "HEAD",
-                    ).stdout.strip(),
-                },
-            )
-            return
-
-        if not self.authorized():
-            self.send_json(401, {"error": "unauthorized"})
-            return
-
-        if path == "/outbox":
-            self.send_json(
-                200,
-                {
-                    "item": next_outbox_item()
-                },
-            )
-            return
-
-        if path == "/ai-outbox":
-            self.send_json(
-                200,
-                {
-                    "item": next_ai_outbox_item()
-                },
-            )
-            return
-
-        if path.startswith("/result/"):
-            task_id = path[len("/result/"):]
-
-            allowed = set(
-                "abcdefghijklmnopqrstuvwxyz"
-                "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-                "0123456789-_."
-            )
-
-            if (
-                not task_id
-                or len(task_id) > 160
-                or any(ch not in allowed for ch in task_id)
-            ):
-                self.send_json(
-                    400,
-                    {"error": "invalid task_id"},
-                )
-                return
-
-            result_dir = RESULTS / task_id
-            result_file = result_dir / "RESULT.json"
-
-            if not result_file.exists():
-                self.send_json(
-                    404,
-                    {
-                        "task_id": task_id,
-                        "status": "pending"
-                    },
-                )
-                return
-
-            result = json.loads(
-                result_file.read_text()
-            )
-
-            stdout_file = result_dir / "stdout.log"
-            stderr_file = result_dir / "stderr.log"
-
-            self.send_json(
-                200,
-                {
-                    "task_id": task_id,
-                    "result": result,
-                    "stdout": (
-                        stdout_file.read_text(
-                            errors="replace"
-                        )[:12000]
-                        if stdout_file.exists()
-                        else ""
-                    ),
-                    "stderr": (
-                        stderr_file.read_text(
-                            errors="replace"
-                        )[:12000]
-                        if stderr_file.exists()
-                        else ""
-                    ),
-                    "git_head": git(
-                        "rev-parse",
-                        "--short",
-                        "HEAD",
-                    ).stdout.strip(),
-                },
-            )
-            return
-
-        self.send_json(404, {"error": "not found"})
-
-    def do_POST(self):
-        path = urlparse(self.path).path
-
-        if not self.authorized():
-            self.send_json(401, {"error": "unauthorized"})
-            return
-
-        try:
-            payload = self.read_json()
-
-            with LOCK:
-                if path == "/incident":
-                    reason = str(
-                        payload.get(
-                            "reason",
-                            "BROWSER_INCIDENT",
-                        )
-                    )[:80]
-
-                    detail = str(
-                        payload.get(
-                            "detail",
-                            "",
-                        )
-                    )[:4000]
-
-                    incident_id = str(
-                        payload.get(
-                            "incident_id",
-                            "browser-incident",
-                        )
-                    )[:160]
-
-                    safe_id = re.sub(
-                        r"[^A-Za-z0-9_.:-]+",
-                        "_",
-                        incident_id,
-                    )
-
-                    safe_reason = re.sub(
-                        r"[^A-Za-z0-9_.:-]+",
-                        "_",
-                        reason,
-                    )
-
-                    incident_dir = (
-                        Path.home()
-                        / ".local"
-                        / "state"
-                        / "prediction-research"
-                        / "incidents"
-                    )
-
-                    incident_dir.mkdir(
-                        parents=True,
-                        exist_ok=True,
-                    )
-
-                    now = time.time()
-
-                    incident_path = (
-                        incident_dir
-                        / (
-                            safe_id
-                            + "__"
-                            + safe_reason
-                            + ".json"
-                        )
-                    )
-
-                    if incident_path.exists():
-                        try:
-                            data = json.loads(
-                                incident_path.read_text(
-                                    encoding="utf-8"
-                                )
-                            )
-                        except Exception:
-                            data = {}
-                    else:
-                        data = {}
-
-                    data.update(
-                        {
-                            "incident_id": incident_id,
-                            "task_id": safe_id,
-                            "reason": reason,
-                            "detail": detail,
-                            "status": "OPEN",
-                            "deliver_to_chat": True,
-                            "first_seen_at":
-                                data.get(
-                                    "first_seen_at",
-                                    now,
-                                ),
-                            "last_seen_at": now,
-                            "automatic_action": "NONE",
-                            "running_task_killed": False,
-                            "paid_action": False,
-                            "live_trading_action": False,
-                            "wallet_action": False,
-                        }
-                    )
-
-                    incident_path.write_text(
-                        json.dumps(
-                            data,
-                            indent=2,
-                            sort_keys=True,
-                        )
-                        + chr(10),
-                        encoding="utf-8",
-                    )
-
-                    self.send_json(
-                        200,
-                        {
-                            "ok": True,
-                            "incident_id":
-                                incident_id,
-                        },
-                    )
-                    return
-
-                if path == "/discover":
-                    task_id = str(
-                        payload.get("task_id", "")
-                    )
-
-                    result = discover(task_id)
-
-                    self.send_json(
-                        200 if result.get("ok") else 400,
-                        result,
-                    )
-                    return
-
-                if path == "/enqueue":
-                    envelope = BridgeEnvelope.model_validate(payload)
-                    result = enqueue(envelope)
-
-                    self.send_json(
-                        200 if result.get("ok") else 409,
-                        result,
-                    )
-                    return
-
-                if path == "/ack":
-                    task_id = str(payload.get("task_id", ""))
-                    result = acknowledge(task_id)
-
-                    self.send_json(
-                        200 if result.get("ok") else 404,
-                        result,
-                    )
-                    return
-
-                if path == "/ai-ack":
-                    task_id = str(payload.get("task_id", ""))
-                    result = acknowledge_ai(task_id)
-
-                    self.send_json(
-                        200 if result.get("ok") else 404,
-                        result,
-                    )
-                    return
-
-            self.send_json(404, {"error": "not found"})
-
-        except Exception as exc:
-            self.send_json(
-                400,
-                {
-                    "error": type(exc).__name__,
-                    "detail": str(exc),
-                },
-            )
 
 
 def main():
