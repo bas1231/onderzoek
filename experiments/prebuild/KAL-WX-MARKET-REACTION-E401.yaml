@@ -1,0 +1,72 @@
+schema_version: 1
+experiment:
+  id: KAL-WX-MARKET-REACTION-E401
+  candidate_id: KAL-WX-INDEX-001
+  status: PREDECLARED_NOT_EXECUTED
+  economic_status: NO_PROVEN_EDGE
+  task_class: research
+  created_at: 2026-09-21
+  objective: >-
+    Measure, prospectively and point-in-time, how quickly executable KXTEMP market state changes after the first decision-eligible KWI full-station incomplete signal used by E390.
+  non_objectives:
+    - "Do not place orders or simulate guaranteed fills."
+    - "Do not infer market edge from signal accuracy alone."
+    - "Do not optimize a reaction threshold after observing results."
+    - "Do not use paid weather feeds or paid APIs."
+  provenance:
+    internal_signal_protocol: KWI-FULL-STATION-PRECANONICAL-V1
+    motivating_result: EDGE-HUNTER-KWI-FULL-STATION-FINAL-E390
+    external_competition_note: knowledge/kalshi/KALSHI_KWI_EXTERNAL_CORROBORATION_2026-09-21.md
+    candidate_file: candidates/active/KAL-WX-INDEX-001.yaml
+  first_decision_eligible_signal:
+    definition: >-
+      First locally received point-in-time manifest for a target KWI minute whose latest_incomplete contains the same number of numeric station temperatures as the previous complete point's contributor count, with a valid earlier complete baseline.
+    revisions: >-
+      Later station-value changes for the same KWI minute are recorded as revisions and must never replace the first decision-eligible timestamp in primary analysis.
+  market_capture:
+    preferred: authenticated_read_only_websocket
+    channels:
+      - orderbook_delta
+      - trade
+    requirements:
+      - "Initial orderbook snapshot before deltas."
+      - "Monotonic contiguous sequence validation where sequence is supplied."
+      - "Local monotonic/UTC receive timestamp for every message."
+      - "Capture gaps/reconnects recorded explicitly."
+      - "No private portfolio/order endpoints."
+      - "No order placement capability."
+    fallback: public_rest_orderbook
+    fallback_limitation: >-
+      REST snapshots may establish coarse executable-state evidence but cannot support second-level market-reaction claims. Any gap exceeding the preregistered state-gap limit makes the reaction unproven.
+  primary_timing:
+    t0: first_decision_eligible_local_receipt
+    reaction_window_ms: 30000
+    max_pre_event_state_age_ms: 5000
+    max_continuous_state_gap_ms: 5000
+    interpretation: >-
+      The first post-t0 executable quote/depth fingerprint change or first post-t0 market trade is the observed reaction marker. This is a market-state latency statistic, not proof that the change was caused by the KWI signal.
+  primary_outputs:
+    - reaction_status
+    - reaction_kind
+    - reaction_latency_ms
+    - pre_signal_best_bid_ask
+    - pre_signal_depth
+    - capture_quality_reasons
+    - signal_value_and_provenance
+    - edge_decay_inputs_for_later_economic_analysis
+  fail_closed_rules:
+    - "Any capture gap straddling t0 through the reaction window => UNPROVEN_REACTION."
+    - "Missing recent pre-signal executable state => UNPROVEN_REACTION."
+    - "Out-of-order market states => UNPROVEN_REACTION."
+    - "WebSocket sequence gap => discard continuity until a fresh snapshot is obtained."
+    - "Capture ending before the full no-reaction window => UNPROVEN_REACTION."
+    - "REST-only evidence may not be used for sub-second or second-level repricing claims."
+  kill_rules:
+    - >-
+      Kill the market-edge lane if, across the untouched prospective sample, executable KXTEMP prices consistently react before a realistic hypothetical order-arrival latency can be reached.
+    - >-
+      Kill or downgrade the lane if coverage quality is insufficient to distinguish fast reaction from missing data.
+    - >-
+      Do not rescue a failed result by changing reaction window, first-signal definition, city subset, or threshold post-hoc; material changes require a new experiment ID.
+  promotion_rule: >-
+    This experiment alone cannot promote to live trading. Any positive timing result still requires explicit executable-price/depth, fees, partial-fill, adverse-selection, settlement-rule, and later prospective shadow evidence.
