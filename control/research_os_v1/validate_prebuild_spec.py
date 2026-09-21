@@ -7,7 +7,6 @@ from __future__ import annotations
 
 import json
 from pathlib import Path
-import sys
 
 ROOT = Path(__file__).resolve().parents[2]
 BASE = ROOT / "control" / "research_os_v1"
@@ -17,6 +16,8 @@ DOCS = ROOT / "docs"
 JSON_FILES = [
     BASE / "governor_policy.json",
     BASE / "scheduler_policy.json",
+    BASE / "task_shape_policy.json",
+    BASE / "discovery_coverage_policy.json",
     BASE / "worker_contract.schema.json",
     BASE / "evidence_graph.schema.json",
     BASE / "canonical_candidate.schema.json",
@@ -76,7 +77,15 @@ def main() -> int:
         "discovery", "market_research", "mechanics", "algebra",
         "red_team", "research_director", "independent_reproducer"
     }
-    for old, item in (migration.get("legacy_to_domain") or {}).items():
+    legacy = migration.get("legacy_to_domain") or {}
+    expected_legacy = {
+        "recon_scout", "scout", "weather_twc", "microstructure", "behavioral",
+        "informed_flow", "algebra", "settlement", "prebuild_killer",
+        "chief_falsifier", "independent_reproducer", "research_director"
+    }
+    if set(legacy) != expected_legacy:
+        fail(errors, f"LEGACY_ROLE_MAPPING_MISMATCH:{sorted(set(legacy) ^ expected_legacy)}")
+    for old, item in legacy.items():
         if item.get("domain") not in valid_domains:
             fail(errors, f"UNKNOWN_MIGRATION_DOMAIN:{old}:{item.get('domain')}")
 
@@ -100,6 +109,19 @@ def main() -> int:
     if scheduler.get("protected_capacity", {}).get("discovery_required_each_active_hour") is not True:
         fail(errors, "DISCOVERY_NOT_PROTECTED")
 
+    shape = objs.get("task_shape_policy.json") or {}
+    fanout = shape.get("fanout") or {}
+    if fanout.get("LOW_SEQUENTIAL", {}).get("max_specialist_workers") != 1:
+        fail(errors, "SEQUENTIAL_FANOUT_NOT_CAPPED_AT_ONE")
+    if "HIGH_INDEPENDENT" not in fanout:
+        fail(errors, "HIGH_INDEPENDENT_FANOUT_POLICY_MISSING")
+
+    coverage = objs.get("discovery_coverage_policy.json") or {}
+    if len(coverage.get("source_families") or []) < 8:
+        fail(errors, "DISCOVERY_SOURCE_FAMILIES_TOO_NARROW")
+    if coverage.get("coverage_debt", {}).get("track_across_active_hours") is not True:
+        fail(errors, "DISCOVERY_COVERAGE_DEBT_DISABLED")
+
     shadow = objs.get("shadow_acceptance.json") or {}
     hard = "\n".join(shadow.get("hard_fail_conditions") or []).lower()
     for word in ["paid", "live", "wallet", "point-in-time", "failed required gate"]:
@@ -107,13 +129,13 @@ def main() -> int:
             fail(errors, f"SHADOW_HARD_FAIL_MISSING:{word}")
 
     worker_schema = objs.get("worker_contract.schema.json") or {}
-    result_enum = (
+    worker_constraints = (
         worker_schema.get("properties", {})
         .get("constraints", {})
         .get("properties", {})
     )
     for key in ["live_trading", "paid_actions", "wallet_actions"]:
-        if result_enum.get(key, {}).get("const") is not False:
+        if worker_constraints.get(key, {}).get("const") is not False:
             fail(errors, f"WORKER_CONSTRAINT_NOT_FALSE:{key}")
 
     replay = objs.get("historical_replay.json") or {}
@@ -122,6 +144,8 @@ def main() -> int:
         fail(errors, f"HISTORICAL_REPLAY_TOO_SMALL:{len(replay_ids)}")
     if len(replay_ids) != len(set(replay_ids)):
         fail(errors, "DUPLICATE_HISTORICAL_REPLAY_ID")
+    if not any(c.get("premature_kill_risk") == "HIGH" for c in replay.get("cases", [])):
+        fail(errors, "REPLAY_HAS_NO_SURVIVOR_ANTI_OVERKILL_CASE")
 
     art = objs.get("architecture_red_team.json") or {}
     art_ids = [c.get("id") for c in art.get("scenarios", [])]
