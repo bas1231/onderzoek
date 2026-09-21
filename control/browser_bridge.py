@@ -529,6 +529,52 @@ def next_outbox_item() -> dict | None:
     )
 
 
+    # REAL_RESULTS_BEFORE_INCIDENTS_E379
+    # A backlog of deliverable incidents must never starve completed executor
+    # results. Surface any completed bridge task first; incidents remain the
+    # fallback when no real task result is ready.
+    for priority_task_id in bridge_tasks:
+        if priority_task_id in acked:
+            continue
+
+        priority_result_dir = RESULTS / priority_task_id
+        priority_result_file = priority_result_dir / "RESULT.json"
+
+        if not priority_result_file.exists():
+            continue
+
+        priority_result = json.loads(priority_result_file.read_text())
+        priority_stdout_file = priority_result_dir / "stdout.log"
+        priority_stderr_file = priority_result_dir / "stderr.log"
+        priority_stdout = (
+            priority_stdout_file.read_text(errors="replace")[:20000]
+            if priority_stdout_file.exists()
+            else ""
+        )
+        priority_stderr = (
+            priority_stderr_file.read_text(errors="replace")[:20000]
+            if priority_stderr_file.exists()
+            else ""
+        )
+
+        lifecycle_update(
+            priority_task_id,
+            "DELIVERED",
+            "bridge outbox exposed result before incident backlog",
+        )
+
+        return {
+            "task_id": priority_task_id,
+            "result": priority_result,
+            "stdout": priority_stdout,
+            "stderr": priority_stderr,
+            "git_head": git(
+                "rev-parse",
+                "--short",
+                "HEAD",
+            ).stdout.strip(),
+        }
+
     # RELIABILITY-E056: deliver local watchdog incidents
     # through the already proven browser result outbox.
     incident_dir = (
