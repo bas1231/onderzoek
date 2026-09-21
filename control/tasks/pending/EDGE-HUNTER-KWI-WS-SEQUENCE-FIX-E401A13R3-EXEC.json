@@ -1,0 +1,25 @@
+{
+  "build_authorization": {
+    "build_kind": "control_plane",
+    "capabilities": [
+      "read_repository",
+      "modify_control_plane",
+      "run_tests",
+      "git_commit",
+      "git_push"
+    ],
+    "mode": "control_plane",
+    "objective": "Apply the already committed Kalshi WebSocket sid-sequence fix, run its local multiplexing test, and commit/push only the intended weather capture code changes."
+  },
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/patch_ws_sid_sequence_e401a13r3.py"
+  ],
+  "hypothesis_id": "KWI-MARKET-REACTION-E401",
+  "live_trading": false,
+  "operation": "python",
+  "task_class": "infrastructure",
+  "task_id": "EDGE-HUNTER-KWI-WS-SEQUENCE-FIX-E401A13R3-EXEC",
+  "timeout_seconds": 90,
+  "working_directory": "."
+}
