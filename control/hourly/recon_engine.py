@@ -11,6 +11,7 @@ ROOT = Path.cwd()
 WATCHLIST = ROOT / "knowledge/recon/watchlist.json"
 GRAPH = ROOT / "knowledge/recon/opportunity_graph.json"
 OUT = ROOT / "knowledge/runs/recon"
+HUNT_PLANS = ROOT / "knowledge/runs/recon_hunts"
 
 ATTACK_TERMS = {
     "PREDATOR": ["failed", "loss", "losing", "adverse selection", "unprofitable", "market maker"],
@@ -209,6 +210,61 @@ def _hunt_gate(item: dict[str, Any]) -> dict[str, Any]:
         },
     }
 
+def _build_hunt_plan(item: dict[str, Any]) -> dict[str, Any]:
+    mode = item.get("attack_mode")
+    model = item.get("economic_model", {})
+    falsification = item.get("falsification", {})
+    source_ids = sorted({x.get("source_id") for x in item.get("observation_history", []) if x.get("source_id")})
+    return {
+        "candidate_id": item.get("id"),
+        "status": "HUNT",
+        "attack_mode": mode,
+        "hypothesis": item.get("claim"),
+        "victim_leak_capture": {
+            "who_loses": model.get("who_loses"),
+            "leak_mechanism": model.get("why"),
+            "who_captures": model.get("who_captures"),
+            "public_trigger": model.get("public_trigger"),
+        },
+        "evidence": {
+            "independent_source_ids": source_ids,
+            "observation_count": item.get("observation_count", 0),
+            "point_in_time_required": True,
+        },
+        "tests": {
+            "primary_falsification": falsification.get("next_decisive_test"),
+            "required_data": [
+                "point-in-time market observations",
+                "public trigger timestamps",
+                "executable bid/ask or L2 where applicable",
+                "fees, slippage and settlement terms",
+            ],
+            "kill_if": [
+                "signal is not predictive out of sample",
+                "gross edge disappears after executable fees/slippage",
+                "effect depends on post-close or non-public information",
+                "independent-source support fails replication",
+            ],
+        },
+        "specialist_route": list(falsification.get("specialist_route", [])),
+        "execution_gate": {
+            "research_only": True,
+            "live_trading": False,
+            "paid_actions": False,
+            "wallet_actions": False,
+            "economic_conclusion": "NO_PROVEN_EDGE",
+        },
+    }
+
+def write_hunt_plans(run_id: str, items: list[dict[str, Any]]) -> tuple[list[dict[str, Any]], Path | None]:
+    hunts = [_build_hunt_plan(x) for x in items if x.get("status") == "HUNT"]
+    if not hunts:
+        return [], None
+    HUNT_PLANS.mkdir(parents=True, exist_ok=True)
+    path = HUNT_PLANS / (run_id + ".json")
+    save_json(path, {"run_id": run_id, "plans": hunts})
+    return hunts, path
+
 def resurrect_if_kill_condition_changed(old: dict[str, Any], fresh: dict[str, Any]) -> bool:
     if old.get("status") != "KILL":
         return False
@@ -310,6 +366,7 @@ def run(run_id: str, routing_path: Path) -> tuple[dict[str, Any], Path]:
     graph = update_graph(findings)
     persisted = load_json(WATCHLIST, {"items": []})
     persisted_counts = {s: sum(1 for f in persisted.get("items", []) if f.get("status") == s) for s in ["KILL","WATCH","HUNT","PROVE"]}
+    hunt_plans, hunt_plan_path = write_hunt_plans(run_id, persisted.get("items", []))
     counts = {s: sum(1 for f in findings if f["status"] == s) for s in ["DISCOVER","KILL","WATCH","HUNT","PROVE"]}
     counts["PERSISTED_HUNT"] = persisted_counts["HUNT"]
     result = {
@@ -320,6 +377,10 @@ def run(run_id: str, routing_path: Path) -> tuple[dict[str, Any], Path]:
         "state_counts": counts,
         "watchlist": watch,
         "opportunity_graph": graph,
+        "hunt_plans": {
+            "count": len(hunt_plans),
+            "ref": str(hunt_plan_path.relative_to(ROOT)) if hunt_plan_path else None,
+        },
         "economic_conclusion": "NO_PROVEN_EDGE",
         "live_trading": False, "paid_actions": False, "wallet_actions": False,
     }
