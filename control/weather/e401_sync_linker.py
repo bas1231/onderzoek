@@ -82,6 +82,23 @@ def event_matches_target(city: str, event_ticker: str, kwi_t) -> bool:
     return event_local_hour(event_ticker) == target_local_hour(city, kwi_t)
 
 
+def event_target_ms(event_ticker: str) -> int | None:
+    """Return the exact KXTEMP market target time encoded in the ticker.
+
+    Kalshi hourly temperature market titles use Eastern Time (EDT/EST); the
+    ticker's terminal hour is that exact market target hour.
+    """
+    parsed = event_local_hour(event_ticker)
+    if parsed is None:
+        return None
+    year, month, day, hour = parsed
+    try:
+        dt = datetime(year, month, day, hour, 0, 0, tzinfo=ZoneInfo("America/New_York"))
+    except Exception:
+        return None
+    return int(dt.timestamp() * 1000)
+
+
 def load_kwi_manifests() -> list[dict]:
     out = []
     for path in sorted(KWI_MANIFESTS.glob("kwi-*.json")) if KWI_MANIFESTS.is_dir() else []:
@@ -123,30 +140,45 @@ def load_completed_cycles() -> list[dict]:
 
 
 def matching_event_snapshot(cycles: list[dict], city: str, kwi_event: dict):
-    """Latest exact event discovery at or before signal availability."""
+    """Nearest future hourly event known before signal availability.
+
+    A Weather Index point is a minute-resolution observation, not the hourly
+    contract's settlement timestamp. For reaction analysis, select the nearest
+    hourly target still in the future at signal availability, using only event
+    discovery snapshots that already existed before that signal. For one ticker,
+    the latest pre-signal discovery snapshot wins.
+    """
     t0 = int(kwi_event["available_at_ms"])
-    candidates = []
+    by_ticker = {}
     for cycle in cycles:
-        if cycle["discovery_ms"] > t0:
+        discovery_ms = int(cycle["discovery_ms"])
+        if discovery_ms > t0:
             continue
         for row in cycle["discovery"].get("series") or []:
             if str(row.get("city", "")).lower() != city:
                 continue
             for event in row.get("events") or []:
                 ticker = event.get("event_ticker")
-                if ticker and event_matches_target(city, ticker, kwi_event.get("kwi_t")):
-                    candidates.append((cycle["discovery_ms"], event))
-    if not candidates:
+                target_ms = event_target_ms(ticker) if ticker else None
+                tickers = sorted(set(event.get("market_tickers") or []))
+                if target_ms is None or target_ms <= t0 or not tickers:
+                    continue
+                prev = by_ticker.get(ticker)
+                if prev is None or discovery_ms > prev[0]:
+                    by_ticker[ticker] = (discovery_ms, target_ms, event, tickers)
+    if not by_ticker:
         return None
-    _, event = max(candidates, key=lambda x: x[0])
-    tickers = sorted(set(event.get("market_tickers") or []))
-    if not tickers:
-        return None
+    ticker, (discovery_ms, target_ms, event, tickers) = min(
+        by_ticker.items(),
+        key=lambda item: (item[1][1], -item[1][0], item[0]),
+    )
     return {
-        "event_ticker": event.get("event_ticker"),
+        "event_ticker": ticker,
         "market_tickers": tickers,
+        "event_target_at_ms": target_ms,
+        "event_discovered_at_ms": discovery_ms,
+        "horizon_to_settlement_ms": target_ms - t0,
     }
-
 
 def relevant_logs(cycles: list[dict], city: str, event_ticker: str) -> list[Path]:
     logs = []
@@ -202,7 +234,7 @@ def composite_result(kwi_event: dict, event_snapshot: dict | None, cycles: list[
         return {
             "status": UNPROVEN_REACTION,
             "economic_conclusion": ECONOMIC_CONCLUSION,
-            "reasons": ["NO_MATCHING_PRE_SIGNAL_HOURLY_EVENT_DISCOVERY"],
+            "reasons": ["NO_PRE_SIGNAL_FUTURE_HOURLY_EVENT_DISCOVERY"],
             "kwi_event": kwi_event,
             "bucket_count": 0,
         }
@@ -231,6 +263,9 @@ def composite_result(kwi_event: dict, event_snapshot: dict | None, cycles: list[
         "economic_conclusion": ECONOMIC_CONCLUSION,
         "kwi_event": kwi_event,
         "event_ticker": event_ticker,
+        "event_target_at_ms": event_snapshot.get("event_target_at_ms"),
+        "event_discovered_at_ms": event_snapshot.get("event_discovered_at_ms"),
+        "horizon_to_settlement_ms": event_snapshot.get("horizon_to_settlement_ms"),
         "bucket_count": len(tickers),
         "bucket_tickers": tickers,
         "capture_log_count": len(logs),
@@ -329,7 +364,8 @@ def build_report(window_ms: int = 30000) -> dict:
         "guards": [
             "Only first_decision_eligible KWI events after prospective capture start enter the primary sample.",
             "Same-target revisions never count as independent evidence.",
-            "The hourly event must have been discovered at or before signal availability.",
+            "The linked hourly event must have been discovered at or before signal availability and its exact target time must still be in the future.",
+            "Among eligible pre-signal discoveries, the nearest future hourly target is selected; KWI minute timestamps are never treated as settlement timestamps.",
             "All bucket tickers from the pre-signal event snapshot must be evaluable or the composite event is UNPROVEN_REACTION.",
             "A reaction is activity, not market edge or profitability.",
             "NO_PROVEN_EDGE remains until later executable-price testing succeeds out of sample.",
