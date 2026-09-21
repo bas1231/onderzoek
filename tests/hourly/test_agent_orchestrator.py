@@ -109,3 +109,29 @@ def test_guardrails_and_queue(tmp_path):
     assert result["guardrails"]["live_trading"] is False
     assert result["guardrails"]["paid_actions"] is False
     assert result["guardrails"]["wallet_actions"] is False
+
+
+def test_validation_pipeline_requires_explicit_structured_pass(tmp_path):
+    mod=load_module()
+    run=tmp_path/"run"
+    run.mkdir()
+    (run/"prebuild_killer.json").write_text(json.dumps({"agent_id":"prebuild_killer","status":"COMPLETED","candidate_ids":["X"],"notes":["looks good"]}))
+    (run/"chief_falsifier.json").write_text(json.dumps({"agent_id":"chief_falsifier","status":"WAITING_FOR_DATA"}))
+    (run/"independent_reproducer.json").write_text(json.dumps({"agent_id":"independent_reproducer","status":"WAITING_FOR_DATA"}))
+    out=mod.propagate_validation(run)
+    assert out["killer_pass"]==[]
+    assert json.loads((run/"chief_falsifier.json").read_text())["survivors"]==[]
+    assert json.loads((run/"independent_reproducer.json").read_text())["reproduction_candidates"]==[]
+
+def test_validation_pipeline_advances_only_same_candidate_through_both_gates(tmp_path):
+    mod=load_module()
+    run=tmp_path/"run"
+    run.mkdir()
+    (run/"prebuild_killer.json").write_text(json.dumps({"agent_id":"prebuild_killer","status":"COMPLETED","validation_results":[{"candidate_id":"X","status":"PASS"},{"candidate_id":"Y","status":"FAIL"}]}))
+    (run/"chief_falsifier.json").write_text(json.dumps({"agent_id":"chief_falsifier","status":"COMPLETED","validation_results":[{"candidate_id":"X","status":"PASS"},{"candidate_id":"Z","status":"PASS"}]}))
+    (run/"independent_reproducer.json").write_text(json.dumps({"agent_id":"independent_reproducer","status":"WAITING_FOR_DATA"}))
+    out=mod.propagate_validation(run)
+    assert out["killer_pass"]==["X"]
+    assert out["falsifier_pass"]==["X","Z"]
+    assert out["reproduction_candidates"]==["X"]
+    assert out["economic_conclusion"]=="NO_PROVEN_EDGE"
