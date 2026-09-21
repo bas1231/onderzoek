@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/kwi_auth_dependency_inventory_e401a6r1.py"
+  ],
+  "exit_code": 1,
+  "finished_at": "2026-09-21T14:12:32.832905+00:00",
+  "hypothesis_id": "KWI-FULL-STATION-PRECANONICAL-V1",
+  "source_commit": "b2139e4689bd1da59f1038be24672f8e752f3cdf",
+  "started_at": "2026-09-21T14:12:32.821059+00:00",
+  "status": "failed",
+  "stderr_sha256": "65a6d5d363afaffcd8f3ac0c3d80b9896073d9237858df9a1da3664846b8389d",
+  "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "task_class": "research",
+  "task_id": "EDGE-HUNTER-KWI-AUTH-INVENTORY-E401A6R1"
+}
