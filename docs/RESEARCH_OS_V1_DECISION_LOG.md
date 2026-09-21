@@ -135,3 +135,13 @@ Reason: algebraic/structural edges may not require predictive signal, while fore
 Decision: shadow challenger first.
 
 Reason: retrospective replay is contaminated by knowing historical outcomes. Architecture elegance is not evidence of superior research performance.
+
+## AD-021 — Freeze matched-case benchmark rules before unseen shadow data
+
+Decision: baseline and challenger must be scored on the exact same unique preregistered case IDs; missing or zero metric denominators remain `UNKNOWN`, never favorable zero; both sides must independently satisfy the minimum observation set.
+
+Reason: the static V1 audit found that unmatched cases or denominator collapse could otherwise manufacture an apparent improvement without a real quality gain.
+
+Timing: this amendment was made before the first unseen Research OS shadow observation was collected. It is therefore a preregistration hardening, not a post-result rule change.
+
+Guard: `shadow_acceptance.json` schema V2 and `validate_prebuild_spec.py` now fail closed if these anti-gaming invariants are removed or weakened.
