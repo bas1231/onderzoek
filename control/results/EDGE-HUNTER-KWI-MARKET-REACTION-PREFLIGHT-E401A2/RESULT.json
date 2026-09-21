@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/preflight_kwi_market_reaction_e401.py"
+  ],
+  "exit_code": 2,
+  "finished_at": "2026-09-21T13:57:10.804875+00:00",
+  "hypothesis_id": "KWI-FULL-STATION-PRECANONICAL-V1",
+  "source_commit": "2e10c00ea35ca2cf61e1afdec2ab0eeeacfe63b4",
+  "started_at": "2026-09-21T13:57:10.794752+00:00",
+  "status": "failed",
+  "stderr_sha256": "1e29798c40f2d222b6aac2903df479855cc20ce5af30cdad0a1486618a9f1a01",
+  "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "task_class": "research",
+  "task_id": "EDGE-HUNTER-KWI-MARKET-REACTION-PREFLIGHT-E401A2"
+}
