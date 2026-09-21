@@ -18,6 +18,7 @@ JSON_FILES = [
     BASE / "scheduler_policy.json",
     BASE / "task_shape_policy.json",
     BASE / "discovery_coverage_policy.json",
+    BASE / "model_budget_policy.json",
     BASE / "worker_contract.schema.json",
     BASE / "evidence_graph.schema.json",
     BASE / "canonical_candidate.schema.json",
@@ -31,6 +32,9 @@ JSON_FILES = [
 DOC_FILES = [
     DOCS / "RESEARCH_OS_V1_PREBUILD_SPEC.md",
     DOCS / "RESEARCH_OS_V1_PREBUILD_AUDIT.md",
+    DOCS / "RESEARCH_OS_V1_WORKER_CONTRACTS.md",
+    DOCS / "RESEARCH_OS_V1_ROLLOUT_PLAN.md",
+    DOCS / "RESEARCH_OS_V1_DECISION_LOG.md",
     DOCS / "PLUS_NATIVE_RESEARCH_OS_CANARY.md",
 ]
 
@@ -121,6 +125,14 @@ def main() -> int:
         fail(errors, "DISCOVERY_SOURCE_FAMILIES_TOO_NARROW")
     if coverage.get("coverage_debt", {}).get("track_across_active_hours") is not True:
         fail(errors, "DISCOVERY_COVERAGE_DEBT_DISABLED")
+
+    budget = objs.get("model_budget_policy.json") or {}
+    no_spend = budget.get("no_hidden_spend") or {}
+    for key in ["automatic_credit_purchase", "openai_api_key_fallback", "paid_external_model_fallback"]:
+        if no_spend.get(key) is not False:
+            fail(errors, f"MODEL_BUDGET_HIDDEN_SPEND_NOT_DISABLED:{key}")
+    if len(budget.get("capability_tiers") or {}) < 4:
+        fail(errors, "MODEL_CAPABILITY_TIERS_INCOMPLETE")
 
     shadow = objs.get("shadow_acceptance.json") or {}
     hard = "\n".join(shadow.get("hard_fail_conditions") or []).lower()
