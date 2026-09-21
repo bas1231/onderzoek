@@ -17,7 +17,7 @@ RESPONSE_SCHEMA = "PVA_AI_EXCHANGE_RESPONSE_V1"
 
 # Compatibility bridge between the current V13 role universe and Research OS V1.
 # The legacy agent_id remains authoritative for PVA_AI_RESPONSE_V1 so the proven
-# V13 receiver can stay unchanged.  responsibility/capability describe the work
+# V13 receiver can stay unchanged. responsibility/capability describe the work
 # semantically and may later replace permanent role personas without changing
 # transport.
 ROLE_CAPABILITIES: dict[str, tuple[str, str]] = {
@@ -170,7 +170,10 @@ def build_request(
         "schema": REQUEST_SCHEMA,
         "run_id": run_id,
         "response_token": token,
-        "created_at": now_iso(),
+        # Prefer the V13 bundle timestamp so rebuilding the exchange wrapper is
+        # deterministic for the same bundle. Local create-once below provides
+        # a second idempotency layer across process restarts/source commits.
+        "created_at": data.get("created_at") or now_iso(),
         "source_commit": source,
         "request_sha256": None,
         "transport": {
@@ -261,5 +264,18 @@ def build_and_write(
     *,
     source_commit: str | None = None,
 ) -> tuple[dict[str, Any], Path]:
-    request = build_request(bundle, source_commit=source_commit)
+    data = validate_bundle(bundle)
+    run_id = str(data["run_id"])
+    token = str(data["response_token"])
+    path = REQUESTS / f"{run_id}.json"
+
+    if path.exists():
+        existing = validate_request(json.loads(path.read_text(encoding="utf-8")))
+        require(
+            existing.get("response_token") == token,
+            "existing request token conflicts with current bundle",
+        )
+        return existing, path
+
+    request = build_request(data, source_commit=source_commit)
     return request, write_request(request)
