@@ -95,6 +95,13 @@ def discover(routing: dict[str, Any]) -> list[dict[str, Any]]:
             })
     return findings
 
+def resurrect_if_kill_condition_changed(old: dict[str, Any], fresh: dict[str, Any]) -> bool:
+    if old.get("status") != "KILL":
+        return False
+    old_condition = old.get("economic_model", {}).get("kill_condition")
+    new_condition = fresh.get("economic_model", {}).get("kill_condition")
+    return bool(old_condition and new_condition is not None and old_condition != new_condition)
+
 def update_watchlist(findings: list[dict[str, Any]]) -> dict[str, Any]:
     watch = load_json(WATCHLIST, {"version": 1, "items": []})
     old = {x["id"]: x for x in watch.get("items", [])}
@@ -106,6 +113,13 @@ def update_watchlist(findings: list[dict[str, Any]]) -> dict[str, Any]:
             added += 1
         else:
             prev = old[f["id"]]
+            if resurrect_if_kill_condition_changed(prev, f):
+                prev["status"] = "WATCH"
+                labels = set(prev.get("labels", []))
+                labels.add("EDGE_RESURRECTION")
+                prev["labels"] = sorted(labels)
+                prev["resurrection_reason"] = "Stored kill condition changed; candidate requires fresh falsification."
+                changed += 1
             if prev.get("sources") != f.get("sources"):
                 prev["sources"] = f["sources"]
                 prev["last_observed_at"] = f.get("observed_at")
