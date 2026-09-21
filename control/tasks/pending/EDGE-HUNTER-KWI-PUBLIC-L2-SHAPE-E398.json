@@ -1,0 +1,14 @@
+{
+  "build_authorization": null,
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/kwi_public_l2_shape_e398.py"
+  ],
+  "hypothesis_id": "KWI-FULL-STATION-PRECANONICAL-V1",
+  "live_trading": false,
+  "operation": "python",
+  "task_class": "research",
+  "task_id": "EDGE-HUNTER-KWI-PUBLIC-L2-SHAPE-E398",
+  "timeout_seconds": 60,
+  "working_directory": "."
+}
