@@ -1,0 +1,16 @@
+[Unit]
+Description=Prediction Research E401 prospective hourly weather market capture
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+WorkingDirectory=%h/prediction_research
+EnvironmentFile=-%h/.config/prediction-research/kalshi_readonly.env
+ExecStart=%h/prediction_research/.venv/bin/python %h/prediction_research/control/weather/e401_prospective_supervisor.py
+Restart=always
+RestartSec=3
+Nice=5
+
+[Install]
+WantedBy=default.target
