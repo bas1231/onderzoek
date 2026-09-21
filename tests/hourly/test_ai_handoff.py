@@ -62,6 +62,25 @@ def test_ready_states_are_explicit():
     assert mod.READY_STATES == {"READY", "RESULT_READY"}
 
 
+def test_response_token_is_deterministic_and_work_bound():
+    mod = load_module()
+    roles = [{"agent_id": "algebra", "status": "READY"}]
+    queue = {"director_attention": [], "full_queue": []}
+
+    a = mod.response_token("hourly-test", roles, queue)
+    b = mod.response_token("hourly-test", roles, queue)
+    changed = mod.response_token(
+        "hourly-test",
+        roles + [{"agent_id": "settlement", "status": "READY"}],
+        queue,
+    )
+
+    assert a == b
+    assert len(a) == 64
+    assert set(a) <= set("0123456789abcdef")
+    assert changed != a
+
+
 def test_no_specialist_browser_fanout_source_policy():
     mod = load_module()
 
@@ -97,6 +116,8 @@ def test_latest_real_bundle_if_available():
 
     assert path.exists()
     assert bundle["schema"] == "PVA_AI_WORK_BUNDLE_V1"
+    assert len(bundle["response_token"]) == 64
+    assert bundle["expected_response_schema"]["response_token"] == bundle["response_token"]
     assert bundle["guardrails"]["live_trading"] is False
     assert bundle["guardrails"]["paid_actions"] is False
     assert bundle["guardrails"]["wallet_actions"] is False
