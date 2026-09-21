@@ -27,19 +27,21 @@ def load_bridge():
     return mod
 
 
-def test_dedicated_routes_exist():
-    source = (
-        ROOT / "control/browser_bridge.py"
+def core_source():
+    return (
+        ROOT / "control/browser_bridge_core.py"
     ).read_text()
+
+
+def test_dedicated_routes_exist():
+    source = core_source()
 
     assert 'path == "/ai-outbox"' in source
     assert 'path == "/ai-ack"' in source
 
 
 def test_hourly_wake_excluded_from_normal_outbox():
-    source = (
-        ROOT / "control/browser_bridge.py"
-    ).read_text()
+    source = core_source()
 
     assert (
         'incident.get("reason")'
@@ -131,10 +133,17 @@ def test_ai_item_never_has_executor_fields(
 
 
 def test_ai_ack_is_separate_in_source():
-    source = (
-        ROOT / "control/browser_bridge.py"
-    ).read_text()
+    source = core_source()
 
     assert 'state.get("ai_acked", [])' in source
     assert 'state.setdefault(' in source
     assert '"ai_acked"' in source
+
+
+def test_response_route_is_not_generic_executor_route():
+    wrapper = (
+        ROOT / "control/browser_bridge.py"
+    ).read_text()
+    assert 'path != "/ai-response"' in wrapper
+    assert "AI_RESPONSE_RECEIVER.receive" in wrapper
+    assert '"/enqueue"' not in wrapper
