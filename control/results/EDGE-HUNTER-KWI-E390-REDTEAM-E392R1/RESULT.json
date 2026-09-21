@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/kwi_e390_redteam_e392r1.py"
+  ],
+  "exit_code": 1,
+  "finished_at": "2026-09-21T07:59:01.593073+00:00",
+  "hypothesis_id": "KWI-FULL-STATION-PRECANONICAL-V1",
+  "source_commit": "94ccb0db5a6cfdd504073ed3f303191808280d1f",
+  "started_at": "2026-09-21T07:59:01.378753+00:00",
+  "status": "failed",
+  "stderr_sha256": "f783fb692597c2ec94d7a188f2cbf83f47cbf26e4230c7bd6c5e0cdd929f1325",
+  "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "task_class": "research",
+  "task_id": "EDGE-HUNTER-KWI-E390-REDTEAM-E392R1"
+}
