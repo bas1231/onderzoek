@@ -147,3 +147,183 @@ def test_response_route_is_not_generic_executor_route():
     assert 'path != "/ai-response"' in wrapper
     assert "AI_RESPONSE_RECEIVER.receive" in wrapper
     assert '"/enqueue"' not in wrapper
+
+
+def _write_hourly_incident(tmp_path, task_id):
+    incident_dir = (
+        tmp_path
+        / ".local/state/prediction-research/incidents"
+    )
+    incident_dir.mkdir(parents=True, exist_ok=True)
+    incident = {
+        "task_id": task_id,
+        "reason": "HOURLY_RESEARCH_WAKE",
+        "status": "OPEN",
+        "deliver_to_chat": True,
+    }
+    path = incident_dir / (task_id + "__HOURLY_RESEARCH_WAKE.json")
+    path.write_text(json.dumps(incident))
+    return incident
+
+
+def test_stalled_ai_delivery_is_reoffered_after_timeout(
+    tmp_path,
+    monkeypatch,
+):
+    mod = load_bridge()
+    task_id = "hourly-research-20260920T1700+0200"
+    incident = _write_hourly_incident(tmp_path, task_id)
+    state = {
+        "bridge_tasks": [],
+        "acked": [],
+        "ai_acked": [task_id],
+        "ai_deliveries": {
+            task_id: {
+                "last_acked_at": 1000.0,
+                "attempts": 1,
+            }
+        },
+    }
+    item = {
+        "kind": "AI_WORK_BUNDLE",
+        "task_id": task_id,
+        "guardrails": {"direct_executor_route": False},
+    }
+
+    monkeypatch.setattr(
+        Path,
+        "home",
+        classmethod(lambda cls: tmp_path),
+    )
+    monkeypatch.setattr(mod, "load_state", lambda: state)
+    monkeypatch.setattr(mod, "_core_next_ai_outbox_item", lambda: None)
+    monkeypatch.setattr(mod.time, "time", lambda: 1601.0)
+    monkeypatch.setattr(
+        mod.AI_TRANSPORT,
+        "should_offer_ai_work",
+        lambda x: x == incident,
+    )
+    monkeypatch.setattr(
+        mod.AI_TRANSPORT,
+        "build_chat_item",
+        lambda x: item,
+    )
+
+    assert mod.next_ai_outbox_item() == item
+
+
+def test_fresh_or_legacy_ai_ack_is_not_replayed(
+    tmp_path,
+    monkeypatch,
+):
+    mod = load_bridge()
+    task_id = "hourly-research-20260920T1700+0200"
+    _write_hourly_incident(tmp_path, task_id)
+
+    monkeypatch.setattr(
+        Path,
+        "home",
+        classmethod(lambda cls: tmp_path),
+    )
+    monkeypatch.setattr(mod, "_core_next_ai_outbox_item", lambda: None)
+    monkeypatch.setattr(mod.time, "time", lambda: 1601.0)
+    monkeypatch.setattr(
+        mod.AI_TRANSPORT,
+        "should_offer_ai_work",
+        lambda x: True,
+    )
+
+    fresh = {
+        "ai_acked": [task_id],
+        "ai_deliveries": {
+            task_id: {
+                "last_acked_at": 1501.0,
+                "attempts": 1,
+            }
+        },
+    }
+    monkeypatch.setattr(mod, "load_state", lambda: fresh)
+    assert mod.next_ai_outbox_item() is None
+
+    legacy = {"ai_acked": [task_id]}
+    monkeypatch.setattr(mod, "load_state", lambda: legacy)
+    assert mod.next_ai_outbox_item() is None
+
+
+def test_response_or_receipt_suppresses_stalled_retry(
+    tmp_path,
+    monkeypatch,
+):
+    mod = load_bridge()
+    task_id = "hourly-research-20260920T1700+0200"
+    _write_hourly_incident(tmp_path, task_id)
+    state = {
+        "ai_acked": [task_id],
+        "ai_deliveries": {
+            task_id: {
+                "last_acked_at": 1000.0,
+                "attempts": 1,
+            }
+        },
+    }
+
+    monkeypatch.setattr(
+        Path,
+        "home",
+        classmethod(lambda cls: tmp_path),
+    )
+    monkeypatch.setattr(mod, "load_state", lambda: state)
+    monkeypatch.setattr(mod, "_core_next_ai_outbox_item", lambda: None)
+    monkeypatch.setattr(mod.time, "time", lambda: 1601.0)
+    monkeypatch.setattr(
+        mod.AI_TRANSPORT,
+        "should_offer_ai_work",
+        lambda x: False,
+    )
+
+    assert mod.next_ai_outbox_item() is None
+
+
+def test_ai_ack_records_delivery_without_refreshing_duplicate(
+    monkeypatch,
+):
+    mod = load_bridge()
+    task_id = "hourly-research-20260920T1700+0200"
+    state = {
+        "ai_acked": [task_id],
+        "ai_deliveries": {},
+    }
+    saved = []
+
+    monkeypatch.setattr(mod, "load_state", lambda: state)
+    monkeypatch.setattr(mod, "save_state", lambda x: saved.append(dict(x)))
+    monkeypatch.setattr(mod.time, "time", lambda: 1234.0)
+    monkeypatch.setattr(
+        mod,
+        "_core_acknowledge_ai",
+        lambda x: {"ok": True, "task_id": x},
+    )
+
+    first = mod.acknowledge_ai(task_id)
+    assert first["ok"] is True
+    assert state["ai_deliveries"][task_id] == {
+        "last_acked_at": 1234.0,
+        "attempts": 1,
+    }
+    assert saved
+
+    monkeypatch.setattr(mod.time, "time", lambda: 1300.0)
+    monkeypatch.setattr(
+        mod,
+        "_core_acknowledge_ai",
+        lambda x: {
+            "ok": True,
+            "task_id": x,
+            "already_acked": True,
+        },
+    )
+
+    second = mod.acknowledge_ai(task_id)
+    assert second["already_acked"] is True
+    assert state["ai_deliveries"][task_id]["last_acked_at"] == 1234.0
+    assert state["ai_deliveries"][task_id]["attempts"] == 1
