@@ -1,0 +1,14 @@
+{
+  "build_authorization": null,
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/kwi_execution_capture_inventory_e394.py"
+  ],
+  "hypothesis_id": "KWI-FULL-STATION-PRECANONICAL-V1",
+  "live_trading": false,
+  "operation": "python",
+  "task_class": "research",
+  "task_id": "EDGE-HUNTER-KWI-EXECUTION-CAPTURE-INVENTORY-E394",
+  "timeout_seconds": 180,
+  "working_directory": "."
+}
