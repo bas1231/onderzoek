@@ -1,11 +1,13 @@
 #!/usr/bin/env python3
 """Three-gate validation for A19B-v2 queue-native LDM timing.
 
-CHECK 1/3 technical: Python compile/unit tests + C syntax against a minimal
-interface stub matching the documented pq_next()/queue_par_t contract.
+CHECK 1/3 technical: Python compile/unit tests + proven-fixture regression +
+C syntax against a minimal interface stub matching the documented
+pq_next()/queue_par_t contract.
 CHECK 2/3 adversarial/fail-closed tests.
-CHECK 3/3 realistic replay: latest real NOAA A19A gzip is framed, parsed,
-archived and decoded through the v2 path. Replay MUST remain latency-ineligible.
+CHECK 3/3 realistic replay: immutable manifest-proven real NOAA A19A gzip is
+framed, parsed, archived and decoded through the v2 path. Replay MUST remain
+latency-ineligible.
 
 A PASS here proves local source/readiness, not live LDM access and not edge.
 """
@@ -24,14 +26,18 @@ ROOT = Path.cwd()
 WEATHER = ROOT / "control" / "weather"
 STATE = Path.home() / ".local" / "state" / "prediction-research"
 A19A_RAW = STATE / "raw" / "madis_omo_public"
+A19A_MANIFESTS = STATE / "madis_omo_manifests"
 
 sys.path.insert(0, str(WEATHER))
 import madis_ldm_queue_native_a19b_v2 as q  # noqa: E402
+from a19a_proven_replay_fixture import select_proven_a19a_gzip  # noqa: E402
 
 PY = WEATHER / "madis_ldm_queue_native_a19b_v2.py"
 C_READER = WEATHER / "madis_ldm_queue_reader_a19b_v2.c"
 UNIT = WEATHER / "test_madis_ldm_queue_native_a19b_v2.py"
 ADV = WEATHER / "test_madis_ldm_queue_native_a19b_v2_adversarial.py"
+FIXTURE_HELPER = WEATHER / "a19a_proven_replay_fixture.py"
+FIXTURE_TEST = WEATHER / "test_a19a_proven_replay_fixture.py"
 
 
 def run(*args: str, timeout: int = 120, cwd: Path = ROOT) -> subprocess.CompletedProcess[str]:
@@ -132,11 +138,12 @@ result = {
     "checks": {},
 }
 
-# CHECK 1/3
+# CHECK 1/3 — technical / regression.
 try:
-    for path in (PY, UNIT, ADV):
+    for path in (PY, UNIT, ADV, FIXTURE_HELPER, FIXTURE_TEST):
         py_compile.compile(str(path), doraise=True)
     unit = run(sys.executable, str(UNIT), timeout=60)
+    fixture_test = run(sys.executable, str(FIXTURE_TEST), timeout=60)
     ccheck = c_stub_compile()
     source = C_READER.read_text(encoding="utf-8")
     semantic_source_ok = all(token in source for token in (
@@ -145,10 +152,13 @@ try:
         "queue_par->inserted",
         "CLOCK_REALTIME",
         "CLOCK_MONOTONIC",
+        "prod_par->info.sz",
     ))
     check1 = bool(
         unit.returncode == 0
         and "MADIS_LDM_QUEUE_NATIVE_A19B_V2_UNIT_TESTS_PASS" in unit.stdout
+        and fixture_test.returncode == 0
+        and "A19A_PROVEN_REPLAY_FIXTURE_TESTS_PASS" in fixture_test.stdout
         and ccheck.get("pass") is True
         and semantic_source_ok
     )
@@ -157,6 +167,8 @@ try:
         "python_compile_pass": True,
         "unit_stdout": unit.stdout.strip(),
         "unit_stderr": unit.stderr[-3000:],
+        "fixture_test_stdout": fixture_test.stdout.strip(),
+        "fixture_test_stderr": fixture_test.stderr[-3000:],
         "c_source_contract_tokens_present": semantic_source_ok,
         "c_syntax_check": ccheck,
     }
@@ -167,7 +179,7 @@ except Exception as exc:
         "detail": f"{type(exc).__name__}: {exc}",
     }
 
-# CHECK 2/3
+# CHECK 2/3 — adversarial/fail-closed.
 if check1:
     adv = run(sys.executable, str(ADV), timeout=60)
     check2 = bool(
@@ -183,18 +195,15 @@ else:
     check2 = False
     result["checks"]["check_2_fail_closed"] = {"pass": False, "status": "SKIPPED_CHECK_1_FAILED"}
 
-# CHECK 3/3: real NOAA payload through framed replay.
-latest = None
-if A19A_RAW.is_dir():
-    files = sorted(A19A_RAW.glob("*.gz"), key=lambda p: p.stat().st_mtime_ns)
-    if files:
-        latest = files[-1]
+# CHECK 3/3 — manifest-proven real NOAA payload through framed replay.
+fixture = select_proven_a19a_gzip(A19A_RAW, A19A_MANIFESTS)
+source = Path(fixture["gzip_path"]) if fixture.get("status") == "PASS" else None
 
-if check1 and check2 and latest is not None:
-    payload = latest.read_bytes()
+if check1 and check2 and source is not None:
+    payload = source.read_bytes()
     # LDM queue insertion timestamps are timeval/microsecond precision. Align the
-    # synthetic callback to the same boundary so an intended 10.000 ms fixture
-    # cannot randomly become 10.001 ms because only one side was truncated.
+    # synthetic callback to the same boundary so the intended 10.000 ms replay
+    # delta is deterministic.
     callback_ns = ((time.time_ns() - 5_000_000) // 1000) * 1000
     frame_raw = q.build_test_frame(
         payload,
@@ -227,7 +236,8 @@ if check1 and check2 and latest is not None:
     )
     result["checks"]["check_3_real_noaa_replay"] = {
         "pass": check3,
-        "source": str(latest),
+        "source": str(source),
+        "fixture_provenance": fixture,
         "status": obj.get("status"),
         "matched_station_count": decode.get("matched_station_count"),
         "matched_stations": decode.get("matched_stations"),
@@ -235,14 +245,15 @@ if check1 and check2 and latest is not None:
         "ldm_queue_insert_at": obj.get("ldm_queue_insert_at"),
         "queue_insert_to_reader_callback_ms": obj.get("queue_insert_to_reader_callback_ms"),
         "queue_latency_eligible": obj.get("eligible_for_queue_insertion_latency_analysis"),
-        "replay_semantics": "synthetic queue timestamp around a real NOAA payload; validates plumbing only, never latency evidence",
+        "replay_semantics": "synthetic queue timestamp around a manifest-proven real NOAA payload; validates plumbing only, never latency evidence",
         "stderr": replay.stderr[-3000:],
     }
 else:
     check3 = False
     result["checks"]["check_3_real_noaa_replay"] = {
         "pass": False,
-        "status": "SKIPPED_NO_A19A_GZIP" if latest is None else "SKIPPED_EARLIER_CHECK_FAILED",
+        "status": "SKIPPED_NO_PROVEN_A19A_FIXTURE" if source is None else "SKIPPED_EARLIER_CHECK_FAILED",
+        "fixture_provenance": fixture,
     }
 
 all_pass = bool(check1 and check2 and check3)
