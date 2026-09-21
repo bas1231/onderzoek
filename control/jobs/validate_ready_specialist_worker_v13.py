@@ -22,6 +22,8 @@ TARGET_TESTS = [
     "tests/hourly/test_agent_orchestrator.py",
     "tests/hourly/test_packet_hydrator.py",
     "tests/bridge/test_ai_response_endpoint_v13.py",
+    "tests/bridge/test_control_auto_continue.py",
+    "tests/bridge/test_outbox_fairness.py",
     "tests/test_recon_engine.py",
 ]
 
@@ -50,13 +52,21 @@ def main() -> int:
         timeout=240,
     )
 
+    # Compile only runtime/test paths touched by this worker change plus the
+    # explicitly repaired watchdog baseline. The repository contains unrelated
+    # historical research job scripts with known syntax damage; those are not
+    # part of V13 and must not be silently repaired or used to mask V13 status.
     steps["python_compile"] = run(
         [
             str(PYTHON),
             "-m",
             "compileall",
             "-q",
-            "control",
+            "control/hourly",
+            "control/browser_bridge.py",
+            "control/browser_bridge_core.py",
+            "control/jobs/watchdog_v1.py",
+            "control/jobs/validate_ready_specialist_worker_v13.py",
             "tests/hourly",
             "tests/bridge",
             "tests/test_recon_engine.py",
