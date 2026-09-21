@@ -1,0 +1,24 @@
+{
+  "build_authorization": {
+    "build_kind": "control_plane",
+    "capabilities": [
+      "public_network_read",
+      "repository_sync",
+      "local_test"
+    ],
+    "mode": "control_plane",
+    "objective": "Compact prospective end-to-end verification of recovered bridge and synchronized repository.",
+    "warrant_ref": null
+  },
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/probe_e389.py"
+  ],
+  "hypothesis_id": "CONTROL-NO-SILENT-WAITING",
+  "live_trading": false,
+  "operation": "python",
+  "task_class": "infrastructure",
+  "task_id": "CONTROL-BRIDGE-POSTRECOVERY-E389",
+  "timeout_seconds": 120,
+  "working_directory": "."
+}
