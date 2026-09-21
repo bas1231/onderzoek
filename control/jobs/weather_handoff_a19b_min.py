@@ -10,11 +10,20 @@ PYTHON = Path.home() / "prediction_research/.venv/bin/python"
 BRANCH = "ai/weather-madis-ldm-a19b"
 V1_JOB = ROOT / "control/jobs/weather_away_a19b.py"
 V1_REPORT = ROOT / "evidence/weather/WEATHER-AWAY-A19B-latest.json"
+V1_PROOF = ROOT / "evidence/weather/A19B_V1_IMMUTABLE_PROOF.json"
 V2_JOB = ROOT / "control/jobs/validate_madis_ldm_a19b_v2.py"
 
 
 def run(*args: str, timeout: int = 1800):
     return subprocess.run(args, cwd=ROOT, text=True, capture_output=True, timeout=timeout)
+
+
+def load_obj(path: Path) -> dict:
+    try:
+        value = json.loads(path.read_text(encoding="utf-8"))
+        return value if isinstance(value, dict) else {}
+    except Exception:
+        return {}
 
 
 def parse_obj(text: str) -> dict:
@@ -34,6 +43,11 @@ def emit(payload: dict, code: int = 0):
     })
     print(json.dumps(payload, indent=2, sort_keys=True))
     raise SystemExit(code)
+
+
+def git_blob(path: str) -> str | None:
+    cp = run("git", "rev-parse", f"HEAD:{path}", timeout=30)
+    return cp.stdout.strip() if cp.returncode == 0 and cp.stdout.strip() else None
 
 
 if not ROOT.is_dir():
@@ -71,26 +85,53 @@ if pull.returncode != 0:
 head = run("git", "rev-parse", "HEAD", timeout=30).stdout.strip()
 steps: dict[str, object] = {}
 
-# Gate 1: A19B-v1. Reuse prior proof if present and valid; do not rerun blindly.
-v1_obj = {}
-if V1_REPORT.is_file():
-    try:
-        v1_obj = json.loads(V1_REPORT.read_text(encoding="utf-8"))
-    except Exception:
-        v1_obj = {}
+# Gate 1: A19B-v1. Prefer immutable proof bound to exact source blobs.
+proof = load_obj(V1_PROOF) if V1_PROOF.is_file() else {}
+source_blobs = proof.get("source_blobs") if isinstance(proof.get("source_blobs"), dict) else {}
+blob_mismatches: dict[str, dict[str, str | None]] = {}
+for path, expected in source_blobs.items():
+    actual = git_blob(str(path))
+    if actual != expected:
+        blob_mismatches[str(path)] = {"expected": str(expected), "actual": actual}
 
-v1_existing_pass = bool(
-    v1_obj.get("status") == "PASS"
-    and (((v1_obj.get("steps") or {}).get("a19b_three_gate_validation") or {}).get("parsed") or {}).get("status") == "PASS"
+proof_valid = bool(
+    proof.get("status") == "PASS"
+    and proof.get("proof_exit_code") == 0
+    and ((proof.get("proof_stdout_claims") or {}).get("a19b_validation_pass") is True)
+    and bool(source_blobs)
+    and not blob_mismatches
 )
 
-if v1_existing_pass:
+latest = load_obj(V1_REPORT) if V1_REPORT.is_file() else {}
+latest_valid = bool(
+    latest.get("status") == "PASS"
+    and (((latest.get("steps") or {}).get("a19b_three_gate_validation") or {}).get("parsed") or {}).get("status") == "PASS"
+)
+
+if proof_valid:
     steps["a19b_v1"] = {
-        "status": "ALREADY_SATISFIED",
+        "status": "ALREADY_SATISFIED_IMMUTABLE_PROOF",
+        "proof": str(V1_PROOF),
+        "proof_task_id": proof.get("proof_task_id"),
+        "proof_finished_at": proof.get("proof_finished_at"),
+        "source_blob_count": len(source_blobs),
+        "source_blobs_match": True,
+        "mutable_latest_status": latest.get("status"),
+        "next_action": "ADVANCE_TO_A19B_V2",
+    }
+elif not V1_PROOF.is_file() and latest_valid:
+    steps["a19b_v1"] = {
+        "status": "ALREADY_SATISFIED_LEGACY_LATEST",
         "report": str(V1_REPORT),
         "next_action": "ADVANCE_TO_A19B_V2",
     }
 else:
+    steps["a19b_v1_proof_check"] = {
+        "proof_present": V1_PROOF.is_file(),
+        "proof_valid": proof_valid,
+        "source_blob_mismatches": blob_mismatches,
+        "mutable_latest_status": latest.get("status"),
+    }
     if not V1_JOB.is_file():
         emit({
             "status": "BLOCKED",
@@ -155,7 +196,7 @@ emit({
     "weather_head": head,
     "steps": steps,
     "next_gate": next_gate,
-    "a19b_v1_rerun_policy": "DO_NOT_REPEAT_WHILE_VALID_PASS_REPORT_EXISTS",
+    "a19b_v1_rerun_policy": "IMMUTABLE_PROOF_REUSED_ONLY_WHILE_BOUND_SOURCE_BLOBS_MATCH",
     "a19b_v2_local_build": "PASS",
     "terminal_for_current_authorization": external_or_system_gate,
 }, 0)
