@@ -16,10 +16,12 @@ FILES = [
     ROOT / "control/weather/kalshi_market_reaction_ws.py",
     ROOT / "control/weather/analyze_kwi_market_reaction.py",
     ROOT / "control/weather/test_market_reaction_ws.py",
+    ROOT / "control/weather/test_analyze_kwi_market_reaction.py",
 ]
 TESTS = [
     ROOT / "control/weather/test_market_reaction.py",
     ROOT / "control/weather/test_market_reaction_ws.py",
+    ROOT / "control/weather/test_analyze_kwi_market_reaction.py",
 ]
 
 
