@@ -159,3 +159,41 @@ def test_complete_reproduced_proof_package_becomes_candidate_not_final_verdict(t
     out=mod.propagate_validation(run)
     assert out["proof_candidates"]==["X"]
     assert out["economic_conclusion"]=="PROVEN_EDGE_CANDIDATE"
+
+
+def test_e2e_acceptance_true_candidate_and_adversarial_fakes(tmp_path):
+    mod=load_module()
+    run=tmp_path/"run"; run.mkdir()
+
+    # Killer: only TRUE and fake proof-package candidates survive.
+    (run/"prebuild_killer.json").write_text(json.dumps({"validation_results":[
+        {"candidate_id":"TRUE","status":"PASS"},
+        {"candidate_id":"FAKE_MISSING_OOS","status":"PASS"},
+        {"candidate_id":"FAKE_NO_ECON","status":"PASS"},
+        {"candidate_id":"KILLED","status":"FAIL"}
+    ]}))
+    (run/"chief_falsifier.json").write_text(json.dumps({"validation_results":[
+        {"candidate_id":"TRUE","status":"PASS"},
+        {"candidate_id":"FAKE_MISSING_OOS","status":"PASS"},
+        {"candidate_id":"FAKE_NO_ECON","status":"PASS"},
+        {"candidate_id":"CROSS_CANDIDATE","status":"PASS"}
+    ]}))
+
+    gates={g:"PASS" for g in mod.PROOF_GATES}
+    bad_oos=dict(gates); bad_oos["out_of_sample"]="FAIL"
+    economics={"fees":1,"spread":1,"slippage":1,"fills":"validated","settlement":"validated","capacity":"bounded","net_edge":0.01}
+    (run/"independent_reproducer.json").write_text(json.dumps({"validation_results":[
+        {"candidate_id":"TRUE","status":"PASS","gates":gates,"economics":economics},
+        {"candidate_id":"FAKE_MISSING_OOS","status":"PASS","gates":bad_oos,"economics":economics},
+        {"candidate_id":"FAKE_NO_ECON","status":"PASS","gates":gates},
+        {"candidate_id":"KILLED","status":"PASS","gates":gates,"economics":economics},
+        {"candidate_id":"CROSS_CANDIDATE","status":"PASS","gates":gates,"economics":economics}
+    ]}))
+
+    out=mod.propagate_validation(run)
+    assert out["proof_candidates"]==["TRUE"]
+    assert out["economic_conclusion"]=="PROVEN_EDGE_CANDIDATE"
+    assert "out_of_sample" in out["proof_rejections"]["FAKE_MISSING_OOS"]
+    assert "missing_economics" in out["proof_rejections"]["FAKE_NO_ECON"]
+    assert "candidate_not_upstream_validated" in out["proof_rejections"]["KILLED"]
+    assert "candidate_not_upstream_validated" in out["proof_rejections"]["CROSS_CANDIDATE"]
