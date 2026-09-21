@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from datetime import datetime, timezone
 from pathlib import Path
 import sys
 
@@ -20,7 +21,8 @@ def test_parse_index_deduplicates_and_sorts():
 
 def test_valid_hour_parser():
     ms = m.file_valid_hour_ms("20260921_1200.gz")
-    assert ms == 1790006400000
+    expected = int(datetime(2026, 9, 21, 12, 0, tzinfo=timezone.utc).timestamp() * 1000)
+    assert ms == expected
 
 
 def test_temperature_conversions():
