@@ -1,0 +1,96 @@
+E395_START
+ROOT /home/leonh/prediction_research EXISTS True
+MATCH_COUNT 12
+MATCH 6 /home/leonh/prediction_research/control/jobs/kwi_reusable_l2_audit_e395.py
+LINE from pathlib import Path
+LINE import subprocess
+LINE needles=('websocket','orderbook','order_book','l2','subscribe','kalshi')
+LINE    if line.lstrip().startswith(('def ','class ','import ','from ')) or any(word in low for word in ('websocket','orderbook','order_book','subscribe','l2')):
+LINE   if any(word in low for word in ('kalshi','surplus','weather','orderbook','proof-hunter')):
+MATCH 5 /home/leonh/prediction_research/control/jobs/inventory_market_data_e279.py
+LINE from pathlib import Path
+LINE terms = ['orderbook','order_book','l2','websocket','kalshi','polymarket','trade','bid','ask']
+MATCH 4 /home/leonh/prediction_research/control/jobs/kwi_execution_capture_inventory_e394.py
+LINE from pathlib import Path
+LINE import subprocess
+LINE patterns=('weather_l2','orderbook','websocket','kalshi','l2_capture','trade_capture')
+LINE   if 'kalshi' in low or 'weather' in low or 'orderbook' in low or 'surplus' in low:
+MATCH 3 /home/leonh/prediction_research/control/jobs/kwi_market_data_readiness_e393.py
+LINE from pathlib import Path
+LINE from datetime import datetime,timezone
+LINE terms=('orderbook','order_book','l2','trade','kxtemp','market')
+MATCH 3 /home/leonh/prediction_research/control/jobs/inspect_market_data_docs_e280.py
+LINE from pathlib import Path
+LINE import json
+LINE terms = ['orderbook','order book','websocket','trade-api','markets','trades','bid','ask','book']
+MATCH 3 /home/leonh/prediction_research/.venv/lib/python3.12/site-packages/pygments/lexers/_cocoa_builtins.py
+LINE     import os
+LINE     import re
+MATCH 2 /home/leonh/prediction_research/experiments/bridge/e154.py
+LINE from pathlib import Path
+LINE import json,subprocess
+LINE policy={'weather_twc':{'evidence_sources':['aviationweather','nws','ecmwf_open','nomads'],'coverage_gaps':['No TWC-specific primary source in registry']},'microstructure':{'evidence_sources':['kalshi_docs','polymarket_do
+MATCH 2 /home/leonh/prediction_research/control/policy_check.py
+LINE import json
+LINE from pathlib import Path
+LINE     "subscribe",
+LINE def check_action(action):
+LINE         "subscribe_service",
+MATCH 2 /home/leonh/prediction_research/control/jobs/close_edge_hunter_0300_e274.py
+LINE from pathlib import Path
+LINE import json
+LINE import subprocess
+LINE     'No live executable orderbook snapshot source is present in the hourly registry.',
+LINE     'Add free read-only executable L2 capture and deeper venue-specific rule retrieval.',
+MATCH 2 /home/leonh/prediction_research/.venv/lib/python3.12/site-packages/pygments/lexers/matlab.py
+LINE import re
+LINE from pygments.lexer import Lexer, RegexLexer, bygroups, default, words, \
+LINE from pygments.lexers import _scilab_builtins
+LINE class MatlabLexer(RegexLexer):
+LINE                         "cell2mat",
+LINE                         "cell2struct",
+LINE                         "cell2table",
+LINE                         "del2",
+LINE                         "integral2",
+LINE                         "pol2cart",
+LINE                         "subscribe",
+LINE                         "unsubscribe",
+LINE     def analyse_text(text):
+LINE class MatlabSessionLexer(Lexer):
+LINE class OctaveLexer(RegexLexer):
+LINE     def analyse_text(text):
+LINE class ScilabLexer(RegexLexer):
+LINE     def analyse_text(text):
+MATCH 2 /home/leonh/prediction_research/.venv/lib/python3.12/site-packages/pygments/lexers/_php_builtins.py
+LINE           'imap_getsubscribed',
+LINE           'imap_listsubscribed',
+LINE           'imap_subscribe',
+LINE           'imap_unsubscribe',
+LINE             'nl2br',
+LINE             'trader_cdl2crows',
+LINE     import glob
+LINE     import os
+LINE     import pprint
+LINE     import re
+LINE     import shutil
+LINE     import tarfile
+LINE     from urllib.request import urlretrieve
+LINE     def get_php_functions():
+LINE     def get_php_references():
+LINE     def regenerate(filename, modules):
+LINE     def run():
+MATCH 2 /home/leonh/prediction_research/.venv/lib/python3.12/site-packages/pygments/lexers/_csound_builtins.py
+LINE ctrl21
+LINE pol2rect
+LINE pycall2
+LINE pycall2i
+LINE pycall2t
+LINE pylcall2
+LINE pylcall2i
+LINE pylcall2t
+LINE websocket
+ROOT /home/leonh/proof_hunter EXISTS False
+ROOT /home/leonh/surplus_maker EXISTS False
+UNIT prediction-research-kalshi-weather-index-recorder.service static    -
+UNIT prediction-research-kalshi-weather-index-recorder.timer   enabled   enabled
+E395_DONE

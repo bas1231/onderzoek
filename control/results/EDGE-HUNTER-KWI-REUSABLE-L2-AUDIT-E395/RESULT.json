@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/kwi_reusable_l2_audit_e395.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-21T08:07:17.510252+00:00",
+  "hypothesis_id": "KWI-FULL-STATION-PRECANONICAL-V1",
+  "source_commit": "542da50dfa0dc6eff32b6f487c46a2f52c3e9f95",
+  "started_at": "2026-09-21T08:07:16.485112+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "c8634bcbaa819a8087b5b4867fde8f23e4fb10a2896cec291452b4625e8ebc8b",
+  "task_class": "research",
+  "task_id": "EDGE-HUNTER-KWI-REUSABLE-L2-AUDIT-E395"
+}
