@@ -11,10 +11,15 @@ def evaluate(
 ) -> dict[str, Any]:
     """Reopen a killed candidate only when an explicit stored condition changed.
 
-    Prior validation is not inherited as proof in the new regime.
+    A resurrection starts a new evidentiary regime. Old evidence remains in the
+    audit history, but no previous gate -- including provenance -- is inherited
+    as a current PASS merely because it once passed in the old regime.
     """
     out = deepcopy(candidate)
-    killed = str(out.get("economic_status") or "").upper() == "TESTED_NEGATIVE" or str(out.get("queue_status") or "").upper() == "CLOSED_NEGATIVE"
+    killed = (
+        str(out.get("economic_status") or "").upper() == "TESTED_NEGATIVE"
+        or str(out.get("queue_status") or "").upper() == "CLOSED_NEGATIVE"
+    )
     conditions = set(map(str, out.get("resurrection_conditions") or []))
     changed = sorted(conditions & set(map(str, changed_conditions)))
 
@@ -23,18 +28,39 @@ def evaluate(
             "resurrected": False,
             "candidate": out,
             "matched_conditions": changed,
-            "reason": "no_stored_resurrection_condition_changed" if killed else "candidate_not_killed",
+            "reason": (
+                "no_stored_resurrection_condition_changed"
+                if killed
+                else "candidate_not_killed"
+            ),
         }
+
+    previous = {
+        "observed_at": observed_at,
+        "matched_conditions": changed,
+        "phase": out.get("phase"),
+        "queue_status": out.get("queue_status"),
+        "economic_status": out.get("economic_status"),
+        "required_gates": deepcopy(out.get("required_gates") or {}),
+    }
+    history = list(out.get("resurrection_history") or [])
+    history.append(previous)
 
     out["queue_status"] = "NEEDS_REVISION"
     out["economic_status"] = "NO_PROVEN_EDGE"
     out["phase"] = "DISCOVERED"
     out["updated_at"] = observed_at
-    out["blockers"] = sorted(set(list(out.get("blockers") or []) + ["RESURRECTED_REQUIRES_FRESH_VALIDATION"]))
+    out["resurrection_history"] = history
+    out["blockers"] = sorted(
+        set(
+            list(out.get("blockers") or [])
+            + ["RESURRECTED_REQUIRES_FRESH_VALIDATION"]
+        )
+    )
+
     gates = dict(out.get("required_gates") or {})
     for gate in list(gates):
-        if gate not in {"source_provenance"}:
-            gates[gate] = "PENDING"
+        gates[gate] = "PENDING"
     out["required_gates"] = gates
 
     return {
@@ -43,4 +69,5 @@ def evaluate(
         "matched_conditions": changed,
         "reason": "EDGE_RESURRECTION_CONDITION_CHANGED",
         "old_validation_inherited": False,
+        "old_gate_passes_inherited": False,
     }
