@@ -3,9 +3,41 @@ from __future__ import annotations
 from collections import Counter
 from typing import Any
 
+FAILED_STATES = {"STALE", "FAILED", "ERROR", "UNAVAILABLE"}
+COMMUNITY_CLASSES = {"COMMUNITY", "SOCIAL", "VIDEO"}
+PRIMARY_AUTHORITIES = {"OFFICIAL_PRIMARY", "ACADEMIC_PRIMARY"}
 
-def _key(item: dict[str, Any]) -> tuple[str, str]:
-    return (str(item.get("source_id") or ""), str(item.get("document_sha256") or ""))
+
+def _clean(value: Any) -> str:
+    return str(value or "").strip()
+
+
+def _identity(item: dict[str, Any]) -> tuple[str, str] | None:
+    """Return strongest available document/upstream identity.
+
+    Content hash outranks URL/source ID so the same document mirrored at two
+    locations counts once. Canonical upstream fact IDs are next best. A bare
+    source ID is a last-resort retrieval identity and is not treated as strong
+    independence evidence.
+    """
+    content_hash = _clean(item.get("document_sha256") or item.get("content_hash"))
+    if content_hash:
+        return ("sha256", content_hash.lower())
+
+    upstream = _clean(item.get("upstream_fact_id") or item.get("canonical_source_id"))
+    if upstream:
+        return ("upstream", upstream)
+
+    source_id = _clean(item.get("source_id"))
+    if source_id:
+        return ("source", source_id)
+    return None
+
+
+def _ratio(num: int, den: int) -> float | None:
+    if den <= 0:
+        return None
+    return round(num / den, 6)
 
 
 def summarize(
@@ -15,54 +47,95 @@ def summarize(
     required_families: list[str],
 ) -> dict[str, Any]:
     """Measure discovery breadth and overlap without treating raw count as quality."""
-    p = [x for x in primary_items if isinstance(x, dict)]
-    r = [x for x in recon_items if isinstance(x, dict)]
-    p_keys = {_key(x) for x in p if any(_key(x))}
-    r_keys = {_key(x) for x in r if any(_key(x))}
+    if not isinstance(primary_items, list) or not isinstance(recon_items, list):
+        raise ValueError("discovery_items_must_be_lists")
+    if not isinstance(attempted_families, list) or not isinstance(required_families, list):
+        raise ValueError("source_family_inputs_must_be_lists")
+
+    invalid_items = [x for x in primary_items + recon_items if not isinstance(x, dict)]
+    if invalid_items:
+        raise ValueError("discovery_item_must_be_object")
+
+    p = list(primary_items)
+    r = list(recon_items)
+    p_keys = {key for x in p if (key := _identity(x)) is not None}
+    r_keys = {key for x in r if (key := _identity(x)) is not None}
     union = p_keys | r_keys
     overlap = p_keys & r_keys
 
     family_counts = Counter()
+    successful_family_counts = Counter()
     primary_count = 0
-    relevant_count = 0
+    relevant_keys: set[tuple[str, str]] = set()
+    relevant_unkeyed = 0
     unsupported_community = 0
-    changed_count = 0
+    changed_keys: set[tuple[str, str]] = set()
+    changed_unkeyed = 0
     stale_or_failed = 0
+    unidentified_items = 0
 
     for item in p + r:
-        family = str(item.get("source_family") or "UNKNOWN")
+        family = _clean(item.get("source_family")) or "UNKNOWN"
         family_counts[family] += 1
-        if str(item.get("source_authority") or "").upper() in {"OFFICIAL_PRIMARY", "ACADEMIC_PRIMARY"}:
+        state = _clean(item.get("source_state")).upper()
+        success = state not in FAILED_STATES and item.get("retrieval_succeeded") is not False
+        if success:
+            successful_family_counts[family] += 1
+
+        if _clean(item.get("source_authority")).upper() in PRIMARY_AUTHORITIES:
             primary_count += 1
+
+        identity = _identity(item)
+        if identity is None:
+            unidentified_items += 1
+
         if item.get("relevant") is True:
-            relevant_count += 1
-        if str(item.get("source_class") or "").upper() in {"COMMUNITY", "SOCIAL", "VIDEO"} and item.get("independently_supported") is not True:
+            if identity is None:
+                relevant_unkeyed += 1
+            else:
+                relevant_keys.add(identity)
+
+        if _clean(item.get("source_class")).upper() in COMMUNITY_CLASSES and item.get("independently_supported") is not True:
             unsupported_community += 1
+
         if item.get("changed_or_new") is True:
-            changed_count += 1
-        if str(item.get("source_state") or "").upper() in {"STALE", "FAILED", "ERROR", "UNAVAILABLE"}:
+            if identity is None:
+                changed_unkeyed += 1
+            else:
+                changed_keys.add(identity)
+
+        if state in FAILED_STATES:
             stale_or_failed += 1
 
-    attempted = set(map(str, attempted_families))
-    required = set(map(str, required_families))
-    gaps = sorted(required - attempted)
+    attempted = {_clean(v) for v in attempted_families if _clean(v)}
+    required = {_clean(v) for v in required_families if _clean(v)}
+    successful = {family for family, count in successful_family_counts.items() if count > 0 and family != "UNKNOWN"}
+    attempt_gaps = sorted(required - attempted)
+    retrieval_gaps = sorted(required - successful)
     denom = len(p) + len(r)
-    overlap_ratio = (len(overlap) / max(1, len(union)))
 
     return {
         "primary_scout_items": len(p),
         "recon_scout_items": len(r),
-        "unique_document_keys": len(union),
+        "identified_document_keys": len(union),
+        "unidentified_items": unidentified_items,
         "duplicate_cross_scout_keys": len(overlap),
-        "duplicate_cross_scout_ratio": round(overlap_ratio, 6),
-        "primary_source_ratio": round(primary_count / max(1, denom), 6),
-        "unique_relevant_items_reported": relevant_count,
-        "changed_or_new_documents": changed_count,
+        "duplicate_cross_scout_ratio": _ratio(len(overlap), len(union)),
+        "primary_source_ratio": _ratio(primary_count, denom),
+        "unique_relevant_items_reported": len(relevant_keys) + relevant_unkeyed,
+        "unique_relevant_identified_items": len(relevant_keys),
+        "changed_or_new_documents": len(changed_keys) + changed_unkeyed,
         "unsupported_community_leads": unsupported_community,
         "stale_or_failed_items": stale_or_failed,
         "source_family_counts": dict(sorted(family_counts.items())),
+        "successful_source_family_counts": dict(sorted(successful_family_counts.items())),
         "attempted_source_families": sorted(attempted),
-        "coverage_gaps": gaps,
-        "coverage_complete": not gaps,
+        "successful_source_families": sorted(successful),
+        "coverage_gaps": attempt_gaps,
+        "retrieval_coverage_gaps": retrieval_gaps,
+        "coverage_attempt_complete": not attempt_gaps,
+        "coverage_retrieval_complete": not retrieval_gaps,
+        "coverage_complete": not attempt_gaps and not retrieval_gaps,
         "raw_item_count_is_success_metric": False,
+        "zero_denominator_metrics_are_unknown": True,
     }
