@@ -10,18 +10,23 @@ DEFAULT_GATES = [
     "holdout", "shadow",
 ]
 
-ECONOMIC_MAP = {
-    "FALSIFIED": "TESTED_NEGATIVE",
-    "TESTED_NEGATIVE": "TESTED_NEGATIVE",
-    "CLOSED_NEGATIVE": "TESTED_NEGATIVE",
-    "RESEARCH_POSITIVE": "RESEARCH_POSITIVE",
-    "STRUCTURAL_CANDIDATE": "STRUCTURAL_CANDIDATE",
-    "EXECUTION_BLOCKED": "EXECUTION_BLOCKED",
+NEGATIVE_DECISIONS = {
+    "FALSIFIED",
+    "TESTED_NEGATIVE",
+    "CLOSED_NEGATIVE",
 }
 
-SAFE_NEGATIVE_STATES = {
-    "TESTED_NEGATIVE",
+NON_PROVEN_POSITIVE_DECISIONS = {
+    "RESEARCH_POSITIVE": "RESEARCH_POSITIVE",
+    "STRUCTURAL_CANDIDATE": "STRUCTURAL_CANDIDATE",
+}
+
+PRESERVABLE_ECONOMIC_STATES = {
+    "NO_PROVEN_EDGE",
+    "RESEARCH_POSITIVE",
+    "STRUCTURAL_CANDIDATE",
     "EXECUTION_BLOCKED",
+    "TESTED_NEGATIVE",
 }
 
 
@@ -38,12 +43,51 @@ def _gate_status(value: Any) -> str:
     return "PENDING"
 
 
+def _merged_gates(src: dict[str, Any]) -> dict[str, Any]:
+    """Merge canonical and legacy gate maps without losing explicit state.
+
+    Canonical `required_gates` is the base representation. A legacy `gates` map
+    may add/override individual entries, but an empty legacy map may not erase a
+    populated canonical map.
+    """
+    merged: dict[str, Any] = {}
+    canonical = src.get("required_gates")
+    legacy = src.get("gates")
+    if isinstance(canonical, dict):
+        merged.update(canonical)
+    if isinstance(legacy, dict):
+        merged.update(legacy)
+    return merged
+
+
+def _economic_status(src: dict[str, Any]) -> str:
+    """Return the most conservative supported non-live economic state.
+
+    Explicit negative/blocked state outranks optimistic stale metadata. Unknown
+    or unsupported positive states are deliberately downgraded to
+    `NO_PROVEN_EDGE`.
+    """
+    decision = str(src.get("decision") or "").upper()
+    queue_status = str(src.get("queue_status") or "NEEDS_DIRECTOR").upper()
+    raw = str(src.get("economic_status") or "").upper()
+
+    if queue_status == "CLOSED_NEGATIVE" or decision in NEGATIVE_DECISIONS or raw == "TESTED_NEGATIVE":
+        return "TESTED_NEGATIVE"
+    if decision == "EXECUTION_BLOCKED" or raw == "EXECUTION_BLOCKED":
+        return "EXECUTION_BLOCKED"
+    if decision in NON_PROVEN_POSITIVE_DECISIONS:
+        return NON_PROVEN_POSITIVE_DECISIONS[decision]
+    if raw in PRESERVABLE_ECONOMIC_STATES:
+        return raw
+    return "NO_PROVEN_EDGE"
+
+
 def canonicalize(candidate: dict[str, Any], source_commit: str, version: int = 1) -> dict[str, Any]:
     """Create a read-only canonical candidate view from legacy or canonical state.
 
-    The adapter is intentionally asymmetric: it preserves explicit negative or
-    blocked states, but it never upgrades an unknown candidate into a proven
-    positive state merely because a legacy field is optimistic.
+    The projection is conservative and idempotent: explicit negative/blocking
+    state cannot be overwritten by optimistic stale metadata, and projecting an
+    already-canonical record preserves its scientific meaning.
     """
     src = deepcopy(candidate)
     cid = str(src.get("candidate_id") or "").strip()
@@ -52,28 +96,10 @@ def canonicalize(candidate: dict[str, Any], source_commit: str, version: int = 1
     if not source_commit:
         raise ValueError("source_commit_required")
 
-    if isinstance(src.get("gates"), dict):
-        raw_gates = src["gates"]
-    elif isinstance(src.get("required_gates"), dict):
-        raw_gates = src["required_gates"]
-    else:
-        raw_gates = {}
-
+    raw_gates = _merged_gates(src)
     gates = {name: _gate_status(raw_gates.get(name)) for name in DEFAULT_GATES}
     for name, value in raw_gates.items():
         gates.setdefault(str(name), _gate_status(value))
-
-    decision = str(src.get("decision") or "").upper()
-    queue_status = str(src.get("queue_status") or "NEEDS_DIRECTOR").upper()
-    raw_economic = str(src.get("economic_status") or "").upper()
-
-    economic = ECONOMIC_MAP.get(decision)
-    if economic is None and queue_status == "CLOSED_NEGATIVE":
-        economic = "TESTED_NEGATIVE"
-    if economic is None and raw_economic in SAFE_NEGATIVE_STATES:
-        economic = raw_economic
-    if economic is None:
-        economic = "NO_PROVEN_EDGE"
 
     search = src.get("search_family")
     if search is not None and not isinstance(search, dict):
@@ -86,7 +112,7 @@ def canonicalize(candidate: dict[str, Any], source_commit: str, version: int = 1
         "mechanism": src.get("mechanism"),
         "phase": str(src.get("phase") or "DISCOVERED"),
         "queue_status": str(src.get("queue_status") or "NEEDS_DIRECTOR"),
-        "economic_status": economic,
+        "economic_status": _economic_status(src),
         "priority": str(src.get("priority") or "P3"),
         "claims": list(src.get("claims") or []),
         "assumptions": list(src.get("assumptions") or []),
