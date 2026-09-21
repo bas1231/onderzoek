@@ -171,6 +171,22 @@ def build_chat_item(
         "OpenAI API guardrail missing",
     )
 
+    ready_roles = data.get("ready_roles") or []
+    require(isinstance(ready_roles, list), "bundle ready_roles invalid")
+    required_role_ids = [
+        str(item.get("agent_id"))
+        for item in ready_roles
+        if isinstance(item, dict) and item.get("agent_id")
+    ]
+    require(
+        len(required_role_ids) == len(ready_roles),
+        "bundle contains invalid ready role",
+    )
+    require(
+        len(set(required_role_ids)) == len(required_role_ids),
+        "bundle contains duplicate ready role",
+    )
+
     return {
         "kind": "AI_WORK_BUNDLE",
         "schema": SCHEMA,
@@ -185,6 +201,7 @@ def build_chat_item(
             ),
             "validator": "control/hourly/ai_response.py",
             "response_token": response_token,
+            "required_role_ids": required_role_ids,
             "marker_start": AI_RESPONSE_START,
             "marker_end": AI_RESPONSE_END,
             "economic_conclusion": "NO_PROVEN_EDGE",
@@ -196,15 +213,18 @@ def build_chat_item(
             "handoff in one ChatGPT turn. Return exactly one structured "
             "PVA_AI_RESPONSE_V1 JSON object, wrapped between the literal "
             f"markers {AI_RESPONSE_START} and {AI_RESPONSE_END}. Echo the "
-            "bundle response_token exactly. Do not put prose, Markdown "
-            "fences, or any other content inside or outside that marker "
-            "block. Preserve NO_PROVEN_EDGE unless later separately "
-            "validated gates permit otherwise; this transport itself never "
-            "authorizes promotion. Recon WATCH triage is research-only and "
-            "has no promotion authority. Do not return executable shell, "
-            "argv or commands. Local work may only be requested "
-            "descriptively through local_task_spec. No live trading, paid "
-            "actions, wallet actions or OpenAI API."
+            "bundle response_token exactly. role_results must contain "
+            "exactly one result for every response_contract.required_role_ids "
+            "entry and no other roles. Do not omit a READY role merely "
+            "because its result is negative or inconclusive. Do not put "
+            "prose, Markdown fences, or any other content inside or outside "
+            "that marker block. Preserve NO_PROVEN_EDGE unless later "
+            "separately validated gates permit otherwise; this transport "
+            "itself never authorizes promotion. Recon WATCH triage is "
+            "research-only and has no promotion authority. Do not return "
+            "executable shell, argv or commands. Local work may only be "
+            "requested descriptively through local_task_spec. No live "
+            "trading, paid actions, wallet actions or OpenAI API."
         ),
         "guardrails": {
             "live_trading": False,
