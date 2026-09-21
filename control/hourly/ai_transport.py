@@ -10,6 +10,8 @@ RUNS = ROOT / "knowledge/runs"
 
 WAKE_REASON = "HOURLY_RESEARCH_WAKE"
 SCHEMA = "PVA_AI_CHAT_WORK_V1"
+AI_RESPONSE_START = "<<<PREDICTION_AI_RESPONSE>>>"
+AI_RESPONSE_END = "<<<END_PREDICTION_AI_RESPONSE>>>"
 
 
 class TransportError(ValueError):
@@ -45,13 +47,6 @@ def run_id_from_incident(incident: dict[str, Any]) -> str:
     stamp = task_id[len(prefix):]
     require(bool(stamp), "missing hourly wake timestamp")
 
-    # Wake IDs:
-    # hourly-research-20260920T1700+0200
-    #
-    # Run IDs:
-    # hourly-20260920T170000+0200
-    #
-    # Convert only this known format. Do not guess arbitrary IDs.
     if len(stamp) >= 13 and "T" in stamp:
         date_part, time_part = stamp.split("T", 1)
 
@@ -143,6 +138,13 @@ def build_chat_item(
         data.get("run_id") == resolved_run_id,
         "bundle run_id mismatch",
     )
+    response_token = data.get("response_token")
+    require(
+        isinstance(response_token, str)
+        and len(response_token) == 64
+        and all(ch in "0123456789abcdef" for ch in response_token),
+        "bundle response_token missing or invalid",
+    )
     delivery_policy = data.get("delivery_policy") or {}
 
     require(
@@ -169,10 +171,22 @@ def build_chat_item(
         "OpenAI API guardrail missing",
     )
 
-    # Important:
-    # This is deliberately NOT a BridgeEnvelope and contains no
-    # command/shell/argv/executable field. It can never be sent to
-    # executor.py as a normal bridge task.
+    ready_roles = data.get("ready_roles") or []
+    require(isinstance(ready_roles, list), "bundle ready_roles invalid")
+    required_role_ids = [
+        str(item.get("agent_id"))
+        for item in ready_roles
+        if isinstance(item, dict) and item.get("agent_id")
+    ]
+    require(
+        len(required_role_ids) == len(ready_roles),
+        "bundle contains invalid ready role",
+    )
+    require(
+        len(set(required_role_ids)) == len(required_role_ids),
+        "bundle contains duplicate ready role",
+    )
+
     return {
         "kind": "AI_WORK_BUNDLE",
         "schema": SCHEMA,
@@ -186,19 +200,31 @@ def build_chat_item(
                 response_path(resolved_run_id).relative_to(ROOT)
             ),
             "validator": "control/hourly/ai_response.py",
+            "response_token": response_token,
+            "required_role_ids": required_role_ids,
+            "marker_start": AI_RESPONSE_START,
+            "marker_end": AI_RESPONSE_END,
             "economic_conclusion": "NO_PROVEN_EDGE",
             "direct_execution_allowed": False,
         },
         "instruction": (
             "Act as the Prediction Research Director for this single "
             "hourly run. Analyze the bundled specialist work and candidate "
-            "handoff in one ChatGPT turn. Return only one structured "
-            "PVA_AI_RESPONSE_V1 object for this run. Preserve "
-            "NO_PROVEN_EDGE unless later separately validated gates permit "
-            "otherwise; this transport itself never authorizes promotion. "
-            "Do not return executable shell, argv or commands. Local work "
-            "may only be requested descriptively through local_task_spec. "
-            "No live trading, paid actions, wallet actions or OpenAI API."
+            "handoff in one ChatGPT turn. Return exactly one structured "
+            "PVA_AI_RESPONSE_V1 JSON object, wrapped between the literal "
+            f"markers {AI_RESPONSE_START} and {AI_RESPONSE_END}. Echo the "
+            "bundle response_token exactly. role_results must contain "
+            "exactly one result for every response_contract.required_role_ids "
+            "entry and no other roles. Do not omit a READY role merely "
+            "because its result is negative or inconclusive. Do not put "
+            "prose, Markdown fences, or any other content inside or outside "
+            "that marker block. Preserve NO_PROVEN_EDGE unless later "
+            "separately validated gates permit otherwise; this transport "
+            "itself never authorizes promotion. Recon WATCH triage is "
+            "research-only and has no promotion authority. Do not return "
+            "executable shell, argv or commands. Local work may only be "
+            "requested descriptively through local_task_spec. No live "
+            "trading, paid actions, wallet actions or OpenAI API."
         ),
         "guardrails": {
             "live_trading": False,

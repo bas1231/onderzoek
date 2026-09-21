@@ -35,6 +35,7 @@ QUEUE_STATES = {
 }
 
 ALLOWED_ROLE_IDS = {
+    "recon_scout",
     "scout",
     "algebra",
     "settlement",
@@ -77,12 +78,12 @@ def require(condition: bool, message: str) -> None:
 
 def validate_role_result(item: Any) -> None:
     require(isinstance(item, dict), "role result must be object")
-
     aid = item.get("agent_id")
     require(aid in ALLOWED_ROLE_IDS, f"invalid agent_id: {aid}")
-
-    status = item.get("status")
-    require(status in ROLE_STATES, f"invalid role status: {status}")
+    require(
+        item.get("status") in ROLE_STATES,
+        f"invalid role status: {item.get('status')}",
+    )
 
     finding = item.get("finding")
     require(
@@ -93,41 +94,24 @@ def validate_role_result(item: Any) -> None:
     refs = item.get("evidence_refs", [])
     require(isinstance(refs, list), "evidence_refs must be list")
     require(
-        all(isinstance(x, str) for x in refs),
+        all(isinstance(value, str) for value in refs),
         "evidence_refs must contain strings",
     )
 
-    cids = item.get("candidate_ids", [])
-    require(isinstance(cids, list), "candidate_ids must be list")
+    candidate_ids = item.get("candidate_ids", [])
+    require(isinstance(candidate_ids, list), "candidate_ids must be list")
     require(
-        all(isinstance(x, str) for x in cids),
+        all(isinstance(value, str) for value in candidate_ids),
         "candidate_ids must contain strings",
     )
 
     local_required = item.get("local_task_required", False)
-    require(
-        isinstance(local_required, bool),
-        "local_task_required must be bool",
-    )
-
+    require(isinstance(local_required, bool), "local_task_required must be bool")
     spec = item.get("local_task_spec")
 
     if local_required:
-        require(
-            isinstance(spec, dict),
-            "local task requires local_task_spec object",
-        )
-
-        # AI may describe needed local computation,
-        # but may NOT directly provide executable shell/command.
-        forbidden = {
-            "command",
-            "shell",
-            "argv",
-            "exec",
-            "executable",
-        }
-
+        require(isinstance(spec, dict), "local task requires local_task_spec object")
+        forbidden = {"command", "shell", "argv", "exec", "executable"}
         overlap = forbidden.intersection(spec.keys())
         require(
             not overlap,
@@ -137,23 +121,11 @@ def validate_role_result(item: Any) -> None:
 
 
 def validate_candidate_decision(item: Any) -> None:
-    require(
-        isinstance(item, dict),
-        "candidate decision must be object",
-    )
-
+    require(isinstance(item, dict), "candidate decision must be object")
     cid = item.get("candidate_id")
-    require(
-        isinstance(cid, str) and bool(cid),
-        "candidate_id required",
-    )
-
+    require(isinstance(cid, str) and bool(cid), "candidate_id required")
     status = item.get("queue_status")
-    require(
-        status in QUEUE_STATES,
-        f"invalid queue_status: {status}",
-    )
-
+    require(status in QUEUE_STATES, f"invalid queue_status: {status}")
     reason = item.get("reason")
     require(
         isinstance(reason, str) and bool(reason.strip()),
@@ -165,14 +137,12 @@ def validate_response(
     response: Any,
     expected_run_id: str,
 ) -> dict[str, Any]:
-
     require(isinstance(response, dict), "response must be object")
-
     require(
-        response.get("run_id") == expected_run_id,
-        "run_id mismatch",
+        response.get("schema") == "PVA_AI_RESPONSE_V1",
+        "unexpected response schema",
     )
-
+    require(response.get("run_id") == expected_run_id, "run_id mismatch")
     require(
         response.get("economic_conclusion") == "NO_PROVEN_EDGE",
         "economic_conclusion must remain NO_PROVEN_EDGE",
@@ -180,18 +150,12 @@ def validate_response(
 
     role_results = response.get("role_results")
     require(isinstance(role_results, list), "role_results required")
-
     candidate_decisions = response.get("candidate_decisions")
-    require(
-        isinstance(candidate_decisions, list),
-        "candidate_decisions required",
-    )
-
+    require(isinstance(candidate_decisions, list), "candidate_decisions required")
     local_tasks = response.get("local_tasks", [])
     require(isinstance(local_tasks, list), "local_tasks must be list")
 
     seen_roles = set()
-
     for item in role_results:
         validate_role_result(item)
         aid = item["agent_id"]
@@ -199,45 +163,28 @@ def validate_response(
         seen_roles.add(aid)
 
     seen_candidates = set()
-
     for item in candidate_decisions:
         validate_candidate_decision(item)
         cid = item["candidate_id"]
-        require(
-            cid not in seen_candidates,
-            f"duplicate candidate: {cid}",
-        )
+        require(cid not in seen_candidates, f"duplicate candidate: {cid}")
         seen_candidates.add(cid)
 
-    # No direct executable task may be returned through local_tasks.
-    # Transport/executor tasks require a separate local approval/compiler.
+    forbidden = {"command", "shell", "argv", "exec", "executable"}
     for task in local_tasks:
         require(isinstance(task, dict), "local task must be object")
-
-        forbidden = {
-            "command",
-            "shell",
-            "argv",
-            "exec",
-            "executable",
-        }
-
         overlap = forbidden.intersection(task.keys())
-
         require(
             not overlap,
             "local_tasks contains executable fields: "
             + ",".join(sorted(overlap)),
         )
 
-    forbidden_top = {
+    for key in {
         "live_trading",
         "paid_actions",
         "wallet_actions",
         "openai_api",
-    }
-
-    for key in forbidden_top:
+    }:
         require(
             response.get(key) not in {True, "true", "TRUE", 1},
             f"forbidden action requested: {key}",
@@ -253,7 +200,6 @@ def candidate_path(candidate_id: str) -> Path:
         and ".." not in candidate_id,
         "unsafe candidate_id",
     )
-
     return CANDIDATES / f"{candidate_id}.json"
 
 
@@ -263,25 +209,18 @@ def apply_response(
     *,
     write: bool = False,
 ) -> dict[str, Any]:
-
     validated = validate_response(response, expected_run_id)
-
     packet_dir = PACKETS / expected_run_id
     require(packet_dir.is_dir(), "packet directory missing")
 
     packet_updates = []
     candidate_updates = []
 
-    # Build complete mutation plan first.
-    # Nothing is written until every referenced object validates.
     for result in validated["role_results"]:
         aid = result["agent_id"]
         path = packet_dir / f"{aid}.json"
-
         require(path.exists(), f"packet missing: {aid}")
-
         packet = load_json(path)
-
         require(
             packet.get("run_id") == expected_run_id,
             f"packet run mismatch: {aid}",
@@ -293,46 +232,30 @@ def apply_response(
             "finding": result.get("finding"),
             "evidence_refs": result.get("evidence_refs", []),
             "candidate_ids": result.get("candidate_ids", []),
-            "next_decisive_question":
-                result.get("next_decisive_question"),
-            "local_task_required":
-                result.get("local_task_required", False),
-            "local_task_spec":
-                result.get("local_task_spec"),
+            "next_decisive_question": result.get("next_decisive_question"),
+            "local_task_required": result.get("local_task_required", False),
+            "local_task_spec": result.get("local_task_spec"),
             "applied_at": now_iso(),
         }
-
-        # Guardrails cannot be relaxed by AI output.
         updated["live_trading"] = False
         updated["paid_actions"] = False
         updated["wallet_actions"] = False
-
         packet_updates.append((path, updated))
 
     for decision in validated["candidate_decisions"]:
         cid = decision["candidate_id"]
         path = candidate_path(cid)
-
         require(path.exists(), f"candidate missing: {cid}")
-
         candidate = load_json(path)
         updated = dict(candidate)
-
         updated["queue_status"] = decision["queue_status"]
         updated["queue_reason"] = decision["reason"]
-
         if "next_decisive_test" in decision:
-            updated["next_decisive_test"] = (
-                decision.get("next_decisive_test")
-            )
-
+            updated["next_decisive_test"] = decision.get("next_decisive_test")
         updated["updated_at"] = now_iso()
-
-        # AI output never changes these approvals.
         updated["live_trading"] = False
         updated["paid_actions"] = False
         updated["wallet_actions"] = False
-
         candidate_updates.append((path, updated))
 
     receipt = {
@@ -340,17 +263,11 @@ def apply_response(
         "run_id": expected_run_id,
         "validated_at": now_iso(),
         "write": write,
-        "packet_updates": [
-            str(p.relative_to(ROOT))
-            for p, _ in packet_updates
-        ],
+        "packet_updates": [str(path.relative_to(ROOT)) for path, _ in packet_updates],
         "candidate_updates": [
-            str(p.relative_to(ROOT))
-            for p, _ in candidate_updates
+            str(path.relative_to(ROOT)) for path, _ in candidate_updates
         ],
-        "local_task_requests": validated.get(
-            "local_tasks", []
-        ),
+        "local_task_requests": validated.get("local_tasks", []),
         "guardrails": {
             "live_trading": False,
             "paid_actions": False,
@@ -362,19 +279,11 @@ def apply_response(
     if write:
         for path, obj in packet_updates:
             save_json(path, obj)
-
         for path, obj in candidate_updates:
             save_json(path, obj)
-
-        receipt_path = (
-            RUNS
-            / f"{expected_run_id}-ai-response-receipt.json"
-        )
-
+        receipt_path = RUNS / f"{expected_run_id}-ai-response-receipt.json"
         save_json(receipt_path, receipt)
-        receipt["receipt_path"] = str(
-            receipt_path.relative_to(ROOT)
-        )
+        receipt["receipt_path"] = str(receipt_path.relative_to(ROOT))
 
     return receipt
 
@@ -388,13 +297,6 @@ if __name__ == "__main__":
     parser.add_argument("--write", action="store_true")
     args = parser.parse_args()
 
-    response_path = Path(args.response)
-    response = load_json(response_path)
-
-    receipt = apply_response(
-        response,
-        args.run_id,
-        write=args.write,
-    )
-
+    response = load_json(Path(args.response))
+    receipt = apply_response(response, args.run_id, write=args.write)
     print(json.dumps(receipt, indent=2, sort_keys=True))

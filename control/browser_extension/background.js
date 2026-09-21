@@ -24,7 +24,8 @@ async function injectIntoTab(tabId) {
         tabId
       },
       files: [
-        "content.js"
+        "content.js",
+        "ai_response_capture.js"
       ]
     });
 

@@ -23,6 +23,7 @@ def load_module():
 
 def base_response(run_id="hourly-test"):
     return {
+        "schema": "PVA_AI_RESPONSE_V1",
         "run_id": run_id,
         "role_results": [
             {
@@ -47,6 +48,15 @@ def test_valid_response():
     mod = load_module()
     x = base_response()
     assert mod.validate_response(x, "hourly-test") == x
+
+
+def test_wrong_schema_rejected():
+    mod = load_module()
+    x = base_response()
+    x["schema"] = "OTHER"
+
+    with pytest.raises(mod.ValidationError, match="schema"):
+        mod.validate_response(x, "hourly-test")
 
 
 def test_wrong_run_rejected():

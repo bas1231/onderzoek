@@ -43,11 +43,6 @@ VALID_STATES = {
     "PARKED",
 }
 
-# PVA resource priority:
-# P0 system safety
-# P1 running/prospective evidence
-# P2 decisive falsification/reproduction
-# P3 discovery/build
 PRIORITIES = {
     "P0": 0,
     "P1": 1,
@@ -121,25 +116,43 @@ PROOF_GATES = {
 }
 
 
-def proof_gate(result: dict[str, Any], upstream_ids: set[str]) -> tuple[bool, list[str]]:
+def proof_gate(
+    result: dict[str, Any],
+    upstream_ids: set[str],
+) -> tuple[bool, list[str]]:
     cid = str(result.get("candidate_id", ""))
     if not cid or cid not in upstream_ids:
         return False, ["candidate_not_upstream_validated"]
     if str(result.get("status", "")).upper() != "PASS":
         return False, ["independent_reproduction_not_pass"]
+
     gates = result.get("gates")
     if not isinstance(gates, dict):
         return False, ["missing_structured_gates"]
-    failed = sorted(g for g in PROOF_GATES if str(gates.get(g, "")).upper() != "PASS")
+
+    failed = sorted(
+        gate
+        for gate in PROOF_GATES
+        if str(gates.get(gate, "")).upper() != "PASS"
+    )
+
     economics = result.get("economics")
     if not isinstance(economics, dict):
         failed.append("missing_economics")
     else:
-        for key in ("fees", "spread", "slippage", "fills", "settlement", "capacity"):
+        for key in (
+            "fees",
+            "spread",
+            "slippage",
+            "fills",
+            "settlement",
+            "capacity",
+        ):
             if key not in economics:
                 failed.append("economics_" + key)
         if economics.get("net_edge") is None:
             failed.append("economics_net_edge")
+
     return not failed, failed
 
 
@@ -152,26 +165,43 @@ def propagate_validation(run_dir: Path) -> dict[str, Any]:
     falsifier = load_json(falsifier_path) if falsifier_path.exists() else {}
     reproducer = load_json(reproducer_path) if reproducer_path.exists() else {}
 
-    # Fail closed: only explicit structured PASS records advance. Notes,
-    # candidate self-claims, missing results, or generic COMPLETED states do not.
-    killer_pass = _validated_ids(killer.get("validation_results"), "PASS")
+    killer_pass = _validated_ids(
+        killer.get("validation_results"),
+        "PASS",
+    )
     falsifier["survivors"] = killer_pass
-    if killer_pass and falsifier.get("status") in {"PENDING", "WAITING_FOR_DATA", "READY"}:
+    if (
+        killer_pass
+        and falsifier.get("status")
+        in {"PENDING", "WAITING_FOR_DATA", "READY"}
+    ):
         falsifier["status"] = "PENDING"
 
-    falsifier_pass = _validated_ids(falsifier.get("validation_results"), "PASS")
+    falsifier_pass = _validated_ids(
+        falsifier.get("validation_results"),
+        "PASS",
+    )
     reproducer["reproduction_candidates"] = [
         cid for cid in falsifier_pass if cid in set(killer_pass)
     ]
-    if reproducer["reproduction_candidates"] and reproducer.get("status") in {"PENDING", "WAITING_FOR_DATA", "READY"}:
+    if (
+        reproducer["reproduction_candidates"]
+        and reproducer.get("status")
+        in {"PENDING", "WAITING_FOR_DATA", "READY"}
+    ):
         reproducer["status"] = "PENDING"
 
     if falsifier_path.exists():
         save_json(falsifier_path, falsifier)
+
     proof_candidates = []
     proof_rejections = {}
     upstream = set(reproducer.get("reproduction_candidates", []))
-    for result in reproducer.get("validation_results", []) if isinstance(reproducer.get("validation_results"), list) else []:
+    results = reproducer.get("validation_results", [])
+    if not isinstance(results, list):
+        results = []
+
+    for result in results:
         if not isinstance(result, dict):
             continue
         ok, reasons = proof_gate(result, upstream)
@@ -187,18 +217,35 @@ def propagate_validation(run_dir: Path) -> dict[str, Any]:
     return {
         "killer_pass": killer_pass,
         "falsifier_pass": falsifier_pass,
-        "reproduction_candidates": reproducer.get("reproduction_candidates", []),
+        "reproduction_candidates": reproducer.get(
+            "reproduction_candidates", []
+        ),
         "proof_candidates": sorted(set(proof_candidates)),
         "proof_rejections": proof_rejections,
-        "economic_conclusion": "PROVEN_EDGE_CANDIDATE" if proof_candidates else "NO_PROVEN_EDGE",
+        "economic_conclusion": (
+            "PROVEN_EDGE_CANDIDATE"
+            if proof_candidates
+            else "NO_PROVEN_EDGE"
+        ),
     }
 
 
 def decide(packet: dict[str, Any]) -> Decision:
     role = str(packet.get("agent_id", ""))
-
-    # Never overwrite terminal/in-flight states.
     current = str(packet.get("status", "PENDING"))
+
+    # A worker-produced NO_EVIDENCE is terminal for this run. A pre-worker
+    # NO_EVIDENCE remains re-evaluable so hydration can make new evidence
+    # READY in the normal preparation path.
+    if current == "NO_EVIDENCE" and isinstance(
+        packet.get("ai_result"), dict
+    ):
+        return Decision(
+            current,
+            str(packet.get("priority", "P3")),
+            "ai_result_preserved",
+        )
+
     if current in {
         "RUNNING",
         "WAITING_FOR_DATA",
@@ -222,7 +269,6 @@ def decide(packet: dict[str, Any]) -> Decision:
                 "P3",
                 "routed_evidence_available",
             )
-
         return Decision(
             "NO_EVIDENCE",
             "P3",
@@ -256,7 +302,10 @@ def decide(packet: dict[str, Any]) -> Decision:
         )
 
     if role == "independent_reproducer":
-        if packet.get("reproduction_candidates") or packet.get("survivors"):
+        if (
+            packet.get("reproduction_candidates")
+            or packet.get("survivors")
+        ):
             return Decision(
                 "READY",
                 "P2",
@@ -284,19 +333,15 @@ def decide(packet: dict[str, Any]) -> Decision:
 
 def enrich_packet(path: Path) -> dict[str, Any]:
     packet = load_json(path)
-
-    # Hard guardrails stay authoritative.
     packet["live_trading"] = False
     packet["paid_actions"] = False
     packet["wallet_actions"] = False
 
     decision = decide(packet)
-
     packet["status"] = decision.state
     packet["priority"] = decision.priority
     packet["orchestrator_reason"] = decision.reason
     packet["orchestrator_updated_at_unix"] = int(time.time())
-
     packet.setdefault("next_decisive_question", None)
     packet.setdefault("local_task_required", False)
     packet.setdefault("local_task_id", None)
@@ -307,16 +352,15 @@ def enrich_packet(path: Path) -> dict[str, Any]:
 
 def priority_key(packet: dict[str, Any]) -> tuple[int, int, str]:
     priority = str(packet.get("priority", "P3"))
-
-    # Older work wins inside the same priority:
-    # simple no-starvation mechanism.
     created = int(
         packet.get(
             "created_at_unix",
-            packet.get("orchestrator_updated_at_unix", int(time.time())),
+            packet.get(
+                "orchestrator_updated_at_unix",
+                int(time.time()),
+            ),
         )
     )
-
     return (
         PRIORITIES.get(priority, 99),
         created,
@@ -331,25 +375,23 @@ def orchestrate(run_dir: Path) -> dict[str, Any]:
     validation = propagate_validation(run_dir)
     packets = []
 
-    # Internal control-plane JSON files (for example _orchestration.json from
-    # an earlier invocation of the same run) are summaries, not agent packets.
-    # Skipping them makes repeated orchestration of one run idempotent.
     for path in sorted(run_dir.glob("*.json")):
         if path.name.startswith("_"):
             continue
         packets.append(enrich_packet(path))
 
     ordered = sorted(packets, key=priority_key)
-
     queue = [
         {
-            "agent_id": p.get("agent_id"),
-            "status": p.get("status"),
-            "priority": p.get("priority"),
-            "reason": p.get("orchestrator_reason"),
-            "local_task_required": p.get("local_task_required", False),
+            "agent_id": packet.get("agent_id"),
+            "status": packet.get("status"),
+            "priority": packet.get("priority"),
+            "reason": packet.get("orchestrator_reason"),
+            "local_task_required": packet.get(
+                "local_task_required", False
+            ),
         }
-        for p in ordered
+        for packet in ordered
     ]
 
     summary = {
@@ -371,14 +413,9 @@ def latest_run_dir() -> Path:
     if not PACKETS.exists():
         raise FileNotFoundError(PACKETS)
 
-    runs = sorted(
-        p for p in PACKETS.iterdir()
-        if p.is_dir()
-    )
-
+    runs = sorted(path for path in PACKETS.iterdir() if path.is_dir())
     if not runs:
         raise RuntimeError("no agent packet runs found")
-
     return runs[-1]
 
 
