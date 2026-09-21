@@ -1,0 +1,106 @@
+{
+  "schema": "PVA_SCHEDULED_AI_WORKER_CONTRACT_V1",
+  "repository": "bas1231/onderzoek",
+  "canonical_code_branch": "main",
+  "exchange_branch": "ai/runtime-exchange",
+  "request_prefix": "ai_exchange/requests",
+  "response_prefix": "ai_exchange/responses",
+  "request_schema": "PVA_AI_EXCHANGE_REQUEST_V1",
+  "response_envelope_schema": "PVA_AI_EXCHANGE_RESPONSE_V1",
+  "worker_response_schema": "PVA_AI_RESPONSE_V1",
+  "mode_priority": [
+    "LOCAL_EXCHANGE_REQUEST",
+    "NATIVE_SCHEDULED_RESEARCH"
+  ],
+  "local_runtime_policy": {
+    "required_for_native_research": false,
+    "manual_user_action_required": false,
+    "states": [
+      "LOCAL_RUNTIME_UNCONFIRMED",
+      "LOCAL_RUNTIME_CONFIRMED_IDLE",
+      "LOCAL_REQUEST_PENDING",
+      "LOCAL_REQUEST_SERVICED",
+      "LOCAL_EXCHANGE_BLOCKED"
+    ],
+    "confirmed_when": "at least one valid PVA_AI_EXCHANGE_REQUEST_V1 has been observed on the exchange branch",
+    "unconfirmed_when": "no valid exchange request has ever been observed; absence of a request is not proof that the local runtime is down",
+    "behavior_when_unconfirmed": "continue NATIVE_SCHEDULED_RESEARCH autonomously; never ask the user to git pull, restart, install, or run terminal commands merely to enable research",
+    "behavior_when_confirmed_idle": "continue NATIVE_SCHEDULED_RESEARCH autonomously until a new local request appears",
+    "behavior_when_request_pending": "service at most one valid oldest pending request before native discovery",
+    "browser_bridge_role": "optional fallback only; never a prerequisite for cloud-native research"
+  },
+  "local_exchange_request": {
+    "selection": "oldest request without a response; at most one per scheduled run",
+    "exact_role_coverage": true,
+    "echo_response_token": true,
+    "echo_request_sha256": true,
+    "response_create_only": true,
+    "browser_bridge_required": false,
+    "continue_broad_duplicate_sweep_after_request": false,
+    "reason": "the local request already contains point-in-time routed evidence; spend the scheduled turn on decisive specialist work instead of duplicating discovery"
+  },
+  "native_scheduled_research": {
+    "enabled_when_no_pending_exchange_request": true,
+    "enabled_when_local_runtime_unconfirmed": true,
+    "single_turn": true,
+    "flow": [
+      "GOVERNOR",
+      "PRIMARY_AND_RECON_DISCOVERY",
+      "EVIDENCE_AND_FAILURE_MEMORY",
+      "DYNAMIC_SPECIALIST_DISPATCH",
+      "RED_TEAM_WHEN_JUSTIFIED",
+      "INDEPENDENT_REPRODUCER_ONLY_FOR_SERIOUS_SURVIVOR",
+      "RESEARCH_DIRECTOR",
+      "GIT_REPORT_AND_STATE"
+    ],
+    "task_shape_policy": "parallel discovery; dependency-aware specialist analysis; sequential semantics-before-economics where required",
+    "waiting_releases_capacity": true,
+    "no_new_evidence_is_valid": true
+  },
+  "responsibilities": {
+    "PRIMARY_SCOUT": ["scout"],
+    "RECON_SCOUT": ["recon_scout"],
+    "SPECIALIST_MARKET_RESEARCH": ["weather_twc", "behavioral", "informed_flow"],
+    "SPECIALIST_MECHANICS": ["settlement", "microstructure"],
+    "SPECIALIST_ALGEBRA": ["algebra"],
+    "RED_TEAM": ["prebuild_killer", "chief_falsifier"],
+    "TEMPORARY_INDEPENDENT_REPRODUCER": ["independent_reproducer"],
+    "RESEARCH_DIRECTOR": ["research_director"]
+  },
+  "governor": {
+    "economic_default": "NO_PROVEN_EDGE",
+    "watch_is_not_hunt": true,
+    "watch_promotion_authority": false,
+    "scheduled_worker_candidate_promotion_authority": false,
+    "scheduled_worker_candidate_kill_authority": false,
+    "live_trading": false,
+    "order_submission": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "fund_movement": false,
+    "openai_api": false,
+    "public_legal_sources_only": true,
+    "preserve_negative_evidence": true,
+    "point_in_time_required": true,
+    "execution_evidence_required_for_economic_claim": true
+  },
+  "native_git_outputs": {
+    "hourly_report_prefix": "hourly-reports",
+    "report_status_default": "NO_PROVEN_EDGE",
+    "must_record": [
+      "new_evidence",
+      "specialist_results",
+      "negative_evidence",
+      "candidate_state_changes",
+      "next_decisive_questions",
+      "governor_status",
+      "local_runtime_state"
+    ]
+  },
+  "concurrency_policy": {
+    "plus_usage_mode": "LOW_USAGE",
+    "scheduled_turns_per_prediction_hour_target": 1,
+    "dynamic_specialist_slot": true,
+    "parallel_workers_only_when_independent_information_gain_justifies_it": true
+  }
+}

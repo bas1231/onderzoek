@@ -1,0 +1,81 @@
+name: V14 validation
+
+on:
+  push:
+    branches:
+      - ai/transport-neutral-autonomous-worker-v14
+  pull_request:
+    paths:
+      - 'control/hourly/**'
+      - 'control/browser_bridge.py'
+      - 'control/browser_bridge_core.py'
+      - 'tests/hourly/**'
+      - 'tests/bridge/**'
+      - '.github/workflows/v14-validation.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Create isolated test environment
+        run: |
+          python -m venv .venv
+          .venv/bin/python -m pip install --upgrade pip
+          .venv/bin/python -m pip install pytest 'pydantic>=2,<3'
+          git config user.email 'v14-ci@example.invalid'
+          git config user.name 'V14 CI'
+
+      - name: V14 target tests
+        run: |
+          .venv/bin/python -m pytest -q \
+            tests/hourly/test_ai_work_exchange_v14.py \
+            tests/hourly/test_git_ai_exchange_v14.py \
+            tests/hourly/test_hourly_wake_git_exchange_v14.py
+
+      - name: Hourly and bridge regression
+        run: |
+          .venv/bin/python -m pytest -q tests/hourly tests/bridge
+
+      - name: Python compile
+        run: |
+          .venv/bin/python -m compileall -q \
+            control/hourly \
+            control/browser_bridge.py \
+            control/browser_bridge_core.py
+
+      - name: Browser extension syntax
+        run: |
+          if command -v node >/dev/null 2>&1; then
+            for file in control/browser_extension/*.js; do
+              [ -f "$file" ] && node --check "$file"
+            done
+          fi
+
+      - name: Safety invariants
+        run: |
+          .venv/bin/python - <<'PY'
+          import json
+          from pathlib import Path
+          p = json.loads(Path('control/hourly/scheduled_worker_contract.json').read_text())
+          g = p['governor']
+          assert g['live_trading'] is False
+          assert g['paid_actions'] is False
+          assert g['wallet_actions'] is False
+          assert g['openai_api'] is False
+          assert g['watch_promotion_authority'] is False
+          assert g['scheduled_worker_candidate_promotion_authority'] is False
+          assert g['scheduled_worker_candidate_kill_authority'] is False
+          print('SAFETY_INVARIANTS_OK')
+          PY
