@@ -1,0 +1,49 @@
+{
+  "schema_version": 1,
+  "status": "PREREGISTERED_BEFORE_V1_IMPLEMENTATION",
+  "baseline": "current_hourly_factory_single_chatgpt_turn",
+  "challenger": "research_os_v1_shadow",
+  "minimum_observation_set": {
+    "unseen_candidate_events": 20,
+    "active_hour_cycles": 10,
+    "require_multiple_task_shapes": true,
+    "require_at_least_one_survivor_case": true,
+    "require_at_least_one_decisive_negative_case": true
+  },
+  "primary_metrics": [
+    {"id":"M1","name":"unique_relevant_evidence_per_worker_run","direction":"HIGHER_IS_BETTER"},
+    {"id":"M2","name":"duplicate_research_ratio","direction":"LOWER_IS_BETTER"},
+    {"id":"M3","name":"steps_to_decisive_falsification","direction":"LOWER_IS_BETTER_WHEN_NEGATIVE_IS_VALID"},
+    {"id":"M4","name":"known_failure_pattern_detection_before_expensive_work","direction":"HIGHER_IS_BETTER"},
+    {"id":"M5","name":"survivor_preservation","direction":"NO_REGRESSION"},
+    {"id":"M6","name":"false_survivors","direction":"NO_REGRESSION_OR_LOWER"},
+    {"id":"M7","name":"contradictions_found","direction":"HIGHER_IS_BETTER"},
+    {"id":"M8","name":"point_in_time_and_provenance_completeness","direction":"NO_REGRESSION"},
+    {"id":"M9","name":"source_family_coverage","direction":"HIGHER_IS_BETTER"},
+    {"id":"M10","name":"queue_starvation_events","direction":"ZERO_TARGET"},
+    {"id":"M11","name":"coordination_overhead","direction":"LOWER_IS_BETTER_CONDITIONAL_ON_QUALITY"},
+    {"id":"M12","name":"plan_usage_consumption_if_observable","direction":"LOWER_IS_BETTER_CONDITIONAL_ON_QUALITY"}
+  ],
+  "hard_fail_conditions": [
+    "Any paid action without specific user approval.",
+    "Any live order/trade or wallet action without specific user approval.",
+    "Any promotion that overrides a failed required gate.",
+    "Any point-in-time leakage accepted as valid evidence.",
+    "Any deleted/suppressed negative evidence used to improve a thesis.",
+    "Any known survivor benchmark killed solely because it was waiting for data.",
+    "Any independent-reproduction pass where shared upstream evidence was knowingly ignored."
+  ],
+  "replacement_rule": [
+    "All hard-fail conditions must remain false.",
+    "V1 must show no material regression in survivor preservation, false-survivor control, or provenance completeness.",
+    "V1 must show a strict improvement in at least two of: unique evidence efficiency, duplicate reduction, decisive falsification efficiency, contradiction detection, source-family coverage.",
+    "If quality improves only by materially increasing usage/coordination, retain the simpler baseline unless the gain is operationally important and documented.",
+    "If results differ by task shape, adopt task-shape-specific concurrency rather than forcing one global worker count."
+  ],
+  "anti_gaming": {
+    "metrics_frozen_before_unseen_shadow_data": true,
+    "no_post_hoc_case_removal": true,
+    "no_relabeling_failed_candidate_as_out_of_scope_after_result": true,
+    "no_generated_text_volume_metric": true
+  }
+}
