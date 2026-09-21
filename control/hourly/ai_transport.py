@@ -10,6 +10,8 @@ RUNS = ROOT / "knowledge/runs"
 
 WAKE_REASON = "HOURLY_RESEARCH_WAKE"
 SCHEMA = "PVA_AI_CHAT_WORK_V1"
+AI_RESPONSE_START = "<<<PREDICTION_AI_RESPONSE>>>"
+AI_RESPONSE_END = "<<<END_PREDICTION_AI_RESPONSE>>>"
 
 
 class TransportError(ValueError):
@@ -186,19 +188,25 @@ def build_chat_item(
                 response_path(resolved_run_id).relative_to(ROOT)
             ),
             "validator": "control/hourly/ai_response.py",
+            "marker_start": AI_RESPONSE_START,
+            "marker_end": AI_RESPONSE_END,
             "economic_conclusion": "NO_PROVEN_EDGE",
             "direct_execution_allowed": False,
         },
         "instruction": (
             "Act as the Prediction Research Director for this single "
             "hourly run. Analyze the bundled specialist work and candidate "
-            "handoff in one ChatGPT turn. Return only one structured "
-            "PVA_AI_RESPONSE_V1 object for this run. Preserve "
-            "NO_PROVEN_EDGE unless later separately validated gates permit "
-            "otherwise; this transport itself never authorizes promotion. "
-            "Do not return executable shell, argv or commands. Local work "
-            "may only be requested descriptively through local_task_spec. "
-            "No live trading, paid actions, wallet actions or OpenAI API."
+            "handoff in one ChatGPT turn. Return exactly one structured "
+            "PVA_AI_RESPONSE_V1 JSON object, wrapped between the literal "
+            f"markers {AI_RESPONSE_START} and {AI_RESPONSE_END}. Do not put "
+            "prose, Markdown fences, or any other content inside or outside "
+            "that marker block. Preserve NO_PROVEN_EDGE unless later "
+            "separately validated gates permit otherwise; this transport "
+            "itself never authorizes promotion. Recon WATCH triage is "
+            "research-only and has no promotion authority. Do not return "
+            "executable shell, argv or commands. Local work may only be "
+            "requested descriptively through local_task_spec. No live "
+            "trading, paid actions, wallet actions or OpenAI API."
         ),
         "guardrails": {
             "live_trading": False,
