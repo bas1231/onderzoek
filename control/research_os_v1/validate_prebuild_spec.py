@@ -176,9 +176,50 @@ def main() -> int:
         fail(errors, "MODEL_CAPABILITY_TIERS_INCOMPLETE")
 
     topology = objs.get("account_aware_plus_topology.json") or {}
+    if topology.get("schema_version") != 2:
+        fail(errors, "PLUS_TOPOLOGY_SCHEMA_NOT_V2")
+
+    product_limit = topology.get("product_limit") or {}
+    max_tasks = product_limit.get("max_active_scheduled_tasks_plus")
+    if not isinstance(max_tasks, int) or max_tasks <= 0:
+        fail(errors, "PLUS_PRODUCT_LIMIT_INVALID")
+    if product_limit.get("treat_as_runtime_constant_forever") is not False:
+        fail(errors, "PLUS_PRODUCT_LIMIT_IMPROPERLY_FROZEN_FOREVER")
+
     account = topology.get("observed_account_state") or {}
-    if account.get("active_tasks_total") != 5 or account.get("free_slots") != 0:
-        fail(errors, "PLUS_TOPOLOGY_DOES_NOT_MATCH_AUDITED_FULL_SLOT_STATE")
+    active = account.get("active_tasks_total")
+    prediction = account.get("prediction_research_tasks")
+    reserved = account.get("reserved_non_prediction_tasks")
+    free_slots = account.get("free_slots")
+    if not all(isinstance(v, int) for v in [active, prediction, reserved, free_slots]):
+        fail(errors, "PLUS_ACCOUNT_SNAPSHOT_COUNTS_INVALID")
+    else:
+        if active != prediction + reserved:
+            fail(errors, "PLUS_ACCOUNT_SNAPSHOT_ARITHMETIC_INVALID")
+        if isinstance(max_tasks, int) and free_slots != max_tasks - active:
+            fail(errors, "PLUS_ACCOUNT_SNAPSHOT_FREE_SLOT_ARITHMETIC_INVALID")
+    if account.get("snapshot_only") is not True:
+        fail(errors, "PLUS_ACCOUNT_STATE_NOT_MARKED_SNAPSHOT")
+    if account.get("snapshot_is_runtime_invariant") is not False:
+        fail(errors, "PLUS_ACCOUNT_SNAPSHOT_TREATED_AS_RUNTIME_INVARIANT")
+    if account.get("mutation_performed") is not False:
+        fail(errors, "PLUS_ACCOUNT_SNAPSHOT_SHOULD_NOT_MUTATE_TASKS")
+
+    capacity = topology.get("runtime_capacity_policy") or {}
+    required_capacity_rules = {
+        "reobserve_before_any_task_reconfiguration": True,
+        "never_assume_snapshot_is_current": True,
+        "never_fail_scientific_runtime_only_because_snapshot_became_stale": True,
+        "never_disable_existing_task_to_make_room_without_user_instruction": True,
+    }
+    for key, expected in required_capacity_rules.items():
+        if capacity.get(key) is not expected:
+            fail(errors, f"PLUS_CAPACITY_POLICY_MISSING:{key}")
+    if capacity.get("if_capacity_is_lower_than_design_requires") != "DEGRADE_CONCURRENCY_NOT_SCIENTIFIC_GATES":
+        fail(errors, "PLUS_CAPACITY_MAY_DEGRADE_SCIENTIFIC_GATES")
+    if capacity.get("if_capacity_is_higher_than_observed") != "DO_NOT_CONSUM_EXTRA_CAPACITY_AUTOMATICALLY":
+        fail(errors, "PLUS_CAPACITY_MAY_AUTO_CONSUME_NEW_SLOT")
+
     target = topology.get("target_prediction_topology") or {}
     prediction_lanes = [
         value
@@ -191,13 +232,15 @@ def main() -> int:
         if value.get("protected_from_research_os")
     ]
     if len(prediction_lanes) != 4 or len(reserved_lanes) != 1:
-        fail(errors, "PLUS_TOPOLOGY_MUST_PRESERVE_4_PLUS_1_SLOT_LAYOUT")
-    if (
-        topology.get("cost_policy", {})
-        .get("disable_existing_non_prediction_task_to_free_capacity")
-        is not False
-    ):
+        fail(errors, "PLUS_TOPOLOGY_MUST_PRESERVE_4_PLUS_1_DESIGN_LAYOUT")
+
+    cost_policy = topology.get("cost_policy") or {}
+    if cost_policy.get("disable_existing_non_prediction_task_to_free_capacity") is not False:
         fail(errors, "PLUS_TOPOLOGY_MAY_NOT_EVICT_EXISTING_NON_PREDICTION_TASK")
+    if cost_policy.get("change_existing_task_schedule_without_user_instruction") is not False:
+        fail(errors, "PLUS_TOPOLOGY_MAY_NOT_RECONFIGURE_TASKS_SILENTLY")
+    if cost_policy.get("consume_newly_available_task_slot_automatically") is not False:
+        fail(errors, "PLUS_TOPOLOGY_MAY_NOT_AUTO_CONSUME_FREE_SLOT")
 
     shadow = objs.get("shadow_acceptance.json") or {}
     if shadow.get("schema_version") != 2:
