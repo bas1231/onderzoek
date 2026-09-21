@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/weather_e401_event_discovery_a10.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-21T15:31:31.172819+00:00",
+  "hypothesis_id": "KWI-MARKET-REACTION-E401",
+  "source_commit": "f3032240401f5072186628706bd53723c8b39b24",
+  "started_at": "2026-09-21T15:31:26.753326+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "dc94a6ee4e62ad416d0221bc3cdacb06c42fde487bb15d9e5fd5a79ee7e3d385",
+  "task_class": "research",
+  "task_id": "EDGE-HUNTER-KWI-EVENT-DISCOVERY-E401A10"
+}
