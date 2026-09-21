@@ -1,0 +1,14 @@
+{
+  "build_authorization": null,
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/weather_e401_ws_sequence_diagnose_a12r1.py"
+  ],
+  "hypothesis_id": "KWI-MARKET-REACTION-E401",
+  "live_trading": false,
+  "operation": "python",
+  "task_class": "research",
+  "task_id": "EDGE-HUNTER-KWI-WS-SEQUENCE-DIAG-E401A12R1",
+  "timeout_seconds": 30,
+  "working_directory": "."
+}
