@@ -5,6 +5,11 @@
   "roles": [
     {
       "authority": "DISCOVERY_ONLY",
+      "id": "recon_scout",
+      "purpose": "Offensive economic reconnaissance for public market leaks, failures, successes, behavioral anomalies and mechanism weaknesses"
+    },
+    {
+      "authority": "DISCOVERY_ONLY",
       "id": "scout",
       "purpose": "Broad discovery of new public evidence, venues, papers, code and anomalies"
     },
@@ -60,6 +65,6 @@
     }
   ],
   "valid_null_result": "NO_PROVEN_EDGE",
-  "version": 1,
+  "version": 2,
   "wallet_actions": false
 }
