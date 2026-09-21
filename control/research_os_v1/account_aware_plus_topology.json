@@ -1,19 +1,31 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "status": "ACCOUNT_AWARE_DESIGN_ONLY",
   "observed_at": "2026-09-21",
   "product_limit": {
     "max_active_scheduled_tasks_plus": 5,
-    "source": "OpenAI Scheduled Tasks documentation"
+    "source": "OpenAI Help Center — Scheduled tasks in ChatGPT",
+    "source_checked_at": "2026-09-21",
+    "treat_as_runtime_constant_forever": false
   },
   "observed_account_state": {
     "active_tasks_total": 5,
     "prediction_research_tasks": 4,
     "reserved_non_prediction_tasks": 1,
     "free_slots": 0,
-    "mutation_performed": false
+    "mutation_performed": false,
+    "snapshot_only": true,
+    "snapshot_is_runtime_invariant": false
   },
-  "constraint": "Research OS must not require creation of an additional active Scheduled Task while the existing non-prediction task remains enabled.",
+  "runtime_capacity_policy": {
+    "reobserve_before_any_task_reconfiguration": true,
+    "never_assume_snapshot_is_current": true,
+    "never_fail_scientific_runtime_only_because_snapshot_became_stale": true,
+    "never_disable_existing_task_to_make_room_without_user_instruction": true,
+    "if_capacity_is_lower_than_design_requires": "DEGRADE_CONCURRENCY_NOT_SCIENTIFIC_GATES",
+    "if_capacity_is_higher_than_observed": "DO_NOT_CONSUM_EXTRA_CAPACITY_AUTOMATICALLY"
+  },
+  "constraint": "Research OS must not require creation of an additional active Scheduled Task while capacity is unavailable, and must never evict an existing non-prediction task without explicit user instruction.",
   "target_prediction_topology": {
     "slot_1": {
       "lane": "PRIMARY_SCOUT",
@@ -42,14 +54,14 @@
     }
   },
   "important_tradeoff": {
-    "current_prediction_pattern": "Four staggered prediction tasks collectively approximate one prediction run per hour.",
+    "current_prediction_pattern_at_observation": "Four staggered prediction tasks collectively approximated one prediction run per hour.",
     "full_four_lane_hourly_pattern": "Four research task runs per hour, one per lane, would consume materially more Plus task/model allowance.",
     "decision": "Do not activate four-lane hourly execution until a canary measures useful unique evidence per run and usage impact."
   },
   "canary_modes": [
     {
       "id": "CANARY_LOW_USAGE",
-      "description": "Keep current approximate one-model-run-per-hour cadence; test six-domain context/routing inside existing transport first.",
+      "description": "Keep current approximate one-model-run-per-hour cadence when available; test six-domain context/routing inside existing transport first.",
       "usage_change": "MINIMAL",
       "preferred_first": true
     },
@@ -57,21 +69,24 @@
       "id": "CANARY_DUAL_DISCOVERY",
       "description": "Use two genuinely independent discovery lanes only during a bounded shadow interval; leave specialist/director consolidation conservative.",
       "usage_change": "MODERATE",
-      "requires_explicit_task_reconfiguration": true
+      "requires_explicit_task_reconfiguration": true,
+      "requires_fresh_capacity_observation": true
     },
     {
       "id": "CANARY_FOUR_LANE",
       "description": "Primary Scout + Recon Scout + dynamic Specialist/RedTeam/Repro + Director each operate as separate hourly task lanes.",
       "usage_change": "HIGH_RELATIVE_TO_CURRENT",
       "requires_explicit_task_reconfiguration": true,
+      "requires_fresh_capacity_observation": true,
       "activation_gate": "Only after low-usage and dual-discovery canaries show enough incremental value."
     }
   ],
-  "reproducer_policy": "Independent Reproducer never consumes a sixth active task slot; it temporarily borrows the dynamic specialist/red-team slot and is isolated by input contract.",
+  "reproducer_policy": "Independent Reproducer never requires a sixth active task slot; it temporarily borrows the dynamic specialist/red-team slot when that topology is actually available and is isolated by input contract.",
   "cost_policy": {
     "create_paid_api_workers": false,
     "buy_credits_automatically": false,
     "disable_existing_non_prediction_task_to_free_capacity": false,
-    "change_existing_task_schedule_without_user_instruction": false
+    "change_existing_task_schedule_without_user_instruction": false,
+    "consume_newly_available_task_slot_automatically": false
   }
 }
