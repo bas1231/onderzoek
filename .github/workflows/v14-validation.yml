@@ -69,10 +69,13 @@ jobs:
           import json
           from pathlib import Path
           p = json.loads(Path('control/hourly/scheduled_worker_contract.json').read_text())
-          assert p['governor']['live_trading'] is False
-          assert p['governor']['paid_actions'] is False
-          assert p['governor']['wallet_actions'] is False
-          assert p['governor']['openai_api'] is False
-          assert p['governor']['watch_has_no_promotion_authority'] is True
+          g = p['governor']
+          assert g['live_trading'] is False
+          assert g['paid_actions'] is False
+          assert g['wallet_actions'] is False
+          assert g['openai_api'] is False
+          assert g['watch_promotion_authority'] is False
+          assert g['scheduled_worker_candidate_promotion_authority'] is False
+          assert g['scheduled_worker_candidate_kill_authority'] is False
           print('SAFETY_INVARIANTS_OK')
           PY
