@@ -19,6 +19,7 @@ JSON_FILES = [
     BASE / "task_shape_policy.json",
     BASE / "discovery_coverage_policy.json",
     BASE / "model_budget_policy.json",
+    BASE / "account_aware_plus_topology.json",
     BASE / "worker_contract.schema.json",
     BASE / "evidence_graph.schema.json",
     BASE / "canonical_candidate.schema.json",
@@ -30,6 +31,7 @@ JSON_FILES = [
     BENCH / "shadow_acceptance.json",
 ]
 DOC_FILES = [
+    DOCS / "RESEARCH_OS_V1_INDEX.md",
     DOCS / "RESEARCH_OS_V1_PREBUILD_SPEC.md",
     DOCS / "RESEARCH_OS_V1_PREBUILD_AUDIT.md",
     DOCS / "RESEARCH_OS_V1_WORKER_CONTRACTS.md",
@@ -133,6 +135,18 @@ def main() -> int:
             fail(errors, f"MODEL_BUDGET_HIDDEN_SPEND_NOT_DISABLED:{key}")
     if len(budget.get("capability_tiers") or {}) < 4:
         fail(errors, "MODEL_CAPABILITY_TIERS_INCOMPLETE")
+
+    topology = objs.get("account_aware_plus_topology.json") or {}
+    account = topology.get("observed_account_state") or {}
+    if account.get("active_tasks_total") != 5 or account.get("free_slots") != 0:
+        fail(errors, "PLUS_TOPOLOGY_DOES_NOT_MATCH_AUDITED_FULL_SLOT_STATE")
+    target = topology.get("target_prediction_topology") or {}
+    prediction_lanes = [v for v in target.values() if not v.get("protected_from_research_os")]
+    reserved_lanes = [v for v in target.values() if v.get("protected_from_research_os")]
+    if len(prediction_lanes) != 4 or len(reserved_lanes) != 1:
+        fail(errors, "PLUS_TOPOLOGY_MUST_PRESERVE_4_PLUS_1_SLOT_LAYOUT")
+    if topology.get("cost_policy", {}).get("disable_existing_non_prediction_task_to_free_capacity") is not False:
+        fail(errors, "PLUS_TOPOLOGY_MAY_NOT_EVICT_EXISTING_NON_PREDICTION_TASK")
 
     shadow = objs.get("shadow_acceptance.json") or {}
     hard = "\n".join(shadow.get("hard_fail_conditions") or []).lower()
