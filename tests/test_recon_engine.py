@@ -97,3 +97,38 @@ def test_same_source_repetition_does_not_promote_to_hunt(tmp_path):
     stored=m.load_json(m.WATCHLIST,{})["items"][0]
     assert stored["status"]=="WATCH"
     assert stored["independent_source_count"]==1
+
+
+def test_hunt_plan_is_research_only_and_falsification_first(tmp_path):
+    m=load(Path("control/hourly/recon_engine.py"))
+    m.HUNT_PLANS=tmp_path/"hunts"
+    item={
+        "id":"RECON-test","status":"HUNT","attack_mode":"PREDATOR",
+        "claim":"Repeated public evidence suggests a mechanism; unproven.",
+        "observation_count":2,
+        "observation_history":[
+            {"source_id":"a","document_sha256":"1"},
+            {"source_id":"b","document_sha256":"2"},
+        ],
+        "economic_model":{"who_loses":None,"why":None,"who_captures":None,"public_trigger":"adverse selection"},
+        "falsification":{"next_decisive_test":"Test point-in-time predictiveness after costs.","specialist_route":["microstructure","behavioral"]},
+    }
+    plans,path=m.write_hunt_plans("run-test",[item])
+    assert path is not None and path.exists()
+    assert len(plans)==1
+    plan=plans[0]
+    assert plan["tests"]["primary_falsification"]=="Test point-in-time predictiveness after costs."
+    assert plan["evidence"]["independent_source_ids"]==["a","b"]
+    assert plan["execution_gate"]["research_only"] is True
+    assert plan["execution_gate"]["live_trading"] is False
+    assert plan["execution_gate"]["paid_actions"] is False
+    assert plan["execution_gate"]["wallet_actions"] is False
+    assert plan["execution_gate"]["economic_conclusion"]=="NO_PROVEN_EDGE"
+
+def test_no_hunt_means_no_hunt_plan_file(tmp_path):
+    m=load(Path("control/hourly/recon_engine.py"))
+    m.HUNT_PLANS=tmp_path/"hunts"
+    plans,path=m.write_hunt_plans("run-test",[{"id":"x","status":"WATCH"}])
+    assert plans==[]
+    assert path is None
+    assert not m.HUNT_PLANS.exists()
