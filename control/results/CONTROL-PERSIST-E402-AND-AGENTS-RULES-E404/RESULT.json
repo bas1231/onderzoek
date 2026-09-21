@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/persist_e402_and_agents_rules_e404.py"
+  ],
+  "exit_code": 1,
+  "finished_at": "2026-09-21T15:20:04.764529+00:00",
+  "hypothesis_id": "CONTROL-BRIDGE-RELIABILITY",
+  "source_commit": "e32eb19ad82556837f340a5c08ea89c2fb2fb7fa",
+  "started_at": "2026-09-21T15:20:04.737498+00:00",
+  "status": "failed",
+  "stderr_sha256": "08f50719f3eac2f17de8f3df4db229d9b18562c8f9babb4d836c62bed3a2b96b",
+  "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "task_class": "infrastructure",
+  "task_id": "CONTROL-PERSIST-E402-AND-AGENTS-RULES-E404"
+}
