@@ -4,7 +4,7 @@
 This module never adjusts the system clock. It calls Linux adjtimex() with
 modes=0 and ntp_gettime() to read kernel time-discipline state. Evidence is
 eligible only when both APIs agree that the clock is synchronized and the
-reported maximum/estimated error stays within conservative local thresholds.
+reported error and offset stay within conservative local thresholds.
 
 This is an evidence-quality gate for latency research, not a claim that the
 kernel values equal an external ground-truth UTC comparison.
@@ -21,6 +21,8 @@ import platform
 
 MAX_ERROR_MS = 100.0
 MAX_EST_ERROR_MS = 100.0
+MAX_ABS_OFFSET_MS = 100.0
+MAX_API_ERROR_DELTA_MS = 2.0
 
 TIME_OK = 0
 TIME_INS = 1
@@ -155,9 +157,11 @@ def evaluate(raw: RawKernelClock) -> dict:
             raw.ntp_esterror_us,
         )
     )
+    maxerror_delta_ms = abs(maxerror_ms - ntp_maxerror_ms)
+    esterror_delta_ms = abs(esterror_ms - ntp_esterror_ms)
     api_agree = bool(
-        raw.maxerror_us == raw.ntp_maxerror_us
-        and raw.esterror_us == raw.ntp_esterror_us
+        maxerror_delta_ms <= MAX_API_ERROR_DELTA_MS
+        and esterror_delta_ms <= MAX_API_ERROR_DELTA_MS
     )
     error_bounds_ok = bool(
         errors_nonnegative
@@ -166,6 +170,7 @@ def evaluate(raw: RawKernelClock) -> dict:
         and ntp_maxerror_ms <= MAX_ERROR_MS
         and ntp_esterror_ms <= MAX_EST_ERROR_MS
     )
+    offset_bounds_ok = abs(offset_ms) <= MAX_ABS_OFFSET_MS
     eligible = bool(
         adj_state_ok
         and ntp_state_ok
@@ -173,6 +178,7 @@ def evaluate(raw: RawKernelClock) -> dict:
         and not clockerr_flag
         and api_agree
         and error_bounds_ok
+        and offset_bounds_ok
     )
 
     return {
@@ -185,6 +191,8 @@ def evaluate(raw: RawKernelClock) -> dict:
         "ntp_maxerror_ms": ntp_maxerror_ms,
         "esterror_ms": esterror_ms,
         "ntp_esterror_ms": ntp_esterror_ms,
+        "maxerror_api_delta_ms": maxerror_delta_ms,
+        "esterror_api_delta_ms": esterror_delta_ms,
         "kernel_status": raw.status,
         "sta_unsync": unsync_flag,
         "sta_clockerr": clockerr_flag,
@@ -192,11 +200,14 @@ def evaluate(raw: RawKernelClock) -> dict:
         "ntp_gettime_return": raw.ntp_gettime_return,
         "api_error_fields_agree": api_agree,
         "error_bounds_ok": error_bounds_ok,
+        "offset_bounds_ok": offset_bounds_ok,
         "evidence_clock_eligible": eligible,
         "read_only": True,
         "thresholds": {
             "max_error_ms": MAX_ERROR_MS,
             "max_est_error_ms": MAX_EST_ERROR_MS,
+            "max_abs_offset_ms": MAX_ABS_OFFSET_MS,
+            "max_api_error_delta_ms": MAX_API_ERROR_DELTA_MS,
         },
     }
 
