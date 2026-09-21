@@ -62,3 +62,38 @@ def test_legacy_watch_noise_is_demoted_from_persistent_state(tmp_path):
     assert persisted["items"] == []
     assert all(x["id"] != legacy["id"] for x in persisted_graph["nodes"])
     assert all(x["from"] != legacy["id"] for x in persisted_graph["edges"])
+
+
+def test_hunt_gate_requires_repeated_independent_public_sources(tmp_path):
+    m=load(Path("control/hourly/recon_engine.py"))
+    m.WATCHLIST=tmp_path/"watchlist.json"
+    m.GRAPH=tmp_path/"graph.json"
+    first=m.discover({"scout":{"evidence":[{"source_id":"rules-a","document_sha256":"a","retrieved_at":"2026-01-01T00:00:00Z","snippet":"Prediction market contracts settle from an official settlement source. Traders price each contract and payout using the named source."}]}})
+    target=[x for x in first if x["attack_mode"]=="MECHANISM_BREAKER"][0]
+    m.update_watchlist([target])
+    stored=m.load_json(m.WATCHLIST,{})["items"][0]
+    assert stored["status"]=="WATCH"
+    assert stored["hunt_gate"]["passes"] is False
+
+    second=dict(target)
+    second["observed_at"]="2026-01-02T00:00:00Z"
+    second["sources"]=[dict(target["sources"][0], source_id="rules-b", document_sha256="b")]
+    m.update_watchlist([second])
+    stored=m.load_json(m.WATCHLIST,{})["items"][0]
+    assert stored["status"]=="HUNT"
+    assert stored["hunt_gate"]["passes"] is True
+    assert stored["independent_source_count"]==2
+    assert "RECON_HUNT" in stored["labels"]
+
+def test_same_source_repetition_does_not_promote_to_hunt(tmp_path):
+    m=load(Path("control/hourly/recon_engine.py"))
+    m.WATCHLIST=tmp_path/"watchlist.json"
+    m.GRAPH=tmp_path/"graph.json"
+    finding=m.discover({"scout":{"evidence":[{"source_id":"rules-a","document_sha256":"a","retrieved_at":"2026-01-01T00:00:00Z","snippet":"Prediction market contracts settle from an official settlement source. Traders price each contract and payout using the named source."}]}})[0]
+    m.update_watchlist([finding])
+    repeat=dict(finding)
+    repeat["sources"]=[dict(finding["sources"][0], document_sha256="b")]
+    m.update_watchlist([repeat])
+    stored=m.load_json(m.WATCHLIST,{})["items"][0]
+    assert stored["status"]=="WATCH"
+    assert stored["independent_source_count"]==1
