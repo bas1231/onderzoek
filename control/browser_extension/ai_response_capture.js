@@ -129,6 +129,7 @@
       response &&
       typeof response === "object" &&
       !Array.isArray(response) &&
+      response.schema === "PVA_AI_RESPONSE_V1" &&
       typeof response.run_id === "string" &&
       response.run_id.startsWith("hourly-") &&
       typeof response.response_token === "string" &&
