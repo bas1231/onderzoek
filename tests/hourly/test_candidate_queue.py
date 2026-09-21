@@ -106,3 +106,19 @@ def test_no_proof_candidate_review_is_null_result(tmp_path):
     path=mod.write_proof_review("run-null",{"proof_candidates":[]})
     data=json.loads(path.read_text())
     assert data["status"]=="NO_PROVEN_EDGE"
+
+
+def test_e2e_director_review_preserves_boundary(tmp_path):
+    mod=load_module()
+    mod.ROOT=tmp_path
+    mod.RUNS=tmp_path/"knowledge/runs"
+    mod.RUNS.mkdir(parents=True)
+    review=mod.write_proof_review("acceptance",{
+        "proof_candidates":["TRUE"],
+        "proof_rejections":{"FAKE":["out_of_sample"]}
+    })
+    data=json.loads(review.read_text())
+    assert data["status"]=="DIRECTOR_REVIEW_REQUIRED"
+    assert data["automatic_candidate_mutation"] is False
+    assert data["automatic_proven_edge"] is False
+    assert not (tmp_path/"knowledge/candidates/TRUE.json").exists()
