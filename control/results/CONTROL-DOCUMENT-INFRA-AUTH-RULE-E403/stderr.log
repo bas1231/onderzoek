@@ -1,0 +1,4 @@
+  File "/home/leonh/prediction_research/control/jobs/document_infrastructure_bridge_auth_rule_e403.py", line 43
+    TARGET.write_text(text.rstrip() + SECTION + '
+                                                ^
+SyntaxError: unterminated string literal (detected at line 43)

@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/document_infrastructure_bridge_auth_rule_e403.py"
+  ],
+  "exit_code": 1,
+  "finished_at": "2026-09-21T15:17:31.779219+00:00",
+  "hypothesis_id": "CONTROL-BRIDGE-RELIABILITY",
+  "source_commit": "650f02c40ef5a7f78c803a476d5294870ed1f744",
+  "started_at": "2026-09-21T15:17:31.766750+00:00",
+  "status": "failed",
+  "stderr_sha256": "1988ea9f1d52a77575c50830456eed4d330e7d2beda7ae34f99e1fce0c4601b8",
+  "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "task_class": "infrastructure",
+  "task_id": "CONTROL-DOCUMENT-INFRA-AUTH-RULE-E403"
+}
