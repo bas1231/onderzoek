@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/commit_bridge_incident_hygiene_e402r2.py"
+  ],
+  "exit_code": 1,
+  "finished_at": "2026-09-21T15:15:32.109590+00:00",
+  "hypothesis_id": "CONTROL-BRIDGE-RELIABILITY",
+  "source_commit": "4389b1344ad22f91f1207d9160ed902d28b330e5",
+  "started_at": "2026-09-21T15:15:32.061392+00:00",
+  "status": "failed",
+  "stderr_sha256": "c6ee50e7ab61caccac2d65884a703837880ea0b27207363a615bbfc4b5c2f8fc",
+  "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "task_class": "infrastructure",
+  "task_id": "CONTROL-BRIDGE-INCIDENT-HYGIENE-E402R2"
+}
