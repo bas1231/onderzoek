@@ -11,7 +11,7 @@ BRANCH = "ai/weather-madis-ldm-a19b"
 V1_JOB = ROOT / "control/jobs/weather_away_a19b.py"
 V1_REPORT = ROOT / "evidence/weather/WEATHER-AWAY-A19B-latest.json"
 V1_PROOF = ROOT / "evidence/weather/A19B_V1_IMMUTABLE_PROOF.json"
-V2_JOB = ROOT / "control/jobs/validate_madis_ldm_a19b_v2.py"
+V2_JOB = ROOT / "control/jobs/validate_madis_ldm_a19b_v2_strict.py"
 
 
 def run(*args: str, timeout: int = 1800):
@@ -72,7 +72,6 @@ if tracked.returncode != 0 or tracked.stdout.strip():
         "detail": tracked.stdout[-4000:] or tracked.stderr[-4000:],
     }, 5)
 
-# Bring only the isolated Weather branch forward, and only by fast-forward.
 pull = run("git", "pull", "--ff-only", "origin", BRANCH, timeout=120)
 if pull.returncode != 0:
     emit({
@@ -85,7 +84,6 @@ if pull.returncode != 0:
 head = run("git", "rev-parse", "HEAD", timeout=30).stdout.strip()
 steps: dict[str, object] = {}
 
-# Gate 1: A19B-v1. Prefer immutable proof bound to exact source blobs.
 proof = load_obj(V1_PROOF) if V1_PROOF.is_file() else {}
 source_blobs = proof.get("source_blobs") if isinstance(proof.get("source_blobs"), dict) else {}
 blob_mismatches: dict[str, dict[str, str | None]] = {}
@@ -117,13 +115,13 @@ if proof_valid:
         "source_blob_count": len(source_blobs),
         "source_blobs_match": True,
         "mutable_latest_status": latest.get("status"),
-        "next_action": "ADVANCE_TO_A19B_V2",
+        "next_action": "ADVANCE_TO_A19B_V2_STRICT",
     }
 elif not V1_PROOF.is_file() and latest_valid:
     steps["a19b_v1"] = {
         "status": "ALREADY_SATISFIED_LEGACY_LATEST",
         "report": str(V1_REPORT),
-        "next_action": "ADVANCE_TO_A19B_V2",
+        "next_action": "ADVANCE_TO_A19B_V2_STRICT",
     }
 else:
     steps["a19b_v1_proof_check"] = {
@@ -154,18 +152,17 @@ else:
             "next_gate": "FIX_A19B_V1_THREE_GATE_VALIDATION",
         }, 8)
 
-# Gate 2: A19B-v2 queue-native local build/readiness.
 if not V2_JOB.is_file():
     emit({
         "status": "BLOCKED_LOCAL_BUILD",
         "weather_head": head,
         "steps": steps,
-        "next_gate": "A19B_V2_VALIDATOR_MISSING",
+        "next_gate": "A19B_V2_STRICT_VALIDATOR_MISSING",
     }, 9)
 
 v2 = run(str(PYTHON), str(V2_JOB.relative_to(ROOT)), timeout=1200)
 v2_obj = parse_obj(v2.stdout)
-steps["a19b_v2"] = {
+steps["a19b_v2_strict"] = {
     "status": v2_obj.get("status") or ("PASS" if v2.returncode == 0 else "FAILED"),
     "returncode": v2.returncode,
     "next_gate": v2_obj.get("next_gate"),
@@ -181,7 +178,7 @@ if v2.returncode != 0 or v2_obj.get("status") != "PASS_LOCAL_BUILD":
         "status": "BLOCKED_LOCAL_VALIDATION",
         "weather_head": head,
         "steps": steps,
-        "next_gate": v2_obj.get("next_gate") or "FIX_A19B_V2_FAILED_CHECK",
+        "next_gate": v2_obj.get("next_gate") or "FIX_A19B_V2_STRICT_FAILED_CHECK",
         "terminal_for_current_authorization": False,
     }, 10)
 
@@ -197,6 +194,6 @@ emit({
     "steps": steps,
     "next_gate": next_gate,
     "a19b_v1_rerun_policy": "IMMUTABLE_PROOF_REUSED_ONLY_WHILE_BOUND_SOURCE_BLOBS_MATCH",
-    "a19b_v2_local_build": "PASS",
+    "a19b_v2_local_build": "PASS_STRICT",
     "terminal_for_current_authorization": external_or_system_gate,
 }, 0)
