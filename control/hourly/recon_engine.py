@@ -61,6 +61,13 @@ def fingerprint(source_id: str, attack_mode: str, term: str, snippet: str) -> st
     raw = "|".join([source_id, attack_mode, term, snippet[:400]]).encode()
     return hashlib.sha256(raw).hexdigest()[:16]
 
+def candidate_key(attack_mode: str, term: str) -> str:
+    # Stable cross-source identity for corroboration. Deliberately coarse: it
+    # groups the same public trigger within an attack mode, while preserving
+    # each source/snippet as a separate finding for audit and recall.
+    raw = "|".join([attack_mode, term]).encode()
+    return "CAND-" + hashlib.sha256(raw).hexdigest()[:16]
+
 def _term_present(text: str, term: str) -> bool:
     if " " in term:
         return term in text
@@ -135,6 +142,7 @@ def discover(routing: dict[str, Any]) -> list[dict[str, Any]]:
             fid = "RECON-" + fingerprint(str(item.get("source_id")), mode, term, text)
             findings.append({
                 "id": fid,
+                "candidate_key": candidate_key(mode, term),
                 "observed_at": item.get("retrieved_at"),
                 "attack_mode": mode,
                 "status": quality["status"],
@@ -295,14 +303,22 @@ def update_watchlist(findings: list[dict[str, Any]]) -> dict[str, Any]:
     for f in findings:
         if f.get("status") == "DISCOVER":
             continue
-        if f["id"] not in old:
+        # Aggregate corroborating observations by stable candidate identity,
+        # not finding ID. Finding IDs remain source-specific audit records.
+        same_candidate = [
+            x for x in old.values()
+            if x.get("candidate_key") == f.get("candidate_key")
+            and x.get("status") in {"WATCH", "HUNT"}
+        ]
+        existing_id = same_candidate[0]["id"] if same_candidate else f["id"]
+        if existing_id not in old:
             f["observation_history"] = []
             _merge_observation(f, f)
             f["hunt_gate"] = _hunt_gate(f)
             old[f["id"]] = f
             added += 1
         else:
-            prev = old[f["id"]]
+            prev = old[existing_id]
             _merge_observation(prev, f)
             prev["quality"] = f.get("quality", prev.get("quality", {}))
             prev["hunt_gate"] = _hunt_gate(prev)

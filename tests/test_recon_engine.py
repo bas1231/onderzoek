@@ -132,3 +132,37 @@ def test_no_hunt_means_no_hunt_plan_file(tmp_path):
     assert plans==[]
     assert path is None
     assert not m.HUNT_PLANS.exists()
+
+
+def test_real_discoveries_from_two_sources_share_candidate_and_promote(tmp_path):
+    m=load(Path("control/hourly/recon_engine.py"))
+    m.WATCHLIST=tmp_path/"watchlist.json"
+    m.GRAPH=tmp_path/"graph.json"
+    a=m.discover({"scout":{"evidence":[{"source_id":"venue-rules","document_sha256":"a","retrieved_at":"2026-01-01T00:00:00Z","snippet":"Prediction market contracts settle from an official settlement source. Traders price each contract and payout using the named source."}]}})
+    b=m.discover({"scout":{"evidence":[{"source_id":"academic-paper","document_sha256":"b","retrieved_at":"2026-01-02T00:00:00Z","snippet":"Prediction market contracts settle from an official settlement source. Market traders compare contract price and payout against settlement rules."}]}})
+    fa=[x for x in a if x["attack_mode"]=="MECHANISM_BREAKER" and x["economic_model"]["public_trigger"]=="settlement"][0]
+    fb=[x for x in b if x["attack_mode"]=="MECHANISM_BREAKER" and x["economic_model"]["public_trigger"]=="settlement"][0]
+    assert fa["id"] != fb["id"]
+    assert fa["candidate_key"] == fb["candidate_key"]
+    m.update_watchlist([fa])
+    m.update_watchlist([fb])
+    items=m.load_json(m.WATCHLIST,{})["items"]
+    matching=[x for x in items if x.get("candidate_key")==fa["candidate_key"]]
+    assert len(matching)==1
+    assert matching[0]["status"]=="HUNT"
+    assert matching[0]["independent_source_count"]==2
+
+def test_different_trigger_does_not_cross_promote(tmp_path):
+    m=load(Path("control/hourly/recon_engine.py"))
+    m.WATCHLIST=tmp_path/"watchlist.json"
+    m.GRAPH=tmp_path/"graph.json"
+    a=m.discover({"scout":{"evidence":[{"source_id":"a","document_sha256":"a","retrieved_at":"2026-01-01T00:00:00Z","snippet":"Prediction market traders receive a maker rebate while orderbook price and liquidity determine fills."}]}})
+    b=m.discover({"scout":{"evidence":[{"source_id":"b","document_sha256":"b","retrieved_at":"2026-01-02T00:00:00Z","snippet":"Prediction market contracts settle from an official settlement source while traders compare price and payout."}]}})
+    fa=[x for x in a if x["attack_mode"]=="MECHANISM_BREAKER"][0]
+    fb=[x for x in b if x["attack_mode"]=="MECHANISM_BREAKER" and x["economic_model"]["public_trigger"]=="settlement"][0]
+    assert fa["candidate_key"] != fb["candidate_key"]
+    m.update_watchlist([fa])
+    m.update_watchlist([fb])
+    items=m.load_json(m.WATCHLIST,{})["items"]
+    assert len(items)==2
+    assert all(x["status"]=="WATCH" for x in items)
