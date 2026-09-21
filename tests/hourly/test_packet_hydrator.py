@@ -95,7 +95,7 @@ def test_no_evidence_stays_empty():
 
 
 def test_recon_hunt_routes_to_specialists_and_prebuild_killer(tmp_path):
-    m=load(Path("control/hourly/packet_hydrator.py"))
+    m=load_module()
     m.ROOT=tmp_path
     packet_dir=tmp_path/"knowledge/runs/agent_packets/run"
     packet_dir.mkdir(parents=True)
@@ -122,7 +122,7 @@ def test_recon_hunt_routes_to_specialists_and_prebuild_killer(tmp_path):
     assert killer["candidates"][0]["candidate_id"]=="RECON-X"
 
 def test_no_hunt_plan_is_noop(tmp_path):
-    m=load(Path("control/hourly/packet_hydrator.py"))
+    m=load_module()
     m.ROOT=tmp_path
     packet_dir=tmp_path/"packets"
     packet_dir.mkdir()
