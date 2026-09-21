@@ -72,6 +72,7 @@ def main() -> int:
             "control/hourly",
             "control/browser_bridge.py",
             "control/browser_bridge_core.py",
+            "control/jobs/watchdog_v1.py",
             "control/jobs/validate_ready_specialist_worker_v13.py",
         ],
         timeout=120,
