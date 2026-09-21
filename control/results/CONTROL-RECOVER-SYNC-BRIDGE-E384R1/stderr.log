@@ -1,0 +1,13 @@
+From github.com:bas1231/onderzoek
+ * branch            main       -> FETCH_HEAD
+   8cdc407..1a4bd94  main       -> origin/main
+Traceback (most recent call last):
+  File "/tmp/tmpox2ghltk/recover_bridge_e383.py", line 202, in <module>
+    ensure_ack_patch()
+  File "/tmp/tmpox2ghltk/recover_bridge_e383.py", line 72, in ensure_ack_patch
+    spec.loader.exec_module(mod)
+  File "<frozen importlib._bootstrap_external>", line 995, in exec_module
+  File "<frozen importlib._bootstrap>", line 488, in _call_with_frames_removed
+  File "/home/leonh/prediction_research/control/browser_bridge.py", line 17, in <module>
+    from validator import Task
+ModuleNotFoundError: No module named 'validator'

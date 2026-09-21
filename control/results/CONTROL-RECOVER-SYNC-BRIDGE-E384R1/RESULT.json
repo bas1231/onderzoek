@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/launch_e384_r1.py"
+  ],
+  "exit_code": 1,
+  "finished_at": "2026-09-21T07:22:43.936064+00:00",
+  "hypothesis_id": "CONTROL-NO-SILENT-WAITING",
+  "source_commit": "317719da59e3a7cbd67704aa4ed6a7639672af48",
+  "started_at": "2026-09-21T07:22:40.312238+00:00",
+  "status": "failed",
+  "stderr_sha256": "5fde2c6966832f3a0dd2adc34a1be039e22f2ff2757c2a7bb99b881a19b18141",
+  "stdout_sha256": "73131dce9bb4a573521ab49d63fdea28bf0cbe8e49e06d0ff881d8b957f14c30",
+  "task_class": "infrastructure",
+  "task_id": "CONTROL-RECOVER-SYNC-BRIDGE-E384R1"
+}
