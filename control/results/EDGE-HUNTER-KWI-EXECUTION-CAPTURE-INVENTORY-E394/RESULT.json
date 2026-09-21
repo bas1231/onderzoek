@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/kwi_execution_capture_inventory_e394.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-21T08:05:53.252084+00:00",
+  "hypothesis_id": "KWI-FULL-STATION-PRECANONICAL-V1",
+  "source_commit": "0fe72bc01b0612a4c8098317ce601721e41c17c1",
+  "started_at": "2026-09-21T08:05:53.167877+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "4b3d88ce4ef4b6d71dc61dff1c3d9aefbc043aa2c9683d4521b90689bcaf1718",
+  "task_class": "research",
+  "task_id": "EDGE-HUNTER-KWI-EXECUTION-CAPTURE-INVENTORY-E394"
+}
