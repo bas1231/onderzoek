@@ -32,8 +32,27 @@ def test_temperature_conversions():
     assert m.temp_to_f(100, "mystery") is None
 
 
+def test_station_identifier_prefers_station_id():
+    class Var:
+        def __init__(self, name):
+            self.name = name
+
+    class Dataset:
+        variables = {
+            "stationName": Var("stationName"),
+            "stationId": Var("stationId"),
+        }
+
+    assert m._station_identifier_var(Dataset()).name == "stationId"
+
+
 if __name__ == "__main__":
-    tests = [test_parse_index_deduplicates_and_sorts, test_valid_hour_parser, test_temperature_conversions]
+    tests = [
+        test_parse_index_deduplicates_and_sorts,
+        test_valid_hour_parser,
+        test_temperature_conversions,
+        test_station_identifier_prefers_station_id,
+    ]
     for test in tests:
         test()
     print(f"MADIS_OMO_A19_TESTS_PASS {len(tests)}")
