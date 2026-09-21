@@ -6,6 +6,7 @@ import tempfile
 ROOT = Path(__file__).resolve().parents[2]
 CADENCE = ROOT / 'control/hourly/work_cadence.py'
 BRIDGE = ROOT / 'control/browser_bridge.py'
+BRIDGE_CORE = ROOT / 'control/browser_bridge_core.py'
 EXECUTOR = ROOT / 'control/executor.py'
 
 spec = importlib.util.spec_from_file_location('cadence_test_module', CADENCE)
@@ -36,7 +37,12 @@ with tempfile.TemporaryDirectory() as tmp:
     bad = mod.check(now=t0, state_path=state)
     assert bad['allowed'] is False and bad['mode'] == 'ERROR'
 
+# V13 keeps the existing bridge implementation in browser_bridge_core.py and
+# a thin wrapper in browser_bridge.py. Cadence enforcement belongs to the core,
+# so inspect the combined implementation rather than assuming a single file.
 bridge = BRIDGE.read_text(encoding='utf-8')
+if BRIDGE_CORE.exists():
+    bridge += '\n' + BRIDGE_CORE.read_text(encoding='utf-8')
 executor = EXECUTOR.read_text(encoding='utf-8')
 assert 'WORK_CADENCE = load_work_cadence()' in bridge
 assert "reason=f'bridge_task:{task.task_id}'" in bridge
