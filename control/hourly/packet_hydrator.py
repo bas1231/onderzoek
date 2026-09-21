@@ -80,9 +80,65 @@ def hydrate_packet(
     return packet
 
 
+def apply_recon_hunts(
+    packet_dir: Path,
+    hunt_plan_path: Path | None,
+) -> dict[str, Any]:
+    if hunt_plan_path is None or not hunt_plan_path.exists():
+        return {"hunt_count": 0, "specialist_roles": [], "killer_candidates": []}
+
+    data = load_json(hunt_plan_path)
+    plans = [x for x in data.get("plans", []) if isinstance(x, dict)]
+    by_role: dict[str, list[dict[str, Any]]] = {}
+    killer_ids: list[str] = []
+
+    for plan in plans:
+        cid = plan.get("candidate_id")
+        if cid:
+            killer_ids.append(str(cid))
+        for role in plan.get("specialist_route", []):
+            by_role.setdefault(str(role), []).append(plan)
+
+    for role, hunts in by_role.items():
+        path = packet_dir / (role + ".json")
+        if not path.exists():
+            continue
+        packet = load_json(path)
+        packet["recon_hunts"] = hunts
+        refs = list(packet.get("input_refs", []))
+        ref = str(hunt_plan_path.relative_to(ROOT))
+        if ref not in refs:
+            refs.append(ref)
+        packet["input_refs"] = refs
+        if packet.get("status") in {"PENDING", "NO_EVIDENCE", "READY"}:
+            packet["status"] = "PENDING"
+        save_json(path, packet)
+
+    killer = packet_dir / "prebuild_killer.json"
+    if killer.exists() and killer_ids:
+        packet = load_json(killer)
+        packet["candidate_ids"] = sorted(set(killer_ids))
+        packet["candidates"] = plans
+        ref = str(hunt_plan_path.relative_to(ROOT))
+        refs = list(packet.get("input_refs", []))
+        if ref not in refs:
+            refs.append(ref)
+        packet["input_refs"] = refs
+        if packet.get("status") in {"PENDING", "WAITING_FOR_DATA", "READY"}:
+            packet["status"] = "PENDING"
+        save_json(killer, packet)
+
+    return {
+        "hunt_count": len(plans),
+        "specialist_roles": sorted(by_role),
+        "killer_candidates": sorted(set(killer_ids)),
+    }
+
+
 def hydrate_run(
     routing_path: Path,
     packet_dir: Path,
+    hunt_plan_path: Path | None = None,
 ) -> dict[str, Any]:
 
     routing_path = routing_path.resolve()
@@ -111,10 +167,13 @@ def hydrate_run(
         save_json(packet_path, packet)
         changed.append(role)
 
+    hunts = apply_recon_hunts(packet_dir, hunt_plan_path)
+
     return {
         "routing": str(routing_path.relative_to(ROOT)),
         "packet_dir": str(packet_dir.relative_to(ROOT)),
         "hydrated_roles": changed,
+        "recon_hunts": hunts,
     }
 
 
