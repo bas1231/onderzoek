@@ -1,0 +1,4 @@
+  File "/home/leonh/prediction_research/control/jobs/kxtemp_l2_capture_e399r1.py", line 96
+    target.write_text(json.dumps(envelope,sort_keys=True,indent=2)+'
+                                                                   ^
+SyntaxError: unterminated string literal (detected at line 96)

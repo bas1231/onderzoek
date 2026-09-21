@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/kxtemp_l2_capture_e399r1.py"
+  ],
+  "exit_code": 1,
+  "finished_at": "2026-09-21T08:19:08.844814+00:00",
+  "hypothesis_id": "KWI-FULL-STATION-PRECANONICAL-V1",
+  "source_commit": "06c3de481f70b148c7f3169b937dbce2ecd984c3",
+  "started_at": "2026-09-21T08:19:08.831828+00:00",
+  "status": "failed",
+  "stderr_sha256": "3f53298c348ddffd8472a19648e94492a13182dbecc4b8c213114a350736ebb8",
+  "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "task_class": "research",
+  "task_id": "EDGE-HUNTER-KXTEMP-L2-CAPTURE-E399R1"
+}
