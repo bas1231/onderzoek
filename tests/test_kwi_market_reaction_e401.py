@@ -1,3 +1,5 @@
+from decimal import Decimal
+
 from control.weather.kwi_market_reaction_e401 import (
     MarketState, OrderBook, analyze_reaction, extract_kwi_events,
     REACTION_OBSERVED, NO_REACTION_OBSERVED_WITHIN_WINDOW, UNPROVEN_REACTION,
@@ -70,15 +72,26 @@ def test_revision_not_duplicate_first_signal():
     ]
     rows=extract_kwi_events(manifests,"miami")
     assert [r["kind"] for r in rows]==["first_decision_eligible","revision"]
+    assert rows[0]["signal_v"]=="82"
 
 
-def test_ws_sequence_gap_fails_closed():
+def test_rest_parser_complements_yes_no_books():
+    from control.weather.kwi_market_reaction_e401 import market_state_from_rest
+    state=market_state_from_rest("KXTEMP-X",10000,{"orderbook_fp":{"yes_dollars":[["0.48","3"],["0.50","2"]],"no_dollars":[["0.47","4"],["0.49","5"]]}})
+    assert state.yes_bid==Decimal("0.50")
+    assert state.yes_ask==Decimal("0.51")
+    assert state.no_bid==Decimal("0.49")
+    assert state.no_ask==Decimal("0.50")
+
+
+def test_ws_sequence_gap_fails_closed_and_invalidates_book():
     ob=OrderBook("KXTEMP-X")
     ob.snapshot({"type":"orderbook_snapshot","seq":10,"msg":{"market_ticker":"KXTEMP-X","yes_dollars_fp":[["0.50","10"]],"no_dollars_fp":[["0.49","10"]]}},10000)
     try:
         ob.delta({"type":"orderbook_delta","seq":12,"msg":{"market_ticker":"KXTEMP-X","side":"yes","price_dollars":"0.50","delta_fp":"-1"}},11000)
     except ValueError as e:
         assert "sequence gap" in str(e)
+        assert ob.ready is False
     else:
         raise AssertionError("sequence gap should fail closed")
 
