@@ -41,6 +41,7 @@ def main() -> int:
     extractor = load('extract_text', R / 'control/hourly/extract_text.py')
     quality = load('source_quality', R / 'control/hourly/source_quality.py')
     router = load('role_router', R / 'control/hourly/role_router.py')
+    recon = load('recon_engine', R / 'control/hourly/recon_engine.py')
     memory = load('memory_context', R / 'control/hourly/memory_context.py')
     hydrator = load('packet_hydrator', R / 'control/hourly/packet_hydrator.py')
     orchestrator = load('agent_orchestrator', R / 'control/hourly/agent_orchestrator.py')
@@ -62,6 +63,8 @@ def main() -> int:
     routing = router.route(run['run_id'])
     routing_path = R / 'knowledge/runs' / (run['run_id'] + '-routing.json')
     routing_path.write_text(json.dumps(routing, indent=2, sort_keys=True) + chr(10))
+
+    recon_data, recon_path = recon.run(run['run_id'], routing_path)
 
     memory_data, memory_path = memory.build(run['run_id'])
 
@@ -110,6 +113,13 @@ def main() -> int:
         for role, data in routing.items()
     }
     current['routing_ref'] = str(routing_path.relative_to(R))
+    current['recon_scout'] = {
+        'ref': str(recon_path.relative_to(R)),
+        'objects_checked': recon_data.get('objects_checked', 0),
+        'state_counts': recon_data.get('state_counts', {}),
+        'watchlist': recon_data.get('watchlist', {}),
+        'economic_conclusion': recon_data.get('economic_conclusion', 'NO_PROVEN_EDGE'),
+    }
     current['agent_control_plane'] = {
         'packet_dir': str(packet_dir.relative_to(R)),
         'hydrated_roles': hydration_data.get('hydrated_roles', []),
@@ -144,6 +154,13 @@ def main() -> int:
             handle.write('Low-text-yield sources: ' + str(quality_data.get('low_text_yield_count')) + chr(10))
             handle.write('Matched Git-memory records: ' + str(memory_data.get('matched_memory_count')) + chr(10))
             handle.write('Memory context: ' + str(memory_path.relative_to(R)) + chr(10))
+            handle.write(chr(10) + '### Recon Scout' + chr(10))
+            handle.write('Objects checked: ' + str(recon_data.get('objects_checked', 0)) + chr(10))
+            handle.write('State counts: ' + json.dumps(recon_data.get('state_counts', {}), sort_keys=True) + chr(10))
+            handle.write('Watchlist changes: ' + json.dumps(recon_data.get('watchlist', {}), sort_keys=True) + chr(10))
+            handle.write('Economic conclusion: ' + str(recon_data.get('economic_conclusion', 'NO_PROVEN_EDGE')) + chr(10))
+            handle.write('Recon evidence: ' + str(recon_path.relative_to(R)) + chr(10))
+
             for role, data in routing.items():
                 handle.write('- ' + role + ': ' + str(len(data.get('evidence', []))) + ' routed evidence items' + chr(10))
 
