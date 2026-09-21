@@ -1,0 +1,4 @@
+  File "/home/leonh/prediction_research/control/jobs/kwi_e390_redteam_e392.py", line 22
+    print('STRICT_N',len(rows)); print('NONPOSITIVE_LEAD',nonpos); print('EXACT_1E9',sum(e<1e-9 for ,e,,_ in rows));
+                                                                                                    ^
+SyntaxError: invalid syntax
