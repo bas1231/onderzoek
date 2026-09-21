@@ -1,0 +1,5 @@
+Traceback (most recent call last):
+  File "/home/leonh/prediction_research/control/jobs/kwi_public_l2_shape_e398.py", line 27, in <module>
+    print('ORDERBOOK_FP_TYPE',type(book).name)
+                              ^^^^^^^^^^^^^^^
+AttributeError: type object 'dict' has no attribute 'name'

@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/kwi_public_l2_shape_e398.py"
+  ],
+  "exit_code": 1,
+  "finished_at": "2026-09-21T08:10:56.898795+00:00",
+  "hypothesis_id": "KWI-FULL-STATION-PRECANONICAL-V1",
+  "source_commit": "e81ad04030ef942821e05b21c8b5a16451852463",
+  "started_at": "2026-09-21T08:10:55.778233+00:00",
+  "status": "failed",
+  "stderr_sha256": "5e8d29d8b9ea9b7e111be008f43ff6922677dcc37072bf4acd50f318665fba86",
+  "stdout_sha256": "41f727c5d0c04a37183d5ff8a9394c6dc16960024f7a7031722e9fb1426360c1",
+  "task_class": "research",
+  "task_id": "EDGE-HUNTER-KWI-PUBLIC-L2-SHAPE-E398"
+}
