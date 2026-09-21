@@ -33,8 +33,9 @@ ROLE_SHAPE = {
     "research_director": ("LOW", "SEQUENTIAL", "PROCESS", "HIGH", "INCREMENTAL", "DECISIVE"),
 }
 
+RUNNABLE = {"READY"}
 WAITING = {"WAITING_FOR_DATA", "WAITING_FOR_RESULT", "PARKED"}
-TERMINAL = {"COMPLETED", "FAILED", "FALSIFIED"}
+TERMINAL = {"COMPLETED", "COMPLETE", "FAILED", "FALSIFIED", "CLOSED_NEGATIVE"}
 
 
 def _candidate_ids(packet: dict[str, Any]) -> list[str]:
@@ -46,11 +47,19 @@ def _candidate_ids(packet: dict[str, Any]) -> list[str]:
     return sorted(set(vals))
 
 
+def _runtime_state(status: str) -> str:
+    if status in RUNNABLE:
+        return "READY"
+    if status in WAITING:
+        return status
+    return "BLOCKED"
+
+
 def packet_to_task(packet: dict[str, Any], run_id: str) -> dict[str, Any] | None:
     role = str(packet.get("agent_id") or "")
     if role not in ROLE_DOMAIN:
         return None
-    status = str(packet.get("status") or "PENDING")
+    status = str(packet.get("status") or "PENDING").upper()
     if status in TERMINAL:
         return None
 
@@ -58,7 +67,7 @@ def packet_to_task(packet: dict[str, Any], run_id: str) -> dict[str, Any] | None
     refs = list(packet.get("input_refs") or [])
     evidence = list(packet.get("routed_evidence") or [])
     candidate_ids = _candidate_ids(packet)
-    state = status if status in WAITING else "READY"
+    state = _runtime_state(status)
 
     objective = str(
         packet.get("next_decisive_question")
@@ -71,6 +80,7 @@ def packet_to_task(packet: dict[str, Any], run_id: str) -> dict[str, Any] | None
         "candidate_id": candidate_ids[0] if len(candidate_ids) == 1 else None,
         "worker_domain": ROLE_DOMAIN[role],
         "legacy_role": role,
+        "legacy_status": status,
         "objective": objective,
         "decisive_question": packet.get("next_decisive_question"),
         "state": state,
