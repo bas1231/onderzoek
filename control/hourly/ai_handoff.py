@@ -56,6 +56,11 @@ def compact_packet(packet: dict[str, Any]) -> dict[str, Any]:
         "coverage_gaps": packet.get("coverage_gaps", []),
         "candidate_ids": packet.get("candidate_ids", []),
         "survivors": packet.get("survivors", []),
+        # Recon WATCH work is triage-only. Preserve it through the AI
+        # handoff without granting promotion authority or candidate status.
+        "recon_watch_triage": packet.get("recon_watch_triage", []),
+        # HUNTs already passed the stricter Recon gate and stay distinct.
+        "recon_hunts": packet.get("recon_hunts", []),
         "next_decisive_question": packet.get(
             "next_decisive_question"
         ),
@@ -124,6 +129,8 @@ def build(run_id: str) -> tuple[dict[str, Any], Path]:
             ],
             "no_starvation": True,
             "promotion_requires_evidence": True,
+            "watch_triage_is_not_promotion": True,
+            "watch_triage_promotion_authority": False,
         },
 
         "guardrails": {
@@ -150,6 +157,11 @@ def build(run_id: str) -> tuple[dict[str, Any], Path]:
         "director_instruction": (
             "Act as the Research Director for this complete bundle. "
             "Evaluate routed evidence role-by-role under each role contract. "
+            "For recon_watch_triage, perform research-only specialist triage: "
+            "test the mechanism, base rate, point-in-time evidence and net "
+            "executable economics, but do not promote WATCH to HUNT and do "
+            "not send WATCH directly to the killer/proof chain. Respect every "
+            "triage_only and promotion_authority=false field. "
             "Do not invent missing evidence. Preserve negative evidence. "
             "Apply Pre-Build Killer before expensive work and Chief "
             "Falsifier before promotion. Use Independent Reproducer only "
