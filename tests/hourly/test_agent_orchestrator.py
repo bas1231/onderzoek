@@ -135,3 +135,27 @@ def test_validation_pipeline_advances_only_same_candidate_through_both_gates(tmp
     assert out["falsifier_pass"]==["X","Z"]
     assert out["reproduction_candidates"]==["X"]
     assert out["economic_conclusion"]=="NO_PROVEN_EDGE"
+
+
+def test_reproducer_pass_without_full_proof_package_stays_unproven(tmp_path):
+    mod=load_module()
+    run=tmp_path/"run"; run.mkdir()
+    (run/"prebuild_killer.json").write_text(json.dumps({"validation_results":[{"candidate_id":"X","status":"PASS"}]}))
+    (run/"chief_falsifier.json").write_text(json.dumps({"validation_results":[{"candidate_id":"X","status":"PASS"}]}))
+    (run/"independent_reproducer.json").write_text(json.dumps({"validation_results":[{"candidate_id":"X","status":"PASS"}]}))
+    out=mod.propagate_validation(run)
+    assert out["proof_candidates"]==[]
+    assert out["economic_conclusion"]=="NO_PROVEN_EDGE"
+    assert "missing_structured_gates" in out["proof_rejections"]["X"]
+
+def test_complete_reproduced_proof_package_becomes_candidate_not_final_verdict(tmp_path):
+    mod=load_module()
+    run=tmp_path/"run"; run.mkdir()
+    (run/"prebuild_killer.json").write_text(json.dumps({"validation_results":[{"candidate_id":"X","status":"PASS"}]}))
+    (run/"chief_falsifier.json").write_text(json.dumps({"validation_results":[{"candidate_id":"X","status":"PASS"}]}))
+    gates={g:"PASS" for g in mod.PROOF_GATES}
+    economics={"fees":1,"spread":1,"slippage":1,"fills":"validated","settlement":"validated","capacity":"bounded","net_edge":0.01}
+    (run/"independent_reproducer.json").write_text(json.dumps({"validation_results":[{"candidate_id":"X","status":"PASS","gates":gates,"economics":economics}]}))
+    out=mod.propagate_validation(run)
+    assert out["proof_candidates"]==["X"]
+    assert out["economic_conclusion"]=="PROVEN_EDGE_CANDIDATE"
