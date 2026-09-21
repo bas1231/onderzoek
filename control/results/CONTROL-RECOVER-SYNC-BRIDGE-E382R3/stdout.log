@@ -1,0 +1,14 @@
+[main 04a268b] control: checkpoint before E382 recovery R3
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+ rename control/tasks/{pending => running}/CONTROL-RECOVER-SYNC-BRIDGE-E382R3.json (100%)
+[main b12dea7] fix: prioritize real bridge results over incident backlog
+ 1 file changed, 46 insertions(+)
+FETCH_ORIGIN_MAIN=PASS
+E379_INSTALL=FAIL:1
+BRANCH_CHECK=PASS
+PRE_HEAD=04a268b65b393b83742d584dc136d1753631992d
+PRE_ORIGIN_MAIN=685dac836c6ec8575bb5381ec1aa7d92297643b6
+PRE_DIVERGENCE=65	46
+TRACKED_CLEAN_BEFORE=PASS
+E381_REPAIR=FAIL:1
+PRE_E382_CHECKPOINT=PASS
