@@ -138,6 +138,10 @@ def validate_response(
     expected_run_id: str,
 ) -> dict[str, Any]:
     require(isinstance(response, dict), "response must be object")
+    require(
+        response.get("schema") == "PVA_AI_RESPONSE_V1",
+        "unexpected response schema",
+    )
     require(response.get("run_id") == expected_run_id, "run_id mismatch")
     require(
         response.get("economic_conclusion") == "NO_PROVEN_EDGE",
