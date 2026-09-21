@@ -1,11 +1,31 @@
 schema_version: 1
-as_of: 2026-09-19
+as_of: 2026-09-21
 queue_status: ACTIVE
 pause:
   requested_at: 2026-09-19T17:45:00+02:00
   reason: "User requested: write current state to Git and stop prediction-market research."
   resume_condition: "Only resume when the user explicitly restarts prediction-market research."
 tasks:
+  - id: CONTROL-BRIDGE-INCIDENT-HYGIENE-E402
+    candidate: CONTROL-BRIDGE-RELIABILITY
+    assigned_role: INFRASTRUCTURE
+    priority: P0
+    status: READY
+    objective: "Stop stale/duplicate bridge incidents from repeatedly surfacing in chat and delaying normal build feedback, without deleting audit evidence."
+    scope:
+      - "Inventory existing local incident JSON files before modifying state."
+      - "Mark stale or superseded TASK_ID_MISSING and CHAT_ACK_STALL incidents RESOLVED/ARCHIVED with deliver_to_chat=false when underlying work is already completed or superseded."
+      - "Require status == OPEN as well as deliver_to_chat == true before browser_bridge exposes an incident to chat."
+      - "Add stale-age and duplicate-reason/task dedupe so resolved historical incidents cannot re-enter the outbox."
+      - "Preserve incident files and history; do not delete evidence."
+      - "Real completed task results must retain priority over incident backlog."
+    acceptance:
+      - "A completed task result is delivered immediately even with at least 20 historical incident files present."
+      - "RESOLVED/ARCHIVED incidents are never returned by the outbox."
+      - "A genuinely new OPEN incident remains deliverable exactly once until acknowledged/resolved."
+      - "Existing bridge canary still passes end-to-end after the patch."
+      - "No live trading, paid action or wallet action."
+
   - id: TASK-WX-000
     candidate: KAL-WX-INDEX-001
     assigned_role: BUILD_VALIDATION
