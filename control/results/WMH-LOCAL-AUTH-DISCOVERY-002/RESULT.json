@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/wmh_local_auth_discovery_002.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-21T08:48:53.638467+00:00",
+  "hypothesis_id": "WEATHER-MAKER-HUNTER-V1",
+  "source_commit": "079fee6218f3f015e597d7490e7d36e68dcf7ed7",
+  "started_at": "2026-09-21T08:48:12.167809+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "2112f29d460945765c35ce2f9857dd89bbeb293df4505c44b4ca44701aea3a23",
+  "task_class": "research",
+  "task_id": "WMH-LOCAL-AUTH-DISCOVERY-002"
+}
