@@ -15,7 +15,7 @@ silently substituted for `ldm_queue_insert_at`.
 
 Live use is intended for a future pqact PIPE action after NOAA supplies the exact
 MADIS feedtype/product identifiers. Replay exists only for validation and is
-NEVER eligible as prospective latency evidence.
+NEVER eligible as prospective adapter latency evidence.
 """
 from __future__ import annotations
 
@@ -119,7 +119,7 @@ def clock_health() -> dict:
     """Capture clock source/offset/uncertainty; unknown fails closed."""
     if shutil.which("chronyc"):
         try:
-            cp = subprocess.run(["chronyc", "tracking", "-n"], text=True, capture_output=True, timeout=3)
+            cp = subprocess.run(["chronyc", "-n", "tracking"], text=True, capture_output=True, timeout=3)
             if cp.returncode == 0 and cp.stdout.strip():
                 out = parse_chronyc_tracking(cp.stdout)
                 out["raw_tracking"] = cp.stdout[-2500:]
@@ -216,12 +216,12 @@ def parse_pqact_metadata_packet(packet: bytes) -> tuple[dict, bytes]:
     feedtype = int(take("=I"))
     sequence_number = int(take("=I"))
     identifier_len = int(take("=I"))
-    if identifier_len < 0 or off + identifier_len > len(packet):
+    if off + identifier_len > len(packet):
         raise ValueError("invalid identifier length")
     identifier = packet[off:off + identifier_len].decode("utf-8", errors="replace")
     off += identifier_len
     origin_len = int(take("=I"))
-    if origin_len < 0 or off + origin_len > len(packet):
+    if off + origin_len > len(packet):
         raise ValueError("invalid origin length")
     origin = packet[off:off + origin_len].decode("utf-8", errors="replace")
     off += origin_len
@@ -243,6 +243,7 @@ def parse_pqact_metadata_packet(packet: bytes) -> tuple[dict, bytes]:
         "product_size": product_size,
         "product_creation_time_ns": creation_ns,
         "product_creation_time": datetime.fromtimestamp(creation_ns / 1e9, tz=timezone.utc).isoformat(),
+        "product_creation_time_semantics": "LDM data-product creation time; NOT local queue insertion time",
         "feedtype_numeric": feedtype,
         "sequence_number": sequence_number,
         "product_identifier": identifier,
@@ -323,14 +324,7 @@ def archive_and_decode(data: bytes, stations: set[str]) -> tuple[dict, bool]:
     }, duplicate)
 
 
-def ingest_payload(
-    data: bytes,
-    timing: dict,
-    *,
-    mode: str,
-    metadata: dict | None,
-    stations: set[str],
-) -> dict:
+def ingest_payload(data: bytes, timing: dict, *, mode: str, metadata: dict | None, stations: set[str]) -> dict:
     decode_started_ns = time.time_ns()
     decoded_wrapper, duplicate = archive_and_decode(data, stations)
     decode_complete_ns = time.time_ns()
@@ -351,17 +345,16 @@ def ingest_payload(
         status = "PASS"
 
     is_live = mode == "ldm-pipe"
-    eligible = bool(
+    adapter_eligible = bool(
         is_live
         and status == "PASS"
         and not duplicate
         and metadata is not None
         and clock.get("evidence_clock_eligible") is True
     )
-    queue_insert_ns = None  # A19B-v1: unavailable from pqact PIPE metadata by design.
     return {
-        "schema": "MADIS_LDM_RECEIPT_A19B_V2",
-        "task": "WEATHER-MADIS-LDM-RECEIPT-A19B",
+        "schema": "MADIS_LDM_TIMING_A19B_V2",
+        "task": "WEATHER-MADIS-LDM-TIMING-A19B",
         "status": status,
         "mode": mode,
         "bytes": len(data),
@@ -369,18 +362,19 @@ def ingest_payload(
         "decode_started_at_ns": decode_started_ns,
         "decode_complete_at_ns": decode_complete_ns,
         "decode_complete_at": datetime.fromtimestamp(decode_complete_ns / 1e9, tz=timezone.utc).isoformat(),
-        "ldm_queue_insert_at_ns": queue_insert_ns,
+        "ldm_queue_insert_at_ns": None,
         "ldm_queue_insert_at": None,
         "ldm_queue_insert_source": "UNAVAILABLE_FROM_PQACT_PIPE_METADATA_A19B_V1",
         "product_metadata": metadata,
         "clock_health": clock,
         "adapter_timestamp_semantics": "adapter_first_seen_at is local handler time; NOT network receipt and NOT LDM queue insertion",
-        "queue_timestamp_semantics": "true local LDM queue insertion must come from queue-native evidence (PQ API/cursor) in A19B-v2",
+        "queue_timestamp_semantics": "true local LDM queue insertion requires queue-native PQ API/cursor evidence in A19B-v2",
         "observation_to_adapter_first_seen": latency,
         "queue_insert_to_adapter_first_seen_ms": None,
         "duplicate_product": duplicate,
-        "eligible_for_prospective_latency_analysis": eligible,
-        "eligibility_guard": "Requires live pqact metadata, decoded requested stations, unique product, and chrony evidence within clock uncertainty gate. Queue-insertion claims remain unavailable in v1.",
+        "eligible_for_adapter_first_seen_latency_analysis": adapter_eligible,
+        "eligible_for_queue_insertion_latency_analysis": False,
+        "eligibility_guard": "Adapter-first-seen analysis requires live pqact metadata, decoded requested stations, unique product, and chrony evidence within the clock gate. Queue-insertion analysis is impossible in A19B-v1.",
         "station_set_guard": "Requested stations are research inputs; current Kalshi/TWC contributor configuration must be independently versioned.",
         "economic_conclusion": "NO_PROVEN_EDGE",
         "live_trading": False,
@@ -419,8 +413,8 @@ def main() -> int:
             metadata, data = parse_pqact_metadata_packet(packet)
         except Exception as exc:
             result = {
-                "schema": "MADIS_LDM_RECEIPT_A19B_V2",
-                "task": "WEATHER-MADIS-LDM-RECEIPT-A19B",
+                "schema": "MADIS_LDM_TIMING_A19B_V2",
+                "task": "WEATHER-MADIS-LDM-TIMING-A19B",
                 "status": "BLOCKED_PQACT_METADATA_PARSE",
                 "mode": mode,
                 **timing,
@@ -428,7 +422,8 @@ def main() -> int:
                 "ldm_queue_insert_at_ns": None,
                 "ldm_queue_insert_at": None,
                 "ldm_queue_insert_source": "UNAVAILABLE_FROM_PQACT_PIPE_METADATA_A19B_V1",
-                "eligible_for_prospective_latency_analysis": False,
+                "eligible_for_adapter_first_seen_latency_analysis": False,
+                "eligible_for_queue_insertion_latency_analysis": False,
                 "economic_conclusion": "NO_PROVEN_EDGE",
                 "live_trading": False,
                 "paid_action": False,
