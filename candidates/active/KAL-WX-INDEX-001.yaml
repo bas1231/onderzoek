@@ -1,4 +1,4 @@
-schema_version: 2
+schema_version: 3
 candidate:
   id: KAL-WX-INDEX-001
   venue: kalshi
@@ -9,6 +9,7 @@ candidate:
   status: PREBUILD_CANDIDATE
   economic_status: NO_PROVEN_EDGE
   created_at: 2026-09-19
+  updated_at: 2026-09-21
 
   thesis: >-
     Publicly observable Kalshi Weather Index state, station composition and calibration state may improve short-horizon prediction of the exact hourly KXTEMP settlement value and may not always be fully reflected in contemporaneous executable market prices.
@@ -19,7 +20,7 @@ candidate:
     assessment: experiments/prebuild/KAL-WX-PB001-weather-index-build-warrant.yaml
     reason: >-
       Point-in-time capture has high information value and low incremental engineering cost, but direct rules proof,
-      cheap empirical replay, economic headroom and execution spotcheck have not yet passed.
+      economic headroom and execution reality still require synchronized market evidence.
 
   multiple_testing_context:
     initial_cities: 4
@@ -49,10 +50,30 @@ candidate:
       - "Public builders already monitor newer KWI/Synoptic semantics, so novelty cannot rely on others using the wrong source."
     agent_rule: "Never infer source from ticker/title or generic help material; contemporaneous contract-specific rules control."
 
+  external_corroboration:
+    as_of: 2026-09-21
+    status: BROAD_SIGNAL_CORROBORATED_NOVELTY_REDUCED
+    evidence_note: knowledge/kalshi/KALSHI_KWI_EXTERNAL_CORROBORATION_2026-09-21.md
+    findings:
+      - >-
+        Wethr.net publicly documents a beta Hourly Index API that recomputes Kalshi Weather Index from a faster observation feed and says estimates are usually available 2-3 minutes before Kalshi publication.
+      - >-
+        Wethr publishes very strong estimate-vs-official accuracy summaries, but its documentation defines those aggregates using the final estimate as of the t+5 publication deadline; do not treat those figures as proof of accuracy at first early signal time.
+      - >-
+        Community tooling on Apify archives KWI minute data, station observations, calibration/status fields including incomplete states, and explicitly targets KXTEMP backtesting; basic KWI collection is therefore not novel.
+      - >-
+        Synoptic documents one-minute HF-ASOS as normally arriving with 2-5 minutes latency and classifies the feed as experimental, supporting the few-minute timing scale while adding outage/regime risk.
+    novelty_implication: >-
+      The broad claim 'predict KWI a few minutes before canonical publication' is externally corroborated and competitive. Any remaining novelty claim must be narrower, such as the exact first-decision-eligible full-station incomplete-point mechanism, and must not be assumed novel without a fresh search.
+    economic_implication: >-
+      External corroboration raises confidence in the signal phenomenon but also raises the prior that other participants already consume similar information. The decisive test is synchronized market-reaction latency and executable depth, not further proof that KWI is reconstructible.
+    mandatory_next_test: >-
+      At the first decision-eligible internal signal timestamp, prove whether contemporaneous executable KXTEMP L2 still offers stale price and sufficient depth after realistic signal-to-order latency, fees, partial fills and adverse selection.
+
   gates:
     prebuild_novelty:
-      status: PARTIAL_PASS
-      requirement: "Narrow information-timing/calibration/source-regime mechanism only; generic weather-model-vs-market thesis is not novel enough."
+      status: PARTIAL_PASS_NARROW_ONLY
+      requirement: "Narrow incomplete/full-station information-timing mechanism only; broad early-KWI reconstruction is externally known and cannot support novelty."
     source_semantics:
       status: PENDING_DIRECT_RULE_CAPTURE
       requirement: "Exact active series/event/market rules and source must be archived point-in-time."
@@ -63,14 +84,14 @@ candidate:
       status: UNPROVEN
       requirement: "Establish plausible forecast surplus versus executable market large enough to survive unavoidable friction before strategy engineering."
     execution_spotcheck:
-      status: READY_NOT_RUN
-      requirement: "Use same-time executable L2/fees/trades; continuous WebSocket evidence required for second-level repricing claims."
+      status: READY_NEEDS_CONTINUOUS_WS
+      requirement: "Use same-time executable L2/fees/trades from the first decision-eligible signal timestamp; continuous WebSocket evidence required for second-level repricing claims."
     signal_edge:
-      status: UNTESTED
-      requirement: "Index-derived model beats persistence/trend/station baselines out-of-sample on settlement-value probability metrics."
+      status: RESEARCH_POSITIVE_E390_PENDING_REDTEAM
+      requirement: "Preserve E390 prospective result, complete unchanged red-team/falsification gates, and do not infer market edge from signal accuracy alone."
     market_edge:
-      status: UNTESTED
-      requirement: "Model probabilities improve on contemporaneous executable market probabilities after fees/spread/depth."
+      status: UNTESTED_CRITICAL_NEXT_GATE
+      requirement: "Model probabilities must improve on contemporaneous executable market probabilities after fees/spread/depth and realistic signal-to-order latency."
     execution:
       status: UNTESTED
       requirement: "Prospective shadow and later separately authorized micro-live survive fill, latency and slippage constraints."
@@ -83,11 +104,11 @@ candidate:
       objective: "Point-in-time replay Weather Index + detailed stations + calibrations against final settlement; compare strong baselines."
       failure_mode: "Index adds no stable out-of-sample predictive information."
     angle_3_market_execution:
-      objective: "Join predictions to same-time executable L2 and measure incremental Brier/log-loss plus realizable net EV."
-      failure_mode: "Market already incorporates signal or execution frictions consume it."
+      objective: "Join the first decision-eligible predictions to same-time executable L2 and measure incremental Brier/log-loss plus realizable net EV and edge decay after signal receipt."
+      failure_mode: "Market already incorporates signal, external competitors reprice first, or execution frictions consume it."
       evidence_requirement: "Continuous orderbook_delta/trade stream before any second-level repricing-lag conclusion."
     optional_angle_4_adversarial:
-      objective: "Independent implementation plus source/config/revision counterexample search."
+      objective: "Independent implementation plus source/config/revision/competition counterexample search."
 
   baselines:
     - persistence_last_index
@@ -124,6 +145,7 @@ candidate:
     - weather_index_minutes
     - detailed_station_breakdown
     - calibration_timeline_with_published_at
+    - first_decision_eligible_signal_timestamp
     - kxtemp_l2_orderbook
     - websocket_orderbook_sequence
     - trades
@@ -144,6 +166,7 @@ candidate:
       - net_expected_value_per_contract
       - realized_shadow_fill_bound
       - return_on_capital_time
+      - edge_decay_from_first_signal
 
   splits:
     method: temporal_grouped
@@ -157,9 +180,12 @@ candidate:
   preregistered_kill_rules:
     - "Kill signal lane if index-enhanced model does not beat predeclared baselines on untouched holdout with stable sign across meaningful city/horizon strata."
     - "Kill market-edge lane if predictive improvement does not beat executable market probability after fees and conservative spread/depth treatment."
+    - "Kill market-edge lane if executable KXTEMP prices already reflect the first decision-eligible signal before a realistic order can arrive."
+    - "Do not use external t+5 final-estimate accuracy as evidence for first-early-estimate accuracy or tradable headroom."
     - "Kill any event whose rule/source/version was not captured point-in-time."
     - "Do not rescue a failed lane by post-hoc feature/threshold selection; material changes create a new experiment version."
     - "Do not use the Chicago adjacent-hour source cutover as same-hour cross-source arbitrage evidence."
+    - "Do not claim novelty for broad early-KWI reconstruction; re-check public competition before any promotion."
 
   execution_blockers:
     - rule_source_conflict_until_direct_capture
@@ -168,6 +194,8 @@ candidate:
     - receipt_basis_and_backfill_eligibility
     - close_time_relative_to_observation
     - continuous_websocket_sequence_pending
+    - external_competition_repricing_speed_unknown
+    - first_signal_to_order_latency_unmeasured
     - l2_depth
     - fees
     - latency
@@ -179,3 +207,4 @@ candidate:
     - KAL-TWC-002
     - KAL-WX-001
     - KALSHI_WEATHER_SOURCE_MIGRATION_MISPRICING_HYPOTHESIS_2026-09-19
+    - knowledge/kalshi/KALSHI_KWI_EXTERNAL_CORROBORATION_2026-09-21.md

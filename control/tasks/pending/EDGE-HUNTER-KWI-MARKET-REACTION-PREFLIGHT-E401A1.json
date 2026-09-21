@@ -1,0 +1,15 @@
+{
+  "build_authorization": null,
+  "command": [
+    ".venv/bin/python",
+    "-c",
+    "import importlib.util,json,os; from pathlib import Path; p=os.environ.get('KALSHI_PRIVATE_KEY_PATH'); print(json.dumps({'api_key_id_present':bool(os.environ.get('KALSHI_API_KEY_ID')),'private_key_path_present':bool(p),'private_key_file_exists':bool(p and Path(p).is_file()),'websockets_available':importlib.util.find_spec('websockets') is not None,'cryptography_available':importlib.util.find_spec('cryptography') is not None,'credential_values_printed':False,'live_trading':False,'paid_action':False,'wallet_action':False},sort_keys=True))"
+  ],
+  "hypothesis_id": "KWI-FULL-STATION-PRECANONICAL-V1",
+  "live_trading": false,
+  "operation": "python",
+  "task_class": "research",
+  "task_id": "EDGE-HUNTER-KWI-MARKET-REACTION-PREFLIGHT-E401A1",
+  "timeout_seconds": 60,
+  "working_directory": "."
+}

@@ -1,0 +1,90 @@
+{
+  "schema": "KAL_WX_MARKET_REACTION_E401_PROTOCOL_V1",
+  "experiment_id": "KAL-WX-MARKET-REACTION-E401",
+  "candidate_id": "KAL-WX-INDEX-001",
+  "hypothesis_id": "KWI-FULL-STATION-PRECANONICAL-V1",
+  "economic_status": "NO_PROVEN_EDGE",
+  "purpose": "Measure point-in-time Kalshi KXTEMP market reaction after the preregistered E390 first-decision-eligible full-station incomplete KWI signal. This is a falsification/evidence gate, not a trading strategy.",
+  "signal_definition": {
+    "source": "existing immutable kalshi_weather_index manifests",
+    "availability_time": "manifest retrieved_at of the first qualifying snapshot",
+    "eligibility": [
+      "latest_incomplete.t parses as numeric",
+      "numeric latest_incomplete station temp_f count equals previous latest_complete.contributors",
+      "previous latest_complete.t is earlier than target incomplete t",
+      "previous latest_complete.v is numeric",
+      "station mean is numeric"
+    ],
+    "primary_event": "first_decision_eligible",
+    "same_target_changes": "record as revisions; analyze separately from the primary first signal"
+  },
+  "market_capture": {
+    "primary": "authenticated read-only Kalshi WebSocket orderbook_delta + trade",
+    "rest_role": "public/read-only diagnostic baseline only; insufficient for second-level repricing claims",
+    "websocket_url": "wss://external-api-ws.kalshi.com/trade-api/ws/v2",
+    "required_fields": [
+      "local receipt timestamp",
+      "market ticker",
+      "initial orderbook snapshot",
+      "orderbook seq",
+      "orderbook delta",
+      "trade",
+      "explicit capture gap/error",
+      "transport coverage heartbeat"
+    ],
+    "write_endpoints_allowed": false,
+    "live_orders_allowed": false
+  },
+  "analysis": {
+    "primary_window_ms": 30000,
+    "max_pre_rest_state_age_ms": 5000,
+    "max_rest_state_gap_ms": 5000,
+    "websocket_precondition": "recent connection coverage; old unchanged snapshot remains valid until a delta",
+    "reaction_definition": "first observed top-of-book/depth fingerprint change OR public trade after signal",
+    "reaction_is_causal_claim": false,
+    "statuses": [
+      "REACTION_OBSERVED",
+      "NO_REACTION_OBSERVED_WITHIN_WINDOW",
+      "UNPROVEN_REACTION"
+    ],
+    "fail_closed_conditions": [
+      "missing pre-event executable state",
+      "stale REST pre-event state",
+      "stale WebSocket connection coverage",
+      "explicit capture gap overlapping analysis window",
+      "REST cadence gap above threshold",
+      "out-of-order market states",
+      "malformed orderbook reconstruction",
+      "WebSocket sequence gap",
+      "capture ending before full no-reaction window"
+    ]
+  },
+  "independence": {
+    "unit": "city x target KWI minute",
+    "do_not_count": "same-target revisions as independent primary events"
+  },
+  "minimum_evidence_before_next_gate": {
+    "evaluable_primary_events": 30,
+    "minimum_cities": 2,
+    "valid_synchronized_capture_fraction": 0.95
+  },
+  "next_gate_if_evidence_sufficient": {
+    "id": "KAL-WX-ORDER-ARRIVAL-E402",
+    "purpose": "Measure actual local signal-to-order-ready latency and compare it to E401 reaction latency before any queue/fill simulation.",
+    "advance_only_if": "there is repeatable positive timing headroom after measured local p95 pipeline/network latency; no economic edge is inferred yet"
+  },
+  "kill_rules": [
+    "Do not infer market edge from KWI prediction accuracy alone.",
+    "Kill/downgrade the market-edge lane if prices consistently reflect the signal before a realistic locally measured order-ready timestamp.",
+    "Do not treat REST polling as evidence for sub-second or second-level repricing lag.",
+    "Do not rescue a failed timing lane by changing signal eligibility, timing window or reaction definition post hoc; create a new experiment version.",
+    "Any gap/sequence ambiguity affecting the event is UNPROVEN, never a favorable fill/lag assumption."
+  ],
+  "guardrails": {
+    "live_trading": false,
+    "orders": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "openai_api": false
+  }
+}
