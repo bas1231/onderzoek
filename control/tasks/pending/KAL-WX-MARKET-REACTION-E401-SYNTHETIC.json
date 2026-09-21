@@ -1,0 +1,18 @@
+{
+  "build_authorization": null,
+  "command": [
+    ".venv/bin/python",
+    "-m",
+    "pytest",
+    "-q",
+    "tests/test_kwi_market_reaction_e401.py",
+    "tests/test_market_capture_e401.py"
+  ],
+  "hypothesis_id": "KAL-WX-MARKET-REACTION-E401",
+  "live_trading": false,
+  "operation": "python",
+  "task_class": "research",
+  "task_id": "KAL-WX-MARKET-REACTION-E401-SYNTHETIC",
+  "timeout_seconds": 180,
+  "working_directory": "."
+}
