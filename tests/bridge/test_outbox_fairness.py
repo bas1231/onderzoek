@@ -1,4 +1,3 @@
-
 from pathlib import Path
 from types import SimpleNamespace
 from unittest.mock import patch
@@ -7,13 +6,14 @@ import json
 import sys
 
 
-def test_outbox_prefers_result_then_incident(tmp_path, monkeypatch):
+def test_real_result_stays_prioritized_until_ack_then_incident(tmp_path, monkeypatch):
     root = Path(__file__).resolve().parents[2]
     control = root / "control"
 
     if str(control) not in sys.path:
         sys.path.insert(0, str(control))
 
+    sys.modules.pop("browser_bridge", None)
     bb = importlib.import_module("browser_bridge")
 
     results = tmp_path / "results"
@@ -50,6 +50,7 @@ def test_outbox_prefers_result_then_incident(tmp_path, monkeypatch):
         json.dumps(
             {
                 "deliver_to_chat": True,
+                "status": "OPEN",
                 "reason": "DEMO_INCIDENT",
                 "detail": "demo",
             }
@@ -89,7 +90,14 @@ def test_outbox_prefers_result_then_incident(tmp_path, monkeypatch):
     ):
         first = bb.next_outbox_item()
         second = bb.next_outbox_item()
+        ack = bb.acknowledge("TASK-RESULT-1")
+        third = bb.next_outbox_item()
 
+    # E379: an unACKed real executor result stays ahead of incident backlog.
     assert first["task_id"] == "TASK-RESULT-1"
-    assert second["task_id"].startswith("INCIDENT-")
+    assert second["task_id"] == "TASK-RESULT-1"
+    assert ack["ok"] is True
+
+    # Once the real result is durably ACKed, OPEN incidents may flow.
+    assert third["task_id"].startswith("INCIDENT-")
     assert state["outbox_prefer_incident"] is False
