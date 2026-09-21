@@ -29,8 +29,13 @@ def fake_decode():
     }
 
 
+def _microsecond_aligned_now_ns() -> int:
+    """Match LDM queue timeval precision so exact-lag fixtures are deterministic."""
+    return (time.time_ns() // 1000) * 1000
+
+
 def parsed_frame(payload: bytes = b"x", lag_ms: int = 5):
-    callback = time.time_ns() - 2_000_000
+    callback = _microsecond_aligned_now_ns() - 2_000_000
     raw = q.build_test_frame(
         payload,
         queue_insert_at_ns=callback - lag_ms * 1_000_000,
@@ -49,6 +54,22 @@ def test_frame_roundtrip_preserves_queue_timestamp():
     assert frame.product_identifier == "HF-ASOS-KMIA"
     assert frame.product_origin == "madis-test"
     assert frame.queue_insert_to_callback_ms == 8.0
+
+
+def test_timeval_precision_is_explicit_not_flaky():
+    # Queue insertion is serialized as timeval (microseconds). A deliberately
+    # non-aligned nanosecond input is truncated exactly as the real LDM API is.
+    callback = 1_790_010_000_000_000_789
+    queue = callback - 8_000_000
+    raw = q.build_test_frame(
+        b"x",
+        queue_insert_at_ns=queue,
+        callback_realtime_ns=callback,
+    )
+    frame = q.read_frame(io.BytesIO(raw))
+    assert frame is not None
+    assert frame.queue_insert_at_ns == (queue // 1000) * 1000
+    assert frame.queue_insert_to_callback_ms == 8.001
 
 
 def test_live_queue_native_can_be_latency_evidence():
@@ -132,6 +153,7 @@ def test_clean_eof_is_not_a_frame():
 if __name__ == "__main__":
     tests = [
         test_frame_roundtrip_preserves_queue_timestamp,
+        test_timeval_precision_is_explicit_not_flaky,
         test_live_queue_native_can_be_latency_evidence,
         test_replay_is_never_latency_evidence,
         test_bad_clock_fails_closed,
