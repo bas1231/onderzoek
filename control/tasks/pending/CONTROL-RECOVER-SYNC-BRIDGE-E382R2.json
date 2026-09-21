@@ -1,0 +1,26 @@
+{
+  "build_authorization": {
+    "build_kind": "control_plane",
+    "capabilities": [
+      "public_network_read",
+      "repository_sync",
+      "local_code_patch",
+      "local_test",
+      "service_restart"
+    ],
+    "mode": "control_plane",
+    "objective": "Recover and synchronize the local control plane with origin/main and install the bridge delivery repairs; user explicitly authorized temporary cadence override.",
+    "warrant_ref": null
+  },
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/launch_e382_r2.py"
+  ],
+  "hypothesis_id": "CONTROL-NO-SILENT-WAITING",
+  "live_trading": false,
+  "operation": "python",
+  "task_class": "infrastructure",
+  "task_id": "CONTROL-RECOVER-SYNC-BRIDGE-E382R2",
+  "timeout_seconds": 300,
+  "working_directory": "."
+}
