@@ -88,12 +88,20 @@ def receipt_path(run_id: str) -> Path:
     return RUNS / f"{safe_run_id(run_id)}-ai-response-receipt.json"
 
 
-def expected_ready_roles(run_id: str) -> set[str]:
+def load_bundle(run_id: str) -> dict[str, Any]:
     path = bundle_path(run_id)
     require(path.exists(), "AI work bundle missing")
     data = load_json(path)
+    require(isinstance(data, dict), "AI work bundle must be object")
     require(data.get("schema") == "PVA_AI_WORK_BUNDLE_V1", "unexpected bundle schema")
     require(data.get("run_id") == run_id, "bundle run_id mismatch")
+    token = data.get("response_token")
+    require(isinstance(token, str) and len(token) == 64, "bundle response_token missing")
+    return data
+
+
+def expected_ready_roles(run_id: str) -> set[str]:
+    data = load_bundle(run_id)
     roles = data.get("ready_roles")
     require(isinstance(roles, list), "bundle ready_roles missing")
     out: set[str] = set()
@@ -121,6 +129,14 @@ def validate_complete_role_coverage(response: dict[str, Any], run_id: str) -> No
     require(not extra, "AI response contains non-ready roles: " + ",".join(extra))
 
 
+def validate_response_token(response: dict[str, Any], run_id: str) -> None:
+    bundle = load_bundle(run_id)
+    require(
+        response.get("response_token") == bundle.get("response_token"),
+        "AI response_token mismatch",
+    )
+
+
 def _same_response(path: Path, response: dict[str, Any]) -> bool:
     try:
         return response_sha256(load_json(path)) == response_sha256(response)
@@ -134,6 +150,7 @@ def receive(payload: dict[str, Any]) -> dict[str, Any]:
     response = payload.get("response")
     require(isinstance(response, dict), "response must be object")
     require(response.get("run_id") == run_id, "response run_id mismatch")
+    validate_response_token(response, run_id)
 
     final = response_path(run_id)
     pending = pending_path(run_id)
