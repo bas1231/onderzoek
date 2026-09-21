@@ -22,11 +22,25 @@ def load_module():
 def test_compact_packet_preserves_decisive_fields():
     mod = load_module()
 
+    triage = [{
+        "candidate_key": "CAND-X",
+        "status": "WATCH",
+        "triage_only": True,
+        "promotion_authority": False,
+        "public_trigger": "settlement",
+    }]
+    hunts = [{
+        "candidate_id": "RECON-HUNT-X",
+        "status": "HUNT",
+    }]
+
     x = mod.compact_packet({
         "agent_id": "algebra",
         "status": "READY",
         "priority": "P3",
         "routed_evidence": [{"source_id": "x"}],
+        "recon_watch_triage": triage,
+        "recon_hunts": hunts,
         "next_decisive_question": "Does identity hold?",
         "local_task_required": False,
         "live_trading": False,
@@ -35,6 +49,10 @@ def test_compact_packet_preserves_decisive_fields():
     assert x["agent_id"] == "algebra"
     assert x["status"] == "READY"
     assert x["routed_evidence"] == [{"source_id": "x"}]
+    assert x["recon_watch_triage"] == triage
+    assert x["recon_watch_triage"][0]["triage_only"] is True
+    assert x["recon_watch_triage"][0]["promotion_authority"] is False
+    assert x["recon_hunts"] == hunts
     assert x["next_decisive_question"] == "Does identity hold?"
     assert x["local_task_required"] is False
 
@@ -54,6 +72,8 @@ def test_no_specialist_browser_fanout_source_policy():
     assert '"single_chatgpt_turn": True' in source
     assert '"specialist_browser_requests": False' in source
     assert '"openai_api": False' in source
+    assert '"watch_triage_is_not_promotion": True' in source
+    assert '"watch_triage_promotion_authority": False' in source
 
 
 def test_latest_real_bundle_if_available():
