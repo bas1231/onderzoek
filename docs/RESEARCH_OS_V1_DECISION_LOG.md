@@ -24,7 +24,7 @@ Reconsider only if concurrency benchmark shows fixed six-worker execution domina
 
 Decision: Primary Scout and Recon Scout stay distinct.
 
-Reason: high-quality conservative discovery and weak-signal/offensive reconnaissance have deliberately different search distributions. One mixed Scout risks either excessive noise or excessive conservatism.
+Reason: high-quality conservative discovery and weak-signal/offensive economic reconnaissance have deliberately different search distributions. One mixed Scout risks either excessive noise or excessive conservatism.
 
 Guard: measured overlap; two Scouts are not useful if they search the same sources.
 
@@ -145,3 +145,11 @@ Reason: the static V1 audit found that unmatched cases or denominator collapse c
 Timing: this amendment was made before the first unseen Research OS shadow observation was collected. It is therefore a preregistration hardening, not a post-result rule change.
 
 Guard: `shadow_acceptance.json` schema V2 and `validate_prebuild_spec.py` now fail closed if these anti-gaming invariants are removed or weakened.
+
+## AD-022 — Account-capacity snapshots are observations, not runtime invariants
+
+Decision: keep the observed 5-slot Plus layout as dated design evidence, but re-observe active-task capacity before any task reconfiguration. A stale account snapshot may reduce concurrency; it may not lower scientific gates or make the Research OS fail merely because task occupancy changed.
+
+Reason: product limits and the user's active-task occupancy are different things. The Plus product limit can be documented, but whether 0, 1 or more slots are free is ephemeral account state. Treating `5 active / 0 free` as a permanent validator invariant would couple scientific correctness to yesterday's scheduler state.
+
+Guard: `account_aware_plus_topology.json` schema V2 marks the account state as snapshot-only. The prebuild validator checks internal consistency and capacity policy instead of requiring a specific current occupancy. Research OS never automatically evicts an existing task or consumes newly available capacity.
