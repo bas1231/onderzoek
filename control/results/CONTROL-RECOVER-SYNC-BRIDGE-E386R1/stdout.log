@@ -1,0 +1,148 @@
+BRANCH_CHECK=PASS
+PRE_E383_CHECKPOINT=PASS
+RESULT_PRIORITY_PATCH=PASS
+ACK_PATCH_COMPILE=PASS
+INCIDENT_ACK_PROBE=PASS
+ACK_PATCH_COMMIT=PASS
+PRE_HEAD=b2de745603938cc1f566b71fdc24f6173fecb28f
+PRE_ORIGIN_MAIN=0d98b4230032d20b6ffb088c6d084f5c318922b6
+PRE_DIVERGENCE=78	50
+TRACKED_CLEAN_BEFORE_SYNC=PASS
+BACKUP_BRANCH=recovery/e383-pre-sync-b2de74560393
+SYNC_MODE=DIVERGED_MERGED
+PUSH_MAIN=PASS
+FINAL_HEAD=954c3e0194edd929c5e8e58b36558026446f209d
+FINAL_ORIGIN_MAIN=954c3e0194edd929c5e8e58b36558026446f209d
+FINAL_DIVERGENCE=0	0
+LOCAL_REMOTE_SYNC=PASS
+FINAL_COMPILE=PASS
+BRIDGE_RESTART_COMMAND=PASS
+HEALTH_200=FAIL
+HEALTH_LAST_ERROR=URLError(ConnectionRefusedError(111, 'Connection refused'))
+SYSTEMCTL_STATUS_BEGIN
+● prediction-research-browser-bridge.service - Prediction Research No-API Browser Bridge
+     Loaded: loaded (/home/leonh/.config/systemd/user/prediction-research-browser-bridge.service; enabled; preset: enabled)
+     Active: activating (auto-restart) (Result: exit-code) since Mon 2026-09-21 09:27:40 CEST; 3s ago
+    Process: 891568 ExecStart=/home/leonh/prediction_research/.venv/bin/python /home/leonh/prediction_research/control/browser_bridge.py (code=exited, status=1/FAILURE)
+   Main PID: 891568 (code=exited, status=1/FAILURE)
+        CPU: 118ms
+
+Sep 21 09:27:43 Strix systemd[341]: prediction-research-browser-bridge.service: Scheduled restart job, restart counter is at 3.
+
+SYSTEMCTL_STATUS_END
+JOURNAL_BEGIN
+Sep 21 09:26:36 Strix python[888875]: 127.0.0.1 - "GET /outbox HTTP/1.1" 200 -
+Sep 21 09:26:36 Strix python[888875]: 127.0.0.1 - "POST /enqueue HTTP/1.1" 400 -
+Sep 21 09:26:38 Strix python[888875]: 127.0.0.1 - "GET /ai-outbox HTTP/1.1" 200 -
+Sep 21 09:26:38 Strix python[888875]: 127.0.0.1 - "GET /outbox HTTP/1.1" 200 -
+Sep 21 09:26:41 Strix python[888875]: 127.0.0.1 - "GET /ai-outbox HTTP/1.1" 200 -
+Sep 21 09:26:41 Strix python[888875]: 127.0.0.1 - "GET /outbox HTTP/1.1" 200 -
+Sep 21 09:26:46 Strix python[888875]: 127.0.0.1 - "GET /ai-outbox HTTP/1.1" 200 -
+Sep 21 09:26:46 Strix python[888875]: 127.0.0.1 - "GET /health HTTP/1.1" 200 -
+Sep 21 09:26:46 Strix python[888875]: 127.0.0.1 - "POST /discover HTTP/1.1" 200 -
+Sep 21 09:26:46 Strix python[888875]: 127.0.0.1 - "GET /ai-outbox HTTP/1.1" 200 -
+Sep 21 09:26:46 Strix python[888875]: 127.0.0.1 - "GET /outbox HTTP/1.1" 200 -
+Sep 21 09:26:46 Strix python[888875]: 127.0.0.1 - "POST /enqueue HTTP/1.1" 400 -
+Sep 21 09:26:46 Strix python[888875]: 127.0.0.1 - "GET /outbox HTTP/1.1" 200 -
+Sep 21 09:26:50 Strix python[888875]: 127.0.0.1 - "GET /ai-outbox HTTP/1.1" 200 -
+Sep 21 09:26:50 Strix python[888875]: 127.0.0.1 - "GET /outbox HTTP/1.1" 200 -
+Sep 21 09:26:54 Strix python[888875]: 127.0.0.1 - "GET /ai-outbox HTTP/1.1" 200 -
+Sep 21 09:26:54 Strix python[888875]: 127.0.0.1 - "GET /outbox HTTP/1.1" 200 -
+Sep 21 09:26:54 Strix python[888875]: 127.0.0.1 - "POST /discover HTTP/1.1" 200 -
+Sep 21 09:26:54 Strix python[888875]: 127.0.0.1 - "POST /enqueue HTTP/1.1" 400 -
+Sep 21 09:26:54 Strix python[888875]: 127.0.0.1 - "GET /outbox HTTP/1.1" 200 -
+Sep 21 09:26:56 Strix python[888875]: 127.0.0.1 - "GET /ai-outbox HTTP/1.1" 200 -
+Sep 21 09:26:56 Strix python[888875]: 127.0.0.1 - "GET /health HTTP/1.1" 200 -
+Sep 21 09:26:56 Strix python[888875]: 127.0.0.1 - "POST /discover HTTP/1.1" 200 -
+Sep 21 09:26:56 Strix python[888875]: 127.0.0.1 - "GET /outbox HTTP/1.1" 200 -
+Sep 21 09:26:56 Strix python[888875]: 127.0.0.1 - "POST /enqueue HTTP/1.1" 400 -
+Sep 21 09:26:58 Strix python[888875]: 127.0.0.1 - "GET /ai-outbox HTTP/1.1" 200 -
+Sep 21 09:26:58 Strix python[888875]: 127.0.0.1 - "GET /outbox HTTP/1.1" 200 -
+Sep 21 09:27:02 Strix python[888875]: 127.0.0.1 - "GET /ai-outbox HTTP/1.1" 200 -
+Sep 21 09:27:02 Strix python[888875]: 127.0.0.1 - "GET /outbox HTTP/1.1" 200 -
+Sep 21 09:27:06 Strix python[888875]: 127.0.0.1 - "GET /ai-outbox HTTP/1.1" 200 -
+Sep 21 09:27:06 Strix python[888875]: 127.0.0.1 - "GET /health HTTP/1.1" 200 -
+Sep 21 09:27:06 Strix python[888875]: 127.0.0.1 - "GET /ai-outbox HTTP/1.1" 200 -
+Sep 21 09:27:06 Strix python[888875]: 127.0.0.1 - "POST /discover HTTP/1.1" 200 -
+Sep 21 09:27:06 Strix python[888875]: 127.0.0.1 - "GET /outbox HTTP/1.1" 200 -
+Sep 21 09:27:06 Strix python[888875]: 127.0.0.1 - "POST /enqueue HTTP/1.1" 400 -
+Sep 21 09:27:06 Strix python[888875]: 127.0.0.1 - "GET /outbox HTTP/1.1" 200 -
+Sep 21 09:27:10 Strix python[888875]: 127.0.0.1 - "GET /ai-outbox HTTP/1.1" 200 -
+Sep 21 09:27:10 Strix python[888875]: 127.0.0.1 - "GET /outbox HTTP/1.1" 200 -
+Sep 21 09:27:13 Strix python[888875]: 127.0.0.1 - "GET /ai-outbox HTTP/1.1" 200 -
+Sep 21 09:27:13 Strix python[888875]: 127.0.0.1 - "GET /outbox HTTP/1.1" 200 -
+Sep 21 09:27:13 Strix python[888875]: 127.0.0.1 - "POST /discover HTTP/1.1" 200 -
+Sep 21 09:27:15 Strix python[888875]: [bridge] enqueue accepted task_id=CONTROL-RECOVER-SYNC-BRIDGE-E386R1
+Sep 21 09:27:15 Strix python[888875]: 127.0.0.1 - "POST /enqueue HTTP/1.1" 200 -
+Sep 21 09:27:16 Strix python[888875]: 127.0.0.1 - "GET /ai-outbox HTTP/1.1" 200 -
+Sep 21 09:27:16 Strix python[888875]: 127.0.0.1 - "GET /health HTTP/1.1" 200 -
+Sep 21 09:27:16 Strix python[888875]: 127.0.0.1 - "POST /discover HTTP/1.1" 200 -
+Sep 21 09:27:16 Strix python[888875]: 127.0.0.1 - "GET /outbox HTTP/1.1" 200 -
+Sep 21 09:27:16 Strix python[888875]: 127.0.0.1 - "POST /enqueue HTTP/1.1" 400 -
+Sep 21 09:27:18 Strix python[888875]: 127.0.0.1 - "GET /ai-outbox HTTP/1.1" 200 -
+Sep 21 09:27:18 Strix python[888875]: 127.0.0.1 - "GET /outbox HTTP/1.1" 200 -
+Sep 21 09:27:22 Strix python[888875]: 127.0.0.1 - "GET /ai-outbox HTTP/1.1" 200 -
+Sep 21 09:27:22 Strix python[888875]: 127.0.0.1 - "GET /outbox HTTP/1.1" 200 -
+Sep 21 09:27:24 Strix python[888875]: 127.0.0.1 - "POST /discover HTTP/1.1" 200 -
+Sep 21 09:27:24 Strix python[888875]: 127.0.0.1 - "POST /enqueue HTTP/1.1" 400 -
+Sep 21 09:27:24 Strix python[888875]: 127.0.0.1 - "GET /outbox HTTP/1.1" 200 -
+Sep 21 09:27:26 Strix python[888875]: 127.0.0.1 - "GET /ai-outbox HTTP/1.1" 200 -
+Sep 21 09:27:26 Strix python[888875]: 127.0.0.1 - "POST /discover HTTP/1.1" 200 -127.0.0.1 - "GET /health HTTP/1.1" 200 -
+Sep 21 09:27:26 Strix python[888875]: 127.0.0.1 - "GET /ai-outbox HTTP/1.1" 200 -
+Sep 21 09:27:26 Strix python[888875]: 127.0.0.1 - "GET /outbox HTTP/1.1" 200 -
+Sep 21 09:27:26 Strix python[888875]: 127.0.0.1 - "GET /outbox HTTP/1.1" 200 -
+Sep 21 09:27:28 Strix python[888875]: 127.0.0.1 - "POST /enqueue HTTP/1.1" 400 -
+Sep 21 09:27:29 Strix systemd[341]: Stopping prediction-research-browser-bridge.service - Prediction Research No-API Browser Bridge...
+Sep 21 09:27:29 Strix systemd[341]: Stopped prediction-research-browser-bridge.service - Prediction Research No-API Browser Bridge.
+Sep 21 09:27:29 Strix systemd[341]: prediction-research-browser-bridge.service: Consumed 2.701s CPU time, 29.5M memory peak, 0B memory swap peak.
+Sep 21 09:27:29 Strix systemd[341]: Started prediction-research-browser-bridge.service - Prediction Research No-API Browser Bridge.
+Sep 21 09:27:29 Strix python[891562]: Prediction Research Browser Bridge listening on http://127.0.0.1:8765
+Sep 21 09:27:29 Strix python[891562]: Traceback (most recent call last):
+Sep 21 09:27:29 Strix python[891562]:   File "/home/leonh/prediction_research/control/browser_bridge.py", line 1058, in <module>
+Sep 21 09:27:29 Strix python[891562]:     main()
+Sep 21 09:27:29 Strix python[891562]:   File "/home/leonh/prediction_research/control/browser_bridge.py", line 1048, in main
+Sep 21 09:27:29 Strix python[891562]:     Handler,
+Sep 21 09:27:29 Strix python[891562]:     ^^^^^^^
+Sep 21 09:27:29 Strix python[891562]: NameError: name 'Handler' is not defined
+Sep 21 09:27:29 Strix systemd[341]: prediction-research-browser-bridge.service: Main process exited, code=exited, status=1/FAILURE
+Sep 21 09:27:29 Strix systemd[341]: prediction-research-browser-bridge.service: Failed with result 'exit-code'.
+Sep 21 09:27:34 Strix systemd[341]: prediction-research-browser-bridge.service: Scheduled restart job, restart counter is at 1.
+Sep 21 09:27:34 Strix systemd[341]: Started prediction-research-browser-bridge.service - Prediction Research No-API Browser Bridge.
+Sep 21 09:27:34 Strix python[891566]: Prediction Research Browser Bridge listening on http://127.0.0.1:8765
+Sep 21 09:27:34 Strix python[891566]: Traceback (most recent call last):
+Sep 21 09:27:34 Strix python[891566]:   File "/home/leonh/prediction_research/control/browser_bridge.py", line 1058, in <module>
+Sep 21 09:27:34 Strix python[891566]:     main()
+Sep 21 09:27:34 Strix python[891566]:   File "/home/leonh/prediction_research/control/browser_bridge.py", line 1048, in main
+Sep 21 09:27:34 Strix python[891566]:     Handler,
+Sep 21 09:27:34 Strix python[891566]:     ^^^^^^^
+Sep 21 09:27:34 Strix python[891566]: NameError: name 'Handler' is not defined
+Sep 21 09:27:34 Strix systemd[341]: prediction-research-browser-bridge.service: Main process exited, code=exited, status=1/FAILURE
+Sep 21 09:27:34 Strix systemd[341]: prediction-research-browser-bridge.service: Failed with result 'exit-code'.
+Sep 21 09:27:39 Strix systemd[341]: prediction-research-browser-bridge.service: Scheduled restart job, restart counter is at 2.
+Sep 21 09:27:39 Strix systemd[341]: Started prediction-research-browser-bridge.service - Prediction Research No-API Browser Bridge.
+Sep 21 09:27:40 Strix python[891568]: Prediction Research Browser Bridge listening on http://127.0.0.1:8765
+Sep 21 09:27:40 Strix python[891568]: Traceback (most recent call last):
+Sep 21 09:27:40 Strix python[891568]:   File "/home/leonh/prediction_research/control/browser_bridge.py", line 1058, in <module>
+Sep 21 09:27:40 Strix python[891568]:     main()
+Sep 21 09:27:40 Strix python[891568]:   File "/home/leonh/prediction_research/control/browser_bridge.py", line 1048, in main
+Sep 21 09:27:40 Strix python[891568]:     Handler,
+Sep 21 09:27:40 Strix python[891568]:     ^^^^^^^
+Sep 21 09:27:40 Strix python[891568]: NameError: name 'Handler' is not defined
+Sep 21 09:27:40 Strix systemd[341]: prediction-research-browser-bridge.service: Main process exited, code=exited, status=1/FAILURE
+Sep 21 09:27:40 Strix systemd[341]: prediction-research-browser-bridge.service: Failed with result 'exit-code'.
+Sep 21 09:27:43 Strix systemd[341]: prediction-research-browser-bridge.service: Scheduled restart job, restart counter is at 3.
+
+JOURNAL_END
+PROBE_PYTHONPATH_FIX=PASS
+E383_WITH_IMPORT_FIX=FAIL:59
+BRANCH_CHECK=PASS
+UNTRACKED_TOTAL=107
+UNTRACKED_REMOTE_CONFLICTS=5
+QUARANTINE=control/jobs/finalize_auto_continue_e020r7f1.py:IDENTICAL:local=c9b9ddd9c47aeda0458ea56860c2f579646908584d32271039f51ef3c5eb51b6:remote=c9b9ddd9c47aeda0458ea56860c2f579646908584d32271039f51ef3c5eb51b6
+QUARANTINE=control/jobs/install_control_auto_continue_e020r.py:DIFFERENT:local=048781a14b23c1f9b34d13da3495779424202d858f975f3a63c3976bd5b48f8d:remote=4b5d0ba351b2290e0a0dc386060b9f30fe566ca85e0e920115e8ede8d76d4efc
+QUARANTINE=control/jobs/install_control_auto_continue_e020r6.py:IDENTICAL:local=d8dceea6adb5e2792d10f0ce0556bbd1600f23fae53a81ac8a6740ec6fe4eae9:remote=d8dceea6adb5e2792d10f0ce0556bbd1600f23fae53a81ac8a6740ec6fe4eae9
+QUARANTINE=control/jobs/repair_and_install_auto_continue_e020r4.py:IDENTICAL:local=716faacbf76750f8188f7f4c98c3b100a30a685a8770b5c2dd99a5d863030048:remote=716faacbf76750f8188f7f4c98c3b100a30a685a8770b5c2dd99a5d863030048
+QUARANTINE=control/jobs/repair_and_install_auto_continue_e020r7.py:IDENTICAL:local=b61425bc978a21f7e325a3c38b6abead8408d3e1a5b9ed1f0a8091cdfc902671:remote=b61425bc978a21f7e325a3c38b6abead8408d3e1a5b9ed1f0a8091cdfc902671
+UNTRACKED_CONFLICT_BACKUP=/home/leonh/.local/state/prediction-research/recovery/e386-20260921T072721Z
+UNTRACKED_CONFLICT_QUARANTINE=PASS
+E385_CHAIN=FAIL:59
