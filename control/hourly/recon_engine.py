@@ -167,6 +167,48 @@ def discover(routing: dict[str, Any]) -> list[dict[str, Any]]:
             })
     return findings
 
+def _source_key(source: dict[str, Any]) -> str:
+    return str(source.get("source_id") or "")
+
+def _merge_observation(prev: dict[str, Any], fresh: dict[str, Any]) -> None:
+    history = list(prev.get("observation_history", []))
+    history.append({
+        "observed_at": fresh.get("observed_at"),
+        "source_id": fresh.get("sources", [{}])[0].get("source_id"),
+        "document_sha256": fresh.get("sources", [{}])[0].get("document_sha256"),
+        "economic_context_count": fresh.get("quality", {}).get("economic_context_count", 0),
+    })
+    dedup = {}
+    for item in history:
+        key = (item.get("source_id"), item.get("document_sha256"))
+        dedup[key] = item
+    prev["observation_history"] = list(dedup.values())[-20:]
+    prev["observation_count"] = len(prev["observation_history"])
+    prev["independent_source_count"] = len({x.get("source_id") for x in prev["observation_history"] if x.get("source_id")})
+
+def _hunt_gate(item: dict[str, Any]) -> dict[str, Any]:
+    observations = int(item.get("observation_count", 1))
+    sources = int(item.get("independent_source_count", 1))
+    context = int(item.get("quality", {}).get("economic_context_count", 0))
+    model = item.get("economic_model", {})
+    falsification = item.get("falsification", {})
+    has_trigger = bool(model.get("public_trigger"))
+    has_test = bool(falsification.get("next_decisive_test"))
+    passes = observations >= 2 and sources >= 2 and context >= 2 and has_trigger and has_test
+    return {
+        "passes": passes,
+        "observation_count": observations,
+        "independent_source_count": sources,
+        "economic_context_count": context,
+        "has_public_trigger": has_trigger,
+        "has_decisive_test": has_test,
+        "requirements": {
+            "min_observations": 2,
+            "min_independent_sources": 2,
+            "min_economic_context_count": 2,
+        },
+    }
+
 def resurrect_if_kill_condition_changed(old: dict[str, Any], fresh: dict[str, Any]) -> bool:
     if old.get("status") != "KILL":
         return False
@@ -198,10 +240,23 @@ def update_watchlist(findings: list[dict[str, Any]]) -> dict[str, Any]:
         if f.get("status") == "DISCOVER":
             continue
         if f["id"] not in old:
+            f["observation_history"] = []
+            _merge_observation(f, f)
+            f["hunt_gate"] = _hunt_gate(f)
             old[f["id"]] = f
             added += 1
         else:
             prev = old[f["id"]]
+            _merge_observation(prev, f)
+            prev["quality"] = f.get("quality", prev.get("quality", {}))
+            prev["hunt_gate"] = _hunt_gate(prev)
+            if prev.get("status") == "WATCH" and prev["hunt_gate"]["passes"]:
+                prev["status"] = "HUNT"
+                labels = set(prev.get("labels", []))
+                labels.add("RECON_HUNT")
+                prev["labels"] = sorted(labels)
+                prev["hunt_reason"] = "Repeated context-supported signal observed across independent public sources; targeted falsification is warranted."
+                changed += 1
             if resurrect_if_kill_condition_changed(prev, f):
                 prev["status"] = "WATCH"
                 labels = set(prev.get("labels", []))
@@ -234,7 +289,10 @@ def update_graph(findings: list[dict[str, Any]]) -> dict[str, Any]:
     for f in findings:
         if f.get("status") == "DISCOVER":
             continue
-        nodes[f["id"]] = {"id": f["id"], "type": "recon_finding", "status": f["status"]}
+        persisted = load_json(WATCHLIST, {"items": []})
+        persisted_by_id = {x["id"]: x for x in persisted.get("items", [])}
+        state = persisted_by_id.get(f["id"], f).get("status", f["status"])
+        nodes[f["id"]] = {"id": f["id"], "type": "recon_finding", "status": state}
         for role in f["falsification"]["specialist_route"]:
             rid = "role:" + role
             nodes[rid] = {"id": rid, "type": "specialist"}
@@ -250,7 +308,10 @@ def run(run_id: str, routing_path: Path) -> tuple[dict[str, Any], Path]:
     findings = discover(routing)
     watch = update_watchlist(findings)
     graph = update_graph(findings)
+    persisted = load_json(WATCHLIST, {"items": []})
+    persisted_counts = {s: sum(1 for f in persisted.get("items", []) if f.get("status") == s) for s in ["KILL","WATCH","HUNT","PROVE"]}
     counts = {s: sum(1 for f in findings if f["status"] == s) for s in ["DISCOVER","KILL","WATCH","HUNT","PROVE"]}
+    counts["PERSISTED_HUNT"] = persisted_counts["HUNT"]
     result = {
         "run_id": run_id,
         "generated_at": datetime.now(timezone.utc).isoformat(),
