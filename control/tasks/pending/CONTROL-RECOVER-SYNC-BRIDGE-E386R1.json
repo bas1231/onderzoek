@@ -1,0 +1,27 @@
+{
+  "build_authorization": {
+    "build_kind": "control_plane",
+    "capabilities": [
+      "public_network_read",
+      "repository_sync",
+      "local_file_backup",
+      "local_code_patch",
+      "local_test",
+      "service_restart"
+    ],
+    "mode": "control_plane",
+    "objective": "Safely back up and quarantine only untracked files that conflict with tracked origin/main paths, then resume fail-closed repository synchronization and bridge restart verification; cadence override explicitly authorized by user.",
+    "warrant_ref": null
+  },
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/launch_e386_r1.py"
+  ],
+  "hypothesis_id": "CONTROL-NO-SILENT-WAITING",
+  "live_trading": false,
+  "operation": "python",
+  "task_class": "infrastructure",
+  "task_id": "CONTROL-RECOVER-SYNC-BRIDGE-E386R1",
+  "timeout_seconds": 300,
+  "working_directory": "."
+}
