@@ -72,31 +72,58 @@ def main() -> int:
 
     for bench_name in ["historical_replay.json", "architecture_red_team.json"]:
         bench = objs.get(bench_name) or {}
-        rows = bench.get("cases") if bench_name == "historical_replay.json" else bench.get("scenarios")
+        rows = (
+            bench.get("cases")
+            if bench_name == "historical_replay.json"
+            else bench.get("scenarios")
+        )
         for row in rows or []:
             for fp in row.get("failure_patterns", row.get("patterns", [])) or []:
                 if fp not in fp_set:
-                    fail(errors, f"UNKNOWN_FAILURE_PATTERN:{bench_name}:{row.get('id')}:{fp}")
+                    fail(
+                        errors,
+                        f"UNKNOWN_FAILURE_PATTERN:{bench_name}:{row.get('id')}:{fp}",
+                    )
 
     migration = objs.get("role_migration.json") or {}
     valid_domains = {
-        "discovery", "market_research", "mechanics", "algebra",
-        "red_team", "research_director", "independent_reproducer"
+        "discovery",
+        "market_research",
+        "mechanics",
+        "algebra",
+        "red_team",
+        "research_director",
+        "independent_reproducer",
     }
     legacy = migration.get("legacy_to_domain") or {}
     expected_legacy = {
-        "recon_scout", "scout", "weather_twc", "microstructure", "behavioral",
-        "informed_flow", "algebra", "settlement", "prebuild_killer",
-        "chief_falsifier", "independent_reproducer", "research_director"
+        "recon_scout",
+        "scout",
+        "weather_twc",
+        "microstructure",
+        "behavioral",
+        "informed_flow",
+        "algebra",
+        "settlement",
+        "prebuild_killer",
+        "chief_falsifier",
+        "independent_reproducer",
+        "research_director",
     }
     if set(legacy) != expected_legacy:
-        fail(errors, f"LEGACY_ROLE_MAPPING_MISMATCH:{sorted(set(legacy) ^ expected_legacy)}")
+        fail(
+            errors,
+            f"LEGACY_ROLE_MAPPING_MISMATCH:{sorted(set(legacy) ^ expected_legacy)}",
+        )
     for old, item in legacy.items():
         if item.get("domain") not in valid_domains:
             fail(errors, f"UNKNOWN_MIGRATION_DOMAIN:{old}:{item.get('domain')}")
 
     governor = objs.get("governor_policy.json") or {}
-    gov_rules = {r.get("match"): r.get("decision") for r in governor.get("rules", [])}
+    gov_rules = {
+        r.get("match"): r.get("decision")
+        for r in governor.get("rules", [])
+    }
     required_governor = {
         "paid_action": "BLOCK_USER_APPROVAL",
         "live_order_or_trade": "BLOCK_USER_APPROVAL",
@@ -110,9 +137,17 @@ def main() -> int:
             fail(errors, f"GOVERNOR_INVARIANT_MISSING:{match}:{decision}")
 
     scheduler = objs.get("scheduler_policy.json") or {}
-    if scheduler.get("reproducibility", {}).get("policy_frozen_during_shadow_benchmark") is not True:
+    if (
+        scheduler.get("reproducibility", {})
+        .get("policy_frozen_during_shadow_benchmark")
+        is not True
+    ):
         fail(errors, "SCHEDULER_NOT_FROZEN_FOR_SHADOW")
-    if scheduler.get("protected_capacity", {}).get("discovery_required_each_active_hour") is not True:
+    if (
+        scheduler.get("protected_capacity", {})
+        .get("discovery_required_each_active_hour")
+        is not True
+    ):
         fail(errors, "DISCOVERY_NOT_PROTECTED")
 
     shape = objs.get("task_shape_policy.json") or {}
@@ -130,7 +165,11 @@ def main() -> int:
 
     budget = objs.get("model_budget_policy.json") or {}
     no_spend = budget.get("no_hidden_spend") or {}
-    for key in ["automatic_credit_purchase", "openai_api_key_fallback", "paid_external_model_fallback"]:
+    for key in [
+        "automatic_credit_purchase",
+        "openai_api_key_fallback",
+        "paid_external_model_fallback",
+    ]:
         if no_spend.get(key) is not False:
             fail(errors, f"MODEL_BUDGET_HIDDEN_SPEND_NOT_DISABLED:{key}")
     if len(budget.get("capability_tiers") or {}) < 4:
@@ -141,18 +180,86 @@ def main() -> int:
     if account.get("active_tasks_total") != 5 or account.get("free_slots") != 0:
         fail(errors, "PLUS_TOPOLOGY_DOES_NOT_MATCH_AUDITED_FULL_SLOT_STATE")
     target = topology.get("target_prediction_topology") or {}
-    prediction_lanes = [v for v in target.values() if not v.get("protected_from_research_os")]
-    reserved_lanes = [v for v in target.values() if v.get("protected_from_research_os")]
+    prediction_lanes = [
+        value
+        for value in target.values()
+        if not value.get("protected_from_research_os")
+    ]
+    reserved_lanes = [
+        value
+        for value in target.values()
+        if value.get("protected_from_research_os")
+    ]
     if len(prediction_lanes) != 4 or len(reserved_lanes) != 1:
         fail(errors, "PLUS_TOPOLOGY_MUST_PRESERVE_4_PLUS_1_SLOT_LAYOUT")
-    if topology.get("cost_policy", {}).get("disable_existing_non_prediction_task_to_free_capacity") is not False:
+    if (
+        topology.get("cost_policy", {})
+        .get("disable_existing_non_prediction_task_to_free_capacity")
+        is not False
+    ):
         fail(errors, "PLUS_TOPOLOGY_MAY_NOT_EVICT_EXISTING_NON_PREDICTION_TASK")
 
     shadow = objs.get("shadow_acceptance.json") or {}
+    if shadow.get("schema_version") != 2:
+        fail(errors, "SHADOW_ACCEPTANCE_SCHEMA_NOT_V2")
+    if shadow.get("status") != "PREREGISTERED_BEFORE_UNSEEN_SHADOW_DATA":
+        fail(errors, "SHADOW_ACCEPTANCE_NOT_FROZEN_BEFORE_UNSEEN_DATA")
+
     hard = "\n".join(shadow.get("hard_fail_conditions") or []).lower()
-    for word in ["paid", "live", "wallet", "point-in-time", "failed required gate"]:
+    for word in [
+        "paid",
+        "live",
+        "wallet",
+        "point-in-time",
+        "failed required gate",
+        "different preregistered case sets",
+        "missing metric denominator",
+    ]:
         if word not in hard:
             fail(errors, f"SHADOW_HARD_FAIL_MISSING:{word}")
+
+    minimum = shadow.get("minimum_observation_set") or {}
+    expected_minimum = {
+        "unseen_candidate_events": 20,
+        "active_hour_cycles": 10,
+        "require_multiple_task_shapes": True,
+        "require_at_least_one_survivor_case": True,
+        "require_at_least_one_decisive_negative_case": True,
+        "case_id_required": True,
+        "case_id_unique": True,
+        "baseline_and_challenger_same_case_set": True,
+    }
+    for key, expected in expected_minimum.items():
+        if minimum.get(key) != expected:
+            fail(errors, f"SHADOW_MINIMUM_INVARIANT_MISSING:{key}:{expected}")
+
+    anti_gaming = shadow.get("anti_gaming") or {}
+    required_anti_gaming = {
+        "metrics_frozen_before_unseen_shadow_data": True,
+        "no_post_hoc_case_removal": True,
+        "no_relabeling_failed_candidate_as_out_of_scope_after_result": True,
+        "case_ids_required_and_unique": True,
+        "baseline_and_challenger_identical_case_ids": True,
+        "missing_denominators_are_unknown_not_zero": True,
+        "both_sides_must_meet_minimum_observation_set": True,
+    }
+    for key, expected in required_anti_gaming.items():
+        if anti_gaming.get(key) is not expected:
+            fail(errors, f"SHADOW_ANTI_GAMING_INVARIANT_MISSING:{key}")
+
+    missing_metric = shadow.get("missing_metric_policy") or {}
+    if missing_metric.get("missing_denominator") != "UNKNOWN":
+        fail(errors, "SHADOW_MISSING_DENOMINATOR_NOT_UNKNOWN")
+    if missing_metric.get("zero_denominator") != "UNKNOWN":
+        fail(errors, "SHADOW_ZERO_DENOMINATOR_NOT_UNKNOWN")
+    if missing_metric.get("unknown_metric_may_count_as_improvement") is not False:
+        fail(errors, "SHADOW_UNKNOWN_METRIC_MAY_COUNT_AS_IMPROVEMENT")
+    if missing_metric.get("unknown_no_regression_metric_may_pass_gate") is not False:
+        fail(errors, "SHADOW_UNKNOWN_METRIC_MAY_PASS_NO_REGRESSION")
+
+    amendment = shadow.get("amendment") or {}
+    if amendment.get("timing") != "before_first_unseen_shadow_observation":
+        fail(errors, "SHADOW_AMENDMENT_TIMING_NOT_PRE_DATA")
 
     worker_schema = objs.get("worker_contract.schema.json") or {}
     worker_constraints = (
@@ -170,7 +277,10 @@ def main() -> int:
         fail(errors, f"HISTORICAL_REPLAY_TOO_SMALL:{len(replay_ids)}")
     if len(replay_ids) != len(set(replay_ids)):
         fail(errors, "DUPLICATE_HISTORICAL_REPLAY_ID")
-    if not any(c.get("premature_kill_risk") == "HIGH" for c in replay.get("cases", [])):
+    if not any(
+        c.get("premature_kill_risk") == "HIGH"
+        for c in replay.get("cases", [])
+    ):
         fail(errors, "REPLAY_HAS_NO_SURVIVOR_ANTI_OVERKILL_CASE")
 
     art = objs.get("architecture_red_team.json") or {}
