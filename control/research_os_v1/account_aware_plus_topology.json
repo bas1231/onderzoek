@@ -1,0 +1,77 @@
+{
+  "schema_version": 1,
+  "status": "ACCOUNT_AWARE_DESIGN_ONLY",
+  "observed_at": "2026-09-21",
+  "product_limit": {
+    "max_active_scheduled_tasks_plus": 5,
+    "source": "OpenAI Scheduled Tasks documentation"
+  },
+  "observed_account_state": {
+    "active_tasks_total": 5,
+    "prediction_research_tasks": 4,
+    "reserved_non_prediction_tasks": 1,
+    "free_slots": 0,
+    "mutation_performed": false
+  },
+  "constraint": "Research OS must not require creation of an additional active Scheduled Task while the existing non-prediction task remains enabled.",
+  "target_prediction_topology": {
+    "slot_1": {
+      "lane": "PRIMARY_SCOUT",
+      "responsibility": "official/primary/academic/code discovery",
+      "protected": true
+    },
+    "slot_2": {
+      "lane": "RECON_SCOUT",
+      "responsibility": "orthogonal weak-signal/offensive economic reconnaissance",
+      "protected": true
+    },
+    "slot_3": {
+      "lane": "DYNAMIC_SPECIALIST_REDTEAM_REPRO",
+      "responsibility": "Market Research, Mechanics or Algebra by task shape; Red Team normally after specialist evidence; temporary Reproducer borrows this slot when promotion-relevant",
+      "dynamic": true
+    },
+    "slot_4": {
+      "lane": "RESEARCH_DIRECTOR",
+      "responsibility": "reconcile artifacts, enforce gates, choose next decisive question, consolidate report",
+      "protected": true
+    },
+    "slot_5": {
+      "lane": "RESERVED_EXISTING_NON_PREDICTION_TASK",
+      "responsibility": "remain untouched by Research OS migration unless the user explicitly changes it",
+      "protected_from_research_os": true
+    }
+  },
+  "important_tradeoff": {
+    "current_prediction_pattern": "Four staggered prediction tasks collectively approximate one prediction run per hour.",
+    "full_four_lane_hourly_pattern": "Four research task runs per hour, one per lane, would consume materially more Plus task/model allowance.",
+    "decision": "Do not activate four-lane hourly execution until a canary measures useful unique evidence per run and usage impact."
+  },
+  "canary_modes": [
+    {
+      "id": "CANARY_LOW_USAGE",
+      "description": "Keep current approximate one-model-run-per-hour cadence; test six-domain context/routing inside existing transport first.",
+      "usage_change": "MINIMAL",
+      "preferred_first": true
+    },
+    {
+      "id": "CANARY_DUAL_DISCOVERY",
+      "description": "Use two genuinely independent discovery lanes only during a bounded shadow interval; leave specialist/director consolidation conservative.",
+      "usage_change": "MODERATE",
+      "requires_explicit_task_reconfiguration": true
+    },
+    {
+      "id": "CANARY_FOUR_LANE",
+      "description": "Primary Scout + Recon Scout + dynamic Specialist/RedTeam/Repro + Director each operate as separate hourly task lanes.",
+      "usage_change": "HIGH_RELATIVE_TO_CURRENT",
+      "requires_explicit_task_reconfiguration": true,
+      "activation_gate": "Only after low-usage and dual-discovery canaries show enough incremental value."
+    }
+  ],
+  "reproducer_policy": "Independent Reproducer never consumes a sixth active task slot; it temporarily borrows the dynamic specialist/red-team slot and is isolated by input contract.",
+  "cost_policy": {
+    "create_paid_api_workers": false,
+    "buy_credits_automatically": false,
+    "disable_existing_non_prediction_task_to_free_capacity": false,
+    "change_existing_task_schedule_without_user_instruction": false
+  }
+}
