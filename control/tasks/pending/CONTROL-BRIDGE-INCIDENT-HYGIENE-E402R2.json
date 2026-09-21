@@ -1,0 +1,23 @@
+{
+  "build_authorization": {
+    "build_kind": "control_plane",
+    "capabilities": [
+      "read_repository",
+      "git_commit",
+      "git_push"
+    ],
+    "mode": "control_plane",
+    "objective": "Persist the already-tested E402 browser bridge incident hygiene repair without staging unrelated files or secrets."
+  },
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/commit_bridge_incident_hygiene_e402r2.py"
+  ],
+  "hypothesis_id": "CONTROL-BRIDGE-RELIABILITY",
+  "live_trading": false,
+  "operation": "python",
+  "task_class": "infrastructure",
+  "task_id": "CONTROL-BRIDGE-INCIDENT-HYGIENE-E402R2",
+  "timeout_seconds": 90,
+  "working_directory": "."
+}
