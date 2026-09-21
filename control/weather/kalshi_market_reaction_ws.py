@@ -71,7 +71,21 @@ def auth_headers(key_id, private_key):
     }
 
 
-def handle_message(books: dict[str, OrderBook], msg: dict[str, Any], recv_at: str, fp) -> None:
+def validate_subscription_sequence(last_seq_by_sid: dict[int, int], msg: dict[str, Any]) -> None:
+    sid = msg.get("sid")
+    seq = msg.get("seq")
+    typ = msg.get("type")
+    if typ in ("orderbook_snapshot", "orderbook_delta") and (not isinstance(sid, int) or not isinstance(seq, int)):
+        raise ValueError("orderbook frame missing sid/seq")
+    if not isinstance(sid, int) or not isinstance(seq, int):
+        return
+    previous = last_seq_by_sid.get(sid)
+    if previous is not None and seq != previous + 1:
+        raise ValueError(f"subscription sequence gap sid={sid}: {previous}->{seq}")
+    last_seq_by_sid[sid] = seq
+
+
+def handle_message(books: dict[str, OrderBook], msg: dict[str, Any], recv_at: str, fp, last_seq_by_sid: dict[int, int]) -> None:
     """Persist one decoded WS frame and update reconstructed books fail-closed.
 
     Every successfully decoded frame is also transport coverage. This matters
@@ -89,6 +103,14 @@ def handle_message(books: dict[str, OrderBook], msg: dict[str, Any], recv_at: st
     })
 
     typ = msg.get("type")
+    try:
+        validate_subscription_sequence(last_seq_by_sid, msg)
+    except ValueError as exc:
+        append_event(fp, {
+            "kind": "capture_gap", "start": recv_at, "end": recv_at,
+            "reason": f"subscription_sequence:{str(exc)[:200]}", "transport": "ws",
+        })
+        raise
     if typ == "orderbook_snapshot":
         ticker = (msg.get("msg") or {}).get("market_ticker")
         if ticker in books:
@@ -148,6 +170,7 @@ async def run_once(
     key_id, private_key = load_auth()
     headers = auth_headers(key_id, private_key)
     books = {t: OrderBook(t) for t in tickers}
+    last_seq_by_sid: dict[int, int] = {}
     start = time.monotonic()
 
     # websockets >= 14 uses additional_headers; older releases use extra_headers.
@@ -193,7 +216,7 @@ async def run_once(
                     "start": recv_at, "end": recv_at, "error_type": "JSONDecodeError",
                 })
                 continue
-            handle_message(books, msg, recv_at, fp)
+            handle_message(books, msg, recv_at, fp, last_seq_by_sid)
 
 
 async def main_async(args) -> int:

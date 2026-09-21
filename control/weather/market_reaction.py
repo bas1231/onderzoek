@@ -191,8 +191,8 @@ class OrderBook:
         seq = envelope.get("seq")
         if not isinstance(seq, int):
             raise ValueError("delta seq missing")
-        if self.last_seq is None or seq != self.last_seq + 1:
-            raise ValueError(f"sequence gap: {self.last_seq}->{seq}")
+        # Sequence continuity is validated per WebSocket subscription sid.
+        # One sid can multiplex multiple market tickers.
         side = msg.get("side")
         if side not in ("yes", "no"):
             raise ValueError("invalid side")
