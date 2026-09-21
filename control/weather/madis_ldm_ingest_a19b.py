@@ -15,7 +15,7 @@ silently substituted for `ldm_queue_insert_at`.
 
 Live use is intended for a future pqact PIPE action after NOAA supplies the exact
 MADIS feedtype/product identifiers. Replay exists only for validation and is
-NEVER eligible as prospective adapter latency evidence.
+NEVER eligible as prospective latency evidence.
 """
 from __future__ import annotations
 
@@ -119,7 +119,7 @@ def clock_health() -> dict:
     """Capture clock source/offset/uncertainty; unknown fails closed."""
     if shutil.which("chronyc"):
         try:
-            cp = subprocess.run(["chronyc", "-n", "tracking"], text=True, capture_output=True, timeout=3)
+            cp = subprocess.run(["chronyc", "tracking", "-n"], text=True, capture_output=True, timeout=3)
             if cp.returncode == 0 and cp.stdout.strip():
                 out = parse_chronyc_tracking(cp.stdout)
                 out["raw_tracking"] = cp.stdout[-2500:]
@@ -367,6 +367,7 @@ def ingest_payload(data: bytes, timing: dict, *, mode: str, metadata: dict | Non
         "ldm_queue_insert_source": "UNAVAILABLE_FROM_PQACT_PIPE_METADATA_A19B_V1",
         "product_metadata": metadata,
         "clock_health": clock,
+        "decode": decoded_wrapper,
         "adapter_timestamp_semantics": "adapter_first_seen_at is local handler time; NOT network receipt and NOT LDM queue insertion",
         "queue_timestamp_semantics": "true local LDM queue insertion requires queue-native PQ API/cursor evidence in A19B-v2",
         "observation_to_adapter_first_seen": latency,
