@@ -1,0 +1,24 @@
+{
+  "build_authorization": {
+    "build_kind": "control_plane",
+    "capabilities": [
+      "read_repository",
+      "modify_agents_md",
+      "git_commit",
+      "git_push"
+    ],
+    "mode": "control_plane",
+    "objective": "Document the mandatory build_authorization rule and the E402R1 enqueue failure diagnostic in AGENTS.md so future agents do not repeat the same control-plane error."
+  },
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/document_infrastructure_bridge_auth_rule_e403.py"
+  ],
+  "hypothesis_id": "CONTROL-BRIDGE-RELIABILITY",
+  "live_trading": false,
+  "operation": "python",
+  "task_class": "infrastructure",
+  "task_id": "CONTROL-DOCUMENT-INFRA-AUTH-RULE-E403",
+  "timeout_seconds": 90,
+  "working_directory": "."
+}
