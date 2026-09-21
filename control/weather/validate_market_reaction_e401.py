@@ -17,11 +17,14 @@ FILES = [
     ROOT / "control/weather/analyze_kwi_market_reaction.py",
     ROOT / "control/weather/test_market_reaction_ws.py",
     ROOT / "control/weather/test_analyze_kwi_market_reaction.py",
+    ROOT / "control/weather/summarize_kwi_market_reaction_e401.py",
+    ROOT / "control/weather/test_summarize_kwi_market_reaction_e401.py",
 ]
 TESTS = [
     ROOT / "control/weather/test_market_reaction.py",
     ROOT / "control/weather/test_market_reaction_ws.py",
     ROOT / "control/weather/test_analyze_kwi_market_reaction.py",
+    ROOT / "control/weather/test_summarize_kwi_market_reaction_e401.py",
 ]
 
 
