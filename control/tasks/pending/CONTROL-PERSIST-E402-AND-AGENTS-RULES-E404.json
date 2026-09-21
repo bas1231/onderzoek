@@ -1,0 +1,25 @@
+{
+  "build_authorization": {
+    "build_kind": "control_plane",
+    "capabilities": [
+      "read_repository",
+      "modify_agents_md",
+      "modify_control_plane",
+      "git_commit",
+      "git_push"
+    ],
+    "mode": "control_plane",
+    "objective": "Persist the tested E402 browser bridge hygiene fix and document mandatory transport-safe infrastructure task authoring rules in AGENTS.md."
+  },
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/persist_e402_and_agents_rules_e404.py"
+  ],
+  "hypothesis_id": "CONTROL-BRIDGE-RELIABILITY",
+  "live_trading": false,
+  "operation": "python",
+  "task_class": "infrastructure",
+  "task_id": "CONTROL-PERSIST-E402-AND-AGENTS-RULES-E404",
+  "timeout_seconds": 90,
+  "working_directory": "."
+}
