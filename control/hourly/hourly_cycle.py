@@ -46,6 +46,7 @@ def main() -> int:
     hydrator = load('packet_hydrator', R / 'control/hourly/packet_hydrator.py')
     orchestrator = load('agent_orchestrator', R / 'control/hourly/agent_orchestrator.py')
     candidate_queue = load('candidate_queue', R / 'control/hourly/candidate_queue.py')
+    ai_handoff = load('ai_handoff', R / 'control/hourly/ai_handoff.py')
 
     run, manifest, report, packets = runner.create_packets()
     sweep_path, sweep_data = sweep.sweep(max_workers=4)
@@ -69,12 +70,11 @@ def main() -> int:
     memory_data, memory_path = memory.build(run['run_id'])
 
     # PVA AGENT CONTROL PLANE V1
-    #
-    # Routing evidence is attached to specialist packets first.
-    # The orchestrator then assigns READY/NO_EVIDENCE/etc.
-    # Candidate scheduling remains persistent and non-blocking.
-    # No AI/API call is performed here: ChatGPT remains the
-    # Research Director reasoning layer.
+    # Routing evidence and Recon triage are attached to specialist packets.
+    # The orchestrator assigns READY/NO_EVIDENCE/etc. ChatGPT remains the
+    # reasoning layer, but READY work is now compiled into the dedicated
+    # AI-only work bundle consumed by the browser bridge. This is not an
+    # executor task and cannot authorize live/paid/wallet actions.
     packet_dir = R / 'knowledge/runs/agent_packets' / run['run_id']
 
     hunt_ref = recon_data.get('hunt_plans', {}).get('ref')
@@ -103,6 +103,11 @@ def main() -> int:
         run['run_id'],
         proof_review_path=proof_review_path,
     )
+
+    # Build before hourly_wake.py. The browser bridge only offers AI work
+    # when the wake incident and bundle run_id match, so ordering is part of
+    # the dispatch contract.
+    ai_bundle, ai_bundle_path = ai_handoff.build(run['run_id'])
 
     run_path = R / 'knowledge/runs' / (run['run_id'] + '.json')
     current = json.loads(run_path.read_text())
@@ -142,6 +147,14 @@ def main() -> int:
         'proof_review_ref': str(
             proof_review_path.relative_to(R)
         ),
+        'ai_work_bundle_ref': str(
+            ai_bundle_path.relative_to(R)
+        ),
+        'ai_work_ready_roles': [
+            item.get('agent_id')
+            for item in ai_bundle.get('ready_roles', [])
+        ],
+        'ai_work_job_count': len(ai_bundle.get('ready_roles', [])),
         'validation_pipeline': orchestration_data.get(
             'validation_pipeline', {}
         ),
@@ -184,6 +197,18 @@ def main() -> int:
             handle.write(
                 'Director handoff: '
                 + str(director_handoff_path.relative_to(R))
+                + chr(10)
+            )
+            handle.write(
+                'AI work bundle: '
+                + str(ai_bundle_path.relative_to(R))
+                + chr(10)
+            )
+            handle.write(
+                'AI READY roles: '
+                + json.dumps(
+                    [x.get('agent_id') for x in ai_bundle.get('ready_roles', [])]
+                )
                 + chr(10)
             )
             handle.write(
