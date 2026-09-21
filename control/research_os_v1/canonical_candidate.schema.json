@@ -1,0 +1,43 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "research-os-v1-canonical-candidate",
+  "title": "Research OS V1 Canonical Candidate View",
+  "type": "object",
+  "required": ["candidate_id", "version", "hypothesis", "phase", "queue_status", "economic_status", "required_gates", "next_decisive_question", "source_commit"],
+  "properties": {
+    "candidate_id": {"type": "string", "minLength": 1},
+    "version": {"type": "integer", "minimum": 1},
+    "hypothesis": {"type": "string", "minLength": 1},
+    "mechanism": {"type": ["string", "null"]},
+    "phase": {"type": "string", "minLength": 1},
+    "queue_status": {"enum": ["QUEUED", "NEEDS_DIRECTOR", "EXPERIMENT_REQUIRED", "RUNNING", "WAITING_FOR_DATA", "WAITING_FOR_RESULT", "RESULT_READY", "NEEDS_REVISION", "PARKED", "CLOSED_NEGATIVE", "PROMOTION_CANDIDATE"]},
+    "economic_status": {"enum": ["NO_PROVEN_EDGE", "STRUCTURAL_CANDIDATE", "RESEARCH_POSITIVE", "TESTED_NEGATIVE", "EXECUTION_BLOCKED"]},
+    "priority": {"enum": ["P0", "P1", "P2", "P3"]},
+    "claims": {"type": "array", "items": {"type": "string"}},
+    "assumptions": {"type": "array", "items": {"type": "string"}},
+    "supporting_evidence": {"type": "array", "items": {"type": "string"}},
+    "contradictory_evidence": {"type": "array", "items": {"type": "string"}},
+    "known_failure_patterns": {"type": "array", "items": {"type": "string"}},
+    "kill_conditions": {"type": "array", "items": {"type": "string"}},
+    "resurrection_conditions": {"type": "array", "items": {"type": "string"}},
+    "required_gates": {"type": "object", "additionalProperties": {"enum": ["PASS", "FAIL", "PENDING", "UNKNOWN", "NOT_APPLICABLE"]}},
+    "search_family": {
+      "type": ["object", "null"],
+      "properties": {
+        "id": {"type": "string"},
+        "hypotheses_examined": {"type": "integer", "minimum": 0},
+        "parameterizations_examined": {"type": "integer", "minimum": 0},
+        "post_hoc_mutations": {"type": "integer", "minimum": 0},
+        "untouched_evidence_remaining": {"type": "boolean"}
+      },
+      "additionalProperties": true
+    },
+    "next_decisive_question": {"type": ["string", "null"]},
+    "dependencies": {"type": "array", "items": {"type": "string"}},
+    "blockers": {"type": "array", "items": {"type": "string"}},
+    "point_in_time_cutoff": {"type": ["string", "null"]},
+    "source_commit": {"type": "string", "minLength": 1},
+    "updated_at": {"type": ["string", "null"]}
+  },
+  "additionalProperties": true
+}
