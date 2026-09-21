@@ -5,12 +5,13 @@ import json
 from pathlib import Path
 import shutil
 import subprocess
-import sys
 from datetime import datetime, timezone
 
 ROOT = Path.cwd()
 EVIDENCE = ROOT / "evidence" / "weather"
 EVIDENCE.mkdir(parents=True, exist_ok=True)
+PROJECT_PYTHON = Path.home() / "prediction_research" / ".venv" / "bin" / "python"
+PYTHON = str(PROJECT_PYTHON if PROJECT_PYTHON.is_file() else Path("python3"))
 
 
 def run(*args: str, timeout: int = 600) -> dict:
@@ -44,6 +45,7 @@ def parse_json(text: str) -> dict:
 result = {
     "task": "WEATHER-AWAY-A19B",
     "generated_at": datetime.now(timezone.utc).isoformat(),
+    "python": PYTHON,
     "live_trading": False,
     "paid_action": False,
     "wallet_action": False,
@@ -51,8 +53,7 @@ result = {
     "steps": {},
 }
 
-# Step 1: mandatory 3-gate validation.
-validation = run(sys.executable, "control/jobs/validate_madis_ldm_a19b.py", timeout=300)
+validation = run(PYTHON, "control/jobs/validate_madis_ldm_a19b.py", timeout=300)
 validation_obj = parse_json(validation["stdout"])
 result["steps"]["a19b_three_gate_validation"] = {
     "runner": validation,
@@ -60,19 +61,15 @@ result["steps"]["a19b_three_gate_validation"] = {
 }
 validation_pass = bool(validation["returncode"] == 0 and validation_obj.get("status") == "PASS")
 
-# Step 2: only if A19B is technically green, refresh A18/A19 research evidence.
 if validation_pass:
-    refresh = run(sys.executable, "control/jobs/run_weather_a18_a19.py", timeout=600)
+    refresh = run(PYTHON, "control/jobs/run_weather_a18_a19.py", timeout=600)
     result["steps"]["a18_a19_refresh"] = {
         "runner": refresh,
         "parsed": parse_json(refresh["stdout"]),
     }
 else:
-    result["steps"]["a18_a19_refresh"] = {
-        "status": "SKIPPED_A19B_VALIDATION_NOT_PASS"
-    }
+    result["steps"]["a18_a19_refresh"] = {"status": "SKIPPED_A19B_VALIDATION_NOT_PASS"}
 
-# Step 3: passive clock-readiness inventory; never install or modify services.
 clock = {}
 if shutil.which("chronyc"):
     clock["chronyc_tracking"] = run("chronyc", "tracking", "-n", timeout=10)
