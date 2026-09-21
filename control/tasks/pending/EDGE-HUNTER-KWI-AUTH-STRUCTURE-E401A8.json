@@ -1,0 +1,14 @@
+{
+  "build_authorization": null,
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/kwi_auth_structure_e401a8.py"
+  ],
+  "hypothesis_id": "KWI-FULL-STATION-PRECANONICAL-V1",
+  "live_trading": false,
+  "operation": "python",
+  "task_class": "research",
+  "task_id": "EDGE-HUNTER-KWI-AUTH-STRUCTURE-E401A8",
+  "timeout_seconds": 60,
+  "working_directory": "."
+}
