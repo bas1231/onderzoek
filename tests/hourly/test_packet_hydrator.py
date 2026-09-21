@@ -92,3 +92,38 @@ def test_no_evidence_stays_empty():
     assert hydrated["routed_evidence"] == []
     assert hydrated["coverage_gaps"] == ["missing dataset"]
     assert hydrated["input_refs"] == []
+
+
+def test_recon_hunt_routes_to_specialists_and_prebuild_killer(tmp_path):
+    m=load(Path("control/hourly/packet_hydrator.py"))
+    m.ROOT=tmp_path
+    packet_dir=tmp_path/"knowledge/runs/agent_packets/run"
+    packet_dir.mkdir(parents=True)
+    for role in ["settlement","algebra","microstructure","prebuild_killer"]:
+        (packet_dir/(role+".json")).write_text(json.dumps({"agent_id":role,"status":"PENDING","input_refs":[]}))
+    hunt_path=tmp_path/"knowledge/runs/recon_hunts/run.json"
+    hunt_path.parent.mkdir(parents=True)
+    hunt_path.write_text(json.dumps({"plans":[{
+        "candidate_id":"RECON-X",
+        "status":"HUNT",
+        "specialist_route":["settlement","algebra"],
+        "execution_gate":{"research_only":True,"live_trading":False,"paid_actions":False,"wallet_actions":False}
+    }]}))
+    out=m.apply_recon_hunts(packet_dir,hunt_path)
+    assert out["hunt_count"]==1
+    settlement=json.loads((packet_dir/"settlement.json").read_text())
+    algebra=json.loads((packet_dir/"algebra.json").read_text())
+    micro=json.loads((packet_dir/"microstructure.json").read_text())
+    killer=json.loads((packet_dir/"prebuild_killer.json").read_text())
+    assert settlement["recon_hunts"][0]["candidate_id"]=="RECON-X"
+    assert algebra["recon_hunts"][0]["candidate_id"]=="RECON-X"
+    assert "recon_hunts" not in micro
+    assert killer["candidate_ids"]==["RECON-X"]
+    assert killer["candidates"][0]["candidate_id"]=="RECON-X"
+
+def test_no_hunt_plan_is_noop(tmp_path):
+    m=load(Path("control/hourly/packet_hydrator.py"))
+    m.ROOT=tmp_path
+    packet_dir=tmp_path/"packets"
+    packet_dir.mkdir()
+    assert m.apply_recon_hunts(packet_dir,None)["hunt_count"]==0
