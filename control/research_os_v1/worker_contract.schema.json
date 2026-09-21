@@ -3,16 +3,19 @@
   "$id": "research-os-v1-worker-contract",
   "title": "Research OS V1 Worker Task/Result Contract",
   "type": "object",
-  "required": ["task_id", "worker_domain", "objective", "task_shape", "inputs", "constraints", "expected_output"],
+  "required": ["task_id", "worker_domain", "objective", "state", "task_shape", "inputs", "constraints", "expected_output", "scheduling", "proposed_action"],
   "properties": {
     "task_id": {"type": "string", "minLength": 1},
     "candidate_id": {"type": ["string", "null"]},
+    "legacy_role": {"type": ["string", "null"]},
+    "legacy_status": {"type": ["string", "null"]},
     "worker_domain": {"enum": ["discovery", "market_research", "mechanics", "algebra", "red_team", "research_director", "independent_reproducer"]},
     "objective": {"type": "string", "minLength": 1},
     "decisive_question": {"type": ["string", "null"]},
+    "state": {"enum": ["READY", "WAITING_FOR_DATA", "WAITING_FOR_RESULT", "PARKED", "BLOCKED"]},
     "task_shape": {
       "type": "object",
-      "required": ["parallelism", "dependency_shape", "uncertainty_type", "decision_relevance"],
+      "required": ["parallelism", "dependency_shape", "uncertainty_type", "time_sensitivity", "novelty", "decision_relevance"],
       "properties": {
         "parallelism": {"enum": ["LOW", "MEDIUM", "HIGH"]},
         "dependency_shape": {"enum": ["INDEPENDENT", "PARTIAL", "SEQUENTIAL"]},
@@ -31,13 +34,15 @@
         "rule_refs": {"type": "array", "items": {"type": "string"}},
         "negative_evidence_refs": {"type": "array", "items": {"type": "string"}},
         "failure_pattern_ids": {"type": "array", "items": {"type": "string"}},
+        "candidate_ids": {"type": "array", "items": {"type": "string"}},
+        "routed_evidence_count": {"type": "integer", "minimum": 0},
         "point_in_time_cutoff": {"type": ["string", "null"]}
       },
       "additionalProperties": true
     },
     "constraints": {
       "type": "object",
-      "required": ["live_trading", "paid_actions", "wallet_actions"],
+      "required": ["live_trading", "paid_actions", "wallet_actions", "source_policy"],
       "properties": {
         "live_trading": {"const": false},
         "paid_actions": {"const": false},
@@ -53,8 +58,33 @@
       "required": ["artifact_type", "required_fields"],
       "properties": {
         "artifact_type": {"enum": ["DISCOVERY_FINDING", "RESEARCH_FINDING", "FALSIFICATION", "REPRODUCTION", "DIRECTOR_DECISION"]},
-        "required_fields": {"type": "array", "items": {"type": "string"}}
-      }
+        "required_fields": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}}
+      },
+      "additionalProperties": false
+    },
+    "scheduling": {
+      "type": "object",
+      "required": ["uncertainty_reduction", "dependency_unlock_value", "evidence_cost", "model_cost", "duplication_risk"],
+      "properties": {
+        "uncertainty_reduction": {"enum": ["LOW", "MEDIUM", "HIGH", "DECISIVE"]},
+        "dependency_unlock_value": {"enum": ["NONE", "ONE", "MULTIPLE"]},
+        "evidence_cost": {"enum": ["LOW", "MEDIUM", "HIGH"]},
+        "model_cost": {"enum": ["LOW", "MEDIUM", "HIGH"]},
+        "duplication_risk": {"enum": ["LOW", "MEDIUM", "HIGH"]}
+      },
+      "additionalProperties": false
+    },
+    "proposed_action": {
+      "type": "object",
+      "required": ["kind", "provenance", "point_in_time"],
+      "properties": {
+        "kind": {"type": "string", "minLength": 1},
+        "provenance": {"type": "boolean"},
+        "point_in_time": {"type": "boolean"},
+        "branch": {"type": ["string", "null"]},
+        "contains_secrets": {"type": "boolean"}
+      },
+      "additionalProperties": true
     },
     "result": {
       "type": "object",
