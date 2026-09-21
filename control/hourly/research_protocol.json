@@ -28,6 +28,8 @@
   "null_result": "NO_PROVEN_EDGE",
   "promotion_rule": "No candidate may be called proven unless every required gate passes out of sample.",
   "research_only": true,
-  "version": 1,
-  "weather_rule": "Predict TWC settlement value as black box; do not equate objective weather truth with settlement."
+  "version": 2,
+  "weather_rule": "Predict TWC settlement value as black box; do not equate objective weather truth with settlement.",
+  "recon_rule": "Recon may aggressively investigate free/public/passive evidence of economic leaks, failures, successes, behavioral weakness, informed-flow signatures and unintended market mechanisms. Discovery is not proof; serious candidates must be routed through falsification and execution-realism gates.",
+  "recon_execution_boundary": "Strategic/manipulation mechanisms may be studied as intelligence, but unauthorized access, credential abuse, fraud/deception, acquisition of stolen/private/non-public information, active security exploitation and prohibited or illegal execution are not permitted. Retain such mechanisms only as NON_EXECUTABLE intelligence when useful."
 }
