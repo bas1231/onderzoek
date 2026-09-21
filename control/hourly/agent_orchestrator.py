@@ -93,6 +93,57 @@ def has_candidate(packet: dict[str, Any]) -> bool:
     )
 
 
+def _validated_ids(items: Any, required_status: str) -> list[str]:
+    if not isinstance(items, list):
+        return []
+    out = []
+    for item in items:
+        if not isinstance(item, dict):
+            continue
+        if str(item.get("status", "")).upper() != required_status:
+            continue
+        cid = item.get("candidate_id")
+        if cid:
+            out.append(str(cid))
+    return sorted(set(out))
+
+
+def propagate_validation(run_dir: Path) -> dict[str, Any]:
+    killer_path = run_dir / "prebuild_killer.json"
+    falsifier_path = run_dir / "chief_falsifier.json"
+    reproducer_path = run_dir / "independent_reproducer.json"
+
+    killer = load_json(killer_path) if killer_path.exists() else {}
+    falsifier = load_json(falsifier_path) if falsifier_path.exists() else {}
+    reproducer = load_json(reproducer_path) if reproducer_path.exists() else {}
+
+    # Fail closed: only explicit structured PASS records advance. Notes,
+    # candidate self-claims, missing results, or generic COMPLETED states do not.
+    killer_pass = _validated_ids(killer.get("validation_results"), "PASS")
+    falsifier["survivors"] = killer_pass
+    if killer_pass and falsifier.get("status") in {"PENDING", "WAITING_FOR_DATA", "READY"}:
+        falsifier["status"] = "PENDING"
+
+    falsifier_pass = _validated_ids(falsifier.get("validation_results"), "PASS")
+    reproducer["reproduction_candidates"] = [
+        cid for cid in falsifier_pass if cid in set(killer_pass)
+    ]
+    if reproducer["reproduction_candidates"] and reproducer.get("status") in {"PENDING", "WAITING_FOR_DATA", "READY"}:
+        reproducer["status"] = "PENDING"
+
+    if falsifier_path.exists():
+        save_json(falsifier_path, falsifier)
+    if reproducer_path.exists():
+        save_json(reproducer_path, reproducer)
+
+    return {
+        "killer_pass": killer_pass,
+        "falsifier_pass": falsifier_pass,
+        "reproduction_candidates": reproducer.get("reproduction_candidates", []),
+        "economic_conclusion": "NO_PROVEN_EDGE",
+    }
+
+
 def decide(packet: dict[str, Any]) -> Decision:
     role = str(packet.get("agent_id", ""))
 
@@ -227,6 +278,7 @@ def orchestrate(run_dir: Path) -> dict[str, Any]:
     if not run_dir.is_dir():
         raise FileNotFoundError(run_dir)
 
+    validation = propagate_validation(run_dir)
     packets = []
 
     for path in sorted(run_dir.glob("*.json")):
@@ -253,6 +305,7 @@ def orchestrate(run_dir: Path) -> dict[str, Any]:
             "wallet_actions": False,
         },
         "queue": queue,
+        "validation_pipeline": validation,
     }
 
     save_json(run_dir / "_orchestration.json", summary)
