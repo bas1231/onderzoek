@@ -1,0 +1,62 @@
+schema_version: 1
+candidate_id: PM-NR-V2-CONVERT-001
+title: "Polymarket NegRisk V2 conversion / cashflow algebra"
+venue: Polymarket
+status: NEEDS_DIRECTOR
+research_phase: MECHANISM_DEFINED
+economic_status: NO_PROVEN_EDGE
+created_at: 2026-09-20T22:00:00+02:00
+updated_at: 2026-09-20T22:00:00+02:00
+hypothesis: >-
+  Public NegRisk conversion primitives plus linked mutually-exclusive outcome books may create
+  fee-adjusted payout-equivalent portfolios whose synchronized executable acquisition cost is
+  below their guaranteed cashflow. This is unproven until semantics, point-in-time mapping,
+  full depth and all execution costs pass.
+known_mechanism:
+  - "Current V2 collateral adapter exposes a NegRisk conversion path."
+  - "Conversion cashflow must include collateral returned for multiple NO positions plus complement YES positions, net of conversion fee."
+  - "Exact-one-TRUE / event resolution semantics are part of the formal proof."
+  - "Gamma identifiers can bridge discovery to CLOB token IDs, but identifier types are not interchangeable."
+  - "Augmented NegRisk introduces placeholders and a time-varying meaning of Other; proofs must be semantic-version aware."
+completed_research:
+  - "Historical versus current V2 architecture distinguished."
+  - "Conversion primitive confirmed in current official code/docs."
+  - "Collateral-plus-complement-YES cashflow correction recorded."
+  - "Public Gamma-to-CLOB mapping path identified."
+  - "Augmented NegRisk semantic/version-drift guardrail identified."
+relevant_findings:
+  - knowledge/polymarket/hourly_findings_2026-09-20_1900.md
+  - knowledge/polymarket/hourly_findings_2026-09-20_2000.md
+  - knowledge/polymarket/hourly_findings_2026-09-20_2100.md
+  - knowledge/polymarket/hourly_findings_2026-09-20_2200.md
+open_question: >-
+  Can one current active, non-ambiguous NegRisk event be reconstructed point-in-time from public
+  metadata and full CLOB books such that a conversion portfolio has positive fee/gas/depth-adjusted
+  lower-bound value under every allowed settlement state?
+next_decisive_test: >-
+  Enumerate one current active NegRisk event; classify ordinary versus augmented; preserve raw Gamma
+  identifiers and outcome semantics; fetch every child token's full public CLOB book in a synchronized
+  observation window; reconcile a validation subset to on-chain preparation/fee semantics; then compute
+  depth-aware conversion cashflows without orders or wallet actions.
+required_data:
+  - "current Gamma event/market raw metadata"
+  - "ordinary vs augmented NegRisk classification"
+  - "contemporaneous named/placeholder/Other semantics"
+  - "market/question/request/condition/token identifier provenance"
+  - "conversion fee provenance"
+  - "synchronized public full CLOB depth"
+  - "gas/approval/inventory assumptions for execution-reality stage"
+blockers:
+  - "No completed current-event end-to-end reconstruction yet."
+  - "No synchronized depth-aware positive portfolio yet."
+  - "No event-specific exact-one-TRUE semantic proof yet."
+  - "Augmented outcome versioning must be captured rather than backfilled."
+stop_condition: >-
+  CLOSED_NEGATIVE only after a decisive semantic/economic falsification; lack of Director capacity is not terminal evidence.
+resume_condition: >-
+  Continue with the next decisive zero-cost public-data reconstruction test.
+forbidden:
+  - live_trading
+  - orders
+  - wallet_actions
+  - paid_actions_without_explicit_approval
