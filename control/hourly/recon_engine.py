@@ -5,6 +5,7 @@ from pathlib import Path
 from typing import Any
 import hashlib
 import json
+import re
 
 ROOT = Path.cwd()
 WATCHLIST = ROOT / "knowledge/recon/watchlist.json"
@@ -31,6 +32,19 @@ SPECIALIST = {
     "INFORMED_FLOW": ["informed_flow", "microstructure"],
 }
 
+# Single generic words are discovery hints, not enough by themselves for WATCH.
+WEAK_TERMS = {"loss", "bot", "api", "release", "attention", "return", "rule", "strategy", "profit", "fee"}
+ECONOMIC_CONTEXT = {
+    "market", "trading", "trader", "order", "orderbook", "price", "spread", "liquidity",
+    "maker", "taker", "settlement", "payout", "contract", "rebate", "collateral",
+    "oracle", "position", "fill", "volume", "probability", "prediction", "arbitrage",
+    "adverse selection", "longshot", "fomo", "herding", "crowding", "roi",
+}
+BOILERPLATE_PHRASES = {
+    "privacy policy", "web policy", "foia", "accessibility statement", "usa.gov",
+    "sitemap", "sign in", "search public comments", "submit tips", "headquarters",
+}
+
 def load_json(path: Path, default: Any) -> Any:
     if not path.exists():
         return default
@@ -46,6 +60,52 @@ def fingerprint(source_id: str, attack_mode: str, term: str, snippet: str) -> st
     raw = "|".join([source_id, attack_mode, term, snippet[:400]]).encode()
     return hashlib.sha256(raw).hexdigest()[:16]
 
+def _term_present(text: str, term: str) -> bool:
+    if " " in term:
+        return term in text
+    return re.search(r"(?<![a-z0-9_])" + re.escape(term) + r"(?![a-z0-9_])", text) is not None
+
+def _all_hits(text: str) -> list[tuple[str, str]]:
+    hits = []
+    for mode, terms in ATTACK_TERMS.items():
+        for term in terms:
+            if _term_present(text, term):
+                hits.append((mode, term))
+    return hits
+
+def _economic_context_count(text: str) -> int:
+    return sum(1 for term in ECONOMIC_CONTEXT if _term_present(text, term))
+
+def _boilerplate_ratio(text: str) -> float:
+    words = re.findall(r"[a-z0-9]+", text)
+    if not words:
+        return 1.0
+    matched = 0
+    for phrase in BOILERPLATE_PHRASES:
+        if phrase in text:
+            matched += len(phrase.split())
+    return min(1.0, matched / max(1, len(words)))
+
+def _quality(text: str, hits: list[tuple[str, str]]) -> dict[str, Any]:
+    unique_terms = {term for _, term in hits}
+    strong_terms = {term for term in unique_terms if term not in WEAK_TERMS}
+    context_count = _economic_context_count(text)
+    boilerplate_ratio = _boilerplate_ratio(text)
+    # WATCH requires either a strong Recon term plus market context, or corroborating
+    # weak terms plus market context. Generic navigation/footer matches stay DISCOVER.
+    watch = (
+        boilerplate_ratio < 0.08
+        and context_count >= 2
+        and (bool(strong_terms) or len(unique_terms) >= 2)
+    )
+    return {
+        "status": "WATCH" if watch else "DISCOVER",
+        "economic_context_count": context_count,
+        "matched_terms": sorted(unique_terms),
+        "strong_terms": sorted(strong_terms),
+        "boilerplate_ratio": round(boilerplate_ratio, 4),
+    }
+
 def discover(routing: dict[str, Any]) -> list[dict[str, Any]]:
     docs = []
     seen = set()
@@ -60,18 +120,30 @@ def discover(routing: dict[str, Any]) -> list[dict[str, Any]]:
     for item in docs:
         text = str(item.get("snippet", ""))
         low = text.lower()
-        for mode, terms in ATTACK_TERMS.items():
-            term = next((t for t in terms if t in low), None)
-            if not term:
+        hits = _all_hits(low)
+        if not hits:
+            continue
+        quality = _quality(low, hits)
+        # Keep DISCOVER/noise in the run for auditability, but do not persist it
+        # into the Watchlist or Opportunity Graph.
+        for mode in ATTACK_TERMS:
+            mode_terms = [term for hit_mode, term in hits if hit_mode == mode]
+            if not mode_terms:
                 continue
+            term = mode_terms[0]
             fid = "RECON-" + fingerprint(str(item.get("source_id")), mode, term, text)
             findings.append({
                 "id": fid,
                 "observed_at": item.get("retrieved_at"),
                 "attack_mode": mode,
-                "status": "WATCH",
-                "labels": ["RECON_ANOMALY"],
-                "claim": "Public evidence contains a Recon-relevant signal; mechanism is unproven.",
+                "status": quality["status"],
+                "labels": ["RECON_ANOMALY"] if quality["status"] == "WATCH" else ["RECON_DISCOVERY_NOISE"],
+                "claim": (
+                    "Public evidence contains a context-supported Recon signal; mechanism is unproven."
+                    if quality["status"] == "WATCH"
+                    else "Keyword signal retained for audit only; insufficient economic context for WATCH."
+                ),
+                "quality": quality,
                 "sources": [{
                     "source_id": item.get("source_id"),
                     "document_sha256": item.get("document_sha256"),
@@ -108,6 +180,8 @@ def update_watchlist(findings: list[dict[str, Any]]) -> dict[str, Any]:
     added = 0
     changed = 0
     for f in findings:
+        if f.get("status") == "DISCOVER":
+            continue
         if f["id"] not in old:
             old[f["id"]] = f
             added += 1
@@ -134,6 +208,8 @@ def update_graph(findings: list[dict[str, Any]]) -> dict[str, Any]:
     nodes = {x["id"]: x for x in graph.get("nodes", [])}
     edges = {(x["from"], x["to"], x["type"]): x for x in graph.get("edges", [])}
     for f in findings:
+        if f.get("status") == "DISCOVER":
+            continue
         nodes[f["id"]] = {"id": f["id"], "type": "recon_finding", "status": f["status"]}
         for role in f["falsification"]["specialist_route"]:
             rid = "role:" + role
@@ -150,7 +226,7 @@ def run(run_id: str, routing_path: Path) -> tuple[dict[str, Any], Path]:
     findings = discover(routing)
     watch = update_watchlist(findings)
     graph = update_graph(findings)
-    counts = {s: sum(1 for f in findings if f["status"] == s) for s in ["KILL","WATCH","HUNT","PROVE"]}
+    counts = {s: sum(1 for f in findings if f["status"] == s) for s in ["DISCOVER","KILL","WATCH","HUNT","PROVE"]}
     result = {
         "run_id": run_id,
         "generated_at": datetime.now(timezone.utc).isoformat(),
