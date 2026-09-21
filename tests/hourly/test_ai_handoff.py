@@ -117,7 +117,14 @@ def test_latest_real_bundle_if_available():
     assert path.exists()
     assert bundle["schema"] == "PVA_AI_WORK_BUNDLE_V1"
     assert len(bundle["response_token"]) == 64
-    assert bundle["expected_response_schema"]["response_token"] == bundle["response_token"]
+    assert (
+        bundle["expected_response_schema"]["schema"]
+        == "PVA_AI_RESPONSE_V1"
+    )
+    assert (
+        bundle["expected_response_schema"]["response_token"]
+        == bundle["response_token"]
+    )
     assert bundle["guardrails"]["live_trading"] is False
     assert bundle["guardrails"]["paid_actions"] is False
     assert bundle["guardrails"]["wallet_actions"] is False
