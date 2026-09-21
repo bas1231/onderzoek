@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/wmh_source_audit_001.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-21T08:46:15.580988+00:00",
+  "hypothesis_id": "WEATHER-MAKER-HUNTER-V1",
+  "source_commit": "0c4bbb69dca221b44b434bd8c1e505721e0cb38d",
+  "started_at": "2026-09-21T08:46:15.484037+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "79a3a57e890d77edab338462c3073b3a45980520bc40d667f02d55cf5e4dd03b",
+  "task_class": "research",
+  "task_id": "WMH-SOURCE-AUDIT-001"
+}
