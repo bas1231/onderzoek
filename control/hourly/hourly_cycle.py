@@ -77,9 +77,12 @@ def main() -> int:
     # Research Director reasoning layer.
     packet_dir = R / 'knowledge/runs/agent_packets' / run['run_id']
 
+    hunt_ref = recon_data.get('hunt_plans', {}).get('ref')
+    hunt_plan_path = (R / hunt_ref) if hunt_ref else None
     hydration_data = hydrator.hydrate_run(
         routing_path,
         packet_dir,
+        hunt_plan_path=hunt_plan_path,
     )
 
     orchestration_data = orchestrator.orchestrate(
@@ -123,6 +126,7 @@ def main() -> int:
     current['agent_control_plane'] = {
         'packet_dir': str(packet_dir.relative_to(R)),
         'hydrated_roles': hydration_data.get('hydrated_roles', []),
+        'recon_hunts': hydration_data.get('recon_hunts', {}),
         'orchestration_ref': str(
             (packet_dir / '_orchestration.json').relative_to(R)
         ),
