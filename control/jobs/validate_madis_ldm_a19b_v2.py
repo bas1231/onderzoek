@@ -64,7 +64,7 @@ int pq_open(const char*, int, pqueue**);
 int pq_close(pqueue*);
 void pq_cset(pqueue*, const timestampt*);
 int pq_next(pqueue*, bool, const prod_class_t*, pq_next_func*, bool, void*);
-int pq_suspend(unsigned int);
+unsigned pq_suspend(unsigned int);
 #endif
 '''
     with tempfile.TemporaryDirectory(prefix="a19b-v2-c-") as td:
@@ -192,7 +192,10 @@ if A19A_RAW.is_dir():
 
 if check1 and check2 and latest is not None:
     payload = latest.read_bytes()
-    callback_ns = time.time_ns() - 5_000_000
+    # LDM queue insertion timestamps are timeval/microsecond precision. Align the
+    # synthetic callback to the same boundary so an intended 10.000 ms fixture
+    # cannot randomly become 10.001 ms because only one side was truncated.
+    callback_ns = ((time.time_ns() - 5_000_000) // 1000) * 1000
     frame_raw = q.build_test_frame(
         payload,
         queue_insert_at_ns=callback_ns - 10_000_000,
