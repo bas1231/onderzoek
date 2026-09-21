@@ -14,6 +14,20 @@ RUNS = ROOT / "knowledge/runs"
 PACKETS = RUNS / "agent_packets"
 RUN_ID_RE = re.compile(r"^hourly-[A-Za-z0-9T:+-]{8,150}$")
 
+# The chat worker may schedule/triage existing candidates, but it may not
+# independently kill or promote them. Those transitions belong to the
+# killer/falsifier/reproducer/director proof path.
+AI_CANDIDATE_STATES = {
+    "NEEDS_DIRECTOR",
+    "EXPERIMENT_REQUIRED",
+    "RUNNING",
+    "WAITING_FOR_DATA",
+    "WAITING_FOR_RESULT",
+    "RESULT_READY",
+    "NEEDS_REVISION",
+    "PARKED",
+}
+
 
 class ResponseReceiverError(ValueError):
     pass
@@ -114,6 +128,27 @@ def expected_ready_roles(run_id: str) -> set[str]:
     return out
 
 
+def bundled_candidate_ids(run_id: str) -> set[str]:
+    data = load_bundle(run_id)
+    queue = data.get("candidate_queue") or {}
+    require(isinstance(queue, dict), "bundle candidate_queue invalid")
+    out: set[str] = set()
+    for section in (
+        "director_attention",
+        "waiting_without_blocking",
+        "full_queue",
+    ):
+        items = queue.get(section, [])
+        require(isinstance(items, list), f"bundle candidate_queue {section} invalid")
+        for item in items:
+            if not isinstance(item, dict):
+                continue
+            cid = item.get("candidate_id")
+            if isinstance(cid, str) and cid:
+                out.add(cid)
+    return out
+
+
 def validate_complete_role_coverage(response: dict[str, Any], run_id: str) -> None:
     expected = expected_ready_roles(run_id)
     role_results = response.get("role_results")
@@ -137,11 +172,68 @@ def validate_response_token(response: dict[str, Any], run_id: str) -> None:
     )
 
 
+def validate_candidate_authority(response: dict[str, Any], run_id: str) -> None:
+    allowed_ids = bundled_candidate_ids(run_id)
+    decisions = response.get("candidate_decisions", [])
+    require(isinstance(decisions, list), "candidate_decisions required")
+    for decision in decisions:
+        require(isinstance(decision, dict), "candidate decision must be object")
+        cid = decision.get("candidate_id")
+        require(cid in allowed_ids, f"candidate not present in AI work bundle: {cid}")
+        status = decision.get("queue_status")
+        require(
+            status in AI_CANDIDATE_STATES,
+            f"AI worker lacks candidate transition authority: {status}",
+        )
+
+
 def _same_response(path: Path, response: dict[str, Any]) -> bool:
     try:
         return response_sha256(load_json(path)) == response_sha256(response)
     except Exception:
         return False
+
+
+def _orchestrate(run_id: str):
+    orchestrator = load_module(
+        "prediction_ai_response_receiver_orchestrator",
+        ROOT / "control/hourly/agent_orchestrator.py",
+    )
+    packet_dir = PACKETS / run_id
+    require(packet_dir.is_dir(), "packet directory missing")
+    return packet_dir, orchestrator.orchestrate(packet_dir)
+
+
+def _result(
+    run_id: str,
+    response: dict[str, Any],
+    orchestration: dict[str, Any],
+    *,
+    already_applied: bool,
+) -> dict[str, Any]:
+    final = response_path(run_id)
+    receipt = receipt_path(run_id)
+    packet_dir = PACKETS / run_id
+    statuses = {
+        item.get("agent_id"): item.get("status")
+        for item in orchestration.get("queue", [])
+        if item.get("agent_id")
+    }
+    return {
+        "ok": True,
+        "run_id": run_id,
+        "already_applied": already_applied,
+        "response_sha256": response_sha256(response),
+        "response_ref": str(final.relative_to(ROOT)),
+        "receipt_ref": str(receipt.relative_to(ROOT)) if receipt.exists() else None,
+        "orchestration_ref": str((packet_dir / "_orchestration.json").relative_to(ROOT)),
+        "role_statuses": statuses,
+        "validation_pipeline": orchestration.get("validation_pipeline", {}),
+        "economic_conclusion": "NO_PROVEN_EDGE",
+        "live_trading": False,
+        "paid_actions": False,
+        "wallet_actions": False,
+    }
 
 
 def receive(payload: dict[str, Any]) -> dict[str, Any]:
@@ -156,33 +248,28 @@ def receive(payload: dict[str, Any]) -> dict[str, Any]:
     pending = pending_path(run_id)
     receipt = receipt_path(run_id)
 
+    # Identical retries are recovery opportunities: re-run the derivable
+    # orchestration step instead of merely returning success. This repairs a
+    # crash after durable response application but before orchestration.
     if final.exists():
         require(_same_response(final, response), "conflicting AI response already stored")
-        return {
-            "ok": True,
-            "run_id": run_id,
-            "already_applied": True,
-            "response_sha256": response_sha256(response),
-            "response_ref": str(final.relative_to(ROOT)),
-            "receipt_ref": str(receipt.relative_to(ROOT)) if receipt.exists() else None,
-            "economic_conclusion": "NO_PROVEN_EDGE",
-            "live_trading": False,
-            "paid_actions": False,
-            "wallet_actions": False,
-        }
+        _, orchestration = _orchestrate(run_id)
+        return _result(
+            run_id,
+            response,
+            orchestration,
+            already_applied=True,
+        )
 
     ai_response = load_module(
         "prediction_ai_response_receiver_apply",
         ROOT / "control/hourly/ai_response.py",
     )
-    orchestrator = load_module(
-        "prediction_ai_response_receiver_orchestrator",
-        ROOT / "control/hourly/agent_orchestrator.py",
-    )
 
-    # Validate the entire response and its mutation plan before any write.
+    # Validate the entire response and mutation plan before any write.
     ai_response.validate_response(response, run_id)
     validate_complete_role_coverage(response, run_id)
+    validate_candidate_authority(response, run_id)
     ai_response.apply_response(response, run_id, write=False)
 
     if pending.exists():
@@ -190,35 +277,19 @@ def receive(payload: dict[str, Any]) -> dict[str, Any]:
     else:
         save_json(pending, response)
 
-    # If a previous attempt applied the packet mutations but crashed before
-    # finalizing the raw response, finish idempotently from the durable receipt.
     if not receipt.exists():
         ai_response.apply_response(response, run_id, write=True)
 
-    packet_dir = PACKETS / run_id
-    require(packet_dir.is_dir(), "packet directory missing")
-    orchestration = orchestrator.orchestrate(packet_dir)
-
+    # Once packet/candidate changes and their receipt exist, the raw response
+    # is durable. Finalize it before the derivable orchestration step so an
+    # identical retry can repair an interrupted orchestration.
     pending.replace(final)
 
-    statuses = {
-        item.get("agent_id"): item.get("status")
-        for item in orchestration.get("queue", [])
-        if item.get("agent_id")
-    }
+    _, orchestration = _orchestrate(run_id)
 
-    return {
-        "ok": True,
-        "run_id": run_id,
-        "already_applied": False,
-        "response_sha256": response_sha256(response),
-        "response_ref": str(final.relative_to(ROOT)),
-        "receipt_ref": str(receipt.relative_to(ROOT)),
-        "orchestration_ref": str((packet_dir / "_orchestration.json").relative_to(ROOT)),
-        "role_statuses": statuses,
-        "validation_pipeline": orchestration.get("validation_pipeline", {}),
-        "economic_conclusion": "NO_PROVEN_EDGE",
-        "live_trading": False,
-        "paid_actions": False,
-        "wallet_actions": False,
-    }
+    return _result(
+        run_id,
+        response,
+        orchestration,
+        already_applied=False,
+    )
