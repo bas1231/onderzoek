@@ -284,6 +284,22 @@ def ingest_remote_responses(*, limit: int = 32) -> dict[str, Any]:
                 raise GitExchangeError("response does not match local request_sha256")
 
             final_response = ROOT / "knowledge/runs" / f"{run_id}-ai-response.json"
+            receipt = ROOT / "knowledge/runs" / f"{run_id}-ai-response-receipt.json"
+            orchestration = (
+                ROOT
+                / "knowledge/runs/agent_packets"
+                / run_id
+                / "_orchestration.json"
+            )
+            complete_before = (
+                final_response.exists()
+                and receipt.exists()
+                and orchestration.exists()
+            )
+            if complete_before:
+                skipped.append({"run_id": run_id, "reason": "ALREADY_APPLIED"})
+                continue
+
             result = receiver.receive({"run_id": run_id, "response": response})
             applied.append({
                 "run_id": run_id,
@@ -291,7 +307,7 @@ def ingest_remote_responses(*, limit: int = 32) -> dict[str, Any]:
                 "response_ref": result.get("response_ref"),
                 "receipt_ref": result.get("receipt_ref"),
                 "role_statuses": result.get("role_statuses", {}),
-                "had_final_response_before": final_response.exists(),
+                "recovery_retry": final_response.exists(),
             })
         except Exception as exc:
             errors.append({
