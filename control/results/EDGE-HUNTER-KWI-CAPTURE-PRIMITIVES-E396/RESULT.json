@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/kwi_capture_primitives_e396.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-21T08:08:31.931359+00:00",
+  "hypothesis_id": "KWI-FULL-STATION-PRECANONICAL-V1",
+  "source_commit": "f36ab7aaf8081160543a47ba85687ef7da99fe15",
+  "started_at": "2026-09-21T08:08:31.896411+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "f02b813f7a1c57b2e244884a7c7b63621f75a843096d79c555133a922140b905",
+  "task_class": "research",
+  "task_id": "EDGE-HUNTER-KWI-CAPTURE-PRIMITIVES-E396"
+}

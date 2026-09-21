@@ -1,0 +1,120 @@
+E396_START
+FILE /home/leonh/prediction_research/kalshi_live.py EXISTS True
+LINE_COUNT 83
+CODE import argparse
+CODE import json
+CODE import time
+CODE import urllib.parse
+CODE import urllib.request
+CODE from datetime import datetime, timezone
+CODE BASE = "https://external-api.kalshi.com/trade-api/v2"
+CODE def get_markets(event_ticker):
+CODE         "event_ticker": event_ticker,
+CODE     url = f"{BASE}/markets?{query}"
+CODE def print_snapshot(event_ticker):
+CODE     data = get_markets(event_ticker)
+CODE         "event_ticker": event_ticker,
+CODE         "markets": []
+CODE     for m in data.get("markets", []):
+CODE         out["markets"].append({
+CODE             "ticker": m.get("ticker"),
+CODE             "yes_bid": m.get("yes_bid_dollars"),
+CODE             "yes_bid_size": m.get("yes_bid_size_fp"),
+CODE             "yes_ask": m.get("yes_ask_dollars"),
+CODE             "yes_ask_size": m.get("yes_ask_size_fp"),
+CODE             "no_bid": m.get("no_bid_dollars"),
+CODE             "no_ask": m.get("no_ask_dollars"),
+CODE def main():
+CODE     p.add_argument("event_ticker")
+CODE         print_snapshot(args.event_ticker.upper())
+FILE /home/leonh/prediction_research/kalshi_decider.py EXISTS True
+LINE_COUNT 663
+CODE import argparse
+CODE import json
+CODE import math
+CODE import time
+CODE import urllib.parse
+CODE import urllib.request
+CODE from collections import defaultdict
+CODE from datetime import datetime
+CODE KALSHI = "https://external-api.kalshi.com/trade-api/v2"
+CODE     "https://site.api.espn.com/apis/site/v2/"
+CODE     "https://site.api.espn.com/apis/site/v2/"
+CODE def get_json(url, params=None):
+CODE def fnum(v):
+CODE def clock_seconds(clock):
+CODE def kalshi_markets():
+CODE     """Alle KXNFLGAME markets ophalen. Alleen GET."""
+CODE     all_markets = []
+CODE             "series_ticker": "KXNFLGAME",
+CODE         data = get_json(f"{KALSHI}/markets", params)
+CODE         all_markets.extend(data.get("markets", []))
+CODE     return all_markets
+CODE def group_by_event(markets):
+CODE     for m in markets:
+CODE         event = m.get("event_ticker")
+CODE def espn_games():
+CODE def espn_win_probability(event_id):
+CODE def competition_info(event):
+CODE def aliases(abbr):
+CODE def market_for_team(markets, team_abbr):
+CODE     for m in markets:
+CODE         ticker = m.get("ticker") or ""
+CODE         suffix = ticker.rsplit("-", 1)[-1].upper()
+CODE def find_event_group(groups, away_abbr, home_abbr):
+CODE     Match op de twee team-suffixes in de echte Kalshi market tickers.
+CODE     Geen hardcoded event ticker nodig.
+CODE     for event_ticker, markets in groups.items():
+CODE             (m.get("ticker") or "").rsplit("-", 1)[-1].upper()
+CODE             for m in markets
+CODE             return event_ticker, markets
+CODE def taker_fee_per_contract(price):
+CODE def max_acceptable_price(model_p, min_raw_edge, min_net_edge):
+CODE def assess_side(
+CODE     market,
+CODE     min_ask,
+CODE     max_ask,
+CODE     ask = fnum(market.get("yes_ask_dollars"))
+CODE     bid = fnum(market.get("yes_bid_dollars"))
+CODE     ask_size = fnum(market.get("yes_ask_size_fp"))
+CODE     if ask is None or bid is None or ask_size is None:
+CODE     if ask <= 0 or ask >= 1:
+CODE     spread = ask - bid
+CODE     fee_pc = taker_fee_per_contract(ask)
+CODE     raw_edge = model_p - ask
+CODE     all_in_pc = ask + fee_pc
+CODE     enough_depth = ask_size >= contracts
+CODE     cost_est = contracts * ask
+CODE         ask >= min_ask,
+CODE         ask <= max_ask,
+CODE         ask <= max_buy,
+CODE         "market": market,
+CODE         "ask": ask,
+CODE         "bid": bid,
+CODE         "ask_size": ask_size,
+CODE def scan(args):
+CODE     markets = kalshi_markets()
+CODE     groups = group_by_event(markets)
+CODE         event_ticker, kgames = find_event_group(
+CODE         away_market = market_for_team(
+CODE         home_market = market_for_team(
+CODE             "event_ticker": event_ticker,
+CODE         if away_market:
+CODE                 away_market,
+CODE                 args.min_ask,
+CODE                 args.max_ask,
+CODE         if home_market:
+CODE                 home_market,
+CODE                 args.min_ask,
+CODE                 args.max_ask,
+CODE def print_candidate(r, number=None, buy=False):
+CODE     print(f"EVENT TICKER    : {r['event_ticker']}")
+CODE_TRUNCATED /home/leonh/prediction_research/kalshi_decider.py
+UNIT_NAME prediction-research-kalshi-weather-index-recorder.service RC 0
+UNIT_LINE Description=Prediction Research Kalshi Weather Index recorder
+UNIT_LINE WorkingDirectory=%h/prediction_research
+UNIT_LINE ExecStart=%h/prediction_research/.venv/bin/python %h/prediction_research/control/weather/kalshi_weather_index_recorder.py
+UNIT_NAME prediction-research-kalshi-weather-index-recorder.timer RC 0
+UNIT_LINE Description=Run Kalshi Weather Index recorder every minute
+UNIT_LINE OnCalendar=*-*-* *:*:15
+E396_DONE
