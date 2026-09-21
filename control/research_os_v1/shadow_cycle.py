@@ -9,6 +9,30 @@ from .failure_memory import required_checks
 from .scheduler import fanout_cap, schedule
 
 
+def _assert_unique_candidate_ids(candidates: list[dict[str, Any]]) -> None:
+    seen: set[str] = set()
+    for candidate in candidates:
+        cid = str(candidate.get("candidate_id") or "").strip()
+        if not cid:
+            raise ValueError("candidate_id_required")
+        if cid in seen:
+            raise ValueError(f"duplicate_candidate_id:{cid}")
+        seen.add(cid)
+
+
+def _assert_unique_task_ids(tasks: list[dict[str, Any]]) -> None:
+    seen: set[str] = set()
+    for task in tasks:
+        tid = str(task.get("task_id") or "").strip() if isinstance(task, dict) else ""
+        if not tid:
+            # Missing IDs are still reported through validate_task below; there
+            # is no useful duplicate identity to compare here.
+            continue
+        if tid in seen:
+            raise ValueError(f"duplicate_task_id:{tid}")
+        seen.add(tid)
+
+
 def build_shadow_plan(
     legacy_candidates: list[dict[str, Any]],
     tasks: list[dict[str, Any]],
@@ -16,13 +40,27 @@ def build_shadow_plan(
 ) -> dict[str, Any]:
     """Read-only Research OS sidecar decision.
 
-    Inputs are copied; no repository/runtime mutation occurs.
+    Inputs are copied; no repository/runtime mutation occurs. Ambiguous identity
+    is rejected rather than silently collapsing records.
     """
-    candidates = [canonicalize(deepcopy(c), source_commit=source_commit) for c in legacy_candidates]
+    if not str(source_commit or "").strip():
+        raise ValueError("source_commit_required")
+    if not isinstance(legacy_candidates, list) or not isinstance(tasks, list):
+        raise ValueError("shadow_inputs_must_be_lists")
+
+    candidate_inputs = deepcopy(legacy_candidates)
+    task_inputs = deepcopy(tasks)
+    _assert_unique_candidate_ids(candidate_inputs)
+    _assert_unique_task_ids(task_inputs)
+
+    candidates = [
+        canonicalize(c, source_commit=source_commit)
+        for c in candidate_inputs
+    ]
 
     task_errors: dict[str, list[str]] = {}
     enriched = []
-    for raw in tasks:
+    for raw in task_inputs:
         task = deepcopy(raw)
         errors = validate_task(task)
         if errors:
