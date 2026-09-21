@@ -118,6 +118,7 @@ def response(run_id, include_director=True, token=TOKEN):
             "local_task_spec": None,
         })
     return {
+        "schema": "PVA_AI_RESPONSE_V1",
         "run_id": run_id,
         "response_token": token,
         "role_results": roles,
