@@ -1,0 +1,14 @@
+{
+  "build_authorization": null,
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/wmh_source_audit_001.py"
+  ],
+  "hypothesis_id": "WEATHER-MAKER-HUNTER-V1",
+  "live_trading": false,
+  "operation": "python",
+  "task_class": "research",
+  "task_id": "WMH-SOURCE-AUDIT-001",
+  "timeout_seconds": 120,
+  "working_directory": "."
+}
