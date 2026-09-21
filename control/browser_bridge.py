@@ -15,6 +15,7 @@ globals()["__name__"] = _wrapper_name
 _CoreHandler = Handler
 _core_next_ai_outbox_item = next_ai_outbox_item
 _core_acknowledge_ai = acknowledge_ai
+_core_acknowledge = acknowledge
 
 # An AI prompt is ACKed after it is inserted into ChatGPT. If the assistant
 # response is then lost before /ai-response is received, the old core would
@@ -130,6 +131,25 @@ def acknowledge_ai(task_id: str) -> dict:
             "last_acked_at": time.time(),
             "attempts": previous_attempts + 1,
         }
+        save_state(state)
+
+    return result
+
+
+def acknowledge(task_id: str) -> dict:
+    """Preserve the durable control-continuation behavior lost from core.
+
+    Historical bridge contract bb5aa16 queues exactly one AI-only continuation
+    after a completed/failed research or infrastructure result is ACKed. The
+    core still contains the queue helpers, so the V13 wrapper restores only the
+    missing call without changing executor authority or result semantics.
+    """
+    result = _core_acknowledge(task_id)
+    if not result.get("ok"):
+        return result
+
+    state = load_state()
+    if _queue_control_continue(state, task_id, "RESULT_ACKED"):
         save_state(state)
 
     return result
