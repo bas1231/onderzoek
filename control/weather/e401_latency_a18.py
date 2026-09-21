@@ -13,6 +13,7 @@ from datetime import datetime, timezone
 import json
 import math
 from pathlib import Path
+import time
 from typing import Iterable
 
 import e401_sync_linker as sync
@@ -25,6 +26,42 @@ from market_reaction import (
 
 STATE = Path.home() / ".local" / "state" / "prediction-research"
 REPORTS = STATE / "e401_reaction_reports"
+
+# A18 reuses the same completed immutable capture logs many times: first inside
+# A17 build_report(), then again for bucket-level latency diagnostics. Cache each
+# exact (path,size,mtime,ticker) decode inside this process so evidence semantics
+# stay identical while duplicate JSONL parsing disappears.
+_RAW_LOAD_CAPTURE = sync.load_capture
+_CAPTURE_CACHE: dict[tuple[str, int, int, str], tuple] = {}
+_CAPTURE_CACHE_HITS = 0
+_CAPTURE_CACHE_MISSES = 0
+
+
+def _cached_load_capture(path: Path, ticker: str):
+    global _CAPTURE_CACHE_HITS, _CAPTURE_CACHE_MISSES
+    p = Path(path)
+    st = p.stat()
+    key = (str(p), int(st.st_size), int(st.st_mtime_ns), str(ticker))
+    cached = _CAPTURE_CACHE.get(key)
+    if cached is not None:
+        _CAPTURE_CACHE_HITS += 1
+        return cached
+    decoded = _RAW_LOAD_CAPTURE(p, ticker)
+    _CAPTURE_CACHE[key] = decoded
+    _CAPTURE_CACHE_MISSES += 1
+    return decoded
+
+
+def install_capture_cache() -> None:
+    sync.load_capture = _cached_load_capture
+
+
+def capture_cache_stats() -> dict[str, int]:
+    return {
+        "entries": len(_CAPTURE_CACHE),
+        "hits": _CAPTURE_CACHE_HITS,
+        "misses": _CAPTURE_CACHE_MISSES,
+    }
 
 
 def percentile(values: Iterable[int], q: float) -> int | None:
@@ -70,7 +107,13 @@ def stats(values: Iterable[int]) -> dict:
 
 
 def analyze(window_ms: int = 30_000) -> dict:
+    total_started = time.monotonic()
+    install_capture_cache()
+
+    base_started = time.monotonic()
     base = sync.build_report(window_ms)
+    base_build_seconds = time.monotonic() - base_started
+
     cycles = sync.load_completed_cycles()
     events = []
     event_latencies: list[int] = []
@@ -140,6 +183,7 @@ def analyze(window_ms: int = 30_000) -> dict:
         })
 
     city_counts = Counter(e["city"] for e in events)
+    total_seconds = time.monotonic() - total_started
     report = {
         "schema": "KAL_WX_MARKET_REACTION_LATENCY_A18_V1",
         "task": "EDGE-HUNTER-KWI-REACTION-LATENCY-E401A18",
@@ -154,6 +198,12 @@ def analyze(window_ms: int = 30_000) -> dict:
         "bucket_reaction_latency": stats(bucket_latencies),
         "bucket_status_counts": dict(sorted(bucket_statuses.items())),
         "reaction_kind_counts": dict(sorted(reaction_kinds.items())),
+        "performance": {
+            "base_build_seconds": round(base_build_seconds, 3),
+            "total_seconds": round(total_seconds, 3),
+            "capture_decode_cache": capture_cache_stats(),
+            "cache_semantics": "process-local cache keyed by completed capture path,size,mtime,ticker; no evidence transformation",
+        },
         "events": events,
         "interpretation_guard": [
             "Observed reaction latency is market activity after first KWI availability, not evidence of economic edge.",
@@ -184,6 +234,7 @@ def main() -> int:
         "bucket_reaction_latency": report["bucket_reaction_latency"],
         "reaction_kind_counts": report["reaction_kind_counts"],
         "bucket_status_counts": report["bucket_status_counts"],
+        "performance": report["performance"],
         "economic_conclusion": report["economic_conclusion"],
         "live_trading": False,
         "paid_action": False,
