@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from typing import Any
 
+from .contracts import validate_task
 from .governor import classify
 from .policy import load_task_shape_policy
 
@@ -9,6 +10,7 @@ LEVEL = {"LOW": 0, "MEDIUM": 1, "HIGH": 2, "DECISIVE": 3}
 NOVELTY = {"DUPLICATE": 0, "INCREMENTAL": 1, "NOVEL": 2}
 UNLOCK = {"NONE": 0, "ONE": 1, "MULTIPLE": 2}
 COST = {"LOW": 0, "MEDIUM": 1, "HIGH": 2}
+WAITING_STATES = {"WAITING_FOR_DATA", "WAITING_FOR_RESULT", "PARKED"}
 
 
 def fanout_cap(task: dict[str, Any], shape_policy: dict[str, Any] | None = None) -> int:
@@ -38,25 +40,50 @@ def _rank(task: dict[str, Any]) -> tuple:
 
 
 def schedule(tasks: list[dict[str, Any]], max_tasks: int | None = None) -> dict[str, Any]:
-    runnable, blocked, waiting = [], [], []
+    runnable: list[dict[str, Any]] = []
+    blocked: list[dict[str, Any]] = []
+    waiting: list[dict[str, Any]] = []
+
     for task in tasks:
-        if str(task.get("state") or "READY") in {"WAITING_FOR_DATA", "WAITING_FOR_RESULT", "PARKED"}:
-            waiting.append({"task_id": task.get("task_id"), "reason": "non_runnable_state"})
+        contract_errors = validate_task(task)
+        if contract_errors:
+            blocked.append({
+                "task_id": task.get("task_id") if isinstance(task, dict) else None,
+                "decision": "BLOCK_INVALID_CONTRACT",
+                "reason": "invalid_contract",
+                "contract_errors": contract_errors,
+            })
             continue
-        action = task.get("proposed_action") or {
-            "kind": "free_public_read_only_research",
-            "provenance": True,
-            "point_in_time": True,
-        }
-        decision = classify(action)
+
+        state = str(task["state"])
+        if state in WAITING_STATES:
+            waiting.append({"task_id": task.get("task_id"), "reason": f"non_runnable_state:{state}"})
+            continue
+        if state != "READY":
+            blocked.append({
+                "task_id": task.get("task_id"),
+                "decision": "BLOCK_NON_READY_STATE",
+                "reason": f"non_runnable_state:{state}",
+            })
+            continue
+
+        decision = classify(task["proposed_action"])
         if not decision.admissible:
-            blocked.append({"task_id": task.get("task_id"), "decision": decision.decision, "reason": decision.reason})
+            blocked.append({
+                "task_id": task.get("task_id"),
+                "decision": decision.decision,
+                "reason": decision.reason,
+            })
             continue
+
         runnable.append(task)
 
     runnable.sort(key=_rank)
     if max_tasks is not None:
+        if not isinstance(max_tasks, int) or isinstance(max_tasks, bool) or max_tasks < 0:
+            raise ValueError("max_tasks_must_be_non_negative_integer_or_none")
         runnable = runnable[:max_tasks]
+
     return {
         "selected": [t.get("task_id") for t in runnable],
         "tasks": runnable,
