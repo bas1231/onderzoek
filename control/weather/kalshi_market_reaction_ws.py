@@ -17,6 +17,7 @@ import json
 import os
 from pathlib import Path
 import time
+from typing import Any
 
 from market_reaction import OrderBook
 
@@ -70,7 +71,75 @@ def auth_headers(key_id, private_key):
     }
 
 
-async def run_once(tickers: list[str], fp, duration_sec: float) -> None:
+def handle_message(books: dict[str, OrderBook], msg: dict[str, Any], recv_at: str, fp) -> None:
+    """Persist one decoded WS frame and update reconstructed books fail-closed.
+
+    Every successfully decoded frame is also transport coverage. This matters
+    because a busy socket may never hit the recv timeout used for idle
+    heartbeats; without this marker, valid capture could be misclassified as
+    stale merely because messages kept arriving.
+    """
+    append_event(fp, {
+        "kind": "coverage", "retrieved_at": recv_at, "transport": "ws",
+    })
+    append_event(fp, {
+        "kind": "ws_raw", "retrieved_at": recv_at,
+        "type": msg.get("type"), "sid": msg.get("sid"), "seq": msg.get("seq"),
+        "msg": msg.get("msg"),
+    })
+
+    typ = msg.get("type")
+    if typ == "orderbook_snapshot":
+        ticker = (msg.get("msg") or {}).get("market_ticker")
+        if ticker in books:
+            try:
+                state = books[ticker].snapshot(msg, recv_at)
+                append_event(fp, {"kind": "market_state", "retrieved_at": recv_at, **state.as_json()})
+            except Exception as exc:
+                append_event(fp, {
+                    "kind": "capture_gap", "ticker": ticker,
+                    "start": recv_at, "end": recv_at,
+                    "reason": f"snapshot_reconstruction:{type(exc).__name__}:{str(exc)[:200]}",
+                })
+                # A malformed replacement snapshot can partially mutate a book.
+                # Never keep trusting it; require a fresh valid snapshot.
+                books[ticker] = OrderBook(ticker)
+    elif typ == "orderbook_delta":
+        ticker = (msg.get("msg") or {}).get("market_ticker")
+        if ticker in books:
+            try:
+                state = books[ticker].delta(msg, recv_at)
+                append_event(fp, {"kind": "market_state", "retrieved_at": recv_at, **state.as_json()})
+            except Exception as exc:
+                append_event(fp, {
+                    "kind": "capture_gap", "ticker": ticker,
+                    "start": recv_at, "end": recv_at,
+                    "reason": f"delta_reconstruction:{type(exc).__name__}:{str(exc)[:200]}",
+                })
+                # Never continue trusting a book after a broken sequence/delta.
+                books[ticker] = OrderBook(ticker)
+    elif typ == "trade":
+        append_event(fp, {
+            "kind": "trade", "retrieved_at": recv_at,
+            **(msg.get("msg") or {}),
+        })
+    elif typ == "error":
+        append_event(fp, {
+            "kind": "capture_error", "stage": "ws_server",
+            "start": recv_at, "end": recv_at,
+            "error_type": "KalshiWebSocketError",
+            "error": str(msg.get("msg"))[:500],
+        })
+
+
+async def run_once(
+    tickers: list[str],
+    fp,
+    duration_sec: float,
+    *,
+    reconnect_gap_start: str | None = None,
+    connection_state: dict[str, bool] | None = None,
+) -> None:
     try:
         import websockets
     except ImportError as exc:
@@ -87,10 +156,20 @@ async def run_once(tickers: list[str], fp, duration_sec: float) -> None:
     ws_cm = websockets.connect(WS_URL, **{header_kw: headers})
 
     async with ws_cm as ws:
+        connected_at = now_iso()
+        if connection_state is not None:
+            connection_state["connected"] = True
+        if reconnect_gap_start is not None:
+            append_event(fp, {
+                "kind": "capture_gap", "start": reconnect_gap_start,
+                "end": connected_at, "reason": "ws_reconnect_interval",
+                "transport": "ws",
+            })
         append_event(fp, {
-            "kind": "ws_connected", "retrieved_at": now_iso(),
+            "kind": "ws_connected", "retrieved_at": connected_at,
             "tickers": tickers, "credential_material_logged": False,
         })
+        append_event(fp, {"kind": "coverage", "retrieved_at": connected_at, "transport": "ws"})
         await ws.send(json.dumps({
             "id": 1, "cmd": "subscribe",
             "params": {"channels": ["orderbook_delta", "trade"], "market_tickers": tickers},
@@ -108,67 +187,28 @@ async def run_once(tickers: list[str], fp, duration_sec: float) -> None:
             try:
                 msg = json.loads(raw)
             except json.JSONDecodeError:
+                append_event(fp, {"kind": "coverage", "retrieved_at": recv_at, "transport": "ws"})
                 append_event(fp, {
                     "kind": "capture_error", "stage": "ws_decode",
                     "start": recv_at, "end": recv_at, "error_type": "JSONDecodeError",
                 })
                 continue
-
-            # Raw market-data frame, timestamped on receipt.
-            append_event(fp, {
-                "kind": "ws_raw", "retrieved_at": recv_at,
-                "type": msg.get("type"), "sid": msg.get("sid"), "seq": msg.get("seq"),
-                "msg": msg.get("msg"),
-            })
-
-            typ = msg.get("type")
-            if typ == "orderbook_snapshot":
-                ticker = (msg.get("msg") or {}).get("market_ticker")
-                if ticker in books:
-                    try:
-                        s = books[ticker].snapshot(msg, recv_at)
-                        append_event(fp, {"kind": "market_state", "retrieved_at": recv_at, **s.as_json()})
-                    except Exception as exc:
-                        append_event(fp, {
-                            "kind": "capture_gap", "ticker": ticker,
-                            "start": recv_at, "end": recv_at,
-                            "reason": f"snapshot_reconstruction:{type(exc).__name__}:{str(exc)[:200]}",
-                        })
-            elif typ == "orderbook_delta":
-                ticker = (msg.get("msg") or {}).get("market_ticker")
-                if ticker in books:
-                    try:
-                        s = books[ticker].delta(msg, recv_at)
-                        append_event(fp, {"kind": "market_state", "retrieved_at": recv_at, **s.as_json()})
-                    except Exception as exc:
-                        append_event(fp, {
-                            "kind": "capture_gap", "ticker": ticker,
-                            "start": recv_at, "end": recv_at,
-                            "reason": f"delta_reconstruction:{type(exc).__name__}:{str(exc)[:200]}",
-                        })
-                        # Never continue trusting a book after a broken sequence.
-                        books[ticker] = OrderBook(ticker)
-            elif typ == "trade":
-                append_event(fp, {
-                    "kind": "trade", "retrieved_at": recv_at,
-                    **(msg.get("msg") or {}),
-                })
-            elif typ == "error":
-                append_event(fp, {
-                    "kind": "capture_error", "stage": "ws_server",
-                    "start": recv_at, "end": recv_at,
-                    "error_type": "KalshiWebSocketError",
-                    "error": str(msg.get("msg"))[:500],
-                })
+            handle_message(books, msg, recv_at, fp)
 
 
 async def main_async(args) -> int:
     tickers = sorted(set(args.ticker))
     if not tickers:
         raise RuntimeError("at least one --ticker is required")
+    if args.reconnect_backoff_sec <= 0:
+        raise RuntimeError("reconnect backoff must be positive")
+
     LOGS.mkdir(parents=True, exist_ok=True)
     stamp = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
     path = LOGS / f"ws-{stamp}.ndjson"
+    run_started = time.monotonic()
+    reconnect_gap_start: str | None = None
+    attempts = 0
 
     with path.open("a", encoding="utf-8") as fp:
         append_event(fp, {
@@ -178,16 +218,55 @@ async def main_async(args) -> int:
             "live_trading": False, "paid_action": False, "wallet_action": False,
         })
         try:
-            await run_once(tickers, fp, args.duration_sec)
-        except Exception as exc:
-            now = now_iso()
-            append_event(fp, {
-                "kind": "capture_gap", "start": now, "end": now,
-                "reason": f"ws_session:{type(exc).__name__}",
-            })
-            raise
+            while True:
+                if args.duration_sec:
+                    elapsed = time.monotonic() - run_started
+                    remaining = args.duration_sec - elapsed
+                    if remaining <= 0:
+                        break
+                else:
+                    remaining = 0
+
+                state = {"connected": False}
+                try:
+                    await run_once(
+                        tickers, fp, remaining,
+                        reconnect_gap_start=reconnect_gap_start,
+                        connection_state=state,
+                    )
+                    reconnect_gap_start = None
+                    attempts = 0
+                    if args.duration_sec:
+                        break
+                    # An unbounded session should only return if the socket ended
+                    # cleanly; treat that as a reconnect boundary.
+                    reconnect_gap_start = now_iso()
+                except Exception as exc:
+                    now = now_iso()
+                    if state["connected"] or reconnect_gap_start is None:
+                        reconnect_gap_start = now
+                    append_event(fp, {
+                        "kind": "capture_error", "stage": "ws_session",
+                        "start": now, "end": now,
+                        "error_type": type(exc).__name__,
+                        "error": str(exc)[:300],
+                        "credential_material_logged": False,
+                    })
+
+                if args.duration_sec and time.monotonic() - run_started >= args.duration_sec:
+                    break
+                attempts += 1
+                delay = min(args.reconnect_backoff_sec * (2 ** min(attempts - 1, 4)), args.reconnect_backoff_max_sec)
+                await asyncio.sleep(delay)
         finally:
+            if reconnect_gap_start is not None:
+                append_event(fp, {
+                    "kind": "capture_gap", "start": reconnect_gap_start,
+                    "end": now_iso(), "reason": "ws_reconnect_until_run_end",
+                    "transport": "ws",
+                })
             append_event(fp, {"kind": "run_end", "ended_at": now_iso(), "transport": "ws"})
+
     print(json.dumps({"status": "completed", "log": str(path), "economic_conclusion": "NO_PROVEN_EDGE"}, indent=2))
     return 0
 
@@ -196,6 +275,8 @@ def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--ticker", action="append", required=True)
     ap.add_argument("--duration-sec", type=float, default=0, help="0 = run until interrupted/disconnect")
+    ap.add_argument("--reconnect-backoff-sec", type=float, default=1.0)
+    ap.add_argument("--reconnect-backoff-max-sec", type=float, default=15.0)
     args = ap.parse_args()
     return asyncio.run(main_async(args))
 
