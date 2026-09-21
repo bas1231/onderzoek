@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/wmh_local_auth_discovery_002.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-21T14:06:10.806734+00:00",
+  "hypothesis_id": "KWI-FULL-STATION-PRECANONICAL-V1",
+  "source_commit": "a72739145cdbf40bb994fc8ab64445b7b8270c49",
+  "started_at": "2026-09-21T14:05:30.065830+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "b6507c57cd208a98f10ae6f36f7caf4601f461d2aede62098242851fa3b52ea1",
+  "task_class": "research",
+  "task_id": "EDGE-HUNTER-KWI-AUTH-DIAG-E401A4"
+}
