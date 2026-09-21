@@ -4,6 +4,7 @@ import json
 R = Path.cwd()
 POLICY = json.loads((R / 'control/hourly/role_source_policy.json').read_text())
 TERMS = {
+    'recon_scout': ['failed', 'loss', 'adverse selection', 'profit', 'strategy', 'bot', 'settlement', 'fee', 'rebate', 'collateral', 'oracle', 'longshot', 'herding', 'informed trading', 'order flow', 'changelog'],
     'weather_twc': ['metar', '2 metre temperature', 'dewpoint', 'wind component', 'temperature forecast'],
     'microstructure': ['order book', 'matching engine', 'maker rebate', 'taker fee', 'liquidity reward'],
     'behavioral': ['favorite-longshot', 'longshot bias', 'overpriced longshot', 'underpriced favorite', 'probability calibration'],
