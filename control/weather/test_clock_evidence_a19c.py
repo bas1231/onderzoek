@@ -46,6 +46,13 @@ def test_microsecond_offset_semantics():
     assert out["evidence_clock_eligible"] is True
 
 
+def test_small_inter_api_tick_delta_is_allowed():
+    out = c.evaluate(raw(ntp_maxerror_us=9_500))
+    assert out["maxerror_api_delta_ms"] == 1.5
+    assert out["api_error_fields_agree"] is True
+    assert out["evidence_clock_eligible"] is True
+
+
 def test_time_error_fails_closed():
     out = c.evaluate(raw(adjtimex_return=c.TIME_ERROR))
     assert out["evidence_clock_eligible"] is False
@@ -58,7 +65,8 @@ def test_unsync_fails_closed():
 
 
 def test_api_disagreement_fails_closed():
-    out = c.evaluate(raw(ntp_maxerror_us=7_999))
+    out = c.evaluate(raw(ntp_maxerror_us=11_000))
+    assert out["maxerror_api_delta_ms"] == 3.0
     assert out["api_error_fields_agree"] is False
     assert out["evidence_clock_eligible"] is False
 
@@ -66,6 +74,13 @@ def test_api_disagreement_fails_closed():
 def test_large_error_fails_closed():
     out = c.evaluate(raw(maxerror_us=100_001, ntp_maxerror_us=100_001))
     assert out["error_bounds_ok"] is False
+    assert out["evidence_clock_eligible"] is False
+
+
+def test_large_offset_fails_closed():
+    out = c.evaluate(raw(offset_raw=100_001_000, offset_is_nanoseconds=True))
+    assert out["clock_offset_ms"] == 100.001
+    assert out["offset_bounds_ok"] is False
     assert out["evidence_clock_eligible"] is False
 
 
@@ -79,10 +94,12 @@ if __name__ == "__main__":
     tests = [
         test_good_kernel_state_is_eligible,
         test_microsecond_offset_semantics,
+        test_small_inter_api_tick_delta_is_allowed,
         test_time_error_fails_closed,
         test_unsync_fails_closed,
         test_api_disagreement_fails_closed,
         test_large_error_fails_closed,
+        test_large_offset_fails_closed,
         test_negative_error_fails_closed,
     ]
     for test in tests:
