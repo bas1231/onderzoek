@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/bridge_smoke_e391.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-21T07:53:21.107651+00:00",
+  "hypothesis_id": "CONTROL-NO-SILENT-WAITING",
+  "source_commit": "173cd633c949e53c4dff1cdd87e8f7d9fce58d94",
+  "started_at": "2026-09-21T07:53:21.093965+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "ee6fc3ced99ef26704bc10b446942f5e9a4bea18a1d4f82a707d1464a19a8d8c",
+  "task_class": "infrastructure",
+  "task_id": "CONTROL-BRIDGE-SMOKE-E391"
+}
