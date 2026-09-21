@@ -20,6 +20,7 @@
   },
   "paid_actions": false,
   "pipeline": [
+    "recon_scout",
     "scout",
     "weather_twc",
     "microstructure",
@@ -36,6 +37,7 @@
   "report_sections": [
     "run_metadata",
     "source_coverage",
+    "recon_scout",
     "new_evidence",
     "candidate_hypotheses",
     "negative_evidence",
@@ -49,6 +51,6 @@
   "source_policy": "free_public_only",
   "status": "ACTIVE",
   "valid_null_result": "NO_PROVEN_EDGE",
-  "version": 2,
+  "version": 3,
   "wallet_actions": false
 }
