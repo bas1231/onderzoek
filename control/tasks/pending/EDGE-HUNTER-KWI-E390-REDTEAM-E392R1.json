@@ -1,0 +1,14 @@
+{
+  "build_authorization": null,
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/kwi_e390_redteam_e392r1.py"
+  ],
+  "hypothesis_id": "KWI-FULL-STATION-PRECANONICAL-V1",
+  "live_trading": false,
+  "operation": "python",
+  "task_class": "research",
+  "task_id": "EDGE-HUNTER-KWI-E390-REDTEAM-E392R1",
+  "timeout_seconds": 180,
+  "working_directory": "."
+}
