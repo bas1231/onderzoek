@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/kwi_market_data_readiness_e393.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-21T08:04:19.947475+00:00",
+  "hypothesis_id": "KWI-FULL-STATION-PRECANONICAL-V1",
+  "source_commit": "2332d8f442b772fc0e665ad061e921a61642127e",
+  "started_at": "2026-09-21T08:04:19.381760+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "1d8f8c4c925db9e4266dbc4056497615ca8a81bdb9bfd25e6c781a7f7d546b84",
+  "task_class": "research",
+  "task_id": "EDGE-HUNTER-KWI-MARKET-DATA-READINESS-E393"
+}
