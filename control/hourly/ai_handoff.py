@@ -13,7 +13,11 @@ PACKETS = RUNS / "agent_packets"
 
 READY_STATES = {"READY", "RESULT_READY"}
 
+# Keep this aligned with the orchestrator's primary/control role universe.
+# recon_scout is deliberately first: it is a first-class specialist worker,
+# not merely a local preprocessing stage.
 ROLE_ORDER = [
+    "recon_scout",
     "scout",
     "algebra",
     "settlement",
@@ -57,10 +61,7 @@ def compact_packet(packet: dict[str, Any]) -> dict[str, Any]:
         "coverage_gaps": packet.get("coverage_gaps", []),
         "candidate_ids": packet.get("candidate_ids", []),
         "survivors": packet.get("survivors", []),
-        # Recon WATCH work is triage-only. Preserve it through the AI
-        # handoff without granting promotion authority or candidate status.
         "recon_watch_triage": packet.get("recon_watch_triage", []),
-        # HUNTs already passed the stricter Recon gate and stay distinct.
         "recon_hunts": packet.get("recon_hunts", []),
         "next_decisive_question": packet.get(
             "next_decisive_question"
@@ -103,25 +104,18 @@ def build(run_id: str) -> tuple[dict[str, Any], Path]:
     director_handoff = load_json(handoff_path)
 
     packets: dict[str, dict[str, Any]] = {}
-
-    for p in packet_dir.glob("*.json"):
-        if p.name.startswith("_"):
+    for path in packet_dir.glob("*.json"):
+        if path.name.startswith("_"):
             continue
-
-        packet = load_json(p)
+        packet = load_json(path)
         aid = packet.get("agent_id")
-
         if aid:
-            packets[aid] = packet
+            packets[str(aid)] = packet
 
     ready_roles = []
-
     for aid in ROLE_ORDER:
         packet = packets.get(aid)
-        if not packet:
-            continue
-
-        if packet.get("status") in READY_STATES:
+        if packet and packet.get("status") in READY_STATES:
             ready_roles.append(compact_packet(packet))
 
     candidate_queue = {
@@ -142,9 +136,6 @@ def build(run_id: str) -> tuple[dict[str, Any], Path]:
         "run_id": run_id,
         "response_token": token,
         "created_at": now_iso(),
-
-        # One ChatGPT reasoning turn should consume this entire bundle.
-        # Do not create one browser/bridge request per specialist.
         "delivery_policy": {
             "single_chatgpt_turn": True,
             "one_bundle_per_cycle": True,
@@ -152,7 +143,6 @@ def build(run_id: str) -> tuple[dict[str, Any], Path]:
             "local_compute_only_when_decisive": True,
             "waiting_does_not_block_other_work": True,
         },
-
         "research_policy": {
             "default_economic_conclusion": "NO_PROVEN_EDGE",
             "priority_order": [
@@ -165,39 +155,35 @@ def build(run_id: str) -> tuple[dict[str, Any], Path]:
             "promotion_requires_evidence": True,
             "watch_triage_is_not_promotion": True,
             "watch_triage_promotion_authority": False,
+            "ai_candidate_kill_authority": False,
+            "ai_candidate_promotion_authority": False,
         },
-
         "guardrails": {
             "live_trading": False,
             "paid_actions": False,
             "wallet_actions": False,
             "openai_api": False,
         },
-
         "ready_roles": ready_roles,
         "candidate_queue": candidate_queue,
-
         "director_instruction": (
             "Act as the Research Director for this complete bundle. "
-            "Evaluate routed evidence role-by-role under each role contract. "
-            "For recon_watch_triage, perform research-only specialist triage: "
-            "test the mechanism, base rate, point-in-time evidence and net "
-            "executable economics, but do not promote WATCH to HUNT and do "
-            "not send WATCH directly to the killer/proof chain. Respect every "
-            "triage_only and promotion_authority=false field. "
-            "Echo response_token exactly in the response so stale or unrelated "
-            "assistant output cannot be applied to this work bundle. "
-            "Do not invent missing evidence. Preserve negative evidence. "
-            "Apply Pre-Build Killer before expensive work and Chief "
-            "Falsifier before promotion. Use Independent Reproducer only "
-            "for serious survivors. Waiting local computation must not "
-            "block unrelated candidates. Request local computation only "
-            "when it answers a concrete decisive question. Queue such work "
-            "as WAITING_FOR_RESULT and continue other research. "
+            "Evaluate every ready role exactly once under its role contract, "
+            "including recon_scout when present. For recon_watch_triage, "
+            "perform research-only specialist triage: test the mechanism, "
+            "base rate, point-in-time evidence and net executable economics, "
+            "but do not promote WATCH to HUNT and do not send WATCH directly "
+            "to the killer/proof chain. The AI worker may schedule or park "
+            "existing bundled candidates but may not close-negative or "
+            "promote them. Echo response_token exactly. Do not invent missing "
+            "evidence. Preserve negative evidence. Apply Pre-Build Killer "
+            "before expensive work and Chief Falsifier before promotion. Use "
+            "Independent Reproducer only for serious survivors. Waiting local "
+            "computation must not block unrelated candidates. Request local "
+            "computation only when it answers a concrete decisive question. "
             "NO_PROVEN_EDGE is a valid conclusion. Never authorize live "
             "trading, paid actions, wallet actions or paid OpenAI API use."
         ),
-
         "expected_response_schema": {
             "run_id": run_id,
             "response_token": token,
@@ -222,9 +208,8 @@ def build(run_id: str) -> tuple[dict[str, Any], Path]:
                     "candidate_id": "string",
                     "queue_status": (
                         "NEEDS_DIRECTOR|EXPERIMENT_REQUIRED|RUNNING|"
-                        "WAITING_FOR_DATA|WAITING_FOR_RESULT|"
-                        "RESULT_READY|NEEDS_REVISION|PARKED|"
-                        "CLOSED_NEGATIVE|PROMOTION_CANDIDATE"
+                        "WAITING_FOR_DATA|WAITING_FOR_RESULT|RESULT_READY|"
+                        "NEEDS_REVISION|PARKED"
                     ),
                     "reason": "string",
                     "next_decisive_test": "string|null",
@@ -238,14 +223,13 @@ def build(run_id: str) -> tuple[dict[str, Any], Path]:
 
     out = RUNS / f"{run_id}-ai-work-bundle.json"
     save_json(out, bundle)
-
     return bundle, out
 
 
 def latest_run_id() -> str:
     dirs = sorted(
-        p for p in PACKETS.iterdir()
-        if p.is_dir() and p.name.startswith("hourly-")
+        path for path in PACKETS.iterdir()
+        if path.is_dir() and path.name.startswith("hourly-")
     )
     if not dirs:
         raise RuntimeError("no packet runs")
@@ -267,8 +251,7 @@ if __name__ == "__main__":
         "run_id": run_id,
         "path": str(path.relative_to(ROOT)),
         "ready_roles": [
-            x["agent_id"]
-            for x in bundle["ready_roles"]
+            item["agent_id"] for item in bundle["ready_roles"]
         ],
         "director_attention": len(
             bundle["candidate_queue"]["director_attention"]
@@ -276,7 +259,8 @@ if __name__ == "__main__":
         "waiting_without_blocking": len(
             bundle["candidate_queue"]["waiting_without_blocking"]
         ),
-        "single_chatgpt_turn":
-            bundle["delivery_policy"]["single_chatgpt_turn"],
+        "single_chatgpt_turn": (
+            bundle["delivery_policy"]["single_chatgpt_turn"]
+        ),
         "guardrails": bundle["guardrails"],
     }, indent=2, sort_keys=True))
