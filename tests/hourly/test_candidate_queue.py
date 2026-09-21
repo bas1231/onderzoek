@@ -1,4 +1,5 @@
 import importlib.util
+import json
 import sys
 from pathlib import Path
 
@@ -80,3 +81,28 @@ def test_guardrails_forced_false():
     assert c["live_trading"] is False
     assert c["paid_actions"] is False
     assert c["wallet_actions"] is False
+
+
+def test_proof_review_never_mutates_candidate_or_declares_final_edge(tmp_path):
+    mod=load_module()
+    mod.ROOT=tmp_path
+    mod.RUNS=tmp_path/"knowledge/runs"
+    mod.RUNS.mkdir(parents=True)
+    before=list((tmp_path/"knowledge").rglob("*.json"))
+    path=mod.write_proof_review("run-x",{"proof_candidates":["X"],"proof_rejections":{"Y":["missing_economics"]}})
+    data=json.loads(path.read_text())
+    assert data["status"]=="DIRECTOR_REVIEW_REQUIRED"
+    assert data["proof_candidates"]==["X"]
+    assert data["automatic_candidate_mutation"] is False
+    assert data["automatic_proven_edge"] is False
+    assert not (tmp_path/"knowledge/candidates/X.json").exists()
+    assert path not in before
+
+def test_no_proof_candidate_review_is_null_result(tmp_path):
+    mod=load_module()
+    mod.ROOT=tmp_path
+    mod.RUNS=tmp_path/"knowledge/runs"
+    mod.RUNS.mkdir(parents=True)
+    path=mod.write_proof_review("run-null",{"proof_candidates":[]})
+    data=json.loads(path.read_text())
+    assert data["status"]=="NO_PROVEN_EDGE"

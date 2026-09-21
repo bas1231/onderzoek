@@ -93,9 +93,15 @@ def main() -> int:
         write_candidates=True,
     )
 
+    proof_review_path = candidate_queue.write_proof_review(
+        run['run_id'],
+        orchestration_data.get('validation_pipeline', {}),
+    )
+
     director_handoff_path = candidate_queue.write_handoff(
         queue_data,
         run['run_id'],
+        proof_review_path=proof_review_path,
     )
 
     run_path = R / 'knowledge/runs' / (run['run_id'] + '.json')
@@ -132,6 +138,12 @@ def main() -> int:
         ),
         'director_handoff_ref': str(
             director_handoff_path.relative_to(R)
+        ),
+        'proof_review_ref': str(
+            proof_review_path.relative_to(R)
+        ),
+        'validation_pipeline': orchestration_data.get(
+            'validation_pipeline', {}
         ),
         'queue_count': len(queue_data.get('queue', [])),
         'default_economic_conclusion': 'NO_PROVEN_EDGE',
