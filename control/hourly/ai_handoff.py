@@ -3,6 +3,7 @@ from __future__ import annotations
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
+import hashlib
 import json
 
 
@@ -71,6 +72,25 @@ def compact_packet(packet: dict[str, Any]) -> dict[str, Any]:
     }
 
 
+def response_token(
+    run_id: str,
+    ready_roles: list[dict[str, Any]],
+    candidate_queue: dict[str, Any],
+) -> str:
+    material = {
+        "run_id": run_id,
+        "ready_roles": ready_roles,
+        "candidate_queue": candidate_queue,
+    }
+    encoded = json.dumps(
+        material,
+        sort_keys=True,
+        separators=(",", ":"),
+        ensure_ascii=False,
+    ).encode("utf-8")
+    return hashlib.sha256(encoded).hexdigest()
+
+
 def build(run_id: str) -> tuple[dict[str, Any], Path]:
     packet_dir = PACKETS / run_id
     if not packet_dir.is_dir():
@@ -104,9 +124,23 @@ def build(run_id: str) -> tuple[dict[str, Any], Path]:
         if packet.get("status") in READY_STATES:
             ready_roles.append(compact_packet(packet))
 
+    candidate_queue = {
+        "director_attention": director_handoff.get(
+            "director_attention", []
+        ),
+        "waiting_without_blocking": director_handoff.get(
+            "waiting_without_blocking", []
+        ),
+        "full_queue": director_handoff.get(
+            "full_queue", []
+        ),
+    }
+    token = response_token(run_id, ready_roles, candidate_queue)
+
     bundle = {
         "schema": "PVA_AI_WORK_BUNDLE_V1",
         "run_id": run_id,
+        "response_token": token,
         "created_at": now_iso(),
 
         # One ChatGPT reasoning turn should consume this entire bundle.
@@ -141,18 +175,7 @@ def build(run_id: str) -> tuple[dict[str, Any], Path]:
         },
 
         "ready_roles": ready_roles,
-
-        "candidate_queue": {
-            "director_attention": director_handoff.get(
-                "director_attention", []
-            ),
-            "waiting_without_blocking": director_handoff.get(
-                "waiting_without_blocking", []
-            ),
-            "full_queue": director_handoff.get(
-                "full_queue", []
-            ),
-        },
+        "candidate_queue": candidate_queue,
 
         "director_instruction": (
             "Act as the Research Director for this complete bundle. "
@@ -162,6 +185,8 @@ def build(run_id: str) -> tuple[dict[str, Any], Path]:
             "executable economics, but do not promote WATCH to HUNT and do "
             "not send WATCH directly to the killer/proof chain. Respect every "
             "triage_only and promotion_authority=false field. "
+            "Echo response_token exactly in the response so stale or unrelated "
+            "assistant output cannot be applied to this work bundle. "
             "Do not invent missing evidence. Preserve negative evidence. "
             "Apply Pre-Build Killer before expensive work and Chief "
             "Falsifier before promotion. Use Independent Reproducer only "
@@ -175,6 +200,7 @@ def build(run_id: str) -> tuple[dict[str, Any], Path]:
 
         "expected_response_schema": {
             "run_id": run_id,
+            "response_token": token,
             "role_results": [
                 {
                     "agent_id": "string",
