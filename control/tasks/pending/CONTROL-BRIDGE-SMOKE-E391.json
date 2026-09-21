@@ -1,0 +1,22 @@
+{
+  "build_authorization": {
+    "build_kind": "control_plane",
+    "capabilities": [
+      "local_test"
+    ],
+    "mode": "control_plane",
+    "objective": "Minimal end-to-end bridge smoke test requested by user.",
+    "warrant_ref": null
+  },
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/bridge_smoke_e391.py"
+  ],
+  "hypothesis_id": "CONTROL-NO-SILENT-WAITING",
+  "live_trading": false,
+  "operation": "python",
+  "task_class": "infrastructure",
+  "task_id": "CONTROL-BRIDGE-SMOKE-E391",
+  "timeout_seconds": 60,
+  "working_directory": "."
+}

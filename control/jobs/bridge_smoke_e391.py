@@ -1,0 +1,1 @@
+print('BRIDGE_SMOKE_E391=PASS')
