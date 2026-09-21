@@ -131,6 +131,8 @@
       !Array.isArray(response) &&
       typeof response.run_id === "string" &&
       response.run_id.startsWith("hourly-") &&
+      typeof response.response_token === "string" &&
+      /^[a-f0-9]{64}$/.test(response.response_token) &&
       response.economic_conclusion === "NO_PROVEN_EDGE" &&
       Array.isArray(response.role_results) &&
       Array.isArray(response.candidate_decisions)
