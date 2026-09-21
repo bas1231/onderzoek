@@ -82,6 +82,11 @@ def _candidate_var(ds, names):
     return None
 
 
+def _station_identifier_var(ds):
+    """Prefer machine station identifiers over descriptive station names."""
+    return _candidate_var(ds, ["stationId", "stationID", "stid", "station", "stationName"])
+
+
 def _strings(var):
     import numpy as np
     arr = var[:]
@@ -126,7 +131,7 @@ def decode_netcdf(path: Path, stations: set[str]) -> dict:
             }
             for name, var in ds.variables.items()
         }
-        station_var = _candidate_var(ds, ["stationName", "stationId", "stationID", "station", "stid"])
+        station_var = _station_identifier_var(ds)
         time_var = _candidate_var(ds, ["observationTime", "timeObs", "obsTime", "time"])
         temp_var = _candidate_var(ds, ["temperature", "airTemperature", "temp", "T"])
         if station_var is None or temp_var is None:
@@ -138,6 +143,7 @@ def decode_netcdf(path: Path, stations: set[str]) -> dict:
             }
 
         station_values = _strings(station_var)
+        normalized_station_values = [s.upper().strip() for s in station_values if s.strip()]
         temps = temp_var[:]
         times = time_var[:] if time_var is not None else None
         units = getattr(temp_var, "units", None)
@@ -166,15 +172,35 @@ def decode_netcdf(path: Path, stations: set[str]) -> dict:
                 except Exception:
                     pass
             rows.append(row)
+
+        matched = {r["station"] for r in rows}
+        missing = sorted(stations - matched)
+        if stations and not matched:
+            decode_status = "NO_REQUESTED_STATIONS_FOUND"
+        elif stations and missing:
+            decode_status = "PARTIAL_REQUESTED_STATION_MATCH"
+        else:
+            decode_status = "PASS"
+
+        suffix_suggestions = {
+            requested: sorted({sid for sid in normalized_station_values if sid.endswith(requested[-3:])})[:20]
+            for requested in sorted(stations)
+            if requested not in matched
+        }
         return {
-            "status": "PASS",
+            "status": decode_status,
             "station_variable": station_var.name,
             "temperature_variable": temp_var.name,
             "time_variable": time_var.name if time_var is not None else None,
             "temperature_units": units,
             "matched_rows": rows,
-            "matched_station_count": len({r["station"] for r in rows}),
+            "matched_station_count": len(matched),
+            "matched_stations": sorted(matched),
             "requested_stations": sorted(stations),
+            "missing_requested_stations": missing,
+            "requested_station_coverage_fraction": (len(matched) / len(stations)) if stations else 1.0,
+            "station_identifier_examples": sorted(set(normalized_station_values))[:40],
+            "suffix_match_suggestions": suffix_suggestions,
             "variable_inventory": inventory,
         }
 
@@ -271,7 +297,12 @@ def main() -> int:
     path.write_text(json.dumps(result, indent=2, sort_keys=True) + "\n", encoding="utf-8")
     result["manifest"] = str(path)
     print(json.dumps(result, indent=2, sort_keys=True))
-    return 0 if result.get("status") in {"PASS", "NO_FILES_DISCOVERED"} else 2
+    decode_status = (result.get("decode") or {}).get("status") if not args.index_only else None
+    if result.get("status") not in {"PASS", "NO_FILES_DISCOVERED"}:
+        return 2
+    if not args.index_only and decode_status != "PASS":
+        return 3
+    return 0
 
 
 if __name__ == "__main__":
