@@ -108,6 +108,41 @@ def _validated_ids(items: Any, required_status: str) -> list[str]:
     return sorted(set(out))
 
 
+PROOF_GATES = {
+    "source_provenance",
+    "point_in_time",
+    "out_of_sample",
+    "signal_edge",
+    "market_edge",
+    "execution_reality",
+    "prebuild_killer",
+    "chief_falsifier",
+    "independent_reproducer",
+}
+
+
+def proof_gate(result: dict[str, Any], upstream_ids: set[str]) -> tuple[bool, list[str]]:
+    cid = str(result.get("candidate_id", ""))
+    if not cid or cid not in upstream_ids:
+        return False, ["candidate_not_upstream_validated"]
+    if str(result.get("status", "")).upper() != "PASS":
+        return False, ["independent_reproduction_not_pass"]
+    gates = result.get("gates")
+    if not isinstance(gates, dict):
+        return False, ["missing_structured_gates"]
+    failed = sorted(g for g in PROOF_GATES if str(gates.get(g, "")).upper() != "PASS")
+    economics = result.get("economics")
+    if not isinstance(economics, dict):
+        failed.append("missing_economics")
+    else:
+        for key in ("fees", "spread", "slippage", "fills", "settlement", "capacity"):
+            if key not in economics:
+                failed.append("economics_" + key)
+        if economics.get("net_edge") is None:
+            failed.append("economics_net_edge")
+    return not failed, failed
+
+
 def propagate_validation(run_dir: Path) -> dict[str, Any]:
     killer_path = run_dir / "prebuild_killer.json"
     falsifier_path = run_dir / "chief_falsifier.json"
@@ -133,6 +168,19 @@ def propagate_validation(run_dir: Path) -> dict[str, Any]:
 
     if falsifier_path.exists():
         save_json(falsifier_path, falsifier)
+    proof_candidates = []
+    proof_rejections = {}
+    upstream = set(reproducer.get("reproduction_candidates", []))
+    for result in reproducer.get("validation_results", []) if isinstance(reproducer.get("validation_results"), list) else []:
+        if not isinstance(result, dict):
+            continue
+        ok, reasons = proof_gate(result, upstream)
+        cid = str(result.get("candidate_id", ""))
+        if ok:
+            proof_candidates.append(cid)
+        elif cid:
+            proof_rejections[cid] = reasons
+
     if reproducer_path.exists():
         save_json(reproducer_path, reproducer)
 
@@ -140,7 +188,9 @@ def propagate_validation(run_dir: Path) -> dict[str, Any]:
         "killer_pass": killer_pass,
         "falsifier_pass": falsifier_pass,
         "reproduction_candidates": reproducer.get("reproduction_candidates", []),
-        "economic_conclusion": "NO_PROVEN_EDGE",
+        "proof_candidates": sorted(set(proof_candidates)),
+        "proof_rejections": proof_rejections,
+        "economic_conclusion": "PROVEN_EDGE_CANDIDATE" if proof_candidates else "NO_PROVEN_EDGE",
     }
 
 
