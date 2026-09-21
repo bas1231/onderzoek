@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/weather_e401_miami_ws_canary_a11.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-21T15:33:15.767353+00:00",
+  "hypothesis_id": "KWI-MARKET-REACTION-E401",
+  "source_commit": "05e1465ad9a840ad71197ae83eb0dec4812ca754",
+  "started_at": "2026-09-21T15:32:48.114030+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "dfe0829215f0200fbad9f8cbd81cb3cf625e5a8a57246efd5035f1a1ef658715",
+  "task_class": "infrastructure",
+  "task_id": "EDGE-HUNTER-KWI-MIAMI-WS-CANARY-E401A11"
+}
