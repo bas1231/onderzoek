@@ -331,7 +331,12 @@ def orchestrate(run_dir: Path) -> dict[str, Any]:
     validation = propagate_validation(run_dir)
     packets = []
 
+    # Internal control-plane JSON files (for example _orchestration.json from
+    # an earlier invocation of the same run) are summaries, not agent packets.
+    # Skipping them makes repeated orchestration of one run idempotent.
     for path in sorted(run_dir.glob("*.json")):
+        if path.name.startswith("_"):
+            continue
         packets.append(enrich_packet(path))
 
     ordered = sorted(packets, key=priority_key)

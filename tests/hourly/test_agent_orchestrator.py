@@ -197,3 +197,24 @@ def test_e2e_acceptance_true_candidate_and_adversarial_fakes(tmp_path):
     assert "missing_economics" in out["proof_rejections"]["FAKE_NO_ECON"]
     assert "candidate_not_upstream_validated" in out["proof_rejections"]["KILLED"]
     assert "candidate_not_upstream_validated" in out["proof_rejections"]["CROSS_CANDIDATE"]
+
+
+def test_orchestrate_rerun_skips_internal_summary(tmp_path):
+    mod = load_module()
+    run = tmp_path / "run"
+    run.mkdir()
+
+    (run / "scout.json").write_text(json.dumps({
+        "agent_id": "scout",
+        "status": "PENDING",
+        "input_refs": ["routing.json"],
+    }))
+
+    first = mod.orchestrate(run)
+    second = mod.orchestrate(run)
+
+    assert len(first["queue"]) == 1
+    assert len(second["queue"]) == 1
+    assert second["queue"][0]["agent_id"] == "scout"
+    assert all(item["agent_id"] is not None for item in second["queue"])
+    assert all(item["reason"] != "unknown_agent_role" for item in second["queue"])
