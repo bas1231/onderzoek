@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/kwi_public_l2_probe_e397.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-21T08:09:51.392050+00:00",
+  "hypothesis_id": "KWI-FULL-STATION-PRECANONICAL-V1",
+  "source_commit": "3115f8566eed2dd505679de95ec3d9042306bbca",
+  "started_at": "2026-09-21T08:09:50.146436+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "cee75ede5ec1f62e4a71b2cc06cb27df0905f3d2ccfbe2bd0be20e09fea5e528",
+  "task_class": "research",
+  "task_id": "EDGE-HUNTER-KWI-PUBLIC-L2-PROBE-E397"
+}
