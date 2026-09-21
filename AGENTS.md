@@ -241,3 +241,27 @@ Harde operationele regel: bridge-taken moeten als gewone zichtbare assistant-cha
 Als de gebruiker de taak niet ziet, geldt de taak als NIET VERZONDEN en moet hij opnieuw zichtbaar worden gestuurd.
 Vermijd bridge-sentinelvoorbeelden in gewone uitleg of payloadvelden, omdat de browserparser die als echte taakgrenzen kan interpreteren.
 
+
+## Bridge task authoring rules
+
+Voor taken die via de lokale browser/control bridge worden verstuurd gelden de volgende fail-closed regels:
+
+- Iedere task met `task_class: infrastructure` MOET vóór verzending een expliciete `build_authorization` bevatten.
+- Voor gewone control-plane infrastructuur: gebruik `mode: control_plane`, `build_kind: control_plane`, een niet-lege `objective` en een expliciete lijst `capabilities`.
+- Controleer capabilities vooraf tegen `control/edge_hunter/warrant_policy.json`; forbidden capabilities mogen nooit worden toegevoegd.
+- Patroon `/discover` HTTP 200 + `/enqueue` HTTP 400 + lifecycle blijft `DISCOVERED` + geen pending taskfile betekent: controleer eerst `control/validator.py` en `control/edge_hunter/build_gate.py`. Dit is een pre-enqueue validatiefout.
+- Een `NO_ENQUEUE_ACK` bij bovenstaand patroon is een gevolgincident; restart niet automatisch bridge/Git/cadence voordat de concrete 400-validatiefout is onderzocht.
+- Gebruik in door de browserbridge gegenereerde Python-jobcode geen dunder runtime-symbolen zoals `__file__` en `__name__`. De transportlaag heeft deze aantoonbaar verminkt naar `file` en `name`.
+- Gebruik voor bridge-jobpaden waar mogelijk `Path.cwd()` omdat execution vanuit de repository-root plaatsvindt.
+- Vermijd fragiele escaped newline-stringconstructies in gegenereerde Python-broncode. De browsertransportlaag heeft eerder een newline-literal gesplitst en daarmee een SyntaxError veroorzaakt.
+- Houd via de bridge gegenereerde Python-jobs klein en syntactisch eenvoudig.
+- Bij onverwachte NameError/SyntaxError moet de opgeslagen job eerst worden vergeleken met de verzonden bron voordat andere subsystemen worden gewijzigd.
+- Nieuwe bridge-jobs moeten waar praktisch mogelijk eerst een goedkope syntax/validator-gate passeren voordat inhoudelijk werk start.
+
+Referentie 2026-09-21:
+- E402R1: infrastructure-envelope zonder `build_authorization` -> `/enqueue` HTTP 400.
+- E402R2: transport verminkte een dunder runtime-symbool -> NameError.
+- E403: transport splitste een newline-string -> SyntaxError.
+- E404: transport verminkte opnieuw een dunder runtime-symbool -> NameError.
+
+Deze failure modes mogen niet opnieuw worden geïntroduceerd.

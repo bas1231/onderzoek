@@ -606,6 +606,12 @@ def next_outbox_item() -> dict | None:
             if not incident.get("deliver_to_chat"):
                 continue
 
+            # INCIDENT_HYGIENE_E402:
+            # resolved/superseded/archive incidents are audit evidence only
+            # and must never re-enter the chat outbox.
+            if incident.get("status") != "OPEN":
+                continue
+
             # Hourly research wakes have a dedicated AI-only
             # transport. Never expose them as ordinary executor
             # result messages as well.
