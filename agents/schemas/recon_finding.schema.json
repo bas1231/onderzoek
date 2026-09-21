@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "required": ["id","observed_at","attack_mode","status","claim","sources","economic_model","falsification"],
+  "status_values": ["KILL","WATCH","HUNT","PROVE"],
+  "event_labels": ["RECON_ANOMALY","FAT_TAIL","EDGE_RESURRECTION","POSSIBLE_NONPUBLIC_INFORMATION","NON_EXECUTABLE"],
+  "economic_model": {
+    "who_loses": null,
+    "why": null,
+    "who_captures": null,
+    "public_trigger": null,
+    "frequency": null,
+    "capacity": null,
+    "net_after_friction": null,
+    "half_life": null,
+    "crowding": null,
+    "adaptability": null,
+    "kill_condition": null
+  },
+  "source_record": {
+    "url_or_ref": null,
+    "source_class": null,
+    "authority": null,
+    "claim_supported": null,
+    "point_in_time": null
+  },
+  "falsification": {
+    "counterevidence": [],
+    "next_decisive_test": null,
+    "required_data": [],
+    "execution_blockers": [],
+    "specialist_route": []
+  }
+}

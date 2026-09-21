@@ -12,6 +12,7 @@ ROOT = Path.cwd()
 PACKETS = ROOT / "knowledge/runs/agent_packets"
 
 PRIMARY_ROLES = {
+    "recon_scout",
     "scout",
     "algebra",
     "settlement",
