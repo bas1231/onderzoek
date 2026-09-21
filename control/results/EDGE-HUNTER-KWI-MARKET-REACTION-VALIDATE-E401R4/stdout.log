@@ -1,0 +1,47 @@
+{
+  "compile_pass": true,
+  "compiled": [
+    "control/weather/market_reaction.py",
+    "control/weather/test_market_reaction.py",
+    "control/weather/kalshi_market_reaction_recorder.py",
+    "control/weather/kalshi_market_reaction_ws.py",
+    "control/weather/analyze_kwi_market_reaction.py",
+    "control/weather/test_market_reaction_ws.py",
+    "control/weather/test_analyze_kwi_market_reaction.py",
+    "control/weather/summarize_kwi_market_reaction_e401.py",
+    "control/weather/test_summarize_kwi_market_reaction_e401.py"
+  ],
+  "economic_conclusion": "NO_PROVEN_EDGE",
+  "live_trading": false,
+  "paid_action": false,
+  "task": "KAL-WX-MARKET-REACTION-E401-VALIDATION",
+  "tests": [
+    {
+      "path": "control/weather/test_market_reaction.py",
+      "returncode": 0,
+      "stderr_tail": ".............\n----------------------------------------------------------------------\nRan 13 tests in 0.001s\n\nOK\n",
+      "stdout_tail": ""
+    },
+    {
+      "path": "control/weather/test_market_reaction_ws.py",
+      "returncode": 0,
+      "stderr_tail": ".....\n----------------------------------------------------------------------\nRan 5 tests in 0.001s\n\nOK\n",
+      "stdout_tail": ""
+    },
+    {
+      "path": "control/weather/test_analyze_kwi_market_reaction.py",
+      "returncode": 0,
+      "stderr_tail": "..\n----------------------------------------------------------------------\nRan 2 tests in 0.000s\n\nOK\n",
+      "stdout_tail": ""
+    },
+    {
+      "path": "control/weather/test_summarize_kwi_market_reaction_e401.py",
+      "returncode": 0,
+      "stderr_tail": "......\n----------------------------------------------------------------------\nRan 6 tests in 0.001s\n\nOK\n",
+      "stdout_tail": ""
+    }
+  ],
+  "tests_pass": true,
+  "wallet_action": false
+}
+KWI_MARKET_REACTION_E401_VALIDATION_PASS

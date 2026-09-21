@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/validate_market_reaction_e401.py"
+  ],
+  "exit_code": 0,
+  "finished_at": "2026-09-21T13:55:06.251005+00:00",
+  "hypothesis_id": "KWI-FULL-STATION-PRECANONICAL-V1",
+  "source_commit": "b15dbd2fc6e2e5bfcf08c3a9f17d4322a0c03992",
+  "started_at": "2026-09-21T13:55:06.028899+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "a62456e69919260468f1ec6d27a3499abcbbefad95c6cbeaac84e66faffc6ec6",
+  "task_class": "research",
+  "task_id": "EDGE-HUNTER-KWI-MARKET-REACTION-VALIDATE-E401R4"
+}
