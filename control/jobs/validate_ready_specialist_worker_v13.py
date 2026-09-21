@@ -50,6 +50,20 @@ def main() -> int:
         timeout=240,
     )
 
+    steps["python_compile"] = run(
+        [
+            str(PYTHON),
+            "-m",
+            "compileall",
+            "-q",
+            "control",
+            "tests/hourly",
+            "tests/bridge",
+            "tests/test_recon_engine.py",
+        ],
+        timeout=180,
+    )
+
     steps["hourly_bridge_regression"] = run(
         [
             str(PYTHON),
@@ -61,21 +75,6 @@ def main() -> int:
             "tests/test_recon_engine.py",
         ],
         timeout=300,
-    )
-
-    steps["python_compile"] = run(
-        [
-            str(PYTHON),
-            "-m",
-            "compileall",
-            "-q",
-            "control/hourly",
-            "control/browser_bridge.py",
-            "control/browser_bridge_core.py",
-            "control/jobs/watchdog_v1.py",
-            "control/jobs/validate_ready_specialist_worker_v13.py",
-        ],
-        timeout=120,
     )
 
     node = shutil.which("node")
@@ -106,8 +105,8 @@ def main() -> int:
 
     required = [
         steps["target_tests"],
-        steps["hourly_bridge_regression"],
         steps["python_compile"],
+        steps["hourly_bridge_regression"],
     ]
     if node:
         required.append(steps["javascript_syntax"])
