@@ -10,30 +10,66 @@ from .shadow_cycle import build_shadow_plan
 
 
 def load_json(path: Path) -> Any:
-    return json.loads(path.read_text(encoding="utf-8"))
+    try:
+        return json.loads(path.read_text(encoding="utf-8"))
+    except Exception as exc:
+        raise ValueError(f"invalid_json:{path}:{type(exc).__name__}:{exc}") from exc
+
+
+def _require_dir(path: Path, label: str) -> None:
+    if not path.exists():
+        raise ValueError(f"{label}_directory_missing:{path}")
+    if not path.is_dir():
+        raise ValueError(f"{label}_path_not_directory:{path}")
 
 
 def load_candidates(candidate_dir: Path) -> list[dict[str, Any]]:
-    rows = []
+    _require_dir(candidate_dir, "candidate")
+    rows: list[dict[str, Any]] = []
+    seen: dict[str, Path] = {}
     for path in sorted(candidate_dir.glob("*.json")):
+        if path.name.startswith("_"):
+            continue
         obj = load_json(path)
-        if isinstance(obj, dict) and obj.get("candidate_id"):
-            rows.append(obj)
+        if not isinstance(obj, dict):
+            raise ValueError(f"candidate_not_object:{path}")
+        candidate_id = str(obj.get("candidate_id") or "").strip()
+        if not candidate_id:
+            raise ValueError(f"candidate_id_missing:{path}")
+        if candidate_id in seen:
+            raise ValueError(
+                f"duplicate_candidate_id:{candidate_id}:{seen[candidate_id]}:{path}"
+            )
+        seen[candidate_id] = path
+        rows.append(obj)
     return rows
 
 
 def load_packets(packet_dir: Path) -> list[dict[str, Any]]:
-    rows = []
+    _require_dir(packet_dir, "packet")
+    rows: list[dict[str, Any]] = []
+    seen: dict[str, Path] = {}
     for path in sorted(packet_dir.glob("*.json")):
         if path.name.startswith("_"):
             continue
         obj = load_json(path)
-        if isinstance(obj, dict) and obj.get("agent_id"):
-            rows.append(obj)
+        if not isinstance(obj, dict):
+            raise ValueError(f"packet_not_object:{path}")
+        agent_id = str(obj.get("agent_id") or "").strip()
+        if not agent_id:
+            raise ValueError(f"packet_agent_id_missing:{path}")
+        if agent_id in seen:
+            raise ValueError(
+                f"duplicate_packet_agent_id:{agent_id}:{seen[agent_id]}:{path}"
+            )
+        seen[agent_id] = path
+        rows.append(obj)
     return rows
 
 
 def build_from_paths(candidate_dir: Path, packet_dir: Path, source_commit: str) -> dict[str, Any]:
+    if not str(source_commit or "").strip():
+        raise ValueError("source_commit_required")
     candidates = load_candidates(candidate_dir)
     packets = load_packets(packet_dir)
     tasks = packets_to_tasks(packets, run_id=packet_dir.name)
