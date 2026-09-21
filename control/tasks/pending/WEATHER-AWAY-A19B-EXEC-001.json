@@ -1,0 +1,13 @@
+{
+  "task_id": "WEATHER-AWAY-A19B-EXEC-001",
+  "hypothesis_id": "KAL-WX-INDEX-001",
+  "task_class": "research",
+  "operation": "python",
+  "working_directory": ".",
+  "command": [
+    "python3",
+    "control/jobs/weather_away_a19b.py"
+  ],
+  "timeout_seconds": 1200,
+  "live_trading": false
+}
