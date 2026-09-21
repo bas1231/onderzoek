@@ -175,9 +175,10 @@ def build(run_id: str) -> tuple[dict[str, Any], Path]:
             "but do not promote WATCH to HUNT and do not send WATCH directly "
             "to the killer/proof chain. The AI worker may schedule or park "
             "existing bundled candidates but may not close-negative or "
-            "promote them. Echo response_token exactly. Do not invent missing "
-            "evidence. Preserve negative evidence. Apply Pre-Build Killer "
-            "before expensive work and Chief Falsifier before promotion. Use "
+            "promote them. Return schema PVA_AI_RESPONSE_V1 and echo "
+            "response_token exactly. Do not invent missing evidence. "
+            "Preserve negative evidence. Apply Pre-Build Killer before "
+            "expensive work and Chief Falsifier before promotion. Use "
             "Independent Reproducer only for serious survivors. Waiting local "
             "computation must not block unrelated candidates. Request local "
             "computation only when it answers a concrete decisive question. "
@@ -185,6 +186,7 @@ def build(run_id: str) -> tuple[dict[str, Any], Path]:
             "trading, paid actions, wallet actions or paid OpenAI API use."
         ),
         "expected_response_schema": {
+            "schema": "PVA_AI_RESPONSE_V1",
             "run_id": run_id,
             "response_token": token,
             "role_results": [
