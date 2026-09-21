@@ -278,7 +278,33 @@ def build_queue(write_candidates: bool = False) -> dict[str, Any]:
     }
 
 
-def write_handoff(queue: dict[str, Any], run_id: str) -> Path:
+def write_proof_review(
+    run_id: str,
+    validation_pipeline: dict[str, Any],
+) -> Path:
+    path = RUNS / f"{run_id}-proof-review.json"
+    candidates = list(validation_pipeline.get("proof_candidates", []))
+    review = {
+        "run_id": run_id,
+        "status": "DIRECTOR_REVIEW_REQUIRED" if candidates else "NO_PROVEN_EDGE",
+        "proof_candidates": candidates,
+        "proof_rejections": validation_pipeline.get("proof_rejections", {}),
+        "source": "agent_control_plane.validation_pipeline",
+        "automatic_candidate_mutation": False,
+        "automatic_proven_edge": False,
+        "live_trading": False,
+        "paid_actions": False,
+        "wallet_actions": False,
+    }
+    save_json(path, review)
+    return path
+
+
+def write_handoff(
+    queue: dict[str, Any],
+    run_id: str,
+    proof_review_path: Path | None = None,
+) -> Path:
     path = RUNS / f"{run_id}-director-handoff.json"
 
     attention = [
@@ -308,6 +334,10 @@ def write_handoff(queue: dict[str, Any], run_id: str) -> Path:
         "director_attention": attention,
         "waiting_without_blocking": waiting,
         "full_queue": queue["queue"],
+        "proof_review_ref": (
+            str(proof_review_path.relative_to(ROOT))
+            if proof_review_path is not None else None
+        ),
         "guardrails": {
             "live_trading": False,
             "paid_actions": False,
