@@ -1,0 +1,14 @@
+{
+  "build_authorization": null,
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/weather_e401_event_discovery_a10.py"
+  ],
+  "hypothesis_id": "KWI-MARKET-REACTION-E401",
+  "live_trading": false,
+  "operation": "python",
+  "task_class": "research",
+  "task_id": "EDGE-HUNTER-KWI-EVENT-DISCOVERY-E401A10",
+  "timeout_seconds": 45,
+  "working_directory": "."
+}
