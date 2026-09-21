@@ -1,0 +1,26 @@
+{
+  "build_authorization": {
+    "build_kind": "control_plane",
+    "capabilities": [
+      "public_network_read",
+      "repository_sync",
+      "local_code_patch",
+      "local_test",
+      "service_restart"
+    ],
+    "mode": "control_plane",
+    "objective": "Complete bridge ACK verification with correct control PYTHONPATH, then finish fail-closed local/remote sync and bridge restart verification; cadence override explicitly authorized by user.",
+    "warrant_ref": null
+  },
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/launch_e385_r1.py"
+  ],
+  "hypothesis_id": "CONTROL-NO-SILENT-WAITING",
+  "live_trading": false,
+  "operation": "python",
+  "task_class": "infrastructure",
+  "task_id": "CONTROL-RECOVER-SYNC-BRIDGE-E385R1",
+  "timeout_seconds": 300,
+  "working_directory": "."
+}
