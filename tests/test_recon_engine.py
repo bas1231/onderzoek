@@ -42,3 +42,23 @@ def test_context_supported_settlement_signal_reaches_watch():
     assert settlement
     assert all(x["status"]=="WATCH" for x in settlement)
     assert settlement[0]["quality"]["economic_context_count"] >= 2
+
+
+def test_legacy_watch_noise_is_demoted_from_persistent_state(tmp_path):
+    m=load(Path("control/hourly/recon_engine.py"))
+    m.WATCHLIST=tmp_path/"watchlist.json"
+    m.GRAPH=tmp_path/"graph.json"
+    noise=m.discover({"scout":{"evidence":[{"source_id":"cftc","document_sha256":"x","retrieved_at":"2026-01-01T00:00:00Z","snippet":"Privacy Policy Web Policy FOIA Accessibility Statement Submit Tips & Complaints Headquarters. Loss information."}]}})[0]
+    legacy=dict(noise)
+    legacy["status"]="WATCH"
+    legacy["labels"]=["RECON_ANOMALY"]
+    m.save_json(m.WATCHLIST, {"version":1,"items":[legacy]})
+    m.save_json(m.GRAPH, {"version":1,"nodes":[{"id":legacy["id"],"type":"recon_finding","status":"WATCH"},{"id":"role:microstructure","type":"specialist"}],"edges":[{"from":legacy["id"],"to":"role:microstructure","type":"route_to"}]})
+    watch=m.update_watchlist([noise])
+    graph=m.update_graph([noise])
+    persisted=m.load_json(m.WATCHLIST,{})
+    persisted_graph=m.load_json(m.GRAPH,{})
+    assert watch["demoted_noise"] == 1
+    assert persisted["items"] == []
+    assert all(x["id"] != legacy["id"] for x in persisted_graph["nodes"])
+    assert all(x["from"] != legacy["id"] for x in persisted_graph["edges"])
