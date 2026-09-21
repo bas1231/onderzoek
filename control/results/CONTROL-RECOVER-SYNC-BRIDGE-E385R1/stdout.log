@@ -1,0 +1,24 @@
+BRANCH_CHECK=PASS
+PRE_E383_CHECKPOINT=PASS
+RESULT_PRIORITY_PATCH=PASS
+ACK_PATCH_COMPILE=PASS
+INCIDENT_ACK_PROBE=PASS
+ACK_PATCH_COMMIT=PASS
+PRE_HEAD=5aaf33f4b75704ad6d93924ad7358b8e81d3e773
+PRE_ORIGIN_MAIN=8b485ee6d646c3f5a3a2703c33fccef187ac62e0
+PRE_DIVERGENCE=75	49
+TRACKED_CLEAN_BEFORE_SYNC=PASS
+BACKUP_BRANCH=recovery/e383-pre-sync-5aaf33f4b757
+SYNC_MODE=DIVERGED_CONFLICT
+
+error: The following untracked working tree files would be overwritten by merge:
+	control/jobs/finalize_auto_continue_e020r7f1.py
+	control/jobs/install_control_auto_continue_e020r.py
+	control/jobs/install_control_auto_continue_e020r6.py
+	control/jobs/repair_and_install_auto_continue_e020r4.py
+	control/jobs/repair_and_install_auto_continue_e020r7.py
+Please move or remove them before you merge.
+Aborting
+Merge with strategy ort failed.
+PROBE_PYTHONPATH_FIX=PASS
+E383_WITH_IMPORT_FIX=FAIL:55
