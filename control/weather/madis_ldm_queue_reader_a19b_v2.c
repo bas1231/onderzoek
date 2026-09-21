@@ -123,14 +123,14 @@ static bool emit_frame(
         fprintf(stderr, "A19B-v2 metadata string too large; refusing product\n");
         return false;
     }
-    if (prod_par->size != (size_t)info->sz) {
-        fprintf(stderr,
-                "A19B-v2 product-size mismatch: prod_par=%zu prod_info=%u\n",
-                prod_par->size, info->sz);
-        return false;
-    }
-    if (prod_par->data == NULL && prod_par->size != 0) {
-        fprintf(stderr, "A19B-v2 null product data\n");
+
+    /* Important LDM semantic distinction:
+     *   prod_par->size is the encoded product-queue region extent;
+     *   info->sz is the decoded data-product payload length.
+     * prod_par->data points at the decoded payload, so the emitted frame must
+     * use info->sz and must never substitute prod_par->size. */
+    if (prod_par->data == NULL && info->sz != 0) {
+        fprintf(stderr, "A19B-v2 null decoded product data\n");
         return false;
     }
 
@@ -157,7 +157,7 @@ static bool emit_frame(
     ok = ok && write_all(FRAME_MAGIC, sizeof(FRAME_MAGIC));
     ok = ok && write_u32_be(FRAME_VERSION);
     ok = ok && write_u32_be(flags);
-    ok = ok && write_u64_be((uint64_t)prod_par->size);
+    ok = ok && write_u64_be((uint64_t)info->sz);
     ok = ok && write_i64_be((int64_t)queue_par->inserted.tv_sec);
     ok = ok && write_i32_be((int32_t)queue_par->inserted.tv_usec);
     ok = ok && write_i64_be((int64_t)info->arrival.tv_sec);
@@ -174,7 +174,7 @@ static bool emit_frame(
     ok = ok && write_all(info->signature, sizeof(info->signature));
     ok = ok && write_all(ident, ident_len);
     ok = ok && write_all(origin, origin_len);
-    ok = ok && write_all(prod_par->data, prod_par->size);
+    ok = ok && write_all(prod_par->data, (size_t)info->sz);
 
     if (!ok || fflush(stdout) != 0) {
         fprintf(stderr, "A19B-v2 stdout frame write failed\n");
