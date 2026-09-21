@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/weather_e401_hourly_ws_canary_a9.py"
+  ],
+  "exit_code": 12,
+  "finished_at": "2026-09-21T15:29:01.760567+00:00",
+  "hypothesis_id": "KWI-MARKET-REACTION-E401",
+  "source_commit": "651c2d6d18022861f6a177f7c39607b2520c6088",
+  "started_at": "2026-09-21T15:29:00.047817+00:00",
+  "status": "failed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "2ed9b744888874d508782af44b1902ef569f13e505fd417edb063154fbc21395",
+  "task_class": "infrastructure",
+  "task_id": "EDGE-HUNTER-KWI-MARKET-WS-CANARY-E401A9"
+}
