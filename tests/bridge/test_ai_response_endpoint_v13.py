@@ -14,10 +14,28 @@ def load_bridge():
     return importlib.import_module("browser_bridge")
 
 
+def handler_for(bb, sent):
+    handler = object.__new__(bb.Handler)
+    handler.path = "/ai-response"
+    handler.authorized = lambda: True
+    handler.read_json = lambda: {
+        "run_id": "hourly-20260921T190000+0200",
+        "response": {
+            "run_id": "hourly-20260921T190000+0200"
+        },
+    }
+    handler.send_json = lambda status, payload: sent.update({
+        "status": status,
+        "payload": payload,
+    })
+    return handler
+
+
 def test_ai_response_endpoint_uses_dedicated_receiver(monkeypatch):
     bb = load_bridge()
     received = {}
     sent = {}
+    error_type = bb.AI_RESPONSE_RECEIVER.ResponseReceiverError
 
     def receive(payload):
         received.update(payload)
@@ -33,24 +51,13 @@ def test_ai_response_endpoint_uses_dedicated_receiver(monkeypatch):
     monkeypatch.setattr(
         bb,
         "AI_RESPONSE_RECEIVER",
-        SimpleNamespace(receive=receive),
+        SimpleNamespace(
+            receive=receive,
+            ResponseReceiverError=error_type,
+        ),
     )
 
-    handler = object.__new__(bb.Handler)
-    handler.path = "/ai-response"
-    handler.authorized = lambda: True
-    handler.read_json = lambda: {
-        "run_id": "hourly-20260921T190000+0200",
-        "response": {
-            "run_id": "hourly-20260921T190000+0200"
-        },
-    }
-    handler.send_json = lambda status, payload: sent.update({
-        "status": status,
-        "payload": payload,
-    })
-
-    handler.do_POST()
+    handler_for(bb, sent).do_POST()
 
     assert sent["status"] == 200
     assert sent["payload"]["ok"] is True
@@ -58,6 +65,50 @@ def test_ai_response_endpoint_uses_dedicated_receiver(monkeypatch):
     assert sent["payload"]["live_trading"] is False
     assert sent["payload"]["paid_actions"] is False
     assert sent["payload"]["wallet_actions"] is False
+
+
+def test_validation_error_is_terminal_400(monkeypatch):
+    bb = load_bridge()
+    sent = {}
+    error_type = bb.AI_RESPONSE_RECEIVER.ResponseReceiverError
+
+    def receive(_payload):
+        raise error_type("AI response_token mismatch")
+
+    monkeypatch.setattr(
+        bb,
+        "AI_RESPONSE_RECEIVER",
+        SimpleNamespace(
+            receive=receive,
+            ResponseReceiverError=error_type,
+        ),
+    )
+
+    handler_for(bb, sent).do_POST()
+    assert sent["status"] == 400
+    assert sent["payload"]["retryable"] is False
+
+
+def test_internal_error_is_retryable_500(monkeypatch):
+    bb = load_bridge()
+    sent = {}
+    error_type = bb.AI_RESPONSE_RECEIVER.ResponseReceiverError
+
+    def receive(_payload):
+        raise RuntimeError("synthetic orchestration crash")
+
+    monkeypatch.setattr(
+        bb,
+        "AI_RESPONSE_RECEIVER",
+        SimpleNamespace(
+            receive=receive,
+            ResponseReceiverError=error_type,
+        ),
+    )
+
+    handler_for(bb, sent).do_POST()
+    assert sent["status"] == 500
+    assert sent["payload"]["retryable"] is True
 
 
 def test_browser_bridge_core_is_preserved():
