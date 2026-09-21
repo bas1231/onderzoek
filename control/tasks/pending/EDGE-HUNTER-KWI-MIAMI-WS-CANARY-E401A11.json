@@ -1,0 +1,23 @@
+{
+  "build_authorization": {
+    "build_kind": "control_plane",
+    "capabilities": [
+      "credential_read",
+      "network_read",
+      "local_data_capture"
+    ],
+    "mode": "control_plane",
+    "objective": "Verify authenticated read-only WebSocket capture across all ten currently open Miami hourly temperature threshold markets before starting prospective E401 collection."
+  },
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/weather_e401_miami_ws_canary_a11.py"
+  ],
+  "hypothesis_id": "KWI-MARKET-REACTION-E401",
+  "live_trading": false,
+  "operation": "python",
+  "task_class": "infrastructure",
+  "task_id": "EDGE-HUNTER-KWI-MIAMI-WS-CANARY-E401A11",
+  "timeout_seconds": 60,
+  "working_directory": "."
+}
