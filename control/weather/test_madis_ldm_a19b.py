@@ -83,7 +83,7 @@ def test_adapter_timing_names_are_semantically_explicit():
     assert all("receipt" not in key for key in timing)
 
 
-def test_replay_can_never_be_latency_evidence():
+def test_replay_can_never_be_latency_evidence_and_preserves_decode_provenance():
     original_clock = m.clock_health
     original_archive = m.archive_and_decode
     try:
@@ -99,6 +99,8 @@ def test_replay_can_never_be_latency_evidence():
             "decode": {
                 "status": "PASS",
                 "matched_station_count": 1,
+                "matched_stations": ["KMIA"],
+                "requested_station_coverage_fraction": 1.0,
                 "matched_rows": [{"station": "KMIA", "observation_time_raw": 1_790_010_000.0}],
             },
         }, False)
@@ -116,6 +118,9 @@ def test_replay_can_never_be_latency_evidence():
         assert result["eligible_for_queue_insertion_latency_analysis"] is False
         assert result["ldm_queue_insert_at_ns"] is None
         assert "NOT network receipt" in result["adapter_timestamp_semantics"]
+        assert result["decode"]["status"] == "PASS"
+        assert result["decode"]["decode"]["matched_station_count"] == 1
+        assert result["decode"]["decode"]["matched_stations"] == ["KMIA"]
     finally:
         m.clock_health = original_clock
         m.archive_and_decode = original_archive
@@ -127,7 +132,7 @@ if __name__ == "__main__":
         test_pqact_metadata_parser_accepts_length_convention_variants,
         test_chrony_parser_exposes_required_clock_fields,
         test_adapter_timing_names_are_semantically_explicit,
-        test_replay_can_never_be_latency_evidence,
+        test_replay_can_never_be_latency_evidence_and_preserves_decode_provenance,
     ]
     for test in tests:
         test()
