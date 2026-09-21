@@ -12,6 +12,23 @@
     "LOCAL_EXCHANGE_REQUEST",
     "NATIVE_SCHEDULED_RESEARCH"
   ],
+  "local_runtime_policy": {
+    "required_for_native_research": false,
+    "manual_user_action_required": false,
+    "states": [
+      "LOCAL_RUNTIME_UNCONFIRMED",
+      "LOCAL_RUNTIME_CONFIRMED_IDLE",
+      "LOCAL_REQUEST_PENDING",
+      "LOCAL_REQUEST_SERVICED",
+      "LOCAL_EXCHANGE_BLOCKED"
+    ],
+    "confirmed_when": "at least one valid PVA_AI_EXCHANGE_REQUEST_V1 has been observed on the exchange branch",
+    "unconfirmed_when": "no valid exchange request has ever been observed; absence of a request is not proof that the local runtime is down",
+    "behavior_when_unconfirmed": "continue NATIVE_SCHEDULED_RESEARCH autonomously; never ask the user to git pull, restart, install, or run terminal commands merely to enable research",
+    "behavior_when_confirmed_idle": "continue NATIVE_SCHEDULED_RESEARCH autonomously until a new local request appears",
+    "behavior_when_request_pending": "service at most one valid oldest pending request before native discovery",
+    "browser_bridge_role": "optional fallback only; never a prerequisite for cloud-native research"
+  },
   "local_exchange_request": {
     "selection": "oldest request without a response; at most one per scheduled run",
     "exact_role_coverage": true,
@@ -24,6 +41,7 @@
   },
   "native_scheduled_research": {
     "enabled_when_no_pending_exchange_request": true,
+    "enabled_when_local_runtime_unconfirmed": true,
     "single_turn": true,
     "flow": [
       "GOVERNOR",
@@ -75,7 +93,8 @@
       "negative_evidence",
       "candidate_state_changes",
       "next_decisive_questions",
-      "governor_status"
+      "governor_status",
+      "local_runtime_state"
     ]
   },
   "concurrency_policy": {
