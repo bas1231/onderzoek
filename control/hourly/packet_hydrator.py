@@ -80,6 +80,81 @@ def hydrate_packet(
     return packet
 
 
+def _watch_triage_item(finding: dict[str, Any]) -> dict[str, Any]:
+    sources = [x for x in finding.get("sources", []) if isinstance(x, dict)]
+    falsification = finding.get("falsification", {})
+    return {
+        "finding_id": finding.get("id"),
+        "candidate_key": finding.get("candidate_key"),
+        "status": "WATCH",
+        "triage_only": True,
+        "promotion_authority": False,
+        "attack_mode": finding.get("attack_mode"),
+        "claim": finding.get("claim"),
+        "source_ids": sorted({str(x.get("source_id")) for x in sources if x.get("source_id")}),
+        "public_trigger": finding.get("economic_model", {}).get("public_trigger"),
+        "next_decisive_test": falsification.get("next_decisive_test"),
+        "snippet": finding.get("snippet"),
+        "execution_gate": {
+            "research_only": True,
+            "live_trading": False,
+            "paid_actions": False,
+            "wallet_actions": False,
+            "economic_conclusion": "NO_PROVEN_EDGE",
+        },
+    }
+
+
+def apply_recon_watch_triage(
+    packet_dir: Path,
+    recon_run_path: Path | None,
+) -> dict[str, Any]:
+    if recon_run_path is None or not recon_run_path.exists():
+        return {"watch_count": 0, "specialist_roles": [], "routed_items": 0}
+
+    data = load_json(recon_run_path)
+    findings = [
+        x for x in data.get("findings", [])
+        if isinstance(x, dict) and x.get("status") == "WATCH"
+    ]
+    by_role: dict[str, dict[str, dict[str, Any]]] = {}
+
+    for finding in findings:
+        triage = _watch_triage_item(finding)
+        stable_id = str(
+            triage.get("candidate_key")
+            or triage.get("finding_id")
+            or ""
+        )
+        for role in finding.get("falsification", {}).get("specialist_route", []):
+            role = str(role)
+            by_role.setdefault(role, {})[stable_id] = triage
+
+    routed_items = 0
+    ref = str(recon_run_path.relative_to(ROOT))
+    for role, triage_by_id in by_role.items():
+        path = packet_dir / (role + ".json")
+        if not path.exists():
+            continue
+        packet = load_json(path)
+        triage_items = list(triage_by_id.values())
+        packet["recon_watch_triage"] = triage_items
+        refs = list(packet.get("input_refs", []))
+        if ref not in refs:
+            refs.append(ref)
+        packet["input_refs"] = refs
+        if packet.get("status") in {"PENDING", "NO_EVIDENCE", "READY"}:
+            packet["status"] = "PENDING"
+        save_json(path, packet)
+        routed_items += len(triage_items)
+
+    return {
+        "watch_count": len(findings),
+        "specialist_roles": sorted(by_role),
+        "routed_items": routed_items,
+    }
+
+
 def apply_recon_hunts(
     packet_dir: Path,
     hunt_plan_path: Path | None,
@@ -139,6 +214,7 @@ def hydrate_run(
     routing_path: Path,
     packet_dir: Path,
     hunt_plan_path: Path | None = None,
+    recon_run_path: Path | None = None,
 ) -> dict[str, Any]:
 
     routing_path = routing_path.resolve()
@@ -167,12 +243,19 @@ def hydrate_run(
         save_json(packet_path, packet)
         changed.append(role)
 
+    # WATCH is triage-only and never enters the killer/proof chain. Infer the
+    # Recon run from the packet run-id when hourly_cycle does not pass it.
+    if recon_run_path is None:
+        inferred = ROOT / "knowledge/runs/recon" / (packet_dir.name + ".json")
+        recon_run_path = inferred if inferred.exists() else None
+    watch_triage = apply_recon_watch_triage(packet_dir, recon_run_path)
     hunts = apply_recon_hunts(packet_dir, hunt_plan_path)
 
     return {
         "routing": str(routing_path.relative_to(ROOT)),
         "packet_dir": str(packet_dir.relative_to(ROOT)),
         "hydrated_roles": changed,
+        "recon_watch_triage": watch_triage,
         "recon_hunts": hunts,
     }
 
