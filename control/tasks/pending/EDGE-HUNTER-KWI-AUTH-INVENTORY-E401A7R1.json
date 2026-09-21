@@ -1,0 +1,14 @@
+{
+  "build_authorization": null,
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/kwi_auth_dependency_inventory_e401a7r1.py"
+  ],
+  "hypothesis_id": "KWI-FULL-STATION-PRECANONICAL-V1",
+  "live_trading": false,
+  "operation": "python",
+  "task_class": "research",
+  "task_id": "EDGE-HUNTER-KWI-AUTH-INVENTORY-E401A7R1",
+  "timeout_seconds": 60,
+  "working_directory": "."
+}
