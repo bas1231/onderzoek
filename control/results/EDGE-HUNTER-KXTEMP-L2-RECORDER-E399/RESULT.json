@@ -1,0 +1,16 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/kxtemp_l2_recorder_e399.py"
+  ],
+  "execution_provenance": {
+    "command_text": ".venv/bin/python control/jobs/kxtemp_l2_recorder_e399.py",
+    "executor_commit": "988e5a1cb1f646150fb025d9aa92c78cac676309",
+    "policy_reason": ".venv/bin/python control/jobs/kxtemp_l2_recorder_e399.py matches blocked action order",
+    "policy_status": "BLOCKED_BY_POLICY"
+  },
+  "reason": ".venv/bin/python control/jobs/kxtemp_l2_recorder_e399.py matches blocked action order",
+  "status": "BLOCKED_BY_POLICY",
+  "task_id": "EDGE-HUNTER-KXTEMP-L2-RECORDER-E399",
+  "timestamp": "2026-09-21T08:13:49.002848+00:00"
+}
