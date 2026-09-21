@@ -22,6 +22,7 @@ def base_task(task_id="T1", parallelism="HIGH", dependency="INDEPENDENT"):
         "task_id": task_id,
         "worker_domain": "discovery",
         "objective": "find new evidence",
+        "state": "READY",
         "task_shape": {
             "parallelism": parallelism,
             "dependency_shape": dependency,
@@ -47,6 +48,11 @@ def base_task(task_id="T1", parallelism="HIGH", dependency="INDEPENDENT"):
             "evidence_cost": "LOW",
             "model_cost": "MEDIUM",
             "duplication_risk": "LOW",
+        },
+        "proposed_action": {
+            "kind": "free_public_read_only_research",
+            "provenance": True,
+            "point_in_time": True,
         },
     }
 
@@ -76,7 +82,7 @@ def benchmark_rows(*, better=False, case_prefix="CASE"):
     rows = []
     for i in range(20):
         cls = "SURVIVOR" if i == 0 else "DECISIVE_NEGATIVE"
-        row = {
+        rows.append({
             "case_id": f"{case_prefix}-{i:02d}",
             "active_hour_id": f"H{i // 2}",
             "task_shape": "PARALLEL" if i % 2 else "SEQUENTIAL",
@@ -94,8 +100,7 @@ def benchmark_rows(*, better=False, case_prefix="CASE"):
             "steps_to_decisive_falsification": 2,
             "source_families_covered": ["OFFICIAL", "CODE"],
             "hard_failures": [],
-        }
-        rows.append(row)
+        })
     return rows
 
 
@@ -120,8 +125,7 @@ def test_governor_requires_approval_for_paid_and_live():
 
 
 def test_unknown_action_fails_closed():
-    d = classify({"kind": "magic_unknown_action"})
-    assert d.admissible is False
+    assert classify({"kind": "magic_unknown_action"}).admissible is False
 
 
 def test_failure_memory_returns_checks_not_kills():
@@ -165,42 +169,23 @@ def test_candidate_adapter_preserves_existing_canonical_gates():
 
 
 def test_candidate_adapter_preserves_closed_negative_without_decision():
-    src = {
+    out = canonicalize({
         "candidate_id": "C3",
         "hypothesis": "x",
         "queue_status": "CLOSED_NEGATIVE",
         "required_gates": {},
-    }
-    out = canonicalize(src, source_commit="abc123")
+    }, source_commit="abc123")
     assert out["economic_status"] == "TESTED_NEGATIVE"
 
 
 def test_evidence_graph_is_idempotent_and_rejects_conflict():
     g = EvidenceGraph()
-    n = {
-        "id": "c1",
-        "type": "candidate",
-        "status": "ACTIVE",
-        "created_at": "2026-01-01T00:00:00Z",
-        "producer": "test",
-    }
+    n = {"id": "c1", "type": "candidate", "status": "ACTIVE", "created_at": "2026-01-01T00:00:00Z", "producer": "test"}
     g.add_node(n)
     g.add_node(n)
-    e = {
-        "id": "e1",
-        "type": "evidence",
-        "status": "OK",
-        "created_at": "2026-01-01T00:00:00Z",
-        "producer": "test",
-    }
+    e = {"id": "e1", "type": "evidence", "status": "OK", "created_at": "2026-01-01T00:00:00Z", "producer": "test"}
     g.add_node(e)
-    edge = {
-        "from": "e1",
-        "to": "c1",
-        "type": "supports",
-        "created_at": "2026-01-01T00:00:00Z",
-        "producer": "test",
-    }
+    edge = {"from": "e1", "to": "c1", "type": "supports", "created_at": "2026-01-01T00:00:00Z", "producer": "test"}
     g.add_edge(edge)
     g.add_edge(edge)
     assert len(g.as_dict()["nodes"]) == 2
@@ -214,6 +199,15 @@ def test_worker_contract_rejects_money_flags():
     assert "paid_actions_must_be_false" in validate_task(t)
 
 
+def test_worker_contract_requires_explicit_action_and_state():
+    t = base_task()
+    t.pop("proposed_action")
+    assert "proposed_action_kind_required" in validate_task(t)
+    t = base_task()
+    t.pop("state")
+    assert "invalid_task_state" in validate_task(t)
+
+
 def test_scheduler_caps_sequential_and_ranks_decisive():
     assert fanout_cap(base_task(parallelism="LOW", dependency="SEQUENTIAL")) == 1
     a = base_task("A")
@@ -222,15 +216,41 @@ def test_scheduler_caps_sequential_and_ranks_decisive():
     assert schedule([a, b])["selected"][0] == "B"
 
 
+def test_scheduler_blocks_invalid_contract_before_governor():
+    t = base_task("BAD")
+    t.pop("proposed_action")
+    out = schedule([t])
+    assert out["selected"] == []
+    assert out["blocked"][0]["decision"] == "BLOCK_INVALID_CONTRACT"
+
+
+def test_scheduler_blocks_non_ready_state():
+    t = base_task("BLOCKED")
+    t["state"] = "BLOCKED"
+    out = schedule([t])
+    assert out["selected"] == []
+    assert out["blocked"][0]["decision"] == "BLOCK_NON_READY_STATE"
+
+
+def test_scheduler_waiting_state_is_not_selected():
+    t = base_task("WAIT")
+    t["state"] = "WAITING_FOR_DATA"
+    out = schedule([t])
+    assert out["selected"] == []
+    assert out["waiting"][0]["task_id"] == "WAIT"
+
+
+def test_scheduler_governor_blocks_missing_provenance():
+    t = base_task("NOPROV")
+    t["proposed_action"]["provenance"] = False
+    out = schedule([t])
+    assert out["selected"] == []
+    assert out["blocked"][0]["decision"] == "BLOCK"
+
+
 def test_shadow_cycle_never_mutates_or_promotes():
-    candidate = {
-        "candidate_id": "C1",
-        "hypothesis": "h",
-        "decision": "UNPROVEN",
-        "gates": {},
-    }
-    t = base_task()
-    out = build_shadow_plan([candidate], [t], source_commit="deadbeef")
+    candidate = {"candidate_id": "C1", "hypothesis": "h", "decision": "UNPROVEN", "gates": {}}
+    out = build_shadow_plan([candidate], [base_task()], source_commit="deadbeef")
     assert out["mode"] == "SHADOW_READ_ONLY"
     assert out["runtime_mutation"] is False
     assert out["live_trading"] is False
@@ -240,29 +260,48 @@ def test_shadow_cycle_never_mutates_or_promotes():
 
 
 def test_legacy_settlement_becomes_sequential_mechanics():
-    packet = {
+    task = packet_to_task({
         "agent_id": "settlement",
         "status": "READY",
         "input_refs": ["knowledge/routing.json"],
         "next_decisive_question": "Are settlement rules identical?",
-    }
-    task = packet_to_task(packet, "R1")
+    }, "R1")
     assert task["worker_domain"] == "mechanics"
     assert task["task_shape"]["dependency_shape"] == "SEQUENTIAL"
+    assert task["state"] == "READY"
     assert task["constraints"]["live_trading"] is False
+    assert validate_task(task) == []
+
+
+def test_legacy_unknown_status_fails_closed():
+    task = packet_to_task({
+        "agent_id": "settlement",
+        "status": "MYSTERY_NEW_STATE",
+        "input_refs": ["x"],
+    }, "R")
+    assert task["state"] == "BLOCKED"
+    out = schedule([task])
+    assert out["selected"] == []
+    assert out["blocked"][0]["decision"] == "BLOCK_NON_READY_STATE"
+
+
+def test_legacy_pending_does_not_become_ready():
+    task = packet_to_task({
+        "agent_id": "scout",
+        "status": "PENDING",
+        "input_refs": ["x"],
+    }, "R")
+    assert task["state"] == "BLOCKED"
+
+
+def test_legacy_terminal_packet_does_not_create_task():
+    assert packet_to_task({"agent_id": "scout", "status": "CLOSED_NEGATIVE"}, "R") is None
+    assert packet_to_task({"agent_id": "scout", "status": "COMPLETED"}, "R") is None
 
 
 def test_falsifier_and_reproducer_are_blinded():
-    f = packet_to_task({
-        "agent_id": "chief_falsifier",
-        "status": "READY",
-        "candidate_ids": ["C1"],
-    }, "R")
-    r = packet_to_task({
-        "agent_id": "independent_reproducer",
-        "status": "READY",
-        "candidate_ids": ["C1"],
-    }, "R")
+    f = packet_to_task({"agent_id": "chief_falsifier", "status": "READY", "candidate_ids": ["C1"]}, "R")
+    r = packet_to_task({"agent_id": "independent_reproducer", "status": "READY", "candidate_ids": ["C1"]}, "R")
     assert f["constraints"]["blind_to_origin_reasoning"] is True
     assert r["constraints"]["blind_to_origin_reasoning"] is True
 
@@ -343,11 +382,7 @@ def test_no_signal_route_requires_explicit_not_applicable():
     unknown = evaluate_promotion(promotion_candidate("PENDING"), signal_required=False)
     assert unknown["eligible"] is False
     assert "signal_edge_not_explicitly_not_applicable" in unknown["block_reasons"]
-
-    explicit = evaluate_promotion(
-        promotion_candidate("NOT_APPLICABLE"),
-        signal_required=False,
-    )
+    explicit = evaluate_promotion(promotion_candidate("NOT_APPLICABLE"), signal_required=False)
     assert explicit["status"] == "PROMOTION_CANDIDATE"
     assert explicit["live_trading_authorized"] is False
 
@@ -400,14 +435,8 @@ def test_reproduction_disjoint_refs_without_lineage_remain_unknown():
 
 
 def test_reproduction_explicit_disjoint_upstream_can_be_independent():
-    origin = [{
-        "ref": "derived:a",
-        "upstream_source_ids": ["official:source-a"],
-    }]
-    repro = [{
-        "ref": "derived:b",
-        "upstream_source_ids": ["official:source-b"],
-    }]
+    origin = [{"ref": "derived:a", "upstream_source_ids": ["official:source-a"]}]
+    repro = [{"ref": "derived:b", "upstream_source_ids": ["official:source-b"]}]
     out = source_independence(origin, repro)
     assert out["status"] == "INDEPENDENT"
     assert out["independence_proof_complete"] is True
