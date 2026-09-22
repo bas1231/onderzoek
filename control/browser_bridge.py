@@ -16,6 +16,42 @@ _CoreHandler = Handler
 _core_next_ai_outbox_item = next_ai_outbox_item
 _core_acknowledge_ai = acknowledge_ai
 _core_acknowledge = acknowledge
+_core_enqueue = enqueue
+_core_commit_and_push = commit_and_push
+
+from executor_preflight import sync_main_fail_closed as _sync_main_fail_closed
+
+
+def commit_and_push(message: str, stage_paths=None):
+    """A bridge enqueue is durable only when its commit reached origin/main.
+
+    The historical core intentionally kept local evidence when a push failed,
+    but returned success to enqueue. That can create a local-only task on a
+    stale branch. Preserve the local commit, but fail closed so the task is not
+    ACCEPTED until synchronization/publishing succeeds on a later retry.
+    """
+    committed, detail = _core_commit_and_push(message, stage_paths)
+    if committed and "remote push failed" in str(detail).lower():
+        return False, detail
+    return committed, detail
+
+
+def enqueue(envelope):
+    """Synchronize the bridge checkout before atomically writing task+files."""
+    with LOCK:
+        sync = _sync_main_fail_closed(ROOT)
+        if not sync.get("ok"):
+            reason = str(sync.get("reason") or "BRIDGE_PREFLIGHT_SYNC_BLOCKED")
+            print(f"[bridge] enqueue preflight blocked reason={reason}")
+            return {
+                "ok": False,
+                "error": "bridge checkout preflight blocked",
+                "reason": reason,
+                "sync": sync,
+                "recoverable": True,
+                "queue_status": queue_status(),
+            }
+        return _core_enqueue(envelope)
 
 # An AI prompt is ACKed after it is inserted into ChatGPT. If the assistant
 # response is then lost before /ai-response is received, the old core would
@@ -48,13 +84,7 @@ def _hourly_incident_for_task(task_id: str):
 def _valid_ai_item(item) -> bool:
     if not isinstance(item, dict):
         return False
-    forbidden = {
-        "command",
-        "shell",
-        "argv",
-        "exec",
-        "executable",
-    }
+    forbidden = {"command", "shell", "argv", "exec", "executable"}
     if forbidden.intersection(item):
         return False
     if item.get("kind") != "AI_WORK_BUNDLE":
@@ -87,17 +117,12 @@ def _stalled_ai_retry(state: dict):
         incident = _hourly_incident_for_task(task_id)
         if incident is None:
             continue
-
-        # This check suppresses retry as soon as either a final response or a
-        # durable response receipt exists for the correlated run.
         if not AI_TRANSPORT.should_offer_ai_work(incident):
             continue
-
         try:
             item = AI_TRANSPORT.build_chat_item(incident)
         except Exception:
             continue
-
         if _valid_ai_item(item):
             return item
 
@@ -115,9 +140,6 @@ def next_ai_outbox_item():
 def acknowledge_ai(task_id: str) -> dict:
     result = _core_acknowledge_ai(task_id)
 
-    # Do not refresh the timeout for duplicate browser ACK retries. A real
-    # initial delivery or a deliberate stale-bundle retry goes through the
-    # normal success path without already_acked=True.
     if result.get("ok") and not result.get("already_acked"):
         state = load_state()
         deliveries = state.setdefault("ai_deliveries", {})
@@ -137,13 +159,7 @@ def acknowledge_ai(task_id: str) -> dict:
 
 
 def acknowledge(task_id: str) -> dict:
-    """Preserve the durable control-continuation behavior lost from core.
-
-    Historical bridge contract bb5aa16 queues exactly one AI-only continuation
-    after a completed/failed research or infrastructure result is ACKed. The
-    core still contains the queue helpers, so the V13 wrapper restores only the
-    missing call without changing executor authority or result semantics.
-    """
+    """Preserve durable control-continuation behavior from the core contract."""
     result = _core_acknowledge(task_id)
     if not result.get("ok"):
         return result
@@ -196,14 +212,8 @@ class Handler(_CoreHandler):
             detail = str(exc)
             exc_name = type(exc).__name__
 
-            # Client/AI validation failures are terminal for that exact
-            # response block. Unexpected runtime failures are retryable so
-            # the browser capture does not permanently discard valid work.
             validation_error = (
-                isinstance(
-                    exc,
-                    AI_RESPONSE_RECEIVER.ResponseReceiverError,
-                )
+                isinstance(exc, AI_RESPONSE_RECEIVER.ResponseReceiverError)
                 or exc_name == "ValidationError"
                 or isinstance(exc, json.JSONDecodeError)
             )
@@ -233,10 +243,7 @@ def main():
         f"Prediction Research Browser Bridge listening "
         f"on http://{HOST}:{PORT}"
     )
-    server = ThreadingHTTPServer(
-        (HOST, PORT),
-        Handler,
-    )
+    server = ThreadingHTTPServer((HOST, PORT), Handler)
     try:
         server.serve_forever()
     except KeyboardInterrupt:
