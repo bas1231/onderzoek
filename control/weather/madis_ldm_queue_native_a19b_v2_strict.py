@@ -7,7 +7,9 @@ needed before queue timestamps may be treated as latency evidence:
 - only queue flags emitted by the safe reader are accepted;
 - a full queue combined with an early cursor signals possible missed products
   and is not latency-eligible;
-- replay remains latency-ineligible through the base implementation.
+- replay remains latency-ineligible through the base implementation;
+- live helper success is accepted only for normal exit or a SIGTERM we sent
+  ourselves after a successfully emitted --once frame.
 """
 from __future__ import annotations
 
@@ -89,6 +91,27 @@ def _parse_stations(text: str) -> set[str]:
     return vals or set(DEFAULT_STATIONS)
 
 
+def _helper_exit_is_success(
+    rc: int,
+    *,
+    once: bool,
+    terminated_by_parent: bool,
+    emitted: int,
+) -> bool:
+    """Fail closed on helper termination provenance.
+
+    A normal helper exit is acceptable. In --once mode, SIGTERM is acceptable
+    only when this wrapper itself sent it after receiving at least one complete
+    frame. Any spontaneous non-zero exit remains a failure even if a frame was
+    emitted first.
+    """
+    if rc == 0:
+        return True
+    if once and terminated_by_parent and emitted > 0 and rc == -15:
+        return True
+    return False
+
+
 def run_frame_file(path: Path, stations: set[str]) -> dict:
     with path.open("rb") as fh:
         frame = read_frame(fh)
@@ -112,6 +135,7 @@ def run_live_helper(helper: Path, queue: Path, pattern: str, stations: set[str],
     proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=None)
     assert proc.stdout is not None
     emitted = 0
+    terminated_by_parent = False
     try:
         while True:
             frame = read_frame(proc.stdout)
@@ -124,7 +148,8 @@ def run_live_helper(helper: Path, queue: Path, pattern: str, stations: set[str],
             if once:
                 break
     finally:
-        if once and proc.poll() is None:
+        if once and emitted > 0 and proc.poll() is None:
+            terminated_by_parent = True
             proc.terminate()
         try:
             rc = proc.wait(timeout=5)
@@ -133,7 +158,17 @@ def run_live_helper(helper: Path, queue: Path, pattern: str, stations: set[str],
             rc = proc.wait(timeout=5)
     if emitted == 0:
         raise RuntimeError(f"queue-native helper emitted no products; returncode={rc}")
-    return 0 if rc in {0, -15} or once else rc
+    if not _helper_exit_is_success(
+        rc,
+        once=once,
+        terminated_by_parent=terminated_by_parent,
+        emitted=emitted,
+    ):
+        raise RuntimeError(
+            "queue-native helper failed after frame emission; "
+            f"returncode={rc} terminated_by_parent={terminated_by_parent} emitted={emitted}"
+        )
+    return 0
 
 
 def main() -> int:
