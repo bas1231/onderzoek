@@ -1,0 +1,9 @@
+[Unit]
+Description=Prediction Research state-aware runtime fast-forward sync
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+WorkingDirectory=%h/prediction_research
+ExecStart=%h/prediction_research/.venv/bin/python %h/prediction_research/control/hourly/runtime_sync.py
