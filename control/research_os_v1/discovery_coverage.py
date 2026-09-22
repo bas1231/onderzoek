@@ -16,6 +16,10 @@ def _optional_text(value: Any, error: str) -> str:
     return value.strip()
 
 
+def _normalize_family(value: str) -> str:
+    return value.strip().casefold()
+
+
 def _string_set(values: Any, error: str) -> set[str]:
     if not isinstance(values, list):
         raise ValueError(error)
@@ -23,7 +27,7 @@ def _string_set(values: Any, error: str) -> set[str]:
     for index, value in enumerate(values):
         if not isinstance(value, str) or not value.strip():
             raise ValueError(f"{error}:{index}")
-        out.add(value.strip())
+        out.add(_normalize_family(value))
     return out
 
 
@@ -83,7 +87,13 @@ def summarize(
     attempted_families: list[str],
     required_families: list[str],
 ) -> dict[str, Any]:
-    """Measure discovery breadth and overlap without treating raw count as quality."""
+    """Measure discovery breadth/overlap without treating absence as success.
+
+    A family is retrieval-complete only when at least one item explicitly says
+    ``retrieval_succeeded is True`` and is not in a failed/stale state. Missing
+    retrieval status remains UNKNOWN. Unidentified relevant/changed items stay
+    visible but are not counted as proven-unique documents.
+    """
     if not isinstance(primary_items, list) or not isinstance(recon_items, list):
         raise ValueError("discovery_items_must_be_lists")
     if not isinstance(attempted_families, list) or not isinstance(required_families, list):
@@ -102,9 +112,10 @@ def summarize(
     union = p_keys | r_keys
     overlap = p_keys & r_keys
 
-    family_counts = Counter()
-    successful_family_counts = Counter()
-    primary_count = 0
+    family_counts: Counter[str] = Counter()
+    successful_family_counts: Counter[str] = Counter()
+    successful_items = 0
+    successful_primary_items = 0
     relevant_keys: set[tuple[str, str]] = set()
     relevant_unkeyed = 0
     unsupported_community = 0
@@ -112,12 +123,14 @@ def summarize(
     changed_unkeyed = 0
     stale_or_failed = 0
     unidentified_items = 0
+    unknown_retrieval_status = 0
 
     for item in p + r:
-        family = _optional_text(
+        family_raw = _optional_text(
             item.get("source_family"),
             "source_family_must_be_string_or_null",
-        ) or "UNKNOWN"
+        )
+        family = _normalize_family(family_raw) if family_raw else "unknown"
         family_counts[family] += 1
 
         state = _optional_text(
@@ -129,16 +142,23 @@ def summarize(
         independently_supported = _optional_bool(item, "independently_supported")
         changed_or_new = _optional_bool(item, "changed_or_new")
 
-        success = state not in FAILED_STATES and retrieval_succeeded is not False
+        failed_state = state in FAILED_STATES
+        if failed_state:
+            stale_or_failed += 1
+
+        success = retrieval_succeeded is True and not failed_state
         if success:
             successful_family_counts[family] += 1
+            successful_items += 1
+        elif retrieval_succeeded is None and not failed_state:
+            unknown_retrieval_status += 1
 
         authority = _optional_text(
             item.get("source_authority"),
             "source_authority_must_be_string_or_null",
         ).upper()
-        if authority in PRIMARY_AUTHORITIES:
-            primary_count += 1
+        if success and authority in PRIMARY_AUTHORITIES:
+            successful_primary_items += 1
 
         identity = _identity(item)
         if identity is None:
@@ -163,32 +183,30 @@ def summarize(
             else:
                 changed_keys.add(identity)
 
-        if state in FAILED_STATES:
-            stale_or_failed += 1
-
     successful = {
         family
         for family, count in successful_family_counts.items()
-        if count > 0 and family != "UNKNOWN"
+        if count > 0 and family != "unknown"
     }
     attempt_gaps = sorted(required - attempted)
     retrieval_gaps = sorted(required - successful)
-    denom = len(p) + len(r)
 
     return {
         "primary_scout_items": len(p),
         "recon_scout_items": len(r),
         "identified_document_keys": len(union),
         "unidentified_items": unidentified_items,
+        "unknown_retrieval_status_items": unknown_retrieval_status,
         "duplicate_cross_scout_keys": len(overlap),
         "duplicate_cross_scout_ratio": _ratio(len(overlap), len(union)),
-        "primary_source_ratio": _ratio(primary_count, denom),
-        "unique_relevant_items_reported": len(relevant_keys) + relevant_unkeyed,
+        "primary_source_ratio": _ratio(successful_primary_items, successful_items),
+        "successful_retrieval_items": successful_items,
+        "unique_relevant_items_reported": len(relevant_keys),
         "unique_relevant_identified_items": len(relevant_keys),
         "relevant_unidentified_items": relevant_unkeyed,
         "changed_or_new_documents": len(changed_keys),
         "changed_or_new_unidentified_items": changed_unkeyed,
-        "changed_or_new_items_reported": len(changed_keys) + changed_unkeyed,
+        "changed_or_new_items_reported": len(changed_keys),
         "unsupported_community_leads": unsupported_community,
         "stale_or_failed_items": stale_or_failed,
         "source_family_counts": dict(sorted(family_counts.items())),
@@ -202,5 +220,6 @@ def summarize(
         "coverage_complete": not attempt_gaps and not retrieval_gaps,
         "raw_item_count_is_success_metric": False,
         "unidentified_items_count_as_proven_unique_documents": False,
+        "missing_retrieval_status_counts_as_success": False,
         "zero_denominator_metrics_are_unknown": True,
     }
