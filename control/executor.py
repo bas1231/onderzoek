@@ -3,6 +3,7 @@ from __future__ import annotations
 import hashlib
 import importlib.util
 import json
+import os
 import shutil
 import subprocess
 import sys
@@ -12,6 +13,7 @@ from pathlib import Path
 
 from validator import Task
 from policy_check import check_action
+from executor_preflight import sync_main_fail_closed, support_script_in_head
 from jobs.lifecycle_ledger import (
     load_record as lifecycle_load,
     update as lifecycle_update,
@@ -26,6 +28,8 @@ COMPLETED = ROOT / "control/tasks/completed"
 FAILED = ROOT / "control/tasks/failed"
 RESULTS = ROOT / "control/results"
 TASK_QUEUE = ROOT / "control/TASK_QUEUE.yaml"
+SYNC_INTERVAL_SECONDS = 10.0
+
 
 def load_work_cadence():
     path = ROOT / 'control/hourly/work_cadence.py'
@@ -44,6 +48,7 @@ def load_work_cadence():
         raise
     return mod
 
+
 WORK_CADENCE = load_work_cadence()
 
 
@@ -53,11 +58,9 @@ def now_iso() -> str:
 
 def sha256_file(path: Path) -> str:
     h = hashlib.sha256()
-
     with path.open("rb") as f:
         for chunk in iter(lambda: f.read(1024 * 1024), b""):
             h.update(chunk)
-
     return h.hexdigest()
 
 
@@ -76,62 +79,35 @@ def current_commit() -> str:
 
 
 def push_head_best_effort() -> bool:
-    """
-    Push completed local research history to the private Git remote.
-
-    A remote failure never erases local evidence.
-    """
-    result = git(
-        "push",
-        "origin",
-        "HEAD:main",
-        check=False,
-    )
-
+    """Push completed local research history without erasing local evidence."""
+    result = git("push", "origin", "HEAD:main", check=False)
     if result.returncode == 0:
         print("Git push: PASS")
         return True
-
     print("Git push: FAILED")
     if result.stderr:
         print(result.stderr.strip())
-
     return False
 
 
 def research_queue_paused() -> bool:
     if not TASK_QUEUE.exists():
         return True
-
     for line in TASK_QUEUE.read_text().splitlines():
         stripped = line.strip()
-
         if stripped.startswith("queue_status:"):
             status = stripped.split(":", 1)[1].strip()
             return status != "ACTIVE"
-
     return True
 
 
 def task_is_committed(task_file: Path) -> bool:
-    """
-    Process a task only after the task file exists in Git HEAD.
-
-    This prevents the executor from racing with a human or director
-    that is still creating/staging/committing the task.
-    """
+    """Process a task only after the task file exists in Git HEAD."""
     try:
         relative = task_file.relative_to(ROOT).as_posix()
     except ValueError:
         return False
-
-    probe = git(
-        "cat-file",
-        "-e",
-        f"HEAD:{relative}",
-        check=False,
-    )
-
+    probe = git("cat-file", "-e", f"HEAD:{relative}", check=False)
     return probe.returncode == 0
 
 
@@ -140,49 +116,40 @@ def process_task(task_file: Path) -> str:
     task = Task.model_validate(raw)
 
     if task.task_class == "research" and research_queue_paused():
-        print(
-            f"{task.task_id}: research queue paused; "
-            "task left pending"
-        )
+        print(f"{task.task_id}: research queue paused; task left pending")
         return "paused"
+
+    support = support_script_in_head(ROOT, task)
+    if not support.get("ok"):
+        print(
+            f"{task.task_id}: support preflight blocked; "
+            f"reason={support.get('reason')} script={support.get('script')}"
+        )
+        return "support_blocked"
 
     lifecycle = lifecycle_load(task.task_id)
 
-    cadence_result = WORK_CADENCE.check(
-        reason=f'executor_task:{task.task_id}',
-    )
+    cadence_result = WORK_CADENCE.check(reason=f'executor_task:{task.task_id}')
     if not cadence_result.get('allowed'):
         reason = str(cadence_result.get('reason', 'CADENCE_BLOCKED'))
-        print(
-            f'{task.task_id}: executor blocked by work cadence: {reason}'
-        )
+        print(f'{task.task_id}: executor blocked by work cadence: {reason}')
         return 'cadence_blocked'
 
     if lifecycle.get("state") != "ACCEPTED":
-        print(
-            f"{task.task_id}: waiting for durable "
-            "bridge ACCEPTED state"
-        )
+        print(f"{task.task_id}: waiting for durable bridge ACCEPTED state")
         return "awaiting_accept"
 
     running_file = RUNNING / task_file.name
     shutil.move(task_file, running_file)
 
-    lifecycle_update(
-        task.task_id,
-        "RUNNING",
-        "executor claimed pending task",
-    )
+    lifecycle_update(task.task_id, "RUNNING", "executor claimed pending task")
 
     started_at = now_iso()
     source_commit = current_commit()
 
     workdir = (ROOT / task.working_directory).resolve()
-
     if ROOT not in workdir.parents and workdir != ROOT:
-        raise RuntimeError(
-            "working directory escaped repository"
-        )
+        raise RuntimeError("working directory escaped repository")
 
     stdout = ""
     stderr = ""
@@ -190,43 +157,30 @@ def process_task(task_file: Path) -> str:
     status = "failed"
 
     command_text = " ".join(task.command)
-
     policy_result = check_action(command_text)
-
     execution_provenance = {
         "executor_commit": current_commit(),
         "policy_status": policy_result["status"],
         "policy_reason": policy_result["reason"],
         "command_text": command_text,
+        "support_preflight": support,
     }
 
     if policy_result["status"] == "BLOCKED_BY_POLICY":
         result_dir = RESULTS / task.task_id
         result_dir.mkdir(parents=True, exist_ok=True)
-
         blocked_result = {
             "task_id": task.task_id,
             "status": "BLOCKED_BY_POLICY",
             "reason": policy_result["reason"],
             "command": task.command,
             "execution_provenance": execution_provenance,
-            "timestamp": now_iso()
+            "timestamp": now_iso(),
         }
-
         (result_dir / "RESULT.json").write_text(
-            json.dumps(
-                blocked_result,
-                indent=2,
-                sort_keys=True
-            ) + "\n"
+            json.dumps(blocked_result, indent=2, sort_keys=True) + "\n"
         )
-
-        lifecycle_update(
-            task.task_id,
-            "BLOCKED_BY_POLICY",
-            policy_result["reason"],
-        )
-
+        lifecycle_update(task.task_id, "BLOCKED_BY_POLICY", policy_result["reason"])
         return "blocked"
 
     try:
@@ -237,16 +191,10 @@ def process_task(task_file: Path) -> str:
             capture_output=True,
             timeout=task.timeout_seconds,
         )
-
         stdout = proc.stdout
         stderr = proc.stderr
         exit_code = proc.returncode
-        status = (
-            "completed"
-            if exit_code == 0
-            else "failed"
-        )
-
+        status = "completed" if exit_code == 0 else "failed"
     except subprocess.TimeoutExpired as exc:
         stdout = exc.stdout or ""
         stderr = (exc.stderr or "") + "\nTASK TIMEOUT"
@@ -254,13 +202,10 @@ def process_task(task_file: Path) -> str:
         status = "failed"
 
     finished_at = now_iso()
-
     result_dir = RESULTS / task.task_id
     result_dir.mkdir(parents=True, exist_ok=True)
-
     stdout_file = result_dir / "stdout.log"
     stderr_file = result_dir / "stderr.log"
-
     stdout_file.write_text(stdout)
     stderr_file.write_text(stderr)
 
@@ -276,172 +221,113 @@ def process_task(task_file: Path) -> str:
         "command": task.command,
         "stdout_sha256": sha256_file(stdout_file),
         "stderr_sha256": sha256_file(stderr_file),
+        "execution_provenance": execution_provenance,
     }
-
-    result_file = result_dir / "RESULT.json"
-
-    result_file.write_text(
-        json.dumps(
-            result,
-            indent=2,
-            sort_keys=True,
-        ) + "\n"
+    (result_dir / "RESULT.json").write_text(
+        json.dumps(result, indent=2, sort_keys=True) + "\n"
     )
 
-    destination = (
-        COMPLETED if status == "completed" else FAILED
-    ) / running_file.name
-
+    destination = (COMPLETED if status == "completed" else FAILED) / running_file.name
     shutil.move(running_file, destination)
 
     lifecycle_update(
         task.task_id,
-        "COMPLETED"
-        if status == "completed"
-        else "FAILED",
+        "COMPLETED" if status == "completed" else "FAILED",
         "executor finished task",
     )
 
-    git(
-        "add",
-        "control/tasks",
-        "control/results",
-        "evidence",
-    )
-
-    staged = git(
-        "diff",
-        "--cached",
-        "--quiet",
-        check=False,
-    )
-
+    git("add", "control/tasks", "control/results", "evidence")
+    staged = git("diff", "--cached", "--quiet", check=False)
     if staged.returncode != 0:
-        git(
-            "commit",
-            "-m",
-            f"result({task.task_id}): {status}",
-        )
+        git("commit", "-m", f"result({task.task_id}): {status}")
         push_head_best_effort()
 
-    print(
-        f"{task.task_id}: {status} "
-        f"(exit={exit_code})"
-    )
-
+    print(f"{task.task_id}: {status} (exit={exit_code})")
     return status
 
 
-def record_infrastructure_failure(
-    task_file: Path,
-    exc: Exception,
-) -> None:
+def record_infrastructure_failure(task_file: Path, exc: Exception) -> None:
     try:
         running_file = RUNNING / task_file.name
-
-        source = (
-            running_file
-            if running_file.exists()
-            else task_file
-        )
-
+        source = running_file if running_file.exists() else task_file
         destination = FAILED / task_file.name
-
         if source.exists():
             shutil.move(source, destination)
 
         error_dir = RESULTS / task_file.stem
-        error_dir.mkdir(
-            parents=True,
-            exist_ok=True,
-        )
+        error_dir.mkdir(parents=True, exist_ok=True)
+        (error_dir / "INFRA_ERROR.txt").write_text(f"{type(exc).__name__}: {exc}\n")
 
-        (error_dir / "INFRA_ERROR.txt").write_text(
-            f"{type(exc).__name__}: {exc}\n"
-        )
-
-        git(
-            "add",
-            "control/tasks",
-            "control/results",
-        )
-
-        staged = git(
-            "diff",
-            "--cached",
-            "--quiet",
-            check=False,
-        )
-
+        git("add", "control/tasks", "control/results")
+        staged = git("diff", "--cached", "--quiet", check=False)
         if staged.returncode != 0:
-            git(
-                "commit",
-                "-m",
-                (
-                    f"result({task_file.stem}): "
-                    "infrastructure failure"
-                ),
-            )
+            git("commit", "-m", f"result({task_file.stem}): infrastructure failure")
             push_head_best_effort()
-
     except Exception as handling_exc:
-        print(
-            "ERROR recording infrastructure failure:",
-            handling_exc,
-        )
+        print("ERROR recording infrastructure failure:", handling_exc)
+
+
+def _reexec_executor() -> None:
+    script = str(Path(__file__).resolve())
+    print("Executor checkout changed; re-execing current executor source", flush=True)
+    os.execv(sys.executable, [sys.executable, script])
 
 
 def main() -> None:
-    for directory in (
-        PENDING,
-        RUNNING,
-        COMPLETED,
-        FAILED,
-        RESULTS,
-    ):
-        directory.mkdir(
-            parents=True,
-            exist_ok=True,
-        )
+    for directory in (PENDING, RUNNING, COMPLETED, FAILED, RESULTS):
+        directory.mkdir(parents=True, exist_ok=True)
 
     print("Prediction Research executor started")
+    loaded_commit = current_commit()
+    last_sync_at = 0.0
 
     while True:
-        tasks = sorted(PENDING.glob("*.json"))
+        # If another local control-plane process changed HEAD, reload Python code
+        # before inspecting or claiming any task.
+        if current_commit() != loaded_commit:
+            _reexec_executor()
 
+        now = time.monotonic()
+        if now - last_sync_at >= SYNC_INTERVAL_SECONDS:
+            sync = sync_main_fail_closed(ROOT)
+            last_sync_at = now
+            if not sync.get("ok"):
+                print(
+                    "Executor preflight sync BLOCKED: "
+                    f"{sync.get('reason')}"
+                )
+                time.sleep(10)
+                continue
+            if current_commit() != loaded_commit:
+                _reexec_executor()
+
+        tasks = sorted(PENDING.glob("*.json"))
         if not tasks:
             time.sleep(5)
             continue
 
         paused_seen = False
         awaiting_accept_seen = False
+        support_blocked_seen = False
 
         for task_file in tasks:
             if not task_is_committed(task_file):
                 continue
-
             try:
                 outcome = process_task(task_file)
-
                 if outcome == "paused":
                     paused_seen = True
                 elif outcome == "awaiting_accept":
                     awaiting_accept_seen = True
-
+                elif outcome == "support_blocked":
+                    support_blocked_seen = True
             except Exception as exc:
-                print(
-                    f"ERROR processing "
-                    f"{task_file.name}: {exc}"
-                )
-
-                record_infrastructure_failure(
-                    task_file,
-                    exc,
-                )
+                print(f"ERROR processing {task_file.name}: {exc}")
+                record_infrastructure_failure(task_file, exc)
 
         if paused_seen:
             time.sleep(30)
-        elif awaiting_accept_seen:
+        elif awaiting_accept_seen or support_blocked_seen:
             time.sleep(5)
 
 
