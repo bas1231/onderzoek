@@ -27,15 +27,31 @@ def _require(cond: bool, message: str, errors: list[str]) -> None:
         errors.append(message)
 
 
+def _nonempty_string(value: Any) -> bool:
+    return isinstance(value, str) and bool(value.strip())
+
+
 def validate_task(task: dict[str, Any]) -> list[str]:
     errors: list[str] = []
     _require(isinstance(task, dict), "task_must_be_object", errors)
     if not isinstance(task, dict):
         return errors
 
-    _require(bool(str(task.get("task_id") or "").strip()), "task_id_required", errors)
+    _require(_nonempty_string(task.get("task_id")), "task_id_required", errors)
+    candidate_id = task.get("candidate_id")
+    _require(
+        candidate_id is None or _nonempty_string(candidate_id),
+        "candidate_id_must_be_string_or_null",
+        errors,
+    )
     _require(task.get("worker_domain") in DOMAINS, "invalid_worker_domain", errors)
-    _require(bool(str(task.get("objective") or "").strip()), "objective_required", errors)
+    _require(_nonempty_string(task.get("objective")), "objective_required", errors)
+    decisive_question = task.get("decisive_question")
+    _require(
+        decisive_question is None or _nonempty_string(decisive_question),
+        "decisive_question_must_be_string_or_null",
+        errors,
+    )
     _require(task.get("state") in TASK_STATES, "invalid_task_state", errors)
 
     shape = task.get("task_shape") if isinstance(task.get("task_shape"), dict) else {}
@@ -50,6 +66,12 @@ def validate_task(task: dict[str, Any]) -> list[str]:
     for key in ("live_trading", "paid_actions", "wallet_actions"):
         _require(constraints.get(key) is False, f"{key}_must_be_false", errors)
     _require(constraints.get("source_policy") in SOURCE_POLICIES, "invalid_source_policy", errors)
+    blind = constraints.get("blind_to_origin_reasoning")
+    _require(
+        blind is None or isinstance(blind, bool),
+        "blind_to_origin_reasoning_must_be_boolean_or_absent",
+        errors,
+    )
 
     _require(isinstance(task.get("inputs"), dict), "inputs_required", errors)
 
@@ -59,7 +81,7 @@ def validate_task(task: dict[str, Any]) -> list[str]:
     _require(
         isinstance(required_fields, list)
         and bool(required_fields)
-        and all(isinstance(v, str) and bool(v.strip()) for v in required_fields),
+        and all(_nonempty_string(v) for v in required_fields),
         "invalid_required_fields",
         errors,
     )
@@ -72,7 +94,7 @@ def validate_task(task: dict[str, Any]) -> list[str]:
     _require(scheduling.get("duplication_risk") in COST_LEVEL, "invalid_duplication_risk", errors)
 
     action = task.get("proposed_action") if isinstance(task.get("proposed_action"), dict) else {}
-    _require(bool(str(action.get("kind") or "").strip()), "proposed_action_kind_required", errors)
+    _require(_nonempty_string(action.get("kind")), "proposed_action_kind_required", errors)
     _require(isinstance(action.get("provenance"), bool), "proposed_action_provenance_bool_required", errors)
     _require(isinstance(action.get("point_in_time"), bool), "proposed_action_point_in_time_bool_required", errors)
 
