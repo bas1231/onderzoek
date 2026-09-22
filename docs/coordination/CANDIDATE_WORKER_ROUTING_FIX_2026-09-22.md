@@ -79,6 +79,35 @@ Generate one fresh research run with the four current non-terminal candidates an
 6. Director can make a candidate-specific next-step decision;
 7. no promotion/negative-close is manufactured merely because routing exists.
 
+## Session A additional finding — 2026-09-22 11:36 CEST
+
+Independent code inspection shows the defect is broader than `agent_orchestrator.py` alone. In the current `control/hourly/hourly_cycle.py`, the preparation order is:
+
+1. `hydrator.hydrate_run(...)`
+2. `orchestrator.orchestrate(...)`
+3. `candidate_queue.build_queue(...)`
+4. `candidate_queue.write_handoff(...)`
+5. `ai_handoff.build(...)`
+
+Therefore the canonical candidate queue is built only **after** the primary agent packets have already been hydrated and orchestrated. At that moment the primary workers cannot deterministically receive the current non-terminal candidate queue unless another explicit source is added.
+
+Implementation guidance for Session B:
+- fix the preparation/dataflow at the correct layer; do not merely change `PRIMARY_ROLES` readiness or broadcast every candidate to every worker;
+- preferably create/snapshot the candidate queue early enough that candidate routing can be applied before primary packets are finalized, or implement an equivalent explicit candidate-routing pass with the same semantics;
+- preserve one canonical queue snapshot for the run so Director handoff and worker assignment cannot disagree about which candidates were eligible;
+- record assignment reasons in packet/orchestration output for auditability.
+
+Additional integration regression required at hourly-cycle level:
+- queued non-terminal candidates are available before/finally during packet orchestration;
+- intended primary packets receive candidate IDs plus an explainable routing reason;
+- unrelated roles remain unassigned;
+- the later Director handoff sees the same candidate snapshot;
+- the AI work bundle preserves those IDs;
+- an empty queue and routed-evidence-only run remain safe and unchanged;
+- validation and all safety semantics remain unchanged.
+
+Evidence: `control/hourly/hourly_cycle.py` currently calls `hydrate_run` and `orchestrate` before `build_queue`.
+
 ## Coordination rule
 
 Session B owns implementation files for this fix until it publishes a commit SHA. Session A remains read-only on those files and handles E2E acceptance/review. If Session B discovers a broader architectural change is required, record it here or in a new coordination note before expanding scope.
