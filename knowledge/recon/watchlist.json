@@ -117,7 +117,7 @@
         "has_decisive_test": true,
         "has_public_trigger": true,
         "independent_source_count": 1,
-        "observation_count": 3,
+        "observation_count": 4,
         "passes": false,
         "requirements": {
           "min_economic_context_count": 2,
@@ -130,8 +130,8 @@
       "labels": [
         "RECON_ANOMALY"
       ],
-      "last_observed_at": "2026-09-22T10:00:18.393434+00:00",
-      "observation_count": 3,
+      "last_observed_at": "2026-09-22T11:00:24.529581+00:00",
+      "observation_count": 4,
       "observation_history": [
         {
           "document_sha256": "57d1b00d6b9aa59444b17d90ce2db04c11fedcd760069731c8099fe6cdb754cb",
@@ -150,6 +150,12 @@
           "economic_context_count": 3,
           "observed_at": "2026-09-22T10:00:18.393434+00:00",
           "source_id": "kalshi_weather_rules"
+        },
+        {
+          "document_sha256": "3d9e0f5bcff1d46e902e391c41b58b8fb45990216966d2c00737700100faa90a",
+          "economic_context_count": 3,
+          "observed_at": "2026-09-22T11:00:24.529581+00:00",
+          "source_id": "kalshi_weather_rules"
         }
       ],
       "observed_at": "2026-09-22T08:00:18.773998+00:00",
@@ -167,8 +173,8 @@
       "snippet": "amounts in specific cities, from New York City to Los Angeles. Traders can take positions on whether a city will reach a certain high temperature or fall within a particular range. Each weather market names its official settlement source in its market rules. Daily high/low temperature markets settle based on the final climate report issued by the National Weather Service (NWS), typically released the following morning. Hourly temperature markets settle on readings from The Weather Company . Always check the specific market\u2019s rules for its source. How Do I Trade on Weather Markets? Kalshi creates a prediction market around a specific temperature threshold for a given location. For example: \u201cHighest temperature in Chicago on April 1",
       "sources": [
         {
-          "document_sha256": "d7422ce4574b0de67df69a4b63393ec0d3c256c0aa81179426a8ef7cffa6e50d",
-          "point_in_time": "2026-09-22T10:00:18.393434+00:00",
+          "document_sha256": "3d9e0f5bcff1d46e902e391c41b58b8fb45990216966d2c00737700100faa90a",
+          "point_in_time": "2026-09-22T11:00:24.529581+00:00",
           "source_id": "kalshi_weather_rules",
           "term": "settlement"
         }
@@ -347,6 +353,6 @@
     "PROVE",
     "KILL"
   ],
-  "updated_at": "2026-09-22T10:00:18.493723+00:00",
+  "updated_at": "2026-09-22T11:00:24.633715+00:00",
   "version": 1
 }
