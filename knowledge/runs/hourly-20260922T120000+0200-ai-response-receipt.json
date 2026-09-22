@@ -1,0 +1,23 @@
+{
+  "candidate_updates": [],
+  "guardrails": {
+    "live_trading": false,
+    "openai_api": false,
+    "paid_actions": false,
+    "wallet_actions": false
+  },
+  "local_task_requests": [],
+  "packet_updates": [
+    "knowledge/runs/agent_packets/hourly-20260922T120000+0200/recon_scout.json",
+    "knowledge/runs/agent_packets/hourly-20260922T120000+0200/scout.json",
+    "knowledge/runs/agent_packets/hourly-20260922T120000+0200/algebra.json",
+    "knowledge/runs/agent_packets/hourly-20260922T120000+0200/settlement.json",
+    "knowledge/runs/agent_packets/hourly-20260922T120000+0200/microstructure.json",
+    "knowledge/runs/agent_packets/hourly-20260922T120000+0200/weather_twc.json",
+    "knowledge/runs/agent_packets/hourly-20260922T120000+0200/research_director.json"
+  ],
+  "run_id": "hourly-20260922T120000+0200",
+  "schema": "PVA_AI_RESPONSE_RECEIPT_V1",
+  "validated_at": "2026-09-22T13:00:20.979446+00:00",
+  "write": true
+}

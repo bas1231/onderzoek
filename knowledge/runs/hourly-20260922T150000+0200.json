@@ -1,0 +1,218 @@
+{
+  "agent_control_plane": {
+    "ai_work_bundle_ref": "knowledge/runs/hourly-20260922T150000+0200-ai-work-bundle.json",
+    "ai_work_job_count": 7,
+    "ai_work_ready_roles": [
+      "recon_scout",
+      "scout",
+      "algebra",
+      "settlement",
+      "microstructure",
+      "weather_twc",
+      "research_director"
+    ],
+    "candidate_routing": [
+      {
+        "candidate_id": "ASSET-RANK-MAKER-HEDGE-V1",
+        "phase": "MECHANISM_DEFINED",
+        "queue_status": "RUNNING",
+        "reasons": [
+          "statewise payoff/equivalence semantics"
+        ],
+        "role": "algebra"
+      },
+      {
+        "candidate_id": "ASSET-RANK-MAKER-HEDGE-V1",
+        "phase": "MECHANISM_DEFINED",
+        "queue_status": "RUNNING",
+        "reasons": [
+          "executable market/fill/hedge economics required",
+          "lane=MICROSTRUCTURE"
+        ],
+        "role": "microstructure"
+      },
+      {
+        "candidate_id": "KWI-FULL-STATION-PRECANONICAL-V1",
+        "phase": "MECHANISM_DEFINED",
+        "queue_status": "WAITING_FOR_RESULT",
+        "reasons": [
+          "lane=WEATHER",
+          "weather/TWC/KWI semantics"
+        ],
+        "role": "weather_twc"
+      },
+      {
+        "candidate_id": "KWI-INCOMPLETE-TO-CANONICAL-V1",
+        "phase": "DISCOVERED",
+        "queue_status": "NEEDS_DIRECTOR",
+        "reasons": [
+          "lane=WEATHER",
+          "weather/TWC/KWI semantics"
+        ],
+        "role": "weather_twc"
+      },
+      {
+        "candidate_id": "PAYOFF-IDENTITY-MINING-V1",
+        "phase": "DISCOVERED",
+        "queue_status": "NEEDS_DIRECTOR",
+        "reasons": [
+          "lane=MARKET_ALGEBRA",
+          "statewise payoff/equivalence semantics"
+        ],
+        "role": "algebra"
+      },
+      {
+        "candidate_id": "PAYOFF-IDENTITY-MINING-V1",
+        "phase": "DISCOVERED",
+        "queue_status": "NEEDS_DIRECTOR",
+        "reasons": [
+          "executable market/fill/hedge economics required"
+        ],
+        "role": "microstructure"
+      }
+    ],
+    "default_economic_conclusion": "NO_PROVEN_EDGE",
+    "director_handoff_ref": "knowledge/runs/hourly-20260922T150000+0200-director-handoff.json",
+    "hydrated_roles": [
+      "algebra",
+      "behavioral",
+      "informed_flow",
+      "microstructure",
+      "recon_scout",
+      "scout",
+      "settlement",
+      "weather_twc"
+    ],
+    "live_trading": false,
+    "orchestration_ref": "knowledge/runs/agent_packets/hourly-20260922T150000+0200/_orchestration.json",
+    "packet_dir": "knowledge/runs/agent_packets/hourly-20260922T150000+0200",
+    "paid_actions": false,
+    "proof_review_ref": "knowledge/runs/hourly-20260922T150000+0200-proof-review.json",
+    "queue_count": 4,
+    "recon_hunts": {
+      "hunt_count": 0,
+      "killer_candidates": [],
+      "specialist_roles": []
+    },
+    "validation_pipeline": {
+      "economic_conclusion": "NO_PROVEN_EDGE",
+      "falsifier_pass": [],
+      "killer_pass": [],
+      "proof_candidates": [],
+      "proof_rejections": {},
+      "reproduction_candidates": []
+    },
+    "wallet_actions": false
+  },
+  "agents": {
+    "algebra": "PENDING",
+    "behavioral": "PENDING",
+    "chief_falsifier": "PENDING",
+    "independent_reproducer": "PENDING",
+    "informed_flow": "PENDING",
+    "microstructure": "PENDING",
+    "prebuild_killer": "PENDING",
+    "recon_scout": "PENDING",
+    "research_director": "PENDING",
+    "scout": "PENDING",
+    "settlement": "PENDING",
+    "weather_twc": "PENDING"
+  },
+  "automated_routing": {
+    "algebra": 1,
+    "behavioral": 0,
+    "informed_flow": 0,
+    "microstructure": 1,
+    "recon_scout": 5,
+    "scout": 4,
+    "settlement": 1,
+    "weather_twc": 3
+  },
+  "cadence": {
+    "cooldown_until": "2026-09-22T17:34:07.566370Z",
+    "mode": "WORK",
+    "work_started_at": "2026-09-22T12:34:07.566370Z",
+    "work_until": "2026-09-22T16:34:07.566370Z"
+  },
+  "candidate_status": "UNPROVEN",
+  "decision": "NO_PROVEN_EDGE",
+  "gates": {
+    "execution_reality": "PENDING",
+    "falsification": "PENDING",
+    "market_edge": "PENDING",
+    "point_in_time": "PENDING",
+    "reproduction": "PENDING",
+    "signal_edge": "PENDING",
+    "source_provenance": "PASS"
+  },
+  "live_trading": false,
+  "memory_context": {
+    "active_candidate_count": 2,
+    "matched_memory_count": 80,
+    "recent_report_count": 3,
+    "ref": "knowledge/runs/hourly-20260922T150000+0200-memory-context.json"
+  },
+  "paid_actions": false,
+  "recon_scout": {
+    "economic_conclusion": "NO_PROVEN_EDGE",
+    "objects_checked": 15,
+    "ref": "knowledge/runs/recon/hourly-20260922T150000+0200.json",
+    "state_counts": {
+      "DISCOVER": 1,
+      "HUNT": 0,
+      "KILL": 0,
+      "PERSISTED_HUNT": 0,
+      "PROVE": 0,
+      "WATCH": 4
+    },
+    "watchlist": {
+      "added": 0,
+      "changed": 1,
+      "demoted_noise": 0,
+      "total": 4
+    }
+  },
+  "routing_ref": "knowledge/runs/hourly-20260922T150000+0200-routing.json",
+  "run_id": "hourly-20260922T150000+0200",
+  "source_failure_count": 0,
+  "source_manifests": {
+    "arxiv": "/home/leonh/prediction_research_prod/knowledge/documents/manifests/arxiv/20260922T130017Z_d7ed6c1e9723.json",
+    "aviationweather": "/home/leonh/prediction_research_prod/knowledge/documents/manifests/aviationweather/20260922T130017Z_dd6e0cc4b237.json",
+    "cftc": "/home/leonh/prediction_research_prod/knowledge/documents/manifests/cftc/20260922T130017Z_91b04a402a31.json",
+    "ecmwf_open": "/home/leonh/prediction_research_prod/knowledge/documents/manifests/ecmwf_open/20260922T130017Z_d957d902c7f6.json",
+    "github": "/home/leonh/prediction_research_prod/knowledge/documents/manifests/github/20260922T130017Z_7ac48bca4d2d.json",
+    "kalshi_docs": "/home/leonh/prediction_research_prod/knowledge/documents/manifests/kalshi_docs/20260922T130017Z_305d1eec8da9.json",
+    "kalshi_weather_rules": "/home/leonh/prediction_research_prod/knowledge/documents/manifests/kalshi_weather_rules/20260922T130018Z_72dea002e994.json",
+    "nomads": "/home/leonh/prediction_research_prod/knowledge/documents/manifests/nomads/20260922T130017Z_ce2511c421d1.json",
+    "nws": "/home/leonh/prediction_research_prod/knowledge/documents/manifests/nws/20260922T130017Z_25f75f350587.json",
+    "polymarket_docs": "/home/leonh/prediction_research_prod/knowledge/documents/manifests/polymarket_docs/20260922T130017Z_bbfb7a5f8e91.json",
+    "reddit": "/home/leonh/prediction_research_prod/knowledge/documents/manifests/reddit/20260922T130017Z_c48b522cbeab.json",
+    "twc_kalshi": "/home/leonh/prediction_research_prod/knowledge/documents/manifests/twc_kalshi/20260922T130018Z_4778025a622c.json",
+    "youtube": "/home/leonh/prediction_research_prod/knowledge/documents/manifests/youtube/20260922T130018Z_d82ca9d3a19b.json"
+  },
+  "source_quality": {
+    "low_text_yield_count": 3,
+    "ref": "knowledge/runs/hourly-20260922T150000+0200-source-quality.json",
+    "usable_count": 10
+  },
+  "source_success_count": 13,
+  "source_sweep_ref": "knowledge/runs/source_sweeps/20260922T130016Z.json",
+  "sources": {
+    "arxiv": "UNCHANGED",
+    "aviationweather": "UNCHANGED",
+    "cftc": "CHANGED",
+    "ecmwf_open": "UNCHANGED",
+    "github": "CHANGED",
+    "kalshi_docs": "UNCHANGED",
+    "kalshi_weather_rules": "CHANGED",
+    "nomads": "CHANGED",
+    "nws": "CHANGED",
+    "polymarket_docs": "UNCHANGED",
+    "reddit": "CHANGED",
+    "twc_kalshi": "UNCHANGED",
+    "youtube": "CHANGED"
+  },
+  "started_at": "2026-09-22T15:00:16.793047+02:00",
+  "status": "STARTED",
+  "wallet_actions": false
+}

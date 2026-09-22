@@ -31,7 +31,7 @@
   "mechanism": "Some station observations appear before canonical completion.",
   "needed_data": [],
   "negative_evidence": [],
-  "next_decisive_test": null,
+  "next_decisive_test": "Do not retune the rejected simple incomplete mean on the same development data; only genuinely preregistered orthogonal mechanisms or new holdout evidence can reopen it.",
   "open_question": null,
   "paid_actions": false,
   "phase": "DISCOVERED",
@@ -44,7 +44,8 @@
     "knowledge/candidates/protocols/KWI-INCOMPLETE-SIGNAL-FEASIBILITY-V1.json"
   ],
   "queue_entered_at": "2026-09-20T00:42:14.997373+00:00",
-  "queue_status": "NEEDS_DIRECTOR",
+  "queue_reason": "The simple incomplete-mean formulation was already falsified in development; parking preserves the negative evidence without exercising kill authority.",
+  "queue_status": "PARKED",
   "resume_condition": null,
   "signal_metric": "MAE/CRPS versus predeclared baseline",
   "simple_incomplete_mean_status": "REJECTED_IN_DEVELOPMENT",
@@ -63,6 +64,6 @@
       "test_id": "KWI-INCOMPLETE-SIGNAL-FEASIBILITY-V1"
     }
   ],
-  "updated_at": "2026-09-20T00:42:14.997373+00:00",
+  "updated_at": "2026-09-22T13:00:21.011386+00:00",
   "wallet_actions": false
 }
