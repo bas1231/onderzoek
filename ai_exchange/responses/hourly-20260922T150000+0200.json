@@ -1,0 +1,98 @@
+{
+  "schema": "PVA_AI_EXCHANGE_RESPONSE_V1",
+  "run_id": "hourly-20260922T150000+0200",
+  "request_sha256": "a0454125f1b4354d9b788e2ec23dd5b25ad841388a2fc8268828619795e1eeae",
+  "response": {
+    "schema": "PVA_AI_RESPONSE_V1",
+    "run_id": "hourly-20260922T150000+0200",
+    "response_token": "5e65cfa49f56bae26a058eeb626940f105454666d5248984cf43a2e88e222dee",
+    "role_results": [
+      {
+        "agent_id": "recon_scout",
+        "candidate_ids": [],
+        "evidence_refs": ["request:routed_evidence:cftc:91b04a402a31d009814416a3229b9312dd6e425cf7a4dd7cfc07c3909eb55307", "request:routed_evidence:kalshi_weather_rules:72dea002e994d0745f3f13d17998aa06e6ddbd99f41299c7e7a81cd794266e62"],
+        "finding": "De CFTC-delta is navigatie/nieuwsoverzicht zonder kandidaat-specifiek mechanisme. De Kalshi-weather delta is inhoudelijk relevant maar bevestigt de bekende bron-scheiding: daily high/low gebruikt final NWS Daily Climate Report, hourly temperatuur The Weather Company. Geen nieuwe HUNT of edge-resurrection gerechtvaardigd.",
+        "local_task_required": false,
+        "local_task_spec": null,
+        "next_decisive_question": "Verschijnt een primaire venue/rule/API-delta met een concreet point-in-time mechanisme dat nog niet in Failure Memory of negative evidence staat?",
+        "status": "COMPLETED",
+        "benchmark_telemetry": {"worker_run_id":"hourly-20260922T150000+0200:recon_scout","research_items":[{"item_id":"recon-cftc-change-1500","duplicate_of":null},{"item_id":"recon-weather-rules-1500","duplicate_of":"kalshi-weather-finality-semantics"}],"evidence":[{"evidence_id":"91b04a402a31d009814416a3229b9312dd6e425cf7a4dd7cfc07c3909eb55307","source_family":"cftc","relevant":false,"contradiction":false,"point_in_time_ok":true,"provenance_ok":true},{"evidence_id":"72dea002e994d0745f3f13d17998aa06e6ddbd99f41299c7e7a81cd794266e62","source_family":"kalshi_weather_rules","relevant":true,"contradiction":false,"point_in_time_ok":true,"provenance_ok":true}],"failure_patterns":[{"pattern_id":"generic-keyword-without-mechanism","applicable":true,"detected_before_expensive_work":true}],"queue_starvation_event_ids":[]}
+      },
+      {
+        "agent_id": "scout",
+        "candidate_ids": [],
+        "evidence_refs": ["request:recon_watch_triage:RECON-d838b2e925d20194", "request:routed_evidence:kalshi_docs:305d1eec8da98433363cce72ce59fb5e221754804f9e946daa3d584ad19ec9ef"],
+        "finding": "De Kalshi changelog-trigger blijft WATCH. De bundle bevat alleen een docs-index naar Changelog en API-specificaties, geen concrete changelog-entry, semantische delta, base-rate of economisch effect. Overige routed snippets reproduceren bestaande weather- en Polymarket-documentatie. GEEN NIEUWE UITKOMST.",
+        "local_task_required": false,
+        "local_task_spec": null,
+        "next_decisive_question": "Welke specifieke primaire changelog-entry verandert een fee-, orderboek-, settlement- of API-primitive en wat is het point-in-time voor/na-effect?",
+        "status": "NO_EVIDENCE",
+        "benchmark_telemetry": {"worker_run_id":"hourly-20260922T150000+0200:scout","research_items":[{"item_id":"watch-kalshi-changelog-1500","duplicate_of":"watch-kalshi-changelog"}],"evidence":[{"evidence_id":"RECON-d838b2e925d20194","source_family":"kalshi_docs","relevant":true,"contradiction":false,"point_in_time_ok":true,"provenance_ok":true}],"failure_patterns":[{"pattern_id":"watch-is-not-hunt","applicable":true,"detected_before_expensive_work":true}],"queue_starvation_event_ids":[]}
+      },
+      {
+        "agent_id": "algebra",
+        "candidate_ids": ["ASSET-RANK-MAKER-HEDGE-V1", "PAYOFF-IDENTITY-MINING-V1"],
+        "evidence_refs": ["knowledge/candidates/ASSET-RANK-MAKER-HEDGE-V1.json", "knowledge/candidates/PAYOFF-IDENTITY-MINING-V1.json", "request:recon_watch_triage:RECON-75b83fbdd0abd801"],
+        "finding": "ASSET-RANK-MAKER-HEDGE-V1 behoudt zijn eerder bewezen one-hot mechanisme maar deze bundle voegt geen nieuwe payout- of fill-evidence toe. PAYOFF-IDENTITY-MINING-V1 blijft generiek: rebate/API/settlement WATCH-snippets definiëren geen volledig contractpaar, toestandruimte of payoutfuncties en leveren dus geen nieuwe statewise identity/dominance proof.",
+        "local_task_required": false,
+        "local_task_spec": null,
+        "next_decisive_question": "Kan één concreet nieuw contractpaar uit primaire regels volledig worden gecanonicaliseerd en statewise gelijk of dominant worden bewezen vóór enige prijsvergelijking?",
+        "status": "NO_EVIDENCE",
+        "benchmark_telemetry": {"worker_run_id":"hourly-20260922T150000+0200:algebra","research_items":[{"item_id":"asset-rank-payout-check-1500","duplicate_of":"asset-rank-one-hot-mechanism"},{"item_id":"payoff-identity-watch-triage-1500","duplicate_of":null}],"evidence":[{"evidence_id":"candidate-ASSET-RANK-MAKER-HEDGE-V1","source_family":"git_candidate_memory","relevant":true,"contradiction":false,"point_in_time_ok":true,"provenance_ok":true},{"evidence_id":"candidate-PAYOFF-IDENTITY-MINING-V1","source_family":"git_candidate_memory","relevant":true,"contradiction":false,"point_in_time_ok":true,"provenance_ok":true}],"failure_patterns":[{"pattern_id":"keyword-is-not-payoff-proof","applicable":true,"detected_before_expensive_work":true}],"queue_starvation_event_ids":[]}
+      },
+      {
+        "agent_id": "settlement",
+        "candidate_ids": [],
+        "evidence_refs": ["request:routed_evidence:kalshi_weather_rules:72dea002e994d0745f3f13d17998aa06e6ddbd99f41299c7e7a81cd794266e62"],
+        "finding": "De primaire Kalshi-weather evidence maakt finality opnieuw expliciet: daily high/low bepaalt op final NWS Daily Climate Report en kan worden vertraagd bij inconsistentie met 6/24-uurs METAR-highs of wanneer final lager is dan preliminary; hourly temperatuur settle op TWC voor exact tijdstip/station. Dit is settlement-semantiek, geen bewijs van voorspellende of executable edge.",
+        "local_task_required": false,
+        "local_task_spec": null,
+        "next_decisive_question": "Kan één concrete hourly markt point-in-time worden gekoppeld aan de toen geldende rule-version, TWC-uitkomst en contemporaneous executable L2 zonder een NWS/METAR-proxy als settlementbron te behandelen?",
+        "status": "COMPLETED",
+        "benchmark_telemetry": {"worker_run_id":"hourly-20260922T150000+0200:settlement","research_items":[{"item_id":"weather-finality-semantics-1500","duplicate_of":"kalshi-weather-finality-semantics"}],"evidence":[{"evidence_id":"72dea002e994d0745f3f13d17998aa06e6ddbd99f41299c7e7a81cd794266e62","source_family":"kalshi_weather_rules","relevant":true,"contradiction":false,"point_in_time_ok":true,"provenance_ok":true}],"failure_patterns":[{"pattern_id":"preliminary-or-proxy-feed-is-not-settlement-source","applicable":true,"detected_before_expensive_work":true}],"queue_starvation_event_ids":[]}
+      },
+      {
+        "agent_id": "microstructure",
+        "candidate_ids": ["ASSET-RANK-MAKER-HEDGE-V1", "PAYOFF-IDENTITY-MINING-V1"],
+        "evidence_refs": ["knowledge/candidates/ASSET-RANK-MAKER-HEDGE-V1.json", "knowledge/candidates/PAYOFF-IDENTITY-MINING-V1.json", "request:routed_evidence:polymarket_docs:bbfb7a5f8e917cdd63380293ded53b574778ed057b05028625269cc66553c7f1"],
+        "finding": "Geen nieuwe executable evidence. ASSET-RANK-MAKER-HEDGE-V1 heeft canonical nog 0 full shadow fills; queue-ahead mag niet via cancellations worden afgeschreven en alleen een bewezen passive fill mag de eerste executable hedge-depth met exacte fees activeren. PAYOFF-IDENTITY-MINING-V1 mist synchronized L2 en partial-fill buffer. Een docs-index naar fees/rebates/orderbooks is geen executable prijs- of fillbewijs.",
+        "local_task_required": false,
+        "local_task_spec": null,
+        "next_decisive_question": "Levert de bestaande prospectieve monitoring een conservatief bewezen full maker fill op, of een synchronized identity met positieve worst-case executable lower bound na fees, slippage en partial-fill buffer?",
+        "status": "WAITING_FOR_DATA",
+        "benchmark_telemetry": {"worker_run_id":"hourly-20260922T150000+0200:microstructure","research_items":[{"item_id":"asset-rank-execution-gate-1500","duplicate_of":null},{"item_id":"payoff-identity-execution-gate-1500","duplicate_of":null}],"evidence":[{"evidence_id":"candidate-ASSET-RANK-MAKER-HEDGE-V1","source_family":"git_candidate_memory","relevant":true,"contradiction":false,"point_in_time_ok":true,"provenance_ok":true},{"evidence_id":"bbfb7a5f8e917cdd63380293ded53b574778ed057b05028625269cc66553c7f1","source_family":"polymarket_docs","relevant":true,"contradiction":false,"point_in_time_ok":true,"provenance_ok":true}],"failure_patterns":[{"pattern_id":"docs-or-midpoint-is-not-executable-evidence","applicable":true,"detected_before_expensive_work":true}],"queue_starvation_event_ids":[]}
+      },
+      {
+        "agent_id": "weather_twc",
+        "candidate_ids": ["KWI-FULL-STATION-PRECANONICAL-V1", "KWI-INCOMPLETE-TO-CANONICAL-V1"],
+        "evidence_refs": ["knowledge/candidates/KWI-FULL-STATION-PRECANONICAL-V1.json", "knowledge/candidates/KWI-INCOMPLETE-TO-CANONICAL-V1.json", "request:routed_evidence:kalshi_weather_rules:72dea002e994d0745f3f13d17998aa06e6ddbd99f41299c7e7a81cd794266e62"],
+        "finding": "KWI-FULL-STATION-PRECANONICAL-V1 blijft prospectief onbewezen: discovery MAE was circa 0.00497 bij 5 stations en 0.00280 bij 8 stations (n=143), maar pre-cutoff rows mogen niet als validation tellen. KWI-INCOMPLETE-TO-CANONICAL-V1's simpele incomplete mean blijft development-falsified (MAE 0.20417 versus baseline 0.08481; 459 pairs) en mag niet op dezelfde data worden geretuned. De Kalshi-regels bevestigen bovendien dat hourly settlement TWC is; METAR/NWS-observaties zijn dus hoogstens signal inputs, geen settlement ground truth voor hourly contracts.",
+        "local_task_required": false,
+        "local_task_spec": null,
+        "next_decisive_question": "Heeft het preregistered full-station protocol voldoende post-cutoff prospectieve cases, en kan een overlevend signaal daarna synchroon tegen executable KXTEMP L2 en de juiste TWC settlementsemantiek worden getest?",
+        "status": "WAITING_FOR_RESULT",
+        "benchmark_telemetry": {"worker_run_id":"hourly-20260922T150000+0200:weather_twc","research_items":[{"item_id":"kwi-full-station-prospective-1500","duplicate_of":null},{"item_id":"kwi-simple-mean-negative-1500","duplicate_of":"kwi-simple-incomplete-mean-rejected"}],"evidence":[{"evidence_id":"candidate-KWI-FULL-STATION-PRECANONICAL-V1","source_family":"git_candidate_memory","relevant":true,"contradiction":false,"point_in_time_ok":true,"provenance_ok":true},{"evidence_id":"candidate-KWI-INCOMPLETE-TO-CANONICAL-V1","source_family":"git_candidate_memory","relevant":true,"contradiction":true,"point_in_time_ok":true,"provenance_ok":true},{"evidence_id":"72dea002e994d0745f3f13d17998aa06e6ddbd99f41299c7e7a81cd794266e62","source_family":"kalshi_weather_rules","relevant":true,"contradiction":false,"point_in_time_ok":true,"provenance_ok":true}],"failure_patterns":[{"pattern_id":"discovery-data-is-not-prospective-validation","applicable":true,"detected_before_expensive_work":true},{"pattern_id":"settlement-proxy-is-not-ground-truth","applicable":true,"detected_before_expensive_work":true}],"queue_starvation_event_ids":[]}
+      },
+      {
+        "agent_id": "research_director",
+        "candidate_ids": [],
+        "evidence_refs": ["request:hourly-20260922T150000+0200", "knowledge/candidates/ASSET-RANK-MAKER-HEDGE-V1.json", "knowledge/candidates/KWI-FULL-STATION-PRECANONICAL-V1.json"],
+        "finding": "Geen nieuwe economische survivor. De enige inhoudelijke source-delta scherpt weather settlement/finality aan maar verandert geen candidate gate: full-station KWI wacht op prospectieve post-cutoff resultaten; de simpele incomplete mean blijft verworpen; maker-hedge wacht op een bewezen full passive fill; payoff mining mist een concreet primair contractpaar. WATCH blijft WATCH. Red-team en independent reproducer zijn niet gerechtvaardigd zonder survivor.",
+        "local_task_required": false,
+        "local_task_spec": null,
+        "next_decisive_question": "Laat de bestaande prospectieve weather- en maker-fill monitoring beslissende data leveren; voor payoff mining eerst één concreet primair contractpaar met volledige statewise semantics vinden.",
+        "status": "COMPLETED",
+        "benchmark_telemetry": {"worker_run_id":"hourly-20260922T150000+0200:research_director","research_items":[{"item_id":"director-adjudication-1500","duplicate_of":null}],"evidence":[{"evidence_id":"request-hourly-20260922T150000+0200","source_family":"ai_exchange_request","relevant":false,"contradiction":false,"point_in_time_ok":true,"provenance_ok":true},{"evidence_id":"candidate-ASSET-RANK-MAKER-HEDGE-V1","source_family":"git_candidate_memory","relevant":true,"contradiction":false,"point_in_time_ok":true,"provenance_ok":true},{"evidence_id":"candidate-KWI-FULL-STATION-PRECANONICAL-V1","source_family":"git_candidate_memory","relevant":true,"contradiction":false,"point_in_time_ok":true,"provenance_ok":true}],"failure_patterns":[{"pattern_id":"no-execution-evidence-no-economic-claim","applicable":true,"detected_before_expensive_work":true}],"queue_starvation_event_ids":[]}
+      }
+    ],
+    "candidate_decisions": [
+      {"candidate_id":"ASSET-RANK-MAKER-HEDGE-V1","next_decisive_test":"Continue preregistered prospective conservative fill monitoring; only a proven full passive fill may trigger synchronized first-executable hedge economics.","queue_status":"RUNNING","reason":"Mechanism remains defined, but canonical monitoring still records no full shadow fill and this bundle adds no executable evidence."},
+      {"candidate_id":"PAYOFF-IDENTITY-MINING-V1","next_decisive_test":"Find one concrete contract pair with primary-rule statewise payout semantics, then compare synchronized executable L2 only after formal equivalence/dominance proof.","queue_status":"NEEDS_DIRECTOR","reason":"Generic WATCH snippets do not define a new payoff identity or executable relation."},
+      {"candidate_id":"KWI-FULL-STATION-PRECANONICAL-V1","next_decisive_test":"Await and evaluate post-cutoff cases under the preregistered 24h full-station protocol; discovery rows cannot count as validation.","queue_status":"WAITING_FOR_RESULT","reason":"Discovery mechanism remains promising but prospectively unproven; no new result is bundled."},
+      {"candidate_id":"KWI-INCOMPLETE-TO-CANONICAL-V1","next_decisive_test":"Do not retune the rejected simple incomplete mean on the same development data; only genuinely preregistered orthogonal mechanisms or new holdout evidence can reopen it.","queue_status":"PARKED","reason":"Simple incomplete mean was already falsified in development; parking preserves negative evidence without exercising kill authority."}
+    ],
+    "director_decision": "Service the routed bundle without promotion or kill. Preserve WATCH status for generic changelog/rebate/API triggers. Keep KWI full-station validation and maker-fill monitoring waiting on their preregistered prospective evidence; keep the rejected simple incomplete-mean formulation parked. No new local task or expensive build is justified.",
+    "economic_conclusion": "NO_PROVEN_EDGE",
+    "local_tasks": []
+  }
+}
