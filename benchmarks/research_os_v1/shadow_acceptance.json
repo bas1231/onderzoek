@@ -7,6 +7,8 @@
     "changes": [
       "Require identical preregistered case IDs for baseline and challenger.",
       "Require every case ID to be present and unique.",
+      "Freeze case metadata across baseline/challenger: active_hour_id, task_shape and ground_truth_class must be identical for each case ID.",
+      "Treat malformed benchmark record types and invalid numeric/boolean fields as validation failures rather than coercing them.",
       "Treat missing or zero metric denominators as UNKNOWN rather than favorable zero values.",
       "Require both baseline and challenger to satisfy the minimum observation set before replacement can pass."
     ]
@@ -21,7 +23,8 @@
     "require_at_least_one_decisive_negative_case": true,
     "case_id_required": true,
     "case_id_unique": true,
-    "baseline_and_challenger_same_case_set": true
+    "baseline_and_challenger_same_case_set": true,
+    "baseline_and_challenger_same_case_metadata": true
   },
   "primary_metrics": [
     {"id":"M1","name":"unique_relevant_evidence_per_worker_run","direction":"HIGHER_IS_BETTER"},
@@ -52,14 +55,17 @@
     "Any known survivor benchmark killed solely because it was waiting for data.",
     "Any independent-reproduction pass where shared upstream evidence was knowingly ignored.",
     "Any baseline/challenger comparison performed on different preregistered case sets.",
+    "Any baseline/challenger comparison where the same case ID has different frozen case metadata.",
+    "Any malformed benchmark value coerced into a favorable metric instead of failing validation.",
     "Any missing metric denominator interpreted as zero to improve a comparison."
   ],
   "replacement_rule": [
     "All hard-fail conditions must remain false.",
     "Both baseline and challenger must satisfy the minimum observation set.",
     "Baseline and challenger must contain the exact same unique preregistered case IDs.",
+    "For each case ID, active_hour_id, task_shape and ground_truth_class must be identical between baseline and challenger.",
     "V1 must show no material regression in survivor preservation, false-survivor control, or provenance completeness.",
-    "Unknown or denominatorless metrics cannot satisfy an improvement or no-regression requirement.",
+    "Unknown, malformed or denominatorless metrics cannot satisfy an improvement or no-regression requirement.",
     "V1 must show a strict improvement in at least two of: unique evidence efficiency, duplicate reduction, decisive falsification efficiency, contradiction detection, source-family coverage.",
     "If quality improves only by materially increasing usage/coordination, retain the simpler baseline unless the gain is operationally important and documented.",
     "If results differ by task shape, adopt task-shape-specific concurrency rather than forcing one global worker count."
@@ -71,6 +77,13 @@
     "no_generated_text_volume_metric": true,
     "case_ids_required_and_unique": true,
     "baseline_and_challenger_identical_case_ids": true,
+    "baseline_and_challenger_identical_case_metadata": true,
+    "frozen_case_metadata_fields": [
+      "active_hour_id",
+      "task_shape",
+      "ground_truth_class"
+    ],
+    "malformed_values_fail_validation_without_coercion": true,
     "missing_denominators_are_unknown_not_zero": true,
     "both_sides_must_meet_minimum_observation_set": true
   }
