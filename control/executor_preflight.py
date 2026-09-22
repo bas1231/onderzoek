@@ -32,7 +32,6 @@ def sync_main_fail_closed(root: Path) -> dict[str, Any]:
     branch = _git(root, "branch", "--show-current")
     if branch.returncode != 0:
         return {"ok": False, "reason": "BRANCH_READ_FAILED", "stderr": branch.stderr[-4000:]}
-
     branch_name = branch.stdout.strip()
     if branch_name != "main":
         return {"ok": False, "reason": "NOT_MAIN_BRANCH", "branch": branch_name}
@@ -115,33 +114,62 @@ def sync_main_fail_closed(root: Path) -> dict[str, Any]:
     }
 
 
-def _task_support_script_rel(task_obj: dict[str, Any]) -> Path | None:
-    """Return the repository-relative support script for Python-like tasks."""
-    if task_obj.get("operation") not in {"python", "health_check"}:
-        return None
-    command = task_obj.get("command")
-    if not isinstance(command, list) or len(command) < 2 or not isinstance(command[1], str):
-        return Path("__INVALID_COMMAND_SCRIPT__")
-    rel = Path(command[1])
+def _safe_rel(value: str) -> Path:
+    rel = Path(value.split("::", 1)[0])
     if rel.is_absolute() or ".." in rel.parts:
         return Path("__UNSAFE_COMMAND_SCRIPT__")
     return rel
 
 
-def task_provenance_in_head(root: Path, task_file: Path) -> dict[str, Any]:
-    """Prove the exact pending task and its executable prerequisite are immutable.
+def _task_support_paths_rel(task_obj: dict[str, Any]) -> list[Path]:
+    """Return explicit repository prerequisites referenced by a task.
 
-    Seeing a task file on disk is insufficient. We require:
-    - the task path exists in HEAD;
-    - the latest commit that changed the task is an ancestor of HEAD;
-    - the task blob at that commit equals the blob in HEAD;
-    - for Python/health-check tasks, the referenced support script already
-      existed in that same task commit;
-    - the support-script blob at the task commit equals the one in HEAD.
-
-    The last two invariants prevent an invalid task from becoming executable
-    later merely because somebody subsequently added or changed its script.
+    Python/health-check tasks bind their script. Pytest tasks bind explicit
+    repository-like targets such as ``tests/x.py`` or ``tests/foo``. Pytest
+    selectors after ``::`` are stripped before provenance comparison.
     """
+    operation = task_obj.get("operation")
+    command = task_obj.get("command")
+    if not isinstance(command, list):
+        return [Path("__INVALID_COMMAND_SCRIPT__")]
+
+    if operation in {"python", "health_check"}:
+        if len(command) < 2 or not isinstance(command[1], str):
+            return [Path("__INVALID_COMMAND_SCRIPT__")]
+        return [_safe_rel(command[1])]
+
+    if operation != "pytest":
+        return []
+    if len(command) < 3:
+        return [Path("__INVALID_COMMAND_SCRIPT__")]
+
+    targets: list[Path] = []
+    for item in command[3:]:
+        if not isinstance(item, str) or not item or item.startswith("-"):
+            continue
+        raw = item.split("::", 1)[0]
+        looks_repo_like = (
+            raw.endswith(".py")
+            or raw.startswith("tests/")
+            or raw.startswith("control/")
+            or raw.startswith("experiments/")
+        )
+        if not looks_repo_like:
+            continue
+        rel = _safe_rel(raw)
+        if rel not in targets:
+            targets.append(rel)
+    return targets
+
+
+def _task_support_script_rel(task_obj: dict[str, Any]) -> Path | None:
+    """Backward-compatible helper used by older callers/tests."""
+    paths = _task_support_paths_rel(task_obj)
+    return paths[0] if paths else None
+
+
+def task_provenance_in_head(root: Path, task_file: Path) -> dict[str, Any]:
+    """Prove the pending task and its explicit prerequisites are immutable."""
     root = root.resolve()
     try:
         rel = task_file.resolve().relative_to(root).as_posix()
@@ -225,11 +253,10 @@ def task_provenance_in_head(root: Path, task_file: Path) -> dict[str, Any]:
             "execution_commit": execution_commit,
         }
 
-    script_rel = _task_support_script_rel(task_obj)
-    support_provenance: dict[str, Any] | None = None
-    if script_rel is not None:
-        script_text = script_rel.as_posix()
-        if script_text == "__INVALID_COMMAND_SCRIPT__":
+    support_items: list[dict[str, str]] = []
+    for support_rel in _task_support_paths_rel(task_obj):
+        support_text = support_rel.as_posix()
+        if support_text == "__INVALID_COMMAND_SCRIPT__":
             return {
                 "ok": False,
                 "reason": "COMMAND_SCRIPT_MISSING",
@@ -237,7 +264,7 @@ def task_provenance_in_head(root: Path, task_file: Path) -> dict[str, Any]:
                 "task_commit": task_commit,
                 "execution_commit": execution_commit,
             }
-        if script_text == "__UNSAFE_COMMAND_SCRIPT__":
+        if support_text == "__UNSAFE_COMMAND_SCRIPT__":
             return {
                 "ok": False,
                 "reason": "UNSAFE_SCRIPT_PATH",
@@ -246,46 +273,59 @@ def task_provenance_in_head(root: Path, task_file: Path) -> dict[str, Any]:
                 "execution_commit": execution_commit,
             }
 
-        at_task = _git(root, "rev-parse", f"{task_commit}:{script_text}")
+        at_task = _git(root, "rev-parse", f"{task_commit}:{support_text}")
         if at_task.returncode != 0:
             return {
                 "ok": False,
                 "reason": "SUPPORT_SCRIPT_NOT_IN_TASK_COMMIT",
                 "task_path": rel,
-                "script": script_text,
+                "script": support_text,
                 "task_commit": task_commit,
                 "execution_commit": execution_commit,
             }
 
-        at_head = _git(root, "rev-parse", f"HEAD:{script_text}")
+        at_head = _git(root, "rev-parse", f"HEAD:{support_text}")
         if at_head.returncode != 0:
             return {
                 "ok": False,
                 "reason": "SUPPORT_SCRIPT_NOT_TRACKED_IN_EXECUTION_HEAD",
                 "task_path": rel,
-                "script": script_text,
+                "script": support_text,
                 "task_commit": task_commit,
                 "execution_commit": execution_commit,
             }
 
-        task_script_blob = at_task.stdout.strip()
-        head_script_blob = at_head.stdout.strip()
-        if task_script_blob != head_script_blob:
+        task_support_blob = at_task.stdout.strip()
+        head_support_blob = at_head.stdout.strip()
+        if task_support_blob != head_support_blob:
             return {
                 "ok": False,
                 "reason": "SUPPORT_SCRIPT_CHANGED_AFTER_TASK_COMMIT",
                 "task_path": rel,
-                "script": script_text,
+                "script": support_text,
                 "task_commit": task_commit,
                 "execution_commit": execution_commit,
-                "task_script_blob": task_script_blob,
-                "execution_script_blob": head_script_blob,
+                "task_script_blob": task_support_blob,
+                "execution_script_blob": head_support_blob,
             }
 
+        support_items.append({"script": support_text, "script_blob": task_support_blob})
+
+    support_provenance: dict[str, Any] | None = None
+    if len(support_items) == 1:
         support_provenance = {
             "status": "SUPPORT_SCRIPT_BOUND_TO_TASK_COMMIT",
-            "script": script_text,
-            "script_blob": task_script_blob,
+            **support_items[0],
+        }
+    elif len(support_items) > 1:
+        support_provenance = {
+            "status": "SUPPORT_TARGETS_BOUND_TO_TASK_COMMIT",
+            "targets": support_items,
+        }
+    elif task_obj.get("operation") == "pytest":
+        support_provenance = {
+            "status": "PYTEST_NO_EXPLICIT_REPOSITORY_TARGETS",
+            "targets": [],
         }
 
     return {
@@ -301,28 +341,41 @@ def task_provenance_in_head(root: Path, task_file: Path) -> dict[str, Any]:
 
 
 def support_script_in_head(root: Path, task: Any) -> dict[str, Any]:
-    """Prove a Python task's support script exists and is tracked in HEAD."""
-    if getattr(task, "operation", None) not in {"python", "health_check"}:
+    """Prove explicit task prerequisites exist on disk and are tracked in HEAD."""
+    operation = getattr(task, "operation", None)
+    if operation not in {"python", "health_check", "pytest"}:
         return {"ok": True, "status": "NOT_APPLICABLE"}
 
-    command = list(getattr(task, "command", []) or [])
-    if len(command) < 2:
+    task_obj = {
+        "operation": operation,
+        "command": list(getattr(task, "command", []) or []),
+    }
+    support_paths = _task_support_paths_rel(task_obj)
+    if not support_paths:
+        if operation == "pytest":
+            return {"ok": True, "status": "PYTEST_NO_EXPLICIT_REPOSITORY_TARGETS"}
         return {"ok": False, "reason": "COMMAND_SCRIPT_MISSING"}
 
-    rel = Path(command[1])
-    if rel.is_absolute() or ".." in rel.parts:
-        return {"ok": False, "reason": "UNSAFE_SCRIPT_PATH"}
-
-    script = (root / rel).resolve()
     root_resolved = root.resolve()
-    if root_resolved not in script.parents:
-        return {"ok": False, "reason": "SCRIPT_ESCAPES_REPOSITORY"}
+    checked: list[str] = []
+    for rel in support_paths:
+        text = rel.as_posix()
+        if text == "__INVALID_COMMAND_SCRIPT__":
+            return {"ok": False, "reason": "COMMAND_SCRIPT_MISSING"}
+        if text == "__UNSAFE_COMMAND_SCRIPT__":
+            return {"ok": False, "reason": "UNSAFE_SCRIPT_PATH"}
 
-    if not script.is_file():
-        return {"ok": False, "reason": "SUPPORT_SCRIPT_MISSING_ON_DISK", "script": rel.as_posix()}
+        target = (root / rel).resolve()
+        if target != root_resolved and root_resolved not in target.parents:
+            return {"ok": False, "reason": "SCRIPT_ESCAPES_REPOSITORY", "script": text}
+        if not target.exists():
+            return {"ok": False, "reason": "SUPPORT_SCRIPT_MISSING_ON_DISK", "script": text}
 
-    tracked = _git(root, "cat-file", "-e", f"HEAD:{rel.as_posix()}")
-    if tracked.returncode != 0:
-        return {"ok": False, "reason": "SUPPORT_SCRIPT_NOT_TRACKED_IN_HEAD", "script": rel.as_posix()}
+        tracked = _git(root, "cat-file", "-e", f"HEAD:{text}")
+        if tracked.returncode != 0:
+            return {"ok": False, "reason": "SUPPORT_SCRIPT_NOT_TRACKED_IN_HEAD", "script": text}
+        checked.append(text)
 
-    return {"ok": True, "status": "SUPPORT_SCRIPT_TRACKED", "script": rel.as_posix()}
+    if len(checked) == 1:
+        return {"ok": True, "status": "SUPPORT_SCRIPT_TRACKED", "script": checked[0]}
+    return {"ok": True, "status": "SUPPORT_TARGETS_TRACKED", "targets": checked}
