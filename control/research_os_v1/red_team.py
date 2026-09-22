@@ -199,9 +199,9 @@ def _blind_search_family(value: Any) -> dict[str, Any] | None:
 def build_blind_packet(candidate: dict[str, Any]) -> dict[str, Any]:
     """Construct adversarial input while excluding persuasive origin reasoning.
 
-    Prior gate outcomes are deliberately blinded. Search-family context is
-    projected to neutral multiple-testing/accounting fields so arbitrary origin
-    prose cannot leak through an otherwise methodological object.
+    Prior gate outcomes and the origin worker's evidence polarity are deliberately
+    blinded. Search-family context is projected to neutral multiple-testing fields
+    so methodological risk remains visible without leaking arbitrary thesis prose.
     """
     if not isinstance(candidate, dict):
         raise ValueError("candidate_must_be_object")
@@ -211,6 +211,19 @@ def build_blind_packet(candidate: dict[str, Any]) -> dict[str, Any]:
     cutoff = _optional_text(
         candidate.get("point_in_time_cutoff"),
         "point_in_time_cutoff_must_be_string_or_null",
+    )
+
+    supporting = _evidence_refs(
+        _require_list(
+            candidate.get("supporting_evidence"),
+            "supporting_evidence_must_be_list",
+        )
+    )
+    contradictory = _evidence_refs(
+        _require_list(
+            candidate.get("contradictory_evidence"),
+            "contradictory_evidence_must_be_list",
+        )
     )
 
     return {
@@ -226,18 +239,7 @@ def build_blind_packet(candidate: dict[str, Any]) -> dict[str, Any]:
         "assumptions": _neutral_assumptions(
             _require_list(candidate.get("assumptions"), "assumptions_must_be_list")
         ),
-        "supporting_evidence_refs": _evidence_refs(
-            _require_list(
-                candidate.get("supporting_evidence"),
-                "supporting_evidence_must_be_list",
-            )
-        ),
-        "contradictory_evidence_refs": _evidence_refs(
-            _require_list(
-                candidate.get("contradictory_evidence"),
-                "contradictory_evidence_must_be_list",
-            )
-        ),
+        "evidence_refs": supporting + contradictory,
         "required_gates": _blind_gate_states(candidate.get("required_gates")),
         "known_failure_patterns": _failure_patterns(
             candidate.get("known_failure_patterns")
@@ -250,6 +252,7 @@ def build_blind_packet(candidate: dict[str, Any]) -> dict[str, Any]:
         "origin_reasoning_included": False,
         "origin_confidence_included": False,
         "origin_gate_states_included": False,
+        "origin_evidence_polarity_included": False,
         "origin_search_family_extra_fields_included": False,
         "expected_result_included": False,
     }
