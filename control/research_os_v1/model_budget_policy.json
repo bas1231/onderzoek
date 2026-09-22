@@ -1,0 +1,64 @@
+{
+  "schema_version": 1,
+  "status": "CAPABILITY_POLICY_NOT_MODEL_GUARANTEE",
+  "principle": "Spend the strongest scarce model capacity only where additional reasoning depth can change a decisive gate. Throughput may degrade when allowance is constrained; evidence standards may not.",
+  "no_hidden_spend": {
+    "automatic_credit_purchase": false,
+    "openai_api_key_fallback": false,
+    "paid_external_model_fallback": false,
+    "rule": "Exhaustion of included allowance causes fallback to an included available capability or queues the task; it never authorizes paid usage."
+  },
+  "capability_tiers": {
+    "TIER_A_SCARCE_DEEP": {
+      "preferred_when_available": ["GPT-6 Astra in Work/Codex", "strongest included high-reasoning option"],
+      "use_cases": [
+        "promotion-relevant Director adjudication",
+        "deep Red Team on serious survivor",
+        "blind Independent Reproducer",
+        "hard Algebra/formal counterexample reasoning",
+        "methodology contradiction with large downstream consequence"
+      ],
+      "avoid_for": ["routine source triage", "unchanged-document summarization", "simple status reporting", "deterministic parsing"]
+    },
+    "TIER_B_DEEP_DEFAULT": {
+      "preferred_when_available": ["GPT-5.6 Sol"],
+      "use_cases": [
+        "normal specialist analysis",
+        "complex primary-source synthesis",
+        "mechanics/settlement analysis",
+        "candidate-level falsification before promotion stage",
+        "Director scheduling when no Tier A need exists"
+      ]
+    },
+    "TIER_C_THROUGHPUT": {
+      "preferred_when_available": ["GPT-5.6 Terra"],
+      "use_cases": [
+        "broad Scout search synthesis",
+        "source classification after deterministic filtering",
+        "routine candidate packet preparation",
+        "coverage-gap analysis"
+      ]
+    },
+    "TIER_D_FAST": {
+      "preferred_when_available": ["GPT-5.6 Luna"],
+      "use_cases": [
+        "very high-volume low-ambiguity triage only when local deterministic code is insufficient",
+        "format/structure normalization that is independently validated"
+      ],
+      "rule": "Prefer local exact code over a model for deterministic hash, dedupe, parsing, schema and arithmetic tasks."
+    }
+  },
+  "escalation": [
+    "Start at the cheapest included capability consistent with the task's ambiguity and consequence.",
+    "Escalate only when a documented uncertainty remains that stronger reasoning can plausibly resolve.",
+    "Promotion-relevant conclusions require the configured high-reasoning gate even if discovery occurred on a faster tier.",
+    "Record model/capability tier and reasoning setting in each worker artifact for benchmark analysis.",
+    "Model agreement across tiers is not independent evidence when upstream data and reasoning path are shared."
+  ],
+  "usage_protection": [
+    "Primary and Recon discovery must retain enough allowance to run during ACTIVE-HOUR even if a deep candidate is consuming Tier A/B capacity.",
+    "WAITING_FOR_DATA candidates receive no repeated deep-model analysis without new evidence.",
+    "No hourly report spends Tier A capacity merely to restate unchanged status.",
+    "If Tier A capacity is unavailable, serious reproduction/adjudication may remain queued rather than silently lowering its evidence standard."
+  ]
+}
