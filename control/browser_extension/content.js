@@ -1,5 +1,5 @@
 (() => {
-  const CONTENT_VERSION = "0.8.0";
+  const CONTENT_VERSION = "0.8.1";
 
   if (
     window.__PREDICTION_RESEARCH_BRIDGE_LOADED__ ===
@@ -357,19 +357,32 @@
             ""
         );
 
-        const selectedAssistantText =
-          specific.map(
-            node =>
-              node.innerText ||
-              node.textContent ||
-              ""
-          ).join("\n");
+        /*
+         * E412:
+         * Onderdruk een body-fallback alleen wanneer een normale
+         * assistant-node zélf een volledig task-blok bevat.
+         *
+         * Alleen controleren of de JSON-inhoud ergens in de
+         * assistant-tekst staat is onvoldoende: ChatGPT kan de
+         * markers en inhoud over verschillende DOM-nodes verdelen.
+         */
+        const selectedAssistantBlocks =
+          new Set(
+            specific.flatMap(
+              node =>
+                extractTaskBlocks(
+                  node.innerText ||
+                  node.textContent ||
+                  ""
+                )
+            )
+          );
 
         const fallbackBlocks =
           extractTaskBlocks(bodyText).filter(
             block => {
               if (
-                selectedAssistantText.includes(block)
+                selectedAssistantBlocks.has(block)
               ) {
                 return false;
               }

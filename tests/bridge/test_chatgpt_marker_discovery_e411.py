@@ -34,4 +34,14 @@ def test_normal_assistant_selector_remains_primary():
 
 def test_content_version_bumped():
     src = content()
-    assert 'const CONTENT_VERSION = "0.8.0";' in src
+
+    line = next(
+        line
+        for line in src.splitlines()
+        if "const CONTENT_VERSION =" in line
+    )
+
+    version = line.split('"')[1]
+    parts = tuple(int(part) for part in version.split("."))
+
+    assert parts >= (0, 8, 0)
