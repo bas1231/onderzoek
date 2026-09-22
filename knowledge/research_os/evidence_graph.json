@@ -22,6 +22,12 @@
       "to": "domain:market_research",
       "type": "ROUTED_TO_DOMAIN"
     },
+    "edge-02cfa7697cede9529cd3": {
+      "capability": "scout",
+      "from": "run:hourly-20260923T010000+0200",
+      "to": "evidence-136e57fd6ccb34762018",
+      "type": "OBSERVED_EVIDENCE"
+    },
     "edge-05109085341b4a436bb4": {
       "capability": "weather_twc",
       "from": "run:hourly-20260922T230000+0200",
@@ -67,6 +73,12 @@
       "to": "evidence-b29aeb5376256029df08",
       "type": "OBSERVED_EVIDENCE"
     },
+    "edge-10f53ad28edc13ee4c2e": {
+      "capability": "weather_twc",
+      "from": "run:hourly-20260923T010000+0200",
+      "to": "evidence-316ee30fd6530f5b1c46",
+      "type": "OBSERVED_EVIDENCE"
+    },
     "edge-14d0606020be19597263": {
       "capability": "settlement",
       "from": "run:hourly-20260922T220000+0200",
@@ -91,6 +103,12 @@
       "to": "evidence-2524ccf25508d78841b5",
       "type": "OBSERVED_EVIDENCE"
     },
+    "edge-21c5de960960ad3a5de7": {
+      "capability": "settlement",
+      "from": "run:hourly-20260923T010000+0200",
+      "to": "evidence-c5e542b4d9f6f74f255d",
+      "type": "OBSERVED_EVIDENCE"
+    },
     "edge-239d2fcd4fed57c252e9": {
       "capability": "weather_twc",
       "from": "run:hourly-20260922T230000+0200",
@@ -113,6 +131,12 @@
       "to": "evidence-316ee30fd6530f5b1c46",
       "type": "OBSERVED_EVIDENCE"
     },
+    "edge-2b193a0dab2aa746ac9c": {
+      "capability": "recon_scout",
+      "from": "run:hourly-20260923T010000+0200",
+      "to": "evidence-d3e2f66b3aa38f22f943",
+      "type": "OBSERVED_EVIDENCE"
+    },
     "edge-2b5f358610b40a8230bc": {
       "capability": "prebuild_killer",
       "from": "candidate:PAYOFF-IDENTITY-MINING-V1",
@@ -120,6 +144,22 @@
         "E007 cheap pre-build falsification required"
       ],
       "run_id": "hourly-20260922T230000+0200",
+      "to": "domain:red_team_pentest",
+      "type": "ROUTED_TO_DOMAIN"
+    },
+    "edge-2c865c34cfc8a0ba40d1": {
+      "capability": "scout",
+      "from": "run:hourly-20260923T010000+0200",
+      "to": "evidence-737e22fb97374034081a",
+      "type": "OBSERVED_EVIDENCE"
+    },
+    "edge-2cb532c6d91f7cce3c28": {
+      "capability": "prebuild_killer",
+      "from": "candidate:ASSET-RANK-MAKER-HEDGE-V1",
+      "reasons": [
+        "E007 cheap pre-build falsification required"
+      ],
+      "run_id": "hourly-20260923T010000+0200",
       "to": "domain:red_team_pentest",
       "type": "ROUTED_TO_DOMAIN"
     },
@@ -145,10 +185,27 @@
       "to": "evidence-316ee30fd6530f5b1c46",
       "type": "OBSERVED_EVIDENCE"
     },
+    "edge-3777ceae26884219a951": {
+      "capability": "weather_twc",
+      "from": "candidate:KWI-FULL-STATION-PRECANONICAL-V1",
+      "reasons": [
+        "lane=WEATHER",
+        "weather/TWC/KWI semantics"
+      ],
+      "run_id": "hourly-20260923T010000+0200",
+      "to": "domain:market_research",
+      "type": "ROUTED_TO_DOMAIN"
+    },
     "edge-3a1c4d0465c4558cc24d": {
       "capability": "recon_scout",
       "from": "run:hourly-20260922T230000+0200",
       "to": "evidence-d005f76bab9786eb51c9",
+      "type": "OBSERVED_EVIDENCE"
+    },
+    "edge-3ea1bc6b784cb125de91": {
+      "capability": "recon_scout",
+      "from": "run:hourly-20260923T010000+0200",
+      "to": "evidence-f56e5e620e767891d675",
       "type": "OBSERVED_EVIDENCE"
     },
     "edge-4493d3ef8c4d26d59869": {
@@ -161,10 +218,32 @@
       "to": "domain:red_team_pentest",
       "type": "ROUTED_TO_DOMAIN"
     },
+    "edge-4b8f95e09abfeddd0bba": {
+      "capability": "recon_scout",
+      "from": "candidate:KWI-FULL-STATION-PRECANONICAL-V1",
+      "reasons": [
+        "unresolved step is explicit recon/discovery"
+      ],
+      "run_id": "hourly-20260923T010000+0200",
+      "to": "domain:discovery",
+      "type": "ROUTED_TO_DOMAIN"
+    },
+    "edge-54a8c1d63688b67e3a0c": {
+      "capability": "microstructure",
+      "from": "run:hourly-20260923T010000+0200",
+      "to": "evidence-c65a8b314ec386a37ae9",
+      "type": "OBSERVED_EVIDENCE"
+    },
     "edge-65765fc8bdbbee8988ba": {
       "capability": "recon_scout",
       "from": "run:hourly-20260922T220000+0200",
       "to": "evidence-552d8aac5558087f7648",
+      "type": "OBSERVED_EVIDENCE"
+    },
+    "edge-689041a9778f9e10e4d0": {
+      "capability": "recon_scout",
+      "from": "run:hourly-20260923T010000+0200",
+      "to": "evidence-d005f76bab9786eb51c9",
       "type": "OBSERVED_EVIDENCE"
     },
     "edge-6ad6b823f82102765c38": {
@@ -178,6 +257,17 @@
       "from": "run:hourly-20260922T220000+0200",
       "to": "evidence-9c87ed13bee90279931e",
       "type": "OBSERVED_EVIDENCE"
+    },
+    "edge-7752544f3ab38ea90858": {
+      "capability": "algebra",
+      "from": "candidate:PAYOFF-IDENTITY-MINING-V1",
+      "reasons": [
+        "lane=MARKET_ALGEBRA",
+        "statewise payoff/equivalence semantics"
+      ],
+      "run_id": "hourly-20260923T010000+0200",
+      "to": "domain:algebra",
+      "type": "ROUTED_TO_DOMAIN"
     },
     "edge-79b91d771ba65ed90597": {
       "capability": "microstructure",
@@ -194,6 +284,12 @@
       "capability": "settlement",
       "from": "run:hourly-20260922T230000+0200",
       "to": "evidence-c9b1f89c28c561c81e18",
+      "type": "OBSERVED_EVIDENCE"
+    },
+    "edge-7fe8f6a0472cb87065bb": {
+      "capability": "weather_twc",
+      "from": "run:hourly-20260923T010000+0200",
+      "to": "evidence-5a0ac9e71f9ac0c310bf",
       "type": "OBSERVED_EVIDENCE"
     },
     "edge-82942957aa31b2acc05d": {
@@ -226,6 +322,16 @@
       ],
       "run_id": "hourly-20260922T220000+0200",
       "to": "domain:red_team_pentest",
+      "type": "ROUTED_TO_DOMAIN"
+    },
+    "edge-9259e53845e00f63b543": {
+      "capability": "algebra",
+      "from": "candidate:ASSET-RANK-MAKER-HEDGE-V1",
+      "reasons": [
+        "statewise payoff/equivalence semantics"
+      ],
+      "run_id": "hourly-20260923T010000+0200",
+      "to": "domain:algebra",
       "type": "ROUTED_TO_DOMAIN"
     },
     "edge-94fbd48a56d74b4183de": {
@@ -262,6 +368,12 @@
       "to": "evidence-3286b3f890883cb2f9d0",
       "type": "OBSERVED_EVIDENCE"
     },
+    "edge-a2038ce48b39ce1df4d6": {
+      "capability": "algebra",
+      "from": "run:hourly-20260923T010000+0200",
+      "to": "evidence-3d2b4187a3518bfbfe7f",
+      "type": "OBSERVED_EVIDENCE"
+    },
     "edge-a4e37ad2763daad14597": {
       "capability": "microstructure",
       "from": "run:hourly-20260922T220000+0200",
@@ -286,6 +398,12 @@
       "to": "evidence-d005f76bab9786eb51c9",
       "type": "OBSERVED_EVIDENCE"
     },
+    "edge-aac558c06a01bf307fba": {
+      "capability": "weather_twc",
+      "from": "run:hourly-20260923T010000+0200",
+      "to": "evidence-301c3379cd7eb2a6f534",
+      "type": "OBSERVED_EVIDENCE"
+    },
     "edge-acd15fb081d4177ebed1": {
       "capability": "weather_twc",
       "from": "run:hourly-20260922T220000+0200",
@@ -302,10 +420,37 @@
       "to": "domain:algebra",
       "type": "ROUTED_TO_DOMAIN"
     },
+    "edge-b01003d31ebec8746329": {
+      "capability": "scout",
+      "from": "candidate:KWI-FULL-STATION-PRECANONICAL-V1",
+      "reasons": [
+        "unresolved step is explicit discovery"
+      ],
+      "run_id": "hourly-20260923T010000+0200",
+      "to": "domain:discovery",
+      "type": "ROUTED_TO_DOMAIN"
+    },
+    "edge-b942005229fa7bdae316": {
+      "capability": "microstructure",
+      "from": "candidate:ASSET-RANK-MAKER-HEDGE-V1",
+      "reasons": [
+        "executable market/fill/hedge economics required",
+        "lane=MICROSTRUCTURE"
+      ],
+      "run_id": "hourly-20260923T010000+0200",
+      "to": "domain:mechanics",
+      "type": "ROUTED_TO_DOMAIN"
+    },
     "edge-b9ea95a28b0f7bc31fce": {
       "capability": "scout",
       "from": "run:hourly-20260922T220000+0200",
       "to": "evidence-123e085a7005490d716f",
+      "type": "OBSERVED_EVIDENCE"
+    },
+    "edge-ba645fc3f6578df0b0d0": {
+      "capability": "recon_scout",
+      "from": "run:hourly-20260923T010000+0200",
+      "to": "evidence-4596a4134d68004df4cd",
       "type": "OBSERVED_EVIDENCE"
     },
     "edge-bd27cb282adc26747539": {
@@ -343,6 +488,32 @@
       "run_id": "hourly-20260922T230000+0200",
       "to": "domain:discovery",
       "type": "ROUTED_TO_DOMAIN"
+    },
+    "edge-d3c93cd9bb6ee475bd08": {
+      "capability": "prebuild_killer",
+      "from": "candidate:KWI-FULL-STATION-PRECANONICAL-V1",
+      "reasons": [
+        "E007 cheap pre-build falsification required"
+      ],
+      "run_id": "hourly-20260923T010000+0200",
+      "to": "domain:red_team_pentest",
+      "type": "ROUTED_TO_DOMAIN"
+    },
+    "edge-d40e50260bad0cb7fcfe": {
+      "capability": "prebuild_killer",
+      "from": "candidate:PAYOFF-IDENTITY-MINING-V1",
+      "reasons": [
+        "E007 cheap pre-build falsification required"
+      ],
+      "run_id": "hourly-20260923T010000+0200",
+      "to": "domain:red_team_pentest",
+      "type": "ROUTED_TO_DOMAIN"
+    },
+    "edge-d738d19d1406e9c233ef": {
+      "capability": "scout",
+      "from": "run:hourly-20260923T010000+0200",
+      "to": "evidence-0a16cc0d5ea198dfc0ca",
+      "type": "OBSERVED_EVIDENCE"
     },
     "edge-dafaf634ac953d3a839e": {
       "capability": "microstructure",
@@ -385,6 +556,28 @@
       "run_id": "hourly-20260922T220000+0200",
       "to": "domain:discovery",
       "type": "ROUTED_TO_DOMAIN"
+    },
+    "edge-f23f8978908342bdfad1": {
+      "capability": "scout",
+      "from": "run:hourly-20260923T010000+0200",
+      "to": "evidence-7374e950b4ced3720fe1",
+      "type": "OBSERVED_EVIDENCE"
+    },
+    "edge-f279f3e61666dcfc8ea0": {
+      "capability": "microstructure",
+      "from": "candidate:PAYOFF-IDENTITY-MINING-V1",
+      "reasons": [
+        "executable market/fill/hedge economics required"
+      ],
+      "run_id": "hourly-20260923T010000+0200",
+      "to": "domain:mechanics",
+      "type": "ROUTED_TO_DOMAIN"
+    },
+    "edge-f9c18309a715e3681c92": {
+      "capability": "recon_scout",
+      "from": "run:hourly-20260923T010000+0200",
+      "to": "evidence-1e3567d2e5e435d8235a",
+      "type": "OBSERVED_EVIDENCE"
     }
   },
   "guardrails": {
@@ -396,17 +589,17 @@
   "nodes": {
     "candidate:ASSET-RANK-MAKER-HEDGE-V1": {
       "candidate_id": "ASSET-RANK-MAKER-HEDGE-V1",
-      "last_seen_run": "hourly-20260922T230000+0200",
+      "last_seen_run": "hourly-20260923T010000+0200",
       "node_type": "candidate"
     },
     "candidate:KWI-FULL-STATION-PRECANONICAL-V1": {
       "candidate_id": "KWI-FULL-STATION-PRECANONICAL-V1",
-      "last_seen_run": "hourly-20260922T230000+0200",
+      "last_seen_run": "hourly-20260923T010000+0200",
       "node_type": "candidate"
     },
     "candidate:PAYOFF-IDENTITY-MINING-V1": {
       "candidate_id": "PAYOFF-IDENTITY-MINING-V1",
-      "last_seen_run": "hourly-20260922T230000+0200",
+      "last_seen_run": "hourly-20260923T010000+0200",
       "node_type": "candidate"
     },
     "evidence-064381927e58a0774b05": {
@@ -417,6 +610,15 @@
       "retrieved_at": "2026-09-22T20:14:49.309386+00:00",
       "source_id": "kalshi_weather_rules",
       "term": "metar"
+    },
+    "evidence-0a16cc0d5ea198dfc0ca": {
+      "capability": "scout",
+      "document_sha256": "d95d0fe0e5011716bc1009ba7c708711e7e594487540bacdb35d2d4bf54ce576",
+      "first_seen_run": "hourly-20260923T010000+0200",
+      "node_type": "evidence",
+      "retrieved_at": "2026-09-22T23:00:17.724424+00:00",
+      "source_id": "kalshi_docs",
+      "term": "prediction market"
     },
     "evidence-123e085a7005490d716f": {
       "capability": "scout",
@@ -430,7 +632,7 @@
     "evidence-136e57fd6ccb34762018": {
       "capability": "scout",
       "document_sha256": "e60f2357eaca0914dea07f1ec9a4f64c01924245e6a8b1882afcbbe9cb9b665b",
-      "first_seen_run": "hourly-20260922T230000+0200",
+      "first_seen_run": "hourly-20260923T010000+0200",
       "node_type": "evidence",
       "retrieved_at": "2026-09-22T20:14:47.716827+00:00",
       "source_id": "polymarket_docs",
@@ -439,7 +641,7 @@
     "evidence-1e3567d2e5e435d8235a": {
       "capability": "recon_scout",
       "document_sha256": "d7ed6c1e9723edcceae8a3d3f258a7ca991bd64f841fad43632caa13a7fad746",
-      "first_seen_run": "hourly-20260922T230000+0200",
+      "first_seen_run": "hourly-20260923T010000+0200",
       "node_type": "evidence",
       "retrieved_at": "2026-09-19T20:59:24.827234+00:00",
       "source_id": "arxiv",
@@ -466,7 +668,7 @@
     "evidence-301c3379cd7eb2a6f534": {
       "capability": "weather_twc",
       "document_sha256": "b3d68ea7c20560ed9a72ada1b7a640116c1a8d99f9c508561b3935c47d4efc4d",
-      "first_seen_run": "hourly-20260922T230000+0200",
+      "first_seen_run": "hourly-20260923T010000+0200",
       "node_type": "evidence",
       "retrieved_at": "2026-09-22T20:14:48.131457+00:00",
       "source_id": "ecmwf_open",
@@ -475,7 +677,7 @@
     "evidence-316ee30fd6530f5b1c46": {
       "capability": "weather_twc",
       "document_sha256": "dd6e0cc4b237e05406554eb33d2b7963367175f44a5a0ae0feb4e59f707b0edf",
-      "first_seen_run": "hourly-20260922T230000+0200",
+      "first_seen_run": "hourly-20260923T010000+0200",
       "node_type": "evidence",
       "retrieved_at": "2026-09-19T20:59:24.461145+00:00",
       "source_id": "aviationweather",
@@ -493,11 +695,20 @@
     "evidence-3d2b4187a3518bfbfe7f": {
       "capability": "algebra",
       "document_sha256": "e60f2357eaca0914dea07f1ec9a4f64c01924245e6a8b1882afcbbe9cb9b665b",
-      "first_seen_run": "hourly-20260922T230000+0200",
+      "first_seen_run": "hourly-20260923T010000+0200",
       "node_type": "evidence",
       "retrieved_at": "2026-09-22T20:14:47.716827+00:00",
       "source_id": "polymarket_docs",
       "term": "combo"
+    },
+    "evidence-4596a4134d68004df4cd": {
+      "capability": "recon_scout",
+      "document_sha256": "d95d0fe0e5011716bc1009ba7c708711e7e594487540bacdb35d2d4bf54ce576",
+      "first_seen_run": "hourly-20260923T010000+0200",
+      "node_type": "evidence",
+      "retrieved_at": "2026-09-22T23:00:17.724424+00:00",
+      "source_id": "kalshi_docs",
+      "term": "loss"
     },
     "evidence-552d8aac5558087f7648": {
       "capability": "recon_scout",
@@ -516,6 +727,33 @@
       "retrieved_at": "2026-09-22T21:00:17.599667+00:00",
       "source_id": "kalshi_weather_rules",
       "term": "settlement"
+    },
+    "evidence-5a0ac9e71f9ac0c310bf": {
+      "capability": "weather_twc",
+      "document_sha256": "75df18bf4b20e7ff35e6b2092670d40674502f3aa2a8342746e40b7bd8ec317b",
+      "first_seen_run": "hourly-20260923T010000+0200",
+      "node_type": "evidence",
+      "retrieved_at": "2026-09-22T23:00:18.564183+00:00",
+      "source_id": "kalshi_weather_rules",
+      "term": "metar"
+    },
+    "evidence-7374e950b4ced3720fe1": {
+      "capability": "scout",
+      "document_sha256": "24c22401e8537fbb092651d787264174043e1387245c99f55ea91cd00d518ee8",
+      "first_seen_run": "hourly-20260923T010000+0200",
+      "node_type": "evidence",
+      "retrieved_at": "2026-09-22T23:00:17.013679+00:00",
+      "source_id": "cftc",
+      "term": "prediction market"
+    },
+    "evidence-737e22fb97374034081a": {
+      "capability": "scout",
+      "document_sha256": "75df18bf4b20e7ff35e6b2092670d40674502f3aa2a8342746e40b7bd8ec317b",
+      "first_seen_run": "hourly-20260923T010000+0200",
+      "node_type": "evidence",
+      "retrieved_at": "2026-09-22T23:00:18.564183+00:00",
+      "source_id": "kalshi_weather_rules",
+      "term": "prediction market"
     },
     "evidence-76a71a49f0c1ee96cbf9": {
       "capability": "scout",
@@ -571,10 +809,19 @@
       "source_id": "cftc",
       "term": "prediction market"
     },
+    "evidence-c5e542b4d9f6f74f255d": {
+      "capability": "settlement",
+      "document_sha256": "75df18bf4b20e7ff35e6b2092670d40674502f3aa2a8342746e40b7bd8ec317b",
+      "first_seen_run": "hourly-20260923T010000+0200",
+      "node_type": "evidence",
+      "retrieved_at": "2026-09-22T23:00:18.564183+00:00",
+      "source_id": "kalshi_weather_rules",
+      "term": "settlement"
+    },
     "evidence-c65a8b314ec386a37ae9": {
       "capability": "microstructure",
       "document_sha256": "e60f2357eaca0914dea07f1ec9a4f64c01924245e6a8b1882afcbbe9cb9b665b",
-      "first_seen_run": "hourly-20260922T230000+0200",
+      "first_seen_run": "hourly-20260923T010000+0200",
       "node_type": "evidence",
       "retrieved_at": "2026-09-22T20:14:47.716827+00:00",
       "source_id": "polymarket_docs",
@@ -601,11 +848,20 @@
     "evidence-d005f76bab9786eb51c9": {
       "capability": "recon_scout",
       "document_sha256": "e60f2357eaca0914dea07f1ec9a4f64c01924245e6a8b1882afcbbe9cb9b665b",
-      "first_seen_run": "hourly-20260922T230000+0200",
+      "first_seen_run": "hourly-20260923T010000+0200",
       "node_type": "evidence",
       "retrieved_at": "2026-09-22T20:14:47.716827+00:00",
       "source_id": "polymarket_docs",
       "term": "fee"
+    },
+    "evidence-d3e2f66b3aa38f22f943": {
+      "capability": "recon_scout",
+      "document_sha256": "75df18bf4b20e7ff35e6b2092670d40674502f3aa2a8342746e40b7bd8ec317b",
+      "first_seen_run": "hourly-20260923T010000+0200",
+      "node_type": "evidence",
+      "retrieved_at": "2026-09-22T23:00:18.564183+00:00",
+      "source_id": "kalshi_weather_rules",
+      "term": "settlement"
     },
     "evidence-ef6b5dd900eeef6f1e6c": {
       "capability": "scout",
@@ -615,6 +871,15 @@
       "retrieved_at": "2026-09-22T21:00:17.599667+00:00",
       "source_id": "kalshi_weather_rules",
       "term": "prediction market"
+    },
+    "evidence-f56e5e620e767891d675": {
+      "capability": "recon_scout",
+      "document_sha256": "24c22401e8537fbb092651d787264174043e1387245c99f55ea91cd00d518ee8",
+      "first_seen_run": "hourly-20260923T010000+0200",
+      "node_type": "evidence",
+      "retrieved_at": "2026-09-22T23:00:17.013679+00:00",
+      "source_id": "cftc",
+      "term": "loss"
     }
   },
   "run_index": {
@@ -671,8 +936,35 @@
       "edge-cc151b5b72da2e5f0d52",
       "edge-dc76cea9541d1a1f978b",
       "edge-e00f67a2ca0d542598e8"
+    ],
+    "hourly-20260923T010000+0200": [
+      "edge-02cfa7697cede9529cd3",
+      "edge-10f53ad28edc13ee4c2e",
+      "edge-21c5de960960ad3a5de7",
+      "edge-2b193a0dab2aa746ac9c",
+      "edge-2c865c34cfc8a0ba40d1",
+      "edge-2cb532c6d91f7cce3c28",
+      "edge-3777ceae26884219a951",
+      "edge-3ea1bc6b784cb125de91",
+      "edge-4b8f95e09abfeddd0bba",
+      "edge-54a8c1d63688b67e3a0c",
+      "edge-689041a9778f9e10e4d0",
+      "edge-7752544f3ab38ea90858",
+      "edge-7fe8f6a0472cb87065bb",
+      "edge-9259e53845e00f63b543",
+      "edge-a2038ce48b39ce1df4d6",
+      "edge-aac558c06a01bf307fba",
+      "edge-b01003d31ebec8746329",
+      "edge-b942005229fa7bdae316",
+      "edge-ba645fc3f6578df0b0d0",
+      "edge-d3c93cd9bb6ee475bd08",
+      "edge-d40e50260bad0cb7fcfe",
+      "edge-d738d19d1406e9c233ef",
+      "edge-f23f8978908342bdfad1",
+      "edge-f279f3e61666dcfc8ea0",
+      "edge-f9c18309a715e3681c92"
     ]
   },
   "schema": "PVA_EVIDENCE_GRAPH_V1",
-  "updated_at": "2026-09-22T21:00:17.728822+00:00"
+  "updated_at": "2026-09-22T23:00:18.704331+00:00"
 }
