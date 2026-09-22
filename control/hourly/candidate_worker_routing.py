@@ -2,17 +2,33 @@ from __future__ import annotations
 
 from pathlib import Path
 from typing import Any
+import importlib.util
 import json
+import sys
 
 
 ROOT = Path(__file__).resolve().parents[2]
+
+
+def _load_architecture():
+    path = ROOT / "control/hourly/research_os_architecture.py"
+    spec = importlib.util.spec_from_file_location("research_os_architecture_routing", path)
+    if spec is None or spec.loader is None:
+        raise ImportError(path)
+    mod = importlib.util.module_from_spec(spec)
+    sys.modules[spec.name] = mod
+    spec.loader.exec_module(mod)
+    return mod
+
+
+ARCH = _load_architecture()
 
 TERMINAL_OR_INACTIVE_QUEUE_STATES = {
     "CLOSED_NEGATIVE",
     "PARKED",
 }
 
-ROUTABLE_PRIMARY_ROLES = {
+ROUTABLE_CAPABILITIES = {
     "recon_scout",
     "scout",
     "algebra",
@@ -21,6 +37,8 @@ ROUTABLE_PRIMARY_ROLES = {
     "behavioral",
     "informed_flow",
     "weather_twc",
+    "prebuild_killer",
+    "chief_falsifier",
 }
 
 SEMANTIC_FIELDS = (
@@ -164,7 +182,6 @@ def _load_candidate_from_row(
     *,
     root: Path = ROOT,
 ) -> dict[str, Any]:
-    """Load semantic metadata while keeping queue-snapshot fields authoritative."""
     candidate: dict[str, Any] = {}
 
     inline = row.get("routing_metadata")
@@ -183,11 +200,8 @@ def _load_candidate_from_row(
                 if isinstance(inline, dict):
                     candidate.update(inline)
         except (OSError, ValueError, json.JSONDecodeError):
-            # Queue rows remain usable for explicit inline/test metadata. A
-            # missing/unsafe source never broadens routing.
             pass
 
-    # The already-built queue is the eligibility/status snapshot for this run.
     for key in (
         "candidate_id",
         "phase",
@@ -204,7 +218,7 @@ def _load_candidate_from_row(
 
 
 def route_candidate(candidate: dict[str, Any]) -> list[dict[str, Any]]:
-    """Return deterministic specialist routes derived only from candidate semantics."""
+    """Return deterministic capability routes derived only from candidate semantics."""
     candidate_id = str(candidate.get("candidate_id") or "")
     status = str(candidate.get("queue_status") or "").upper()
     if not candidate_id or status in TERMINAL_OR_INACTIVE_QUEUE_STATES:
@@ -213,13 +227,12 @@ def route_candidate(candidate: dict[str, Any]) -> list[dict[str, Any]]:
     lane = str(candidate.get("lane") or "").upper()
     core_text = _field_text(candidate, SEMANTIC_FIELDS)
     check_text = _field_text(candidate, CHECK_FIELDS)
-
     reasons: dict[str, set[str]] = {}
 
-    def add(role: str, reason: str) -> None:
-        if role not in ROUTABLE_PRIMARY_ROLES:
+    def add(capability: str, reason: str) -> None:
+        if capability not in ROUTABLE_CAPABILITIES:
             return
-        reasons.setdefault(role, set()).add(reason)
+        reasons.setdefault(capability, set()).add(reason)
 
     if lane == "WEATHER":
         add("weather_twc", "lane=WEATHER")
@@ -239,40 +252,37 @@ def route_candidate(candidate: dict[str, Any]) -> list[dict[str, Any]]:
 
     if _contains_any(core_text, WEATHER_TERMS):
         add("weather_twc", "weather/TWC/KWI semantics")
-
     if _contains_any(core_text + " " + check_text, SETTLEMENT_TERMS):
         add("settlement", "settlement/source/finality/revision semantics")
-
     if _contains_any(core_text, ALGEBRA_TERMS):
         add("algebra", "statewise payoff/equivalence semantics")
-
     if _contains_any(core_text, MICROSTRUCTURE_TERMS):
         add("microstructure", "executable market/fill/hedge economics required")
-
     if _contains_any(core_text, BEHAVIORAL_TERMS):
         add("behavioral", "behavioral mechanism semantics")
-
     if _contains_any(core_text, INFORMED_FLOW_TERMS):
         add("informed_flow", "informed-flow mechanism semantics")
-
-    # Discovery workers are deliberately opt-in. Merely being DISCOVERED does
-    # not route a specialist candidate back to Scout/Recon.
     if _contains_any(core_text, DISCOVERY_TERMS):
         add("scout", "unresolved step is explicit discovery")
         add("recon_scout", "unresolved step is explicit recon/discovery")
 
+    # E007: every active candidate gets the cheap adversarial pass. Only
+    # serious survivor phases/statuses additionally receive deep falsification.
+    add("prebuild_killer", "E007 cheap pre-build falsification required")
+    if ARCH.red_team_mode(candidate) == "DEEP_FALSIFICATION":
+        add("chief_falsifier", "E007 serious survivor requires deep falsification")
+
     return [
         {
             "candidate_id": candidate_id,
-            "role": role,
-            "reasons": sorted(role_reasons),
+            "capability": capability,
+            "reasons": sorted(capability_reasons),
         }
-        for role, role_reasons in sorted(reasons.items())
+        for capability, capability_reasons in sorted(reasons.items())
     ]
 
 
 def _deduplicated_rows(rows: list[Any]) -> list[dict[str, Any]]:
-    """Choose one deterministic representation per candidate_id."""
     selected: dict[str, tuple[str, dict[str, Any]]] = {}
     for row in rows:
         if not isinstance(row, dict):
@@ -293,28 +303,46 @@ def _deduplicated_rows(rows: list[Any]) -> list[dict[str, Any]]:
     return [selected[candidate_id][1] for candidate_id in sorted(selected)]
 
 
+def _capability_bucket(packet: dict[str, Any], capability: str) -> dict[str, Any]:
+    work = packet.get("capability_work")
+    if not isinstance(work, dict):
+        work = {}
+    bucket = work.get(capability)
+    if not isinstance(bucket, dict):
+        bucket = {}
+    work[capability] = bucket
+    packet["capability_work"] = work
+    return bucket
+
+
 def hydrate_candidate_routes(
     run_dir: Path,
     candidate_queue: dict[str, Any] | None,
     *,
     root: Path = ROOT,
 ) -> list[dict[str, Any]]:
-    """Attach eligible candidate IDs to relevant primary packets, auditably."""
+    """Attach eligible candidate IDs to relevant domain/capability packets."""
     if not candidate_queue:
         return []
     rows = candidate_queue.get("queue")
     if not isinstance(rows, list):
         return []
 
+    available = {
+        path.stem
+        for path in run_dir.glob("*.json")
+        if not path.name.startswith("_")
+    }
     assignments: list[dict[str, Any]] = []
-    ordered_rows = _deduplicated_rows(rows)
 
-    for row in ordered_rows:
+    for row in _deduplicated_rows(rows):
         candidate = _load_candidate_from_row(row, root=root)
-        routes = route_candidate(candidate)
-        for route in routes:
-            role = str(route["role"])
-            packet_path = run_dir / f"{role}.json"
+        for route in route_candidate(candidate):
+            capability = str(route["capability"])
+            packet_role = ARCH.resolve_packet_role(capability, available)
+            if not packet_role:
+                continue
+            packet_path = run_dir / f"{packet_role}.json"
             if not packet_path.exists():
                 continue
 
@@ -323,27 +351,52 @@ def hydrate_candidate_routes(
                 continue
 
             candidate_id = str(route["candidate_id"])
-            ids = {
-                str(value)
-                for value in packet.get("candidate_ids", [])
-                if value
-            }
+            ids = {str(value) for value in packet.get("candidate_ids", []) if value}
             ids.add(candidate_id)
             packet["candidate_ids"] = sorted(ids)
 
-            audit = packet.get("candidate_routing")
+            bucket = _capability_bucket(packet, capability)
+            capability_ids = {str(value) for value in bucket.get("candidate_ids", []) if value}
+            capability_ids.add(candidate_id)
+            bucket["candidate_ids"] = sorted(capability_ids)
+
+            audit = bucket.get("candidate_routing")
             if not isinstance(audit, list):
                 audit = []
             audit = [
-                item
-                for item in audit
-                if not (
-                    isinstance(item, dict)
-                    and str(item.get("candidate_id")) == candidate_id
-                )
+                item for item in audit
+                if not (isinstance(item, dict) and str(item.get("candidate_id")) == candidate_id)
             ]
             audit.append({
                 "candidate_id": candidate_id,
+                "capability": capability,
+                "reasons": list(route["reasons"]),
+                "phase": candidate.get("phase"),
+                "queue_status": candidate.get("queue_status"),
+                "source_ref": row.get("source_ref"),
+                "open_question": candidate.get("open_question"),
+                "next_decisive_test": candidate.get("next_decisive_test"),
+            })
+            bucket["candidate_routing"] = sorted(
+                audit,
+                key=lambda item: str(item.get("candidate_id") or ""),
+            )
+
+            top_audit = packet.get("candidate_routing")
+            if not isinstance(top_audit, list):
+                top_audit = []
+            top_audit = [
+                item for item in top_audit
+                if not (
+                    isinstance(item, dict)
+                    and str(item.get("candidate_id")) == candidate_id
+                    and str(item.get("capability")) == capability
+                )
+            ]
+            top_audit.append({
+                "candidate_id": candidate_id,
+                "capability": capability,
+                "domain_role": packet_role,
                 "reasons": list(route["reasons"]),
                 "phase": candidate.get("phase"),
                 "queue_status": candidate.get("queue_status"),
@@ -352,9 +405,22 @@ def hydrate_candidate_routes(
                 "next_decisive_test": candidate.get("next_decisive_test"),
             })
             packet["candidate_routing"] = sorted(
-                audit,
-                key=lambda item: str(item.get("candidate_id") or ""),
+                top_audit,
+                key=lambda item: (
+                    str(item.get("candidate_id") or ""),
+                    str(item.get("capability") or ""),
+                ),
             )
+
+            if packet_role == "red_team_pentest":
+                modes = packet.get("red_team_modes")
+                if not isinstance(modes, dict):
+                    modes = {}
+                current = modes.get(candidate_id)
+                proposed = ARCH.red_team_mode(candidate)
+                if current != "DEEP_FALSIFICATION" or proposed == "DEEP_FALSIFICATION":
+                    modes[candidate_id] = proposed
+                packet["red_team_modes"] = modes
 
             tmp = packet_path.with_suffix(packet_path.suffix + ".tmp")
             tmp.write_text(
@@ -365,7 +431,8 @@ def hydrate_candidate_routes(
 
             assignments.append({
                 "candidate_id": candidate_id,
-                "role": role,
+                "role": packet_role,
+                "capability": capability,
                 "reasons": list(route["reasons"]),
                 "phase": candidate.get("phase"),
                 "queue_status": candidate.get("queue_status"),
@@ -373,5 +440,9 @@ def hydrate_candidate_routes(
 
     return sorted(
         assignments,
-        key=lambda item: (str(item["candidate_id"]), str(item["role"])),
+        key=lambda item: (
+            str(item["candidate_id"]),
+            str(item["role"]),
+            str(item["capability"]),
+        ),
     )
