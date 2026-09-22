@@ -132,6 +132,11 @@ class Task(BaseModel):
             if len(command) < 3:
                 raise ValueError("pytest command incomplete")
 
+            if command[0] != ".venv/bin/python":
+                raise ValueError(
+                    "pytest must use project virtualenv python"
+                )
+
             if command[1:3] != ["-m", "pytest"]:
                 raise ValueError(
                     "pytest must run through python -m pytest"
