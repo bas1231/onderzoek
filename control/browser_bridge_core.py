@@ -154,6 +154,19 @@ class BridgeEnvelope(BaseModel):
         return value
 
 
+# E410:
+# browser_bridge.py executes this module source in wrapper globals.
+# With ``from __future__ import annotations`` Pydantic cannot always
+# resolve FileWrite from that synthetic module namespace automatically.
+# Rebuild explicitly while both referenced models are available.
+BridgeEnvelope.model_rebuild(
+    _types_namespace={
+        "FileWrite": FileWrite,
+        "Task": Task,
+    }
+)
+
+
 def git(*args: str, check: bool = True):
     return subprocess.run(
         ["git", *args],
