@@ -34,11 +34,16 @@ def test_market_algebra_lane_routes_to_algebra_without_keyword_fallback():
     }
 
     routes = router.route_candidate(candidate)
+    by_capability = {item["capability"]: item for item in routes}
 
-    assert routes == [
-        {
-            "candidate_id": "MARKET-ALGEBRA-TAXONOMY-TEST",
-            "role": "algebra",
-            "reasons": ["lane=MARKET_ALGEBRA"],
-        }
-    ]
+    assert by_capability["algebra"] == {
+        "candidate_id": "MARKET-ALGEBRA-TAXONOMY-TEST",
+        "capability": "algebra",
+        "reasons": ["lane=MARKET_ALGEBRA"],
+    }
+    assert by_capability["prebuild_killer"] == {
+        "candidate_id": "MARKET-ALGEBRA-TAXONOMY-TEST",
+        "capability": "prebuild_killer",
+        "reasons": ["E007 cheap pre-build falsification required"],
+    }
+    assert set(by_capability) == {"algebra", "prebuild_killer"}

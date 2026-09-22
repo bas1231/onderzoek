@@ -2,10 +2,26 @@ from __future__ import annotations
 
 from pathlib import Path
 from typing import Any
+import importlib.util
 import json
+import sys
 
 
 ROOT = Path.cwd()
+
+
+def _load_architecture():
+    path = ROOT / "control/hourly/research_os_architecture.py"
+    spec = importlib.util.spec_from_file_location("research_os_architecture_hydrator", path)
+    if spec is None or spec.loader is None:
+        raise ImportError(path)
+    mod = importlib.util.module_from_spec(spec)
+    sys.modules[spec.name] = mod
+    spec.loader.exec_module(mod)
+    return mod
+
+
+ARCH = _load_architecture()
 
 
 def load_json(path: Path) -> Any:
@@ -21,8 +37,8 @@ def save_json(path: Path, obj: Any) -> None:
     tmp.replace(path)
 
 
-def evidence_ref(item: dict[str, Any]) -> dict[str, Any]:
-    return {
+def evidence_ref(item: dict[str, Any], capability: str | None = None) -> dict[str, Any]:
+    out = {
         "source_id": item.get("source_id"),
         "document_sha256": item.get("document_sha256"),
         "retrieved_at": item.get("retrieved_at"),
@@ -30,6 +46,123 @@ def evidence_ref(item: dict[str, Any]) -> dict[str, Any]:
         "term": item.get("term"),
         "snippet": item.get("snippet"),
     }
+    if capability:
+        out["capability"] = capability
+    return out
+
+
+def available_roles(packet_dir: Path) -> set[str]:
+    return {
+        path.stem
+        for path in packet_dir.glob("*.json")
+        if not path.name.startswith("_")
+    }
+
+
+def _resolve_packet(packet_dir: Path, capability: str) -> tuple[str, Path] | None:
+    role = ARCH.resolve_packet_role(capability, available_roles(packet_dir))
+    if not role:
+        return None
+    path = packet_dir / f"{role}.json"
+    return (role, path) if path.exists() else None
+
+
+def _dedup_dicts(items: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    selected: dict[str, dict[str, Any]] = {}
+    for item in items:
+        key = json.dumps(item, sort_keys=True, separators=(",", ":"), ensure_ascii=False, default=str)
+        selected[key] = item
+    return [selected[key] for key in sorted(selected)]
+
+
+def _dedup_candidate_items(items: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    selected: dict[str, dict[str, Any]] = {}
+    for item in items:
+        cid = str(item.get("candidate_key") or item.get("candidate_id") or item.get("finding_id") or "")
+        key = cid or json.dumps(item, sort_keys=True, separators=(",", ":"), ensure_ascii=False, default=str)
+        selected.setdefault(key, item)
+    return [selected[key] for key in sorted(selected)]
+
+
+def _capability_bucket(packet: dict[str, Any], capability: str) -> dict[str, Any]:
+    work = packet.get("capability_work")
+    if not isinstance(work, dict):
+        work = {}
+    bucket = work.get(capability)
+    if not isinstance(bucket, dict):
+        bucket = {}
+    work[capability] = bucket
+    packet["capability_work"] = work
+    return bucket
+
+
+def _mark_pending(packet: dict[str, Any]) -> None:
+    if packet.get("status") in {"PENDING", "NO_EVIDENCE", "READY"}:
+        packet["status"] = "PENDING"
+    packet.pop("orchestrator_reason", None)
+    packet.pop("orchestrator_updated_at_unix", None)
+
+
+def hydrate_capability(
+    packet: dict[str, Any],
+    capability: str,
+    routed: dict[str, Any] | None,
+    routing_path: Path,
+) -> dict[str, Any]:
+    bucket = _capability_bucket(packet, capability)
+    if not routed:
+        bucket["routed_evidence"] = []
+        bucket["coverage_gaps"] = []
+        bucket["routing_status"] = "NO_ROUTE"
+        return packet
+
+    evidence = [
+        evidence_ref(x, capability)
+        for x in routed.get("evidence", [])
+        if isinstance(x, dict)
+    ]
+    bucket["routed_evidence"] = evidence
+    bucket["coverage_gaps"] = list(routed.get("coverage_gaps", []))
+    bucket["routing_status"] = routed.get("status", "UNKNOWN")
+
+    flat = [x for x in packet.get("routed_evidence", []) if isinstance(x, dict)]
+    flat.extend(evidence)
+    packet["routed_evidence"] = _dedup_dicts(flat)
+
+    gaps = packet.get("coverage_gaps_by_capability")
+    if not isinstance(gaps, dict):
+        gaps = {}
+    gaps[capability] = list(bucket["coverage_gaps"])
+    packet["coverage_gaps_by_capability"] = gaps
+    packet["coverage_gaps"] = sorted({
+        str(gap)
+        for values in gaps.values()
+        if isinstance(values, list)
+        for gap in values
+    })
+
+    if evidence:
+        ref = str(routing_path.relative_to(ROOT))
+        refs = [str(x) for x in packet.get("input_refs", [])]
+        if ref not in refs:
+            refs.append(ref)
+        packet["input_refs"] = refs
+    _mark_pending(packet)
+
+    if packet.get("agent_id") == "discovery" and capability in {"scout", "recon_scout"}:
+        lanes = packet.get("discovery_lanes")
+        if not isinstance(lanes, dict):
+            lanes = {}
+        lane_name = "primary_scout" if capability == "scout" else "recon_scout"
+        lanes[lane_name] = {
+            "capability": capability,
+            "routed_evidence": evidence,
+            "coverage_gaps": list(bucket["coverage_gaps"]),
+            "routing_status": bucket["routing_status"],
+        }
+        packet["discovery_lanes"] = lanes
+
+    return packet
 
 
 def hydrate_packet(
@@ -37,47 +170,15 @@ def hydrate_packet(
     routed: dict[str, Any] | None,
     routing_path: Path,
 ) -> dict[str, Any]:
-
-    if not routed:
-        packet["input_refs"] = []
-        packet["routed_evidence"] = []
-        packet["coverage_gaps"] = []
-        packet["routing_status"] = "NO_ROUTE"
-        return packet
-
-    evidence = [
-        evidence_ref(x)
-        for x in routed.get("evidence", [])
-        if isinstance(x, dict)
+    """Legacy direct helper retained for historical regression tests/tools."""
+    capability = str(packet.get("agent_id") or "unknown")
+    hydrated = hydrate_capability(packet, capability, routed, routing_path)
+    # Historical callers expect evidence objects without a capability label.
+    hydrated["routed_evidence"] = [
+        {k: v for k, v in item.items() if k != "capability"}
+        for item in hydrated.get("routed_evidence", [])
     ]
-
-    packet["routed_evidence"] = evidence
-    packet["coverage_gaps"] = list(
-        routed.get("coverage_gaps", [])
-    )
-    packet["routing_status"] = routed.get(
-        "status",
-        "UNKNOWN",
-    )
-
-    # Reference provenance without inventing files per evidence item.
-    packet["input_refs"] = (
-        [str(routing_path.relative_to(ROOT))]
-        if evidence else []
-    )
-
-    # Re-evaluate states previously assigned before hydration.
-    if packet.get("status") in {
-        "PENDING",
-        "NO_EVIDENCE",
-        "READY",
-    }:
-        packet["status"] = "PENDING"
-
-    packet.pop("orchestrator_reason", None)
-    packet.pop("orchestrator_updated_at_unix", None)
-
-    return packet
+    return hydrated
 
 
 def _watch_triage_item(finding: dict[str, Any]) -> dict[str, Any]:
@@ -110,47 +211,58 @@ def apply_recon_watch_triage(
     recon_run_path: Path | None,
 ) -> dict[str, Any]:
     if recon_run_path is None or not recon_run_path.exists():
-        return {"watch_count": 0, "specialist_roles": [], "routed_items": 0}
+        return {"watch_count": 0, "domain_roles": [], "specialist_roles": [], "routed_items": 0}
 
     data = load_json(recon_run_path)
     findings = [
         x for x in data.get("findings", [])
         if isinstance(x, dict) and x.get("status") == "WATCH"
     ]
-    by_role: dict[str, dict[str, dict[str, Any]]] = {}
+    routed_items = 0
+    touched: set[str] = set()
+    routed_keys: set[tuple[str, str]] = set()
+    ref = str(recon_run_path.relative_to(ROOT))
 
     for finding in findings:
         triage = _watch_triage_item(finding)
-        stable_id = str(
-            triage.get("candidate_key")
-            or triage.get("finding_id")
-            or ""
-        )
-        for role in finding.get("falsification", {}).get("specialist_route", []):
-            role = str(role)
-            by_role.setdefault(role, {})[stable_id] = triage
+        stable_id = str(triage.get("candidate_key") or triage.get("finding_id") or "")
+        for raw_capability in finding.get("falsification", {}).get("specialist_route", []):
+            capability = str(raw_capability)
+            resolved = _resolve_packet(packet_dir, capability)
+            if not resolved:
+                continue
+            role, path = resolved
+            dedup_key = (role + ":" + capability, stable_id)
+            if dedup_key in routed_keys:
+                continue
+            routed_keys.add(dedup_key)
+            packet = load_json(path)
+            item = dict(triage)
+            item["capability"] = capability
 
-    routed_items = 0
-    ref = str(recon_run_path.relative_to(ROOT))
-    for role, triage_by_id in by_role.items():
-        path = packet_dir / (role + ".json")
-        if not path.exists():
-            continue
-        packet = load_json(path)
-        triage_items = list(triage_by_id.values())
-        packet["recon_watch_triage"] = triage_items
-        refs = list(packet.get("input_refs", []))
-        if ref not in refs:
-            refs.append(ref)
-        packet["input_refs"] = refs
-        if packet.get("status") in {"PENDING", "NO_EVIDENCE", "READY"}:
-            packet["status"] = "PENDING"
-        save_json(path, packet)
-        routed_items += len(triage_items)
+            bucket = _capability_bucket(packet, capability)
+            current = [x for x in bucket.get("recon_watch_triage", []) if isinstance(x, dict)]
+            current.append(item)
+            bucket["recon_watch_triage"] = _dedup_candidate_items(current)
 
+            top = [x for x in packet.get("recon_watch_triage", []) if isinstance(x, dict)]
+            top.append(item)
+            packet["recon_watch_triage"] = _dedup_candidate_items(top)
+
+            refs = [str(x) for x in packet.get("input_refs", [])]
+            if ref not in refs:
+                refs.append(ref)
+            packet["input_refs"] = refs
+            _mark_pending(packet)
+            save_json(path, packet)
+            routed_items += 1
+            touched.add(role)
+
+    roles = sorted(touched)
     return {
         "watch_count": len(findings),
-        "specialist_roles": sorted(by_role),
+        "domain_roles": roles,
+        "specialist_roles": roles,
         "routed_items": routed_items,
     }
 
@@ -160,52 +272,75 @@ def apply_recon_hunts(
     hunt_plan_path: Path | None,
 ) -> dict[str, Any]:
     if hunt_plan_path is None or not hunt_plan_path.exists():
-        return {"hunt_count": 0, "specialist_roles": [], "killer_candidates": []}
+        return {"hunt_count": 0, "domain_roles": [], "specialist_roles": [], "killer_candidates": []}
 
     data = load_json(hunt_plan_path)
     plans = [x for x in data.get("plans", []) if isinstance(x, dict)]
-    by_role: dict[str, list[dict[str, Any]]] = {}
+    touched: set[str] = set()
     killer_ids: list[str] = []
+    ref = str(hunt_plan_path.relative_to(ROOT))
 
     for plan in plans:
         cid = plan.get("candidate_id")
         if cid:
             killer_ids.append(str(cid))
-        for role in plan.get("specialist_route", []):
-            by_role.setdefault(str(role), []).append(plan)
+        for raw_capability in plan.get("specialist_route", []):
+            capability = str(raw_capability)
+            resolved = _resolve_packet(packet_dir, capability)
+            if not resolved:
+                continue
+            role, path = resolved
+            packet = load_json(path)
+            item = dict(plan)
+            item["capability"] = capability
 
-    for role, hunts in by_role.items():
-        path = packet_dir / (role + ".json")
-        if not path.exists():
-            continue
-        packet = load_json(path)
-        packet["recon_hunts"] = hunts
-        refs = list(packet.get("input_refs", []))
-        ref = str(hunt_plan_path.relative_to(ROOT))
-        if ref not in refs:
-            refs.append(ref)
-        packet["input_refs"] = refs
-        if packet.get("status") in {"PENDING", "NO_EVIDENCE", "READY"}:
-            packet["status"] = "PENDING"
-        save_json(path, packet)
+            bucket = _capability_bucket(packet, capability)
+            hunts = [x for x in bucket.get("recon_hunts", []) if isinstance(x, dict)]
+            hunts.append(item)
+            bucket["recon_hunts"] = _dedup_candidate_items(hunts)
 
-    killer = packet_dir / "prebuild_killer.json"
-    if killer.exists() and killer_ids:
-        packet = load_json(killer)
-        packet["candidate_ids"] = sorted(set(killer_ids))
-        packet["candidates"] = plans
-        ref = str(hunt_plan_path.relative_to(ROOT))
-        refs = list(packet.get("input_refs", []))
-        if ref not in refs:
-            refs.append(ref)
-        packet["input_refs"] = refs
-        if packet.get("status") in {"PENDING", "WAITING_FOR_DATA", "READY"}:
-            packet["status"] = "PENDING"
-        save_json(killer, packet)
+            top = [x for x in packet.get("recon_hunts", []) if isinstance(x, dict)]
+            top.append(item)
+            packet["recon_hunts"] = _dedup_candidate_items(top)
+            refs = [str(x) for x in packet.get("input_refs", [])]
+            if ref not in refs:
+                refs.append(ref)
+            packet["input_refs"] = refs
+            _mark_pending(packet)
+            save_json(path, packet)
+            touched.add(role)
 
+    if killer_ids:
+        resolved = _resolve_packet(packet_dir, "prebuild_killer")
+        if resolved:
+            role, path = resolved
+            packet = load_json(path)
+            ids = {str(x) for x in packet.get("candidate_ids", []) if x}
+            ids.update(killer_ids)
+            packet["candidate_ids"] = sorted(ids)
+            packet["candidates"] = plans
+            bucket = _capability_bucket(packet, "prebuild_killer")
+            bucket["candidate_ids"] = sorted(ids)
+            bucket["recon_hunts"] = plans
+            modes = packet.get("red_team_modes")
+            if not isinstance(modes, dict):
+                modes = {}
+            for cid in killer_ids:
+                modes[str(cid)] = "QUICK_KILL"
+            packet["red_team_modes"] = modes
+            refs = [str(x) for x in packet.get("input_refs", [])]
+            if ref not in refs:
+                refs.append(ref)
+            packet["input_refs"] = refs
+            _mark_pending(packet)
+            save_json(path, packet)
+            touched.add(role)
+
+    roles = sorted(touched)
     return {
         "hunt_count": len(plans),
-        "specialist_roles": sorted(by_role),
+        "domain_roles": roles,
+        "specialist_roles": roles,
         "killer_candidates": sorted(set(killer_ids)),
     }
 
@@ -216,35 +351,23 @@ def hydrate_run(
     hunt_plan_path: Path | None = None,
     recon_run_path: Path | None = None,
 ) -> dict[str, Any]:
-
     routing_path = routing_path.resolve()
     packet_dir = packet_dir.resolve()
-
     routing = load_json(routing_path)
-    changed = []
+    changed: set[str] = set()
+    hydrated_capabilities: list[str] = []
 
-    for packet_path in sorted(packet_dir.glob("*.json")):
-        if packet_path.name.startswith("_"):
+    for capability, routed in sorted(routing.items()):
+        resolved = _resolve_packet(packet_dir, str(capability))
+        if not resolved:
             continue
-
+        role, packet_path = resolved
         packet = load_json(packet_path)
-        role = str(packet.get("agent_id", ""))
-
-        # Only routed specialist roles are hydrated here.
-        if role not in routing:
-            continue
-
-        packet = hydrate_packet(
-            packet,
-            routing.get(role),
-            routing_path,
-        )
-
+        packet = hydrate_capability(packet, str(capability), routed, routing_path)
         save_json(packet_path, packet)
-        changed.append(role)
+        changed.add(role)
+        hydrated_capabilities.append(str(capability))
 
-    # WATCH is triage-only and never enters the killer/proof chain. Infer the
-    # Recon run from the packet run-id when hourly_cycle does not pass it.
     if recon_run_path is None:
         inferred = ROOT / "knowledge/runs/recon" / (packet_dir.name + ".json")
         recon_run_path = inferred if inferred.exists() else None
@@ -254,23 +377,19 @@ def hydrate_run(
     return {
         "routing": str(routing_path.relative_to(ROOT)),
         "packet_dir": str(packet_dir.relative_to(ROOT)),
-        "hydrated_roles": changed,
+        "hydrated_roles": sorted(changed),
+        "hydrated_capabilities": sorted(set(hydrated_capabilities)),
         "recon_watch_triage": watch_triage,
         "recon_hunts": hunts,
+        "architecture": "E007_SIX_DOMAIN",
     }
 
 
 if __name__ == "__main__":
-    import sys
+    import sys as _sys
 
-    if len(sys.argv) != 3:
-        raise SystemExit(
-            "usage: packet_hydrator.py ROUTING_JSON PACKET_DIR"
-        )
+    if len(_sys.argv) != 3:
+        raise SystemExit("usage: packet_hydrator.py ROUTING_JSON PACKET_DIR")
 
-    result = hydrate_run(
-        Path(sys.argv[1]),
-        Path(sys.argv[2]),
-    )
-
+    result = hydrate_run(Path(_sys.argv[1]), Path(_sys.argv[2]))
     print(json.dumps(result, indent=2, sort_keys=True))

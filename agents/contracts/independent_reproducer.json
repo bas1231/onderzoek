@@ -1,12 +1,24 @@
 {
   "agent": "independent_reproducer",
+  "authority": "VALIDATION_ONLY",
+  "transient": true,
+  "blind": true,
   "gate": "independent_confirmation_required",
-  "input": "surviving evidence packages",
-  "live_trading": false,
-  "output": [
-    "reproduction_status",
-    "discrepancies"
+  "input": "minimum preregistered hypothesis/test interface for serious survivors; originating conclusion withheld",
+  "requirements": [
+    "Do not receive the originating worker conclusion",
+    "Use independent evidence/recomputation where possible",
+    "Report discrepancies even when they weaken the candidate",
+    "No promotion authority"
   ],
+  "output": [
+    "validation_results",
+    "reproduction_status",
+    "discrepancies",
+    "evidence_refs"
+  ],
+  "live_trading": false,
   "paid_actions": false,
-  "wallet_actions": false
+  "wallet_actions": false,
+  "openai_api": false
 }

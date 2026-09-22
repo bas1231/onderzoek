@@ -27,11 +27,17 @@ def base_response(run_id="hourly-test"):
         "run_id": run_id,
         "role_results": [
             {
-                "agent_id": "scout",
+                "agent_id": "discovery",
                 "status": "COMPLETED",
                 "finding": "No decisive new evidence.",
                 "evidence_refs": [],
                 "candidate_ids": [],
+                "capability_results": {
+                    "scout": {"finding": "no decisive evidence"},
+                    "recon_scout": {"finding": "no decisive evidence"},
+                },
+                "validation_results": [],
+                "failure_pattern_ids": [],
                 "next_decisive_question": None,
                 "local_task_required": False,
                 "local_task_spec": None,
@@ -54,7 +60,6 @@ def test_wrong_schema_rejected():
     mod = load_module()
     x = base_response()
     x["schema"] = "OTHER"
-
     with pytest.raises(mod.ValidationError, match="schema"):
         mod.validate_response(x, "hourly-test")
 
@@ -62,7 +67,6 @@ def test_wrong_schema_rejected():
 def test_wrong_run_rejected():
     mod = load_module()
     x = base_response()
-
     with pytest.raises(mod.ValidationError):
         mod.validate_response(x, "other-run")
 
@@ -71,7 +75,6 @@ def test_edge_claim_rejected():
     mod = load_module()
     x = base_response()
     x["economic_conclusion"] = "PROVEN_EDGE"
-
     with pytest.raises(mod.ValidationError):
         mod.validate_response(x, "hourly-test")
 
@@ -80,7 +83,6 @@ def test_paid_action_rejected():
     mod = load_module()
     x = base_response()
     x["paid_actions"] = True
-
     with pytest.raises(mod.ValidationError):
         mod.validate_response(x, "hourly-test")
 
@@ -93,7 +95,6 @@ def test_direct_command_in_role_task_rejected():
         "question": "test something",
         "command": "rm -rf /",
     }
-
     with pytest.raises(mod.ValidationError):
         mod.validate_response(x, "hourly-test")
 
@@ -102,23 +103,19 @@ def test_direct_command_in_local_tasks_rejected():
     mod = load_module()
     x = base_response()
     x["local_tasks"] = [
-        {
-            "task_id": "x",
-            "command": ["python", "x.py"],
-        }
+        {"task_id": "x", "command": ["python", "x.py"]}
     ]
-
     with pytest.raises(mod.ValidationError):
         mod.validate_response(x, "hourly-test")
 
 
-def test_unknown_role_rejected():
+def test_unknown_or_legacy_permanent_role_rejected():
     mod = load_module()
-    x = base_response()
-    x["role_results"][0]["agent_id"] = "fake_agent"
-
-    with pytest.raises(mod.ValidationError):
-        mod.validate_response(x, "hourly-test")
+    for invalid in ("fake_agent", "scout", "weather_twc", "prebuild_killer"):
+        x = base_response()
+        x["role_results"][0]["agent_id"] = invalid
+        with pytest.raises(mod.ValidationError):
+            mod.validate_response(x, "hourly-test")
 
 
 def test_invalid_candidate_state_rejected():
@@ -131,13 +128,19 @@ def test_invalid_candidate_state_rejected():
             "reason": "bad",
         }
     ]
+    with pytest.raises(mod.ValidationError):
+        mod.validate_response(x, "hourly-test")
 
+
+def test_invalid_failure_pattern_rejected():
+    mod = load_module()
+    x = base_response()
+    x["role_results"][0]["failure_pattern_ids"] = ["FP-999"]
     with pytest.raises(mod.ValidationError):
         mod.validate_response(x, "hourly-test")
 
 
 def test_path_traversal_candidate_rejected():
     mod = load_module()
-
     with pytest.raises(mod.ValidationError):
         mod.candidate_path("../../etc/passwd")

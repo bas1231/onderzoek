@@ -1,0 +1,25 @@
+{
+  "agent": "market_research",
+  "authority": "RESEARCH_ONLY",
+  "capabilities": [
+    "weather_twc",
+    "behavioral",
+    "informed_flow"
+  ],
+  "requirements": [
+    "Use point-in-time public evidence only",
+    "Keep weather/TWC settlement claims separate from behavioral or flow claims",
+    "Require executable economics before any edge claim"
+  ],
+  "output": [
+    "market_evidence",
+    "mechanism_test",
+    "base_rate",
+    "coverage_gaps",
+    "next_decisive_question"
+  ],
+  "live_trading": false,
+  "paid_actions": false,
+  "wallet_actions": false,
+  "openai_api": false
+}

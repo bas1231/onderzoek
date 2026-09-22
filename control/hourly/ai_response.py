@@ -3,9 +3,12 @@ from __future__ import annotations
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
+import importlib.util
 import json
+import sys
 
 
+MODULE_ROOT = Path(__file__).resolve().parents[2]
 ROOT = Path.cwd()
 RUNS = ROOT / "knowledge/runs"
 PACKETS = RUNS / "agent_packets"
@@ -35,19 +38,16 @@ QUEUE_STATES = {
 }
 
 ALLOWED_ROLE_IDS = {
-    "recon_scout",
-    "scout",
+    "discovery",
+    "market_research",
+    "mechanics",
     "algebra",
-    "settlement",
-    "microstructure",
-    "behavioral",
-    "informed_flow",
-    "weather_twc",
-    "prebuild_killer",
-    "chief_falsifier",
+    "red_team_pentest",
     "independent_reproducer",
     "research_director",
 }
+
+FAILURE_PATTERN_IDS = {f"FP-{index:03d}" for index in range(1, 37)}
 
 
 class ValidationError(ValueError):
@@ -80,44 +80,46 @@ def validate_role_result(item: Any) -> None:
     require(isinstance(item, dict), "role result must be object")
     aid = item.get("agent_id")
     require(aid in ALLOWED_ROLE_IDS, f"invalid agent_id: {aid}")
-    require(
-        item.get("status") in ROLE_STATES,
-        f"invalid role status: {item.get('status')}",
-    )
+    require(item.get("status") in ROLE_STATES, f"invalid role status: {item.get('status')}")
 
     finding = item.get("finding")
-    require(
-        finding is None or isinstance(finding, str),
-        "finding must be string|null",
-    )
+    require(finding is None or isinstance(finding, str), "finding must be string|null")
 
     refs = item.get("evidence_refs", [])
     require(isinstance(refs, list), "evidence_refs must be list")
-    require(
-        all(isinstance(value, str) for value in refs),
-        "evidence_refs must contain strings",
-    )
+    require(all(isinstance(value, str) for value in refs), "evidence_refs must contain strings")
 
     candidate_ids = item.get("candidate_ids", [])
     require(isinstance(candidate_ids, list), "candidate_ids must be list")
-    require(
-        all(isinstance(value, str) for value in candidate_ids),
-        "candidate_ids must contain strings",
-    )
+    require(all(isinstance(value, str) for value in candidate_ids), "candidate_ids must contain strings")
+
+    capability_results = item.get("capability_results", {})
+    require(isinstance(capability_results, dict), "capability_results must be object")
+
+    validation_results = item.get("validation_results", [])
+    require(isinstance(validation_results, list), "validation_results must be list")
+    for result in validation_results:
+        require(isinstance(result, dict), "validation result must be object")
+        cid = result.get("candidate_id")
+        require(cid is None or isinstance(cid, str), "validation candidate_id must be string|null")
+        status = str(result.get("status") or "").upper()
+        require(status in {"PASS", "FAIL", "INCONCLUSIVE", "WAITING"}, f"invalid validation status: {status}")
+        mode = result.get("mode") or result.get("stage")
+        if mode is not None:
+            require(str(mode).upper() in {"QUICK_KILL", "DEEP_FALSIFICATION", "REPRODUCTION"}, f"invalid validation mode: {mode}")
+
+    failure_ids = item.get("failure_pattern_ids", [])
+    require(isinstance(failure_ids, list), "failure_pattern_ids must be list")
+    require(all(value in FAILURE_PATTERN_IDS for value in failure_ids), "invalid failure_pattern_id")
 
     local_required = item.get("local_task_required", False)
     require(isinstance(local_required, bool), "local_task_required must be bool")
     spec = item.get("local_task_spec")
-
     if local_required:
         require(isinstance(spec, dict), "local task requires local_task_spec object")
         forbidden = {"command", "shell", "argv", "exec", "executable"}
         overlap = forbidden.intersection(spec.keys())
-        require(
-            not overlap,
-            "local_task_spec contains executable fields: "
-            + ",".join(sorted(overlap)),
-        )
+        require(not overlap, "local_task_spec contains executable fields: " + ",".join(sorted(overlap)))
 
 
 def validate_candidate_decision(item: Any) -> None:
@@ -127,26 +129,16 @@ def validate_candidate_decision(item: Any) -> None:
     status = item.get("queue_status")
     require(status in QUEUE_STATES, f"invalid queue_status: {status}")
     reason = item.get("reason")
-    require(
-        isinstance(reason, str) and bool(reason.strip()),
-        "candidate reason required",
-    )
+    require(isinstance(reason, str) and bool(reason.strip()), "candidate reason required")
+    resurrection = item.get("resurrection_condition")
+    require(resurrection is None or isinstance(resurrection, str), "resurrection_condition must be string|null")
 
 
-def validate_response(
-    response: Any,
-    expected_run_id: str,
-) -> dict[str, Any]:
+def validate_response(response: Any, expected_run_id: str) -> dict[str, Any]:
     require(isinstance(response, dict), "response must be object")
-    require(
-        response.get("schema") == "PVA_AI_RESPONSE_V1",
-        "unexpected response schema",
-    )
+    require(response.get("schema") == "PVA_AI_RESPONSE_V1", "unexpected response schema")
     require(response.get("run_id") == expected_run_id, "run_id mismatch")
-    require(
-        response.get("economic_conclusion") == "NO_PROVEN_EDGE",
-        "economic_conclusion must remain NO_PROVEN_EDGE",
-    )
+    require(response.get("economic_conclusion") == "NO_PROVEN_EDGE", "economic_conclusion must remain NO_PROVEN_EDGE")
 
     role_results = response.get("role_results")
     require(isinstance(role_results, list), "role_results required")
@@ -173,34 +165,32 @@ def validate_response(
     for task in local_tasks:
         require(isinstance(task, dict), "local task must be object")
         overlap = forbidden.intersection(task.keys())
-        require(
-            not overlap,
-            "local_tasks contains executable fields: "
-            + ",".join(sorted(overlap)),
-        )
+        require(not overlap, "local_tasks contains executable fields: " + ",".join(sorted(overlap)))
 
-    for key in {
-        "live_trading",
-        "paid_actions",
-        "wallet_actions",
-        "openai_api",
-    }:
-        require(
-            response.get(key) not in {True, "true", "TRUE", 1},
-            f"forbidden action requested: {key}",
-        )
+    for key in {"live_trading", "paid_actions", "wallet_actions", "openai_api"}:
+        require(response.get(key) not in {True, "true", "TRUE", 1}, f"forbidden action requested: {key}")
 
     return response
 
 
 def candidate_path(candidate_id: str) -> Path:
-    require(
-        "/" not in candidate_id
-        and "\\" not in candidate_id
-        and ".." not in candidate_id,
-        "unsafe candidate_id",
-    )
+    require("/" not in candidate_id and "\\" not in candidate_id and ".." not in candidate_id, "unsafe candidate_id")
     return CANDIDATES / f"{candidate_id}.json"
+
+
+def _record_graphs(run_id: str, response: dict[str, Any]) -> dict[str, Any]:
+    path = MODULE_ROOT / "control/hourly/evidence_failure_graph.py"
+    spec = importlib.util.spec_from_file_location("evidence_failure_graph_ai_response", path)
+    if spec is None or spec.loader is None:
+        raise ImportError(path)
+    mod = importlib.util.module_from_spec(spec)
+    sys.modules[spec.name] = mod
+    spec.loader.exec_module(mod)
+    mod.ROOT = ROOT
+    mod.STORE = ROOT / "knowledge/research_os"
+    mod.EVIDENCE_PATH = mod.STORE / "evidence_graph.json"
+    mod.FAILURE_PATH = mod.STORE / "failure_graph.json"
+    return mod.record_ai_response(run_id, response)
 
 
 def apply_response(
@@ -221,10 +211,7 @@ def apply_response(
         path = packet_dir / f"{aid}.json"
         require(path.exists(), f"packet missing: {aid}")
         packet = load_json(path)
-        require(
-            packet.get("run_id") == expected_run_id,
-            f"packet run mismatch: {aid}",
-        )
+        require(packet.get("run_id") == expected_run_id, f"packet run mismatch: {aid}")
 
         updated = dict(packet)
         updated["status"] = result["status"]
@@ -232,14 +219,21 @@ def apply_response(
             "finding": result.get("finding"),
             "evidence_refs": result.get("evidence_refs", []),
             "candidate_ids": result.get("candidate_ids", []),
+            "capability_results": result.get("capability_results", {}),
+            "validation_results": result.get("validation_results", []),
+            "failure_pattern_ids": result.get("failure_pattern_ids", []),
             "next_decisive_question": result.get("next_decisive_question"),
             "local_task_required": result.get("local_task_required", False),
             "local_task_spec": result.get("local_task_spec"),
             "applied_at": now_iso(),
         }
+        updated["capability_results"] = result.get("capability_results", {})
+        updated["validation_results"] = result.get("validation_results", [])
+        updated["failure_pattern_ids"] = result.get("failure_pattern_ids", [])
         updated["live_trading"] = False
         updated["paid_actions"] = False
         updated["wallet_actions"] = False
+        updated["openai_api"] = False
         packet_updates.append((path, updated))
 
     for decision in validated["candidate_decisions"]:
@@ -252,6 +246,8 @@ def apply_response(
         updated["queue_reason"] = decision["reason"]
         if "next_decisive_test" in decision:
             updated["next_decisive_test"] = decision.get("next_decisive_test")
+        if "resurrection_condition" in decision:
+            updated["resurrection_condition"] = decision.get("resurrection_condition")
         updated["updated_at"] = now_iso()
         updated["live_trading"] = False
         updated["paid_actions"] = False
@@ -260,13 +256,12 @@ def apply_response(
 
     receipt = {
         "schema": "PVA_AI_RESPONSE_RECEIPT_V1",
+        "architecture": "E007_SIX_DOMAIN",
         "run_id": expected_run_id,
         "validated_at": now_iso(),
         "write": write,
         "packet_updates": [str(path.relative_to(ROOT)) for path, _ in packet_updates],
-        "candidate_updates": [
-            str(path.relative_to(ROOT)) for path, _ in candidate_updates
-        ],
+        "candidate_updates": [str(path.relative_to(ROOT)) for path, _ in candidate_updates],
         "local_task_requests": validated.get("local_tasks", []),
         "guardrails": {
             "live_trading": False,
@@ -281,6 +276,7 @@ def apply_response(
             save_json(path, obj)
         for path, obj in candidate_updates:
             save_json(path, obj)
+        receipt["graph_updates"] = _record_graphs(expected_run_id, validated)
         receipt_path = RUNS / f"{expected_run_id}-ai-response-receipt.json"
         save_json(receipt_path, receipt)
         receipt["receipt_path"] = str(receipt_path.relative_to(ROOT))
