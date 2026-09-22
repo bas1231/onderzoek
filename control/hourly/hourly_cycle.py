@@ -70,11 +70,19 @@ def main() -> int:
     memory_data, memory_path = memory.build(run['run_id'])
 
     # PVA AGENT CONTROL PLANE V1
+    # Snapshot the canonical non-terminal candidate queue before packet
+    # orchestration. The exact same snapshot is used for candidate→worker
+    # routing and the later Director handoff, preventing queue/worker drift.
+    queue_data = candidate_queue.build_queue(
+        write_candidates=True,
+    )
+
     # Routing evidence and Recon triage are attached to specialist packets.
-    # The orchestrator assigns READY/NO_EVIDENCE/etc. ChatGPT remains the
-    # reasoning layer, but READY work is now compiled into the dedicated
-    # AI-only work bundle consumed by the browser bridge. This is not an
-    # executor task and cannot authorize live/paid/wallet actions.
+    # The orchestrator then attaches only semantically relevant candidates and
+    # assigns READY/NO_EVIDENCE/etc. ChatGPT remains the reasoning layer, but
+    # READY work is compiled into the dedicated AI-only work bundle consumed by
+    # the browser bridge. This is not an executor task and cannot authorize
+    # live/paid/wallet actions.
     packet_dir = R / 'knowledge/runs/agent_packets' / run['run_id']
 
     hunt_ref = recon_data.get('hunt_plans', {}).get('ref')
@@ -87,10 +95,7 @@ def main() -> int:
 
     orchestration_data = orchestrator.orchestrate(
         packet_dir,
-    )
-
-    queue_data = candidate_queue.build_queue(
-        write_candidates=True,
+        candidate_queue=queue_data,
     )
 
     proof_review_path = candidate_queue.write_proof_review(
@@ -158,6 +163,9 @@ def main() -> int:
         'validation_pipeline': orchestration_data.get(
             'validation_pipeline', {}
         ),
+        'candidate_routing': orchestration_data.get(
+            'candidate_routing', []
+        ),
         'queue_count': len(queue_data.get('queue', [])),
         'default_economic_conclusion': 'NO_PROVEN_EDGE',
         'live_trading': False,
@@ -215,6 +223,11 @@ def main() -> int:
                 'Persistent candidate queue: '
                 + str(len(queue_data.get('queue', [])))
                 + ' nonterminal candidates'
+                + chr(10)
+            )
+            handle.write(
+                'Candidate→worker assignments: '
+                + str(len(orchestration_data.get('candidate_routing', [])))
                 + chr(10)
             )
             handle.write(
