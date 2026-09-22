@@ -31,6 +31,34 @@ def has_string_or_object_items(prop: dict) -> bool:
     return {"string", "object"}.issubset(types)
 
 
+def evidence_provenance_guard_present(node_schema: dict) -> bool:
+    for rule in node_schema.get("allOf") or []:
+        if not isinstance(rule, dict):
+            continue
+        if_block = rule.get("if") or {}
+        type_const = (
+            if_block.get("properties", {})
+            .get("type", {})
+            .get("const")
+        )
+        then = rule.get("then") or {}
+        required = set(then.get("required") or [])
+        any_of = then.get("anyOf") or []
+        required_alternatives = {
+            tuple(option.get("required") or [])
+            for option in any_of
+            if isinstance(option, dict)
+        }
+        if (
+            type_const == "evidence"
+            and "point_in_time_status" in required
+            and ("source_ref",) in required_alternatives
+            and ("content_hash",) in required_alternatives
+        ):
+            return True
+    return False
+
+
 def main() -> int:
     errors: list[str] = []
     canonical = load("canonical_candidate.schema.json")
@@ -113,6 +141,8 @@ def main() -> int:
     for key in ("id", "type", "status", "created_at", "producer"):
         if key not in set(node_schema.get("required") or []):
             errors.append(f"GRAPH_NODE_REQUIRED_FIELD_MISSING:{key}")
+    if not evidence_provenance_guard_present(node_schema):
+        errors.append("GRAPH_EVIDENCE_PROVENANCE_GUARD_MISSING")
     for key in ("from", "to", "type", "created_at", "producer"):
         if key not in set(edge_schema.get("required") or []):
             errors.append(f"GRAPH_EDGE_REQUIRED_FIELD_MISSING:{key}")
