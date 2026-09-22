@@ -6,12 +6,12 @@
   "required": ["task_id", "worker_domain", "objective", "state", "task_shape", "inputs", "constraints", "expected_output", "scheduling", "proposed_action"],
   "properties": {
     "task_id": {"type": "string", "minLength": 1},
-    "candidate_id": {"type": ["string", "null"]},
-    "legacy_role": {"type": ["string", "null"]},
-    "legacy_status": {"type": ["string", "null"]},
+    "candidate_id": {"anyOf": [{"type": "string", "minLength": 1}, {"type": "null"}]},
+    "legacy_role": {"anyOf": [{"type": "string", "minLength": 1}, {"type": "null"}]},
+    "legacy_status": {"anyOf": [{"type": "string", "minLength": 1}, {"type": "null"}]},
     "worker_domain": {"enum": ["discovery", "market_research", "mechanics", "algebra", "red_team", "research_director", "independent_reproducer"]},
     "objective": {"type": "string", "minLength": 1},
-    "decisive_question": {"type": ["string", "null"]},
+    "decisive_question": {"anyOf": [{"type": "string", "minLength": 1}, {"type": "null"}]},
     "state": {"enum": ["READY", "WAITING_FOR_DATA", "WAITING_FOR_RESULT", "PARKED", "BLOCKED"]},
     "task_shape": {
       "type": "object",
@@ -29,14 +29,14 @@
     "inputs": {
       "type": "object",
       "properties": {
-        "claim_ids": {"type": "array", "items": {"type": "string"}},
-        "evidence_refs": {"type": "array", "items": {"type": "string"}},
-        "rule_refs": {"type": "array", "items": {"type": "string"}},
-        "negative_evidence_refs": {"type": "array", "items": {"type": "string"}},
-        "failure_pattern_ids": {"type": "array", "items": {"type": "string"}},
-        "candidate_ids": {"type": "array", "items": {"type": "string"}},
+        "claim_ids": {"type": "array", "items": {"type": "string", "minLength": 1}},
+        "evidence_refs": {"type": "array", "items": {"type": "string", "minLength": 1}},
+        "rule_refs": {"type": "array", "items": {"type": "string", "minLength": 1}},
+        "negative_evidence_refs": {"type": "array", "items": {"type": "string", "minLength": 1}},
+        "failure_pattern_ids": {"type": "array", "items": {"type": "string", "minLength": 1}},
+        "candidate_ids": {"type": "array", "items": {"type": "string", "minLength": 1}},
         "routed_evidence_count": {"type": "integer", "minimum": 0},
-        "point_in_time_cutoff": {"type": ["string", "null"]}
+        "point_in_time_cutoff": {"anyOf": [{"type": "string", "minLength": 1}, {"type": "null"}]}
       },
       "additionalProperties": true
     },
@@ -52,7 +52,7 @@
       },
       "additionalProperties": true
     },
-    "stop_conditions": {"type": "array", "items": {"type": "string"}},
+    "stop_conditions": {"type": "array", "items": {"type": "string", "minLength": 1}},
     "expected_output": {
       "type": "object",
       "required": ["artifact_type", "required_fields"],
@@ -81,7 +81,7 @@
         "kind": {"type": "string", "minLength": 1},
         "provenance": {"type": "boolean"},
         "point_in_time": {"type": "boolean"},
-        "branch": {"type": ["string", "null"]},
+        "branch": {"anyOf": [{"type": "string", "minLength": 1}, {"type": "null"}]},
         "contains_secrets": {"type": "boolean"}
       },
       "additionalProperties": true
@@ -94,10 +94,10 @@
         "claims": {"type": "array", "items": {"type": "object"}},
         "evidence": {"type": "array", "items": {"type": "object"}},
         "contradictions": {"type": "array", "items": {"type": "object"}},
-        "unknowns": {"type": "array", "items": {"type": "string"}},
+        "unknowns": {"type": "array", "items": {"type": "string", "minLength": 1}},
         "gate_effect": {"type": "array", "items": {"type": "object"}},
-        "failure_patterns_triggered": {"type": "array", "items": {"type": "string"}},
-        "next_decisive_test": {"type": ["string", "null"]},
+        "failure_patterns_triggered": {"type": "array", "items": {"type": "string", "minLength": 1}},
+        "next_decisive_test": {"anyOf": [{"type": "string", "minLength": 1}, {"type": "null"}]},
         "source_independence": {"enum": ["UNKNOWN", "SHARED_UPSTREAM", "PARTIAL", "INDEPENDENT", "NOT_APPLICABLE"]},
         "economic_conclusion": {"enum": ["NO_PROVEN_EDGE", "RESEARCH_POSITIVE", "TESTED_NEGATIVE", "EXECUTION_BLOCKED", "STRUCTURAL_CANDIDATE"]}
       },
