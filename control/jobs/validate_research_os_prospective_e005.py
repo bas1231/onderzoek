@@ -16,8 +16,8 @@ if not PYTHON.exists():
     PYTHON = Path(sys.executable)
 
 EXPECTED_TREES = {
-    "control/research_os_v1": "087b216841a92d0fb7a5923fed7e642afa8e8827",
-    "tests/research_os_v1": "0f4eca5b1dd32adb3e63f65aa4621c6a0b5d5473",
+    "control/research_os_v1": "50f26c84d58d30714d53439d2e55699b18936091",
+    "tests/research_os_v1": "a2e390e64c9df7a5c0bfcccbf92abf5937e178dc",
     "benchmarks/research_os_v1": "370584867096e736c9ea9680133eca82febe0952",
 }
 EXPECTED_DOCS = {
