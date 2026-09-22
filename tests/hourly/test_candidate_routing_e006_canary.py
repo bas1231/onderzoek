@@ -96,7 +96,10 @@ def test_e006_current_candidates_reach_real_bundle_and_exchange_request(tmp_path
     assert "ASSET-RANK-MAKER-HEDGE-V1" in algebra_ids
     assert "PAYOFF-IDENTITY-MINING-V1" in micro_ids
     assert "ASSET-RANK-MAKER-HEDGE-V1" in micro_ids
-    assert "PAYOFF-IDENTITY-MINING-V1" in settlement_ids
+    # Current PAYOFF-IDENTITY metadata does not yet make settlement/finality
+    # a decisive open question; do not broaden the route just because the
+    # candidate concerns payouts.
+    assert "PAYOFF-IDENTITY-MINING-V1" not in settlement_ids
 
     # Specialist candidates must not leak back into generic discovery or
     # unrelated behavioral/flow roles merely because their phase is DISCOVERED.
