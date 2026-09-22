@@ -84,6 +84,56 @@
     "point_in_time_required": true,
     "execution_evidence_required_for_economic_claim": true
   },
+  "prospective_shadow_telemetry": {
+    "status": "ENABLED_INSTRUMENTATION_ONLY",
+    "decision_behavior_change": false,
+    "extra_scheduled_turns": 0,
+    "benchmark_branch": "ai/research-os-v1-shadow-collection",
+    "eligible_case_source": "valid paired ai/runtime-exchange request and response",
+    "native_run_without_exchange_pair_counts_as_benchmark_case": false,
+    "role_result_extension": "benchmark_telemetry",
+    "required_when_servicing_local_exchange_request": true,
+    "candidate_link_rule": "role_result.candidate_ids must include every bundled candidate actually evaluated by that role and no unrelated candidate",
+    "transport_self_reference_relevant": false,
+    "benchmark_telemetry_required_fields": [
+      "worker_run_id",
+      "research_items",
+      "evidence",
+      "failure_patterns",
+      "queue_starvation_event_ids"
+    ],
+    "worker_run_id_rule": "use <run_id>:<agent_id> unless the request supplies a stricter stable identifier",
+    "research_item_shape": {
+      "item_id": "non-empty stable string",
+      "duplicate_of": "string|null"
+    },
+    "evidence_item_shape": {
+      "evidence_id": "non-empty stable string or evidence_ref",
+      "source_family": "non-empty string",
+      "relevant": "boolean",
+      "contradiction": "boolean",
+      "point_in_time_ok": "boolean",
+      "provenance_ok": "boolean"
+    },
+    "failure_pattern_shape": {
+      "pattern_id": "stable failure-pattern id",
+      "applicable": "boolean",
+      "detected_before_expensive_work": "boolean"
+    },
+    "optional_fields": [
+      "coordination_overhead_units",
+      "plan_usage_units"
+    ],
+    "anti_gaming": [
+      "do not self-report aggregate benchmark counts",
+      "list the underlying evidence/research/failure items instead",
+      "mark ai_exchange request/response self-references relevant=false",
+      "do not invent contradiction or provenance status",
+      "missing or unknown status must remain false/unknown through omission rather than being upgraded"
+    ],
+    "candidate_authority_unchanged": true,
+    "economic_conclusion": "NO_PROVEN_EDGE"
+  },
   "native_git_outputs": {
     "hourly_report_prefix": "hourly-reports",
     "report_status_default": "NO_PROVEN_EDGE",
