@@ -169,11 +169,16 @@ def build_packet(candidate: dict[str, Any], preregistered_question: str) -> dict
 
 
 def _source_sets(items: list[Any]) -> tuple[set[str], set[str], bool]:
-    """Return reference IDs, canonical upstream IDs and lineage completeness."""
+    """Return artifact/source identities, canonical upstream IDs and completeness.
+
+    A positive independence result requires explicit upstream lineage on both
+    sides. Independently of that lineage, exact shared artifact/source identity
+    (including content hashes) is sufficient to disprove independence.
+    """
     if not isinstance(items, list):
         raise ValueError("source_sets_must_be_lists")
 
-    refs: set[str] = set()
+    identities: set[str] = set()
     upstream: set[str] = set()
     complete = bool(items)
 
@@ -182,22 +187,40 @@ def _source_sets(items: list[Any]) -> tuple[set[str], set[str], bool]:
             text = item.strip()
             if not text:
                 raise ValueError(f"blank_source_reference:{index}")
-            refs.add(text)
+            identities.add(f"ref:{text}")
             complete = False
             continue
         if not isinstance(item, dict):
             raise ValueError(f"source_reference_must_be_string_or_object:{index}")
 
-        ref_value = None
         for key in ("ref", "evidence_ref", "source_ref"):
             if item.get(key) is not None:
-                ref_value = _required_text(
+                value = _required_text(
                     item.get(key),
                     f"invalid_source_reference:{index}:{key}",
                 )
-                break
-        if ref_value:
-            refs.add(ref_value)
+                identities.add(f"ref:{value}")
+
+        if item.get("source_id") is not None:
+            source_id = _required_text(
+                item.get("source_id"),
+                f"invalid_source_reference:{index}:source_id",
+            )
+            identities.add(f"source:{source_id}")
+
+        hash_value = None
+        if item.get("document_sha256") is not None:
+            hash_value = _required_text(
+                item.get("document_sha256"),
+                f"invalid_source_reference:{index}:document_sha256",
+            )
+        elif item.get("content_hash") is not None:
+            hash_value = _required_text(
+                item.get("content_hash"),
+                f"invalid_source_reference:{index}:content_hash",
+            )
+        if hash_value:
+            identities.add(f"sha256:{hash_value.lower()}")
 
         lineage_value = None
         lineage_key = None
@@ -239,21 +262,21 @@ def _source_sets(items: list[Any]) -> tuple[set[str], set[str], bool]:
 
     if not upstream:
         complete = False
-    return refs, upstream, complete
+    return identities, upstream, complete
 
 
 def source_independence(origin_sources: list[Any], reproduction_sources: list[Any]) -> dict[str, Any]:
     if not isinstance(origin_sources, list) or not isinstance(reproduction_sources, list):
         raise ValueError("source_sets_must_be_lists")
 
-    origin_refs, origin_upstream, origin_complete = _source_sets(origin_sources)
-    repro_refs, repro_upstream, repro_complete = _source_sets(reproduction_sources)
+    origin_ids, origin_upstream, origin_complete = _source_sets(origin_sources)
+    repro_ids, repro_upstream, repro_complete = _source_sets(reproduction_sources)
 
-    shared_refs = sorted(origin_refs & repro_refs)
+    shared_ids = sorted(origin_ids & repro_ids)
     shared_upstream = sorted(origin_upstream & repro_upstream)
     proof_complete = origin_complete and repro_complete
 
-    if shared_refs:
+    if shared_ids:
         status = "SHARED_UPSTREAM"
     elif not proof_complete:
         status = "UNKNOWN"
@@ -264,7 +287,7 @@ def source_independence(origin_sources: list[Any], reproduction_sources: list[An
 
     return {
         "status": status,
-        "shared_reference_ids": shared_refs,
+        "shared_reference_ids": shared_ids,
         "shared_upstream_refs": shared_upstream,
         "origin_upstream_ids": sorted(origin_upstream),
         "reproduction_upstream_ids": sorted(repro_upstream),
