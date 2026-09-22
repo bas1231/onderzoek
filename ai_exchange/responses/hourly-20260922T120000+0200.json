@@ -1,0 +1,135 @@
+{
+  "schema": "PVA_AI_EXCHANGE_RESPONSE_V1",
+  "run_id": "hourly-20260922T120000+0200",
+  "request_sha256": "142d62f7083a257489bf4ab67839fa41f8105c526457021cb7b420894ad1fb07",
+  "response": {
+    "schema": "PVA_AI_RESPONSE_V1",
+    "run_id": "hourly-20260922T120000+0200",
+    "response_token": "159ff1c86499622f3c42367a9f71f86bca97a861ce9c19ae98151e06e3bb89b9",
+    "role_results": [
+      {
+        "agent_id": "recon_scout",
+        "candidate_ids": [],
+        "evidence_refs": ["request:routed_evidence:cftc:b8e0af45393731f39d8634d16bf65f91174297c690e7fe6e2d0fcd26282d4529", "request:routed_evidence:kalshi_weather_rules:d7422ce4574b0de67df69a4b63393ec0d3c256c0aa81179426a8ef7cffa6e50d"],
+        "finding": "De gewijzigde CFTC- en Kalshi-weather snippets bevatten geen zelfstandig reproduceerbaar economisch mechanisme. De CFTC-snippet is navigatie/nieuwsoverzicht zonder kandidaat-specifieke causaliteit; de weather-wijziging bevestigt vooral settlement-semantiek. Geen WATCH->HUNT promotie.",
+        "local_task_required": false,
+        "local_task_spec": null,
+        "next_decisive_question": "Is er een nieuwe primaire venue/rule/API-wijziging met een concrete, point-in-time testbare koppeling naar prijs- of settlementgedrag?",
+        "status": "COMPLETED",
+        "benchmark_telemetry": {
+          "worker_run_id": "hourly-20260922T120000+0200:recon_scout",
+          "research_items": [{"item_id":"recon-cftc-change","duplicate_of":null},{"item_id":"recon-weather-settlement-change","duplicate_of":null}],
+          "evidence": [{"evidence_id":"b8e0af45393731f39d8634d16bf65f91174297c690e7fe6e2d0fcd26282d4529","source_family":"cftc","relevant":false,"contradiction":false,"point_in_time_ok":true,"provenance_ok":true},{"evidence_id":"d7422ce4574b0de67df69a4b63393ec0d3c256c0aa81179426a8ef7cffa6e50d","source_family":"kalshi_weather_rules","relevant":true,"contradiction":false,"point_in_time_ok":true,"provenance_ok":true}],
+          "failure_patterns": [{"pattern_id":"generic-keyword-without-mechanism","applicable":true,"detected_before_expensive_work":true}],
+          "queue_starvation_event_ids": []
+        }
+      },
+      {
+        "agent_id": "scout",
+        "candidate_ids": [],
+        "evidence_refs": ["request:recon_watch_triage:RECON-d838b2e925d20194", "https://help.kalshi.com/en/articles/13823837-weather-markets"],
+        "finding": "De changelog-trigger is slechts een WATCH-signaal; het request bevat geen concrete changelog-entry of vóór/na API-delta. Kalshi's actuele weather-uitleg bevestigt dat daily markten op final NWS climate reports en hourly markten op The Weather Company settelen, met mogelijke afrondings/conversieverschillen in preliminaire TWC-waarden. Dit is semantics-evidence, geen market/execution edge.",
+        "local_task_required": false,
+        "local_task_spec": null,
+        "next_decisive_question": "Welke specifieke changelog-entry veranderde een economisch relevante API/rule primitive, en is die wijziging point-in-time reproduceerbaar?",
+        "status": "COMPLETED",
+        "benchmark_telemetry": {
+          "worker_run_id": "hourly-20260922T120000+0200:scout",
+          "research_items": [{"item_id":"watch-kalshi-changelog","duplicate_of":null},{"item_id":"kalshi-weather-semantics","duplicate_of":null}],
+          "evidence": [{"evidence_id":"RECON-d838b2e925d20194","source_family":"kalshi_docs","relevant":true,"contradiction":false,"point_in_time_ok":true,"provenance_ok":true},{"evidence_id":"kalshi-weather-help-2026-07-22","source_family":"kalshi_help","relevant":true,"contradiction":false,"point_in_time_ok":true,"provenance_ok":true}],
+          "failure_patterns": [{"pattern_id":"watch-is-not-hunt","applicable":true,"detected_before_expensive_work":true}],
+          "queue_starvation_event_ids": []
+        }
+      },
+      {
+        "agent_id": "algebra",
+        "candidate_ids": [],
+        "evidence_refs": ["request:recon_watch_triage:RECON-75b83fbdd0abd801", "request:recon_watch_triage:RECON-0db7ff1ec789722b", "request:recon_watch_triage:RECON-18d062630dd9c963"],
+        "finding": "Geen statewise payout identity kan uit de drie WATCH-snippets worden bewezen. Rebate/API/settlement-woorden leveren geen payofffunctie, toestandruimte of formele conversieprimitive. Zonder contractsemantiek is iedere algebraïsche equivalentie speculatief.",
+        "local_task_required": false,
+        "local_task_spec": null,
+        "next_decisive_question": "Kan voor één concreet contractpaar de volledige payoutfunctie per toegestane settlementstate uit primaire regels worden afgeleid?",
+        "status": "NO_EVIDENCE",
+        "benchmark_telemetry": {
+          "worker_run_id": "hourly-20260922T120000+0200:algebra",
+          "research_items": [{"item_id":"watch-rebate-algebra","duplicate_of":null},{"item_id":"watch-api-algebra","duplicate_of":null},{"item_id":"watch-weather-algebra","duplicate_of":null}],
+          "evidence": [{"evidence_id":"RECON-75b83fbdd0abd801","source_family":"polymarket_docs","relevant":true,"contradiction":false,"point_in_time_ok":true,"provenance_ok":true},{"evidence_id":"RECON-0db7ff1ec789722b","source_family":"kalshi_docs","relevant":true,"contradiction":false,"point_in_time_ok":true,"provenance_ok":true},{"evidence_id":"RECON-18d062630dd9c963","source_family":"kalshi_weather_rules","relevant":true,"contradiction":false,"point_in_time_ok":true,"provenance_ok":true}],
+          "failure_patterns": [{"pattern_id":"keyword-is-not-payoff-proof","applicable":true,"detected_before_expensive_work":true}],
+          "queue_starvation_event_ids": []
+        }
+      },
+      {
+        "agent_id": "settlement",
+        "candidate_ids": [],
+        "evidence_refs": ["https://help.kalshi.com/en/articles/13823837-weather-markets", "request:routed_evidence:kalshi_weather_rules:d7422ce4574b0de67df69a4b63393ec0d3c256c0aa81179426a8ef7cffa6e50d"],
+        "finding": "Primaire venue-uitleg bevestigt een materiële semantische scheiding: daily high/low gebruikt de final NWS Daily Climate Report; hourly temperature gebruikt de TWC-waarde op het exacte tijdstip/station. Daily determination kan worden vertraagd bij inconsistentie met 6h/24h METAR of wanneer final lager is dan preliminary; hourly TWC preliminary kan door rounding/conversion afwijken van final. Dit verhoogt finality/source-drift risico en verhindert gebruik van preliminaire of alternatieve feeds als settlementbewijs.",
+        "local_task_required": false,
+        "local_task_spec": null,
+        "next_decisive_question": "Kan voor een concrete hourly markt de TWC final value met timestamp/station/rule-version point-in-time worden gekoppeld aan contemporaneous executable L2?",
+        "status": "COMPLETED",
+        "benchmark_telemetry": {
+          "worker_run_id": "hourly-20260922T120000+0200:settlement",
+          "research_items": [{"item_id":"kalshi-weather-finality-semantics","duplicate_of":null}],
+          "evidence": [{"evidence_id":"kalshi-weather-help-2026-07-22","source_family":"kalshi_help","relevant":true,"contradiction":false,"point_in_time_ok":true,"provenance_ok":true}],
+          "failure_patterns": [{"pattern_id":"preliminary-feed-is-not-settlement-source","applicable":true,"detected_before_expensive_work":true}],
+          "queue_starvation_event_ids": []
+        }
+      },
+      {
+        "agent_id": "microstructure",
+        "candidate_ids": [],
+        "evidence_refs": ["request:routed_evidence:polymarket_docs:bbfb7a5f8e917cdd63380293ded53b574778ed057b05028625269cc66553c7f1", "https://help.kalshi.com/en/articles/13823854-kalshi-api"],
+        "finding": "Geen executable edge aantoonbaar. Het request bevat documentatie-index/snippets maar geen gelijktijdige bid/ask-depth, fills, fees of slippage. Kalshi bevestigt publiek dat orderbooks via de API beschikbaar zijn, maar beschikbaarheid van een datakanaal is geen execution evidence. Rebate-informatie zonder concrete markt, eligibility, score en contemporaneous book kan niet in netto-economie worden verwerkt.",
+        "local_task_required": false,
+        "local_task_spec": null,
+        "next_decisive_question": "Bestaat er voor één hypothese een gesynchroniseerde executable L2-snapshot met fees/rebates en voldoende depth om netto edge te toetsen?",
+        "status": "NO_EVIDENCE",
+        "benchmark_telemetry": {
+          "worker_run_id": "hourly-20260922T120000+0200:microstructure",
+          "research_items": [{"item_id":"execution-evidence-gate","duplicate_of":null}],
+          "evidence": [{"evidence_id":"bbfb7a5f8e917cdd63380293ded53b574778ed057b05028625269cc66553c7f1","source_family":"polymarket_docs","relevant":true,"contradiction":false,"point_in_time_ok":true,"provenance_ok":true},{"evidence_id":"kalshi-api-help-2026-03-10","source_family":"kalshi_help","relevant":true,"contradiction":false,"point_in_time_ok":true,"provenance_ok":true}],
+          "failure_patterns": [{"pattern_id":"docs-or-midpoint-is-not-executable-evidence","applicable":true,"detected_before_expensive_work":true}],
+          "queue_starvation_event_ids": []
+        }
+      },
+      {
+        "agent_id": "weather_twc",
+        "candidate_ids": [],
+        "evidence_refs": ["https://help.kalshi.com/en/articles/13823837-weather-markets", "request:routed_evidence:aviationweather:dd6e0cc4b237e05406554eb33d2b7963367175f44a5a0ae0feb4e59f707b0edf", "request:routed_evidence:ecmwf_open:d957d902c7f6f0e6fbd7c0274d54b5cc1e86f4399db2a7bd1455aa3f08947667"],
+        "finding": "Signal edge blijft onbewezen. METAR en ECMWF zijn bruikbare referentie-/forecastbronnen, maar Kalshi's hourly contracten settelen op TWC final en Kalshi waarschuwt dat preliminary TWC door rounding/conversion kan afwijken. Zonder contemporaneous TWC-final-compatible signal plus executable KXTEMP-L2 kan geen market- of execution-edge worden afgeleid.",
+        "local_task_required": false,
+        "local_task_spec": null,
+        "next_decisive_question": "Levert een prospectieve, timestamped vergelijking tussen TWC-compatible observatie en contemporaneous executable hourly-temperature L2 na fees een herhaalbare voorsprong op?",
+        "status": "WAITING_FOR_DATA",
+        "benchmark_telemetry": {
+          "worker_run_id": "hourly-20260922T120000+0200:weather_twc",
+          "research_items": [{"item_id":"weather-source-alignment","duplicate_of":null}],
+          "evidence": [{"evidence_id":"kalshi-weather-help-2026-07-22","source_family":"kalshi_help","relevant":true,"contradiction":false,"point_in_time_ok":true,"provenance_ok":true},{"evidence_id":"dd6e0cc4b237e05406554eb33d2b7963367175f44a5a0ae0feb4e59f707b0edf","source_family":"aviationweather","relevant":true,"contradiction":false,"point_in_time_ok":true,"provenance_ok":true},{"evidence_id":"d957d902c7f6f0e6fbd7c0274d54b5cc1e86f4399db2a7bd1455aa3f08947667","source_family":"ecmwf_open","relevant":true,"contradiction":false,"point_in_time_ok":true,"provenance_ok":true}],
+          "failure_patterns": [{"pattern_id":"reference-weather-feed-is-not-official-hourly-settlement","applicable":true,"detected_before_expensive_work":true}],
+          "queue_starvation_event_ids": []
+        }
+      },
+      {
+        "agent_id": "research_director",
+        "candidate_ids": [],
+        "evidence_refs": ["request:hourly-20260922T120000+0200", "https://help.kalshi.com/en/articles/13823837-weather-markets"],
+        "finding": "De 12:00 bundle levert vooral een nuttige semantics/finality-correctie voor hourly weather op; de generieke changelog/rebate/API WATCH-signalen missen mechanisme en executable evidence. Geen kandidaat is aan deze work-items gebundeld, dus geen candidate-state beslissing. Geen serieuze survivor voor reproducer of killer/proof-chain.",
+        "local_task_required": false,
+        "local_task_spec": null,
+        "next_decisive_question": "Verzamel voor de weather-lane één prospectieve, gesynchroniseerde TWC-compatible observation/final + exact contract rule/version + executable L2/fees case; voor andere WATCH-signalen eerst een concrete primaire delta/mechanisme vastleggen.",
+        "status": "COMPLETED",
+        "benchmark_telemetry": {
+          "worker_run_id": "hourly-20260922T120000+0200:research_director",
+          "research_items": [{"item_id":"director-adjudication-1200","duplicate_of":null}],
+          "evidence": [{"evidence_id":"request-hourly-20260922T120000+0200","source_family":"ai_exchange_request","relevant":false,"contradiction":false,"point_in_time_ok":true,"provenance_ok":true},{"evidence_id":"kalshi-weather-help-2026-07-22","source_family":"kalshi_help","relevant":true,"contradiction":false,"point_in_time_ok":true,"provenance_ok":true}],
+          "failure_patterns": [{"pattern_id":"no-execution-evidence-no-economic-claim","applicable":true,"detected_before_expensive_work":true}],
+          "queue_starvation_event_ids": []
+        }
+      }
+    ],
+    "candidate_decisions": [],
+    "director_decision": "Service de 12:00 bundle zonder brede duplicerende discovery. Bewaar de hourly-weather source/finality-correctie als beslissende specialistuitkomst; generieke changelog/rebate/API WATCH-signalen blijven research-only totdat een concreet mechanisme en point-in-time executable evidence bestaan. Geen promotion/kill-authority uitgeoefend.",
+    "economic_conclusion": "NO_PROVEN_EDGE",
+    "local_tasks": []
+  }
+}
