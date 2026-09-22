@@ -47,6 +47,7 @@ def test_challenger_intentional_unassignment_is_explicit_zero_work_not_missing_d
     assert row["research_items"] == 0
     assert row["unique_relevant_evidence"] == 0
     assert row["decision"] == "KEEP"
+    assert row["point_in_time_and_provenance_complete"] is False
 
 
 def test_baseline_cannot_claim_intentional_unassignment():
