@@ -42,7 +42,7 @@ def test_red_team_strips_origin_confidence_and_reasoning_from_claims_and_evidenc
     }]
 
 
-def test_reproducer_strips_origin_analysis_from_evidence_objects():
+def test_reproducer_strips_origin_analysis_gate_states_and_evidence_polarity():
     candidate = {
         "candidate_id": "C1",
         "supporting_evidence": [{
@@ -53,19 +53,43 @@ def test_reproducer_strips_origin_analysis_from_evidence_objects():
             "expected_result": "positive",
             "confidence": 1.0,
         }],
-        "contradictory_evidence": [],
-        "required_gates": {},
+        "contradictory_evidence": [{
+            "evidence_ref": "raw/b.json",
+            "source_id": "official-b",
+            "upstream_source_ids": ["official-b"],
+            "analysis": "origin worker called this contradictory",
+        }],
+        "required_gates": {
+            "mechanism": "PASS",
+            "market_edge": "FAIL",
+        },
     }
     packet = build_packet(candidate, "Can the preregistered effect be reproduced?")
     text = repr(packet)
     assert "origin worker says this is decisive" not in text
+    assert "origin worker called this contradictory" not in text
     assert "expected_result" not in text
     assert "confidence" not in text
-    assert packet["raw_evidence_refs"] == [{
-        "evidence_ref": "raw/a.json",
-        "source_id": "official-a",
-        "upstream_source_ids": ["official-a"],
-    }]
+    assert "raw_evidence_refs" not in packet
+    assert "contradictory_evidence_refs" not in packet
+    assert packet["evidence_refs"] == [
+        {
+            "evidence_ref": "raw/a.json",
+            "source_id": "official-a",
+            "upstream_source_ids": ["official-a"],
+        },
+        {
+            "evidence_ref": "raw/b.json",
+            "source_id": "official-b",
+            "upstream_source_ids": ["official-b"],
+        },
+    ]
+    assert packet["required_gates"] == {
+        "market_edge": "UNKNOWN",
+        "mechanism": "UNKNOWN",
+    }
+    assert packet["origin_gate_states_included"] is False
+    assert packet["origin_evidence_polarity_included"] is False
 
 
 def test_reproducer_requires_preregistered_question():
