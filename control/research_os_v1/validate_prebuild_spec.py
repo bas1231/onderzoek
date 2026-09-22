@@ -181,7 +181,7 @@ def main() -> int:
 
     product_limit = topology.get("product_limit") or {}
     max_tasks = product_limit.get("max_active_scheduled_tasks_plus")
-    if not isinstance(max_tasks, int) or max_tasks <= 0:
+    if not isinstance(max_tasks, int) or isinstance(max_tasks, bool) or max_tasks <= 0:
         fail(errors, "PLUS_PRODUCT_LIMIT_INVALID")
     if product_limit.get("treat_as_runtime_constant_forever") is not False:
         fail(errors, "PLUS_PRODUCT_LIMIT_IMPROPERLY_FROZEN_FOREVER")
@@ -191,12 +191,15 @@ def main() -> int:
     prediction = account.get("prediction_research_tasks")
     reserved = account.get("reserved_non_prediction_tasks")
     free_slots = account.get("free_slots")
-    if not all(isinstance(v, int) for v in [active, prediction, reserved, free_slots]):
+    if not all(
+        isinstance(v, int) and not isinstance(v, bool)
+        for v in [active, prediction, reserved, free_slots]
+    ):
         fail(errors, "PLUS_ACCOUNT_SNAPSHOT_COUNTS_INVALID")
     else:
         if active != prediction + reserved:
             fail(errors, "PLUS_ACCOUNT_SNAPSHOT_ARITHMETIC_INVALID")
-        if isinstance(max_tasks, int) and free_slots != max_tasks - active:
+        if isinstance(max_tasks, int) and not isinstance(max_tasks, bool) and free_slots != max_tasks - active:
             fail(errors, "PLUS_ACCOUNT_SNAPSHOT_FREE_SLOT_ARITHMETIC_INVALID")
     if account.get("snapshot_only") is not True:
         fail(errors, "PLUS_ACCOUNT_STATE_NOT_MARKED_SNAPSHOT")
@@ -256,6 +259,8 @@ def main() -> int:
         "point-in-time",
         "failed required gate",
         "different preregistered case sets",
+        "different frozen case metadata",
+        "malformed benchmark value",
         "missing metric denominator",
     ]:
         if word not in hard:
@@ -271,6 +276,7 @@ def main() -> int:
         "case_id_required": True,
         "case_id_unique": True,
         "baseline_and_challenger_same_case_set": True,
+        "baseline_and_challenger_same_case_metadata": True,
     }
     for key, expected in expected_minimum.items():
         if minimum.get(key) != expected:
@@ -283,12 +289,22 @@ def main() -> int:
         "no_relabeling_failed_candidate_as_out_of_scope_after_result": True,
         "case_ids_required_and_unique": True,
         "baseline_and_challenger_identical_case_ids": True,
+        "baseline_and_challenger_identical_case_metadata": True,
+        "malformed_values_fail_validation_without_coercion": True,
         "missing_denominators_are_unknown_not_zero": True,
         "both_sides_must_meet_minimum_observation_set": True,
     }
     for key, expected in required_anti_gaming.items():
         if anti_gaming.get(key) is not expected:
             fail(errors, f"SHADOW_ANTI_GAMING_INVARIANT_MISSING:{key}")
+
+    expected_metadata_fields = [
+        "active_hour_id",
+        "task_shape",
+        "ground_truth_class",
+    ]
+    if anti_gaming.get("frozen_case_metadata_fields") != expected_metadata_fields:
+        fail(errors, "SHADOW_FROZEN_CASE_METADATA_FIELDS_MISMATCH")
 
     missing_metric = shadow.get("missing_metric_policy") or {}
     if missing_metric.get("missing_denominator") != "UNKNOWN":
