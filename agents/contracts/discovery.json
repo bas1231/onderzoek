@@ -1,0 +1,28 @@
+{
+  "agent": "discovery",
+  "authority": "DISCOVERY_ONLY",
+  "capabilities": [
+    "scout",
+    "recon_scout"
+  ],
+  "protected_lanes": {
+    "primary_scout": "Broad public evidence, venues, papers, code and anomaly discovery",
+    "recon_scout": "Independent offensive economic reconnaissance, failures, weak mechanisms and counter-crowd signals"
+  },
+  "requirements": [
+    "Keep primary_scout and recon_scout provenance separate",
+    "Do not promote WATCH to HUNT without Director/gate logic",
+    "Preserve null results and negative evidence"
+  ],
+  "output": [
+    "new_evidence",
+    "watch_triage",
+    "candidate_proposals",
+    "negative_evidence",
+    "next_decisive_question"
+  ],
+  "live_trading": false,
+  "paid_actions": false,
+  "wallet_actions": false,
+  "openai_api": false
+}
