@@ -114,6 +114,88 @@ def sync_main_fail_closed(root: Path) -> dict[str, Any]:
     }
 
 
+def task_provenance_in_head(root: Path, task_file: Path) -> dict[str, Any]:
+    """Prove the exact pending task blob comes from history contained by HEAD.
+
+    This closes a subtle stale-checkout gap: seeing a task file on disk is not
+    enough.  We require the task path to exist in HEAD, identify the most recent
+    commit that changed that path, prove that commit is an ancestor of HEAD, and
+    prove that the blob in that commit equals the blob currently in HEAD.
+    """
+    root = root.resolve()
+    try:
+        rel = task_file.resolve().relative_to(root).as_posix()
+    except ValueError:
+        return {"ok": False, "reason": "TASK_PATH_ESCAPES_REPOSITORY"}
+
+    head = _git(root, "rev-parse", "HEAD")
+    if head.returncode != 0:
+        return {"ok": False, "reason": "EXECUTION_HEAD_READ_FAILED", "stderr": head.stderr[-2000:]}
+    execution_commit = head.stdout.strip()
+
+    head_blob = _git(root, "rev-parse", f"HEAD:{rel}")
+    if head_blob.returncode != 0:
+        return {
+            "ok": False,
+            "reason": "TASK_NOT_TRACKED_IN_EXECUTION_HEAD",
+            "task_path": rel,
+            "execution_commit": execution_commit,
+        }
+
+    latest = _git(root, "log", "-1", "--format=%H", "HEAD", "--", rel)
+    task_commit = latest.stdout.strip() if latest.returncode == 0 else ""
+    if not task_commit:
+        return {
+            "ok": False,
+            "reason": "TASK_COMMIT_NOT_FOUND",
+            "task_path": rel,
+            "execution_commit": execution_commit,
+        }
+
+    ancestor = _git(root, "merge-base", "--is-ancestor", task_commit, execution_commit)
+    if ancestor.returncode != 0:
+        return {
+            "ok": False,
+            "reason": "TASK_COMMIT_NOT_IN_EXECUTION_HISTORY",
+            "task_path": rel,
+            "task_commit": task_commit,
+            "execution_commit": execution_commit,
+        }
+
+    task_blob = _git(root, "rev-parse", f"{task_commit}:{rel}")
+    if task_blob.returncode != 0:
+        return {
+            "ok": False,
+            "reason": "TASK_BLOB_NOT_FOUND_AT_TASK_COMMIT",
+            "task_path": rel,
+            "task_commit": task_commit,
+            "execution_commit": execution_commit,
+        }
+
+    task_blob_sha = task_blob.stdout.strip()
+    head_blob_sha = head_blob.stdout.strip()
+    if task_blob_sha != head_blob_sha:
+        return {
+            "ok": False,
+            "reason": "TASK_BLOB_CHANGED_AFTER_TASK_COMMIT",
+            "task_path": rel,
+            "task_commit": task_commit,
+            "execution_commit": execution_commit,
+            "task_blob": task_blob_sha,
+            "execution_blob": head_blob_sha,
+        }
+
+    return {
+        "ok": True,
+        "status": "TASK_COMMIT_PROVEN",
+        "task_path": rel,
+        "task_commit": task_commit,
+        "task_blob": task_blob_sha,
+        "execution_commit": execution_commit,
+        "relationship": "equal" if task_commit == execution_commit else "ancestor",
+    }
+
+
 def support_script_in_head(root: Path, task: Any) -> dict[str, Any]:
     """Prove a Python task's support script exists and is tracked in HEAD."""
     if getattr(task, "operation", None) not in {"python", "health_check"}:
