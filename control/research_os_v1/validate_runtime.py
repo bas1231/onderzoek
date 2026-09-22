@@ -13,7 +13,8 @@ from .governor import classify
 from .hypothesis_accounting import adaptive_search_flags, normalize as normalize_search_family
 from .legacy_adapter import packet_to_task
 from .promotion import evaluate as evaluate_promotion
-from .reproducer import source_independence
+from .red_team import build_blind_packet
+from .reproducer import build_packet as build_reproducer_packet, source_independence
 from .resurrection import evaluate as evaluate_resurrection
 from .scheduler import fanout_cap, schedule
 from .shadow_benchmark import summarize as summarize_benchmark, replacement_check
@@ -125,6 +126,22 @@ def main() -> int:
         patterns = pattern_index()
         if len(patterns) < 30:
             errors.append(f"FAILURE_MEMORY_TOO_SMALL:{len(patterns)}")
+        malformed_memory = {
+            "schema_version": 1,
+            "patterns": [{
+                "id": "FP-X",
+                "name": "x",
+                "gate": 123,
+                "trigger": "x",
+                "required_check": "x",
+                "default_effect": "BLOCK",
+            }],
+        }
+        try:
+            pattern_index(malformed_memory)
+            errors.append("FAILURE_MEMORY_STRINGIFIED_NON_STRING_FIELD")
+        except ValueError:
+            pass
     except Exception as exc:
         errors.append(f"FAILURE_MEMORY_LOAD_FAIL:{exc}")
 
@@ -270,19 +287,47 @@ def main() -> int:
             for g in [
                 "source_provenance", "point_in_time", "mechanism", "signal_edge",
                 "market_edge", "execution_reality", "prebuild_killer",
-                "chief_falsifier", "validation", "independent_reproduction", "shadow",
+                "chief_falsifier", "validation", "holdout",
+                "independent_reproduction", "shadow",
             ]
         }
         verdict = evaluate_promotion({"required_gates": gates})
+        if verdict.get("status") != "PROMOTION_CANDIDATE":
+            errors.append("FULL_PROMOTION_GATE_SET_NOT_RECOGNIZED")
         if verdict.get("live_trading_authorized") is not False:
             errors.append("PROMOTION_AUTHORIZED_LIVE_TRADING")
 
-        gates["signal_edge"] = "PENDING"
-        no_signal = evaluate_promotion({"required_gates": gates}, signal_required=False)
+        missing_holdout = dict(gates)
+        missing_holdout.pop("holdout")
+        holdout_verdict = evaluate_promotion({"required_gates": missing_holdout})
+        if holdout_verdict.get("eligible") is not False or "holdout" not in holdout_verdict.get("pending_gates", []):
+            errors.append("PROMOTION_DID_NOT_REQUIRE_HOLDOUT")
+
+        no_signal_gates = dict(gates)
+        no_signal_gates["signal_edge"] = "PENDING"
+        no_signal = evaluate_promotion({"required_gates": no_signal_gates}, signal_required=False)
         if no_signal.get("eligible") is not False:
             errors.append("NO_SIGNAL_ROUTE_SKIPPED_UNRESOLVED_SIGNAL_GATE")
     except Exception as exc:
         errors.append(f"PROMOTION_SMOKE_FAIL:{exc}")
+
+    try:
+        blind = build_blind_packet({
+            "candidate_id": "BLIND",
+            "hypothesis": "h",
+            "claims": [],
+            "assumptions": [],
+            "supporting_evidence": [],
+            "contradictory_evidence": [],
+            "required_gates": {"mechanism": "PASS", "market_edge": "FAIL"},
+            "known_failure_patterns": [],
+        })
+        if set(blind.get("required_gates", {}).values()) != {"UNKNOWN"}:
+            errors.append("RED_TEAM_ORIGIN_GATE_STATE_LEAK")
+        if blind.get("origin_gate_states_included") is not False:
+            errors.append("RED_TEAM_GATE_STATE_BLINDING_FLAG_WRONG")
+    except Exception as exc:
+        errors.append(f"RED_TEAM_BLINDING_SMOKE_FAIL:{exc}")
 
     try:
         same = source_independence(["same"], ["same"])
@@ -297,6 +342,19 @@ def main() -> int:
         )
         if explicit.get("counts_as_independent_reproduction") is not True:
             errors.append("EXPLICIT_DISJOINT_LINEAGE_NOT_RECOGNIZED")
+        try:
+            source_independence([123], [{"ref": "b", "upstream_source_ids": ["source:b"]}])
+            errors.append("REPRODUCER_ACCEPTED_NON_REFERENCE_ITEM")
+        except ValueError:
+            pass
+        try:
+            build_reproducer_packet(
+                {"candidate_id": "R", "supporting_evidence": "raw/a.json"},
+                "question",
+            )
+            errors.append("REPRODUCER_ACCEPTED_STRING_AS_EVIDENCE_LIST")
+        except ValueError:
+            pass
     except Exception as exc:
         errors.append(f"REPRODUCTION_SMOKE_FAIL:{exc}")
 
@@ -314,12 +372,28 @@ def main() -> int:
         )
         if resurrected["candidate"]["required_gates"].get("source_provenance") != "PENDING":
             errors.append("RESURRECTION_INHERITED_OLD_PROVENANCE_PASS")
+        try:
+            evaluate_resurrection(
+                {
+                    "candidate_id": "R2",
+                    "queue_status": "CLOSED_NEGATIVE",
+                    "economic_status": "TESTED_NEGATIVE",
+                    "resurrection_conditions": ["regime_change"],
+                },
+                "regime_change",
+                "2026-09-21T00:00:00Z",
+            )
+            errors.append("RESURRECTION_ACCEPTED_STRING_AS_CHANGED_CONDITION_LIST")
+        except ValueError:
+            pass
     except Exception as exc:
         errors.append(f"RESURRECTION_SMOKE_FAIL:{exc}")
 
     try:
-        baseline = summarize_benchmark(_benchmark_rows())
-        challenger = summarize_benchmark(_benchmark_rows(better=True))
+        baseline_rows = _benchmark_rows()
+        challenger_rows = _benchmark_rows(better=True)
+        baseline = summarize_benchmark(baseline_rows)
+        challenger = summarize_benchmark(challenger_rows)
         replacement = replacement_check(baseline, challenger)
         if replacement.get("scientific_replacement_gate_met") is not True:
             errors.append("MATCHED_BENCHMARK_REPLACEMENT_CHECK_FAILED")
@@ -328,6 +402,25 @@ def main() -> int:
         mismatch_verdict = replacement_check(baseline, mismatched)
         if mismatch_verdict.get("scientific_replacement_gate_met") is not False:
             errors.append("MISMATCHED_CASE_SET_ALLOWED_REPLACEMENT")
+
+        relabelled_rows = _benchmark_rows(better=True)
+        relabelled_rows[1]["ground_truth_class"] = "SURVIVOR"
+        relabelled_rows[1]["decision"] = "KEEP"
+        relabelled = summarize_benchmark(relabelled_rows)
+        relabelled_verdict = replacement_check(baseline, relabelled)
+        if relabelled_verdict.get("comparable_case_metadata") is not False:
+            errors.append("RELABELLED_CASE_METADATA_TREATED_AS_COMPARABLE")
+        if relabelled_verdict.get("scientific_replacement_gate_met") is not False:
+            errors.append("RELABELLED_CASE_ALLOWED_REPLACEMENT")
+
+        malformed_numeric_rows = _benchmark_rows()
+        malformed_numeric_rows[0]["worker_runs"] = "2"
+        malformed_numeric = summarize_benchmark(malformed_numeric_rows)
+        if not any(
+            str(error).endswith(":worker_runs")
+            for error in malformed_numeric.get("validation_errors", [])
+        ):
+            errors.append("BENCHMARK_STRING_NUMERIC_NOT_REJECTED")
 
         missing_den = _benchmark_rows()
         for row in missing_den:
