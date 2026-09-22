@@ -21,6 +21,8 @@ COST_LEVEL = {"LOW", "MEDIUM", "HIGH"}
 RESULT_STATUS = {"COMPLETE", "BLOCKED", "FAILED", "NO_NEW_EVIDENCE"}
 ECONOMIC = {"NO_PROVEN_EDGE", "RESEARCH_POSITIVE", "TESTED_NEGATIVE", "EXECUTION_BLOCKED", "STRUCTURAL_CANDIDATE"}
 SOURCE_INDEPENDENCE = {"UNKNOWN", "SHARED_UPSTREAM", "PARTIAL", "INDEPENDENT", "NOT_APPLICABLE"}
+GATE_STATES = {"PASS", "FAIL", "PENDING", "UNKNOWN", "NOT_APPLICABLE"}
+POSITIVE_ECONOMIC = {"RESEARCH_POSITIVE", "STRUCTURAL_CANDIDATE"}
 
 
 def _require(cond: bool, message: str, errors: list[str]) -> None:
@@ -198,4 +200,112 @@ def validate_result(result: dict[str, Any]) -> list[str]:
             errors,
         )
     _require(result.get("economic_conclusion") in ECONOMIC, "invalid_economic_conclusion", errors)
+    return sorted(set(errors))
+
+
+def _provenance_object(item: Any) -> bool:
+    if not isinstance(item, dict):
+        return False
+    ref = item.get("source_ref") or item.get("evidence_ref") or item.get("ref")
+    content_hash = item.get("content_hash") or item.get("document_sha256")
+    if not (_nonempty_string(ref) or _nonempty_string(content_hash)):
+        return False
+    return item.get("point_in_time_status") in GATE_STATES
+
+
+def validate_result_for_task(task: dict[str, Any], result: dict[str, Any]) -> list[str]:
+    """Validate a worker result in the authority/context of its originating task."""
+    errors = list(validate_task(task))
+    errors.extend(validate_result(result))
+    if errors:
+        return sorted(set(errors))
+
+    task_id = task["task_id"]
+    domain = task["worker_domain"]
+    candidate_id = task.get("candidate_id")
+
+    _require(result.get("task_id") == task_id, "result_task_id_mismatch", errors)
+    _require(result.get("worker_domain") == domain, "result_worker_domain_mismatch", errors)
+    if candidate_id is not None:
+        _require(
+            result.get("candidate_id") == candidate_id,
+            "result_candidate_id_mismatch",
+            errors,
+        )
+
+    status = result["status"]
+    economic = result["economic_conclusion"]
+
+    if status == "FAILED":
+        _require(economic == "NO_PROVEN_EDGE", "failed_result_may_not_set_economic_state", errors)
+    elif status == "NO_NEW_EVIDENCE":
+        _require(economic == "NO_PROVEN_EDGE", "no_new_evidence_may_not_set_economic_state", errors)
+    elif status == "BLOCKED":
+        _require(
+            economic in {"NO_PROVEN_EDGE", "EXECUTION_BLOCKED"},
+            "blocked_result_has_invalid_economic_state",
+            errors,
+        )
+
+    if domain in {"discovery", "red_team"}:
+        _require(
+            economic not in POSITIVE_ECONOMIC,
+            f"{domain}_may_not_emit_positive_economic_conclusion",
+            errors,
+        )
+
+    if result.get("source_independence") == "INDEPENDENT":
+        _require(
+            domain == "independent_reproducer",
+            "only_independent_reproducer_may_assert_source_independence",
+            errors,
+        )
+    if domain == "independent_reproducer" and status == "COMPLETE":
+        _require(
+            result.get("source_independence") in SOURCE_INDEPENDENCE,
+            "reproducer_complete_requires_source_independence_state",
+            errors,
+        )
+
+    for index, item in enumerate(result.get("evidence") or []):
+        _require(
+            _provenance_object(item),
+            f"evidence_missing_provenance:{index}",
+            errors,
+        )
+    for index, item in enumerate(result.get("contradictions") or []):
+        _require(
+            _provenance_object(item),
+            f"contradiction_missing_provenance:{index}",
+            errors,
+        )
+
+    seen_gate_effects: set[str] = set()
+    for index, effect in enumerate(result.get("gate_effect") or []):
+        gate = effect.get("gate") if isinstance(effect, dict) else None
+        state = effect.get("state") if isinstance(effect, dict) else None
+        _require(_nonempty_string(gate), f"gate_effect_gate_required:{index}", errors)
+        _require(state in GATE_STATES, f"invalid_gate_effect_state:{index}", errors)
+        if _nonempty_string(gate):
+            normalized_gate = gate.strip()
+            _require(
+                normalized_gate not in seen_gate_effects,
+                f"duplicate_gate_effect:{normalized_gate}",
+                errors,
+            )
+            seen_gate_effects.add(normalized_gate)
+        basis_refs = effect.get("basis_refs") if isinstance(effect, dict) else None
+        if state in {"PASS", "FAIL"}:
+            _require(
+                _string_list(basis_refs, nonempty=True),
+                f"gate_effect_basis_required:{index}",
+                errors,
+            )
+        elif basis_refs is not None:
+            _require(
+                _string_list(basis_refs),
+                f"gate_effect_basis_invalid:{index}",
+                errors,
+            )
+
     return sorted(set(errors))
