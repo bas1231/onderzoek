@@ -1,0 +1,13 @@
+[Unit]
+Description=Prediction Research state-aware runtime sync every five minutes
+
+[Timer]
+OnBootSec=2min
+OnUnitActiveSec=5min
+AccuracySec=30s
+RandomizedDelaySec=15s
+Persistent=true
+Unit=prediction-runtime-sync.service
+
+[Install]
+WantedBy=timers.target
