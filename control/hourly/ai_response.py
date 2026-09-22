@@ -8,6 +8,7 @@ import json
 import sys
 
 
+MODULE_ROOT = Path(__file__).resolve().parents[2]
 ROOT = Path.cwd()
 RUNS = ROOT / "knowledge/runs"
 PACKETS = RUNS / "agent_packets"
@@ -178,13 +179,17 @@ def candidate_path(candidate_id: str) -> Path:
 
 
 def _record_graphs(run_id: str, response: dict[str, Any]) -> dict[str, Any]:
-    path = ROOT / "control/hourly/evidence_failure_graph.py"
+    path = MODULE_ROOT / "control/hourly/evidence_failure_graph.py"
     spec = importlib.util.spec_from_file_location("evidence_failure_graph_ai_response", path)
     if spec is None or spec.loader is None:
         raise ImportError(path)
     mod = importlib.util.module_from_spec(spec)
     sys.modules[spec.name] = mod
     spec.loader.exec_module(mod)
+    mod.ROOT = ROOT
+    mod.STORE = ROOT / "knowledge/research_os"
+    mod.EVIDENCE_PATH = mod.STORE / "evidence_graph.json"
+    mod.FAILURE_PATH = mod.STORE / "failure_graph.json"
     return mod.record_ai_response(run_id, response)
 
 
