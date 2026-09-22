@@ -1,0 +1,158 @@
+{
+  "agent_control_plane": {
+    "ai_work_bundle_ref": "knowledge/runs/hourly-20260922T100000+0200-ai-work-bundle.json",
+    "ai_work_job_count": 7,
+    "ai_work_ready_roles": [
+      "recon_scout",
+      "scout",
+      "algebra",
+      "settlement",
+      "microstructure",
+      "weather_twc",
+      "research_director"
+    ],
+    "default_economic_conclusion": "NO_PROVEN_EDGE",
+    "director_handoff_ref": "knowledge/runs/hourly-20260922T100000+0200-director-handoff.json",
+    "hydrated_roles": [
+      "algebra",
+      "behavioral",
+      "informed_flow",
+      "microstructure",
+      "recon_scout",
+      "scout",
+      "settlement",
+      "weather_twc"
+    ],
+    "live_trading": false,
+    "orchestration_ref": "knowledge/runs/agent_packets/hourly-20260922T100000+0200/_orchestration.json",
+    "packet_dir": "knowledge/runs/agent_packets/hourly-20260922T100000+0200",
+    "paid_actions": false,
+    "proof_review_ref": "knowledge/runs/hourly-20260922T100000+0200-proof-review.json",
+    "queue_count": 4,
+    "recon_hunts": {
+      "hunt_count": 0,
+      "killer_candidates": [],
+      "specialist_roles": []
+    },
+    "validation_pipeline": {
+      "economic_conclusion": "NO_PROVEN_EDGE",
+      "falsifier_pass": [],
+      "killer_pass": [],
+      "proof_candidates": [],
+      "proof_rejections": {},
+      "reproduction_candidates": []
+    },
+    "wallet_actions": false
+  },
+  "agents": {
+    "algebra": "PENDING",
+    "behavioral": "PENDING",
+    "chief_falsifier": "PENDING",
+    "independent_reproducer": "PENDING",
+    "informed_flow": "PENDING",
+    "microstructure": "PENDING",
+    "prebuild_killer": "PENDING",
+    "recon_scout": "PENDING",
+    "research_director": "PENDING",
+    "scout": "PENDING",
+    "settlement": "PENDING",
+    "weather_twc": "PENDING"
+  },
+  "automated_routing": {
+    "algebra": 1,
+    "behavioral": 0,
+    "informed_flow": 0,
+    "microstructure": 1,
+    "recon_scout": 5,
+    "scout": 4,
+    "settlement": 1,
+    "weather_twc": 3
+  },
+  "cadence": {
+    "cooldown_until": "2026-09-22T12:34:07.565023Z",
+    "mode": "WORK",
+    "work_started_at": "2026-09-22T07:34:07.565023Z",
+    "work_until": "2026-09-22T11:34:07.565023Z"
+  },
+  "candidate_status": "UNPROVEN",
+  "decision": "NO_PROVEN_EDGE",
+  "gates": {
+    "execution_reality": "PENDING",
+    "falsification": "PENDING",
+    "market_edge": "PENDING",
+    "point_in_time": "PENDING",
+    "reproduction": "PENDING",
+    "signal_edge": "PENDING",
+    "source_provenance": "PASS"
+  },
+  "live_trading": false,
+  "memory_context": {
+    "active_candidate_count": 2,
+    "matched_memory_count": 80,
+    "recent_report_count": 3,
+    "ref": "knowledge/runs/hourly-20260922T100000+0200-memory-context.json"
+  },
+  "paid_actions": false,
+  "recon_scout": {
+    "economic_conclusion": "NO_PROVEN_EDGE",
+    "objects_checked": 15,
+    "ref": "knowledge/runs/recon/hourly-20260922T100000+0200.json",
+    "state_counts": {
+      "DISCOVER": 1,
+      "HUNT": 0,
+      "KILL": 0,
+      "PERSISTED_HUNT": 0,
+      "PROVE": 0,
+      "WATCH": 4
+    },
+    "watchlist": {
+      "added": 4,
+      "changed": 0,
+      "demoted_noise": 0,
+      "total": 4
+    }
+  },
+  "routing_ref": "knowledge/runs/hourly-20260922T100000+0200-routing.json",
+  "run_id": "hourly-20260922T100000+0200",
+  "source_failure_count": 0,
+  "source_manifests": {
+    "arxiv": "/home/leonh/prediction_research_prod/knowledge/documents/manifests/arxiv/20260922T080018Z_d7ed6c1e9723.json",
+    "aviationweather": "/home/leonh/prediction_research_prod/knowledge/documents/manifests/aviationweather/20260922T080017Z_dd6e0cc4b237.json",
+    "cftc": "/home/leonh/prediction_research_prod/knowledge/documents/manifests/cftc/20260922T080017Z_ce5421d512e8.json",
+    "ecmwf_open": "/home/leonh/prediction_research_prod/knowledge/documents/manifests/ecmwf_open/20260922T080017Z_0ca259ff241d.json",
+    "github": "/home/leonh/prediction_research_prod/knowledge/documents/manifests/github/20260922T080018Z_1b283b8c4742.json",
+    "kalshi_docs": "/home/leonh/prediction_research_prod/knowledge/documents/manifests/kalshi_docs/20260922T080017Z_305d1eec8da9.json",
+    "kalshi_weather_rules": "/home/leonh/prediction_research_prod/knowledge/documents/manifests/kalshi_weather_rules/20260922T080018Z_57d1b00d6b9a.json",
+    "nomads": "/home/leonh/prediction_research_prod/knowledge/documents/manifests/nomads/20260922T080018Z_5f2ff578e2aa.json",
+    "nws": "/home/leonh/prediction_research_prod/knowledge/documents/manifests/nws/20260922T080017Z_31c6ffbba37d.json",
+    "polymarket_docs": "/home/leonh/prediction_research_prod/knowledge/documents/manifests/polymarket_docs/20260922T080017Z_bbfb7a5f8e91.json",
+    "reddit": "/home/leonh/prediction_research_prod/knowledge/documents/manifests/reddit/20260922T080018Z_bca668cecadb.json",
+    "twc_kalshi": "/home/leonh/prediction_research_prod/knowledge/documents/manifests/twc_kalshi/20260922T080018Z_4778025a622c.json",
+    "youtube": "/home/leonh/prediction_research_prod/knowledge/documents/manifests/youtube/20260922T080018Z_fa701082e71b.json"
+  },
+  "source_quality": {
+    "low_text_yield_count": 3,
+    "ref": "knowledge/runs/hourly-20260922T100000+0200-source-quality.json",
+    "usable_count": 10
+  },
+  "source_success_count": 13,
+  "source_sweep_ref": "knowledge/runs/source_sweeps/20260922T080017Z.json",
+  "sources": {
+    "arxiv": "UNCHANGED",
+    "aviationweather": "UNCHANGED",
+    "cftc": "CHANGED",
+    "ecmwf_open": "CHANGED",
+    "github": "CHANGED",
+    "kalshi_docs": "CHANGED",
+    "kalshi_weather_rules": "CHANGED",
+    "nomads": "CHANGED",
+    "nws": "CHANGED",
+    "polymarket_docs": "CHANGED",
+    "reddit": "CHANGED",
+    "twc_kalshi": "UNCHANGED",
+    "youtube": "CHANGED"
+  },
+  "started_at": "2026-09-22T10:00:17.212475+02:00",
+  "status": "STARTED",
+  "wallet_actions": false
+}

@@ -1,6 +1,95 @@
 {
-  "version": 1,
   "description": "Opportunity Graph linking people/classes, bots, behavior, rules, APIs, markets, settlement, failures, successes and hypotheses.",
-  "nodes": [],
-  "edges": []
+  "edges": [
+    {
+      "from": "RECON-0db7ff1ec789722b",
+      "to": "role:algebra",
+      "type": "route_to"
+    },
+    {
+      "from": "RECON-0db7ff1ec789722b",
+      "to": "role:microstructure",
+      "type": "route_to"
+    },
+    {
+      "from": "RECON-0db7ff1ec789722b",
+      "to": "role:settlement",
+      "type": "route_to"
+    },
+    {
+      "from": "RECON-18d062630dd9c963",
+      "to": "role:algebra",
+      "type": "route_to"
+    },
+    {
+      "from": "RECON-18d062630dd9c963",
+      "to": "role:microstructure",
+      "type": "route_to"
+    },
+    {
+      "from": "RECON-18d062630dd9c963",
+      "to": "role:settlement",
+      "type": "route_to"
+    },
+    {
+      "from": "RECON-75b83fbdd0abd801",
+      "to": "role:algebra",
+      "type": "route_to"
+    },
+    {
+      "from": "RECON-75b83fbdd0abd801",
+      "to": "role:microstructure",
+      "type": "route_to"
+    },
+    {
+      "from": "RECON-75b83fbdd0abd801",
+      "to": "role:settlement",
+      "type": "route_to"
+    },
+    {
+      "from": "RECON-d838b2e925d20194",
+      "to": "role:scout",
+      "type": "route_to"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "RECON-0db7ff1ec789722b",
+      "status": "WATCH",
+      "type": "recon_finding"
+    },
+    {
+      "id": "RECON-18d062630dd9c963",
+      "status": "WATCH",
+      "type": "recon_finding"
+    },
+    {
+      "id": "RECON-75b83fbdd0abd801",
+      "status": "WATCH",
+      "type": "recon_finding"
+    },
+    {
+      "id": "RECON-d838b2e925d20194",
+      "status": "WATCH",
+      "type": "recon_finding"
+    },
+    {
+      "id": "role:algebra",
+      "type": "specialist"
+    },
+    {
+      "id": "role:microstructure",
+      "type": "specialist"
+    },
+    {
+      "id": "role:scout",
+      "type": "specialist"
+    },
+    {
+      "id": "role:settlement",
+      "type": "specialist"
+    }
+  ],
+  "updated_at": "2026-09-22T08:00:18.880660+00:00",
+  "version": 1
 }
