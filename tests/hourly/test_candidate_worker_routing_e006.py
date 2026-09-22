@@ -249,50 +249,52 @@ def test_hourly_cycle_builds_one_queue_snapshot_before_orchestration():
     assert "candidate_queue=queue_data" in source
 
 
-def test_current_four_candidates_route_and_survive_into_exchange_work_items(tmp_path):
+def test_synthetic_candidate_ids_survive_into_exchange_work_items(tmp_path):
     orchestrator = load_module(
-        "agent_orchestrator_e006_current",
+        "agent_orchestrator_e006_exchange",
         "control/hourly/agent_orchestrator.py",
     )
-    candidate_queue = load_module(
-        "candidate_queue_e006_current",
-        "control/hourly/candidate_queue.py",
-    )
     ai_handoff = load_module(
-        "ai_handoff_e006_current",
+        "ai_handoff_e006_exchange",
         "control/hourly/ai_handoff.py",
     )
     exchange = load_module(
-        "ai_work_exchange_e006_current",
+        "ai_work_exchange_e006_exchange",
         "control/hourly/ai_work_exchange.py",
     )
 
-    queue = candidate_queue.build_queue(write_candidates=False)
-    current_ids = {
-        "KWI-INCOMPLETE-TO-CANONICAL-V1",
-        "PAYOFF-IDENTITY-MINING-V1",
-        "ASSET-RANK-MAKER-HEDGE-V1",
-        "KWI-FULL-STATION-PRECANONICAL-V1",
-    }
-    queue_ids = {str(x.get("candidate_id")) for x in queue["queue"]}
-    assert current_ids <= queue_ids
+    candidates = [
+        row(
+            "WEATHER-CANARY",
+            lane="WEATHER",
+            hypothesis="KWI station temperature may lead TWC publication.",
+        ),
+        row(
+            "PAYOFF-CANARY",
+            lane="ALGEBRA",
+            hypothesis="statewise payoff identity may create equivalent portfolios",
+            required_data=["simultaneous executable L2 depth"],
+        ),
+        row(
+            "MAKER-CANARY",
+            lane="MICROSTRUCTURE",
+            phase="MECHANISM_DEFINED",
+            queue_status="RUNNING",
+            mechanism="maker fill followed by taker hedge",
+            required_data=["fill probability", "slippage", "hedge latency"],
+        ),
+    ]
 
     run = tmp_path / "fresh-canary"
     write_packets(run)
-    result = orchestrator.orchestrate(run, candidate_queue=queue)
+    result = orchestrator.orchestrate(run, candidate_queue={"queue": candidates})
 
-    weather_ids = set(packet(run, "weather_twc").get("candidate_ids", []))
-    algebra_ids = set(packet(run, "algebra").get("candidate_ids", []))
-    micro_ids = set(packet(run, "microstructure").get("candidate_ids", []))
-
-    assert "KWI-INCOMPLETE-TO-CANONICAL-V1" in weather_ids
-    assert "KWI-FULL-STATION-PRECANONICAL-V1" in weather_ids
-    assert "PAYOFF-IDENTITY-MINING-V1" in algebra_ids
-    assert "ASSET-RANK-MAKER-HEDGE-V1" in algebra_ids
-    assert "ASSET-RANK-MAKER-HEDGE-V1" in micro_ids
-
-    for unrelated in ("behavioral", "informed_flow"):
-        assert not (set(packet(run, unrelated).get("candidate_ids", [])) & current_ids)
+    assert packet(run, "weather_twc")["candidate_ids"] == ["WEATHER-CANARY"]
+    assert "PAYOFF-CANARY" in packet(run, "algebra")["candidate_ids"]
+    assert "PAYOFF-CANARY" in packet(run, "microstructure")["candidate_ids"]
+    assert "MAKER-CANARY" in packet(run, "microstructure")["candidate_ids"]
+    assert packet(run, "scout").get("candidate_ids", []) == []
+    assert packet(run, "recon_scout").get("candidate_ids", []) == []
 
     ready_roles = []
     for role in PRIMARY_ROLES:
@@ -313,19 +315,19 @@ def test_current_four_candidates_route_and_survive_into_exchange_work_items(tmp_
         },
         "ready_roles": ready_roles,
         "candidate_queue": {
-            "full_queue": queue["queue"],
-            "director_attention": queue["queue"],
+            "full_queue": candidates,
+            "director_attention": candidates,
             "waiting_without_blocking": [],
         },
-        "director_instruction": "candidate routing canary",
+        "director_instruction": "candidate routing regression",
         "expected_response_schema": {},
     }
     request = exchange.build_request(bundle, source_commit="0" * 40)
     work_by_role = {x["agent_id"]: x for x in request["work_items"]}
 
-    assert "KWI-INCOMPLETE-TO-CANONICAL-V1" in work_by_role["weather_twc"]["packet"]["candidate_ids"]
-    assert "PAYOFF-IDENTITY-MINING-V1" in work_by_role["algebra"]["packet"]["candidate_ids"]
-    assert "ASSET-RANK-MAKER-HEDGE-V1" in work_by_role["microstructure"]["packet"]["candidate_ids"]
+    assert "WEATHER-CANARY" in work_by_role["weather_twc"]["packet"]["candidate_ids"]
+    assert "PAYOFF-CANARY" in work_by_role["algebra"]["packet"]["candidate_ids"]
+    assert "MAKER-CANARY" in work_by_role["microstructure"]["packet"]["candidate_ids"]
     assert result["validation_pipeline"]["proof_candidates"] == []
     assert request["governor"]["ai_candidate_promotion_authority"] is False
     assert request["governor"]["ai_candidate_kill_authority"] is False
