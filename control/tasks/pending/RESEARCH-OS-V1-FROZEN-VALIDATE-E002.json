@@ -1,0 +1,24 @@
+{
+  "build_authorization": {
+    "build_kind": "control_plane",
+    "capabilities": [
+      "read_repository",
+      "read_git_branch",
+      "create_temporary_worktree",
+      "run_tests"
+    ],
+    "mode": "control_plane",
+    "objective": "Validate the current frozen Research OS V1 snapshot in an isolated temporary worktree without activating or modifying active runtime behavior, without credentials, paid actions, trading, wallet actions or external model/API fallback"
+  },
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/validate_research_os_frozen_e002.py"
+  ],
+  "hypothesis_id": "CONTROL-RESEARCH-OS-V1",
+  "live_trading": false,
+  "operation": "python",
+  "task_class": "infrastructure",
+  "task_id": "RESEARCH-OS-V1-FROZEN-VALIDATE-E002",
+  "timeout_seconds": 2400,
+  "working_directory": "."
+}
