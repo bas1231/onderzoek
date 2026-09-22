@@ -16,6 +16,7 @@ ALLOW = (
     "knowledge/candidates/protocols/**/*.json",
     "knowledge/recon/watchlist.json",
     "knowledge/recon/opportunity_graph.json",
+    "knowledge/research_os/*.json",
     "knowledge/runs/hourly-*.json",
     "knowledge/runs/twc-revision-summary-latest.json",
 )
@@ -75,7 +76,6 @@ def fail(reason: str, code: int = 1) -> int:
 
 
 def main() -> int:
-    # Never absorb somebody else's staged work.
     if git("diff", "--cached", "--quiet", check=False).returncode != 0:
         return fail("git index was already non-empty")
 
@@ -90,8 +90,6 @@ def main() -> int:
     local_before = git("rev-parse", "HEAD").stdout.strip()
     remote_before = git("rev-parse", "origin/main").stdout.strip()
 
-    # Critical rule:
-    # publisher never merges/rebases and never pushes unrelated local commits.
     if local_before != remote_before:
         return fail(
             "local HEAD differs from origin/main; manual reconciliation required"
@@ -108,16 +106,11 @@ def main() -> int:
     for line in status:
         if not line:
             continue
-
         path = line[3:]
-
-        # Handle rename notation conservatively.
         if " -> " in path:
             path = path.split(" -> ", 1)[1]
-
         if denied(path):
             continue
-
         if matches_allow(path):
             candidates.append(path)
 
@@ -132,7 +125,6 @@ def main() -> int:
         print("GIT_CHECKPOINT_NO_CHANGES")
         return 0
 
-    # Stage only explicit allowlisted paths.
     for path in candidates:
         p = ROOT / path
         if p.exists():
@@ -144,7 +136,6 @@ def main() -> int:
         if p
     ]
 
-    # Adversarial verification of staged set.
     invalid = [
         p
         for p in staged
@@ -166,7 +157,6 @@ def main() -> int:
         print("GIT_CHECKPOINT_NO_CHANGES")
         return 0
 
-    # Validate JSON before it can become durable canonical state.
     for path in staged:
         if not path.endswith(".json"):
             continue
@@ -191,8 +181,6 @@ def main() -> int:
 
     new_head = git("rev-parse", "HEAD").stdout.strip()
 
-    # Race protection:
-    # somebody could have pushed after our initial fetch.
     fetch2 = git("fetch", "origin", "main", check=False)
     if fetch2.returncode != 0:
         return fail(
