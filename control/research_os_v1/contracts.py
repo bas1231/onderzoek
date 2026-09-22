@@ -20,6 +20,7 @@ DEPENDENCY_UNLOCK = {"NONE", "ONE", "MULTIPLE"}
 COST_LEVEL = {"LOW", "MEDIUM", "HIGH"}
 RESULT_STATUS = {"COMPLETE", "BLOCKED", "FAILED", "NO_NEW_EVIDENCE"}
 ECONOMIC = {"NO_PROVEN_EDGE", "RESEARCH_POSITIVE", "TESTED_NEGATIVE", "EXECUTION_BLOCKED", "STRUCTURAL_CANDIDATE"}
+SOURCE_INDEPENDENCE = {"UNKNOWN", "SHARED_UPSTREAM", "PARTIAL", "INDEPENDENT", "NOT_APPLICABLE"}
 
 
 def _require(cond: bool, message: str, errors: list[str]) -> None:
@@ -31,6 +32,18 @@ def _nonempty_string(value: Any) -> bool:
     return isinstance(value, str) and bool(value.strip())
 
 
+def _optional_nonempty_string(value: Any) -> bool:
+    return value is None or _nonempty_string(value)
+
+
+def _string_list(value: Any, *, nonempty: bool = False) -> bool:
+    return (
+        isinstance(value, list)
+        and (bool(value) if nonempty else True)
+        and all(_nonempty_string(item) for item in value)
+    )
+
+
 def validate_task(task: dict[str, Any]) -> list[str]:
     errors: list[str] = []
     _require(isinstance(task, dict), "task_must_be_object", errors)
@@ -38,17 +51,22 @@ def validate_task(task: dict[str, Any]) -> list[str]:
         return errors
 
     _require(_nonempty_string(task.get("task_id")), "task_id_required", errors)
-    candidate_id = task.get("candidate_id")
     _require(
-        candidate_id is None or _nonempty_string(candidate_id),
+        _optional_nonempty_string(task.get("candidate_id")),
         "candidate_id_must_be_string_or_null",
         errors,
     )
+    for key in ("legacy_role", "legacy_status"):
+        if key in task:
+            _require(
+                _optional_nonempty_string(task.get(key)),
+                f"{key}_must_be_string_or_null",
+                errors,
+            )
     _require(task.get("worker_domain") in DOMAINS, "invalid_worker_domain", errors)
     _require(_nonempty_string(task.get("objective")), "objective_required", errors)
-    decisive_question = task.get("decisive_question")
     _require(
-        decisive_question is None or _nonempty_string(decisive_question),
+        _optional_nonempty_string(task.get("decisive_question")),
         "decisive_question_must_be_string_or_null",
         errors,
     )
@@ -73,15 +91,37 @@ def validate_task(task: dict[str, Any]) -> list[str]:
         errors,
     )
 
-    _require(isinstance(task.get("inputs"), dict), "inputs_required", errors)
+    inputs = task.get("inputs") if isinstance(task.get("inputs"), dict) else None
+    _require(inputs is not None, "inputs_required", errors)
+    if inputs is not None:
+        for key in (
+            "claim_ids", "evidence_refs", "rule_refs", "negative_evidence_refs",
+            "failure_pattern_ids", "candidate_ids",
+        ):
+            if key in inputs:
+                _require(
+                    _string_list(inputs.get(key)),
+                    f"invalid_input_{key}",
+                    errors,
+                )
+        if "routed_evidence_count" in inputs:
+            count = inputs.get("routed_evidence_count")
+            _require(
+                isinstance(count, int) and not isinstance(count, bool) and count >= 0,
+                "invalid_routed_evidence_count",
+                errors,
+            )
+        if "point_in_time_cutoff" in inputs:
+            _require(
+                _optional_nonempty_string(inputs.get("point_in_time_cutoff")),
+                "invalid_point_in_time_cutoff",
+                errors,
+            )
 
     expected = task.get("expected_output") if isinstance(task.get("expected_output"), dict) else {}
     _require(expected.get("artifact_type") in ARTIFACT_TYPES, "invalid_artifact_type", errors)
-    required_fields = expected.get("required_fields")
     _require(
-        isinstance(required_fields, list)
-        and bool(required_fields)
-        and all(_nonempty_string(v) for v in required_fields),
+        _string_list(expected.get("required_fields"), nonempty=True),
         "invalid_required_fields",
         errors,
     )
@@ -97,6 +137,25 @@ def validate_task(task: dict[str, Any]) -> list[str]:
     _require(_nonempty_string(action.get("kind")), "proposed_action_kind_required", errors)
     _require(isinstance(action.get("provenance"), bool), "proposed_action_provenance_bool_required", errors)
     _require(isinstance(action.get("point_in_time"), bool), "proposed_action_point_in_time_bool_required", errors)
+    if "branch" in action:
+        _require(
+            _optional_nonempty_string(action.get("branch")),
+            "proposed_action_branch_must_be_string_or_null",
+            errors,
+        )
+    if "contains_secrets" in action:
+        _require(
+            isinstance(action.get("contains_secrets"), bool),
+            "proposed_action_contains_secrets_bool_required",
+            errors,
+        )
+
+    if "stop_conditions" in task:
+        _require(
+            _string_list(task.get("stop_conditions")),
+            "invalid_stop_conditions",
+            errors,
+        )
 
     return sorted(set(errors))
 
@@ -106,8 +165,37 @@ def validate_result(result: dict[str, Any]) -> list[str]:
     _require(isinstance(result, dict), "result_must_be_object", errors)
     if not isinstance(result, dict):
         return errors
+
     _require(result.get("status") in RESULT_STATUS, "invalid_result_status", errors)
-    for key in ("claims", "evidence", "contradictions", "unknowns", "gate_effect"):
-        _require(isinstance(result.get(key), list), f"{key}_must_be_list", errors)
+    for key in ("claims", "evidence", "contradictions", "gate_effect"):
+        value = result.get(key)
+        _require(
+            isinstance(value, list) and all(isinstance(item, dict) for item in value),
+            f"{key}_must_be_list_of_objects",
+            errors,
+        )
+    _require(
+        _string_list(result.get("unknowns")),
+        "unknowns_must_be_string_list",
+        errors,
+    )
+    if "failure_patterns_triggered" in result:
+        _require(
+            _string_list(result.get("failure_patterns_triggered")),
+            "failure_patterns_triggered_must_be_string_list",
+            errors,
+        )
+    if "next_decisive_test" in result:
+        _require(
+            _optional_nonempty_string(result.get("next_decisive_test")),
+            "next_decisive_test_must_be_string_or_null",
+            errors,
+        )
+    if "source_independence" in result:
+        _require(
+            result.get("source_independence") in SOURCE_INDEPENDENCE,
+            "invalid_source_independence",
+            errors,
+        )
     _require(result.get("economic_conclusion") in ECONOMIC, "invalid_economic_conclusion", errors)
     return sorted(set(errors))
