@@ -1,0 +1,74 @@
+{
+  "schema_version": 1,
+  "status": "PREREGISTERED_BEFORE_FIRST_PROSPECTIVE_CAPTURE",
+  "purpose": "Collect immutable candidate-hour cases for the Research OS V1 shadow benchmark without allowing case multiplication, post-hoc dropping, or baseline/challenger case drift.",
+  "case_unit": {
+    "definition": "One canonical candidate observed in one ACTIVE-HOUR cycle with at least one legacy task that references exactly that candidate.",
+    "maximum_cases_per_candidate_per_active_hour": 1,
+    "representative_task_rule": [
+      "Prefer a Research OS scheduler-selected task linked to the candidate.",
+      "If none is selected, prefer a READY linked task.",
+      "Otherwise choose the lexicographically smallest linked task_id.",
+      "Do not create a case when no single-candidate linked task exists."
+    ],
+    "case_id_fields": [
+      "schema_version",
+      "active_hour_id",
+      "candidate_id",
+      "representative_task_id",
+      "legacy_role",
+      "task_shape"
+    ],
+    "case_id_hash": "SHA256 canonical JSON, prefix ROS1, first 24 hex characters"
+  },
+  "collection_rules": [
+    "Collection is read-only with respect to active factory state.",
+    "Every cycle artifact is immutable after first successful write; identical repeats are idempotent and differing repeats fail closed.",
+    "Ground truth is UNRESOLVED at capture time.",
+    "No captured case may be removed because its later outcome is inconvenient, ambiguous, negative, or still unresolved.",
+    "Unresolved mandatory cases block the final replacement comparison rather than being skipped.",
+    "Baseline and challenger observations must later bind to the exact same case_id.",
+    "The collector never authorizes trading, paid actions, wallet actions, or runtime mutation."
+  ],
+  "mandatory_cohort_rule": {
+    "start": "the first prospective capture explicitly accepted for the benchmark after collector validation",
+    "inclusion": "all qualifying cases from every accepted ACTIVE-HOUR cycle in chronological collection order",
+    "minimum_unseen_candidate_events": 20,
+    "minimum_active_hour_cycles": 10,
+    "minimum_task_shapes": 2,
+    "requires_survivor": true,
+    "requires_decisive_negative": true,
+    "no_post_hoc_case_removal": true,
+    "unresolved_case_policy": "BLOCK_REPLACEMENT_GATE"
+  },
+  "ground_truth_resolution_policy": {
+    "status": "FROZEN_BEFORE_FIRST_PROSPECTIVE_CAPTURE",
+    "DECISIVE_NEGATIVE": [
+      "Later canonical queue_status is CLOSED_NEGATIVE.",
+      "Later canonical economic_status is TESTED_NEGATIVE.",
+      "Any required non-NA gate is explicitly FAIL; required-gate failure is non-overridable."
+    ],
+    "SURVIVOR": [
+      "At least three later accepted ACTIVE-HOUR cycles have elapsed since capture.",
+      "No decisive-negative condition has occurred.",
+      "The candidate remains in an active or waiting state rather than CLOSED_NEGATIVE.",
+      "At least one substantive progress signal exists: a required gate PASS, or an explicit next decisive question, blocker, dependency, WAITING_FOR_DATA, or WAITING_FOR_RESULT state."
+    ],
+    "otherwise": "UNRESOLVED",
+    "priority": "DECISIVE_NEGATIVE takes precedence over SURVIVOR when both could otherwise appear to apply.",
+    "anti_zombie_rule": "Mere age or repeated presence without a substantive progress signal is not sufficient for SURVIVOR."
+  },
+  "pairing_rules": [
+    "Baseline and challenger must use the captured case_id and frozen active_hour_id/task_shape metadata.",
+    "A side-specific observation cannot change candidate_id, task_shape, or representative task identity.",
+    "Missing side observations remain missing and cannot be imputed as zero or success.",
+    "No composite score is introduced; the existing shadow_acceptance.json replacement rule remains authoritative."
+  ],
+  "hard_constraints": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "runtime_mutation": false,
+    "economic_default": "NO_PROVEN_EDGE"
+  }
+}
