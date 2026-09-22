@@ -97,6 +97,66 @@ def test_clean_runtime_fast_forwards_and_preserves_untracked(tmp_path, monkeypat
     assert run(prod, "rev-parse", "HEAD") == remote_head
     assert runtime_file.exists()
     assert result["untracked_file_count"] == 1
+    assert result["durable_untracked_seen"] == []
+
+
+def test_allowlisted_untracked_durable_state_triggers_checkpoint(tmp_path, monkeypatch):
+    remote, _seed, prod = make_repos(tmp_path)
+    mod = load_module()
+    configure_module(mod, monkeypatch, prod, tmp_path)
+
+    rel = "knowledge/recon/watchlist.json"
+    target = prod / rel
+    target.parent.mkdir(parents=True, exist_ok=True)
+    target.write_text('{"watch": true}\n', encoding="utf-8")
+
+    calls = []
+
+    def publish_checkpoint():
+        calls.append(rel)
+        run(prod, "add", "--", rel)
+        run(prod, "commit", "-m", "test durable checkpoint")
+        run(prod, "push", "origin", "main")
+        return {
+            "ok": True,
+            "returncode": 0,
+            "stdout": "published",
+            "stderr": "",
+        }
+
+    monkeypatch.setattr(mod, "run_checkpoint", publish_checkpoint)
+
+    result = mod.sync()
+
+    assert calls == [rel]
+    assert result["status"] == "READY"
+    assert result["checkpoint"]["ok"] is True
+    assert result["durable_untracked_seen"] == [rel]
+    assert result["durable_state_seen"] == [rel]
+    assert run(prod, "ls-files", "--error-unmatch", rel) == rel
+    assert run(prod, "rev-parse", "HEAD") == run(remote, "rev-parse", "main")
+
+
+def test_remote_overlap_with_untracked_durable_state_blocks(tmp_path, monkeypatch):
+    _remote, seed, prod = make_repos(tmp_path)
+    mod = load_module()
+    configure_module(mod, monkeypatch, prod, tmp_path)
+
+    rel = "knowledge/recon/watchlist.json"
+    target = prod / rel
+    target.parent.mkdir(parents=True, exist_ok=True)
+    target.write_text('{"v": "local"}\n', encoding="utf-8")
+
+    commit_file(seed, rel, '{"v": "remote"}\n', "remote watchlist add")
+    run(seed, "push", "origin", "main")
+    local_before = run(prod, "rev-parse", "HEAD")
+
+    result = mod.safe_sync()
+
+    assert result["status"] == "BLOCKED"
+    assert "overlaps local durable state" in result["error"]
+    assert run(prod, "rev-parse", "HEAD") == local_before
+    assert target.read_text(encoding="utf-8") == '{"v": "local"}\n'
 
 
 def test_unexpected_tracked_code_change_blocks_without_mutation(tmp_path, monkeypatch):

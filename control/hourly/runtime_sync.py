@@ -88,10 +88,14 @@ def staged_changes() -> list[str]:
     return sorted({line.strip() for line in out.splitlines() if line.strip()})
 
 
-def untracked_count() -> int:
+def untracked_paths() -> list[str]:
     proc = git("ls-files", "--others", "--exclude-standard")
     out = require_ok(proc, "list untracked files")
-    return len([line for line in out.splitlines() if line.strip()])
+    return sorted({line.strip() for line in out.splitlines() if line.strip()})
+
+
+def untracked_count() -> int:
+    return len(untracked_paths())
 
 
 def classify_tracked_paths(
@@ -106,6 +110,23 @@ def classify_tracked_paths(
         else:
             safe.append(path)
     return safe, unexpected
+
+
+def checkpointable_untracked_paths(
+    paths: list[str],
+    checkpoint: Any,
+) -> list[str]:
+    """Return only untracked paths the durable checkpoint is allowed to publish.
+
+    Other untracked runtime files remain deliberately untouched. They are not
+    treated as tracked-code drift, but they must not prevent new durable
+    receipts/reports from triggering the checkpoint publisher.
+    """
+    return sorted({
+        path
+        for path in paths
+        if not checkpoint.denied(path) and checkpoint.matches_allow(path)
+    })
 
 
 def changed_between(base: str, head: str) -> list[str]:
@@ -170,7 +191,12 @@ def sync() -> dict[str, Any]:
 
     tracked = tracked_changes()
     safe, unexpected = classify_tracked_paths(tracked, checkpoint)
-    untracked = untracked_count()
+    untracked_before = untracked_paths()
+    safe_untracked = checkpointable_untracked_paths(
+        untracked_before,
+        checkpoint,
+    )
+    untracked = len(untracked_before)
 
     if unexpected:
         raise RuntimeSyncError(
@@ -187,7 +213,8 @@ def sync() -> dict[str, Any]:
             )
 
         remote_changes = changed_between(local_before, remote_before)
-        overlap = sorted(set(safe).intersection(remote_changes))
+        local_durable = set(safe).union(safe_untracked)
+        overlap = sorted(local_durable.intersection(remote_changes))
         if overlap:
             raise RuntimeSyncError(
                 "remote update overlaps local durable state: "
@@ -211,7 +238,12 @@ def sync() -> dict[str, Any]:
             + ", ".join(unexpected_after_ff[:20])
         )
 
-    if safe_after_ff:
+    safe_untracked_after_ff = checkpointable_untracked_paths(
+        untracked_paths(),
+        checkpoint,
+    )
+
+    if safe_after_ff or safe_untracked_after_ff:
         checkpoint_result = run_checkpoint()
         if not checkpoint_result["ok"]:
             raise RuntimeSyncError(
@@ -239,10 +271,19 @@ def sync() -> dict[str, Any]:
         remaining,
         checkpoint,
     )
-    if safe_remaining or unexpected_remaining:
+    safe_untracked_remaining = checkpointable_untracked_paths(
+        untracked_paths(),
+        checkpoint,
+    )
+    durable_remaining = (
+        safe_remaining
+        + unexpected_remaining
+        + safe_untracked_remaining
+    )
+    if durable_remaining:
         raise RuntimeSyncError(
-            "tracked changes remain after sync/checkpoint: "
-            + ", ".join((safe_remaining + unexpected_remaining)[:20])
+            "durable changes remain after sync/checkpoint: "
+            + ", ".join(durable_remaining[:20])
         )
 
     return write_status(
@@ -253,7 +294,8 @@ def sync() -> dict[str, Any]:
         head=local_after,
         fast_forward=ff_performed,
         checkpoint=checkpoint_result,
-        durable_state_seen=safe,
+        durable_state_seen=sorted(set(safe).union(safe_untracked)),
+        durable_untracked_seen=safe_untracked,
         remote_change_count=len(remote_changes),
         untracked_file_count=untracked,
     )
