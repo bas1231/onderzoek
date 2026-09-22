@@ -38,8 +38,8 @@ def test_red_team_strips_origin_confidence_reasoning_and_evidence_polarity():
     assert "persuasive thesis prose" not in text
     assert "this proves the thesis" not in text
     assert "origin says this contradicts" not in text
-    assert "expected_result" not in text
-    assert "confidence" not in text
+    assert packet["expected_result_included"] is False
+    assert packet["origin_confidence_included"] is False
     assert "supporting_evidence_refs" not in packet
     assert "contradictory_evidence_refs" not in packet
     assert packet["claims"] == [{"claim_id": "CL1", "statement": "Observable claim"}]
@@ -85,7 +85,7 @@ def test_reproducer_strips_origin_analysis_gate_states_and_evidence_polarity():
     assert "origin worker says this is decisive" not in text
     assert "origin worker called this contradictory" not in text
     assert "expected_result" not in text
-    assert "confidence" not in text
+    assert packet["origin_confidence_included"] is False
     assert "raw_evidence_refs" not in packet
     assert "contradictory_evidence_refs" not in packet
     assert packet["evidence_refs"] == [
