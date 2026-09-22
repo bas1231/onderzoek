@@ -75,3 +75,10 @@ def test_red_team_rejects_malformed_evidence_instead_of_dropping_it():
     candidate["supporting_evidence"] = [{"analysis": "origin prose only"}]
     with pytest.raises(ValueError, match="evidence_reference_has_no_provenance"):
         build_blind_packet(candidate)
+
+
+def test_red_team_primary_flag_alone_is_not_provenance():
+    candidate = base_candidate()
+    candidate["supporting_evidence"] = [{"is_primary_source": True}]
+    with pytest.raises(ValueError, match="evidence_reference_has_no_provenance"):
+        build_blind_packet(candidate)
