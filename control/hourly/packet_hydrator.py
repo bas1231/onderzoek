@@ -75,6 +75,15 @@ def _dedup_dicts(items: list[dict[str, Any]]) -> list[dict[str, Any]]:
     return [selected[key] for key in sorted(selected)]
 
 
+def _dedup_candidate_items(items: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    selected: dict[str, dict[str, Any]] = {}
+    for item in items:
+        cid = str(item.get("candidate_key") or item.get("candidate_id") or item.get("finding_id") or "")
+        key = cid or json.dumps(item, sort_keys=True, separators=(",", ":"), ensure_ascii=False, default=str)
+        selected.setdefault(key, item)
+    return [selected[key] for key in sorted(selected)]
+
+
 def _capability_bucket(packet: dict[str, Any], capability: str) -> dict[str, Any]:
     work = packet.get("capability_work")
     if not isinstance(work, dict):
@@ -138,7 +147,7 @@ def hydrate_capability(
         if ref not in refs:
             refs.append(ref)
         packet["input_refs"] = refs
-        _mark_pending(packet)
+    _mark_pending(packet)
 
     if packet.get("agent_id") == "discovery" and capability in {"scout", "recon_scout"}:
         lanes = packet.get("discovery_lanes")
@@ -154,6 +163,22 @@ def hydrate_capability(
         packet["discovery_lanes"] = lanes
 
     return packet
+
+
+def hydrate_packet(
+    packet: dict[str, Any],
+    routed: dict[str, Any] | None,
+    routing_path: Path,
+) -> dict[str, Any]:
+    """Legacy direct helper retained for historical regression tests/tools."""
+    capability = str(packet.get("agent_id") or "unknown")
+    hydrated = hydrate_capability(packet, capability, routed, routing_path)
+    # Historical callers expect evidence objects without a capability label.
+    hydrated["routed_evidence"] = [
+        {k: v for k, v in item.items() if k != "capability"}
+        for item in hydrated.get("routed_evidence", [])
+    ]
+    return hydrated
 
 
 def _watch_triage_item(finding: dict[str, Any]) -> dict[str, Any]:
@@ -186,7 +211,7 @@ def apply_recon_watch_triage(
     recon_run_path: Path | None,
 ) -> dict[str, Any]:
     if recon_run_path is None or not recon_run_path.exists():
-        return {"watch_count": 0, "domain_roles": [], "routed_items": 0}
+        return {"watch_count": 0, "domain_roles": [], "specialist_roles": [], "routed_items": 0}
 
     data = load_json(recon_run_path)
     findings = [
@@ -195,16 +220,22 @@ def apply_recon_watch_triage(
     ]
     routed_items = 0
     touched: set[str] = set()
+    routed_keys: set[tuple[str, str]] = set()
     ref = str(recon_run_path.relative_to(ROOT))
 
     for finding in findings:
         triage = _watch_triage_item(finding)
+        stable_id = str(triage.get("candidate_key") or triage.get("finding_id") or "")
         for raw_capability in finding.get("falsification", {}).get("specialist_route", []):
             capability = str(raw_capability)
             resolved = _resolve_packet(packet_dir, capability)
             if not resolved:
                 continue
             role, path = resolved
+            dedup_key = (role + ":" + capability, stable_id)
+            if dedup_key in routed_keys:
+                continue
+            routed_keys.add(dedup_key)
             packet = load_json(path)
             item = dict(triage)
             item["capability"] = capability
@@ -212,11 +243,11 @@ def apply_recon_watch_triage(
             bucket = _capability_bucket(packet, capability)
             current = [x for x in bucket.get("recon_watch_triage", []) if isinstance(x, dict)]
             current.append(item)
-            bucket["recon_watch_triage"] = _dedup_dicts(current)
+            bucket["recon_watch_triage"] = _dedup_candidate_items(current)
 
             top = [x for x in packet.get("recon_watch_triage", []) if isinstance(x, dict)]
             top.append(item)
-            packet["recon_watch_triage"] = _dedup_dicts(top)
+            packet["recon_watch_triage"] = _dedup_candidate_items(top)
 
             refs = [str(x) for x in packet.get("input_refs", [])]
             if ref not in refs:
@@ -227,9 +258,11 @@ def apply_recon_watch_triage(
             routed_items += 1
             touched.add(role)
 
+    roles = sorted(touched)
     return {
         "watch_count": len(findings),
-        "domain_roles": sorted(touched),
+        "domain_roles": roles,
+        "specialist_roles": roles,
         "routed_items": routed_items,
     }
 
@@ -239,7 +272,7 @@ def apply_recon_hunts(
     hunt_plan_path: Path | None,
 ) -> dict[str, Any]:
     if hunt_plan_path is None or not hunt_plan_path.exists():
-        return {"hunt_count": 0, "domain_roles": [], "killer_candidates": []}
+        return {"hunt_count": 0, "domain_roles": [], "specialist_roles": [], "killer_candidates": []}
 
     data = load_json(hunt_plan_path)
     plans = [x for x in data.get("plans", []) if isinstance(x, dict)]
@@ -264,11 +297,11 @@ def apply_recon_hunts(
             bucket = _capability_bucket(packet, capability)
             hunts = [x for x in bucket.get("recon_hunts", []) if isinstance(x, dict)]
             hunts.append(item)
-            bucket["recon_hunts"] = _dedup_dicts(hunts)
+            bucket["recon_hunts"] = _dedup_candidate_items(hunts)
 
             top = [x for x in packet.get("recon_hunts", []) if isinstance(x, dict)]
             top.append(item)
-            packet["recon_hunts"] = _dedup_dicts(top)
+            packet["recon_hunts"] = _dedup_candidate_items(top)
             refs = [str(x) for x in packet.get("input_refs", [])]
             if ref not in refs:
                 refs.append(ref)
@@ -285,6 +318,7 @@ def apply_recon_hunts(
             ids = {str(x) for x in packet.get("candidate_ids", []) if x}
             ids.update(killer_ids)
             packet["candidate_ids"] = sorted(ids)
+            packet["candidates"] = plans
             bucket = _capability_bucket(packet, "prebuild_killer")
             bucket["candidate_ids"] = sorted(ids)
             bucket["recon_hunts"] = plans
@@ -302,9 +336,11 @@ def apply_recon_hunts(
             save_json(path, packet)
             touched.add(role)
 
+    roles = sorted(touched)
     return {
         "hunt_count": len(plans),
-        "domain_roles": sorted(touched),
+        "domain_roles": roles,
+        "specialist_roles": roles,
         "killer_candidates": sorted(set(killer_ids)),
     }
 
