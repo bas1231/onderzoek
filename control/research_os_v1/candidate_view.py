@@ -51,21 +51,44 @@ def _gate_status(value: Any) -> str:
         return "NOT_APPLICABLE"
     if text in {"UNKNOWN", "UNPROVEN"}:
         return "UNKNOWN"
+    # Legacy partial-stage labels such as PENDING_PROSPECTIVE,
+    # PASS_DISCOVERY_ONLY and DISCOVERY_COMPLETE are deliberately not upgraded
+    # to PASS. They remain unresolved until a current gate explicitly passes.
     return "PENDING"
 
 
 def _merged_gates(src: dict[str, Any]) -> dict[str, Any]:
-    merged: dict[str, Any] = {}
+    """Merge legacy/canonical gate maps without silently resolving conflicts."""
     canonical = src.get("required_gates")
     legacy = src.get("gates")
     if canonical is not None and not isinstance(canonical, dict):
         raise ValueError("required_gates_must_be_object")
     if legacy is not None and not isinstance(legacy, dict):
         raise ValueError("gates_must_be_object")
-    if isinstance(legacy, dict):
-        merged.update(legacy)
-    if isinstance(canonical, dict):
-        merged.update(canonical)
+
+    legacy = legacy or {}
+    canonical = canonical or {}
+    merged: dict[str, Any] = {}
+
+    all_names = list(legacy) + [name for name in canonical if name not in legacy]
+    for raw_name in all_names:
+        if not isinstance(raw_name, str) or not raw_name.strip():
+            raise ValueError("gate_name_must_be_nonempty_string")
+        name = raw_name.strip()
+        legacy_present = raw_name in legacy
+        canonical_present = raw_name in canonical
+        if legacy_present and canonical_present:
+            legacy_state = _gate_status(legacy[raw_name])
+            canonical_state = _gate_status(canonical[raw_name])
+            if legacy_state != canonical_state:
+                raise ValueError(
+                    f"conflicting_gate_state:{name}:{legacy_state}:{canonical_state}"
+                )
+            merged[name] = canonical[raw_name]
+        elif canonical_present:
+            merged[name] = canonical[raw_name]
+        else:
+            merged[name] = legacy[raw_name]
     return merged
 
 
@@ -154,22 +177,23 @@ def canonicalize(candidate: dict[str, Any], source_commit: str, version: int = 1
         raise ValueError("version_must_be_positive_integer")
 
     raw_gates = _merged_gates(src)
-    for name in raw_gates:
-        if not isinstance(name, str) or not name.strip():
-            raise ValueError("gate_name_must_be_nonempty_string")
     gates = {name: _gate_status(raw_gates.get(name)) for name in DEFAULT_GATES}
     for name, value in raw_gates.items():
-        gate_name = name.strip()
-        gates.setdefault(gate_name, _gate_status(value))
+        gates.setdefault(name, _gate_status(value))
 
     raw_queue = _state_text(
         src.get("queue_status"),
         "queue_status",
         default="NEEDS_DIRECTOR",
     )
-    queue_status = raw_queue if raw_queue in ALLOWED_QUEUE_STATUS else "NEEDS_DIRECTOR"
+    if raw_queue not in ALLOWED_QUEUE_STATUS:
+        raise ValueError(f"unknown_queue_status:{raw_queue}")
+    queue_status = raw_queue
+
     raw_priority = _state_text(src.get("priority"), "priority", default="P3")
-    priority = raw_priority if raw_priority in ALLOWED_PRIORITY else "P3"
+    if raw_priority not in ALLOWED_PRIORITY:
+        raise ValueError(f"unknown_priority:{raw_priority}")
+    priority = raw_priority
 
     evidence_value = (
         src.get("supporting_evidence")
