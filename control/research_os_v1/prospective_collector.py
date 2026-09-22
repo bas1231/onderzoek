@@ -227,6 +227,10 @@ def build_cycle_capture(
                 "phase": candidate.get("phase"),
                 "queue_status": candidate.get("queue_status"),
                 "economic_status": candidate.get("economic_status"),
+                "required_gates": deepcopy(candidate.get("required_gates") or {}),
+                "next_decisive_question": candidate.get("next_decisive_question"),
+                "blockers": deepcopy(candidate.get("blockers") or []),
+                "dependencies": deepcopy(candidate.get("dependencies") or []),
                 "candidate_hash": _sha256(candidate),
             },
         }
