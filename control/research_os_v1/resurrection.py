@@ -21,6 +21,30 @@ def _string_list(value: Any, error: str) -> list[str]:
     return out
 
 
+def _gate_map(value: Any, error: str) -> dict[str, Any]:
+    if value is None:
+        return {}
+    if not isinstance(value, dict):
+        raise ValueError(error)
+    out: dict[str, Any] = {}
+    for raw_gate, state in value.items():
+        gate = _required_text(raw_gate, "gate_name_must_be_nonempty_string")
+        out[gate] = deepcopy(state)
+    return out
+
+
+def _stored_resurrection_conditions(candidate: dict[str, Any]) -> list[str]:
+    if candidate.get("resurrection_conditions") is not None:
+        return _string_list(
+            candidate.get("resurrection_conditions"),
+            "resurrection_conditions_must_be_list_of_nonempty_strings",
+        )
+    legacy = candidate.get("resume_condition")
+    if legacy is None:
+        return []
+    return [_required_text(legacy, "resume_condition_must_be_nonempty_string")]
+
+
 def evaluate(
     candidate: dict[str, Any],
     changed_conditions: list[str],
@@ -28,10 +52,10 @@ def evaluate(
 ) -> dict[str, Any]:
     """Reopen a killed candidate only when an explicit stored condition changed.
 
-    Condition matching is exact after whitespace normalization; strings are not
-    treated as iterable lists. A resurrection starts a new evidentiary regime.
-    Old evidence remains in audit history, but no previous gate is inherited as
-    a current PASS merely because it once passed in the old regime.
+    Resurrection starts a fresh evidentiary regime. Both canonical
+    ``required_gates`` and legacy ``gates`` are reset as one union so an old PASS
+    can never leak back through the compatibility representation. Prior values
+    remain only in ``resurrection_history``.
     """
     if not isinstance(candidate, dict):
         raise ValueError("candidate_must_be_object")
@@ -47,10 +71,7 @@ def evaluate(
         or str(out.get("queue_status") or "").upper() == "CLOSED_NEGATIVE"
     )
 
-    stored_conditions = _string_list(
-        out.get("resurrection_conditions"),
-        "resurrection_conditions_must_be_list_of_nonempty_strings",
-    )
+    stored_conditions = _stored_resurrection_conditions(out)
     conditions = set(stored_conditions)
     changed = sorted(conditions & set(changed_list))
 
@@ -66,15 +87,16 @@ def evaluate(
             ),
         }
 
-    gates_value = out.get("required_gates")
-    if gates_value is None:
-        gates_value = {}
-    if not isinstance(gates_value, dict):
-        raise ValueError("required_gates_must_be_object")
-    gates: dict[str, str] = {}
-    for raw_gate in gates_value:
-        gate = _required_text(raw_gate, "gate_name_must_be_nonempty_string")
-        gates[gate] = "PENDING"
+    canonical_gates = _gate_map(
+        out.get("required_gates"),
+        "required_gates_must_be_object",
+    )
+    legacy_gates = _gate_map(
+        out.get("gates"),
+        "gates_must_be_object",
+    )
+    all_gate_names = sorted(set(canonical_gates) | set(legacy_gates))
+    reset_gates = {gate: "PENDING" for gate in all_gate_names}
 
     blockers = _string_list(
         out.get("blockers"),
@@ -97,7 +119,8 @@ def evaluate(
         "phase": out.get("phase"),
         "queue_status": out.get("queue_status"),
         "economic_status": out.get("economic_status"),
-        "required_gates": deepcopy(gates_value),
+        "required_gates": deepcopy(canonical_gates),
+        "legacy_gates": deepcopy(legacy_gates),
     }
     history.append(previous)
 
@@ -109,7 +132,10 @@ def evaluate(
     out["blockers"] = sorted(
         set(blockers + ["RESURRECTED_REQUIRES_FRESH_VALIDATION"])
     )
-    out["required_gates"] = gates
+    out["required_gates"] = deepcopy(reset_gates)
+    if "gates" in out:
+        out["gates"] = deepcopy(reset_gates)
+    out["resurrection_conditions"] = stored_conditions
 
     return {
         "resurrected": True,
