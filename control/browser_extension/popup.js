@@ -456,14 +456,161 @@ document.getElementById("pageDiagnostic")
   .addEventListener(
     "click",
     async () => {
-      const tab = await activeTab();
+      const tab =
+        await activeTab();
 
-      if (!tab || !tab.id) {
+      if (
+        !tab ||
+        !tab.id
+      ) {
         statusBox.textContent =
           "Geen actieve tab gevonden.";
         return;
       }
 
+      const diagnostic = {
+        diagnostic_version:
+          "E414R1",
+
+        extension_manifest_version:
+          chrome.runtime
+            .getManifest()
+            .version,
+
+        tab: {
+          id: tab.id,
+          url: tab.url || "",
+          title: tab.title || ""
+        }
+      };
+
+
+      /*
+       * 1. Armed state.
+       */
+      try {
+        const stored =
+          await chrome.storage.local.get([
+            "armedUrl",
+            "armedProjectKey"
+          ]);
+
+        const currentUrl =
+          normalizedChatUrl(
+            tab.url || ""
+          );
+
+        const currentProject =
+          projectKeyFromUrl(
+            tab.url || ""
+          );
+
+        diagnostic.armed = {
+          stored_url:
+            stored.armedUrl || null,
+
+          stored_project:
+            stored.armedProjectKey || null,
+
+          current_url:
+            currentUrl,
+
+          current_project:
+            currentProject,
+
+          match:
+            Boolean(
+              (
+                stored.armedUrl &&
+                stored.armedUrl ===
+                  currentUrl
+              ) ||
+              (
+                stored.armedProjectKey &&
+                stored.armedProjectKey ===
+                  currentProject
+              )
+            )
+        };
+
+      } catch (error) {
+        diagnostic.armed = {
+          error:
+            String(error)
+        };
+      }
+
+
+      /*
+       * 2. Is content.js werkelijk actief?
+       */
+      try {
+        diagnostic.content_runtime =
+          await chrome.tabs.sendMessage(
+            tab.id,
+            {
+              type:
+                "predictionBridgePing"
+            }
+          );
+
+      } catch (error) {
+        diagnostic.content_runtime = {
+          ok: false,
+          error:
+            String(error)
+        };
+      }
+
+
+      /*
+       * 3. Is ai_response_capture.js actief?
+       */
+      try {
+        diagnostic.capture_runtime =
+          await chrome.tabs.sendMessage(
+            tab.id,
+            {
+              type:
+                "predictionAiCapturePing"
+            }
+          );
+
+      } catch (error) {
+        diagnostic.capture_runtime = {
+          ok: false,
+          error:
+            String(error)
+        };
+      }
+
+
+      /*
+       * 4. Is localhost bridge bereikbaar?
+       */
+      try {
+        diagnostic.bridge_health =
+          await bridgeFetch(
+            "/health",
+            "GET"
+          );
+
+      } catch (error) {
+        diagnostic.bridge_health = {
+          ok: false,
+          error:
+            String(error)
+        };
+      }
+
+
+      /*
+       * 5. Wat ziet de ChatGPT DOM werkelijk?
+       *
+       * Markerstrings bewust opgebouwd uit delen,
+       * zodat deze diagnostic zelf geen false task
+       * in de chat veroorzaakt.
+       */
       try {
         const results =
           await chrome.scripting.executeScript({
@@ -472,66 +619,247 @@ document.getElementById("pageDiagnostic")
             },
 
             func: () => {
+              const LEFT =
+                "<" + "<" + "<";
+
+              const RIGHT =
+                ">" + ">" + ">";
+
+              const START =
+                LEFT +
+                "PREDICTION_BRIDGE_TASK" +
+                RIGHT;
+
+              const END =
+                LEFT +
+                "END_PREDICTION_BRIDGE_TASK" +
+                RIGHT;
+
+
+              function nodeText(node) {
+                return (
+                  node &&
+                  (
+                    node.innerText ||
+                    node.textContent ||
+                    ""
+                  )
+                ) || "";
+              }
+
+
+              function extractBlocks(text) {
+                const blocks = [];
+                let position = 0;
+
+                while (true) {
+                  const start =
+                    text.indexOf(
+                      START,
+                      position
+                    );
+
+                  if (start < 0) {
+                    break;
+                  }
+
+                  const bodyStart =
+                    start +
+                    START.length;
+
+                  const end =
+                    text.indexOf(
+                      END,
+                      bodyStart
+                    );
+
+                  if (end < 0) {
+                    break;
+                  }
+
+                  blocks.push(
+                    text
+                      .slice(
+                        bodyStart,
+                        end
+                      )
+                      .trim()
+                  );
+
+                  position =
+                    end +
+                    END.length;
+                }
+
+                return blocks;
+              }
+
+
+              function taskId(block) {
+                try {
+                  const value =
+                    JSON.parse(
+                      block
+                    );
+
+                  if (
+                    value &&
+                    typeof value.task_id ===
+                      "string"
+                  ) {
+                    return value.task_id;
+                  }
+
+                  if (
+                    value &&
+                    value.task &&
+                    typeof value.task.task_id ===
+                      "string"
+                  ) {
+                    return (
+                      value.task.task_id
+                    );
+                  }
+
+                  return "NO_TASK_ID";
+
+                } catch {
+                  const match =
+                    block.match(
+                      /"task_id"\s*:\s*"([^"]+)"/
+                    );
+
+                  return match
+                    ? match[1]
+                    : "UNPARSEABLE";
+                }
+              }
+
+
               const bodyText =
-                document.body
-                  ? (document.body.innerText || "")
-                  : "";
+                nodeText(
+                  document.body
+                );
 
-              const taskStart =
-                "<<<PREDICTION_BRIDGE_TASK>>>";
+              const assistantNodes =
+                Array.from(
+                  document.querySelectorAll(
+                    '[data-message-author-role="assistant"]'
+                  )
+                );
 
-              const taskEnd =
-                "<<<END_PREDICTION_BRIDGE_TASK>>>";
+              const userNodes =
+                Array.from(
+                  document.querySelectorAll(
+                    '[data-message-author-role="user"]'
+                  )
+                );
 
-              const startCount =
-                bodyText.split(taskStart).length - 1;
+              const bodyBlocks =
+                extractBlocks(
+                  bodyText
+                );
 
-              const endCount =
-                bodyText.split(taskEnd).length - 1;
+              const assistantBlocks =
+                assistantNodes.flatMap(
+                  node =>
+                    extractBlocks(
+                      nodeText(node)
+                    )
+                );
 
-              const composer =
-                document.querySelector("#prompt-textarea") ||
-                document.querySelector(
-                  '[contenteditable="true"][role="textbox"]'
-                ) ||
-                document.querySelector("textarea");
-
-              const assistantSelectorCount =
-                document.querySelectorAll(
-                  '[data-message-author-role="assistant"]'
-                ).length;
+              const userBlocks =
+                userNodes.flatMap(
+                  node =>
+                    extractBlocks(
+                      nodeText(node)
+                    )
+                );
 
               return {
-                url: location.href,
-                pathname: location.pathname,
-                title: document.title,
-                body_chars: bodyText.length,
-                task_start_markers: startCount,
-                task_end_markers: endCount,
-                composer_found: Boolean(composer),
+                url:
+                  location.href,
+
+                ready_state:
+                  document.readyState,
+
+                body_chars:
+                  bodyText.length,
+
+                start_markers:
+                  bodyText
+                    .split(START)
+                    .length - 1,
+
+                end_markers:
+                  bodyText
+                    .split(END)
+                    .length - 1,
+
                 assistant_nodes:
-                  assistantSelectorCount
+                  assistantNodes.length,
+
+                user_nodes:
+                  userNodes.length,
+
+                body_task_ids:
+                  bodyBlocks.map(
+                    taskId
+                  ),
+
+                assistant_task_ids:
+                  assistantBlocks.map(
+                    taskId
+                  ),
+
+                user_task_ids:
+                  userBlocks.map(
+                    taskId
+                  ),
+
+                canary_seen:
+                  bodyText.includes(
+                    "AUTOCHAT-BRIDGE-E415-CANARY-01"
+                  ),
+
+                composer_found:
+                  Boolean(
+                    document.querySelector(
+                      "#prompt-textarea"
+                    ) ||
+                    document.querySelector(
+                      '[contenteditable="true"][role="textbox"]'
+                    ) ||
+                    document.querySelector(
+                      "textarea"
+                    )
+                  )
               };
             }
           });
 
-        const result =
-          results &&
-          results[0] &&
-          results[0].result;
-
-        statusBox.textContent =
-          "CHATGPT PAGE DIAGNOSTIC\n\n" +
-          JSON.stringify(
-            result,
-            null,
-            2
-          );
+        diagnostic.page =
+          (
+            results &&
+            results[0]
+          )
+            ? results[0].result
+            : null;
 
       } catch (error) {
-        statusBox.textContent =
-          "PAGE ACCESS FAILED\n\n" +
-          String(error);
+        diagnostic.page = {
+          error:
+            String(error)
+        };
       }
+
+
+      statusBox.textContent =
+        "BRIDGE TELEMETRY E414R1\n\n" +
+        JSON.stringify(
+          diagnostic,
+          null,
+          2
+        );
     }
   );
