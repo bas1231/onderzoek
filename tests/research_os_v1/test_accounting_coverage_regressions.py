@@ -31,6 +31,60 @@ def test_missing_accounting_never_allows_direct_promotion():
     assert flags["accounting_present"] is False
     assert flags["requires_untouched_validation"] is True
     assert flags["discovery_evidence_may_promote_directly"] is False
+    assert flags["promotion_blocker"] == "SEARCH_FAMILY_MISSING"
+
+
+def test_zero_recorded_trials_are_unknown_and_block_direct_use():
+    flags = adaptive_search_flags({
+        "id": "F0",
+        "hypotheses_examined": 0,
+        "parameterizations_examined": 0,
+        "post_hoc_mutations": 0,
+        "untouched_evidence_remaining": True,
+    })
+    assert flags["adaptive_search"] == "UNKNOWN"
+    assert flags["search_trials_recorded"] == 0
+    assert flags["requires_untouched_validation"] is True
+    assert flags["discovery_evidence_may_promote_directly"] is False
+    assert flags["promotion_blocker"] == "NO_SEARCH_TRIAL_RECORDED"
+    assert flags["reason"] == "no_trials_recorded"
+
+
+def test_post_hoc_mutation_without_recorded_trial_is_invalid_accounting():
+    with pytest.raises(ValueError, match="post_hoc_mutations_without_recorded_trial"):
+        normalize({
+            "id": "F0-MUTATED",
+            "hypotheses_examined": 0,
+            "parameterizations_examined": 0,
+            "post_hoc_mutations": 1,
+            "untouched_evidence_remaining": True,
+        })
+
+
+def test_resolved_variants_may_not_exceed_recorded_search_space():
+    with pytest.raises(ValueError, match="resolved_variants_exceed_recorded_search_space"):
+        normalize({
+            "id": "F-BAD-COUNTS",
+            "hypotheses_examined": 1,
+            "parameterizations_examined": 1,
+            "post_hoc_mutations": 0,
+            "failed_variants": 2,
+            "surviving_variants": 1,
+            "untouched_evidence_remaining": True,
+        })
+
+
+def test_single_recorded_path_without_untouched_evidence_cannot_promote_directly():
+    flags = adaptive_search_flags({
+        "id": "F1-NO-HOLDOUT",
+        "hypotheses_examined": 1,
+        "parameterizations_examined": 0,
+        "post_hoc_mutations": 0,
+        "untouched_evidence_remaining": False,
+    })
+    assert flags["adaptive_search"] is False
+    assert flags["discovery_evidence_may_promote_directly"] is False
+    assert flags["promotion_blocker"] == "NO_UNTOUCHED_EVIDENCE_REMAINING"
 
 
 def test_adaptive_search_without_untouched_evidence_exposes_blocker():
