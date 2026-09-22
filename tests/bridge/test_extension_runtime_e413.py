@@ -19,10 +19,12 @@ def test_manifest_no_longer_auto_injects():
         read("manifest.json")
     )
 
-    assert (
-        manifest["version"]
-        == "0.9.0"
+    manifest_version = tuple(
+        int(part)
+        for part in manifest["version"].split(".")
     )
+
+    assert manifest_version >= (0, 9, 0)
 
     assert (
         "content_scripts"
@@ -68,7 +70,12 @@ def test_content_context_guard():
     )
 
     assert (
-        'const CONTENT_VERSION = "0.9.0";'
+        "const CONTENT_VERSION ="
+        in src
+    )
+
+    assert (
+        'const CONTENT_VERSION = "0.9.1";'
         in src
     )
 

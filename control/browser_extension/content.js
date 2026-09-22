@@ -1,5 +1,5 @@
 (() => {
-  const CONTENT_VERSION = "0.9.0";
+  const CONTENT_VERSION = "0.9.1";
 
   if (
     window.__PREDICTION_RESEARCH_BRIDGE_LOADED__ ===
@@ -462,6 +462,14 @@
           extractTaskBlocks(bodyText).filter(
             block => {
               if (
+                !looksLikeExecutableTaskBlock(
+                  block
+                )
+              ) {
+                return false;
+              }
+
+              if (
                 selectedAssistantBlocks.has(block)
               ) {
                 return false;
@@ -502,6 +510,57 @@
 
     return specific;
   }
+
+  /*
+   * E415:
+   * Markerwoorden kunnen ook voorkomen in uitleg, broncode,
+   * diagnostics of geciteerde tekst.
+   *
+   * Alleen blokken die op een echte bridge-task lijken mogen
+   * naar JSON.parse en de incidentketen.
+   */
+  function looksLikeExecutableTaskBlock(block) {
+    const candidate =
+      String(block || "").trim();
+
+    if (!candidate) {
+      return false;
+    }
+
+    if (!candidate.startsWith("{")) {
+      return false;
+    }
+
+    if (
+      !candidate.includes(
+        '"task_id"'
+      )
+    ) {
+      return false;
+    }
+
+    const looksDirect =
+      candidate.includes(
+        '"task_class"'
+      ) &&
+      candidate.includes(
+        '"operation"'
+      );
+
+    const looksEnvelope =
+      candidate.includes(
+        '"bridge_version"'
+      ) &&
+      candidate.includes(
+        '"task"'
+      );
+
+    return Boolean(
+      looksDirect ||
+      looksEnvelope
+    );
+  }
+
 
   function extractTaskBlocks(text) {
     const blocks = [];
@@ -795,6 +854,19 @@
         for (
           const block of extractTaskBlocks(text)
         ) {
+          /*
+           * Tweede gate:
+           * ook normale assistant-nodes mogen markerwoorden
+           * bevatten als onderdeel van code/uitleg.
+           */
+          if (
+            !looksLikeExecutableTaskBlock(
+              block
+            )
+          ) {
+            continue;
+          }
+
           let envelope;
 
           try {
