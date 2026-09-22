@@ -192,6 +192,10 @@ def _normalize_telemetry_record(
         (unique_evidence, contradictions, research_count, duplicate_count, applicable, pre, len(starvation))
     ):
         raise ValueError(f"unassigned_case_has_research_activity:{case_id}")
+    if intentionally_unassigned:
+        # A scheduler that deliberately performs no research gets no provenance
+        # completeness credit merely because the evidence set is empty.
+        provenance_complete = False
 
     out: dict[str, Any] = {
         **expected,
