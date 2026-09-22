@@ -112,6 +112,39 @@ def test_replay_remains_ineligible_under_strict_gate():
     with_fake_decode(body)
 
 
+def test_helper_exit_provenance_fails_closed():
+    assert strict._helper_exit_is_success(
+        0,
+        once=False,
+        terminated_by_parent=False,
+        emitted=1,
+    ) is True
+    assert strict._helper_exit_is_success(
+        -15,
+        once=True,
+        terminated_by_parent=True,
+        emitted=1,
+    ) is True
+    assert strict._helper_exit_is_success(
+        7,
+        once=True,
+        terminated_by_parent=False,
+        emitted=1,
+    ) is False
+    assert strict._helper_exit_is_success(
+        -15,
+        once=True,
+        terminated_by_parent=False,
+        emitted=1,
+    ) is False
+    assert strict._helper_exit_is_success(
+        -15,
+        once=True,
+        terminated_by_parent=True,
+        emitted=0,
+    ) is False
+
+
 if __name__ == "__main__":
     tests = [
         test_clean_live_frame_is_eligible,
@@ -119,6 +152,7 @@ if __name__ == "__main__":
         test_early_cursor_without_full_queue_is_not_automatically_rejected,
         test_full_queue_without_early_cursor_is_not_automatically_rejected,
         test_replay_remains_ineligible_under_strict_gate,
+        test_helper_exit_provenance_fails_closed,
     ]
     for test in tests:
         test()
