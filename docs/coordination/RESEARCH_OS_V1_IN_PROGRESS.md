@@ -18,7 +18,7 @@ Canonical active runtime remains: `main`
 
 Research OS V1 static/adversarial hardening is now **content-frozen before final reconciliation and execution testing**. Other sessions may continue normal Weather, Recon, bridge, executor and hourly work on `main`.
 
-At the latest comparison the Research OS branch was **112 commits ahead / 76 commits behind `main`**, while every changed path remained confined to Research-OS sidecar/docs/tests/benchmarks. No active `control/hourly/*`, Weather, Recon, bridge or executor runtime file is part of the Research OS diff.
+At the freeze comparison the Research OS branch was **112 commits ahead / 76 commits behind `main`**, while every changed path remained confined to Research-OS sidecar/docs/tests/benchmarks. No active `control/hourly/*`, Weather, Recon, bridge or executor runtime file is part of the Research OS diff.
 
 The branch will not be continuously rebased while unrelated sessions continue moving `main`. The next structural change is one deliberate final reconciliation against the then-current `main`.
 
