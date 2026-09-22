@@ -1,0 +1,18 @@
+[Unit]
+Description=Prediction Research local control executor
+After=network-online.target
+Wants=network-online.target
+
+# Fallback unit for the canonical Strix production checkout. The installer
+# renders prediction-research-executor.service.in from its own repo root.
+[Service]
+Type=simple
+WorkingDirectory=%h/prediction_research_prod
+Environment=PYTHONUNBUFFERED=1
+ExecStart=%h/prediction_research_prod/.venv/bin/python %h/prediction_research_prod/control/executor.py
+Restart=always
+RestartSec=5
+TimeoutStopSec=20
+
+[Install]
+WantedBy=default.target
