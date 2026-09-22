@@ -46,6 +46,8 @@ def main() -> int:
     hydrator = load('packet_hydrator', R / 'control/hourly/packet_hydrator.py')
     orchestrator = load('agent_orchestrator', R / 'control/hourly/agent_orchestrator.py')
     candidate_queue = load('candidate_queue', R / 'control/hourly/candidate_queue.py')
+    scheduler = load('task_shape_scheduler', R / 'control/hourly/task_shape_scheduler.py')
+    graph = load('evidence_failure_graph', R / 'control/hourly/evidence_failure_graph.py')
     ai_handoff = load('ai_handoff', R / 'control/hourly/ai_handoff.py')
 
     run, manifest, report, packets = runner.create_packets()
@@ -66,25 +68,13 @@ def main() -> int:
     routing_path.write_text(json.dumps(routing, indent=2, sort_keys=True) + chr(10))
 
     recon_data, recon_path = recon.run(run['run_id'], routing_path)
-
     memory_data, memory_path = memory.build(run['run_id'])
 
-    # PVA AGENT CONTROL PLANE V1
-    # Snapshot the canonical non-terminal candidate queue before packet
-    # orchestration. The exact same snapshot is used for candidate→worker
-    # routing and the later Director handoff, preventing queue/worker drift.
-    queue_data = candidate_queue.build_queue(
-        write_candidates=True,
-    )
+    # One canonical candidate snapshot per cycle: routing, Director handoff and
+    # transient reproduction all consume the same point-in-time queue state.
+    queue_data = candidate_queue.build_queue(write_candidates=True)
 
-    # Routing evidence and Recon triage are attached to specialist packets.
-    # The orchestrator then attaches only semantically relevant candidates and
-    # assigns READY/NO_EVIDENCE/etc. ChatGPT remains the reasoning layer, but
-    # READY work is compiled into the dedicated AI-only work bundle consumed by
-    # the browser bridge. This is not an executor task and cannot authorize
-    # live/paid/wallet actions.
     packet_dir = R / 'knowledge/runs/agent_packets' / run['run_id']
-
     hunt_ref = recon_data.get('hunt_plans', {}).get('ref')
     hunt_plan_path = (R / hunt_ref) if hunt_ref else None
     hydration_data = hydrator.hydrate_run(
@@ -98,6 +88,18 @@ def main() -> int:
         candidate_queue=queue_data,
     )
 
+    # Persist graph-style research memory before dispatch. This records what
+    # evidence/candidate routing was actually visible to this cycle.
+    graph_input_state = graph.record_cycle_inputs(
+        run['run_id'],
+        routing,
+        orchestration_data.get('candidate_routing', []),
+    )
+
+    # Task shape is applied after routing/orchestration and before AI bundle
+    # compilation so only useful six-domain workers become ready work items.
+    schedule_data = scheduler.schedule(packet_dir)
+
     proof_review_path = candidate_queue.write_proof_review(
         run['run_id'],
         orchestration_data.get('validation_pipeline', {}),
@@ -109,13 +111,21 @@ def main() -> int:
         proof_review_path=proof_review_path,
     )
 
-    # Build before hourly_wake.py. The browser bridge only offers AI work
-    # when the wake incident and bundle run_id match, so ordering is part of
-    # the dispatch contract.
+    # Build before hourly_wake.py. Browser bridge wake/run matching remains a
+    # hard dispatch contract.
     ai_bundle, ai_bundle_path = ai_handoff.build(run['run_id'])
 
     run_path = R / 'knowledge/runs' / (run['run_id'] + '.json')
     current = json.loads(run_path.read_text())
+    current['architecture'] = 'E007_SIX_DOMAIN'
+    current['permanent_agents'] = [
+        'discovery',
+        'market_research',
+        'mechanics',
+        'algebra',
+        'red_team_pentest',
+        'research_director',
+    ]
     current['cadence'] = {
         'mode': cadence_result.get('mode'),
         'work_started_at': cadence_result.get('work_started_at'),
@@ -140,38 +150,33 @@ def main() -> int:
         'economic_conclusion': recon_data.get('economic_conclusion', 'NO_PROVEN_EDGE'),
     }
     current['agent_control_plane'] = {
+        'architecture': 'E007_SIX_DOMAIN',
         'packet_dir': str(packet_dir.relative_to(R)),
         'hydrated_roles': hydration_data.get('hydrated_roles', []),
+        'hydrated_capabilities': hydration_data.get('hydrated_capabilities', []),
         'recon_hunts': hydration_data.get('recon_hunts', {}),
-        'orchestration_ref': str(
-            (packet_dir / '_orchestration.json').relative_to(R)
-        ),
-        'director_handoff_ref': str(
-            director_handoff_path.relative_to(R)
-        ),
-        'proof_review_ref': str(
-            proof_review_path.relative_to(R)
-        ),
-        'ai_work_bundle_ref': str(
-            ai_bundle_path.relative_to(R)
-        ),
+        'orchestration_ref': str((packet_dir / '_orchestration.json').relative_to(R)),
+        'task_schedule_ref': str((packet_dir / '_task_schedule.json').relative_to(R)),
+        'scheduled_dynamic_workers': schedule_data.get('scheduled_dynamic_workers', []),
+        'scheduled_transient_workers': schedule_data.get('scheduled_transient_workers', []),
+        'director_handoff_ref': str(director_handoff_path.relative_to(R)),
+        'proof_review_ref': str(proof_review_path.relative_to(R)),
+        'ai_work_bundle_ref': str(ai_bundle_path.relative_to(R)),
         'ai_work_ready_roles': [
             item.get('agent_id')
             for item in ai_bundle.get('ready_roles', [])
         ],
         'ai_work_job_count': len(ai_bundle.get('ready_roles', [])),
-        'validation_pipeline': orchestration_data.get(
-            'validation_pipeline', {}
-        ),
-        'candidate_routing': orchestration_data.get(
-            'candidate_routing', []
-        ),
+        'validation_pipeline': orchestration_data.get('validation_pipeline', {}),
+        'candidate_routing': orchestration_data.get('candidate_routing', []),
         'queue_count': len(queue_data.get('queue', [])),
         'default_economic_conclusion': 'NO_PROVEN_EDGE',
         'live_trading': False,
         'paid_actions': False,
         'wallet_actions': False,
+        'openai_api': False,
     }
+    current['research_graphs'] = graph_input_state
     current['memory_context'] = {
         'ref': str(memory_path.relative_to(R)),
         'matched_memory_count': memory_data.get('matched_memory_count'),
@@ -186,12 +191,13 @@ def main() -> int:
     if marker not in existing:
         with report_path.open('a') as handle:
             handle.write(chr(10) + marker + chr(10) + chr(10))
+            handle.write('Architecture: E007_SIX_DOMAIN' + chr(10))
             handle.write('Cadence mode: ' + str(cadence_result.get('mode')) + chr(10))
             handle.write('Usable sources: ' + str(quality_data.get('usable_count')) + chr(10))
             handle.write('Low-text-yield sources: ' + str(quality_data.get('low_text_yield_count')) + chr(10))
             handle.write('Matched Git-memory records: ' + str(memory_data.get('matched_memory_count')) + chr(10))
             handle.write('Memory context: ' + str(memory_path.relative_to(R)) + chr(10))
-            handle.write(chr(10) + '### Recon Scout' + chr(10))
+            handle.write(chr(10) + '### Recon Scout preprocessing' + chr(10))
             handle.write('Objects checked: ' + str(recon_data.get('objects_checked', 0)) + chr(10))
             handle.write('State counts: ' + json.dumps(recon_data.get('state_counts', {}), sort_keys=True) + chr(10))
             handle.write('Watchlist changes: ' + json.dumps(recon_data.get('watchlist', {}), sort_keys=True) + chr(10))
@@ -199,41 +205,19 @@ def main() -> int:
             handle.write('Recon evidence: ' + str(recon_path.relative_to(R)) + chr(10))
 
             for role, data in routing.items():
-                handle.write('- ' + role + ': ' + str(len(data.get('evidence', []))) + ' routed evidence items' + chr(10))
+                handle.write('- capability ' + role + ': ' + str(len(data.get('evidence', []))) + ' routed evidence items' + chr(10))
 
-            handle.write(chr(10) + '### Agent control plane' + chr(10))
-            handle.write(
-                'Director handoff: '
-                + str(director_handoff_path.relative_to(R))
-                + chr(10)
-            )
-            handle.write(
-                'AI work bundle: '
-                + str(ai_bundle_path.relative_to(R))
-                + chr(10)
-            )
-            handle.write(
-                'AI READY roles: '
-                + json.dumps(
-                    [x.get('agent_id') for x in ai_bundle.get('ready_roles', [])]
-                )
-                + chr(10)
-            )
-            handle.write(
-                'Persistent candidate queue: '
-                + str(len(queue_data.get('queue', [])))
-                + ' nonterminal candidates'
-                + chr(10)
-            )
-            handle.write(
-                'Candidate→worker assignments: '
-                + str(len(orchestration_data.get('candidate_routing', [])))
-                + chr(10)
-            )
-            handle.write(
-                'Economic default: NO_PROVEN_EDGE'
-                + chr(10)
-            )
+            handle.write(chr(10) + '### Six-domain control plane' + chr(10))
+            handle.write('Permanent agents: discovery, market_research, mechanics, algebra, red_team_pentest, research_director' + chr(10))
+            handle.write('Scheduled domain workers: ' + json.dumps(schedule_data.get('scheduled_dynamic_workers', [])) + chr(10))
+            handle.write('Transient workers: ' + json.dumps(schedule_data.get('scheduled_transient_workers', [])) + chr(10))
+            handle.write('Director handoff: ' + str(director_handoff_path.relative_to(R)) + chr(10))
+            handle.write('AI work bundle: ' + str(ai_bundle_path.relative_to(R)) + chr(10))
+            handle.write('AI READY roles: ' + json.dumps([x.get('agent_id') for x in ai_bundle.get('ready_roles', [])]) + chr(10))
+            handle.write('Persistent candidate queue: ' + str(len(queue_data.get('queue', []))) + ' nonterminal candidates' + chr(10))
+            handle.write('Candidate→domain/capability assignments: ' + str(len(orchestration_data.get('candidate_routing', []))) + chr(10))
+            handle.write('Evidence Graph: ' + str(graph_input_state.get('evidence_graph_ref')) + chr(10))
+            handle.write('Economic default: NO_PROVEN_EDGE' + chr(10))
 
     subprocess.run(
         [str(R / '.venv/bin/python'), str(R / 'control/hourly/hourly_wake.py')],
@@ -246,6 +230,7 @@ def main() -> int:
         sweep_data['failure_count'],
         quality_data.get('usable_count'),
         memory_data.get('matched_memory_count'),
+        'E007_SIX_DOMAIN',
     )
     return 0
 
