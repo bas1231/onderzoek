@@ -31,6 +31,13 @@ def test_wrong_failure_memory_schema_fails_closed():
         pattern_index(obj)
 
 
+def test_boolean_schema_version_does_not_alias_integer_one():
+    obj = valid_memory()
+    obj["schema_version"] = True
+    with pytest.raises(ValueError, match="unsupported_failure_memory_schema_version"):
+        pattern_index(obj)
+
+
 def test_failure_pattern_ids_must_be_list_not_string():
     with pytest.raises(ValueError, match="failure_pattern_ids_must_be_list"):
         required_checks("FP-X", valid_memory())
@@ -39,3 +46,10 @@ def test_failure_pattern_ids_must_be_list_not_string():
 def test_blank_failure_pattern_id_is_rejected():
     with pytest.raises(ValueError, match="failure_pattern_id_invalid"):
         required_checks([""], valid_memory())
+
+
+def test_numeric_pattern_field_is_rejected_not_stringified():
+    obj = valid_memory()
+    obj["patterns"][0]["gate"] = 123
+    with pytest.raises(ValueError, match="failure_pattern_field_required:0:gate"):
+        pattern_index(obj)
