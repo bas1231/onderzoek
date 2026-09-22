@@ -63,10 +63,12 @@ def normalize(search_family: dict[str, Any] | None) -> dict[str, Any] | None:
         raise ValueError("data_periods_seen_must_be_string_list")
     obj["data_periods_seen"] = [v.strip() for v in periods]
 
-    if obj["surviving_variants"] > (
-        obj["hypotheses_examined"] + obj["parameterizations_examined"]
-    ):
-        raise ValueError("surviving_variants_exceed_recorded_search_space")
+    trials = obj["hypotheses_examined"] + obj["parameterizations_examined"]
+    resolved_variants = obj["failed_variants"] + obj["surviving_variants"]
+    if resolved_variants > trials:
+        raise ValueError("resolved_variants_exceed_recorded_search_space")
+    if trials == 0 and obj["post_hoc_mutations"] > 0:
+        raise ValueError("post_hoc_mutations_without_recorded_trial")
 
     return obj
 
@@ -86,12 +88,28 @@ def adaptive_search_flags(search_family: dict[str, Any] | None) -> dict[str, Any
             "requires_untouched_validation": True,
             "untouched_validation_available": "UNKNOWN",
             "discovery_evidence_may_promote_directly": False,
+            "promotion_blocker": "SEARCH_FAMILY_MISSING",
             "reason": "search_family_missing",
         }
 
     trials = obj["hypotheses_examined"] + obj["parameterizations_examined"]
-    adaptive = obj["post_hoc_mutations"] > 0 or trials > 1
     untouched = obj["untouched_evidence_remaining"]
+
+    if trials == 0:
+        return {
+            "accounting_present": True,
+            "adaptive_search": "UNKNOWN",
+            "search_trials_recorded": 0,
+            "post_hoc_mutations": obj["post_hoc_mutations"],
+            "untouched_evidence_remaining": untouched,
+            "untouched_validation_available": untouched,
+            "requires_untouched_validation": True,
+            "discovery_evidence_may_promote_directly": False,
+            "promotion_blocker": "NO_SEARCH_TRIAL_RECORDED",
+            "reason": "no_trials_recorded",
+        }
+
+    adaptive = obj["post_hoc_mutations"] > 0 or trials > 1
     return {
         "accounting_present": True,
         "adaptive_search": adaptive,
@@ -100,10 +118,12 @@ def adaptive_search_flags(search_family: dict[str, Any] | None) -> dict[str, Any
         "untouched_evidence_remaining": untouched,
         "untouched_validation_available": untouched,
         "requires_untouched_validation": adaptive,
-        "discovery_evidence_may_promote_directly": (not adaptive and trials == 1),
+        "discovery_evidence_may_promote_directly": (
+            not adaptive and trials == 1 and untouched
+        ),
         "promotion_blocker": (
             "NO_UNTOUCHED_EVIDENCE_REMAINING"
-            if adaptive and not untouched
+            if not untouched
             else None
         ),
         "reason": "adaptive_or_multiple_search" if adaptive else "single_preregistered_path",
