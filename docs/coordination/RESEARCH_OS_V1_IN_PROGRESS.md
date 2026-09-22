@@ -1,6 +1,6 @@
 # Research OS V1 — coordination marker
 
-Status: **IN PROGRESS / SHADOW VALIDATION ONLY / DO NOT MERGE YET**
+Status: **HARDENING FROZEN / SHADOW VALIDATION ONLY / DO NOT MERGE YET**
 
 Owner lane: Research OS V1 architecture consolidation
 
@@ -8,80 +8,71 @@ Design branch: `ai/research-os-v1-prebuild-spec`
 
 Primary integration branch: `ai/research-os-v1-integration-shadow`
 
+Hardening-freeze head: `cea418468606b4bbe77f20861c55f1d0bd7732a3`
+
 Primary draft PR: **#21**
 
 Canonical active runtime remains: `main`
 
 ## Current coordination state — 2026-09-22
 
-Research OS V1 is being hardened as an **additive sidecar**. Other sessions may continue normal Weather, Recon, bridge, executor and hourly work on `main`.
+Research OS V1 static/adversarial hardening is now **content-frozen before final reconciliation and execution testing**. Other sessions may continue normal Weather, Recon, bridge, executor and hourly work on `main`.
 
-At the latest comparison, `main` had advanced **71 commits beyond the current Research OS merge-base** while the Research OS diff remained confined to Research-OS-specific sidecar/docs/tests/benchmarks. Because several sessions are actively writing to `main`, the Research OS branch will **not be continuously rebased after every external commit**. Continuous rebasing would create unnecessary merge churn and conflict risk.
+At the latest comparison the Research OS branch was **112 commits ahead / 76 commits behind `main`**, while every changed path remained confined to Research-OS sidecar/docs/tests/benchmarks. No active `control/hourly/*`, Weather, Recon, bridge or executor runtime file is part of the Research OS diff.
 
-### Current merge decision
+The branch will not be continuously rebased while unrelated sessions continue moving `main`. The next structural change is one deliberate final reconciliation against the then-current `main`.
 
-**NO MERGE NOW.** PR #21 remains draft/shadow-only.
+### Merge decision
 
-The intended integration sequence is:
+**NO MERGE NOW. PR #21 remains draft/shadow-only.**
 
-1. finish static/adversarial hardening on the Research OS sidecar;
-2. freeze Research OS changes for validation;
-3. perform **one final reconciliation** against the then-current `main`;
-4. preserve the newest tested `main` behavior by default;
-5. run Research OS tests + validators + the full current runtime regression suite locally/free;
-6. run the read-only shadow planner on real current candidates/agent packets;
-7. collect the preregistered unseen shadow benchmark;
+Required sequence:
+
+1. preserve this hardening freeze;
+2. reconcile once against the then-current `main`;
+3. newest tested `main` behavior wins on overlap;
+4. run Research OS tests + all offline validators locally/free;
+5. run the full current hourly/bridge/Recon/Weather regression suite;
+6. run `shadow_cli` read-only on real current candidates/agent packets;
+7. collect the preregistered unseen A/B shadow benchmark;
 8. only if the scientific replacement gate passes, review the smallest possible active-factory hook;
-9. merge/activation remains a separate deliberate step — never an automatic consequence of a benchmark PASS.
+9. merge/activation remains a separate deliberate step and is never authorized automatically by a benchmark PASS.
 
-If another session believes an earlier merge/rebase is required, it should record the reason in Git before changing Research OS integration semantics.
+## Frozen hardening invariants
 
-## Current hardening work
+The freeze includes, among others:
 
-Recent Research OS audit work is targeting silent false positives, state loss and benchmark gaming. Current/just-added safeguards include:
+- deterministic Governor; unknown/paid/live/wallet actions fail closed or require specific user approval;
+- unknown/non-ready legacy states cannot silently become READY;
+- duplicate task/candidate IDs fail closed;
+- canonical candidate state is type-strict; unknown queue status/priority fails closed;
+- conflicting legacy `gates` vs canonical `required_gates` fails closed instead of choosing hidden precedence;
+- partial legacy gate labels never upgrade to PASS;
+- Evidence Graph evidence nodes require provenance plus explicit point-in-time status;
+- Evidence Graph rejects self-edges and simultaneous supports/contradicts polarity for the same pair;
+- worker results are task-aware: worker/task/candidate identity must match;
+- Discovery and Red Team cannot emit positive economic conclusions;
+- FAILED/NO_NEW_EVIDENCE results cannot carry a positive economic state;
+- PASS/FAIL gate effects require basis refs that actually exist in task inputs/result evidence;
+- holdout is mandatory for promotion;
+- every present/future required gate is binding; unknown new gates cannot be ignored;
+- no-signal route requires explicit `signal_edge=NOT_APPLICABLE`;
+- Primary/Recon coverage requires explicit successful retrieval; missing retrieval status is UNKNOWN;
+- unidentified sources cannot inflate proven-unique evidence counts;
+- Reproducer checks artifact hash/source identity plus explicit upstream lineage before independence can PASS;
+- Red Team and Reproducer are blind to origin gate outcomes and supporting-vs-contradictory evidence polarity;
+- resurrection resets the union of legacy and canonical gates to PENDING and keeps old states only in history;
+- Failure Memory pattern hit creates a required check and never auto-kills by pattern match alone;
+- zero/missing search-family trials cannot masquerade as a clean preregistered path;
+- resolved variants cannot exceed the registered search universe;
+- benchmark baseline/challenger require identical unique case IDs **and identical frozen case metadata**;
+- missing/zero benchmark denominators are UNKNOWN, never favorable zero;
+- malformed benchmark values fail closed;
+- temporary Plus task-slot observations are capacity snapshots, not scientific invariants.
 
-- worker task contracts are explicit and fail closed; no scheduler-generated implicit safe action;
-- unknown/non-ready legacy task states cannot silently become READY;
-- duplicate/conflicting candidate IDs, task IDs, Evidence Graph nodes/edges fail closed;
-- canonical candidate projection preserves conservative state and is type-strict;
-- Independent Reproducer requires explicit upstream lineage before independence can PASS;
-- no-signal promotion requires explicit `signal_edge=NOT_APPLICABLE`;
-- **holdout is a mandatory promotion gate**; it may not be skipped;
-- resurrection inherits no old PASS gates;
-- shadow benchmark missing denominators remain UNKNOWN, never favorable zero;
-- baseline/challenger must use identical unique preregistered case IDs;
-- same case ID must preserve the same frozen case identity (ground-truth class / task shape / ACTIVE-HOUR identity) to prevent post-hoc relabeling;
-- benchmark records are moving toward strict typed validation rather than permissive numeric coercion;
-- temporary Plus task-slot observations are snapshots, not permanent scientific invariants.
+These benchmark/methodology changes were frozen **before the first unseen Research OS shadow dataset is accepted**.
 
-These benchmark and promotion hardenings are being made **before the first unseen Research OS shadow dataset is accepted**.
-
-## Implemented V1 sidecar
-
-The sidecar includes:
-
-- deterministic Governor;
-- canonical candidate adapter with negative-state preservation;
-- reusable Failure Memory;
-- idempotent Evidence Graph;
-- worker contracts;
-- task-shape scheduler/fanout caps;
-- read-only shadow planner/CLI;
-- hypothesis and multiple-testing accounting;
-- Primary/Recon source-coverage accounting;
-- deterministic promotion gate;
-- resurrection with complete gate reset and preserved history;
-- blind Red-Team packet construction;
-- Independent Reproducer source-lineage checks;
-- preregistered shadow benchmark;
-- offline prebuild/runtime validators;
-- architecture/historical/concurrency benchmark fixtures.
-
-## Purpose
-
-This file is the cross-session coordination point for Research OS V1. Other active sessions working on `main` should read it before making changes to orchestration, agent roles, candidate state, evidence/provenance, Recon promotion, scheduling or AI transport.
-
-The redesign consolidates the current agent layer into six responsibility domains while preserving specialist checks as capabilities/gates:
+## Six responsibility domains
 
 1. Discovery
 2. Market Research
@@ -100,46 +91,31 @@ Independent Reproduction remains a temporary isolated validation step rather tha
 - `docs/PLUS_NATIVE_RESEARCH_OS_CANARY.md`
 - `tests/research_os_v1/*`
 
-No existing `control/hourly/*`, bridge, Recon, Weather or executor file should be replaced by the Research OS sidecar during shadow construction.
-
 ## Coordination rules for other sessions
 
 1. **Do not merge PR #21 into `main` yet.**
 2. Continue normal Weather, Recon, bridge, executor and hourly work on `main`.
-3. Before changing orchestration/candidate/evidence/scheduler semantics, re-read this marker and current `main`.
-4. Treat changes to `control/hourly/*`, AI transport, bridge, candidate schemas, provenance or gate behavior as Research OS integration inputs.
-5. Prefer additive, backward-compatible runtime changes on `main`.
-6. Do not create a competing `control/research_os_v1/*` implementation on `main` while this marker is active.
-7. Preserve `NO_PROVEN_EDGE`, point-in-time, provenance, negative evidence, holdout, no-post-hoc-relaxation and execution-realistic gates.
-8. Do not introduce paid API/model calls, live trading, wallet/fund movement or hidden cost paths.
-9. During final reconciliation, preserve newest tested `main` behavior; never replace it with older sidecar copies.
-10. New architectural failure modes should be added/proposed for Failure Memory rather than silently bypassed.
-11. Do not continuously rebase PR #21 merely because unrelated sessions move `main`; reconcile once at the explicit validation freeze point unless there is a semantic overlap that requires earlier action.
+3. Do not add semantic Research-OS hardening after freeze without recording the reason/conflict in Git first.
+4. Do not create a competing `control/research_os_v1/*` implementation on `main`.
+5. Treat new `main` orchestration/candidate/provenance/gate changes as inputs to the final reconcile, not reasons to overwrite newer tested runtime behavior.
+6. Preserve `NO_PROVEN_EDGE`, point-in-time, provenance, negative evidence, holdout, no-post-hoc-relaxation and execution-realistic gates.
+7. No paid API/model calls, live trading, wallet/fund movement or hidden cost paths.
+8. If a semantic overlap is discovered, fail closed and document it instead of silently choosing one implementation.
 
-## Cross-session conflict protocol
+## Final reconcile / validation gate
 
-If a `main` change overlaps Research OS semantics:
+Before PR #21 can leave draft:
 
-1. identify the exact overlapping behavior/path;
-2. prefer newest tested `main` behavior;
-3. port Research OS invariants around it rather than reverting it;
-4. record unresolved semantic conflict in Git;
-5. fail closed rather than guessing which interpretation wins;
-6. keep PR #21 draft until conflict and validation are resolved.
-
-## Remaining validation sequence
-
-1. finish current static/adversarial hardening;
-2. freeze sidecar changes;
-3. reconcile once against latest `main`;
-4. run `pytest -q tests/research_os_v1` locally/free;
-5. run `python -m control.research_os_v1.validate_prebuild_spec`;
-6. run `python -m control.research_os_v1.validate_runtime`;
-7. run full current regression tests, including hourly/bridge/Recon/Weather;
-8. run `shadow_cli` on real current agent packets and candidates without runtime feedback;
-9. collect at least 20 unseen candidate-events across at least 10 ACTIVE-HOUR cycles on the exact same preregistered baseline/challenger cases;
-10. require holdout/reproduction/provenance/execution gates to remain non-bypassable;
-11. only after the scientific replacement gate passes, review a minimal active-factory hook separately.
+1. final reconcile against latest `main`;
+2. `pytest -q tests/research_os_v1` locally/free;
+3. `python -m control.research_os_v1.validate_prebuild_spec`;
+4. `python -m control.research_os_v1.validate_schema_alignment`;
+5. `python -m control.research_os_v1.validate_runtime`;
+6. full current runtime regression suite;
+7. real read-only `shadow_cli` run;
+8. at least 20 unseen candidate-events / 10 ACTIVE-HOUR cycles on identical preregistered baseline/challenger cases;
+9. no hard-fail condition and no regression in survivor preservation, false-survivor control or provenance completeness;
+10. separate review of any active-factory hook after scientific acceptance.
 
 No automatic activation is authorized by this coordination file.
 
