@@ -2,7 +2,7 @@ from control.research_os_v1.red_team import build_blind_packet
 from control.research_os_v1.reproducer import build_packet
 
 
-def test_red_team_strips_origin_confidence_and_reasoning_from_claims_and_evidence():
+def test_red_team_strips_origin_confidence_reasoning_and_evidence_polarity():
     candidate = {
         "candidate_id": "C1",
         "hypothesis": "Neutral hypothesis",
@@ -26,20 +26,36 @@ def test_red_team_strips_origin_confidence_and_reasoning_from_claims_and_evidenc
             "analysis": "this proves the thesis",
             "confidence": 0.95,
         }],
-        "contradictory_evidence": [],
-        "required_gates": {},
+        "contradictory_evidence": [{
+            "ref": "evidence/raw/b.json",
+            "upstream_source_ids": ["official:b"],
+            "analysis": "origin says this contradicts",
+        }],
+        "required_gates": {"mechanism": "PASS"},
     }
     packet = build_blind_packet(candidate)
     text = repr(packet)
     assert "persuasive thesis prose" not in text
     assert "this proves the thesis" not in text
+    assert "origin says this contradicts" not in text
     assert "expected_result" not in text
     assert "confidence" not in text
+    assert "supporting_evidence_refs" not in packet
+    assert "contradictory_evidence_refs" not in packet
     assert packet["claims"] == [{"claim_id": "CL1", "statement": "Observable claim"}]
-    assert packet["supporting_evidence_refs"] == [{
-        "ref": "evidence/raw/a.json",
-        "upstream_source_ids": ["official:a"],
-    }]
+    assert packet["evidence_refs"] == [
+        {
+            "ref": "evidence/raw/a.json",
+            "upstream_source_ids": ["official:a"],
+        },
+        {
+            "ref": "evidence/raw/b.json",
+            "upstream_source_ids": ["official:b"],
+        },
+    ]
+    assert packet["required_gates"] == {"mechanism": "UNKNOWN"}
+    assert packet["origin_gate_states_included"] is False
+    assert packet["origin_evidence_polarity_included"] is False
 
 
 def test_reproducer_strips_origin_analysis_gate_states_and_evidence_polarity():
