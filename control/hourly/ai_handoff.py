@@ -12,21 +12,12 @@ RUNS = ROOT / "knowledge/runs"
 PACKETS = RUNS / "agent_packets"
 
 READY_STATES = {"READY", "RESULT_READY"}
-
-# Keep this aligned with the orchestrator's primary/control role universe.
-# recon_scout is deliberately first: it is a first-class specialist worker,
-# not merely a local preprocessing stage.
 ROLE_ORDER = [
-    "recon_scout",
-    "scout",
+    "discovery",
+    "market_research",
+    "mechanics",
     "algebra",
-    "settlement",
-    "microstructure",
-    "behavioral",
-    "informed_flow",
-    "weather_twc",
-    "prebuild_killer",
-    "chief_falsifier",
+    "red_team_pentest",
     "independent_reproducer",
     "research_director",
 ]
@@ -59,16 +50,23 @@ def compact_packet(packet: dict[str, Any]) -> dict[str, Any]:
         "input_refs": packet.get("input_refs", []),
         "routed_evidence": packet.get("routed_evidence", []),
         "coverage_gaps": packet.get("coverage_gaps", []),
+        "coverage_gaps_by_capability": packet.get("coverage_gaps_by_capability", {}),
+        "capability_work": packet.get("capability_work", {}),
+        "discovery_lanes": packet.get("discovery_lanes", {}),
         "candidate_ids": packet.get("candidate_ids", []),
-        "survivors": packet.get("survivors", []),
+        "candidate_routing": packet.get("candidate_routing", []),
+        "red_team_modes": packet.get("red_team_modes", {}),
+        "reproduction_candidates": packet.get("reproduction_candidates", []),
+        "blind_reproduction_interface": packet.get("blind_reproduction_interface", []),
+        "blind": bool(packet.get("blind", False)),
+        "transient": bool(packet.get("transient", False)),
         "recon_watch_triage": packet.get("recon_watch_triage", []),
         "recon_hunts": packet.get("recon_hunts", []),
-        "next_decisive_question": packet.get(
-            "next_decisive_question"
-        ),
-        "local_task_required": packet.get(
-            "local_task_required", False
-        ),
+        "task_shape": packet.get("task_shape"),
+        "scheduler_priority": packet.get("scheduler_priority"),
+        "dynamic_worker_scheduled": packet.get("dynamic_worker_scheduled"),
+        "next_decisive_question": packet.get("next_decisive_question"),
+        "local_task_required": packet.get("local_task_required", False),
         "local_task_id": packet.get("local_task_id"),
     }
 
@@ -100,7 +98,6 @@ def build(run_id: str) -> tuple[dict[str, Any], Path]:
     handoff_path = RUNS / f"{run_id}-director-handoff.json"
     if not handoff_path.exists():
         raise FileNotFoundError(handoff_path)
-
     director_handoff = load_json(handoff_path)
 
     packets: dict[str, dict[str, Any]] = {}
@@ -119,20 +116,18 @@ def build(run_id: str) -> tuple[dict[str, Any], Path]:
             ready_roles.append(compact_packet(packet))
 
     candidate_queue = {
-        "director_attention": director_handoff.get(
-            "director_attention", []
-        ),
-        "waiting_without_blocking": director_handoff.get(
-            "waiting_without_blocking", []
-        ),
-        "full_queue": director_handoff.get(
-            "full_queue", []
-        ),
+        "director_attention": director_handoff.get("director_attention", []),
+        "waiting_without_blocking": director_handoff.get("waiting_without_blocking", []),
+        "full_queue": director_handoff.get("full_queue", []),
     }
     token = response_token(run_id, ready_roles, candidate_queue)
 
+    task_schedule_path = packet_dir / "_task_schedule.json"
+    task_schedule = load_json(task_schedule_path) if task_schedule_path.exists() else {}
+
     bundle = {
         "schema": "PVA_AI_WORK_BUNDLE_V1",
+        "architecture": "E007_SIX_DOMAIN",
         "run_id": run_id,
         "response_token": token,
         "created_at": now_iso(),
@@ -142,21 +137,21 @@ def build(run_id: str) -> tuple[dict[str, Any], Path]:
             "specialist_browser_requests": False,
             "local_compute_only_when_decisive": True,
             "waiting_does_not_block_other_work": True,
+            "max_permanent_specialist_domains": 5,
+            "transient_reproducer_isolated": True,
         },
         "research_policy": {
             "default_economic_conclusion": "NO_PROVEN_EDGE",
-            "priority_order": [
-                "P0_SYSTEM_SAFETY",
-                "P1_RUNNING_PROSPECTIVE_EVIDENCE",
-                "P2_DECISIVE_RESEARCH",
-                "P3_DISCOVERY_BUILD",
-            ],
             "no_starvation": True,
             "promotion_requires_evidence": True,
             "watch_triage_is_not_promotion": True,
             "watch_triage_promotion_authority": False,
             "ai_candidate_kill_authority": False,
             "ai_candidate_promotion_authority": False,
+            "kill_is_not_delete": True,
+            "negative_evidence_must_be_preserved": True,
+            "protected_discovery_lanes": ["primary_scout", "recon_scout"],
+            "red_team_modes": ["QUICK_KILL", "DEEP_FALSIFICATION"],
         },
         "guardrails": {
             "live_trading": False,
@@ -164,26 +159,24 @@ def build(run_id: str) -> tuple[dict[str, Any], Path]:
             "wallet_actions": False,
             "openai_api": False,
         },
+        "task_schedule": task_schedule,
         "ready_roles": ready_roles,
         "candidate_queue": candidate_queue,
         "director_instruction": (
-            "Act as the Research Director for this complete bundle. "
-            "Evaluate every ready role exactly once under its role contract, "
-            "including recon_scout when present. For recon_watch_triage, "
-            "perform research-only specialist triage: test the mechanism, "
-            "base rate, point-in-time evidence and net executable economics, "
-            "but do not promote WATCH to HUNT and do not send WATCH directly "
-            "to the killer/proof chain. The AI worker may schedule or park "
-            "existing bundled candidates but may not close-negative or "
-            "promote them. Return schema PVA_AI_RESPONSE_V1 and echo "
-            "response_token exactly. Do not invent missing evidence. "
-            "Preserve negative evidence. Apply Pre-Build Killer before "
-            "expensive work and Chief Falsifier before promotion. Use "
-            "Independent Reproducer only for serious survivors. Waiting local "
-            "computation must not block unrelated candidates. Request local "
-            "computation only when it answers a concrete decisive question. "
-            "NO_PROVEN_EDGE is a valid conclusion. Never authorize live "
-            "trading, paid actions, wallet actions or paid OpenAI API use."
+            "Operate the E007 six-domain Research OS. Evaluate every bundled ready role exactly once. "
+            "Legacy specialist names inside capability_work are capabilities, not extra agents. Keep "
+            "Discovery primary_scout and recon_scout findings/provenance separate before synthesis. "
+            "Market Research must keep weather/TWC, behavioral and informed-flow evidence labelled by "
+            "capability. Mechanics must separate settlement/finality from executable microstructure. "
+            "Red Team/Pentest must use QUICK_KILL for cheap early falsification and DEEP_FALSIFICATION "
+            "only where red_team_modes requests it. The transient Independent Reproducer is blind: do "
+            "not infer or reconstruct withheld originating conclusions; reproduce from the supplied "
+            "interface and independent evidence. Preserve negative evidence and cite failure-pattern IDs "
+            "FP-001..FP-036 when applicable. Do not invent missing evidence. AI may schedule, wait, revise "
+            "or park bundled candidates but may not close-negative or promote them. Return exactly schema "
+            "PVA_AI_RESPONSE_V1 and echo response_token. Include capability_results for consolidated "
+            "domains and validation_results for Red Team/Reproducer when applicable. NO_PROVEN_EDGE is "
+            "valid. Never authorize live trading, paid actions, wallet actions or paid OpenAI API use."
         ),
         "expected_response_schema": {
             "schema": "PVA_AI_RESPONSE_V1",
@@ -191,15 +184,14 @@ def build(run_id: str) -> tuple[dict[str, Any], Path]:
             "response_token": token,
             "role_results": [
                 {
-                    "agent_id": "string",
-                    "status": (
-                        "COMPLETED|NO_EVIDENCE|FALSIFIED|"
-                        "WAITING_FOR_DATA|WAITING_FOR_RESULT|"
-                        "RESULT_READY|PARKED"
-                    ),
+                    "agent_id": "discovery|market_research|mechanics|algebra|red_team_pentest|independent_reproducer|research_director",
+                    "status": "COMPLETED|NO_EVIDENCE|FALSIFIED|WAITING_FOR_DATA|WAITING_FOR_RESULT|RESULT_READY|PARKED",
                     "finding": "string|null",
                     "evidence_refs": ["string"],
                     "candidate_ids": ["string"],
+                    "capability_results": {},
+                    "validation_results": [],
+                    "failure_pattern_ids": ["FP-xxx"],
                     "next_decisive_question": "string|null",
                     "local_task_required": False,
                     "local_task_spec": None,
@@ -208,18 +200,19 @@ def build(run_id: str) -> tuple[dict[str, Any], Path]:
             "candidate_decisions": [
                 {
                     "candidate_id": "string",
-                    "queue_status": (
-                        "NEEDS_DIRECTOR|EXPERIMENT_REQUIRED|RUNNING|"
-                        "WAITING_FOR_DATA|WAITING_FOR_RESULT|RESULT_READY|"
-                        "NEEDS_REVISION|PARKED"
-                    ),
+                    "queue_status": "NEEDS_DIRECTOR|EXPERIMENT_REQUIRED|RUNNING|WAITING_FOR_DATA|WAITING_FOR_RESULT|RESULT_READY|NEEDS_REVISION|PARKED",
                     "reason": "string",
                     "next_decisive_test": "string|null",
+                    "resurrection_condition": "string|null",
                 }
             ],
             "director_decision": "string",
             "economic_conclusion": "NO_PROVEN_EDGE",
             "local_tasks": [],
+            "live_trading": False,
+            "paid_actions": False,
+            "wallet_actions": False,
+            "openai_api": False,
         },
     }
 
@@ -247,22 +240,11 @@ if __name__ == "__main__":
 
     run_id = args.run_id or latest_run_id()
     bundle, path = build(run_id)
-
     print(json.dumps({
         "ok": True,
         "run_id": run_id,
         "path": str(path.relative_to(ROOT)),
-        "ready_roles": [
-            item["agent_id"] for item in bundle["ready_roles"]
-        ],
-        "director_attention": len(
-            bundle["candidate_queue"]["director_attention"]
-        ),
-        "waiting_without_blocking": len(
-            bundle["candidate_queue"]["waiting_without_blocking"]
-        ),
-        "single_chatgpt_turn": (
-            bundle["delivery_policy"]["single_chatgpt_turn"]
-        ),
+        "ready_roles": [item["agent_id"] for item in bundle["ready_roles"]],
+        "architecture": bundle["architecture"],
         "guardrails": bundle["guardrails"],
     }, indent=2, sort_keys=True))
