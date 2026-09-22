@@ -137,6 +137,7 @@ def _flatten(value: Any) -> list[str]:
     if isinstance(value, dict):
         out: list[str] = []
         for key in sorted(value):
+            out.append(str(key))
             out.extend(_flatten(value[key]))
         return out
     if isinstance(value, (list, tuple, set)):
@@ -270,6 +271,28 @@ def route_candidate(candidate: dict[str, Any]) -> list[dict[str, Any]]:
     ]
 
 
+def _deduplicated_rows(rows: list[Any]) -> list[dict[str, Any]]:
+    """Choose one deterministic representation per candidate_id."""
+    selected: dict[str, tuple[str, dict[str, Any]]] = {}
+    for row in rows:
+        if not isinstance(row, dict):
+            continue
+        candidate_id = str(row.get("candidate_id") or "")
+        if not candidate_id:
+            continue
+        canonical = json.dumps(
+            row,
+            sort_keys=True,
+            separators=(",", ":"),
+            ensure_ascii=False,
+            default=str,
+        )
+        current = selected.get(candidate_id)
+        if current is None or canonical < current[0]:
+            selected[candidate_id] = (canonical, row)
+    return [selected[candidate_id][1] for candidate_id in sorted(selected)]
+
+
 def hydrate_candidate_routes(
     run_dir: Path,
     candidate_queue: dict[str, Any] | None,
@@ -284,10 +307,7 @@ def hydrate_candidate_routes(
         return []
 
     assignments: list[dict[str, Any]] = []
-    ordered_rows = sorted(
-        (row for row in rows if isinstance(row, dict)),
-        key=lambda row: str(row.get("candidate_id") or ""),
-    )
+    ordered_rows = _deduplicated_rows(rows)
 
     for row in ordered_rows:
         candidate = _load_candidate_from_row(row, root=root)
