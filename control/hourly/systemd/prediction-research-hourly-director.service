@@ -1,7 +1,16 @@
 [Unit]
-Description=Prediction Research hourly director wake
+Description=Prediction Research hourly Director
+After=network-online.target prediction-research-executor.service
+Wants=network-online.target
 
+# Fallback unit for the canonical Strix production checkout. The installer
+# renders prediction-research-hourly-director.service.in from its own repo root,
+# so alternate checkouts never need to edit this file manually.
 [Service]
 Type=oneshot
-WorkingDirectory=/home/leonh/prediction_research
-ExecStart=%h/prediction_research/.venv/bin/python %h/prediction_research/control/hourly/edge_hunter_cycle.py
+WorkingDirectory=%h/prediction_research_prod
+Environment=PYTHONUNBUFFERED=1
+ExecStart=%h/prediction_research_prod/.venv/bin/python %h/prediction_research_prod/control/hourly/edge_hunter_cycle.py
+
+[Install]
+WantedBy=default.target
