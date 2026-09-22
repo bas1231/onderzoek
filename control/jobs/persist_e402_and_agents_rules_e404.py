@@ -101,5 +101,5 @@ def main():
     raise SystemExit(0 if result['pushed'] else 26)
 
 
-if name == 'main':
+if __name__ == '__main__':
     main()

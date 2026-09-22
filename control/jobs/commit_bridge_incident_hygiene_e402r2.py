@@ -2,7 +2,7 @@ import json
 import subprocess
 from pathlib import Path
 
-ROOT = Path(file).resolve().parents[2]
+ROOT = Path.cwd()
 TARGET = 'control/browser_bridge.py'
 
 
@@ -72,5 +72,5 @@ def main():
     raise SystemExit(0 if result['pushed'] else 25)
 
 
-if name == 'main':
+if __name__ == '__main__':
     main()

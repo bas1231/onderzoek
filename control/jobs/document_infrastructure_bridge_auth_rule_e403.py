@@ -2,7 +2,7 @@ import json
 import subprocess
 from pathlib import Path
 
-ROOT = Path(file).resolve().parents[2]
+ROOT = Path.cwd()
 TARGET = ROOT / 'AGENTS.md'
 MARKER = '## Bridge infrastructure authorization rule'
 SECTION = '''
@@ -40,8 +40,7 @@ def main():
 
     text = TARGET.read_text(encoding='utf-8')
     if MARKER not in text:
-        TARGET.write_text(text.rstrip() + SECTION + '
-', encoding='utf-8')
+        TARGET.write_text(text.rstrip() + SECTION + chr(10), encoding='utf-8')
         result['changed'] = True
 
     diff = run('git', 'diff', '--', 'AGENTS.md')
@@ -85,5 +84,5 @@ def main():
     raise SystemExit(0 if result['pushed'] else 24)
 
 
-if name == 'main':
+if __name__ == '__main__':
     main()
