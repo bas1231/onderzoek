@@ -1,0 +1,1 @@
+Research OS V1 E004 snapshot construction marker. The actual validation snapshot is built on branch ai/research-os-v1-frozen-validation from current main plus only frozen Research-OS subtrees/docs. This marker exists only for cross-session visibility and must not be treated as validation PASS or merge approval.
