@@ -1,5 +1,3 @@
-import copy
-
 from control.research_os_v1.contracts import validate_result_for_task
 
 
@@ -130,13 +128,51 @@ def test_gate_pass_requires_nonempty_basis_refs():
     assert "gate_effect_basis_required:0" in errors
 
 
-def test_gate_pass_with_basis_is_valid():
+def test_gate_pass_with_result_evidence_basis_is_valid():
     good = result()
     good["evidence"] = [evidence()]
     good["gate_effect"] = [{
         "gate": "mechanism",
         "state": "PASS",
         "basis_refs": ["raw/e1.json"],
+    }]
+    assert validate_result_for_task(task(), good) == []
+
+
+def test_gate_pass_with_preregistered_task_input_basis_is_valid():
+    t = task()
+    t["inputs"]["rule_refs"] = ["rules/contract-v1.json"]
+    good = result()
+    good["gate_effect"] = [{
+        "gate": "mechanism",
+        "state": "PASS",
+        "basis_refs": ["rules/contract-v1.json"],
+    }]
+    assert validate_result_for_task(t, good) == []
+
+
+def test_gate_pass_with_invented_basis_ref_is_rejected():
+    bad = result()
+    bad["evidence"] = [evidence("raw/real.json")]
+    bad["gate_effect"] = [{
+        "gate": "mechanism",
+        "state": "PASS",
+        "basis_refs": ["raw/invented.json"],
+    }]
+    errors = validate_result_for_task(task(), bad)
+    assert "gate_effect_unknown_basis_ref:0:raw/invented.json" in errors
+
+
+def test_hash_basis_can_reference_evidence_hash_identity():
+    good = result()
+    good["evidence"] = [{
+        "document_sha256": "ABCDEF",
+        "point_in_time_status": "PASS",
+    }]
+    good["gate_effect"] = [{
+        "gate": "mechanism",
+        "state": "PASS",
+        "basis_refs": ["sha256:abcdef"],
     }]
     assert validate_result_for_task(task(), good) == []
 
