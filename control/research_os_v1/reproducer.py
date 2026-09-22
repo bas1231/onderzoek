@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-from copy import deepcopy
 from typing import Any
 
 
@@ -55,12 +54,7 @@ def _evidence_list(candidate: dict[str, Any], key: str) -> list[Any]:
 
 
 def _reference_projection(items: list[Any]) -> list[Any]:
-    """Keep provenance/lineage only; exclude origin analysis/confidence prose.
-
-    Malformed evidence is rejected rather than silently omitted, because dropping
-    a bad provenance record could make the remaining packet look cleaner or more
-    independent than the original evidence actually was.
-    """
+    """Keep provenance/lineage only; exclude origin analysis/confidence prose."""
     if not isinstance(items, list):
         raise ValueError("evidence_items_must_be_list")
 
@@ -117,7 +111,26 @@ def _reference_projection(items: list[Any]) -> list[Any]:
     return out
 
 
+def _blind_gate_states(value: Any) -> dict[str, str]:
+    if value is None:
+        return {}
+    if not isinstance(value, dict):
+        raise ValueError("required_gates_must_be_object")
+    result: dict[str, str] = {}
+    for key in value:
+        gate = _required_text(key, "gate_name_must_be_nonempty_string")
+        result[gate] = "UNKNOWN"
+    return dict(sorted(result.items()))
+
+
 def build_packet(candidate: dict[str, Any], preregistered_question: str) -> dict[str, Any]:
+    """Build a provenance-only reproduction packet with origin judgments blinded.
+
+    Supporting/contradictory labels are intentionally collapsed into one neutral
+    evidence list, and prior gate states are replaced with UNKNOWN. This keeps
+    the reproducer aware of what must be checked without revealing what the
+    origin workflow concluded.
+    """
     if not isinstance(candidate, dict):
         raise ValueError("candidate_must_be_object")
     candidate_id = _required_text(candidate.get("candidate_id"), "candidate_id_required")
@@ -126,11 +139,12 @@ def build_packet(candidate: dict[str, Any], preregistered_question: str) -> dict
         "preregistered_question_required",
     )
 
-    required_gates = candidate.get("required_gates")
-    if required_gates is None:
-        required_gates = {}
-    if not isinstance(required_gates, dict):
-        raise ValueError("required_gates_must_be_object")
+    supporting = _reference_projection(
+        _evidence_list(candidate, "supporting_evidence")
+    )
+    contradictory = _reference_projection(
+        _evidence_list(candidate, "contradictory_evidence")
+    )
 
     cutoff = _optional_text(
         candidate.get("point_in_time_cutoff"),
@@ -140,17 +154,14 @@ def build_packet(candidate: dict[str, Any], preregistered_question: str) -> dict
     return {
         "candidate_id": candidate_id,
         "preregistered_question": question,
-        "raw_evidence_refs": _reference_projection(
-            _evidence_list(candidate, "supporting_evidence")
-        ),
-        "contradictory_evidence_refs": _reference_projection(
-            _evidence_list(candidate, "contradictory_evidence")
-        ),
-        "required_gates": deepcopy(required_gates),
+        "evidence_refs": supporting + contradictory,
+        "required_gates": _blind_gate_states(candidate.get("required_gates")),
         "point_in_time_cutoff": cutoff,
         "origin_reasoning_included": False,
         "origin_conclusion_included": False,
         "origin_confidence_included": False,
+        "origin_gate_states_included": False,
+        "origin_evidence_polarity_included": False,
         "live_trading": False,
         "paid_actions": False,
         "wallet_actions": False,
@@ -158,13 +169,7 @@ def build_packet(candidate: dict[str, Any], preregistered_question: str) -> dict
 
 
 def _source_sets(items: list[Any]) -> tuple[set[str], set[str], bool]:
-    """Return reference IDs, canonical upstream IDs and lineage completeness.
-
-    Different file/document references are not enough to prove source
-    independence: two derived artifacts can share one upstream feed. A positive
-    independence decision therefore requires explicit upstream lineage on both
-    sides. Exact shared references are still sufficient to prove dependence.
-    """
+    """Return reference IDs, canonical upstream IDs and lineage completeness."""
     if not isinstance(items, list):
         raise ValueError("source_sets_must_be_lists")
 
