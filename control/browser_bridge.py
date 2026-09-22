@@ -3,6 +3,7 @@
 # Executing it in this module's globals preserves monkeypatch/test semantics while
 # letting the AI-response channel stay separate from the generic executor route.
 
+import os as _bridge_os
 from pathlib import Path as _WrapperPath
 
 _wrapper_name = globals().get("__name__", "browser_bridge")
@@ -22,6 +23,41 @@ _core_commit_and_push = commit_and_push
 from executor_preflight import sync_main_fail_closed as _sync_main_fail_closed
 
 
+# Capture the exact repository revision whose Python source is currently loaded
+# in this long-running bridge process. A later git fast-forward changes files on
+# disk but does not change already-imported Python code, so execution must fail
+# closed until this process has re-execed itself.
+_loaded_probe = git("rev-parse", "HEAD", check=False)
+_LOADED_BRIDGE_COMMIT = (
+    _loaded_probe.stdout.strip()
+    if _loaded_probe.returncode == 0
+    else ""
+)
+_BRIDGE_REEXEC_SCHEDULED = False
+
+
+def _current_head() -> str:
+    probe = git("rev-parse", "HEAD", check=False)
+    return probe.stdout.strip() if probe.returncode == 0 else ""
+
+
+def _reexec_bridge_runtime() -> None:
+    """Replace this process with the current on-disk bridge implementation."""
+    script = str(_WrapperPath(__file__).resolve())
+    _bridge_os.execv(sys.executable, [sys.executable, script])
+
+
+def _schedule_bridge_reexec() -> None:
+    """Schedule re-exec after the current HTTP response has had time to flush."""
+    global _BRIDGE_REEXEC_SCHEDULED
+    if _BRIDGE_REEXEC_SCHEDULED:
+        return
+    _BRIDGE_REEXEC_SCHEDULED = True
+    timer = threading.Timer(0.35, _reexec_bridge_runtime)
+    timer.daemon = True
+    timer.start()
+
+
 def commit_and_push(message: str, stage_paths=None):
     """A bridge enqueue is durable only when its commit reached origin/main.
 
@@ -37,7 +73,7 @@ def commit_and_push(message: str, stage_paths=None):
 
 
 def enqueue(envelope):
-    """Synchronize the bridge checkout before atomically writing task+files."""
+    """Synchronize and attest the bridge runtime before accepting a task."""
     with LOCK:
         sync = _sync_main_fail_closed(ROOT)
         if not sync.get("ok"):
@@ -51,6 +87,29 @@ def enqueue(envelope):
                 "recoverable": True,
                 "queue_status": queue_status(),
             }
+
+        current_head = _current_head()
+        if (
+            not _LOADED_BRIDGE_COMMIT
+            or not current_head
+            or current_head != _LOADED_BRIDGE_COMMIT
+        ):
+            print(
+                "[bridge] stale runtime blocked; "
+                f"loaded={_LOADED_BRIDGE_COMMIT or 'UNKNOWN'} "
+                f"current={current_head or 'UNKNOWN'}"
+            )
+            _schedule_bridge_reexec()
+            return {
+                "ok": False,
+                "error": "bridge runtime stale after repository sync",
+                "reason": "BRIDGE_RUNTIME_STALE_REEXEC_SCHEDULED",
+                "loaded_commit": _LOADED_BRIDGE_COMMIT or None,
+                "current_head": current_head or None,
+                "recoverable": True,
+                "queue_status": queue_status(),
+            }
+
         return _core_enqueue(envelope)
 
 # An AI prompt is ACKed after it is inserted into ChatGPT. If the assistant
