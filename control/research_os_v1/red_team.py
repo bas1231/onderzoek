@@ -153,7 +153,8 @@ def _evidence_refs(items: list[Any]) -> list[Any]:
         if is_primary is True:
             row["is_primary_source"] = True
 
-        if not row:
+        provenance_keys = set(REFERENCE_KEYS) | {"upstream_source_ids"}
+        if not any(key in row for key in provenance_keys):
             raise ValueError(f"evidence_reference_has_no_provenance:{index}")
         out.append(row)
     return out
