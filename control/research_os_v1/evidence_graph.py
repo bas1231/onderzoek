@@ -31,7 +31,8 @@ def _optional_text(value: Any, error: str) -> str | None:
         return None
     if not isinstance(value, str):
         raise ValueError(error)
-    return value.strip()
+    text = value.strip()
+    return text or None
 
 
 def _normalize_node(node: dict[str, Any]) -> dict[str, Any]:
@@ -81,6 +82,12 @@ def _normalize_node(node: dict[str, Any]) -> dict[str, Any]:
     if "metadata" in node and not isinstance(node.get("metadata"), dict):
         raise ValueError(f"node_metadata_must_be_object:{nid}")
 
+    if ntype == "evidence":
+        if "point_in_time_status" not in node:
+            raise ValueError(f"evidence_point_in_time_status_required:{nid}")
+        if not normalized.get("source_ref") and not normalized.get("content_hash"):
+            raise ValueError(f"evidence_provenance_required:{nid}")
+
     return normalized
 
 
@@ -93,6 +100,8 @@ def _normalize_edge(edge: dict[str, Any]) -> tuple[tuple[str, str, str], dict[st
 
     source = _required_text(edge.get("from"), "edge_source_required")
     target = _required_text(edge.get("to"), "edge_target_required")
+    if source == target:
+        raise ValueError(f"self_edge_not_allowed:{source}")
     etype = _required_text(edge.get("type"), "edge_type_required")
     if etype not in VALID_EDGE_TYPES:
         raise ValueError(f"invalid_edge_type:{etype}")
@@ -157,6 +166,9 @@ class EvidenceGraph:
         source, target, etype = key
         if source not in self._nodes or target not in self._nodes:
             raise ValueError("edge_endpoint_missing")
+        opposite = "contradicts" if etype == "supports" else "supports" if etype == "contradicts" else None
+        if opposite is not None and (source, target, opposite) in self._edges:
+            raise ValueError(f"conflicting_edge_polarity:{source}:{target}")
         existing = self._edges.get(key)
         if existing is not None and existing != normalized:
             raise ValueError(f"conflicting_edge:{source}:{target}:{etype}")
