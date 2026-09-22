@@ -217,14 +217,90 @@ def acknowledge_ai(task_id: str) -> dict:
     return result
 
 
+def _incident_outbox_id(path: _WrapperPath) -> str:
+    raw = "INCIDENT-" + path.stem
+
+    return "".join(
+        ch
+        if ch.isalnum() or ch in "._:-"
+        else "_"
+        for ch in raw
+    )[:150]
+
+
+def _resolve_incident_after_ack(task_id: str) -> bool:
+    """Persist ACK resolution in the incident record itself."""
+
+    if not task_id.startswith("INCIDENT-"):
+        return False
+
+    incident_dir = (
+        _WrapperPath.home()
+        / ".local"
+        / "state"
+        / "prediction-research"
+        / "incidents"
+    )
+
+    if not incident_dir.exists():
+        return False
+
+    for path in incident_dir.glob("*.json"):
+        if _incident_outbox_id(path) != task_id:
+            continue
+
+        try:
+            data = json.loads(
+                path.read_text(encoding="utf-8")
+            )
+        except Exception:
+            return False
+
+        if data.get("status") == "OPEN":
+            data["status"] = "RESOLVED"
+            data["resolved_at"] = time.time()
+            data["resolution"] = "BROWSER_ACK_RESOLVED"
+
+            tmp = path.with_suffix(
+                path.suffix + ".tmp"
+            )
+
+            tmp.write_text(
+                json.dumps(
+                    data,
+                    indent=2,
+                    sort_keys=True,
+                )
+                + "\n",
+                encoding="utf-8",
+            )
+
+            tmp.replace(path)
+
+        return True
+
+    return False
+
+
 def acknowledge(task_id: str) -> dict:
-    """Preserve durable control-continuation behavior from the core contract."""
+    """ACK the result and durably close incident-backed outbox items."""
+
     result = _core_acknowledge(task_id)
+
     if not result.get("ok"):
         return result
 
+    result["incident_resolved"] = (
+        _resolve_incident_after_ack(task_id)
+    )
+
     state = load_state()
-    if _queue_control_continue(state, task_id, "RESULT_ACKED"):
+
+    if _queue_control_continue(
+        state,
+        task_id,
+        "RESULT_ACKED",
+    ):
         save_state(state)
 
     return result

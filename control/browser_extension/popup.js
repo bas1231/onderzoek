@@ -322,7 +322,7 @@ document.getElementById("roundTrip")
 
       while (
         Date.now() - started
-        < 30000
+        < 90000
       ) {
         await new Promise(
           resolve =>
@@ -344,8 +344,62 @@ document.getElementById("roundTrip")
           result.data &&
           result.data.result
         ) {
+          let ack = null;
+          let lastAckError = "";
+
+          for (
+            let attempt = 0;
+            attempt < 5;
+            attempt += 1
+          ) {
+            try {
+              ack = await bridgeFetch(
+                "/ack",
+                "POST",
+                {
+                  task_id: taskId
+                }
+              );
+            } catch (error) {
+              lastAckError = String(error);
+            }
+
+            if (ack && ack.ok) {
+              break;
+            }
+
+            await new Promise(
+              resolve =>
+                setTimeout(
+                  resolve,
+                  Math.min(
+                    4000,
+                    250 * (2 ** attempt)
+                  )
+                )
+            );
+          }
+
+          if (!(ack && ack.ok)) {
+            statusBox.textContent =
+              "ACK FAILED\\n\\n" +
+              `Task: ${taskId}\\n` +
+              (
+                lastAckError
+                  ? `Error: ${lastAckError}\\n`
+                  : ""
+              ) +
+              JSON.stringify(
+                ack,
+                null,
+                2
+              );
+
+            return;
+          }
+
           statusBox.textContent =
-            "ROUND TRIP PASS\n\n" +
+            "ROUND TRIP PASS\\nACK PASS\\n\\n" +
             JSON.stringify(
               result.data,
               null,
@@ -359,7 +413,7 @@ document.getElementById("roundTrip")
       statusBox.textContent =
         "TIMEOUT\n\n" +
         `${taskId} was enqueued, ` +
-        "but no result appeared within 30 seconds.";
+        "but no result appeared within 90 seconds.";
     }
   );
 
