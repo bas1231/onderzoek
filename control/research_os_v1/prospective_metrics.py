@@ -157,10 +157,21 @@ def _normalize_telemetry_record(
     if decision not in VALID_DECISIONS:
         raise ValueError(f"invalid_telemetry_decision:{side}:{case_id}:{decision}")
 
+    intentionally_unassigned = record.get("intentionally_unassigned", False)
+    if not isinstance(intentionally_unassigned, bool):
+        raise ValueError(f"intentionally_unassigned_must_be_bool:{side}:{case_id}")
+
     worker_run_ids = _unique_text_list(
         record.get("worker_run_ids"), f"worker_run_ids_invalid:{side}:{case_id}"
     )
-    if not worker_run_ids:
+    if intentionally_unassigned:
+        if side != "CHALLENGER":
+            raise ValueError(f"intentional_unassignment_only_challenger:{case_id}")
+        if worker_run_ids:
+            raise ValueError(f"unassigned_case_has_worker_runs:{case_id}")
+        if decision != "KEEP":
+            raise ValueError(f"unassigned_case_decision_must_be_keep:{case_id}")
+    elif not worker_run_ids:
         raise ValueError(f"worker_run_ids_empty:{side}:{case_id}")
 
     unique_evidence, contradictions, families, provenance_complete = _evidence_metrics(
@@ -176,6 +187,11 @@ def _normalize_telemetry_record(
     hard_failures = _unique_text_list(
         record.get("hard_failures"), f"hard_failures_invalid:{side}:{case_id}"
     )
+
+    if intentionally_unassigned and any(
+        (unique_evidence, contradictions, research_count, duplicate_count, applicable, pre, len(starvation))
+    ):
+        raise ValueError(f"unassigned_case_has_research_activity:{case_id}")
 
     out: dict[str, Any] = {
         **expected,
