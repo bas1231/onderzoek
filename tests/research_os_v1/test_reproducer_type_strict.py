@@ -116,3 +116,12 @@ def test_disjoint_explicit_lineage_and_artifacts_can_still_be_independent():
     result = source_independence(origin, reproduction)
     assert result["status"] == "INDEPENDENT"
     assert result["counts_as_independent_reproduction"] is True
+
+
+def test_reproducer_primary_flag_alone_is_not_provenance():
+    candidate = {
+        "candidate_id": "C1",
+        "supporting_evidence": [{"is_primary_source": True}],
+    }
+    with pytest.raises(ValueError, match="evidence_reference_has_no_provenance"):
+        build_packet(candidate, "question")
