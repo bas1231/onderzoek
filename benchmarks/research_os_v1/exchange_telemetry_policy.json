@@ -1,0 +1,62 @@
+{
+  "schema_version": 1,
+  "status": "FROZEN_BEFORE_FIRST_PROSPECTIVE_EXCHANGE_CASE",
+  "purpose": "Use existing ai/runtime-exchange request/response pairs as the point-in-time structured source for baseline/challenger shadow benchmarking without adding extra scheduled runs.",
+  "eligible_case_source": "PVA_AI_EXCHANGE_REQUEST_V1 paired with a valid PVA_AI_EXCHANGE_RESPONSE_V1 for the same run_id and request_sha256",
+  "role_result_extension": "benchmark_telemetry",
+  "benchmark_telemetry_fields": {
+    "worker_run_id": "non-empty stable string, normally <run_id>:<agent_id>",
+    "research_items": [
+      {"item_id": "stable string", "duplicate_of": "string|null"}
+    ],
+    "evidence": [
+      {
+        "evidence_id": "stable string or evidence_ref",
+        "source_family": "non-empty string",
+        "relevant": "boolean",
+        "contradiction": "boolean",
+        "point_in_time_ok": "boolean",
+        "provenance_ok": "boolean"
+      }
+    ],
+    "failure_patterns": [
+      {
+        "pattern_id": "FP-xxx",
+        "applicable": "boolean",
+        "detected_before_expensive_work": "boolean"
+      }
+    ],
+    "queue_starvation_event_ids": "list of unique stable strings",
+    "coordination_overhead_units": "optional non-negative measured units",
+    "plan_usage_units": "optional non-negative measured units"
+  },
+  "candidate_link_rule": "role_result.candidate_ids must list every bundled candidate the role actually evaluated and must not list candidates it did not evaluate",
+  "transport_self_reference_rule": "an ai_exchange request/response self-reference may be retained for provenance but must be marked relevant=false for evidence-yield metrics",
+  "source_family_rule": "derive source_family from the underlying public source or durable knowledge artifact, never from persuasive interpretation",
+  "decision_rule": {
+    "KILL": "a candidate-linked prebuild_killer or chief_falsifier role_result is FALSIFIED",
+    "CLOSED_NEGATIVE": "reserved for an externally established canonical closed-negative state; scheduled workers themselves have no close-negative authority",
+    "KEEP": "all other observed candidate cases"
+  },
+  "counterfactual_challenger": {
+    "input_cutoff": "request object before its paired AI response exists",
+    "selection": "formal Research OS scheduler may select only tasks present in the request work_items",
+    "evidence_accounting": "challenger may count only role_result telemetry from roles selected using pre-response request state",
+    "missing_selected_role_result": "fail closed; do not impute evidence or zero metrics",
+    "extra_baseline_role_result": "may count for BASELINE but not CHALLENGER if the formal pre-response scheduler did not select it"
+  },
+  "resource_policy": {
+    "extra_scheduled_ai_runs": 0,
+    "existing_prediction_slot_cadence_unchanged": true,
+    "openai_api": false,
+    "paid_actions": false
+  },
+  "hard_constraints": {
+    "live_trading": false,
+    "wallet_actions": false,
+    "fund_movement": false,
+    "candidate_promotion_authority": false,
+    "candidate_kill_authority": false,
+    "economic_default": "NO_PROVEN_EDGE"
+  }
+}
