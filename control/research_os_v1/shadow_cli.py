@@ -23,6 +23,12 @@ def _require_dir(path: Path, label: str) -> None:
         raise ValueError(f"{label}_path_not_directory:{path}")
 
 
+def _required_text(value: Any, error: str) -> str:
+    if not isinstance(value, str) or not value.strip():
+        raise ValueError(error)
+    return value.strip()
+
+
 def load_candidates(candidate_dir: Path) -> list[dict[str, Any]]:
     _require_dir(candidate_dir, "candidate")
     rows: list[dict[str, Any]] = []
@@ -33,9 +39,13 @@ def load_candidates(candidate_dir: Path) -> list[dict[str, Any]]:
         obj = load_json(path)
         if not isinstance(obj, dict):
             raise ValueError(f"candidate_not_object:{path}")
-        candidate_id = str(obj.get("candidate_id") or "").strip()
-        if not candidate_id:
-            raise ValueError(f"candidate_id_missing:{path}")
+        try:
+            candidate_id = _required_text(
+                obj.get("candidate_id"),
+                f"candidate_id_missing_or_invalid:{path}",
+            )
+        except ValueError as exc:
+            raise exc
         if candidate_id in seen:
             raise ValueError(
                 f"duplicate_candidate_id:{candidate_id}:{seen[candidate_id]}:{path}"
@@ -55,9 +65,10 @@ def load_packets(packet_dir: Path) -> list[dict[str, Any]]:
         obj = load_json(path)
         if not isinstance(obj, dict):
             raise ValueError(f"packet_not_object:{path}")
-        agent_id = str(obj.get("agent_id") or "").strip()
-        if not agent_id:
-            raise ValueError(f"packet_agent_id_missing:{path}")
+        agent_id = _required_text(
+            obj.get("agent_id"),
+            f"packet_agent_id_missing_or_invalid:{path}",
+        )
         if agent_id in seen:
             raise ValueError(
                 f"duplicate_packet_agent_id:{agent_id}:{seen[agent_id]}:{path}"
@@ -68,17 +79,17 @@ def load_packets(packet_dir: Path) -> list[dict[str, Any]]:
 
 
 def build_from_paths(candidate_dir: Path, packet_dir: Path, source_commit: str) -> dict[str, Any]:
-    if not str(source_commit or "").strip():
-        raise ValueError("source_commit_required")
+    source = _required_text(source_commit, "source_commit_required")
     candidates = load_candidates(candidate_dir)
     packets = load_packets(packet_dir)
-    tasks = packets_to_tasks(packets, run_id=packet_dir.name)
-    result = build_shadow_plan(candidates, tasks, source_commit=source_commit)
+    run_id = _required_text(packet_dir.name, "packet_run_id_required")
+    tasks = packets_to_tasks(packets, run_id=run_id)
+    result = build_shadow_plan(candidates, tasks, source_commit=source)
     result["input_summary"] = {
         "candidate_count": len(candidates),
         "packet_count": len(packets),
         "task_count": len(tasks),
-        "packet_run_id": packet_dir.name,
+        "packet_run_id": run_id,
     }
     return result
 
