@@ -1,0 +1,317 @@
+{
+  "candidate_decisions": [],
+  "director_decision": "Laat alle bestaande candidate queue-statussen ongewijzigd. WATCH blijft WATCH. Geen promotie en geen negative close. Prioriteer prospectieve TWC/finality-data en exact-contract incentive/L2-economie; voer geen brede duplicerende discovery uit in deze request-service run.",
+  "economic_conclusion": "NO_PROVEN_EDGE",
+  "live_trading": false,
+  "local_tasks": [],
+  "openai_api": false,
+  "paid_actions": false,
+  "response_token": "f46755beee0f507966c81b0fb016eae59ae96d41de900a704aff501399b4fa8f",
+  "role_results": [
+    {
+      "agent_id": "recon_scout",
+      "benchmark_telemetry": {
+        "evidence": [
+          {
+            "contradiction": false,
+            "evidence_id": "source_registry:kalshi_docs:305d1eec8da98433363cce72ce59fb5e221754804f9e946daa3d584ad19ec9ef",
+            "point_in_time_ok": true,
+            "provenance_ok": true,
+            "relevant": true,
+            "source_family": "kalshi_docs"
+          },
+          {
+            "contradiction": false,
+            "evidence_id": "source_registry:kalshi_weather_rules:57d1b00d6b9aa59444b17d90ce2db04c11fedcd760069731c8099fe6cdb754cb",
+            "point_in_time_ok": true,
+            "provenance_ok": true,
+            "relevant": true,
+            "source_family": "kalshi_weather_rules"
+          }
+        ],
+        "failure_patterns": [
+          {
+            "applicable": true,
+            "detected_before_expensive_work": true,
+            "pattern_id": "generic-keyword-hit-without-mechanism"
+          }
+        ],
+        "queue_starvation_event_ids": [],
+        "research_items": [
+          {
+            "duplicate_of": null,
+            "item_id": "recon-routed-source-triage-1000"
+          }
+        ],
+        "worker_run_id": "hourly-20260922T100000+0200:recon_scout"
+      },
+      "candidate_ids": [],
+      "evidence_refs": [
+        "knowledge/runs/hourly-20260922T100000+0200-routing.json",
+        "source_registry:kalshi_docs:305d1eec8da98433363cce72ce59fb5e221754804f9e946daa3d584ad19ec9ef",
+        "source_registry:kalshi_weather_rules:57d1b00d6b9aa59444b17d90ce2db04c11fedcd760069731c8099fe6cdb754cb",
+        "source_registry:polymarket_docs:bbfb7a5f8e917cdd63380293ded53b574778ed057b05028625269cc66553c7f1"
+      ],
+      "finding": "De gewijzigde routed bronnen bevatten concrete venue-mechanics (Kalshi API/changelog, Kalshi weather settlement en Polymarket fees/rebates), maar geen nieuw gedocumenteerd foutmechanisme, point-in-time voorspellend signaal of netto executable prijsverschil. De generieke CFTC- en documentatiehits zijn onvoldoende voor HUNT en blijven discovery-context.",
+      "local_task_required": false,
+      "local_task_spec": null,
+      "next_decisive_question": "Levert een concrete primaire venue-wijziging een falsifieerbaar mechanisme op dat met point-in-time executable data kan worden getest?",
+      "status": "COMPLETED"
+    },
+    {
+      "agent_id": "scout",
+      "benchmark_telemetry": {
+        "evidence": [
+          {
+            "contradiction": false,
+            "evidence_id": "source_registry:kalshi_docs:305d1eec8da98433363cce72ce59fb5e221754804f9e946daa3d584ad19ec9ef",
+            "point_in_time_ok": true,
+            "provenance_ok": true,
+            "relevant": true,
+            "source_family": "kalshi_docs"
+          }
+        ],
+        "failure_patterns": [
+          {
+            "applicable": true,
+            "detected_before_expensive_work": true,
+            "pattern_id": "watch-is-not-hunt"
+          }
+        ],
+        "queue_starvation_event_ids": [],
+        "research_items": [
+          {
+            "duplicate_of": null,
+            "item_id": "scout-source-delta-1000"
+          }
+        ],
+        "worker_run_id": "hourly-20260922T100000+0200:scout"
+      },
+      "candidate_ids": [],
+      "evidence_refs": [
+        "knowledge/runs/hourly-20260922T100000+0200-routing.json",
+        "knowledge/runs/recon/hourly-20260922T100000+0200.json",
+        "source_registry:kalshi_docs:305d1eec8da98433363cce72ce59fb5e221754804f9e946daa3d584ad19ec9ef"
+      ],
+      "finding": "De primaire source-delta's leveren geen zelfstandige nieuwe edge-lead. De bruikbare wijzigingen zijn mechanische context voor weather/settlement/microstructure; de Kalshi changelog-WATCH blijft WATCH en wordt niet naar HUNT gepromoveerd zonder concrete semantische wijziging en economische test.",
+      "local_task_required": false,
+      "local_task_spec": null,
+      "next_decisive_question": "Welke concrete changelog- of rules-delta verandert contractsemantiek, fees, API-data of settlement op een economisch testbare manier?",
+      "status": "COMPLETED"
+    },
+    {
+      "agent_id": "algebra",
+      "benchmark_telemetry": {
+        "evidence": [
+          {
+            "contradiction": false,
+            "evidence_id": "source_registry:polymarket_docs:bbfb7a5f8e917cdd63380293ded53b574778ed057b05028625269cc66553c7f1",
+            "point_in_time_ok": true,
+            "provenance_ok": true,
+            "relevant": true,
+            "source_family": "polymarket_docs"
+          }
+        ],
+        "failure_patterns": [
+          {
+            "applicable": true,
+            "detected_before_expensive_work": true,
+            "pattern_id": "identity-without-executable-legs"
+          }
+        ],
+        "queue_starvation_event_ids": [],
+        "research_items": [
+          {
+            "duplicate_of": null,
+            "item_id": "algebra-rebate-watch-triage-1000"
+          }
+        ],
+        "worker_run_id": "hourly-20260922T100000+0200:algebra"
+      },
+      "candidate_ids": [],
+      "evidence_refs": [
+        "knowledge/runs/hourly-20260922T100000+0200-routing.json",
+        "source_registry:polymarket_docs:bbfb7a5f8e917cdd63380293ded53b574778ed057b05028625269cc66553c7f1"
+      ],
+      "finding": "De bundle specificeert geen concrete set legs met volledige payoutregels, settlementtoestanden, fee/rebatevoorwaarden en gelijktijdige executable prijzen. De Polymarket rebate/docs-hit bewijst alleen dat mechanismen bestaan; hij levert geen state-wise payout-identiteit of gegarandeerde floor. Geen algebraïsche edge bewezen.",
+      "local_task_required": false,
+      "local_task_spec": null,
+      "next_decisive_question": "Welke exacte legs hebben volledige rules plus fee/rebate-semantiek en simultane executable L2 zodat state-wise netto payout kan worden bewezen?",
+      "status": "NO_EVIDENCE"
+    },
+    {
+      "agent_id": "settlement",
+      "benchmark_telemetry": {
+        "evidence": [
+          {
+            "contradiction": false,
+            "evidence_id": "source_registry:kalshi_weather_rules:57d1b00d6b9aa59444b17d90ce2db04c11fedcd760069731c8099fe6cdb754cb",
+            "point_in_time_ok": true,
+            "provenance_ok": true,
+            "relevant": true,
+            "source_family": "kalshi_weather_rules"
+          }
+        ],
+        "failure_patterns": [
+          {
+            "applicable": true,
+            "detected_before_expensive_work": true,
+            "pattern_id": "preliminary-is-not-final-settlement"
+          }
+        ],
+        "queue_starvation_event_ids": [],
+        "research_items": [
+          {
+            "duplicate_of": null,
+            "item_id": "settlement-weather-finality-1000"
+          }
+        ],
+        "worker_run_id": "hourly-20260922T100000+0200:settlement"
+      },
+      "candidate_ids": [],
+      "evidence_refs": [
+        "source_registry:kalshi_weather_rules:57d1b00d6b9aa59444b17d90ce2db04c11fedcd760069731c8099fe6cdb754cb",
+        "knowledge/runs/hourly-20260922T100000+0200-routing.json"
+      ],
+      "finding": "De gewijzigde Kalshi weather-bron bevestigt het cruciale source-split: daily high/low gebruikt de finale NWS Daily Climate Report, hourly temperature gebruikt The Weather Company op het exacte contracttijdstip/station. Daily settlement kan worden vertraagd bij inconsistentie met METAR 6/24-uurs highs of wanneer een finale NWS-high lager is dan een eerdere preliminary. Dit is finality/revision-risico, geen bewezen edge.",
+      "local_task_required": false,
+      "local_task_spec": null,
+      "next_decisive_question": "Kunnen preliminary, METAR-consistency en finale settlement-objecten prospectief met timestamps aan dezelfde contracten worden gekoppeld zonder hindsight?",
+      "status": "COMPLETED"
+    },
+    {
+      "agent_id": "microstructure",
+      "benchmark_telemetry": {
+        "evidence": [
+          {
+            "contradiction": false,
+            "evidence_id": "source_registry:polymarket_docs:bbfb7a5f8e917cdd63380293ded53b574778ed057b05028625269cc66553c7f1",
+            "point_in_time_ok": true,
+            "provenance_ok": true,
+            "relevant": true,
+            "source_family": "polymarket_docs"
+          }
+        ],
+        "failure_patterns": [
+          {
+            "applicable": true,
+            "detected_before_expensive_work": true,
+            "pattern_id": "incentive-without-execution-economics"
+          }
+        ],
+        "queue_starvation_event_ids": [],
+        "research_items": [
+          {
+            "duplicate_of": null,
+            "item_id": "microstructure-incentive-watch-1000"
+          }
+        ],
+        "worker_run_id": "hourly-20260922T100000+0200:microstructure"
+      },
+      "candidate_ids": [],
+      "evidence_refs": [
+        "source_registry:polymarket_docs:bbfb7a5f8e917cdd63380293ded53b574778ed057b05028625269cc66553c7f1",
+        "knowledge/runs/hourly-20260922T100000+0200-routing.json"
+      ],
+      "finding": "De Polymarket-docs bevestigen fee-, maker-rebate-, taker-rebate- en liquidity-reward-mechanismen, maar de bundle bevat geen exact-contract point-in-time L2-depth, toepasselijke fee/rewardconfiguratie, fill-probability of adverse-selectionmeting. Zonder die gegevens is er geen execution edge; midpoint/UI/last trade is niet voldoende.",
+      "local_task_required": false,
+      "local_task_spec": null,
+      "next_decisive_question": "Wat is voor één exact incentive-enabled contract de netto economie na executable depth, fees/rebates/rewards, slippage, fills en adverse selection?",
+      "status": "NO_EVIDENCE"
+    },
+    {
+      "agent_id": "weather_twc",
+      "benchmark_telemetry": {
+        "evidence": [
+          {
+            "contradiction": false,
+            "evidence_id": "source_registry:kalshi_weather_rules:57d1b00d6b9aa59444b17d90ce2db04c11fedcd760069731c8099fe6cdb754cb",
+            "point_in_time_ok": true,
+            "provenance_ok": true,
+            "relevant": true,
+            "source_family": "kalshi_weather_rules"
+          }
+        ],
+        "failure_patterns": [
+          {
+            "applicable": true,
+            "detected_before_expensive_work": true,
+            "pattern_id": "proxy-weather-source-not-settlement-source"
+          }
+        ],
+        "queue_starvation_event_ids": [],
+        "research_items": [
+          {
+            "duplicate_of": null,
+            "item_id": "weather-source-semantics-1000"
+          }
+        ],
+        "worker_run_id": "hourly-20260922T100000+0200:weather_twc"
+      },
+      "candidate_ids": [],
+      "evidence_refs": [
+        "source_registry:kalshi_weather_rules:57d1b00d6b9aa59444b17d90ce2db04c11fedcd760069731c8099fe6cdb754cb",
+        "source_registry:aviationweather:dd6e0cc4b237e05406554eb33d2b7963367175f44a5a0ae0feb4e59f707b0edf",
+        "source_registry:ecmwf_open:0ca259ff241dfbdd8dfd74f5482d338ee580377e0eca2358dcbdd550b766b36d"
+      ],
+      "finding": "De primary weather evidence scherpt de semantiek aan maar levert nog geen nieuwe prospectieve TWC-observaties. Hourly Kalshi-contracten settelen op The Weather Company voor exact tijdstip/station; METAR/NWS-data kan voor daily consistency relevant zijn maar is niet automatisch de hourly settlementbron. Signal edge blijft onbewezen zonder timestamped TWC preliminary/final of recordercorpus.",
+      "local_task_required": false,
+      "local_task_spec": null,
+      "next_decisive_question": "Levert het prospectieve recordercorpus timestamped TWC preliminary/final verschillen op die vóór marktcorrectie beschikbaar zijn en reproduceerbaar zijn?",
+      "status": "WAITING_FOR_DATA"
+    },
+    {
+      "agent_id": "research_director",
+      "benchmark_telemetry": {
+        "evidence": [
+          {
+            "contradiction": false,
+            "evidence_id": "source_registry:kalshi_weather_rules:57d1b00d6b9aa59444b17d90ce2db04c11fedcd760069731c8099fe6cdb754cb",
+            "point_in_time_ok": true,
+            "provenance_ok": true,
+            "relevant": true,
+            "source_family": "kalshi_weather_rules"
+          },
+          {
+            "contradiction": false,
+            "evidence_id": "source_registry:polymarket_docs:bbfb7a5f8e917cdd63380293ded53b574778ed057b05028625269cc66553c7f1",
+            "point_in_time_ok": true,
+            "provenance_ok": true,
+            "relevant": true,
+            "source_family": "polymarket_docs"
+          }
+        ],
+        "failure_patterns": [
+          {
+            "applicable": true,
+            "detected_before_expensive_work": true,
+            "pattern_id": "no-end-to-end-edge-chain"
+          }
+        ],
+        "queue_starvation_event_ids": [],
+        "research_items": [
+          {
+            "duplicate_of": null,
+            "item_id": "director-adjudication-1000"
+          }
+        ],
+        "worker_run_id": "hourly-20260922T100000+0200:research_director"
+      },
+      "candidate_ids": [],
+      "evidence_refs": [
+        "knowledge/runs/hourly-20260922T100000+0200-routing.json",
+        "knowledge/runs/recon/hourly-20260922T100000+0200.json",
+        "source_registry:kalshi_weather_rules:57d1b00d6b9aa59444b17d90ce2db04c11fedcd760069731c8099fe6cdb754cb",
+        "source_registry:polymarket_docs:bbfb7a5f8e917cdd63380293ded53b574778ed057b05028625269cc66553c7f1"
+      ],
+      "finding": "Geen work_item levert deze run een bewezen signal-to-market-to-execution keten. De relevante nieuwe semantiek is weather finality/source-splitting; incentive- en API-WATCH-signalen missen executable evidence. Laat bestaande candidate queue-statussen ongemoeid, promoveer of sluit niets, en besteed vervolgcapaciteit aan prospectieve TWC/finality-data en exact-contract incentive/L2-economie wanneer die beschikbaar zijn.",
+      "local_task_required": false,
+      "local_task_spec": null,
+      "next_decisive_question": "Welke lane levert als eerste prospectieve point-in-time data plus executable economics die NO_PROVEN_EDGE daadwerkelijk kan falsifiëren?",
+      "status": "COMPLETED"
+    }
+  ],
+  "run_id": "hourly-20260922T100000+0200",
+  "schema": "PVA_AI_RESPONSE_V1",
+  "wallet_actions": false
+}
