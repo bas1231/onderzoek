@@ -14,10 +14,10 @@ def load(name, path):
     return mod
 
 
-def test_all_orchestrated_roles_have_ai_worker_contract():
-    orchestrator = load(
-        "worker_contract_orchestrator",
-        ROOT / "control/hourly/agent_orchestrator.py",
+def test_six_domain_runtime_roles_have_ai_worker_contract():
+    architecture = load(
+        "worker_contract_architecture",
+        ROOT / "control/hourly/research_os_architecture.py",
     )
     handoff = load(
         "worker_contract_handoff",
@@ -28,16 +28,36 @@ def test_all_orchestrated_roles_have_ai_worker_contract():
         ROOT / "control/hourly/ai_response.py",
     )
 
-    orchestrated = set(orchestrator.PRIMARY_ROLES) | set(
-        orchestrator.CONTROL_ROLES
-    )
+    expected_permanent = set(architecture.PERMANENT_AGENTS)
+    expected_transient = {"independent_reproducer"}
+    expected = expected_permanent | expected_transient
     handed_off = set(handoff.ROLE_ORDER)
     accepted = set(response.ALLOWED_ROLE_IDS)
 
-    assert orchestrated <= handed_off
-    assert handed_off <= accepted
-    assert "recon_scout" in handed_off
-    assert "recon_scout" in accepted
+    assert expected_permanent == {
+        "discovery",
+        "market_research",
+        "mechanics",
+        "algebra",
+        "red_team_pentest",
+        "research_director",
+    }
+    assert handed_off == expected
+    assert accepted == expected
+
+    legacy_permanent_roles = {
+        "recon_scout",
+        "scout",
+        "settlement",
+        "microstructure",
+        "behavioral",
+        "informed_flow",
+        "weather_twc",
+        "prebuild_killer",
+        "chief_falsifier",
+    }
+    assert not legacy_permanent_roles.intersection(handed_off)
+    assert not legacy_permanent_roles.intersection(accepted)
 
 
 def test_ai_handoff_candidate_schema_has_no_kill_or_promotion_state():
