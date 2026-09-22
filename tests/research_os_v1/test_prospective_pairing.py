@@ -129,11 +129,21 @@ def test_unresolved_cohort_cannot_be_paired():
         normalize_observation_set(status, observation_set("BASELINE"), "BASELINE")
 
 
-def test_negative_case_requires_falsification_steps():
+def test_falsified_negative_requires_falsification_steps():
     obs = observation_set("BASELINE")
     obs["records"][1]["steps_to_decisive_falsification"] = None
-    with pytest.raises(ValueError, match="steps_required_for_negative"):
+    with pytest.raises(ValueError, match="steps_required_for_falsified_negative"):
         normalize_observation_set(cohort_status(), obs, "BASELINE")
+
+
+def test_unfalsified_negative_is_counted_by_m6_without_inventing_steps():
+    obs = observation_set("CHALLENGER")
+    obs["records"][1]["decision"] = "KEEP"
+    obs["records"][1]["steps_to_decisive_falsification"] = None
+    rows = normalize_observation_set(cohort_status(), obs, "CHALLENGER")
+    assert rows[1]["ground_truth_class"] == "DECISIVE_NEGATIVE"
+    assert rows[1]["decision"] == "KEEP"
+    assert "steps_to_decisive_falsification" not in rows[1]
 
 
 def test_invalid_decision_fails_closed():
