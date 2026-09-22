@@ -66,3 +66,53 @@ def test_shared_primary_source_is_not_independent_even_with_different_refs():
     result = source_independence(origin, reproduction)
     assert result["status"] == "SHARED_UPSTREAM"
     assert result["counts_as_independent_reproduction"] is False
+
+
+def test_same_content_hash_is_not_independent_even_with_different_refs_and_labels():
+    origin = [{
+        "ref": "artifact:a",
+        "document_sha256": "ABCDEF",
+        "upstream_source_ids": ["claimed:origin"],
+    }]
+    reproduction = [{
+        "ref": "artifact:b",
+        "content_hash": "abcdef",
+        "upstream_source_ids": ["claimed:reproduction"],
+    }]
+    result = source_independence(origin, reproduction)
+    assert result["status"] == "SHARED_UPSTREAM"
+    assert "sha256:abcdef" in result["shared_reference_ids"]
+    assert result["counts_as_independent_reproduction"] is False
+
+
+def test_same_source_id_blocks_independence_even_if_upstream_labels_disagree():
+    origin = [{
+        "ref": "artifact:a",
+        "source_id": "venue:official-feed",
+        "upstream_source_ids": ["claimed:a"],
+    }]
+    reproduction = [{
+        "ref": "artifact:b",
+        "source_id": "venue:official-feed",
+        "upstream_source_ids": ["claimed:b"],
+    }]
+    result = source_independence(origin, reproduction)
+    assert result["status"] == "SHARED_UPSTREAM"
+    assert "source:venue:official-feed" in result["shared_reference_ids"]
+    assert result["counts_as_independent_reproduction"] is False
+
+
+def test_disjoint_explicit_lineage_and_artifacts_can_still_be_independent():
+    origin = [{
+        "ref": "artifact:a",
+        "document_sha256": "aaa",
+        "upstream_source_ids": ["official:a"],
+    }]
+    reproduction = [{
+        "ref": "artifact:b",
+        "document_sha256": "bbb",
+        "upstream_source_ids": ["official:b"],
+    }]
+    result = source_independence(origin, reproduction)
+    assert result["status"] == "INDEPENDENT"
+    assert result["counts_as_independent_reproduction"] is True
