@@ -9,6 +9,8 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
+from .candidate_view import ALLOWED_PRIORITY, ALLOWED_QUEUE_STATUS
+
 BASE = Path(__file__).resolve().parent
 
 
@@ -57,6 +59,13 @@ def main() -> int:
     allowed_gate_states = set((gates.get("additionalProperties") or {}).get("enum") or [])
     if allowed_gate_states != {"PASS", "FAIL", "PENDING", "UNKNOWN", "NOT_APPLICABLE"}:
         errors.append("CANONICAL_GATE_STATES_DRIFT")
+
+    schema_queue_status = set((canonical_props.get("queue_status") or {}).get("enum") or [])
+    if schema_queue_status != ALLOWED_QUEUE_STATUS:
+        errors.append("CANONICAL_QUEUE_STATUS_ENUM_DRIFT")
+    schema_priority = set((canonical_props.get("priority") or {}).get("enum") or [])
+    if schema_priority != ALLOWED_PRIORITY:
+        errors.append("CANONICAL_PRIORITY_ENUM_DRIFT")
 
     worker_props = worker.get("properties") or {}
     worker_required = set(worker.get("required") or [])
