@@ -1,0 +1,87 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "research-os-v1-canonical-candidate",
+  "title": "Research OS V1 Canonical Candidate View",
+  "type": "object",
+  "required": [
+    "candidate_id",
+    "version",
+    "hypothesis",
+    "mechanism",
+    "phase",
+    "queue_status",
+    "economic_status",
+    "priority",
+    "claims",
+    "assumptions",
+    "supporting_evidence",
+    "contradictory_evidence",
+    "known_failure_patterns",
+    "kill_conditions",
+    "resurrection_conditions",
+    "required_gates",
+    "search_family",
+    "next_decisive_question",
+    "dependencies",
+    "blockers",
+    "point_in_time_cutoff",
+    "source_commit",
+    "updated_at"
+  ],
+  "properties": {
+    "candidate_id": {"type": "string", "minLength": 1},
+    "version": {"type": "integer", "minimum": 1},
+    "hypothesis": {"type": "string", "minLength": 1},
+    "mechanism": {"type": ["string", "null"]},
+    "phase": {"type": "string", "minLength": 1},
+    "queue_status": {"enum": ["QUEUED", "NEEDS_DIRECTOR", "EXPERIMENT_REQUIRED", "RUNNING", "WAITING_FOR_DATA", "WAITING_FOR_RESULT", "RESULT_READY", "NEEDS_REVISION", "PARKED", "CLOSED_NEGATIVE", "PROMOTION_CANDIDATE"]},
+    "economic_status": {"enum": ["NO_PROVEN_EDGE", "STRUCTURAL_CANDIDATE", "RESEARCH_POSITIVE", "TESTED_NEGATIVE", "EXECUTION_BLOCKED"]},
+    "priority": {"enum": ["P0", "P1", "P2", "P3"]},
+    "claims": {
+      "type": "array",
+      "items": {"anyOf": [{"type": "string", "minLength": 1}, {"type": "object"}]}
+    },
+    "assumptions": {
+      "type": "array",
+      "items": {"anyOf": [{"type": "string", "minLength": 1}, {"type": "object"}]}
+    },
+    "supporting_evidence": {
+      "type": "array",
+      "items": {"anyOf": [{"type": "string", "minLength": 1}, {"type": "object"}]}
+    },
+    "contradictory_evidence": {
+      "type": "array",
+      "items": {"anyOf": [{"type": "string", "minLength": 1}, {"type": "object"}]}
+    },
+    "known_failure_patterns": {"type": "array", "items": {"type": "string", "minLength": 1}},
+    "kill_conditions": {"type": "array", "items": {"type": "string", "minLength": 1}},
+    "resurrection_conditions": {"type": "array", "items": {"type": "string", "minLength": 1}},
+    "required_gates": {
+      "type": "object",
+      "propertyNames": {"type": "string", "minLength": 1},
+      "additionalProperties": {"enum": ["PASS", "FAIL", "PENDING", "UNKNOWN", "NOT_APPLICABLE"]}
+    },
+    "search_family": {
+      "type": ["object", "null"],
+      "required": ["id", "hypotheses_examined", "parameterizations_examined", "post_hoc_mutations", "untouched_evidence_remaining"],
+      "properties": {
+        "id": {"type": "string", "minLength": 1},
+        "hypotheses_examined": {"type": "integer", "minimum": 0},
+        "parameterizations_examined": {"type": "integer", "minimum": 0},
+        "post_hoc_mutations": {"type": "integer", "minimum": 0},
+        "failed_variants": {"type": "integer", "minimum": 0},
+        "surviving_variants": {"type": "integer", "minimum": 0},
+        "untouched_evidence_remaining": {"type": "boolean"},
+        "data_periods_seen": {"type": "array", "items": {"type": "string", "minLength": 1}}
+      },
+      "additionalProperties": true
+    },
+    "next_decisive_question": {"type": ["string", "null"]},
+    "dependencies": {"type": "array", "items": {"type": "string", "minLength": 1}},
+    "blockers": {"type": "array", "items": {"type": "string", "minLength": 1}},
+    "point_in_time_cutoff": {"type": ["string", "null"]},
+    "source_commit": {"type": "string", "minLength": 1},
+    "updated_at": {"type": ["string", "null"]}
+  },
+  "additionalProperties": false
+}

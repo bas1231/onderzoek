@@ -1,0 +1,91 @@
+import pytest
+
+from control.research_os_v1.hypothesis_accounting import adaptive_search_flags, normalize
+from control.research_os_v1.discovery_coverage import summarize
+
+
+def test_string_false_is_not_accepted_as_boolean_holdout_state():
+    with pytest.raises(ValueError, match="untouched_evidence_remaining_must_be_boolean"):
+        normalize({
+            "id": "F1",
+            "hypotheses_examined": 1,
+            "parameterizations_examined": 0,
+            "post_hoc_mutations": 0,
+            "untouched_evidence_remaining": "false",
+        })
+
+
+def test_boolean_is_not_accepted_as_integer_search_count():
+    with pytest.raises(ValueError, match="search_count_must_be_integer:hypotheses_examined"):
+        normalize({
+            "id": "F1",
+            "hypotheses_examined": True,
+            "parameterizations_examined": 0,
+            "post_hoc_mutations": 0,
+            "untouched_evidence_remaining": True,
+        })
+
+
+def test_missing_accounting_never_allows_direct_promotion():
+    flags = adaptive_search_flags(None)
+    assert flags["accounting_present"] is False
+    assert flags["requires_untouched_validation"] is True
+    assert flags["discovery_evidence_may_promote_directly"] is False
+
+
+def test_adaptive_search_without_untouched_evidence_exposes_blocker():
+    flags = adaptive_search_flags({
+        "id": "F1",
+        "hypotheses_examined": 4,
+        "parameterizations_examined": 2,
+        "post_hoc_mutations": 1,
+        "untouched_evidence_remaining": False,
+    })
+    assert flags["adaptive_search"] is True
+    assert flags["untouched_validation_available"] is False
+    assert flags["promotion_blocker"] == "NO_UNTOUCHED_EVIDENCE_REMAINING"
+
+
+def test_zero_discovery_denominators_are_unknown_not_zero():
+    out = summarize([], [], [], [])
+    assert out["duplicate_cross_scout_ratio"] is None
+    assert out["primary_source_ratio"] is None
+    assert out["zero_denominator_metrics_are_unknown"] is True
+
+
+def test_same_content_hash_on_different_sources_is_cross_scout_duplicate():
+    p = [{
+        "source_id": "official-url-a",
+        "document_sha256": "ABC123",
+        "source_family": "official_rules_contracts",
+        "retrieval_succeeded": True,
+    }]
+    r = [{
+        "source_id": "mirror-url-b",
+        "document_sha256": "abc123",
+        "source_family": "community_discussion_weak_signals",
+        "retrieval_succeeded": True,
+    }]
+    out = summarize(p, r, ["official_rules_contracts"], ["official_rules_contracts"])
+    assert out["identified_document_keys"] == 1
+    assert out["duplicate_cross_scout_keys"] == 1
+    assert out["duplicate_cross_scout_ratio"] == 1.0
+
+
+def test_attempted_but_failed_family_is_not_retrieval_complete():
+    p = [{
+        "source_id": "official-url-a",
+        "source_family": "official_rules_contracts",
+        "source_state": "FAILED",
+        "retrieval_succeeded": False,
+    }]
+    out = summarize(
+        p,
+        [],
+        ["official_rules_contracts"],
+        ["official_rules_contracts"],
+    )
+    assert out["coverage_attempt_complete"] is True
+    assert out["coverage_retrieval_complete"] is False
+    assert out["coverage_complete"] is False
+    assert out["retrieval_coverage_gaps"] == ["official_rules_contracts"]
