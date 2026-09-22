@@ -1,0 +1,47 @@
+{
+  "schema_version": 1,
+  "status": "FROZEN_BEFORE_FIRST_PROSPECTIVE_EXCHANGE_CASE",
+  "mode": "CANARY_LOW_USAGE_LOGICAL_ROLE_REPLAY",
+  "purpose": "Compare the legacy request role set with the formal Research OS low-usage topology without adding an extra model turn.",
+  "input_cutoff": "PVA_AI_EXCHANGE_REQUEST_V1 before the paired response exists",
+  "eligible_pool": "only work_items present in the request and already marked READY by the legacy orchestrator",
+  "logical_role_unit_definition": "one role_result for one agent_id within one scheduled model turn; this is not claimed to be an independent model invocation",
+  "selection_order": [
+    "Select scout when present and admissible.",
+    "Select recon_scout when present and admissible.",
+    "From every other admissible non-director role, select at most one dynamic role using the frozen Research OS ordinal scheduler ranking.",
+    "Select research_director when present and admissible."
+  ],
+  "maximum_logical_role_units": 4,
+  "dynamic_pool": [
+    "weather_twc",
+    "behavioral",
+    "informed_flow",
+    "microstructure",
+    "settlement",
+    "algebra",
+    "prebuild_killer",
+    "chief_falsifier",
+    "independent_reproducer"
+  ],
+  "candidate_case_rule": "Every candidate linked by any READY request work_item is a case even when the challenger assigns no candidate-linked worker. Explicit no-allocation is recorded as intentionally_unassigned=true and decision KEEP.",
+  "representative_task_rule": [
+    "Prefer a challenger-selected candidate-linked task.",
+    "Otherwise prefer the lexicographically smallest candidate-linked READY task.",
+    "Never use response findings to choose the representative task."
+  ],
+  "decision_rule": {
+    "KILL": "a selected candidate-linked prebuild_killer or chief_falsifier role_result returns FALSIFIED",
+    "KEEP": "all other candidate cases, including intentional no-allocation",
+    "CLOSED_NEGATIVE": "not granted to the scheduled worker and may only come from later canonical ground truth"
+  },
+  "evidence_rule": "Challenger counts only benchmark_telemetry belonging to challenger-selected role_results; baseline counts all candidate-linked role_results returned for the request.",
+  "missing_selected_role_result": "FAIL_CLOSED",
+  "resource_rule": {
+    "extra_scheduled_turns": 0,
+    "existing_prediction_task_schedule_changed": false,
+    "paid_actions": false,
+    "openai_api": false
+  },
+  "economic_default": "NO_PROVEN_EDGE"
+}
