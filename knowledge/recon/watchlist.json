@@ -36,7 +36,7 @@
         "has_decisive_test": true,
         "has_public_trigger": true,
         "independent_source_count": 1,
-        "observation_count": 1,
+        "observation_count": 2,
         "passes": false,
         "requirements": {
           "min_economic_context_count": 2,
@@ -49,12 +49,19 @@
       "labels": [
         "RECON_ANOMALY"
       ],
-      "observation_count": 1,
+      "last_observed_at": "2026-09-22T20:14:48.944097+00:00",
+      "observation_count": 2,
       "observation_history": [
         {
           "document_sha256": "305d1eec8da98433363cce72ce59fb5e221754804f9e946daa3d584ad19ec9ef",
           "economic_context_count": 2,
           "observed_at": "2026-09-22T08:00:17.880171+00:00",
+          "source_id": "kalshi_docs"
+        },
+        {
+          "document_sha256": "9cb68a95e387ab168e492e404814de6096b817532a86ff492fa671a392755722",
+          "economic_context_count": 2,
+          "observed_at": "2026-09-22T20:14:48.944097+00:00",
           "source_id": "kalshi_docs"
         }
       ],
@@ -74,8 +81,8 @@
       "snippet": "your API credentials. Kalshi Academy New to prediction markets? Explore educational resources and tutorials. Reference Rate Limits Token budgets, tiers, and bursting. Changelog Stay updated with the latest API changes. Glossary Key terms and concepts used across the exchange. Specifications Predictions REST Download openapi.yaml for event-contract REST API integration. Predictions WebSocket Download asyncapi.yaml for event-contract WebSocket integration. Perps REST Download perps_openapi.yaml for perpetual futures REST API integration. Perps WebSocket Download perps_asyncapi.yaml for perpetual futures WebSocket integration.",
       "sources": [
         {
-          "document_sha256": "305d1eec8da98433363cce72ce59fb5e221754804f9e946daa3d584ad19ec9ef",
-          "point_in_time": "2026-09-22T08:00:17.880171+00:00",
+          "document_sha256": "9cb68a95e387ab168e492e404814de6096b817532a86ff492fa671a392755722",
+          "point_in_time": "2026-09-22T20:14:48.944097+00:00",
           "source_id": "kalshi_docs",
           "term": "api"
         }
@@ -117,7 +124,7 @@
         "has_decisive_test": true,
         "has_public_trigger": true,
         "independent_source_count": 1,
-        "observation_count": 5,
+        "observation_count": 6,
         "passes": false,
         "requirements": {
           "min_economic_context_count": 2,
@@ -130,8 +137,8 @@
       "labels": [
         "RECON_ANOMALY"
       ],
-      "last_observed_at": "2026-09-22T13:00:18.416721+00:00",
-      "observation_count": 5,
+      "last_observed_at": "2026-09-22T20:14:49.309386+00:00",
+      "observation_count": 6,
       "observation_history": [
         {
           "document_sha256": "57d1b00d6b9aa59444b17d90ce2db04c11fedcd760069731c8099fe6cdb754cb",
@@ -162,6 +169,12 @@
           "economic_context_count": 3,
           "observed_at": "2026-09-22T13:00:18.416721+00:00",
           "source_id": "kalshi_weather_rules"
+        },
+        {
+          "document_sha256": "7171014b39c2da8b7011c2df3fea6c3a0fba32242311e5ab9fec680ba43394fb",
+          "economic_context_count": 3,
+          "observed_at": "2026-09-22T20:14:49.309386+00:00",
+          "source_id": "kalshi_weather_rules"
         }
       ],
       "observed_at": "2026-09-22T08:00:18.773998+00:00",
@@ -179,8 +192,8 @@
       "snippet": "amounts in specific cities, from New York City to Los Angeles. Traders can take positions on whether a city will reach a certain high temperature or fall within a particular range. Each weather market names its official settlement source in its market rules. Daily high/low temperature markets settle based on the final climate report issued by the National Weather Service (NWS), typically released the following morning. Hourly temperature markets settle on readings from The Weather Company . Always check the specific market\u2019s rules for its source. How Do I Trade on Weather Markets? Kalshi creates a prediction market around a specific temperature threshold for a given location. For example: \u201cHighest temperature in Chicago on April 1",
       "sources": [
         {
-          "document_sha256": "72dea002e994d0745f3f13d17998aa06e6ddbd99f41299c7e7a81cd794266e62",
-          "point_in_time": "2026-09-22T13:00:18.416721+00:00",
+          "document_sha256": "7171014b39c2da8b7011c2df3fea6c3a0fba32242311e5ab9fec680ba43394fb",
+          "point_in_time": "2026-09-22T20:14:49.309386+00:00",
           "source_id": "kalshi_weather_rules",
           "term": "settlement"
         }
@@ -222,7 +235,7 @@
         "has_decisive_test": true,
         "has_public_trigger": true,
         "independent_source_count": 1,
-        "observation_count": 1,
+        "observation_count": 2,
         "passes": false,
         "requirements": {
           "min_economic_context_count": 2,
@@ -235,12 +248,19 @@
       "labels": [
         "RECON_ANOMALY"
       ],
-      "observation_count": 1,
+      "last_observed_at": "2026-09-22T20:14:47.716827+00:00",
+      "observation_count": 2,
       "observation_history": [
         {
           "document_sha256": "bbfb7a5f8e917cdd63380293ded53b574778ed057b05028625269cc66553c7f1",
           "economic_context_count": 8,
           "observed_at": "2026-09-22T08:00:17.642822+00:00",
+          "source_id": "polymarket_docs"
+        },
+        {
+          "document_sha256": "e60f2357eaca0914dea07f1ec9a4f64c01924245e6a8b1882afcbbe9cb9b665b",
+          "economic_context_count": 8,
+          "observed_at": "2026-09-22T20:14:47.716827+00:00",
           "source_id": "polymarket_docs"
         }
       ],
@@ -260,8 +280,8 @@
       "snippet": "ils Prices and Order Books Analytics Real-Time Data Chainlink TWAP Prices Trading Overview Place Your First Order Wallets and Authentication Session Keys Beta Place Orders Manage Orders Real-Time Order Updates Positions Combos Wallet Activity Fees Market Making Matching Engine Restarts Bridge Programs Taker Rebate Program Maker Rebates Program Liquidity Rewards Builder Program Referral Program Resources Contracts Data Resources Error Codes \ud83c\uddfa\ud83c\uddf8 Looking for Polymarket US documentation? Visit US Docs \u2192 Polymarket Documentation Build on the world\u2019s largest prediction market. APIs, SDKs, and tools for prediction market developers. Developer Quickstart Make your first API request in minutes. Learn the basics of the Polymarket platform, f",
       "sources": [
         {
-          "document_sha256": "bbfb7a5f8e917cdd63380293ded53b574778ed057b05028625269cc66553c7f1",
-          "point_in_time": "2026-09-22T08:00:17.642822+00:00",
+          "document_sha256": "e60f2357eaca0914dea07f1ec9a4f64c01924245e6a8b1882afcbbe9cb9b665b",
+          "point_in_time": "2026-09-22T20:14:47.716827+00:00",
           "source_id": "polymarket_docs",
           "term": "rebate"
         }
@@ -301,7 +321,7 @@
         "has_decisive_test": true,
         "has_public_trigger": true,
         "independent_source_count": 1,
-        "observation_count": 1,
+        "observation_count": 2,
         "passes": false,
         "requirements": {
           "min_economic_context_count": 2,
@@ -314,12 +334,19 @@
       "labels": [
         "RECON_ANOMALY"
       ],
-      "observation_count": 1,
+      "last_observed_at": "2026-09-22T20:14:48.944097+00:00",
+      "observation_count": 2,
       "observation_history": [
         {
           "document_sha256": "305d1eec8da98433363cce72ce59fb5e221754804f9e946daa3d584ad19ec9ef",
           "economic_context_count": 2,
           "observed_at": "2026-09-22T08:00:17.880171+00:00",
+          "source_id": "kalshi_docs"
+        },
+        {
+          "document_sha256": "9cb68a95e387ab168e492e404814de6096b817532a86ff492fa671a392755722",
+          "economic_context_count": 2,
+          "observed_at": "2026-09-22T20:14:48.944097+00:00",
           "source_id": "kalshi_docs"
         }
       ],
@@ -339,8 +366,8 @@
       "snippet": "your API credentials. Kalshi Academy New to prediction markets? Explore educational resources and tutorials. Reference Rate Limits Token budgets, tiers, and bursting. Changelog Stay updated with the latest API changes. Glossary Key terms and concepts used across the exchange. Specifications Predictions REST Download openapi.yaml for event-contract REST API integration. Predictions WebSocket Download asyncapi.yaml for event-contract WebSocket integration. Perps REST Download perps_openapi.yaml for perpetual futures REST API integration. Perps WebSocket Download perps_asyncapi.yaml for perpetual futures WebSocket integration.",
       "sources": [
         {
-          "document_sha256": "305d1eec8da98433363cce72ce59fb5e221754804f9e946daa3d584ad19ec9ef",
-          "point_in_time": "2026-09-22T08:00:17.880171+00:00",
+          "document_sha256": "9cb68a95e387ab168e492e404814de6096b817532a86ff492fa671a392755722",
+          "point_in_time": "2026-09-22T20:14:48.944097+00:00",
           "source_id": "kalshi_docs",
           "term": "changelog"
         }
@@ -359,6 +386,6 @@
     "PROVE",
     "KILL"
   ],
-  "updated_at": "2026-09-22T13:00:18.550620+00:00",
+  "updated_at": "2026-09-22T20:14:49.504600+00:00",
   "version": 1
 }
