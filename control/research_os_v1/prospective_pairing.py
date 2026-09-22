@@ -159,9 +159,9 @@ def _normalize_record(
     )
 
     steps = record.get("steps_to_decisive_falsification")
-    if ground_truth_class == "DECISIVE_NEGATIVE":
+    if ground_truth_class == "DECISIVE_NEGATIVE" and decision in {"KILL", "CLOSED_NEGATIVE"}:
         row["steps_to_decisive_falsification"] = _nonnegative_int(
-            steps, f"steps_required_for_negative:{side}:{case_id}"
+            steps, f"steps_required_for_falsified_negative:{side}:{case_id}"
         )
     elif steps is not None:
         row["steps_to_decisive_falsification"] = _nonnegative_int(
