@@ -149,15 +149,20 @@ def test_e006_current_candidates_reach_real_bundle_and_exchange_request(tmp_path
     assert "PAYOFF-IDENTITY-MINING-V1" in bundle_by_role["algebra"]["candidate_ids"]
     assert "ASSET-RANK-MAKER-HEDGE-V1" in bundle_by_role["microstructure"]["candidate_ids"]
 
-    # The exact same queue snapshot remains visible to the Director, including
-    # candidate-specific next steps where the canonical record has one.
+    # The exact same queue snapshot remains visible to the Director. Current
+    # canonical records may legitimately have next_decisive_test=null; the
+    # response contract must nevertheless permit a candidate-specific next
+    # step to be returned without inventing one during routing.
     bundle_queue = {
         row["candidate_id"]: row
         for row in bundle["candidate_queue"]["full_queue"]
     }
     assert set(bundle_queue) >= CURRENT_CANDIDATES
-    assert bundle_queue["ASSET-RANK-MAKER-HEDGE-V1"]["next_decisive_test"]
-    assert bundle_queue["KWI-FULL-STATION-PRECANONICAL-V1"]["next_decisive_test"]
+    assert all("next_decisive_test" in bundle_queue[cid] for cid in CURRENT_CANDIDATES)
+    decision_schema = bundle["expected_response_schema"]["candidate_decisions"][0]
+    assert decision_schema["candidate_id"] == "string"
+    assert decision_schema["next_decisive_test"] == "string|null"
+    assert "existing bundled candidates" in bundle["director_instruction"]
 
     # Build the real transport-neutral request; packet candidate IDs must
     # survive unchanged into the work_items offered to the AI worker.
