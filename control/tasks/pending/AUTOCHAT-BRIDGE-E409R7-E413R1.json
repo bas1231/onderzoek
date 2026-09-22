@@ -1,0 +1,21 @@
+{
+  "build_authorization": {
+    "build_kind": "control_plane",
+    "capabilities": [
+      "read_repository"
+    ],
+    "mode": "control_plane",
+    "objective": "Verify E413R1 extension runtime ownership, page discovery, durable enqueue, executor lifecycle, result delivery, and ACK."
+  },
+  "command": [
+    ".venv/bin/python",
+    "experiments/health_check.py"
+  ],
+  "hypothesis_id": "CONTROL-BRIDGE-E409",
+  "live_trading": false,
+  "operation": "health_check",
+  "task_class": "infrastructure",
+  "task_id": "AUTOCHAT-BRIDGE-E409R7-E413R1",
+  "timeout_seconds": 60,
+  "working_directory": "."
+}
