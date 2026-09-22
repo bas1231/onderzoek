@@ -11,6 +11,7 @@ BASE_REQUIRED = [
     "prebuild_killer",
     "chief_falsifier",
     "validation",
+    "holdout",
     "independent_reproduction",
     "shadow",
 ]
@@ -21,8 +22,8 @@ def evaluate(candidate: dict[str, Any], signal_required: bool = True) -> dict[st
 
     `signal_required=False` is not permission to silently skip a signal gate. The
     candidate must explicitly record `signal_edge=NOT_APPLICABLE`; otherwise the
-    route fails closed. This only returns scientific state and never authorizes
-    live trading.
+    route fails closed. Holdout evidence is always required before promotion.
+    This only returns scientific state and never authorizes live trading.
     """
     gates = (
         candidate.get("required_gates")
