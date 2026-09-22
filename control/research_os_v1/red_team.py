@@ -1,7 +1,8 @@
 from __future__ import annotations
 
-from copy import deepcopy
 from typing import Any
+
+from .hypothesis_accounting import normalize as normalize_search_family
 
 ATTACK_ORDER = [
     "SEMANTIC_SOURCE",
@@ -20,6 +21,16 @@ REFERENCE_KEYS = (
     "source_id",
     "content_hash",
     "document_sha256",
+)
+SEARCH_FAMILY_FIELDS = (
+    "id",
+    "hypotheses_examined",
+    "parameterizations_examined",
+    "post_hoc_mutations",
+    "failed_variants",
+    "surviving_variants",
+    "untouched_evidence_remaining",
+    "data_periods_seen",
 )
 
 
@@ -172,21 +183,30 @@ def _failure_patterns(value: Any) -> list[str]:
     return sorted(out)
 
 
+def _blind_search_family(value: Any) -> dict[str, Any] | None:
+    if value is None:
+        return None
+    normalized = normalize_search_family(value)
+    if normalized is None:
+        return None
+    return {
+        key: normalized[key]
+        for key in SEARCH_FAMILY_FIELDS
+        if key in normalized
+    }
+
+
 def build_blind_packet(candidate: dict[str, Any]) -> dict[str, Any]:
     """Construct adversarial input while excluding persuasive origin reasoning.
 
-    Prior gate outcomes are deliberately blinded. The Red Team may know which
-    gates exist, but it must not inherit whether the origin workflow thought a
-    gate had already passed or failed.
+    Prior gate outcomes are deliberately blinded. Search-family context is
+    projected to neutral multiple-testing/accounting fields so arbitrary origin
+    prose cannot leak through an otherwise methodological object.
     """
     if not isinstance(candidate, dict):
         raise ValueError("candidate_must_be_object")
     candidate_id = _required_text(candidate.get("candidate_id"), "candidate_id_required")
     claim = _required_text(candidate.get("hypothesis"), "hypothesis_required")
-
-    search_family = candidate.get("search_family")
-    if search_family is not None and not isinstance(search_family, dict):
-        raise ValueError("search_family_must_be_object_or_null")
 
     cutoff = _optional_text(
         candidate.get("point_in_time_cutoff"),
@@ -223,12 +243,13 @@ def build_blind_packet(candidate: dict[str, Any]) -> dict[str, Any]:
             candidate.get("known_failure_patterns")
         ),
         "point_in_time_cutoff": cutoff,
-        "search_family": deepcopy(search_family),
+        "search_family": _blind_search_family(candidate.get("search_family")),
         "attack_order": list(ATTACK_ORDER),
         "allowed_verdicts": ["KILL", "PARK", "NEEDS_EVIDENCE", "SURVIVED_RED_TEAM"],
         "economic_promotion_authority": False,
         "origin_reasoning_included": False,
         "origin_confidence_included": False,
         "origin_gate_states_included": False,
+        "origin_search_family_extra_fields_included": False,
         "expected_result_included": False,
     }
