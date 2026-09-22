@@ -14,6 +14,8 @@ ALLOW = (
     "knowledge/candidates/*.json",
     "knowledge/candidates/protocols/*.json",
     "knowledge/candidates/protocols/**/*.json",
+    "knowledge/recon/watchlist.json",
+    "knowledge/recon/opportunity_graph.json",
     "knowledge/runs/hourly-*.json",
     "knowledge/runs/twc-revision-summary-latest.json",
 )
