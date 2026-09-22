@@ -40,24 +40,32 @@ def normalize(search_family: dict[str, Any] | None) -> dict[str, Any] | None:
     if missing:
         raise ValueError("search_family_missing:" + ",".join(missing))
 
-    family_id = str(obj.get("id") or "").strip()
-    if not family_id:
+    family_id = obj.get("id")
+    if not isinstance(family_id, str) or not family_id.strip():
         raise ValueError("search_family_id_required")
-    obj["id"] = family_id
+    obj["id"] = family_id.strip()
 
     for key in COUNT_FIELDS:
-        obj[key] = _non_negative_int(obj, key, default=0 if key in {"failed_variants", "surviving_variants"} else None)
+        obj[key] = _non_negative_int(
+            obj,
+            key,
+            default=0 if key in {"failed_variants", "surviving_variants"} else None,
+        )
 
     untouched = obj.get("untouched_evidence_remaining")
     if not isinstance(untouched, bool):
         raise ValueError("untouched_evidence_remaining_must_be_boolean")
 
     periods = obj.get("data_periods_seen", [])
-    if not isinstance(periods, list) or not all(isinstance(v, str) and v.strip() for v in periods):
+    if not isinstance(periods, list) or not all(
+        isinstance(v, str) and v.strip() for v in periods
+    ):
         raise ValueError("data_periods_seen_must_be_string_list")
-    obj["data_periods_seen"] = list(periods)
+    obj["data_periods_seen"] = [v.strip() for v in periods]
 
-    if obj["surviving_variants"] > obj["hypotheses_examined"] + obj["parameterizations_examined"]:
+    if obj["surviving_variants"] > (
+        obj["hypotheses_examined"] + obj["parameterizations_examined"]
+    ):
         raise ValueError("surviving_variants_exceed_recorded_search_space")
 
     return obj
