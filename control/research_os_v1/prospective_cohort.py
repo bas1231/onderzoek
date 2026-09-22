@@ -89,6 +89,17 @@ def _cohort_cutoff(cycles: list[dict[str, Any]]) -> int | None:
     return None
 
 
+def _case_metadata(case: dict[str, Any]) -> dict[str, Any]:
+    return {
+        "case_id": case["case_id"],
+        "active_hour_id": case["active_hour_id"],
+        "candidate_id": case["candidate_id"],
+        "task_shape": case["task_shape"],
+        "representative_task_id": case["representative_task_id"],
+        "legacy_role": case["legacy_role"],
+    }
+
+
 def build_cohort_status(cycles: list[dict[str, Any]]) -> dict[str, Any]:
     ordered = _validate_and_sort_cycles(cycles)
     cutoff = _cohort_cutoff(ordered)
@@ -105,6 +116,7 @@ def build_cohort_status(cycles: list[dict[str, Any]]) -> dict[str, Any]:
             "minimum_raw_collection_met": False,
             "cutoff_active_hour_id": None,
             "cohort_case_ids": [],
+            "cohort_case_metadata": [],
             "resolved_survivors": 0,
             "resolved_decisive_negatives": 0,
             "unresolved_cases": 0,
@@ -132,11 +144,12 @@ def build_cohort_status(cycles: list[dict[str, Any]]) -> dict[str, Any]:
         else:
             unresolved_count += 1
 
-    case_ids = [case["case_id"] for _, case in cohort_cases]
+    case_metadata = [_case_metadata(case) for _, case in cohort_cases]
+    case_ids = [row["case_id"] for row in case_metadata]
     cutoff_hour = cohort_cycles[-1]["active_hour_id"]
     lock_core = {
         "cutoff_active_hour_id": cutoff_hour,
-        "cohort_case_ids": case_ids,
+        "cohort_case_metadata": case_metadata,
         "cohort_cycle_ids": [cycle["active_hour_id"] for cycle in cohort_cycles],
     }
     cohort_hash = _sha256(lock_core)
@@ -157,6 +170,7 @@ def build_cohort_status(cycles: list[dict[str, Any]]) -> dict[str, Any]:
         "cohort_hash": cohort_hash,
         "cohort_cycle_ids": lock_core["cohort_cycle_ids"],
         "cohort_case_ids": case_ids,
+        "cohort_case_metadata": case_metadata,
         "cohort_case_count": len(case_ids),
         "cohort_cycle_count": len(cohort_cycles),
         "task_shapes_observed": sorted({case["task_shape"] for _, case in cohort_cases}),
@@ -179,6 +193,7 @@ def write_cohort_lock(output_dir: Path, status: dict[str, Any]) -> dict[str, Any
         "cohort_hash": status["cohort_hash"],
         "cohort_cycle_ids": status["cohort_cycle_ids"],
         "cohort_case_ids": status["cohort_case_ids"],
+        "cohort_case_metadata": status["cohort_case_metadata"],
     }
     path = Path(output_dir) / "cohort_lock.json"
     encoded = json.dumps(lock, indent=2, sort_keys=True) + "\n"
