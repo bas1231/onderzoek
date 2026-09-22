@@ -206,7 +206,7 @@ def summarize(
         "relevant_unidentified_items": relevant_unkeyed,
         "changed_or_new_documents": len(changed_keys),
         "changed_or_new_unidentified_items": changed_unkeyed,
-        "changed_or_new_items_reported": len(changed_keys),
+        "changed_or_new_items_reported": len(changed_keys) + changed_unkeyed,
         "unsupported_community_leads": unsupported_community,
         "stale_or_failed_items": stale_or_failed,
         "source_family_counts": dict(sorted(family_counts.items())),
