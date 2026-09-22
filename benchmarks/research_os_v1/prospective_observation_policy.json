@@ -1,0 +1,51 @@
+{
+  "schema_version": 1,
+  "status": "FROZEN_BEFORE_FIRST_PROSPECTIVE_BENCHMARK_CASE",
+  "purpose": "Derive Research OS V1 baseline/challenger benchmark metrics from structured telemetry and bind both sides to the exact frozen cohort without self-reported aggregate metrics or case relabeling.",
+  "identity_source": "cohort_case_metadata from the automatically frozen prospective cohort",
+  "ground_truth_source": "prospective_resolver output only",
+  "sides": ["BASELINE", "CHALLENGER"],
+  "exact_pairing_rules": [
+    "Both sides must contain every frozen cohort case exactly once.",
+    "No extra or missing case is permitted.",
+    "case_id, active_hour_id, candidate_id, task_shape, representative_task_id and legacy_role must exactly match the frozen cohort metadata.",
+    "A side cannot provide or alter authoritative ground_truth_class; resolver ground truth is injected after telemetry validation.",
+    "Both side artifacts must carry the exact frozen cohort_hash."
+  ],
+  "metric_derivation_rules": {
+    "worker_runs": "count of unique worker_run_ids",
+    "unique_relevant_evidence": "count of distinct evidence_id entries marked relevant=true",
+    "contradictions_found": "count of evidence entries with contradiction=true",
+    "point_in_time_and_provenance_complete": "true only when every relevant evidence entry has point_in_time_ok=true and provenance_ok=true",
+    "source_families_covered": "set of source_family values among relevant evidence",
+    "research_items": "count of distinct structured research_items",
+    "duplicate_research_items": "count of research_items carrying a non-null duplicate_of",
+    "applicable_known_failure_patterns": "count of failure-pattern entries marked applicable=true",
+    "failure_patterns_before_expensive_work": "count of applicable failure-pattern entries marked detected_before_expensive_work=true",
+    "queue_starvation_events": "count of unique queue_starvation_event_ids",
+    "hard_failures": "exact unique hard-failure IDs supplied by structured telemetry",
+    "steps_to_decisive_falsification": "required non-negative integer for every DECISIVE_NEGATIVE case",
+    "coordination_overhead_units": "optional non-negative measured units; never imputed",
+    "plan_usage_units": "optional non-negative measured units; never imputed"
+  },
+  "anti_gaming_rules": [
+    "Self-reported aggregate metric fields in raw telemetry are ignored.",
+    "Duplicate evidence IDs, research item IDs, worker run IDs, failure-pattern IDs and starvation event IDs fail closed.",
+    "A failure pattern cannot be counted as detected-before-expensive-work unless it is also applicable.",
+    "Missing telemetry for one frozen case blocks the benchmark rather than being treated as zero.",
+    "Missing optional metrics remain missing; they are never coerced to zero.",
+    "Baseline and challenger summaries are compared only after exact cohort identity validation."
+  ],
+  "replacement_authority": {
+    "authoritative_module": "control/research_os_v1/shadow_benchmark.py",
+    "scientific_gate_can_authorize_runtime_replacement": false,
+    "human_integration_decision_required": true,
+    "economic_default": "NO_PROVEN_EDGE"
+  },
+  "hard_constraints": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "runtime_mutation": false
+  }
+}
