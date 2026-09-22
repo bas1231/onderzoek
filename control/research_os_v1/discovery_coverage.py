@@ -8,8 +8,32 @@ COMMUNITY_CLASSES = {"COMMUNITY", "SOCIAL", "VIDEO"}
 PRIMARY_AUTHORITIES = {"OFFICIAL_PRIMARY", "ACADEMIC_PRIMARY"}
 
 
-def _clean(value: Any) -> str:
-    return str(value or "").strip()
+def _optional_text(value: Any, error: str) -> str:
+    if value is None:
+        return ""
+    if not isinstance(value, str):
+        raise ValueError(error)
+    return value.strip()
+
+
+def _string_set(values: Any, error: str) -> set[str]:
+    if not isinstance(values, list):
+        raise ValueError(error)
+    out: set[str] = set()
+    for index, value in enumerate(values):
+        if not isinstance(value, str) or not value.strip():
+            raise ValueError(f"{error}:{index}")
+        out.add(value.strip())
+    return out
+
+
+def _optional_bool(item: dict[str, Any], key: str) -> bool | None:
+    value = item.get(key)
+    if value is None:
+        return None
+    if not isinstance(value, bool):
+        raise ValueError(f"{key}_must_be_boolean_or_null")
+    return value
 
 
 def _identity(item: dict[str, Any]) -> tuple[str, str] | None:
@@ -20,15 +44,28 @@ def _identity(item: dict[str, Any]) -> tuple[str, str] | None:
     source ID is a last-resort retrieval identity and is not treated as strong
     independence evidence.
     """
-    content_hash = _clean(item.get("document_sha256") or item.get("content_hash"))
+    content_hash = _optional_text(
+        item.get("document_sha256")
+        if item.get("document_sha256") is not None
+        else item.get("content_hash"),
+        "content_hash_must_be_string_or_null",
+    )
     if content_hash:
         return ("sha256", content_hash.lower())
 
-    upstream = _clean(item.get("upstream_fact_id") or item.get("canonical_source_id"))
+    upstream = _optional_text(
+        item.get("upstream_fact_id")
+        if item.get("upstream_fact_id") is not None
+        else item.get("canonical_source_id"),
+        "upstream_identity_must_be_string_or_null",
+    )
     if upstream:
         return ("upstream", upstream)
 
-    source_id = _clean(item.get("source_id"))
+    source_id = _optional_text(
+        item.get("source_id"),
+        "source_id_must_be_string_or_null",
+    )
     if source_id:
         return ("source", source_id)
     return None
@@ -52,9 +89,11 @@ def summarize(
     if not isinstance(attempted_families, list) or not isinstance(required_families, list):
         raise ValueError("source_family_inputs_must_be_lists")
 
-    invalid_items = [x for x in primary_items + recon_items if not isinstance(x, dict)]
-    if invalid_items:
+    if any(not isinstance(x, dict) for x in primary_items + recon_items):
         raise ValueError("discovery_item_must_be_object")
+
+    attempted = _string_set(attempted_families, "attempted_source_family_invalid")
+    required = _string_set(required_families, "required_source_family_invalid")
 
     p = list(primary_items)
     r = list(recon_items)
@@ -75,30 +114,50 @@ def summarize(
     unidentified_items = 0
 
     for item in p + r:
-        family = _clean(item.get("source_family")) or "UNKNOWN"
+        family = _optional_text(
+            item.get("source_family"),
+            "source_family_must_be_string_or_null",
+        ) or "UNKNOWN"
         family_counts[family] += 1
-        state = _clean(item.get("source_state")).upper()
-        success = state not in FAILED_STATES and item.get("retrieval_succeeded") is not False
+
+        state = _optional_text(
+            item.get("source_state"),
+            "source_state_must_be_string_or_null",
+        ).upper()
+        retrieval_succeeded = _optional_bool(item, "retrieval_succeeded")
+        relevant = _optional_bool(item, "relevant")
+        independently_supported = _optional_bool(item, "independently_supported")
+        changed_or_new = _optional_bool(item, "changed_or_new")
+
+        success = state not in FAILED_STATES and retrieval_succeeded is not False
         if success:
             successful_family_counts[family] += 1
 
-        if _clean(item.get("source_authority")).upper() in PRIMARY_AUTHORITIES:
+        authority = _optional_text(
+            item.get("source_authority"),
+            "source_authority_must_be_string_or_null",
+        ).upper()
+        if authority in PRIMARY_AUTHORITIES:
             primary_count += 1
 
         identity = _identity(item)
         if identity is None:
             unidentified_items += 1
 
-        if item.get("relevant") is True:
+        if relevant is True:
             if identity is None:
                 relevant_unkeyed += 1
             else:
                 relevant_keys.add(identity)
 
-        if _clean(item.get("source_class")).upper() in COMMUNITY_CLASSES and item.get("independently_supported") is not True:
+        source_class = _optional_text(
+            item.get("source_class"),
+            "source_class_must_be_string_or_null",
+        ).upper()
+        if source_class in COMMUNITY_CLASSES and independently_supported is not True:
             unsupported_community += 1
 
-        if item.get("changed_or_new") is True:
+        if changed_or_new is True:
             if identity is None:
                 changed_unkeyed += 1
             else:
@@ -107,9 +166,11 @@ def summarize(
         if state in FAILED_STATES:
             stale_or_failed += 1
 
-    attempted = {_clean(v) for v in attempted_families if _clean(v)}
-    required = {_clean(v) for v in required_families if _clean(v)}
-    successful = {family for family, count in successful_family_counts.items() if count > 0 and family != "UNKNOWN"}
+    successful = {
+        family
+        for family, count in successful_family_counts.items()
+        if count > 0 and family != "UNKNOWN"
+    }
     attempt_gaps = sorted(required - attempted)
     retrieval_gaps = sorted(required - successful)
     denom = len(p) + len(r)
@@ -124,7 +185,10 @@ def summarize(
         "primary_source_ratio": _ratio(primary_count, denom),
         "unique_relevant_items_reported": len(relevant_keys) + relevant_unkeyed,
         "unique_relevant_identified_items": len(relevant_keys),
-        "changed_or_new_documents": len(changed_keys) + changed_unkeyed,
+        "relevant_unidentified_items": relevant_unkeyed,
+        "changed_or_new_documents": len(changed_keys),
+        "changed_or_new_unidentified_items": changed_unkeyed,
+        "changed_or_new_items_reported": len(changed_keys) + changed_unkeyed,
         "unsupported_community_leads": unsupported_community,
         "stale_or_failed_items": stale_or_failed,
         "source_family_counts": dict(sorted(family_counts.items())),
@@ -137,5 +201,6 @@ def summarize(
         "coverage_retrieval_complete": not retrieval_gaps,
         "coverage_complete": not attempt_gaps and not retrieval_gaps,
         "raw_item_count_is_success_metric": False,
+        "unidentified_items_count_as_proven_unique_documents": False,
         "zero_denominator_metrics_are_unknown": True,
     }
