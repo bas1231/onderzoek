@@ -13,7 +13,11 @@ from pathlib import Path
 
 from validator import Task
 from policy_check import check_action
-from executor_preflight import sync_main_fail_closed, support_script_in_head
+from executor_preflight import (
+    sync_main_fail_closed,
+    support_script_in_head,
+    task_provenance_in_head,
+)
 from jobs.lifecycle_ledger import (
     load_record as lifecycle_load,
     update as lifecycle_update,
@@ -119,6 +123,14 @@ def process_task(task_file: Path) -> str:
         print(f"{task.task_id}: research queue paused; task left pending")
         return "paused"
 
+    task_provenance = task_provenance_in_head(ROOT, task_file)
+    if not task_provenance.get("ok"):
+        print(
+            f"{task.task_id}: task provenance preflight blocked; "
+            f"reason={task_provenance.get('reason')}"
+        )
+        return "task_provenance_blocked"
+
     support = support_script_in_head(ROOT, task)
     if not support.get("ok"):
         print(
@@ -160,6 +172,7 @@ def process_task(task_file: Path) -> str:
     policy_result = check_action(command_text)
     execution_provenance = {
         "executor_commit": current_commit(),
+        "task_provenance": task_provenance,
         "policy_status": policy_result["status"],
         "policy_reason": policy_result["reason"],
         "command_text": command_text,
@@ -309,6 +322,7 @@ def main() -> None:
         paused_seen = False
         awaiting_accept_seen = False
         support_blocked_seen = False
+        task_provenance_blocked_seen = False
 
         for task_file in tasks:
             if not task_is_committed(task_file):
@@ -321,13 +335,15 @@ def main() -> None:
                     awaiting_accept_seen = True
                 elif outcome == "support_blocked":
                     support_blocked_seen = True
+                elif outcome == "task_provenance_blocked":
+                    task_provenance_blocked_seen = True
             except Exception as exc:
                 print(f"ERROR processing {task_file.name}: {exc}")
                 record_infrastructure_failure(task_file, exc)
 
         if paused_seen:
             time.sleep(30)
-        elif awaiting_accept_seen or support_blocked_seen:
+        elif awaiting_accept_seen or support_blocked_seen or task_provenance_blocked_seen:
             time.sleep(5)
 
 
