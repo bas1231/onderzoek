@@ -1,0 +1,21 @@
+{
+  "build_authorization": {
+    "build_kind": "control_plane",
+    "capabilities": [
+      "read_repository"
+    ],
+    "mode": "control_plane",
+    "objective": "Verify ChatGPT page discovery and full bridge lifecycle after clearing invalidated extension contexts."
+  },
+  "command": [
+    ".venv/bin/python",
+    "experiments/health_check.py"
+  ],
+  "hypothesis_id": "CONTROL-BRIDGE-E409",
+  "live_trading": false,
+  "operation": "health_check",
+  "task_class": "infrastructure",
+  "task_id": "AUTOCHAT-BRIDGE-E409R6-CLEANCONTEXT",
+  "timeout_seconds": 60,
+  "working_directory": "."
+}
