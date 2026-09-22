@@ -213,6 +213,36 @@ def _provenance_object(item: Any) -> bool:
     return item.get("point_in_time_status") in GATE_STATES
 
 
+def _reference_ids(item: Any) -> set[str]:
+    if not isinstance(item, dict):
+        return set()
+    out: set[str] = set()
+    for key in ("source_ref", "evidence_ref", "ref"):
+        value = item.get(key)
+        if _nonempty_string(value):
+            out.add(value.strip())
+    for key in ("content_hash", "document_sha256"):
+        value = item.get(key)
+        if _nonempty_string(value):
+            clean = value.strip()
+            out.add(clean)
+            out.add(f"sha256:{clean.lower()}")
+    return out
+
+
+def _known_basis_refs(task: dict[str, Any], result: dict[str, Any]) -> set[str]:
+    known: set[str] = set()
+    inputs = task.get("inputs") if isinstance(task.get("inputs"), dict) else {}
+    for key in ("evidence_refs", "rule_refs", "negative_evidence_refs"):
+        values = inputs.get(key) or []
+        if isinstance(values, list):
+            known.update(v.strip() for v in values if _nonempty_string(v))
+    for key in ("evidence", "contradictions"):
+        for item in result.get(key) or []:
+            known.update(_reference_ids(item))
+    return known
+
+
 def validate_result_for_task(task: dict[str, Any], result: dict[str, Any]) -> list[str]:
     """Validate a worker result in the authority/context of its originating task."""
     errors = list(validate_task(task))
@@ -280,6 +310,7 @@ def validate_result_for_task(task: dict[str, Any], result: dict[str, Any]) -> li
             errors,
         )
 
+    known_basis_refs = _known_basis_refs(task, result)
     seen_gate_effects: set[str] = set()
     for index, effect in enumerate(result.get("gate_effect") or []):
         gate = effect.get("gate") if isinstance(effect, dict) else None
@@ -307,5 +338,12 @@ def validate_result_for_task(task: dict[str, Any], result: dict[str, Any]) -> li
                 f"gate_effect_basis_invalid:{index}",
                 errors,
             )
+        if _string_list(basis_refs) if basis_refs is not None else False:
+            for basis_ref in basis_refs:
+                _require(
+                    basis_ref.strip() in known_basis_refs,
+                    f"gate_effect_unknown_basis_ref:{index}:{basis_ref.strip()}",
+                    errors,
+                )
 
     return sorted(set(errors))
