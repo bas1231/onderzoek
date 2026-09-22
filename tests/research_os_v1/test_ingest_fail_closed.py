@@ -8,13 +8,17 @@ from control.research_os_v1.shadow_cycle import build_shadow_plan
 
 
 def node(node_id, node_type="evidence", status="OK"):
-    return {
+    row = {
         "id": node_id,
         "type": node_type,
         "status": status,
         "created_at": "2026-09-21T00:00:00Z",
         "producer": "test",
     }
+    if node_type == "evidence":
+        row["source_ref"] = f"raw/{node_id}.json"
+        row["point_in_time_status"] = "UNKNOWN"
+    return row
 
 
 def task(task_id="T1"):
@@ -57,6 +61,16 @@ def task(task_id="T1"):
     }
 
 
+def edge(source, target, edge_type="supports"):
+    return {
+        "from": source,
+        "to": target,
+        "type": edge_type,
+        "created_at": "2026-09-21T00:00:00Z",
+        "producer": "test",
+    }
+
+
 def test_graph_constructor_rejects_conflicting_duplicate_node():
     graph = {
         "schema_version": 1,
@@ -77,20 +91,57 @@ def test_graph_constructor_rejects_invalid_node_type():
         EvidenceGraph(graph)
 
 
+def test_evidence_node_requires_explicit_point_in_time_status():
+    bad = node("e1")
+    bad.pop("point_in_time_status")
+    with pytest.raises(ValueError, match="evidence_point_in_time_status_required:e1"):
+        EvidenceGraph({"schema_version": 1, "nodes": [bad], "edges": []})
+
+
+def test_evidence_node_requires_source_ref_or_content_hash():
+    bad = node("e1")
+    bad.pop("source_ref")
+    with pytest.raises(ValueError, match="evidence_provenance_required:e1"):
+        EvidenceGraph({"schema_version": 1, "nodes": [bad], "edges": []})
+
+
+def test_content_hash_alone_is_valid_evidence_provenance():
+    good = node("e1")
+    good.pop("source_ref")
+    good["content_hash"] = "abc123"
+    graph = EvidenceGraph({"schema_version": 1, "nodes": [good], "edges": []})
+    assert graph.as_dict()["nodes"][0]["content_hash"] == "abc123"
+
+
 def test_graph_constructor_rejects_edge_with_missing_endpoint():
     graph = {
         "schema_version": 1,
         "nodes": [node("e1")],
-        "edges": [{
-            "from": "e1",
-            "to": "missing",
-            "type": "supports",
-            "created_at": "2026-09-21T00:00:00Z",
-            "producer": "test",
-        }],
+        "edges": [edge("e1", "missing")],
     }
     with pytest.raises(ValueError, match="edge_endpoint_missing"):
         EvidenceGraph(graph)
+
+
+def test_graph_rejects_self_edge():
+    graph = {
+        "schema_version": 1,
+        "nodes": [node("e1")],
+        "edges": [edge("e1", "e1")],
+    }
+    with pytest.raises(ValueError, match="self_edge_not_allowed:e1"):
+        EvidenceGraph(graph)
+
+
+def test_graph_rejects_support_and_contradict_for_same_pair():
+    graph = EvidenceGraph({
+        "schema_version": 1,
+        "nodes": [node("e1"), node("c1", node_type="claim")],
+        "edges": [],
+    })
+    graph.add_edge(edge("e1", "c1", "supports"))
+    with pytest.raises(ValueError, match="conflicting_edge_polarity:e1:c1"):
+        graph.add_edge(edge("e1", "c1", "contradicts"))
 
 
 def test_candidate_loader_rejects_duplicate_identity(tmp_path):
