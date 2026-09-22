@@ -34,6 +34,28 @@ def test_prior_gate_outcomes_are_blinded_to_unknown():
     assert "'PENDING'" not in text
 
 
+def test_search_family_keeps_methodology_but_drops_origin_prose():
+    candidate = base_candidate()
+    candidate["search_family"] = {
+        "id": "SF-1",
+        "hypotheses_examined": 3,
+        "parameterizations_examined": 2,
+        "post_hoc_mutations": 1,
+        "failed_variants": 2,
+        "surviving_variants": 1,
+        "untouched_evidence_remaining": True,
+        "data_periods_seen": ["development"],
+        "expected_result": "this should win",
+        "origin_reasoning": "persuasive prose",
+    }
+    packet = build_blind_packet(candidate)
+    assert packet["search_family"]["id"] == "SF-1"
+    assert packet["search_family"]["hypotheses_examined"] == 3
+    assert "expected_result" not in packet["search_family"]
+    assert "origin_reasoning" not in packet["search_family"]
+    assert packet["origin_search_family_extra_fields_included"] is False
+
+
 def test_red_team_rejects_string_where_claim_list_required():
     candidate = base_candidate()
     candidate["claims"] = "claim text"
