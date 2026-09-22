@@ -8,7 +8,7 @@ import subprocess
 ROOT = Path.home() / "prediction_research_weather"
 PYTHON = Path.home() / "prediction_research/.venv/bin/python"
 BRANCH = "ai/weather-madis-ldm-a19b"
-JOB = ROOT / "control/jobs/validate_clock_evidence_a19c.py"
+JOB = ROOT / "control/jobs/validate_clock_evidence_kernel_a19c.py"
 
 
 def run(*args: str, timeout: int = 300):
@@ -28,22 +28,36 @@ def emit(payload: dict, code: int = 0):
 
 
 if not ROOT.is_dir() or not PYTHON.is_file():
-    emit({"status": "BLOCKED", "next_gate": "LOCAL_WEATHER_RUNTIME_MISSING"}, 2)
+    emit({"status": "BLOCKED_TRANSPORT", "next_gate": "LOCAL_WEATHER_RUNTIME_MISSING"}, 2)
 
 branch = run("git", "branch", "--show-current", timeout=30).stdout.strip()
 if branch != BRANCH:
-    emit({"status": "BLOCKED", "next_gate": "WRONG_WEATHER_BRANCH", "actual": branch}, 3)
+    emit({
+        "status": "BLOCKED_TRANSPORT",
+        "next_gate": "WRONG_WEATHER_BRANCH",
+        "expected": BRANCH,
+        "actual": branch,
+    }, 3)
 
 tracked = run("git", "status", "--porcelain", "--untracked-files=no", timeout=30)
 if tracked.returncode != 0 or tracked.stdout.strip():
-    emit({"status": "BLOCKED", "next_gate": "WEATHER_WORKTREE_TRACKED_CHANGES", "detail": tracked.stdout[-4000:]}, 4)
+    emit({
+        "status": "BLOCKED_TRANSPORT",
+        "next_gate": "WEATHER_WORKTREE_TRACKED_CHANGES",
+        "detail": tracked.stdout[-4000:] or tracked.stderr[-4000:],
+    }, 4)
 
 pull = run("git", "pull", "--ff-only", "origin", BRANCH, timeout=120)
 if pull.returncode != 0:
-    emit({"status": "BLOCKED", "next_gate": "WEATHER_BRANCH_FAST_FORWARD_FAILED", "stdout": pull.stdout[-4000:], "stderr": pull.stderr[-4000:]}, 5)
+    emit({
+        "status": "BLOCKED_TRANSPORT",
+        "next_gate": "WEATHER_BRANCH_FAST_FORWARD_FAILED",
+        "stdout": pull.stdout[-4000:],
+        "stderr": pull.stderr[-4000:],
+    }, 5)
 
 if not JOB.is_file():
-    emit({"status": "BLOCKED", "next_gate": "A19C_VALIDATOR_MISSING"}, 6)
+    emit({"status": "BLOCKED_TRANSPORT", "next_gate": "A19C_KERNEL_VALIDATOR_MISSING"}, 6)
 
 head = run("git", "rev-parse", "HEAD", timeout=30).stdout.strip()
 proc = run(str(PYTHON), str(JOB.relative_to(ROOT)), timeout=180)
@@ -52,12 +66,32 @@ try:
 except Exception:
     parsed = {}
 
+if not isinstance(parsed, dict) or not parsed:
+    emit({
+        "status": "BLOCKED_TRANSPORT",
+        "weather_head": head,
+        "validator_returncode": proc.returncode,
+        "next_gate": "A19C_RESULT_PARSE_FAILED",
+        "stdout": proc.stdout[-12000:],
+        "stderr": proc.stderr[-5000:],
+    }, 7)
+
+local_build_status = parsed.get("local_build_status")
+research_gate_status = parsed.get("status")
+
+# A correctly functioning fail-closed clock gate is research evidence, not an
+# executor crash. The latest validator returns zero for both PASS_CLOCK_EVIDENCE
+# and BLOCKED_REAL_CLOCK_EVIDENCE, while local validation failures remain nonzero.
+transport_ok = bool(proc.returncode == 0 and local_build_status == "PASS")
+
 emit({
-    "status": parsed.get("status") or ("PASS" if proc.returncode == 0 else "FAILED"),
+    "status": "PASS" if transport_ok else "FAILED",
     "weather_head": head,
     "validator_returncode": proc.returncode,
+    "local_build_status": local_build_status,
+    "research_gate_status": research_gate_status,
     "checks": parsed.get("checks"),
-    "clock_readiness": parsed.get("clock_readiness"),
-    "next_gate": parsed.get("next_gate") or "A19C_RESULT_PARSE_FAILED",
+    "clock_evidence": parsed.get("clock_evidence"),
+    "next_gate": parsed.get("next_gate") or "A19C_RESULT_MISSING_NEXT_GATE",
     "stderr": proc.stderr[-5000:],
-}, proc.returncode)
+}, 0 if transport_ok else 8)
