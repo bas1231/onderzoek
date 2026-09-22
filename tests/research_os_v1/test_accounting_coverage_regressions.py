@@ -89,3 +89,71 @@ def test_attempted_but_failed_family_is_not_retrieval_complete():
     assert out["coverage_retrieval_complete"] is False
     assert out["coverage_complete"] is False
     assert out["retrieval_coverage_gaps"] == ["official_rules_contracts"]
+
+
+def test_missing_retrieval_status_is_unknown_not_success():
+    p = [{
+        "source_id": "official-url-a",
+        "source_family": "official_rules_contracts",
+    }]
+    out = summarize(
+        p,
+        [],
+        ["official_rules_contracts"],
+        ["official_rules_contracts"],
+    )
+    assert out["successful_retrieval_items"] == 0
+    assert out["unknown_retrieval_status_items"] == 1
+    assert out["coverage_retrieval_complete"] is False
+    assert out["missing_retrieval_status_counts_as_success"] is False
+
+
+def test_source_family_matching_is_case_insensitive():
+    p = [{
+        "source_id": "official-url-a",
+        "source_family": "Official_Rules_Contracts",
+        "retrieval_succeeded": True,
+    }]
+    out = summarize(
+        p,
+        [],
+        ["OFFICIAL_RULES_CONTRACTS"],
+        ["official_rules_contracts"],
+    )
+    assert out["coverage_attempt_complete"] is True
+    assert out["coverage_retrieval_complete"] is True
+    assert out["successful_source_families"] == ["official_rules_contracts"]
+
+
+def test_unidentified_relevant_items_do_not_inflate_unique_document_count():
+    p = [{
+        "source_family": "official_rules_contracts",
+        "retrieval_succeeded": True,
+        "relevant": True,
+        "changed_or_new": True,
+    }]
+    out = summarize(p, [], ["official_rules_contracts"], ["official_rules_contracts"])
+    assert out["relevant_unidentified_items"] == 1
+    assert out["unique_relevant_items_reported"] == 0
+    assert out["changed_or_new_unidentified_items"] == 1
+    assert out["changed_or_new_documents"] == 0
+    assert out["unidentified_items_count_as_proven_unique_documents"] is False
+
+
+def test_primary_source_ratio_uses_successful_retrievals_only():
+    p = [
+        {
+            "source_id": "good-primary",
+            "source_family": "official_rules_contracts",
+            "source_authority": "OFFICIAL_PRIMARY",
+            "retrieval_succeeded": True,
+        },
+        {
+            "source_id": "failed-secondary",
+            "source_family": "code",
+            "retrieval_succeeded": False,
+        },
+    ]
+    out = summarize(p, [], ["official_rules_contracts", "code"], ["official_rules_contracts"])
+    assert out["successful_retrieval_items"] == 1
+    assert out["primary_source_ratio"] == 1.0
