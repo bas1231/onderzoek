@@ -105,7 +105,11 @@ def _reference_projection(items: list[Any]) -> list[Any]:
         if item.get("is_primary_source") is True:
             row["is_primary_source"] = True
 
-        if not row:
+        provenance_keys = set(REFERENCE_KEYS) | {
+            "upstream_source_ids",
+            "upstream_source_id",
+        }
+        if not any(key in row for key in provenance_keys):
             raise ValueError(f"evidence_reference_has_no_provenance:{index}")
         out.append(row)
     return out
