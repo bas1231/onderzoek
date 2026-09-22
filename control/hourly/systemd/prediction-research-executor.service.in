@@ -1,0 +1,16 @@
+[Unit]
+Description=Prediction Research local control executor
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+WorkingDirectory=@@ROOT@@
+Environment=PYTHONUNBUFFERED=1
+ExecStart=@@PYTHON@@ @@ROOT@@/control/executor.py
+Restart=always
+RestartSec=5
+TimeoutStopSec=20
+
+[Install]
+WantedBy=default.target
