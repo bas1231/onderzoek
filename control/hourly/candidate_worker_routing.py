@@ -223,7 +223,7 @@ def route_candidate(candidate: dict[str, Any]) -> list[dict[str, Any]]:
 
     if lane == "WEATHER":
         add("weather_twc", "lane=WEATHER")
-    if lane in {"ALGEBRA", "PAYOFF_ALGEBRA"}:
+    if lane in {"ALGEBRA", "PAYOFF_ALGEBRA", "MARKET_ALGEBRA"}:
         add("algebra", f"lane={lane}")
     if lane in {"MICROSTRUCTURE", "EXECUTION"}:
         add("microstructure", f"lane={lane}")
