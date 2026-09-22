@@ -1,0 +1,116 @@
+{
+  "schema": "PVA_AI_EXCHANGE_RESPONSE_V1",
+  "run_id": "hourly-20260922T080000+0200",
+  "request_sha256": "a9de04825114d2b9eb032a9f7c7f8bb1fcd34d0f8ad0c5b5bd7524c9e9481ee9",
+  "response": {
+    "schema": "PVA_AI_RESPONSE_V1",
+    "run_id": "hourly-20260922T080000+0200",
+    "response_token": "78764e64f09c9394c928738a90abbc6e0c5dbfadc6079b3040bd5cfa3e4447c2",
+    "role_results": [
+      {
+        "agent_id": "recon_scout",
+        "status": "COMPLETED",
+        "finding": "De nieuwe routed evidence bevat wel settlement-, fee- en API-mechanismen, maar geen gedocumenteerde fout, verliesmechaniek of reproduceerbare inconsistentie die deze run tot HUNT rechtvaardigt. De generieke CFTC/Kalshi 'loss'-hits zijn navigatie-/referentieruis; behoud alleen de concrete weather-settlement- en market-mechanics signalen als onderzoekssporen.",
+        "evidence_refs": [
+          "ai_exchange/requests/hourly-20260922T080000+0200.json#recon_scout",
+          "source_registry:kalshi_weather_rules:fe3fa52ad0075baf398b43dff11317737f10834be7f26cce5c4a28ed75d94fef",
+          "source_registry:polymarket_docs:bbfb7a5f8e917cdd63380293ded53b574778ed057b05028625269cc66553c7f1"
+        ],
+        "candidate_ids": [],
+        "next_decisive_question": "Kan een concreet settlement-, fee- of rebate-mechanisme met point-in-time marktdata worden gekoppeld aan aantoonbaar netto uitvoerbaar prijsverschil?",
+        "local_task_required": false,
+        "local_task_spec": null
+      },
+      {
+        "agent_id": "scout",
+        "status": "COMPLETED",
+        "finding": "De gewijzigde primaire bronnen leveren deze run geen zelfstandige nieuwe lead die door de routing- en source-quality-gates heen komt. De bruikbare wijzigingen zijn doorgestuurd naar specialistische settlement/weather/microstructure-analyse; overige generieke matches tellen niet als edge-evidence.",
+        "evidence_refs": [
+          "knowledge/runs/hourly-20260922T080000+0200-routing.json",
+          "knowledge/runs/recon/hourly-20260922T080000+0200.json",
+          "ai_exchange/requests/hourly-20260922T080000+0200.json#scout"
+        ],
+        "candidate_ids": [],
+        "next_decisive_question": "Verschijnt in een primaire venue-bron een concrete nieuwe regel/API/fee/settlementwijziging die een falsifieerbare marktmechaniek oplevert?",
+        "local_task_required": false,
+        "local_task_spec": null
+      },
+      {
+        "agent_id": "algebra",
+        "status": "COMPLETED",
+        "finding": "Er is in deze bundle geen exact gespecificeerde set contractlegs met volledige payoutregels, settlementtoestanden en executable prijzen. Daardoor kan geen state-wise payout-equivalentie of floor formeel worden bewezen. Zonder exacte legs, regels, fees en boeken blijft payoff-identity een onderzoekshypothese en geen bewezen edge.",
+        "evidence_refs": [
+          "ai_exchange/requests/hourly-20260922T080000+0200.json#algebra"
+        ],
+        "candidate_ids": [],
+        "next_decisive_question": "Welke concrete contractset heeft volledig machineleesbare settlementregels én gelijktijdige executable L2-prijzen zodat Payout_A(s)=Payout_B(s) voor iedere toegestane toestand kan worden geverifieerd?",
+        "local_task_required": false,
+        "local_task_spec": null
+      },
+      {
+        "agent_id": "settlement",
+        "status": "COMPLETED",
+        "finding": "De settlementsemantiek is concreet maar levert op zichzelf nog geen edge: Kalshi vermeldt dat dagelijkse temperatuurmarkten de finale NWS Daily Climate Report gebruiken, terwijl hourly temperatuurmarkten The Weather Company gebruiken op het in de regels genoemde tijdstip/station. Voor hourly readings kan een voorlopige waarde afwijken van de finale waarde door rounding/conversie. Dit maakt source/timestamp/finality cruciaal voor point-in-time bewijs.",
+        "evidence_refs": [
+          "https://help.kalshi.com/en/articles/13823837-weather-markets",
+          "source_registry:kalshi_weather_rules:fe3fa52ad0075baf398b43dff11317737f10834be7f26cce5c4a28ed75d94fef",
+          "ai_exchange/requests/hourly-20260922T080000+0200.json#settlement"
+        ],
+        "candidate_ids": [],
+        "next_decisive_question": "Kunnen timestamped preliminary TWC readings en de uiteindelijke officiële weather.com/kalshi waarde prospectief worden gekoppeld aan dezelfde contracten om revision/finality-gedrag te meten?",
+        "local_task_required": false,
+        "local_task_spec": null
+      },
+      {
+        "agent_id": "microstructure",
+        "status": "COMPLETED",
+        "finding": "De routed Polymarket-documentatie bevestigt dat fee-, market-making- en rebate-mechanismen bestaan, maar deze request bevat geen point-in-time executable bid/ask depth, fee-configuratie per exact contract, fills of adverse-selectionmeting. Daardoor is geen execution edge aantoonbaar; midpoint, UI-prijs of referentieprijs zou daarvoor onvoldoende zijn.",
+        "evidence_refs": [
+          "source_registry:polymarket_docs:bbfb7a5f8e917cdd63380293ded53b574778ed057b05028625269cc66553c7f1",
+          "ai_exchange/requests/hourly-20260922T080000+0200.json#microstructure"
+        ],
+        "candidate_ids": [],
+        "next_decisive_question": "Wat is voor één exact fee-enabled contract de netto maker/taker-economie na gelijktijdige executable depth, fees/rebates, slippage, fill probability en adverse selection?",
+        "local_task_required": false,
+        "local_task_spec": null
+      },
+      {
+        "agent_id": "weather_twc",
+        "status": "COMPLETED",
+        "finding": "TWC is voor Kalshi hourly weather settlement de relevante bron, maar de bundle bevat nog geen timestamped prospectieve TWC-observatiereeks waarmee een voorspellend/revision-signaal kan worden getest. De recorderlane is daarom zinvol, maar deze run bewijst nog geen signal edge.",
+        "evidence_refs": [
+          "https://help.kalshi.com/en/articles/13823837-weather-markets",
+          "source_registry:kalshi_weather_rules:fe3fa52ad0075baf398b43dff11317737f10834be7f26cce5c4a28ed75d94fef",
+          "ai_exchange/requests/hourly-20260922T080000+0200.json#weather_twc"
+        ],
+        "candidate_ids": [],
+        "next_decisive_question": "Levert de prospectieve TWC-recorder voldoende timestamped preliminary-versus-final waarnemingen op om revisionrichting, frequentie en eventuele marktvertraging zonder hindsight te kwantificeren?",
+        "local_task_required": false,
+        "local_task_spec": null
+      },
+      {
+        "agent_id": "research_director",
+        "status": "COMPLETED",
+        "finding": "Geen specialist heeft in deze run bewijs geleverd voor een formele payout-edge, een prospectief TWC-signaal of een netto executable microstructure-edge. Candidate-state blijft daarom ongewijzigd. Prioriteit voor vervolgdata: prospectieve TWC preliminary-versus-final meting en exact-contract fee/rebate plus L2-economie; payoff identities pas opnieuw beoordelen wanneer alle legs en settlementregels exact beschikbaar zijn.",
+        "evidence_refs": [
+          "ai_exchange/requests/hourly-20260922T080000+0200.json",
+          "knowledge/runs/hourly-20260922T080000+0200-routing.json",
+          "knowledge/runs/hourly-20260922T080000+0200-source-quality.json",
+          "knowledge/runs/hourly-20260922T080000+0200-proof-review.json"
+        ],
+        "candidate_ids": [],
+        "next_decisive_question": "Welke lane levert als eerste prospectieve, point-in-time en netto executable evidence die de huidige NO_PROVEN_EDGE-status kan falsifiëren?",
+        "local_task_required": false,
+        "local_task_spec": null
+      }
+    ],
+    "candidate_decisions": [],
+    "director_decision": "Laat bestaande candidate queue-statussen ongewijzigd. Geen promotie of negative close. Verzamel eerst prospectieve TWC revision/finality-data en exact-contract fee/rebate/L2-economie; toets payoff identities alleen met volledige state-wise regels en executable legs.",
+    "economic_conclusion": "NO_PROVEN_EDGE",
+    "local_tasks": [],
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "openai_api": false
+  }
+}
