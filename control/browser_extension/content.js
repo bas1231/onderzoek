@@ -1,5 +1,5 @@
 (() => {
-  const CONTENT_VERSION = "0.8.1";
+  const CONTENT_VERSION = "0.9.0";
 
   if (
     window.__PREDICTION_RESEARCH_BRIDGE_LOADED__ ===
@@ -38,6 +38,59 @@
   let sendingAiWork = false;
   let scanning = false;
   let scanStartedAt = 0;
+
+  function extensionContextAlive() {
+    try {
+      return Boolean(
+        typeof chrome !== "undefined" &&
+        chrome.runtime &&
+        chrome.runtime.id
+      );
+    } catch {
+      return false;
+    }
+  }
+
+
+  function contextInvalidated(error) {
+    return Boolean(
+      !extensionContextAlive() ||
+      String(error || "").includes(
+        "Extension context invalidated"
+      )
+    );
+  }
+
+
+  chrome.runtime.onMessage.addListener(
+    (
+      message,
+      sender,
+      sendResponse
+    ) => {
+      if (
+        !message ||
+        message.type !==
+          "predictionBridgePing"
+      ) {
+        return;
+      }
+
+      sendResponse({
+        ok: true,
+        version: CONTENT_VERSION,
+        context_alive:
+          extensionContextAlive(),
+        project_key:
+          projectKeyFromCurrentUrl(),
+        url:
+          normalizedCurrentUrl()
+      });
+
+      return false;
+    }
+  );
+
 
   const inFlightTaskIds = new Set();
 
@@ -182,14 +235,33 @@
   }
 
   async function isArmed() {
-    const stored = await chrome.storage.local.get([
-      "armedUrl",
-      "armedProjectKey"
-    ]);
+    if (!extensionContextAlive()) {
+      return false;
+    }
+
+    let stored;
+
+    try {
+      stored =
+        await chrome.storage.local.get([
+          "armedUrl",
+          "armedProjectKey"
+        ]);
+
+    } catch (error) {
+      if (
+        contextInvalidated(error)
+      ) {
+        return false;
+      }
+
+      throw error;
+    }
 
     if (
       stored.armedUrl &&
-      stored.armedUrl === normalizedCurrentUrl()
+      stored.armedUrl ===
+        normalizedCurrentUrl()
     ) {
       return true;
     }
@@ -200,7 +272,8 @@
     if (
       currentProjectKey &&
       stored.armedProjectKey &&
-      currentProjectKey === stored.armedProjectKey
+      currentProjectKey ===
+        stored.armedProjectKey
     ) {
       return true;
     }
@@ -208,11 +281,18 @@
     return false;
   }
 
+
   async function bridgeFetch(
     path,
     method = "GET",
     body = undefined
   ) {
+    if (!extensionContextAlive()) {
+      throw new Error(
+        "Extension context invalidated"
+      );
+    }
+
     return await new Promise(
       (resolve, reject) => {
         let settled = false;

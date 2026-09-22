@@ -34,7 +34,20 @@ def test_user_message_fail_closed_remains():
     assert "text => text.includes(block)" in src
 
 
-def test_content_version_is_e412():
+def test_content_version_is_e412_or_newer():
     src = source()
 
-    assert 'const CONTENT_VERSION = "0.8.1";' in src
+    line = next(
+        line
+        for line in src.splitlines()
+        if "const CONTENT_VERSION =" in line
+    )
+
+    version = line.split('"')[1]
+
+    parts = tuple(
+        int(part)
+        for part in version.split(".")
+    )
+
+    assert parts >= (0, 8, 1)

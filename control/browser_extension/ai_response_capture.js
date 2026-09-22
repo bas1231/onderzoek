@@ -1,9 +1,15 @@
 (() => {
-  if (window.__PREDICTION_AI_RESPONSE_CAPTURE_LOADED__) {
+  const CAPTURE_VERSION = "0.9.0";
+
+  if (
+    window.__PREDICTION_AI_RESPONSE_CAPTURE_LOADED__ ===
+      CAPTURE_VERSION
+  ) {
     return;
   }
 
-  window.__PREDICTION_AI_RESPONSE_CAPTURE_LOADED__ = true;
+  window.__PREDICTION_AI_RESPONSE_CAPTURE_LOADED__ =
+    CAPTURE_VERSION;
 
   const LEFT = "<" + "<" + "<";
   const RIGHT = ">" + ">" + ">";
@@ -16,6 +22,55 @@
 
   let scanning = false;
   let scanTimer = null;
+
+
+  function extensionContextAlive() {
+    try {
+      return Boolean(
+        typeof chrome !== "undefined" &&
+        chrome.runtime &&
+        chrome.runtime.id
+      );
+    } catch {
+      return false;
+    }
+  }
+
+
+  function contextInvalidated(error) {
+    return Boolean(
+      !extensionContextAlive() ||
+      String(error || "").includes(
+        "Extension context invalidated"
+      )
+    );
+  }
+
+
+  chrome.runtime.onMessage.addListener(
+    (
+      message,
+      sender,
+      sendResponse
+    ) => {
+      if (
+        !message ||
+        message.type !==
+          "predictionAiCapturePing"
+      ) {
+        return;
+      }
+
+      sendResponse({
+        ok: true,
+        version: CAPTURE_VERSION,
+        context_alive:
+          extensionContextAlive()
+      });
+
+      return false;
+    }
+  );
 
   function fingerprint(text) {
     let hash = 2166136261;
@@ -40,31 +95,60 @@
   }
 
   async function isArmed() {
-    const stored = await chrome.storage.local.get([
-      "armedUrl",
-      "armedProjectKey"
-    ]);
+    if (!extensionContextAlive()) {
+      return false;
+    }
+
+    let stored;
+
+    try {
+      stored =
+        await chrome.storage.local.get([
+          "armedUrl",
+          "armedProjectKey"
+        ]);
+
+    } catch (error) {
+      if (
+        contextInvalidated(error)
+      ) {
+        return false;
+      }
+
+      throw error;
+    }
 
     if (
       stored.armedUrl &&
-      stored.armedUrl === normalizedCurrentUrl()
+      stored.armedUrl ===
+        normalizedCurrentUrl()
     ) {
       return true;
     }
 
-    const projectKey = projectKeyFromCurrentUrl();
+    const projectKey =
+      projectKeyFromCurrentUrl();
+
     return Boolean(
       projectKey &&
       stored.armedProjectKey &&
-      projectKey === stored.armedProjectKey
+      projectKey ===
+        stored.armedProjectKey
     );
   }
+
 
   async function bridgeFetch(
     path,
     method = "GET",
     body = undefined
   ) {
+    if (!extensionContextAlive()) {
+      throw new Error(
+        "Extension context invalidated"
+      );
+    }
+
     return await chrome.runtime.sendMessage({
       type: "bridgeFetch",
       path,

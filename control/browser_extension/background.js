@@ -1,3 +1,64 @@
+const RUNTIME_VERSION = "0.9.0";
+
+
+function normalizedChatUrl(rawUrl) {
+  try {
+    const url = new URL(rawUrl);
+    return `${url.origin}${url.pathname}`;
+  } catch {
+    return "";
+  }
+}
+
+
+function projectKeyFromUrl(rawUrl) {
+  try {
+    const url = new URL(rawUrl);
+
+    const parts =
+      url.pathname
+        .split("/")
+        .filter(Boolean);
+
+    return (
+      parts.find(
+        part => part.startsWith("g-p-")
+      ) || ""
+    );
+
+  } catch {
+    return "";
+  }
+}
+
+
+function tabMatchesArmedState(tab, stored) {
+  if (
+    !tab ||
+    !tab.url
+  ) {
+    return false;
+  }
+
+  if (
+    stored.armedUrl &&
+    stored.armedUrl ===
+      normalizedChatUrl(tab.url)
+  ) {
+    return true;
+  }
+
+  const projectKey =
+    projectKeyFromUrl(tab.url);
+
+  return Boolean(
+    projectKey &&
+    stored.armedProjectKey &&
+    projectKey === stored.armedProjectKey
+  );
+}
+
+
 async function injectIntoTab(tabId) {
   try {
     const tab = await chrome.tabs.get(tabId);
@@ -16,6 +77,24 @@ async function injectIntoTab(tabId) {
       return {
         ok: false,
         reason: "not a ChatGPT tab"
+      };
+    }
+
+    const stored =
+      await chrome.storage.local.get([
+        "armedUrl",
+        "armedProjectKey"
+      ]);
+
+    if (
+      !tabMatchesArmedState(
+        tab,
+        stored
+      )
+    ) {
+      return {
+        ok: false,
+        reason: "tab not armed"
       };
     }
 
@@ -181,6 +260,12 @@ async function ensureWatchdogAlarm() {
 }
 
 async function watchdogTick() {
+  const armed =
+    await chrome.storage.local.get([
+      "armedUrl",
+      "armedProjectKey"
+    ]);
+
   const tabs = await chrome.tabs.query({
     url: [
       "https://chatgpt.com/*",
@@ -190,6 +275,15 @@ async function watchdogTick() {
 
   for (const tab of tabs) {
     if (!tab.id) {
+      continue;
+    }
+
+    if (
+      !tabMatchesArmedState(
+        tab,
+        armed
+      )
+    ) {
       continue;
     }
 
