@@ -1,0 +1,13 @@
+[Unit]
+Description=Prediction Research hourly Director
+After=network-online.target prediction-research-executor.service
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+WorkingDirectory=@@ROOT@@
+Environment=PYTHONUNBUFFERED=1
+ExecStart=@@PYTHON@@ @@ROOT@@/control/hourly/edge_hunter_cycle.py
+
+[Install]
+WantedBy=default.target
