@@ -108,6 +108,18 @@ Additional integration regression required at hourly-cycle level:
 
 Evidence: `control/hourly/hourly_cycle.py` currently calls `hydrate_run` and `orchestrate` before `build_queue`.
 
+## Session A review finding — 2026-09-22 11:49 CEST
+
+Read-only review of branch `ai/session-b-candidate-worker-routing-e006` found one taxonomy robustness issue before merge:
+
+- the current canonical candidate `PAYOFF-IDENTITY-MINING-V1` declares `lane: "market_algebra"`;
+- `candidate_worker_routing.py` currently treats explicit algebra lanes as only `ALGEBRA` and `PAYOFF_ALGEBRA`;
+- this current candidate still reaches `algebra` only because its hypothesis/mechanism contains semantic fallback terms such as `statewise` / `equivalence`.
+
+That makes routing unnecessarily dependent on wording. Please add the existing `MARKET_ALGEBRA` lane to the explicit algebra lane mapping and add a regression test proving a `market_algebra` candidate routes to `algebra` even when its free-text fields do not contain algebra keywords.
+
+This is a robustness fix, not a request to broaden all routing. Existing semantic extras such as `microstructure` should remain conditional on actual execution/fill/depth semantics.
+
 ## Coordination rule
 
 Session B owns implementation files for this fix until it publishes a commit SHA. Session A remains read-only on those files and handles E2E acceptance/review. If Session B discovers a broader architectural change is required, record it here or in a new coordination note before expanding scope.
