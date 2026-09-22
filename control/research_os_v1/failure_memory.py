@@ -16,17 +16,17 @@ REQUIRED_PATTERN_FIELDS = {
 
 
 def _required_text(item: dict[str, Any], key: str, index: int) -> str:
-    value = str(item.get(key) or "").strip()
-    if not value:
+    value = item.get(key)
+    if not isinstance(value, str) or not value.strip():
         raise ValueError(f"failure_pattern_field_required:{index}:{key}")
-    return value
+    return value.strip()
 
 
 def pattern_index(obj: dict[str, Any] | None = None) -> dict[str, dict[str, Any]]:
     source = deepcopy(obj if obj is not None else load_failure_patterns())
     if not isinstance(source, dict):
         raise ValueError("failure_memory_must_be_object")
-    if source.get("schema_version") != 1:
+    if source.get("schema_version") != 1 or isinstance(source.get("schema_version"), bool):
         raise ValueError("unsupported_failure_memory_schema_version")
     patterns = source.get("patterns")
     if not isinstance(patterns, list) or not patterns:
