@@ -1,9 +1,15 @@
 (() => {
-  if (window.__PREDICTION_RESEARCH_BRIDGE_LOADED__) {
+  const CONTENT_VERSION = "0.7.0";
+
+  if (
+    window.__PREDICTION_RESEARCH_BRIDGE_LOADED__ ===
+    CONTENT_VERSION
+  ) {
     return;
   }
 
-  window.__PREDICTION_RESEARCH_BRIDGE_LOADED__ = true;
+  window.__PREDICTION_RESEARCH_BRIDGE_LOADED__ =
+    CONTENT_VERSION;
 
   const LEFT = "<" + "<" + "<";
   const RIGHT = ">" + ">" + ">";
@@ -598,8 +604,8 @@
         assistantMessages();
 
       const nodes =
-        allNodes.length > 24
-          ? allNodes.slice(-24)
+        allNodes.length > 100
+          ? allNodes.slice(-100)
           : allNodes;
 
       if (
@@ -616,8 +622,8 @@
             "";
 
         const text =
-          rawText.length > 250000
-            ? rawText.slice(-250000)
+          rawText.length > 1000000
+            ? rawText.slice(-1000000)
             : rawText;
 
         for (
@@ -627,6 +633,33 @@
 
           try {
               envelope = JSON.parse(block);
+
+              /*
+               * E408:
+               * backwards compatibility met directe Task JSON.
+               */
+              if (
+                envelope &&
+                typeof envelope === "object" &&
+                !Array.isArray(envelope) &&
+                envelope.task_id &&
+                !envelope.task
+              ) {
+                const directTask = {
+                  ...envelope
+                };
+
+                envelope = {
+                  bridge_version: 1,
+                  commit_message:
+                    "bridge: enqueue "
+                    + String(
+                      directTask.task_id
+                    ).slice(0, 120),
+                  files: [],
+                  task: directTask
+                };
+              }
             } catch (error) {
               const parseFingerprint =
                 bridgeFingerprint(block);
@@ -970,11 +1003,44 @@
   }
 
   function resultMessage(item) {
+    const executionProvenance =
+      (
+        item.result &&
+        item.result.execution_provenance
+      ) || {};
+
+    const taskProvenance =
+      executionProvenance.task_provenance || {};
+
     const compact = {
       task_id: item.task_id,
       result: item.result,
       stdout: (item.stdout || "").slice(0, 12000),
       stderr: (item.stderr || "").slice(0, 12000),
+
+      provenance: {
+        task_source_commit:
+          taskProvenance.task_commit || null,
+
+        execution_start_head:
+          executionProvenance.executor_commit ||
+          (
+            item.result &&
+            item.result.source_commit
+          ) ||
+          null,
+
+        result_source_commit:
+          (
+            item.result &&
+            item.result.source_commit
+          ) ||
+          null,
+
+        delivery_head:
+          item.git_head || null
+      },
+
       git_head: item.git_head
     };
 
@@ -1222,6 +1288,7 @@
   setInterval(
     () => {
       scanForTasks();
+      flushDurableQueue();
       flushPendingResultAcks();
       pollAiOutbox();
       pollOutbox();

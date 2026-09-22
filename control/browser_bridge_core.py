@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import base64
+
 import importlib.util
 import json
 import re
@@ -15,7 +17,10 @@ from urllib.parse import urlparse
 from pydantic import BaseModel, Field, field_validator
 
 from validator import Task
-from jobs.lifecycle_ledger import update as lifecycle_update
+from jobs.lifecycle_ledger import (
+    load_record as lifecycle_load,
+    update as lifecycle_update,
+)
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -81,7 +86,31 @@ WORK_CADENCE = load_work_cadence()
 
 class FileWrite(BaseModel):
     path: str
-    content: str
+    content: str | None = None
+    content_b64: str | None = None
+
+    def decoded_content(self) -> str:
+        has_text = self.content is not None
+        has_b64 = self.content_b64 is not None
+
+        if has_text == has_b64:
+            raise ValueError(
+                "exactly one of content or content_b64 is required"
+            )
+
+        if self.content is not None:
+            return self.content
+
+        try:
+            raw = base64.b64decode(
+                self.content_b64.encode("ascii"),
+                validate=True,
+            )
+            return raw.decode("utf-8")
+        except Exception as exc:
+            raise ValueError(
+                "invalid UTF-8 content_b64"
+            ) from exc
 
     @field_validator("path")
     @classmethod
@@ -436,7 +465,7 @@ def enqueue(envelope: BridgeEnvelope) -> dict:
             )
 
             target.write_text(
-                file_write.content,
+                file_write.decoded_content(),
                 encoding="utf-8",
             )
 
@@ -517,6 +546,30 @@ def next_outbox_item() -> dict | None:
     bridge_tasks = state.get("bridge_tasks", [])
     acked = set(state.get("acked", []))
 
+    # E408: lifecycle ACK is authoritative durable evidence.
+    recovered_acks = []
+
+    for known_task_id in bridge_tasks:
+        try:
+            lifecycle = lifecycle_load(
+                known_task_id
+            )
+        except Exception:
+            continue
+
+        if (
+            lifecycle.get("state") == "ACKED"
+            and known_task_id not in acked
+        ):
+            acked.add(known_task_id)
+            recovered_acks.append(
+                known_task_id
+            )
+
+    if recovered_acks:
+        state["acked"] = sorted(acked)
+        save_state(state)
+
     prefer_incident = bool(
         state.get("outbox_prefer_incident", False)
     )
@@ -533,7 +586,7 @@ def next_outbox_item() -> dict | None:
     # A backlog of deliverable incidents must never starve completed executor
     # results. Surface any completed bridge task first; incidents remain the
     # fallback when no real task result is ready.
-    for priority_task_id in bridge_tasks:
+    for priority_task_id in reversed(bridge_tasks):
         if priority_task_id in acked:
             continue
 
@@ -591,6 +644,7 @@ def next_outbox_item() -> dict | None:
         incident_paths = sorted(
             incident_dir.glob("*.json"),
             key=lambda path: path.stat().st_mtime,
+            reverse=True,
         )
 
         for incident_path in incident_paths:
