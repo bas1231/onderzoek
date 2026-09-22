@@ -64,6 +64,20 @@ def _rank(task: dict[str, Any]) -> tuple:
     )
 
 
+def _assert_unique_task_ids(tasks: list[Any]) -> None:
+    seen: set[str] = set()
+    for task in tasks:
+        if not isinstance(task, dict):
+            continue
+        raw = task.get("task_id")
+        if not isinstance(raw, str) or not raw.strip():
+            continue
+        task_id = raw.strip()
+        if task_id in seen:
+            raise ValueError(f"duplicate_task_id:{task_id}")
+        seen.add(task_id)
+
+
 def schedule(tasks: list[dict[str, Any]], max_tasks: int | None = None) -> dict[str, Any]:
     if not isinstance(tasks, list):
         raise ValueError("tasks_must_be_list")
@@ -73,6 +87,10 @@ def schedule(tasks: list[dict[str, Any]], max_tasks: int | None = None) -> dict[
         or max_tasks < 0
     ):
         raise ValueError("max_tasks_must_be_non_negative_integer_or_none")
+
+    # Identity ambiguity is a control-plane error, not something ranking should
+    # silently deduplicate or execute twice.
+    _assert_unique_task_ids(tasks)
 
     runnable: list[dict[str, Any]] = []
     blocked: list[dict[str, Any]] = []
