@@ -1,0 +1,24 @@
+{
+  "agent": "mechanics",
+  "authority": "RESEARCH_ONLY",
+  "capabilities": [
+    "settlement",
+    "microstructure"
+  ],
+  "requirements": [
+    "Verify rules, settlement source, finality and revision semantics",
+    "Use executable bid/ask/L2 rather than UI midpoint claims",
+    "Include fees, spread, depth, slippage, fills, partial-fill and latency reality"
+  ],
+  "output": [
+    "settlement_analysis",
+    "execution_analysis",
+    "friction_model",
+    "capacity_blockers",
+    "next_decisive_question"
+  ],
+  "live_trading": false,
+  "paid_actions": false,
+  "wallet_actions": false,
+  "openai_api": false
+}
