@@ -10,7 +10,7 @@ def base_candidate():
     }
 
 
-def test_required_gates_override_stale_legacy_gates():
+def test_conflicting_legacy_and_canonical_gates_fail_closed():
     candidate = base_candidate()
     candidate["gates"] = {
         "mechanism": "PASS",
@@ -20,9 +20,8 @@ def test_required_gates_override_stale_legacy_gates():
         "mechanism": "FAIL",
         "execution_reality": "FAIL",
     }
-    out = canonicalize(candidate, source_commit="abc")
-    assert out["required_gates"]["mechanism"] == "FAIL"
-    assert out["required_gates"]["execution_reality"] == "FAIL"
+    with pytest.raises(ValueError, match="conflicting_gate_state:mechanism:PASS:FAIL"):
+        canonicalize(candidate, source_commit="abc")
 
 
 def test_canonical_supporting_evidence_overrides_legacy_evidence_alias():
