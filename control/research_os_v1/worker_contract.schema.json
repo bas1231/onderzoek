@@ -88,14 +88,79 @@
     },
     "result": {
       "type": "object",
-      "required": ["status", "claims", "evidence", "contradictions", "unknowns", "gate_effect", "economic_conclusion"],
+      "required": ["task_id", "worker_domain", "status", "claims", "evidence", "contradictions", "unknowns", "gate_effect", "economic_conclusion"],
       "properties": {
+        "task_id": {"type": "string", "minLength": 1},
+        "candidate_id": {"anyOf": [{"type": "string", "minLength": 1}, {"type": "null"}]},
+        "worker_domain": {"enum": ["discovery", "market_research", "mechanics", "algebra", "red_team", "research_director", "independent_reproducer"]},
         "status": {"enum": ["COMPLETE", "BLOCKED", "FAILED", "NO_NEW_EVIDENCE"]},
         "claims": {"type": "array", "items": {"type": "object"}},
-        "evidence": {"type": "array", "items": {"type": "object"}},
-        "contradictions": {"type": "array", "items": {"type": "object"}},
+        "evidence": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["point_in_time_status"],
+            "properties": {
+              "source_ref": {"type": "string", "minLength": 1},
+              "evidence_ref": {"type": "string", "minLength": 1},
+              "ref": {"type": "string", "minLength": 1},
+              "content_hash": {"type": "string", "minLength": 1},
+              "document_sha256": {"type": "string", "minLength": 1},
+              "point_in_time_status": {"enum": ["PASS", "FAIL", "PENDING", "UNKNOWN", "NOT_APPLICABLE"]}
+            },
+            "anyOf": [
+              {"required": ["source_ref"]},
+              {"required": ["evidence_ref"]},
+              {"required": ["ref"]},
+              {"required": ["content_hash"]},
+              {"required": ["document_sha256"]}
+            ],
+            "additionalProperties": true
+          }
+        },
+        "contradictions": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["point_in_time_status"],
+            "properties": {
+              "source_ref": {"type": "string", "minLength": 1},
+              "evidence_ref": {"type": "string", "minLength": 1},
+              "ref": {"type": "string", "minLength": 1},
+              "content_hash": {"type": "string", "minLength": 1},
+              "document_sha256": {"type": "string", "minLength": 1},
+              "point_in_time_status": {"enum": ["PASS", "FAIL", "PENDING", "UNKNOWN", "NOT_APPLICABLE"]}
+            },
+            "anyOf": [
+              {"required": ["source_ref"]},
+              {"required": ["evidence_ref"]},
+              {"required": ["ref"]},
+              {"required": ["content_hash"]},
+              {"required": ["document_sha256"]}
+            ],
+            "additionalProperties": true
+          }
+        },
         "unknowns": {"type": "array", "items": {"type": "string", "minLength": 1}},
-        "gate_effect": {"type": "array", "items": {"type": "object"}},
+        "gate_effect": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["gate", "state"],
+            "properties": {
+              "gate": {"type": "string", "minLength": 1},
+              "state": {"enum": ["PASS", "FAIL", "PENDING", "UNKNOWN", "NOT_APPLICABLE"]},
+              "basis_refs": {"type": "array", "items": {"type": "string", "minLength": 1}}
+            },
+            "allOf": [
+              {
+                "if": {"properties": {"state": {"enum": ["PASS", "FAIL"]}}, "required": ["state"]},
+                "then": {"required": ["basis_refs"], "properties": {"basis_refs": {"minItems": 1}}}
+              }
+            ],
+            "additionalProperties": true
+          }
+        },
         "failure_patterns_triggered": {"type": "array", "items": {"type": "string", "minLength": 1}},
         "next_decisive_test": {"anyOf": [{"type": "string", "minLength": 1}, {"type": "null"}]},
         "source_independence": {"enum": ["UNKNOWN", "SHARED_UPSTREAM", "PARTIAL", "INDEPENDENT", "NOT_APPLICABLE"]},
