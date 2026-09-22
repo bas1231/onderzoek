@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 import subprocess
 from pathlib import Path
 from typing import Any
@@ -114,13 +115,32 @@ def sync_main_fail_closed(root: Path) -> dict[str, Any]:
     }
 
 
-def task_provenance_in_head(root: Path, task_file: Path) -> dict[str, Any]:
-    """Prove the exact pending task blob comes from history contained by HEAD.
+def _task_support_script_rel(task_obj: dict[str, Any]) -> Path | None:
+    """Return the repository-relative support script for Python-like tasks."""
+    if task_obj.get("operation") not in {"python", "health_check"}:
+        return None
+    command = task_obj.get("command")
+    if not isinstance(command, list) or len(command) < 2 or not isinstance(command[1], str):
+        return Path("__INVALID_COMMAND_SCRIPT__")
+    rel = Path(command[1])
+    if rel.is_absolute() or ".." in rel.parts:
+        return Path("__UNSAFE_COMMAND_SCRIPT__")
+    return rel
 
-    This closes a subtle stale-checkout gap: seeing a task file on disk is not
-    enough.  We require the task path to exist in HEAD, identify the most recent
-    commit that changed that path, prove that commit is an ancestor of HEAD, and
-    prove that the blob in that commit equals the blob currently in HEAD.
+
+def task_provenance_in_head(root: Path, task_file: Path) -> dict[str, Any]:
+    """Prove the exact pending task and its executable prerequisite are immutable.
+
+    Seeing a task file on disk is insufficient. We require:
+    - the task path exists in HEAD;
+    - the latest commit that changed the task is an ancestor of HEAD;
+    - the task blob at that commit equals the blob in HEAD;
+    - for Python/health-check tasks, the referenced support script already
+      existed in that same task commit;
+    - the support-script blob at the task commit equals the one in HEAD.
+
+    The last two invariants prevent an invalid task from becoming executable
+    later merely because somebody subsequently added or changed its script.
     """
     root = root.resolve()
     try:
@@ -185,6 +205,89 @@ def task_provenance_in_head(root: Path, task_file: Path) -> dict[str, Any]:
             "execution_blob": head_blob_sha,
         }
 
+    try:
+        task_obj = json.loads(task_file.read_text(encoding="utf-8"))
+    except Exception as exc:
+        return {
+            "ok": False,
+            "reason": "TASK_JSON_READ_FAILED",
+            "task_path": rel,
+            "task_commit": task_commit,
+            "execution_commit": execution_commit,
+            "detail": f"{type(exc).__name__}: {exc}",
+        }
+    if not isinstance(task_obj, dict):
+        return {
+            "ok": False,
+            "reason": "TASK_JSON_NOT_OBJECT",
+            "task_path": rel,
+            "task_commit": task_commit,
+            "execution_commit": execution_commit,
+        }
+
+    script_rel = _task_support_script_rel(task_obj)
+    support_provenance: dict[str, Any] | None = None
+    if script_rel is not None:
+        script_text = script_rel.as_posix()
+        if script_text == "__INVALID_COMMAND_SCRIPT__":
+            return {
+                "ok": False,
+                "reason": "COMMAND_SCRIPT_MISSING",
+                "task_path": rel,
+                "task_commit": task_commit,
+                "execution_commit": execution_commit,
+            }
+        if script_text == "__UNSAFE_COMMAND_SCRIPT__":
+            return {
+                "ok": False,
+                "reason": "UNSAFE_SCRIPT_PATH",
+                "task_path": rel,
+                "task_commit": task_commit,
+                "execution_commit": execution_commit,
+            }
+
+        at_task = _git(root, "rev-parse", f"{task_commit}:{script_text}")
+        if at_task.returncode != 0:
+            return {
+                "ok": False,
+                "reason": "SUPPORT_SCRIPT_NOT_IN_TASK_COMMIT",
+                "task_path": rel,
+                "script": script_text,
+                "task_commit": task_commit,
+                "execution_commit": execution_commit,
+            }
+
+        at_head = _git(root, "rev-parse", f"HEAD:{script_text}")
+        if at_head.returncode != 0:
+            return {
+                "ok": False,
+                "reason": "SUPPORT_SCRIPT_NOT_TRACKED_IN_EXECUTION_HEAD",
+                "task_path": rel,
+                "script": script_text,
+                "task_commit": task_commit,
+                "execution_commit": execution_commit,
+            }
+
+        task_script_blob = at_task.stdout.strip()
+        head_script_blob = at_head.stdout.strip()
+        if task_script_blob != head_script_blob:
+            return {
+                "ok": False,
+                "reason": "SUPPORT_SCRIPT_CHANGED_AFTER_TASK_COMMIT",
+                "task_path": rel,
+                "script": script_text,
+                "task_commit": task_commit,
+                "execution_commit": execution_commit,
+                "task_script_blob": task_script_blob,
+                "execution_script_blob": head_script_blob,
+            }
+
+        support_provenance = {
+            "status": "SUPPORT_SCRIPT_BOUND_TO_TASK_COMMIT",
+            "script": script_text,
+            "script_blob": task_script_blob,
+        }
+
     return {
         "ok": True,
         "status": "TASK_COMMIT_PROVEN",
@@ -193,6 +296,7 @@ def task_provenance_in_head(root: Path, task_file: Path) -> dict[str, Any]:
         "task_blob": task_blob_sha,
         "execution_commit": execution_commit,
         "relationship": "equal" if task_commit == execution_commit else "ancestor",
+        "support_provenance": support_provenance,
     }
 
 
