@@ -1,6 +1,6 @@
 # ForecastEx block/RFQ access kill-check — 2026-09-22
 
-Status: `WATCH / ACCESS_AND_EFFECTIVENESS_BLOCKED`
+Status: `ACCESS_BLOCKED_FOR_CURRENT_DEPLOYMENT / RESURRECT_ON_EXPLICIT_FCM_SUPPORT`
 Economic conclusion: `NO_PROVEN_EDGE`
 
 ## Question
@@ -48,35 +48,48 @@ ForecastEx Rule 304 states that a person who is not eligible to become a Forecas
 
 So the ordinary Forecast Contract path remains potentially accessible through an intermediary even though direct membership is not.
 
-What is **not** yet established is whether that customer path can use the new Member-facing RFQ functionality or participate in block trades on customer instructions, and under what minimum size / broker policy / fee conditions.
+What is **not** established by those rules is that an ordinary FCM Customer can use the new Member-facing RFQ functionality or participate in block trades on customer instructions.
+
+### 6. The currently documented IBKR customer/API path exposes ordinary Event Contract orders, not a ForecastEx RFQ/block flow
+
+Interactive Brokers' current Event Contract Web API documentation explicitly supports ForecastEx Event Contract discovery and standard order submission through the ordinary account order endpoint. Its ForecastEx order example opens/closes positions by buying YES/NO contracts and uses the normal order payload.
+
+The current public Event Contract documentation reviewed on 2026-09-22 contains purpose-built discovery/rules endpoints and ordinary order submission, but no documented ForecastEx customer RFQ endpoint, block-trade endpoint, RFQ-response workflow, block minimum-size parameter, or customer-facing block execution workflow.
+
+This is **not** proof that no FCM can ever support a customer block/RFQ service. It is sufficient to fail closed for this project's current autonomous API deployment: the identified, documented customer API route does not presently establish access to the new Member-facing RFQ/block execution lane.
 
 ## Fail-closed decision
 
-Do **not** build a ForecastEx block/RFQ execution strategy from the rule-change headline.
+Do **not** build a ForecastEx block/RFQ execution strategy for the current deployment.
 
 Current gate state:
 
 - Block Trading rule exists: `PASS`
 - Direct Membership feasible for project budget: `FAIL`
 - Ordinary FCM customer access to Forecast Contracts: `PASS`
-- Customer access to RFQ: `UNKNOWN`
-- Customer access to Block Trading: `UNKNOWN`
+- IBKR ordinary ForecastEx Event Contract API access: `PASS / STANDARD_ORDER_PATH`
+- Customer/API access to ForecastEx RFQ: `NOT_DOCUMENTED / FAIL_CLOSED`
+- Customer/API access to ForecastEx Block Trading: `NOT_DOCUMENTED / FAIL_CLOSED`
+- Other FCM customer RFQ/block support: `UNKNOWN`
 - Block minimum size: `UNKNOWN`
 - RFQ minimum size / response semantics: `UNKNOWN`
-- Block Trading Fee Holiday currently effective: `UNKNOWN / CFTC still 10 Day Review`
+- Block Trading Fee Holiday currently effective: `UNKNOWN / CFTC still 10 Day Review at capture time`
 - Point-in-time executable block/RFQ quotes: `MISSING`
-- Net executable edge: `NOT TESTABLE YET`
+- Net executable edge: `NOT TESTABLE`
 
-## Next decisive question
+For the present project constraints, this trigger is therefore `ACCESS_BLOCKED_FOR_CURRENT_DEPLOYMENT`. No market-data scanner, execution adapter, strategy code or specialist capacity should be allocated to this lane while those access gates remain closed.
 
-The cheapest decisive follow-up is **not** market scanning. It is to establish from a primary ForecastEx rule/notice, FCM documentation, or direct broker capability documentation:
+## Resurrection conditions
 
-1. whether an FCM Customer may originate/respond to an RFQ or block trade through its FCM;
-2. the minimum block quantity / notional for Forecast Contracts;
-3. the applicable current block/RFQ fees after the CFTC filing's actual effective/certified state;
-4. whether block/RFQ execution is exposed through any customer-accessible electronic/API path or is operationally Member-only.
+Reopen the lane only on new primary evidence that changes a decisive dependency, for example:
 
-If the customer path is unavailable or the minimum size is materially above the project's budget, close this trigger as `ACCESS_BLOCKED` without spending model or engineering capacity on execution analysis.
+1. a qualified FCM explicitly documents that ordinary customers may originate/respond to ForecastEx RFQs or submit customer block trades;
+2. a customer-accessible API/electronic workflow for that functionality is documented;
+3. minimum quantity/notional is documented and compatible with the project budget;
+4. the relevant RFQ/block and fee-holiday filings are certified/effective and current fees are captured;
+5. executable point-in-time RFQ/block quotes or fills can then be captured without paid/nonpublic access.
+
+Until one of those conditions changes, repeated investigation of ForecastEx block/RFQ economics is duplicate work and should be suppressed by Failure Memory / resurrection logic.
 
 No paid action, account opening, broker contact, trade, wallet action or live execution is authorized by this note.
 
