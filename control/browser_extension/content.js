@@ -1,5 +1,5 @@
 (() => {
-  const CONTENT_VERSION = "0.7.0";
+  const CONTENT_VERSION = "0.8.0";
 
   if (
     window.__PREDICTION_RESEARCH_BRIDGE_LOADED__ ===
@@ -325,16 +325,89 @@
       )
     );
 
-    if (specific.length > 0) {
-      return specific;
+    /*
+     * E411:
+     * ChatGPT kan assistant-berichten zichtbaar renderen buiten
+     * de klassieke assistant-selector.
+     *
+     * Scan document.body niet blind als uitvoerbare bron.
+     * Voeg alleen task-blokken toe die:
+     * - zichtbaar in body staan;
+     * - niet al in een normale assistant-node staan;
+     * - niet letterlijk in een user-message voorkomen.
+     */
+    if (document.body) {
+      const bodyText =
+        document.body.innerText ||
+        document.body.textContent ||
+        "";
+
+      if (
+        bodyText.includes(TASK_START) &&
+        bodyText.includes(TASK_END)
+      ) {
+        const userTexts = Array.from(
+          document.querySelectorAll(
+            '[data-message-author-role="user"]'
+          )
+        ).map(
+          node =>
+            node.innerText ||
+            node.textContent ||
+            ""
+        );
+
+        const selectedAssistantText =
+          specific.map(
+            node =>
+              node.innerText ||
+              node.textContent ||
+              ""
+          ).join("\n");
+
+        const fallbackBlocks =
+          extractTaskBlocks(bodyText).filter(
+            block => {
+              if (
+                selectedAssistantText.includes(block)
+              ) {
+                return false;
+              }
+
+              if (
+                userTexts.some(
+                  text => text.includes(block)
+                )
+              ) {
+                return false;
+              }
+
+              return true;
+            }
+          );
+
+        if (fallbackBlocks.length > 0) {
+          specific.push({
+            textContent:
+              fallbackBlocks.map(
+                block =>
+                  TASK_START +
+                  "\n" +
+                  block +
+                  "\n" +
+                  TASK_END
+              ).join("\n")
+          });
+
+          console.log(
+            "[Prediction Bridge] E411 marker fallback:",
+            fallbackBlocks.length
+          );
+        }
+      }
     }
 
-    /*
-     * ChatGPT wijzigt geregeld zijn DOM-structuur.
-     * Als de specifieke selector niet bestaat, scan dan de
-     * zichtbare pagina als fallback.
-     */
-    return document.body ? [document.body] : [];
+    return specific;
   }
 
   function extractTaskBlocks(text) {
