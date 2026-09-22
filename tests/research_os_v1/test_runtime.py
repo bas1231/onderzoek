@@ -70,6 +70,7 @@ def promotion_candidate(signal_state="PASS"):
             "prebuild_killer",
             "chief_falsifier",
             "validation",
+            "holdout",
             "independent_reproduction",
             "shadow",
         ]
@@ -183,7 +184,15 @@ def test_evidence_graph_is_idempotent_and_rejects_conflict():
     n = {"id": "c1", "type": "candidate", "status": "ACTIVE", "created_at": "2026-01-01T00:00:00Z", "producer": "test"}
     g.add_node(n)
     g.add_node(n)
-    e = {"id": "e1", "type": "evidence", "status": "OK", "created_at": "2026-01-01T00:00:00Z", "producer": "test"}
+    e = {
+        "id": "e1",
+        "type": "evidence",
+        "status": "OK",
+        "created_at": "2026-01-01T00:00:00Z",
+        "producer": "test",
+        "source_ref": "raw/e1.json",
+        "point_in_time_status": "PASS",
+    }
     g.add_node(e)
     edge = {"from": "e1", "to": "c1", "type": "supports", "created_at": "2026-01-01T00:00:00Z", "producer": "test"}
     g.add_edge(edge)
@@ -359,7 +368,7 @@ def test_discovery_coverage_measures_overlap_and_gaps():
     }]
     out = summarize_coverage(p, r, ["OFFICIAL"], ["OFFICIAL", "CODE"])
     assert out["duplicate_cross_scout_keys"] == 1
-    assert out["coverage_gaps"] == ["CODE"]
+    assert out["coverage_gaps"] == ["code"]
     assert out["raw_item_count_is_success_metric"] is False
 
 
