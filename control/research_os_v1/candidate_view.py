@@ -51,8 +51,6 @@ def _gate_status(value: Any) -> str:
         return "NOT_APPLICABLE"
     if text in {"UNKNOWN", "UNPROVEN"}:
         return "UNKNOWN"
-    # Legacy qualified states (for example PASS_DISCOVERY_ONLY or
-    # PENDING_PROSPECTIVE) deliberately do not count as a current PASS.
     return "PENDING"
 
 
@@ -64,9 +62,6 @@ def _merged_gates(src: dict[str, Any]) -> dict[str, Any]:
         raise ValueError("required_gates_must_be_object")
     if legacy is not None and not isinstance(legacy, dict):
         raise ValueError("gates_must_be_object")
-
-    # Legacy is the fallback representation. Canonical state is newer and must
-    # win on conflicts; otherwise a stale legacy field can erase a current FAIL.
     if isinstance(legacy, dict):
         merged.update(legacy)
     if isinstance(canonical, dict):
@@ -177,14 +172,14 @@ def canonicalize(candidate: dict[str, Any], source_commit: str, version: int = 1
     priority = raw_priority if raw_priority in ALLOWED_PRIORITY else "P3"
 
     evidence_value = (
-        src.get("evidence")
-        if src.get("evidence") is not None
-        else src.get("supporting_evidence")
+        src.get("supporting_evidence")
+        if src.get("supporting_evidence") is not None
+        else src.get("evidence")
     )
     negative_value = (
-        src.get("negative_evidence")
-        if src.get("negative_evidence") is not None
-        else src.get("contradictory_evidence")
+        src.get("contradictory_evidence")
+        if src.get("contradictory_evidence") is not None
+        else src.get("negative_evidence")
     )
     evidence_src = {"value": evidence_value}
     negative_src = {"value": negative_value}
