@@ -6,6 +6,13 @@ from typing import Any
 import json
 import time
 
+try:
+    from control.hourly.candidate_worker_routing import (
+        hydrate_candidate_routes,
+    )
+except ModuleNotFoundError:  # direct-script/importlib execution fallback
+    from candidate_worker_routing import hydrate_candidate_routes
+
 
 ROOT = Path.cwd()
 
@@ -235,8 +242,8 @@ def decide(packet: dict[str, Any]) -> Decision:
     current = str(packet.get("status", "PENDING"))
 
     # A worker-produced NO_EVIDENCE is terminal for this run. A pre-worker
-    # NO_EVIDENCE remains re-evaluable so hydration can make new evidence
-    # READY in the normal preparation path.
+    # NO_EVIDENCE remains re-evaluable so hydration can make new evidence or
+    # a deterministic candidate assignment READY in the normal preparation path.
     if current == "NO_EVIDENCE" and isinstance(
         packet.get("ai_result"), dict
     ):
@@ -263,6 +270,16 @@ def decide(packet: dict[str, Any]) -> Decision:
         )
 
     if role in PRIMARY_ROLES:
+        if has_candidate(packet):
+            return Decision(
+                "READY",
+                "P3",
+                (
+                    "candidate_and_routed_evidence_available"
+                    if has_evidence(packet)
+                    else "candidate_assignment_available"
+                ),
+            )
         if has_evidence(packet):
             return Decision(
                 "READY",
@@ -336,6 +353,7 @@ def enrich_packet(path: Path) -> dict[str, Any]:
     packet["live_trading"] = False
     packet["paid_actions"] = False
     packet["wallet_actions"] = False
+    packet["openai_api"] = False
 
     decision = decide(packet)
     packet["status"] = decision.state
@@ -368,10 +386,17 @@ def priority_key(packet: dict[str, Any]) -> tuple[int, int, str]:
     )
 
 
-def orchestrate(run_dir: Path) -> dict[str, Any]:
+def orchestrate(
+    run_dir: Path,
+    candidate_queue: dict[str, Any] | None = None,
+) -> dict[str, Any]:
     if not run_dir.is_dir():
         raise FileNotFoundError(run_dir)
 
+    candidate_assignments = hydrate_candidate_routes(
+        run_dir,
+        candidate_queue,
+    )
     validation = propagate_validation(run_dir)
     packets = []
 
@@ -387,6 +412,8 @@ def orchestrate(run_dir: Path) -> dict[str, Any]:
             "status": packet.get("status"),
             "priority": packet.get("priority"),
             "reason": packet.get("orchestrator_reason"),
+            "candidate_ids": packet.get("candidate_ids", []),
+            "candidate_routing": packet.get("candidate_routing", []),
             "local_task_required": packet.get(
                 "local_task_required", False
             ),
@@ -400,7 +427,9 @@ def orchestrate(run_dir: Path) -> dict[str, Any]:
             "live_trading": False,
             "paid_actions": False,
             "wallet_actions": False,
+            "openai_api": False,
         },
+        "candidate_routing": candidate_assignments,
         "queue": queue,
         "validation_pipeline": validation,
     }
