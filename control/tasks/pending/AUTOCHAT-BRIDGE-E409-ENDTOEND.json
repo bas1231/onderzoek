@@ -1,0 +1,21 @@
+{
+  "build_authorization": {
+    "build_kind": "control_plane",
+    "capabilities": [
+      "read_repository"
+    ],
+    "mode": "control_plane",
+    "objective": "Verify E408 end-to-end bridge lifecycle after browser extension reload, including direct top-level task normalization and durable ACK."
+  },
+  "command": [
+    ".venv/bin/python",
+    "experiments/health_check.py"
+  ],
+  "hypothesis_id": "CONTROL-BRIDGE-E409",
+  "live_trading": false,
+  "operation": "health_check",
+  "task_class": "infrastructure",
+  "task_id": "AUTOCHAT-BRIDGE-E409-ENDTOEND",
+  "timeout_seconds": 60,
+  "working_directory": "."
+}
