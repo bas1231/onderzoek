@@ -5,66 +5,75 @@
   "roles": [
     {
       "authority": "DISCOVERY_ONLY",
-      "id": "recon_scout",
-      "purpose": "Offensive economic reconnaissance for public market leaks, failures, successes, behavioral anomalies and mechanism weaknesses"
-    },
-    {
-      "authority": "DISCOVERY_ONLY",
-      "id": "scout",
-      "purpose": "Broad discovery of new public evidence, venues, papers, code and anomalies"
-    },
-    {
-      "authority": "RESEARCH_ONLY",
-      "id": "weather_twc",
-      "purpose": "Hourly weather, TWC settlement and nowcasting research"
-    },
-    {
-      "authority": "RESEARCH_ONLY",
-      "id": "microstructure",
-      "purpose": "Orderbook, maker-taker, spread, depth and execution research"
+      "capabilities": [
+        "scout",
+        "recon_scout"
+      ],
+      "id": "discovery",
+      "protected_lanes": [
+        "primary_scout",
+        "recon_scout"
+      ],
+      "purpose": "Protected dual-lane discovery: broad public-evidence scouting plus independent offensive economic reconnaissance"
     },
     {
       "authority": "RESEARCH_ONLY",
-      "id": "behavioral",
-      "purpose": "Human bias, crowd behaviour and favorite-longshot research"
+      "capabilities": [
+        "weather_twc",
+        "behavioral",
+        "informed_flow"
+      ],
+      "id": "market_research",
+      "purpose": "Market-domain research covering weather/TWC, behavioral mechanisms and informed-flow signatures"
     },
     {
       "authority": "RESEARCH_ONLY",
-      "id": "informed_flow",
-      "purpose": "Research informed trading and information-flow signatures"
+      "capabilities": [
+        "settlement",
+        "microstructure"
+      ],
+      "id": "mechanics",
+      "purpose": "Rules, settlement, finality, orderbook, fills, fees, depth, slippage and execution mechanics"
     },
     {
       "authority": "RESEARCH_ONLY",
+      "capabilities": [
+        "algebra"
+      ],
       "id": "algebra",
       "purpose": "Payout identities, portfolio equivalence and formal market algebra"
     },
     {
-      "authority": "RESEARCH_ONLY",
-      "id": "settlement",
-      "purpose": "Rules, finality, oracle, settlement and revision research"
-    },
-    {
       "authority": "VETO_RECOMMENDATION",
-      "id": "prebuild_killer",
-      "purpose": "Attempt to kill ideas before implementation"
-    },
-    {
-      "authority": "VETO_RECOMMENDATION",
-      "id": "chief_falsifier",
-      "purpose": "Adversarially falsify hypotheses and detect leakage"
-    },
-    {
-      "authority": "VALIDATION_ONLY",
-      "id": "independent_reproducer",
-      "purpose": "Reproduce evidence independently before promotion"
+      "capabilities": [
+        "prebuild_killer",
+        "chief_falsifier"
+      ],
+      "id": "red_team_pentest",
+      "modes": [
+        "QUICK_KILL",
+        "DEEP_FALSIFICATION"
+      ],
+      "purpose": "Cheap pre-build kill checks, deep adversarial falsification and meta-red-team review"
     },
     {
       "authority": "RESEARCH_COORDINATION",
+      "capabilities": [
+        "research_director"
+      ],
       "id": "research_director",
-      "purpose": "Route evidence, enforce gates and publish hourly status"
+      "purpose": "Route evidence, allocate dynamic workers, enforce deterministic gates and publish hourly status"
+    }
+  ],
+  "transient_roles": [
+    {
+      "authority": "VALIDATION_ONLY",
+      "blind": true,
+      "id": "independent_reproducer",
+      "purpose": "Spawn only for serious survivors; independently reproduce evidence before any promotion"
     }
   ],
   "valid_null_result": "NO_PROVEN_EDGE",
-  "version": 2,
+  "version": 3,
   "wallet_actions": false
 }
