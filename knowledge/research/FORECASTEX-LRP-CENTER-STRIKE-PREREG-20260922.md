@@ -1,7 +1,7 @@
 # ForecastEx Financials LRP center-strike test — preregistration
 
 Preregistered: 2026-09-22
-Status: `PREREGISTERED / RESEARCH_ONLY`
+Status: `BLOCKED_SEMANTICS / BLOCKED_PIT`
 Economic conclusion: `NO_PROVEN_EDGE`
 Live trading: `false`
 Paid actions: `false`
@@ -48,6 +48,25 @@ Do not use `2026-09-21` mechanically as the treatment start merely because it is
 Before analysis, extract and freeze the actual effective date/time from the official filing/exhibit/notice. Data at or after that timestamp is `POST`; earlier data is `PRE`.
 
 If effective timing cannot be established, stop with `BLOCKED_PIT`.
+
+## Blocker observation — 2026-09-22
+
+The current public CFTC filing metadata reliably establishes:
+- filing 63713;
+- the center-strike amendment description;
+- receipt date 2026-09-04;
+- certified status/date 2026-09-21;
+- existence of an associated clean/redline Financials Liquidity Retainer Program exhibit.
+
+However, through the currently available public retrieval paths in this research run, the associated clean/redline exhibit itself was not recoverable as a reliable primary artifact. ForecastEx Notices-to-Members search also did not surface a matching current notice containing the exact center-range definition or effective timestamp.
+
+Therefore **no outcome data has been inspected for this hypothesis**. Per the preregistered rules, Stage A does not start.
+
+Current blockers:
+- `BLOCKED_SEMANTICS`: official center-strike range/product scope not yet recovered deterministically;
+- `BLOCKED_PIT`: actual effective date/time not yet recovered from the primary exhibit/notice.
+
+This is a clean methodological stop, not negative evidence against the economic hypothesis.
 
 ## Stage A — zero-cost public-data test
 
@@ -147,4 +166,4 @@ Kill/PARK this lane if any of the following holds:
 
 ## Resurrection conditions
 
-A PARKED lane may be reopened only by new evidence that changes a named blocker: new official program documentation, a longer untouched POST window, a new free executable-data source, or a documented change in the incentive regime.
+A BLOCKED/PARKED lane may be reopened only by new evidence that changes a named blocker: retrieval of the official clean/redline exhibit, a matching ForecastEx notice with deterministic center-range/effective timing, a longer untouched POST window after semantics are locked, a new free executable-data source, or a documented change in the incentive regime.
