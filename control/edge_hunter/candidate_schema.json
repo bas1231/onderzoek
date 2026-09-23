@@ -5,6 +5,12 @@
     "NO_PROVEN_EDGE",
     "SURVIVES_STAGE"
   ],
+  "allowed_monitoring_states": [
+    "NONE",
+    "WATCH",
+    "RECHECK_TRIGGERED",
+    "ACTIVE_RESEARCH"
+  ],
   "allowed_phases": [
     "DISCOVERED",
     "MECHANISM_DEFINED",
@@ -18,6 +24,23 @@
     "SHADOW",
     "MICRO_LIVE_ELIGIBLE"
   ],
+  "watch_fields": {
+    "monitoring_state": "optional; defaults to NONE",
+    "watch_reason": "required when monitoring_state is WATCH",
+    "recheck_triggers": "required non-empty list when monitoring_state is WATCH",
+    "preserved_negative_evidence": "optional references to prior failures that remain binding",
+    "last_checked_at": "optional point-in-time timestamp",
+    "triggered_by": "required when monitoring_state is RECHECK_TRIGGERED"
+  },
+  "watch_semantics": {
+    "watch_is_nonterminal": true,
+    "watch_is_not_edge_proof": true,
+    "watch_is_not_rejection": true,
+    "material_trigger_required_for_recheck": true,
+    "trigger_never_auto_promotes": true,
+    "negative_evidence_must_be_preserved": true,
+    "small_absolute_profit_is_not_a_kill_reason": true
+  },
   "hard_gates": {
     "executable_market_price_required_for_market_edge": true,
     "formal_or_statistical_evidence_required": true,
@@ -39,5 +62,5 @@
     "phase",
     "decision"
   ],
-  "version": 1
+  "version": 2
 }
