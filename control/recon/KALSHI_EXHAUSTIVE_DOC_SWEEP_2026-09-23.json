@@ -1,0 +1,51 @@
+{
+  "schema": "PVA_RECON_TASK_V1",
+  "task_id": "TASK-RECON-KALSHI-DOCS-001",
+  "assigned_role": "RECON_SCOUT",
+  "priority": "P1_PERSISTENT",
+  "status": "READY",
+  "created_at": "2026-09-23",
+  "objective": "Systematically inventory and review the full publicly available Kalshi documentation surface to discover economically relevant mechanisms, exceptions, interactions, ambiguities and future WATCH triggers that candidate-driven research may miss.",
+  "continue_across_runs": true,
+  "completion_rule": "Do not mark complete until the enumerated public documentation universe is reconciled against the coverage manifest and unresolved gaps are explicitly zero; inaccessible or dynamic surfaces must be recorded as gaps.",
+  "required_surfaces": [
+    "exchange and general rulebook",
+    "product-specific rules and settlement terms",
+    "settlement/finality/cancellation/void/no-data/fair-price/Market Outcome Review exceptions",
+    "fees/rebates/incentives/rewards/collateral/netting/capital release",
+    "REST API documentation and schemas",
+    "WebSocket documentation, sequencing and lifecycle semantics",
+    "order types/matching/queue/partial-fill/open-close-early-determination behavior",
+    "combo/MVE/multivariate and special product mechanics",
+    "data sources/timestamps/revisions/rounding/precision/measurement windows",
+    "changelogs/release notes/deprecations/new fields",
+    "public regulatory filings/certifications that define or change venue mechanics"
+  ],
+  "four_angle_review": {
+    "angle_1_semantic_rules": "Prove exact rule meaning, state space, settlement, exceptions, source hierarchy and cross-document conflicts.",
+    "angle_2_technical_implementation": "Inspect REST/WebSocket/schema/UI/order-lifecycle/timing behavior and identify documented implementation interactions or mismatches.",
+    "angle_3_economic_execution": "Ask whether any legal executable path can have net EV > 0 after fees, depth, fills, queue, collateral, slippage, latency, partial fills and settlement risk. Cents per episode remain valid if reproducible.",
+    "angle_4_adversarial_change_watch": "Search for hidden failure modes, prior negative evidence, rule/regime dependencies and concrete future triggers that should reopen a WATCH item."
+  },
+  "routing": {
+    "interesting_but_unproven": "WATCH",
+    "materially_testable": "HUNT",
+    "concrete_hypothesis_needing_falsification": "RED_TEAM_PENTEST",
+    "unchanged_already_falsified_dependency": "PRESERVE_NEGATIVE_EVIDENCE_NO_DUPLICATE_DEEP_WORK"
+  },
+  "acceptance_criteria": [
+    "Coverage manifest exists and inventories the discovered Kalshi public documentation universe with URL/path, observed version/timestamp and provenance/hash where practical.",
+    "Every manifest item has a review status; gaps are explicit rather than silently omitted.",
+    "Every material finding has all four angle fields completed or an explicit reason an angle cannot yet be evaluated.",
+    "Every possible positive-EV mechanism is preserved even if expected absolute profit is only cents; scale/capacity affect ranking, not admission.",
+    "Existing candidate and negative-evidence records are checked before presenting a finding as new.",
+    "Every regime-dependent negative or currently unattractive mechanism gets concrete WATCH/recheck triggers when later rule, fee, source, access, liquidity or API changes could matter.",
+    "Recon does not claim PROVEN_EDGE; serious candidates are routed to specialists and Red Team/Pentest for independent falsification.",
+    "No live trading, wallet movement, paid action, credential abuse, unauthorized access or active security exploitation."
+  ],
+  "proof_standard": "Existing AGENTS.md triple self-check, point-in-time, negative-evidence and execution-first rules remain mandatory in addition to this four-angle Recon pass.",
+  "economic_default": "NO_PROVEN_EDGE",
+  "live_trading": false,
+  "paid_actions": false,
+  "wallet_actions": false
+}
