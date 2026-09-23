@@ -5,6 +5,9 @@ Gebruik voor lokale ChatGPT ↔ WSL bridge-opdrachten uitsluitend het actuele mu
 Harde regels:
 
 - Voor bridge-commands gebruik je gewone zichtbare assistanttekst in exact dit formaat: `[[PREDICTION_CMD:<ACTION>:<TASK_ID>]]`.
+- De marker moet letterlijk exact de tekens `[[PREDICTION_CMD:` + action + `:` + task-ID + `]]` bevatten.
+- Escape de dubbele punten NIET. `[[PREDICTION_CMD\:BRIDGE_PING\:...]]` is ongeldig. Er mogen nergens backslashes in de marker worden toegevoegd door Markdown-escaping.
+- Zet de echte commandmarker niet in een code fence en verander geen leestekens; stuur hem als één gewone zichtbare tekstregel.
 - `<ACTION>` en `<TASK_ID>` zijn placeholders in documentatie en mogen nooit letterlijk worden verstuurd.
 - Genereer voor iedere uitvoering een werkelijk nieuwe task-ID, bijvoorbeeld `BRIDGE-PING-20260923-163501-A7K2`. Gebruik nooit letterlijke placeholdernamen zoals `UNIQUE_TASK_ID`, `UNIEKE-ID`, `TEST-ID` of `TASK_ID`.
 - Gebruik niet het legacy `<<<PREDICTION_BRIDGE_TASK>>> ... <<<END_PREDICTION_BRIDGE_TASK>>>`-formaat.
