@@ -113,7 +113,8 @@ def test_router_default_chat_is_atomic_and_readable(tmp_path):
 
 def test_userscript_contract_is_multichat_and_visible_marker_only():
     text = (TM / "prediction-chat-wake.user.js").read_text(encoding="utf-8")
-    assert "@version      0.3.1" in text
+    assert "@version      0.3.2" in text
+    assert "// @match        https://chatgpt.com/*" in text
     assert "@noframes" in text
     assert "http://localhost:8765" in text
     assert "http://localhost:8767" in text
@@ -126,14 +127,33 @@ def test_userscript_contract_is_multichat_and_visible_marker_only():
     assert "preserveLegacyFallback" in text
 
 
-def test_userscript_startup_is_fail_safe_before_menu_registration():
+def test_userscript_uses_official_tampermonkey_tab_api_for_identity():
+    text = (TM / "prediction-chat-wake.user.js").read_text(encoding="utf-8")
+    for grant in ["GM_getTab", "GM_saveTab", "GM_getTabs", "window.onurlchange"]:
+        assert f"// @grant        {grant}" in text
+    assert "GM_getTab(" in text
+    assert "GM_saveTab(" in text
+    assert "GM_getTabs(" in text
+    assert "prediction_consumer_id" in text
+    assert "prediction_chat_id" in text
+    assert "prediction_bridge = true" in text
+    assert "Toon bridge-tabs" in text
+    assert "sessionStorage" not in text
+
+
+def test_userscript_refreshes_tab_registration_on_spa_url_change():
+    text = (TM / "prediction-chat-wake.user.js").read_text(encoding="utf-8")
+    assert "if (window.onurlchange === null)" in text
+    assert "window.addEventListener('urlchange'" in text
+    assert "ensureTabIdentity(true)" in text
+
+
+def test_userscript_startup_is_fail_safe_before_network_runtime():
     text = (TM / "prediction-chat-wake.user.js").read_text(encoding="utf-8")
     assert "if (window.top !== window.self) return;" not in text
-    assert "function makeConsumerId()" in text
-    assert "sessionStorage.getItem(key)" in text
-    assert "catch (_)" in text
     assert "GM_registerMenuCommand('Toon chat-ID'" in text
-    assert "status('script gestart')" in text
+    assert "status('script gestart; tabregistratie...')" in text
+    assert "tab-api fallback" in text
 
 
 def test_userscript_javascript_syntax_when_node_available():
