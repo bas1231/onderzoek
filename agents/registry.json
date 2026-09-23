@@ -7,14 +7,16 @@
       "authority": "DISCOVERY_ONLY",
       "capabilities": [
         "scout",
-        "recon_scout"
+        "recon_scout",
+        "market_instance_contradiction_sweep"
       ],
       "id": "discovery",
       "protected_lanes": [
         "primary_scout",
-        "recon_scout"
+        "recon_scout",
+        "market_instance_contradiction_sweep"
       ],
-      "purpose": "Protected dual-lane discovery: broad public-evidence scouting plus independent offensive economic reconnaissance"
+      "purpose": "Protected discovery: broad public-evidence scouting plus independent offensive economic reconnaissance, including persistent inspection of concrete market instances for formal contradictions, payout identities, dominance and other relation candidates before specialist proof"
     },
     {
       "authority": "RESEARCH_ONLY",
@@ -41,7 +43,7 @@
         "algebra"
       ],
       "id": "algebra",
-      "purpose": "Payout identities, portfolio equivalence and formal market algebra"
+      "purpose": "Payout identities, portfolio equivalence, dominance and formal market algebra for concrete relation candidates"
     },
     {
       "authority": "VETO_RECOMMENDATION",
@@ -74,6 +76,6 @@
     }
   ],
   "valid_null_result": "NO_PROVEN_EDGE",
-  "version": 3,
+  "version": 4,
   "wallet_actions": false
 }
