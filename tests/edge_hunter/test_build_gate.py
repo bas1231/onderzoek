@@ -68,6 +68,9 @@ def setup_candidate_root(path: Path):
     (path / "control/BUILD_STATE.json").write_text(
         json.dumps(state)
     )
+    (path / "control/AUTONOMOUS_BUILD_POLICY.json").write_text(
+        (ROOT / "control/AUTONOMOUS_BUILD_POLICY.json").read_text()
+    )
 
     candidate = {
         "candidate_id": "CAND-EHB-002",
