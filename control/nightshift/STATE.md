@@ -1,6 +1,6 @@
 # Prediction Nightshift State
 
-Timestamp: 2026-09-23 22:xx CEST
+Timestamp: 2026-09-23 late evening CEST
 Lane: A — bridge/delivery + wake-loop continuity
 
 ## Completed
@@ -19,49 +19,35 @@ Live browser send was subsequently observed working by the user.
 Commit: `b7750a7173221ac8e5a1ca3d21a023827d41520d`
 File: `control/tampermonkey_multichat/test_userscript_delivery_dedupe_static.py`
 
-Coverage:
-- sent-event memory is persistent Tampermonkey GM storage;
-- an already remembered event is ACKed and skipped, never resubmitted;
-- a newly submitted event is remembered before ACK, preventing resend after ACK transport failure;
-- `restartWakeLoop()` does not clear sent-event memory.
-
 4. Short continuation wake.
 Commit: `d70bf0b4fc8dc70c6535a29b55713c4d7281746c`
-File: `control/tampermonkey_multichat/prediction-nightshift-wake.user.js`
 Version: `0.1.2`
-Change: wake message is now simply `ga door`; the loop resumes shortly after a completed assistant turn instead of waiting for a guessed ChatGPT timeout. OpenAI Help documentation checked on 2026-09-23 does not publish an exact regular-chat inactivity/generation timeout; the public troubleshooting guidance only suggests waiting 30–60 seconds when a response appears stuck, which is not a timeout contract.
+Wake text reduced to `ga door` and resumed shortly after completed assistant turns.
+
+5. Dedicated bounded Nightshift WSL control integrated into `Prediction Nightshift Wake`.
+Version: `0.2.0`
+The userscript now uses Tampermonkey `GM_xmlhttpRequest` to the existing localhost command/router (`8767`) and result server (`8765`), accepts only `SIX_AI_HEALTH` plus `DEV-PRED-NIGHTSHIFT-*` task IDs, persists command dedupe, compacts WSL results to <=900 characters, ACKs the outbox event, and submits only the compact summary. Raw WSL stdout/diffs are never posted into the ChatGPT composer.
+
+6. First bounded WSL canary manifest created.
+Repo: `bas1231/fg-assistent`
+Commit: `a7a8d4a2758cd446fdb51249c9c5c7fcf1e7f175`
+Task: `DEV-PRED-NIGHTSHIFT-BRIDGE-CANARY-E001`
+It syncs only the server semantics regression test, runs that unittest in `prediction_research_prod`, then reports `git rev-parse HEAD`. No generic shell, live trading, paid actions, credentials or device/network actions are enabled.
 
 ## Evidence / tests
-- Canonical userscript source confirms `KEY_SENT_EVENTS = prediction_sent_events_v3`, persistent `GM_getValue`/`GM_setValue`, remembered-event ACK+continue, remember-before-ACK ordering, and no sent-memory reset on wake-loop restart.
-- Source inspection confirms server discovery enumerates OUTBOX and ACK moves OUTBOX→SENT.
-- GitHub connector cannot execute WSL/Chrome/Tampermonkey runtime, so local WSL service state remains unverified here.
-- Static/browser tests are committed but local execution still needs a runtime-capable path.
-
-Later runtime-capable verification:
-`python3 -m unittest control/tampermonkey_multichat/test_bridge_server_sent_semantics.py -v`
-`python3 -m unittest control/tampermonkey_multichat/test_userscript_delivery_dedupe_static.py -v`
+- Canonical nightshift userscript is v0.2.0 and contains bounded WSL control plus compact-result delivery.
+- Existing bridge server source enumerates only OUTBOX for `/next`; ACK moves OUTBOX to SENT and repeated ACK is idempotent.
+- Existing dev-task runner allowlists projects/commands and blocks live trading, paid actions, network devices, generic shells and non-loopback network references.
+- Browser wake send has been live-observed working; v0.2.0 WSL round-trip is now the next canary.
 
 ## Current status
-- Wake-loop send path: `LIVE_OBSERVED_WORKING` on v0.1.1; v0.1.2 short-message change committed, browser install pending.
-- Server-side SENT→no-redelivery: `SOURCE_CONFIRMED`; regression committed; execution `UNVERIFIED`.
-- Browser event-id duplicate/stale replay protection: `SOURCE_CONFIRMED`; static regression committed; execution `UNVERIFIED`.
-- Canonical Prediction Chat Wake Bridge remains v0.3.3 while local/browser code advanced separately; do not overwrite blindly.
-- Task-level duplicate suppression across differently identified RESULT_READY events: `NOT YET PROVEN`.
-- WSL control from the nightshift: `NOT CONNECTED`; this is now the top blocker.
-- Local runtime UP/RUNNING: `UNVERIFIED`.
-
-## Design decision
-Do not wait for an undocumented ChatGPT timeout. A normal chat turn is already over when the assistant response completes, so the wake loop should trigger the next turn soon after completion. Keep the wake transport separate from WSL control/result transport.
-
-For WSL control, reuse the existing allowlisted localhost command infrastructure rather than inventing generic shell access. The nightshift transport must:
-- send only allowlisted task IDs/actions;
-- use persistent task-level dedupe;
-- never place unbounded WSL stdout/diffs in the composer;
-- hard-cap and summarize returned results;
-- ACK only after a compact result is visibly delivered;
-- preserve fail-closed behavior and no live trading/funds/credentials.
+- Wake-loop send path: `LIVE_OBSERVED_WORKING`.
+- Nightshift WSL-control code: `IMPLEMENTED`, live round-trip `PENDING CANARY`.
+- Server-side SENT->no-redelivery: `SOURCE_CONFIRMED`; regression committed.
+- Raw-result dump prevention in nightshift path: `SOURCE_CONFIRMED` by hard compaction and <=900-char composer payload.
+- Local runtime UP/RUNNING: `UNVERIFIED` until canary result returns.
 
 ## Next exact step
-Build the dedicated Nightshift WSL control path on top of the existing localhost allowlisted command/router infrastructure, with bounded result compaction and no raw RESULT_READY dump delivery. Then use it first for a tiny BRIDGE_PING/local unittest canary before any broader runtime work.
+Dispatch `DEV-PRED-NIGHTSHIFT-BRIDGE-CANARY-E001` through the v0.2.0 nightshift bridge and require a compact `NIGHTSHIFT_WSL_RESULT_V1` response. If PASS, immediately move to scheduler/runtime/service health. If FAIL, use only the compact status to fix the single failing layer.
 
-Safety: no live trading, no wallet/fund movement, no paid actions, no credentials, no security misuse. Economic state remains `NO_PROVEN_EDGE`.
+Safety: no live trading, no wallet/fund movement, no paid actions, no credentials in Git, no security misuse. Economic state remains `NO_PROVEN_EDGE`.
