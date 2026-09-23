@@ -1,0 +1,245 @@
+{
+  "schema": "PVA_WATCH_REGISTRY_V1",
+  "as_of": "2026-09-23",
+  "policy": {
+    "watch_is_nonterminal": true,
+    "watch_is_not_rejection": true,
+    "watch_is_not_edge_proof": true,
+    "material_trigger_required_for_recheck": true,
+    "trigger_never_auto_promotes": true,
+    "preserve_negative_evidence": true,
+    "small_absolute_profit_is_not_a_kill_reason": true,
+    "unchanged_items_should_not_consume_deep_research": true
+  },
+  "entries": [
+    {
+      "watch_id": "WATCH-FLB-MAKER-TAIL-DEMAND-V1",
+      "title": "Behavioral tail-demand / maker settlement rent",
+      "venue": "cross_venue",
+      "current_status": "WATCH",
+      "watch_reason": "New academic mechanism evidence is research-positive, but transfer to current executable Kalshi/target-venue economics is unproven.",
+      "recheck_triggers": [
+        "new own maker-fill dataset with price-bucket/category labels",
+        "prospective queue/fill and post-fill markout evidence",
+        "inventory-to-settlement PnL evidence including fees/rewards",
+        "new venue incentive or fee regime materially changing maker economics"
+      ],
+      "preserved_negative_evidence": [
+        "maker status alone is not edge",
+        "favorite-longshot bias alone is not a direct trading rule",
+        "adverse selection and settlement inventory risk must be measured"
+      ],
+      "candidate_refs": ["KAL-FLB-002", "TASK-FLB-001"]
+    },
+    {
+      "watch_id": "WATCH-ROBINHOOD-MULTI-DCM-V1",
+      "title": "Multi-DCM route fragmentation through one frontend",
+      "venue": "cross_venue",
+      "current_status": "WATCH",
+      "watch_reason": "Multiple underlying DCM routes exist, but no synchronized route-resolved executable price difference or exact payoff identity has been demonstrated.",
+      "recheck_triggers": [
+        "route-resolved simultaneous bid/ask or L2 becomes available",
+        "provably identical cross-DCM contract pair is identified",
+        "routing policy, fee schedule or venue eligibility changes",
+        "material route-specific spread/depth/fill divergence appears"
+      ],
+      "preserved_negative_evidence": [
+        "same frontend or title does not prove same contract semantics",
+        "smart routing may eliminate rather than create fragmentation"
+      ]
+    },
+    {
+      "watch_id": "WATCH-FORECASTEX-BLOCK-RFQ-V1",
+      "title": "ForecastEx block/RFQ versus visible CLOB",
+      "venue": "forecastex",
+      "current_status": "WATCH",
+      "watch_reason": "Block trading, proposed fee holiday and liquidity-retainer changes are real regime changes, but user access and executable economics are unproven.",
+      "recheck_triggers": [
+        "block/RFQ participant eligibility and minimum size confirmed compatible with project constraints",
+        "fee holiday becomes effective or fee schedule changes",
+        "synchronized RFQ/block quote and CLOB depth can be compared",
+        "liquidity-retainer program materially shifts executable strike liquidity"
+      ],
+      "preserved_negative_evidence": [
+        "fee holiday alone is not edge",
+        "off-book liquidity cannot be inferred from displayed CLOB",
+        "access/minimum-size constraints may make the route non-executable"
+      ]
+    },
+    {
+      "watch_id": "WATCH-NADEX-MACRO-MM-V1",
+      "title": "Nadex/CDNA zero-maker-fee, rebates and finer ticks",
+      "venue": "nadex_cdna",
+      "current_status": "WATCH",
+      "watch_reason": "New market-maker, volume-incentive, fractional-unit and tick rules may alter microstructure but current net execution advantage is unproven.",
+      "recheck_triggers": [
+        "program implementation becomes effective",
+        "participant eligibility and quoting obligations become compatible with project scale",
+        "realized rebate/fee schedule can be measured",
+        "executable books show persistent small positive maker economics after adverse selection"
+      ],
+      "preserved_negative_evidence": [
+        "zero maker fee plus finer tick does not imply positive EV",
+        "new incentives may compress rather than create inefficiency"
+      ]
+    },
+    {
+      "watch_id": "WATCH-POLY-SPORT-COMBO-ARB-V1",
+      "title": "Polymarket live-sports combinatorial arbitrage",
+      "venue": "polymarket",
+      "current_status": "WATCH",
+      "watch_reason": "External research shows executable episodes can exist, but they are short-lived and depth-constrained; small capacity is no longer a rejection criterion under current policy.",
+      "recheck_triggers": [
+        "current synchronized full-depth capture shows any repeatable net-positive episode after fees and legging risk",
+        "new execution path improves atomicity or leg coordination",
+        "market depth or opportunity lifetime materially increases",
+        "small-capacity episodes reproduce prospectively even if absolute profit is only cents"
+      ],
+      "preserved_negative_evidence": [
+        "historical external paper is not project PnL proof",
+        "midpoint/theoretical combo violations are not executable edge",
+        "depth and seconds-long duration are major blockers"
+      ],
+      "scale_note": "Low capacity lowers priority only; it does not invalidate a proven positive-EV episode."
+    },
+    {
+      "watch_id": "WATCH-KWI-INCOMPLETE-ORTHOGONAL-V1",
+      "title": "KWI incomplete-state predictive signal via new mechanism",
+      "venue": "kalshi",
+      "current_status": "WATCH",
+      "watch_reason": "The simple unweighted incomplete-station mean was falsified in development; the broader early-information mechanism may still be testable by a genuinely orthogonal preregistered method or new holdout.",
+      "recheck_triggers": [
+        "new untouched holdout becomes available",
+        "genuinely orthogonal preregistered estimator/mechanism is proposed",
+        "source/station publication process materially changes"
+      ],
+      "preserved_negative_evidence": [
+        "do not retune station subsets or weights on the same development data",
+        "simple incomplete mean failed its survival rule"
+      ],
+      "candidate_refs": ["KWI-INCOMPLETE-TO-CANONICAL-V1"]
+    },
+    {
+      "watch_id": "WATCH-FEEFREE-BELOWPAR-PARTITIONS-V1",
+      "title": "Fee-free below-par exhaustive partitions",
+      "venue": "cross_venue",
+      "current_status": "WATCH",
+      "watch_reason": "Earlier work treated very low capacity and long capital lock as economically unattractive. Under the positive-EV policy these are ranking penalties, not admission failures.",
+      "recheck_triggers": [
+        "any formally proven below-par basket with net locked edge > 0 after all frictions",
+        "capital lock shortens or collateral is released earlier",
+        "capacity/depth increases",
+        "same mechanism appears repeatedly across independent markets"
+      ],
+      "preserved_negative_evidence": [
+        "must prove executable depth and full settlement semantics",
+        "capital efficiency remains a ranking factor"
+      ],
+      "scale_note": "Cent-level locked profit remains valid research output if reproducible."
+    },
+    {
+      "watch_id": "WATCH-FORECASTEX-COUPON-FARM-V1",
+      "title": "ForecastEx same-market YES+NO coupon farming",
+      "venue": "forecastex",
+      "current_status": "TESTED_NEGATIVE_WATCH",
+      "watch_reason": "Current Rule 604 net offsetting and observed combined asks prevented the deterministic coupon loop, but this is regime-dependent.",
+      "recheck_triggers": [
+        "Rule 604 or offsetting semantics change",
+        "coupon treatment of offsetting positions changes",
+        "point-in-time combined executable cost falls below guaranteed coupon-adjusted payout"
+      ],
+      "preserved_negative_evidence": [
+        "12.4M-snapshot census found no combined asks under $1 in examined corpus",
+        "current same-market net offsetting blocks the simple loop"
+      ]
+    },
+    {
+      "watch_id": "WATCH-TRUEO-REWARD-HEDGE-V1",
+      "title": "Trueo reward hedge",
+      "venue": "other",
+      "current_status": "TESTED_NEGATIVE_WATCH",
+      "watch_reason": "Mechanism was theoretically interesting but the examined factory had rewardAmount=0.",
+      "recheck_triggers": [
+        "rewardAmount becomes positive",
+        "new factory or program introduces economically material rewards",
+        "reward terms or hedgeability change"
+      ],
+      "preserved_negative_evidence": [
+        "zero reward means no current economic route"
+      ]
+    },
+    {
+      "watch_id": "WATCH-KALSHI-SOCCER-3WAY-V1",
+      "title": "Kalshi soccer HOME/DRAW/AWAY partition",
+      "venue": "kalshi",
+      "current_status": "TESTED_NEGATIVE_WATCH",
+      "watch_reason": "Checked examples were priced above par before fees, but this is instance-dependent pricing rather than a permanent semantic impossibility.",
+      "recheck_triggers": [
+        "new executable three-way basket costs below guaranteed payout after fees",
+        "fee schedule changes",
+        "new product family creates a cleaner one-hot partition"
+      ],
+      "preserved_negative_evidence": [
+        "at least 12 checked examples were about 101-105 cents before fees for 100-cent payout"
+      ]
+    },
+    {
+      "watch_id": "WATCH-KALSHI-MACRO-FIRST-DECIDABILITY-V1",
+      "title": "Official macro release then stale Kalshi quote",
+      "venue": "kalshi",
+      "current_status": "TESTED_NEGATIVE_WATCH",
+      "watch_reason": "Fed/CPI/payroll families examined closed before official release, eliminating the post-release trading window; other families or future rule changes may differ.",
+      "recheck_triggers": [
+        "market close moves to after official release",
+        "new contract family remains executable after a deterministic public release",
+        "release or contract timing semantics materially change"
+      ],
+      "preserved_negative_evidence": [
+        "examined FOMC/CPI/payroll contracts closed before scheduled official release"
+      ]
+    },
+    {
+      "watch_id": "WATCH-WEATHER-HOURLY-DAILY-IDENTITY-V1",
+      "title": "Hourly weather versus daily high/low deterministic identity",
+      "venue": "kalshi",
+      "current_status": "TESTED_NEGATIVE_WATCH",
+      "watch_reason": "The examined families use different settlement sources, so no deterministic identity currently exists.",
+      "recheck_triggers": [
+        "hourly and daily products adopt the same settlement source and transformation",
+        "new weather family provides formally identical source semantics",
+        "rules materially change rounding/revision/source behavior"
+      ],
+      "preserved_negative_evidence": [
+        "hourly TWC versus daily NWS source mismatch breaks identity"
+      ]
+    },
+    {
+      "watch_id": "WATCH-KXHIGHNY-SIX-NO-V1",
+      "title": "KXHIGHNY six-NO unconditional floor",
+      "venue": "kalshi",
+      "current_status": "TESTED_NEGATIVE_WATCH",
+      "watch_reason": "Standard-path floor existed but exception states prevented an unconditional guarantee.",
+      "recheck_triggers": [
+        "no-data/last-fair-price/MOR exception semantics are removed or materially changed",
+        "new contract family has the same standard partition without those exception classes"
+      ],
+      "preserved_negative_evidence": [
+        "PH-E012 closed the unconditional route under the then-current rules"
+      ]
+    },
+    {
+      "watch_id": "WATCH-POLY-GHOST-FILL-DEFENSIVE-V1",
+      "title": "Polymarket ghost-fill atomicity gap",
+      "venue": "polymarket",
+      "current_status": "SAFETY_EXCLUDED_DEFENSIVE_WATCH",
+      "watch_reason": "Operational exploitation remains out of scope; monitor only because atomicity changes affect legitimate fill/replay accounting.",
+      "recheck_triggers": [
+        "protocol changes atomic settlement/fill semantics",
+        "venue introduces stronger settlement guarantees affecting legitimate execution modeling"
+      ],
+      "preserved_negative_evidence": [
+        "do not build or test a strategy that intentionally exploits the atomicity gap"
+      ]
+    }
+  ]
+}
