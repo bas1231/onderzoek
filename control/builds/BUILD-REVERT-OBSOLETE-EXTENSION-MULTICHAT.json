@@ -1,0 +1,32 @@
+{
+  "schema": "AUTONOMOUS_BUILD_CHARTER_V1",
+  "build_id": "BUILD-REVERT-OBSOLETE-EXTENSION-MULTICHAT",
+  "objective": "Revert the mistakenly reintroduced Chrome-extension multi-chat implementation because the active production chat transport is the Tampermonkey userscript stack, not the obsolete Prediction Research Bridge extension.",
+  "source_commit": "e9220246f09498323b7bdb86a0a3a10d63e3e948",
+  "scope": {
+    "allowed_paths": [
+      "control/browser_bridge.py",
+      "control/browser_extension/background.js",
+      "control/builds/BUILD-BRIDGE-MULTICHAT-V1.json",
+      "tests/bridge/test_multichat_extension_contract.py",
+      "tests/bridge/test_multichat_routing.py",
+      "control/builds/BUILD-REVERT-OBSOLETE-EXTENSION-MULTICHAT.json"
+    ],
+    "non_goals": [
+      "Modify the working Tampermonkey userscript before its current local source is inspected",
+      "Change live trading, wallet or paid-action behavior"
+    ]
+  },
+  "acceptance_criteria": [
+    "PR #37 extension-specific changes are reverted exactly",
+    "The active Tampermonkey transport remains untouched",
+    "Repository safety invariants remain false"
+  ],
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "openai_api": false
+  },
+  "status": "DEFINED"
+}
