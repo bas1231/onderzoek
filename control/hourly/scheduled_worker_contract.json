@@ -239,8 +239,26 @@
       "candidate_state_changes",
       "next_decisive_questions",
       "governor_status",
-      "local_runtime_state"
-    ]
+      "local_runtime_state",
+      "profitable_trader_research_status"
+    ],
+    "profitable_trader_research_status": {
+      "required_each_hourly_report": true,
+      "seed_task": "RECON-PROFITABLE-TRADER-SEEDS-E001",
+      "report_fields": [
+        "seed_or_mechanism",
+        "verification_class",
+        "current_stage",
+        "new_evidence_since_last_report",
+        "current_blocker",
+        "next_decisive_test",
+        "candidate_or_watch_ref",
+        "economic_conclusion"
+      ],
+      "no_news_rule": "If no new result exists, explicitly report GEEN NIEUWE UITKOMST and retain the last known stage/blocker.",
+      "completion_rule": "Continue reporting until each seeded mechanism is terminally falsified/parked or has completed the configured validation pipeline; never silently drop the section.",
+      "economic_default": "NO_PROVEN_EDGE"
+    }
   },
   "concurrency_policy": {
     "plus_usage_mode": "LOW_USAGE",
