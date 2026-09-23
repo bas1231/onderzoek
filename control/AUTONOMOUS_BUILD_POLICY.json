@@ -1,0 +1,27 @@
+{
+  "schema": "AUTONOMOUS_BUILD_POLICY_V1",
+  "version": 1,
+  "enforcement": "ENFORCE",
+  "max_attempts": 3,
+  "read_only_capabilities": [
+    "read_repository",
+    "read_runtime",
+    "read_git",
+    "run_tests",
+    "compile",
+    "health_check",
+    "inspect_status"
+  ],
+  "protected_paths": [
+    "AGENTS.md",
+    "methodology/AUTONOMOUS_BUILD_PROTOCOL.md",
+    "control/AUTONOMOUS_BUILD_POLICY.json",
+    "control/edge_hunter/autonomous_build_governance.py"
+  ],
+  "governance_capability": "governance_change",
+  "required_safety_flags": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false
+  }
+}

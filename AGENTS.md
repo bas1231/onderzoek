@@ -176,6 +176,22 @@ gelden aanvullend de regels in `control/LOCAL_EXECUTION_RULES.md`.
 
 De lokale executor is een research-worker en geen live-trading executor.
 
+## Universele autonome build-governance
+
+Voor iedere toekomstige **muterende** software-, infrastructuur-, migratie-, reparatie- of systeemtaak in deze repository is `methodology/AUTONOMOUS_BUILD_PROTOCOL.md` normatief.
+
+Harde kern:
+- de builder mag zijn eigen doel, scope, acceptance criteria of definitie van succes niet wijzigen;
+- geen test weakening om een build groen te krijgen;
+- evidence vóór `PASS`/`DONE`/`CLOSED`;
+- materiële builds krijgen een bevroren build charter en waar praktisch onafhankelijke verificatie;
+- least privilege, atomic scope, geen incidental scope creep en idempotency by default;
+- muterende infrastructuurtaken worden fail-closed gevalideerd via `control/edge_hunter/autonomous_build_governance.py` en `control/AUTONOMOUS_BUILD_POLICY.json`;
+- project- of componentregels mogen deze governance aanscherpen maar niet stilzwijgend versoepelen;
+- kosten, live trading, wallet/fund movement, credential writes en andere afzonderlijk goedkeuringsplichtige acties blijven buiten een gewone build-autorisatie.
+
+`BUILD_PASS + NO_PROVEN_EDGE` is een geldige succesvolle builduitkomst.
+
 ## Research Director / no-API control plane
 
 De Research Director draait niet via een OpenAI API-call in deze repository.
@@ -248,6 +264,7 @@ Voor taken die via de lokale browser/control bridge worden verstuurd gelden de v
 
 - Iedere task met `task_class: infrastructure` MOET vóór verzending een expliciete `build_authorization` bevatten.
 - Voor gewone control-plane infrastructuur: gebruik `mode: control_plane`, `build_kind: control_plane`, een niet-lege `objective` en een expliciete lijst `capabilities`.
+- Voor iedere **muterende** infrastructure-task is daarnaast een geldig `build_authorization.build_contract` verplicht volgens `methodology/AUTONOMOUS_BUILD_PROTOCOL.md`; read-only taken blijven backward-compatible.
 - Controleer capabilities vooraf tegen `control/edge_hunter/warrant_policy.json`; forbidden capabilities mogen nooit worden toegevoegd.
 - Patroon `/discover` HTTP 200 + `/enqueue` HTTP 400 + lifecycle blijft `DISCOVERED` + geen pending taskfile betekent: controleer eerst `control/validator.py` en `control/edge_hunter/build_gate.py`. Dit is een pre-enqueue validatiefout.
 - Een `NO_ENQUEUE_ACK` bij bovenstaand patroon is een gevolgincident; restart niet automatisch bridge/Git/cadence voordat de concrete 400-validatiefout is onderzocht.
