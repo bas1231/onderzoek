@@ -4,7 +4,7 @@ from pathlib import Path
 from typing import Any
 import json
 
-from . import prebuild_warrant
+from . import autonomous_build_governance, prebuild_warrant
 
 ROOT = Path(__file__).resolve().parents[2]
 
@@ -103,6 +103,8 @@ def authorize_task(
 
     Research tasks remain unaffected. Infrastructure tasks must explicitly
     declare either a control-plane authorization or a candidate-build warrant.
+    Mutating infrastructure tasks additionally follow the repository-wide
+    Autonomous Build Protocol.
     """
 
     if not isinstance(task, dict):
@@ -142,6 +144,13 @@ def authorize_task(
         policy,
         build_state,
     )
+
+    governance = autonomous_build_governance.validate_task(
+        task,
+        root=root,
+    )
+    if not governance["allowed"]:
+        reasons.extend(governance["reasons"])
 
     mode = authorization.get("mode")
 
