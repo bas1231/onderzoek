@@ -100,6 +100,48 @@ def build(run_id: str) -> tuple[dict[str, Any], Path]:
         raise FileNotFoundError(handoff_path)
     director_handoff = load_json(handoff_path)
 
+    # AI_BUNDLE_CREATE_ONCE_E002
+    # One hourly run_id represents one immutable AI work snapshot. Re-running
+    # the same hour must reuse that snapshot instead of silently changing the
+    # response token while a create-only request may already be in flight.
+    out = RUNS / f"{run_id}-ai-work-bundle.json"
+    if out.exists():
+        existing = load_json(out)
+        if not isinstance(existing, dict):
+            raise ValueError("existing AI work bundle must be object")
+        if existing.get("schema") != "PVA_AI_WORK_BUNDLE_V1":
+            raise ValueError("existing AI work bundle schema mismatch")
+        if existing.get("run_id") != run_id:
+            raise ValueError("existing AI work bundle run_id mismatch")
+
+        token = existing.get("response_token")
+        if not isinstance(token, str) or len(token) != 64:
+            raise ValueError("existing AI work bundle token invalid")
+
+        ready_roles = existing.get("ready_roles")
+        if not isinstance(ready_roles, list):
+            raise ValueError("existing AI work bundle ready_roles invalid")
+
+        guardrails = existing.get("guardrails") or {}
+        for key in (
+            "live_trading",
+            "paid_actions",
+            "wallet_actions",
+            "openai_api",
+        ):
+            if guardrails.get(key) is not False:
+                raise ValueError(
+                    f"existing AI work bundle unsafe guardrail: {key}"
+                )
+
+        expected = existing.get("expected_response_schema") or {}
+        if expected.get("response_token") != token:
+            raise ValueError(
+                "existing AI work bundle expected response token mismatch"
+            )
+
+        return existing, out
+
     packets: dict[str, dict[str, Any]] = {}
     for path in packet_dir.glob("*.json"):
         if path.name.startswith("_"):
@@ -216,7 +258,6 @@ def build(run_id: str) -> tuple[dict[str, Any], Path]:
         },
     }
 
-    out = RUNS / f"{run_id}-ai-work-bundle.json"
     save_json(out, bundle)
     return bundle, out
 
