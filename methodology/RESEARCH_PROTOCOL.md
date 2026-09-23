@@ -19,6 +19,38 @@ De research heeft **geen minimum dagwinst, minimum absolute dollarwinst of minim
 
 Deze regel verlaagt **niet** de bewijsstandaard. Een kleine edge moet dezelfde point-in-time, execution-, validation- en anti-overfittinggates doorlopen als een grote edge.
 
+## WATCH, parkeren en heropenen
+
+`WATCH` is een **persistente niet-terminale monitoringstatus**. Het betekent niet dat een edge bewezen is, maar ook niet dat de route is afgewezen.
+
+Gebruik `WATCH` wanneer een mechanisme of route nu onvoldoende bewijs, economics, toegang, liquidity of actualiteit heeft om actief te promoveren, maar door **materieel nieuwe informatie** later opnieuw relevant kan worden.
+
+Iedere WATCH-entry legt waar mogelijk vast:
+
+- `watch_reason`: waarom nu geen actieve promotie plaatsvindt;
+- `recheck_triggers`: concrete omstandigheden die herbeoordeling rechtvaardigen;
+- `preserved_negative_evidence`: welke eerdere negatives/failure modes geldig blijven;
+- `last_checked_at` en relevante provenance;
+- `current_status`: bijvoorbeeld `WATCH`, `RECHECK_TRIGGERED`, `ACTIVE_RESEARCH`, `TESTED_NEGATIVE`;
+- `candidate_refs`/`mechanism_refs` zodat nieuws aan bestaande research wordt gekoppeld in plaats van als nieuw idee te worden gedupliceerd.
+
+Geldige recheck-triggers zijn onder meer:
+
+- wijziging van contractregels, settlementbron, rounding/finality of oracle;
+- fee-, rebate-, reward-, collateral- of incentivewijziging;
+- gewijzigde venue-/jurisdictie-/participanttoegang;
+- nieuw executionpad zoals RFQ, block trading, nieuwe routering of nieuwe ordertypes;
+- materiële verandering in spread, L2-depth, volume, queue/fill-gedrag of opportunity lifetime;
+- nieuwe primaire bron, academische/mechanistische evidence of nieuwe dataset;
+- een vooraf vastgelegde nieuwe holdout of prospectieve observation die een eerder probleem rechtstreeks test;
+- een concrete nieuwe contractpair/market instance die een eerder formeel mechanisme opnieuw testbaar maakt.
+
+Een trigger **promoveert nooit automatisch**. Hij zet de route op `RECHECK_TRIGGERED`; daarna gelden opnieuw semantiek-, data-, execution-, falsificatie- en validatiegates.
+
+Eerdere negatieve evidence wordt nooit gewist. Een WATCH-resurrection moet expliciet aangeven **welke beslissende dependency is veranderd**. Zonder zo'n verandering wordt een oude gefalsificeerde variant niet eindeloos opnieuw getest.
+
+Voorbeeld: een estimator die op developmentdata is gefalsificeerd wordt niet opnieuw getuned op dezelfde data omdat er toevallig nieuw nieuws is; alleen orthogonale methode, nieuwe preregistratie of nieuwe untouched/holdout evidence kan die route inhoudelijk heropenen.
+
 ## Bewijslagen
 
 ### 0. Pre-build viability
@@ -91,12 +123,15 @@ id: UNIQUE-ID
 venue: kalshi|polymarket|forecastex|cross_venue|other
 mechanism_id: optional
 kind: fact|observation|hypothesis|negative_evidence|candidate
-status: FACT_VERIFIED|OBSERVED|HYPOTHESIS_UNTESTED|TESTED_NEGATIVE|STRUCTURAL_CANDIDATE|RESEARCH_POSITIVE|EXECUTION_BLOCKED|NO_PROVEN_EDGE
+status: FACT_VERIFIED|OBSERVED|HYPOTHESIS_UNTESTED|TESTED_NEGATIVE|STRUCTURAL_CANDIDATE|RESEARCH_POSITIVE|WATCH|RECHECK_TRIGGERED|EXECUTION_BLOCKED|NO_PROVEN_EDGE
 claim: "..."
 as_of: YYYY-MM-DD
 source_class: PRIMARY|PAPER|SECONDARY|COMMUNITY|DARK_MARKET_INTELLIGENCE
 search_family: optional
 multiple_testing_context: optional
+watch_reason: optional
+recheck_triggers: []
+preserved_negative_evidence: []
 provenance: []
 required_data: []
 falsification: []
