@@ -1,0 +1,52 @@
+{
+  "schema": "AUTONOMOUS_BUILD_CHARTER_V1",
+  "build_id": "BUILD-POSITIVE-EV-WATCH-REVIEW-V1",
+  "protocol_version": 1,
+  "objective": "Re-review existing prediction-market exploit candidates under the policy that any evidence-compatible net EV > 0 remains research-eligible regardless of current daily scale, and formalize persistent WATCH/resurrection triggers so later material news or regime changes can reopen blocked or currently unattractive routes without erasing prior negative evidence.",
+  "source_commit": "6479463016362c436468e0a343db3d23fd82d817",
+  "allowed_capabilities": [
+    "read_repository",
+    "write_repository_governance",
+    "write_research_state"
+  ],
+  "allowed_paths": [
+    "methodology/RESEARCH_PROTOCOL.md",
+    "control/hourly/scheduled_worker_contract.json",
+    "control/edge_hunter/candidate_schema.json",
+    "knowledge/watch",
+    "control/builds/BUILD-POSITIVE-EV-WATCH-REVIEW-V1.json"
+  ],
+  "planned_paths": [
+    "methodology/RESEARCH_PROTOCOL.md",
+    "control/hourly/scheduled_worker_contract.json",
+    "control/edge_hunter/candidate_schema.json",
+    "knowledge/watch/WATCH_REGISTRY.json",
+    "knowledge/watch/POSITIVE_EV_REREVIEW_2026-09-23.json",
+    "control/builds/BUILD-POSITIVE-EV-WATCH-REVIEW-V1.json"
+  ],
+  "acceptance_criteria": [
+    "Existing promising and previously scale-deprioritized routes are explicitly re-reviewed under the positive-EV admission rule.",
+    "WATCH is defined as a persistent nonterminal monitoring state, not a rejection or proof of edge.",
+    "Each WATCH item can carry concrete recheck triggers tied to rules, fees, access, source semantics, settlement, liquidity/depth, executable pricing, new datasets/holdouts, or new mechanism evidence.",
+    "Material trigger evidence causes re-evaluation, not automatic promotion.",
+    "Prior negative evidence remains attached and cannot be erased by resurrection.",
+    "Scheduled research checks WATCH triggers without wasting full research cycles on unchanged items.",
+    "No live trading, paid action, wallet action, or proof-standard weakening is introduced."
+  ],
+  "non_goals": [
+    "Promote any candidate to PROVEN_EDGE without evidence.",
+    "Authorize live trading or capital use.",
+    "Erase or weaken negative evidence.",
+    "Blindly rerun every historical negative every hour without a material trigger."
+  ],
+  "independent_verification": "Verify the methodology, machine-readable worker contract, candidate schema and WATCH registry agree on positive-EV admission, persistent WATCH semantics, trigger-based resurrection and preservation of negative evidence.",
+  "rollback_plan": "Revert only these governance/research-state changes if contradictions are found; preserve the charter and audit trail.",
+  "cleanup_plan": "No temporary runtime resources are created.",
+  "max_attempts": 2,
+  "governance_change": true,
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false
+  }
+}
