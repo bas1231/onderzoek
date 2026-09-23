@@ -1,12 +1,14 @@
 #!/usr/bin/env python3
 """Hardened wrapper around bridge_server_v2.
 
-Two invariants are enforced at the localhost delivery boundary, independent of
+Three invariants are enforced at the localhost delivery boundary, independent of
 which Tampermonkey script is installed:
 
 1. /next never exposes unbounded RESULT_READY/WSL stdout to the browser.
 2. Once any event for a task_id is in SENT, later OUTBOX events for that same
    task_id are silently retired and never delivered again.
+3. The dedicated nightshift userscript is served from loopback for a one-click
+   Tampermonkey install/update without exposing bridge secrets.
 
 This makes browser-side dedupe a second line of defence instead of the only one.
 """
@@ -20,6 +22,7 @@ from http.server import ThreadingHTTPServer
 import bridge_server_v2 as base
 
 MAX_BROWSER_MESSAGE = 900
+NIGHTSHIFT_USERSCRIPT_FILE = base.DATA_DIR / "prediction-nightshift-wake.user.js"
 _RAW_OLDEST_EVENT = base.oldest_event
 
 
@@ -50,7 +53,6 @@ def _retire_duplicate(path, obj) -> None:
 
 def hardened_oldest_event(chat_id=None, consumer_id=None):
     """Return only the first not-yet-delivered task event."""
-    # A bounded loop prevents malformed queues from spinning forever.
     for _ in range(256):
         path, obj = _RAW_OLDEST_EVENT(chat_id, consumer_id)
         if obj is None:
@@ -113,12 +115,11 @@ def compact_delivery_event(obj):
     return out
 
 
-# Parent Handler methods resolve oldest_event in the base module globals.
 base.oldest_event = hardened_oldest_event
 
 
 class Handler(base.Handler):
-    server_version = "PredictionChatWake/0.4-hardened"
+    server_version = "PredictionChatWake/0.5-hardened"
 
     def reply_json(self, status, obj):
         if (
@@ -130,10 +131,27 @@ class Handler(base.Handler):
             obj = compact_delivery_event(obj)
         super().reply_json(status, obj)
 
+    def reply_nightshift_userscript(self):
+        if not NIGHTSHIFT_USERSCRIPT_FILE.exists():
+            self.reply_json(404, {"ok": False, "error": "nightshift_userscript_not_installed"})
+            return
+        body = NIGHTSHIFT_USERSCRIPT_FILE.read_bytes()
+        self.send_response(200)
+        self.send_header("Content-Type", "application/javascript; charset=utf-8")
+        self.send_header("Content-Length", str(len(body)))
+        self.send_header("Cache-Control", "no-store")
+        self.end_headers()
+        self.wfile.write(body)
+
     def do_GET(self):
-        # Keep the existing protocol, but expose hardened state in health.
         from urllib.parse import urlparse
         parsed = urlparse(self.path)
+
+        # Deliberately unauthenticated: loopback-only and contains no token.
+        if parsed.path == "/prediction-nightshift-wake.user.js":
+            self.reply_nightshift_userscript()
+            return
+
         if parsed.path == "/health":
             if not self.authorized():
                 self.reply_json(401, {"ok": False, "error": "unauthorized"})
@@ -141,11 +159,12 @@ class Handler(base.Handler):
             self.reply_json(200, {
                 "ok": True,
                 "service": "prediction-chat-wake",
-                "version": 4,
+                "version": 5,
                 "multichat": True,
                 "server_compaction": True,
                 "task_dedupe": True,
                 "max_browser_message": MAX_BROWSER_MESSAGE,
+                "nightshift_userscript": NIGHTSHIFT_USERSCRIPT_FILE.exists(),
             })
             return
         super().do_GET()
