@@ -42,6 +42,7 @@ def main() -> int:
     quality = load('source_quality', R / 'control/hourly/source_quality.py')
     router = load('role_router', R / 'control/hourly/role_router.py')
     recon = load('recon_engine', R / 'control/hourly/recon_engine.py')
+    market_scanner = load('market_instance_scanner', R / 'control/hourly/market_instance_scanner.py')
     memory = load('memory_context', R / 'control/hourly/memory_context.py')
     hydrator = load('packet_hydrator', R / 'control/hourly/packet_hydrator.py')
     orchestrator = load('agent_orchestrator', R / 'control/hourly/agent_orchestrator.py')
@@ -63,7 +64,14 @@ def main() -> int:
             pass
 
     quality_data, quality_path = quality.grade(run['run_id'])
+
+    # Concrete market-instance scan is independent of text/source discovery.
+    # It is public/read-only and fail-soft: a temporary venue/API failure is
+    # recorded as BLOCKED evidence but does not abort the rest of the hourly run.
+    market_scan_data, market_scan_path = market_scanner.run(run['run_id'])
+
     routing = router.route(run['run_id'])
+    market_scanner.inject_routing(routing, market_scan_data)
     routing_path = R / 'knowledge/runs' / (run['run_id'] + '-routing.json')
     routing_path.write_text(json.dumps(routing, indent=2, sort_keys=True) + chr(10))
 
@@ -137,6 +145,18 @@ def main() -> int:
         'low_text_yield_count': quality_data.get('low_text_yield_count'),
         'ref': str(quality_path.relative_to(R)),
     }
+    current['market_instance_scan'] = {
+        'status': market_scan_data.get('status'),
+        'ref': str(market_scan_path.relative_to(R)),
+        'objects_checked': market_scan_data.get('objects_checked', {}),
+        'coverage': market_scan_data.get('coverage', {}),
+        'change_detection': market_scan_data.get('change_detection', {}),
+        'relation_count': market_scan_data.get('relation_count', 0),
+        'relation_type_counts': market_scan_data.get('relation_type_counts', {}),
+        'gross_positive_screen_count': market_scan_data.get('gross_positive_screen_count', 0),
+        'economic_conclusion': market_scan_data.get('economic_conclusion', 'NO_PROVEN_EDGE'),
+        'blocker': market_scan_data.get('blocker'),
+    }
     current['automated_routing'] = {
         role: len(data.get('evidence', []))
         for role, data in routing.items()
@@ -197,6 +217,18 @@ def main() -> int:
             handle.write('Low-text-yield sources: ' + str(quality_data.get('low_text_yield_count')) + chr(10))
             handle.write('Matched Git-memory records: ' + str(memory_data.get('matched_memory_count')) + chr(10))
             handle.write('Memory context: ' + str(memory_path.relative_to(R)) + chr(10))
+            handle.write(chr(10) + '### Kalshi market-instance contradiction scan' + chr(10))
+            handle.write('Status: ' + str(market_scan_data.get('status')) + chr(10))
+            handle.write('Objects checked: ' + json.dumps(market_scan_data.get('objects_checked', {}), sort_keys=True) + chr(10))
+            handle.write('Coverage: ' + json.dumps(market_scan_data.get('coverage', {}), sort_keys=True) + chr(10))
+            handle.write('Semantic changes: ' + json.dumps(market_scan_data.get('change_detection', {}), sort_keys=True) + chr(10))
+            handle.write('Relations: ' + str(market_scan_data.get('relation_count', 0)) + chr(10))
+            handle.write('Relation types: ' + json.dumps(market_scan_data.get('relation_type_counts', {}), sort_keys=True) + chr(10))
+            handle.write('Gross-positive screens pending fees/L2: ' + str(market_scan_data.get('gross_positive_screen_count', 0)) + chr(10))
+            handle.write('Market scan evidence: ' + str(market_scan_path.relative_to(R)) + chr(10))
+            if market_scan_data.get('blocker'):
+                handle.write('Market scan blocker: ' + str(market_scan_data.get('blocker')) + chr(10))
+            handle.write('Economic conclusion: ' + str(market_scan_data.get('economic_conclusion', 'NO_PROVEN_EDGE')) + chr(10))
             handle.write(chr(10) + '### Recon Scout preprocessing' + chr(10))
             handle.write('Objects checked: ' + str(recon_data.get('objects_checked', 0)) + chr(10))
             handle.write('State counts: ' + json.dumps(recon_data.get('state_counts', {}), sort_keys=True) + chr(10))
@@ -230,6 +262,8 @@ def main() -> int:
         sweep_data['failure_count'],
         quality_data.get('usable_count'),
         memory_data.get('matched_memory_count'),
+        market_scan_data.get('relation_count', 0),
+        market_scan_data.get('gross_positive_screen_count', 0),
         'E007_SIX_DOMAIN',
     )
     return 0
