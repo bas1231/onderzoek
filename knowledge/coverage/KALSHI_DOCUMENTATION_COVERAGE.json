@@ -1,0 +1,45 @@
+{
+  "schema": "PVA_VENUE_DOCUMENTATION_COVERAGE_V1",
+  "venue": "kalshi",
+  "owner_role": "RECON_SCOUT",
+  "status": "INCOMPLETE",
+  "complete_coverage_claim_allowed": false,
+  "objective": "Enumerate, review, hash/provenance-track and economically classify the full publicly available Kalshi documentation surface, then keep it current through change-triggered WATCH rechecks.",
+  "coverage_domains": [
+    "exchange_rulebook",
+    "product_specific_rules",
+    "settlement_determination_finality",
+    "cancellation_void_no_data_fair_price_review_exceptions",
+    "fees_rebates_incentives_rewards",
+    "collateral_margin_netting_capital_release",
+    "order_types_matching_queue_partial_fills",
+    "market_lifecycle_open_close_early_close_early_determination",
+    "api",
+    "websocket",
+    "schema_fields_limits_and_ui_api_differences",
+    "combo_mve_multivariate_special_products",
+    "data_sources_timestamps_revisions_rounding_precision_measurement_windows",
+    "changelog_release_notes_deprecations",
+    "relevant_public_regulatory_filings_and_certifications"
+  ],
+  "required_per_document_fields": [
+    "source_url_or_path",
+    "document_identity",
+    "observed_at",
+    "version_or_last_modified_if_available",
+    "content_hash_or_equivalent_provenance",
+    "review_status",
+    "mechanism_notes",
+    "exception_notes",
+    "related_candidate_or_watch_ids",
+    "change_recheck_required"
+  ],
+  "completion_rule": "COMPLETE_COVERAGE may only be claimed when the enumerated public documentation universe reconciles against reviewed manifest entries and unresolved gaps equal zero. Dynamic or inaccessible surfaces remain explicit gaps.",
+  "watch_rule": "Any material documentation change must be mapped to affected candidates, negative evidence and WATCH entries; only changed decisive dependencies trigger deep re-analysis.",
+  "current_gaps": [
+    "Full public Kalshi documentation universe has not yet been enumerated and reconciled.",
+    "No complete page-by-page/version-by-version coverage ledger exists yet.",
+    "Historical knowledge files demonstrate substantial targeted Kalshi research but do not prove exhaustive documentation coverage."
+  ],
+  "entries": []
+}
