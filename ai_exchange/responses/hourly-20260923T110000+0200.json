@@ -1,0 +1,139 @@
+{
+  "schema": "PVA_AI_EXCHANGE_RESPONSE_V1",
+  "run_id": "hourly-20260923T110000+0200",
+  "request_sha256": "ef6d5a785c687b4e62c24bba1829307d9964bd2529dec6e0b3926c6276b023b9",
+  "response": {
+    "schema": "PVA_AI_RESPONSE_V1",
+    "run_id": "hourly-20260923T110000+0200",
+    "response_token": "2debd5dc0565fa42f7a88ae6f177d1fa6926cb9d41c582d85d191931298ea7ee",
+    "role_results": [
+      {
+        "agent_id": "discovery",
+        "candidate_ids": ["KWI-FULL-STATION-PRECANONICAL-V1"],
+        "capability_results": {
+          "recon_scout": "Bundled public-source deltas do not supply a new post-cutoff full-station validation case. The Kalshi weather-source text confirms source semantics but is not validation evidence.",
+          "scout": "No new candidate-specific discovery in the packet changes the preregistered test. CFTC and generic docs deltas are not sufficient to create or promote a candidate."
+        },
+        "evidence_refs": ["knowledge/candidates/KWI-FULL-STATION-PRECANONICAL-V1.json", "request:routed_evidence:kalshi_docs"],
+        "failure_pattern_ids": [],
+        "finding": "No new post-cutoff validation evidence; discovery remains separated from validation.",
+        "local_task_required": false,
+        "local_task_spec": null,
+        "next_decisive_question": "Does a post-cutoff case complete under the preregistered 24h full-station protocol without using discovery rows as validation?",
+        "status": "WAITING_FOR_RESULT",
+        "validation_results": []
+      },
+      {
+        "agent_id": "market_research",
+        "candidate_ids": ["KWI-FULL-STATION-PRECANONICAL-V1"],
+        "capability_results": {
+          "weather_twc": "Daily high/low and hourly temperature products must retain their distinct settlement-source semantics; the packet does not provide a new prospective TWC-linked validation result.",
+          "behavioral": "No new candidate-specific behavioral evidence in the packet.",
+          "informed_flow": "No new candidate-specific informed-flow evidence in the packet."
+        },
+        "evidence_refs": ["knowledge/candidates/KWI-FULL-STATION-PRECANONICAL-V1.json", "request:routed_evidence:kalshi_weather_source"],
+        "failure_pattern_ids": [],
+        "finding": "Signal research remains pending prospective validation; no market or execution edge follows from source semantics alone.",
+        "local_task_required": false,
+        "local_task_spec": null,
+        "next_decisive_question": "Do preregistered post-cutoff full-station cases retain the discovery-era signal quality, and only then is synchronized executable market testing justified?",
+        "status": "WAITING_FOR_RESULT",
+        "validation_results": []
+      },
+      {
+        "agent_id": "mechanics",
+        "candidate_ids": ["ASSET-RANK-MAKER-HEDGE-V1", "PAYOFF-IDENTITY-MINING-V1"],
+        "capability_results": {
+          "settlement": "No new settlement/finality evidence in the packet establishes a statewise payout relation or changes a candidate gate.",
+          "microstructure": "ASSET-RANK-MAKER-HEDGE-V1 still lacks a proven full passive fill; cancellations are not fills and synchronized first-executable hedge economics cannot yet be evaluated. PAYOFF-IDENTITY-MINING-V1 has no concrete formally equivalent contract pair with executable synchronized L2."
+        },
+        "evidence_refs": ["knowledge/candidates/ASSET-RANK-MAKER-HEDGE-V1.json", "knowledge/candidates/PAYOFF-IDENTITY-MINING-V1.json", "request:routed_evidence:polymarket_docs"],
+        "failure_pattern_ids": [],
+        "finding": "Execution evidence remains insufficient: no proven maker fill and no formally proved payoff pair followed by synchronized executable depth.",
+        "local_task_required": false,
+        "local_task_spec": null,
+        "next_decisive_question": "Does a conservative full passive fill occur, or can one concrete contract pair first pass complete statewise payout proof?",
+        "status": "WAITING_FOR_DATA",
+        "validation_results": []
+      },
+      {
+        "agent_id": "algebra",
+        "candidate_ids": ["ASSET-RANK-MAKER-HEDGE-V1", "PAYOFF-IDENTITY-MINING-V1"],
+        "capability_results": {
+          "algebra": "No complete contract pair and state space are supplied that prove equivalence, dominance, or a payout floor. Generic fees/rebates/combos documentation is not a payoff proof."
+        },
+        "evidence_refs": ["knowledge/candidates/PAYOFF-IDENTITY-MINING-V1.json", "knowledge/candidates/ASSET-RANK-MAKER-HEDGE-V1.json", "request:routed_evidence:polymarket_docs"],
+        "failure_pattern_ids": [],
+        "finding": "No new statewise identity is proved; price comparison remains downstream of formal semantics.",
+        "local_task_required": false,
+        "local_task_spec": null,
+        "next_decisive_question": "Can one concrete pair be specified from primary rules and proved statewise equivalent or dominant before any executable-price comparison?",
+        "status": "NO_EVIDENCE",
+        "validation_results": []
+      },
+      {
+        "agent_id": "red_team_pentest",
+        "candidate_ids": ["ASSET-RANK-MAKER-HEDGE-V1", "KWI-FULL-STATION-PRECANONICAL-V1", "PAYOFF-IDENTITY-MINING-V1"],
+        "capability_results": {
+          "prebuild_killer": "No candidate clears its cheapest decisive evidence gate: Weather awaits post-cutoff validation; maker-hedge awaits a conservative full fill; payoff mining awaits formal statewise proof.",
+          "chief_falsifier": "Discovery-era weather performance cannot count as validation; maker economics cannot be inferred without a full fill and first-executable hedge; algebraic opportunity cannot be inferred from product similarity or documentation keywords."
+        },
+        "evidence_refs": ["knowledge/candidates/KWI-FULL-STATION-PRECANONICAL-V1.json", "knowledge/candidates/ASSET-RANK-MAKER-HEDGE-V1.json", "knowledge/candidates/PAYOFF-IDENTITY-MINING-V1.json"],
+        "failure_pattern_ids": [],
+        "finding": "Deep falsification finds no basis for promotion and no authority is exercised to kill; all three claims remain gated by missing decisive evidence.",
+        "local_task_required": false,
+        "local_task_spec": null,
+        "next_decisive_question": "Which candidate first produces genuinely new gate-satisfying evidence rather than recycled discovery or non-executable proxies?",
+        "status": "COMPLETED",
+        "validation_results": [
+          {"candidate_id": "ASSET-RANK-MAKER-HEDGE-V1", "mode": "DEEP_FALSIFICATION", "status": "INCONCLUSIVE"},
+          {"candidate_id": "KWI-FULL-STATION-PRECANONICAL-V1", "mode": "DEEP_FALSIFICATION", "status": "WAITING"},
+          {"candidate_id": "PAYOFF-IDENTITY-MINING-V1", "mode": "DEEP_FALSIFICATION", "status": "INCONCLUSIVE"}
+        ]
+      },
+      {
+        "agent_id": "research_director",
+        "candidate_ids": [],
+        "capability_results": {},
+        "evidence_refs": ["request:candidate_queue", "request:director_instruction"],
+        "failure_pattern_ids": [],
+        "finding": "No bundled result establishes signal-to-market-to-execution edge end to end. Preserve current gates and avoid duplicative discovery.",
+        "local_task_required": false,
+        "local_task_spec": null,
+        "next_decisive_question": "Await the first preregistered or formally proved gate result; do not spend research capacity on downstream execution claims before that evidence exists.",
+        "status": "COMPLETED",
+        "validation_results": []
+      }
+    ],
+    "candidate_decisions": [
+      {
+        "candidate_id": "KWI-FULL-STATION-PRECANONICAL-V1",
+        "next_decisive_test": "Await and evaluate post-cutoff cases under the preregistered 24h full-station protocol; discovery rows cannot count as validation.",
+        "queue_status": "WAITING_FOR_RESULT",
+        "reason": "No new post-cutoff result is present in the bundled evidence.",
+        "resurrection_condition": null
+      },
+      {
+        "candidate_id": "ASSET-RANK-MAKER-HEDGE-V1",
+        "next_decisive_test": "Continue preregistered prospective conservative fill monitoring; only a proven full passive fill may trigger synchronized first-executable hedge economics.",
+        "queue_status": "RUNNING",
+        "reason": "No proven full passive fill is present; execution economics remain unmeasured.",
+        "resurrection_condition": null
+      },
+      {
+        "candidate_id": "PAYOFF-IDENTITY-MINING-V1",
+        "next_decisive_test": "Find one concrete contract pair with primary-rule statewise payout semantics, then compare synchronized executable L2 only after formal equivalence/dominance proof.",
+        "queue_status": "NEEDS_DIRECTOR",
+        "reason": "No complete statewise identity or dominance proof is present.",
+        "resurrection_condition": null
+      }
+    ],
+    "director_decision": "Preserve current candidate gates. Do not promote or close-negative any bundled candidate. Weather waits for post-cutoff preregistered evidence; maker-hedge continues conservative fill monitoring; payoff mining requires one concrete primary-rule statewise proof before price work.",
+    "economic_conclusion": "NO_PROVEN_EDGE",
+    "local_tasks": [],
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "openai_api": false
+  }
+}
