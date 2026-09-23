@@ -4,4 +4,5 @@ Description=Prediction Research hourly director wake
 [Service]
 Type=oneshot
 WorkingDirectory=/home/leonh/prediction_research
+ExecStartPre=%h/prediction_research/.venv/bin/python %h/prediction_research/control/hourly/runtime_sync.py
 ExecStart=%h/prediction_research/.venv/bin/python %h/prediction_research/control/hourly/edge_hunter_cycle.py
