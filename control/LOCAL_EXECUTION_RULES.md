@@ -98,3 +98,19 @@ Voor candidate-specifieke bouw:
 
 Researchtaken zonder code-/infrastructuurbouw gebruiken geen
 `build_authorization` en blijven onder de gewone researchqueue-regels vallen.
+
+## Universele autonome build-governance
+
+Voor iedere toekomstige **muterende** software-, infrastructuur-, migratie-, reparatie- of systeemtaak is `methodology/AUTONOMOUS_BUILD_PROTOCOL.md` normatief.
+
+- Project- of componentregels mogen dit protocol aanscherpen maar niet stilzwijgend versoepelen.
+- Read-only infrastructuurtaken blijven compatibel met de bestaande authorization flow.
+- Een muterende infrastructuurtaak moet een volledig `build_authorization.build_contract` bevatten.
+- Het build contract bevriest objective, broncommit, capabilities, paden, acceptance criteria, non-goals, verificatie, rollback, cleanup, retrybudget en safetyflags vóór implementatie.
+- De builder mag zijn eigen succescriteria niet aanpassen.
+- Beschermde governancepaden vereisen een expliciete governancewijziging en capability.
+- `control/edge_hunter/autonomous_build_governance.py` valideert deze contracten fail-closed.
+- `control/AUTONOMOUS_BUILD_POLICY.json` is de machineleesbare policy.
+- `control/builds/BUILD_CHARTER_TEMPLATE.json` is het standaardtemplate voor nieuwe materiële builds.
+
+Een build kan technisch volledig slagen terwijl de inhoudelijke researchuitkomst negatief blijft. `BUILD_PASS + NO_PROVEN_EDGE` is geldig.
