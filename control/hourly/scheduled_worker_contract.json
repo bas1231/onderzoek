@@ -37,7 +37,25 @@
     "response_create_only": true,
     "browser_bridge_required": false,
     "continue_broad_duplicate_sweep_after_request": false,
-    "reason": "the local request already contains point-in-time routed evidence; spend the scheduled turn on decisive specialist work instead of duplicating discovery"
+    "reason": "the local request already contains point-in-time routed evidence; spend the scheduled turn on decisive specialist work instead of duplicating discovery",
+    "validation_result_contract": {
+      "required_fields": [
+        "candidate_id",
+        "status"
+      ],
+      "allowed_statuses": [
+        "PASS",
+        "FAIL",
+        "INCONCLUSIVE",
+        "WAITING"
+      ],
+      "optional_mode_values": [
+        "QUICK_KILL",
+        "DEEP_FALSIFICATION",
+        "REPRODUCTION"
+      ],
+      "status_field_rule": "Every validation_results item must use the status field. A result field may not replace status."
+    }
   },
   "native_scheduled_research": {
     "enabled_when_no_pending_exchange_request": true,
@@ -58,14 +76,34 @@
     "no_new_evidence_is_valid": true
   },
   "responsibilities": {
-    "PRIMARY_SCOUT": ["scout"],
-    "RECON_SCOUT": ["recon_scout"],
-    "SPECIALIST_MARKET_RESEARCH": ["weather_twc", "behavioral", "informed_flow"],
-    "SPECIALIST_MECHANICS": ["settlement", "microstructure"],
-    "SPECIALIST_ALGEBRA": ["algebra"],
-    "RED_TEAM": ["prebuild_killer", "chief_falsifier"],
-    "TEMPORARY_INDEPENDENT_REPRODUCER": ["independent_reproducer"],
-    "RESEARCH_DIRECTOR": ["research_director"]
+    "PRIMARY_SCOUT": [
+      "scout"
+    ],
+    "RECON_SCOUT": [
+      "recon_scout"
+    ],
+    "SPECIALIST_MARKET_RESEARCH": [
+      "weather_twc",
+      "behavioral",
+      "informed_flow"
+    ],
+    "SPECIALIST_MECHANICS": [
+      "settlement",
+      "microstructure"
+    ],
+    "SPECIALIST_ALGEBRA": [
+      "algebra"
+    ],
+    "RED_TEAM": [
+      "prebuild_killer",
+      "chief_falsifier"
+    ],
+    "TEMPORARY_INDEPENDENT_REPRODUCER": [
+      "independent_reproducer"
+    ],
+    "RESEARCH_DIRECTOR": [
+      "research_director"
+    ]
   },
   "governor": {
     "economic_default": "NO_PROVEN_EDGE",
