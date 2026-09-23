@@ -64,6 +64,7 @@
     "flow": [
       "GOVERNOR",
       "PRIMARY_AND_RECON_DISCOVERY",
+      "PUBLIC_PROFITABLE_TRADER_CLAIM_SCOUTING",
       "EVIDENCE_AND_FAILURE_MEMORY",
       "WATCH_TRIGGER_RECHECK",
       "DYNAMIC_SPECIALIST_DISPATCH",
@@ -74,7 +75,21 @@
     ],
     "task_shape_policy": "parallel discovery; dependency-aware specialist analysis; trigger-aware WATCH rechecks; sequential semantics-before-economics where required",
     "waiting_releases_capacity": true,
-    "no_new_evidence_is_valid": true
+    "no_new_evidence_is_valid": true,
+    "profitable_trader_claim_scouting": {
+      "required_each_native_run": true,
+      "purpose": "Find public claims or evidence of sustained prediction-market profitability, extract mechanisms, and generate falsifiable CLONE_MUTATE research leads.",
+      "evidence_rule": "Self-reported P&L, leaderboards, community posts and interviews are discovery leads only; independently verifiable public history or reproducible evidence is required before stronger classification.",
+      "classifications": [
+        "CLAIM_ONLY",
+        "PARTIALLY_VERIFIED",
+        "PUBLICLY_REPRODUCIBLE"
+      ],
+      "no_copy_trading": true,
+      "no_paid_sources": true,
+      "no_private_access": true,
+      "economic_default": "NO_PROVEN_EDGE"
+    }
   },
   "responsibilities": {
     "PRIMARY_SCOUT": [
