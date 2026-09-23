@@ -23,6 +23,22 @@ A price anomaly is not evidence of an exploit until the statewise payout relatio
 
 This market-instance sweep is persistent. New listings, changed strikes/ranges/windows, new combo/MVE products, meaningful liquidity changes and rule/fee changes are recheck triggers. Unchanged already-tested negative instances should not consume repeated deep work.
 
+## Mandatory priority — public profitable-trader claim scouting
+Every scheduled Recon run must also search free/public sources for people, teams, bots or public accounts claiming or showing sustained profit on prediction markets (including Kalshi, Polymarket and adjacent venues). This is a discovery lane, not proof and not copy-trading.
+
+Prioritize claims with verifiable public P&L, settled-market history, disclosed mechanism, reproducible data, interviews, code, or independently checkable account activity. Search community sources, interviews, podcasts, public profiles, leaderboards, research posts and reputable reporting. Record counterevidence and survivorship/selection bias.
+
+For each materially new success claim:
+- capture WHO, VENUE, CLAIMED/OBSERVED_PNL, TIME_WINDOW, MARKET_FAMILY, STATED_MECHANISM, PUBLIC_EVIDENCE, and whether performance is independently verifiable;
+- classify CLAIM_ONLY, PARTIALLY_VERIFIED, or PUBLICLY_REPRODUCIBLE;
+- extract the mechanism rather than copying the person's trades;
+- compare against Git memory and existing negative evidence;
+- route a plausible uncrowded mechanism through CLONE_MUTATE and the normal four-angle review;
+- never infer future profitability from a leaderboard or self-reported P&L alone;
+- never execute copy trades, paid subscriptions, private-group access, credentialed scraping, or contact people as part of this lane.
+
+A claim with no reproducible mechanism remains WATCH/discovery evidence. Any candidate derived from it still requires point-in-time, semantic, execution, falsification and independent-reproduction gates. Economic default remains NO_PROVEN_EDGE.
+
 ## Mandatory four-angle review
 Every materially interesting clause, mechanism, exception, documentation inconsistency or possible exploit path discovered during the sweeps must be examined from **four distinct angles** before Recon routes it onward:
 
