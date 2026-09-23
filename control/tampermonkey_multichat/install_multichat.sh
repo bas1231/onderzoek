@@ -56,6 +56,24 @@ main() {
         echo "Rollback uitgevoerd. Terminal blijft open."
     }
 
+    wait_health() {
+        url="$1"
+        needle="$2"
+        attempt=1
+        body=""
+        while [ "$attempt" -le 20 ]; do
+            body="$(curl -fsS -H "Authorization: Bearer $TOKEN" "$url" 2>/dev/null)"
+            if printf '%s' "$body" | grep -q "$needle"; then
+                printf '%s' "$body"
+                return 0
+            fi
+            sleep 0.25
+            attempt=$((attempt + 1))
+        done
+        printf '%s' "$body"
+        return 1
+    }
+
     if [ ! -s "$TOKEN_FILE" ]; then
         if ! python3 - <<'PY' > "$TOKEN_FILE"
 import secrets
@@ -155,16 +173,18 @@ UNIT
         return 1
     fi
 
-    WAKE_HEALTH="$(curl -fsS -H "Authorization: Bearer $TOKEN" http://localhost:8765/health 2>/dev/null)"
-    ROUTER_HEALTH="$(curl -fsS -H "Authorization: Bearer $TOKEN" http://localhost:8767/health 2>/dev/null)"
-
-    if ! printf '%s' "$WAKE_HEALTH" | grep -q '"multichat":true'; then
-        echo "FOUT: wake health-check is niet multi-chat groen: $WAKE_HEALTH"
+    if WAKE_HEALTH="$(wait_health http://localhost:8765/health '"multichat":true')"; then
+        :
+    else
+        echo "FOUT: wake health-check werd niet tijdig multi-chat groen: $WAKE_HEALTH"
         rollback
         return 1
     fi
-    if ! printf '%s' "$ROUTER_HEALTH" | grep -q '"ok":true'; then
-        echo "FOUT: router health-check mislukt: $ROUTER_HEALTH"
+
+    if ROUTER_HEALTH="$(wait_health http://localhost:8767/health '"ok":true')"; then
+        :
+    else
+        echo "FOUT: router health-check werd niet tijdig groen: $ROUTER_HEALTH"
         rollback
         return 1
     fi
