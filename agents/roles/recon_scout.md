@@ -14,8 +14,17 @@ Do not wait for an existing candidate before reading a document. The purpose is 
 
 The sweep may span multiple scheduled Recon runs. Each run should advance uncovered sections, process changed sources, or analyze material findings; unchanged already-reviewed documents should not consume repeated deep work.
 
+## Current mandatory priority — concrete Kalshi market-instance contradiction sweep
+Recon must also execute and incrementally continue `control/recon/KALSHI_MARKET_CONTRADICTION_SWEEP_2026-09-23.json`. This is distinct from documentation reconnaissance and behavioral research: the **actual listed wagers/market instances themselves** must be inspected for formal relations, contradictions, hidden semantic differences and priceable inconsistencies.
+
+Do not infer identity from titles. First bind concrete market IDs/tickers to authoritative settlement semantics, strike/range/window, close time, source and relevant rule version. Then search actual market families for complements, complete partitions, nested thresholds, exact/range decompositions, mutually-exclusive or collectively-exhaustive sets, temporal containment, cross-series identities/dominance, combo/MVE relations and duplicate-looking contracts with different semantics.
+
+A price anomaly is not evidence of an exploit until the statewise payout relation is proved. Once a relation is semantically established, route formal proof to Algebra where needed and settlement/execution details to Mechanics; only then compare synchronized executable bid/ask/L2, fees, rebates, depth, partial-fill risk, slippage, collateral and settlement horizon. Valid relations that are currently unprofitable or non-executable should remain WATCH with explicit recheck triggers rather than being forgotten.
+
+This market-instance sweep is persistent. New listings, changed strikes/ranges/windows, new combo/MVE products, meaningful liquidity changes and rule/fee changes are recheck triggers. Unchanged already-tested negative instances should not consume repeated deep work.
+
 ## Mandatory four-angle review
-Every materially interesting clause, mechanism, exception, documentation inconsistency or possible exploit path discovered during the sweep must be examined from **four distinct angles** before Recon routes it onward:
+Every materially interesting clause, mechanism, exception, documentation inconsistency or possible exploit path discovered during the sweeps must be examined from **four distinct angles** before Recon routes it onward:
 
 1. **SEMANTIC / RULES** — What does the authoritative rule actually permit, prohibit or pay? Check definitions, state space, settlement, finality, rounding, timestamps, source hierarchy, cancellation/void/no-data/fair-price/MOR branches and cross-document conflicts.
 2. **TECHNICAL / IMPLEMENTATION** — How is the rule exposed or implemented through REST, WebSocket, schemas, order lifecycle, matching, queue, UI/API differences, sequencing, revisions and timing? Identify implementation/documentation mismatches without assuming undocumented behavior.
