@@ -24,6 +24,9 @@ Regels:
 
 - `ACTION` moet door de command receiver zijn toegestaan.
 - `TASK_ID` moet uniek zijn voor die uitvoering.
+- `<ACTION>` en `<TASK_ID>` zijn uitsluitend documentatieplaceholders en mogen nooit letterlijk worden verstuurd.
+- Genereer een echte unieke task-ID, bijvoorbeeld `BRIDGE-PING-20260923-163501-A7K2`.
+- Gebruik nooit letterlijke placeholdernamen zoals `UNIQUE_TASK_ID`, `UNIEKE-ID`, `TEST-ID` of `TASK_ID` als task-ID.
 - De marker moet letterlijk zichtbaar zijn in gewone assistanttekst.
 - Commentary/tool-output alleen telt niet als verzending.
 - Gebruik niet automatisch het legacy `PREDICTION_BRIDGE_TASK`-formaat.
@@ -35,7 +38,7 @@ De receiver `/health` is autoritatief voor de op dat moment toegestane acties.
 Wanneer de eigenaar vraagt de bridge te testen:
 
 1. Gebruik `BRIDGE_PING`.
-2. Kies een nieuwe unieke task-ID.
+2. Genereer een nieuwe unieke task-ID; hergebruik nooit een eerder gebruikte of voorbeeld-ID.
 3. Plaats de commandmarker als gewone zichtbare assistanttekst.
 4. Verklaar de test pas PASS wanneer `RESULT_READY` exact dezelfde task-ID teruggeeft.
 5. Voor `BRIDGE_PING` vereist PASS tevens:
