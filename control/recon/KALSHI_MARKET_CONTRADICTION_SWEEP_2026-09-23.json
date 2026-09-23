@@ -3,8 +3,17 @@
   "task_id": "TASK-RECON-KALSHI-MARKETS-001",
   "assigned_role": "RECON_SCOUT",
   "priority": "P1_PERSISTENT",
-  "status": "READY",
+  "status": "IMPLEMENTED_PENDING_LIVE_CANARY",
   "created_at": "2026-09-23",
+  "implemented_at": "2026-09-23",
+  "implementation": {
+    "scanner": "control/hourly/market_instance_scanner.py",
+    "tests": "tests/test_market_instance_scanner.py",
+    "hourly_integration": "control/hourly/hourly_cycle.py",
+    "local_synthetic_test_result": "9 passed",
+    "live_canary_required": true,
+    "live_canary_success_rule": "An active hourly cycle fetches public Kalshi open events/markets, writes a market_instance_scan artifact, records coverage/change counts, and routes bounded relation evidence without claiming net-positive EV before fees/L2/rule-exception review."
+  },
   "objective": "Continuously inspect concrete Kalshi market instances and related contract families for logical, semantic and economically exploitable inconsistencies, independently of behavioral research and documentation-only reconnaissance.",
   "continue_across_runs": true,
   "scope": {
