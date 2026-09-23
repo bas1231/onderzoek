@@ -9,8 +9,13 @@ on:
       - 'control/hourly/**'
       - 'control/browser_bridge.py'
       - 'control/browser_bridge_core.py'
+      - 'control/edge_hunter/**'
+      - 'control/AUTONOMOUS_BUILD_POLICY.json'
+      - 'methodology/AUTONOMOUS_BUILD_PROTOCOL.md'
       - 'tests/hourly/**'
       - 'tests/bridge/**'
+      - 'tests/edge_hunter/test_autonomous_build_governance.py'
+      - 'tests/edge_hunter/test_build_gate.py'
       - '.github/workflows/v14-validation.yml'
 
 permissions:
@@ -44,6 +49,13 @@ jobs:
             tests/hourly/test_git_ai_exchange_v14.py \
             tests/hourly/test_hourly_wake_git_exchange_v14.py
 
+      - name: Autonomous build governance
+        run: |
+          .venv/bin/python -m pytest -q \
+            tests/edge_hunter/test_autonomous_build_governance.py \
+            tests/edge_hunter/test_build_gate.py \
+            tests/bridge/test_autonomous_build_governance_v1.py
+
       - name: Hourly and bridge regression
         run: |
           .venv/bin/python -m pytest -q tests/hourly tests/bridge
@@ -52,6 +64,7 @@ jobs:
         run: |
           .venv/bin/python -m compileall -q \
             control/hourly \
+            control/edge_hunter \
             control/browser_bridge.py \
             control/browser_bridge_core.py
 
@@ -77,5 +90,11 @@ jobs:
           assert g['watch_promotion_authority'] is False
           assert g['scheduled_worker_candidate_promotion_authority'] is False
           assert g['scheduled_worker_candidate_kill_authority'] is False
+          policy = json.loads(Path('control/AUTONOMOUS_BUILD_POLICY.json').read_text())
+          assert policy['required_safety_flags'] == {
+              'live_trading': False,
+              'paid_actions': False,
+              'wallet_actions': False,
+          }
           print('SAFETY_INVARIANTS_OK')
           PY
