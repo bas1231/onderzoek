@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "status": "SHADOW_SPEC_ONLY",
+  "default_economic_status": "NO_PROVEN_EDGE",
+  "default_action": "BLOCK_UNLESS_CLASSIFIED",
+  "rules": [
+    {"id":"GOV-001","match":"free_public_read_only_research","decision":"ALLOW","requirements":["provenance","point_in_time"]},
+    {"id":"GOV-002","match":"paid_action","decision":"BLOCK_USER_APPROVAL","requirements":["specific_action_approval"]},
+    {"id":"GOV-003","match":"live_order_or_trade","decision":"BLOCK_USER_APPROVAL","requirements":["specific_action_approval"]},
+    {"id":"GOV-004","match":"wallet_or_fund_movement","decision":"BLOCK_USER_APPROVAL","requirements":["specific_action_approval"]},
+    {"id":"GOV-005","match":"credential_mutation_or_secret_export","decision":"BLOCK","requirements":[]},
+    {"id":"GOV-006","match":"unauthorized_access_fraud_deception_manipulation_or_active_security_exploitation","decision":"BLOCK","requirements":[]},
+    {"id":"GOV-007","match":"post_close_or_later_revision_backfill_into_point_in_time_decision","decision":"BLOCK","requirements":[]},
+    {"id":"GOV-008","match":"delete_negative_evidence_to_strengthen_thesis","decision":"BLOCK","requirements":[]},
+    {"id":"GOV-009","match":"relax_failed_gate_post_hoc","decision":"BLOCK","requirements":[]},
+    {"id":"GOV-010","match":"git_write_to_shadow_spec_branch_without_secrets","decision":"ALLOW","requirements":["branch_is_not_main","no_secrets"]},
+    {"id":"GOV-011","match":"runtime_or_main_control_plane_mutation","decision":"BLOCK_SHADOW_REVIEW","requirements":["benchmark_pass","explicit_activation_step"]}
+  ],
+  "promotion_invariants": {
+    "required_gate_failure_is_non_overridable": true,
+    "director_may_waive_required_gate": false,
+    "red_team_may_promote_economic_edge": false,
+    "unknown_required_evidence_fails_closed": true
+  }
+}

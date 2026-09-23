@@ -1,0 +1,40 @@
+{
+  "schema_version": 1,
+  "status": "PREREGISTERED_SHADOW_POLICY",
+  "classification_fields": [
+    "parallelism",
+    "dependency_shape",
+    "uncertainty_type",
+    "time_sensitivity",
+    "novelty",
+    "decision_relevance"
+  ],
+  "fanout": {
+    "LOW_SEQUENTIAL": {
+      "max_specialist_workers": 1,
+      "rule": "Resolve the upstream dependency before dispatching downstream analysis."
+    },
+    "MEDIUM_PARTIAL": {
+      "max_specialist_workers": 3,
+      "rule": "Parallelize only independent subquestions; represent dependencies explicitly."
+    },
+    "HIGH_INDEPENDENT": {
+      "max_specialist_workers": 5,
+      "rule": "Fan out only across distinct source, method or failure-mode families; duplicate prompts do not count as diversity."
+    }
+  },
+  "examples": [
+    {"task":"broad venue-agnostic public source sweep","parallelism":"HIGH","dependency_shape":"INDEPENDENT","recommended":"dual discovery plus bounded fanout"},
+    {"task":"contract rules -> payoff proof -> executable economics","parallelism":"LOW","dependency_shape":"SEQUENTIAL","recommended":"one dependency stage at a time"},
+    {"task":"attack candidate across semantic, leakage and execution failure modes","parallelism":"HIGH","dependency_shape":"PARTIAL","recommended":"independent attacks may fan out, final adjudication waits for all required attacks"},
+    {"task":"prospective candidate waiting for corpus","parallelism":"LOW","dependency_shape":"SEQUENTIAL","recommended":"WAITING_FOR_DATA; release AI capacity"},
+    {"task":"formal search over many independent payoff relation families","parallelism":"HIGH","dependency_shape":"INDEPENDENT","recommended":"local deterministic enumeration first; model workers inspect novel residuals"}
+  ],
+  "guardrails": [
+    "No fanout solely to keep workers busy.",
+    "Do not ask multiple workers the identical question and treat agreement as independent evidence.",
+    "Use local deterministic computation before model fanout when exhaustive filtering is cheaper and exact.",
+    "Every worker must receive a distinct decisive question, source family or failure-mode objective when fanout > 1.",
+    "Director records why the chosen fanout matches the task shape."
+  ]
+}

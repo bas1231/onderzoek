@@ -1,0 +1,72 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "research-os-v1-evidence-graph",
+  "title": "Research OS V1 Minimal Evidence Graph",
+  "type": "object",
+  "required": ["schema_version", "nodes", "edges"],
+  "properties": {
+    "schema_version": {"const": 1},
+    "nodes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "type", "status", "created_at", "producer"],
+        "properties": {
+          "id": {"type": "string", "minLength": 1},
+          "type": {"enum": ["candidate", "claim", "evidence", "assumption", "rule", "experiment", "failure_pattern"]},
+          "status": {"type": "string", "minLength": 1},
+          "statement": {"type": ["string", "null"]},
+          "created_at": {"type": "string", "minLength": 1},
+          "observed_at": {"type": ["string", "null"]},
+          "retrieved_at": {"type": ["string", "null"]},
+          "point_in_time_status": {"enum": ["PASS", "FAIL", "UNKNOWN", "NOT_APPLICABLE"]},
+          "source_ref": {"type": ["string", "null"]},
+          "content_hash": {"type": ["string", "null"]},
+          "producer": {"type": "string", "minLength": 1},
+          "source_commit": {"type": ["string", "null"]},
+          "search_family_id": {"type": ["string", "null"]},
+          "metadata": {"type": "object"}
+        },
+        "allOf": [
+          {
+            "if": {
+              "properties": {"type": {"const": "evidence"}},
+              "required": ["type"]
+            },
+            "then": {
+              "required": ["point_in_time_status"],
+              "anyOf": [
+                {
+                  "required": ["source_ref"],
+                  "properties": {"source_ref": {"type": "string", "minLength": 1}}
+                },
+                {
+                  "required": ["content_hash"],
+                  "properties": {"content_hash": {"type": "string", "minLength": 1}}
+                }
+              ]
+            }
+          }
+        ],
+        "additionalProperties": false
+      }
+    },
+    "edges": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["from", "to", "type", "created_at", "producer"],
+        "properties": {
+          "from": {"type": "string", "minLength": 1},
+          "to": {"type": "string", "minLength": 1},
+          "type": {"enum": ["supports", "contradicts", "depends_on", "tested_by", "invalidated_by", "supersedes", "derived_from"]},
+          "created_at": {"type": "string", "minLength": 1},
+          "producer": {"type": "string", "minLength": 1},
+          "note": {"type": ["string", "null"]}
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false
+}
