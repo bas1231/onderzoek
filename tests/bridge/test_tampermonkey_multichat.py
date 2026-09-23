@@ -148,3 +148,12 @@ def test_installer_keeps_interactive_terminal_safe_and_does_not_replace_8766_rec
     assert "install -m 0755 \"$SRC_DIR/command_receiver.py\"" not in text
     assert "prediction-chat-router.service" in text
     assert "rollback" in text
+
+
+def test_installer_waits_for_services_before_declaring_health_failure():
+    text = (TM / "install_multichat.sh").read_text(encoding="utf-8")
+    assert "wait_health()" in text
+    assert 'while [ "$attempt" -le 20 ]' in text
+    assert "sleep 0.25" in text
+    assert "http://localhost:8765/health" in text
+    assert "http://localhost:8767/health" in text
