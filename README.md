@@ -74,3 +74,18 @@ Dark-web/illicit markets mogen als **intelligencebron** worden onderzocht via pu
 **Legaal grijs, vreemd, onbedoeld of economisch ongunstig voor een venue is in scope. Illegale uitvoering is een harde stop.**
 
 Onderzoek naar legale contract-, settlement-, collateral-, fee-, information-, behavioral-, oracle- en microstructurele inefficiënties is in scope. Marktmanipulatie, fraude, misleiding, sabotage, credentialmisbruik, ongeautoriseerde toegang en operationeel misbruik van softwarekwetsbaarheden zijn niet in scope. Publieke security-/incidentinformatie mag wel als defensieve, intelligence- of falsificatiecontext worden vastgelegd zonder exploit-instructies.
+
+## Actuele lokale multi-chat bridge
+
+Voor iedere Prediction-sessie die de lokale ChatGPT ↔ WSL bridge gebruikt is `control/tampermonkey_multichat/PROTOCOL.md` autoritatief.
+
+Wanneer de eigenaar vraagt de bridge te testen of een lokale bridge-command uit te voeren:
+
+- lees eerst dat protocol;
+- gebruik het actuele zichtbare multi-chat markerprotocol;
+- gebruik niet automatisch het legacy `PREDICTION_BRIDGE_TASK`-formaat;
+- een bridge-test gebruikt `BRIDGE_PING` met een unieke task-ID;
+- verklaar PASS alleen wanneer `RESULT_READY` exact dezelfde task-ID teruggeeft en de acceptance criteria in het protocol slagen;
+- iedere chat wordt door Tampermonkey afzonderlijk gerouteerd; verzin daarom niet handmatig een `chat_id`.
+
+Bewezen baseline op 2026-09-23: automatische zichtbare-DOM-detectie en volledige same-chat roundtrip zijn PASS met `TM-DOM-20260923-001` en `DOM-AUTO-20260923-001`.
