@@ -440,6 +440,12 @@
       "to": "domain:red_team_pentest",
       "type": "ROUTED_TO_DOMAIN"
     },
+    "edge-2bba74fe1be922fc7bc2": {
+      "capability": "weather_twc",
+      "from": "run:hourly-20260923T090000+0200",
+      "to": "evidence-578c3a2a4e067531b5ca",
+      "type": "OBSERVED_EVIDENCE"
+    },
     "edge-2c0191182f96a7180a2d": {
       "capability": "recon_scout",
       "from": "run:hourly-20260923T030000+0200",
@@ -726,6 +732,12 @@
       "run_id": "hourly-20260923T020000+0200",
       "to": "domain:red_team_pentest",
       "type": "ROUTED_TO_DOMAIN"
+    },
+    "edge-56281a8a866e1cafd7a7": {
+      "capability": "recon_scout",
+      "from": "run:hourly-20260923T090000+0200",
+      "to": "evidence-a5acb8df4c260843b33c",
+      "type": "OBSERVED_EVIDENCE"
     },
     "edge-581c177d0a10994f06c8": {
       "capability": "weather_twc",
@@ -1158,6 +1170,12 @@
       "to": "domain:algebra",
       "type": "ROUTED_TO_DOMAIN"
     },
+    "edge-925a22791cea90d7b23b": {
+      "capability": "scout",
+      "from": "run:hourly-20260923T090000+0200",
+      "to": "evidence-cf7ba1c2f525260630ba",
+      "type": "OBSERVED_EVIDENCE"
+    },
     "edge-93fd4b47e53f790a8f94": {
       "capability": "microstructure",
       "from": "candidate:PAYOFF-IDENTITY-MINING-V1",
@@ -1490,6 +1508,12 @@
       "capability": "recon_scout",
       "from": "run:hourly-20260923T060000+0200",
       "to": "evidence-d005f76bab9786eb51c9",
+      "type": "OBSERVED_EVIDENCE"
+    },
+    "edge-bac496f6348271ccc6fd": {
+      "capability": "recon_scout",
+      "from": "run:hourly-20260923T090000+0200",
+      "to": "evidence-8c8a97104debffe1a240",
       "type": "OBSERVED_EVIDENCE"
     },
     "edge-bc226fe97bbda7a20ade": {
@@ -1907,6 +1931,12 @@
       "to": "domain:red_team_pentest",
       "type": "ROUTED_TO_DOMAIN"
     },
+    "edge-e78f6399a0e7737867a5": {
+      "capability": "scout",
+      "from": "run:hourly-20260923T090000+0200",
+      "to": "evidence-5fe7eefb01c974d3aff3",
+      "type": "OBSERVED_EVIDENCE"
+    },
     "edge-e7d437751a99a20e6068": {
       "capability": "recon_scout",
       "from": "run:hourly-20260923T030000+0200",
@@ -2034,6 +2064,12 @@
       "capability": "weather_twc",
       "from": "run:hourly-20260923T090000+0200",
       "to": "evidence-316ee30fd6530f5b1c46",
+      "type": "OBSERVED_EVIDENCE"
+    },
+    "edge-f85a180168b50a7c6b4d": {
+      "capability": "settlement",
+      "from": "run:hourly-20260923T090000+0200",
+      "to": "evidence-6ba6d877cc99aaf4a55c",
       "type": "OBSERVED_EVIDENCE"
     },
     "edge-f9405bcd727e3942ef87": {
@@ -2488,6 +2524,15 @@
       "source_id": "kalshi_weather_rules",
       "term": "settlement"
     },
+    "evidence-578c3a2a4e067531b5ca": {
+      "capability": "weather_twc",
+      "document_sha256": "002720441a7fd7232f818f91e5a818e787afed546dcb70494846daa19349212c",
+      "first_seen_run": "hourly-20260923T090000+0200",
+      "node_type": "evidence",
+      "retrieved_at": "2026-09-23T07:16:23.859469+00:00",
+      "source_id": "kalshi_weather_rules",
+      "term": "metar"
+    },
     "evidence-5928abe69dd89a9bc4c6": {
       "capability": "settlement",
       "document_sha256": "b63ef74159e6d20a8c0af31d5633cf1f182a29f677800428083442e4926db769",
@@ -2524,6 +2569,15 @@
       "source_id": "ecmwf_open",
       "term": "2 metre temperature"
     },
+    "evidence-5fe7eefb01c974d3aff3": {
+      "capability": "scout",
+      "document_sha256": "a3b911226f7cfa9ccd50a439b3304db64d7caab72b1d6c5f363cb3f6731d5b31",
+      "first_seen_run": "hourly-20260923T090000+0200",
+      "node_type": "evidence",
+      "retrieved_at": "2026-09-23T07:16:22.519156+00:00",
+      "source_id": "cftc",
+      "term": "prediction market"
+    },
     "evidence-616409ff849cd1532552": {
       "capability": "weather_twc",
       "document_sha256": "91bfd2fa44b1c109d44f4d22d593396775363ef137c09df8a96bd29ec36a713a",
@@ -2548,6 +2602,15 @@
       "first_seen_run": "hourly-20260923T060000+0200",
       "node_type": "evidence",
       "retrieved_at": "2026-09-23T04:00:18.600024+00:00",
+      "source_id": "kalshi_weather_rules",
+      "term": "settlement"
+    },
+    "evidence-6ba6d877cc99aaf4a55c": {
+      "capability": "settlement",
+      "document_sha256": "002720441a7fd7232f818f91e5a818e787afed546dcb70494846daa19349212c",
+      "first_seen_run": "hourly-20260923T090000+0200",
+      "node_type": "evidence",
+      "retrieved_at": "2026-09-23T07:16:23.859469+00:00",
       "source_id": "kalshi_weather_rules",
       "term": "settlement"
     },
@@ -2632,6 +2695,15 @@
       "source_id": "kalshi_weather_rules",
       "term": "metar"
     },
+    "evidence-8c8a97104debffe1a240": {
+      "capability": "recon_scout",
+      "document_sha256": "002720441a7fd7232f818f91e5a818e787afed546dcb70494846daa19349212c",
+      "first_seen_run": "hourly-20260923T090000+0200",
+      "node_type": "evidence",
+      "retrieved_at": "2026-09-23T07:16:23.859469+00:00",
+      "source_id": "kalshi_weather_rules",
+      "term": "settlement"
+    },
     "evidence-950d6fabe789b668c144": {
       "capability": "settlement",
       "document_sha256": "688c282dd1dc0b4074e5386d58438eb2012fef5bfcfe312a4057832845b5e9b2",
@@ -2694,6 +2766,15 @@
       "retrieved_at": "2026-09-23T05:00:17.499665+00:00",
       "source_id": "kalshi_weather_rules",
       "term": "settlement"
+    },
+    "evidence-a5acb8df4c260843b33c": {
+      "capability": "recon_scout",
+      "document_sha256": "a3b911226f7cfa9ccd50a439b3304db64d7caab72b1d6c5f363cb3f6731d5b31",
+      "first_seen_run": "hourly-20260923T090000+0200",
+      "node_type": "evidence",
+      "retrieved_at": "2026-09-23T07:16:22.519156+00:00",
+      "source_id": "cftc",
+      "term": "loss"
     },
     "evidence-a85c2b0a6caeb4852076": {
       "capability": "recon_scout",
@@ -2783,6 +2864,15 @@
       "node_type": "evidence",
       "retrieved_at": "2026-09-23T03:00:16.360664+00:00",
       "source_id": "cftc",
+      "term": "prediction market"
+    },
+    "evidence-cf7ba1c2f525260630ba": {
+      "capability": "scout",
+      "document_sha256": "002720441a7fd7232f818f91e5a818e787afed546dcb70494846daa19349212c",
+      "first_seen_run": "hourly-20260923T090000+0200",
+      "node_type": "evidence",
+      "retrieved_at": "2026-09-23T07:16:23.859469+00:00",
+      "source_id": "kalshi_weather_rules",
       "term": "prediction market"
     },
     "evidence-d005f76bab9786eb51c9": {
@@ -3175,33 +3265,33 @@
       "edge-f9ebd84e4ab26d9d8040"
     ],
     "hourly-20260923T090000+0200": [
-      "edge-0566282c9e756ae88903",
-      "edge-0a54d3bd9f77445b0284",
       "edge-0a8a12d46f382c2607c3",
       "edge-10edeabd824ba9a0f26e",
-      "edge-1a1b0b4856bb93a6205d",
-      "edge-2c5c24e9076e370ac6f9",
+      "edge-2bba74fe1be922fc7bc2",
       "edge-3b0fbfd3949fe487c04f",
       "edge-42827dae5fd943cabfb5",
+      "edge-56281a8a866e1cafd7a7",
       "edge-61e373daa73b212db4aa",
       "edge-6e031dedd639b9974933",
       "edge-78ecfd2e410124ddc17f",
       "edge-79c78f700db206317716",
       "edge-7fc387758ae6b143c5fa",
+      "edge-925a22791cea90d7b23b",
       "edge-93fd4b47e53f790a8f94",
       "edge-a5a31bb99d8f8fcfd921",
+      "edge-bac496f6348271ccc6fd",
       "edge-bf3d8b53943973ccf6dd",
       "edge-c2f00a10c6956f170f71",
       "edge-c7c63ce75140b1787c41",
       "edge-d8e2b5b9e9844abd3c4d",
-      "edge-e314da92e517c9bcf522",
+      "edge-e78f6399a0e7737867a5",
       "edge-eb00aa3394c1aaa3be3e",
       "edge-eb04dfaf2005545b0f59",
       "edge-f74dd1171e7b6f94b256",
-      "edge-fb0a71c8edc023c61da1",
-      "edge-ff4fd09b868df660f993"
+      "edge-f85a180168b50a7c6b4d",
+      "edge-fb0a71c8edc023c61da1"
     ]
   },
   "schema": "PVA_EVIDENCE_GRAPH_V1",
-  "updated_at": "2026-09-23T07:08:33.438678+00:00"
+  "updated_at": "2026-09-23T07:16:24.054920+00:00"
 }
