@@ -65,13 +65,14 @@
       "GOVERNOR",
       "PRIMARY_AND_RECON_DISCOVERY",
       "EVIDENCE_AND_FAILURE_MEMORY",
+      "WATCH_TRIGGER_RECHECK",
       "DYNAMIC_SPECIALIST_DISPATCH",
       "RED_TEAM_WHEN_JUSTIFIED",
       "INDEPENDENT_REPRODUCER_ONLY_FOR_SERIOUS_SURVIVOR",
       "RESEARCH_DIRECTOR",
       "GIT_REPORT_AND_STATE"
     ],
-    "task_shape_policy": "parallel discovery; dependency-aware specialist analysis; sequential semantics-before-economics where required",
+    "task_shape_policy": "parallel discovery; dependency-aware specialist analysis; trigger-aware WATCH rechecks; sequential semantics-before-economics where required",
     "waiting_releases_capacity": true,
     "no_new_evidence_is_valid": true
   },
@@ -130,6 +131,35 @@
       "small_edge_rule": "Do not kill or discard a candidate solely because absolute profit is small. Preserve and rank it; multiple independent small positive-EV edges may be combined into a portfolio.",
       "kill_rule": "Kill or park only for substantive evidence such as falsification, non-positive net EV, non-executability, unacceptable legal or risk constraints, missing proofability, or explicitly documented opportunity cost; never merely for being below a daily-profit target.",
       "proof_standard_unchanged": true
+    },
+    "watch_policy": {
+      "registry_path": "knowledge/watch/WATCH_REGISTRY.json",
+      "watch_is_persistent_nonterminal": true,
+      "watch_is_not_rejection": true,
+      "watch_is_not_edge_proof": true,
+      "material_trigger_required_for_recheck": true,
+      "trigger_never_auto_promotes": true,
+      "preserve_prior_negative_evidence": true,
+      "unchanged_watch_items_do_not_consume_deep_research": true,
+      "check_each_scheduled_run": true,
+      "trigger_sources": [
+        "rules_or_settlement_change",
+        "fees_rebates_rewards_or_collateral_change",
+        "venue_or_participant_access_change",
+        "new_execution_path_or_order_type",
+        "material_liquidity_depth_spread_fill_or_lifetime_change",
+        "new_primary_or_academic_mechanism_evidence",
+        "new_preregistered_holdout_or_prospective_data",
+        "new_concrete_contract_pair_or_market_instance"
+      ],
+      "recheck_result": "RECHECK_TRIGGERED",
+      "recheck_requirement": "identify the changed decisive dependency and rerun the relevant gates; do not erase or bypass old failures"
+    },
+    "positive_ev_policy_rereview": {
+      "manifest_path": "knowledge/watch/POSITIVE_EV_REREVIEW_2026-09-23.json",
+      "require_existing_candidates_and_recent_watch_routes_reviewed": true,
+      "scale_only_rejections_must_be_reclassified": "WATCH_OR_LOW_PRIORITY_IF_NET_EV_CAN_REMAIN_POSITIVE",
+      "do_not_reopen_falsified_method_without_new_dependency": true
     }
   },
   "prospective_shadow_telemetry": {
@@ -189,6 +219,8 @@
       "new_evidence",
       "specialist_results",
       "negative_evidence",
+      "watch_trigger_events",
+      "positive_ev_policy_rereview_progress",
       "candidate_state_changes",
       "next_decisive_questions",
       "governor_status",
