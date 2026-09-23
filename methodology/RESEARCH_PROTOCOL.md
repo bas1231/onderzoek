@@ -6,10 +6,23 @@ Deze knowledge base moet venue-onafhankelijke discovery versnellen zonder hindsi
 
 Lees daarnaast `methodology/CONTINUOUS_PREDICTION_MARKET_RED_TEAM.md` voor de overkoepelende continuous-red-team architectuur.
 
+## Positieve-EV scope en schaalbeleid
+
+De research heeft **geen minimum dagwinst, minimum absolute dollarwinst of minimum winst per episode als toelatingsdrempel**.
+
+- Iedere kandidaat die na relevante fricties en risico's aantoonbaar `net EV > 0` kan hebben, is onderzoekswaardig, ook wanneer de verwachte winst slechts centen per episode is.
+- `€100+/dag` is een **uiteindelijke portfolio-schaalambitie**, geen eis voor een individuele candidate en geen kill-gate.
+- Capacity, opportunity frequency, capital lock, capital efficiency, settlementhorizon en absolute dagwinst worden gemeten om candidates te **rangschikken en te schalen**, niet om een anders geldige kleine positieve edge automatisch weg te gooien.
+- Een kleine edge mag uitsluitend wegens schaal lager worden geprioriteerd; zij blijft bewaard en onderzoekbaar zolang de netto EV positief kan zijn en execution realistisch blijft.
+- Meerdere onafhankelijke kleine positieve edges mogen als portfolio worden gecombineerd. De som van kleine reproduceerbare edges is een geldige route naar het uiteindelijke schaaldoel.
+- Een candidate wordt niet gekilled omdat zij “te weinig per dag” verdient. Kill/park vereist inhoudelijke reden, zoals falsificatie, `net EV <= 0`, non-executability, onaanvaardbaar risico/legaliteitsprobleem, ontbrekende bewijsbaarheid of expliciet gedocumenteerde opportunity cost.
+
+Deze regel verlaagt **niet** de bewijsstandaard. Een kleine edge moet dezelfde point-in-time, execution-, validation- en anti-overfittinggates doorlopen als een grote edge.
+
 ## Bewijslagen
 
 ### 0. Pre-build viability
-Voordat nieuwe strategy- of infrastructurecode wordt gebouwd: novelty/negative evidence, semantic viability, economic headroom, goedkope empirische falsificatie en execution spotcheck. Alleen survivors krijgen normaal een build warrant.
+Voordat nieuwe strategy- of infrastructurecode wordt gebouwd: novelty/negative evidence, semantic viability, economic headroom, goedkope empirische falsificatie en execution spotcheck. Alleen survivors krijgen normaal een build warrant. Lage absolute winst alleen is geen reden om een otherwise plausibele positive-EV survivor uit te sluiten; engineeringprioriteit mag wel op informatiewaarde en opportunity cost worden gerangschikt.
 
 ### 1. Semantic / rules proof
 Leg exact vast wat het contract betaalt in iedere toegestane toestand. Titelgelijkenis is alleen discovery. Source, measurement window, threshold, rounding, revision, DNP/cancel/void/fair-price, oracle en finality kunnen de payoff veranderen.
@@ -115,3 +128,5 @@ Dark-web/illicit markets mogen uitsluitend als intelligencebron worden meegenome
 Totdat alle relevante gates zijn gepasseerd blijft de economische status:
 
 `NO_PROVEN_EDGE`
+
+Wanneer een edge uiteindelijk wordt bewezen, is **positieve netto EV** de economische kernvoorwaarde; er geldt geen afzonderlijke minimum-dagwinst om haar als echte edge te erkennen. Schaal en materialiteit worden daarna als aparte portfolio- en prioriteitsdimensies gerapporteerd.
