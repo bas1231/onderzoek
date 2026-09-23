@@ -88,12 +88,12 @@ def test_valid_mutating_contract_is_allowed():
     }
 
 
-def test_source_commit_is_pinned_to_current_head():
+def test_source_commit_must_be_a_full_sha():
     row = task()
-    row["build_authorization"]["build_contract"]["source_commit"] = "0" * 40
+    row["build_authorization"]["build_contract"]["source_commit"] = "not-a-sha"
     result = validate_task(row)
     assert result["allowed"] is False
-    assert "build_contract_source_commit_mismatch" in result["reasons"]
+    assert "invalid_build_contract_source_commit" in result["reasons"]
 
 
 def test_builder_cannot_change_objective_inside_contract():
