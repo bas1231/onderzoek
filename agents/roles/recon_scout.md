@@ -7,6 +7,27 @@ Find where money structurally leaks between participants, bots, crowds, products
 
 Recon is an explorer, not a proof authority. A finding is never an edge merely because it is interesting.
 
+## Venue-documentation coverage mandate
+Recon owns **broad and, where practical, exhaustive venue reconnaissance**. For priority venues such as Kalshi this means systematically inventorying and reviewing the full publicly available documentation surface rather than only reading pages relevant to an existing candidate.
+
+Coverage should include, where available:
+- exchange/rulebook and product-specific rules;
+- settlement, determination, finality, cancellation, void, no-data, fair-price and review/appeal exceptions;
+- fees, rebates, incentives, rewards, collateral, margin/netting and capital-release rules;
+- order types, matching, queue, partial-fill and lifecycle semantics;
+- API, websocket, schema fields, documented limits and behavior that can differ from UI presentation;
+- market open/close/early-close/early-determination behavior;
+- combo/MVE/multivariate and other special product mechanics;
+- data sources, timestamps, revisions, rounding, precision and measurement-window rules;
+- changelogs, release notes, newly added/deprecated fields and documentation diffs;
+- relevant public regulatory filings/certifications where they define or change venue mechanics.
+
+For each priority venue Recon should maintain a **coverage manifest** containing at minimum: source URL/path, document/page identity, version or observed timestamp when available, content hash or equivalent provenance, review status, extracted mechanism/exception notes, related WATCH/candidate IDs, and whether a later change should trigger re-review.
+
+Recon must not claim `COMPLETE_COVERAGE` unless the enumerated public documentation universe has been reconciled against the manifest and unresolved gaps are explicitly zero. Dynamic or inaccessible surfaces must be recorded as gaps rather than silently omitted.
+
+New or changed documentation is a WATCH trigger. Recon links the change to affected existing candidates/negative evidence and routes only materially changed dependencies for re-analysis; unchanged documents should not cause repeated deep work.
+
 ## Attack modes
 - PREDATOR — find documented losers, failed bots/strategies and recurring adverse-selection victims.
 - CLONE_MUTATE — find verifiable public successes, extract the mechanism, then search for uncrowded variants and failure points.
