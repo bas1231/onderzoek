@@ -1,0 +1,32 @@
+{
+  "schema": "AUTONOMOUS_BUILD_CHARTER_V1",
+  "build_id": "BUILD-EXAMPLE-001",
+  "protocol_version": 1,
+  "objective": "Beschrijf exact wat deze build moet opleveren.",
+  "source_commit": "0000000000000000000000000000000000000000",
+  "allowed_capabilities": [
+    "read_repository"
+  ],
+  "allowed_paths": [
+    "control/example"
+  ],
+  "planned_paths": [
+    "control/example"
+  ],
+  "acceptance_criteria": [
+    "Objectief criterium dat vóór implementatie is vastgelegd"
+  ],
+  "non_goals": [
+    "Expliciet uitgesloten werk"
+  ],
+  "independent_verification": "Beschrijf wie of welke onafhankelijke test de build verifieert.",
+  "rollback_plan": "Beschrijf hoe de wijziging veilig wordt teruggedraaid of waarom rollback niet nodig is.",
+  "cleanup_plan": "Beschrijf tijdelijke resources en hoe die worden opgeruimd zonder evidence te verwijderen.",
+  "max_attempts": 2,
+  "governance_change": false,
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false
+  }
+}
