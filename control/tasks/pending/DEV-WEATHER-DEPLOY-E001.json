@@ -1,0 +1,79 @@
+{
+  "task_id": "DEV-WEATHER-DEPLOY-E001",
+  "hypothesis_id": "CONTROL-WEATHER-PUBLIC-RACE-DEPLOY",
+  "task_class": "infrastructure",
+  "operation": "python",
+  "working_directory": ".",
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/deploy_weather_public_race_e001.py"
+  ],
+  "timeout_seconds": 900,
+  "live_trading": false,
+  "build_authorization": {
+    "mode": "control_plane",
+    "build_kind": "control_plane",
+    "objective": "Deploy and validate the bounded read-only public weather source-race collector on the Strix",
+    "capabilities": [
+      "read_repository",
+      "read_git",
+      "run_tests",
+      "inspect_status",
+      "git_remote_fetch",
+      "network_public_http",
+      "write_runtime_state",
+      "manage_user_service"
+    ],
+    "build_contract": {
+      "build_id": "BUILD-WEATHER-PUBLIC-RACE-E001",
+      "protocol_version": 1,
+      "objective": "Deploy and validate the bounded read-only public weather source-race collector on the Strix",
+      "source_commit": "bbd36c6cd38c1dcb6818b162c46df99134609ddc",
+      "allowed_capabilities": [
+        "read_repository",
+        "read_git",
+        "run_tests",
+        "inspect_status",
+        "git_remote_fetch",
+        "network_public_http",
+        "write_runtime_state",
+        "manage_user_service"
+      ],
+      "allowed_paths": [
+        "control/tasks",
+        "control/results/DEV-WEATHER-DEPLOY-E001",
+        "evidence/weather"
+      ],
+      "planned_paths": [
+        "control/tasks",
+        "control/results/DEV-WEATHER-DEPLOY-E001"
+      ],
+      "acceptance_criteria": [
+        "Weather branch fetch resolves exactly to commit 81c0e37b56f38fbf589706560a043579a9e47c5d",
+        "Offline technical and adversarial validation passes",
+        "Prospective public-source smoke validation passes",
+        "prediction-weather-public-metar-race.service is active and enabled",
+        "prediction-weather-public-metar-analysis.timer is enabled",
+        "Final analyzer exits successfully",
+        "No live trading, paid action or wallet action occurs"
+      ],
+      "non_goals": [
+        "No order submission or cancellation",
+        "No wallet or fund movement",
+        "No paid API use",
+        "No credential writes",
+        "No claim of economic edge from successful deployment"
+      ],
+      "independent_verification": "The deployment task runs the separate three-gate validator and then independently checks systemd active/enabled state and a final analyzer run.",
+      "rollback_plan": "Disable prediction-weather-public-metar-race.service and prediction-weather-public-metar-analysis.timer; the detached pinned worktree and immutable captured evidence remain available for audit.",
+      "cleanup_plan": "Retain the pinned worktree while the service references it; remove only superseded temporary worktrees after a later explicitly governed deployment.",
+      "max_attempts": 2,
+      "governance_change": false,
+      "safety": {
+        "live_trading": false,
+        "paid_actions": false,
+        "wallet_actions": false
+      }
+    }
+  }
+}
