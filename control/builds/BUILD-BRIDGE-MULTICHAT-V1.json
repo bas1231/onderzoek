@@ -1,0 +1,59 @@
+{
+  "schema": "AUTONOMOUS_BUILD_CHARTER_V1",
+  "build_id": "BUILD-BRIDGE-MULTICHAT-V1",
+  "protocol_version": 1,
+  "objective": "Maak de lokale Prediction browser bridge veilig bruikbaar vanuit twee of meer ChatGPT-chats tegelijk zonder result-routing tussen chats te verwisselen en zonder een reeds lopende sessie te onderbreken tijdens de bouw.",
+  "source_commit": "258926820b88585c7625ba9726e33d16cc28e6b1",
+  "allowed_capabilities": [
+    "read_repository",
+    "write_repository",
+    "run_tests",
+    "compile"
+  ],
+  "allowed_paths": [
+    "control/browser_bridge.py",
+    "control/browser_bridge_core.py",
+    "control/browser_extension",
+    "control/builds/BUILD-BRIDGE-MULTICHAT-V1.json",
+    "tests/bridge"
+  ],
+  "planned_paths": [
+    "control/browser_bridge.py",
+    "control/browser_bridge_core.py",
+    "control/browser_extension/background.js",
+    "control/browser_extension/content.js",
+    "control/browser_extension/ai_response_capture.js",
+    "control/browser_extension/popup.js",
+    "control/browser_extension/popup.html",
+    "control/builds/BUILD-BRIDGE-MULTICHAT-V1.json",
+    "tests/bridge/test_multichat_routing.py",
+    "tests/bridge/test_multichat_extension_contract.py"
+  ],
+  "acceptance_criteria": [
+    "Twee verschillende chat-clients kunnen taken aanmelden terwijl resultaten alleen naar de oorspronkelijke chat-client worden aangeboden.",
+    "Een client kan een taak van een andere client niet ACKen.",
+    "AI-work wordt per item aan één chat-client geleased zodat twee chats hetzelfde work bundle niet tegelijk krijgen.",
+    "Bestaande clients zonder client-id blijven backward-compatible.",
+    "Project auto-arm blijft werken en meerdere exacte chats kunnen tegelijk armed zijn.",
+    "Bestaande bridge/hourly regressietests en JavaScript syntax blijven groen.",
+    "Geen live trading, paid actions of wallet actions worden toegevoegd.",
+    "De wijziging kan op een branch worden gebouwd terwijl de huidige bridge-runtime op de bestaande commit blijft draaien; activatie vereist pas na merge een normale runtime/extension reload."
+  ],
+  "non_goals": [
+    "Geen parallelle muterende executor-jobs in dezelfde working tree.",
+    "Geen live trading of venue-write endpoints.",
+    "Geen vervanging van Git als canonical audit trail.",
+    "Geen onbeperkte auto-arming van alle ChatGPT-tabs buiten expliciet armed chats/projecten."
+  ],
+  "independent_verification": "GitHub Actions voert de volledige tests/bridge en tests/hourly regressie plus JavaScript syntax uit; routing krijgt aparte negatieve tests voor cross-chat delivery en ACK.",
+  "rollback_plan": "PR niet mergen bij failure; na merge kan de mergecommit worden gerevert. De oude runtime blijft tot reload in geheugen actief.",
+  "cleanup_plan": "Geen tijdelijke services. Alleen de feature branch/PR en permanente tests/code; geen runtime evidence verwijderen.",
+  "max_attempts": 3,
+  "governance_change": false,
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false
+  },
+  "status": "DEFINED"
+}
