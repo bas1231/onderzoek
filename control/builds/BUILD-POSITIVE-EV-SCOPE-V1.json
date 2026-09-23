@@ -1,0 +1,47 @@
+{
+  "schema": "AUTONOMOUS_BUILD_CHARTER_V1",
+  "build_id": "BUILD-POSITIVE-EV-SCOPE-V1",
+  "protocol_version": 1,
+  "objective": "Maak expliciet dat iedere aantoonbare netto positieve EV-kans onderzoekswaardig is, ongeacht absolute winst per episode of per dag, en dat EUR 100 per dag alleen een later schaaldoel is en nooit een candidate-admission- of kill-threshold.",
+  "source_commit": "3121e45ff553a7e8305c28988dc25e14a5018de3",
+  "allowed_capabilities": [
+    "read_repository",
+    "write_methodology",
+    "write_scheduled_worker_contract"
+  ],
+  "allowed_paths": [
+    "methodology/RESEARCH_PROTOCOL.md",
+    "methodology/EXECUTION_FIRST_DISCOVERY.md",
+    "control/hourly/scheduled_worker_contract.json",
+    "control/builds/BUILD-POSITIVE-EV-SCOPE-V1.json"
+  ],
+  "planned_paths": [
+    "methodology/RESEARCH_PROTOCOL.md",
+    "methodology/EXECUTION_FIRST_DISCOVERY.md",
+    "control/hourly/scheduled_worker_contract.json"
+  ],
+  "acceptance_criteria": [
+    "Geen minimum dagwinst of minimum absolute dollarwinst wordt als toelatingsdrempel gebruikt voor research.",
+    "Een kandidaat met conservatief aantoonbare netto EV > 0 blijft onderzoekswaardig, ook bij slechts centen per episode.",
+    "Capacity, frequentie, capital lock en dagwinst worden ranking- en schaalvariabelen, niet automatische kill-gates.",
+    "EUR 100 per dag wordt expliciet als uiteindelijke portfolio-schaalambitie behandeld, niet als eis voor een individuele edge.",
+    "Kleine onafhankelijke positieve edges mogen als portfolio worden gecombineerd.",
+    "Bestaande bewijsstandaard, NO_PROVEN_EDGE-default, legaliteit en live-tradinggrenzen blijven ongewijzigd."
+  ],
+  "non_goals": [
+    "Een edge bewezen verklaren zonder bestaande evidence-gates.",
+    "Live trading autoriseren.",
+    "Fees, risk, fillability, latency, capital lock of settlementrisico negeren.",
+    "Bestaande negatieve evidence wissen of testdrempels versoepelen."
+  ],
+  "independent_verification": "Na implementatie worden de drie gewijzigde bestanden opnieuw gelezen en gecontroleerd op consistente policytekst en geldige JSON voor het worker contract.",
+  "rollback_plan": "Herstel de drie gewijzigde bestanden naar hun pre-build blobversies als de policy inconsistent blijkt of bestaande safety/evidence-gates verzwakt.",
+  "cleanup_plan": "Geen tijdelijke resources; het build charter blijft als audit trail behouden.",
+  "max_attempts": 2,
+  "governance_change": true,
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false
+  }
+}
