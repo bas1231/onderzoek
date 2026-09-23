@@ -1,0 +1,1771 @@
+{
+  "candidate_queue": {
+    "director_attention": [
+      {
+        "active_experiment_ids": [],
+        "age_hours": 79.301,
+        "candidate_id": "PAYOFF-IDENTITY-MINING-V1",
+        "effective_priority_rank": 1,
+        "next_decisive_test": "Find one concrete contract pair with primary-rule statewise payout semantics, then compare synchronized executable L2 only after formal equivalence/dominance proof.",
+        "open_question": null,
+        "phase": "DISCOVERED",
+        "priority": "P2",
+        "queue_status": "NEEDS_DIRECTOR",
+        "source_ref": "knowledge/candidates/PAYOFF-IDENTITY-MINING-V1.json"
+      }
+    ],
+    "full_queue": [
+      {
+        "active_experiment_ids": [],
+        "age_hours": 79.301,
+        "candidate_id": "KWI-INCOMPLETE-TO-CANONICAL-V1",
+        "effective_priority_rank": 1,
+        "next_decisive_test": "Do not retune the rejected simple incomplete mean on the same development data; only genuinely preregistered orthogonal mechanisms or new holdout evidence can reopen it.",
+        "open_question": null,
+        "phase": "DISCOVERED",
+        "priority": "P2",
+        "queue_status": "PARKED",
+        "source_ref": "knowledge/candidates/KWI-INCOMPLETE-TO-CANONICAL-V1.json"
+      },
+      {
+        "active_experiment_ids": [],
+        "age_hours": 79.301,
+        "candidate_id": "PAYOFF-IDENTITY-MINING-V1",
+        "effective_priority_rank": 1,
+        "next_decisive_test": "Find one concrete contract pair with primary-rule statewise payout semantics, then compare synchronized executable L2 only after formal equivalence/dominance proof.",
+        "open_question": null,
+        "phase": "DISCOVERED",
+        "priority": "P2",
+        "queue_status": "NEEDS_DIRECTOR",
+        "source_ref": "knowledge/candidates/PAYOFF-IDENTITY-MINING-V1.json"
+      },
+      {
+        "active_experiment_ids": [],
+        "age_hours": 77.833,
+        "candidate_id": "ASSET-RANK-MAKER-HEDGE-V1",
+        "effective_priority_rank": 1,
+        "next_decisive_test": "Continue preregistered prospective conservative fill monitoring; only a proven full passive fill may trigger synchronized first-executable hedge economics.",
+        "open_question": null,
+        "phase": "MECHANISM_DEFINED",
+        "priority": "P1",
+        "queue_status": "RUNNING",
+        "source_ref": "knowledge/candidates/ASSET-RANK-MAKER-HEDGE-V1.json"
+      },
+      {
+        "active_experiment_ids": [],
+        "age_hours": 64.47,
+        "candidate_id": "KWI-FULL-STATION-PRECANONICAL-V1",
+        "effective_priority_rank": 1,
+        "next_decisive_test": "Await and evaluate post-cutoff cases under the preregistered 24h full-station protocol; discovery rows cannot count as validation.",
+        "open_question": null,
+        "phase": "MECHANISM_DEFINED",
+        "priority": "P1",
+        "queue_status": "WAITING_FOR_RESULT",
+        "source_ref": "knowledge/candidates/KWI-FULL-STATION-PRECANONICAL-V1.json"
+      }
+    ],
+    "waiting_without_blocking": [
+      {
+        "active_experiment_ids": [],
+        "age_hours": 77.833,
+        "candidate_id": "ASSET-RANK-MAKER-HEDGE-V1",
+        "effective_priority_rank": 1,
+        "next_decisive_test": "Continue preregistered prospective conservative fill monitoring; only a proven full passive fill may trigger synchronized first-executable hedge economics.",
+        "open_question": null,
+        "phase": "MECHANISM_DEFINED",
+        "priority": "P1",
+        "queue_status": "RUNNING",
+        "source_ref": "knowledge/candidates/ASSET-RANK-MAKER-HEDGE-V1.json"
+      },
+      {
+        "active_experiment_ids": [],
+        "age_hours": 64.47,
+        "candidate_id": "KWI-FULL-STATION-PRECANONICAL-V1",
+        "effective_priority_rank": 1,
+        "next_decisive_test": "Await and evaluate post-cutoff cases under the preregistered 24h full-station protocol; discovery rows cannot count as validation.",
+        "open_question": null,
+        "phase": "MECHANISM_DEFINED",
+        "priority": "P1",
+        "queue_status": "WAITING_FOR_RESULT",
+        "source_ref": "knowledge/candidates/KWI-FULL-STATION-PRECANONICAL-V1.json"
+      }
+    ]
+  },
+  "created_at": "2026-09-23T08:00:17.532325+00:00",
+  "director_instruction": "Operate the E007 six-domain Research OS. Evaluate every bundled ready role exactly once. Legacy specialist names inside capability_work are capabilities, not extra agents. Keep Discovery primary_scout and recon_scout findings/provenance separate before synthesis. Market Research must keep weather/TWC, behavioral and informed-flow evidence labelled by capability. Mechanics must separate settlement/finality from executable microstructure. Red Team/Pentest must use QUICK_KILL for cheap early falsification and DEEP_FALSIFICATION only where red_team_modes requests it. The transient Independent Reproducer is blind: do not infer or reconstruct withheld originating conclusions; reproduce from the supplied interface and independent evidence. Preserve negative evidence and cite failure-pattern IDs FP-001..FP-036 when applicable. Every validation_results item must contain status=PASS|FAIL|INCONCLUSIVE|WAITING; mode may be QUICK_KILL, DEEP_FALSIFICATION or REPRODUCTION. Never use result in place of the required status field. Do not invent missing evidence. AI may schedule, wait, revise or park bundled candidates but may not close-negative or promote them. Return exactly schema PVA_AI_RESPONSE_V1 and echo response_token. Include capability_results for consolidated domains and validation_results for Red Team/Reproducer when applicable. NO_PROVEN_EDGE is valid. Never authorize live trading, paid actions, wallet actions or paid OpenAI API use.",
+  "expected_response_schema": {
+    "candidate_decisions": [
+      {
+        "candidate_id": "string",
+        "next_decisive_test": "string|null",
+        "queue_status": "NEEDS_DIRECTOR|EXPERIMENT_REQUIRED|RUNNING|WAITING_FOR_DATA|WAITING_FOR_RESULT|RESULT_READY|NEEDS_REVISION|PARKED",
+        "reason": "string",
+        "resurrection_condition": "string|null"
+      }
+    ],
+    "director_decision": "string",
+    "economic_conclusion": "NO_PROVEN_EDGE",
+    "live_trading": false,
+    "local_tasks": [],
+    "openai_api": false,
+    "paid_actions": false,
+    "response_token": "7f7d4fa8ec02eabdaea63ff35c7a9386d00e24ed65aa6bea85ab5fb9405fc572",
+    "role_results": [
+      {
+        "agent_id": "discovery|market_research|mechanics|algebra|red_team_pentest|independent_reproducer|research_director",
+        "candidate_ids": [
+          "string"
+        ],
+        "capability_results": {},
+        "evidence_refs": [
+          "string"
+        ],
+        "failure_pattern_ids": [
+          "FP-xxx"
+        ],
+        "finding": "string|null",
+        "local_task_required": false,
+        "local_task_spec": null,
+        "next_decisive_question": "string|null",
+        "status": "COMPLETED|NO_EVIDENCE|FALSIFIED|WAITING_FOR_DATA|WAITING_FOR_RESULT|RESULT_READY|PARKED",
+        "validation_results": [
+          {
+            "candidate_id": "string|null",
+            "mode": "QUICK_KILL|DEEP_FALSIFICATION|REPRODUCTION|null",
+            "status": "PASS|FAIL|INCONCLUSIVE|WAITING"
+          }
+        ]
+      }
+    ],
+    "run_id": "hourly-20260923T100000+0200",
+    "schema": "PVA_AI_RESPONSE_V1",
+    "wallet_actions": false
+  },
+  "governor": {
+    "ai_candidate_kill_authority": false,
+    "ai_candidate_promotion_authority": false,
+    "economic_conclusion": "NO_PROVEN_EDGE",
+    "live_trading": false,
+    "openai_api": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "watch_has_no_promotion_authority": true,
+    "watch_is_not_hunt": true
+  },
+  "request_sha256": "7c3ef12c241456df19063afa636e4e53e20071b3e38c497d517d736475b3abc0",
+  "response_token": "7f7d4fa8ec02eabdaea63ff35c7a9386d00e24ed65aa6bea85ab5fb9405fc572",
+  "run_id": "hourly-20260923T100000+0200",
+  "schema": "PVA_AI_EXCHANGE_REQUEST_V1",
+  "source_commit": "88dae852b01373e3ea3b1819fc7ffa27844b6242",
+  "transport": {
+    "browser_bridge_required": false,
+    "preferred_transport": "git",
+    "response_branch": "ai/runtime-exchange",
+    "response_path": "ai_exchange/responses/hourly-20260923T100000+0200.json",
+    "transport_neutral": true
+  },
+  "work_items": [
+    {
+      "agent_id": "discovery",
+      "capability_mode": "DISCOVERY",
+      "legacy_role": "discovery",
+      "must_return_result": true,
+      "objective": null,
+      "packet": {
+        "agent_id": "discovery",
+        "blind": false,
+        "blind_reproduction_interface": [],
+        "candidate_ids": [
+          "KWI-FULL-STATION-PRECANONICAL-V1"
+        ],
+        "candidate_routing": [
+          {
+            "candidate_id": "KWI-FULL-STATION-PRECANONICAL-V1",
+            "capability": "recon_scout",
+            "domain_role": "discovery",
+            "next_decisive_test": "Await and evaluate post-cutoff cases under the preregistered 24h full-station protocol; discovery rows cannot count as validation.",
+            "open_question": null,
+            "phase": "MECHANISM_DEFINED",
+            "queue_status": "WAITING_FOR_RESULT",
+            "reasons": [
+              "unresolved step is explicit recon/discovery"
+            ],
+            "source_ref": "knowledge/candidates/KWI-FULL-STATION-PRECANONICAL-V1.json"
+          },
+          {
+            "candidate_id": "KWI-FULL-STATION-PRECANONICAL-V1",
+            "capability": "scout",
+            "domain_role": "discovery",
+            "next_decisive_test": "Await and evaluate post-cutoff cases under the preregistered 24h full-station protocol; discovery rows cannot count as validation.",
+            "open_question": null,
+            "phase": "MECHANISM_DEFINED",
+            "queue_status": "WAITING_FOR_RESULT",
+            "reasons": [
+              "unresolved step is explicit discovery"
+            ],
+            "source_ref": "knowledge/candidates/KWI-FULL-STATION-PRECANONICAL-V1.json"
+          }
+        ],
+        "capability_work": {
+          "recon_scout": {
+            "candidate_ids": [
+              "KWI-FULL-STATION-PRECANONICAL-V1"
+            ],
+            "candidate_routing": [
+              {
+                "candidate_id": "KWI-FULL-STATION-PRECANONICAL-V1",
+                "capability": "recon_scout",
+                "next_decisive_test": "Await and evaluate post-cutoff cases under the preregistered 24h full-station protocol; discovery rows cannot count as validation.",
+                "open_question": null,
+                "phase": "MECHANISM_DEFINED",
+                "queue_status": "WAITING_FOR_RESULT",
+                "reasons": [
+                  "unresolved step is explicit recon/discovery"
+                ],
+                "source_ref": "knowledge/candidates/KWI-FULL-STATION-PRECANONICAL-V1.json"
+              }
+            ],
+            "coverage_gaps": [
+              "Hourly registry is a bounded source universe; deep web/GitHub/community discovery remains a Research Director/Recon search task until a lawful free collector is registered."
+            ],
+            "routed_evidence": [
+              {
+                "capability": "recon_scout",
+                "document_sha256": "d7ed6c1e9723edcceae8a3d3f258a7ca991bd64f841fad43632caa13a7fad746",
+                "retrieved_at": "2026-09-19T20:59:24.827234+00:00",
+                "snippet": "re ; Multiagent Systems ; Multimedia ; Networking and Internet Architecture ; Neural and Evolutionary Computing ; Numerical Analysis ; Operating Systems ; Other Computer Science ; Performance ; Programming Languages ; Robotics ; Social and Information Networks ; Software Engineering ; Sound ; Symbolic Computation ; Systems and Control Quantitative Biology Quantitative Biology ( q-bio new , recent , search ) includes: (see detailed description ): Biomolecules ; Cell Behavior ; Genomics ; Molecular Networks ; Neurons and Cognition ; Other Quantitative Biology ; Populations and Evolution ; Quantitative Methods ; Subcellular Processes ; Tissues and Organs Quantitative Finance Quantitative Finance ( q-fin new , recent , search ) includ",
+                "source_id": "arxiv",
+                "source_state": "UNCHANGED",
+                "term": "bot"
+              },
+              {
+                "capability": "recon_scout",
+                "document_sha256": "cb2d9d73d70ff17bf70f803e04aec043ec7caae58f9731f88d16146a016b0457",
+                "retrieved_at": "2026-09-23T08:00:16.097018+00:00",
+                "snippet": "reviewed online. Policy and Notices Privacy Policy Web Policy FOIA EEO No FEAR Act Accessibility Statement Whistleblower Protection Enhancement Act Resources CFTC Regulations Commodity Exchange Act Procurement USA.gov Glossary Actions Search Public Comments Submit Tips & Complaints Search Industry Filings Whistleblower.gov Inspector General Sitemap CFTC Headquarters Three Lafayette Centre 1155 21st Street, NW Washington, DC 20581 202.418.5000",
+                "source_id": "cftc",
+                "source_state": "CHANGED",
+                "term": "loss"
+              },
+              {
+                "capability": "recon_scout",
+                "document_sha256": "db3ecbbf2aedc92b2c4902fdaeb4ae518cabf847ef25ad61ad48c2804fb4897f",
+                "retrieved_at": "2026-09-23T03:00:16.954800+00:00",
+                "snippet": "your API credentials. Kalshi Academy New to prediction markets? Explore educational resources and tutorials. Reference Rate Limits Token budgets, tiers, and bursting. Changelog Stay updated with the latest API changes. Glossary Key terms and concepts used across the exchange. Specifications Predictions REST Download openapi.yaml for event-contract REST API integration. Predictions WebSocket Download asyncapi.yaml for event-contract WebSocket integration. Perps REST Download perps_openapi.yaml for perpetual futures REST API integration. Perps WebSocket Download perps_asyncapi.yaml for perpetual futures WebSocket integration.",
+                "source_id": "kalshi_docs",
+                "source_state": "UNCHANGED",
+                "term": "loss"
+              },
+              {
+                "capability": "recon_scout",
+                "document_sha256": "92da6ddc75d01480400ae4b9c69f24e2a4c43d940d41024e756b57426f2683dd",
+                "retrieved_at": "2026-09-23T08:00:17.353617+00:00",
+                "snippet": "amounts in specific cities, from New York City to Los Angeles. Traders can take positions on whether a city will reach a certain high temperature or fall within a particular range. Each weather market names its official settlement source in its market rules. Daily high/low temperature markets settle based on the final climate report issued by the National Weather Service (NWS), typically released the following morning. Hourly temperature markets settle on readings from The Weather Company . Always check the specific market’s rules for its source. How Do I Trade on Weather Markets? Kalshi creates a prediction market around a specific temperature threshold for a given location. For example: “Highest temperature in Chicago on April 1",
+                "source_id": "kalshi_weather_rules",
+                "source_state": "CHANGED",
+                "term": "settlement"
+              },
+              {
+                "capability": "recon_scout",
+                "document_sha256": "e60f2357eaca0914dea07f1ec9a4f64c01924245e6a8b1882afcbbe9cb9b665b",
+                "retrieved_at": "2026-09-22T20:14:47.716827+00:00",
+                "snippet": "oks Analytics Real-Time Data Chainlink TWAP Prices Trading Overview Place Your First Order Wallets and Authentication Session Keys Beta Place Orders Manage Orders Real-Time Order Updates Positions Combos Wallet Activity Fees Market Making Matching Engine Restarts Bridge Programs Taker Rebate Program Maker Rebates Program Liquidity Rewards Builder Program Referral Program Resources Contracts Data Resources Error Codes 🇺🇸 Looking for Polymarket US documentation? Visit US Docs → Polymarket Documentation Build on the world’s largest prediction market. APIs, SDKs, and tools for prediction market developers. Developer Quickstart Make your first API request in minutes. Learn the basics of the Polymarket platform, fetch market data, place",
+                "source_id": "polymarket_docs",
+                "source_state": "UNCHANGED",
+                "term": "fee"
+              }
+            ],
+            "routing_status": "EVIDENCE_ROUTED"
+          },
+          "scout": {
+            "candidate_ids": [
+              "KWI-FULL-STATION-PRECANONICAL-V1"
+            ],
+            "candidate_routing": [
+              {
+                "candidate_id": "KWI-FULL-STATION-PRECANONICAL-V1",
+                "capability": "scout",
+                "next_decisive_test": "Await and evaluate post-cutoff cases under the preregistered 24h full-station protocol; discovery rows cannot count as validation.",
+                "open_question": null,
+                "phase": "MECHANISM_DEFINED",
+                "queue_status": "WAITING_FOR_RESULT",
+                "reasons": [
+                  "unresolved step is explicit discovery"
+                ],
+                "source_ref": "knowledge/candidates/KWI-FULL-STATION-PRECANONICAL-V1.json"
+              }
+            ],
+            "coverage_gaps": [],
+            "recon_watch_triage": [
+              {
+                "attack_mode": "FRONTIER_RAIDER",
+                "candidate_key": "CAND-21d39551c9a2ed59",
+                "capability": "scout",
+                "claim": "Public evidence contains a context-supported Recon signal; mechanism is unproven.",
+                "execution_gate": {
+                  "economic_conclusion": "NO_PROVEN_EDGE",
+                  "live_trading": false,
+                  "paid_actions": false,
+                  "research_only": true,
+                  "wallet_actions": false
+                },
+                "finding_id": "RECON-d838b2e925d20194",
+                "next_decisive_test": "Establish mechanism, base rate, point-in-time predictiveness and net executable economics.",
+                "promotion_authority": false,
+                "public_trigger": "changelog",
+                "snippet": "your API credentials. Kalshi Academy New to prediction markets? Explore educational resources and tutorials. Reference Rate Limits Token budgets, tiers, and bursting. Changelog Stay updated with the latest API changes. Glossary Key terms and concepts used across the exchange. Specifications Predictions REST Download openapi.yaml for event-contract REST API integration. Predictions WebSocket Download asyncapi.yaml for event-contract WebSocket integration. Perps REST Download perps_openapi.yaml for perpetual futures REST API integration. Perps WebSocket Download perps_asyncapi.yaml for perpetual futures WebSocket integration.",
+                "source_ids": [
+                  "kalshi_docs"
+                ],
+                "status": "WATCH",
+                "triage_only": true
+              }
+            ],
+            "routed_evidence": [
+              {
+                "capability": "scout",
+                "document_sha256": "cb2d9d73d70ff17bf70f803e04aec043ec7caae58f9731f88d16146a016b0457",
+                "retrieved_at": "2026-09-23T08:00:16.097018+00:00",
+                "snippet": "ments of Traders Bank Participation Reports Cotton On-Call Financial Data for FCMS Staff Reports Weekly Swaps Report Cleared Margin Reports Office of the Chief Economist Forms & Submissions Learn & Protect Understanding Prediction Markets and Event Contracts Check Registration & Disciplinary History Submit a Tip or Complaint RED List Office of Proceedings Learning Resources News & Events Press Releases Public Statements & Remarks Events Carousel Rotation On On CFTC and Kansas State University to Host AgCon October 22-23 CFTC Grants Multiple Whistleblower Awards CFTC Issues Advisory on Self-Certifying Incentive Programs for Prediction Markets CFTC Approves Final Rule Concerning Whistleblower Awards Holding Wrongdoers Accountable Wh",
+                "source_id": "cftc",
+                "source_state": "CHANGED",
+                "term": "prediction market"
+              },
+              {
+                "capability": "scout",
+                "document_sha256": "db3ecbbf2aedc92b2c4902fdaeb4ae518cabf847ef25ad61ad48c2804fb4897f",
+                "retrieved_at": "2026-09-23T03:00:16.954800+00:00",
+                "snippet": "king Your First Request Make your first API call and start trading on Kalshi. Demo Environment Build and test safely against the demo environment. API Keys Generate and manage your API credentials. Kalshi Academy New to prediction markets? Explore educational resources and tutorials. Reference Rate Limits Token budgets, tiers, and bursting. Changelog Stay updated with the latest API changes. Glossary Key terms and concepts used across the exchange. Specifications Predictions REST Download openapi.yaml for event-contract REST API integration. Predictions WebSocket Download asyncapi.yaml for event-contract WebSocket integration. Perps REST Download perps_openapi.yaml for perpetual futures REST API integration. Perps WebSocket Downlo",
+                "source_id": "kalshi_docs",
+                "source_state": "UNCHANGED",
+                "term": "prediction market"
+              },
+              {
+                "capability": "scout",
+                "document_sha256": "92da6ddc75d01480400ae4b9c69f24e2a4c43d940d41024e756b57426f2683dd",
+                "retrieved_at": "2026-09-23T08:00:17.353617+00:00",
+                "snippet": "cally released the following morning. Hourly temperature markets settle on readings from The Weather Company . Always check the specific market’s rules for its source. How Do I Trade on Weather Markets? Kalshi creates a prediction market around a specific temperature threshold for a given location. For example: “Highest temperature in Chicago on April 15, 2025?” ​ Contract prices for temperature ranges may shift as new weather data (e.g., forecasts, model runs, satellite images, observations) becomes available. Note: Not all weather data is the same. Apps like AccuWeather, iOS Weather, or Google Weather may be useful for guidance but do not determine contract outcomes. The only source used for settlement is the one named in the ma",
+                "source_id": "kalshi_weather_rules",
+                "source_state": "CHANGED",
+                "term": "prediction market"
+              },
+              {
+                "capability": "scout",
+                "document_sha256": "e60f2357eaca0914dea07f1ec9a4f64c01924245e6a8b1882afcbbe9cb9b665b",
+                "retrieved_at": "2026-09-22T20:14:47.716827+00:00",
+                "snippet": "Program Liquidity Rewards Builder Program Referral Program Resources Contracts Data Resources Error Codes 🇺🇸 Looking for Polymarket US documentation? Visit US Docs → Polymarket Documentation Build on the world’s largest prediction market. APIs, SDKs, and tools for prediction market developers. Developer Quickstart Make your first API request in minutes. Learn the basics of the Polymarket platform, fetch market data, place orders, and redeem winning positions. Place Your First Order → TypeScript Python API import { createPublicClient } from \"@polymarket/client\" ; const client = createPublicClient (); const pages = client . listMarkets ({ closed: false }); const { items : markets } = await pages . firstPage (); from polymarket impor",
+                "source_id": "polymarket_docs",
+                "source_state": "UNCHANGED",
+                "term": "prediction market"
+              }
+            ],
+            "routing_status": "EVIDENCE_ROUTED"
+          }
+        },
+        "contract": {
+          "agent": "discovery",
+          "authority": "DISCOVERY_ONLY",
+          "capabilities": [
+            "scout",
+            "recon_scout"
+          ],
+          "live_trading": false,
+          "openai_api": false,
+          "output": [
+            "new_evidence",
+            "watch_triage",
+            "candidate_proposals",
+            "negative_evidence",
+            "next_decisive_question"
+          ],
+          "paid_actions": false,
+          "protected_lanes": {
+            "primary_scout": "Broad public evidence, venues, papers, code and anomaly discovery",
+            "recon_scout": "Independent offensive economic reconnaissance, failures, weak mechanisms and counter-crowd signals"
+          },
+          "requirements": [
+            "Keep primary_scout and recon_scout provenance separate",
+            "Do not promote WATCH to HUNT without Director/gate logic",
+            "Preserve null results and negative evidence"
+          ],
+          "wallet_actions": false
+        },
+        "coverage_gaps": [
+          "Hourly registry is a bounded source universe; deep web/GitHub/community discovery remains a Research Director/Recon search task until a lawful free collector is registered."
+        ],
+        "coverage_gaps_by_capability": {
+          "recon_scout": [
+            "Hourly registry is a bounded source universe; deep web/GitHub/community discovery remains a Research Director/Recon search task until a lawful free collector is registered."
+          ],
+          "scout": []
+        },
+        "discovery_lanes": {
+          "primary_scout": {
+            "capability": "scout",
+            "coverage_gaps": [],
+            "routed_evidence": [
+              {
+                "capability": "scout",
+                "document_sha256": "cb2d9d73d70ff17bf70f803e04aec043ec7caae58f9731f88d16146a016b0457",
+                "retrieved_at": "2026-09-23T08:00:16.097018+00:00",
+                "snippet": "ments of Traders Bank Participation Reports Cotton On-Call Financial Data for FCMS Staff Reports Weekly Swaps Report Cleared Margin Reports Office of the Chief Economist Forms & Submissions Learn & Protect Understanding Prediction Markets and Event Contracts Check Registration & Disciplinary History Submit a Tip or Complaint RED List Office of Proceedings Learning Resources News & Events Press Releases Public Statements & Remarks Events Carousel Rotation On On CFTC and Kansas State University to Host AgCon October 22-23 CFTC Grants Multiple Whistleblower Awards CFTC Issues Advisory on Self-Certifying Incentive Programs for Prediction Markets CFTC Approves Final Rule Concerning Whistleblower Awards Holding Wrongdoers Accountable Wh",
+                "source_id": "cftc",
+                "source_state": "CHANGED",
+                "term": "prediction market"
+              },
+              {
+                "capability": "scout",
+                "document_sha256": "db3ecbbf2aedc92b2c4902fdaeb4ae518cabf847ef25ad61ad48c2804fb4897f",
+                "retrieved_at": "2026-09-23T03:00:16.954800+00:00",
+                "snippet": "king Your First Request Make your first API call and start trading on Kalshi. Demo Environment Build and test safely against the demo environment. API Keys Generate and manage your API credentials. Kalshi Academy New to prediction markets? Explore educational resources and tutorials. Reference Rate Limits Token budgets, tiers, and bursting. Changelog Stay updated with the latest API changes. Glossary Key terms and concepts used across the exchange. Specifications Predictions REST Download openapi.yaml for event-contract REST API integration. Predictions WebSocket Download asyncapi.yaml for event-contract WebSocket integration. Perps REST Download perps_openapi.yaml for perpetual futures REST API integration. Perps WebSocket Downlo",
+                "source_id": "kalshi_docs",
+                "source_state": "UNCHANGED",
+                "term": "prediction market"
+              },
+              {
+                "capability": "scout",
+                "document_sha256": "92da6ddc75d01480400ae4b9c69f24e2a4c43d940d41024e756b57426f2683dd",
+                "retrieved_at": "2026-09-23T08:00:17.353617+00:00",
+                "snippet": "cally released the following morning. Hourly temperature markets settle on readings from The Weather Company . Always check the specific market’s rules for its source. How Do I Trade on Weather Markets? Kalshi creates a prediction market around a specific temperature threshold for a given location. For example: “Highest temperature in Chicago on April 15, 2025?” ​ Contract prices for temperature ranges may shift as new weather data (e.g., forecasts, model runs, satellite images, observations) becomes available. Note: Not all weather data is the same. Apps like AccuWeather, iOS Weather, or Google Weather may be useful for guidance but do not determine contract outcomes. The only source used for settlement is the one named in the ma",
+                "source_id": "kalshi_weather_rules",
+                "source_state": "CHANGED",
+                "term": "prediction market"
+              },
+              {
+                "capability": "scout",
+                "document_sha256": "e60f2357eaca0914dea07f1ec9a4f64c01924245e6a8b1882afcbbe9cb9b665b",
+                "retrieved_at": "2026-09-22T20:14:47.716827+00:00",
+                "snippet": "Program Liquidity Rewards Builder Program Referral Program Resources Contracts Data Resources Error Codes 🇺🇸 Looking for Polymarket US documentation? Visit US Docs → Polymarket Documentation Build on the world’s largest prediction market. APIs, SDKs, and tools for prediction market developers. Developer Quickstart Make your first API request in minutes. Learn the basics of the Polymarket platform, fetch market data, place orders, and redeem winning positions. Place Your First Order → TypeScript Python API import { createPublicClient } from \"@polymarket/client\" ; const client = createPublicClient (); const pages = client . listMarkets ({ closed: false }); const { items : markets } = await pages . firstPage (); from polymarket impor",
+                "source_id": "polymarket_docs",
+                "source_state": "UNCHANGED",
+                "term": "prediction market"
+              }
+            ],
+            "routing_status": "EVIDENCE_ROUTED"
+          },
+          "recon_scout": {
+            "capability": "recon_scout",
+            "coverage_gaps": [
+              "Hourly registry is a bounded source universe; deep web/GitHub/community discovery remains a Research Director/Recon search task until a lawful free collector is registered."
+            ],
+            "routed_evidence": [
+              {
+                "capability": "recon_scout",
+                "document_sha256": "d7ed6c1e9723edcceae8a3d3f258a7ca991bd64f841fad43632caa13a7fad746",
+                "retrieved_at": "2026-09-19T20:59:24.827234+00:00",
+                "snippet": "re ; Multiagent Systems ; Multimedia ; Networking and Internet Architecture ; Neural and Evolutionary Computing ; Numerical Analysis ; Operating Systems ; Other Computer Science ; Performance ; Programming Languages ; Robotics ; Social and Information Networks ; Software Engineering ; Sound ; Symbolic Computation ; Systems and Control Quantitative Biology Quantitative Biology ( q-bio new , recent , search ) includes: (see detailed description ): Biomolecules ; Cell Behavior ; Genomics ; Molecular Networks ; Neurons and Cognition ; Other Quantitative Biology ; Populations and Evolution ; Quantitative Methods ; Subcellular Processes ; Tissues and Organs Quantitative Finance Quantitative Finance ( q-fin new , recent , search ) includ",
+                "source_id": "arxiv",
+                "source_state": "UNCHANGED",
+                "term": "bot"
+              },
+              {
+                "capability": "recon_scout",
+                "document_sha256": "cb2d9d73d70ff17bf70f803e04aec043ec7caae58f9731f88d16146a016b0457",
+                "retrieved_at": "2026-09-23T08:00:16.097018+00:00",
+                "snippet": "reviewed online. Policy and Notices Privacy Policy Web Policy FOIA EEO No FEAR Act Accessibility Statement Whistleblower Protection Enhancement Act Resources CFTC Regulations Commodity Exchange Act Procurement USA.gov Glossary Actions Search Public Comments Submit Tips & Complaints Search Industry Filings Whistleblower.gov Inspector General Sitemap CFTC Headquarters Three Lafayette Centre 1155 21st Street, NW Washington, DC 20581 202.418.5000",
+                "source_id": "cftc",
+                "source_state": "CHANGED",
+                "term": "loss"
+              },
+              {
+                "capability": "recon_scout",
+                "document_sha256": "db3ecbbf2aedc92b2c4902fdaeb4ae518cabf847ef25ad61ad48c2804fb4897f",
+                "retrieved_at": "2026-09-23T03:00:16.954800+00:00",
+                "snippet": "your API credentials. Kalshi Academy New to prediction markets? Explore educational resources and tutorials. Reference Rate Limits Token budgets, tiers, and bursting. Changelog Stay updated with the latest API changes. Glossary Key terms and concepts used across the exchange. Specifications Predictions REST Download openapi.yaml for event-contract REST API integration. Predictions WebSocket Download asyncapi.yaml for event-contract WebSocket integration. Perps REST Download perps_openapi.yaml for perpetual futures REST API integration. Perps WebSocket Download perps_asyncapi.yaml for perpetual futures WebSocket integration.",
+                "source_id": "kalshi_docs",
+                "source_state": "UNCHANGED",
+                "term": "loss"
+              },
+              {
+                "capability": "recon_scout",
+                "document_sha256": "92da6ddc75d01480400ae4b9c69f24e2a4c43d940d41024e756b57426f2683dd",
+                "retrieved_at": "2026-09-23T08:00:17.353617+00:00",
+                "snippet": "amounts in specific cities, from New York City to Los Angeles. Traders can take positions on whether a city will reach a certain high temperature or fall within a particular range. Each weather market names its official settlement source in its market rules. Daily high/low temperature markets settle based on the final climate report issued by the National Weather Service (NWS), typically released the following morning. Hourly temperature markets settle on readings from The Weather Company . Always check the specific market’s rules for its source. How Do I Trade on Weather Markets? Kalshi creates a prediction market around a specific temperature threshold for a given location. For example: “Highest temperature in Chicago on April 1",
+                "source_id": "kalshi_weather_rules",
+                "source_state": "CHANGED",
+                "term": "settlement"
+              },
+              {
+                "capability": "recon_scout",
+                "document_sha256": "e60f2357eaca0914dea07f1ec9a4f64c01924245e6a8b1882afcbbe9cb9b665b",
+                "retrieved_at": "2026-09-22T20:14:47.716827+00:00",
+                "snippet": "oks Analytics Real-Time Data Chainlink TWAP Prices Trading Overview Place Your First Order Wallets and Authentication Session Keys Beta Place Orders Manage Orders Real-Time Order Updates Positions Combos Wallet Activity Fees Market Making Matching Engine Restarts Bridge Programs Taker Rebate Program Maker Rebates Program Liquidity Rewards Builder Program Referral Program Resources Contracts Data Resources Error Codes 🇺🇸 Looking for Polymarket US documentation? Visit US Docs → Polymarket Documentation Build on the world’s largest prediction market. APIs, SDKs, and tools for prediction market developers. Developer Quickstart Make your first API request in minutes. Learn the basics of the Polymarket platform, fetch market data, place",
+                "source_id": "polymarket_docs",
+                "source_state": "UNCHANGED",
+                "term": "fee"
+              }
+            ],
+            "routing_status": "EVIDENCE_ROUTED"
+          }
+        },
+        "dynamic_worker_scheduled": true,
+        "input_refs": [
+          "knowledge/runs/hourly-20260923T100000+0200-routing.json",
+          "knowledge/runs/recon/hourly-20260923T100000+0200.json"
+        ],
+        "local_task_id": null,
+        "local_task_required": false,
+        "next_decisive_question": null,
+        "orchestrator_reason": "candidate_and_routed_evidence_available",
+        "priority": "P3",
+        "recon_hunts": [],
+        "recon_watch_triage": [
+          {
+            "attack_mode": "FRONTIER_RAIDER",
+            "candidate_key": "CAND-21d39551c9a2ed59",
+            "capability": "scout",
+            "claim": "Public evidence contains a context-supported Recon signal; mechanism is unproven.",
+            "execution_gate": {
+              "economic_conclusion": "NO_PROVEN_EDGE",
+              "live_trading": false,
+              "paid_actions": false,
+              "research_only": true,
+              "wallet_actions": false
+            },
+            "finding_id": "RECON-d838b2e925d20194",
+            "next_decisive_test": "Establish mechanism, base rate, point-in-time predictiveness and net executable economics.",
+            "promotion_authority": false,
+            "public_trigger": "changelog",
+            "snippet": "your API credentials. Kalshi Academy New to prediction markets? Explore educational resources and tutorials. Reference Rate Limits Token budgets, tiers, and bursting. Changelog Stay updated with the latest API changes. Glossary Key terms and concepts used across the exchange. Specifications Predictions REST Download openapi.yaml for event-contract REST API integration. Predictions WebSocket Download asyncapi.yaml for event-contract WebSocket integration. Perps REST Download perps_openapi.yaml for perpetual futures REST API integration. Perps WebSocket Download perps_asyncapi.yaml for perpetual futures WebSocket integration.",
+            "source_ids": [
+              "kalshi_docs"
+            ],
+            "status": "WATCH",
+            "triage_only": true
+          }
+        ],
+        "red_team_modes": {},
+        "reproduction_candidates": [],
+        "routed_evidence": [
+          {
+            "capability": "recon_scout",
+            "document_sha256": "92da6ddc75d01480400ae4b9c69f24e2a4c43d940d41024e756b57426f2683dd",
+            "retrieved_at": "2026-09-23T08:00:17.353617+00:00",
+            "snippet": "amounts in specific cities, from New York City to Los Angeles. Traders can take positions on whether a city will reach a certain high temperature or fall within a particular range. Each weather market names its official settlement source in its market rules. Daily high/low temperature markets settle based on the final climate report issued by the National Weather Service (NWS), typically released the following morning. Hourly temperature markets settle on readings from The Weather Company . Always check the specific market’s rules for its source. How Do I Trade on Weather Markets? Kalshi creates a prediction market around a specific temperature threshold for a given location. For example: “Highest temperature in Chicago on April 1",
+            "source_id": "kalshi_weather_rules",
+            "source_state": "CHANGED",
+            "term": "settlement"
+          },
+          {
+            "capability": "recon_scout",
+            "document_sha256": "cb2d9d73d70ff17bf70f803e04aec043ec7caae58f9731f88d16146a016b0457",
+            "retrieved_at": "2026-09-23T08:00:16.097018+00:00",
+            "snippet": "reviewed online. Policy and Notices Privacy Policy Web Policy FOIA EEO No FEAR Act Accessibility Statement Whistleblower Protection Enhancement Act Resources CFTC Regulations Commodity Exchange Act Procurement USA.gov Glossary Actions Search Public Comments Submit Tips & Complaints Search Industry Filings Whistleblower.gov Inspector General Sitemap CFTC Headquarters Three Lafayette Centre 1155 21st Street, NW Washington, DC 20581 202.418.5000",
+            "source_id": "cftc",
+            "source_state": "CHANGED",
+            "term": "loss"
+          },
+          {
+            "capability": "recon_scout",
+            "document_sha256": "d7ed6c1e9723edcceae8a3d3f258a7ca991bd64f841fad43632caa13a7fad746",
+            "retrieved_at": "2026-09-19T20:59:24.827234+00:00",
+            "snippet": "re ; Multiagent Systems ; Multimedia ; Networking and Internet Architecture ; Neural and Evolutionary Computing ; Numerical Analysis ; Operating Systems ; Other Computer Science ; Performance ; Programming Languages ; Robotics ; Social and Information Networks ; Software Engineering ; Sound ; Symbolic Computation ; Systems and Control Quantitative Biology Quantitative Biology ( q-bio new , recent , search ) includes: (see detailed description ): Biomolecules ; Cell Behavior ; Genomics ; Molecular Networks ; Neurons and Cognition ; Other Quantitative Biology ; Populations and Evolution ; Quantitative Methods ; Subcellular Processes ; Tissues and Organs Quantitative Finance Quantitative Finance ( q-fin new , recent , search ) includ",
+            "source_id": "arxiv",
+            "source_state": "UNCHANGED",
+            "term": "bot"
+          },
+          {
+            "capability": "recon_scout",
+            "document_sha256": "db3ecbbf2aedc92b2c4902fdaeb4ae518cabf847ef25ad61ad48c2804fb4897f",
+            "retrieved_at": "2026-09-23T03:00:16.954800+00:00",
+            "snippet": "your API credentials. Kalshi Academy New to prediction markets? Explore educational resources and tutorials. Reference Rate Limits Token budgets, tiers, and bursting. Changelog Stay updated with the latest API changes. Glossary Key terms and concepts used across the exchange. Specifications Predictions REST Download openapi.yaml for event-contract REST API integration. Predictions WebSocket Download asyncapi.yaml for event-contract WebSocket integration. Perps REST Download perps_openapi.yaml for perpetual futures REST API integration. Perps WebSocket Download perps_asyncapi.yaml for perpetual futures WebSocket integration.",
+            "source_id": "kalshi_docs",
+            "source_state": "UNCHANGED",
+            "term": "loss"
+          },
+          {
+            "capability": "recon_scout",
+            "document_sha256": "e60f2357eaca0914dea07f1ec9a4f64c01924245e6a8b1882afcbbe9cb9b665b",
+            "retrieved_at": "2026-09-22T20:14:47.716827+00:00",
+            "snippet": "oks Analytics Real-Time Data Chainlink TWAP Prices Trading Overview Place Your First Order Wallets and Authentication Session Keys Beta Place Orders Manage Orders Real-Time Order Updates Positions Combos Wallet Activity Fees Market Making Matching Engine Restarts Bridge Programs Taker Rebate Program Maker Rebates Program Liquidity Rewards Builder Program Referral Program Resources Contracts Data Resources Error Codes 🇺🇸 Looking for Polymarket US documentation? Visit US Docs → Polymarket Documentation Build on the world’s largest prediction market. APIs, SDKs, and tools for prediction market developers. Developer Quickstart Make your first API request in minutes. Learn the basics of the Polymarket platform, fetch market data, place",
+            "source_id": "polymarket_docs",
+            "source_state": "UNCHANGED",
+            "term": "fee"
+          },
+          {
+            "capability": "scout",
+            "document_sha256": "92da6ddc75d01480400ae4b9c69f24e2a4c43d940d41024e756b57426f2683dd",
+            "retrieved_at": "2026-09-23T08:00:17.353617+00:00",
+            "snippet": "cally released the following morning. Hourly temperature markets settle on readings from The Weather Company . Always check the specific market’s rules for its source. How Do I Trade on Weather Markets? Kalshi creates a prediction market around a specific temperature threshold for a given location. For example: “Highest temperature in Chicago on April 15, 2025?” ​ Contract prices for temperature ranges may shift as new weather data (e.g., forecasts, model runs, satellite images, observations) becomes available. Note: Not all weather data is the same. Apps like AccuWeather, iOS Weather, or Google Weather may be useful for guidance but do not determine contract outcomes. The only source used for settlement is the one named in the ma",
+            "source_id": "kalshi_weather_rules",
+            "source_state": "CHANGED",
+            "term": "prediction market"
+          },
+          {
+            "capability": "scout",
+            "document_sha256": "cb2d9d73d70ff17bf70f803e04aec043ec7caae58f9731f88d16146a016b0457",
+            "retrieved_at": "2026-09-23T08:00:16.097018+00:00",
+            "snippet": "ments of Traders Bank Participation Reports Cotton On-Call Financial Data for FCMS Staff Reports Weekly Swaps Report Cleared Margin Reports Office of the Chief Economist Forms & Submissions Learn & Protect Understanding Prediction Markets and Event Contracts Check Registration & Disciplinary History Submit a Tip or Complaint RED List Office of Proceedings Learning Resources News & Events Press Releases Public Statements & Remarks Events Carousel Rotation On On CFTC and Kansas State University to Host AgCon October 22-23 CFTC Grants Multiple Whistleblower Awards CFTC Issues Advisory on Self-Certifying Incentive Programs for Prediction Markets CFTC Approves Final Rule Concerning Whistleblower Awards Holding Wrongdoers Accountable Wh",
+            "source_id": "cftc",
+            "source_state": "CHANGED",
+            "term": "prediction market"
+          },
+          {
+            "capability": "scout",
+            "document_sha256": "db3ecbbf2aedc92b2c4902fdaeb4ae518cabf847ef25ad61ad48c2804fb4897f",
+            "retrieved_at": "2026-09-23T03:00:16.954800+00:00",
+            "snippet": "king Your First Request Make your first API call and start trading on Kalshi. Demo Environment Build and test safely against the demo environment. API Keys Generate and manage your API credentials. Kalshi Academy New to prediction markets? Explore educational resources and tutorials. Reference Rate Limits Token budgets, tiers, and bursting. Changelog Stay updated with the latest API changes. Glossary Key terms and concepts used across the exchange. Specifications Predictions REST Download openapi.yaml for event-contract REST API integration. Predictions WebSocket Download asyncapi.yaml for event-contract WebSocket integration. Perps REST Download perps_openapi.yaml for perpetual futures REST API integration. Perps WebSocket Downlo",
+            "source_id": "kalshi_docs",
+            "source_state": "UNCHANGED",
+            "term": "prediction market"
+          },
+          {
+            "capability": "scout",
+            "document_sha256": "e60f2357eaca0914dea07f1ec9a4f64c01924245e6a8b1882afcbbe9cb9b665b",
+            "retrieved_at": "2026-09-22T20:14:47.716827+00:00",
+            "snippet": "Program Liquidity Rewards Builder Program Referral Program Resources Contracts Data Resources Error Codes 🇺🇸 Looking for Polymarket US documentation? Visit US Docs → Polymarket Documentation Build on the world’s largest prediction market. APIs, SDKs, and tools for prediction market developers. Developer Quickstart Make your first API request in minutes. Learn the basics of the Polymarket platform, fetch market data, place orders, and redeem winning positions. Place Your First Order → TypeScript Python API import { createPublicClient } from \"@polymarket/client\" ; const client = createPublicClient (); const pages = client . listMarkets ({ closed: false }); const { items : markets } = await pages . firstPage (); from polymarket impor",
+            "source_id": "polymarket_docs",
+            "source_state": "UNCHANGED",
+            "term": "prediction market"
+          }
+        ],
+        "scheduler_priority": "NOVEL_EVIDENCE",
+        "status": "READY",
+        "task_shape": {
+          "dependencies": "independent",
+          "expected_decision_value": "high",
+          "max_parallel_workers": 5,
+          "name": "HIGH_INDEPENDENT",
+          "novelty": "high",
+          "time_sensitivity": "normal",
+          "uncertainty": "source/semantic"
+        },
+        "transient": false
+      },
+      "priority": "P3",
+      "responsibility": "DISCOVERY",
+      "task_shape": "PARALLEL",
+      "work_id": "bebfc72265cf12cd42c1881733d85c8a7f4b2de944bcdc9cab5a29fbd19d2f87"
+    },
+    {
+      "agent_id": "market_research",
+      "capability_mode": "MARKET_RESEARCH",
+      "legacy_role": "market_research",
+      "must_return_result": true,
+      "objective": null,
+      "packet": {
+        "agent_id": "market_research",
+        "blind": false,
+        "blind_reproduction_interface": [],
+        "candidate_ids": [
+          "KWI-FULL-STATION-PRECANONICAL-V1"
+        ],
+        "candidate_routing": [
+          {
+            "candidate_id": "KWI-FULL-STATION-PRECANONICAL-V1",
+            "capability": "weather_twc",
+            "domain_role": "market_research",
+            "next_decisive_test": "Await and evaluate post-cutoff cases under the preregistered 24h full-station protocol; discovery rows cannot count as validation.",
+            "open_question": null,
+            "phase": "MECHANISM_DEFINED",
+            "queue_status": "WAITING_FOR_RESULT",
+            "reasons": [
+              "lane=WEATHER",
+              "weather/TWC/KWI semantics"
+            ],
+            "source_ref": "knowledge/candidates/KWI-FULL-STATION-PRECANONICAL-V1.json"
+          }
+        ],
+        "capability_work": {
+          "behavioral": {
+            "coverage_gaps": [],
+            "routed_evidence": [],
+            "routing_status": "NO_EVIDENCE"
+          },
+          "informed_flow": {
+            "coverage_gaps": [
+              "No point-in-time participant identity/flow dataset"
+            ],
+            "routed_evidence": [],
+            "routing_status": "NO_EVIDENCE"
+          },
+          "weather_twc": {
+            "candidate_ids": [
+              "KWI-FULL-STATION-PRECANONICAL-V1"
+            ],
+            "candidate_routing": [
+              {
+                "candidate_id": "KWI-FULL-STATION-PRECANONICAL-V1",
+                "capability": "weather_twc",
+                "next_decisive_test": "Await and evaluate post-cutoff cases under the preregistered 24h full-station protocol; discovery rows cannot count as validation.",
+                "open_question": null,
+                "phase": "MECHANISM_DEFINED",
+                "queue_status": "WAITING_FOR_RESULT",
+                "reasons": [
+                  "lane=WEATHER",
+                  "weather/TWC/KWI semantics"
+                ],
+                "source_ref": "knowledge/candidates/KWI-FULL-STATION-PRECANONICAL-V1.json"
+              }
+            ],
+            "coverage_gaps": [
+              "No TWC-specific primary source in registry"
+            ],
+            "routed_evidence": [
+              {
+                "capability": "weather_twc",
+                "document_sha256": "dd6e0cc4b237e05406554eb33d2b7963367175f44a5a0ae0feb4e59f707b0edf",
+                "retrieved_at": "2026-09-19T20:59:24.461145+00:00",
+                "snippet": "n Sign in Weather Observations GFA FORECAST Ceiling & Visibility Clouds Precipitation Thunderstorms Temperature Winds Turbulence Icing Products SIGMET G-AIRMET Center Weather Adv Prog charts TAF map Forecast Discussions METAR/TAF data PIREP/AIREP data Wind/temp data ITWS data WAFS grids SigWx charts TCF/eTCF/ECFP Tools Terminal Weather Dashboard Winter Weather Dashboard Ceiling & Visibility Dashboard Pre-Duty Weather Briefings CWSU Status Advanced Map Decision support imagery Traffic Flow Management Portal Fax charts Archive View Data API Status Submit a PIREP Edit Gate Forecast Connect About AWC Recent changes Upcoming changes Outreach SIGMET Preview TCF Whiteboard Aviation Weather Testbed Sign in Settings Admin Auto Dark Light P",
+                "source_id": "aviationweather",
+                "source_state": "UNCHANGED",
+                "term": "metar"
+              },
+              {
+                "capability": "weather_twc",
+                "document_sha256": "0c54279e3477a8e86dcbaf6a9b6b21c114bdee37527833007a618dd07bd7685c",
+                "retrieved_at": "2026-09-23T00:00:16.889823+00:00",
+                "snippet": "d deviation of sub-gridscale orography (step 0) 160 sfc slor Slope of sub-gridscale orography (step 0) 163 sfc tcc Total cloud cover 164 sfc 10u 10 metre U wind component 165 sfc 10v 10 metre V wind component 166 sfc 2t 2 metre temperature 167 sfc 2d 2 metre dewpoint temperature 168 sfc ssrd Surface net short-wave (solar) radiation downwards 169 sfc lsm Land Sea Mask 172 sfc strd Surface net long-wave (thermal) radiation downwards 175 sfc ssr Surface net short-wave (solar) radiation 176 sfc str Surface net long-wave (thermal) radiation 177 sfc ttr Top net long-wave (thermal) radiation 179 sfc ewss Time-integrated eastward turbulent surface stress 180 sfc nsss Time-integrated northward turbulent surface stress 181 sfc ro Runoff 205",
+                "source_id": "ecmwf_open",
+                "source_state": "UNCHANGED",
+                "term": "2 metre temperature"
+              },
+              {
+                "capability": "weather_twc",
+                "document_sha256": "92da6ddc75d01480400ae4b9c69f24e2a4c43d940d41024e756b57426f2683dd",
+                "retrieved_at": "2026-09-23T08:00:17.353617+00:00",
+                "snippet": "ing based on the high temperature recorded in the final NWS Daily Climate Report. Market determination may be delayed in the rare instances of a) a high temperature is not consistent with 6-hr or 24-hr highs reported by METAR or b) the final NWS Climate Report high temperature value is lower than previous preliminary report. ​ Hourly Temperature Markets Some temperature markets are hourly - the market title names an exact time, for example “Chicago temperature at 5 PM EDT.” These markets are also directional: each contract resolves on whether the temperature at that time is above or below a specific level, rather than within a range. They settle on the temperature at that exact time as reported by The Weather Company for the stati",
+                "source_id": "kalshi_weather_rules",
+                "source_state": "CHANGED",
+                "term": "metar"
+              }
+            ],
+            "routing_status": "EVIDENCE_ROUTED"
+          }
+        },
+        "contract": {
+          "agent": "market_research",
+          "authority": "RESEARCH_ONLY",
+          "capabilities": [
+            "weather_twc",
+            "behavioral",
+            "informed_flow"
+          ],
+          "live_trading": false,
+          "openai_api": false,
+          "output": [
+            "market_evidence",
+            "mechanism_test",
+            "base_rate",
+            "coverage_gaps",
+            "next_decisive_question"
+          ],
+          "paid_actions": false,
+          "requirements": [
+            "Use point-in-time public evidence only",
+            "Keep weather/TWC settlement claims separate from behavioral or flow claims",
+            "Require executable economics before any edge claim"
+          ],
+          "wallet_actions": false
+        },
+        "coverage_gaps": [
+          "No TWC-specific primary source in registry",
+          "No point-in-time participant identity/flow dataset"
+        ],
+        "coverage_gaps_by_capability": {
+          "behavioral": [],
+          "informed_flow": [
+            "No point-in-time participant identity/flow dataset"
+          ],
+          "weather_twc": [
+            "No TWC-specific primary source in registry"
+          ]
+        },
+        "discovery_lanes": {},
+        "dynamic_worker_scheduled": true,
+        "input_refs": [
+          "knowledge/runs/hourly-20260923T100000+0200-routing.json"
+        ],
+        "local_task_id": null,
+        "local_task_required": false,
+        "next_decisive_question": null,
+        "orchestrator_reason": "candidate_and_routed_evidence_available",
+        "priority": "P3",
+        "recon_hunts": [],
+        "recon_watch_triage": [],
+        "red_team_modes": {},
+        "reproduction_candidates": [],
+        "routed_evidence": [
+          {
+            "capability": "weather_twc",
+            "document_sha256": "0c54279e3477a8e86dcbaf6a9b6b21c114bdee37527833007a618dd07bd7685c",
+            "retrieved_at": "2026-09-23T00:00:16.889823+00:00",
+            "snippet": "d deviation of sub-gridscale orography (step 0) 160 sfc slor Slope of sub-gridscale orography (step 0) 163 sfc tcc Total cloud cover 164 sfc 10u 10 metre U wind component 165 sfc 10v 10 metre V wind component 166 sfc 2t 2 metre temperature 167 sfc 2d 2 metre dewpoint temperature 168 sfc ssrd Surface net short-wave (solar) radiation downwards 169 sfc lsm Land Sea Mask 172 sfc strd Surface net long-wave (thermal) radiation downwards 175 sfc ssr Surface net short-wave (solar) radiation 176 sfc str Surface net long-wave (thermal) radiation 177 sfc ttr Top net long-wave (thermal) radiation 179 sfc ewss Time-integrated eastward turbulent surface stress 180 sfc nsss Time-integrated northward turbulent surface stress 181 sfc ro Runoff 205",
+            "source_id": "ecmwf_open",
+            "source_state": "UNCHANGED",
+            "term": "2 metre temperature"
+          },
+          {
+            "capability": "weather_twc",
+            "document_sha256": "92da6ddc75d01480400ae4b9c69f24e2a4c43d940d41024e756b57426f2683dd",
+            "retrieved_at": "2026-09-23T08:00:17.353617+00:00",
+            "snippet": "ing based on the high temperature recorded in the final NWS Daily Climate Report. Market determination may be delayed in the rare instances of a) a high temperature is not consistent with 6-hr or 24-hr highs reported by METAR or b) the final NWS Climate Report high temperature value is lower than previous preliminary report. ​ Hourly Temperature Markets Some temperature markets are hourly - the market title names an exact time, for example “Chicago temperature at 5 PM EDT.” These markets are also directional: each contract resolves on whether the temperature at that time is above or below a specific level, rather than within a range. They settle on the temperature at that exact time as reported by The Weather Company for the stati",
+            "source_id": "kalshi_weather_rules",
+            "source_state": "CHANGED",
+            "term": "metar"
+          },
+          {
+            "capability": "weather_twc",
+            "document_sha256": "dd6e0cc4b237e05406554eb33d2b7963367175f44a5a0ae0feb4e59f707b0edf",
+            "retrieved_at": "2026-09-19T20:59:24.461145+00:00",
+            "snippet": "n Sign in Weather Observations GFA FORECAST Ceiling & Visibility Clouds Precipitation Thunderstorms Temperature Winds Turbulence Icing Products SIGMET G-AIRMET Center Weather Adv Prog charts TAF map Forecast Discussions METAR/TAF data PIREP/AIREP data Wind/temp data ITWS data WAFS grids SigWx charts TCF/eTCF/ECFP Tools Terminal Weather Dashboard Winter Weather Dashboard Ceiling & Visibility Dashboard Pre-Duty Weather Briefings CWSU Status Advanced Map Decision support imagery Traffic Flow Management Portal Fax charts Archive View Data API Status Submit a PIREP Edit Gate Forecast Connect About AWC Recent changes Upcoming changes Outreach SIGMET Preview TCF Whiteboard Aviation Weather Testbed Sign in Settings Admin Auto Dark Light P",
+            "source_id": "aviationweather",
+            "source_state": "UNCHANGED",
+            "term": "metar"
+          }
+        ],
+        "scheduler_priority": "TIME_SENSITIVE_EVIDENCE",
+        "status": "READY",
+        "task_shape": {
+          "dependencies": "independent",
+          "expected_decision_value": "high",
+          "max_parallel_workers": 5,
+          "name": "HIGH_INDEPENDENT",
+          "novelty": "normal",
+          "time_sensitivity": "high",
+          "uncertainty": "source/semantic"
+        },
+        "transient": false
+      },
+      "priority": "P3",
+      "responsibility": "SPECIALIST_DISPATCH",
+      "task_shape": "PARALLEL",
+      "work_id": "db4fc5a91bcb20bf8b927d0c94519151b81618d0e05ff28b3a6f44026eb774bd"
+    },
+    {
+      "agent_id": "mechanics",
+      "capability_mode": "MECHANICS",
+      "legacy_role": "mechanics",
+      "must_return_result": true,
+      "objective": null,
+      "packet": {
+        "agent_id": "mechanics",
+        "blind": false,
+        "blind_reproduction_interface": [],
+        "candidate_ids": [
+          "ASSET-RANK-MAKER-HEDGE-V1",
+          "PAYOFF-IDENTITY-MINING-V1"
+        ],
+        "candidate_routing": [
+          {
+            "candidate_id": "ASSET-RANK-MAKER-HEDGE-V1",
+            "capability": "microstructure",
+            "domain_role": "mechanics",
+            "next_decisive_test": "Continue preregistered prospective conservative fill monitoring; only a proven full passive fill may trigger synchronized first-executable hedge economics.",
+            "open_question": null,
+            "phase": "MECHANISM_DEFINED",
+            "queue_status": "RUNNING",
+            "reasons": [
+              "executable market/fill/hedge economics required",
+              "lane=MICROSTRUCTURE"
+            ],
+            "source_ref": "knowledge/candidates/ASSET-RANK-MAKER-HEDGE-V1.json"
+          },
+          {
+            "candidate_id": "PAYOFF-IDENTITY-MINING-V1",
+            "capability": "microstructure",
+            "domain_role": "mechanics",
+            "next_decisive_test": "Find one concrete contract pair with primary-rule statewise payout semantics, then compare synchronized executable L2 only after formal equivalence/dominance proof.",
+            "open_question": null,
+            "phase": "DISCOVERED",
+            "queue_status": "NEEDS_DIRECTOR",
+            "reasons": [
+              "executable market/fill/hedge economics required"
+            ],
+            "source_ref": "knowledge/candidates/PAYOFF-IDENTITY-MINING-V1.json"
+          }
+        ],
+        "capability_work": {
+          "microstructure": {
+            "candidate_ids": [
+              "ASSET-RANK-MAKER-HEDGE-V1",
+              "PAYOFF-IDENTITY-MINING-V1"
+            ],
+            "candidate_routing": [
+              {
+                "candidate_id": "ASSET-RANK-MAKER-HEDGE-V1",
+                "capability": "microstructure",
+                "next_decisive_test": "Continue preregistered prospective conservative fill monitoring; only a proven full passive fill may trigger synchronized first-executable hedge economics.",
+                "open_question": null,
+                "phase": "MECHANISM_DEFINED",
+                "queue_status": "RUNNING",
+                "reasons": [
+                  "executable market/fill/hedge economics required",
+                  "lane=MICROSTRUCTURE"
+                ],
+                "source_ref": "knowledge/candidates/ASSET-RANK-MAKER-HEDGE-V1.json"
+              },
+              {
+                "candidate_id": "PAYOFF-IDENTITY-MINING-V1",
+                "capability": "microstructure",
+                "next_decisive_test": "Find one concrete contract pair with primary-rule statewise payout semantics, then compare synchronized executable L2 only after formal equivalence/dominance proof.",
+                "open_question": null,
+                "phase": "DISCOVERED",
+                "queue_status": "NEEDS_DIRECTOR",
+                "reasons": [
+                  "executable market/fill/hedge economics required"
+                ],
+                "source_ref": "knowledge/candidates/PAYOFF-IDENTITY-MINING-V1.json"
+              }
+            ],
+            "coverage_gaps": [
+              "No live orderbook snapshot source in hourly registry"
+            ],
+            "recon_watch_triage": [
+              {
+                "attack_mode": "MECHANISM_BREAKER",
+                "candidate_key": "CAND-103b39d83eee3369",
+                "capability": "microstructure",
+                "claim": "Public evidence contains a context-supported Recon signal; mechanism is unproven.",
+                "execution_gate": {
+                  "economic_conclusion": "NO_PROVEN_EDGE",
+                  "live_trading": false,
+                  "paid_actions": false,
+                  "research_only": true,
+                  "wallet_actions": false
+                },
+                "finding_id": "RECON-0db7ff1ec789722b",
+                "next_decisive_test": "Establish mechanism, base rate, point-in-time predictiveness and net executable economics.",
+                "promotion_authority": false,
+                "public_trigger": "api",
+                "snippet": "your API credentials. Kalshi Academy New to prediction markets? Explore educational resources and tutorials. Reference Rate Limits Token budgets, tiers, and bursting. Changelog Stay updated with the latest API changes. Glossary Key terms and concepts used across the exchange. Specifications Predictions REST Download openapi.yaml for event-contract REST API integration. Predictions WebSocket Download asyncapi.yaml for event-contract WebSocket integration. Perps REST Download perps_openapi.yaml for perpetual futures REST API integration. Perps WebSocket Download perps_asyncapi.yaml for perpetual futures WebSocket integration.",
+                "source_ids": [
+                  "kalshi_docs"
+                ],
+                "status": "WATCH",
+                "triage_only": true
+              },
+              {
+                "attack_mode": "MECHANISM_BREAKER",
+                "candidate_key": "CAND-64cb34fb55766cdd",
+                "capability": "microstructure",
+                "claim": "Public evidence contains a context-supported Recon signal; mechanism is unproven.",
+                "execution_gate": {
+                  "economic_conclusion": "NO_PROVEN_EDGE",
+                  "live_trading": false,
+                  "paid_actions": false,
+                  "research_only": true,
+                  "wallet_actions": false
+                },
+                "finding_id": "RECON-75b83fbdd0abd801",
+                "next_decisive_test": "Establish mechanism, base rate, point-in-time predictiveness and net executable economics.",
+                "promotion_authority": false,
+                "public_trigger": "rebate",
+                "snippet": "ils Prices and Order Books Analytics Real-Time Data Chainlink TWAP Prices Trading Overview Place Your First Order Wallets and Authentication Session Keys Beta Place Orders Manage Orders Real-Time Order Updates Positions Combos Wallet Activity Fees Market Making Matching Engine Restarts Bridge Programs Taker Rebate Program Maker Rebates Program Liquidity Rewards Builder Program Referral Program Resources Contracts Data Resources Error Codes 🇺🇸 Looking for Polymarket US documentation? Visit US Docs → Polymarket Documentation Build on the world’s largest prediction market. APIs, SDKs, and tools for prediction market developers. Developer Quickstart Make your first API request in minutes. Learn the basics of the Polymarket platform, f",
+                "source_ids": [
+                  "polymarket_docs"
+                ],
+                "status": "WATCH",
+                "triage_only": true
+              },
+              {
+                "attack_mode": "MECHANISM_BREAKER",
+                "candidate_key": "CAND-86b30e47fb75cfcd",
+                "capability": "microstructure",
+                "claim": "Public evidence contains a context-supported Recon signal; mechanism is unproven.",
+                "execution_gate": {
+                  "economic_conclusion": "NO_PROVEN_EDGE",
+                  "live_trading": false,
+                  "paid_actions": false,
+                  "research_only": true,
+                  "wallet_actions": false
+                },
+                "finding_id": "RECON-18d062630dd9c963",
+                "next_decisive_test": "Establish mechanism, base rate, point-in-time predictiveness and net executable economics.",
+                "promotion_authority": false,
+                "public_trigger": "settlement",
+                "snippet": "amounts in specific cities, from New York City to Los Angeles. Traders can take positions on whether a city will reach a certain high temperature or fall within a particular range. Each weather market names its official settlement source in its market rules. Daily high/low temperature markets settle based on the final climate report issued by the National Weather Service (NWS), typically released the following morning. Hourly temperature markets settle on readings from The Weather Company . Always check the specific market’s rules for its source. How Do I Trade on Weather Markets? Kalshi creates a prediction market around a specific temperature threshold for a given location. For example: “Highest temperature in Chicago on April 1",
+                "source_ids": [
+                  "kalshi_weather_rules"
+                ],
+                "status": "WATCH",
+                "triage_only": true
+              }
+            ],
+            "routed_evidence": [
+              {
+                "capability": "microstructure",
+                "document_sha256": "e60f2357eaca0914dea07f1ec9a4f64c01924245e6a8b1882afcbbe9cb9b665b",
+                "retrieved_at": "2026-09-22T20:14:47.716827+00:00",
+                "snippet": "market 101 SDKs & APIs Core Concepts Markets & Events Negative Risk Markets Prices & Orderbook Positions & Tokens Polymarket USD Order Lifecycle Resolution Market Data Overview Discover Markets Market Details Prices and Order Books Analytics Real-Time Data Chainlink TWAP Prices Trading Overview Place Your First Order Wallets and Authentication Session Keys Beta Place Orders Manage Orders Real-Time Order Updates Positions Combos Wallet Activity Fees Market Making Matching Engine Restarts Bridge Programs Taker Rebate Program Maker Rebates Program Liquidity Rewards Builder Program Referral Program Resources Contracts Data Resources Error Codes 🇺🇸 Looking for Polymarket US documentation? Visit US Docs → Polymarket Documentation Build",
+                "source_id": "polymarket_docs",
+                "source_state": "UNCHANGED",
+                "term": "order book"
+              }
+            ],
+            "routing_status": "EVIDENCE_ROUTED"
+          },
+          "settlement": {
+            "coverage_gaps": [
+              "Venue-specific contract-rule pages may need deeper retrieval than docs landing pages"
+            ],
+            "recon_watch_triage": [
+              {
+                "attack_mode": "MECHANISM_BREAKER",
+                "candidate_key": "CAND-103b39d83eee3369",
+                "capability": "settlement",
+                "claim": "Public evidence contains a context-supported Recon signal; mechanism is unproven.",
+                "execution_gate": {
+                  "economic_conclusion": "NO_PROVEN_EDGE",
+                  "live_trading": false,
+                  "paid_actions": false,
+                  "research_only": true,
+                  "wallet_actions": false
+                },
+                "finding_id": "RECON-0db7ff1ec789722b",
+                "next_decisive_test": "Establish mechanism, base rate, point-in-time predictiveness and net executable economics.",
+                "promotion_authority": false,
+                "public_trigger": "api",
+                "snippet": "your API credentials. Kalshi Academy New to prediction markets? Explore educational resources and tutorials. Reference Rate Limits Token budgets, tiers, and bursting. Changelog Stay updated with the latest API changes. Glossary Key terms and concepts used across the exchange. Specifications Predictions REST Download openapi.yaml for event-contract REST API integration. Predictions WebSocket Download asyncapi.yaml for event-contract WebSocket integration. Perps REST Download perps_openapi.yaml for perpetual futures REST API integration. Perps WebSocket Download perps_asyncapi.yaml for perpetual futures WebSocket integration.",
+                "source_ids": [
+                  "kalshi_docs"
+                ],
+                "status": "WATCH",
+                "triage_only": true
+              },
+              {
+                "attack_mode": "MECHANISM_BREAKER",
+                "candidate_key": "CAND-64cb34fb55766cdd",
+                "capability": "settlement",
+                "claim": "Public evidence contains a context-supported Recon signal; mechanism is unproven.",
+                "execution_gate": {
+                  "economic_conclusion": "NO_PROVEN_EDGE",
+                  "live_trading": false,
+                  "paid_actions": false,
+                  "research_only": true,
+                  "wallet_actions": false
+                },
+                "finding_id": "RECON-75b83fbdd0abd801",
+                "next_decisive_test": "Establish mechanism, base rate, point-in-time predictiveness and net executable economics.",
+                "promotion_authority": false,
+                "public_trigger": "rebate",
+                "snippet": "ils Prices and Order Books Analytics Real-Time Data Chainlink TWAP Prices Trading Overview Place Your First Order Wallets and Authentication Session Keys Beta Place Orders Manage Orders Real-Time Order Updates Positions Combos Wallet Activity Fees Market Making Matching Engine Restarts Bridge Programs Taker Rebate Program Maker Rebates Program Liquidity Rewards Builder Program Referral Program Resources Contracts Data Resources Error Codes 🇺🇸 Looking for Polymarket US documentation? Visit US Docs → Polymarket Documentation Build on the world’s largest prediction market. APIs, SDKs, and tools for prediction market developers. Developer Quickstart Make your first API request in minutes. Learn the basics of the Polymarket platform, f",
+                "source_ids": [
+                  "polymarket_docs"
+                ],
+                "status": "WATCH",
+                "triage_only": true
+              },
+              {
+                "attack_mode": "MECHANISM_BREAKER",
+                "candidate_key": "CAND-86b30e47fb75cfcd",
+                "capability": "settlement",
+                "claim": "Public evidence contains a context-supported Recon signal; mechanism is unproven.",
+                "execution_gate": {
+                  "economic_conclusion": "NO_PROVEN_EDGE",
+                  "live_trading": false,
+                  "paid_actions": false,
+                  "research_only": true,
+                  "wallet_actions": false
+                },
+                "finding_id": "RECON-18d062630dd9c963",
+                "next_decisive_test": "Establish mechanism, base rate, point-in-time predictiveness and net executable economics.",
+                "promotion_authority": false,
+                "public_trigger": "settlement",
+                "snippet": "amounts in specific cities, from New York City to Los Angeles. Traders can take positions on whether a city will reach a certain high temperature or fall within a particular range. Each weather market names its official settlement source in its market rules. Daily high/low temperature markets settle based on the final climate report issued by the National Weather Service (NWS), typically released the following morning. Hourly temperature markets settle on readings from The Weather Company . Always check the specific market’s rules for its source. How Do I Trade on Weather Markets? Kalshi creates a prediction market around a specific temperature threshold for a given location. For example: “Highest temperature in Chicago on April 1",
+                "source_ids": [
+                  "kalshi_weather_rules"
+                ],
+                "status": "WATCH",
+                "triage_only": true
+              }
+            ],
+            "routed_evidence": [
+              {
+                "capability": "settlement",
+                "document_sha256": "92da6ddc75d01480400ae4b9c69f24e2a4c43d940d41024e756b57426f2683dd",
+                "retrieved_at": "2026-09-23T08:00:17.353617+00:00",
+                "snippet": "amounts in specific cities, from New York City to Los Angeles. Traders can take positions on whether a city will reach a certain high temperature or fall within a particular range. Each weather market names its official settlement source in its market rules. Daily high/low temperature markets settle based on the final climate report issued by the National Weather Service (NWS), typically released the following morning. Hourly temperature markets settle on readings from The Weather Company . Always check the specific market’s rules for its source. How Do I Trade on Weather Markets? Kalshi creates a prediction market around a specific temperature threshold for a given location. For example: “Highest temperature in Chicago on April 1",
+                "source_id": "kalshi_weather_rules",
+                "source_state": "CHANGED",
+                "term": "settlement"
+              }
+            ],
+            "routing_status": "EVIDENCE_ROUTED"
+          }
+        },
+        "contract": {
+          "agent": "mechanics",
+          "authority": "RESEARCH_ONLY",
+          "capabilities": [
+            "settlement",
+            "microstructure"
+          ],
+          "live_trading": false,
+          "openai_api": false,
+          "output": [
+            "settlement_analysis",
+            "execution_analysis",
+            "friction_model",
+            "capacity_blockers",
+            "next_decisive_question"
+          ],
+          "paid_actions": false,
+          "requirements": [
+            "Verify rules, settlement source, finality and revision semantics",
+            "Use executable bid/ask/L2 rather than UI midpoint claims",
+            "Include fees, spread, depth, slippage, fills, partial-fill and latency reality"
+          ],
+          "wallet_actions": false
+        },
+        "coverage_gaps": [
+          "No live orderbook snapshot source in hourly registry",
+          "Venue-specific contract-rule pages may need deeper retrieval than docs landing pages"
+        ],
+        "coverage_gaps_by_capability": {
+          "microstructure": [
+            "No live orderbook snapshot source in hourly registry"
+          ],
+          "settlement": [
+            "Venue-specific contract-rule pages may need deeper retrieval than docs landing pages"
+          ]
+        },
+        "discovery_lanes": {},
+        "dynamic_worker_scheduled": true,
+        "input_refs": [
+          "knowledge/runs/hourly-20260923T100000+0200-routing.json",
+          "knowledge/runs/recon/hourly-20260923T100000+0200.json"
+        ],
+        "local_task_id": null,
+        "local_task_required": false,
+        "next_decisive_question": null,
+        "orchestrator_reason": "candidate_and_routed_evidence_available",
+        "priority": "P3",
+        "recon_hunts": [],
+        "recon_watch_triage": [
+          {
+            "attack_mode": "MECHANISM_BREAKER",
+            "candidate_key": "CAND-103b39d83eee3369",
+            "capability": "settlement",
+            "claim": "Public evidence contains a context-supported Recon signal; mechanism is unproven.",
+            "execution_gate": {
+              "economic_conclusion": "NO_PROVEN_EDGE",
+              "live_trading": false,
+              "paid_actions": false,
+              "research_only": true,
+              "wallet_actions": false
+            },
+            "finding_id": "RECON-0db7ff1ec789722b",
+            "next_decisive_test": "Establish mechanism, base rate, point-in-time predictiveness and net executable economics.",
+            "promotion_authority": false,
+            "public_trigger": "api",
+            "snippet": "your API credentials. Kalshi Academy New to prediction markets? Explore educational resources and tutorials. Reference Rate Limits Token budgets, tiers, and bursting. Changelog Stay updated with the latest API changes. Glossary Key terms and concepts used across the exchange. Specifications Predictions REST Download openapi.yaml for event-contract REST API integration. Predictions WebSocket Download asyncapi.yaml for event-contract WebSocket integration. Perps REST Download perps_openapi.yaml for perpetual futures REST API integration. Perps WebSocket Download perps_asyncapi.yaml for perpetual futures WebSocket integration.",
+            "source_ids": [
+              "kalshi_docs"
+            ],
+            "status": "WATCH",
+            "triage_only": true
+          },
+          {
+            "attack_mode": "MECHANISM_BREAKER",
+            "candidate_key": "CAND-64cb34fb55766cdd",
+            "capability": "settlement",
+            "claim": "Public evidence contains a context-supported Recon signal; mechanism is unproven.",
+            "execution_gate": {
+              "economic_conclusion": "NO_PROVEN_EDGE",
+              "live_trading": false,
+              "paid_actions": false,
+              "research_only": true,
+              "wallet_actions": false
+            },
+            "finding_id": "RECON-75b83fbdd0abd801",
+            "next_decisive_test": "Establish mechanism, base rate, point-in-time predictiveness and net executable economics.",
+            "promotion_authority": false,
+            "public_trigger": "rebate",
+            "snippet": "ils Prices and Order Books Analytics Real-Time Data Chainlink TWAP Prices Trading Overview Place Your First Order Wallets and Authentication Session Keys Beta Place Orders Manage Orders Real-Time Order Updates Positions Combos Wallet Activity Fees Market Making Matching Engine Restarts Bridge Programs Taker Rebate Program Maker Rebates Program Liquidity Rewards Builder Program Referral Program Resources Contracts Data Resources Error Codes 🇺🇸 Looking for Polymarket US documentation? Visit US Docs → Polymarket Documentation Build on the world’s largest prediction market. APIs, SDKs, and tools for prediction market developers. Developer Quickstart Make your first API request in minutes. Learn the basics of the Polymarket platform, f",
+            "source_ids": [
+              "polymarket_docs"
+            ],
+            "status": "WATCH",
+            "triage_only": true
+          },
+          {
+            "attack_mode": "MECHANISM_BREAKER",
+            "candidate_key": "CAND-86b30e47fb75cfcd",
+            "capability": "settlement",
+            "claim": "Public evidence contains a context-supported Recon signal; mechanism is unproven.",
+            "execution_gate": {
+              "economic_conclusion": "NO_PROVEN_EDGE",
+              "live_trading": false,
+              "paid_actions": false,
+              "research_only": true,
+              "wallet_actions": false
+            },
+            "finding_id": "RECON-18d062630dd9c963",
+            "next_decisive_test": "Establish mechanism, base rate, point-in-time predictiveness and net executable economics.",
+            "promotion_authority": false,
+            "public_trigger": "settlement",
+            "snippet": "amounts in specific cities, from New York City to Los Angeles. Traders can take positions on whether a city will reach a certain high temperature or fall within a particular range. Each weather market names its official settlement source in its market rules. Daily high/low temperature markets settle based on the final climate report issued by the National Weather Service (NWS), typically released the following morning. Hourly temperature markets settle on readings from The Weather Company . Always check the specific market’s rules for its source. How Do I Trade on Weather Markets? Kalshi creates a prediction market around a specific temperature threshold for a given location. For example: “Highest temperature in Chicago on April 1",
+            "source_ids": [
+              "kalshi_weather_rules"
+            ],
+            "status": "WATCH",
+            "triage_only": true
+          }
+        ],
+        "red_team_modes": {},
+        "reproduction_candidates": [],
+        "routed_evidence": [
+          {
+            "capability": "microstructure",
+            "document_sha256": "e60f2357eaca0914dea07f1ec9a4f64c01924245e6a8b1882afcbbe9cb9b665b",
+            "retrieved_at": "2026-09-22T20:14:47.716827+00:00",
+            "snippet": "market 101 SDKs & APIs Core Concepts Markets & Events Negative Risk Markets Prices & Orderbook Positions & Tokens Polymarket USD Order Lifecycle Resolution Market Data Overview Discover Markets Market Details Prices and Order Books Analytics Real-Time Data Chainlink TWAP Prices Trading Overview Place Your First Order Wallets and Authentication Session Keys Beta Place Orders Manage Orders Real-Time Order Updates Positions Combos Wallet Activity Fees Market Making Matching Engine Restarts Bridge Programs Taker Rebate Program Maker Rebates Program Liquidity Rewards Builder Program Referral Program Resources Contracts Data Resources Error Codes 🇺🇸 Looking for Polymarket US documentation? Visit US Docs → Polymarket Documentation Build",
+            "source_id": "polymarket_docs",
+            "source_state": "UNCHANGED",
+            "term": "order book"
+          },
+          {
+            "capability": "settlement",
+            "document_sha256": "92da6ddc75d01480400ae4b9c69f24e2a4c43d940d41024e756b57426f2683dd",
+            "retrieved_at": "2026-09-23T08:00:17.353617+00:00",
+            "snippet": "amounts in specific cities, from New York City to Los Angeles. Traders can take positions on whether a city will reach a certain high temperature or fall within a particular range. Each weather market names its official settlement source in its market rules. Daily high/low temperature markets settle based on the final climate report issued by the National Weather Service (NWS), typically released the following morning. Hourly temperature markets settle on readings from The Weather Company . Always check the specific market’s rules for its source. How Do I Trade on Weather Markets? Kalshi creates a prediction market around a specific temperature threshold for a given location. For example: “Highest temperature in Chicago on April 1",
+            "source_id": "kalshi_weather_rules",
+            "source_state": "CHANGED",
+            "term": "settlement"
+          }
+        ],
+        "scheduler_priority": "POINT_IN_TIME_OR_EXECUTION_EVIDENCE",
+        "status": "READY",
+        "task_shape": {
+          "dependencies": "independent",
+          "expected_decision_value": "high",
+          "max_parallel_workers": 5,
+          "name": "HIGH_INDEPENDENT",
+          "novelty": "normal",
+          "time_sensitivity": "normal",
+          "uncertainty": "source/semantic"
+        },
+        "transient": false
+      },
+      "priority": "P3",
+      "responsibility": "SPECIALIST_DISPATCH",
+      "task_shape": "SEQUENTIAL",
+      "work_id": "277a73c09336d7d279ef868bca079efedf8af7c8fab9ea86dab7a098e9061a3f"
+    },
+    {
+      "agent_id": "algebra",
+      "capability_mode": "ALGEBRA",
+      "legacy_role": "algebra",
+      "must_return_result": true,
+      "objective": null,
+      "packet": {
+        "agent_id": "algebra",
+        "blind": false,
+        "blind_reproduction_interface": [],
+        "candidate_ids": [
+          "ASSET-RANK-MAKER-HEDGE-V1",
+          "PAYOFF-IDENTITY-MINING-V1"
+        ],
+        "candidate_routing": [
+          {
+            "candidate_id": "ASSET-RANK-MAKER-HEDGE-V1",
+            "capability": "algebra",
+            "domain_role": "algebra",
+            "next_decisive_test": "Continue preregistered prospective conservative fill monitoring; only a proven full passive fill may trigger synchronized first-executable hedge economics.",
+            "open_question": null,
+            "phase": "MECHANISM_DEFINED",
+            "queue_status": "RUNNING",
+            "reasons": [
+              "statewise payoff/equivalence semantics"
+            ],
+            "source_ref": "knowledge/candidates/ASSET-RANK-MAKER-HEDGE-V1.json"
+          },
+          {
+            "candidate_id": "PAYOFF-IDENTITY-MINING-V1",
+            "capability": "algebra",
+            "domain_role": "algebra",
+            "next_decisive_test": "Find one concrete contract pair with primary-rule statewise payout semantics, then compare synchronized executable L2 only after formal equivalence/dominance proof.",
+            "open_question": null,
+            "phase": "DISCOVERED",
+            "queue_status": "NEEDS_DIRECTOR",
+            "reasons": [
+              "lane=MARKET_ALGEBRA",
+              "statewise payoff/equivalence semantics"
+            ],
+            "source_ref": "knowledge/candidates/PAYOFF-IDENTITY-MINING-V1.json"
+          }
+        ],
+        "capability_work": {
+          "algebra": {
+            "candidate_ids": [
+              "ASSET-RANK-MAKER-HEDGE-V1",
+              "PAYOFF-IDENTITY-MINING-V1"
+            ],
+            "candidate_routing": [
+              {
+                "candidate_id": "ASSET-RANK-MAKER-HEDGE-V1",
+                "capability": "algebra",
+                "next_decisive_test": "Continue preregistered prospective conservative fill monitoring; only a proven full passive fill may trigger synchronized first-executable hedge economics.",
+                "open_question": null,
+                "phase": "MECHANISM_DEFINED",
+                "queue_status": "RUNNING",
+                "reasons": [
+                  "statewise payoff/equivalence semantics"
+                ],
+                "source_ref": "knowledge/candidates/ASSET-RANK-MAKER-HEDGE-V1.json"
+              },
+              {
+                "candidate_id": "PAYOFF-IDENTITY-MINING-V1",
+                "capability": "algebra",
+                "next_decisive_test": "Find one concrete contract pair with primary-rule statewise payout semantics, then compare synchronized executable L2 only after formal equivalence/dominance proof.",
+                "open_question": null,
+                "phase": "DISCOVERED",
+                "queue_status": "NEEDS_DIRECTOR",
+                "reasons": [
+                  "lane=MARKET_ALGEBRA",
+                  "statewise payoff/equivalence semantics"
+                ],
+                "source_ref": "knowledge/candidates/PAYOFF-IDENTITY-MINING-V1.json"
+              }
+            ],
+            "coverage_gaps": [],
+            "recon_watch_triage": [
+              {
+                "attack_mode": "MECHANISM_BREAKER",
+                "candidate_key": "CAND-103b39d83eee3369",
+                "capability": "algebra",
+                "claim": "Public evidence contains a context-supported Recon signal; mechanism is unproven.",
+                "execution_gate": {
+                  "economic_conclusion": "NO_PROVEN_EDGE",
+                  "live_trading": false,
+                  "paid_actions": false,
+                  "research_only": true,
+                  "wallet_actions": false
+                },
+                "finding_id": "RECON-0db7ff1ec789722b",
+                "next_decisive_test": "Establish mechanism, base rate, point-in-time predictiveness and net executable economics.",
+                "promotion_authority": false,
+                "public_trigger": "api",
+                "snippet": "your API credentials. Kalshi Academy New to prediction markets? Explore educational resources and tutorials. Reference Rate Limits Token budgets, tiers, and bursting. Changelog Stay updated with the latest API changes. Glossary Key terms and concepts used across the exchange. Specifications Predictions REST Download openapi.yaml for event-contract REST API integration. Predictions WebSocket Download asyncapi.yaml for event-contract WebSocket integration. Perps REST Download perps_openapi.yaml for perpetual futures REST API integration. Perps WebSocket Download perps_asyncapi.yaml for perpetual futures WebSocket integration.",
+                "source_ids": [
+                  "kalshi_docs"
+                ],
+                "status": "WATCH",
+                "triage_only": true
+              },
+              {
+                "attack_mode": "MECHANISM_BREAKER",
+                "candidate_key": "CAND-64cb34fb55766cdd",
+                "capability": "algebra",
+                "claim": "Public evidence contains a context-supported Recon signal; mechanism is unproven.",
+                "execution_gate": {
+                  "economic_conclusion": "NO_PROVEN_EDGE",
+                  "live_trading": false,
+                  "paid_actions": false,
+                  "research_only": true,
+                  "wallet_actions": false
+                },
+                "finding_id": "RECON-75b83fbdd0abd801",
+                "next_decisive_test": "Establish mechanism, base rate, point-in-time predictiveness and net executable economics.",
+                "promotion_authority": false,
+                "public_trigger": "rebate",
+                "snippet": "ils Prices and Order Books Analytics Real-Time Data Chainlink TWAP Prices Trading Overview Place Your First Order Wallets and Authentication Session Keys Beta Place Orders Manage Orders Real-Time Order Updates Positions Combos Wallet Activity Fees Market Making Matching Engine Restarts Bridge Programs Taker Rebate Program Maker Rebates Program Liquidity Rewards Builder Program Referral Program Resources Contracts Data Resources Error Codes 🇺🇸 Looking for Polymarket US documentation? Visit US Docs → Polymarket Documentation Build on the world’s largest prediction market. APIs, SDKs, and tools for prediction market developers. Developer Quickstart Make your first API request in minutes. Learn the basics of the Polymarket platform, f",
+                "source_ids": [
+                  "polymarket_docs"
+                ],
+                "status": "WATCH",
+                "triage_only": true
+              },
+              {
+                "attack_mode": "MECHANISM_BREAKER",
+                "candidate_key": "CAND-86b30e47fb75cfcd",
+                "capability": "algebra",
+                "claim": "Public evidence contains a context-supported Recon signal; mechanism is unproven.",
+                "execution_gate": {
+                  "economic_conclusion": "NO_PROVEN_EDGE",
+                  "live_trading": false,
+                  "paid_actions": false,
+                  "research_only": true,
+                  "wallet_actions": false
+                },
+                "finding_id": "RECON-18d062630dd9c963",
+                "next_decisive_test": "Establish mechanism, base rate, point-in-time predictiveness and net executable economics.",
+                "promotion_authority": false,
+                "public_trigger": "settlement",
+                "snippet": "amounts in specific cities, from New York City to Los Angeles. Traders can take positions on whether a city will reach a certain high temperature or fall within a particular range. Each weather market names its official settlement source in its market rules. Daily high/low temperature markets settle based on the final climate report issued by the National Weather Service (NWS), typically released the following morning. Hourly temperature markets settle on readings from The Weather Company . Always check the specific market’s rules for its source. How Do I Trade on Weather Markets? Kalshi creates a prediction market around a specific temperature threshold for a given location. For example: “Highest temperature in Chicago on April 1",
+                "source_ids": [
+                  "kalshi_weather_rules"
+                ],
+                "status": "WATCH",
+                "triage_only": true
+              }
+            ],
+            "routed_evidence": [
+              {
+                "capability": "algebra",
+                "document_sha256": "e60f2357eaca0914dea07f1ec9a4f64c01924245e6a8b1882afcbbe9cb9b665b",
+                "retrieved_at": "2026-09-22T20:14:47.716827+00:00",
+                "snippet": "ils Prices and Order Books Analytics Real-Time Data Chainlink TWAP Prices Trading Overview Place Your First Order Wallets and Authentication Session Keys Beta Place Orders Manage Orders Real-Time Order Updates Positions Combos Wallet Activity Fees Market Making Matching Engine Restarts Bridge Programs Taker Rebate Program Maker Rebates Program Liquidity Rewards Builder Program Referral Program Resources Contracts Data Resources Error Codes 🇺🇸 Looking for Polymarket US documentation? Visit US Docs → Polymarket Documentation Build on the world’s largest prediction market. APIs, SDKs, and tools for prediction market developers. Developer Quickstart Make your first API request in minutes. Learn the basics of the Polymarket platform, f",
+                "source_id": "polymarket_docs",
+                "source_state": "UNCHANGED",
+                "term": "combo"
+              }
+            ],
+            "routing_status": "EVIDENCE_ROUTED"
+          }
+        },
+        "contract": {
+          "agent": "algebra",
+          "gate": "statewise_payout_proof_required",
+          "input": "contract and payout structures",
+          "live_trading": false,
+          "output": [
+            "candidate_identities",
+            "formal_conditions"
+          ],
+          "paid_actions": false,
+          "wallet_actions": false
+        },
+        "coverage_gaps": [],
+        "coverage_gaps_by_capability": {
+          "algebra": []
+        },
+        "discovery_lanes": {},
+        "dynamic_worker_scheduled": true,
+        "input_refs": [
+          "knowledge/runs/hourly-20260923T100000+0200-routing.json",
+          "knowledge/runs/recon/hourly-20260923T100000+0200.json"
+        ],
+        "local_task_id": null,
+        "local_task_required": false,
+        "next_decisive_question": null,
+        "orchestrator_reason": "candidate_and_routed_evidence_available",
+        "priority": "P3",
+        "recon_hunts": [],
+        "recon_watch_triage": [
+          {
+            "attack_mode": "MECHANISM_BREAKER",
+            "candidate_key": "CAND-103b39d83eee3369",
+            "capability": "algebra",
+            "claim": "Public evidence contains a context-supported Recon signal; mechanism is unproven.",
+            "execution_gate": {
+              "economic_conclusion": "NO_PROVEN_EDGE",
+              "live_trading": false,
+              "paid_actions": false,
+              "research_only": true,
+              "wallet_actions": false
+            },
+            "finding_id": "RECON-0db7ff1ec789722b",
+            "next_decisive_test": "Establish mechanism, base rate, point-in-time predictiveness and net executable economics.",
+            "promotion_authority": false,
+            "public_trigger": "api",
+            "snippet": "your API credentials. Kalshi Academy New to prediction markets? Explore educational resources and tutorials. Reference Rate Limits Token budgets, tiers, and bursting. Changelog Stay updated with the latest API changes. Glossary Key terms and concepts used across the exchange. Specifications Predictions REST Download openapi.yaml for event-contract REST API integration. Predictions WebSocket Download asyncapi.yaml for event-contract WebSocket integration. Perps REST Download perps_openapi.yaml for perpetual futures REST API integration. Perps WebSocket Download perps_asyncapi.yaml for perpetual futures WebSocket integration.",
+            "source_ids": [
+              "kalshi_docs"
+            ],
+            "status": "WATCH",
+            "triage_only": true
+          },
+          {
+            "attack_mode": "MECHANISM_BREAKER",
+            "candidate_key": "CAND-64cb34fb55766cdd",
+            "capability": "algebra",
+            "claim": "Public evidence contains a context-supported Recon signal; mechanism is unproven.",
+            "execution_gate": {
+              "economic_conclusion": "NO_PROVEN_EDGE",
+              "live_trading": false,
+              "paid_actions": false,
+              "research_only": true,
+              "wallet_actions": false
+            },
+            "finding_id": "RECON-75b83fbdd0abd801",
+            "next_decisive_test": "Establish mechanism, base rate, point-in-time predictiveness and net executable economics.",
+            "promotion_authority": false,
+            "public_trigger": "rebate",
+            "snippet": "ils Prices and Order Books Analytics Real-Time Data Chainlink TWAP Prices Trading Overview Place Your First Order Wallets and Authentication Session Keys Beta Place Orders Manage Orders Real-Time Order Updates Positions Combos Wallet Activity Fees Market Making Matching Engine Restarts Bridge Programs Taker Rebate Program Maker Rebates Program Liquidity Rewards Builder Program Referral Program Resources Contracts Data Resources Error Codes 🇺🇸 Looking for Polymarket US documentation? Visit US Docs → Polymarket Documentation Build on the world’s largest prediction market. APIs, SDKs, and tools for prediction market developers. Developer Quickstart Make your first API request in minutes. Learn the basics of the Polymarket platform, f",
+            "source_ids": [
+              "polymarket_docs"
+            ],
+            "status": "WATCH",
+            "triage_only": true
+          },
+          {
+            "attack_mode": "MECHANISM_BREAKER",
+            "candidate_key": "CAND-86b30e47fb75cfcd",
+            "capability": "algebra",
+            "claim": "Public evidence contains a context-supported Recon signal; mechanism is unproven.",
+            "execution_gate": {
+              "economic_conclusion": "NO_PROVEN_EDGE",
+              "live_trading": false,
+              "paid_actions": false,
+              "research_only": true,
+              "wallet_actions": false
+            },
+            "finding_id": "RECON-18d062630dd9c963",
+            "next_decisive_test": "Establish mechanism, base rate, point-in-time predictiveness and net executable economics.",
+            "promotion_authority": false,
+            "public_trigger": "settlement",
+            "snippet": "amounts in specific cities, from New York City to Los Angeles. Traders can take positions on whether a city will reach a certain high temperature or fall within a particular range. Each weather market names its official settlement source in its market rules. Daily high/low temperature markets settle based on the final climate report issued by the National Weather Service (NWS), typically released the following morning. Hourly temperature markets settle on readings from The Weather Company . Always check the specific market’s rules for its source. How Do I Trade on Weather Markets? Kalshi creates a prediction market around a specific temperature threshold for a given location. For example: “Highest temperature in Chicago on April 1",
+            "source_ids": [
+              "kalshi_weather_rules"
+            ],
+            "status": "WATCH",
+            "triage_only": true
+          }
+        ],
+        "red_team_modes": {},
+        "reproduction_candidates": [],
+        "routed_evidence": [
+          {
+            "capability": "algebra",
+            "document_sha256": "e60f2357eaca0914dea07f1ec9a4f64c01924245e6a8b1882afcbbe9cb9b665b",
+            "retrieved_at": "2026-09-22T20:14:47.716827+00:00",
+            "snippet": "ils Prices and Order Books Analytics Real-Time Data Chainlink TWAP Prices Trading Overview Place Your First Order Wallets and Authentication Session Keys Beta Place Orders Manage Orders Real-Time Order Updates Positions Combos Wallet Activity Fees Market Making Matching Engine Restarts Bridge Programs Taker Rebate Program Maker Rebates Program Liquidity Rewards Builder Program Referral Program Resources Contracts Data Resources Error Codes 🇺🇸 Looking for Polymarket US documentation? Visit US Docs → Polymarket Documentation Build on the world’s largest prediction market. APIs, SDKs, and tools for prediction market developers. Developer Quickstart Make your first API request in minutes. Learn the basics of the Polymarket platform, f",
+            "source_id": "polymarket_docs",
+            "source_state": "UNCHANGED",
+            "term": "combo"
+          }
+        ],
+        "scheduler_priority": "DECISIVE_SEMANTIC_OR_SOURCE_KILL_CHECK",
+        "status": "READY",
+        "task_shape": {
+          "dependencies": "independent",
+          "expected_decision_value": "high",
+          "max_parallel_workers": 5,
+          "name": "HIGH_INDEPENDENT",
+          "novelty": "normal",
+          "time_sensitivity": "normal",
+          "uncertainty": "source/semantic"
+        },
+        "transient": false
+      },
+      "priority": "P3",
+      "responsibility": "SPECIALIST_DISPATCH",
+      "task_shape": "SEQUENTIAL",
+      "work_id": "23ad41e907e846cf6c4617ebd706b59348b1980c1e559dab06559f7924bc2eaf"
+    },
+    {
+      "agent_id": "red_team_pentest",
+      "capability_mode": "DEEP_FALSIFICATION",
+      "legacy_role": "red_team_pentest",
+      "must_return_result": true,
+      "objective": null,
+      "packet": {
+        "agent_id": "red_team_pentest",
+        "blind": false,
+        "blind_reproduction_interface": [],
+        "candidate_ids": [
+          "ASSET-RANK-MAKER-HEDGE-V1",
+          "KWI-FULL-STATION-PRECANONICAL-V1",
+          "PAYOFF-IDENTITY-MINING-V1"
+        ],
+        "candidate_routing": [
+          {
+            "candidate_id": "ASSET-RANK-MAKER-HEDGE-V1",
+            "capability": "prebuild_killer",
+            "domain_role": "red_team_pentest",
+            "next_decisive_test": "Continue preregistered prospective conservative fill monitoring; only a proven full passive fill may trigger synchronized first-executable hedge economics.",
+            "open_question": null,
+            "phase": "MECHANISM_DEFINED",
+            "queue_status": "RUNNING",
+            "reasons": [
+              "E007 cheap pre-build falsification required"
+            ],
+            "source_ref": "knowledge/candidates/ASSET-RANK-MAKER-HEDGE-V1.json"
+          },
+          {
+            "candidate_id": "KWI-FULL-STATION-PRECANONICAL-V1",
+            "capability": "prebuild_killer",
+            "domain_role": "red_team_pentest",
+            "next_decisive_test": "Await and evaluate post-cutoff cases under the preregistered 24h full-station protocol; discovery rows cannot count as validation.",
+            "open_question": null,
+            "phase": "MECHANISM_DEFINED",
+            "queue_status": "WAITING_FOR_RESULT",
+            "reasons": [
+              "E007 cheap pre-build falsification required"
+            ],
+            "source_ref": "knowledge/candidates/KWI-FULL-STATION-PRECANONICAL-V1.json"
+          },
+          {
+            "candidate_id": "PAYOFF-IDENTITY-MINING-V1",
+            "capability": "prebuild_killer",
+            "domain_role": "red_team_pentest",
+            "next_decisive_test": "Find one concrete contract pair with primary-rule statewise payout semantics, then compare synchronized executable L2 only after formal equivalence/dominance proof.",
+            "open_question": null,
+            "phase": "DISCOVERED",
+            "queue_status": "NEEDS_DIRECTOR",
+            "reasons": [
+              "E007 cheap pre-build falsification required"
+            ],
+            "source_ref": "knowledge/candidates/PAYOFF-IDENTITY-MINING-V1.json"
+          }
+        ],
+        "capability_work": {
+          "prebuild_killer": {
+            "candidate_ids": [
+              "ASSET-RANK-MAKER-HEDGE-V1",
+              "KWI-FULL-STATION-PRECANONICAL-V1",
+              "PAYOFF-IDENTITY-MINING-V1"
+            ],
+            "candidate_routing": [
+              {
+                "candidate_id": "ASSET-RANK-MAKER-HEDGE-V1",
+                "capability": "prebuild_killer",
+                "next_decisive_test": "Continue preregistered prospective conservative fill monitoring; only a proven full passive fill may trigger synchronized first-executable hedge economics.",
+                "open_question": null,
+                "phase": "MECHANISM_DEFINED",
+                "queue_status": "RUNNING",
+                "reasons": [
+                  "E007 cheap pre-build falsification required"
+                ],
+                "source_ref": "knowledge/candidates/ASSET-RANK-MAKER-HEDGE-V1.json"
+              },
+              {
+                "candidate_id": "KWI-FULL-STATION-PRECANONICAL-V1",
+                "capability": "prebuild_killer",
+                "next_decisive_test": "Await and evaluate post-cutoff cases under the preregistered 24h full-station protocol; discovery rows cannot count as validation.",
+                "open_question": null,
+                "phase": "MECHANISM_DEFINED",
+                "queue_status": "WAITING_FOR_RESULT",
+                "reasons": [
+                  "E007 cheap pre-build falsification required"
+                ],
+                "source_ref": "knowledge/candidates/KWI-FULL-STATION-PRECANONICAL-V1.json"
+              },
+              {
+                "candidate_id": "PAYOFF-IDENTITY-MINING-V1",
+                "capability": "prebuild_killer",
+                "next_decisive_test": "Find one concrete contract pair with primary-rule statewise payout semantics, then compare synchronized executable L2 only after formal equivalence/dominance proof.",
+                "open_question": null,
+                "phase": "DISCOVERED",
+                "queue_status": "NEEDS_DIRECTOR",
+                "reasons": [
+                  "E007 cheap pre-build falsification required"
+                ],
+                "source_ref": "knowledge/candidates/PAYOFF-IDENTITY-MINING-V1.json"
+              }
+            ]
+          }
+        },
+        "contract": {
+          "agent": "red_team_pentest",
+          "authority": "VETO_RECOMMENDATION",
+          "capabilities": [
+            "prebuild_killer",
+            "chief_falsifier"
+          ],
+          "live_trading": false,
+          "modes": [
+            "QUICK_KILL",
+            "DEEP_FALSIFICATION"
+          ],
+          "openai_api": false,
+          "output": [
+            "validation_results",
+            "negative_evidence",
+            "survivors",
+            "failure_memory_updates",
+            "next_decisive_question"
+          ],
+          "paid_actions": false,
+          "requirements": [
+            "Try the cheapest decisive kill before expensive work",
+            "Attack leakage, source mismatch, post-hoc gates, stale data, non-executable pricing and hidden exception classes",
+            "Run deeper falsification only for serious survivors",
+            "Never promote or close a candidate autonomously"
+          ],
+          "wallet_actions": false
+        },
+        "coverage_gaps": [],
+        "coverage_gaps_by_capability": {},
+        "discovery_lanes": {},
+        "dynamic_worker_scheduled": true,
+        "input_refs": [],
+        "local_task_id": null,
+        "local_task_required": false,
+        "next_decisive_question": null,
+        "orchestrator_reason": "candidate_available_for_red_team",
+        "priority": "P2",
+        "recon_hunts": [],
+        "recon_watch_triage": [],
+        "red_team_modes": {
+          "ASSET-RANK-MAKER-HEDGE-V1": "QUICK_KILL",
+          "KWI-FULL-STATION-PRECANONICAL-V1": "QUICK_KILL",
+          "PAYOFF-IDENTITY-MINING-V1": "QUICK_KILL"
+        },
+        "reproduction_candidates": [],
+        "routed_evidence": [],
+        "scheduler_priority": "CHEAP_DECISIVE_FALSIFICATION",
+        "status": "READY",
+        "task_shape": {
+          "dependencies": "sequential",
+          "expected_decision_value": "high",
+          "max_parallel_workers": 1,
+          "name": "LOW_SEQUENTIAL",
+          "novelty": "normal",
+          "time_sensitivity": "normal",
+          "uncertainty": "semantic/economic"
+        },
+        "transient": false
+      },
+      "priority": "P2",
+      "responsibility": "RED_TEAM",
+      "task_shape": "PARTIAL",
+      "work_id": "50741d9834310d116713a3796edfd50de4001dd7334519d1851457bacbf56097"
+    },
+    {
+      "agent_id": "research_director",
+      "capability_mode": "ADJUDICATION",
+      "legacy_role": "research_director",
+      "must_return_result": true,
+      "objective": null,
+      "packet": {
+        "agent_id": "research_director",
+        "blind": false,
+        "blind_reproduction_interface": [],
+        "candidate_ids": [],
+        "candidate_routing": [],
+        "capability_work": {},
+        "contract": {
+          "agent": "research_director",
+          "authority": "RESEARCH_COORDINATION",
+          "gate": "NO_PROVEN_EDGE_is_valid",
+          "input": "six-domain outputs, candidate queue, Evidence Graph, Failure Graph, scheduler state and validation pipeline",
+          "live_trading": false,
+          "openai_api": false,
+          "output": [
+            "hourly_report",
+            "candidate_status",
+            "next_hour_queue",
+            "scheduler_decision",
+            "graph_updates",
+            "validation_status"
+          ],
+          "paid_actions": false,
+          "requirements": [
+            "Allocate only admissible work",
+            "Prefer decisive kill/evidence work over filler output",
+            "Preserve negative evidence and resurrection conditions",
+            "Do not count correlated evidence twice",
+            "Do not promote without deterministic gates and required independent reproduction"
+          ],
+          "wallet_actions": false
+        },
+        "coverage_gaps": [],
+        "coverage_gaps_by_capability": {},
+        "discovery_lanes": {},
+        "dynamic_worker_scheduled": null,
+        "input_refs": [],
+        "local_task_id": null,
+        "local_task_required": false,
+        "next_decisive_question": null,
+        "orchestrator_reason": "director_closes_active_cycle",
+        "priority": "P1",
+        "recon_hunts": [],
+        "recon_watch_triage": [],
+        "red_team_modes": {},
+        "reproduction_candidates": [],
+        "routed_evidence": [],
+        "scheduler_priority": null,
+        "status": "READY",
+        "task_shape": null,
+        "transient": false
+      },
+      "priority": "P1",
+      "responsibility": "RESEARCH_DIRECTOR",
+      "task_shape": "PARTIAL",
+      "work_id": "5ee5258c153b7b3f0a3d58ef65c806d8ff03cd54cfa82916dd7ef12994281cae"
+    }
+  ]
+}
