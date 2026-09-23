@@ -1,0 +1,147 @@
+{
+  "schema": "PVA_POSITIVE_EV_POLICY_REREVIEW_V1",
+  "as_of": "2026-09-23",
+  "policy_change": "Any evidence-compatible net EV > 0 remains research-eligible regardless of current daily scale or cents per episode. Scale/capacity/frequency/capital lock rank opportunities but do not by themselves kill them.",
+  "proof_standard_unchanged": true,
+  "live_trading": false,
+  "review_scope": {
+    "core_candidates": [
+      "ASSET-RANK-MAKER-HEDGE-V1",
+      "PAYOFF-IDENTITY-MINING-V1",
+      "KWI-FULL-STATION-PRECANONICAL-V1",
+      "KWI-INCOMPLETE-TO-CANONICAL-V1"
+    ],
+    "recent_routes": [
+      "behavioral tail-demand / maker settlement rent",
+      "Robinhood multi-DCM route fragmentation",
+      "ForecastEx block/RFQ and liquidity-incentive regime",
+      "Nadex/CDNA maker-fee/rebate/fractional-tick regime",
+      "Polymarket live-sports combinatorial arbitrage",
+      "fee-free below-par exhaustive partitions"
+    ],
+    "selected_negative_routes_with_material_resurrection_triggers": [
+      "ForecastEx same-market YES+NO coupon farming",
+      "Trueo reward hedge",
+      "Kalshi soccer three-way partition",
+      "scheduled macro first-decidability",
+      "hourly weather versus daily high/low identity",
+      "KXHIGHNY six-NO unconditional floor"
+    ]
+  },
+  "results": [
+    {
+      "item": "ASSET-RANK-MAKER-HEDGE-V1",
+      "previous_state": "RUNNING / UNPROVEN",
+      "rereview_result": "KEEP_ACTIVE",
+      "reason": "Conditional maker-then-taker arithmetic can be positive; small absolute profit is not a kill reason. The decisive blocker remains proof of a conservative full passive fill followed by executable hedge economics.",
+      "scale_effect": "NONE_ON_ADMISSION"
+    },
+    {
+      "item": "PAYOFF-IDENTITY-MINING-V1",
+      "previous_state": "NEEDS_DIRECTOR / UNPROVEN",
+      "rereview_result": "KEEP_RESEARCH_ELIGIBLE",
+      "reason": "Any formally proven statewise identity/dominance with net executable positive cashflow is relevant even if the absolute profit is cents. Current blocker is lack of one concrete fully proven pair plus synchronized executable L2.",
+      "scale_effect": "RANK_AFTER_PROOF"
+    },
+    {
+      "item": "KWI-FULL-STATION-PRECANONICAL-V1",
+      "previous_state": "WAITING_FOR_RESULT / UNPROVEN",
+      "rereview_result": "KEEP_ACTIVE_WAITING",
+      "reason": "A small but reproducible weather information edge remains valid if it survives market prices, fees and execution. Await genuinely post-cutoff preregistered evidence.",
+      "scale_effect": "NONE_ON_ADMISSION"
+    },
+    {
+      "item": "KWI-INCOMPLETE-TO-CANONICAL-V1",
+      "previous_state": "PARKED; simple incomplete mean rejected in development",
+      "rereview_result": "WATCH_BROADER_MECHANISM",
+      "reason": "The failed simple estimator remains rejected; low profit was not the reason for failure. The broader early-information mechanism may reopen only on new untouched holdout, orthogonal preregistered method or material source-process change.",
+      "scale_effect": "NONE; METHOD_FALSIFICATION_PRESERVED"
+    },
+    {
+      "item": "Behavioral tail-demand / maker settlement rent",
+      "previous_state": "RESEARCH_POSITIVE_MECHANISM / WATCH",
+      "rereview_result": "WATCH_HIGH_INFORMATION_VALUE",
+      "reason": "Academic mechanism evidence is relevant. Even small repeatable maker rent matters; own fills, adverse selection, markouts, inventory-to-settlement and fees/rewards remain required.",
+      "scale_effect": "LOW_CAPACITY_WOULD_LOWER_PRIORITY_ONLY"
+    },
+    {
+      "item": "Robinhood multi-DCM route fragmentation",
+      "previous_state": "WATCH",
+      "rereview_result": "WATCH",
+      "reason": "A small route-specific executable discrepancy would be worth proving. Need exact cross-venue payoff identity plus simultaneous route-resolved prices/fees/depth.",
+      "scale_effect": "SMALL_EDGE_ALLOWED"
+    },
+    {
+      "item": "ForecastEx block/RFQ versus CLOB",
+      "previous_state": "WATCH",
+      "rereview_result": "WATCH",
+      "reason": "Even a small fee or execution improvement can matter if repeatable. Need actual eligibility, minimum size, quote and fill evidence; fee holiday alone is not edge.",
+      "scale_effect": "SMALL_EDGE_ALLOWED"
+    },
+    {
+      "item": "Nadex/CDNA maker-fee/rebate/fractional-tick regime",
+      "previous_state": "WATCH",
+      "rereview_result": "WATCH",
+      "reason": "Small maker economics are explicitly in scope. Need effective implementation, eligibility, realized fee/rebate data, fill behavior and adverse-selection-adjusted markouts.",
+      "scale_effect": "SMALL_EDGE_ALLOWED"
+    },
+    {
+      "item": "Polymarket live-sports combinatorial arbitrage",
+      "previous_state": "WATCH; external evidence indicates short-lived and depth-constrained opportunities",
+      "rereview_result": "WATCH_RETAINED_DESPITE_LOW_CAPACITY",
+      "reason": "The previous low-capacity observation is no longer a reason to dismiss the mechanism. A reproducible cents-level net executable episode is valid research output; speed/depth/legging remain execution blockers.",
+      "scale_effect": "LOW_CAPACITY_IS_PRIORITY_PENALTY_NOT_KILL_GATE"
+    },
+    {
+      "item": "Fee-free below-par exhaustive partitions",
+      "previous_state": "Previously described as potentially economically unattractive because of low capacity and long capital lock",
+      "rereview_result": "RECLASSIFY_TO_WATCH_IF_NET_POSITIVE",
+      "reason": "Low capacity or long settlement cannot alone invalidate an otherwise proven positive locked edge. Preserve such routes, quantify return per capital-day, and rank them rather than discarding them.",
+      "scale_effect": "PRIOR_DESCRIPTION_SUPERSEDED_AS_ADMISSION_RULE"
+    },
+    {
+      "item": "ForecastEx same-market YES+NO coupon farming",
+      "previous_state": "TESTED_NEGATIVE",
+      "rereview_result": "TESTED_NEGATIVE_WATCH",
+      "reason": "The current simple loop remains invalid due to offsetting semantics and observed prices. Reopen only if Rule 604/coupon treatment changes or a new point-in-time coupon-adjusted locked payout exceeds executable cost.",
+      "scale_effect": "NO_CHANGE"
+    },
+    {
+      "item": "Trueo reward hedge",
+      "previous_state": "TESTED_NEGATIVE because rewardAmount=0",
+      "rereview_result": "TESTED_NEGATIVE_WATCH",
+      "reason": "Current route remains inactive, but rewardAmount or factory economics can change later. Positive rewards trigger recheck.",
+      "scale_effect": "NO_CHANGE"
+    },
+    {
+      "item": "Kalshi soccer three-way partition",
+      "previous_state": "TESTED_NEGATIVE on checked examples",
+      "rereview_result": "TESTED_NEGATIVE_WATCH",
+      "reason": "Observed baskets were above par, but this is pricing-instance evidence rather than a permanent impossibility. Future below-par executable baskets remain eligible even for small profit.",
+      "scale_effect": "SMALL_EDGE_ALLOWED"
+    },
+    {
+      "item": "Scheduled macro first-decidability",
+      "previous_state": "TESTED_NEGATIVE for examined Fed/CPI/payroll families",
+      "rereview_result": "TESTED_NEGATIVE_WATCH",
+      "reason": "Current families closed before official release. Reopen if a contract family or rule change leaves a post-release executable window.",
+      "scale_effect": "NO_CHANGE"
+    },
+    {
+      "item": "Hourly weather versus daily high/low identity",
+      "previous_state": "TESTED_NEGATIVE due TWC/NWS source mismatch",
+      "rereview_result": "TESTED_NEGATIVE_WATCH",
+      "reason": "Current identity remains invalid. Reopen only if settlement sources/transformations converge or a new family has formally identical semantics.",
+      "scale_effect": "NO_CHANGE"
+    },
+    {
+      "item": "KXHIGHNY six-NO unconditional floor",
+      "previous_state": "ROUTE_CLOSED under current exception semantics",
+      "rereview_result": "TESTED_NEGATIVE_WATCH",
+      "reason": "Do not rerun under unchanged rules. Reopen only if no-data/last-fair-price/MOR exception classes materially change or a new family lacks them.",
+      "scale_effect": "NO_CHANGE"
+    }
+  ],
+  "overall_conclusion": "No route is promoted by the policy change alone. Routes previously penalized mainly for small absolute profit or capacity are retained/reclassified as WATCH or low-priority research-eligible. Structural/method failures remain negative until the decisive dependency changes. WATCH is now the durable mechanism for later news/regime-driven resurrection.",
+  "watch_registry": "knowledge/watch/WATCH_REGISTRY.json"
+}
