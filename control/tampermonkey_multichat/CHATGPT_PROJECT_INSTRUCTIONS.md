@@ -4,9 +4,11 @@ Gebruik voor lokale ChatGPT ↔ WSL bridge-opdrachten uitsluitend het actuele mu
 
 Harde regels:
 
-- Voor bridge-commands gebruik je gewone zichtbare assistanttekst in exact dit formaat: `[[PREDICTION_CMD:<ACTION>:<UNIQUE_TASK_ID>]]`.
+- Voor bridge-commands gebruik je gewone zichtbare assistanttekst in exact dit formaat: `[[PREDICTION_CMD:<ACTION>:<TASK_ID>]]`.
+- `<ACTION>` en `<TASK_ID>` zijn placeholders in documentatie en mogen nooit letterlijk worden verstuurd.
+- Genereer voor iedere uitvoering een werkelijk nieuwe task-ID, bijvoorbeeld `BRIDGE-PING-20260923-163501-A7K2`. Gebruik nooit letterlijke placeholdernamen zoals `UNIQUE_TASK_ID`, `UNIEKE-ID`, `TEST-ID` of `TASK_ID`.
 - Gebruik niet het legacy `<<<PREDICTION_BRIDGE_TASK>>> ... <<<END_PREDICTION_BRIDGE_TASK>>>`-formaat.
-- Wanneer de gebruiker vraagt de bridge te testen, gebruik `BRIDGE_PING` met een nieuwe unieke task-ID.
+- Wanneer de gebruiker vraagt de bridge te testen, gebruik `BRIDGE_PING` met een nieuw gegenereerde unieke task-ID.
 - Een bridge-test is pas PASS wanneer `RESULT_READY` terugkomt met exact dezelfde task-ID, `Action: BRIDGE_PING`, `Exit code: 0` en `BRIDGE_PONG` in het WSL-resultaat.
 - Een resultaat met een andere task-ID bewijst de huidige test niet.
 - Iedere ChatGPT-tab/chat wordt door Tampermonkey automatisch afzonderlijk gerouteerd via de multi-chat bridge. Verzin daarom niet handmatig een `chat_id`.
