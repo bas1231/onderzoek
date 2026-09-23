@@ -4,6 +4,7 @@ from pathlib import Path
 from typing import Any
 import json
 import re
+import subprocess
 
 ROOT = Path(__file__).resolve().parents[2]
 ID_RE = re.compile(r"^[A-Za-z0-9][A-Za-z0-9_.:-]{2,119}$")
@@ -66,6 +67,24 @@ def _is_mutating(authorization: dict[str, Any], policy: dict[str, Any]) -> bool:
     return any(capability not in read_only for capability in capabilities)
 
 
+def _current_commit(root: Path) -> str | None:
+    try:
+        result = subprocess.run(
+            ["git", "rev-parse", "HEAD"],
+            cwd=root,
+            text=True,
+            capture_output=True,
+            timeout=5,
+            check=False,
+        )
+    except Exception:
+        return None
+    value = result.stdout.strip()
+    if result.returncode != 0 or not SHA_RE.fullmatch(value):
+        return None
+    return value
+
+
 def validate_task(
     task: dict[str, Any],
     *,
@@ -122,6 +141,12 @@ def validate_task(
     source_commit = contract.get("source_commit")
     if not isinstance(source_commit, str) or not SHA_RE.fullmatch(source_commit):
         reasons.append("invalid_build_contract_source_commit")
+    else:
+        current_commit = _current_commit(root)
+        if current_commit is None:
+            reasons.append("build_contract_source_commit_unverifiable")
+        elif current_commit != source_commit:
+            reasons.append("build_contract_source_commit_mismatch")
 
     allowed_capabilities = contract.get("allowed_capabilities")
     if not _string_list(allowed_capabilities):
