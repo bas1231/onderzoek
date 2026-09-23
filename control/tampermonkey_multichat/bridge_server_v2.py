@@ -17,6 +17,7 @@ SENT = DATA_DIR / "sent"
 ROUTES = DATA_DIR / "routes"
 TOKEN_FILE = HOME / ".config" / "prediction-chat-bridge" / "token"
 DEFAULT_CHAT_FILE = DATA_DIR / "default_chat.json"
+USERSCRIPT_FILE = DATA_DIR / "prediction-chat-wake.user.js"
 
 TASK_RE = re.compile(r"^[A-Za-z0-9._:-]{1,160}$")
 CHAT_RE = re.compile(r"^[A-Za-z0-9._:-]{4,180}$")
@@ -104,17 +105,17 @@ def oldest_event(chat_id=None, consumer_id=None):
             continue
         task_id = str(obj.get("task_id") or "")
         route = route_for_task(task_id)
-
         fallback = default_chat()
+
         if chat_id is None:
-            # Legacy v1 clients only see unrouted work until a v3 fallback chat
-            # has registered. This makes the rolling upgrade safe.
+            # Backward compatibility during upgrade: a legacy v1 tab can still
+            # consume unrouted work until a v3 fallback chat is registered.
             if route is not None or fallback is not None:
                 continue
             return path, obj
 
-        # Routed v3 clients see their own work. The registered fallback chat
-        # additionally receives autonomous/unrouted wake events.
+        # Routed work returns only to the chat that created that task. Unrouted
+        # autonomous wakeups go only to the explicitly selected fallback chat.
         if route != chat_id and not (route is None and fallback == chat_id):
             continue
         if not lease_available(str(obj["event_id"]), chat_id, consumer_id or chat_id):
@@ -129,7 +130,7 @@ def json_bytes(obj):
 
 
 class Handler(BaseHTTPRequestHandler):
-    server_version = "PredictionChatWake/0.2"
+    server_version = "PredictionChatWake/0.3"
 
     def log_message(self, fmt, *args):
         if self.command != "GET" or not self.path.startswith("/next"):
@@ -150,14 +151,33 @@ class Handler(BaseHTTPRequestHandler):
         self.end_headers()
         self.wfile.write(body)
 
+    def reply_userscript(self):
+        if not USERSCRIPT_FILE.exists():
+            self.reply_json(404, {"ok": False, "error": "userscript_not_installed"})
+            return
+        body = USERSCRIPT_FILE.read_bytes()
+        self.send_response(200)
+        self.send_header("Content-Type", "application/javascript; charset=utf-8")
+        self.send_header("Content-Length", str(len(body)))
+        self.send_header("Cache-Control", "no-store")
+        self.end_headers()
+        self.wfile.write(body)
+
     def do_GET(self):
         parsed = urlparse(self.path)
+
+        # Deliberately unauthenticated: loopback-only, contains no secret, and
+        # lets Tampermonkey install/update the userscript directly in the browser.
+        if parsed.path == "/prediction-chat-wake.user.js":
+            self.reply_userscript()
+            return
+
         if not self.authorized():
             self.reply_json(401, {"ok": False, "error": "unauthorized"})
             return
 
         if parsed.path == "/health":
-            self.reply_json(200, {"ok": True, "service": "prediction-chat-wake", "version": 2, "multichat": True})
+            self.reply_json(200, {"ok": True, "service": "prediction-chat-wake", "version": 3, "multichat": True})
             return
         if parsed.path != "/next":
             self.reply_json(404, {"ok": False, "error": "not_found"})
@@ -231,19 +251,25 @@ class Handler(BaseHTTPRequestHandler):
             if obj is None:
                 self.reply_json(409, {"ok": False, "error": "invalid_event"})
                 return
+
             route = route_for_task(str(obj.get("task_id") or ""))
-            if route is not None:
-                if chat_id != route:
-                    self.reply_json(409, {"ok": False, "error": "chat_mismatch"})
-                    return
-                with LEASE_LOCK:
-                    lease = LEASES.get(event_id)
-                if lease and consumer_id and lease[1] != consumer_id and lease[2] > time.monotonic():
-                    self.reply_json(409, {"ok": False, "error": "consumer_mismatch"})
-                    return
-            elif chat_id is not None and default_chat() != chat_id:
+            expected_chat = route or default_chat()
+            if expected_chat is not None and chat_id != expected_chat:
+                self.reply_json(409, {"ok": False, "error": "chat_mismatch"})
+                return
+            if expected_chat is None and chat_id is not None:
                 self.reply_json(409, {"ok": False, "error": "unrouted_event"})
                 return
+
+            with LEASE_LOCK:
+                lease = LEASES.get(event_id)
+            if lease and lease[2] > time.monotonic():
+                if chat_id is not None and lease[0] != chat_id:
+                    self.reply_json(409, {"ok": False, "error": "chat_lease_mismatch"})
+                    return
+                if consumer_id is not None and lease[1] != consumer_id:
+                    self.reply_json(409, {"ok": False, "error": "consumer_mismatch"})
+                    return
 
             os.replace(src, dst)
             release_lease(event_id)
@@ -268,7 +294,7 @@ def main():
     httpd = ThreadingHTTPServer((args.host, args.port), Handler)
     httpd.daemon_threads = True
     httpd.bridge_token = token
-    print(f"prediction-chat-wake v2 listening on http://{args.host}:{args.port}", flush=True)
+    print(f"prediction-chat-wake v3 listening on http://{args.host}:{args.port}", flush=True)
     httpd.serve_forever()
 
 
