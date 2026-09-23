@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Prediction Chat Wake Bridge
 // @namespace    local.prediction.chatbridge
-// @version      0.3.0
+// @version      0.3.1
 // @description  Multi-chat transport for the local Prediction control plane.
 // @match        https://chatgpt.com/*
 // @grant        GM_xmlhttpRequest
@@ -15,7 +15,6 @@
 
 (function () {
   'use strict';
-  if (window.top !== window.self) return;
 
   const WAKE_BASE = 'http://localhost:8765';
   const COMMAND_BASE = 'http://localhost:8767';
@@ -25,23 +24,29 @@
   const KEY_COMMAND_IDS = 'prediction_command_ids_v3';
   const KEY_SENT_EVENTS = 'prediction_sent_events_v3';
   const KEY_FALLBACK_REGISTERED = 'prediction_fallback_registered_v3';
-  const SCRIPT_VERSION = '0.3.0';
+  const SCRIPT_VERSION = '0.3.1';
 
   let statusEl = null;
   let stopped = false;
   let scanBusy = false;
 
-  const CONSUMER_ID = (() => {
-    const key = 'prediction_bridge_consumer_v3';
-    let value = sessionStorage.getItem(key);
-    if (!value) {
-      value = `tab-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 10)}`;
-      sessionStorage.setItem(key, value);
-    }
-    return value;
-  })();
-
   function sleep(ms) { return new Promise(resolve => setTimeout(resolve, ms)); }
+
+  function makeConsumerId() {
+    const generated = `tab-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 10)}`;
+    const key = 'prediction_bridge_consumer_v3';
+    try {
+      const stored = sessionStorage.getItem(key);
+      if (stored) return stored;
+      sessionStorage.setItem(key, generated);
+    } catch (_) {
+      // Session storage can be unavailable in hardened browser contexts.
+      // A per-page fallback ID still preserves routing safety.
+    }
+    return generated;
+  }
+
+  const CONSUMER_ID = makeConsumerId();
 
   function stableHash(text) {
     let hash = 2166136261;
@@ -68,17 +73,20 @@
   }
 
   function status(text, bad = false) {
-    if (!statusEl) {
-      statusEl = document.createElement('div');
-      Object.assign(statusEl.style, {
-        position: 'fixed', right: '12px', bottom: '12px', zIndex: '2147483647',
-        padding: '6px 9px', borderRadius: '7px', font: '12px/1.3 system-ui,sans-serif',
-        background: 'rgba(25,25,25,.88)', color: '#fff', pointerEvents: 'none', opacity: '.78'
-      });
-      document.documentElement.appendChild(statusEl);
-    }
-    statusEl.textContent = `WSL bridge v3: ${text}`;
-    statusEl.style.outline = bad ? '1px solid #c33' : '1px solid #555';
+    try {
+      if (!statusEl || !statusEl.isConnected) {
+        statusEl = document.createElement('div');
+        statusEl.id = 'prediction-chat-bridge-status-v3';
+        Object.assign(statusEl.style, {
+          position: 'fixed', right: '12px', bottom: '12px', zIndex: '2147483647',
+          padding: '6px 9px', borderRadius: '7px', font: '12px/1.3 system-ui,sans-serif',
+          background: 'rgba(25,25,25,.88)', color: '#fff', pointerEvents: 'none', opacity: '.78'
+        });
+        (document.documentElement || document.body).appendChild(statusEl);
+      }
+      statusEl.textContent = `WSL bridge v3.1: ${text}`;
+      statusEl.style.outline = bad ? '1px solid #c33' : '1px solid #555';
+    } catch (_) {}
   }
 
   function gmRequest(details) {
@@ -112,8 +120,8 @@
       '#prompt-textarea', '[contenteditable="true"][role="textbox"]',
       'textarea[aria-label*="Chat"]', 'textarea[placeholder*="Ask"]', '[contenteditable="true"]'
     ];
-    for (const s of selectors) {
-      const el = document.querySelector(s);
+    for (const selector of selectors) {
+      const el = document.querySelector(selector);
       if (el && el.offsetParent !== null) return el;
     }
     return null;
@@ -124,8 +132,8 @@
       '[data-testid="send-button"]', '#composer-submit-button',
       'button[aria-label="Send prompt"]', 'button[aria-label*="Send"]'
     ];
-    for (const s of selectors) {
-      const el = document.querySelector(s);
+    for (const selector of selectors) {
+      const el = document.querySelector(selector);
       if (el && el.offsetParent !== null && !el.disabled) return el;
     }
     return null;
@@ -177,41 +185,12 @@
   }
 
   async function ack(eventId, chatId) {
-    const r = await gmRequest({
+    const response = await gmRequest({
       method: 'POST', url: `${WAKE_BASE}/ack`, timeout: 5000,
       headers: { ...authHeaders(), 'Content-Type': 'application/json' },
       data: JSON.stringify({ event_id: String(eventId), chat_id: chatId, consumer_id: CONSUMER_ID })
     });
-    return r.status === 200;
-  }
-
-  async function wakeLoop() {
-    while (!stopped) {
-      if (!enabled()) { status('uitgeschakeld'); await sleep(2000); continue; }
-      if (!token()) { status('token ontbreekt', true); await sleep(3000); continue; }
-      if (chatIsBusy()) { status('ChatGPT is bezig'); await sleep(1200); continue; }
-      const chatId = currentChatId();
-      try {
-        status(`luistert ${chatId.slice(-8)}`);
-        const url = `${WAKE_BASE}/next?chat_id=${encodeURIComponent(chatId)}&consumer_id=${encodeURIComponent(CONSUMER_ID)}`;
-        const r = await gmRequest({ method: 'GET', url, headers: authHeaders(), timeout: 25000 });
-        if (r.status === 204) continue;
-        if (r.status === 401) { status('token geweigerd', true); await sleep(3000); continue; }
-        if (r.status !== 200) { status(`wake HTTP ${r.status}`, true); await sleep(1500); continue; }
-        const event = JSON.parse(r.responseText);
-        if (!event || !event.event_id || !event.message) { status('ongeldig event', true); await sleep(1200); continue; }
-        if (remembered(KEY_SENT_EVENTS, event.event_id)) { await ack(event.event_id, chatId); continue; }
-        status(`event ${event.task_id || event.event_id}`);
-        const sent = await submitMessage(String(event.message));
-        if (!sent) { await sleep(1200); continue; }
-        remember(KEY_SENT_EVENTS, event.event_id);
-        const ok = await ack(event.event_id, chatId);
-        status(ok ? `verzonden: ${event.task_id || event.event_id}` : 'ACK mislukt', !ok);
-      } catch (_) {
-        status('WSL niet bereikbaar', true);
-        await sleep(1800);
-      }
-    }
+    return response.status === 200;
   }
 
   function assistantRoots() {
@@ -233,21 +212,23 @@
     for (const root of assistantRoots()) {
       const text = String(root.innerText || root.textContent || '');
       let match;
-      while ((match = re.exec(text)) !== null) out.push({ action: match[1], task_id: match[2], key: `${match[1]}:${match[2]}` });
+      while ((match = re.exec(text)) !== null) {
+        out.push({ action: match[1], task_id: match[2], key: `${match[1]}:${match[2]}` });
+      }
     }
     return out;
   }
 
   async function sendCommand(marker) {
     const chatId = currentChatId();
-    const r = await gmRequest({
+    const response = await gmRequest({
       method: 'POST', url: `${COMMAND_BASE}/command`, timeout: 18000,
       headers: { ...authHeaders(), 'Content-Type': 'application/json' },
       data: JSON.stringify({ action: marker.action, task_id: marker.task_id, chat_id: chatId, consumer_id: CONSUMER_ID })
     });
-    if (r.status >= 200 && r.status < 300) return true;
-    if (r.status === 409) { status(`route conflict ${marker.task_id}`, true); return false; }
-    throw new Error(`command HTTP ${r.status}`);
+    if (response.status >= 200 && response.status < 300) return true;
+    if (response.status === 409) { status(`route conflict ${marker.task_id}`, true); return false; }
+    throw new Error(`command HTTP ${response.status}`);
   }
 
   async function scanCommands() {
@@ -271,12 +252,12 @@
 
   async function setFallbackForCurrentChat(showAlert) {
     const chatId = currentChatId();
-    const r = await gmRequest({
+    const response = await gmRequest({
       method: 'POST', url: `${COMMAND_BASE}/fallback`, timeout: 5000,
       headers: { ...authHeaders(), 'Content-Type': 'application/json' },
       data: JSON.stringify({ chat_id: chatId })
     });
-    if (r.status !== 200) throw new Error(`HTTP ${r.status}`);
+    if (response.status !== 200) throw new Error(`HTTP ${response.status}`);
     GM_setValue(KEY_BOUND_PATH, location.pathname);
     GM_setValue(KEY_FALLBACK_REGISTERED, chatId);
     if (showAlert) alert(`Prediction fallback-chat ingesteld.\nchat_id=${chatId}\npath=${location.pathname}`);
@@ -290,8 +271,8 @@
     try { await setFallbackForCurrentChat(false); } catch (_) {}
   }
 
-  GM_registerMenuCommand('Deze chat als fallback instellen', () => {
-    setFallbackForCurrentChat(true).catch(() => alert('Fallback instellen mislukt. Controleer token/services.'));
+  GM_registerMenuCommand('Toon chat-ID', () => {
+    alert(`Prediction bridge ${SCRIPT_VERSION}\nchat_id=${currentChatId()}\nconsumer_id=${CONSUMER_ID}`);
   });
 
   GM_registerMenuCommand('Bridge-token instellen', () => {
@@ -309,15 +290,50 @@
     alert(`Prediction bridge: ${next ? 'AAN' : 'UIT'}`);
   });
 
-  GM_registerMenuCommand('Toon chat-ID', () => {
-    alert(`Prediction bridge ${SCRIPT_VERSION}\nchat_id=${currentChatId()}\nconsumer_id=${CONSUMER_ID}`);
+  GM_registerMenuCommand('Deze chat als fallback instellen', () => {
+    setFallbackForCurrentChat(true).catch(() => alert('Fallback instellen mislukt. Controleer token/services.'));
   });
 
-  const observer = new MutationObserver(() => { scanCommands(); preserveLegacyFallback(); });
-  observer.observe(document.documentElement, { childList: true, subtree: true, characterData: true });
-  setInterval(scanCommands, 1500);
-  setInterval(preserveLegacyFallback, 5000);
-  preserveLegacyFallback();
-  scanCommands();
-  wakeLoop();
+  status('script gestart');
+
+  async function wakeLoop() {
+    while (!stopped) {
+      if (!enabled()) { status('uitgeschakeld'); await sleep(2000); continue; }
+      if (!token()) { status('token ontbreekt', true); await sleep(3000); continue; }
+      if (chatIsBusy()) { status('ChatGPT is bezig'); await sleep(1200); continue; }
+      const chatId = currentChatId();
+      try {
+        status(`luistert ${chatId.slice(-8)}`);
+        const url = `${WAKE_BASE}/next?chat_id=${encodeURIComponent(chatId)}&consumer_id=${encodeURIComponent(CONSUMER_ID)}`;
+        const response = await gmRequest({ method: 'GET', url, headers: authHeaders(), timeout: 25000 });
+        if (response.status === 204) continue;
+        if (response.status === 401) { status('token geweigerd', true); await sleep(3000); continue; }
+        if (response.status !== 200) { status(`wake HTTP ${response.status}`, true); await sleep(1500); continue; }
+        const event = JSON.parse(response.responseText);
+        if (!event || !event.event_id || !event.message) { status('ongeldig event', true); await sleep(1200); continue; }
+        if (remembered(KEY_SENT_EVENTS, event.event_id)) { await ack(event.event_id, chatId); continue; }
+        status(`event ${event.task_id || event.event_id}`);
+        const sent = await submitMessage(String(event.message));
+        if (!sent) { await sleep(1200); continue; }
+        remember(KEY_SENT_EVENTS, event.event_id);
+        const ok = await ack(event.event_id, chatId);
+        status(ok ? `verzonden: ${event.task_id || event.event_id}` : 'ACK mislukt', !ok);
+      } catch (_) {
+        status('WSL niet bereikbaar', true);
+        await sleep(1800);
+      }
+    }
+  }
+
+  try {
+    const observer = new MutationObserver(() => { scanCommands(); preserveLegacyFallback(); });
+    observer.observe(document.documentElement, { childList: true, subtree: true, characterData: true });
+    setInterval(scanCommands, 1500);
+    setInterval(preserveLegacyFallback, 5000);
+    preserveLegacyFallback();
+    scanCommands();
+    wakeLoop();
+  } catch (error) {
+    status(`startup fout: ${String(error)}`, true);
+  }
 })();
