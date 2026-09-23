@@ -1,0 +1,85 @@
+{
+  "schema": "PVA_RECON_TASK_V1",
+  "task_id": "TASK-RECON-KALSHI-MARKETS-001",
+  "assigned_role": "RECON_SCOUT",
+  "priority": "P1_PERSISTENT",
+  "status": "READY",
+  "created_at": "2026-09-23",
+  "objective": "Continuously inspect concrete Kalshi market instances and related contract families for logical, semantic and economically exploitable inconsistencies, independently of behavioral research and documentation-only reconnaissance.",
+  "continue_across_runs": true,
+  "scope": {
+    "venue": "Kalshi",
+    "market_instances": "active and newly listed markets first; recently changed or semantically related markets when needed for relation proof",
+    "relation_families": [
+      "YES/NO complements",
+      "mutually exclusive and collectively exhaustive partitions",
+      "nested thresholds and monotonicity",
+      "ranges, buckets and exact-value decompositions",
+      "greater-than/at-least/less-than boundary relations",
+      "same-event contracts expressed through different series or products",
+      "cross-series identities and dominance relations",
+      "time-window containment and deadline relations",
+      "conditional, combo, MVE and multivariate payout relations",
+      "duplicate or near-duplicate contracts with potentially different settlement semantics",
+      "statewise payout equivalence or dominance",
+      "collateral/netting/capital-release interactions where economically relevant"
+    ]
+  },
+  "required_process": [
+    "Capture market identity, event/series identity, rule text or authoritative settlement semantics, strike/range/window, close time and source provenance before inferring a relation.",
+    "Generate candidate relations from actual market instances rather than titles alone.",
+    "Prove the relation statewise from authoritative semantics before using any price discrepancy as evidence.",
+    "Classify relation as EQUIVALENT, DOMINATES, PARTITION, NESTED, MUTUALLY_EXCLUSIVE, COLLECTIVELY_EXHAUSTIVE, TEMPORAL_RELATION, SEMANTICALLY_DIFFERENT or UNPROVEN.",
+    "Only after semantic proof, compare synchronized executable bid/ask/L2, fees, rebates, depth, partial-fill risk, slippage, collateral and settlement horizon.",
+    "Treat UI probability, midpoint, last trade and title similarity as discovery clues only, never executable proof.",
+    "Preserve tested-negative relation families and concrete counterexamples so they are not rediscovered as new.",
+    "Every demonstrable net-positive executable opportunity remains research-worthy even if only cents per episode; scale affects ranking, not admission."
+  ],
+  "contradiction_checks": [
+    "A and NOT-A executable costs inconsistent with guaranteed payout after fees",
+    "complete partition executable basket inconsistent with total guaranteed payout",
+    "nested market prices violate proven monotonic dominance",
+    "exact/range market differs from formally equivalent threshold portfolio",
+    "same statewise payoff has materially different executable cost across contract paths",
+    "a dominated contract is priced more favorably than its proven dominator in a way that survives execution frictions",
+    "time-window or deadline relations create impossible simultaneous outcomes or overlooked dominance",
+    "market metadata/title suggests identity but rules prove a hidden semantic mismatch",
+    "rule/market-instance interaction creates a contradiction not visible from documentation alone"
+  ],
+  "routing": {
+    "relation_discovery": "RECON_SCOUT",
+    "formal_statewise_proof": "SPECIALIST_ALGEBRA",
+    "settlement_and_execution_semantics": "SPECIALIST_MECHANICS",
+    "concrete_surviving_hypothesis": "RED_TEAM_PENTEST",
+    "interesting_unpriced_or_currently_non_executable_relation": "WATCH",
+    "formally_valid_and_materially_testable_relation": "HUNT"
+  },
+  "watch_policy": {
+    "persist_currently_unprofitable_valid_relations": true,
+    "recheck_triggers": [
+      "new market instance in an existing relation family",
+      "material price/depth/spread/liquidity change",
+      "fee/rebate/reward/collateral change",
+      "rule or settlement-source change",
+      "new combo/MVE/special-product listing",
+      "new executable contract path",
+      "changed close time, strike, bucket or measurement window"
+    ],
+    "unchanged_negative_instances_do_not_require_full_reanalysis": true
+  },
+  "acceptance_criteria": [
+    "Actual market instances are inspected, not only venue documentation or trader behavior.",
+    "Candidate relations are linked to concrete market IDs/tickers and point-in-time rule provenance.",
+    "No price contradiction is promoted before a formal semantic/statewise relation is established.",
+    "Executable economics uses synchronized bid/ask or L2 and all material frictions.",
+    "Valid but currently unprofitable or non-executable relations can remain WATCH with explicit triggers.",
+    "Existing PAYOFF-IDENTITY-MINING-V1 and negative-evidence records are reused rather than duplicated.",
+    "No candidate is discarded solely because the absolute profit opportunity is small.",
+    "No live trading, orders, wallet movement, paid actions or active security exploitation."
+  ],
+  "related_candidate": "PAYOFF-IDENTITY-MINING-V1",
+  "economic_default": "NO_PROVEN_EDGE",
+  "live_trading": false,
+  "paid_actions": false,
+  "wallet_actions": false
+}
