@@ -1,0 +1,230 @@
+{
+  "candidate_failures": {},
+  "guardrails": {
+    "live_trading": false,
+    "openai_api": false,
+    "paid_actions": false,
+    "wallet_actions": false
+  },
+  "negative_results": {},
+  "patterns": {
+    "FP-001": {
+      "candidate_ids": [],
+      "encounters": [],
+      "name": "SAME_TITLE_NOT_SAME_CONTRACT",
+      "pattern_id": "FP-001"
+    },
+    "FP-002": {
+      "candidate_ids": [],
+      "encounters": [],
+      "name": "SETTLEMENT_SOURCE_MISMATCH",
+      "pattern_id": "FP-002"
+    },
+    "FP-003": {
+      "candidate_ids": [],
+      "encounters": [],
+      "name": "SETTLEMENT_TRANSFORMATION_MISMATCH",
+      "pattern_id": "FP-003"
+    },
+    "FP-004": {
+      "candidate_ids": [],
+      "encounters": [],
+      "name": "UI_OR_MIDPOINT_NOT_EXECUTABLE",
+      "pattern_id": "FP-004"
+    },
+    "FP-005": {
+      "candidate_ids": [],
+      "encounters": [],
+      "name": "STALE_MIRROR_OR_CACHE",
+      "pattern_id": "FP-005"
+    },
+    "FP-006": {
+      "candidate_ids": [],
+      "encounters": [],
+      "name": "THEORETICAL_IDENTITY_NOT_ECONOMIC_EDGE",
+      "pattern_id": "FP-006"
+    },
+    "FP-007": {
+      "candidate_ids": [],
+      "encounters": [],
+      "name": "GROSS_EDGE_DIES_AFTER_FRICTION",
+      "pattern_id": "FP-007"
+    },
+    "FP-008": {
+      "candidate_ids": [],
+      "encounters": [],
+      "name": "PARTIAL_FILL_OR_LEGGING_RISK",
+      "pattern_id": "FP-008"
+    },
+    "FP-009": {
+      "candidate_ids": [],
+      "encounters": [],
+      "name": "QUEUE_CANCELLATION_AS_FILL",
+      "pattern_id": "FP-009"
+    },
+    "FP-010": {
+      "candidate_ids": [],
+      "encounters": [],
+      "name": "SCORE_OR_STATE_NOT_FINAL",
+      "pattern_id": "FP-010"
+    },
+    "FP-011": {
+      "candidate_ids": [],
+      "encounters": [],
+      "name": "HIDDEN_EXCEPTION_CLASS",
+      "pattern_id": "FP-011"
+    },
+    "FP-012": {
+      "candidate_ids": [],
+      "encounters": [],
+      "name": "DISCRETE_DOMAIN_ASSUMPTION",
+      "pattern_id": "FP-012"
+    },
+    "FP-013": {
+      "candidate_ids": [],
+      "encounters": [],
+      "name": "COLLATERAL_RETURN_NOT_WEALTH",
+      "pattern_id": "FP-013"
+    },
+    "FP-014": {
+      "candidate_ids": [],
+      "encounters": [],
+      "name": "CLOSE_BEFORE_INFORMATION",
+      "pattern_id": "FP-014"
+    },
+    "FP-015": {
+      "candidate_ids": [],
+      "encounters": [],
+      "name": "LOOKAHEAD_OR_REVISION_LEAKAGE",
+      "pattern_id": "FP-015"
+    },
+    "FP-016": {
+      "candidate_ids": [],
+      "encounters": [],
+      "name": "LEGACY_RECONSTRUCTION",
+      "pattern_id": "FP-016"
+    },
+    "FP-017": {
+      "candidate_ids": [],
+      "encounters": [],
+      "name": "AUTH_OR_VISIBILITY_GAP",
+      "pattern_id": "FP-017"
+    },
+    "FP-018": {
+      "candidate_ids": [],
+      "encounters": [],
+      "name": "REST_SAMPLING_MISSES_FAST_REPRICE",
+      "pattern_id": "FP-018"
+    },
+    "FP-019": {
+      "candidate_ids": [],
+      "encounters": [],
+      "name": "WS_SEQUENCE_GAP",
+      "pattern_id": "FP-019"
+    },
+    "FP-020": {
+      "candidate_ids": [],
+      "encounters": [],
+      "name": "DUPLICATE_TRADE_OR_WINDOW_COUNT",
+      "pattern_id": "FP-020"
+    },
+    "FP-021": {
+      "candidate_ids": [],
+      "encounters": [],
+      "name": "MULTIPLE_TESTING_FALSE_DISCOVERY",
+      "pattern_id": "FP-021"
+    },
+    "FP-022": {
+      "candidate_ids": [],
+      "encounters": [],
+      "name": "POST_HOC_GATE_RELAXATION",
+      "pattern_id": "FP-022"
+    },
+    "FP-023": {
+      "candidate_ids": [],
+      "encounters": [],
+      "name": "SHARED_UPSTREAM_SOURCE",
+      "pattern_id": "FP-023"
+    },
+    "FP-024": {
+      "candidate_ids": [],
+      "encounters": [],
+      "name": "INACTIVE_REWARD_OR_FEE_REGIME",
+      "pattern_id": "FP-024"
+    },
+    "FP-025": {
+      "candidate_ids": [],
+      "encounters": [],
+      "name": "VARIABLE_EXTERNAL_YIELD",
+      "pattern_id": "FP-025"
+    },
+    "FP-026": {
+      "candidate_ids": [],
+      "encounters": [],
+      "name": "ONCHAIN_OR_ASYNC_EXECUTION_FAILURE",
+      "pattern_id": "FP-026"
+    },
+    "FP-027": {
+      "candidate_ids": [],
+      "encounters": [],
+      "name": "ADVERSE_SELECTION_IGNORED",
+      "pattern_id": "FP-027"
+    },
+    "FP-028": {
+      "candidate_ids": [],
+      "encounters": [],
+      "name": "CAPACITY_OR_DEPTH_COLLAPSE",
+      "pattern_id": "FP-028"
+    },
+    "FP-029": {
+      "candidate_ids": [],
+      "encounters": [],
+      "name": "TIME_UNIT_TIMEZONE_MISMATCH",
+      "pattern_id": "FP-029"
+    },
+    "FP-030": {
+      "candidate_ids": [],
+      "encounters": [],
+      "name": "CORRELATED_EVIDENCE_DOUBLE_COUNT",
+      "pattern_id": "FP-030"
+    },
+    "FP-031": {
+      "candidate_ids": [],
+      "encounters": [],
+      "name": "DISCOVERY_SOURCE_OVERLAP",
+      "pattern_id": "FP-031"
+    },
+    "FP-032": {
+      "candidate_ids": [],
+      "encounters": [],
+      "name": "CANDIDATE_STATE_SPLIT_BRAIN",
+      "pattern_id": "FP-032"
+    },
+    "FP-033": {
+      "candidate_ids": [],
+      "encounters": [],
+      "name": "STALE_GIT_OR_CONCURRENT_WRITE",
+      "pattern_id": "FP-033"
+    },
+    "FP-034": {
+      "candidate_ids": [],
+      "encounters": [],
+      "name": "PROMPT_INJECTION_FROM_SOURCE",
+      "pattern_id": "FP-034"
+    },
+    "FP-035": {
+      "candidate_ids": [],
+      "encounters": [],
+      "name": "DIRECTOR_CONFIRMATION_BIAS",
+      "pattern_id": "FP-035"
+    },
+    "FP-036": {
+      "candidate_ids": [],
+      "encounters": [],
+      "name": "ZOMBIE_CANDIDATE",
+      "pattern_id": "FP-036"
+    }
+  },
+  "schema": "PVA_FAILURE_GRAPH_V1",
+  "updated_at": "2026-09-23T08:17:01.807966+00:00"
+}

@@ -1,0 +1,32 @@
+{
+  "architecture": "E007_SIX_DOMAIN",
+  "candidate_updates": [
+    "knowledge/candidates/ASSET-RANK-MAKER-HEDGE-V1.json",
+    "knowledge/candidates/KWI-FULL-STATION-PRECANONICAL-V1.json",
+    "knowledge/candidates/PAYOFF-IDENTITY-MINING-V1.json"
+  ],
+  "graph_updates": {
+    "evidence_graph_ref": "knowledge/research_os/evidence_graph.json",
+    "failure_graph_ref": "knowledge/research_os/failure_graph.json",
+    "failure_pattern_count": 36
+  },
+  "guardrails": {
+    "live_trading": false,
+    "openai_api": false,
+    "paid_actions": false,
+    "wallet_actions": false
+  },
+  "local_task_requests": [],
+  "packet_updates": [
+    "knowledge/runs/agent_packets/hourly-20260923T100000+0200/discovery.json",
+    "knowledge/runs/agent_packets/hourly-20260923T100000+0200/market_research.json",
+    "knowledge/runs/agent_packets/hourly-20260923T100000+0200/mechanics.json",
+    "knowledge/runs/agent_packets/hourly-20260923T100000+0200/algebra.json",
+    "knowledge/runs/agent_packets/hourly-20260923T100000+0200/red_team_pentest.json",
+    "knowledge/runs/agent_packets/hourly-20260923T100000+0200/research_director.json"
+  ],
+  "run_id": "hourly-20260923T100000+0200",
+  "schema": "PVA_AI_RESPONSE_RECEIPT_V1",
+  "validated_at": "2026-09-23T08:17:01.804059+00:00",
+  "write": true
+}

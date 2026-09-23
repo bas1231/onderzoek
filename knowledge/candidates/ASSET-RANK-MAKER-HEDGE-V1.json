@@ -95,11 +95,12 @@
     "knowledge/candidates/protocols/ASSET-RANK-MAKER-HEDGE-V1-fill-feasibility-24h-v1.json"
   ],
   "queue_entered_at": "2026-09-20T02:10:18.043370+00:00",
-  "queue_reason": "Mechanism remains defined, but canonical monitoring records no full shadow fill and this bundle adds no executable evidence.",
+  "queue_reason": "No new full passive fill or executable hedge evidence.",
   "queue_status": "RUNNING",
   "resume_condition": null,
+  "resurrection_condition": null,
   "signal_metric": "Conservative shadow fill rate plus realized fee-adjusted locked value per filled 5-contract episode.",
   "stop_condition": null,
-  "updated_at": "2026-09-22T13:00:21.011109+00:00",
+  "updated_at": "2026-09-23T08:17:01.803999+00:00",
   "wallet_actions": false
 }

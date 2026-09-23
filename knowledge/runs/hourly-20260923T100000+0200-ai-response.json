@@ -1,0 +1,397 @@
+{
+  "candidate_decisions": [
+    {
+      "candidate_id": "ASSET-RANK-MAKER-HEDGE-V1",
+      "next_decisive_test": "Continue preregistered prospective conservative fill monitoring; only a proven full passive fill may trigger synchronized first-executable hedge economics.",
+      "queue_status": "RUNNING",
+      "reason": "No new full passive fill or executable hedge evidence.",
+      "resurrection_condition": null
+    },
+    {
+      "candidate_id": "KWI-FULL-STATION-PRECANONICAL-V1",
+      "next_decisive_test": "Await and evaluate post-cutoff cases under the preregistered 24h full-station protocol; discovery rows cannot count as validation.",
+      "queue_status": "WAITING_FOR_RESULT",
+      "reason": "No new post-cutoff prospective result bundled.",
+      "resurrection_condition": null
+    },
+    {
+      "candidate_id": "PAYOFF-IDENTITY-MINING-V1",
+      "next_decisive_test": "Find one concrete contract pair with primary-rule statewise payout semantics, then compare synchronized executable L2 only after formal equivalence/dominance proof.",
+      "queue_status": "NEEDS_DIRECTOR",
+      "reason": "Generic WATCH snippets do not define a statewise payoff identity.",
+      "resurrection_condition": null
+    }
+  ],
+  "director_decision": "Preserve current queue states; treat the CFTC incentive-program advisory headline as WATCH only; continue preregistered evidence collection and semantics-before-economics discipline.",
+  "economic_conclusion": "NO_PROVEN_EDGE",
+  "live_trading": false,
+  "local_tasks": [],
+  "openai_api": false,
+  "paid_actions": false,
+  "response_token": "7f7d4fa8ec02eabdaea63ff35c7a9386d00e24ed65aa6bea85ab5fb9405fc572",
+  "role_results": [
+    {
+      "agent_id": "discovery",
+      "benchmark_telemetry": {
+        "evidence": [
+          {
+            "contradiction": false,
+            "evidence_id": "cb2d9d73d70ff17bf70f803e04aec043ec7caae58f9731f88d16146a016b0457",
+            "point_in_time_ok": true,
+            "provenance_ok": true,
+            "relevant": true,
+            "source_family": "cftc"
+          },
+          {
+            "contradiction": false,
+            "evidence_id": "db3ecbbf2aedc92b2c4902fdaeb4ae518cabf847ef25ad61ad48c2804fb4897f",
+            "point_in_time_ok": true,
+            "provenance_ok": true,
+            "relevant": true,
+            "source_family": "kalshi_docs"
+          },
+          {
+            "contradiction": false,
+            "evidence_id": "92da6ddc75d01480400ae4b9c69f24e2a4c43d940d41024e756b57426f2683dd",
+            "point_in_time_ok": true,
+            "provenance_ok": true,
+            "relevant": true,
+            "source_family": "kalshi_weather_rules"
+          }
+        ],
+        "failure_patterns": [],
+        "queue_starvation_event_ids": [],
+        "research_items": [
+          {
+            "duplicate_of": null,
+            "item_id": "cftc-incentive-advisory-watch-1000"
+          },
+          {
+            "duplicate_of": "watch-kalshi-changelog",
+            "item_id": "kalshi-changelog-watch-1000"
+          },
+          {
+            "duplicate_of": "kalshi-weather-finality-semantics",
+            "item_id": "weather-rules-source-semantics-1000"
+          }
+        ],
+        "worker_run_id": "hourly-20260923T100000+0200:discovery"
+      },
+      "candidate_ids": [
+        "KWI-FULL-STATION-PRECANONICAL-V1"
+      ],
+      "capability_results": {
+        "recon_scout": "Geen nieuwe HUNT. CFTC, Kalshi en Polymarket snippets leveren hoogstens rule/API/rebate WATCH-triggers; zonder concrete delta, base-rate en point-in-time economics geen kandidaatbewijs.",
+        "scout": "De nieuwe CFTC-snippet meldt een advisory over self-certifying incentive programs for prediction markets, maar de request bevat geen filingtekst of candidate-specifieke economics. Kalshi changelog/API blijft WATCH; weather-rules bevestigen bekende bronsemantiek."
+      },
+      "evidence_refs": [
+        "request:routed_evidence:cftc:cb2d9d73d70ff17bf70f803e04aec043ec7caae58f9731f88d16146a016b0457",
+        "request:routed_evidence:kalshi_docs:db3ecbbf2aedc92b2c4902fdaeb4ae518cabf847ef25ad61ad48c2804fb4897f",
+        "request:routed_evidence:kalshi_weather_rules:92da6ddc75d01480400ae4b9c69f24e2a4c43d940d41024e756b57426f2683dd"
+      ],
+      "failure_pattern_ids": [],
+      "finding": "GEEN NIEUWE UITKOMST voor de gebundelde candidate; nieuwe CFTC advisory-headline is WATCH en niet voldoende voor economische conclusie.",
+      "local_task_required": false,
+      "local_task_spec": null,
+      "next_decisive_question": "Komt er concrete primaire tekst die een rule/incentive/API-wijziging en de economische gevolgen point-in-time vastlegt?",
+      "status": "COMPLETED",
+      "validation_results": []
+    },
+    {
+      "agent_id": "market_research",
+      "benchmark_telemetry": {
+        "evidence": [
+          {
+            "contradiction": false,
+            "evidence_id": "candidate-KWI-FULL-STATION-PRECANONICAL-V1",
+            "point_in_time_ok": true,
+            "provenance_ok": true,
+            "relevant": true,
+            "source_family": "git_candidate_memory"
+          },
+          {
+            "contradiction": false,
+            "evidence_id": "92da6ddc75d01480400ae4b9c69f24e2a4c43d940d41024e756b57426f2683dd",
+            "point_in_time_ok": true,
+            "provenance_ok": true,
+            "relevant": true,
+            "source_family": "kalshi_weather_rules"
+          }
+        ],
+        "failure_patterns": [],
+        "queue_starvation_event_ids": [],
+        "research_items": [
+          {
+            "duplicate_of": null,
+            "item_id": "kwi-full-station-prospective-1000"
+          }
+        ],
+        "worker_run_id": "hourly-20260923T100000+0200:market_research"
+      },
+      "candidate_ids": [
+        "KWI-FULL-STATION-PRECANONICAL-V1"
+      ],
+      "capability_results": {
+        "behavioral": "NO_EVIDENCE",
+        "informed_flow": "NO_EVIDENCE; geen point-in-time participant identity/flow dataset.",
+        "weather_twc": "Geen nieuw post-cutoff prospectief resultaat. Discovery-MAE blijft 0.004965 bij 5 stations en 0.002797 bij 8 stations, beide n=143, en mag niet als validatie tellen. Kalshi bevestigt TWC als hourly settlementbron; NWS/METAR/modeldata zijn niet dezelfde settlementbron."
+      },
+      "evidence_refs": [
+        "knowledge/candidates/KWI-FULL-STATION-PRECANONICAL-V1.json",
+        "request:routed_evidence:kalshi_weather_rules:92da6ddc75d01480400ae4b9c69f24e2a4c43d940d41024e756b57426f2683dd"
+      ],
+      "failure_pattern_ids": [],
+      "finding": "KWI full-station blijft prospectief onbewezen; signal edge, market edge en execution edge zijn niet aangetoond.",
+      "local_task_required": false,
+      "local_task_spec": null,
+      "next_decisive_question": "Levert het preregistered 24h protocol nieuwe post-cutoff full-station cases op?",
+      "status": "WAITING_FOR_RESULT",
+      "validation_results": []
+    },
+    {
+      "agent_id": "mechanics",
+      "benchmark_telemetry": {
+        "evidence": [
+          {
+            "contradiction": false,
+            "evidence_id": "candidate-ASSET-RANK-MAKER-HEDGE-V1",
+            "point_in_time_ok": true,
+            "provenance_ok": true,
+            "relevant": true,
+            "source_family": "git_candidate_memory"
+          },
+          {
+            "contradiction": false,
+            "evidence_id": "candidate-PAYOFF-IDENTITY-MINING-V1",
+            "point_in_time_ok": true,
+            "provenance_ok": true,
+            "relevant": true,
+            "source_family": "git_candidate_memory"
+          },
+          {
+            "contradiction": false,
+            "evidence_id": "e60f2357eaca0914dea07f1ec9a4f64c01924245e6a8b1882afcbbe9cb9b665b",
+            "point_in_time_ok": true,
+            "provenance_ok": true,
+            "relevant": true,
+            "source_family": "polymarket_docs"
+          }
+        ],
+        "failure_patterns": [],
+        "queue_starvation_event_ids": [],
+        "research_items": [
+          {
+            "duplicate_of": null,
+            "item_id": "asset-rank-execution-gate-1000"
+          },
+          {
+            "duplicate_of": null,
+            "item_id": "payoff-identity-execution-gate-1000"
+          }
+        ],
+        "worker_run_id": "hourly-20260923T100000+0200:mechanics"
+      },
+      "candidate_ids": [
+        "ASSET-RANK-MAKER-HEDGE-V1",
+        "PAYOFF-IDENTITY-MINING-V1"
+      ],
+      "capability_results": {
+        "microstructure": "Geen synchronized executable L2/fill-evidence in de bundle. ASSET-RANK heeft canoniek nog 0 full shadow fills; docs over orderbooks/rebates zijn geen bewijs van depth, queue depletion, hedgeprijs of netto execution edge.",
+        "settlement": "Weather rules bevestigen bekende source/finality-scheiding. Voor payoff mining ontbreekt nog een concreet contractpaar met volledige primaire statewise semantics."
+      },
+      "evidence_refs": [
+        "knowledge/candidates/ASSET-RANK-MAKER-HEDGE-V1.json",
+        "knowledge/candidates/PAYOFF-IDENTITY-MINING-V1.json",
+        "request:routed_evidence:polymarket_docs:e60f2357eaca0914dea07f1ec9a4f64c01924245e6a8b1882afcbbe9cb9b665b"
+      ],
+      "failure_pattern_ids": [],
+      "finding": "Geen execution edge; eerst full passive fill of formeel payoffbewijs, daarna pas synchronized executable economics.",
+      "local_task_required": false,
+      "local_task_spec": null,
+      "next_decisive_question": "Verschijnt een bewezen full passive fill of een formeel bewezen identity met gelijktijdige executable L2?",
+      "status": "WAITING_FOR_DATA",
+      "validation_results": []
+    },
+    {
+      "agent_id": "algebra",
+      "benchmark_telemetry": {
+        "evidence": [
+          {
+            "contradiction": false,
+            "evidence_id": "candidate-PAYOFF-IDENTITY-MINING-V1",
+            "point_in_time_ok": true,
+            "provenance_ok": true,
+            "relevant": true,
+            "source_family": "git_candidate_memory"
+          },
+          {
+            "contradiction": false,
+            "evidence_id": "candidate-ASSET-RANK-MAKER-HEDGE-V1",
+            "point_in_time_ok": true,
+            "provenance_ok": true,
+            "relevant": true,
+            "source_family": "git_candidate_memory"
+          }
+        ],
+        "failure_patterns": [],
+        "queue_starvation_event_ids": [],
+        "research_items": [
+          {
+            "duplicate_of": null,
+            "item_id": "payoff-identity-semantic-gate-1000"
+          },
+          {
+            "duplicate_of": "asset-rank-one-hot-mechanism",
+            "item_id": "asset-rank-payout-check-1000"
+          }
+        ],
+        "worker_run_id": "hourly-20260923T100000+0200:algebra"
+      },
+      "candidate_ids": [
+        "ASSET-RANK-MAKER-HEDGE-V1",
+        "PAYOFF-IDENTITY-MINING-V1"
+      ],
+      "capability_results": {
+        "algebra": "Geen nieuw concreet contractpaar, volledige toestandruimte of primaire payoutregels. API/rebate/settlement WATCH-snippets dragen geen statewise equivalence/dominance proof. ASSET-RANK behoudt bestaand one-hot mechanisme zonder nieuwe payout- of fill-evidence."
+      },
+      "evidence_refs": [
+        "knowledge/candidates/ASSET-RANK-MAKER-HEDGE-V1.json",
+        "knowledge/candidates/PAYOFF-IDENTITY-MINING-V1.json"
+      ],
+      "failure_pattern_ids": [],
+      "finding": "GEEN NIEUWE UITKOMST: geen nieuwe formele payoff identity.",
+      "local_task_required": false,
+      "local_task_spec": null,
+      "next_decisive_question": "Kan één concreet contractpaar uit primaire regels statewise gelijk of dominant worden bewezen vóór prijsvergelijking?",
+      "status": "NO_EVIDENCE",
+      "validation_results": []
+    },
+    {
+      "agent_id": "red_team_pentest",
+      "benchmark_telemetry": {
+        "evidence": [
+          {
+            "contradiction": false,
+            "evidence_id": "candidate-ASSET-RANK-MAKER-HEDGE-V1",
+            "point_in_time_ok": true,
+            "provenance_ok": true,
+            "relevant": true,
+            "source_family": "git_candidate_memory"
+          },
+          {
+            "contradiction": false,
+            "evidence_id": "candidate-KWI-FULL-STATION-PRECANONICAL-V1",
+            "point_in_time_ok": true,
+            "provenance_ok": true,
+            "relevant": true,
+            "source_family": "git_candidate_memory"
+          },
+          {
+            "contradiction": false,
+            "evidence_id": "candidate-PAYOFF-IDENTITY-MINING-V1",
+            "point_in_time_ok": true,
+            "provenance_ok": true,
+            "relevant": true,
+            "source_family": "git_candidate_memory"
+          }
+        ],
+        "failure_patterns": [],
+        "queue_starvation_event_ids": [],
+        "research_items": [
+          {
+            "duplicate_of": null,
+            "item_id": "quick-kill-asset-rank-1000"
+          },
+          {
+            "duplicate_of": null,
+            "item_id": "quick-kill-kwi-full-station-1000"
+          },
+          {
+            "duplicate_of": null,
+            "item_id": "quick-kill-payoff-mining-1000"
+          }
+        ],
+        "worker_run_id": "hourly-20260923T100000+0200:red_team_pentest"
+      },
+      "candidate_ids": [
+        "ASSET-RANK-MAKER-HEDGE-V1",
+        "KWI-FULL-STATION-PRECANONICAL-V1",
+        "PAYOFF-IDENTITY-MINING-V1"
+      ],
+      "capability_results": {
+        "chief_falsifier": "Geen DEEP_FALSIFICATION: geen nieuwe survivor passeert de goedkope bewijs-gates.",
+        "prebuild_killer": "QUICK_KILL op alle drie: ASSET-RANK blijft geblokkeerd door ontbreken bewezen full passive fill; KWI door ontbreken prospectieve post-cutoff validatie; payoff mining door ontbreken concreet primair contractpaar en statewise proof."
+      },
+      "evidence_refs": [
+        "knowledge/candidates/ASSET-RANK-MAKER-HEDGE-V1.json",
+        "knowledge/candidates/KWI-FULL-STATION-PRECANONICAL-V1.json",
+        "knowledge/candidates/PAYOFF-IDENTITY-MINING-V1.json"
+      ],
+      "failure_pattern_ids": [],
+      "finding": "Geen candidate-kill of promotion; escalatie blijft terecht geblokkeerd door ontbrekende vooraf vereiste bewijslaag.",
+      "local_task_required": false,
+      "local_task_spec": null,
+      "next_decisive_question": "Welke candidate passeert als eerste zijn goedkope gate met nieuw point-in-time bewijs?",
+      "status": "COMPLETED",
+      "validation_results": [
+        {
+          "candidate_id": "ASSET-RANK-MAKER-HEDGE-V1",
+          "mode": "QUICK_KILL",
+          "status": "WAITING"
+        },
+        {
+          "candidate_id": "KWI-FULL-STATION-PRECANONICAL-V1",
+          "mode": "QUICK_KILL",
+          "status": "WAITING"
+        },
+        {
+          "candidate_id": "PAYOFF-IDENTITY-MINING-V1",
+          "mode": "QUICK_KILL",
+          "status": "WAITING"
+        }
+      ]
+    },
+    {
+      "agent_id": "research_director",
+      "benchmark_telemetry": {
+        "evidence": [
+          {
+            "contradiction": false,
+            "evidence_id": "request-hourly-20260923T100000+0200",
+            "point_in_time_ok": true,
+            "provenance_ok": true,
+            "relevant": false,
+            "source_family": "ai_exchange_transport"
+          }
+        ],
+        "failure_patterns": [],
+        "queue_starvation_event_ids": [],
+        "research_items": [
+          {
+            "duplicate_of": null,
+            "item_id": "director-adjudication-1000"
+          }
+        ],
+        "worker_run_id": "hourly-20260923T100000+0200:research_director"
+      },
+      "candidate_ids": [],
+      "capability_results": {},
+      "evidence_refs": [
+        "request:hourly-20260923T100000+0200",
+        "knowledge/candidates/ASSET-RANK-MAKER-HEDGE-V1.json",
+        "knowledge/candidates/KWI-FULL-STATION-PRECANONICAL-V1.json",
+        "knowledge/candidates/PAYOFF-IDENTITY-MINING-V1.json"
+      ],
+      "failure_pattern_ids": [],
+      "finding": "Geen gebundelde candidate heeft nieuw bewijs dat een statuspromotie rechtvaardigt. CFTC incentive-program advisory-headline is een nieuwe WATCH-trigger maar zonder concrete primary-text economics geen HUNT. Independent Reproducer is niet gevraagd en wordt niet toegevoegd.",
+      "local_task_required": false,
+      "local_task_spec": null,
+      "next_decisive_question": "Welk nieuw prospectief of primair semantisch bewijs doorbreekt als eerste een bestaande gate?",
+      "status": "COMPLETED",
+      "validation_results": []
+    }
+  ],
+  "run_id": "hourly-20260923T100000+0200",
+  "schema": "PVA_AI_RESPONSE_V1",
+  "wallet_actions": false
+}
