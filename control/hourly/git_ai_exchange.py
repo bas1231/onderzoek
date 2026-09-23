@@ -16,6 +16,26 @@ REMOTE_REF = f"refs/remotes/origin/{EXCHANGE_BRANCH}"
 REQUEST_PREFIX = "ai_exchange/requests"
 RESPONSE_PREFIX = "ai_exchange/responses"
 
+# E004: immutable, exact historical protocol failures that pre-date the current
+# six-role response contract.  A response is quarantined only when both its
+# exchange path and Git blob SHA match this registry and the observed failure
+# still has the expected validation signature.  New or modified failures stay
+# fail-closed in the normal errors list.
+HISTORICAL_RESPONSE_QUARANTINE: dict[str, dict[str, str]] = {
+    "ai_exchange/responses/hourly-20260922T150000+0200.json": {
+        "blob_sha": "95f6fa87c56604b71520d0cdc321f300c431f494",
+        "error_type": "ValidationError",
+        "error_prefix": "invalid agent_id: recon_scout",
+        "reason": "PRE_E001_LEGACY_ROLE_CONTRACT",
+    },
+    "ai_exchange/responses/hourly-20260923T090000+0200.json": {
+        "blob_sha": "5e8c8f3e6899f1bafdfe6f9275fe7d144cc0e93b",
+        "error_type": "ValidationError",
+        "error_prefix": "invalid validation status:",
+        "reason": "PRE_E003_VALIDATION_RESULT_CONTRACT",
+    },
+}
+
 
 class GitExchangeError(RuntimeError):
     pass
@@ -80,6 +100,43 @@ def _show(ref: str, path: str) -> str | None:
     if proc.returncode != 0:
         return None
     return proc.stdout
+
+
+def _blob_sha(ref: str, path: str) -> str | None:
+    proc = _git(["rev-parse", "--verify", f"{ref}:{path}"])
+    if proc.returncode != 0:
+        return None
+    value = proc.stdout.strip()
+    return value if len(value) == 40 else None
+
+
+def _historical_quarantine_record(
+    ref: str,
+    remote_path: str,
+    exc: Exception,
+) -> dict[str, Any] | None:
+    rule = HISTORICAL_RESPONSE_QUARANTINE.get(remote_path)
+    if rule is None:
+        return None
+
+    blob_sha = _blob_sha(ref, remote_path)
+    if blob_sha != rule["blob_sha"]:
+        return None
+
+    error_type = type(exc).__name__
+    error = str(exc)[:1000]
+    if error_type != rule["error_type"]:
+        return None
+    if not error.startswith(rule["error_prefix"]):
+        return None
+
+    return {
+        "path": remote_path,
+        "blob_sha": blob_sha,
+        "reason": rule["reason"],
+        "error_type": error_type,
+        "error": error,
+    }
 
 
 def _semantic_json_equal(left: str, right: dict[str, Any]) -> bool:
@@ -263,6 +320,7 @@ def ingest_remote_responses(*, limit: int = 32) -> dict[str, Any]:
 
     applied: list[dict[str, Any]] = []
     skipped: list[dict[str, Any]] = []
+    quarantined: list[dict[str, Any]] = []
     errors: list[dict[str, Any]] = []
 
     for remote_path in _response_paths(ref)[-limit:]:
@@ -291,8 +349,9 @@ def ingest_remote_responses(*, limit: int = 32) -> dict[str, Any]:
                 / run_id
                 / "_orchestration.json"
             )
+            response_existed_before = final_response.exists()
             complete_before = (
-                final_response.exists()
+                response_existed_before
                 and receipt.exists()
                 and orchestration.exists()
             )
@@ -307,9 +366,13 @@ def ingest_remote_responses(*, limit: int = 32) -> dict[str, Any]:
                 "response_ref": result.get("response_ref"),
                 "receipt_ref": result.get("receipt_ref"),
                 "role_statuses": result.get("role_statuses", {}),
-                "recovery_retry": final_response.exists(),
+                "recovery_retry": response_existed_before,
             })
         except Exception as exc:
+            quarantine = _historical_quarantine_record(ref, remote_path, exc)
+            if quarantine is not None:
+                quarantined.append(quarantine)
+                continue
             errors.append({
                 "path": remote_path,
                 "error_type": type(exc).__name__,
@@ -322,6 +385,7 @@ def ingest_remote_responses(*, limit: int = 32) -> dict[str, Any]:
         "exchange_commit": ref,
         "applied": applied,
         "skipped": skipped,
+        "quarantined": quarantined,
         "errors": errors,
         "economic_conclusion": "NO_PROVEN_EDGE",
         "live_trading": False,
@@ -339,6 +403,7 @@ def safe_ingest_remote_responses(*, limit: int = 32) -> dict[str, Any]:
             "status": "TRANSPORT_UNAVAILABLE",
             "applied": [],
             "skipped": [],
+            "quarantined": [],
             "errors": [{
                 "error_type": type(exc).__name__,
                 "error": str(exc)[:1000],
