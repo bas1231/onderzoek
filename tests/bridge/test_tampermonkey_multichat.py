@@ -113,7 +113,7 @@ def test_router_default_chat_is_atomic_and_readable(tmp_path):
 
 def test_userscript_contract_is_multichat_and_visible_marker_only():
     text = (TM / "prediction-chat-wake.user.js").read_text(encoding="utf-8")
-    assert "@version      0.3.2" in text
+    assert "@version      0.3.3" in text
     assert "// @match        https://chatgpt.com/*" in text
     assert "@noframes" in text
     assert "http://localhost:8765" in text
@@ -123,7 +123,7 @@ def test_userscript_contract_is_multichat_and_visible_marker_only():
     assert "consumer_id" in text
     assert "data-message-author-role=\"assistant\"" in text
     assert "<<<PREDICTION_BRIDGE_TASK>>>" not in text
-    assert "currentChatId()" in text
+    assert "conversationState()" in text
     assert "preserveLegacyFallback" in text
 
 
@@ -141,11 +141,28 @@ def test_userscript_uses_official_tampermonkey_tab_api_for_identity():
     assert "sessionStorage" not in text
 
 
-def test_userscript_refreshes_tab_registration_on_spa_url_change():
+def test_userscript_new_chat_is_provisional_until_real_conversation_url():
+    text = (TM / "prediction-chat-wake.user.js").read_text(encoding="utf-8")
+    assert "location.pathname.match(/(?:^|\\/)c\\/([^/?#]+)/)" in text
+    assert "stable: false" in text
+    assert "chat-pending-" in text
+    assert "if (!identity.stable)" in text
+    assert "wacht op vaste ChatGPT chat-ID" in text
+    assert "if (!identity.stable) return false;" in text
+
+
+def test_userscript_restarts_wake_loop_on_spa_url_change():
     text = (TM / "prediction-chat-wake.user.js").read_text(encoding="utf-8")
     assert "if (window.onurlchange === null)" in text
     assert "window.addEventListener('urlchange'" in text
     assert "ensureTabIdentity(true)" in text
+    assert "restartWakeLoop('URL gewijzigd')" in text
+    assert "wakeGeneration" in text
+
+
+def test_userscript_command_dedupe_is_scoped_to_chat():
+    text = (TM / "prediction-chat-wake.user.js").read_text(encoding="utf-8")
+    assert "const dedupeKey = `${identity.chatId}|${marker.markerKey}`;" in text
 
 
 def test_userscript_startup_is_fail_safe_before_network_runtime():
