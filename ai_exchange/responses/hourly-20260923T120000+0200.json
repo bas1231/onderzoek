@@ -1,0 +1,180 @@
+{
+  "schema": "PVA_AI_EXCHANGE_RESPONSE_V1",
+  "request_sha256": "8490d5a8ba2a383982942388106210917e06a5d1e851421327ea9b95a756a68f",
+  "response": {
+    "schema": "PVA_AI_RESPONSE_V1",
+    "run_id": "hourly-20260923T120000+0200",
+    "response_token": "694a84d947e438387985de92c41a6cddf16b077d5af4bc26cdcabc6db57bbbc9",
+    "role_results": [
+      {
+        "agent_id": "discovery",
+        "candidate_ids": ["KWI-FULL-STATION-PRECANONICAL-V1"],
+        "capability_results": {
+          "scout": "Kalshi weather source text changed but confirms the known settlement-source distinction; changelog/API and CFTC snippets are WATCH-only and do not establish a mechanism or executable edge.",
+          "recon_scout": "No new HUNT. The changed weather text is relevant provenance; remaining routed items are unchanged or generic weak signals."
+        },
+        "evidence_refs": ["knowledge/runs/hourly-20260923T120000+0200-routing.json", "knowledge/runs/recon/hourly-20260923T120000+0200.json", "source:kalshi_weather_rules:30f3ce27b7aad531788ce015d55c27c81ce9a15973f5cfa378282cb73354b66a"],
+        "failure_pattern_ids": [],
+        "finding": "No new candidate-grade discovery; weather source semantics remain the only directly relevant changed evidence and are consistent with the existing protocol.",
+        "local_task_required": false,
+        "local_task_spec": null,
+        "next_decisive_question": "Do post-cutoff preregistered full-station cases produce admissible validation evidence?",
+        "status": "COMPLETED",
+        "validation_results": [],
+        "benchmark_telemetry": {
+          "worker_run_id": "hourly-20260923T120000+0200:discovery",
+          "research_items": [{"item_id":"kalshi-weather-source-change-20260923T100019Z","duplicate_of":null},{"item_id":"kalshi-changelog-watch","duplicate_of":null}],
+          "evidence": [{"evidence_id":"30f3ce27b7aad531788ce015d55c27c81ce9a15973f5cfa378282cb73354b66a","source_family":"kalshi_weather_rules","relevant":true,"contradiction":false,"point_in_time_ok":true,"provenance_ok":true}],
+          "failure_patterns": [],
+          "queue_starvation_event_ids": []
+        }
+      },
+      {
+        "agent_id": "market_research",
+        "candidate_ids": ["KWI-FULL-STATION-PRECANONICAL-V1"],
+        "capability_results": {
+          "weather_twc": "Kalshi explicitly distinguishes final NWS Daily Climate Report settlement for daily high/low from exact-time The Weather Company readings for hourly temperature. No TWC-specific primary feed or new post-cutoff validation result is bundled.",
+          "behavioral": "NO_EVIDENCE",
+          "informed_flow": "NO_EVIDENCE; no point-in-time participant identity/flow dataset."
+        },
+        "evidence_refs": ["source:kalshi_weather_rules:30f3ce27b7aad531788ce015d55c27c81ce9a15973f5cfa378282cb73354b66a", "source:aviationweather:dd6e0cc4b237e05406554eb33d2b7963367175f44a5a0ae0feb4e59f707b0edf", "source:ecmwf_open:0c54279e3477a8e86dcbaf6a9b6b21c114bdee37527833007a618dd07bd7685c"],
+        "failure_pattern_ids": [],
+        "finding": "Settlement semantics are clearer, but the candidate remains waiting: proxy weather sources cannot substitute for TWC and no admissible post-cutoff result is present.",
+        "local_task_required": false,
+        "local_task_spec": null,
+        "next_decisive_question": "What do the first post-cutoff 24h full-station cases show under the preregistered protocol using the correct settlement-source provenance?",
+        "status": "WAITING_FOR_RESULT",
+        "validation_results": [],
+        "benchmark_telemetry": {
+          "worker_run_id": "hourly-20260923T120000+0200:market_research",
+          "research_items": [{"item_id":"kwi-full-station-post-cutoff-wait","duplicate_of":null}],
+          "evidence": [{"evidence_id":"30f3ce27b7aad531788ce015d55c27c81ce9a15973f5cfa378282cb73354b66a","source_family":"kalshi_weather_rules","relevant":true,"contradiction":false,"point_in_time_ok":true,"provenance_ok":true}],
+          "failure_patterns": [],
+          "queue_starvation_event_ids": []
+        }
+      },
+      {
+        "agent_id": "mechanics",
+        "candidate_ids": ["ASSET-RANK-MAKER-HEDGE-V1", "PAYOFF-IDENTITY-MINING-V1"],
+        "capability_results": {
+          "settlement": "Weather settlement-source evidence is relevant context but does not resolve either bundled mechanics candidate's decisive economic test.",
+          "microstructure": "No synchronized executable L2 or proven passive fill is bundled. Polymarket order-book/rebate documentation establishes available mechanisms only, not net executable economics."
+        },
+        "evidence_refs": ["source:polymarket_docs:e60f2357eaca0914dea07f1ec9a4f64c01924245e6a8b1882afcbbe9cb9b665b", "knowledge/candidates/ASSET-RANK-MAKER-HEDGE-V1.json", "knowledge/candidates/PAYOFF-IDENTITY-MINING-V1.json"],
+        "failure_pattern_ids": [],
+        "finding": "Execution gate remains closed: maker-hedge lacks a proven full passive fill; payoff identity lacks a concrete formally proven contract pair plus synchronized executable depth.",
+        "local_task_required": false,
+        "local_task_spec": null,
+        "next_decisive_question": "Can either candidate supply its prerequisite execution evidence without relying on midpoint/UI or hypothetical fills?",
+        "status": "WAITING_FOR_DATA",
+        "validation_results": [],
+        "benchmark_telemetry": {
+          "worker_run_id": "hourly-20260923T120000+0200:mechanics",
+          "research_items": [{"item_id":"asset-rank-fill-gate","duplicate_of":null},{"item_id":"payoff-identity-l2-gate","duplicate_of":null}],
+          "evidence": [{"evidence_id":"e60f2357eaca0914dea07f1ec9a4f64c01924245e6a8b1882afcbbe9cb9b665b","source_family":"polymarket_docs","relevant":true,"contradiction":false,"point_in_time_ok":true,"provenance_ok":true}],
+          "failure_patterns": [],
+          "queue_starvation_event_ids": []
+        }
+      },
+      {
+        "agent_id": "algebra",
+        "candidate_ids": ["ASSET-RANK-MAKER-HEDGE-V1", "PAYOFF-IDENTITY-MINING-V1"],
+        "capability_results": {
+          "algebra": "No concrete new contract pair with complete primary-rule state space is bundled, so no equivalence/dominance theorem can be proved. Combo documentation is insufficient by itself."
+        },
+        "evidence_refs": ["source:polymarket_docs:e60f2357eaca0914dea07f1ec9a4f64c01924245e6a8b1882afcbbe9cb9b665b", "knowledge/candidates/PAYOFF-IDENTITY-MINING-V1.json"],
+        "failure_pattern_ids": [],
+        "finding": "No formal payoff identity is established this cycle; economics must not be evaluated before a statewise proof on a concrete pair.",
+        "local_task_required": false,
+        "local_task_spec": null,
+        "next_decisive_question": "Which concrete pair can be expressed from primary rules as complete statewise payout functions and proved equivalent or dominant?",
+        "status": "WAITING_FOR_DATA",
+        "validation_results": [],
+        "benchmark_telemetry": {
+          "worker_run_id": "hourly-20260923T120000+0200:algebra",
+          "research_items": [{"item_id":"payoff-identity-concrete-pair-gate","duplicate_of":null}],
+          "evidence": [{"evidence_id":"e60f2357eaca0914dea07f1ec9a4f64c01924245e6a8b1882afcbbe9cb9b665b","source_family":"polymarket_docs","relevant":true,"contradiction":false,"point_in_time_ok":true,"provenance_ok":true}],
+          "failure_patterns": [],
+          "queue_starvation_event_ids": []
+        }
+      },
+      {
+        "agent_id": "red_team_pentest",
+        "candidate_ids": ["ASSET-RANK-MAKER-HEDGE-V1", "KWI-FULL-STATION-PRECANONICAL-V1", "PAYOFF-IDENTITY-MINING-V1"],
+        "capability_results": {
+          "prebuild_killer": "All three candidates fail to clear their cheap prerequisite gates this cycle: no proven passive fill, no post-cutoff full-station result, and no concrete statewise-proven identity plus executable L2.",
+          "chief_falsifier": "No DEEP_FALSIFICATION justified after QUICK_KILL prerequisites remain unmet."
+        },
+        "evidence_refs": ["knowledge/candidates/ASSET-RANK-MAKER-HEDGE-V1.json", "knowledge/candidates/KWI-FULL-STATION-PRECANONICAL-V1.json", "knowledge/candidates/PAYOFF-IDENTITY-MINING-V1.json"],
+        "failure_pattern_ids": [],
+        "finding": "No candidate is killed, but none warrants expensive falsification or reproduction because decisive prerequisite evidence is absent.",
+        "local_task_required": false,
+        "local_task_spec": null,
+        "next_decisive_question": "Has any candidate produced the exact prerequisite evidence needed to justify deeper falsification?",
+        "status": "COMPLETED",
+        "validation_results": [
+          {"candidate_id":"ASSET-RANK-MAKER-HEDGE-V1","mode":"QUICK_KILL","status":"WAITING"},
+          {"candidate_id":"KWI-FULL-STATION-PRECANONICAL-V1","mode":"QUICK_KILL","status":"WAITING"},
+          {"candidate_id":"PAYOFF-IDENTITY-MINING-V1","mode":"QUICK_KILL","status":"WAITING"}
+        ],
+        "benchmark_telemetry": {
+          "worker_run_id": "hourly-20260923T120000+0200:red_team_pentest",
+          "research_items": [{"item_id":"quick-kill-three-candidates","duplicate_of":null}],
+          "evidence": [],
+          "failure_patterns": [],
+          "queue_starvation_event_ids": []
+        }
+      },
+      {
+        "agent_id": "research_director",
+        "candidate_ids": [],
+        "capability_results": {},
+        "evidence_refs": ["knowledge/runs/hourly-20260923T120000+0200-routing.json", "knowledge/runs/recon/hourly-20260923T120000+0200.json"],
+        "failure_pattern_ids": [],
+        "finding": "No economic survivor. Preserve existing candidate states and spend no additional capacity until the named prerequisite evidence arrives.",
+        "local_task_required": false,
+        "local_task_spec": null,
+        "next_decisive_question": "Which waiting candidate first produces admissible new evidence that changes a decisive gate?",
+        "status": "COMPLETED",
+        "validation_results": [],
+        "benchmark_telemetry": {
+          "worker_run_id": "hourly-20260923T120000+0200:research_director",
+          "research_items": [{"item_id":"director-adjudication-1200","duplicate_of":null}],
+          "evidence": [],
+          "failure_patterns": [],
+          "queue_starvation_event_ids": []
+        }
+      }
+    ],
+    "candidate_decisions": [
+      {
+        "candidate_id": "ASSET-RANK-MAKER-HEDGE-V1",
+        "next_decisive_test": "Continue preregistered prospective conservative fill monitoring; only a proven full passive fill may trigger synchronized first-executable hedge economics.",
+        "queue_status": "RUNNING",
+        "reason": "No proven full passive fill is bundled; current execution prerequisite remains unchanged.",
+        "resurrection_condition": null
+      },
+      {
+        "candidate_id": "KWI-FULL-STATION-PRECANONICAL-V1",
+        "next_decisive_test": "Await and evaluate post-cutoff cases under the preregistered 24h full-station protocol; discovery rows cannot count as validation.",
+        "queue_status": "WAITING_FOR_RESULT",
+        "reason": "Changed settlement-source documentation does not substitute for preregistered post-cutoff validation cases.",
+        "resurrection_condition": null
+      },
+      {
+        "candidate_id": "PAYOFF-IDENTITY-MINING-V1",
+        "next_decisive_test": "Find one concrete contract pair with primary-rule statewise payout semantics, then compare synchronized executable L2 only after formal equivalence/dominance proof.",
+        "queue_status": "NEEDS_DIRECTOR",
+        "reason": "No concrete statewise-proven pair or synchronized executable L2 is bundled.",
+        "resurrection_condition": null
+      }
+    ],
+    "director_decision": "Keep all bundled candidates at their existing queue states. No promotion, kill, paid action, live execution, wallet action or local task. Wait for admissible prerequisite evidence; do not treat WATCH signals or documentation changes as economic proof.",
+    "economic_conclusion": "NO_PROVEN_EDGE",
+    "live_trading": false,
+    "local_tasks": [],
+    "openai_api": false,
+    "paid_actions": false,
+    "wallet_actions": false
+  }
+}
