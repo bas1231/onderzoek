@@ -1,0 +1,87 @@
+{
+  "schema": "PVA_KALSHI_DOC_COVERAGE_V1",
+  "task_id": "TASK-RECON-KALSHI-DOCS-001",
+  "status": "IN_PROGRESS",
+  "observed_at": "2026-09-23",
+  "economic_conclusion": "NO_PROVEN_EDGE",
+  "coverage_complete": false,
+  "reviewed_cluster": "fees/rebates/incentives/rewards",
+  "sources": [
+    {
+      "identity": "Kalshi Help Center — Liquidity Incentive Program",
+      "url": "https://help.kalshi.com/en/articles/13823851-liquidity-incentive-program",
+      "observed_at": "2026-09-23",
+      "review_status": "REVIEWED_MATERIAL",
+      "notes": "Resting orders can earn rewards without fills. Order book is sampled once per second at a random instant. Qualification depends on Target Size, Reference Price proximity and two-sided depth. Excluded snapshots scale the pool down. Daily rewards are documented as $1-$1,000 per market; final program payout below $1 is not paid; terms may change or terminate.",
+      "recheck_trigger": "program terms, target-size/reference-price formula, eligibility, payout floor, market schedule or API exposure changes"
+    },
+    {
+      "identity": "Kalshi Help Center — Volume Incentive Program",
+      "url": "https://help.kalshi.com/en/articles/13823850-what-is-the-kalshi-volume-incentive-program",
+      "observed_at": "2026-09-23",
+      "review_status": "REVIEWED_MATERIAL",
+      "notes": "Eligible CLOB volume can share a reward pool, with documented maximum reward of $0.005 per contract. Market-specific programs may restrict eligible volume to maker or taker side. Contracts outside $0.03-$0.97 are excluded for event contracts. International/non-US users are ineligible for rewards.",
+      "recheck_trigger": "reward cap, eligible price band, side eligibility, participant eligibility, market schedule or governing notice changes"
+    },
+    {
+      "identity": "Kalshi Help Center — Liquidity and Volume Incentive Programs: Where to Find Them",
+      "url": "https://help.kalshi.com/en/articles/16076644-liquidity-and-volume-incentive-programs-where-to-find-them",
+      "observed_at": "2026-09-23",
+      "review_status": "REVIEWED_MATERIAL",
+      "notes": "Market-level program metadata includes reward type, pool, dates and liquidity parameters; paid reward history is distinct from live estimates. Help Center states definitions are available through the public Trade API. Live UI qualification indicators are guidance, not final reward records.",
+      "recheck_trigger": "new API fields/endpoints, payout-estimate semantics or UI/API divergence"
+    },
+    {
+      "identity": "Kalshi Help Center — Fees",
+      "url": "https://help.kalshi.com/en/articles/13823805-fees",
+      "observed_at": "2026-09-23",
+      "review_status": "REVIEWED_SUPPORTING",
+      "notes": "Fee schedules can vary by market/special event; maker fees can apply to resting orders when eventually executed. Cancellation of a resting order itself is not documented as fee-bearing.",
+      "recheck_trigger": "fee schedule, series/event override or maker-fee policy change"
+    },
+    {
+      "identity": "Kalshi Help Center — Limit Orders",
+      "url": "https://help.kalshi.com/en/articles/13823811-limit-orders",
+      "observed_at": "2026-09-23",
+      "review_status": "REVIEWED_SUPPORTING",
+      "notes": "Event-contract limit orders may partially fill; remaining quantity can rest. Generic help text says resting orders often avoid trading fees except where maker fees apply. Executability still requires actual fills and current fee provenance.",
+      "recheck_trigger": "order lifecycle, partial-fill or fee semantics change"
+    }
+  ],
+  "four_angle_review": {
+    "semantic_rules": {
+      "status": "DONE_FIRST_PASS",
+      "result": "Liquidity rewards are a separate cashflow from contract settlement and can accrue to qualifying resting liquidity even without execution. Volume rewards require executed eligible volume. Reward qualification is conditional on program/market/participant rules; it is not a guaranteed rebate per posted order or per trade."
+    },
+    "technical_implementation": {
+      "status": "DONE_FIRST_PASS_WITH_GAP",
+      "result": "Liquidity scoring is based on random within-second snapshots, dynamic Reference Price, Target Size and two-sided-depth qualification. Market-level program definitions are documented as available through the public Trade API, but the exact endpoint/schema was not independently reconciled in this run. UI qualification/earnings indicators are explicitly non-final."
+    },
+    "economic_execution": {
+      "status": "DONE_FIRST_PASS",
+      "result": "Potential mechanism: reward cashflow can offset adverse-selection/fee costs for resting liquidity; volume rewards can offset trading costs by at most the documented per-contract cap. No positive net EV is established because current market-specific pool, competition score, executable fills, adverse markouts, fee overrides, inventory risk and participant eligibility are not jointly measured. Small positive EV would remain research-eligible if later reproduced."
+    },
+    "adversarial_change_watch": {
+      "status": "DONE_FIRST_PASS",
+      "result": "Key killers are non-US reward ineligibility, program termination/modification, two-sided-depth exclusions, minimum payout, competition dilution, maker fees, adverse selection and UI-estimate non-finality. WATCH triggers: new/changed reward periods, API schema/endpoint changes, eligibility changes, target-size/discount-factor changes, reward-cap changes, fee overrides, or materially different liquidity/competition."
+    }
+  },
+  "routing": {
+    "finding_status": "WATCH",
+    "hunt": false,
+    "reason": "Documented incentive mechanics are economically relevant but no market-specific point-in-time executable net-EV proof exists. For the current user context, documented non-US reward ineligibility is a decisive present blocker to direct reward capture, but the mechanism remains relevant venue intelligence and can resurrect if eligibility/access changes."
+  },
+  "coverage_gaps": [
+    "exchange/general rulebook not yet reconciled exhaustively",
+    "product-specific rules/settlement corpus not yet inventoried exhaustively",
+    "settlement/finality/cancellation/void/no-data/fair-price/MOR cluster incomplete",
+    "REST API full schema inventory incomplete; incentive endpoint/schema needs direct reconciliation",
+    "WebSocket sequencing/lifecycle full inventory incomplete",
+    "order matching/queue/partial-fill/early-close cluster incomplete beyond supporting limit-order page",
+    "combo/MVE/multivariate special mechanics incomplete",
+    "data-source/timestamp/revision/rounding/precision corpus incomplete",
+    "changelog/release-note/deprecation universe incomplete",
+    "public regulatory filings/certifications universe incomplete"
+  ],
+  "next_surface": "REST Trade API incentive-program schema plus governing regulatory notices, then reconcile with fee schedule and market-level program fields"
+}
