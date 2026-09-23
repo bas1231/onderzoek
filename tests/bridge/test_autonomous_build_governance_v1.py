@@ -81,8 +81,8 @@ def test_valid_mutating_infrastructure_contract_is_accepted():
     assert parsed.build_authorization["build_contract"]["build_id"] == "BUILD-BRIDGE-GOV-001"
 
 
-def test_stale_source_commit_is_denied():
+def test_invalid_source_commit_is_denied():
     row = base_row(["read_repository", "write_repository"], include_contract=True)
-    row["build_authorization"]["build_contract"]["source_commit"] = "0" * 40
-    with pytest.raises(Exception, match="build_contract_source_commit_mismatch"):
+    row["build_authorization"]["build_contract"]["source_commit"] = "not-a-sha"
+    with pytest.raises(Exception, match="invalid_build_contract_source_commit"):
         Task.model_validate(row)
