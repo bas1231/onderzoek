@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
-# Intentionally no `set -e` / `set -o errexit`: interactive terminal safety.
-# Run this script with `bash install_multichat.sh`; failures are handled locally.
+# Interactive-terminal safe: every failure is handled locally and returns from main.
+# Run this script with `bash install_multichat.sh`.
 
 main() {
     SRC_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" 2>/dev/null && pwd)"
@@ -29,7 +29,6 @@ main() {
         return 1
     fi
 
-    # Preserve the working local implementation before touching it.
     [ -f "$DATA_DIR/bridge_server.py" ] && cp -p "$DATA_DIR/bridge_server.py" "$BACKUP_DIR/bridge_server.py" || true
     [ -f "$DATA_DIR/command_router.py" ] && cp -p "$DATA_DIR/command_router.py" "$BACKUP_DIR/command_router.py" || true
     [ -f "$SOURCE_DIR/prediction-chat-wake.user.js" ] && cp -p "$SOURCE_DIR/prediction-chat-wake.user.js" "$BACKUP_DIR/prediction-chat-wake.user.js" || true
@@ -131,7 +130,6 @@ UNIT
         return 1
     fi
 
-    # 8766 is the already-working command receiver and is deliberately untouched.
     if ! systemctl --user is-active --quiet prediction-chat-command.service; then
         echo "FOUT: bestaande prediction-chat-command.service op 8766 draait niet."
         echo "De receiver wordt niet automatisch gewijzigd of vervangen."
