@@ -21,6 +21,11 @@ RESPONSE_SCHEMA = "PVA_AI_EXCHANGE_RESPONSE_V1"
 # semantically and may later replace permanent role personas without changing
 # transport.
 ROLE_CAPABILITIES: dict[str, tuple[str, str]] = {
+    # Research OS V1 permanent domain roles.
+    "discovery": ("DISCOVERY", "DISCOVERY"),
+    "market_research": ("SPECIALIST_DISPATCH", "MARKET_RESEARCH"),
+    "mechanics": ("SPECIALIST_DISPATCH", "MECHANICS"),
+    "red_team_pentest": ("RED_TEAM", "DEEP_FALSIFICATION"),
     "recon_scout": ("RECON_SCOUT", "DISCOVERY"),
     "scout": ("PRIMARY_SCOUT", "DISCOVERY"),
     "weather_twc": ("SPECIALIST_DISPATCH", "MARKET_RESEARCH"),
@@ -89,12 +94,13 @@ def work_id(run_id: str, response_token: str, agent_id: str) -> str:
 
 
 def task_shape(agent_id: str) -> str:
-    if agent_id in {"settlement", "microstructure", "algebra"}:
+    if agent_id in {"settlement", "microstructure", "mechanics", "algebra"}:
         return "SEQUENTIAL"
     if agent_id in {
         "prebuild_killer",
         "chief_falsifier",
         "independent_reproducer",
+        "red_team_pentest",
         "research_director",
     }:
         return "PARTIAL"
