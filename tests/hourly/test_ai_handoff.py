@@ -130,3 +130,63 @@ def test_latest_real_bundle_if_available():
     assert bundle["guardrails"]["wallet_actions"] is False
     assert bundle["guardrails"]["openai_api"] is False
     assert bundle["delivery_policy"]["single_chatgpt_turn"] is True
+
+
+
+def test_build_reuses_first_bundle_for_same_run_id(tmp_path):
+    mod = load_module()
+
+    mod.RUNS = tmp_path / "runs"
+    mod.PACKETS = mod.RUNS / "agent_packets"
+
+    run_id = "hourly-20990101T120000+0200"
+    packet_dir = mod.PACKETS / run_id
+    packet_dir.mkdir(parents=True)
+
+    handoff = {
+        "director_attention": [],
+        "waiting_without_blocking": [],
+        "full_queue": [],
+    }
+    (
+        mod.RUNS / f"{run_id}-director-handoff.json"
+    ).write_text(
+        json.dumps(handoff),
+        encoding="utf-8",
+    )
+
+    first_packet = {
+        "run_id": run_id,
+        "agent_id": "discovery",
+        "status": "READY",
+        "priority": "P3",
+        "candidate_ids": [],
+        "next_decisive_question": "first question",
+    }
+    (
+        packet_dir / "discovery.json"
+    ).write_text(
+        json.dumps(first_packet),
+        encoding="utf-8",
+    )
+
+    first, first_path = mod.build(run_id)
+
+    changed_packet = dict(first_packet)
+    changed_packet["next_decisive_question"] = "changed later"
+    (
+        packet_dir / "discovery.json"
+    ).write_text(
+        json.dumps(changed_packet),
+        encoding="utf-8",
+    )
+
+    second, second_path = mod.build(run_id)
+
+    assert second_path == first_path
+    assert second == first
+    assert second["response_token"] == first["response_token"]
+    assert (
+        second["ready_roles"][0]["next_decisive_question"]
+        == "first question"
+    )
