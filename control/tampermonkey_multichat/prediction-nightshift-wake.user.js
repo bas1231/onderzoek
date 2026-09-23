@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Prediction Nightshift Wake
 // @namespace    prediction-research-os
-// @version      0.1.1
+// @version      0.1.2
 // @description  Wake-only loop for autonomous overnight ChatGPT work. No bridge outbox/result delivery.
 // @match        https://chatgpt.com/*
 // @grant        GM_registerMenuCommand
@@ -13,17 +13,22 @@
 (() => {
   'use strict';
 
-  const VERSION = '0.1.1';
+  const VERSION = '0.1.2';
   const KEY_ENABLED = 'prediction_nightshift_wake_enabled_v1';
   const KEY_STARTED_AT = 'prediction_nightshift_wake_started_at_v1';
   const KEY_LAST_WAKE = 'prediction_nightshift_wake_last_wake_v1';
   const KEY_LAST_ATTEMPT = 'prediction_nightshift_wake_last_attempt_v1';
-  const WAKE_GAP_MS = 45_000;
+
+  // OpenAI does not publish an exact regular-chat inactivity/generation timeout.
+  // A normal chat turn has already ended once the assistant response is complete,
+  // so waiting for a guessed timeout buys no extra work. Resume shortly after the
+  // completed assistant turn instead.
+  const WAKE_GAP_MS = 15_000;
   const ATTEMPT_GAP_MS = 8_000;
   const POLL_MS = 2_500;
   const MAX_SESSION_MS = 12 * 60 * 60 * 1000;
   const DONE_MARKER = '[[NIGHTSHIFT_DONE]]';
-  const WAKE_TEXT = 'NIGHTSHIFT_WAKE_V1: ga verder met de prediction-nachtshift in bas1231/onderzoek. Lees eerst control/nightshift/STATE.md als die bestaat. Doe precies één afgebakende technische stap die binnen deze beurt volledig kan worden afgerond, schrijf/commit daarna een checkpoint met bewijs/tests en vervolg bij de volgende wake. Systeemherstel heeft voorrang op research. Geen live trading, geldbewegingen, betaalde acties of credentials.';
+  const WAKE_TEXT = 'ga door';
 
   function now() { return Date.now(); }
   function sleep(ms) { return new Promise(resolve => setTimeout(resolve, ms)); }
@@ -107,13 +112,29 @@
     }
   }
 
-  function wakeVisibleAsUserTurn() {
-    const nodes = roleNodes('user');
-    for (const node of nodes.slice(Math.max(0, nodes.length - 12))) {
-      const text = String(node.innerText || node.textContent || '');
-      if (text.includes('NIGHTSHIFT_WAKE_V1:')) return true;
+  function stableHash(text) {
+    let hash = 2166136261;
+    for (let i = 0; i < text.length; i += 1) {
+      hash ^= text.charCodeAt(i);
+      hash = Math.imul(hash, 16777619);
     }
-    return false;
+    return (hash >>> 0).toString(16).padStart(8, '0');
+  }
+
+  function newestUserTurn() {
+    const nodes = roleNodes('user');
+    if (!nodes.length) return null;
+    const root = nodes[nodes.length - 1];
+    const container = root.closest?.('[data-turn-id], [data-testid^="conversation-turn-"], article') || root;
+    const text = String(root.innerText || root.textContent || '').replace(/\s+/g, ' ').trim();
+    const explicitId = String(
+      container.getAttribute?.('data-turn-id') ||
+      container.getAttribute?.('data-testid') ||
+      root.getAttribute?.('data-message-id') ||
+      ''
+    );
+    const key = explicitId ? `user:${explicitId}` : `user-fp:${stableHash(`${text.length}|${text.slice(-320)}`)}`;
+    return { key, text };
   }
 
   function findComposer() {
@@ -224,12 +245,12 @@
     return null;
   }
 
-  async function waitForSent(composer, beforeUserCount, loops = 20) {
+  async function waitForSent(composer, beforeUserKey, loops = 20) {
     for (let i = 0; i < loops; i += 1) {
-      if (wakeVisibleAsUserTurn()) return true;
-      if (roleNodes('user').length > beforeUserCount) return true;
-      const current = findComposer() || composer;
-      if (!composerText(current).includes('NIGHTSHIFT_WAKE_V1:')) return true;
+      const currentUser = newestUserTurn();
+      if (currentUser && currentUser.key !== beforeUserKey && currentUser.text === WAKE_TEXT) return true;
+      const currentComposer = findComposer() || composer;
+      if (!composerText(currentComposer).includes(WAKE_TEXT)) return true;
       await sleep(100);
     }
     return false;
@@ -245,7 +266,8 @@
   }
 
   async function submitComposer(composer) {
-    const beforeUserCount = roleNodes('user').length;
+    const beforeUser = newestUserTurn();
+    const beforeUserKey = beforeUser ? beforeUser.key : '';
 
     let button = null;
     for (let i = 0; i < 20; i += 1) {
@@ -260,13 +282,13 @@
       try {
         try { HTMLFormElement.prototype.requestSubmit.call(form, button); }
         catch (_) { form.requestSubmit(button); }
-        if (await waitForSent(composer, beforeUserCount, 15)) return true;
+        if (await waitForSent(composer, beforeUserKey, 15)) return true;
       } catch (_) {}
     }
 
     if (button) {
       fireRealClick(button);
-      if (await waitForSent(composer, beforeUserCount, 20)) return true;
+      if (await waitForSent(composer, beforeUserKey, 20)) return true;
     }
 
     try {
@@ -278,7 +300,7 @@
           shiftKey: false, ctrlKey: false, altKey: false, metaKey: false
         }));
       }
-      if (await waitForSent(composer, beforeUserCount, 25)) return true;
+      if (await waitForSent(composer, beforeUserKey, 25)) return true;
     } catch (_) {}
 
     return false;
