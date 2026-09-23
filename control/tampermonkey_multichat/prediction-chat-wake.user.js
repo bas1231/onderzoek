@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Prediction Chat Wake Bridge
 // @namespace    local.prediction.chatbridge
-// @version      0.3.2
+// @version      0.3.3
 // @description  Multi-chat transport for the local Prediction control plane.
 // @match        https://chatgpt.com/*
 // @grant        GM_xmlhttpRequest
@@ -28,15 +28,16 @@
   const KEY_COMMAND_IDS = 'prediction_command_ids_v3';
   const KEY_SENT_EVENTS = 'prediction_sent_events_v3';
   const KEY_FALLBACK_REGISTERED = 'prediction_fallback_registered_v3';
-  const SCRIPT_VERSION = '0.3.2';
+  const SCRIPT_VERSION = '0.3.3';
 
   let statusEl = null;
-  let stopped = false;
   let scanBusy = false;
   let tabIdentityBusy = null;
   let lastRegisteredChatId = '';
+  let lastRegisteredUrl = '';
   let tabApiOk = false;
   let consumerId = `tab-fallback-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 10)}`;
+  let wakeGeneration = 0;
 
   function sleep(ms) { return new Promise(resolve => setTimeout(resolve, ms)); }
 
@@ -51,17 +52,26 @@
 
   function canonicalChatUrl() {
     const u = new URL(location.href);
-    const kept = new URLSearchParams();
-    for (const [key, value] of u.searchParams.entries()) {
-      if (!/^utm_/i.test(key) && key !== 'model' && key !== 'temporary-chat') kept.append(key, value);
-    }
-    const suffix = kept.toString();
-    return `${u.origin}${u.pathname}${suffix ? `?${suffix}` : ''}`;
+    return `${u.origin}${u.pathname}`;
   }
 
-  function currentChatId() {
+  function conversationState() {
     const raw = canonicalChatUrl();
-    return `chat-${stableHash(raw)}-${raw.length.toString(36)}`;
+    const match = location.pathname.match(/(?:^|\/)c\/([^/?#]+)/);
+    if (match && match[1]) {
+      return {
+        stable: true,
+        conversationId: match[1],
+        canonicalUrl: raw,
+        chatId: `chat-c-${stableHash(match[1])}-${match[1].length.toString(36)}`
+      };
+    }
+    return {
+      stable: false,
+      conversationId: '',
+      canonicalUrl: raw,
+      chatId: `chat-pending-${stableHash(raw)}-${raw.length.toString(36)}`
+    };
   }
 
   function status(text, bad = false) {
@@ -76,7 +86,7 @@
         });
         (document.documentElement || document.body).appendChild(statusEl);
       }
-      statusEl.textContent = `WSL bridge v3.2: ${text}`;
+      statusEl.textContent = `WSL bridge v3.3: ${text}`;
       statusEl.style.outline = bad ? '1px solid #c33' : '1px solid #555';
     } catch (_) {}
   }
@@ -89,38 +99,29 @@
 
   function gmGetTab() {
     return new Promise((resolve, reject) => {
-      try {
-        GM_getTab(tab => resolve(tab && typeof tab === 'object' ? tab : {}));
-      } catch (error) {
-        reject(error);
-      }
+      try { GM_getTab(tab => resolve(tab && typeof tab === 'object' ? tab : {})); }
+      catch (error) { reject(error); }
     });
   }
 
   function gmSaveTab(tab) {
     return new Promise((resolve, reject) => {
-      try {
-        GM_saveTab(tab, () => resolve());
-      } catch (error) {
-        reject(error);
-      }
+      try { GM_saveTab(tab, () => resolve()); }
+      catch (error) { reject(error); }
     });
   }
 
   function gmGetTabs() {
     return new Promise((resolve, reject) => {
-      try {
-        GM_getTabs(tabs => resolve(tabs && typeof tabs === 'object' ? tabs : {}));
-      } catch (error) {
-        reject(error);
-      }
+      try { GM_getTabs(tabs => resolve(tabs && typeof tabs === 'object' ? tabs : {})); }
+      catch (error) { reject(error); }
     });
   }
 
   async function ensureTabIdentity(force = false) {
-    const chatId = currentChatId();
-    if (!force && tabApiOk && lastRegisteredChatId === chatId) {
-      return { chatId, consumerId, tabApiOk: true };
+    const state = conversationState();
+    if (!force && tabApiOk && lastRegisteredChatId === state.chatId && lastRegisteredUrl === state.canonicalUrl) {
+      return { ...state, consumerId, tabApiOk: true };
     }
     if (tabIdentityBusy) return tabIdentityBusy;
 
@@ -128,24 +129,29 @@
       try {
         const tab = await gmGetTab();
         const existing = String(tab.prediction_consumer_id || '').trim();
-        if (existing) consumerId = existing;
-        else consumerId = `tab-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 10)}`;
+        consumerId = existing || `tab-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 10)}`;
 
+        const fresh = conversationState();
         tab.prediction_bridge = true;
         tab.prediction_consumer_id = consumerId;
-        tab.prediction_chat_id = chatId;
-        tab.prediction_chat_url = canonicalChatUrl();
+        tab.prediction_chat_id = fresh.chatId;
+        tab.prediction_chat_url = fresh.canonicalUrl;
+        tab.prediction_conversation_id = fresh.conversationId;
+        tab.prediction_chat_stable = fresh.stable;
         tab.prediction_script_version = SCRIPT_VERSION;
         tab.prediction_updated_at = new Date().toISOString();
         await gmSaveTab(tab);
 
         tabApiOk = true;
-        lastRegisteredChatId = chatId;
-        return { chatId, consumerId, tabApiOk: true };
+        lastRegisteredChatId = fresh.chatId;
+        lastRegisteredUrl = fresh.canonicalUrl;
+        return { ...fresh, consumerId, tabApiOk: true };
       } catch (_) {
+        const fresh = conversationState();
         tabApiOk = false;
-        lastRegisteredChatId = chatId;
-        return { chatId, consumerId, tabApiOk: false };
+        lastRegisteredChatId = fresh.chatId;
+        lastRegisteredUrl = fresh.canonicalUrl;
+        return { ...fresh, consumerId, tabApiOk: false };
       } finally {
         tabIdentityBusy = null;
       }
@@ -166,7 +172,7 @@
 
   function remembered(key, id) { return recentList(key).includes(String(id)); }
 
-  function remember(key, id, limit = 300) {
+  function remember(key, id, limit = 400) {
     const value = String(id);
     const values = recentList(key).filter(x => x !== value);
     values.push(value);
@@ -216,11 +222,8 @@
       if (document.execCommand('insertText', false, text)) return;
     } catch (_) {}
     el.textContent = text;
-    try {
-      el.dispatchEvent(new InputEvent('input', { bubbles: true, inputType: 'insertText', data: text }));
-    } catch (_) {
-      el.dispatchEvent(new Event('input', { bubbles: true }));
-    }
+    try { el.dispatchEvent(new InputEvent('input', { bubbles: true, inputType: 'insertText', data: text })); }
+    catch (_) { el.dispatchEvent(new Event('input', { bubbles: true })); }
   }
 
   async function submitMessage(text) {
@@ -243,12 +246,11 @@
     return true;
   }
 
-  async function ack(eventId, chatId) {
-    const identity = await ensureTabIdentity();
+  async function ack(eventId, chatId, eventConsumerId) {
     const response = await gmRequest({
       method: 'POST', url: `${WAKE_BASE}/ack`, timeout: 5000,
       headers: { ...authHeaders(), 'Content-Type': 'application/json' },
-      data: JSON.stringify({ event_id: String(eventId), chat_id: chatId, consumer_id: identity.consumerId })
+      data: JSON.stringify({ event_id: String(eventId), chat_id: chatId, consumer_id: eventConsumerId })
     });
     return response.status === 200;
   }
@@ -273,14 +275,14 @@
       const text = String(root.innerText || root.textContent || '');
       let match;
       while ((match = re.exec(text)) !== null) {
-        out.push({ action: match[1], task_id: match[2], key: `${match[1]}:${match[2]}` });
+        out.push({ action: match[1], task_id: match[2], markerKey: `${match[1]}:${match[2]}` });
       }
     }
     return out;
   }
 
-  async function sendCommand(marker) {
-    const identity = await ensureTabIdentity();
+  async function sendCommand(marker, identity) {
+    if (!identity.stable) return false;
     const response = await gmRequest({
       method: 'POST', url: `${COMMAND_BASE}/command`, timeout: 18000,
       headers: { ...authHeaders(), 'Content-Type': 'application/json' },
@@ -295,12 +297,17 @@
     if (scanBusy || !enabled() || !token()) return;
     scanBusy = true;
     try {
-      await ensureTabIdentity();
+      const identity = await ensureTabIdentity();
+      if (!identity.stable) {
+        status('wacht op vaste ChatGPT chat-ID');
+        return;
+      }
       for (const marker of visibleCommandMarkers()) {
-        if (remembered(KEY_COMMAND_IDS, marker.key)) continue;
-        const ok = await sendCommand(marker);
+        const dedupeKey = `${identity.chatId}|${marker.markerKey}`;
+        if (remembered(KEY_COMMAND_IDS, dedupeKey)) continue;
+        const ok = await sendCommand(marker, identity);
         if (ok) {
-          remember(KEY_COMMAND_IDS, marker.key);
+          remember(KEY_COMMAND_IDS, dedupeKey);
           status(`command ${marker.action}: ${marker.task_id}`);
         }
       }
@@ -313,6 +320,10 @@
 
   async function setFallbackForCurrentChat(showAlert) {
     const identity = await ensureTabIdentity(true);
+    if (!identity.stable) {
+      if (showAlert) alert('Deze nieuwe chat heeft nog geen vaste ChatGPT chat-ID. Stuur eerst één bericht.');
+      return;
+    }
     const response = await gmRequest({
       method: 'POST', url: `${COMMAND_BASE}/fallback`, timeout: 5000,
       headers: { ...authHeaders(), 'Content-Type': 'application/json' },
@@ -328,13 +339,14 @@
     const bound = legacyBoundPath();
     if (!bound || location.pathname !== bound || !token()) return;
     const identity = await ensureTabIdentity();
+    if (!identity.stable) return;
     if (String(GM_getValue(KEY_FALLBACK_REGISTERED, '') || '') === identity.chatId) return;
     try { await setFallbackForCurrentChat(false); } catch (_) {}
   }
 
   GM_registerMenuCommand('Toon chat-ID', async () => {
     const identity = await ensureTabIdentity(true);
-    alert(`Prediction bridge ${SCRIPT_VERSION}\nchat_id=${identity.chatId}\nconsumer_id=${identity.consumerId}\ntab_api=${identity.tabApiOk ? 'OK' : 'FALLBACK'}`);
+    alert(`Prediction bridge ${SCRIPT_VERSION}\nchat_id=${identity.chatId}\nconsumer_id=${identity.consumerId}\nstable_chat=${identity.stable ? 'JA' : 'NEE'}\ntab_api=${identity.tabApiOk ? 'OK' : 'FALLBACK'}`);
   });
 
   GM_registerMenuCommand('Toon bridge-tabs', async () => {
@@ -342,7 +354,7 @@
       await ensureTabIdentity(true);
       const tabs = await gmGetTabs();
       const bridgeTabs = Object.entries(tabs).filter(([, tab]) => tab && tab.prediction_bridge === true);
-      const lines = bridgeTabs.map(([tabId, tab]) => `${tabId}: ${tab.prediction_chat_id || '?'} | ${tab.prediction_consumer_id || '?'}`);
+      const lines = bridgeTabs.map(([tabId, tab]) => `${tabId}: ${tab.prediction_chat_id || '?'} | ${tab.prediction_consumer_id || '?'} | stable=${tab.prediction_chat_stable === true ? 'yes' : 'no'}`);
       alert(`Prediction bridge ${SCRIPT_VERSION}\nactieve opgeslagen tabs=${bridgeTabs.length}\n\n${lines.join('\n') || '(geen)'}`);
     } catch (error) {
       alert(`Bridge-tabs uitlezen mislukt: ${String(error)}`);
@@ -362,47 +374,75 @@
     const next = !enabled();
     GM_setValue(KEY_ENABLED, next);
     alert(`Prediction bridge: ${next ? 'AAN' : 'UIT'}`);
+    if (next) restartWakeLoop('bridge-aan');
   });
 
   GM_registerMenuCommand('Deze chat als fallback instellen', () => {
     setFallbackForCurrentChat(true).catch(() => alert('Fallback instellen mislukt. Controleer token/services.'));
   });
 
-  status('script gestart; tabregistratie...');
+  async function wakeLoop(generation) {
+    while (generation === wakeGeneration) {
+      if (!enabled()) { status('uitgeschakeld'); await sleep(1500); continue; }
+      if (!token()) { status('token ontbreekt', true); await sleep(2500); continue; }
+      if (chatIsBusy()) { status('ChatGPT is bezig'); await sleep(800); continue; }
 
-  async function wakeLoop() {
-    while (!stopped) {
-      if (!enabled()) { status('uitgeschakeld'); await sleep(2000); continue; }
-      if (!token()) { status('token ontbreekt', true); await sleep(3000); continue; }
-      if (chatIsBusy()) { status('ChatGPT is bezig'); await sleep(1200); continue; }
       const identity = await ensureTabIdentity();
+      if (generation !== wakeGeneration) return;
+      if (!identity.stable) { status('wacht op vaste ChatGPT chat-ID'); await sleep(500); continue; }
+
       try {
         status(`${identity.tabApiOk ? 'tab-api' : 'fallback'} luistert ${identity.chatId.slice(-8)}`);
         const url = `${WAKE_BASE}/next?chat_id=${encodeURIComponent(identity.chatId)}&consumer_id=${encodeURIComponent(identity.consumerId)}`;
         const response = await gmRequest({ method: 'GET', url, headers: authHeaders(), timeout: 25000 });
+        if (generation !== wakeGeneration) return;
         if (response.status === 204) continue;
-        if (response.status === 401) { status('token geweigerd', true); await sleep(3000); continue; }
-        if (response.status !== 200) { status(`wake HTTP ${response.status}`, true); await sleep(1500); continue; }
+        if (response.status === 401) { status('token geweigerd', true); await sleep(2500); continue; }
+        if (response.status !== 200) { status(`wake HTTP ${response.status}`, true); await sleep(1200); continue; }
+
         const event = JSON.parse(response.responseText);
-        if (!event || !event.event_id || !event.message) { status('ongeldig event', true); await sleep(1200); continue; }
-        if (remembered(KEY_SENT_EVENTS, event.event_id)) { await ack(event.event_id, identity.chatId); continue; }
+        if (!event || !event.event_id || !event.message) { status('ongeldig event', true); await sleep(1000); continue; }
+        if (remembered(KEY_SENT_EVENTS, event.event_id)) {
+          await ack(event.event_id, identity.chatId, identity.consumerId);
+          continue;
+        }
+
         status(`event ${event.task_id || event.event_id}`);
         const sent = await submitMessage(String(event.message));
-        if (!sent) { await sleep(1200); continue; }
+        if (!sent) { await sleep(1000); continue; }
         remember(KEY_SENT_EVENTS, event.event_id);
-        const ok = await ack(event.event_id, identity.chatId);
+        const ok = await ack(event.event_id, identity.chatId, identity.consumerId);
         status(ok ? `verzonden: ${event.task_id || event.event_id}` : 'ACK mislukt', !ok);
       } catch (_) {
+        if (generation !== wakeGeneration) return;
         status('WSL niet bereikbaar', true);
-        await sleep(1800);
+        await sleep(1500);
       }
     }
   }
 
+  function restartWakeLoop(reason) {
+    wakeGeneration += 1;
+    const generation = wakeGeneration;
+    status(`wake restart: ${reason}`);
+    wakeLoop(generation);
+  }
+
+  async function handleUrlChange() {
+    await ensureTabIdentity(true);
+    restartWakeLoop('URL gewijzigd');
+    setTimeout(() => {
+      scanCommands();
+      preserveLegacyFallback();
+    }, 150);
+  }
+
+  status('script gestart; tabregistratie...');
+
   try {
     if (window.onurlchange === null) {
       window.addEventListener('urlchange', () => {
-        ensureTabIdentity(true).catch(() => {});
+        handleUrlChange().catch(() => status('URL-wijziging verwerken mislukt', true));
       });
     }
 
@@ -412,10 +452,10 @@
     setInterval(preserveLegacyFallback, 5000);
 
     ensureTabIdentity(true).then(identity => {
-      status(`${identity.tabApiOk ? 'tab-api OK' : 'tab-api fallback'} ${identity.chatId.slice(-8)}`, !identity.tabApiOk);
+      status(identity.stable ? `${identity.tabApiOk ? 'tab-api OK' : 'tab-api fallback'} ${identity.chatId.slice(-8)}` : 'wacht op vaste ChatGPT chat-ID', !identity.tabApiOk);
       preserveLegacyFallback();
       scanCommands();
-      wakeLoop();
+      restartWakeLoop('startup');
     });
   } catch (error) {
     status(`startup fout: ${String(error)}`, true);
