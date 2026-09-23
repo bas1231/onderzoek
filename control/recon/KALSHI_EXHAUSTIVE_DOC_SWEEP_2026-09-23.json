@@ -3,10 +3,17 @@
   "task_id": "TASK-RECON-KALSHI-DOCS-001",
   "assigned_role": "RECON_SCOUT",
   "priority": "P1_PERSISTENT",
-  "status": "READY",
+  "status": "IN_PROGRESS",
   "created_at": "2026-09-23",
   "objective": "Systematically inventory and review the full publicly available Kalshi documentation surface to discover economically relevant mechanisms, exceptions, interactions, ambiguities and future WATCH triggers that candidate-driven research may miss.",
   "continue_across_runs": true,
+  "coverage_manifest": "knowledge/kalshi/recon/KALSHI_DOC_COVERAGE_2026-09-23.json",
+  "last_progress": {
+    "date": "2026-09-23",
+    "cluster": "fees/rebates/incentives/rewards",
+    "result": "Reviewed liquidity incentives, volume incentives, incentive discovery/UI semantics, fees and event-contract limit-order support. Four-angle first pass completed. Routed WATCH; no HUNT or proven edge.",
+    "economic_conclusion": "NO_PROVEN_EDGE"
+  },
   "completion_rule": "Do not mark complete until the enumerated public documentation universe is reconciled against the coverage manifest and unresolved gaps are explicitly zero; inaccessible or dynamic surfaces must be recorded as gaps.",
   "required_surfaces": [
     "exchange and general rulebook",
