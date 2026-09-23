@@ -1,0 +1,34 @@
+{
+  "schema": "AUTONOMOUS_BUILD_CHARTER_V1",
+  "build_id": "BUILD-TAMPERMONKEY-MULTICHAT-V1",
+  "objective": "Make the already-working Tampermonkey Prediction chat transport safely support multiple simultaneous ChatGPT chats while preserving the currently active legacy session during a rolling upgrade.",
+  "source_commit": "a31b438d29cb72b096da53cd37055c86578f76ae",
+  "scope": {
+    "allowed_paths": [
+      "control/tampermonkey_multichat/**",
+      "tests/bridge/test_tampermonkey_multichat.py",
+      "control/builds/BUILD-TAMPERMONKEY-MULTICHAT-V1.json"
+    ],
+    "non_goals": [
+      "Reintroduce the obsolete Chrome extension transport",
+      "Modify the existing command_receiver.py on port 8766",
+      "Enable live trading, paid actions, wallet actions or OpenAI API use"
+    ]
+  },
+  "acceptance_criteria": [
+    "Legacy Tampermonkey clients without chat_id continue to receive only unrouted work until v3 fallback registration",
+    "Routed work is isolated by chat_id",
+    "Duplicate tabs use per-consumer delivery leases",
+    "Cross-chat or mismatched-consumer ACK is rejected",
+    "Task-to-chat routing is persisted before forwarding a command to the existing 8766 receiver",
+    "The existing command_receiver.py remains unchanged",
+    "Installer creates backups and contains no terminal-closing shell behavior"
+  ],
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "openai_api": false
+  },
+  "status": "IMPLEMENTING"
+}
