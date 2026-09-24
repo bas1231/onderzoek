@@ -1,13 +1,13 @@
 {
   "candidate_id": "MANUAL-SCOUT-HENGELTJES-20260924",
   "created_at": "2026-09-24T15:57:00+00:00",
-  "updated_at": "2026-09-24T15:57:00+00:00",
+  "updated_at": "2026-09-24T17:20:36+00:00",
   "provenance": "MANUAL_SCOUT_SEED",
   "provenance_note": "User-supplied lead. Do not represent it as autonomously discovered by a scout.",
-  "lane": "DISCOVERY",
+  "lane": "microstructure",
   "phase": "DISCOVERED",
   "decision": "UNPROVEN",
-  "queue_status": "NEEDS_DIRECTOR",
+  "queue_status": "EXPERIMENT_REQUIRED",
   "priority": "P2",
   "manual_seed_ref": "knowledge/manual_scout_seeds/2026-09-24-hengeltjes-late-passive-liquidity.md",
   "manual_seed_payload": {
@@ -22,8 +22,23 @@
       "profitability only under optimistic fill assumptions"
     ]
   },
-  "open_question": "Discovery must read the manual seed, classify the mechanism without assuming a domain in advance, and identify the cheapest decisive falsification path.",
-  "next_decisive_test": "Run normal discovery/recon triage on the attached seed before specialist synthesis; preserve provenance and NO_PROVEN_EDGE.",
+  "mechanism": "Late-settlement passive-liquidity hypothesis in Kalshi weather markets. The hypothesized edge is favorable maker execution conditional on strict queue-realistic fills, not meteorological forecast accuracy.",
+  "open_question": "Can queue-realistic prospective shadow fills at predefined late-settlement passive bids survive false-positive-fill and adverse-selection kill tests after fees/friction?",
+  "next_decisive_test": "Execute the preregistered mandatory deathchecks for the read-only shadow protocol, prove three clean no-live/no-cost runs and the Miami regression fixture, then activate prospective collection only if every activation gate passes. PRIMARY evaluation must use conservative price-time queue reconstruction, sequence/reconnect/restart fail-closed handling, partial-fill accounting, +10/+30/+60/+120 markouts, authoritative final settlement and net EV after fees/friction; optimistic fill assumptions remain separate.",
+  "prospective_protocols": [
+    "knowledge/candidates/protocols/MANUAL-SCOUT-HENGELTJES-20260924-shadow-v1.json"
+  ],
+  "director_trace": {
+    "run_id": "hourly-20260924T190000+0200",
+    "response_commit": "bd839f714dc9ec0995f5fc51799185703338198a",
+    "discovery": "COMPLETED",
+    "mechanics_microstructure": "COMPLETED",
+    "mechanics_settlement": "COMPLETED",
+    "red_team_quick_kill": "INCONCLUSIVE",
+    "research_director": "COMPLETED",
+    "director_decision": "Proceed only as a frozen prospective read-only shadow experiment; no promotion, live execution or cost-bearing action is authorized.",
+    "economic_conclusion": "NO_PROVEN_EDGE"
+  },
   "live_trading": false,
   "paid_actions": false,
   "wallet_actions": false,
