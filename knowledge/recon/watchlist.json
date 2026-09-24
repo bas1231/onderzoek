@@ -167,15 +167,9 @@
       "labels": [
         "RECON_ANOMALY"
       ],
-      "last_observed_at": "2026-09-24T12:14:42.151495+00:00",
+      "last_observed_at": "2026-09-24T14:00:23.943175+00:00",
       "observation_count": 20,
       "observation_history": [
-        {
-          "document_sha256": "7171014b39c2da8b7011c2df3fea6c3a0fba32242311e5ab9fec680ba43394fb",
-          "economic_context_count": 3,
-          "observed_at": "2026-09-22T20:14:49.309386+00:00",
-          "source_id": "kalshi_weather_rules"
-        },
         {
           "document_sha256": "434b3720a91424d6010ae6e6b4ee0f7b956d609c4b4343aab78330981e9bc5a4",
           "economic_context_count": 3,
@@ -289,6 +283,12 @@
           "economic_context_count": 3,
           "observed_at": "2026-09-24T12:14:42.151495+00:00",
           "source_id": "kalshi_weather_rules"
+        },
+        {
+          "document_sha256": "5276bdcfb54d5d48ca4fc3cfeac4b70cd8d367a6f5859efe751b03f7ae2ddba4",
+          "economic_context_count": 3,
+          "observed_at": "2026-09-24T14:00:23.943175+00:00",
+          "source_id": "kalshi_weather_rules"
         }
       ],
       "observed_at": "2026-09-22T08:00:18.773998+00:00",
@@ -306,8 +306,8 @@
       "snippet": "amounts in specific cities, from New York City to Los Angeles. Traders can take positions on whether a city will reach a certain high temperature or fall within a particular range. Each weather market names its official settlement source in its market rules. Daily high/low temperature markets settle based on the final climate report issued by the National Weather Service (NWS), typically released the following morning. Hourly temperature markets settle on readings from The Weather Company . Always check the specific market\u2019s rules for its source. How Do I Trade on Weather Markets? Kalshi creates a prediction market around a specific temperature threshold for a given location. For example: \u201cHighest temperature in Chicago on April 1",
       "sources": [
         {
-          "document_sha256": "886163677f769a2815ebdb3c6c100a76f2f2492d6136d8bcc73e103ddacf91c5",
-          "point_in_time": "2026-09-24T12:14:42.151495+00:00",
+          "document_sha256": "5276bdcfb54d5d48ca4fc3cfeac4b70cd8d367a6f5859efe751b03f7ae2ddba4",
+          "point_in_time": "2026-09-24T14:00:23.943175+00:00",
           "source_id": "kalshi_weather_rules",
           "term": "settlement"
         }
@@ -349,7 +349,7 @@
         "has_decisive_test": true,
         "has_public_trigger": true,
         "independent_source_count": 1,
-        "observation_count": 3,
+        "observation_count": 4,
         "passes": false,
         "requirements": {
           "min_economic_context_count": 2,
@@ -362,8 +362,8 @@
       "labels": [
         "RECON_ANOMALY"
       ],
-      "last_observed_at": "2026-09-24T11:05:30.845119+00:00",
-      "observation_count": 3,
+      "last_observed_at": "2026-09-24T14:00:22.677886+00:00",
+      "observation_count": 4,
       "observation_history": [
         {
           "document_sha256": "bbfb7a5f8e917cdd63380293ded53b574778ed057b05028625269cc66553c7f1",
@@ -381,6 +381,12 @@
           "document_sha256": "d759fce09bdb5669686df2d90b4a5446745f78ed5f3781451082f7fe7f7d2389",
           "economic_context_count": 8,
           "observed_at": "2026-09-24T11:05:30.845119+00:00",
+          "source_id": "polymarket_docs"
+        },
+        {
+          "document_sha256": "ce6f86a2731bfa7a785db34abb1155d71c060dc9afcea867a8285f9fecf5bc89",
+          "economic_context_count": 8,
+          "observed_at": "2026-09-24T14:00:22.677886+00:00",
           "source_id": "polymarket_docs"
         }
       ],
@@ -400,8 +406,8 @@
       "snippet": "ils Prices and Order Books Analytics Real-Time Data Chainlink TWAP Prices Trading Overview Place Your First Order Wallets and Authentication Session Keys Beta Place Orders Manage Orders Real-Time Order Updates Positions Combos Wallet Activity Fees Market Making Matching Engine Restarts Bridge Programs Taker Rebate Program Maker Rebates Program Liquidity Rewards Builder Program Referral Program Resources Contracts Data Resources Error Codes \ud83c\uddfa\ud83c\uddf8 Looking for Polymarket US documentation? Visit US Docs \u2192 Polymarket Documentation Build on the world\u2019s largest prediction market. APIs, SDKs, and tools for prediction market developers. Developer Quickstart Make your first API request in minutes. Learn the basics of the Polymarket platform, f",
       "sources": [
         {
-          "document_sha256": "d759fce09bdb5669686df2d90b4a5446745f78ed5f3781451082f7fe7f7d2389",
-          "point_in_time": "2026-09-24T11:05:30.845119+00:00",
+          "document_sha256": "ce6f86a2731bfa7a785db34abb1155d71c060dc9afcea867a8285f9fecf5bc89",
+          "point_in_time": "2026-09-24T14:00:22.677886+00:00",
           "source_id": "polymarket_docs",
           "term": "rebate"
         }
@@ -536,6 +542,6 @@
     "PROVE",
     "KILL"
   ],
-  "updated_at": "2026-09-24T12:19:26.842456+00:00",
+  "updated_at": "2026-09-24T14:04:01.805571+00:00",
   "version": 1
 }
