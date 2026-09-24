@@ -1,0 +1,145 @@
+{
+  "schema": "PVA_PROSPECTIVE_SHADOW_PROTOCOL_V1",
+  "protocol_id": "MANUAL-SCOUT-HENGELTJES-20260924-SHADOW-V1",
+  "candidate_id": "MANUAL-SCOUT-HENGELTJES-20260924",
+  "status": "PREREGISTERED_PENDING_DEATHCHECKS",
+  "provenance": "MANUAL_SCOUT_SEED",
+  "economic_conclusion": "NO_PROVEN_EDGE",
+  "purpose": "Falsify or support the hypothesis that unusually favorable late passive maker bids in Kalshi weather markets can receive conservatively provable fills often enough, and that the filled subset can retain positive conditional net economics after adverse selection, fees and friction.",
+  "scope": {
+    "venue": "Kalshi",
+    "market_family": "weather",
+    "mechanism": "late_settlement_passive_liquidity",
+    "forecast_edge_required": false,
+    "eligible_market_rule": "Include only weather contracts for which exact contract rules, close time, settlement source/finality semantics, full required point-in-time execution evidence and final authoritative settlement can be archived. Unknown semantics fail closed.",
+    "independence_unit": "settlement_event",
+    "correlated_quotes_rule": "All virtual quotes and strike/bucket contracts tied to the same settlement event are clustered and must not be treated as independent events."
+  },
+  "virtual_order_grid": {
+    "side_rule": "Only the side implied by the frozen candidate-selection rule for the observed market may be shadowed; no post-hoc side switching after later evidence.",
+    "maker_bid_cents": [85, 87, 89, 91, 93],
+    "t_minus_minutes": [30, 20, 15, 10, 5],
+    "size_contracts": 5,
+    "passive_only": true,
+    "marketable_orders_forbidden": true,
+    "unfilled_pnl": 0
+  },
+  "fill_model_primary": {
+    "name": "CONSERVATIVE_PRICE_TIME_QUEUE",
+    "queue_rule": "At virtual-order creation, join behind all displayed quantity already resting at the exact price. Price touch alone never proves a fill.",
+    "depletion_credit": "Credit queue depletion only from point-in-time public execution evidence whose semantics are sufficient to distinguish executed quantity from cancellations or unrelated book changes. Cancellations receive zero fill credit.",
+    "partial_fill_rule": "Credit only the quantity proven to have executed after provable queue-ahead depletion; all remaining quantity stays unfilled.",
+    "ambiguous_fill_label": "UNPROVEN_FILL",
+    "sequence_gap_rule": "Any unresolved sequence gap affecting an active virtual order makes its subsequent fill state UNPROVEN_FILL.",
+    "reconnect_rule": "Reconnect or resubscription ambiguity affecting queue continuity invalidates the active queue state unless continuity is deterministically re-established from an authoritative snapshot/sequence contract.",
+    "restart_rule": "Any active virtual order spanning a collector restart is labelled UNPROVEN_RESTART and excluded from PRIMARY fill economics unless continuity is deterministically proven.",
+    "optimistic_sensitivity": "May be reported separately, but must never be mixed into PRIMARY results."
+  },
+  "point_in_time_evidence": {
+    "required": [
+      "market_id/ticker and exact contract rules/rules_version",
+      "settlement source and close timestamp",
+      "orderbook timestamped snapshots and relevant L2 depth",
+      "ordered deltas/sequence identifiers when supplied by the feed",
+      "public trades/execution evidence with documented semantics",
+      "fee schedule applicable at virtual-order time",
+      "virtual-order creation timestamp and frozen grid coordinates",
+      "collector receipt/archive timestamps",
+      "final authoritative settlement outcome and retrieval timestamp"
+    ],
+    "immutable_raw_required": true,
+    "post_close_information_for_order_decision_forbidden": true,
+    "later_revision_backfill_for_preclose_decision_forbidden": true
+  },
+  "adverse_selection": {
+    "post_fill_markout_seconds": [10, 30, 60, 120],
+    "required_for_primary_filled_episode": true,
+    "interpretation": "Favorable fills may be toxic/informed flow; PRIMARY analysis must pair fill proof with markouts and final settlement rather than treating fill occurrence as positive evidence."
+  },
+  "economics": {
+    "primary_quantity": "conservatively_proven_filled_quantity_only",
+    "conditional_ev_definition": "realized settlement payout per proven filled contract minus executed virtual price minus point-in-time applicable fees/friction",
+    "report_fill_rate": true,
+    "report_unconditional_shadow_pnl": true,
+    "report_conditional_filled_pnl": true,
+    "fees_and_friction_required": true,
+    "capacity_claims_forbidden_in_pilot": true
+  },
+  "evaluation_window": {
+    "start_rule": "The first eligible settlement event observed strictly after a separate ACTIVATION record is committed following all mandatory deathchecks.",
+    "stop_rule": "Stop at the earlier of 100 eligible settlement events or 7 full calendar days after activation. Do not extend automatically because results or sample size are inconvenient.",
+    "max_settlement_events": 100,
+    "max_calendar_days": 7,
+    "if_insufficient_data": "Report INSUFFICIENT_DATA or NO_PROVEN_EDGE; do not change the frozen grid or silently extend the window.",
+    "same_settlement_not_independent": true
+  },
+  "reporting_slices_predefined": [
+    "maker_bid_cents",
+    "t_minus_minutes",
+    "city_or_station",
+    "weather_contract_family"
+  ],
+  "metrics": {
+    "primary": [
+      "conservative_proven_fill_rate",
+      "conditional_net_ev_per_proven_filled_contract",
+      "unconditional_shadow_pnl_per_eligible_settlement_event",
+      "final_settlement_win_rate_for_proven_fills",
+      "post_fill_markouts_10_30_60_120s"
+    ],
+    "diagnostic": [
+      "UNPROVEN_FILL_count",
+      "UNPROVEN_RESTART_count",
+      "sequence_gap_count",
+      "reconnect_invalidated_count",
+      "partial_fill_quantity",
+      "missing_fee_or_rule_count"
+    ],
+    "multiple_testing_rule": "Grid cells and reporting slices are descriptive within this pilot; do not select a profitable cell post hoc as a new proven strategy. Any post-hoc survivor becomes a new hypothesis requiring fresh untouched prospective data."
+  },
+  "historical_regression_only": {
+    "miami_case": {
+      "market_context": "Miami hourly temperature, 76F or above, NO side",
+      "virtual_or_historical_order": "5 NO at 89 cents",
+      "expected_cost_usd": 4.45,
+      "expected_payout_usd": 5.0,
+      "expected_profit_usd": 0.55,
+      "expected_roi_pct": 12.36,
+      "role": "proof-of-mechanism regression fixture only; never validation evidence"
+    }
+  },
+  "mandatory_deathchecks_before_activation": [
+    {
+      "id": "DC1_FALSE_POSITIVE_FILL",
+      "pass_condition": "Cancellation-only/touch-without-execution fixtures cannot become PRIMARY fills, and ambiguous queue depletion becomes UNPROVEN_FILL."
+    },
+    {
+      "id": "DC2_NO_HINDSIGHT",
+      "pass_condition": "Virtual-order side, price, size and T-minus placement are determined from frozen pre-close rules only; later settlement/markout information cannot alter placement."
+    },
+    {
+      "id": "DC3_NO_LIVE_OR_COST_PATH",
+      "pass_condition": "The experiment has no enabled code path for order placement/cancel/amend, wallet/fund movement, paid API, cloud/VPS or paid OpenAI API use; any uncertainty fails closed."
+    }
+  ],
+  "activation_gate": {
+    "required_clean_runs": 3,
+    "required": [
+      "all three mandatory deathchecks PASS",
+      "Miami regression fixture reproduces 5 at 89 cents -> +$0.55 without being counted as prospective evidence",
+      "raw archive and sequence/reconnect ambiguity handling are reproducible",
+      "read-only/no-cost guard is PASS"
+    ],
+    "activation_before_gate_pass_forbidden": true
+  },
+  "safety": {
+    "live_trading": false,
+    "order_placement": false,
+    "cancel_or_amend": false,
+    "wallet_actions": false,
+    "paid_actions": false,
+    "openai_api": false,
+    "cloud_or_vps": false,
+    "credentials_in_git": false
+  }
+}
