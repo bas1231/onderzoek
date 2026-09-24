@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """Enable/disable bounded server-side nightshift heartbeat for one routed chat.
 
-A heartbeat writes a user-visible commandmarker into ChatGPT.  That is not a
+A heartbeat writes a user-visible commandmarker into ChatGPT. That is not a
 normal scheduler primitive: enabling it therefore requires an explicit CLI
-opt-in on every activation.  Existing callers that omit the opt-in fail closed.
+opt-in on every activation. Existing callers that omit the opt-in fail closed.
 """
 from __future__ import annotations
 
@@ -58,9 +58,9 @@ def enable(
         raise RuntimeError("explicit_commandmarker_opt_in_required")
     if not (0.25 <= hours <= 12.0):
         raise RuntimeError("hours_out_of_range")
-    if not (15.0 <= interval <= 300.0):
+    if not (15.0 <= interval <= 600.0):
         raise RuntimeError("interval_out_of_range")
-    if not (0.0 <= delay <= 300.0):
+    if not (0.0 <= delay <= 600.0):
         raise RuntimeError("delay_out_of_range")
     now = time.time()
     chat_id = route_chat(task_id)
@@ -114,8 +114,8 @@ def main() -> int:
     p_enable = sub.add_parser("enable")
     p_enable.add_argument("task_id")
     p_enable.add_argument("--hours", type=float, default=10.0)
-    p_enable.add_argument("--interval", type=float, default=300.0)
-    p_enable.add_argument("--delay", type=float, default=300.0)
+    p_enable.add_argument("--interval", type=float, default=600.0)
+    p_enable.add_argument("--delay", type=float, default=600.0)
     p_enable.add_argument(
         "--allow-commandmarker",
         action="store_true",
