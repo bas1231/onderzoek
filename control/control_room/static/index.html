@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="nl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Prediction Control Room</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <div>
+      <div class="eyebrow">PREDICTION RESEARCH-OS</div>
+      <h1>CONTROL ROOM <span>V0</span></h1>
+    </div>
+    <div class="topmeta">
+      <div id="clock">--:--:--</div>
+      <div id="refreshState" class="muted">laden…</div>
+    </div>
+  </header>
+
+  <main>
+    <section id="truthBar" class="truthbar"></section>
+
+    <section class="grid grid-3">
+      <article class="panel span-2">
+        <div class="panel-head"><h2>Live activity</h2><span class="hint">Git + lokale runtime-evidence</span></div>
+        <div id="activity" class="timeline"></div>
+      </article>
+      <article class="panel">
+        <div class="panel-head"><h2>Alerts</h2><span id="alertCount" class="pill">0</span></div>
+        <div id="alerts" class="stack"></div>
+      </article>
+    </section>
+
+    <section class="grid grid-2">
+      <article class="panel">
+        <div class="panel-head"><h2>System health</h2><span id="healthBadge" class="pill">UNKNOWN</span></div>
+        <div id="health" class="kv"></div>
+      </article>
+      <article class="panel">
+        <div class="panel-head"><h2>Git</h2><span id="gitBadge" class="pill">UNKNOWN</span></div>
+        <div id="git" class="kv"></div>
+      </article>
+    </section>
+
+    <section class="panel">
+      <div class="panel-head"><h2>Agents</h2><span class="hint">Geen heartbeat = UNKNOWN, niet automatisch defect</span></div>
+      <div id="agents" class="agent-grid"></div>
+    </section>
+
+    <section class="panel">
+      <div class="panel-head"><h2>Tasks &amp; lifecycle</h2><span class="hint">Alleen vooraf geselecteerde veilige metadata</span></div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Tijd</th><th>Task</th><th>Hypothese</th><th>Type</th><th>Status</th><th>Bron</th></tr></thead>
+          <tbody id="tasks"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="grid grid-2">
+      <article class="panel">
+        <div class="panel-head"><h2>Resources</h2><span class="hint">lokale host</span></div>
+        <div id="resources" class="kv"></div>
+      </article>
+      <article class="panel">
+        <div class="panel-head"><h2>Provenance</h2><span class="hint">wat V0 daadwerkelijk leest</span></div>
+        <div id="provenance" class="provenance"></div>
+      </article>
+    </section>
+
+    <section class="panel machine-room">
+      <div class="panel-head"><h2>Behind the scenes</h2><span class="pill safe">READ ONLY</span></div>
+      <div class="flow">
+        <div>Research Director</div><b>→</b><div>Bridge / Router</div><b>→</b><div>WSL Control Plane</div><b>→</b><div>Executor</div><b>→</b><div>Evidence</div><b>→</b><div>Git</div>
+      </div>
+      <p class="muted">V0 observeert bestaande bestanden en Git. Het dashboard zelf voert geen taak uit, doet geen externe poll en heeft geen mutation endpoint.</p>
+    </section>
+  </main>
+
+  <footer>Prediction Control Room V0 · local observability only · UNKNOWN blijft UNKNOWN</footer>
+  <script src="/app.js" defer></script>
+</body>
+</html>
