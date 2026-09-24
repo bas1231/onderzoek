@@ -1,0 +1,230 @@
+{
+  "schema": "PVA_AI_EXCHANGE_RESPONSE_V1",
+  "run_id": "hourly-20260924T180000+0200",
+  "request_sha256": "0b22d380a7cc684ceb2ac929e656e2764899849bf229553c362cf1b8b81256b9",
+  "response": {
+    "schema": "PVA_AI_RESPONSE_V1",
+    "run_id": "hourly-20260924T180000+0200",
+    "response_token": "018090c914da3a1b014306e1edf98c39bb8da46c0bb3e2392f751ac0cf39c73e",
+    "role_results": [
+      {
+        "agent_id": "discovery",
+        "candidate_ids": ["KWI-FULL-STATION-PRECANONICAL-V1", "MANUAL-SCOUT-HENGELTJES-20260924"],
+        "capability_results": {
+          "scout": {
+            "status": "COMPLETED",
+            "finding": "MANUAL-SCOUT-HENGELTJES-20260924 is not primarily a weather-forecast signal. The weather/rain family is the initial market scope; the hypothesized edge is conditional passive-liquidity execution: unusually favorable late maker orders, strict fill proof, adverse selection and settlement outcome. Primary next specialist is microstructure, with settlement/finality as supporting mechanics. The historical Miami 5 NO @ 89c fill is proof-of-mechanism only, not proof of positive EV. KWI remains waiting for post-cutoff evidence."
+          },
+          "recon_scout": {
+            "status": "COMPLETED",
+            "finding": "Cheapest falsification path for the hengeltjes seed is prospective read-only queue-realistic shadowing with fail-closed sequence/reconnect handling, followed by toxic-fill/adverse-selection and post-fill markout analysis. A trade print at our price cannot by itself prove our fill."
+          }
+        },
+        "evidence_refs": [
+          "knowledge/manual_scout_seeds/2026-09-24-hengeltjes-late-passive-liquidity.md",
+          "knowledge/candidates/MANUAL-SCOUT-HENGELTJES-20260924.json",
+          "knowledge/candidates/KWI-FULL-STATION-PRECANONICAL-V1.json"
+        ],
+        "failure_pattern_ids": [],
+        "finding": "Discovery classifies the manual seed as a passive-liquidity/microstructure hypothesis inside the short-duration Kalshi weather-market scope, with settlement support; it should proceed to mechanics rather than weather forecasting.",
+        "local_task_required": false,
+        "local_task_spec": null,
+        "next_decisive_question": "Under frozen prospective shadow rules, do strict queue-realistic late passive fills occur often enough and avoid adverse selection enough for conditional settlement EV to exceed price plus friction?",
+        "status": "COMPLETED",
+        "validation_results": [],
+        "benchmark_telemetry": {
+          "worker_run_id": "hourly-20260924T180000+0200:discovery",
+          "research_items": [
+            {"item_id": "manual-hengeltjes-classification-1800", "duplicate_of": null},
+            {"item_id": "kwi-post-cutoff-check-1800", "duplicate_of": null}
+          ],
+          "evidence": [
+            {"evidence_id": "knowledge/manual_scout_seeds/2026-09-24-hengeltjes-late-passive-liquidity.md", "source_family": "git-manual-scout-seed", "relevant": true, "contradiction": false, "point_in_time_ok": true, "provenance_ok": true},
+            {"evidence_id": "knowledge/candidates/MANUAL-SCOUT-HENGELTJES-20260924.json", "source_family": "git-candidate-state", "relevant": true, "contradiction": false, "point_in_time_ok": true, "provenance_ok": true},
+            {"evidence_id": "knowledge/candidates/KWI-FULL-STATION-PRECANONICAL-V1.json", "source_family": "git-candidate-state", "relevant": true, "contradiction": false, "point_in_time_ok": true, "provenance_ok": true}
+          ],
+          "failure_patterns": [],
+          "queue_starvation_event_ids": []
+        }
+      },
+      {
+        "agent_id": "market_research",
+        "candidate_ids": ["KWI-FULL-STATION-PRECANONICAL-V1"],
+        "capability_results": {
+          "weather_twc": {"status": "WAITING_FOR_RESULT", "finding": "No new admissible post-cutoff full-station KWI result is supplied in this bundle."},
+          "behavioral": {"status": "NO_EVIDENCE", "finding": "No candidate-relevant behavioral evidence is supplied."},
+          "informed_flow": {"status": "NO_EVIDENCE", "finding": "No point-in-time participant-flow evidence is supplied."}
+        },
+        "evidence_refs": ["knowledge/candidates/KWI-FULL-STATION-PRECANONICAL-V1.json"],
+        "failure_pattern_ids": [],
+        "finding": "KWI remains gated on genuinely new post-cutoff prospective evidence.",
+        "local_task_required": false,
+        "local_task_spec": null,
+        "next_decisive_question": "Does the first admissible post-cutoff full-station case reproduce the discovery signal?",
+        "status": "WAITING_FOR_RESULT",
+        "validation_results": [],
+        "benchmark_telemetry": {
+          "worker_run_id": "hourly-20260924T180000+0200:market_research",
+          "research_items": [{"item_id": "kwi-weather-gate-1800", "duplicate_of": null}],
+          "evidence": [{"evidence_id": "knowledge/candidates/KWI-FULL-STATION-PRECANONICAL-V1.json", "source_family": "git-candidate-state", "relevant": true, "contradiction": false, "point_in_time_ok": true, "provenance_ok": true}],
+          "failure_patterns": [],
+          "queue_starvation_event_ids": []
+        }
+      },
+      {
+        "agent_id": "mechanics",
+        "candidate_ids": ["ASSET-RANK-MAKER-HEDGE-V1", "PAYOFF-IDENTITY-MINING-V1"],
+        "capability_results": {
+          "settlement": {"status": "NO_EVIDENCE", "finding": "No new primary-rule state space establishes a concrete payoff-equivalent or dominant pair in the candidates routed to Mechanics in this immutable bundle."},
+          "microstructure": {"status": "WAITING_FOR_DATA", "finding": "ASSET-RANK still lacks a proven full shadow fill; PAYOFF-IDENTITY still lacks the formal pair needed before executable L2. The newly classified manual hengeltjes seed was not pre-routed to Mechanics in this immutable bundle and therefore must enter Mechanics on the next cycle."}
+        },
+        "evidence_refs": ["knowledge/candidates/ASSET-RANK-MAKER-HEDGE-V1.json", "knowledge/candidates/PAYOFF-IDENTITY-MINING-V1.json"],
+        "failure_pattern_ids": [],
+        "finding": "Existing Mechanics candidates remain blocked; the manual seed requires next-cycle Mechanics routing after Discovery classification.",
+        "local_task_required": false,
+        "local_task_spec": null,
+        "next_decisive_question": "On the next cycle, can the manual seed be evaluated with strict queue-realistic passive-fill evidence, settlement finality and adverse-selection markouts?",
+        "status": "WAITING_FOR_DATA",
+        "validation_results": [],
+        "benchmark_telemetry": {
+          "worker_run_id": "hourly-20260924T180000+0200:mechanics",
+          "research_items": [
+            {"item_id": "asset-rank-fill-gate-1800", "duplicate_of": null},
+            {"item_id": "payoff-semantic-gate-1800", "duplicate_of": null}
+          ],
+          "evidence": [
+            {"evidence_id": "knowledge/candidates/ASSET-RANK-MAKER-HEDGE-V1.json", "source_family": "git-candidate-state", "relevant": true, "contradiction": false, "point_in_time_ok": true, "provenance_ok": true},
+            {"evidence_id": "knowledge/candidates/PAYOFF-IDENTITY-MINING-V1.json", "source_family": "git-candidate-state", "relevant": true, "contradiction": false, "point_in_time_ok": true, "provenance_ok": true}
+          ],
+          "failure_patterns": [],
+          "queue_starvation_event_ids": []
+        }
+      },
+      {
+        "agent_id": "algebra",
+        "candidate_ids": ["ASSET-RANK-MAKER-HEDGE-V1", "PAYOFF-IDENTITY-MINING-V1"],
+        "capability_results": {
+          "algebra": {"status": "WAITING_FOR_DATA", "finding": "No complete new primary-rule state space is supplied from which statewise equivalence or dominance can be proven."}
+        },
+        "evidence_refs": ["knowledge/candidates/ASSET-RANK-MAKER-HEDGE-V1.json", "knowledge/candidates/PAYOFF-IDENTITY-MINING-V1.json"],
+        "failure_pattern_ids": [],
+        "finding": "No new formal identity is proven; price comparison remains premature.",
+        "local_task_required": false,
+        "local_task_spec": null,
+        "next_decisive_question": "Which concrete contract pair has complete primary-rule payout semantics for every allowed state?",
+        "status": "WAITING_FOR_DATA",
+        "validation_results": [],
+        "benchmark_telemetry": {
+          "worker_run_id": "hourly-20260924T180000+0200:algebra",
+          "research_items": [{"item_id": "payoff-proof-gate-1800", "duplicate_of": null}],
+          "evidence": [{"evidence_id": "knowledge/candidates/PAYOFF-IDENTITY-MINING-V1.json", "source_family": "git-candidate-state", "relevant": true, "contradiction": false, "point_in_time_ok": true, "provenance_ok": true}],
+          "failure_patterns": [],
+          "queue_starvation_event_ids": []
+        }
+      },
+      {
+        "agent_id": "red_team_pentest",
+        "candidate_ids": ["ASSET-RANK-MAKER-HEDGE-V1", "KWI-FULL-STATION-PRECANONICAL-V1", "MANUAL-SCOUT-HENGELTJES-20260924", "PAYOFF-IDENTITY-MINING-V1"],
+        "capability_results": {
+          "prebuild_killer": {"status": "COMPLETED", "finding": "QUICK_KILL does not establish edge for the manual seed: one profitable Miami fill proves occurrence only. The cheapest decisive threats are false-positive fill reconstruction, hindsight in order placement, sequence/reconnect ambiguity and adverse selection of the filled subset. Existing candidates remain blocked at their prior cheap gates."},
+          "chief_falsifier": {"status": "COMPLETED", "finding": "No deep falsification is justified until prospective queue-realistic fill evidence exists for the manual seed; optimistic fill assumptions must never enter PRIMARY results."}
+        },
+        "evidence_refs": [
+          "knowledge/manual_scout_seeds/2026-09-24-hengeltjes-late-passive-liquidity.md",
+          "knowledge/candidates/MANUAL-SCOUT-HENGELTJES-20260924.json",
+          "knowledge/candidates/ASSET-RANK-MAKER-HEDGE-V1.json",
+          "knowledge/candidates/KWI-FULL-STATION-PRECANONICAL-V1.json",
+          "knowledge/candidates/PAYOFF-IDENTITY-MINING-V1.json"
+        ],
+        "failure_pattern_ids": [],
+        "finding": "The manual seed survives only as an unproven, falsifiable microstructure hypothesis; its proof-of-mechanism must not be upgraded to proof-of-edge.",
+        "local_task_required": false,
+        "local_task_spec": null,
+        "next_decisive_question": "Can prospective conservative shadowing prove actual queue-realistic fills and show that post-fill adverse selection does not erase the apparent price advantage?",
+        "status": "COMPLETED",
+        "validation_results": [
+          {"candidate_id": "ASSET-RANK-MAKER-HEDGE-V1", "mode": "QUICK_KILL", "status": "INCONCLUSIVE"},
+          {"candidate_id": "KWI-FULL-STATION-PRECANONICAL-V1", "mode": "QUICK_KILL", "status": "WAITING"},
+          {"candidate_id": "MANUAL-SCOUT-HENGELTJES-20260924", "mode": "QUICK_KILL", "status": "INCONCLUSIVE"},
+          {"candidate_id": "PAYOFF-IDENTITY-MINING-V1", "mode": "QUICK_KILL", "status": "INCONCLUSIVE"}
+        ],
+        "benchmark_telemetry": {
+          "worker_run_id": "hourly-20260924T180000+0200:red_team_pentest",
+          "research_items": [{"item_id": "quick-kill-bundle-1800", "duplicate_of": null}],
+          "evidence": [
+            {"evidence_id": "knowledge/manual_scout_seeds/2026-09-24-hengeltjes-late-passive-liquidity.md", "source_family": "git-manual-scout-seed", "relevant": true, "contradiction": false, "point_in_time_ok": true, "provenance_ok": true},
+            {"evidence_id": "candidate-bundle-state-1800", "source_family": "git-candidate-state", "relevant": true, "contradiction": false, "point_in_time_ok": true, "provenance_ok": true}
+          ],
+          "failure_patterns": [],
+          "queue_starvation_event_ids": []
+        }
+      },
+      {
+        "agent_id": "research_director",
+        "candidate_ids": [],
+        "capability_results": {},
+        "evidence_refs": [
+          "knowledge/manual_scout_seeds/2026-09-24-hengeltjes-late-passive-liquidity.md",
+          "knowledge/candidates/MANUAL-SCOUT-HENGELTJES-20260924.json",
+          "knowledge/candidates/ASSET-RANK-MAKER-HEDGE-V1.json",
+          "knowledge/candidates/KWI-FULL-STATION-PRECANONICAL-V1.json",
+          "knowledge/candidates/PAYOFF-IDENTITY-MINING-V1.json"
+        ],
+        "failure_pattern_ids": [],
+        "finding": "Discovery has completed the requested classification. The manual hengeltjes candidate should remain active but unproven and be routed next cycle to Mechanics microstructure plus settlement/finality support; weather remains market scope rather than a forecasting-edge claim. No candidate is promoted or killed.",
+        "local_task_required": false,
+        "local_task_spec": null,
+        "next_decisive_question": "Does the next cycle route MANUAL-SCOUT-HENGELTJES-20260924 into Mechanics and define the minimal prospective queue-realistic shadow experiment without changing the no-live/no-cost boundary?",
+        "status": "COMPLETED",
+        "validation_results": [],
+        "benchmark_telemetry": {
+          "worker_run_id": "hourly-20260924T180000+0200:research_director",
+          "research_items": [{"item_id": "director-hengeltjes-routing-1800", "duplicate_of": null}],
+          "evidence": [
+            {"evidence_id": "knowledge/manual_scout_seeds/2026-09-24-hengeltjes-late-passive-liquidity.md", "source_family": "git-manual-scout-seed", "relevant": true, "contradiction": false, "point_in_time_ok": true, "provenance_ok": true},
+            {"evidence_id": "candidate-bundle-state-1800", "source_family": "git-candidate-state", "relevant": true, "contradiction": false, "point_in_time_ok": true, "provenance_ok": true}
+          ],
+          "failure_patterns": [],
+          "queue_starvation_event_ids": []
+        }
+      }
+    ],
+    "candidate_decisions": [
+      {
+        "candidate_id": "ASSET-RANK-MAKER-HEDGE-V1",
+        "queue_status": "RUNNING",
+        "reason": "No full passive fill is proven; current execution evidence remains insufficient.",
+        "next_decisive_test": "Continue preregistered conservative fill monitoring; only a proven full passive fill may trigger synchronized executable hedge economics.",
+        "resurrection_condition": null
+      },
+      {
+        "candidate_id": "KWI-FULL-STATION-PRECANONICAL-V1",
+        "queue_status": "WAITING_FOR_RESULT",
+        "reason": "No admissible post-cutoff result is present; pre-cutoff discovery evidence cannot serve as validation.",
+        "next_decisive_test": "Await and evaluate post-cutoff cases under the preregistered 24h full-station protocol.",
+        "resurrection_condition": null
+      },
+      {
+        "candidate_id": "MANUAL-SCOUT-HENGELTJES-20260924",
+        "queue_status": "EXPERIMENT_REQUIRED",
+        "reason": "Discovery classifies the seed as a passive-liquidity/microstructure hypothesis with settlement/finality support. Weather/rain is the motivating market scope, not a weather-forecast edge. The Miami fill is proof-of-mechanism only; prospective queue-realistic fill and adverse-selection evidence is still required.",
+        "next_decisive_test": "Route next cycle to mechanics microstructure and settlement: define a read-only prospective shadow test of late passive maker orders with strict queue-realistic fills, sequence/reconnect fail-closed rules, post-fill markouts, adverse-selection analysis, final settlement outcomes and EV after fees/friction; preserve MANUAL_SCOUT_SEED provenance and NO_PROVEN_EDGE.",
+        "resurrection_condition": null
+      },
+      {
+        "candidate_id": "PAYOFF-IDENTITY-MINING-V1",
+        "queue_status": "NEEDS_DIRECTOR",
+        "reason": "No complete concrete statewise identity/dominance proof is present.",
+        "next_decisive_test": "Find a concrete primary-rule-proven statewise pair before synchronized executable L2 comparison.",
+        "resurrection_condition": null
+      }
+    ],
+    "director_decision": "Accept Discovery classification of MANUAL-SCOUT-HENGELTJES-20260924 as a passive-liquidity/microstructure hypothesis in the short-duration weather-market scope, retain NO_PROVEN_EDGE, and schedule next-cycle Mechanics microstructure plus settlement/finality evaluation under read-only shadow constraints. Preserve all other candidate gates.",
+    "economic_conclusion": "NO_PROVEN_EDGE",
+    "local_tasks": [],
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "openai_api": false
+  }
+}
