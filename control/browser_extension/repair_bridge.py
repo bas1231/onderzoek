@@ -5,164 +5,13 @@ import json
 import shutil
 import time
 
+from patch_result_ack_presend_gate import MARKER as ACK_GATE_MARKER
+from patch_result_ack_presend_gate import patch_text as patch_ack_presend_gate
+
 ROOT = Path(__file__).resolve().parents[2]
 EXT = ROOT / "control" / "browser_extension"
 CONTENT = EXT / "content.js"
 MANIFEST = EXT / "manifest.json"
-
-ANCHOR = '''    async function removeDurableEnvelope(taskId) {
-      const queue = await loadDurableQueue();
-
-      if (queue[taskId]) {
-        delete queue[taskId];
-        await saveDurableQueue(queue);
-      }
-    }
-
-
-  async function scanForTasks() {'''
-
-FLUSH = r'''    async function removeDurableEnvelope(taskId) {
-      const queue = await loadDurableQueue();
-
-      if (queue[taskId]) {
-        delete queue[taskId];
-        await saveDurableQueue(queue);
-      }
-    }
-
-    async function flushDurableQueue() {
-      if (!(await isArmed())) {
-        return;
-      }
-
-      const queue = await loadDurableQueue();
-      const processed = new Set(
-        await processedTaskIds()
-      );
-
-      let changed = false;
-      const now = Date.now();
-
-      for (const [taskId, record] of Object.entries(queue)) {
-        if (
-          !record ||
-          typeof record !== "object" ||
-          !record.envelope
-        ) {
-          delete queue[taskId];
-          changed = true;
-          continue;
-        }
-
-        if (processed.has(taskId)) {
-          delete queue[taskId];
-          changed = true;
-          continue;
-        }
-
-        const attempts = Number(record.attempts || 0);
-        const lastAttemptAt = Number(record.lastAttemptAt || 0);
-        const backoffMs = Math.min(
-          60000,
-          2000 * Math.pow(2, Math.min(attempts, 5))
-        );
-
-        if (
-          lastAttemptAt &&
-          now - lastAttemptAt < backoffMs
-        ) {
-          continue;
-        }
-
-        record.attempts = attempts + 1;
-        record.lastAttemptAt = now;
-        record.updatedAt = now;
-
-        try {
-          const discoverResponse = await bridgeFetch(
-            "/discover",
-            "POST",
-            {
-              task_id: taskId
-            }
-          );
-
-          if (
-            !discoverResponse ||
-            !discoverResponse.ok
-          ) {
-            record.lastError =
-              "discover: " +
-              JSON.stringify(discoverResponse).slice(0, 500);
-            changed = true;
-            continue;
-          }
-
-          const response = await bridgeFetch(
-            "/enqueue",
-            "POST",
-            record.envelope
-          );
-
-          if (response && response.ok) {
-            await markTaskProcessed(taskId);
-            processed.add(taskId);
-            delete queue[taskId];
-            changed = true;
-
-            console.log(
-              "[Prediction Bridge] durable task accepted:",
-              taskId,
-              response.status
-            );
-          } else {
-            record.lastError =
-              "enqueue: " +
-              JSON.stringify(response).slice(0, 500);
-            changed = true;
-          }
-        } catch (error) {
-          record.lastError = String(error).slice(0, 500);
-          changed = true;
-
-          console.warn(
-            "[Prediction Bridge] durable retry failed:",
-            taskId,
-            error
-          );
-        }
-      }
-
-      if (changed) {
-        await saveDurableQueue(queue);
-      }
-    }
-
-
-  async function scanForTasks() {'''
-
-OLD_GUARD = '''(() => {
-  if (window.__PREDICTION_RESEARCH_BRIDGE_LOADED__) {
-    return;
-  }
-
-  window.__PREDICTION_RESEARCH_BRIDGE_LOADED__ = true;
-'''
-
-NEW_GUARD = '''(() => {
-  const CONTENT_VERSION = "0.5.2";
-
-  if (
-    window.__PREDICTION_RESEARCH_BRIDGE_LOADED__ ===
-    CONTENT_VERSION
-  ) {
-    return;
-  }
-
-  window.__PREDICTION_RESEARCH_BRIDGE_LOADED__ =
-    CONTENT_VERSION;
-'''
 
 
 def backup(path: Path) -> Path:
@@ -172,51 +21,51 @@ def backup(path: Path) -> Path:
     return target
 
 
+def _assert_existing_bridge_invariants(text: str) -> None:
+    required = (
+        "async function flushDurableQueue()",
+        "async function resultAckPending(taskId)",
+        "async function flushPendingResultAcks()",
+        "const CONTENT_VERSION =",
+    )
+    missing = [item for item in required if item not in text]
+    if missing:
+        raise SystemExit(
+            "Refusing repair: audited bridge invariants missing: "
+            + ", ".join(missing)
+        )
+
+
 def patch_content() -> tuple[bool, list[Path]]:
-    text = CONTENT.read_text(encoding="utf-8")
+    """Apply only forward/idempotent repairs; never downgrade local code."""
+    original = CONTENT.read_text(encoding="utf-8")
+    _assert_existing_bridge_invariants(original)
+
+    try:
+        patched, changed = patch_ack_presend_gate(original)
+    except ValueError as exc:
+        raise SystemExit(str(exc)) from exc
+
     backups: list[Path] = []
-    changed = False
-
-    if "async function flushDurableQueue()" not in text:
-        if ANCHOR not in text:
-            raise SystemExit(
-                "Refusing to patch: durable-queue anchor not found. "
-                "Repository content differs from the audited version."
-            )
-        backups.append(backup(CONTENT))
-        text = text.replace(ANCHOR, FLUSH, 1)
-        changed = True
-
-    if OLD_GUARD in text:
-        if not backups:
-            backups.append(backup(CONTENT))
-        text = text.replace(OLD_GUARD, NEW_GUARD, 1)
-        changed = True
-
     if changed:
-        CONTENT.write_text(text, encoding="utf-8")
+        backups.append(backup(CONTENT))
+        CONTENT.write_text(patched, encoding="utf-8")
 
     final = CONTENT.read_text(encoding="utf-8")
-    if "async function flushDurableQueue()" not in final:
-        raise SystemExit("Repair failed: flushDurableQueue is still missing")
-    if 'const CONTENT_VERSION = "0.5.2";' not in final:
-        raise SystemExit("Repair failed: versioned reinjection guard is missing")
+    _assert_existing_bridge_invariants(final)
+    if ACK_GATE_MARKER not in final:
+        raise SystemExit("Repair failed: result ACK pre-send gate missing")
 
     return changed, backups
 
 
-def patch_manifest() -> tuple[bool, list[Path]]:
+def validate_manifest() -> tuple[bool, list[Path]]:
+    """Validate manifest only. Never rewrite/downgrade a newer local version."""
     data = json.loads(MANIFEST.read_text(encoding="utf-8"))
-    if data.get("version") == "0.5.2":
-        return False, []
-
-    backups = [backup(MANIFEST)]
-    data["version"] = "0.5.2"
-    MANIFEST.write_text(
-        json.dumps(data, indent=2, ensure_ascii=False) + "\n",
-        encoding="utf-8",
-    )
-    return True, backups
+    version = str(data.get("version") or "").strip()
+    if not version:
+        raise SystemExit("Refusing repair: manifest version missing")
+    return False, []
 
 
 def main() -> None:
@@ -224,14 +73,15 @@ def main() -> None:
         raise SystemExit("Run this from the prediction_research checkout")
 
     content_changed, content_backups = patch_content()
-    manifest_changed, manifest_backups = patch_manifest()
+    manifest_changed, manifest_backups = validate_manifest()
 
     print("PREDICTION_BRIDGE_REPAIR_OK")
     print("content_changed=", content_changed)
     print("manifest_changed=", manifest_changed)
+    print("ack_presend_gate=present")
     for path in content_backups + manifest_backups:
         print("backup=", path)
-    print("next=reload Prediction Research Bridge once in chrome://extensions")
+    print("runtime_liveness=UNVERIFIED")
 
 
 if __name__ == "__main__":
