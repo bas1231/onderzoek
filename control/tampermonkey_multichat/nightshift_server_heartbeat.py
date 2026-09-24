@@ -97,8 +97,8 @@ def main() -> int:
     p_enable = sub.add_parser("enable")
     p_enable.add_argument("task_id")
     p_enable.add_argument("--hours", type=float, default=10.0)
-    p_enable.add_argument("--interval", type=float, default=25.0)
-    p_enable.add_argument("--delay", type=float, default=30.0)
+    p_enable.add_argument("--interval", type=float, default=300.0)
+    p_enable.add_argument("--delay", type=float, default=300.0)
 
     sub.add_parser("disable")
     sub.add_parser("status")
