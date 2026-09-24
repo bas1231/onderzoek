@@ -15,6 +15,11 @@ The server-side heartbeat is intentionally opt-in, bounded by an expiry time,
 and tells the assistant to continue only while the agreed nightshift task is
 unfinished. Once that task is complete, later heartbeats must be ignored and
 must not start new work.
+
+Heartbeat timing is inactivity-based. A bridge result delivered back to the
+bound chat resets the timer. A newly routed nightshift command also resets the
+timer, because that is evidence that the assistant just emitted a work message.
+Only ten full minutes without either kind of activity produce a wake message.
 """
 from __future__ import annotations
 
@@ -30,6 +35,7 @@ from http.server import ThreadingHTTPServer
 import bridge_server_v2 as base
 
 MAX_BROWSER_MESSAGE = 900
+DEFAULT_HEARTBEAT_INTERVAL = 600.0
 HEARTBEAT_MESSAGE = (
     "ga door. Als de afgesproken nightshift-taak volledig is afgerond, "
     "negeer deze heartbeat en start niets nieuws."
@@ -69,14 +75,61 @@ def _load_mode() -> dict | None:
 
 def _heartbeat_interval(mode: dict) -> float:
     try:
-        value = float(mode.get("interval_seconds") or 300.0)
+        value = float(mode.get("interval_seconds") or DEFAULT_HEARTBEAT_INTERVAL)
     except Exception:
-        value = 300.0
-    return min(300.0, max(15.0, value))
+        value = DEFAULT_HEARTBEAT_INTERVAL
+    return min(600.0, max(15.0, value))
+
+
+def _latest_route_activity(chat_id: str) -> float:
+    """Return newest routed command timestamp for this chat, bounded to recent files."""
+    candidates = []
+    try:
+        for path in base.ROUTES.glob("*.json"):
+            if path.name.startswith("DEV-PRED-NIGHTSHIFT-HEARTBEAT-"):
+                continue
+            try:
+                candidates.append((path.stat().st_mtime_ns, path))
+            except OSError:
+                continue
+    except OSError:
+        return 0.0
+
+    candidates.sort(key=lambda item: item[0], reverse=True)
+    for _, path in candidates[:512]:
+        try:
+            obj = json.loads(path.read_text(encoding="utf-8"))
+        except Exception:
+            continue
+        if str(obj.get("chat_id") or "") != str(chat_id):
+            continue
+        try:
+            return max(float(obj.get("created_at_unix") or 0), path.stat().st_mtime)
+        except Exception:
+            try:
+                return path.stat().st_mtime
+            except OSError:
+                return 0.0
+    return 0.0
+
+
+def _touch_activity(chat_id: str, source: str) -> bool:
+    """Persist activity for the active nightshift chat."""
+    if not chat_id:
+        return False
+    with _HEARTBEAT_LOCK:
+        mode = _load_mode()
+        if not mode or str(mode.get("chat_id")) != str(chat_id):
+            return False
+        now = time.time()
+        mode["last_activity_at"] = now
+        mode["last_activity_source"] = str(source)[:80]
+        _atomic_json(NIGHTSHIFT_MODE_FILE, mode)
+        return True
 
 
 def _maybe_enqueue_heartbeat(chat_id) -> bool:
-    """Create one routed heartbeat event when nightshift mode is due."""
+    """Create one routed heartbeat only after a full inactivity interval."""
     if not chat_id:
         return False
 
@@ -89,11 +142,20 @@ def _maybe_enqueue_heartbeat(chat_id) -> bool:
         try:
             not_before = float(mode.get("not_before") or 0)
             last_emit_at = float(mode.get("last_emit_at") or 0)
+            last_activity_at = float(mode.get("last_activity_at") or mode.get("started_at") or 0)
         except Exception:
             return False
+
+        route_activity_at = _latest_route_activity(str(chat_id))
+        effective_activity_at = max(last_activity_at, last_emit_at, route_activity_at)
+        if route_activity_at > last_activity_at:
+            mode["last_activity_at"] = route_activity_at
+            mode["last_activity_source"] = "assistant_command_route"
+            _atomic_json(NIGHTSHIFT_MODE_FILE, mode)
+
         if now < not_before:
             return False
-        if (now - last_emit_at) < _heartbeat_interval(mode):
+        if (now - effective_activity_at) < _heartbeat_interval(mode):
             return False
 
         token = secrets.token_hex(4)
@@ -118,6 +180,8 @@ def _maybe_enqueue_heartbeat(chat_id) -> bool:
         })
 
         mode["last_emit_at"] = now
+        mode["last_activity_at"] = now
+        mode["last_activity_source"] = "heartbeat_emit"
         mode["last_event_id"] = event_id
         _atomic_json(NIGHTSHIFT_MODE_FILE, mode)
         return True
@@ -149,7 +213,7 @@ def _retire_duplicate(path, obj) -> None:
 
 
 def hardened_oldest_event(chat_id=None, consumer_id=None):
-    """Return the first not-yet-delivered task event, then heartbeat if due."""
+    """Return first not-yet-delivered task event, then heartbeat if due."""
     for _ in range(256):
         path, obj = _RAW_OLDEST_EVENT(chat_id, consumer_id)
         if obj is None:
@@ -160,6 +224,8 @@ def hardened_oldest_event(chat_id=None, consumer_id=None):
         if task_id and task_id in _sent_task_ids():
             _retire_duplicate(path, obj)
             continue
+        if str(obj.get("source") or "") != "server_heartbeat":
+            _touch_activity(str(chat_id or ""), "bridge_result")
         return path, obj
     return None, None
 
@@ -218,7 +284,7 @@ base.oldest_event = hardened_oldest_event
 
 
 class Handler(base.Handler):
-    server_version = "PredictionChatWake/0.7-hardened"
+    server_version = "PredictionChatWake/0.8-hardened"
 
     def reply_json(self, status, obj):
         if (
@@ -259,7 +325,7 @@ class Handler(base.Handler):
             self.reply_json(200, {
                 "ok": True,
                 "service": "prediction-chat-wake",
-                "version": 7,
+                "version": 8,
                 "multichat": True,
                 "server_compaction": True,
                 "task_dedupe": True,
@@ -267,6 +333,9 @@ class Handler(base.Handler):
                 "heartbeat_mode_enabled": bool(mode),
                 "heartbeat_interval_seconds": _heartbeat_interval(mode) if mode else None,
                 "heartbeat_done_guard": True,
+                "heartbeat_inactivity_reset": True,
+                "heartbeat_resets_on_bridge_result": True,
+                "heartbeat_resets_on_assistant_command": True,
                 "max_browser_message": MAX_BROWSER_MESSAGE,
                 "nightshift_userscript": NIGHTSHIFT_USERSCRIPT_FILE.exists(),
             })
