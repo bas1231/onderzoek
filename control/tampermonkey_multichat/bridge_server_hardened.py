@@ -1,29 +1,120 @@
 #!/usr/bin/env python3
 """Hardened wrapper around bridge_server_v2.
 
-Three invariants are enforced at the localhost delivery boundary, independent of
-which Tampermonkey script is installed:
+Delivery invariants are enforced at the localhost boundary, independent of which
+Tampermonkey script version is currently installed:
 
 1. /next never exposes unbounded RESULT_READY/WSL stdout to the browser.
 2. Once any event for a task_id is in SENT, later OUTBOX events for that same
    task_id are silently retired and never delivered again.
-3. The dedicated nightshift userscript is served from loopback for a one-click
-   Tampermonkey install/update without exposing bridge secrets.
+3. The dedicated nightshift userscript is served from loopback for install/update.
+4. Nightshift heartbeat can be generated server-side for one explicitly bound
+   chat, so an old-but-working browser userscript can keep the session moving.
 
-This makes browser-side dedupe a second line of defence instead of the only one.
+The server-side heartbeat is intentionally opt-in, bounded by an expiry time,
+and emits only the literal message ``ga door``.
 """
 from __future__ import annotations
 
 import argparse
+import json
 import os
 import re
+import secrets
+import threading
+import time
 from http.server import ThreadingHTTPServer
 
 import bridge_server_v2 as base
 
 MAX_BROWSER_MESSAGE = 900
 NIGHTSHIFT_USERSCRIPT_FILE = base.DATA_DIR / "prediction-nightshift-wake.user.js"
+NIGHTSHIFT_MODE_FILE = base.DATA_DIR / "nightshift_mode.json"
 _RAW_OLDEST_EVENT = base.oldest_event
+_HEARTBEAT_LOCK = threading.Lock()
+
+
+def _atomic_json(path, obj) -> None:
+    tmp = path.with_name(f".{path.name}.{os.getpid()}.{threading.get_ident()}.tmp")
+    tmp.write_text(json.dumps(obj, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
+    os.replace(tmp, path)
+
+
+def _load_mode() -> dict | None:
+    if not NIGHTSHIFT_MODE_FILE.exists():
+        return None
+    try:
+        mode = json.loads(NIGHTSHIFT_MODE_FILE.read_text(encoding="utf-8"))
+    except Exception:
+        return None
+    if not isinstance(mode, dict) or mode.get("enabled") is not True:
+        return None
+    chat_id = base.safe_id(mode.get("chat_id"), base.CHAT_RE)
+    if not chat_id:
+        return None
+    try:
+        expires_at = float(mode.get("expires_at") or 0)
+    except Exception:
+        return None
+    if expires_at <= time.time():
+        return None
+    return mode
+
+
+def _heartbeat_interval(mode: dict) -> float:
+    try:
+        value = float(mode.get("interval_seconds") or 25.0)
+    except Exception:
+        value = 25.0
+    return min(300.0, max(15.0, value))
+
+
+def _maybe_enqueue_heartbeat(chat_id) -> bool:
+    """Create one routed heartbeat event when nightshift mode is due."""
+    if not chat_id:
+        return False
+
+    with _HEARTBEAT_LOCK:
+        mode = _load_mode()
+        if not mode or str(mode.get("chat_id")) != str(chat_id):
+            return False
+
+        now = time.time()
+        try:
+            not_before = float(mode.get("not_before") or 0)
+            last_emit_at = float(mode.get("last_emit_at") or 0)
+        except Exception:
+            return False
+        if now < not_before:
+            return False
+        if (now - last_emit_at) < _heartbeat_interval(mode):
+            return False
+
+        token = secrets.token_hex(4)
+        epoch_ms = int(now * 1000)
+        task_id = f"DEV-PRED-NIGHTSHIFT-HEARTBEAT-{epoch_ms}-{token}"
+        event_id = f"hb-{epoch_ms}-{token}"
+        route_path = base.ROUTES / f"{task_id}.json"
+        event_path = base.OUTBOX / f"{event_id}.json"
+
+        _atomic_json(route_path, {
+            "task_id": task_id,
+            "chat_id": str(chat_id),
+            "source": "server_heartbeat",
+            "created_at": now,
+        })
+        _atomic_json(event_path, {
+            "event_id": event_id,
+            "task_id": task_id,
+            "message": "ga door",
+            "created_at": now,
+            "source": "server_heartbeat",
+        })
+
+        mode["last_emit_at"] = now
+        mode["last_event_id"] = event_id
+        _atomic_json(NIGHTSHIFT_MODE_FILE, mode)
+        return True
 
 
 def _sent_task_ids() -> set[str]:
@@ -52,10 +143,12 @@ def _retire_duplicate(path, obj) -> None:
 
 
 def hardened_oldest_event(chat_id=None, consumer_id=None):
-    """Return only the first not-yet-delivered task event."""
+    """Return the first not-yet-delivered task event, then heartbeat if due."""
     for _ in range(256):
         path, obj = _RAW_OLDEST_EVENT(chat_id, consumer_id)
         if obj is None:
+            if _maybe_enqueue_heartbeat(chat_id):
+                continue
             return path, obj
         task_id = str(obj.get("task_id") or "").strip()
         if task_id and task_id in _sent_task_ids():
@@ -119,7 +212,7 @@ base.oldest_event = hardened_oldest_event
 
 
 class Handler(base.Handler):
-    server_version = "PredictionChatWake/0.5-hardened"
+    server_version = "PredictionChatWake/0.6-hardened"
 
     def reply_json(self, status, obj):
         if (
@@ -156,13 +249,17 @@ class Handler(base.Handler):
             if not self.authorized():
                 self.reply_json(401, {"ok": False, "error": "unauthorized"})
                 return
+            mode = _load_mode()
             self.reply_json(200, {
                 "ok": True,
                 "service": "prediction-chat-wake",
-                "version": 5,
+                "version": 6,
                 "multichat": True,
                 "server_compaction": True,
                 "task_dedupe": True,
+                "server_heartbeat": True,
+                "heartbeat_mode_enabled": bool(mode),
+                "heartbeat_interval_seconds": _heartbeat_interval(mode) if mode else None,
                 "max_browser_message": MAX_BROWSER_MESSAGE,
                 "nightshift_userscript": NIGHTSHIFT_USERSCRIPT_FILE.exists(),
             })
