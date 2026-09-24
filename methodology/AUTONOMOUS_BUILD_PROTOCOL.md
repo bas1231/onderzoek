@@ -112,3 +112,19 @@ Software kan correct gebouwd zijn terwijl een research/businesshypothese faalt.
 `BUILD_PASS + NO_PROVEN_EDGE` is een geldige succesvolle builduitkomst.
 
 Een lagere technische PASS promoveert nooit automatisch de bovenliggende economische/researchgate.
+
+## 9. Parallel build coordination
+
+Wanneer meer dan één AI-sessie/builder tegelijk muterende werkzaamheden kan uitvoeren, is `methodology/PARALLEL_BUILD_PROTOCOL.md` aanvullend normatief.
+
+Harde eisen:
+- iedere muterende sessie registreert zichzelf en haar `planned_paths` vóór schrijven;
+- muterende sessies gebruiken afzonderlijke branches/worktrees;
+- dezelfde worktree of overlappende padclaims blokkeren fail-closed;
+- iedere sessie controleert vóór integratie opnieuw de actuele `origin/main`;
+- slechts één sessie tegelijk bezit de integration lock;
+- een gewijzigde `main` vereist incorporatie en her-validatie voordat publiceren is toegestaan;
+- conflicten worden niet automatisch semantisch opgelost;
+- runtime leases/locks zijn tijdelijk, Git blijft de canonical audit trail.
+
+De repository-owned coordinator is `control/jobs/parallel_build_coordination.py`. De browser-extensie of bridge-transportlaag hoeft hiervoor niet te worden aangepast.
