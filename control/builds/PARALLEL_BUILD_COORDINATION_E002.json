@@ -1,0 +1,57 @@
+{
+  "schema": "AUTONOMOUS_BUILD_CHARTER_V1",
+  "build_id": "PARALLEL-BUILD-COORDINATION-E002",
+  "protocol_version": 1,
+  "objective": "Make parallel AI build coordination genuinely shared across separate Git worktrees so 2-3 concurrent mutating sessions see the same leases and integration lock, without changing heartbeat, browser extension, or bridge transport behavior.",
+  "source_commit": "b890d7eed3520207e7c29e83e8c3947bf4c9f0e6",
+  "allowed_capabilities": [
+    "read_repository",
+    "write_repository",
+    "read_git",
+    "run_tests",
+    "compile",
+    "governance_change"
+  ],
+  "allowed_paths": [
+    "control/jobs/parallel_build_coordination_shared.py",
+    "tests/test_parallel_build_coordination_shared.py",
+    "methodology/PARALLEL_BUILD_PROTOCOL.md",
+    "methodology/AUTONOMOUS_BUILD_PROTOCOL.md",
+    "control/AUTONOMOUS_BUILD_POLICY.json",
+    "control/builds/PARALLEL_BUILD_COORDINATION_E002.json"
+  ],
+  "planned_paths": [
+    "control/jobs/parallel_build_coordination_shared.py",
+    "tests/test_parallel_build_coordination_shared.py",
+    "methodology/PARALLEL_BUILD_PROTOCOL.md",
+    "methodology/AUTONOMOUS_BUILD_PROTOCOL.md",
+    "control/AUTONOMOUS_BUILD_POLICY.json",
+    "control/builds/PARALLEL_BUILD_COORDINATION_E002.json"
+  ],
+  "acceptance_criteria": [
+    "Two real Git worktrees of the same repository resolve to one shared coordination runtime.",
+    "Non-overlapping path claims from distinct worktrees are allowed concurrently.",
+    "Overlapping path claims across distinct worktrees are blocked fail-closed.",
+    "The integration lock is exclusive across distinct worktrees.",
+    "Canonical governance points mutating sessions to the shared coordinator entrypoint.",
+    "No heartbeat files, browser extension files, or bridge transport files are changed.",
+    "Focused tests and compile pass."
+  ],
+  "non_goals": [
+    "No heartbeat changes.",
+    "No browser extension or bridge transport changes.",
+    "No live trading, wallet, paid API or credential actions.",
+    "No automatic semantic conflict resolution.",
+    "No force push or history rewrite."
+  ],
+  "independent_verification": "Focused tests create multiple real Git worktrees and prove shared registry/conflict/integration-lock behavior.",
+  "rollback_plan": "Revert E002 commits and continue using the prior coordinator while parallel mutating sessions remain disabled.",
+  "cleanup_plan": "Test worktrees are temporary pytest resources; runtime coordination state lives under Git common-dir and leases expire by TTL.",
+  "max_attempts": 2,
+  "governance_change": true,
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false
+  }
+}
