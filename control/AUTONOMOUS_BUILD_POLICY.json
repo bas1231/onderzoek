@@ -18,7 +18,8 @@
     "methodology/PARALLEL_BUILD_PROTOCOL.md",
     "control/AUTONOMOUS_BUILD_POLICY.json",
     "control/edge_hunter/autonomous_build_governance.py",
-    "control/jobs/parallel_build_coordination.py"
+    "control/jobs/parallel_build_coordination.py",
+    "control/jobs/parallel_build_coordination_shared.py"
   ],
   "governance_capability": "governance_change",
   "required_safety_flags": {
