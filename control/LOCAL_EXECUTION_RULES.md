@@ -114,3 +114,21 @@ Voor iedere toekomstige **muterende** software-, infrastructuur-, migratie-, rep
 - `control/builds/BUILD_CHARTER_TEMPLATE.json` is het standaardtemplate voor nieuwe materiële builds.
 
 Een build kan technisch volledig slagen terwijl de inhoudelijke researchuitkomst negatief blijft. `BUILD_PASS + NO_PROVEN_EDGE` is geldig.
+
+## Parallelle buildsessies
+
+Wanneer twee of meer AI-sessies/builders tegelijk muterende werkzaamheden kunnen uitvoeren, geldt aanvullend `methodology/PARALLEL_BUILD_PROTOCOL.md`.
+
+Voor iedere muterende sessie:
+- controleer eerst actieve leases met `control/jobs/parallel_build_coordination.py status`;
+- registreer vóór schrijven een unieke sessielease met `start`, `task_id` en alle geplande paden;
+- gebruik een eigen branch/worktree; twee muterende sessies mogen nooit dezelfde worktree delen;
+- laat overlappende padclaims fail-closed blokkeren;
+- vernieuw de lease tijdens langer werk met `heartbeat`;
+- verkrijg vóór merge/publish exclusief de integration lock;
+- voer `premerge` uit tegen de actuele `origin/main`;
+- incorporeer een inmiddels gewijzigde `main` en draai relevante tests opnieuw voordat `mark-validated` wordt gebruikt;
+- publiceer alleen nadat `publish-check` `PUBLISH_ALLOWED` geeft;
+- geef daarna integration lock en sessielease vrij.
+
+De runtime-state onder `/.runtime/build_coordination/` is tijdelijk en wordt niet gecommit. De bridge/browser-extensie hoeft voor deze coördinatie niet te worden gewijzigd.
