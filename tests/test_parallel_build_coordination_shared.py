@@ -1,9 +1,13 @@
 import importlib.util
 import subprocess
+import sys
 from pathlib import Path
 
 
 MODULE_PATH = Path(__file__).resolve().parents[1] / "control" / "jobs" / "parallel_build_coordination_shared.py"
+MODULE_DIR = MODULE_PATH.parent
+if str(MODULE_DIR) not in sys.path:
+    sys.path.insert(0, str(MODULE_DIR))
 spec = importlib.util.spec_from_file_location("parallel_build_coordination_shared", MODULE_PATH)
 module = importlib.util.module_from_spec(spec)
 assert spec.loader is not None
