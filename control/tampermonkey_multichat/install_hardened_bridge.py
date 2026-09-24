@@ -109,6 +109,7 @@ def main() -> int:
             last.get("ok") is True
             and last.get("server_compaction") is True
             and last.get("task_dedupe") is True
+            and last.get("server_heartbeat") is True
             and last.get("nightshift_userscript") is True
             and int(last.get("max_browser_message") or 0) <= 900
             and script_ok
@@ -116,6 +117,7 @@ def main() -> int:
             print("HARDENED_BRIDGE=PASS")
             print("SERVER_COMPACTION=1")
             print("TASK_DEDUPE=1")
+            print("SERVER_HEARTBEAT=1")
             print("NIGHTSHIFT_USERSCRIPT=1")
             print("MAX_BROWSER_MESSAGE=900")
             return 0
