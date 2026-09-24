@@ -1,5 +1,10 @@
 #!/usr/bin/env python3
-"""Enable/disable bounded server-side nightshift heartbeat for one routed chat."""
+"""Enable/disable bounded server-side nightshift heartbeat for one routed chat.
+
+A heartbeat writes a user-visible commandmarker into ChatGPT.  That is not a
+normal scheduler primitive: enabling it therefore requires an explicit CLI
+opt-in on every activation.  Existing callers that omit the opt-in fail closed.
+"""
 from __future__ import annotations
 
 import argparse
@@ -42,7 +47,15 @@ def route_chat(task_id: str) -> str:
     return chat_id
 
 
-def enable(task_id: str, hours: float, interval: float, delay: float) -> None:
+def enable(
+    task_id: str,
+    hours: float,
+    interval: float,
+    delay: float,
+    allow_commandmarker: bool,
+) -> None:
+    if allow_commandmarker is not True:
+        raise RuntimeError("explicit_commandmarker_opt_in_required")
     if not (0.25 <= hours <= 12.0):
         raise RuntimeError("hours_out_of_range")
     if not (15.0 <= interval <= 300.0):
@@ -53,6 +66,7 @@ def enable(task_id: str, hours: float, interval: float, delay: float) -> None:
     chat_id = route_chat(task_id)
     obj = {
         "enabled": True,
+        "allow_commandmarker": True,
         "chat_id": chat_id,
         "started_at": now,
         "not_before": now + delay,
@@ -63,6 +77,7 @@ def enable(task_id: str, hours: float, interval: float, delay: float) -> None:
     }
     atomic_json(MODE, obj)
     print("NIGHTSHIFT_SERVER_HEARTBEAT=ENABLED")
+    print("COMMANDMARKER_OPT_IN=EXPLICIT")
     print(f"INTERVAL_SECONDS={int(interval)}")
     print(f"DELAY_SECONDS={int(delay)}")
     print(f"EXPIRES_IN_SECONDS={int(hours * 3600)}")
@@ -84,7 +99,9 @@ def status() -> None:
     obj = read_mode()
     now = time.time()
     enabled = obj.get("enabled") is True and float(obj.get("expires_at") or 0) > now
+    explicit = obj.get("allow_commandmarker") is True
     print(f"NIGHTSHIFT_SERVER_HEARTBEAT={'ENABLED' if enabled else 'DISABLED'}")
+    print(f"COMMANDMARKER_OPT_IN={'EXPLICIT' if explicit else 'ABSENT'}")
     if enabled:
         print(f"INTERVAL_SECONDS={int(float(obj.get('interval_seconds') or 0))}")
         print(f"SECONDS_REMAINING={max(0, int(float(obj.get('expires_at') or 0) - now))}")
@@ -99,13 +116,24 @@ def main() -> int:
     p_enable.add_argument("--hours", type=float, default=10.0)
     p_enable.add_argument("--interval", type=float, default=300.0)
     p_enable.add_argument("--delay", type=float, default=300.0)
+    p_enable.add_argument(
+        "--allow-commandmarker",
+        action="store_true",
+        help="Explicitly permit user-visible heartbeat commandmarkers for this activation.",
+    )
 
     sub.add_parser("disable")
     sub.add_parser("status")
     args = parser.parse_args()
 
     if args.action == "enable":
-        enable(args.task_id, args.hours, args.interval, args.delay)
+        enable(
+            args.task_id,
+            args.hours,
+            args.interval,
+            args.delay,
+            args.allow_commandmarker,
+        )
     elif args.action == "disable":
         disable()
     else:
