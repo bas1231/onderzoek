@@ -1,0 +1,65 @@
+{
+  "schema": "AUTONOMOUS_BUILD_CHARTER_V1",
+  "build_id": "PARALLEL-BUILD-COORDINATION-E001",
+  "protocol_version": 1,
+  "objective": "Add repository/WSL-side coordination for 2-3 simultaneous mutating AI build sessions using session leases, path conflict detection, separate-worktree expectations, stale-main checks and a serialized integration lock, without changing the browser bridge extension or bridge transport code.",
+  "source_commit": "263f12051fb9ffb976cc2bef8c8eca58303acc83",
+  "allowed_capabilities": [
+    "read_repository",
+    "write_repository",
+    "read_runtime",
+    "read_git",
+    "run_tests",
+    "compile",
+    "governance_change"
+  ],
+  "allowed_paths": [
+    ".gitignore",
+    "methodology/AUTONOMOUS_BUILD_PROTOCOL.md",
+    "methodology/PARALLEL_BUILD_PROTOCOL.md",
+    "control/AUTONOMOUS_BUILD_POLICY.json",
+    "control/LOCAL_EXECUTION_RULES.md",
+    "control/jobs/parallel_build_coordination.py",
+    "control/builds/PARALLEL_BUILD_COORDINATION_E001.json",
+    "tests/test_parallel_build_coordination.py"
+  ],
+  "planned_paths": [
+    ".gitignore",
+    "methodology/AUTONOMOUS_BUILD_PROTOCOL.md",
+    "methodology/PARALLEL_BUILD_PROTOCOL.md",
+    "control/AUTONOMOUS_BUILD_POLICY.json",
+    "control/LOCAL_EXECUTION_RULES.md",
+    "control/jobs/parallel_build_coordination.py",
+    "control/builds/PARALLEL_BUILD_COORDINATION_E001.json",
+    "tests/test_parallel_build_coordination.py"
+  ],
+  "acceptance_criteria": [
+    "No file under control/browser_extension/ is modified.",
+    "No bridge transport file is modified.",
+    "Two mutating sessions in the same worktree are blocked fail-closed.",
+    "Overlapping planned paths are blocked even when sessions use different worktrees.",
+    "Non-overlapping sessions in distinct worktrees can coexist.",
+    "Only one session can own the integration lock at a time and stale locks expire.",
+    "A session detects when origin/main advanced after its source commit and overlapping main changes block integration.",
+    "Publishing is blocked until the branch has been revalidated against the current origin/main and is based on it.",
+    "Runtime coordination state remains untracked under .runtime/.",
+    "Coordinator compile and focused tests pass."
+  ],
+  "non_goals": [
+    "No changes to the browser extension or browser bridge transport.",
+    "No changes to heartbeat or scheduler business behavior.",
+    "No live trading, wallet, paid API or credential actions.",
+    "No automatic semantic conflict resolution.",
+    "No force push or history rewrite."
+  ],
+  "independent_verification": "Focused pytest coverage plus an independent repository diff check proving browser-extension and bridge-transport paths are untouched.",
+  "rollback_plan": "Revert the coordination governance commit(s); .runtime/build_coordination is ignored and may be deleted after all sessions are stopped.",
+  "cleanup_plan": "Session leases and integration locks are runtime-only. Sessions release them explicitly; TTL expiry prevents indefinite stale ownership.",
+  "max_attempts": 2,
+  "governance_change": true,
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false
+  }
+}
