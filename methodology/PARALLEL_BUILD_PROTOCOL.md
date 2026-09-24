@@ -6,7 +6,7 @@ Doel: 2–3 builders mogen tegelijk nuttig werk doen zonder elkaars wijzigingen,
 
 ## 1. Kernregels
 
-1. Iedere muterende sessie registreert vóór implementatie een unieke `session_id`, `task_id`, broncommit, branch/worktree en `planned_paths` via `control/jobs/parallel_build_coordination.py`.
+1. Iedere muterende sessie registreert vóór implementatie een unieke `session_id`, `task_id`, broncommit, branch/worktree en `planned_paths` via `control/jobs/parallel_build_coordination_shared.py`.
 2. Iedere muterende sessie controleert vóór schrijven welke andere actieve sessies bestaan.
 3. Twee muterende sessies mogen **nooit dezelfde worktree** delen. Een tweede muterende sessie in dezelfde worktree wordt fail-closed geblokkeerd.
 4. Ook in verschillende worktrees worden overlappende `planned_paths` fail-closed geblokkeerd. Prefix-overlap telt mee: `control/foo` conflicteert met `control/foo/bar.py`.
@@ -34,9 +34,15 @@ Doel: 2–3 builders mogen tegelijk nuttig werk doen zonder elkaars wijzigingen,
 
 ## 3. Runtime state
 
-Lokale coordination-state staat onder:
+De coordination-state moet **gedeeld zijn door alle worktrees van dezelfde repository**. Daarom gebruikt de canonical coordinator de Git common-dir (`git rev-parse --git-common-dir`) en bewaart daar:
 
-`/.runtime/build_coordination/`
+`<git-common-dir>/prediction-build-coordination/`
+
+Gebruik voor muterende sessies uitsluitend:
+
+`control/jobs/parallel_build_coordination_shared.py`
+
+De oudere worktree-lokale `.runtime/build_coordination/`-state is niet geschikt als canonical registry voor parallelle worktrees, omdat iedere worktree dan een eigen registry kan zien.
 
 Deze state is niet canonical en wordt niet gecommit. Git blijft de permanente audit trail.
 
@@ -49,7 +55,7 @@ Per actieve sessie wordt minimaal vastgelegd:
 - `source_commit`;
 - worktree;
 - host;
-- heartbeat/expiry;
+- lease-renewal/expiry;
 - status;
 - `last_validated_main`.
 
@@ -64,7 +70,7 @@ Voorbeeldstatus:
 ```text
 ACTIVE BUILDERS: 2
 A scheduler  worktree-A  control/scheduler/**
-B heartbeat  worktree-B  control/nightshift/**
+B research  worktree-B  experiments/weather/**
 PATH CONFLICT: none
 PARALLEL BUILD: allowed
 ```

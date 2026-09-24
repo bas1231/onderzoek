@@ -121,10 +121,11 @@ Harde eisen:
 - iedere muterende sessie registreert zichzelf en haar `planned_paths` vóór schrijven;
 - muterende sessies gebruiken afzonderlijke branches/worktrees;
 - dezelfde worktree of overlappende padclaims blokkeren fail-closed;
+- alle worktrees van dezelfde repository gebruiken één gedeelde registry in de Git common-dir;
 - iedere sessie controleert vóór integratie opnieuw de actuele `origin/main`;
 - slechts één sessie tegelijk bezit de integration lock;
 - een gewijzigde `main` vereist incorporatie en her-validatie voordat publiceren is toegestaan;
 - conflicten worden niet automatisch semantisch opgelost;
 - runtime leases/locks zijn tijdelijk, Git blijft de canonical audit trail.
 
-De repository-owned coordinator is `control/jobs/parallel_build_coordination.py`. De browser-extensie of bridge-transportlaag hoeft hiervoor niet te worden aangepast.
+De repository-owned canonical coordinator voor parallelle mutaties is `control/jobs/parallel_build_coordination_shared.py`. De browser-extensie of bridge-transportlaag hoeft hiervoor niet te worden aangepast.
