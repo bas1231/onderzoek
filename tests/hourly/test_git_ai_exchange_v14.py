@@ -257,3 +257,54 @@ def test_e004_ingest_applies_current_response_without_historical_error_pollution
     assert result["quarantined"][0]["reason"] == "PRE_E001_LEGACY_ROLE_CONTRACT"
     assert [item["run_id"] for item in result["applied"]] == [current_run]
     assert result["applied"][0]["recovery_retry"] is False
+
+
+
+def test_e005_missing_top_level_run_id_is_quarantined_only_for_exact_legacy_blobs(
+    monkeypatch,
+):
+    mod = load_module()
+
+    cases = {
+        "ai_exchange/responses/hourly-20260923T120000+0200.json":
+            "7aba670f82b757d494c9d04d5a53b39a72f3cb91",
+        "ai_exchange/responses/hourly-20260923T130000+0200.json":
+            "24aa92c50fb0e67b19d8c39f7010dd3b8619e6b9",
+        "ai_exchange/responses/hourly-20260923T140000+0200.json":
+            "5d1d4c12ead4ff34a1cd22d694580bee0573b9e4",
+    }
+
+    for path, sha in cases.items():
+        monkeypatch.setattr(
+            mod,
+            "_blob_sha",
+            lambda ref, candidate, p=path, s=sha:
+                s if candidate == p else None,
+        )
+        record = mod._historical_quarantine_record(
+            "exchange-ref",
+            path,
+            mod.GitExchangeError("invalid response run_id"),
+        )
+        assert record is not None
+        assert record["blob_sha"] == sha
+        assert record["reason"] == "PRE_E005_LEGACY_RESPONSE_ENVELOPE_RUN_ID"
+
+    # Same validation failure from a NEW path must remain fail-closed.
+    monkeypatch.setattr(mod, "_blob_sha", lambda ref, path: "f" * 40)
+    assert mod._historical_quarantine_record(
+        "exchange-ref",
+        "ai_exchange/responses/hourly-20990101T000000+0000.json",
+        mod.GitExchangeError("invalid response run_id"),
+    ) is None
+
+    # Do not weaken the actual envelope contract.
+    with pytest.raises(mod.GitExchangeError, match="invalid response run_id"):
+        mod._validate_envelope({
+            "schema": "PVA_AI_EXCHANGE_RESPONSE_V1",
+            "request_sha256": "a" * 64,
+            "response": {
+                "schema": "PVA_AI_RESPONSE_V1",
+                "run_id": "hourly-20990101T000000+0000",
+            },
+        })

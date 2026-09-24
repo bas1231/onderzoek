@@ -34,6 +34,24 @@ HISTORICAL_RESPONSE_QUARANTINE: dict[str, dict[str, str]] = {
         "error_prefix": "invalid validation status:",
         "reason": "PRE_E003_VALIDATION_RESULT_CONTRACT",
     },
+    "ai_exchange/responses/hourly-20260923T120000+0200.json": {
+        "blob_sha": "7aba670f82b757d494c9d04d5a53b39a72f3cb91",
+        "error_type": "GitExchangeError",
+        "error_prefix": "invalid response run_id",
+        "reason": "PRE_E005_LEGACY_RESPONSE_ENVELOPE_RUN_ID",
+    },
+    "ai_exchange/responses/hourly-20260923T130000+0200.json": {
+        "blob_sha": "24aa92c50fb0e67b19d8c39f7010dd3b8619e6b9",
+        "error_type": "GitExchangeError",
+        "error_prefix": "invalid response run_id",
+        "reason": "PRE_E005_LEGACY_RESPONSE_ENVELOPE_RUN_ID",
+    },
+    "ai_exchange/responses/hourly-20260923T140000+0200.json": {
+        "blob_sha": "5d1d4c12ead4ff34a1cd22d694580bee0573b9e4",
+        "error_type": "GitExchangeError",
+        "error_prefix": "invalid response run_id",
+        "reason": "PRE_E005_LEGACY_RESPONSE_ENVELOPE_RUN_ID",
+    },
 }
 
 
