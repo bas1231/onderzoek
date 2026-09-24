@@ -45,7 +45,7 @@ def safe_id(value, regex):
     return value if regex.fullmatch(value) else None
 
 
-def route_for_task(task_id):
+def route_binding_for_task(task_id):
     task_id = str(task_id or "").strip()
     if not TASK_RE.fullmatch(task_id):
         return None
@@ -56,7 +56,17 @@ def route_for_task(task_id):
         data = json.loads(path.read_text(encoding="utf-8"))
     except Exception:
         return None
-    return safe_id(data.get("chat_id"), CHAT_RE)
+    chat_id = safe_id(data.get("chat_id"), CHAT_RE)
+    if not chat_id:
+        return None
+    raw_consumer = str(data.get("consumer_id") or "").strip()
+    consumer_id = safe_id(raw_consumer, CONSUMER_RE) if raw_consumer else None
+    return {"chat_id": chat_id, "consumer_id": consumer_id}
+
+
+def route_for_task(task_id):
+    binding = route_binding_for_task(task_id)
+    return binding.get("chat_id") if binding else None
 
 
 def default_chat():
@@ -104,7 +114,9 @@ def oldest_event(chat_id=None, consumer_id=None):
         if obj is None:
             continue
         task_id = str(obj.get("task_id") or "")
-        route = route_for_task(task_id)
+        binding = route_binding_for_task(task_id)
+        route = binding.get("chat_id") if binding else None
+        route_consumer = binding.get("consumer_id") if binding else None
         fallback = default_chat()
 
         if chat_id is None:
@@ -114,9 +126,12 @@ def oldest_event(chat_id=None, consumer_id=None):
                 continue
             return path, obj
 
-        # Routed work returns only to the chat that created that task. Unrouted
-        # autonomous wakeups go only to the explicitly selected fallback chat.
+        # Routed work returns only to the chat that created that task. If the
+        # route also records a consumer/tab, only that exact tab may lease it.
+        # Legacy route files without consumer_id remain chat-scoped.
         if route != chat_id and not (route is None and fallback == chat_id):
+            continue
+        if route == chat_id and route_consumer and consumer_id != route_consumer:
             continue
         if not lease_available(str(obj["event_id"]), chat_id, consumer_id or chat_id):
             continue
@@ -130,7 +145,7 @@ def json_bytes(obj):
 
 
 class Handler(BaseHTTPRequestHandler):
-    server_version = "PredictionChatWake/0.3"
+    server_version = "PredictionChatWake/0.4"
 
     def log_message(self, fmt, *args):
         if self.command != "GET" or not self.path.startswith("/next"):
@@ -177,7 +192,13 @@ class Handler(BaseHTTPRequestHandler):
             return
 
         if parsed.path == "/health":
-            self.reply_json(200, {"ok": True, "service": "prediction-chat-wake", "version": 3, "multichat": True})
+            self.reply_json(200, {
+                "ok": True,
+                "service": "prediction-chat-wake",
+                "version": 4,
+                "multichat": True,
+                "consumer_routing": True,
+            })
             return
         if parsed.path != "/next":
             self.reply_json(404, {"ok": False, "error": "not_found"})
@@ -252,13 +273,18 @@ class Handler(BaseHTTPRequestHandler):
                 self.reply_json(409, {"ok": False, "error": "invalid_event"})
                 return
 
-            route = route_for_task(str(obj.get("task_id") or ""))
+            binding = route_binding_for_task(str(obj.get("task_id") or ""))
+            route = binding.get("chat_id") if binding else None
+            route_consumer = binding.get("consumer_id") if binding else None
             expected_chat = route or default_chat()
             if expected_chat is not None and chat_id != expected_chat:
                 self.reply_json(409, {"ok": False, "error": "chat_mismatch"})
                 return
             if expected_chat is None and chat_id is not None:
                 self.reply_json(409, {"ok": False, "error": "unrouted_event"})
+                return
+            if route_consumer and consumer_id != route_consumer:
+                self.reply_json(409, {"ok": False, "error": "consumer_route_mismatch"})
                 return
 
             with LEASE_LOCK:
@@ -294,7 +320,7 @@ def main():
     httpd = ThreadingHTTPServer((args.host, args.port), Handler)
     httpd.daemon_threads = True
     httpd.bridge_token = token
-    print(f"prediction-chat-wake v3 listening on http://{args.host}:{args.port}", flush=True)
+    print(f"prediction-chat-wake v4 listening on http://{args.host}:{args.port}", flush=True)
     httpd.serve_forever()
 
 
