@@ -1,0 +1,19 @@
+{
+  "task_id": "DEPLOY-HOURLY-TIMER-RECOVERY-E001",
+  "hypothesis_id": "CONTROL-AUTONOMOUS-RESEARCH",
+  "task_class": "infrastructure",
+  "operation": "python",
+  "working_directory": ".",
+  "command": [
+    ".venv/bin/python",
+    "control/jobs/deploy_hourly_runtime_sync_e001.py"
+  ],
+  "timeout_seconds": 60,
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "openai_api": false
+  },
+  "objective": "Install both canonical hourly systemd user units, daemon-reload, enable --now the timer, and fail closed unless timer is enabled and active."
+}
