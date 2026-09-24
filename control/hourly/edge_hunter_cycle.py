@@ -2,10 +2,15 @@ from __future__ import annotations
 
 from pathlib import Path
 import importlib.util
+import json
 import subprocess
 import sys
+from datetime import datetime, timezone
 
 ROOT = Path(__file__).resolve().parents[2]
+STATE = Path.home() / ".local/state/prediction-research"
+CYCLE_RECEIPT = STATE / "scheduled-cycle-latest.json"
+GIT_CHECKPOINT = STATE / "git-checkpoint-latest.json"
 
 
 def load_hourly_cycle():
@@ -28,10 +33,7 @@ def latest_canonical_run_id() -> str:
     candidates = []
     for path in (ROOT / "knowledge/runs").glob("hourly-*.json"):
         stem = path.stem
-        # Canonical run IDs have no derivative suffix after the UTC offset.
-        # Validate by requiring the manifest itself to name the same run_id.
         try:
-            import json
             data = json.loads(path.read_text(encoding="utf-8"))
         except Exception:
             continue
@@ -55,6 +57,45 @@ def run_required_checkpoint(script: str, label: str, timeout: int = 180) -> None
         raise RuntimeError(f"{label} failed with rc={proc.returncode}")
 
 
+def read_json(path: Path) -> dict | None:
+    try:
+        data = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, ValueError, TypeError):
+        return None
+    return data if isinstance(data, dict) else None
+
+
+def write_cycle_receipt(run_id: str) -> None:
+    """Persist one bounded correlation receipt after every required checkpoint passed.
+
+    This proves completion of this local wrapper invocation only. It deliberately
+    does not claim that the browser bridge or exchange poller is continuously UP.
+    """
+    checkpoint = read_json(GIT_CHECKPOINT)
+    payload = {
+        "schema": "PVA_SCHEDULED_CYCLE_RECEIPT_V1",
+        "timestamp_utc": datetime.now(timezone.utc).isoformat(),
+        "run_id": run_id,
+        "status": "COMPLETED",
+        "git_checkpoint_status": (checkpoint or {}).get("status"),
+        "git_checkpoint_head": (checkpoint or {}).get("head"),
+        "claims": {
+            "scheduled_wrapper_completed": True,
+            "required_checkpoints_completed": True,
+            "browser_bridge_running": False,
+            "runtime_exchange_running": False,
+        },
+        "live_trading": False,
+        "paid_actions": False,
+        "wallet_actions": False,
+        "openai_api": False,
+    }
+    STATE.mkdir(parents=True, exist_ok=True)
+    tmp = CYCLE_RECEIPT.with_suffix(".tmp")
+    tmp.write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    tmp.replace(CYCLE_RECEIPT)
+
+
 def main() -> int:
     # Do not use runpy(..., run_name='__main__') here. hourly_cycle.py ends in
     # SystemExit(main()), which used to terminate this wrapper with rc=0 before
@@ -62,9 +103,6 @@ def main() -> int:
     hourly = load_hourly_cycle()
     cycle_rc = int(hourly.main())
     if cycle_rc == 75:
-        # Expected work-cadence cooldown. The systemd unit declares 75 a
-        # successful no-work outcome, so cooldown is visible without looking
-        # like a scheduler failure.
         print("HOURLY_CYCLE_COOLDOWN")
         return 75
     if cycle_rc != 0:
@@ -77,9 +115,6 @@ def main() -> int:
     packet = prepare(run_id)
     print("EDGE_HUNTER_PACKET", packet)
 
-    # These checkpoints are part of the scheduled cycle. A failure must be
-    # observable to systemd rather than being printed and silently converted
-    # into a successful scheduler run.
     run_required_checkpoint(
         "control/jobs/hourly_asset_fill_checkpoint_e354.py",
         "ASSET_FILL_CHECKPOINT_RC",
@@ -92,6 +127,8 @@ def main() -> int:
         "control/hourly/git_checkpoint.py",
         "GIT_CHECKPOINT_RC",
     )
+    write_cycle_receipt(run_id)
+    print("SCHEDULED_CYCLE_RECEIPT", run_id)
     return 0
 
 
