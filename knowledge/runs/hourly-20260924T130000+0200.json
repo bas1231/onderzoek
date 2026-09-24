@@ -1,0 +1,347 @@
+{
+  "agent_control_plane": {
+    "ai_work_bundle_ref": "knowledge/runs/hourly-20260924T130000+0200-ai-work-bundle.json",
+    "ai_work_job_count": 6,
+    "ai_work_ready_roles": [
+      "discovery",
+      "market_research",
+      "mechanics",
+      "algebra",
+      "red_team_pentest",
+      "research_director"
+    ],
+    "architecture": "E007_SIX_DOMAIN",
+    "candidate_routing": [
+      {
+        "candidate_id": "ASSET-RANK-MAKER-HEDGE-V1",
+        "capability": "algebra",
+        "phase": "MECHANISM_DEFINED",
+        "queue_status": "RUNNING",
+        "reasons": [
+          "statewise payoff/equivalence semantics"
+        ],
+        "role": "algebra"
+      },
+      {
+        "candidate_id": "ASSET-RANK-MAKER-HEDGE-V1",
+        "capability": "microstructure",
+        "phase": "MECHANISM_DEFINED",
+        "queue_status": "RUNNING",
+        "reasons": [
+          "executable market/fill/hedge economics required",
+          "lane=MICROSTRUCTURE"
+        ],
+        "role": "mechanics"
+      },
+      {
+        "candidate_id": "ASSET-RANK-MAKER-HEDGE-V1",
+        "capability": "prebuild_killer",
+        "phase": "MECHANISM_DEFINED",
+        "queue_status": "RUNNING",
+        "reasons": [
+          "E007 cheap pre-build falsification required"
+        ],
+        "role": "red_team_pentest"
+      },
+      {
+        "candidate_id": "KWI-FULL-STATION-PRECANONICAL-V1",
+        "capability": "recon_scout",
+        "phase": "MECHANISM_DEFINED",
+        "queue_status": "WAITING_FOR_RESULT",
+        "reasons": [
+          "unresolved step is explicit recon/discovery"
+        ],
+        "role": "discovery"
+      },
+      {
+        "candidate_id": "KWI-FULL-STATION-PRECANONICAL-V1",
+        "capability": "scout",
+        "phase": "MECHANISM_DEFINED",
+        "queue_status": "WAITING_FOR_RESULT",
+        "reasons": [
+          "unresolved step is explicit discovery"
+        ],
+        "role": "discovery"
+      },
+      {
+        "candidate_id": "KWI-FULL-STATION-PRECANONICAL-V1",
+        "capability": "weather_twc",
+        "phase": "MECHANISM_DEFINED",
+        "queue_status": "WAITING_FOR_RESULT",
+        "reasons": [
+          "lane=WEATHER",
+          "weather/TWC/KWI semantics"
+        ],
+        "role": "market_research"
+      },
+      {
+        "candidate_id": "KWI-FULL-STATION-PRECANONICAL-V1",
+        "capability": "prebuild_killer",
+        "phase": "MECHANISM_DEFINED",
+        "queue_status": "WAITING_FOR_RESULT",
+        "reasons": [
+          "E007 cheap pre-build falsification required"
+        ],
+        "role": "red_team_pentest"
+      },
+      {
+        "candidate_id": "PAYOFF-IDENTITY-MINING-V1",
+        "capability": "algebra",
+        "phase": "DISCOVERED",
+        "queue_status": "NEEDS_DIRECTOR",
+        "reasons": [
+          "lane=MARKET_ALGEBRA",
+          "statewise payoff/equivalence semantics"
+        ],
+        "role": "algebra"
+      },
+      {
+        "candidate_id": "PAYOFF-IDENTITY-MINING-V1",
+        "capability": "microstructure",
+        "phase": "DISCOVERED",
+        "queue_status": "NEEDS_DIRECTOR",
+        "reasons": [
+          "executable market/fill/hedge economics required"
+        ],
+        "role": "mechanics"
+      },
+      {
+        "candidate_id": "PAYOFF-IDENTITY-MINING-V1",
+        "capability": "prebuild_killer",
+        "phase": "DISCOVERED",
+        "queue_status": "NEEDS_DIRECTOR",
+        "reasons": [
+          "E007 cheap pre-build falsification required"
+        ],
+        "role": "red_team_pentest"
+      }
+    ],
+    "default_economic_conclusion": "NO_PROVEN_EDGE",
+    "director_handoff_ref": "knowledge/runs/hourly-20260924T130000+0200-director-handoff.json",
+    "hydrated_capabilities": [
+      "algebra",
+      "behavioral",
+      "informed_flow",
+      "microstructure",
+      "recon_scout",
+      "scout",
+      "settlement",
+      "weather_twc"
+    ],
+    "hydrated_roles": [
+      "algebra",
+      "discovery",
+      "market_research",
+      "mechanics"
+    ],
+    "live_trading": false,
+    "openai_api": false,
+    "orchestration_ref": "knowledge/runs/agent_packets/hourly-20260924T130000+0200/_orchestration.json",
+    "packet_dir": "knowledge/runs/agent_packets/hourly-20260924T130000+0200",
+    "paid_actions": false,
+    "proof_review_ref": "knowledge/runs/hourly-20260924T130000+0200-proof-review.json",
+    "queue_count": 4,
+    "recon_hunts": {
+      "domain_roles": [],
+      "hunt_count": 0,
+      "killer_candidates": [],
+      "specialist_roles": []
+    },
+    "scheduled_dynamic_workers": [
+      "algebra",
+      "red_team_pentest",
+      "mechanics",
+      "market_research",
+      "discovery"
+    ],
+    "scheduled_transient_workers": [],
+    "task_schedule_ref": "knowledge/runs/agent_packets/hourly-20260924T130000+0200/_task_schedule.json",
+    "validation_pipeline": {
+      "architecture": "E007_SIX_DOMAIN",
+      "deep_falsification_pass": [],
+      "economic_conclusion": "NO_PROVEN_EDGE",
+      "proof_candidates": [],
+      "proof_rejections": {},
+      "quick_kill_pass": [],
+      "reproduction_candidates": []
+    },
+    "wallet_actions": false
+  },
+  "agents": {
+    "algebra": "PENDING",
+    "discovery": "PENDING",
+    "market_research": "PENDING",
+    "mechanics": "PENDING",
+    "red_team_pentest": "PENDING",
+    "research_director": "PENDING"
+  },
+  "architecture": "E007_SIX_DOMAIN",
+  "automated_routing": {
+    "algebra": 81,
+    "behavioral": 0,
+    "informed_flow": 0,
+    "microstructure": 81,
+    "recon_scout": 5,
+    "scout": 4,
+    "settlement": 81,
+    "weather_twc": 3
+  },
+  "cadence": {
+    "cooldown_until": "2026-09-24T16:05:30.428658Z",
+    "mode": "WORK",
+    "work_started_at": "2026-09-24T11:05:30.428658Z",
+    "work_until": "2026-09-24T15:05:30.428658Z"
+  },
+  "candidate_status": "UNPROVEN",
+  "decision": "NO_PROVEN_EDGE",
+  "gates": {
+    "execution_reality": "PENDING",
+    "falsification": "PENDING",
+    "market_edge": "PENDING",
+    "point_in_time": "PENDING",
+    "reproduction": "PENDING",
+    "signal_edge": "PENDING",
+    "source_provenance": "PASS"
+  },
+  "live_trading": false,
+  "market_instance_scan": {
+    "blocker": null,
+    "change_detection": {
+      "new_market_count": 85681,
+      "new_market_sample": [
+        "AMAZONFTC-29DEC31",
+        "APPLEUS-29DEC31",
+        "BEYONCEGENRE-30-AFA",
+        "BEYONCEGENRE-30-DEA",
+        "BEYONCEGENRE-30-RA",
+        "BEYONCEGENRE-30-TAA",
+        "BEYONCEGENRE-30-TCA",
+        "BEYONCEGENRE-30-TGA",
+        "BEYONCEGENRE-30-THA",
+        "BEYONCEGENRE-30-TRA",
+        "BEYONCEGENRE-30-TRHA",
+        "CHINAUSGDP-30",
+        "CONTROLH-2026-D",
+        "CONTROLH-2026-R",
+        "CONTROLH-2028-D",
+        "CONTROLH-2028-R",
+        "CONTROLS-2026-D",
+        "CONTROLS-2026-R",
+        "CONTROLS-2028-D",
+        "CONTROLS-2028-R",
+        "ECMOV-28NOV07-DEM11T30",
+        "ECMOV-28NOV07-DEM131T210",
+        "ECMOV-28NOV07-DEM1T10",
+        "ECMOV-28NOV07-DEM211T538",
+        "ECMOV-28NOV07-DEM31T60"
+      ],
+      "removed_market_count": 0,
+      "removed_market_sample": [],
+      "semantic_change_count": 0,
+      "semantic_change_sample": []
+    },
+    "coverage": {
+      "complete_open_universe": false,
+      "events_pages_exhausted": false,
+      "markets_pages_exhausted": false,
+      "max_pages": 30
+    },
+    "economic_conclusion": "NO_PROVEN_EDGE",
+    "gross_positive_screen_count": 3429,
+    "objects_checked": {
+      "events": 6000,
+      "markets": 85681
+    },
+    "ref": "knowledge/runs/market_instance_scan/hourly-20260924T130000+0200.json",
+    "relation_count": 395795,
+    "relation_type_counts": {
+      "COMPLEMENT": 85681,
+      "DECLARED_EQUIVALENCE": 660,
+      "MUTUALLY_EXCLUSIVE_PAIR": 180229,
+      "MUTUALLY_EXCLUSIVE_SET": 1419,
+      "NESTED_DOMINANCE": 127806
+    },
+    "status": "OK"
+  },
+  "memory_context": {
+    "active_candidate_count": 2,
+    "matched_memory_count": 80,
+    "recent_report_count": 3,
+    "ref": "knowledge/runs/hourly-20260924T130000+0200-memory-context.json"
+  },
+  "paid_actions": false,
+  "permanent_agents": [
+    "discovery",
+    "market_research",
+    "mechanics",
+    "algebra",
+    "red_team_pentest",
+    "research_director"
+  ],
+  "recon_scout": {
+    "economic_conclusion": "NO_PROVEN_EDGE",
+    "objects_checked": 255,
+    "ref": "knowledge/runs/recon/hourly-20260924T130000+0200.json",
+    "state_counts": {
+      "DISCOVER": 81,
+      "HUNT": 0,
+      "KILL": 0,
+      "PERSISTED_HUNT": 0,
+      "PROVE": 0,
+      "WATCH": 4
+    },
+    "watchlist": {
+      "added": 0,
+      "changed": 4,
+      "demoted_noise": 0,
+      "total": 4
+    }
+  },
+  "research_graphs": {
+    "evidence_graph_ref": "knowledge/research_os/evidence_graph.json",
+    "run_edge_count": 265
+  },
+  "routing_ref": "knowledge/runs/hourly-20260924T130000+0200-routing.json",
+  "run_id": "hourly-20260924T130000+0200",
+  "source_failure_count": 0,
+  "source_manifests": {
+    "arxiv": "/home/leonh/prediction_research_prod/knowledge/documents/manifests/arxiv/20260924T110531Z_d7ed6c1e9723.json",
+    "aviationweather": "/home/leonh/prediction_research_prod/knowledge/documents/manifests/aviationweather/20260924T110530Z_dd6e0cc4b237.json",
+    "cftc": "/home/leonh/prediction_research_prod/knowledge/documents/manifests/cftc/20260924T110530Z_e73479cb4002.json",
+    "ecmwf_open": "/home/leonh/prediction_research_prod/knowledge/documents/manifests/ecmwf_open/20260924T110531Z_bbcb4e9e1090.json",
+    "github": "/home/leonh/prediction_research_prod/knowledge/documents/manifests/github/20260924T110531Z_ac5808fab744.json",
+    "kalshi_docs": "/home/leonh/prediction_research_prod/knowledge/documents/manifests/kalshi_docs/20260924T110531Z_1dcde5bc751b.json",
+    "kalshi_weather_rules": "/home/leonh/prediction_research_prod/knowledge/documents/manifests/kalshi_weather_rules/20260924T110531Z_1378b6902e32.json",
+    "nomads": "/home/leonh/prediction_research_prod/knowledge/documents/manifests/nomads/20260924T110531Z_9219bbd8a28d.json",
+    "nws": "/home/leonh/prediction_research_prod/knowledge/documents/manifests/nws/20260924T110530Z_3fede1769de2.json",
+    "polymarket_docs": "/home/leonh/prediction_research_prod/knowledge/documents/manifests/polymarket_docs/20260924T110530Z_d759fce09bdb.json",
+    "reddit": "/home/leonh/prediction_research_prod/knowledge/documents/manifests/reddit/20260924T110531Z_9968c10f6de6.json",
+    "twc_kalshi": "/home/leonh/prediction_research_prod/knowledge/documents/manifests/twc_kalshi/20260924T110531Z_5a6987788893.json",
+    "youtube": "/home/leonh/prediction_research_prod/knowledge/documents/manifests/youtube/20260924T110531Z_2e60875797cd.json"
+  },
+  "source_quality": {
+    "low_text_yield_count": 3,
+    "ref": "knowledge/runs/hourly-20260924T130000+0200-source-quality.json",
+    "usable_count": 10
+  },
+  "source_success_count": 13,
+  "source_sweep_ref": "knowledge/runs/source_sweeps/20260924T110530Z.json",
+  "sources": {
+    "arxiv": "UNCHANGED",
+    "aviationweather": "UNCHANGED",
+    "cftc": "CHANGED",
+    "ecmwf_open": "CHANGED",
+    "github": "CHANGED",
+    "kalshi_docs": "CHANGED",
+    "kalshi_weather_rules": "CHANGED",
+    "nomads": "CHANGED",
+    "nws": "CHANGED",
+    "polymarket_docs": "CHANGED",
+    "reddit": "CHANGED",
+    "twc_kalshi": "CHANGED",
+    "youtube": "CHANGED"
+  },
+  "started_at": "2026-09-24T13:05:30.487228+02:00",
+  "status": "STARTED",
+  "wallet_actions": false
+}
