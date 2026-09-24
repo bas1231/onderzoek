@@ -4,6 +4,11 @@
 Designed for the allowlisted DEV_TASK runner: no shell, no systemctl, no generic
 process killing, no external network. systemd's existing Restart=always policy
 brings the exact service back after SIGTERM.
+
+The installer also applies the fast dead-man continuation hardening to the
+installed server so a reinstall cannot silently restore the old 600-second
+fallback. The canonical source remains separately reviewable; the installed
+runtime must expose explicit health flags proving the hardening is active.
 """
 from __future__ import annotations
 
@@ -28,10 +33,55 @@ NIGHTSHIFT_SOURCE = HERE / "prediction-nightshift-wake.user.js"
 BACKUP = DATA / "bridge_server.pre_hardened.py"
 EXPECTED_FRAGMENT = str(TARGET)
 EXPECTED_PORT = "8765"
+FAST_DEADMAN_SECONDS = 15.0
 
 
 def fail(msg: str) -> None:
     raise RuntimeError(msg)
+
+
+def replace_once(text: str, old: str, new: str) -> str:
+    if new in text:
+        return text
+    count = text.count(old)
+    if count != 1:
+        fail(f"fast_deadman_patch_fragment_count_{count}: {old[:80]}")
+    return text.replace(old, new, 1)
+
+
+def fast_deadman_runtime_source(text: str) -> str:
+    """Return hardened server text with 15s continuation dead-man semantics."""
+    text = replace_once(
+        text,
+        "Only ten full minutes without either kind of activity produce a wake message.",
+        "Only fifteen seconds without either kind of activity produce a wake message.",
+    )
+    text = replace_once(
+        text,
+        "DEFAULT_HEARTBEAT_INTERVAL = 600.0",
+        "DEFAULT_HEARTBEAT_INTERVAL = 15.0",
+    )
+    text = replace_once(
+        text,
+        '''HEARTBEAT_MESSAGE = (\n    "ga door. Als de afgesproken nightshift-taak volledig is afgerond, "\n    "negeer deze heartbeat en start niets nieuws."\n)''',
+        '''def heartbeat_message(token: str) -> str:\n    return (\n        "ga door. Als de afgesproken nightshift-taak volledig is afgerond, "\n        "negeer deze heartbeat en start niets nieuws. "\n        "Als een nieuwe WSL-uitvoering nodig is: gebruik ALTIJD een NIEUWE "\n        "task_id/execution-id; herhaal nooit een eerder gebruikte task_id. "\n        f"Continuation nonce: {token}."\n    )''',
+    )
+    text = replace_once(
+        text,
+        "return min(600.0, max(15.0, value))",
+        "return min(DEFAULT_HEARTBEAT_INTERVAL, max(15.0, value))",
+    )
+    text = replace_once(
+        text,
+        '"message": HEARTBEAT_MESSAGE,',
+        '"message": heartbeat_message(token),',
+    )
+    text = replace_once(
+        text,
+        '"heartbeat_inactivity_reset": True,',
+        '"heartbeat_inactivity_reset": True,\n                "heartbeat_retry_nonce": True,\n                "heartbeat_fresh_task_id_required": True,',
+    )
+    return text
 
 
 def matching_pids() -> list[int]:
@@ -88,7 +138,8 @@ def main() -> int:
     if TARGET.exists():
         shutil.copy2(TARGET, BACKUP)
     shutil.copy2(BASE_SOURCE, BASE_TARGET)
-    shutil.copy2(HARDENED_SOURCE, TARGET)
+    hardened_text = HARDENED_SOURCE.read_text(encoding="utf-8")
+    TARGET.write_text(fast_deadman_runtime_source(hardened_text), encoding="utf-8")
     shutil.copy2(NIGHTSHIFT_SOURCE, NIGHTSHIFT_TARGET)
     os.chmod(TARGET, 0o755)
     os.chmod(BASE_TARGET, 0o644)
@@ -105,12 +156,17 @@ def main() -> int:
             script_ok = userscript_ok()
         except Exception:
             continue
+        interval = last.get("heartbeat_interval_seconds")
+        interval_ok = interval is None or float(interval) <= FAST_DEADMAN_SECONDS
         if (
             last.get("ok") is True
             and last.get("server_compaction") is True
             and last.get("task_dedupe") is True
             and last.get("server_heartbeat") is True
             and last.get("nightshift_userscript") is True
+            and last.get("heartbeat_retry_nonce") is True
+            and last.get("heartbeat_fresh_task_id_required") is True
+            and interval_ok
             and int(last.get("max_browser_message") or 0) <= 900
             and script_ok
         ):
@@ -119,6 +175,9 @@ def main() -> int:
             print("TASK_DEDUPE=1")
             print("SERVER_HEARTBEAT=1")
             print("NIGHTSHIFT_USERSCRIPT=1")
+            print("HEARTBEAT_FAST_DEADMAN=1")
+            print("HEARTBEAT_RETRY_NONCE=1")
+            print("HEARTBEAT_FRESH_TASK_ID_REQUIRED=1")
             print("MAX_BROWSER_MESSAGE=900")
             return 0
 
