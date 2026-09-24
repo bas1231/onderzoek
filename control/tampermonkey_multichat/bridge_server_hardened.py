@@ -12,7 +12,9 @@ Tampermonkey script version is currently installed:
    chat, so an old-but-working browser userscript can keep the session moving.
 
 The server-side heartbeat is intentionally opt-in, bounded by an expiry time,
-and emits only the literal message ``ga door``.
+and tells the assistant to continue only while the agreed nightshift task is
+unfinished. Once that task is complete, later heartbeats must be ignored and
+must not start new work.
 """
 from __future__ import annotations
 
@@ -28,6 +30,10 @@ from http.server import ThreadingHTTPServer
 import bridge_server_v2 as base
 
 MAX_BROWSER_MESSAGE = 900
+HEARTBEAT_MESSAGE = (
+    "ga door. Als de afgesproken nightshift-taak volledig is afgerond, "
+    "negeer deze heartbeat en start niets nieuws."
+)
 NIGHTSHIFT_USERSCRIPT_FILE = base.DATA_DIR / "prediction-nightshift-wake.user.js"
 NIGHTSHIFT_MODE_FILE = base.DATA_DIR / "nightshift_mode.json"
 _RAW_OLDEST_EVENT = base.oldest_event
@@ -63,9 +69,9 @@ def _load_mode() -> dict | None:
 
 def _heartbeat_interval(mode: dict) -> float:
     try:
-        value = float(mode.get("interval_seconds") or 25.0)
+        value = float(mode.get("interval_seconds") or 300.0)
     except Exception:
-        value = 25.0
+        value = 300.0
     return min(300.0, max(15.0, value))
 
 
@@ -106,7 +112,7 @@ def _maybe_enqueue_heartbeat(chat_id) -> bool:
         _atomic_json(event_path, {
             "event_id": event_id,
             "task_id": task_id,
-            "message": "ga door",
+            "message": HEARTBEAT_MESSAGE,
             "created_at": now,
             "source": "server_heartbeat",
         })
@@ -212,7 +218,7 @@ base.oldest_event = hardened_oldest_event
 
 
 class Handler(base.Handler):
-    server_version = "PredictionChatWake/0.6-hardened"
+    server_version = "PredictionChatWake/0.7-hardened"
 
     def reply_json(self, status, obj):
         if (
@@ -253,13 +259,14 @@ class Handler(base.Handler):
             self.reply_json(200, {
                 "ok": True,
                 "service": "prediction-chat-wake",
-                "version": 6,
+                "version": 7,
                 "multichat": True,
                 "server_compaction": True,
                 "task_dedupe": True,
                 "server_heartbeat": True,
                 "heartbeat_mode_enabled": bool(mode),
                 "heartbeat_interval_seconds": _heartbeat_interval(mode) if mode else None,
+                "heartbeat_done_guard": True,
                 "max_browser_message": MAX_BROWSER_MESSAGE,
                 "nightshift_userscript": NIGHTSHIFT_USERSCRIPT_FILE.exists(),
             })
