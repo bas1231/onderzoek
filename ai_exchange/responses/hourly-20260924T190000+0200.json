@@ -1,0 +1,153 @@
+{
+  "schema": "PVA_AI_EXCHANGE_RESPONSE_V1",
+  "run_id": "hourly-20260924T190000+0200",
+  "request_sha256": "4c8185c7b158d9ec93ebe771b908e4a4403dcb7723aeb38aa538a411174f545f",
+  "response": {
+    "schema": "PVA_AI_RESPONSE_V1",
+    "run_id": "hourly-20260924T190000+0200",
+    "response_token": "2663bd23cac45d67ef0445de50d35897573849b1e04ca5114541e2e753f96007",
+    "role_results": [
+      {
+        "agent_id": "discovery",
+        "candidate_ids": ["MANUAL-SCOUT-HENGELTJES-20260924"],
+        "capability_results": {
+          "scout": {"status": "COMPLETED", "finding": "Prior classification remains coherent: weather/rain is the market scope while the hypothesized edge is late passive-liquidity execution rather than forecasting accuracy."},
+          "recon_scout": {"status": "COMPLETED", "finding": "No cheaper decisive route was found than prospective queue-realistic shadowing with strict fill proof and adverse-selection analysis."}
+        },
+        "evidence_refs": ["knowledge/manual_scout_seeds/2026-09-24-hengeltjes-late-passive-liquidity.md", "knowledge/candidates/MANUAL-SCOUT-HENGELTJES-20260924.json"],
+        "failure_pattern_ids": [],
+        "finding": "Discovery classification is stable and the candidate is ready for Mechanics experiment definition.",
+        "local_task_required": false,
+        "local_task_spec": null,
+        "next_decisive_question": "Can a frozen prospective shadow protocol prove actual passive fills without hindsight or optimistic queue assumptions?",
+        "status": "COMPLETED",
+        "validation_results": []
+      },
+      {
+        "agent_id": "market_research",
+        "candidate_ids": ["KWI-FULL-STATION-PRECANONICAL-V1"],
+        "capability_results": {
+          "weather_twc": {"status": "WAITING_FOR_RESULT", "finding": "No new admissible post-cutoff KWI full-station result is supplied in this bundle."},
+          "behavioral": {"status": "NO_EVIDENCE", "finding": "No new behavioral evidence is required for the manual passive-liquidity candidate at this stage."},
+          "informed_flow": {"status": "NO_EVIDENCE", "finding": "Adverse selection must be tested from point-in-time execution/markout evidence rather than inferred participant identity."}
+        },
+        "evidence_refs": ["knowledge/candidates/KWI-FULL-STATION-PRECANONICAL-V1.json"],
+        "failure_pattern_ids": [],
+        "finding": "KWI remains separately gated on post-cutoff evidence; it is not the signal basis for the hengeltjes candidate.",
+        "local_task_required": false,
+        "local_task_spec": null,
+        "next_decisive_question": "Does the first admissible post-cutoff full-station case reproduce the KWI signal?",
+        "status": "WAITING_FOR_RESULT",
+        "validation_results": []
+      },
+      {
+        "agent_id": "mechanics",
+        "candidate_ids": ["ASSET-RANK-MAKER-HEDGE-V1", "MANUAL-SCOUT-HENGELTJES-20260924", "PAYOFF-IDENTITY-MINING-V1"],
+        "capability_results": {
+          "microstructure": {
+            "status": "COMPLETED",
+            "finding": "For MANUAL-SCOUT-HENGELTJES-20260924 the minimal admissible experiment is read-only prospective shadowing of frozen passive maker quotes. PRIMARY fill credit requires conservative price-time queue evidence; a trade print at our price alone is insufficient. Sequence gaps, reconnects, restart ambiguity and unprovable queue depletion must classify the virtual order UNPROVEN rather than filled. Record partial fills only for proven quantity and preserve +10/+30/+60/+120 second post-fill markouts to measure toxic-flow/adverse-selection risk. Unfilled virtual orders contribute zero P&L. Fees/friction must be included before any EV claim."
+          },
+          "settlement": {
+            "status": "COMPLETED",
+            "finding": "The experiment must bind each virtual order to the exact Kalshi contract rules, close time and authoritative final settlement outcome. Settlement evidence may score only orders placed from information available before close. Preliminary/final divergence is relevant only when the preliminary information was itself available before close. Weather remains the market family; no TWC forecast edge is assumed."
+          }
+        },
+        "evidence_refs": ["knowledge/manual_scout_seeds/2026-09-24-hengeltjes-late-passive-liquidity.md", "knowledge/candidates/MANUAL-SCOUT-HENGELTJES-20260924.json", "knowledge/candidates/ASSET-RANK-MAKER-HEDGE-V1.json", "knowledge/candidates/PAYOFF-IDENTITY-MINING-V1.json"],
+        "failure_pattern_ids": [],
+        "finding": "Mechanics accepts the candidate only as an experiment-ready, unproven microstructure hypothesis. Freeze a shadow grid before collection; conservative queue reconstruction and adverse-selection markouts are mandatory, and settlement must be authoritative and point-in-time clean.",
+        "local_task_required": false,
+        "local_task_spec": null,
+        "next_decisive_question": "After freezing the shadow protocol, do proven queue-realistic fills occur often enough and settle favorably enough that conditional net EV remains positive after fees/friction and adverse selection?",
+        "status": "COMPLETED",
+        "validation_results": []
+      },
+      {
+        "agent_id": "algebra",
+        "candidate_ids": ["ASSET-RANK-MAKER-HEDGE-V1", "PAYOFF-IDENTITY-MINING-V1"],
+        "capability_results": {
+          "algebra": {"status": "WAITING_FOR_DATA", "finding": "No new complete primary-rule state space is supplied for a statewise payoff identity or dominance proof."}
+        },
+        "evidence_refs": ["knowledge/candidates/ASSET-RANK-MAKER-HEDGE-V1.json", "knowledge/candidates/PAYOFF-IDENTITY-MINING-V1.json"],
+        "failure_pattern_ids": [],
+        "finding": "No new algebraic proof is available; price comparison remains gated on complete payout semantics.",
+        "local_task_required": false,
+        "local_task_spec": null,
+        "next_decisive_question": "Which concrete contract pair has complete primary-rule payout semantics for every allowed state?",
+        "status": "WAITING_FOR_DATA",
+        "validation_results": []
+      },
+      {
+        "agent_id": "red_team_pentest",
+        "candidate_ids": ["ASSET-RANK-MAKER-HEDGE-V1", "KWI-FULL-STATION-PRECANONICAL-V1", "MANUAL-SCOUT-HENGELTJES-20260924", "PAYOFF-IDENTITY-MINING-V1"],
+        "capability_results": {
+          "prebuild_killer": {"status": "COMPLETED", "finding": "The hengeltjes candidate survives QUICK_KILL only as an unproven experiment. Fatal false positives remain: counting prints as fills, hidden hindsight in virtual order placement, queue depletion inferred from cancellations without provenance, sequence/reconnect ambiguity, and profits that disappear under conservative fill assumptions."},
+          "chief_falsifier": {"status": "COMPLETED", "finding": "Adverse selection is the central economic kill test: favorable passive fills may be precisely the subset where informed or faster flow is trading against the virtual maker. PRIMARY results must therefore pair fill proof with post-fill markouts and final settlement, while optimistic fill sensitivity stays separate."}
+        },
+        "evidence_refs": ["knowledge/manual_scout_seeds/2026-09-24-hengeltjes-late-passive-liquidity.md", "knowledge/candidates/MANUAL-SCOUT-HENGELTJES-20260924.json", "knowledge/candidates/ASSET-RANK-MAKER-HEDGE-V1.json", "knowledge/candidates/KWI-FULL-STATION-PRECANONICAL-V1.json", "knowledge/candidates/PAYOFF-IDENTITY-MINING-V1.json"],
+        "failure_pattern_ids": [],
+        "finding": "No promotion basis exists. The manual candidate may proceed only to frozen prospective shadow testing with fail-closed fill reconstruction and adverse-selection measurement.",
+        "local_task_required": false,
+        "local_task_spec": null,
+        "next_decisive_question": "Does the strategy retain positive conditional economics when only conservatively proven fills are counted and toxic-fill markouts are included?",
+        "status": "COMPLETED",
+        "validation_results": [
+          {"candidate_id": "ASSET-RANK-MAKER-HEDGE-V1", "mode": "QUICK_KILL", "status": "INCONCLUSIVE"},
+          {"candidate_id": "KWI-FULL-STATION-PRECANONICAL-V1", "mode": "QUICK_KILL", "status": "WAITING"},
+          {"candidate_id": "MANUAL-SCOUT-HENGELTJES-20260924", "mode": "QUICK_KILL", "status": "INCONCLUSIVE"},
+          {"candidate_id": "PAYOFF-IDENTITY-MINING-V1", "mode": "QUICK_KILL", "status": "INCONCLUSIVE"}
+        ]
+      },
+      {
+        "agent_id": "research_director",
+        "candidate_ids": [],
+        "capability_results": {},
+        "evidence_refs": ["knowledge/manual_scout_seeds/2026-09-24-hengeltjes-late-passive-liquidity.md", "knowledge/candidates/MANUAL-SCOUT-HENGELTJES-20260924.json"],
+        "failure_pattern_ids": [],
+        "finding": "The requested scout-to-specialist trace has succeeded. Discovery classified the seed, Mechanics routed it to microstructure plus settlement/finality, and Red Team defined the cheapest kill conditions. Keep the candidate EXPERIMENT_REQUIRED and NO_PROVEN_EDGE. The next admissible step is to freeze the prospective read-only shadow protocol before collecting evaluation evidence.",
+        "local_task_required": false,
+        "local_task_spec": null,
+        "next_decisive_question": "Can the frozen shadow protocol be executed prospectively with immutable point-in-time L2/trade/settlement evidence and conservative queue semantics?",
+        "status": "COMPLETED",
+        "validation_results": []
+      }
+    ],
+    "candidate_decisions": [
+      {
+        "candidate_id": "ASSET-RANK-MAKER-HEDGE-V1",
+        "queue_status": "RUNNING",
+        "reason": "No proven full passive fill has changed its existing execution gate.",
+        "next_decisive_test": "Continue preregistered conservative fill monitoring; only a proven full passive fill may trigger synchronized executable hedge economics.",
+        "resurrection_condition": null
+      },
+      {
+        "candidate_id": "KWI-FULL-STATION-PRECANONICAL-V1",
+        "queue_status": "WAITING_FOR_RESULT",
+        "reason": "No new admissible post-cutoff full-station evidence is present.",
+        "next_decisive_test": "Await and evaluate post-cutoff cases under the preregistered 24h full-station protocol.",
+        "resurrection_condition": null
+      },
+      {
+        "candidate_id": "MANUAL-SCOUT-HENGELTJES-20260924",
+        "queue_status": "EXPERIMENT_REQUIRED",
+        "reason": "Discovery and Mechanics now agree on a testable microstructure/settlement mechanism, but no prospective queue-realistic sample exists yet and adverse selection remains unmeasured.",
+        "next_decisive_test": "Freeze and run a read-only prospective shadow protocol for late passive maker orders using conservative price-time queue reconstruction, sequence/reconnect/restart fail-closed handling, partial-fill accounting, post-fill markouts, authoritative final settlement and net EV after fees/friction. Keep optimistic fill assumptions outside PRIMARY results.",
+        "resurrection_condition": null
+      },
+      {
+        "candidate_id": "PAYOFF-IDENTITY-MINING-V1",
+        "queue_status": "NEEDS_DIRECTOR",
+        "reason": "No complete concrete statewise identity/dominance proof is present.",
+        "next_decisive_test": "Find a concrete primary-rule-proven statewise pair before synchronized executable L2 comparison.",
+        "resurrection_condition": null
+      }
+    ],
+    "director_decision": "Proceed with MANUAL-SCOUT-HENGELTJES-20260924 only as a frozen prospective read-only shadow experiment. No promotion, no live execution and no cost-bearing action are authorized.",
+    "economic_conclusion": "NO_PROVEN_EDGE",
+    "local_tasks": [],
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "openai_api": false
+  }
+}
