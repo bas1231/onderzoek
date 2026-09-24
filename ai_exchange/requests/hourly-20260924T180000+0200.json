@@ -1,0 +1,1104 @@
+{
+  "candidate_queue": {
+    "director_attention": [
+      {
+        "active_experiment_ids": [],
+        "age_hours": 111.659,
+        "candidate_id": "PAYOFF-IDENTITY-MINING-V1",
+        "effective_priority_rank": 1,
+        "next_decisive_test": "Find one concrete contract pair with primary-rule statewise payout semantics, then compare synchronized executable L2 only after formal equivalence/dominance proof.",
+        "open_question": null,
+        "phase": "DISCOVERED",
+        "priority": "P2",
+        "queue_status": "NEEDS_DIRECTOR",
+        "source_ref": "knowledge/candidates/PAYOFF-IDENTITY-MINING-V1.json"
+      },
+      {
+        "active_experiment_ids": [],
+        "age_hours": 0.413,
+        "candidate_id": "MANUAL-SCOUT-HENGELTJES-20260924",
+        "effective_priority_rank": 2,
+        "next_decisive_test": "Run normal discovery/recon triage on the attached seed before specialist synthesis; preserve provenance and NO_PROVEN_EDGE.",
+        "open_question": "Discovery must read the manual seed, classify the mechanism without assuming a domain in advance, and identify the cheapest decisive falsification path.",
+        "phase": "DISCOVERED",
+        "priority": "P2",
+        "queue_status": "NEEDS_DIRECTOR",
+        "source_ref": "knowledge/candidates/MANUAL-SCOUT-HENGELTJES-20260924.json"
+      }
+    ],
+    "full_queue": [
+      {
+        "active_experiment_ids": [],
+        "age_hours": 111.659,
+        "candidate_id": "KWI-INCOMPLETE-TO-CANONICAL-V1",
+        "effective_priority_rank": 1,
+        "next_decisive_test": "Do not retune the rejected simple incomplete mean on the same development data; only genuinely preregistered orthogonal mechanisms or new holdout evidence can reopen it.",
+        "open_question": null,
+        "phase": "DISCOVERED",
+        "priority": "P2",
+        "queue_status": "PARKED",
+        "source_ref": "knowledge/candidates/KWI-INCOMPLETE-TO-CANONICAL-V1.json"
+      },
+      {
+        "active_experiment_ids": [],
+        "age_hours": 111.659,
+        "candidate_id": "PAYOFF-IDENTITY-MINING-V1",
+        "effective_priority_rank": 1,
+        "next_decisive_test": "Find one concrete contract pair with primary-rule statewise payout semantics, then compare synchronized executable L2 only after formal equivalence/dominance proof.",
+        "open_question": null,
+        "phase": "DISCOVERED",
+        "priority": "P2",
+        "queue_status": "NEEDS_DIRECTOR",
+        "source_ref": "knowledge/candidates/PAYOFF-IDENTITY-MINING-V1.json"
+      },
+      {
+        "active_experiment_ids": [],
+        "age_hours": 110.192,
+        "candidate_id": "ASSET-RANK-MAKER-HEDGE-V1",
+        "effective_priority_rank": 1,
+        "next_decisive_test": "Continue preregistered prospective conservative fill monitoring; only a proven full passive fill may trigger synchronized first-executable hedge economics.",
+        "open_question": null,
+        "phase": "MECHANISM_DEFINED",
+        "priority": "P1",
+        "queue_status": "RUNNING",
+        "source_ref": "knowledge/candidates/ASSET-RANK-MAKER-HEDGE-V1.json"
+      },
+      {
+        "active_experiment_ids": [],
+        "age_hours": 96.828,
+        "candidate_id": "KWI-FULL-STATION-PRECANONICAL-V1",
+        "effective_priority_rank": 1,
+        "next_decisive_test": "Await and evaluate post-cutoff cases under the preregistered 24h full-station protocol; discovery rows cannot count as validation.",
+        "open_question": null,
+        "phase": "MECHANISM_DEFINED",
+        "priority": "P1",
+        "queue_status": "WAITING_FOR_RESULT",
+        "source_ref": "knowledge/candidates/KWI-FULL-STATION-PRECANONICAL-V1.json"
+      },
+      {
+        "active_experiment_ids": [],
+        "age_hours": 0.413,
+        "candidate_id": "MANUAL-SCOUT-HENGELTJES-20260924",
+        "effective_priority_rank": 2,
+        "next_decisive_test": "Run normal discovery/recon triage on the attached seed before specialist synthesis; preserve provenance and NO_PROVEN_EDGE.",
+        "open_question": "Discovery must read the manual seed, classify the mechanism without assuming a domain in advance, and identify the cheapest decisive falsification path.",
+        "phase": "DISCOVERED",
+        "priority": "P2",
+        "queue_status": "NEEDS_DIRECTOR",
+        "source_ref": "knowledge/candidates/MANUAL-SCOUT-HENGELTJES-20260924.json"
+      }
+    ],
+    "waiting_without_blocking": [
+      {
+        "active_experiment_ids": [],
+        "age_hours": 110.192,
+        "candidate_id": "ASSET-RANK-MAKER-HEDGE-V1",
+        "effective_priority_rank": 1,
+        "next_decisive_test": "Continue preregistered prospective conservative fill monitoring; only a proven full passive fill may trigger synchronized first-executable hedge economics.",
+        "open_question": null,
+        "phase": "MECHANISM_DEFINED",
+        "priority": "P1",
+        "queue_status": "RUNNING",
+        "source_ref": "knowledge/candidates/ASSET-RANK-MAKER-HEDGE-V1.json"
+      },
+      {
+        "active_experiment_ids": [],
+        "age_hours": 96.828,
+        "candidate_id": "KWI-FULL-STATION-PRECANONICAL-V1",
+        "effective_priority_rank": 1,
+        "next_decisive_test": "Await and evaluate post-cutoff cases under the preregistered 24h full-station protocol; discovery rows cannot count as validation.",
+        "open_question": null,
+        "phase": "MECHANISM_DEFINED",
+        "priority": "P1",
+        "queue_status": "WAITING_FOR_RESULT",
+        "source_ref": "knowledge/candidates/KWI-FULL-STATION-PRECANONICAL-V1.json"
+      }
+    ]
+  },
+  "created_at": "2026-09-24T16:21:48.418636+00:00",
+  "director_instruction": "Operate the E007 six-domain Research OS. Evaluate every bundled ready role exactly once. Legacy specialist names inside capability_work are capabilities, not extra agents. Keep Discovery primary_scout and recon_scout findings/provenance separate before synthesis. Market Research must keep weather/TWC, behavioral and informed-flow evidence labelled by capability. Mechanics must separate settlement/finality from executable microstructure. Red Team/Pentest must use QUICK_KILL for cheap early falsification and DEEP_FALSIFICATION only where red_team_modes requests it. The transient Independent Reproducer is blind: do not infer or reconstruct withheld originating conclusions; reproduce from the supplied interface and independent evidence. Preserve negative evidence and cite failure-pattern IDs FP-001..FP-036 when applicable. Every validation_results item must contain status=PASS|FAIL|INCONCLUSIVE|WAITING; mode may be QUICK_KILL, DEEP_FALSIFICATION or REPRODUCTION. Never use result in place of the required status field. Do not invent missing evidence. AI may schedule, wait, revise or park bundled candidates but may not close-negative or promote them. Return exactly schema PVA_AI_RESPONSE_V1 and echo response_token. Include capability_results for consolidated domains and validation_results for Red Team/Reproducer when applicable. NO_PROVEN_EDGE is valid. Never authorize live trading, paid actions, wallet actions or paid OpenAI API use.",
+  "expected_response_schema": {
+    "candidate_decisions": [
+      {
+        "candidate_id": "string",
+        "next_decisive_test": "string|null",
+        "queue_status": "NEEDS_DIRECTOR|EXPERIMENT_REQUIRED|RUNNING|WAITING_FOR_DATA|WAITING_FOR_RESULT|RESULT_READY|NEEDS_REVISION|PARKED",
+        "reason": "string",
+        "resurrection_condition": "string|null"
+      }
+    ],
+    "director_decision": "string",
+    "economic_conclusion": "NO_PROVEN_EDGE",
+    "live_trading": false,
+    "local_tasks": [],
+    "openai_api": false,
+    "paid_actions": false,
+    "response_token": "018090c914da3a1b014306e1edf98c39bb8da46c0bb3e2392f751ac0cf39c73e",
+    "role_results": [
+      {
+        "agent_id": "discovery|market_research|mechanics|algebra|red_team_pentest|independent_reproducer|research_director",
+        "candidate_ids": [
+          "string"
+        ],
+        "capability_results": {},
+        "evidence_refs": [
+          "string"
+        ],
+        "failure_pattern_ids": [
+          "FP-xxx"
+        ],
+        "finding": "string|null",
+        "local_task_required": false,
+        "local_task_spec": null,
+        "next_decisive_question": "string|null",
+        "status": "COMPLETED|NO_EVIDENCE|FALSIFIED|WAITING_FOR_DATA|WAITING_FOR_RESULT|RESULT_READY|PARKED",
+        "validation_results": [
+          {
+            "candidate_id": "string|null",
+            "mode": "QUICK_KILL|DEEP_FALSIFICATION|REPRODUCTION|null",
+            "status": "PASS|FAIL|INCONCLUSIVE|WAITING"
+          }
+        ]
+      }
+    ],
+    "run_id": "hourly-20260924T180000+0200",
+    "schema": "PVA_AI_RESPONSE_V1",
+    "wallet_actions": false
+  },
+  "governor": {
+    "ai_candidate_kill_authority": false,
+    "ai_candidate_promotion_authority": false,
+    "economic_conclusion": "NO_PROVEN_EDGE",
+    "live_trading": false,
+    "openai_api": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "watch_has_no_promotion_authority": true,
+    "watch_is_not_hunt": true
+  },
+  "request_sha256": "0b22d380a7cc684ceb2ac929e656e2764899849bf229553c362cf1b8b81256b9",
+  "response_token": "018090c914da3a1b014306e1edf98c39bb8da46c0bb3e2392f751ac0cf39c73e",
+  "run_id": "hourly-20260924T180000+0200",
+  "schema": "PVA_AI_EXCHANGE_REQUEST_V1",
+  "source_commit": "6b33058eb6a0afbe0c111165fbf997d57b2d7cd1",
+  "transport": {
+    "browser_bridge_required": false,
+    "preferred_transport": "git",
+    "response_branch": "ai/runtime-exchange",
+    "response_path": "ai_exchange/responses/hourly-20260924T180000+0200.json",
+    "transport_neutral": true
+  },
+  "work_items": [
+    {
+      "agent_id": "discovery",
+      "capability_mode": "DISCOVERY",
+      "legacy_role": "discovery",
+      "must_return_result": true,
+      "objective": null,
+      "packet": {
+        "agent_id": "discovery",
+        "blind": false,
+        "blind_reproduction_interface": [],
+        "candidate_ids": [
+          "KWI-FULL-STATION-PRECANONICAL-V1",
+          "MANUAL-SCOUT-HENGELTJES-20260924"
+        ],
+        "candidate_routing": [
+          {
+            "candidate_id": "KWI-FULL-STATION-PRECANONICAL-V1",
+            "capability": "recon_scout",
+            "domain_role": "discovery",
+            "next_decisive_test": "Await and evaluate post-cutoff cases under the preregistered 24h full-station protocol; discovery rows cannot count as validation.",
+            "open_question": null,
+            "phase": "MECHANISM_DEFINED",
+            "queue_status": "WAITING_FOR_RESULT",
+            "reasons": [
+              "unresolved step is explicit recon/discovery"
+            ],
+            "source_ref": "knowledge/candidates/KWI-FULL-STATION-PRECANONICAL-V1.json"
+          },
+          {
+            "candidate_id": "KWI-FULL-STATION-PRECANONICAL-V1",
+            "capability": "scout",
+            "domain_role": "discovery",
+            "next_decisive_test": "Await and evaluate post-cutoff cases under the preregistered 24h full-station protocol; discovery rows cannot count as validation.",
+            "open_question": null,
+            "phase": "MECHANISM_DEFINED",
+            "queue_status": "WAITING_FOR_RESULT",
+            "reasons": [
+              "unresolved step is explicit discovery"
+            ],
+            "source_ref": "knowledge/candidates/KWI-FULL-STATION-PRECANONICAL-V1.json"
+          },
+          {
+            "candidate_id": "MANUAL-SCOUT-HENGELTJES-20260924",
+            "capability": "recon_scout",
+            "domain_role": "discovery",
+            "next_decisive_test": "Run normal discovery/recon triage on the attached seed before specialist synthesis; preserve provenance and NO_PROVEN_EDGE.",
+            "open_question": "Discovery must read the manual seed, classify the mechanism without assuming a domain in advance, and identify the cheapest decisive falsification path.",
+            "phase": "DISCOVERED",
+            "queue_status": "NEEDS_DIRECTOR",
+            "reasons": [
+              "lane=DISCOVERY",
+              "unresolved step is explicit recon/discovery"
+            ],
+            "source_ref": "knowledge/candidates/MANUAL-SCOUT-HENGELTJES-20260924.json"
+          },
+          {
+            "candidate_id": "MANUAL-SCOUT-HENGELTJES-20260924",
+            "capability": "scout",
+            "domain_role": "discovery",
+            "next_decisive_test": "Run normal discovery/recon triage on the attached seed before specialist synthesis; preserve provenance and NO_PROVEN_EDGE.",
+            "open_question": "Discovery must read the manual seed, classify the mechanism without assuming a domain in advance, and identify the cheapest decisive falsification path.",
+            "phase": "DISCOVERED",
+            "queue_status": "NEEDS_DIRECTOR",
+            "reasons": [
+              "lane=DISCOVERY",
+              "unresolved step is explicit discovery"
+            ],
+            "source_ref": "knowledge/candidates/MANUAL-SCOUT-HENGELTJES-20260924.json"
+          }
+        ],
+        "capability_work": {
+          "recon_scout": {
+            "candidate_ids": [
+              "KWI-FULL-STATION-PRECANONICAL-V1",
+              "MANUAL-SCOUT-HENGELTJES-20260924"
+            ],
+            "candidate_routing": [
+              {
+                "candidate_id": "KWI-FULL-STATION-PRECANONICAL-V1",
+                "capability": "recon_scout",
+                "next_decisive_test": "Await and evaluate post-cutoff cases under the preregistered 24h full-station protocol; discovery rows cannot count as validation.",
+                "open_question": null,
+                "phase": "MECHANISM_DEFINED",
+                "queue_status": "WAITING_FOR_RESULT",
+                "reasons": [
+                  "unresolved step is explicit recon/discovery"
+                ],
+                "source_ref": "knowledge/candidates/KWI-FULL-STATION-PRECANONICAL-V1.json"
+              },
+              {
+                "candidate_id": "MANUAL-SCOUT-HENGELTJES-20260924",
+                "capability": "recon_scout",
+                "next_decisive_test": "Run normal discovery/recon triage on the attached seed before specialist synthesis; preserve provenance and NO_PROVEN_EDGE.",
+                "open_question": "Discovery must read the manual seed, classify the mechanism without assuming a domain in advance, and identify the cheapest decisive falsification path.",
+                "phase": "DISCOVERED",
+                "queue_status": "NEEDS_DIRECTOR",
+                "reasons": [
+                  "lane=DISCOVERY",
+                  "unresolved step is explicit recon/discovery"
+                ],
+                "source_ref": "knowledge/candidates/MANUAL-SCOUT-HENGELTJES-20260924.json"
+              }
+            ],
+            "coverage_gaps": [
+              "Hourly registry is a bounded source universe; deep web/GitHub/community discovery remains a Research Director/Recon search task until a lawful free collector is registered."
+            ],
+            "routed_evidence": [],
+            "routing_status": "NO_EVIDENCE"
+          },
+          "scout": {
+            "candidate_ids": [
+              "KWI-FULL-STATION-PRECANONICAL-V1",
+              "MANUAL-SCOUT-HENGELTJES-20260924"
+            ],
+            "candidate_routing": [
+              {
+                "candidate_id": "KWI-FULL-STATION-PRECANONICAL-V1",
+                "capability": "scout",
+                "next_decisive_test": "Await and evaluate post-cutoff cases under the preregistered 24h full-station protocol; discovery rows cannot count as validation.",
+                "open_question": null,
+                "phase": "MECHANISM_DEFINED",
+                "queue_status": "WAITING_FOR_RESULT",
+                "reasons": [
+                  "unresolved step is explicit discovery"
+                ],
+                "source_ref": "knowledge/candidates/KWI-FULL-STATION-PRECANONICAL-V1.json"
+              },
+              {
+                "candidate_id": "MANUAL-SCOUT-HENGELTJES-20260924",
+                "capability": "scout",
+                "next_decisive_test": "Run normal discovery/recon triage on the attached seed before specialist synthesis; preserve provenance and NO_PROVEN_EDGE.",
+                "open_question": "Discovery must read the manual seed, classify the mechanism without assuming a domain in advance, and identify the cheapest decisive falsification path.",
+                "phase": "DISCOVERED",
+                "queue_status": "NEEDS_DIRECTOR",
+                "reasons": [
+                  "lane=DISCOVERY",
+                  "unresolved step is explicit discovery"
+                ],
+                "source_ref": "knowledge/candidates/MANUAL-SCOUT-HENGELTJES-20260924.json"
+              }
+            ],
+            "coverage_gaps": [],
+            "routed_evidence": [],
+            "routing_status": "NO_EVIDENCE"
+          }
+        },
+        "contract": {
+          "agent": "discovery",
+          "authority": "DISCOVERY_ONLY",
+          "capabilities": [
+            "scout",
+            "recon_scout"
+          ],
+          "live_trading": false,
+          "openai_api": false,
+          "output": [
+            "new_evidence",
+            "watch_triage",
+            "candidate_proposals",
+            "negative_evidence",
+            "next_decisive_question"
+          ],
+          "paid_actions": false,
+          "protected_lanes": {
+            "primary_scout": "Broad public evidence, venues, papers, code and anomaly discovery",
+            "recon_scout": "Independent offensive economic reconnaissance, failures, weak mechanisms and counter-crowd signals"
+          },
+          "requirements": [
+            "Keep primary_scout and recon_scout provenance separate",
+            "Do not promote WATCH to HUNT without Director/gate logic",
+            "Preserve null results and negative evidence"
+          ],
+          "wallet_actions": false
+        },
+        "coverage_gaps": [
+          "Hourly registry is a bounded source universe; deep web/GitHub/community discovery remains a Research Director/Recon search task until a lawful free collector is registered."
+        ],
+        "coverage_gaps_by_capability": {
+          "recon_scout": [
+            "Hourly registry is a bounded source universe; deep web/GitHub/community discovery remains a Research Director/Recon search task until a lawful free collector is registered."
+          ],
+          "scout": []
+        },
+        "discovery_lanes": {
+          "primary_scout": {
+            "capability": "scout",
+            "coverage_gaps": [],
+            "routed_evidence": [],
+            "routing_status": "NO_EVIDENCE"
+          },
+          "recon_scout": {
+            "capability": "recon_scout",
+            "coverage_gaps": [
+              "Hourly registry is a bounded source universe; deep web/GitHub/community discovery remains a Research Director/Recon search task until a lawful free collector is registered."
+            ],
+            "routed_evidence": [],
+            "routing_status": "NO_EVIDENCE"
+          }
+        },
+        "dynamic_worker_scheduled": true,
+        "input_refs": [],
+        "local_task_id": null,
+        "local_task_required": false,
+        "next_decisive_question": null,
+        "orchestrator_reason": "candidate_assignment_available",
+        "priority": "P3",
+        "recon_hunts": [],
+        "recon_watch_triage": [],
+        "red_team_modes": {},
+        "reproduction_candidates": [],
+        "routed_evidence": [],
+        "scheduler_priority": "NOVEL_EVIDENCE",
+        "status": "READY",
+        "task_shape": {
+          "dependencies": "independent",
+          "expected_decision_value": "high",
+          "max_parallel_workers": 5,
+          "name": "HIGH_INDEPENDENT",
+          "novelty": "high",
+          "time_sensitivity": "normal",
+          "uncertainty": "source/semantic"
+        },
+        "transient": false
+      },
+      "priority": "P3",
+      "responsibility": "DISCOVERY",
+      "task_shape": "PARALLEL",
+      "work_id": "658f95917d2118dd83dcb3a4dbbf7fcd64b1a31e2e9f80deb4998c88fc0db56e"
+    },
+    {
+      "agent_id": "market_research",
+      "capability_mode": "MARKET_RESEARCH",
+      "legacy_role": "market_research",
+      "must_return_result": true,
+      "objective": null,
+      "packet": {
+        "agent_id": "market_research",
+        "blind": false,
+        "blind_reproduction_interface": [],
+        "candidate_ids": [
+          "KWI-FULL-STATION-PRECANONICAL-V1"
+        ],
+        "candidate_routing": [
+          {
+            "candidate_id": "KWI-FULL-STATION-PRECANONICAL-V1",
+            "capability": "weather_twc",
+            "domain_role": "market_research",
+            "next_decisive_test": "Await and evaluate post-cutoff cases under the preregistered 24h full-station protocol; discovery rows cannot count as validation.",
+            "open_question": null,
+            "phase": "MECHANISM_DEFINED",
+            "queue_status": "WAITING_FOR_RESULT",
+            "reasons": [
+              "lane=WEATHER",
+              "weather/TWC/KWI semantics"
+            ],
+            "source_ref": "knowledge/candidates/KWI-FULL-STATION-PRECANONICAL-V1.json"
+          }
+        ],
+        "capability_work": {
+          "behavioral": {
+            "coverage_gaps": [],
+            "routed_evidence": [],
+            "routing_status": "NO_EVIDENCE"
+          },
+          "informed_flow": {
+            "coverage_gaps": [
+              "No point-in-time participant identity/flow dataset"
+            ],
+            "routed_evidence": [],
+            "routing_status": "NO_EVIDENCE"
+          },
+          "weather_twc": {
+            "candidate_ids": [
+              "KWI-FULL-STATION-PRECANONICAL-V1"
+            ],
+            "candidate_routing": [
+              {
+                "candidate_id": "KWI-FULL-STATION-PRECANONICAL-V1",
+                "capability": "weather_twc",
+                "next_decisive_test": "Await and evaluate post-cutoff cases under the preregistered 24h full-station protocol; discovery rows cannot count as validation.",
+                "open_question": null,
+                "phase": "MECHANISM_DEFINED",
+                "queue_status": "WAITING_FOR_RESULT",
+                "reasons": [
+                  "lane=WEATHER",
+                  "weather/TWC/KWI semantics"
+                ],
+                "source_ref": "knowledge/candidates/KWI-FULL-STATION-PRECANONICAL-V1.json"
+              }
+            ],
+            "coverage_gaps": [
+              "No TWC-specific primary source in registry"
+            ],
+            "routed_evidence": [],
+            "routing_status": "NO_EVIDENCE"
+          }
+        },
+        "contract": {
+          "agent": "market_research",
+          "authority": "RESEARCH_ONLY",
+          "capabilities": [
+            "weather_twc",
+            "behavioral",
+            "informed_flow"
+          ],
+          "live_trading": false,
+          "openai_api": false,
+          "output": [
+            "market_evidence",
+            "mechanism_test",
+            "base_rate",
+            "coverage_gaps",
+            "next_decisive_question"
+          ],
+          "paid_actions": false,
+          "requirements": [
+            "Use point-in-time public evidence only",
+            "Keep weather/TWC settlement claims separate from behavioral or flow claims",
+            "Require executable economics before any edge claim"
+          ],
+          "wallet_actions": false
+        },
+        "coverage_gaps": [
+          "No TWC-specific primary source in registry",
+          "No point-in-time participant identity/flow dataset"
+        ],
+        "coverage_gaps_by_capability": {
+          "behavioral": [],
+          "informed_flow": [
+            "No point-in-time participant identity/flow dataset"
+          ],
+          "weather_twc": [
+            "No TWC-specific primary source in registry"
+          ]
+        },
+        "discovery_lanes": {},
+        "dynamic_worker_scheduled": true,
+        "input_refs": [],
+        "local_task_id": null,
+        "local_task_required": false,
+        "next_decisive_question": null,
+        "orchestrator_reason": "candidate_assignment_available",
+        "priority": "P3",
+        "recon_hunts": [],
+        "recon_watch_triage": [],
+        "red_team_modes": {},
+        "reproduction_candidates": [],
+        "routed_evidence": [],
+        "scheduler_priority": "TIME_SENSITIVE_EVIDENCE",
+        "status": "READY",
+        "task_shape": {
+          "dependencies": "independent",
+          "expected_decision_value": "high",
+          "max_parallel_workers": 5,
+          "name": "HIGH_INDEPENDENT",
+          "novelty": "normal",
+          "time_sensitivity": "high",
+          "uncertainty": "source/semantic"
+        },
+        "transient": false
+      },
+      "priority": "P3",
+      "responsibility": "SPECIALIST_DISPATCH",
+      "task_shape": "PARALLEL",
+      "work_id": "85c49babdd361b49647e8081480f262017a462a5afb48028bb4af74118c3d22d"
+    },
+    {
+      "agent_id": "mechanics",
+      "capability_mode": "MECHANICS",
+      "legacy_role": "mechanics",
+      "must_return_result": true,
+      "objective": null,
+      "packet": {
+        "agent_id": "mechanics",
+        "blind": false,
+        "blind_reproduction_interface": [],
+        "candidate_ids": [
+          "ASSET-RANK-MAKER-HEDGE-V1",
+          "PAYOFF-IDENTITY-MINING-V1"
+        ],
+        "candidate_routing": [
+          {
+            "candidate_id": "ASSET-RANK-MAKER-HEDGE-V1",
+            "capability": "microstructure",
+            "domain_role": "mechanics",
+            "next_decisive_test": "Continue preregistered prospective conservative fill monitoring; only a proven full passive fill may trigger synchronized first-executable hedge economics.",
+            "open_question": null,
+            "phase": "MECHANISM_DEFINED",
+            "queue_status": "RUNNING",
+            "reasons": [
+              "executable market/fill/hedge economics required",
+              "lane=MICROSTRUCTURE"
+            ],
+            "source_ref": "knowledge/candidates/ASSET-RANK-MAKER-HEDGE-V1.json"
+          },
+          {
+            "candidate_id": "PAYOFF-IDENTITY-MINING-V1",
+            "capability": "microstructure",
+            "domain_role": "mechanics",
+            "next_decisive_test": "Find one concrete contract pair with primary-rule statewise payout semantics, then compare synchronized executable L2 only after formal equivalence/dominance proof.",
+            "open_question": null,
+            "phase": "DISCOVERED",
+            "queue_status": "NEEDS_DIRECTOR",
+            "reasons": [
+              "executable market/fill/hedge economics required"
+            ],
+            "source_ref": "knowledge/candidates/PAYOFF-IDENTITY-MINING-V1.json"
+          }
+        ],
+        "capability_work": {
+          "microstructure": {
+            "candidate_ids": [
+              "ASSET-RANK-MAKER-HEDGE-V1",
+              "PAYOFF-IDENTITY-MINING-V1"
+            ],
+            "candidate_routing": [
+              {
+                "candidate_id": "ASSET-RANK-MAKER-HEDGE-V1",
+                "capability": "microstructure",
+                "next_decisive_test": "Continue preregistered prospective conservative fill monitoring; only a proven full passive fill may trigger synchronized first-executable hedge economics.",
+                "open_question": null,
+                "phase": "MECHANISM_DEFINED",
+                "queue_status": "RUNNING",
+                "reasons": [
+                  "executable market/fill/hedge economics required",
+                  "lane=MICROSTRUCTURE"
+                ],
+                "source_ref": "knowledge/candidates/ASSET-RANK-MAKER-HEDGE-V1.json"
+              },
+              {
+                "candidate_id": "PAYOFF-IDENTITY-MINING-V1",
+                "capability": "microstructure",
+                "next_decisive_test": "Find one concrete contract pair with primary-rule statewise payout semantics, then compare synchronized executable L2 only after formal equivalence/dominance proof.",
+                "open_question": null,
+                "phase": "DISCOVERED",
+                "queue_status": "NEEDS_DIRECTOR",
+                "reasons": [
+                  "executable market/fill/hedge economics required"
+                ],
+                "source_ref": "knowledge/candidates/PAYOFF-IDENTITY-MINING-V1.json"
+              }
+            ],
+            "coverage_gaps": [
+              "No live orderbook snapshot source in hourly registry"
+            ],
+            "routed_evidence": [],
+            "routing_status": "NO_EVIDENCE"
+          },
+          "settlement": {
+            "coverage_gaps": [
+              "Venue-specific contract-rule pages may need deeper retrieval than docs landing pages"
+            ],
+            "routed_evidence": [],
+            "routing_status": "NO_EVIDENCE"
+          }
+        },
+        "contract": {
+          "agent": "mechanics",
+          "authority": "RESEARCH_ONLY",
+          "capabilities": [
+            "settlement",
+            "microstructure"
+          ],
+          "live_trading": false,
+          "openai_api": false,
+          "output": [
+            "settlement_analysis",
+            "execution_analysis",
+            "friction_model",
+            "capacity_blockers",
+            "next_decisive_question"
+          ],
+          "paid_actions": false,
+          "requirements": [
+            "Verify rules, settlement source, finality and revision semantics",
+            "Use executable bid/ask/L2 rather than UI midpoint claims",
+            "Include fees, spread, depth, slippage, fills, partial-fill and latency reality"
+          ],
+          "wallet_actions": false
+        },
+        "coverage_gaps": [
+          "No live orderbook snapshot source in hourly registry",
+          "Venue-specific contract-rule pages may need deeper retrieval than docs landing pages"
+        ],
+        "coverage_gaps_by_capability": {
+          "microstructure": [
+            "No live orderbook snapshot source in hourly registry"
+          ],
+          "settlement": [
+            "Venue-specific contract-rule pages may need deeper retrieval than docs landing pages"
+          ]
+        },
+        "discovery_lanes": {},
+        "dynamic_worker_scheduled": true,
+        "input_refs": [],
+        "local_task_id": null,
+        "local_task_required": false,
+        "next_decisive_question": null,
+        "orchestrator_reason": "candidate_assignment_available",
+        "priority": "P3",
+        "recon_hunts": [],
+        "recon_watch_triage": [],
+        "red_team_modes": {},
+        "reproduction_candidates": [],
+        "routed_evidence": [],
+        "scheduler_priority": "POINT_IN_TIME_OR_EXECUTION_EVIDENCE",
+        "status": "READY",
+        "task_shape": {
+          "dependencies": "independent",
+          "expected_decision_value": "high",
+          "max_parallel_workers": 5,
+          "name": "HIGH_INDEPENDENT",
+          "novelty": "normal",
+          "time_sensitivity": "normal",
+          "uncertainty": "source/semantic"
+        },
+        "transient": false
+      },
+      "priority": "P3",
+      "responsibility": "SPECIALIST_DISPATCH",
+      "task_shape": "SEQUENTIAL",
+      "work_id": "2f2e62d93e1e6cfa4c993b98439304e7a7aafd48e1cc17d261e616fd90a12731"
+    },
+    {
+      "agent_id": "algebra",
+      "capability_mode": "ALGEBRA",
+      "legacy_role": "algebra",
+      "must_return_result": true,
+      "objective": null,
+      "packet": {
+        "agent_id": "algebra",
+        "blind": false,
+        "blind_reproduction_interface": [],
+        "candidate_ids": [
+          "ASSET-RANK-MAKER-HEDGE-V1",
+          "PAYOFF-IDENTITY-MINING-V1"
+        ],
+        "candidate_routing": [
+          {
+            "candidate_id": "ASSET-RANK-MAKER-HEDGE-V1",
+            "capability": "algebra",
+            "domain_role": "algebra",
+            "next_decisive_test": "Continue preregistered prospective conservative fill monitoring; only a proven full passive fill may trigger synchronized first-executable hedge economics.",
+            "open_question": null,
+            "phase": "MECHANISM_DEFINED",
+            "queue_status": "RUNNING",
+            "reasons": [
+              "statewise payoff/equivalence semantics"
+            ],
+            "source_ref": "knowledge/candidates/ASSET-RANK-MAKER-HEDGE-V1.json"
+          },
+          {
+            "candidate_id": "PAYOFF-IDENTITY-MINING-V1",
+            "capability": "algebra",
+            "domain_role": "algebra",
+            "next_decisive_test": "Find one concrete contract pair with primary-rule statewise payout semantics, then compare synchronized executable L2 only after formal equivalence/dominance proof.",
+            "open_question": null,
+            "phase": "DISCOVERED",
+            "queue_status": "NEEDS_DIRECTOR",
+            "reasons": [
+              "lane=MARKET_ALGEBRA",
+              "statewise payoff/equivalence semantics"
+            ],
+            "source_ref": "knowledge/candidates/PAYOFF-IDENTITY-MINING-V1.json"
+          }
+        ],
+        "capability_work": {
+          "algebra": {
+            "candidate_ids": [
+              "ASSET-RANK-MAKER-HEDGE-V1",
+              "PAYOFF-IDENTITY-MINING-V1"
+            ],
+            "candidate_routing": [
+              {
+                "candidate_id": "ASSET-RANK-MAKER-HEDGE-V1",
+                "capability": "algebra",
+                "next_decisive_test": "Continue preregistered prospective conservative fill monitoring; only a proven full passive fill may trigger synchronized first-executable hedge economics.",
+                "open_question": null,
+                "phase": "MECHANISM_DEFINED",
+                "queue_status": "RUNNING",
+                "reasons": [
+                  "statewise payoff/equivalence semantics"
+                ],
+                "source_ref": "knowledge/candidates/ASSET-RANK-MAKER-HEDGE-V1.json"
+              },
+              {
+                "candidate_id": "PAYOFF-IDENTITY-MINING-V1",
+                "capability": "algebra",
+                "next_decisive_test": "Find one concrete contract pair with primary-rule statewise payout semantics, then compare synchronized executable L2 only after formal equivalence/dominance proof.",
+                "open_question": null,
+                "phase": "DISCOVERED",
+                "queue_status": "NEEDS_DIRECTOR",
+                "reasons": [
+                  "lane=MARKET_ALGEBRA",
+                  "statewise payoff/equivalence semantics"
+                ],
+                "source_ref": "knowledge/candidates/PAYOFF-IDENTITY-MINING-V1.json"
+              }
+            ],
+            "coverage_gaps": [],
+            "routed_evidence": [],
+            "routing_status": "NO_EVIDENCE"
+          }
+        },
+        "contract": {
+          "agent": "algebra",
+          "gate": "statewise_payout_proof_required",
+          "input": "contract and payout structures",
+          "live_trading": false,
+          "output": [
+            "candidate_identities",
+            "formal_conditions"
+          ],
+          "paid_actions": false,
+          "wallet_actions": false
+        },
+        "coverage_gaps": [],
+        "coverage_gaps_by_capability": {
+          "algebra": []
+        },
+        "discovery_lanes": {},
+        "dynamic_worker_scheduled": true,
+        "input_refs": [],
+        "local_task_id": null,
+        "local_task_required": false,
+        "next_decisive_question": null,
+        "orchestrator_reason": "candidate_assignment_available",
+        "priority": "P3",
+        "recon_hunts": [],
+        "recon_watch_triage": [],
+        "red_team_modes": {},
+        "reproduction_candidates": [],
+        "routed_evidence": [],
+        "scheduler_priority": "DECISIVE_SEMANTIC_OR_SOURCE_KILL_CHECK",
+        "status": "READY",
+        "task_shape": {
+          "dependencies": "independent",
+          "expected_decision_value": "high",
+          "max_parallel_workers": 5,
+          "name": "HIGH_INDEPENDENT",
+          "novelty": "normal",
+          "time_sensitivity": "normal",
+          "uncertainty": "source/semantic"
+        },
+        "transient": false
+      },
+      "priority": "P3",
+      "responsibility": "SPECIALIST_DISPATCH",
+      "task_shape": "SEQUENTIAL",
+      "work_id": "4b8d6f84da2e162e38692b41b44ba80bec79a5c46aeaaf9828afc28f851f120f"
+    },
+    {
+      "agent_id": "red_team_pentest",
+      "capability_mode": "DEEP_FALSIFICATION",
+      "legacy_role": "red_team_pentest",
+      "must_return_result": true,
+      "objective": null,
+      "packet": {
+        "agent_id": "red_team_pentest",
+        "blind": false,
+        "blind_reproduction_interface": [],
+        "candidate_ids": [
+          "ASSET-RANK-MAKER-HEDGE-V1",
+          "KWI-FULL-STATION-PRECANONICAL-V1",
+          "MANUAL-SCOUT-HENGELTJES-20260924",
+          "PAYOFF-IDENTITY-MINING-V1"
+        ],
+        "candidate_routing": [
+          {
+            "candidate_id": "ASSET-RANK-MAKER-HEDGE-V1",
+            "capability": "prebuild_killer",
+            "domain_role": "red_team_pentest",
+            "next_decisive_test": "Continue preregistered prospective conservative fill monitoring; only a proven full passive fill may trigger synchronized first-executable hedge economics.",
+            "open_question": null,
+            "phase": "MECHANISM_DEFINED",
+            "queue_status": "RUNNING",
+            "reasons": [
+              "E007 cheap pre-build falsification required"
+            ],
+            "source_ref": "knowledge/candidates/ASSET-RANK-MAKER-HEDGE-V1.json"
+          },
+          {
+            "candidate_id": "KWI-FULL-STATION-PRECANONICAL-V1",
+            "capability": "prebuild_killer",
+            "domain_role": "red_team_pentest",
+            "next_decisive_test": "Await and evaluate post-cutoff cases under the preregistered 24h full-station protocol; discovery rows cannot count as validation.",
+            "open_question": null,
+            "phase": "MECHANISM_DEFINED",
+            "queue_status": "WAITING_FOR_RESULT",
+            "reasons": [
+              "E007 cheap pre-build falsification required"
+            ],
+            "source_ref": "knowledge/candidates/KWI-FULL-STATION-PRECANONICAL-V1.json"
+          },
+          {
+            "candidate_id": "MANUAL-SCOUT-HENGELTJES-20260924",
+            "capability": "prebuild_killer",
+            "domain_role": "red_team_pentest",
+            "next_decisive_test": "Run normal discovery/recon triage on the attached seed before specialist synthesis; preserve provenance and NO_PROVEN_EDGE.",
+            "open_question": "Discovery must read the manual seed, classify the mechanism without assuming a domain in advance, and identify the cheapest decisive falsification path.",
+            "phase": "DISCOVERED",
+            "queue_status": "NEEDS_DIRECTOR",
+            "reasons": [
+              "E007 cheap pre-build falsification required"
+            ],
+            "source_ref": "knowledge/candidates/MANUAL-SCOUT-HENGELTJES-20260924.json"
+          },
+          {
+            "candidate_id": "PAYOFF-IDENTITY-MINING-V1",
+            "capability": "prebuild_killer",
+            "domain_role": "red_team_pentest",
+            "next_decisive_test": "Find one concrete contract pair with primary-rule statewise payout semantics, then compare synchronized executable L2 only after formal equivalence/dominance proof.",
+            "open_question": null,
+            "phase": "DISCOVERED",
+            "queue_status": "NEEDS_DIRECTOR",
+            "reasons": [
+              "E007 cheap pre-build falsification required"
+            ],
+            "source_ref": "knowledge/candidates/PAYOFF-IDENTITY-MINING-V1.json"
+          }
+        ],
+        "capability_work": {
+          "prebuild_killer": {
+            "candidate_ids": [
+              "ASSET-RANK-MAKER-HEDGE-V1",
+              "KWI-FULL-STATION-PRECANONICAL-V1",
+              "MANUAL-SCOUT-HENGELTJES-20260924",
+              "PAYOFF-IDENTITY-MINING-V1"
+            ],
+            "candidate_routing": [
+              {
+                "candidate_id": "ASSET-RANK-MAKER-HEDGE-V1",
+                "capability": "prebuild_killer",
+                "next_decisive_test": "Continue preregistered prospective conservative fill monitoring; only a proven full passive fill may trigger synchronized first-executable hedge economics.",
+                "open_question": null,
+                "phase": "MECHANISM_DEFINED",
+                "queue_status": "RUNNING",
+                "reasons": [
+                  "E007 cheap pre-build falsification required"
+                ],
+                "source_ref": "knowledge/candidates/ASSET-RANK-MAKER-HEDGE-V1.json"
+              },
+              {
+                "candidate_id": "KWI-FULL-STATION-PRECANONICAL-V1",
+                "capability": "prebuild_killer",
+                "next_decisive_test": "Await and evaluate post-cutoff cases under the preregistered 24h full-station protocol; discovery rows cannot count as validation.",
+                "open_question": null,
+                "phase": "MECHANISM_DEFINED",
+                "queue_status": "WAITING_FOR_RESULT",
+                "reasons": [
+                  "E007 cheap pre-build falsification required"
+                ],
+                "source_ref": "knowledge/candidates/KWI-FULL-STATION-PRECANONICAL-V1.json"
+              },
+              {
+                "candidate_id": "MANUAL-SCOUT-HENGELTJES-20260924",
+                "capability": "prebuild_killer",
+                "next_decisive_test": "Run normal discovery/recon triage on the attached seed before specialist synthesis; preserve provenance and NO_PROVEN_EDGE.",
+                "open_question": "Discovery must read the manual seed, classify the mechanism without assuming a domain in advance, and identify the cheapest decisive falsification path.",
+                "phase": "DISCOVERED",
+                "queue_status": "NEEDS_DIRECTOR",
+                "reasons": [
+                  "E007 cheap pre-build falsification required"
+                ],
+                "source_ref": "knowledge/candidates/MANUAL-SCOUT-HENGELTJES-20260924.json"
+              },
+              {
+                "candidate_id": "PAYOFF-IDENTITY-MINING-V1",
+                "capability": "prebuild_killer",
+                "next_decisive_test": "Find one concrete contract pair with primary-rule statewise payout semantics, then compare synchronized executable L2 only after formal equivalence/dominance proof.",
+                "open_question": null,
+                "phase": "DISCOVERED",
+                "queue_status": "NEEDS_DIRECTOR",
+                "reasons": [
+                  "E007 cheap pre-build falsification required"
+                ],
+                "source_ref": "knowledge/candidates/PAYOFF-IDENTITY-MINING-V1.json"
+              }
+            ]
+          }
+        },
+        "contract": {
+          "agent": "red_team_pentest",
+          "authority": "VETO_RECOMMENDATION",
+          "capabilities": [
+            "prebuild_killer",
+            "chief_falsifier"
+          ],
+          "live_trading": false,
+          "modes": [
+            "QUICK_KILL",
+            "DEEP_FALSIFICATION"
+          ],
+          "openai_api": false,
+          "output": [
+            "validation_results",
+            "negative_evidence",
+            "survivors",
+            "failure_memory_updates",
+            "next_decisive_question"
+          ],
+          "paid_actions": false,
+          "requirements": [
+            "Try the cheapest decisive kill before expensive work",
+            "Attack leakage, source mismatch, post-hoc gates, stale data, non-executable pricing and hidden exception classes",
+            "Run deeper falsification only for serious survivors",
+            "Never promote or close a candidate autonomously"
+          ],
+          "wallet_actions": false
+        },
+        "coverage_gaps": [],
+        "coverage_gaps_by_capability": {},
+        "discovery_lanes": {},
+        "dynamic_worker_scheduled": true,
+        "input_refs": [],
+        "local_task_id": null,
+        "local_task_required": false,
+        "next_decisive_question": null,
+        "orchestrator_reason": "candidate_available_for_red_team",
+        "priority": "P2",
+        "recon_hunts": [],
+        "recon_watch_triage": [],
+        "red_team_modes": {
+          "ASSET-RANK-MAKER-HEDGE-V1": "QUICK_KILL",
+          "KWI-FULL-STATION-PRECANONICAL-V1": "QUICK_KILL",
+          "MANUAL-SCOUT-HENGELTJES-20260924": "QUICK_KILL",
+          "PAYOFF-IDENTITY-MINING-V1": "QUICK_KILL"
+        },
+        "reproduction_candidates": [],
+        "routed_evidence": [],
+        "scheduler_priority": "CHEAP_DECISIVE_FALSIFICATION",
+        "status": "READY",
+        "task_shape": {
+          "dependencies": "sequential",
+          "expected_decision_value": "high",
+          "max_parallel_workers": 1,
+          "name": "LOW_SEQUENTIAL",
+          "novelty": "normal",
+          "time_sensitivity": "normal",
+          "uncertainty": "semantic/economic"
+        },
+        "transient": false
+      },
+      "priority": "P2",
+      "responsibility": "RED_TEAM",
+      "task_shape": "PARTIAL",
+      "work_id": "87a3b7a83d676a8a68c6e5891afed9affc62771d4a308d55ade5ea02dc3e6aa9"
+    },
+    {
+      "agent_id": "research_director",
+      "capability_mode": "ADJUDICATION",
+      "legacy_role": "research_director",
+      "must_return_result": true,
+      "objective": null,
+      "packet": {
+        "agent_id": "research_director",
+        "blind": false,
+        "blind_reproduction_interface": [],
+        "candidate_ids": [],
+        "candidate_routing": [],
+        "capability_work": {},
+        "contract": {
+          "agent": "research_director",
+          "authority": "RESEARCH_COORDINATION",
+          "gate": "NO_PROVEN_EDGE_is_valid",
+          "input": "six-domain outputs, candidate queue, Evidence Graph, Failure Graph, scheduler state and validation pipeline",
+          "live_trading": false,
+          "openai_api": false,
+          "output": [
+            "hourly_report",
+            "candidate_status",
+            "next_hour_queue",
+            "scheduler_decision",
+            "graph_updates",
+            "validation_status"
+          ],
+          "paid_actions": false,
+          "requirements": [
+            "Allocate only admissible work",
+            "Prefer decisive kill/evidence work over filler output",
+            "Preserve negative evidence and resurrection conditions",
+            "Do not count correlated evidence twice",
+            "Do not promote without deterministic gates and required independent reproduction"
+          ],
+          "wallet_actions": false
+        },
+        "coverage_gaps": [],
+        "coverage_gaps_by_capability": {},
+        "discovery_lanes": {},
+        "dynamic_worker_scheduled": null,
+        "input_refs": [],
+        "local_task_id": null,
+        "local_task_required": false,
+        "next_decisive_question": null,
+        "orchestrator_reason": "director_closes_active_cycle",
+        "priority": "P1",
+        "recon_hunts": [],
+        "recon_watch_triage": [],
+        "red_team_modes": {},
+        "reproduction_candidates": [],
+        "routed_evidence": [],
+        "scheduler_priority": null,
+        "status": "READY",
+        "task_shape": null,
+        "transient": false
+      },
+      "priority": "P1",
+      "responsibility": "RESEARCH_DIRECTOR",
+      "task_shape": "PARTIAL",
+      "work_id": "89fc48c681f71f0e8f0b21019a77c9bed152286e6f9e3769c1902b3cb2225194"
+    }
+  ]
+}
