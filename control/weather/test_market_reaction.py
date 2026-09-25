@@ -65,7 +65,7 @@ class MarketReactionTests(unittest.TestCase):
         pre = st(1_000)
         pre = MarketState(**{**pre.__dict__, "transport": "ws"})
         r = analyze_reaction(
-            self.kwi, [pre], coverage_ms=[9_500, 40_000],
+            self.kwi, [pre], coverage_ms=list(range(9_000, 40_001, 1_000)),
             window_ms=30_000, max_state_gap_ms=5_000,
         )
         self.assertEqual(r["status"], NO_REACTION_OBSERVED_WITHIN_WINDOW)
@@ -91,9 +91,9 @@ class MarketReactionTests(unittest.TestCase):
     def test_first_eligible_and_same_t_revision(self):
         base_complete = {"t": 100, "v": 79, "contributors": 2}
         manifests = [
-            {"retrieved_at": "2026-09-21T10:00:00Z", "cities":[{"city":"miami","config_version":"c1","latest_complete":base_complete,"latest_incomplete":{"t":101,"stations":[{"temp_f":80},{"temp_f":82}]}}]},
-            {"retrieved_at": "2026-09-21T10:00:01Z", "cities":[{"city":"miami","config_version":"c1","latest_complete":base_complete,"latest_incomplete":{"t":101,"stations":[{"temp_f":80},{"temp_f":82}]}}]},
-            {"retrieved_at": "2026-09-21T10:00:02Z", "cities":[{"city":"miami","config_version":"c1","latest_complete":base_complete,"latest_incomplete":{"t":101,"stations":[{"temp_f":81},{"temp_f":82}]}}]},
+            {"timestamp_semantics": "response_body_received", "retrieved_at": "2026-09-21T10:00:00Z", "cities":[{"city":"miami","config_version":"c1","latest_complete":base_complete,"latest_incomplete":{"t":101,"stations":[{"temp_f":80},{"temp_f":82}]}}]},
+            {"timestamp_semantics": "response_body_received", "retrieved_at": "2026-09-21T10:00:01Z", "cities":[{"city":"miami","config_version":"c1","latest_complete":base_complete,"latest_incomplete":{"t":101,"stations":[{"temp_f":80},{"temp_f":82}]}}]},
+            {"timestamp_semantics": "response_body_received", "retrieved_at": "2026-09-21T10:00:02Z", "cities":[{"city":"miami","config_version":"c1","latest_complete":base_complete,"latest_incomplete":{"t":101,"stations":[{"temp_f":81},{"temp_f":82}]}}]},
         ]
         ev = extract_kwi_events(manifests, "miami")
         self.assertEqual([x["kind"] for x in ev], ["first_decision_eligible", "revision"])
@@ -103,17 +103,22 @@ class MarketReactionTests(unittest.TestCase):
 
     def test_incomplete_signal_requires_full_expected_station_set(self):
         manifests = [
-            {"retrieved_at": "2026-09-21T10:00:00Z", "cities":[{"city":"miami","latest_complete":{"t":100,"v":79,"contributors":3},"latest_incomplete":{"t":101,"stations":[{"temp_f":80},{"temp_f":82}]}}]},
+            {"timestamp_semantics": "response_body_received", "retrieved_at": "2026-09-21T10:00:00Z", "cities":[{"city":"miami","latest_complete":{"t":100,"v":79,"contributors":3},"latest_incomplete":{"t":101,"stations":[{"temp_f":80},{"temp_f":82}]}}]},
         ]
         self.assertEqual(extract_kwi_events(manifests, "miami"), [])
 
     def test_ws_sequence_gap_fails_closed(self):
         ob = OrderBook("KXTEMP-X")
         snap = {"type":"orderbook_snapshot","seq":2,"msg":{"market_ticker":"KXTEMP-X","yes_dollars_fp":[["0.40","10"]],"no_dollars_fp":[["0.58","8"]]}}
+        from kalshi_market_reaction_ws import validate_subscription_sequence
+        sequence = {}
+        snap["sid"] = 1
+        validate_subscription_sequence(sequence, snap)
         ob.snapshot(snap, 9)
         bad = {"type":"orderbook_delta","seq":4,"msg":{"market_ticker":"KXTEMP-X","side":"yes","price_dollars":"0.40","delta_fp":"-1"}}
         with self.assertRaisesRegex(ValueError, "sequence gap"):
-            ob.delta(bad, 10)
+            bad["sid"] = 1
+            validate_subscription_sequence(sequence, bad)
 
     def test_deterministic_replay(self):
         states = [st(9_000), st(11_000), st(15_000, "0.44", "0.46"), st(40_000, "0.44", "0.46")]

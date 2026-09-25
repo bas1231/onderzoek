@@ -7,6 +7,7 @@ ACKed and skipped, while a newly submitted event must be remembered before ACK.
 """
 from pathlib import Path
 import re
+import runpy
 import unittest
 
 SCRIPT = Path(__file__).with_name("prediction-chat-wake.user.js")
@@ -26,22 +27,12 @@ class UserscriptDeliveryDedupeStaticTests(unittest.TestCase):
         self.assertIn("GM_setValue(key, values)", self.src)
 
     def test_remembered_event_is_acked_and_not_resubmitted(self):
-        pattern = re.compile(
-            r"if \(remembered\(KEY_SENT_EVENTS, event\.event_id\)\) \{\s*"
-            r"await ack\(event\.event_id, identity\.chatId, identity\.consumerId\);\s*"
-            r"continue;\s*\}",
-            re.S,
-        )
-        self.assertRegex(self.src, pattern)
+        behavior = runpy.run_path(str(SCRIPT.parents[2] / 'tests/audit/test_delivery_behavior.py'))
+        behavior['test_event_memory_survives_new_script_instance']()
 
     def test_new_event_is_remembered_before_ack(self):
-        remember_at = self.src.find("remember(KEY_SENT_EVENTS, event.event_id);")
-        ack_at = self.src.find(
-            "const ok = await ack(event.event_id, identity.chatId, identity.consumerId);",
-            remember_at,
-        )
-        self.assertGreaterEqual(remember_at, 0)
-        self.assertGreater(ack_at, remember_at)
+        behavior = runpy.run_path(str(SCRIPT.parents[2] / 'tests/audit/test_delivery_behavior.py'))
+        behavior['test_new_event_receipt_written_before_ack']()
 
     def test_restart_does_not_clear_sent_event_memory(self):
         match = re.search(

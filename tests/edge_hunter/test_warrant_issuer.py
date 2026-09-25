@@ -33,6 +33,10 @@ def setup_root(path: Path, *, phase: str = "PREBUILD_KILLED") -> Path:
         json.dumps(build_state)
     )
 
+    (path / "control/AUTONOMOUS_BUILD_POLICY.json").write_text(
+        (ROOT / "control/AUTONOMOUS_BUILD_POLICY.json").read_text()
+    )
+
     candidate = {
         "candidate_id": "CAND-EHB-003",
         "lane": "market_algebra",

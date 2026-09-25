@@ -38,7 +38,7 @@ class PatchV045TaskDedupeStaticTests(unittest.TestCase):
 
     def test_task_is_remembered_before_normal_ack(self):
         marker = "const sent = await submitMessage(String(event.message));"
-        block_start = self.src.index(marker)
+        block_start = self.src.index(marker, self.src.index("wake_new ="))
         block = self.src[block_start:]
         self.assertLess(
             block.index("remember(KEY_SENT_TASKS, taskKey)"),

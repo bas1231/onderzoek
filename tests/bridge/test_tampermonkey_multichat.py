@@ -113,7 +113,7 @@ def test_router_default_chat_is_atomic_and_readable(tmp_path):
 
 def test_userscript_contract_is_multichat_and_visible_marker_only():
     text = (TM / "prediction-chat-wake.user.js").read_text(encoding="utf-8")
-    assert "@version      0.3.3" in text
+    assert "@version      0.4.7" in text
     assert "// @match        https://chatgpt.com/*" in text
     assert "@noframes" in text
     assert "http://localhost:8765" in text

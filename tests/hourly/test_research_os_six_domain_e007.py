@@ -48,7 +48,7 @@ def test_registry_has_exactly_six_permanent_agents_and_transient_reproducer():
         "research_director",
     ]
     assert transient == ["independent_reproducer"]
-    assert registry["version"] == 3
+    assert registry["version"] == 4
     assert registry["live_trading"] is False
     assert registry["paid_actions"] is False
     assert registry["wallet_actions"] is False
