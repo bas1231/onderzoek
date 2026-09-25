@@ -25,6 +25,7 @@ with urllib.request.urlopen(request, timeout=30) as response:
     http_status = int(getattr(response, "status", 200))
     content_type = response.headers.get("Content-Type")
 
+received_at = datetime.now(timezone.utc)
 sha256 = hashlib.sha256(body).hexdigest()
 raw_path = RAW_DIR / (sha256 + ".bin")
 if not raw_path.exists():
@@ -63,7 +64,9 @@ for row in current_rows.values():
     status_counts[status] = status_counts.get(status, 0) + 1
 
 summary = {
-    "retrieved_at": now_utc.isoformat(),
+    "timestamp_semantics": "response_body_received",
+    "request_started_at": now_utc.isoformat(),
+    "retrieved_at": received_at.isoformat(),
     "weekStart": week_start,
     "http_status": http_status,
     "content_type": content_type,
@@ -139,7 +142,7 @@ if previous_rows is not None:
     )
     summary["changes_sample"] = change_rows
 
-stamp = now_utc.strftime("%Y%m%dT%H%M%SZ")
+stamp = received_at.strftime("%Y%m%dT%H%M%SZ")
 manifest_name = "twc-hourly-" + stamp + "-" + sha256[:12] + ".json"
 summary["manifest_name"] = manifest_name
 manifest_path = MANIFEST_DIR / manifest_name

@@ -241,12 +241,18 @@ def extract_kwi_events(manifests: Iterable[dict[str, Any]], city: str) -> list[d
     """
     rows: list[tuple[int, dict[str, Any]]] = []
     for manifest in manifests:
+        if manifest.get("timestamp_semantics") != "response_body_received":
+            continue  # Legacy request-start timestamps cannot prove availability.
         try:
             retrieved_ms = _parse_ts_ms(manifest.get("retrieved_at"))
         except ValueError:
             continue
         for row in manifest.get("cities") or []:
             if not isinstance(row, dict) or str(row.get("city", "")).lower() != city.lower():
+                continue
+            try:
+                row_received_ms = _parse_ts_ms(row.get("retrieved_at", manifest.get("retrieved_at")))
+            except ValueError:
                 continue
             incomplete = row.get("latest_incomplete") or {}
             previous = row.get("latest_complete") or {}
@@ -274,7 +280,7 @@ def extract_kwi_events(manifests: Iterable[dict[str, Any]], city: str) -> list[d
             if len(temps) != expected:
                 continue
             mean = sum(temps, Decimal("0")) / Decimal(len(temps))
-            rows.append((retrieved_ms, {
+            rows.append((row_received_ms, {
                 "city": city,
                 "config_version": row.get("config_version"),
                 "kwi_t": target_t,
@@ -348,6 +354,12 @@ def analyze_reaction(
         reasons.append("NO_PRE_EVENT_EXECUTABLE_STATE")
     else:
         baseline = pre[-1]
+        prices = (baseline.yes_bid, baseline.yes_ask, baseline.no_bid, baseline.no_ask)
+        quantities = (baseline.yes_bid_qty, baseline.no_bid_qty)
+        if any(p is None or not p.is_finite() or not 0 <= p <= 1 for p in prices) or any(q is None or not q.is_finite() or q <= 0 for q in quantities):
+            reasons.append("NO_PRE_EVENT_EXECUTABLE_STATE")
+        elif baseline.yes_bid > baseline.yes_ask or baseline.no_bid > baseline.no_ask:
+            reasons.append("INVALID_PRE_EVENT_BOOK")
         if baseline.transport == "ws":
             # A WS snapshot remains current until a delta arrives. Require
             # recent transport coverage rather than a recent price change.
@@ -358,6 +370,18 @@ def analyze_reaction(
             reasons.append("PRE_EVENT_STATE_TOO_OLD")
 
     end = t0 + window_ms
+    if pre:
+        for state in ordered:
+            if not t0 <= state.ts_ms <= end:
+                continue
+            if state.ticker != pre[-1].ticker:
+                reasons.append("MIXED_MARKET_TICKERS")
+            prices = (state.yes_bid, state.yes_ask, state.no_bid, state.no_ask)
+            quantities = (state.yes_bid_qty, state.no_bid_qty)
+            if any(p is not None and (not p.is_finite() or not 0 <= p <= 1) for p in prices):
+                reasons.append("INVALID_POST_EVENT_BOOK")
+            if any(q is not None and (not q.is_finite() or q < 0) for q in quantities):
+                reasons.append("INVALID_POST_EVENT_BOOK")
     if any(_gap_straddles(g, t0 - max_pre_age_ms, end) for g in gaps):
         reasons.append("CAPTURE_GAP_STRADDLES_WINDOW")
 
@@ -369,6 +393,13 @@ def analyze_reaction(
         for a, b in zip(relevant, relevant[1:]):
             if a.transport == "rest" and b.transport == "rest" and b.ts_ms - a.ts_ms > max_state_gap_ms:
                 reasons.append("MARKET_STATE_GAP_TOO_LARGE")
+                break
+
+    if pre and pre[-1].transport == "ws":
+        points = sorted(set(coverage_points + [s.ts_ms for s in ordered]))
+        for left, right in zip(points, points[1:]):
+            if left < end and right > t0 and right - left > max_state_gap_ms:
+                reasons.append("WS_COVERAGE_GAP_TOO_LARGE")
                 break
 
     if reasons:

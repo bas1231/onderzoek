@@ -24,6 +24,8 @@ for p in files:
         retrieved=datetime.fromisoformat(str(data.get('retrieved_at')))
     except Exception:
         continue
+    if data.get('timestamp_semantics') != 'response_body_received':
+        continue
     records.append((retrieved,p,data))
 records.sort(key=lambda item:item)
 
@@ -38,6 +40,12 @@ for retrieved,p,data in records:
             continue
         city=str(cityrow.get('city') or '')
         config=str(cityrow.get('config_version') or '')
+        if not config:
+            continue
+        try:
+            city_received=datetime.fromisoformat(str(cityrow.get('retrieved_at',data.get('retrieved_at'))))
+        except (ValueError, TypeError):
+            continue
         incomplete=cityrow.get('latest_incomplete') or dict()
         if isinstance(incomplete,dict) and incomplete.get('t') is not None:
             try:
@@ -45,8 +53,8 @@ for retrieved,p,data in records:
             except Exception:
                 target_t=None
             if target_t is not None:
-                key=city+'|'+str(target_t)
-                if key not in first_seen:
+                key=city+'|'+config+'|'+str(target_t)
+                if key not in first_seen or city_received.timestamp() < first_seen[key]["first_incomplete_epoch"]:
                     stations=incomplete.get('stations') or tuple()
                     temps=list()
                     for station in stations:
@@ -69,7 +77,7 @@ for retrieved,p,data in records:
                             previous_t=None
                             previous_v=None
                             previous_contributors=None
-                    first_seen[key]=dict(city=city,config_version=config,t=target_t,first_incomplete_at=retrieved.isoformat(),first_incomplete_epoch=retrieved.timestamp(),station_count=len(temps),station_mean=(sum(temps)/len(temps) if temps else None),previous_t=previous_t,previous_v=previous_v,previous_contributors=previous_contributors,manifest=p.name)
+                    first_seen[key]=dict(city=city,config_version=config,t=target_t,first_incomplete_at=city_received.isoformat(),first_incomplete_epoch=city_received.timestamp(),station_count=len(temps),station_mean=(sum(temps)/len(temps) if temps else None),previous_t=previous_t,previous_v=previous_v,previous_contributors=previous_contributors,manifest=p.name)
         complete=cityrow.get('latest_complete') or dict()
         if isinstance(complete,dict) and complete.get('t') is not None and complete.get('v') is not None:
             try:
@@ -79,9 +87,9 @@ for retrieved,p,data in records:
                 complete_t=None
                 complete_v=None
             if complete_t is not None and complete_v is not None:
-                key=city+'|'+str(complete_t)
-                if key not in first_complete:
-                    first_complete[key]=dict(target_v=complete_v,first_complete_at=retrieved.isoformat(),first_complete_epoch=retrieved.timestamp())
+                key=city+'|'+config+'|'+str(complete_t)
+                if key not in first_complete or city_received.timestamp() < first_complete[key]["first_complete_epoch"]:
+                    first_complete[key]=dict(target_v=complete_v,first_complete_at=city_received.isoformat(),first_complete_epoch=city_received.timestamp())
 
 eligible=list()
 open_pairs=list()
@@ -115,6 +123,8 @@ for key in sorted(first_seen):
     target=first_complete.get(key)
     if not isinstance(target,dict):
         open_pairs.append(row)
+        continue
+    if float(target['first_complete_epoch']) <= float(row['first_incomplete_epoch']):
         continue
     primary=float(row.get('station_mean'))
     baseline=float(previous_v)
