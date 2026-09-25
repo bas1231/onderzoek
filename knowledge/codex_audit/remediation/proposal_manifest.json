@@ -1,0 +1,108 @@
+{
+  "timestamp": "2026-09-25T07:27:38.403454+00:00",
+  "production_modified": false,
+  "paths": [
+    {
+      "path": "control/weather/kalshi_weather_index_recorder.py",
+      "base_exists": true,
+      "base_sha256": "bb60c33e4056783f860a0829c2dfaaeda345a3567c68292a7036e870d8a8c741",
+      "proposed_sha256": "03296693b1e188f93b88809629d4f23204aac7d7a0e23fd299adc90a634e43d0"
+    },
+    {
+      "path": "control/weather/twc_hourly_recorder.py",
+      "base_exists": true,
+      "base_sha256": "7152fad08c72c57a5e718ec04b3f41f417f8028fa84680d9e690ddcedfefb9b7",
+      "proposed_sha256": "704a16a724aef17ade8fbdb8c4cbf79484cfe886f8ec101e2753bfffda6a6734"
+    },
+    {
+      "path": "control/weather/market_reaction.py",
+      "base_exists": true,
+      "base_sha256": "d2b94d2330bb2a26e290e754799f3b2d3a61cd05099e79af3355289771ff0a88",
+      "proposed_sha256": "de3605a95a204fe420e2d1d78f1bcc57a48035ccca72d4512dadabc12d2384dc"
+    },
+    {
+      "path": "control/jobs/evaluate_kwi_full_station_checkpoint_e369.py",
+      "base_exists": true,
+      "base_sha256": "da854cb34dfacb13a22d3907fd1ec60e1292aa276a28b19c839560cb374edbbd",
+      "proposed_sha256": "e4eb12fe4fed0f503e869acf4e679e3df4799e32bc0efb29cb258ee2b3a2f898"
+    },
+    {
+      "path": "control/hourly/agent_orchestrator.py",
+      "base_exists": true,
+      "base_sha256": "32f3163a576e7eeffbc4d42fcbcb60a12a84b74ea7c0ec9b02f7325dc6f36141",
+      "proposed_sha256": "2dcfffc3b236ce18fbddeb890c80f70fbdcb055a208c5f41aac38522bf7c58f7"
+    },
+    {
+      "path": "control/executor.py",
+      "base_exists": true,
+      "base_sha256": "a58be3ce60162ff75376c849f46207f6eedf71fd4e371c6a98c6a64be64b1785",
+      "proposed_sha256": "1e46648006b3ecafe5adbf39ddd121eb7ffef747272a4bb9d76c2d9b912de35f"
+    },
+    {
+      "path": "control/tampermonkey_multichat/command_router.py",
+      "base_exists": true,
+      "base_sha256": "629de71ceb5c95004a51edf0d4a9a503e5f001188db09d992f81ac57566468f9",
+      "proposed_sha256": "423258b57652e738616ff3297decb78cf896c97e0755295a2152ef5f816e325c"
+    },
+    {
+      "path": "control/tampermonkey_multichat/prediction-chat-wake.user.js",
+      "base_exists": true,
+      "base_sha256": "7e0859e14bd93041eb845f379a2cec5ed7a81a72ce0e08356e80c5af72ba890b",
+      "proposed_sha256": "90c7cd439007a3e9f8922f468c0975f7dccee88c4471da1898a42819c13f898e"
+    },
+    {
+      "path": "control/policy_check.py",
+      "base_exists": false,
+      "base_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "proposed_sha256": "8701e90989ee25b524ea5560c0120fcf7133101b414dc4134246cb2aec8540bc"
+    },
+    {
+      "path": "control/policy.json",
+      "base_exists": false,
+      "base_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "proposed_sha256": "06faf3f29f6052602d2b182bf2afb1002f0982e005607b8c1c531b2a5cde87b4"
+    },
+    {
+      "path": "tests/audit/test_reliability_regressions.py",
+      "base_exists": false,
+      "base_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "proposed_sha256": "0d66dfb5ea7a177bee04c8624acff0891ade0c7826012ded0d7dc1f38c2e0e1f"
+    },
+    {
+      "path": "tests/edge_hunter/test_warrant_issuer.py",
+      "base_exists": true,
+      "base_sha256": "cea5d9c1ce3490a51e52b1ca395f9ef810a0445ea6bf29524fb164e96f19b8dc",
+      "proposed_sha256": "b17f859a9c0f881221eedfd369b32fe2fe076f125329e7c5d11d8fe3b658d50c"
+    },
+    {
+      "path": "tests/hourly/test_research_os_six_domain_e007.py",
+      "base_exists": true,
+      "base_sha256": "351f6f93d505adf48f69805515cf02a92be7bdf1943e518ed5f939cdb4e1ada3",
+      "proposed_sha256": "13587675077d6cc7271f4d32da17e8a0c2388c4b722ffb944b44cc8734a55889"
+    },
+    {
+      "path": "control/weather/test_market_reaction.py",
+      "base_exists": true,
+      "base_sha256": "7ebbcc12cfb369eec45af8e465b08eff0e272690cf99305e23d83eedb1ece159",
+      "proposed_sha256": "80758e26ab00f724d300b6257883c49f806d251b57e62c00a09cdf5dc5bab59d"
+    },
+    {
+      "path": "control/weather/test_market_reaction_ws.py",
+      "base_exists": true,
+      "base_sha256": "94e6728fbfc0e1f7ce5b15b52291f31fb1169acc77167d1e5dc11f4c5783e62e",
+      "proposed_sha256": "b9093cd6143c7b8a3733e81d93ba9c49deb1643de59d52ee0a7abd679bb35280"
+    },
+    {
+      "path": "control/tampermonkey_multichat/test_patch_v045_task_dedupe_static.py",
+      "base_exists": true,
+      "base_sha256": "b4a364eb0bf0ea98ab0568ea76945d9878b873052f8170689b9f4a724446eaed",
+      "proposed_sha256": "488c698a22c74fef3c85291eb3ba6072f3bf143ba9b1c0f9adac6f8235958ad0"
+    },
+    {
+      "path": "knowledge/codex_audit/evidence/reproduce_defects.py",
+      "base_exists": true,
+      "base_sha256": "c339aba98bb7cffaf70aa994d4c0a28211d3554915b776b0de3fcfb2a3d4c7b1",
+      "proposed_sha256": "8a0fb2d6f5b8eadf632067b66af2a286b185cabd50e24c1971f605d50db3958b"
+    }
+  ]
+}

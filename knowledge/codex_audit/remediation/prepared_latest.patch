@@ -1,0 +1,985 @@
+--- a/control/weather/kalshi_weather_index_recorder.py
++++ b/control/weather/kalshi_weather_index_recorder.py
+@@ -19,10 +19,12 @@
+ def fetch_city(city):
+     url = BASE + "/live_data/weather/" + city + "?" + urlencode({"last_sec": 10800, "detailed": "true"})
+     req = urllib.request.Request(url, headers={"User-Agent": "PredictionResearch-public-weather-index-recorder"})
++    request_started_at = datetime.now(timezone.utc).isoformat()
+     with urllib.request.urlopen(req, timeout=20) as r:
+         body = r.read(5_000_000)
+         status = int(getattr(r, "status", 200))
+         ctype = r.headers.get("Content-Type")
++    received_at = datetime.now(timezone.utc).isoformat()
+     sha = hashlib.sha256(body).hexdigest()
+     city_dir = RAW / city
+     city_dir.mkdir(parents=True, exist_ok=True)
+@@ -33,6 +35,8 @@
+     return {
+         "city": city,
+         "url": url,
++        "request_started_at": request_started_at,
++        "retrieved_at": received_at,
+         "status": status,
+         "content_type": ctype,
+         "sha256": sha,
+@@ -60,7 +64,7 @@
+                 return row
+     return None
+ 
+-retrieved_at = datetime.now(timezone.utc).isoformat()
++cycle_started_at = datetime.now(timezone.utc).isoformat()
+ rows = []
+ 
+ for city in CITIES:
+@@ -72,6 +76,8 @@
+     row = {
+         "city": city,
+         "status": res["status"],
++        "request_started_at": res["request_started_at"],
++        "retrieved_at": res["retrieved_at"],
+         "content_type": res["content_type"],
+         "sha256": res["sha256"],
+         "bytes": res["bytes"],
+@@ -98,7 +104,10 @@
+     }
+     rows.append(row)
+ 
++retrieved_at = datetime.now(timezone.utc).isoformat()
+ manifest = {
++    "timestamp_semantics": "response_body_received",
++    "request_started_at": cycle_started_at,
+     "retrieved_at": retrieved_at,
+     "source": "Kalshi public live_data weather endpoint",
+     "cities": rows,
+--- a/control/weather/twc_hourly_recorder.py
++++ b/control/weather/twc_hourly_recorder.py
+@@ -25,6 +25,7 @@
+     http_status = int(getattr(response, "status", 200))
+     content_type = response.headers.get("Content-Type")
+ 
++received_at = datetime.now(timezone.utc)
+ sha256 = hashlib.sha256(body).hexdigest()
+ raw_path = RAW_DIR / (sha256 + ".bin")
+ if not raw_path.exists():
+@@ -63,7 +64,9 @@
+     status_counts[status] = status_counts.get(status, 0) + 1
+ 
+ summary = {
+-    "retrieved_at": now_utc.isoformat(),
++    "timestamp_semantics": "response_body_received",
++    "request_started_at": now_utc.isoformat(),
++    "retrieved_at": received_at.isoformat(),
+     "weekStart": week_start,
+     "http_status": http_status,
+     "content_type": content_type,
+@@ -139,7 +142,7 @@
+     )
+     summary["changes_sample"] = change_rows
+ 
+-stamp = now_utc.strftime("%Y%m%dT%H%M%SZ")
++stamp = received_at.strftime("%Y%m%dT%H%M%SZ")
+ manifest_name = "twc-hourly-" + stamp + "-" + sha256[:12] + ".json"
+ summary["manifest_name"] = manifest_name
+ manifest_path = MANIFEST_DIR / manifest_name
+--- a/control/weather/market_reaction.py
++++ b/control/weather/market_reaction.py
+@@ -241,12 +241,18 @@
+     """
+     rows: list[tuple[int, dict[str, Any]]] = []
+     for manifest in manifests:
++        if manifest.get("timestamp_semantics") != "response_body_received":
++            continue  # Legacy request-start timestamps cannot prove availability.
+         try:
+             retrieved_ms = _parse_ts_ms(manifest.get("retrieved_at"))
+         except ValueError:
+             continue
+         for row in manifest.get("cities") or []:
+             if not isinstance(row, dict) or str(row.get("city", "")).lower() != city.lower():
++                continue
++            try:
++                row_received_ms = _parse_ts_ms(row.get("retrieved_at", manifest.get("retrieved_at")))
++            except ValueError:
+                 continue
+             incomplete = row.get("latest_incomplete") or {}
+             previous = row.get("latest_complete") or {}
+@@ -274,7 +280,7 @@
+             if len(temps) != expected:
+                 continue
+             mean = sum(temps, Decimal("0")) / Decimal(len(temps))
+-            rows.append((retrieved_ms, {
++            rows.append((row_received_ms, {
+                 "city": city,
+                 "config_version": row.get("config_version"),
+                 "kwi_t": target_t,
+@@ -348,6 +354,12 @@
+         reasons.append("NO_PRE_EVENT_EXECUTABLE_STATE")
+     else:
+         baseline = pre[-1]
++        prices = (baseline.yes_bid, baseline.yes_ask, baseline.no_bid, baseline.no_ask)
++        quantities = (baseline.yes_bid_qty, baseline.no_bid_qty)
++        if any(p is None or not p.is_finite() or not 0 <= p <= 1 for p in prices) or any(q is None or not q.is_finite() or q <= 0 for q in quantities):
++            reasons.append("NO_PRE_EVENT_EXECUTABLE_STATE")
++        elif baseline.yes_bid > baseline.yes_ask or baseline.no_bid > baseline.no_ask:
++            reasons.append("INVALID_PRE_EVENT_BOOK")
+         if baseline.transport == "ws":
+             # A WS snapshot remains current until a delta arrives. Require
+             # recent transport coverage rather than a recent price change.
+@@ -358,6 +370,18 @@
+             reasons.append("PRE_EVENT_STATE_TOO_OLD")
+ 
+     end = t0 + window_ms
++    if pre:
++        for state in ordered:
++            if not t0 <= state.ts_ms <= end:
++                continue
++            if state.ticker != pre[-1].ticker:
++                reasons.append("MIXED_MARKET_TICKERS")
++            prices = (state.yes_bid, state.yes_ask, state.no_bid, state.no_ask)
++            quantities = (state.yes_bid_qty, state.no_bid_qty)
++            if any(p is not None and (not p.is_finite() or not 0 <= p <= 1) for p in prices):
++                reasons.append("INVALID_POST_EVENT_BOOK")
++            if any(q is not None and (not q.is_finite() or q < 0) for q in quantities):
++                reasons.append("INVALID_POST_EVENT_BOOK")
+     if any(_gap_straddles(g, t0 - max_pre_age_ms, end) for g in gaps):
+         reasons.append("CAPTURE_GAP_STRADDLES_WINDOW")
+ 
+@@ -369,6 +393,13 @@
+         for a, b in zip(relevant, relevant[1:]):
+             if a.transport == "rest" and b.transport == "rest" and b.ts_ms - a.ts_ms > max_state_gap_ms:
+                 reasons.append("MARKET_STATE_GAP_TOO_LARGE")
++                break
++
++    if pre and pre[-1].transport == "ws":
++        points = sorted(set(coverage_points + [s.ts_ms for s in ordered]))
++        for left, right in zip(points, points[1:]):
++            if left < end and right > t0 and right - left > max_state_gap_ms:
++                reasons.append("WS_COVERAGE_GAP_TOO_LARGE")
+                 break
+ 
+     if reasons:
+--- a/control/jobs/evaluate_kwi_full_station_checkpoint_e369.py
++++ b/control/jobs/evaluate_kwi_full_station_checkpoint_e369.py
+@@ -24,6 +24,8 @@
+         retrieved=datetime.fromisoformat(str(data.get('retrieved_at')))
+     except Exception:
+         continue
++    if data.get('timestamp_semantics') != 'response_body_received':
++        continue
+     records.append((retrieved,p,data))
+ records.sort(key=lambda item:item)
+ 
+@@ -38,6 +40,12 @@
+             continue
+         city=str(cityrow.get('city') or '')
+         config=str(cityrow.get('config_version') or '')
++        if not config:
++            continue
++        try:
++            city_received=datetime.fromisoformat(str(cityrow.get('retrieved_at',data.get('retrieved_at'))))
++        except (ValueError, TypeError):
++            continue
+         incomplete=cityrow.get('latest_incomplete') or dict()
+         if isinstance(incomplete,dict) and incomplete.get('t') is not None:
+             try:
+@@ -45,7 +53,7 @@
+             except Exception:
+                 target_t=None
+             if target_t is not None:
+-                key=city+'|'+str(target_t)
++                key=city+'|'+config+'|'+str(target_t)
+                 if key not in first_seen:
+                     stations=incomplete.get('stations') or tuple()
+                     temps=list()
+@@ -69,7 +77,7 @@
+                             previous_t=None
+                             previous_v=None
+                             previous_contributors=None
+-                    first_seen[key]=dict(city=city,config_version=config,t=target_t,first_incomplete_at=retrieved.isoformat(),first_incomplete_epoch=retrieved.timestamp(),station_count=len(temps),station_mean=(sum(temps)/len(temps) if temps else None),previous_t=previous_t,previous_v=previous_v,previous_contributors=previous_contributors,manifest=p.name)
++                    first_seen[key]=dict(city=city,config_version=config,t=target_t,first_incomplete_at=city_received.isoformat(),first_incomplete_epoch=city_received.timestamp(),station_count=len(temps),station_mean=(sum(temps)/len(temps) if temps else None),previous_t=previous_t,previous_v=previous_v,previous_contributors=previous_contributors,manifest=p.name)
+         complete=cityrow.get('latest_complete') or dict()
+         if isinstance(complete,dict) and complete.get('t') is not None and complete.get('v') is not None:
+             try:
+@@ -79,9 +87,9 @@
+                 complete_t=None
+                 complete_v=None
+             if complete_t is not None and complete_v is not None:
+-                key=city+'|'+str(complete_t)
++                key=city+'|'+config+'|'+str(complete_t)
+                 if key not in first_complete:
+-                    first_complete[key]=dict(target_v=complete_v,first_complete_at=retrieved.isoformat(),first_complete_epoch=retrieved.timestamp())
++                    first_complete[key]=dict(target_v=complete_v,first_complete_at=city_received.isoformat(),first_complete_epoch=city_received.timestamp())
+ 
+ eligible=list()
+ open_pairs=list()
+@@ -115,6 +123,8 @@
+     target=first_complete.get(key)
+     if not isinstance(target,dict):
+         open_pairs.append(row)
++        continue
++    if float(target['first_complete_epoch']) <= float(row['first_incomplete_epoch']):
+         continue
+     primary=float(row.get('station_mean'))
+     baseline=float(previous_v)
+--- a/control/hourly/agent_orchestrator.py
++++ b/control/hourly/agent_orchestrator.py
+@@ -7,6 +7,7 @@
+ import json
+ import sys
+ import time
++import math
+ 
+ try:
+     from control.hourly.candidate_worker_routing import hydrate_candidate_routes
+@@ -222,9 +223,16 @@
+             "settlement",
+             "capacity",
+         ):
+-            if key not in economics:
++            value = economics.get(key)
++            if value is None or value == "" or isinstance(value, bool):
+                 failed.append("economics_" + key)
+-        if economics.get("net_edge") is None:
++            elif key in {"fees", "spread", "slippage"}:
++                if not isinstance(value, (int, float)) or not math.isfinite(value) or value < 0:
++                    failed.append("economics_" + key)
++            elif not isinstance(value, (str, dict, int, float)) or not value:
++                failed.append("economics_" + key)
++        net = economics.get("net_edge")
++        if isinstance(net, bool) or not isinstance(net, (int, float)) or not math.isfinite(net) or net <= 0:
+             failed.append("economics_net_edge")
+ 
+     return not failed, failed
+--- a/control/executor.py
++++ b/control/executor.py
+@@ -193,6 +193,7 @@
+         (result_dir / "RESULT.json").write_text(
+             json.dumps(blocked_result, indent=2, sort_keys=True) + "\n"
+         )
++        shutil.move(running_file, FAILED / running_file.name)
+         lifecycle_update(task.task_id, "BLOCKED_BY_POLICY", policy_result["reason"])
+         return "blocked"
+ 
+@@ -210,7 +211,12 @@
+         status = "completed" if exit_code == 0 else "failed"
+     except subprocess.TimeoutExpired as exc:
+         stdout = exc.stdout or ""
+-        stderr = (exc.stderr or "") + "\nTASK TIMEOUT"
++        stderr = exc.stderr or ""
++        if isinstance(stdout, bytes):
++            stdout = stdout.decode("utf-8", errors="replace")
++        if isinstance(stderr, bytes):
++            stderr = stderr.decode("utf-8", errors="replace")
++        stderr += "\nTASK TIMEOUT"
+         exit_code = 124
+         status = "failed"
+ 
+@@ -270,6 +276,7 @@
+         error_dir = RESULTS / task_file.stem
+         error_dir.mkdir(parents=True, exist_ok=True)
+         (error_dir / "INFRA_ERROR.txt").write_text(f"{type(exc).__name__}: {exc}\n")
++        lifecycle_update(task_file.stem, "FAILED", "executor infrastructure failure: " + type(exc).__name__)
+ 
+         git("add", "control/tasks", "control/results")
+         staged = git("diff", "--cached", "--quiet", check=False)
+--- a/control/tampermonkey_multichat/command_router.py
++++ b/control/tampermonkey_multichat/command_router.py
+@@ -63,7 +63,9 @@
+         fd = os.open(path, os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o600)
+     except FileExistsError:
+         existing = read_route(task_id)
+-        old_chat = str((existing or {}).get("chat_id") or "")
++        if not isinstance(existing, dict) or existing.get("task_id") != task_id or not CHAT_RE.fullmatch(str(existing.get("chat_id") or "")):
++            raise ValueError("TASK_ROUTE_CORRUPT")
++        old_chat = str(existing.get("chat_id") or "")
+         old_consumer = str((existing or {}).get("consumer_id") or "")
+         if old_chat and old_chat != chat_id:
+             raise ValueError("TASK_ROUTE_CONFLICT")
+@@ -128,8 +130,12 @@
+ 
+     try:
+         data = json.loads(raw or b"{}")
+-    except Exception:
+-        data = {"ok": 200 <= status < 300, "raw": raw.decode("utf-8", errors="replace")}
++    except (ValueError, UnicodeDecodeError):
++        return 502, {"ok": False, "error": "invalid_upstream_json"}
++    if not isinstance(data, dict):
++        return 502, {"ok": False, "error": "invalid_upstream_envelope"}
++    if 200 <= status < 300 and data.get("ok") is not True:
++        return 502, {"ok": False, "error": "upstream_success_unconfirmed"}
+     return status, data
+ 
+ 
+@@ -178,7 +184,15 @@
+ 
+         try:
+             length = int(self.headers.get("Content-Length", "0"))
+-            payload = json.loads(self.rfile.read(min(length, 32768)) or b"{}")
++            if length <= 0 or length > 32768:
++                self.reply(413 if length > 32768 else 400, {"ok": False, "error": "bad_length"})
++                return
++            raw = self.rfile.read(length)
++            if len(raw) != length:
++                raise ValueError("truncated body")
++            payload = json.loads(raw)
++            if not isinstance(payload, dict):
++                raise ValueError("payload must be object")
+         except Exception:
+             self.reply(400, {"ok": False, "error": "bad_json"})
+             return
+--- a/control/tampermonkey_multichat/prediction-chat-wake.user.js
++++ b/control/tampermonkey_multichat/prediction-chat-wake.user.js
+@@ -230,6 +230,8 @@
+     if (chatIsBusy()) return false;
+     const composer = findComposer();
+     if (!composer) { status('composer niet gevonden', true); return false; }
++    const draft = String(('value' in composer ? composer.value : composer.innerText || composer.textContent) || '');
++    if (draft.trim()) { status('bestaand concept behouden; levering wacht', true); return false; }
+     setComposerText(composer, text);
+     let button = null;
+     for (let i = 0; i < 20; i += 1) {
+@@ -237,13 +239,32 @@
+       if (button) break;
+       await sleep(100);
+     }
+-    if (!button) { status('sendknop niet gevonden', true); return false; }
++    if (!button) {
++      // Remove only this invocation's untouched insertion, never a user edit.
++      const current = findComposer();
++      const ownText = current ? String(('value' in current ? current.value : current.innerText || current.textContent) || '') : '';
++      if (current === composer && ownText === text) setComposerText(composer, draft);
++      status('sendknop niet gevonden; levering wordt herprobeerd', true);
++      return false;
++    }
++    const current = findComposer();
++    const currentText = current ? String(('value' in current ? current.value : current.innerText || current.textContent) || '') : '';
++    if (current !== composer || currentText.trim() !== text.trim() || chatIsBusy()) {
++      status('concept gewijzigd; levering wacht', true); return false;
++    }
++    // A cleared editor is not a delivery receipt: require a new user turn.
++    const normalize = value => String(value || '').replace(/\s+/g, ' ').trim();
++    const matchingTurns = () => Array.from(document.querySelectorAll('[data-message-author-role="user"]'))
++      .filter(node => normalize(node.innerText || node.textContent) === normalize(text)).length;
++    const before = matchingTurns();
+     button.click();
+-    await sleep(650);
+-    const now = findComposer();
+-    const remaining = now ? (('value' in now ? now.value : now.innerText || now.textContent || '').trim()) : '';
+-    if (remaining.includes(text.trim())) { status('verzenden niet bevestigd', true); return false; }
+-    return true;
++    for (let i = 0; i < 20; i += 1) {
++      await sleep(250);
++      if (matchingTurns() > before) return true;
++    }
++    status('geen nieuwe userturn bevestigd; levering onbewezen', true);
++    return false;
++
+   }
+ 
+   async function ack(eventId, chatId, eventConsumerId) {
+--- /dev/null
++++ b/control/policy_check.py
+@@ -0,0 +1,82 @@
++import json
++from pathlib import Path
++
++POLICY = Path(__file__).parent / "policy.json"
++
++BLOCKED_PATTERNS = [
++    "order",
++    "trade",
++    "buy",
++    "sell",
++    "withdraw",
++    "deposit",
++    "wallet",
++    "private_key",
++    "api_payment",
++    "send",
++    "transfer",
++    "crypto",
++    "fund",
++    "payment",
++    "payout",
++    "subscribe",
++    "subscription",
++    "purchase",
++    "checkout",
++    "invoice",
++    "billing",
++    "credit_card",
++    "card",
++    "license",
++    "upgrade",
++    "premium"
++]
++
++def check_action(action):
++    action = action.lower().replace("-", "_")
++
++    try:
++        policy = json.loads(POLICY.read_text())
++        if not isinstance(policy, dict) or policy.get("mode") != "research_only":
++            raise ValueError("research-only policy required")
++        permissions = policy.get("permissions")
++        if not isinstance(permissions, dict) or any(permissions.get(key) is not False for key in ("place_orders", "wallet_access", "crypto_transfer", "live_trading", "paid_api_calls", "external_write")):
++            raise ValueError("unsafe policy permissions")
++        configured = policy.get("blocked_actions")
++        if not isinstance(configured, list) or not all(isinstance(x, str) and x for x in configured):
++            raise ValueError("invalid blocked_actions")
++    except (OSError, ValueError, TypeError):
++        return {"status": "BLOCKED_BY_POLICY", "reason": "policy unavailable, malformed or unsafe"}
++
++    blocked = configured + BLOCKED_PATTERNS
++
++    for item in blocked:
++        item = item.lower().replace("-", "_")
++        if item in action or item.replace("_","") in action.replace("_",""):
++            return {
++                "status": "BLOCKED_BY_POLICY",
++                "reason": f"{action} matches blocked action {item}"
++            }
++
++    return {
++        "status": "ALLOWED",
++        "reason": "research action permitted"
++    }
++
++
++if __name__ == "__main__":
++    tests = [
++        "place_order",
++        "kalshi_buy",
++        "withdraw_wallet",
++        "send_crypto",
++        "transfer_funds",
++        "api_payment",
++        "subscribe_service",
++        "purchase_api_credits",
++        "credit_card_payment",
++        "write_report"
++    ]
++
++    for t in tests:
++        print(f"{t:25} -> {check_action(t)}")
+--- /dev/null
++++ b/control/policy.json
+@@ -0,0 +1,47 @@
++{
++  "mode": "research_only",
++
++  "permissions": {
++    "read_research_data": true,
++    "write_reports": true,
++    "write_logs": true,
++    "write_queue": true,
++
++    "place_orders": false,
++    "wallet_access": false,
++    "crypto_transfer": false,
++    "live_trading": false,
++    "paid_api_calls": false,
++    "external_write": false
++  },
++
++  "allowed_write_paths": [
++    "reports",
++    "logs",
++    "queue"
++  ],
++
++  "blocked_actions": [
++    "order",
++    "trade",
++    "buy",
++    "sell",
++    "withdraw",
++    "deposit",
++    "wallet",
++    "private_key",
++    "api_payment",
++    "send",
++    "transfer",
++    "crypto",
++    "fund",
++    "payment",
++    "payout"
++  ],
++
++  "require_human_approval_for": [
++    "money",
++    "credentials",
++    "external_changes"
++  ]
++}
+--- /dev/null
++++ b/tests/audit/test_reliability_regressions.py
+@@ -0,0 +1,257 @@
++"""Gedragstests voor de audit; alle data synthetisch, geen live services."""
++import contextlib
++import datetime as dt
++from decimal import Decimal
++import hashlib
++import importlib.util
++import io
++import json
++from pathlib import Path
++import runpy
++import subprocess
++import sys
++from types import SimpleNamespace
++
++import pytest
++
++ROOT = Path(__file__).resolve().parents[2]
++sys.path.insert(0, str(ROOT))
++sys.path.insert(0, str(ROOT / 'control'))
++sys.path.insert(0, str(ROOT / 'control/weather'))
++
++
++def load(name, path):
++    spec = importlib.util.spec_from_file_location('audit_' + name, ROOT / path)
++    module = importlib.util.module_from_spec(spec)
++    sys.modules[spec.name] = module
++    spec.loader.exec_module(module)
++    return module
++
++
++@pytest.fixture
++def router(tmp_path):
++    m = load('router', 'control/tampermonkey_multichat/command_router.py')
++    m.ROUTES = tmp_path
++    return m
++
++
++@pytest.mark.parametrize('raw', ['{', '[]', 'null', '{}', '{"task_id":"wrong","chat_id":"chat-old"}'])
++def test_corrupt_existing_route_fails_closed(router, raw):
++    p = router.ROUTES / 'TASK-A.json'
++    p.write_text(raw)
++    with pytest.raises(ValueError):
++        router.write_route('TASK-A', 'chat-new', 'consumer-new')
++    assert p.read_text() == raw
++
++
++def test_route_retry_idempotent_and_cross_consumer_rejected(router):
++    first = router.write_route('TASK-A', 'chat-same', 'consumer-a')
++    p = router.ROUTES / 'TASK-A.json'
++    original = p.read_bytes()
++    assert router.write_route('TASK-A', 'chat-same', 'consumer-a') == first
++    assert p.read_bytes() == original
++    with pytest.raises(ValueError):
++        router.write_route('TASK-A', 'chat-same', 'consumer-b')
++    with pytest.raises(ValueError):
++        router.write_route('TASK-A', 'chat-other', 'consumer-a')
++
++
++@pytest.mark.parametrize('body,declared,status', [(b'[]',2,400),(b'null',4,400),(b'"hi"',4,400),(b'{',1,400),(b'{}',9,400),(b'{}',-1,400),(b'{}',32769,413)])
++def test_bad_envelope_is_visible_and_never_forwarded(router, monkeypatch, body, declared, status):
++    h = object.__new__(router.Handler)
++    h.path = '/command'
++    h.authorized = lambda: True
++    h.headers = {'Content-Length': str(declared)}
++    h.rfile = io.BytesIO(body)
++    replies = []
++    h.reply = lambda code, payload: replies.append((code, payload))
++    monkeypatch.setattr(router, 'forward_command', lambda *a: pytest.fail('forward must not occur'))
++    h.do_POST()
++    assert replies[0][0] == status
++    assert not list(router.ROUTES.iterdir())
++
++
++def test_malformed_upstream_success_is_not_success(router, monkeypatch):
++    class Response:
++        status = 200
++        def __enter__(self): return self
++        def __exit__(self, *a): return False
++        def read(self, *a): return b'{"ok":'
++    monkeypatch.setattr(router, 'urlopen', lambda *a, **k: Response())
++    status, result = router.forward_command({'action':'BRIDGE_PING','task_id':'TASK-A'}, 'synthetic-only')
++    assert status == 502
++    assert result['ok'] is False
++
++
++def proof_result(m):
++    return {'candidate_id':'SYNTHETIC', 'status':'PASS', 'gates':{x:'PASS' for x in m.PROOF_GATES}, 'economics':{'fees':0.01,'spread':0.01,'slippage':0.01,'fills':'validated','settlement':'validated','capacity':'bounded','net_edge':0.02}}
++
++
++@pytest.mark.parametrize('key,value', [('net_edge',-1),('net_edge',0),('net_edge',True),('net_edge','0.1'),('net_edge',float('nan')),('net_edge',float('inf')),('fees',None),('fees',True),('fees',-1),('fees',float('inf')),('slippage','unknown'),('fills',None),('settlement',{})])
++def test_proof_rejects_invalid_economics(key, value):
++    m=load('orchestrator','control/hourly/agent_orchestrator.py')
++    result=proof_result(m);result['economics'][key]=value
++    accepted,reasons=m.proof_gate(result,{'SYNTHETIC'})
++    assert not accepted and reasons
++
++
++def test_proof_valid_candidate_still_accepted_but_requires_upstream():
++    m=load('orchestrator','control/hourly/agent_orchestrator.py');row=proof_result(m)
++    assert m.proof_gate(row,{'SYNTHETIC'}) == (True, [])
++    assert m.proof_gate(row,set())[0] is False
++
++
++def test_actual_timeout_preserves_logs_and_terminal_state(tmp_path, monkeypatch):
++    m=load('executor','control/executor.py')
++    for name in ['PENDING','RUNNING','COMPLETED','FAILED','RESULTS']:
++        d=tmp_path/name;d.mkdir();monkeypatch.setattr(m,name,d)
++    monkeypatch.setattr(m,'ROOT',tmp_path)
++    task=SimpleNamespace(task_id='SYNTHETIC', hypothesis_id='SYNTHETIC', task_class='infrastructure', working_directory='.', timeout_seconds=.1, command=[sys.executable,'-c','import os,time; os.write(1,b"partial-out\\xff"); os.write(2,b"partial-err\\xff"); time.sleep(2)'])
++    monkeypatch.setattr(m,'Task',SimpleNamespace(model_validate=lambda _:task))
++    monkeypatch.setattr(m,'task_provenance_in_head',lambda *a:{'ok':True})
++    monkeypatch.setattr(m,'support_script_in_head',lambda *a:{'ok':True})
++    monkeypatch.setattr(m,'current_commit',lambda:'0'*40)
++    monkeypatch.setattr(m,'lifecycle_load',lambda *a:{'state':'ACCEPTED'})
++    states=[];monkeypatch.setattr(m,'lifecycle_update',lambda *a:states.append(a))
++    monkeypatch.setattr(m,'WORK_CADENCE',SimpleNamespace(check=lambda **k:{'allowed':True}))
++    monkeypatch.setattr(m,'check_action',lambda *a:{'status':'ALLOWED','reason':'fixture'})
++    monkeypatch.setattr(m,'git',lambda *a,**k:SimpleNamespace(returncode=0))
++    p=m.PENDING/'SYNTHETIC.json';p.write_text('{}')
++    assert m.process_task(p)=='failed'
++    result=json.loads((m.RESULTS/'SYNTHETIC/RESULT.json').read_text())
++    assert result['exit_code']==124 and result['status']=='failed'
++    assert states[-1][1]=='FAILED'
++    assert not (m.RUNNING/p.name).exists() and (m.FAILED/p.name).exists()
++    for stream in ['stdout','stderr']:
++        log=m.RESULTS/'SYNTHETIC'/(stream+'.log')
++        assert result[stream+'_sha256']==hashlib.sha256(log.read_bytes()).hexdigest()
++        assert 'partial-' in log.read_text()
++    assert 'TASK TIMEOUT' in (m.RESULTS/'SYNTHETIC/stderr.log').read_text()
++
++
++def manifest(stamp='2026-09-25T00:00:00+00:00', config='v1'):
++    return {'timestamp_semantics':'response_body_received','retrieved_at':stamp,'cities':[{'city':'nyc','config_version':config,'retrieved_at':stamp,'latest_complete':{'t':100,'v':79,'contributors':1},'latest_incomplete':{'t':101,'stations':[{'temp_f':80}]}}]}
++
++
++def test_receipt_provenance_and_city_clock():
++    m=load('reaction','control/weather/market_reaction.py');row=manifest()
++    row['cities'][0]['retrieved_at']='2026-09-25T00:00:05+00:00'
++    event=m.extract_kwi_events([row],'nyc')[0]
++    assert event['available_at_ms']==m.parse_ts_ms('2026-09-25T00:00:05+00:00')
++    del row['timestamp_semantics']
++    assert m.extract_kwi_events([row],'nyc')==[]
++
++
++@pytest.mark.parametrize('mode', ['later','earlier','same_time','different_config','unknown_clock'])
++def test_target_must_be_later_same_config(tmp_path, monkeypatch, mode):
++    home=tmp_path/'home';root=tmp_path/'root';root.mkdir()
++    folder=home/'.local/state/prediction-research/kalshi_weather_index_manifests';folder.mkdir(parents=True)
++    prot=root/'knowledge/candidates/protocols';prot.mkdir(parents=True)
++    (prot/'KWI-FULL-STATION-PRECANONICAL-24H-V1.json').write_text(json.dumps({'prospective_cutoff':'2026-09-25T00:00:00+00:00','window_end':'2026-09-26T00:00:00+00:00','minimum_eligible_pairs_per_city':30,'minimum_eligible_cities':2}))
++    signal=manifest('2026-09-25T00:00:10+00:00')
++    second={'later':20,'earlier':5,'same_time':10,'different_config':20,'unknown_clock':20}[mode]
++    target=manifest(f'2026-09-25T00:00:{second:02d}+00:00','v2' if mode=='different_config' else 'v1')
++    target['cities'][0]['latest_complete']={'t':101,'v':80,'contributors':1}
++    target['cities'][0].pop('latest_incomplete')
++    if mode=='unknown_clock':
++        signal.pop('timestamp_semantics');target.pop('timestamp_semantics')
++    for i,row in enumerate([signal,target]):(folder/f'{i}.json').write_text(json.dumps(row))
++    monkeypatch.chdir(root);monkeypatch.setattr(Path,'home',lambda:home)
++    with contextlib.redirect_stdout(io.StringIO()):values=runpy.run_path(str(ROOT/'control/jobs/evaluate_kwi_full_station_checkpoint_e369.py'))
++    assert len(values['eligible']) == (1 if mode=='later' else 0)
++
++
++def test_continuous_quiet_book_and_missing_coverage():
++    m=load('reaction','control/weather/market_reaction.py');D=Decimal
++    state=m.MarketState(ticker='SYNTHETIC',ts_ms=1000,yes_bid=D('.4'),yes_ask=D('.6'),no_bid=D('.4'),no_ask=D('.6'),yes_bid_qty=D(1),no_bid_qty=D(1),transport='ws')
++    event={'available_at_ms':10000}
++    assert m.analyze_reaction(event,[state],coverage_ms=list(range(9000,41000,1000)))['status']==m.NO_REACTION_OBSERVED_WITHIN_WINDOW
++    assert m.analyze_reaction(event,[state],coverage_ms=[9500,100000])['status']==m.UNPROVEN_REACTION
++
++
++@pytest.mark.parametrize('scenario', ['draft','no_button','concurrent_edit','normal'])
++def test_composer_ownership_and_retry(scenario):
++    js=r'''
++const fs=require('fs');
++const src=fs.readFileSync('control/tampermonkey_multichat/prediction-chat-wake.user.js','utf8');
++const fn=src.slice(src.indexOf('  async function submitMessage('),src.indexOf('  async function ack('));
++const scenario=process.argv[1];
++let composer={value:scenario==='draft'?'USER DRAFT':''}, sent=[], polls=0;
++const document={querySelectorAll:()=>sent.map(text=>({textContent:text}))};
++const chatIsBusy=()=>false,findComposer=()=>composer,status=()=>{};
++const setComposerText=(el,text)=>el.value=text;
++const sleep=async()=>{if(scenario==='concurrent_edit')composer.value='NEW USER TEXT';};
++const findSendButton=()=>{polls++;if(scenario==='no_button'||(scenario==='concurrent_edit'&&polls===1))return null;return {click:()=>{sent.push(composer.value);composer.value='';}};};
++eval(fn+';submitMessage("BRIDGE").then(ok=>console.log(JSON.stringify({ok,sent,remaining:composer.value})))');
++'''
++    row=json.loads(subprocess.check_output(['node','-e',js,scenario],cwd=ROOT,text=True))
++    if scenario=='normal':assert row=={'ok':True,'sent':['BRIDGE'],'remaining':''}
++    elif scenario=='draft':assert row=={'ok':False,'sent':[],'remaining':'USER DRAFT'}
++    elif scenario=='concurrent_edit':assert row=={'ok':False,'sent':[],'remaining':'NEW USER TEXT'}
++    else:assert row=={'ok':False,'sent':[],'remaining':''}
++
++
++@pytest.mark.parametrize('action', ['place-order','withdraw_wallet','send_crypto','purchase_api_credits','paid_api_payment'])
++def test_restored_policy_still_blocks_financial_actions(action):
++    m=load('policy','control/policy_check.py')
++    assert m.check_action(action)['status']=='BLOCKED_BY_POLICY'
++
++
++@pytest.mark.parametrize('raw', [None,'{','[]','{}','{"mode":"live"}'])
++def test_policy_configuration_missing_or_invalid_fails_closed(tmp_path, raw):
++    m=load('policy','control/policy_check.py');m.POLICY=tmp_path/'policy.json'
++    if raw is not None:m.POLICY.write_text(raw)
++    assert m.check_action('write_report')['status']=='BLOCKED_BY_POLICY'
++
++
++def test_policy_safe_local_research_remains_allowed():
++    m=load('policy','control/policy_check.py')
++    assert m.check_action('write_report')['status']=='ALLOWED'
++
++
++def test_policy_denial_terminalizes_queue(tmp_path, monkeypatch):
++    m=load('executor','control/executor.py')
++    for name in ['PENDING','RUNNING','COMPLETED','FAILED','RESULTS']:
++        d=tmp_path/name;d.mkdir();monkeypatch.setattr(m,name,d)
++    monkeypatch.setattr(m,'ROOT',tmp_path)
++    task=SimpleNamespace(task_id='SYNTHETIC',hypothesis_id='SYNTHETIC',task_class='infrastructure',working_directory='.',timeout_seconds=1,command=['synthetic'])
++    monkeypatch.setattr(m,'Task',SimpleNamespace(model_validate=lambda _:task))
++    monkeypatch.setattr(m,'task_provenance_in_head',lambda *a:{'ok':True})
++    monkeypatch.setattr(m,'support_script_in_head',lambda *a:{'ok':True})
++    monkeypatch.setattr(m,'current_commit',lambda:'0'*40)
++    monkeypatch.setattr(m,'lifecycle_load',lambda *a:{'state':'ACCEPTED'})
++    states=[];monkeypatch.setattr(m,'lifecycle_update',lambda *a:states.append(a))
++    monkeypatch.setattr(m,'WORK_CADENCE',SimpleNamespace(check=lambda **k:{'allowed':True}))
++    monkeypatch.setattr(m,'check_action',lambda *a:{'status':'BLOCKED_BY_POLICY','reason':'fixture denial'})
++    monkeypatch.setattr(m,'git',lambda *a,**k:SimpleNamespace(returncode=0))
++    p=m.PENDING/'SYNTHETIC.json';p.write_text('{}')
++    assert m.process_task(p)=='blocked'
++    assert not (m.RUNNING/p.name).exists()
++    assert (m.FAILED/p.name).exists()
++    assert states[-1][1]=='BLOCKED_BY_POLICY'
++    assert json.loads((m.RESULTS/'SYNTHETIC/RESULT.json').read_text())['status']=='BLOCKED_BY_POLICY'
++
++
++def test_composer_clear_alone_is_not_delivery_evidence():
++    js=r'''
++const fs=require('fs');
++const src=fs.readFileSync('control/tampermonkey_multichat/prediction-chat-wake.user.js','utf8');
++const fn=src.slice(src.indexOf('  async function submitMessage('),src.indexOf('  async function ack('));
++let composer={value:''};
++const document={querySelectorAll:()=>[]};
++const chatIsBusy=()=>false,findComposer=()=>composer,status=()=>{};
++const setComposerText=(el,text)=>el.value=text,sleep=async()=>{};
++const findSendButton=()=>({click:()=>{composer.value='';}});
++eval(fn+';submitMessage("SYNTHETIC DELIVERY").then(ok=>console.log(JSON.stringify({ok})))');
++'''
++    result=json.loads(subprocess.check_output(['node','-e',js],cwd=ROOT,text=True))
++    assert result['ok'] is False
++
++
++@pytest.mark.parametrize('mode',['foreign_ticker','nonfinite_price'])
++def test_invalid_post_event_state_cannot_prove_reaction(mode):
++    m=load('reaction','control/weather/market_reaction.py');D=Decimal
++    pre=m.MarketState('X',9000,D('.4'),D('.6'),D('.4'),D('.6'),D(10),D(10),'rest')
++    post=m.MarketState('Y' if mode=='foreign_ticker' else 'X',11000,D('.5') if mode=='foreign_ticker' else D('Infinity'),D('.6'),D('.4'),D('.5'),D(10),D(10),'rest')
++    result=m.analyze_reaction({'available_at_ms':10000},[pre,post],window_ms=1000)
++    assert result['status']==m.UNPROVEN_REACTION
+--- a/tests/edge_hunter/test_warrant_issuer.py
++++ b/tests/edge_hunter/test_warrant_issuer.py
+@@ -31,6 +31,10 @@
+     )
+     (path / "control/BUILD_STATE.json").write_text(
+         json.dumps(build_state)
++    )
++
++    (path / "control/AUTONOMOUS_BUILD_POLICY.json").write_text(
++        (ROOT / "control/AUTONOMOUS_BUILD_POLICY.json").read_text()
+     )
+ 
+     candidate = {
+--- a/tests/hourly/test_research_os_six_domain_e007.py
++++ b/tests/hourly/test_research_os_six_domain_e007.py
+@@ -48,7 +48,7 @@
+         "research_director",
+     ]
+     assert transient == ["independent_reproducer"]
+-    assert registry["version"] == 3
++    assert registry["version"] == 4
+     assert registry["live_trading"] is False
+     assert registry["paid_actions"] is False
+     assert registry["wallet_actions"] is False
+--- a/control/weather/test_market_reaction.py
++++ b/control/weather/test_market_reaction.py
+@@ -65,7 +65,7 @@
+         pre = st(1_000)
+         pre = MarketState(**{**pre.__dict__, "transport": "ws"})
+         r = analyze_reaction(
+-            self.kwi, [pre], coverage_ms=[9_500, 40_000],
++            self.kwi, [pre], coverage_ms=list(range(9_000, 40_001, 1_000)),
+             window_ms=30_000, max_state_gap_ms=5_000,
+         )
+         self.assertEqual(r["status"], NO_REACTION_OBSERVED_WITHIN_WINDOW)
+@@ -91,9 +91,9 @@
+     def test_first_eligible_and_same_t_revision(self):
+         base_complete = {"t": 100, "v": 79, "contributors": 2}
+         manifests = [
+-            {"retrieved_at": "2026-09-21T10:00:00Z", "cities":[{"city":"miami","config_version":"c1","latest_complete":base_complete,"latest_incomplete":{"t":101,"stations":[{"temp_f":80},{"temp_f":82}]}}]},
+-            {"retrieved_at": "2026-09-21T10:00:01Z", "cities":[{"city":"miami","config_version":"c1","latest_complete":base_complete,"latest_incomplete":{"t":101,"stations":[{"temp_f":80},{"temp_f":82}]}}]},
+-            {"retrieved_at": "2026-09-21T10:00:02Z", "cities":[{"city":"miami","config_version":"c1","latest_complete":base_complete,"latest_incomplete":{"t":101,"stations":[{"temp_f":81},{"temp_f":82}]}}]},
++            {"timestamp_semantics": "response_body_received", "retrieved_at": "2026-09-21T10:00:00Z", "cities":[{"city":"miami","config_version":"c1","latest_complete":base_complete,"latest_incomplete":{"t":101,"stations":[{"temp_f":80},{"temp_f":82}]}}]},
++            {"timestamp_semantics": "response_body_received", "retrieved_at": "2026-09-21T10:00:01Z", "cities":[{"city":"miami","config_version":"c1","latest_complete":base_complete,"latest_incomplete":{"t":101,"stations":[{"temp_f":80},{"temp_f":82}]}}]},
++            {"timestamp_semantics": "response_body_received", "retrieved_at": "2026-09-21T10:00:02Z", "cities":[{"city":"miami","config_version":"c1","latest_complete":base_complete,"latest_incomplete":{"t":101,"stations":[{"temp_f":81},{"temp_f":82}]}}]},
+         ]
+         ev = extract_kwi_events(manifests, "miami")
+         self.assertEqual([x["kind"] for x in ev], ["first_decision_eligible", "revision"])
+@@ -103,17 +103,22 @@
+ 
+     def test_incomplete_signal_requires_full_expected_station_set(self):
+         manifests = [
+-            {"retrieved_at": "2026-09-21T10:00:00Z", "cities":[{"city":"miami","latest_complete":{"t":100,"v":79,"contributors":3},"latest_incomplete":{"t":101,"stations":[{"temp_f":80},{"temp_f":82}]}}]},
++            {"timestamp_semantics": "response_body_received", "retrieved_at": "2026-09-21T10:00:00Z", "cities":[{"city":"miami","latest_complete":{"t":100,"v":79,"contributors":3},"latest_incomplete":{"t":101,"stations":[{"temp_f":80},{"temp_f":82}]}}]},
+         ]
+         self.assertEqual(extract_kwi_events(manifests, "miami"), [])
+ 
+     def test_ws_sequence_gap_fails_closed(self):
+         ob = OrderBook("KXTEMP-X")
+         snap = {"type":"orderbook_snapshot","seq":2,"msg":{"market_ticker":"KXTEMP-X","yes_dollars_fp":[["0.40","10"]],"no_dollars_fp":[["0.58","8"]]}}
++        from kalshi_market_reaction_ws import validate_subscription_sequence
++        sequence = {}
++        snap["sid"] = 1
++        validate_subscription_sequence(sequence, snap)
+         ob.snapshot(snap, 9)
+         bad = {"type":"orderbook_delta","seq":4,"msg":{"market_ticker":"KXTEMP-X","side":"yes","price_dollars":"0.40","delta_fp":"-1"}}
+         with self.assertRaisesRegex(ValueError, "sequence gap"):
+-            ob.delta(bad, 10)
++            bad["sid"] = 1
++            validate_subscription_sequence(sequence, bad)
+ 
+     def test_deterministic_replay(self):
+         states = [st(9_000), st(11_000), st(15_000, "0.44", "0.46"), st(40_000, "0.44", "0.46")]
+--- a/control/weather/test_market_reaction_ws.py
++++ b/control/weather/test_market_reaction_ws.py
+@@ -13,6 +13,7 @@
+ 
+ class MarketReactionWsTests(unittest.TestCase):
+     def setUp(self):
++        self.sequence = {}
+         self.ticker = "KXTEMP-X"
+         self.books = {self.ticker: OrderBook(self.ticker)}
+         self.ts = "2026-09-21T12:00:00+00:00"
+@@ -20,6 +21,7 @@
+     def snapshot(self, seq=1):
+         return {
+             "type": "orderbook_snapshot",
++            "sid": 1,
+             "seq": seq,
+             "msg": {
+                 "market_ticker": self.ticker,
+@@ -30,13 +32,13 @@
+ 
+     def test_every_decoded_frame_emits_transport_coverage(self):
+         fp = io.StringIO()
+-        handle_message(self.books, {"type": "subscribed", "sid": 1, "msg": {}}, self.ts, fp)
++        handle_message(self.books, {"type": "subscribed", "sid": 1, "msg": {}}, self.ts, fp, self.sequence)
+         kinds = [r["kind"] for r in rows(fp)]
+         self.assertEqual(kinds, ["coverage", "ws_raw"])
+ 
+     def test_snapshot_emits_coverage_raw_and_state(self):
+         fp = io.StringIO()
+-        handle_message(self.books, self.snapshot(), self.ts, fp)
++        handle_message(self.books, self.snapshot(), self.ts, fp, self.sequence)
+         out = rows(fp)
+         self.assertEqual([r["kind"] for r in out], ["coverage", "ws_raw", "market_state"])
+         self.assertTrue(self.books[self.ticker].ready)
+@@ -44,20 +46,21 @@
+ 
+     def test_malformed_replacement_snapshot_resets_book(self):
+         fp = io.StringIO()
+-        handle_message(self.books, self.snapshot(), self.ts, fp)
++        handle_message(self.books, self.snapshot(), self.ts, fp, self.sequence)
+         bad = self.snapshot(seq=2)
+         bad["msg"]["no_dollars_fp"] = [["not-a-price", "8"]]
+-        handle_message(self.books, bad, "2026-09-21T12:00:01+00:00", fp)
++        handle_message(self.books, bad, "2026-09-21T12:00:01+00:00", fp, self.sequence)
+         out = rows(fp)
+         self.assertEqual(out[-1]["kind"], "capture_gap")
+         self.assertIn("snapshot_reconstruction", out[-1]["reason"])
+         self.assertFalse(self.books[self.ticker].ready)
+ 
+-    def test_sequence_gap_resets_book(self):
++    def test_sequence_gap_aborts_capture(self):
+         fp = io.StringIO()
+-        handle_message(self.books, self.snapshot(seq=10), self.ts, fp)
++        handle_message(self.books, self.snapshot(seq=10), self.ts, fp, self.sequence)
+         bad_delta = {
+             "type": "orderbook_delta",
++            "sid": 1,
+             "seq": 12,
+             "msg": {
+                 "market_ticker": self.ticker,
+@@ -66,11 +69,12 @@
+                 "delta_fp": "-1",
+             },
+         }
+-        handle_message(self.books, bad_delta, "2026-09-21T12:00:01+00:00", fp)
++        with self.assertRaisesRegex(ValueError, "sequence gap"):
++            handle_message(self.books, bad_delta, "2026-09-21T12:00:01+00:00", fp, self.sequence)
+         out = rows(fp)
+         self.assertEqual(out[-1]["kind"], "capture_gap")
+         self.assertIn("sequence gap", out[-1]["reason"])
+-        self.assertFalse(self.books[self.ticker].ready)
++        self.assertEqual(sum(r["kind"] == "market_state" for r in out), 1)
+ 
+     def test_trade_frame_emits_coverage_and_trade(self):
+         fp = io.StringIO()
+@@ -79,7 +83,7 @@
+             "seq": 2,
+             "msg": {"market_ticker": self.ticker, "trade_id": "t1"},
+         }
+-        handle_message(self.books, msg, self.ts, fp)
++        handle_message(self.books, msg, self.ts, fp, self.sequence)
+         out = rows(fp)
+         self.assertEqual([r["kind"] for r in out], ["coverage", "ws_raw", "trade"])
+         self.assertEqual(out[-1]["trade_id"], "t1")
+--- a/control/tampermonkey_multichat/test_patch_v045_task_dedupe_static.py
++++ b/control/tampermonkey_multichat/test_patch_v045_task_dedupe_static.py
+@@ -38,7 +38,7 @@
+ 
+     def test_task_is_remembered_before_normal_ack(self):
+         marker = "const sent = await submitMessage(String(event.message));"
+-        block_start = self.src.index(marker)
++        block_start = self.src.index(marker, self.src.index("wake_new ="))
+         block = self.src[block_start:]
+         self.assertLess(
+             block.index("remember(KEY_SENT_TASKS, taskKey)"),
+--- a/knowledge/codex_audit/evidence/reproduce_defects.py
++++ b/knowledge/codex_audit/evidence/reproduce_defects.py
+@@ -3,6 +3,7 @@
+ Uitvoering vanuit repository-root: python3 knowledge/codex_audit/evidence/reproduce_defects.py
+ Alle gerapporteerde waarden zijn synthetische testdata, geen marktobservaties.
+ """
++import hashlib
+ import contextlib
+ import ast
+ import datetime
+@@ -103,14 +104,20 @@
+         base = Path(td)
+         pending = base / "pending.json"
+         pending.write_text("{}")
+-        task = SimpleNamespace(task_class="infrastructure", task_id="SYNTHETIC", working_directory=".", command=["synthetic"], timeout_seconds=1)
++        task = SimpleNamespace(task_class="infrastructure", task_id="SYNTHETIC", hypothesis_id="SYNTHETIC", working_directory=".", command=["synthetic"], timeout_seconds=1)
+         timeout = subprocess.TimeoutExpired(["synthetic"], 1, output=b"partial stdout", stderr=b"partial stderr")
+         import shutil
+         ns = {"json": json, "ROOT": base, "RUNNING": base / "running", "RESULTS": base / "results", "Task": SimpleNamespace(model_validate=lambda _: task), "task_provenance_in_head": lambda *a: {"ok": True}, "support_script_in_head": lambda *a: {"ok": True}, "lifecycle_load": lambda *a: {"state": "ACCEPTED"}, "lifecycle_update": lambda *a: None, "WORK_CADENCE": SimpleNamespace(check=lambda **k: {"allowed": True}), "shutil": shutil, "now_iso": lambda: "2026-09-25T00:00:00Z", "current_commit": lambda: "0" * 40, "check_action": lambda _: {"status": "ALLOWED", "reason": "synthetic"}, "subprocess": subprocess}
++        ns["COMPLETED"] = base / "completed"
++        ns["FAILED"] = base / "failed"
++        ns["COMPLETED"].mkdir()
++        ns["FAILED"].mkdir()
++        ns["sha256_file"] = lambda p: hashlib.sha256(p.read_bytes()).hexdigest()
++        ns["git"] = lambda *a, **k: SimpleNamespace(returncode=0)
+         ns["RUNNING"].mkdir()
+         ns["Path"] = Path
+         exec(compile(ast.Module(body=[fn], type_ignores=[]), "control/executor.py", "exec"), ns)
+-        with patch("subprocess.run", side_effect=timeout):
++        with patch("subprocess.run", side_effect=timeout), contextlib.redirect_stdout(io.StringIO()):
+             try:
+                 ns["process_task"](pending)
+                 err = None
+@@ -132,8 +139,8 @@
+         protocols.mkdir(parents=True)
+         (protocols / "KWI-FULL-STATION-PRECANONICAL-24H-V1.json").write_text(json.dumps({"prospective_cutoff":"2026-09-20T00:00:00+00:00", "window_end":"2026-09-21T00:00:00+00:00", "minimum_eligible_pairs_per_city":30, "minimum_eligible_cities":2}))
+         rows = [
+-            {"retrieved_at":"2026-09-20T00:00:10+00:00", "cities":[{"city":"nyc", "config_version":"v1", "latest_complete":{"t":100, "v":80, "contributors":1}}]},
+-            {"retrieved_at":"2026-09-20T00:00:20+00:00", "cities":[{"city":"nyc", "config_version":"v2", "latest_complete":{"t":99, "v":79, "contributors":1}, "latest_incomplete":{"t":100, "stations":[{"temp_f":80}]}}]},
++            {"timestamp_semantics":"response_body_received", "retrieved_at":"2026-09-20T00:00:10+00:00", "cities":[{"city":"nyc", "config_version":"v1", "latest_complete":{"t":100, "v":80, "contributors":1}}]},
++            {"timestamp_semantics":"response_body_received", "retrieved_at":"2026-09-20T00:00:20+00:00", "cities":[{"city":"nyc", "config_version":"v2", "latest_complete":{"t":99, "v":79, "contributors":1}, "latest_incomplete":{"t":100, "stations":[{"temp_f":80}]}}]},
+         ]
+         for i, row in enumerate(rows):
+             (manifests / f"{i}.json").write_text(json.dumps(row))

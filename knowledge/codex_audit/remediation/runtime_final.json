@@ -1,0 +1,97 @@
+{
+  "observed_at": "2026-09-25T07:27:10.155747+00:00",
+  "commands": [
+    {
+      "command": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "exit_code": 0,
+      "stdout": "80a5ff7cfc49b7be27413d0fea9c03b0f48e0f50\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "git",
+        "show",
+        "--format=",
+        "--name-only",
+        "80a5ff7"
+      ],
+      "exit_code": 0,
+      "stdout": "knowledge/codex_audit/ACCEPTANCE_CRITERIA.md\nknowledge/codex_audit/AUDIT_ARTIFACT_HASHES.json\nknowledge/codex_audit/AUDIT_PLAN.md\nknowledge/codex_audit/FINAL_AUDIT_REPORT.md\nknowledge/codex_audit/FINDINGS.jsonl\nknowledge/codex_audit/OPEN_FINDINGS.md\nknowledge/codex_audit/README.md\nknowledge/codex_audit/REMEDIATION_LOG.md\nknowledge/codex_audit/RESIDUAL_RISKS.md\nknowledge/codex_audit/SYSTEM_MAP.md\nknowledge/codex_audit/TEST_MATRIX.md\nknowledge/codex_audit/evidence/baseline_branches.json\nknowledge/codex_audit/evidence/baseline_git_status.json\nknowledge/codex_audit/evidence/baseline_head.json\nknowledge/codex_audit/evidence/baseline_history.json\nknowledge/codex_audit/evidence/baseline_manifest.json\nknowledge/codex_audit/evidence/baseline_python.json\nknowledge/codex_audit/evidence/baseline_runtime_timers.json\nknowledge/codex_audit/evidence/baseline_runtime_units.json\nknowledge/codex_audit/evidence/baseline_worktrees.json\nknowledge/codex_audit/evidence/broad_static_history_check.json\nknowledge/codex_audit/evidence/cleanup.json\nknowledge/codex_audit/evidence/composer_reproduction.js\nknowledge/codex_audit/evidence/final_git_commit_blocker.json\nknowledge/codex_audit/evidence/final_preservation_check.json\nknowledge/codex_audit/evidence/historical_bridge_errors.json\nknowledge/codex_audit/evidence/installed_configuration.json\nknowledge/codex_audit/evidence/preservation_check.json\nknowledge/codex_audit/evidence/provenance_tests_security.json\nknowledge/codex_audit/evidence/reproduce_defects.py\nknowledge/codex_audit/evidence/runtime_and_agent_trace.json\nknowledge/codex_audit/evidence/second_pass_historical_check.json\nknowledge/codex_audit/evidence/syntax_failure_task_mapping.json\nknowledge/codex_audit/evidence/test_audit_regressions.py\nknowledge/codex_audit/test_runs/adversarial_regressions.json\nknowledge/codex_audit/test_runs/adversarial_regressions.log\nknowledge/codex_audit/test_runs/adversarial_regressions_venv.json\nknowledge/codex_audit/test_runs/adversarial_regressions_venv.log\nknowledge/codex_audit/test_runs/adversarial_reproductions.json\nknowledge/codex_audit/test_runs/adversarial_reproductions_v2.json\nknowledge/codex_audit/test_runs/adversarial_second_pass.json\nknowledge/codex_audit/test_runs/baseline_pytest.json\nknowledge/codex_audit/test_runs/baseline_pytest.log\nknowledge/codex_audit/test_runs/baseline_pytest_git_fixture.json\nknowledge/codex_audit/test_runs/baseline_pytest_git_fixture.log\nknowledge/codex_audit/test_runs/composer_reproduction.json\nknowledge/codex_audit/test_runs/final_adversarial.log\nknowledge/codex_audit/test_runs/final_adversarial_meta.json\nknowledge/codex_audit/test_runs/final_composer.log\nknowledge/codex_audit/test_runs/final_composer_meta.json\nknowledge/codex_audit/test_runs/final_reproductions.log\nknowledge/codex_audit/test_runs/final_reproductions_meta.json\nknowledge/codex_audit/test_runs/real_timeout_type.json\nknowledge/codex_audit/test_runs/warrant_failure_classification.json\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "systemctl",
+        "--user",
+        "is-active",
+        "prediction-research-hourly.service"
+      ],
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "Failed to connect to bus: Operation not permitted\n"
+    },
+    {
+      "command": [
+        "python3",
+        "control/jobs/parallel_build_coordination_shared.py",
+        "status"
+      ],
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\n  File \"/usr/lib/python3.12/pathlib.py\", line 1313, in mkdir\n    os.mkdir(self, mode)\nFileNotFoundError: [Errno 2] No such file or directory: '/home/leonh/prediction_research_prod/.git/prediction-build-coordination/sessions'\n\nDuring handling of the above exception, another exception occurred:\n\nTraceback (most recent call last):\n  File \"/home/leonh/prediction_research_prod/control/jobs/parallel_build_coordination_shared.py\", line 76, in <module>\n    raise SystemExit(main())\n                     ^^^^^^\n  File \"/home/leonh/prediction_research_prod/control/jobs/parallel_build_coordination_shared.py\", line 36, in main\n    coord = Coordinator(Path(args.root))\n            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/leonh/prediction_research_prod/control/jobs/parallel_build_coordination_shared.py\", line 31, in __init__\n    self.sessions.mkdir(parents=True, exist_ok=True)\n  File \"/usr/lib/python3.12/pathlib.py\", line 1317, in mkdir\n    self.parent.mkdir(parents=True, exist_ok=True)\n  File \"/usr/lib/python3.12/pathlib.py\", line 1313, in mkdir\n    os.mkdir(self, mode)\nOSError: [Errno 30] Read-only file system: '/home/leonh/prediction_research_prod/.git/prediction-build-coordination'\n"
+    }
+  ],
+  "receipts": [
+    {
+      "path": "/home/leonh/.local/state/prediction-research/runtime-sync-latest.json",
+      "sha256": "ebe2985dc6d3285bd465a858140ee43641a19c52783317974525e80c67c19de3",
+      "fields": {
+        "status": "BLOCKED_TRACKED_CHANGES",
+        "timestamp": "2026-09-22T09:13:19+02:00"
+      }
+    },
+    {
+      "path": "/home/leonh/.local/state/prediction-research/runtime-health-latest.json",
+      "sha256": "66ee69db66ab797d44d50befbda4a9c77cca76ecc9885ac98914daf8ac4b3a01",
+      "fields": {
+        "timestamp_utc": "2026-09-24T14:04:16.286387+00:00",
+        "reason": "recent preflight plus correlated completed scheduled-cycle receipt observed",
+        "claims": {
+          "browser_bridge_running": false,
+          "runtime_exchange_running": false,
+          "scheduled_cycle_recently_completed": true,
+          "scheduler_preflight_recent": true,
+          "scheduler_service_running": false
+        }
+      }
+    },
+    {
+      "path": "/home/leonh/.local/state/prediction-research/scheduled-cycle-latest.json",
+      "sha256": "7a910cacfff4e8a1cdeab6904c2ce6de4afabde26503acbc8ea470f933307401",
+      "fields": {
+        "status": "COMPLETED",
+        "timestamp_utc": "2026-09-24T14:04:16.186272+00:00",
+        "run_id": "hourly-20260924T160000+0200",
+        "claims": {
+          "browser_bridge_running": false,
+          "required_checkpoints_completed": true,
+          "runtime_exchange_running": false,
+          "scheduled_wrapper_completed": true
+        }
+      }
+    },
+    {
+      "path": "/home/leonh/.local/state/prediction-research/git-checkpoint-latest.json",
+      "sha256": "24687bbc0a1514628f99b7379cd12f5c7a9c07e12bc15d1b07c9256b2bc1b823",
+      "fields": {
+        "status": "FAIL_CLOSED",
+        "timestamp_utc": "2026-09-24T15:13:35.113193+00:00",
+        "reason": "local HEAD differs from origin/main; manual reconciliation required"
+      }
+    }
+  ]
+}

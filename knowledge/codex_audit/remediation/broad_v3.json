@@ -1,0 +1,23 @@
+{
+  "command": [
+    "/home/leonh/prediction_research_prod/.venv/bin/python",
+    "-m",
+    "pytest",
+    "-q",
+    "tests",
+    "control/weather",
+    "control/tampermonkey_multichat",
+    "knowledge/codex_audit/evidence/test_audit_regressions.py",
+    "--tb=short",
+    "-o",
+    "cache_dir=/tmp/codex-remediation-pytest-cache"
+  ],
+  "cwd": "/tmp/codex-remediation-80a5ff7",
+  "started_at": "2026-09-25T07:24:09.986463+00:00",
+  "ended_at": "2026-09-25T07:24:18.970907+00:00",
+  "exit_code": 1,
+  "environment": {
+    "PYTHONDONTWRITEBYTECODE": "1",
+    "PYTHONPATH": "/tmp/codex-remediation-80a5ff7:/tmp/codex-remediation-80a5ff7/control/weather"
+  }
+}

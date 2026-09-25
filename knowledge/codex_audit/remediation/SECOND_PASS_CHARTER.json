@@ -1,0 +1,14 @@
+{
+  "objective": "Bevestigde schijnlevering en ongeldige post-event marketstate fail-closed afhandelen in voorstelkopie.",
+  "production_mutation": false,
+  "allowed_paths": [
+    "/tmp/codex-remediation-80a5ff7",
+    "knowledge/codex_audit"
+  ],
+  "acceptance_criteria": [
+    "Nieuwe userturn vereist voor leveringsbevestiging.",
+    "Foreign ticker/nonfinite poststate geeft UNPROVEN.",
+    "Positieve bestaande gedragstests blijven behouden."
+  ],
+  "max_attempts": 3
+}

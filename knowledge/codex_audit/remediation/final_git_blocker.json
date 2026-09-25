@@ -1,0 +1,15 @@
+{
+  "timestamp": "2026-09-25T07:32:05.511517+00:00",
+  "command": [
+    "git",
+    "add",
+    "--dry-run",
+    "--",
+    "knowledge/codex_audit"
+  ],
+  "exit_code": 128,
+  "stdout": "",
+  "stderr": "fatal: Unable to create '/home/leonh/prediction_research_prod/.git/index.lock': Read-only file system\n",
+  "commit_attempted": false,
+  "reason": "Geen commit uitvoeren na mislukte pathspec-staging; vooraf staged eigenaarwerk beschermen."
+}

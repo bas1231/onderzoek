@@ -1,0 +1,28 @@
+.......................F........FF..............                         [100%]
+=================================== FAILURES ===================================
+_________ MarketReactionTests.test_first_eligible_and_same_t_revision __________
+control/weather/test_market_reaction.py:99: in test_first_eligible_and_same_t_revision
+    self.assertEqual([x["kind"] for x in ev], ["first_decision_eligible", "revision"])
+E   AssertionError: Lists differ: [] != ['first_decision_eligible', 'revision']
+E   
+E   Second list contains 2 additional elements.
+E   First extra element 0:
+E   'first_decision_eligible'
+E   
+E   - []
+E   + ['first_decision_eligible', 'revision']
+________ MarketReactionTests.test_ws_quiet_book_can_use_coverage_marker ________
+control/weather/test_market_reaction.py:71: in test_ws_quiet_book_can_use_coverage_marker
+    self.assertEqual(r["status"], NO_REACTION_OBSERVED_WITHIN_WINDOW)
+E   AssertionError: 'UNPROVEN_REACTION' != 'NO_REACTION_OBSERVED_WITHIN_WINDOW'
+E   - UNPROVEN_REACTION
+E   + NO_REACTION_OBSERVED_WITHIN_WINDOW
+____________ MarketReactionTests.test_ws_sequence_gap_fails_closed _____________
+control/weather/test_market_reaction.py:115: in test_ws_sequence_gap_fails_closed
+    with self.assertRaisesRegex(ValueError, "sequence gap"):
+E   AssertionError: ValueError not raised
+=========================== short test summary info ============================
+FAILED control/weather/test_market_reaction.py::MarketReactionTests::test_first_eligible_and_same_t_revision
+FAILED control/weather/test_market_reaction.py::MarketReactionTests::test_ws_quiet_book_can_use_coverage_marker
+FAILED control/weather/test_market_reaction.py::MarketReactionTests::test_ws_sequence_gap_fails_closed
+3 failed, 45 passed in 1.01s

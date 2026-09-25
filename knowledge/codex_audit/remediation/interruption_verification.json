@@ -1,0 +1,37 @@
+{
+  "at": "2026-09-25T07:13:26.765350+00:00",
+  "sources": {
+    "control/weather/kalshi_weather_index_recorder.py": {
+      "original_sha256": "bb60c33e4056783f860a0829c2dfaaeda345a3567c68292a7036e870d8a8c741",
+      "prepared_sha256": "03296693b1e188f93b88809629d4f23204aac7d7a0e23fd299adc90a634e43d0"
+    },
+    "control/weather/twc_hourly_recorder.py": {
+      "original_sha256": "7152fad08c72c57a5e718ec04b3f41f417f8028fa84680d9e690ddcedfefb9b7",
+      "prepared_sha256": "704a16a724aef17ade8fbdb8c4cbf79484cfe886f8ec101e2753bfffda6a6734"
+    },
+    "control/weather/market_reaction.py": {
+      "original_sha256": "d2b94d2330bb2a26e290e754799f3b2d3a61cd05099e79af3355289771ff0a88",
+      "prepared_sha256": "721813f700fe172fcefb9ecc9a0f43b7133698f18d2680dca86acdcda2d54394"
+    },
+    "control/jobs/evaluate_kwi_full_station_checkpoint_e369.py": {
+      "original_sha256": "da854cb34dfacb13a22d3907fd1ec60e1292aa276a28b19c839560cb374edbbd",
+      "prepared_sha256": "e4eb12fe4fed0f503e869acf4e679e3df4799e32bc0efb29cb258ee2b3a2f898"
+    },
+    "control/hourly/agent_orchestrator.py": {
+      "original_sha256": "32f3163a576e7eeffbc4d42fcbcb60a12a84b74ea7c0ec9b02f7325dc6f36141",
+      "prepared_sha256": "2dcfffc3b236ce18fbddeb890c80f70fbdcb055a208c5f41aac38522bf7c58f7"
+    },
+    "control/executor.py": {
+      "original_sha256": "a58be3ce60162ff75376c849f46207f6eedf71fd4e371c6a98c6a64be64b1785",
+      "prepared_sha256": "117ae5e2beb68fc4e8e554c1139d7228cb8e30ccae663899a5fd763ac19f94e3"
+    },
+    "control/tampermonkey_multichat/command_router.py": {
+      "original_sha256": "629de71ceb5c95004a51edf0d4a9a503e5f001188db09d992f81ac57566468f9",
+      "prepared_sha256": "bf6f24376cd907e64499fc220471bd2670f4c126e0cb7295dc7dd43f962b4aee"
+    },
+    "control/tampermonkey_multichat/prediction-chat-wake.user.js": {
+      "original_sha256": "7e0859e14bd93041eb845f379a2cec5ed7a81a72ce0e08356e80c5af72ba890b",
+      "prepared_sha256": "fa828488417f789b7ab1458942b58b64ebe5f2aa53aa0c05bcb299325e5ba70e"
+    }
+  }
+}

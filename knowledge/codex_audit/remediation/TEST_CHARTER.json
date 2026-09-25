@@ -1,0 +1,26 @@
+{
+  "build_id": "AUDIT-REMEDIATION-REGRESSION-001",
+  "source_commit": "80a5ff7",
+  "objective": "Onafhankelijke gedragstests voor voorbereide fixes en nieuwe regressies; stale fixtures gericht actualiseren zonder veiligheidsinvarianten te verlagen.",
+  "allowed_paths": [
+    "/tmp/codex-remediation-80a5ff7/tests",
+    "/tmp/codex-remediation-80a5ff7/control/weather/test_market_reaction.py",
+    "/tmp/codex-remediation-80a5ff7/control/weather/test_market_reaction_ws.py",
+    "/tmp/codex-remediation-80a5ff7/knowledge/codex_audit/evidence/reproduce_defects.py",
+    "knowledge/codex_audit/remediation"
+  ],
+  "acceptance_criteria": [
+    "Werkelijke timeout met partiele bytes levert RESULT exit 124 en FAILED lifecycle.",
+    "Positieve bekende-PIT-fixtures blijven bruikbaar; legacy of niet-later target niet.",
+    "Geen gebruikersconcept verliezen bij sendbutton failure of concurrente edit.",
+    "Corrupte/malformed upstreamrespons mag geen transport-PASS geven.",
+    "Oorspronkelijke negatieve tests blijven hun veiligheidsbetekenis behouden."
+  ],
+  "non_goals": [
+    "productie wijzigen",
+    "test weakening",
+    "parameters tunen",
+    "deployment"
+  ],
+  "created_at": "2026-09-25T07:16:52.218936+00:00"
+}

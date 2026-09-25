@@ -1,0 +1,130 @@
+#!/usr/bin/env python3
+import unittest
+from decimal import Decimal
+
+from market_reaction import (
+    MarketState, OrderBook, analyze_reaction, extract_kwi_events,
+    REACTION_OBSERVED, NO_REACTION_OBSERVED_WITHIN_WINDOW, UNPROVEN_REACTION,
+)
+
+def st(ms, bid="0.40", ask="0.42", qty="10"):
+    return MarketState(
+        ticker="KXTEMP-X", ts_ms=ms,
+        yes_bid=Decimal(bid), yes_ask=Decimal(ask),
+        no_bid=Decimal(str(1 - float(ask))),
+        no_ask=Decimal(str(1 - float(bid))),
+        yes_bid_qty=Decimal(qty), no_bid_qty=Decimal("9"),
+        transport="test",
+    )
+
+class MarketReactionTests(unittest.TestCase):
+    def setUp(self):
+        self.kwi = {
+            "city": "miami", "kwi_t": "x", "kwi_v": "80",
+            "kind": "first_seen", "available_at_ms": 10_000,
+        }
+
+    def test_immediate_book_reaction(self):
+        states = [st(9_000), st(10_100, "0.45", "0.47"), st(40_000, "0.45", "0.47")]
+        r = analyze_reaction(self.kwi, states, window_ms=30_000, max_state_gap_ms=40_000)
+        self.assertEqual(r["status"], REACTION_OBSERVED)
+        self.assertEqual(r["latency_ms"], 100)
+
+    def test_delayed_book_reaction(self):
+        states = [st(9_000), st(11_000), st(14_000), st(16_000, "0.41", "0.43"), st(40_000, "0.41", "0.43")]
+        r = analyze_reaction(self.kwi, states, window_ms=30_000, max_state_gap_ms=30_000)
+        self.assertEqual(r["status"], REACTION_OBSERVED)
+        self.assertEqual(r["latency_ms"], 6_000)
+
+    def test_no_reaction_with_full_coverage(self):
+        states = [st(9_000), st(15_000), st(25_000), st(40_000)]
+        r = analyze_reaction(self.kwi, states, window_ms=30_000, max_state_gap_ms=15_000)
+        self.assertEqual(r["status"], NO_REACTION_OBSERVED_WITHIN_WINDOW)
+
+    def test_gap_straddling_kwi_is_unproven(self):
+        states = [st(9_000), st(11_000), st(40_000)]
+        r = analyze_reaction(
+            self.kwi, states, gaps=[{"start": 9.5, "end": 10.5}],
+            window_ms=30_000, max_state_gap_ms=40_000,
+        )
+        self.assertEqual(r["status"], UNPROVEN_REACTION)
+        self.assertIn("CAPTURE_GAP_STRADDLES_WINDOW", r["reasons"])
+
+    def test_out_of_order_is_unproven(self):
+        states = [st(9_000), st(12_000), st(11_000), st(40_000)]
+        r = analyze_reaction(self.kwi, states, window_ms=30_000, max_state_gap_ms=40_000)
+        self.assertEqual(r["status"], UNPROVEN_REACTION)
+        self.assertIn("OUT_OF_ORDER_MARKET_STATE", r["reasons"])
+
+    def test_missing_post_coverage_is_unproven(self):
+        r = analyze_reaction(self.kwi, [st(9_000), st(15_000)], window_ms=30_000, max_state_gap_ms=20_000)
+        self.assertEqual(r["status"], UNPROVEN_REACTION)
+        self.assertIn("CAPTURE_ENDS_BEFORE_WINDOW", r["reasons"])
+
+    def test_ws_quiet_book_can_use_coverage_marker(self):
+        pre = st(1_000)
+        pre = MarketState(**{**pre.__dict__, "transport": "ws"})
+        r = analyze_reaction(
+            self.kwi, [pre], coverage_ms=list(range(9_000, 40_001, 1_000)),
+            window_ms=30_000, max_state_gap_ms=5_000,
+        )
+        self.assertEqual(r["status"], NO_REACTION_OBSERVED_WITHIN_WINDOW)
+
+    def test_ws_old_snapshot_without_recent_coverage_is_unproven(self):
+        pre = st(1_000)
+        pre = MarketState(**{**pre.__dict__, "transport": "ws"})
+        r = analyze_reaction(
+            self.kwi, [pre], coverage_ms=[40_000],
+            window_ms=30_000, max_state_gap_ms=5_000,
+        )
+        self.assertEqual(r["status"], UNPROVEN_REACTION)
+        self.assertIn("PRE_EVENT_WS_COVERAGE_TOO_OLD", r["reasons"])
+
+    def test_trade_counts_as_reaction(self):
+        states = [st(9_000), st(12_000), st(40_000)]
+        trades = [{"ticker": "KXTEMP-X", "created_time": "1970-01-01T00:00:15+00:00", "trade_id": "t1"}]
+        r = analyze_reaction(self.kwi, states, trades, window_ms=30_000, max_state_gap_ms=30_000)
+        self.assertEqual(r["status"], REACTION_OBSERVED)
+        self.assertEqual(r["reaction_kind"], "trade")
+        self.assertEqual(r["latency_ms"], 5_000)
+
+    def test_first_eligible_and_same_t_revision(self):
+        base_complete = {"t": 100, "v": 79, "contributors": 2}
+        manifests = [
+            {"timestamp_semantics": "response_body_received", "retrieved_at": "2026-09-21T10:00:00Z", "cities":[{"city":"miami","config_version":"c1","latest_complete":base_complete,"latest_incomplete":{"t":101,"stations":[{"temp_f":80},{"temp_f":82}]}}]},
+            {"timestamp_semantics": "response_body_received", "retrieved_at": "2026-09-21T10:00:01Z", "cities":[{"city":"miami","config_version":"c1","latest_complete":base_complete,"latest_incomplete":{"t":101,"stations":[{"temp_f":80},{"temp_f":82}]}}]},
+            {"timestamp_semantics": "response_body_received", "retrieved_at": "2026-09-21T10:00:02Z", "cities":[{"city":"miami","config_version":"c1","latest_complete":base_complete,"latest_incomplete":{"t":101,"stations":[{"temp_f":81},{"temp_f":82}]}}]},
+        ]
+        ev = extract_kwi_events(manifests, "miami")
+        self.assertEqual([x["kind"] for x in ev], ["first_decision_eligible", "revision"])
+        self.assertEqual(ev[0]["signal_v"], "81")
+        self.assertEqual(ev[0]["station_count"], 2)
+        self.assertEqual(ev[1]["prior_station_values"], ["80", "82"])
+
+    def test_incomplete_signal_requires_full_expected_station_set(self):
+        manifests = [
+            {"timestamp_semantics": "response_body_received", "retrieved_at": "2026-09-21T10:00:00Z", "cities":[{"city":"miami","latest_complete":{"t":100,"v":79,"contributors":3},"latest_incomplete":{"t":101,"stations":[{"temp_f":80},{"temp_f":82}]}}]},
+        ]
+        self.assertEqual(extract_kwi_events(manifests, "miami"), [])
+
+    def test_ws_sequence_gap_fails_closed(self):
+        ob = OrderBook("KXTEMP-X")
+        snap = {"type":"orderbook_snapshot","seq":2,"msg":{"market_ticker":"KXTEMP-X","yes_dollars_fp":[["0.40","10"]],"no_dollars_fp":[["0.58","8"]]}}
+        from kalshi_market_reaction_ws import validate_subscription_sequence
+        sequence = {}
+        snap["sid"] = 1
+        validate_subscription_sequence(sequence, snap)
+        ob.snapshot(snap, 9)
+        bad = {"type":"orderbook_delta","seq":4,"msg":{"market_ticker":"KXTEMP-X","side":"yes","price_dollars":"0.40","delta_fp":"-1"}}
+        with self.assertRaisesRegex(ValueError, "sequence gap"):
+            bad["sid"] = 1
+            validate_subscription_sequence(sequence, bad)
+
+    def test_deterministic_replay(self):
+        states = [st(9_000), st(11_000), st(15_000, "0.44", "0.46"), st(40_000, "0.44", "0.46")]
+        a = analyze_reaction(self.kwi, states, window_ms=30_000, max_state_gap_ms=30_000)
+        b = analyze_reaction(self.kwi, states, window_ms=30_000, max_state_gap_ms=30_000)
+        self.assertEqual(a, b)
+
+if __name__ == "__main__":
+    unittest.main()

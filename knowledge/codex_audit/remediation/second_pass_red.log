@@ -1,0 +1,25 @@
+FFF                                                                      [100%]
+=================================== FAILURES ===================================
+______________ test_composer_clear_alone_is_not_delivery_evidence ______________
+tests/audit/test_reliability_regressions.py:247: in test_composer_clear_alone_is_not_delivery_evidence
+    assert result['ok'] is False
+E   assert True is False
+_____ test_invalid_post_event_state_cannot_prove_reaction[foreign_ticker] ______
+tests/audit/test_reliability_regressions.py:256: in test_invalid_post_event_state_cannot_prove_reaction
+    assert result['status']==m.UNPROVEN_REACTION
+E   AssertionError: assert 'REACTION_OBSERVED' == 'UNPROVEN_REACTION'
+E     
+E     - UNPROVEN_REACTION
+E     + REACTION_OBSERVED
+_____ test_invalid_post_event_state_cannot_prove_reaction[nonfinite_price] _____
+tests/audit/test_reliability_regressions.py:256: in test_invalid_post_event_state_cannot_prove_reaction
+    assert result['status']==m.UNPROVEN_REACTION
+E   AssertionError: assert 'REACTION_OBSERVED' == 'UNPROVEN_REACTION'
+E     
+E     - UNPROVEN_REACTION
+E     + REACTION_OBSERVED
+=========================== short test summary info ============================
+FAILED tests/audit/test_reliability_regressions.py::test_composer_clear_alone_is_not_delivery_evidence
+FAILED tests/audit/test_reliability_regressions.py::test_invalid_post_event_state_cannot_prove_reaction[foreign_ticker]
+FAILED tests/audit/test_reliability_regressions.py::test_invalid_post_event_state_cannot_prove_reaction[nonfinite_price]
+3 failed, 52 deselected in 0.30s

@@ -21,3 +21,11 @@ Negen gewenste invarianten blijven rood: final_adversarial.log (9 failed). final
 Warrantfailure afzonderlijk geclassificeerd als ontbrekende policyfixture; zie warrant_failure_classification.json. Tweede review: coveragegat/lege quote en target vooraf bekend; zie final_reproductions.log. Geen productieregressie-na-fix: er was geen toegestane fix.
 
 Brede read-only controle: 726 Python AST-parses (14 historische syntaxfouten); 6 JS syntaxchecks geslaagd; 454 RESULT-objecten en 904 loghashes zonder mismatch. Zie evidence/broad_static_history_check.json.
+
+## Hervatting na baseline 80a5ff7
+
+Baseline door eigenaar veilig gecommit en geverifieerd. Vervolgcommits/coordinator blijven read-only. Productiebronhashes ongewijzigd. Voorstellen, exacte commands en resultaten: `remediation/`. Nieuwe bevindingen AUD-CODEX-015 t/m 018; geen productiefix geclaimd. Nieuwe gedragstests: 52 passed. Breedste huidige regressie: 444 passed, 8 failed (broad_v3). De oorspronkelijke negen invarianten slagen in de voorstelkopie; oorspronkelijke rode evidence blijft bewaard.
+
+## Actuele hervattingsstatus — 25 september 2026
+
+Baseline 80a5ff7 is geverifieerd en veilig. Oudere tekst over ontbrekende baselinecommit is historisch; vervolgcommits/lease blijven geblokkeerd door read-only .git. Productie ongewijzigd. Zie FINAL_AUDIT_REPORT.md en remediation/TRIAGE.md: 20 bevindingen, 64 auditchecks geslaagd op voorstelbron; brede suite en duurzame replay beide 447 passed / 8 failed. Geen productie-FIXED/RETESTED. Frozen acceptancecriteria zijn niet versoepeld. Exact vervolg staat in CONTINUATION.

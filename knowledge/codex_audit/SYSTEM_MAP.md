@@ -40,3 +40,7 @@ Trace van vijf responses op 24 september: alle zes role_results bestaan, corresp
 Validator begrenst executables, relatieve werkdirectories, scriptpaden en buildcontracts. Executor controleert committed task/support provenance, cadence en policy, en voert zonder shell uit. Timeout met bytes-output crasht in foutafhandeling. Legacy failure-recording schrijft INFRA_ERROR maar reconcileert lifecycle niet. Resultaatstatus is geen bewijs van succesvolle remote persistence.
 
 Actuele runtime-inspectie via systemd-userbus en sockettests is sandbox-blocked. Lokale receipts/raw files blijven leesbaar. Geen credentials gelezen, geen queues hervat, geen netwerkmutaties of push uitgevoerd.
+
+## Actuele hervattingsstatus — 25 september 2026
+
+Baseline 80a5ff7 is geverifieerd en veilig. Oudere tekst over ontbrekende baselinecommit is historisch; vervolgcommits/lease blijven geblokkeerd door read-only .git. Productie ongewijzigd. Zie FINAL_AUDIT_REPORT.md en remediation/TRIAGE.md: 20 bevindingen, 64 auditchecks geslaagd op voorstelbron; brede suite en duurzame replay beide 447 passed / 8 failed. Geen productie-FIXED/RETESTED. Frozen acceptancecriteria zijn niet versoepeld. Exact vervolg staat in CONTINUATION.

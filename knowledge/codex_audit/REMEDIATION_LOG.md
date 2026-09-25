@@ -22,3 +22,11 @@ Audit-harnessfouten: aanvankelijk ontbrak het root-importpad; daarna Path in de 
 6. Productie hourly-blokkade oplossen met behoud/review bestaand userwerk; dan afzonderlijke runtime/DOM/recovery-canary en volledige regressie.
 
 Geen cleanup van permanente services; auditfixture heeft geen services gestart. Tijdelijke testdirectories worden door TemporaryDirectory opgeruimd. De geïsoleerde suitekopie wordt na afsluiting verwijderd; evidence blijft in knowledge/codex_audit.
+
+## Hervatting na baseline 80a5ff7
+
+Baseline door eigenaar veilig gecommit en geverifieerd. Vervolgcommits/coordinator blijven read-only. Productiebronhashes ongewijzigd. Voorstellen, exacte commands en resultaten: `remediation/`. Nieuwe bevindingen AUD-CODEX-015 t/m 018; geen productiefix geclaimd. Nieuwe gedragstests: 52 passed. Breedste huidige regressie: 444 passed, 8 failed (broad_v3). De oorspronkelijke negen invarianten slagen in de voorstelkopie; oorspronkelijke rode evidence blijft bewaard.
+
+## Actuele hervattingsstatus — 25 september 2026
+
+Baseline 80a5ff7 is geverifieerd en veilig. Oudere tekst over ontbrekende baselinecommit is historisch; vervolgcommits/lease blijven geblokkeerd door read-only .git. Productie ongewijzigd. Zie FINAL_AUDIT_REPORT.md en remediation/TRIAGE.md: 20 bevindingen, 64 auditchecks geslaagd op voorstelbron; brede suite en duurzame replay beide 447 passed / 8 failed. Geen productie-FIXED/RETESTED. Frozen acceptancecriteria zijn niet versoepeld. Exact vervolg staat in CONTINUATION.

@@ -1,0 +1,309 @@
+--- a/control/weather/kalshi_weather_index_recorder.py
++++ b/control/weather/kalshi_weather_index_recorder.py
+@@ -19,10 +19,12 @@
+ def fetch_city(city):
+     url = BASE + "/live_data/weather/" + city + "?" + urlencode({"last_sec": 10800, "detailed": "true"})
+     req = urllib.request.Request(url, headers={"User-Agent": "PredictionResearch-public-weather-index-recorder"})
++    request_started_at = datetime.now(timezone.utc).isoformat()
+     with urllib.request.urlopen(req, timeout=20) as r:
+         body = r.read(5_000_000)
+         status = int(getattr(r, "status", 200))
+         ctype = r.headers.get("Content-Type")
++    received_at = datetime.now(timezone.utc).isoformat()
+     sha = hashlib.sha256(body).hexdigest()
+     city_dir = RAW / city
+     city_dir.mkdir(parents=True, exist_ok=True)
+@@ -33,6 +35,8 @@
+     return {
+         "city": city,
+         "url": url,
++        "request_started_at": request_started_at,
++        "retrieved_at": received_at,
+         "status": status,
+         "content_type": ctype,
+         "sha256": sha,
+@@ -60,7 +64,7 @@
+                 return row
+     return None
+ 
+-retrieved_at = datetime.now(timezone.utc).isoformat()
++cycle_started_at = datetime.now(timezone.utc).isoformat()
+ rows = []
+ 
+ for city in CITIES:
+@@ -72,6 +76,8 @@
+     row = {
+         "city": city,
+         "status": res["status"],
++        "request_started_at": res["request_started_at"],
++        "retrieved_at": res["retrieved_at"],
+         "content_type": res["content_type"],
+         "sha256": res["sha256"],
+         "bytes": res["bytes"],
+@@ -98,7 +104,10 @@
+     }
+     rows.append(row)
+ 
++retrieved_at = datetime.now(timezone.utc).isoformat()
+ manifest = {
++    "timestamp_semantics": "response_body_received",
++    "request_started_at": cycle_started_at,
+     "retrieved_at": retrieved_at,
+     "source": "Kalshi public live_data weather endpoint",
+     "cities": rows,
+--- a/control/weather/twc_hourly_recorder.py
++++ b/control/weather/twc_hourly_recorder.py
+@@ -25,6 +25,7 @@
+     http_status = int(getattr(response, "status", 200))
+     content_type = response.headers.get("Content-Type")
+ 
++received_at = datetime.now(timezone.utc)
+ sha256 = hashlib.sha256(body).hexdigest()
+ raw_path = RAW_DIR / (sha256 + ".bin")
+ if not raw_path.exists():
+@@ -63,7 +64,9 @@
+     status_counts[status] = status_counts.get(status, 0) + 1
+ 
+ summary = {
+-    "retrieved_at": now_utc.isoformat(),
++    "timestamp_semantics": "response_body_received",
++    "request_started_at": now_utc.isoformat(),
++    "retrieved_at": received_at.isoformat(),
+     "weekStart": week_start,
+     "http_status": http_status,
+     "content_type": content_type,
+@@ -139,7 +142,7 @@
+     )
+     summary["changes_sample"] = change_rows
+ 
+-stamp = now_utc.strftime("%Y%m%dT%H%M%SZ")
++stamp = received_at.strftime("%Y%m%dT%H%M%SZ")
+ manifest_name = "twc-hourly-" + stamp + "-" + sha256[:12] + ".json"
+ summary["manifest_name"] = manifest_name
+ manifest_path = MANIFEST_DIR / manifest_name
+--- a/control/weather/market_reaction.py
++++ b/control/weather/market_reaction.py
+@@ -241,12 +241,18 @@
+     """
+     rows: list[tuple[int, dict[str, Any]]] = []
+     for manifest in manifests:
++        if manifest.get("timestamp_semantics") != "response_body_received":
++            continue  # Legacy request-start timestamps cannot prove availability.
+         try:
+             retrieved_ms = _parse_ts_ms(manifest.get("retrieved_at"))
+         except ValueError:
+             continue
+         for row in manifest.get("cities") or []:
+             if not isinstance(row, dict) or str(row.get("city", "")).lower() != city.lower():
++                continue
++            try:
++                row_received_ms = _parse_ts_ms(row.get("retrieved_at", manifest.get("retrieved_at")))
++            except ValueError:
+                 continue
+             incomplete = row.get("latest_incomplete") or {}
+             previous = row.get("latest_complete") or {}
+@@ -274,7 +280,7 @@
+             if len(temps) != expected:
+                 continue
+             mean = sum(temps, Decimal("0")) / Decimal(len(temps))
+-            rows.append((retrieved_ms, {
++            rows.append((row_received_ms, {
+                 "city": city,
+                 "config_version": row.get("config_version"),
+                 "kwi_t": target_t,
+@@ -348,6 +354,12 @@
+         reasons.append("NO_PRE_EVENT_EXECUTABLE_STATE")
+     else:
+         baseline = pre[-1]
++        prices = (baseline.yes_bid, baseline.yes_ask, baseline.no_bid, baseline.no_ask)
++        quantities = (baseline.yes_bid_qty, baseline.no_bid_qty)
++        if any(p is None or not p.is_finite() or not 0 <= p <= 1 for p in prices) or any(q is None or not q.is_finite() or q <= 0 for q in quantities):
++            reasons.append("NO_PRE_EVENT_EXECUTABLE_STATE")
++        elif baseline.yes_bid > baseline.yes_ask or baseline.no_bid > baseline.no_ask:
++            reasons.append("INVALID_PRE_EVENT_BOOK")
+         if baseline.transport == "ws":
+             # A WS snapshot remains current until a delta arrives. Require
+             # recent transport coverage rather than a recent price change.
+@@ -369,6 +381,13 @@
+         for a, b in zip(relevant, relevant[1:]):
+             if a.transport == "rest" and b.transport == "rest" and b.ts_ms - a.ts_ms > max_state_gap_ms:
+                 reasons.append("MARKET_STATE_GAP_TOO_LARGE")
++                break
++
++    if pre and pre[-1].transport == "ws":
++        points = sorted(set(coverage_points + [s.ts_ms for s in ordered]))
++        for left, right in zip(points, points[1:]):
++            if left < end and right > t0 and right - left > max_state_gap_ms:
++                reasons.append("WS_COVERAGE_GAP_TOO_LARGE")
+                 break
+ 
+     if reasons:
+--- a/control/jobs/evaluate_kwi_full_station_checkpoint_e369.py
++++ b/control/jobs/evaluate_kwi_full_station_checkpoint_e369.py
+@@ -24,6 +24,8 @@
+         retrieved=datetime.fromisoformat(str(data.get('retrieved_at')))
+     except Exception:
+         continue
++    if data.get('timestamp_semantics') != 'response_body_received':
++        continue
+     records.append((retrieved,p,data))
+ records.sort(key=lambda item:item)
+ 
+@@ -38,6 +40,12 @@
+             continue
+         city=str(cityrow.get('city') or '')
+         config=str(cityrow.get('config_version') or '')
++        if not config:
++            continue
++        try:
++            city_received=datetime.fromisoformat(str(cityrow.get('retrieved_at',data.get('retrieved_at'))))
++        except (ValueError, TypeError):
++            continue
+         incomplete=cityrow.get('latest_incomplete') or dict()
+         if isinstance(incomplete,dict) and incomplete.get('t') is not None:
+             try:
+@@ -45,7 +53,7 @@
+             except Exception:
+                 target_t=None
+             if target_t is not None:
+-                key=city+'|'+str(target_t)
++                key=city+'|'+config+'|'+str(target_t)
+                 if key not in first_seen:
+                     stations=incomplete.get('stations') or tuple()
+                     temps=list()
+@@ -69,7 +77,7 @@
+                             previous_t=None
+                             previous_v=None
+                             previous_contributors=None
+-                    first_seen[key]=dict(city=city,config_version=config,t=target_t,first_incomplete_at=retrieved.isoformat(),first_incomplete_epoch=retrieved.timestamp(),station_count=len(temps),station_mean=(sum(temps)/len(temps) if temps else None),previous_t=previous_t,previous_v=previous_v,previous_contributors=previous_contributors,manifest=p.name)
++                    first_seen[key]=dict(city=city,config_version=config,t=target_t,first_incomplete_at=city_received.isoformat(),first_incomplete_epoch=city_received.timestamp(),station_count=len(temps),station_mean=(sum(temps)/len(temps) if temps else None),previous_t=previous_t,previous_v=previous_v,previous_contributors=previous_contributors,manifest=p.name)
+         complete=cityrow.get('latest_complete') or dict()
+         if isinstance(complete,dict) and complete.get('t') is not None and complete.get('v') is not None:
+             try:
+@@ -79,9 +87,9 @@
+                 complete_t=None
+                 complete_v=None
+             if complete_t is not None and complete_v is not None:
+-                key=city+'|'+str(complete_t)
++                key=city+'|'+config+'|'+str(complete_t)
+                 if key not in first_complete:
+-                    first_complete[key]=dict(target_v=complete_v,first_complete_at=retrieved.isoformat(),first_complete_epoch=retrieved.timestamp())
++                    first_complete[key]=dict(target_v=complete_v,first_complete_at=city_received.isoformat(),first_complete_epoch=city_received.timestamp())
+ 
+ eligible=list()
+ open_pairs=list()
+@@ -115,6 +123,8 @@
+     target=first_complete.get(key)
+     if not isinstance(target,dict):
+         open_pairs.append(row)
++        continue
++    if float(target['first_complete_epoch']) <= float(row['first_incomplete_epoch']):
+         continue
+     primary=float(row.get('station_mean'))
+     baseline=float(previous_v)
+--- a/control/hourly/agent_orchestrator.py
++++ b/control/hourly/agent_orchestrator.py
+@@ -7,6 +7,7 @@
+ import json
+ import sys
+ import time
++import math
+ 
+ try:
+     from control.hourly.candidate_worker_routing import hydrate_candidate_routes
+@@ -222,9 +223,16 @@
+             "settlement",
+             "capacity",
+         ):
+-            if key not in economics:
++            value = economics.get(key)
++            if value is None or value == "" or isinstance(value, bool):
+                 failed.append("economics_" + key)
+-        if economics.get("net_edge") is None:
++            elif key in {"fees", "spread", "slippage"}:
++                if not isinstance(value, (int, float)) or not math.isfinite(value) or value < 0:
++                    failed.append("economics_" + key)
++            elif not isinstance(value, (str, dict, int, float)) or not value:
++                failed.append("economics_" + key)
++        net = economics.get("net_edge")
++        if isinstance(net, bool) or not isinstance(net, (int, float)) or not math.isfinite(net) or net <= 0:
+             failed.append("economics_net_edge")
+ 
+     return not failed, failed
+--- a/control/executor.py
++++ b/control/executor.py
+@@ -210,7 +210,12 @@
+         status = "completed" if exit_code == 0 else "failed"
+     except subprocess.TimeoutExpired as exc:
+         stdout = exc.stdout or ""
+-        stderr = (exc.stderr or "") + "\nTASK TIMEOUT"
++        stderr = exc.stderr or ""
++        if isinstance(stdout, bytes):
++            stdout = stdout.decode("utf-8", errors="replace")
++        if isinstance(stderr, bytes):
++            stderr = stderr.decode("utf-8", errors="replace")
++        stderr += "\nTASK TIMEOUT"
+         exit_code = 124
+         status = "failed"
+ 
+@@ -270,6 +275,7 @@
+         error_dir = RESULTS / task_file.stem
+         error_dir.mkdir(parents=True, exist_ok=True)
+         (error_dir / "INFRA_ERROR.txt").write_text(f"{type(exc).__name__}: {exc}\n")
++        lifecycle_update(task_file.stem, "FAILED", "executor infrastructure failure: " + type(exc).__name__)
+ 
+         git("add", "control/tasks", "control/results")
+         staged = git("diff", "--cached", "--quiet", check=False)
+--- a/control/tampermonkey_multichat/command_router.py
++++ b/control/tampermonkey_multichat/command_router.py
+@@ -63,7 +63,9 @@
+         fd = os.open(path, os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o600)
+     except FileExistsError:
+         existing = read_route(task_id)
+-        old_chat = str((existing or {}).get("chat_id") or "")
++        if not isinstance(existing, dict) or existing.get("task_id") != task_id or not CHAT_RE.fullmatch(str(existing.get("chat_id") or "")):
++            raise ValueError("TASK_ROUTE_CORRUPT")
++        old_chat = str(existing.get("chat_id") or "")
+         old_consumer = str((existing or {}).get("consumer_id") or "")
+         if old_chat and old_chat != chat_id:
+             raise ValueError("TASK_ROUTE_CONFLICT")
+@@ -178,7 +180,15 @@
+ 
+         try:
+             length = int(self.headers.get("Content-Length", "0"))
+-            payload = json.loads(self.rfile.read(min(length, 32768)) or b"{}")
++            if length <= 0 or length > 32768:
++                self.reply(413 if length > 32768 else 400, {"ok": False, "error": "bad_length"})
++                return
++            raw = self.rfile.read(length)
++            if len(raw) != length:
++                raise ValueError("truncated body")
++            payload = json.loads(raw)
++            if not isinstance(payload, dict):
++                raise ValueError("payload must be object")
+         except Exception:
+             self.reply(400, {"ok": False, "error": "bad_json"})
+             return
+--- a/control/tampermonkey_multichat/prediction-chat-wake.user.js
++++ b/control/tampermonkey_multichat/prediction-chat-wake.user.js
+@@ -230,6 +230,8 @@
+     if (chatIsBusy()) return false;
+     const composer = findComposer();
+     if (!composer) { status('composer niet gevonden', true); return false; }
++    const draft = String(('value' in composer ? composer.value : composer.innerText || composer.textContent) || '');
++    if (draft.trim()) { status('bestaand concept behouden; levering wacht', true); return false; }
+     setComposerText(composer, text);
+     let button = null;
+     for (let i = 0; i < 20; i += 1) {
+@@ -238,6 +240,11 @@
+       await sleep(100);
+     }
+     if (!button) { status('sendknop niet gevonden', true); return false; }
++    const current = findComposer();
++    const currentText = current ? String(('value' in current ? current.value : current.innerText || current.textContent) || '') : '';
++    if (current !== composer || currentText.trim() !== text.trim() || chatIsBusy()) {
++      status('concept gewijzigd; levering wacht', true); return false;
++    }
+     button.click();
+     await sleep(650);
+     const now = findComposer();

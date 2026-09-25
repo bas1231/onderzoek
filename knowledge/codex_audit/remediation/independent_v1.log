@@ -1,0 +1,34 @@
+.............F..............F........F..                                 [100%]
+=================================== FAILURES ===================================
+________________ test_malformed_upstream_success_is_not_success ________________
+tests/audit/test_reliability_regressions.py:82: in test_malformed_upstream_success_is_not_success
+    assert status == 502
+E   assert 200 == 502
+____________ test_actual_timeout_preserves_logs_and_terminal_state _____________
+tests/audit/test_reliability_regressions.py:105: in test_actual_timeout_preserves_logs_and_terminal_state
+    m=load('executor','control/executor.py')
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/audit/test_reliability_regressions.py:27: in load
+    spec.loader.exec_module(module)
+<frozen importlib._bootstrap_external>:995: in exec_module
+    ???
+<frozen importlib._bootstrap>:488: in _call_with_frames_removed
+    ???
+control/executor.py:15: in <module>
+    from policy_check import check_action
+E   ModuleNotFoundError: No module named 'policy_check'
+_________________ test_composer_ownership_and_retry[no_button] _________________
+tests/audit/test_reliability_regressions.py:190: in test_composer_ownership_and_retry
+    else:assert row=={'ok':False,'sent':[],'remaining':''}
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   AssertionError: assert {'ok': False,...ng': 'BRIDGE'} == {'ok': False,...emaining': ''}
+E     
+E     Omitting 2 identical items, use -vv to show
+E     Differing items:
+E     {'remaining': 'BRIDGE'} != {'remaining': ''}
+E     Use -v to get more diff
+=========================== short test summary info ============================
+FAILED tests/audit/test_reliability_regressions.py::test_malformed_upstream_success_is_not_success
+FAILED tests/audit/test_reliability_regressions.py::test_actual_timeout_preserves_logs_and_terminal_state
+FAILED tests/audit/test_reliability_regressions.py::test_composer_ownership_and_retry[no_button]
+3 failed, 37 passed in 1.71s

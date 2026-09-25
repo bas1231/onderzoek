@@ -1,0 +1,59 @@
+{
+  "build_id": "AUDIT-REMEDIATION-80a5ff7-FIXTURE",
+  "protocol_version": 1,
+  "objective": "Bevestigde auditdefecten herstellen en verifieren in geisoleerde testkopie; uitsluitend reviewbare patches produceren, geen productiemutatie.",
+  "source_commit": "80a5ff7cfc49b7be27413d0fea9c03b0f48e0f50",
+  "allowed_capabilities": [
+    "read_repository",
+    "local_tests",
+    "write_audit_artifacts"
+  ],
+  "allowed_paths": [
+    "/tmp/codex-remediation-80a5ff7",
+    "knowledge/codex_audit"
+  ],
+  "planned_paths": [
+    "control/weather/kalshi_weather_index_recorder.py",
+    "control/weather/twc_hourly_recorder.py",
+    "control/weather/market_reaction.py",
+    "control/jobs/evaluate_kwi_full_station_checkpoint_e369.py",
+    "control/hourly/agent_orchestrator.py",
+    "control/executor.py",
+    "control/tampermonkey_multichat/command_router.py",
+    "control/tampermonkey_multichat/prediction-chat-wake.user.js"
+  ],
+  "acceptance_criteria": [
+    "Originele negen gedragsinvarianten blijven behouden.",
+    "Alle voorstellen krijgen failing regression en focused/subsystemtest.",
+    "Onbekende historische receiptkwaliteit wordt niet als exact PIT behandeld.",
+    "Geen productiecode/userwerk gewijzigd, geen push."
+  ],
+  "non_goals": [
+    "deploy",
+    "service restart",
+    "trading",
+    "strategy optimization",
+    "herlabelen holdout"
+  ],
+  "independent_verification": "Tweede adversariele ronde met nieuwe randgevallen; geen aparte reviewer beschikbaar.",
+  "rollback_plan": "Productie blijft ongewijzigd; voorstellen kunnen worden verworpen.",
+  "cleanup_plan": "Verwijder uitsluitend eigen fixture na export patch en testlogs.",
+  "max_attempts": 3,
+  "governance_change": false,
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false
+  },
+  "production_mutation": "BLOCKED: gedeelde coordinator en .git read-only",
+  "source_hashes": {
+    "control/weather/kalshi_weather_index_recorder.py": "bb60c33e4056783f860a0829c2dfaaeda345a3567c68292a7036e870d8a8c741",
+    "control/weather/twc_hourly_recorder.py": "7152fad08c72c57a5e718ec04b3f41f417f8028fa84680d9e690ddcedfefb9b7",
+    "control/weather/market_reaction.py": "d2b94d2330bb2a26e290e754799f3b2d3a61cd05099e79af3355289771ff0a88",
+    "control/jobs/evaluate_kwi_full_station_checkpoint_e369.py": "da854cb34dfacb13a22d3907fd1ec60e1292aa276a28b19c839560cb374edbbd",
+    "control/hourly/agent_orchestrator.py": "32f3163a576e7eeffbc4d42fcbcb60a12a84b74ea7c0ec9b02f7325dc6f36141",
+    "control/executor.py": "a58be3ce60162ff75376c849f46207f6eedf71fd4e371c6a98c6a64be64b1785",
+    "control/tampermonkey_multichat/command_router.py": "629de71ceb5c95004a51edf0d4a9a503e5f001188db09d992f81ac57566468f9",
+    "control/tampermonkey_multichat/prediction-chat-wake.user.js": "7e0859e14bd93041eb845f379a2cec5ed7a81a72ce0e08356e80c5af72ba890b"
+  }
+}
