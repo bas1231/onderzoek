@@ -20,6 +20,7 @@ UPSTREAM = "http://127.0.0.1:8766/command"
 
 TASK_RE = re.compile(r"^[A-Za-z0-9._:-]{1,160}$")
 CHAT_RE = re.compile(r"^[A-Za-z0-9._:-]{4,180}$")
+CONSUMER_RE = re.compile(r"^[A-Za-z0-9._:-]{4,220}$")
 
 
 def ensure_dirs():
@@ -48,12 +49,13 @@ def read_route(task_id):
         return None
 
 
-def write_route(task_id, chat_id):
+def write_route(task_id, chat_id, consumer_id=None):
     path = ROUTES / f"{task_id}.json"
     payload = {
-        "version": 1,
+        "version": 2,
         "task_id": task_id,
         "chat_id": chat_id,
+        "consumer_id": consumer_id,
         "created_at_unix": time.time(),
     }
     encoded = (json.dumps(payload, ensure_ascii=False, sort_keys=True) + "\n").encode("utf-8")
@@ -61,8 +63,15 @@ def write_route(task_id, chat_id):
         fd = os.open(path, os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o600)
     except FileExistsError:
         existing = read_route(task_id)
-        old = str((existing or {}).get("chat_id") or "")
-        if old and old != chat_id:
+        if not isinstance(existing, dict) or existing.get("task_id") != task_id or not CHAT_RE.fullmatch(str(existing.get("chat_id") or "")):
+            raise ValueError("TASK_ROUTE_CORRUPT")
+        old_chat = str(existing.get("chat_id") or "")
+        old_consumer = str((existing or {}).get("consumer_id") or "")
+        if old_chat and old_chat != chat_id:
+            raise ValueError("TASK_ROUTE_CONFLICT")
+        # Existing legacy routes stay chat-scoped. For consumer-aware routes,
+        # a second tab may not claim the same task_id.
+        if old_consumer and consumer_id and old_consumer != consumer_id:
             raise ValueError("TASK_ROUTE_CONFLICT")
         return existing or payload
 
@@ -119,15 +128,22 @@ def forward_command(payload, token):
     except URLError as exc:
         return 503, {"ok": False, "error": "upstream_unreachable", "detail": str(exc.reason)}
 
+    except OSError as exc:
+        return 503, {"ok": False, "error": "upstream_transport_error", "detail": type(exc).__name__}
+
     try:
         data = json.loads(raw or b"{}")
-    except Exception:
-        data = {"ok": 200 <= status < 300, "raw": raw.decode("utf-8", errors="replace")}
+    except (ValueError, UnicodeDecodeError):
+        return 502, {"ok": False, "error": "invalid_upstream_json"}
+    if not isinstance(data, dict):
+        return 502, {"ok": False, "error": "invalid_upstream_envelope"}
+    if 200 <= status < 300 and data.get("ok") is not True:
+        return 502, {"ok": False, "error": "upstream_success_unconfirmed"}
     return status, data
 
 
 class Handler(BaseHTTPRequestHandler):
-    server_version = "PredictionChatCommandRouter/0.1"
+    server_version = "PredictionChatCommandRouter/0.2"
 
     def log_message(self, fmt, *args):
         if self.path != "/health":
@@ -151,7 +167,13 @@ class Handler(BaseHTTPRequestHandler):
             self.reply(401, {"ok": False, "error": "unauthorized"})
             return
         if self.path == "/health":
-            self.reply(200, {"ok": True, "service": "prediction-chat-command-router", "version": 1, "upstream_port": 8766})
+            self.reply(200, {
+                "ok": True,
+                "service": "prediction-chat-command-router",
+                "version": 2,
+                "upstream_port": 8766,
+                "consumer_routing": True,
+            })
             return
         self.reply(404, {"ok": False, "error": "not_found"})
 
@@ -165,7 +187,15 @@ class Handler(BaseHTTPRequestHandler):
 
         try:
             length = int(self.headers.get("Content-Length", "0"))
-            payload = json.loads(self.rfile.read(min(length, 32768)) or b"{}")
+            if length <= 0 or length > 32768:
+                self.reply(413 if length > 32768 else 400, {"ok": False, "error": "bad_length"})
+                return
+            raw = self.rfile.read(length)
+            if len(raw) != length:
+                raise ValueError("truncated body")
+            payload = json.loads(raw)
+            if not isinstance(payload, dict):
+                raise ValueError("payload must be object")
         except Exception:
             self.reply(400, {"ok": False, "error": "bad_json"})
             return
@@ -181,15 +211,20 @@ class Handler(BaseHTTPRequestHandler):
 
         task_id = str(payload.get("task_id") or "").strip()
         action = str(payload.get("action") or "").strip()
+        raw_consumer = str(payload.get("consumer_id") or "").strip()
+        consumer_id = raw_consumer or None
         if not TASK_RE.fullmatch(task_id):
             self.reply(400, {"ok": False, "error": "bad_task_id"})
             return
         if not action or len(action) > 80:
             self.reply(400, {"ok": False, "error": "bad_action"})
             return
+        if raw_consumer and not CONSUMER_RE.fullmatch(raw_consumer):
+            self.reply(400, {"ok": False, "error": "bad_consumer_id"})
+            return
 
         try:
-            write_route(task_id, chat_id)
+            route = write_route(task_id, chat_id, consumer_id)
         except ValueError:
             self.reply(409, {"ok": False, "error": "TASK_ROUTE_CONFLICT", "task_id": task_id})
             return
@@ -198,6 +233,7 @@ class Handler(BaseHTTPRequestHandler):
         if isinstance(result, dict):
             result = dict(result)
             result.setdefault("chat_id", chat_id)
+            result.setdefault("consumer_id", (route or {}).get("consumer_id"))
             result.setdefault("routed", True)
         self.reply(status, result)
 

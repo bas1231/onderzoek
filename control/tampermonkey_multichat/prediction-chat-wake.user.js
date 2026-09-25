@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Prediction Chat Wake Bridge
 // @namespace    local.prediction.chatbridge
-// @version      0.3.3
+// @version      0.4.7
 // @description  Multi-chat transport for the local Prediction control plane.
 // @match        https://chatgpt.com/*
 // @grant        GM_xmlhttpRequest
@@ -27,8 +27,10 @@
   const KEY_BOUND_PATH = 'bound_chat_path';
   const KEY_COMMAND_IDS = 'prediction_command_ids_v3';
   const KEY_SENT_EVENTS = 'prediction_sent_events_v3';
+  const KEY_SENT_TASKS = 'prediction_sent_tasks_v047';
+  const deliveryRetryAfter = new Map();
   const KEY_FALLBACK_REGISTERED = 'prediction_fallback_registered_v3';
-  const SCRIPT_VERSION = '0.3.3';
+  const SCRIPT_VERSION = '0.4.7';
 
   let statusEl = null;
   let scanBusy = false;
@@ -86,7 +88,7 @@
         });
         (document.documentElement || document.body).appendChild(statusEl);
       }
-      statusEl.textContent = `WSL bridge v3.3: ${text}`;
+      statusEl.textContent = `WSL bridge v4.7: ${text}`;
       statusEl.style.outline = bad ? '1px solid #c33' : '1px solid #555';
     } catch (_) {}
   }
@@ -230,6 +232,8 @@
     if (chatIsBusy()) return false;
     const composer = findComposer();
     if (!composer) { status('composer niet gevonden', true); return false; }
+    const draft = String(('value' in composer ? composer.value : composer.innerText || composer.textContent) || '');
+    if (draft.trim()) { status('bestaand concept behouden; levering wacht', true); return false; }
     setComposerText(composer, text);
     let button = null;
     for (let i = 0; i < 20; i += 1) {
@@ -237,13 +241,32 @@
       if (button) break;
       await sleep(100);
     }
-    if (!button) { status('sendknop niet gevonden', true); return false; }
+    if (!button) {
+      // Remove only this invocation's untouched insertion, never a user edit.
+      const current = findComposer();
+      const ownText = current ? String(('value' in current ? current.value : current.innerText || current.textContent) || '') : '';
+      if (current === composer && ownText === text) setComposerText(composer, draft);
+      status('sendknop niet gevonden; levering wordt herprobeerd', true);
+      return false;
+    }
+    const current = findComposer();
+    const currentText = current ? String(('value' in current ? current.value : current.innerText || current.textContent) || '') : '';
+    if (current !== composer || currentText.trim() !== text.trim() || chatIsBusy()) {
+      status('concept gewijzigd; levering wacht', true); return false;
+    }
+    // A cleared editor is not a delivery receipt: require a new user turn.
+    const normalize = value => String(value || '').replace(/\s+/g, ' ').trim();
+    const matchingTurns = () => Array.from(document.querySelectorAll('[data-message-author-role="user"]'))
+      .filter(node => normalize(node.innerText || node.textContent) === normalize(text)).length;
+    const before = matchingTurns();
     button.click();
-    await sleep(650);
-    const now = findComposer();
-    const remaining = now ? (('value' in now ? now.value : now.innerText || now.textContent || '').trim()) : '';
-    if (remaining.includes(text.trim())) { status('verzenden niet bevestigd', true); return false; }
-    return true;
+    for (let i = 0; i < 20; i += 1) {
+      await sleep(250);
+      if (matchingTurns() > before) return true;
+    }
+    status('geen nieuwe userturn bevestigd; levering onbewezen', true);
+    return false;
+
   }
 
   async function ack(eventId, chatId, eventConsumerId) {
@@ -381,6 +404,14 @@
     setFallbackForCurrentChat(true).catch(() => alert('Fallback instellen mislukt. Controleer token/services.'));
   });
 
+  function recentUserTurnContainsDelivery(text) {
+    const normalize = value => String(value || '').replace(/\s+/g, ' ').trim();
+    const expected = normalize(text);
+    if (!expected) return false;
+    return Array.from(document.querySelectorAll('[data-message-author-role="user"]'))
+      .some(node => normalize(node.innerText || node.textContent) === expected);
+  }
+
   async function wakeLoop(generation) {
     while (generation === wakeGeneration) {
       if (!enabled()) { status('uitgeschakeld'); await sleep(1500); continue; }
@@ -402,17 +433,31 @@
 
         const event = JSON.parse(response.responseText);
         if (!event || !event.event_id || !event.message) { status('ongeldig event', true); await sleep(1000); continue; }
-        if (remembered(KEY_SENT_EVENTS, event.event_id)) {
-          await ack(event.event_id, identity.chatId, identity.consumerId);
-          continue;
+        const message = String(event.message);
+        // Scope durable receipts by chat and full payload; task IDs may carry
+        // multiple legitimate updates. Do not use a lossy hash or partial anchor.
+        const taskKey = JSON.stringify([identity.chatId, String(event.task_id || event.event_id), message]);
+        const eventKey = JSON.stringify([identity.chatId, String(event.event_id), message]);
+        const alreadyDelivered = remembered(KEY_SENT_EVENTS, eventKey) ||
+          remembered(KEY_SENT_TASKS, taskKey) || recentUserTurnContainsDelivery(message);
+        if (!alreadyDelivered) {
+          const retryAt = deliveryRetryAfter.get(taskKey) || 0;
+          if (Date.now() < retryAt) { await sleep(1000); continue; }
+          deliveryRetryAfter.set(taskKey, Date.now() + 60000);
+          // Bound transient state; evict expired entries only.
+          for (const [key, expiry] of deliveryRetryAfter) {
+            if (expiry < Date.now()) deliveryRetryAfter.delete(key);
+          }
+          const sent = await submitMessage(message);
+          if (generation !== wakeGeneration) return;
+          if (!sent && !recentUserTurnContainsDelivery(message)) { await sleep(1000); continue; }
         }
-
-        status(`event ${event.task_id || event.event_id}`);
-        const sent = await submitMessage(String(event.message));
-        if (!sent) { await sleep(1000); continue; }
-        remember(KEY_SENT_EVENTS, event.event_id);
+        remember(KEY_SENT_EVENTS, eventKey);
+        remember(KEY_SENT_TASKS, taskKey);
+        deliveryRetryAfter.delete(taskKey);
         const ok = await ack(event.event_id, identity.chatId, identity.consumerId);
         status(ok ? `verzonden: ${event.task_id || event.event_id}` : 'ACK mislukt', !ok);
+        if (!ok) await sleep(1200);
       } catch (_) {
         if (generation !== wakeGeneration) return;
         status('WSL niet bereikbaar', true);
