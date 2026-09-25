@@ -193,6 +193,7 @@ def process_task(task_file: Path) -> str:
         (result_dir / "RESULT.json").write_text(
             json.dumps(blocked_result, indent=2, sort_keys=True) + "\n"
         )
+        shutil.move(running_file, FAILED / running_file.name)
         lifecycle_update(task.task_id, "BLOCKED_BY_POLICY", policy_result["reason"])
         return "blocked"
 
@@ -210,7 +211,12 @@ def process_task(task_file: Path) -> str:
         status = "completed" if exit_code == 0 else "failed"
     except subprocess.TimeoutExpired as exc:
         stdout = exc.stdout or ""
-        stderr = (exc.stderr or "") + "\nTASK TIMEOUT"
+        stderr = exc.stderr or ""
+        if isinstance(stdout, bytes):
+            stdout = stdout.decode("utf-8", errors="replace")
+        if isinstance(stderr, bytes):
+            stderr = stderr.decode("utf-8", errors="replace")
+        stderr += "\nTASK TIMEOUT"
         exit_code = 124
         status = "failed"
 
@@ -270,6 +276,7 @@ def record_infrastructure_failure(task_file: Path, exc: Exception) -> None:
         error_dir = RESULTS / task_file.stem
         error_dir.mkdir(parents=True, exist_ok=True)
         (error_dir / "INFRA_ERROR.txt").write_text(f"{type(exc).__name__}: {exc}\n")
+        lifecycle_update(task_file.stem, "FAILED", "executor infrastructure failure: " + type(exc).__name__)
 
         git("add", "control/tasks", "control/results")
         staged = git("diff", "--cached", "--quiet", check=False)

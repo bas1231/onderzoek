@@ -1,0 +1,47 @@
+{
+  "mode": "research_only",
+
+  "permissions": {
+    "read_research_data": true,
+    "write_reports": true,
+    "write_logs": true,
+    "write_queue": true,
+
+    "place_orders": false,
+    "wallet_access": false,
+    "crypto_transfer": false,
+    "live_trading": false,
+    "paid_api_calls": false,
+    "external_write": false
+  },
+
+  "allowed_write_paths": [
+    "reports",
+    "logs",
+    "queue"
+  ],
+
+  "blocked_actions": [
+    "order",
+    "trade",
+    "buy",
+    "sell",
+    "withdraw",
+    "deposit",
+    "wallet",
+    "private_key",
+    "api_payment",
+    "send",
+    "transfer",
+    "crypto",
+    "fund",
+    "payment",
+    "payout"
+  ],
+
+  "require_human_approval_for": [
+    "money",
+    "credentials",
+    "external_changes"
+  ]
+}
