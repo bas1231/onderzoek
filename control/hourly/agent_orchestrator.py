@@ -7,6 +7,7 @@ import importlib.util
 import json
 import sys
 import time
+import math
 
 try:
     from control.hourly.candidate_worker_routing import hydrate_candidate_routes
@@ -194,6 +195,15 @@ def _gate_pass(gates: dict[str, Any], gate: str) -> bool:
     return any(str(gates.get(alias, "")).upper() == "PASS" for alias in aliases)
 
 
+def _finite_economics_number(value: Any) -> bool:
+    if isinstance(value, bool) or not isinstance(value, (int, float)):
+        return False
+    try:
+        return math.isfinite(value)
+    except OverflowError:
+        return False
+
+
 def proof_gate(
     result: dict[str, Any],
     upstream_ids: set[str],
@@ -222,9 +232,16 @@ def proof_gate(
             "settlement",
             "capacity",
         ):
-            if key not in economics:
+            value = economics.get(key)
+            if value is None or value == "" or isinstance(value, bool):
                 failed.append("economics_" + key)
-        if economics.get("net_edge") is None:
+            elif key in {"fees", "spread", "slippage"}:
+                if not _finite_economics_number(value) or value < 0:
+                    failed.append("economics_" + key)
+            elif not isinstance(value, (str, dict, int, float)) or not value:
+                failed.append("economics_" + key)
+        net = economics.get("net_edge")
+        if not _finite_economics_number(net) or net <= 0:
             failed.append("economics_net_edge")
 
     return not failed, failed
