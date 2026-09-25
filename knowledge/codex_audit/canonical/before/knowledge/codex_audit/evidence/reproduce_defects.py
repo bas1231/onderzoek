@@ -3,7 +3,6 @@
 Uitvoering vanuit repository-root: python3 knowledge/codex_audit/evidence/reproduce_defects.py
 Alle gerapporteerde waarden zijn synthetische testdata, geen marktobservaties.
 """
-import hashlib
 import contextlib
 import ast
 import datetime
@@ -104,20 +103,14 @@ def main():
         base = Path(td)
         pending = base / "pending.json"
         pending.write_text("{}")
-        task = SimpleNamespace(task_class="infrastructure", task_id="SYNTHETIC", hypothesis_id="SYNTHETIC", working_directory=".", command=["synthetic"], timeout_seconds=1)
+        task = SimpleNamespace(task_class="infrastructure", task_id="SYNTHETIC", working_directory=".", command=["synthetic"], timeout_seconds=1)
         timeout = subprocess.TimeoutExpired(["synthetic"], 1, output=b"partial stdout", stderr=b"partial stderr")
         import shutil
         ns = {"json": json, "ROOT": base, "RUNNING": base / "running", "RESULTS": base / "results", "Task": SimpleNamespace(model_validate=lambda _: task), "task_provenance_in_head": lambda *a: {"ok": True}, "support_script_in_head": lambda *a: {"ok": True}, "lifecycle_load": lambda *a: {"state": "ACCEPTED"}, "lifecycle_update": lambda *a: None, "WORK_CADENCE": SimpleNamespace(check=lambda **k: {"allowed": True}), "shutil": shutil, "now_iso": lambda: "2026-09-25T00:00:00Z", "current_commit": lambda: "0" * 40, "check_action": lambda _: {"status": "ALLOWED", "reason": "synthetic"}, "subprocess": subprocess}
-        ns["COMPLETED"] = base / "completed"
-        ns["FAILED"] = base / "failed"
-        ns["COMPLETED"].mkdir()
-        ns["FAILED"].mkdir()
-        ns["sha256_file"] = lambda p: hashlib.sha256(p.read_bytes()).hexdigest()
-        ns["git"] = lambda *a, **k: SimpleNamespace(returncode=0)
         ns["RUNNING"].mkdir()
         ns["Path"] = Path
         exec(compile(ast.Module(body=[fn], type_ignores=[]), "control/executor.py", "exec"), ns)
-        with patch("subprocess.run", side_effect=timeout), contextlib.redirect_stdout(io.StringIO()):
+        with patch("subprocess.run", side_effect=timeout):
             try:
                 ns["process_task"](pending)
                 err = None
@@ -139,8 +132,8 @@ def main():
         protocols.mkdir(parents=True)
         (protocols / "KWI-FULL-STATION-PRECANONICAL-24H-V1.json").write_text(json.dumps({"prospective_cutoff":"2026-09-20T00:00:00+00:00", "window_end":"2026-09-21T00:00:00+00:00", "minimum_eligible_pairs_per_city":30, "minimum_eligible_cities":2}))
         rows = [
-            {"timestamp_semantics":"response_body_received", "retrieved_at":"2026-09-20T00:00:10+00:00", "cities":[{"city":"nyc", "config_version":"v1", "latest_complete":{"t":100, "v":80, "contributors":1}}]},
-            {"timestamp_semantics":"response_body_received", "retrieved_at":"2026-09-20T00:00:20+00:00", "cities":[{"city":"nyc", "config_version":"v2", "latest_complete":{"t":99, "v":79, "contributors":1}, "latest_incomplete":{"t":100, "stations":[{"temp_f":80}]}}]},
+            {"retrieved_at":"2026-09-20T00:00:10+00:00", "cities":[{"city":"nyc", "config_version":"v1", "latest_complete":{"t":100, "v":80, "contributors":1}}]},
+            {"retrieved_at":"2026-09-20T00:00:20+00:00", "cities":[{"city":"nyc", "config_version":"v2", "latest_complete":{"t":99, "v":79, "contributors":1}, "latest_incomplete":{"t":100, "stations":[{"temp_f":80}]}}]},
         ]
         for i, row in enumerate(rows):
             (manifests / f"{i}.json").write_text(json.dumps(row))

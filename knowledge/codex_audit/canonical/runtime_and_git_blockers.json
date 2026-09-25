@@ -1,0 +1,40 @@
+{
+  "timestamp": "2026-09-25T09:32:31.558967+00:00",
+  "checks": [
+    {
+      "command": [
+        "git",
+        "add",
+        "--dry-run",
+        "--",
+        "knowledge/codex_audit/canonical"
+      ],
+      "exit_code": 128,
+      "stdout": "",
+      "stderr": "fatal: Unable to create '/home/leonh/prediction_research_prod/.git/index.lock': Read-only file system\n"
+    },
+    {
+      "command": [
+        "systemctl",
+        "--user",
+        "is-active",
+        "prediction-research-hourly.service"
+      ],
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "Failed to connect to bus: Operation not permitted\n"
+    },
+    {
+      "command": [
+        "python3",
+        "control/jobs/parallel_build_coordination_shared.py",
+        "status"
+      ],
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\n  File \"/usr/lib/python3.12/pathlib.py\", line 1313, in mkdir\n    os.mkdir(self, mode)\nFileNotFoundError: [Errno 2] No such file or directory: '/home/leonh/prediction_research_prod/.git/prediction-build-coordination/sessions'\n\nDuring handling of the above exception, another exception occurred:\n\nTraceback (most recent call last):\n  File \"/home/leonh/prediction_research_prod/control/jobs/parallel_build_coordination_shared.py\", line 76, in <module>\n    raise SystemExit(main())\n                     ^^^^^^\n  File \"/home/leonh/prediction_research_prod/control/jobs/parallel_build_coordination_shared.py\", line 36, in main\n    coord = Coordinator(Path(args.root))\n            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/leonh/prediction_research_prod/control/jobs/parallel_build_coordination_shared.py\", line 31, in __init__\n    self.sessions.mkdir(parents=True, exist_ok=True)\n  File \"/usr/lib/python3.12/pathlib.py\", line 1317, in mkdir\n    self.parent.mkdir(parents=True, exist_ok=True)\n  File \"/usr/lib/python3.12/pathlib.py\", line 1313, in mkdir\n    os.mkdir(self, mode)\nOSError: [Errno 30] Read-only file system: '/home/leonh/prediction_research_prod/.git/prediction-build-coordination'\n"
+    }
+  ],
+  "service_mutations": false,
+  "queue_resumed": false
+}

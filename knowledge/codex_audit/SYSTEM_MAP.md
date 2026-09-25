@@ -1,3 +1,5 @@
+> Actueel canonical checkpoint: bronherstel uitgevoerd; 474 tests geslaagd / 2 geclassificeerde failures. 17 bevindingen FIXED_AND_RETESTED, runtimekwalificatie onvolledig. Zie FINAL_AUDIT_REPORT.md en canonical/COMMIT_PLAN.md. Oudere passages hieronder beschrijven de oorspronkelijke baseline.
+
 # Geobserveerde systeemkaart
 
 Bron: werkboom op HEAD `6b33058` plus vooraf bestaande staged/unstaged wijzigingen; individuele hashes staan in `evidence/baseline_manifest.json`. Geen conclusies uitsluitend uit bestandsnamen.

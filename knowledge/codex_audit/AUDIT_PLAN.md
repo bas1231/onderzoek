@@ -1,3 +1,5 @@
+> Actueel canonical checkpoint: bronherstel uitgevoerd; 474 tests geslaagd / 2 geclassificeerde failures. 17 bevindingen FIXED_AND_RETESTED, runtimekwalificatie onvolledig. Zie FINAL_AUDIT_REPORT.md en canonical/COMMIT_PLAN.md. Oudere passages hieronder beschrijven de oorspronkelijke baseline.
+
 # Auditplan
 
 Bevroren scope: infrastructuur, agents, hourly, bridge, weather/TWC, point-in-time, holdout, execution, tests, security en Git-historie. Eerst baseline; daarna veilige falsificatie met fixtures; geen productieactivering, trading, betaalde diensten of push. Geen reparatie vóór lokale baselinecommit. Tweede adversariële review en eindrapport verplicht.

@@ -1,146 +1,170 @@
-# Onafhankelijke kwalificatie — hervat op 25 september 2026
+# Canonical herstel en onafhankelijke kwalificatie — 25 september 2026
 
 ## 1. Eindkwalificatie
 
-**AUDIT_FAIL + AUDIT_INCOMPLETE + NO_PROVEN_EDGE.** Bekende HIGH-productiedefecten blijven aanwezig. Geteste herstelvoorstellen zijn nog niet geïntegreerd. Geen AUDIT_PASS_WITH_TESTED_ASSURANCE.
+**AUDIT_FAIL + AUDIT_INCOMPLETE + NO_PROVEN_EDGE.** De geverifieerde brondefecten zijn daadwerkelijk gerepareerd in de canonical werkboom. De volledige operationele keten kan nog niet worden gekwalificeerd: hourly is geblokkeerd/stale, deployment wijkt af, live socket/systemd/browsercontroles zijn beperkt en twee suitefailures blijven expliciet open. Geen AUDIT_PASS_WITH_TESTED_ASSURANCE.
 
-## 2. Kernuitkomst
+## 2. Executive summary
 
-Baselinecommit **80a5ff7cfc49b7be27413d0fea9c03b0f48e0f50** is intact en bevat uitsluitend knowledge/codex_audit. De acht voorbereide bronpatches zijn teruggevonden en geverifieerd; oorspronkelijke bronhashes matchen. Veilige testkopie uitgebreid met ontbrekende policyafhankelijkheid, terminale policy-afwijzing, upstream-responsevalidatie en tweede-ronde bevindingen.
+23 permanente bevindingen: **17 FIXED_AND_RETESTED**, 1 CONFIRMED_OPEN, 1 BLOCKED, 3 RESIDUAL_RISK, 1 UNPROVEN. Eén van de 17 betreft een vóór integratie ontdekte voorstelregressie; het getal is geen telling van 17 afzonderlijke productie-incidenten.
 
-**64 auditgedragstests slagen**: negen oorspronkelijke invarianten plus 55 aanvullende tests. Breedste veilige suite: **447 passed, 8 failed**, identiek gereproduceerd vanuit de duurzaam geëxporteerde bestanden. Dit is geen groene volledige suite en geen productiefix.
+Alle oorspronkelijke **64 auditgedragstests slagen tegen canonical bron**. Definitieve brede canonical regressie: **474 passed / 2 failed**, exit1, 476 tests. Dit is geen volledig groene suite. De twee resterende failures zijn de sandbox-geblokkeerde sockettest en het expliciet onbesliste 15s/600s-policyconflict. Geen skips/xfails toegevoegd, geen veiligheidscriteria versoepeld.
 
-Canonical .git blijft in deze tools read-only ondanks de door eigenaar gemaakte baselinecommit. Gedeelde coordinator/lease, eigen canonical worktree en vervolgcommits zijn daardoor geblokkeerd. Geen sandboxuitbreiding gevraagd. Productiecode, bestaande indexwijzigingen en userwerk zijn niet overschreven.
+22 code-/testbestanden gewijzigd/toegevoegd; bronbasis exact gecontroleerd tegen proposal_manifest.json. Alle zeventien voorgestelde bestandbases matchten; geen blinde patchtoepassing. Bestaande staged userindex en alle niet-gerelateerde tracked bestanden zijn ongewijzigd. Ook de staged installer is onaangeroerd.
 
-## 3. Exacte scope
+## 3. Exacte scope en Git-basis
 
-Voortzetting van oorspronkelijke audit, geen herstart. Bestaande 14 bevindingen, 17 baselinefailures, negen regressies, voorbereid herstel, relevante wetenschappelijke paden, runtime-receipts en nieuwe failure-injection. Nieuwe bevindingen 015–020. Bronbasis is bestaande werkboom bij 80a5ff7 inclusief vooraf staged routerwijzigingen; voorstelpatch is dus niet blind op schone HEAD toepasbaar.
+Baseline `80a5ff7cfc49b7be27413d0fea9c03b0f48e0f50`; eerdere auditevidence `db6c0f3c98b0b8fbc8b89544c3745cfba311e8e6`. Beide bestaan en zijn niet herschreven. Op db6c0f3 is de canonical werkboom gerepareerd met expliciete autorisatie van de eigenaar ondanks read-only .git. Geen nieuwe canonical commits konden worden gemaakt; dat onderdeel van de missie blijft BLOCKED.
 
-Niet uitgevoerd: live browsertransport, externe modelaanroepen, service-restarts, reboot, remote push, trades, betaald verkeer, wallets of model-/holdoutoptimalisatie. Eenmalige historische jobs niet ongericht uitgevoerd.
+Geen herstart van discovery, geen productiequeue hervat, geen services geactiveerd, geen order/wallet/paid API/netwerkhandel, geen push, geen reset. Historische raw/immutable evidence en holdout zijn niet gewijzigd. Node/pytest-tests gebruiken synthetische data en begrensde lokale fixtures.
 
-## 4. Geobserveerde architectuur
+## 4. Werkelijk geobserveerde architectuur
 
-Zie SYSTEM_MAP.md. Hourly timer → runtime_sync → edge_hunter_cycle/hourly_cycle → bronverwerking/recon/queue → AI-bundle/exchange → responsevalidator → agentpackets/receipt/orchestration → Git-checkpoint. ChatGPT is Director; registry v4 beschrijft zes permanente domeinrollen plus transient reproducer. Rollen zijn geen bewijs van onafhankelijke LLM-processen.
+Zie SYSTEM_MAP.md. Hourly timer → runtime_sync → edge_hunter_cycle/hourly_cycle → bron/recon/queue → AI-bundle/exchange → responsevalidator → agentpackets/receipt/orchestration → checkpoint. ChatGPT is Director; registry v4 bevat zes permanente rollen plus transient reproducer. Dit bewijst geen zes onafhankelijke LLM-processen.
 
-Multi-chatbridge en legacy researchbridge zijn afzonderlijke paden. Hourly/executor wijzen naar prod; weather/lifecycle deels naar legacy checkout. Canonical userscript en lokale deployment verschillen. Browsergeladen versie blijft onbekend.
+Multi-chat en legacy researchbridge blijven aparte paden. Hourly/executor wijzen naar prod; weather/lifecycle deels naar legacy checkout. Gerepareerde canonical files zijn niet automatisch geladen door bestaande processen of de browser. Deze deploymentgrens is expliciet behouden.
 
-## 5. Tests en scope van assurance
+## 5. Tests uitgevoerd
 
-| Ronde | Uitkomst | Evidence onder remediation/ |
+| Ronde | Resultaat | Evidence onder remediation/ |
 |---|---|---|
-| Baseline (reeds bewaard) | 374 passed / 17 failed | oorspronkelijke test_runs/ |
-| Originele auditinvarianten vóór herstel | 9 failed | oorspronkelijke test_runs/ |
-| Eerste onafhankelijke aanvullende tests | 37 passed / 3 failed | independent_v1.* |
-| Policy terminalisatie vóór herstel | 11 passed / 1 failed / 40 deselected | policy_red.* |
-| Nieuwe false-delivery/post-state tests vóór herstel | 3 failed / 52 deselected | second_pass_red.* |
-| Alle nieuwe + oorspronkelijke auditchecks | 64 passed | second_pass_green.* |
-| Breedste regressie | 447 passed / 8 failed | final_broad.* |
-| Reconstructie uit duurzame voorstellen | 447 passed / 8 failed | durable_replay.* |
+| Bestaande baseline (voor herstel) | 374 pass / 17 fail | oorspronkelijke test_runs/ |
+| Negen auditinvarianten vóór herstel | 9 fail | oorspronkelijke test_runs/ |
+| Voorstelreplay | 447 pass / 8 fail | durable_replay.* |
+| Canonical weather/PIT focus | 39 pass / 46 deselected | canonical_weather.* |
+| Canonical proof focus | 16 pass / 51 deselected | canonical_proof.* |
+| Canonical bridge focus | 34 pass / 35 deselected | canonical_bridge.* |
+| Canonical executor focus | 20 pass / 42 deselected | canonical_executor.* |
+| Eerste volledige canonical suite | 447 pass / 8 fail | canonical_initial_full.* |
+| Nieuwe deliverycounterexamples vóór herstel | 5 fail / 2 pass | canonical_delivery_red.* |
+| 64 auditchecks plus 7 deliverychecks | 71 pass | canonical_delivery_green.* |
+| Nieuwe transport/PIT/economics counterexamples | Rode evidence, apart van fixturefout | canonical_falsification_red.*, canonical_new_counterexamples.* |
+| Herstelde falsificatie plus guards | 25 pass | canonical_falsification_green.* |
+| Scoped receipt/herstartcontracts | 27 pass | canonical_static_contract_reconciled.* |
+| **Definitieve brede canonical suite** | **474 pass / 2 fail** | **canonical_final_regression.*** |
 
-Exacte commands, tijden, cwd, omgeving en exitstatus staan in bijbehorende JSON. Echte lokale subprocess-timeout produceert partial stdout/stderr, exit124, RESULT, hashes en terminale FAILED-taak. Overige externe componenten worden bewust gemockt; dit bewijst geen volledige runtime-E2E.
+Exacte commands, timestamps, interpreter, cwd, environment en exitstatus staan in JSON naast de logs. De definitieve run gebruikt de echte repositorybron, niet proposed/. Er is geen steekproefresultaat tot globale E2E-PASS gepromoveerd.
 
 ## 6. Runtime-evidence
 
-remediation/runtime_final.json bevestigt dat systemd-userbus ontoegankelijk blijft (Operation not permitted). Scheduled-cycle receipt blijft 24 september 14:04 UTC; checkpoint is FAIL_CLOSED wegens lokale/remote HEAD-divergentie. Er is geen nieuwe live-hourly-PASS. Oudere/stale runtime-syncbestanden worden niet als actuele meting verkocht; oorspronkelijke trace bevat ook prod-specifieke sync-evidence.
+Een echte lokale subprocess-timeout test partiële niet-UTF8 stdout/stderr, exit124, RESULT-hashes en terminale FAILED-locatie. Policy-afwijzing verlaat RUNNING. De echte Bridge-handler wordt socketloos aangeroepen: eerste en herhaalde ACK blijven idempotent, outbox verdwijnt en sent blijft bestaan. Dit is handler/persistence-integratie, geen TCP/browserbewijs.
 
-Historische audit traceerde vijf responsebundels met zes rollen naar packets/receipts/downstream. Nieuwe AI-invocaties of actuele consumptie zijn niet aangetoond. Geen queue zelfstandig hervat.
+Systemd-userbus blijft Operation not permitted; lokale socketaanmaak geeft PermissionError. Laatste getraceerde scheduled-cycle receipt blijft 24 september 14:04 UTC; checkpoint was FAIL_CLOSED. Nieuwe canonical bron verandert die historical/runtimefeiten niet. Geen live hourly of browsercanary uitgevoerd. `canonical/runtime_and_git_blockers.json` bevat de actuele grenscontroles. De na herstel gelezen prod-runtime-sync receipt is nog **BLOCKED op 25 september 09:00:18 UTC**; de scheduled-cycle receipt is onveranderd. Zie `canonical/runtime_receipts_after_repair.json` (gelezen 09:38 UTC).
 
-## 7. Alle bevindingen
+## 7. Alle bevindingen naar severity/status
 
-| ID | Severity | Status | Bevinding |
+| ID | Ernst | Actuele status | Kern |
 |---|---|---|---|
 | AUD-CODEX-001 | HIGH | BLOCKED | Baseline 80a5ff7 door eigenaar gecommit; vervolgauditcommits en gedeelde coordinator nog steeds geblokkeerd door read-only .git. |
-| AUD-CODEX-002 | HIGH | CONFIRMED | Actuele runtime-sync is geblokkeerd door bestaande staged wijzigingen; laatste wrapperreceipt is verouderd. |
-| AUD-CODEX-003 | HIGH | CONFIRMED | Beide weatherrecorders gebruiken request-start als retrieved_at; KWI deelt één eerdere tijd over drie seriële fetches. |
-| AUD-CODEX-004 | HIGH | CONFIRMED | Proof-gate accepteert negatieve, nul en niet-numerieke netto-edge plus null kostenvelden. |
-| AUD-CODEX-005 | HIGH | CONFIRMED | Corrupt bestaande route wordt als geslaagde nieuwe route geretourneerd zonder duurzame route te schrijven. |
-| AUD-CODEX-006 | MEDIUM | CONFIRMED | Geldige JSON met niet-objecttopniveau laat handler crashen zonder HTTP-foutresponse. |
-| AUD-CODEX-007 | MEDIUM | CONFIRMED | Repositorybrede tests zijn niet groen; meerdere tests volgen oude interfaces/versies. |
+| AUD-CODEX-002 | HIGH | CONFIRMED_OPEN | Actuele runtime-sync is geblokkeerd door bestaande staged wijzigingen; laatste wrapperreceipt is verouderd. |
+| AUD-CODEX-003 | HIGH | FIXED_AND_RETESTED | Beide weatherrecorders gebruiken request-start als retrieved_at; KWI deelt één eerdere tijd over drie seriële fetches. |
+| AUD-CODEX-004 | HIGH | FIXED_AND_RETESTED | Proof-gate accepteert negatieve, nul en niet-numerieke netto-edge plus null kostenvelden. |
+| AUD-CODEX-005 | HIGH | FIXED_AND_RETESTED | Corrupt bestaande route wordt als geslaagde nieuwe route geretourneerd zonder duurzame route te schrijven. |
+| AUD-CODEX-006 | MEDIUM | FIXED_AND_RETESTED | Geldige JSON met niet-objecttopniveau laat handler crashen zonder HTTP-foutresponse. |
+| AUD-CODEX-007 | MEDIUM | RESIDUAL_RISK | Repositorybrede tests zijn niet groen; meerdere tests volgen oude interfaces/versies. |
 | AUD-CODEX-008 | HIGH | UNPROVEN | Gevonden weatherlane bewijst geen 1–4 uur probabilistische voorspelling van definitieve TWC-settlement. |
-| AUD-CODEX-009 | HIGH | CONFIRMED | Canonical userscript overschrijft bestaand onverzonden gebruikersconcept bij bridgelevering. |
-| AUD-CODEX-010 | HIGH | CONFIRMED | Timeout met partiële bytes-output faalt tijdens timeoutafhandeling en verliest normaal RESULT-contract. |
-| AUD-CODEX-011 | HIGH | CONFIRMED | Interne websocket-meetgaten en ontbrekende executable prijzen worden als bewezen geen reactie geclassificeerd. |
-| AUD-CODEX-012 | HIGH | CONFIRMED | Prospectieve evaluator accepteert target dat al voor voorspelling compleet was, ook bij andere config. |
+| AUD-CODEX-009 | HIGH | FIXED_AND_RETESTED | Canonical userscript overschrijft bestaand onverzonden gebruikersconcept bij bridgelevering. |
+| AUD-CODEX-010 | HIGH | FIXED_AND_RETESTED | Timeout met partiële bytes-output faalt tijdens timeoutafhandeling en verliest normaal RESULT-contract. |
+| AUD-CODEX-011 | HIGH | FIXED_AND_RETESTED | Interne websocket-meetgaten en ontbrekende executable prijzen worden als bewezen geen reactie geclassificeerd. |
+| AUD-CODEX-012 | HIGH | FIXED_AND_RETESTED | Prospectieve evaluator accepteert target dat al voor voorspelling compleet was, ook bij andere config. |
 | AUD-CODEX-013 | MEDIUM | RESIDUAL_RISK | Geinstalleerde componenten gebruiken verschillende repositories en userscript wijkt af van canonical Git-bestand. |
 | AUD-CODEX-014 | LOW | RESIDUAL_RISK | 14 van 726 Pythonbestanden hebben syntaxfouten; historische mislukte jobs mogen niet als opnieuw uitvoerbaar worden behandeld. |
-| AUD-CODEX-015 | HIGH | CONFIRMED | Productie-executor importeert ontbrekende policy_check-module. |
-| AUD-CODEX-016 | MEDIUM | CONFIRMED | Malformed HTTP200 van upstream wordt als succes doorgegeven. |
-| AUD-CODEX-017 | MEDIUM | RESIDUAL_RISK | Eerste draftbehoudpatch strandde eigen invoer na ontbrekende sendknop. |
-| AUD-CODEX-018 | HIGH | CONFIRMED | Policy-afgewezen taak blijft in RUNNING-directory achter. |
-| AUD-CODEX-019 | HIGH | CONFIRMED | Leeg invoerveld wordt zonder nieuwe userturn als geslaagde levering behandeld. |
-| AUD-CODEX-020 | HIGH | CONFIRMED | Foreign ticker en niet-eindige post-event prijs worden als reactie gescoord. |
+| AUD-CODEX-015 | HIGH | FIXED_AND_RETESTED | Productie-executor importeert ontbrekende policy_check-module. |
+| AUD-CODEX-016 | MEDIUM | FIXED_AND_RETESTED | Malformed HTTP200 van upstream wordt als succes doorgegeven. |
+| AUD-CODEX-017 | MEDIUM | FIXED_AND_RETESTED | Eerste draftbehoudpatch strandde eigen invoer na ontbrekende sendknop. |
+| AUD-CODEX-018 | HIGH | FIXED_AND_RETESTED | Policy-afgewezen taak blijft in RUNNING-directory achter. |
+| AUD-CODEX-019 | HIGH | FIXED_AND_RETESTED | Leeg invoerveld wordt zonder nieuwe userturn als geslaagde levering behandeld. |
+| AUD-CODEX-020 | HIGH | FIXED_AND_RETESTED | Foreign ticker en niet-eindige post-event prijs worden als reactie gescoord. |
+| AUD-CODEX-021 | MEDIUM | FIXED_AND_RETESTED | Raw TimeoutError/OSError uit upstream ontsnapt aan expliciete foutrespons. |
+| AUD-CODEX-022 | HIGH | FIXED_AND_RETESTED | Batchvolgorde overschrijft echte vroegste city-receipt niet. |
+| AUD-CODEX-023 | HIGH | FIXED_AND_RETESTED | Canonical wake loop mist task/payload-dedupe, retrybackoff en userturn-recovery. |
 
-## 8. Herstelvoorstellen
+## 8. Canonical gerepareerde bevindingen
 
-Geen productiebevinding FIXED/RETESTED. prepared_latest.patch, proposed/ en proposal_manifest.json bevatten reviewbare voorstellen voor receiptklokken, fail-closed economics, routervalidatie, composerbehoud/leveringsbewijs, timeout/lifecycle/policyqueue, coverage en prospectieve/config-identieke targets. Twee ontbrekende policybestanden zijn met vastgelegde legacyprovenance voorgesteld; policyconfigvalidatie is fail-closed. Dit is geen bewijs dat een lexicale policychecker een volledige securityboundary vormt.
+003: request-start en response-body receipt gescheiden, per-city receipt en expliciete provenance.
+004: ontbrekende/negatieve/nul/niet-eindige economics fail-closed; ook zeer grote JSON-integers veroorzaken geen OverflowError meer.
+005/006/016/021: corrupt routebestand niet als succes, begrensde object-envelopevalidatie, expliciet upstreamsuccesscontract en zichtbare transportfoutrespons.
+009/017/019/023: conceptbehoud, eigenaarschap bij retry, zichtbare userturnbevestiging, volledige chat/task/payload-scoping, durable receipts vóór ACK en 60s retrybackoff. Userscriptmetadata v0.4.7. Gewijzigde payload voor dezelfde task wordt niet stil weggefilterd; partial anchor is geen leveringsbewijs.
+010/015/018: timeoutbytes veilig decoderen, foutlifecycle, ontbrekende research-only policydependency hersteld met fail-closed configcheck en terminale policyqueue.
+011/012/020/022: coveragegaten/ongeldige executable baseline → UNPROVEN, strikt later target met gelijke config, ongeldige/foreign post-state afgewezen en selectie op werkelijk vroegste cityreceipt onafhankelijk van batchvolgorde.
 
-Voorstelregressie 017 (eigen editorinvoer strandt na ontbrekende sendknop) werd gevonden vóór deployment, gecorrigeerd en gedragsmatig hergetest. Onderliggende userdraft blijft behouden.
+Alle genoemde bronwijzigingen bestaan canonical en relevante tests slagen. `remediation_commit` blijft null zolang Git niet kan schrijven; dat wordt niet verborgen. Bron-FIXED_AND_RETESTED is geen attestatie van deployed processen.
 
-## 9. Resterende defects en triage
+## 9. Resterende failures en bevindingen
 
-Alle productiecorrectheidsbevindingen blijven open tot canonical integratie en herverificatie. remediation/TRIAGE.md classificeert ieder van de oorspronkelijke 17 failures, twee na herstel geraakte stale fixtures en nieuwe repros. Acht huidige failures: één socket-omgevingsbeperking, één installer-SLA/ownerwijzigingconflict, zes userscriptversie/safeguardverwachtingen. Geen skip/xfail toegevoegd; geen safetyassertions geschrapt om groen te worden.
+**Sockettest:** daadwerkelijke TCP-test kan geen socket maken binnen deze sandbox. Bestaande test intact en rood; nieuwe socketloze handler/persistencetest groen. Geen E2E-PASS.
 
-## 10. Geblokkeerde/onbewezen gebieden
+**Installerpolicy:** oude test eist 15s fast-deadman; bestaande staged eigenaarinstaller bewaart expliciet 600s inactivity. Beide intenties zijn bewaard. Geen interval gewijzigd en geen 15s-assertion versoepeld. Nieuwe gedragstest bevestigt bij de ownerbron 600s, idempotente patchgeneratie, unieke retry-nonce en fresh-task-ID-instructie. De operationeel gewenste SLA is daarmee nog niet beslist.
 
-Canonical commits/lease/worktree, echte service-/browserroundtrip en rebootrecovery, actuele hourly-executie, private Weather Runner, holdouttoegangsverleden en executionbewijs. De browservoorstellen zijn Node-gedragstests, geen attestatie van de echte DOM of geladen scriptversie. DOMvertraging en duplicate-task/retry-recovery verdienen verdere deploymenttests.
+De drie tijdelijk bijkomende failures in canonical_final_full waren oude @version0.3.3- en raw-event-id-bronpatronen. Versiecontract is naar de werkelijke v0.4.7 gebracht; dedupechecks voeren nu werkelijk herstel na nieuwe scriptinstantie en storage-before-ACK uit. Negatieve evidence blijft bewaard.
+
+## 10. BLOCKED / UNPROVEN
+
+Lokale canonical commits/coordinator binnen deze toolomgeving; echte systemd/TCP/browser/rebootcanary; actuele hourly-completion; volledige externe modelinvocatietrace; legacy-checkout deployment; finale TWC-doelvalidatie, holdouttoegangsverleden en executionbewijs. Geen ontbrekend bewijs als PASS geclassificeerd.
 
 ## 11. Residuele risico's
 
-Historische raw data hebben geen achteraf reconstrueerbare exacte responseklok. Voorstel sluit onbekende timestampsemantiek uit; daardoor kunnen oude analyses geen eligible rows meer hebben. Dat is fail-closed, geen bewijs van afwezigheid van signaal. Multi-checkoutdrift, concurrency/atomicity, live recovery en deployment blijven onzeker. Historische failurejobs blijven behouden.
+Onbekende historische receiptkwaliteit blijft onbekend; oude data worden niet herschreven. De lexicale policychecker is geen volledige command-sandbox. Node-tests modelleren DOM en storage, maar bewijzen geen echte browservirtualisatie/timing of alle meervoudige tabs. Scoped cache gebruikt andere keys dan oude globals; deployment/migratie vereist expliciete canary. Full crash/reboot recovery en alle concurrencygevallen zijn niet bewezen. Oude historische failurejobs blijven bewaard.
 
 ## 12. Weather/TWC wetenschappelijke conclusie
 
-**UNPROVEN** voor probabilistisch voorspellen van finale TWC settlement 1–4 uur vooruit. Geobserveerde KWI-minute publication-lag lane is een ander target. Geen aanname over interne TWC-methodiek. Persistence bestaat; vergelijkbare OOS trend/METAR-ASOS/NWP/gecombineerde baselines en volledige CRPS/Brier/logloss/calibration/sharpness-evaluatie zijn niet aangetoond.
+**UNPROVEN** voor probabilistisch voorspellen van finale TWC settlement 1–4 uur vooruit. KWI-minute publication-lag is een ander target. Geen interne TWC-werking aangenomen zonder primaire evidence. Receipt-reparaties maken gegevens niet retrospectief point-in-time.
+
+Persistence is aangetroffen; vergelijkbare OOS trend/METAR-ASOS/NWP/gecombineerde Weather Runner-baselines en volledige CRPS/Brier/logloss/calibration/reliability/sharpness-kwalificatie zijn niet aangetoond. Geen nieuwe strategie ontwikkeld om historische resultaten te verbeteren.
 
 ## 13. Point-in-time conclusie
 
-Productie-PIT faalt op teruggedateerde receipts en eerder bekende/cross-config targets. Voorstellen gebruiken response-body receipt, per-cityklok, expliciete provenance en strikt later target met gelijke config. Synthetische positieve en negatieve gevallen slagen. Oude timestamps zijn niet herschreven. Geen volledige PIT-certificering voor alle feature/forecastrevisie/settlementpaden.
+De bevestigde lokale receipt-/chronology-/configdefecten zijn canonical gerepareerd en synthetisch gefalsificeerd/hergetest. Nieuwe test bewijst dat de vroegste cityreceipt prevaleert boven de aggregate batchvolgorde. Legacy manifests zonder expliciete receiptsemantiek worden uitgesloten. Dit kan eerdere eligible aantallen laten verdwijnen: fail-closed, geen negatief signaalbewijs op zichzelf.
+
+Volledige PIT-validiteit over alle forecastavailability/revisie/feature/settlementpaden blijft UNPROVEN. Geen herlabeling of achteraf verzonnen timestamps.
 
 ## 14. Holdoutintegriteit
 
-**UNPROVEN**: geen volledige toegangsgeschiedenis of gegarandeerd untouched holdout aangetoond. KWI city×minute events en buckets zijn niet onafhankelijk; station×local_date-afhankelijkheid blijft relevant. Geen eerder bekeken data tot holdout omgedoopt; geen parameters op uitkomsten afgestemd.
+**UNPROVEN.** Geen afdoende untouched holdout/toegangsgeschiedenis aangetoond. Station×local_date-afhankelijkheid en gedeelde settlementbuckets blijven relevant; eventcounts zijn geen onafhankelijke trials. Geen tuning of hergebruik als nieuwe holdout.
 
 ## 15. Signal-edge status
 
-**NO_PROVEN_EDGE / UNPROVEN** voor het gevraagde final-TWC target. Technische gate of publication-mechanism evidence is hoogstens RESEARCH_POSITIVE. Geen significantie, modelperformance of P&L verzonnen.
+**NO_PROVEN_EDGE / UNPROVEN** voor het gevraagde finale TWC-target. Technische gates en mechanismeobservaties zijn geen economische edge. Geen performance, significantie of P&L verzonnen.
 
 ## 16. Market-edge status
 
-**NO_PROVEN_EDGE.** Geen complete onderbouwing met gelijktijdige executable bid/ask, L2-volume, fees, slippage, partial fills, retail-latency, collateral en settlementfinality. Een geldig meteorologisch signaal of geen gemeten quote-reactie bewijst geen netto-edge.
+**NO_PROVEN_EDGE.** Geen volledige combinatie van point-in-time executable bid/ask, L2 quantity, fees, slippage, fills, retail-latency, collateral en settlementfinality. Geen geobserveerde reactie betekent niet dat informatie nog buiten prijzen ligt. Geen orders of testorders uitgevoerd.
 
-## 17. Bridge-conclusie
+## 17. Prediction Bridge-conclusie
 
-Productie bevat bevestigde routing/envelope/draft/leveringsfouten. Voorsteltests dekken corruptie, replay-identiteit, payloadgrenzen, malformed upstream200, conceptbehoud, ontbrekende sendknop, concurrerende edit en geen zichtbare delivery. Geen globale Bridge-PASS; taskdedupe/retry/page-recovery en echte HTTP/DOM blijven open.
+Afgebakende canonical fouten gerepareerd; routing/envelope/transport, ACKpersistency en browserdeliverygedrag hebben negatieve én positieve tests. Actual loaded browser/runtime niet geattesteerd. Geen algemene Bridge-E2E-PASS.
 
-## 18. Agents/orchestratie
+## 18. Agents/orchestratie-conclusie
 
-Historische role-persistence/consumptie is aangetoond binnen beperkte traces. Actuele volledige keten, zes afzonderlijke modelinvocaties en elk recoverypad zijn niet bewezen. Proof-gatevoorstel weigert negatieve/nul/niet-eindige economics en vereist upstream evidence-ID; claimwoorden zijn nog geen economisch bewijs.
+Historische vijf responsebundels met zes rollen zijn getraceerd naar packets/receipts/downstream. Canonical proof-gate en relevante orchestratiesuites slagen. Actuele volledige hourly-keten blijft niet aangetoond en eerder geblokkeerd door userindex/sync. Deze guard niet omzeild; queue niet hervat.
 
-## 19. Regressie
+## 19. Definitieve regressie
 
-455 verzamelde tests: 447 pass, 8 fail. De suite en oorspronkelijke negen auditchecks zijn uit geëxporteerde bron opnieuw opgebouwd met hetzelfde resultaat. Metadata-Gitfixture bevat geen canonical commit of remote. Volledige repositorykwalificatie blijft onvolledig omdat live/infrastructure en overige historische scripts geen onbeperkt veilig testsuite-equivalent vormen.
+476 canonical tests verzameld: 474 pass, 2 expliciet geclassificeerde fail. Geen verborgen xfail/skip om de twee failures te maskeren. 64 oorspronkelijke auditchecks plus aanvullende falsificaties zijn opgenomen. Groene positieve controls voorkomen dat alles eenvoudigweg geweigerd wordt.
 
-## 20. Tweede adversariële audit
+## 20. Nieuwe adversariële review van gerepareerde bron
 
-Dezelfde auditor, frisse counterexamples; geen tweede onafhankelijke persoon/model geclaimd. Nieuwe ontdekkingen: ontbrekende policydependency, ongeldige upstreamsuccess, policyqueue-terminalisatie, voorstelretryregressie, editor-clear false delivery, invalid/foreign post-event reaction. Rode evidence gaat vooraf aan herstel. Dit toont dat eerdere green checks onvoldoende waren.
+Nieuwe rode counterexamples: dubbele delivery/ACKretry/recovery/backoff; raw upstream timeout; zeer groot integer in finite-economicscheck; vroegste cityreceipt verstopt in later manifest. Alle kregen minimale reparatie en groene focused plus brede canonical regressie. Een onjuist gemockte handlerreplynaam was een auditfixturefout en is zo geclassificeerd, geen productiebug.
 
-## 21. Finale falsificatie / drievoudige controle
+Review is door dezelfde auditor met nieuwe failure modes uitgevoerd; geen tweede persoon/model gefingeerd.
 
-Semantiek/provenance: targetidentiteit, config en request/receiptklok gecontroleerd; TWC-final/settlementregels blijven onbewezen. Data/reproduceerbaarheid: rode counterexamples, positieve controles, volledige regressie en onafhankelijke reconstructie uit export. Economie/execution: ontbreken van volledige L2/fees/fills maakt promotie onmogelijk. Geen van deze controles wordt vervangen door een groen proceslampje.
+## 21. Finale falsificatie en drievoudige zelfcontrole
 
-Hourly-PASS wordt tegengesproken door stale receipts/blokkades. Bridge-PASS door false-deliveryreproductie. PIT-PASS door terugdatering/negative lead. Recovery-PASS blijft begrensd tot geïsoleerde timeout/policytests. Holdout/signal/market-PASS missen vereist bewijs. Deze claims zijn dus verworpen of UNPROVEN, niet stilzwijgend geaccepteerd.
+Semantiek/provenance: sourcebasis, per-city receipt, config/targetidentiteit en ownerpolicy gecontroleerd. Data/reproduceerbaarheid: bewaarde red/green counterexamples, volledige canonical suite en exacte codehashes. Economie/execution: geen volledig bewijs; daarom geen promotie.
 
-## 22. CONTINUATION — exacte volgende stappen
+PIT-, proof-, terminalisatie-, timeout-, route-, malformed-response-, draft-, false-delivery-, coverage- en chronologyclaims zijn op hun begrensde gedrag getest. Grote claims blijven verworpen/onbewezen: huidige hourly werkt, alle processen gebruiken gerepareerde bron, browser-E2E werkt, holdout intact, signal/market edge bewezen. Een actief proces of groen unittestresultaat vervangt die evidence niet.
 
-1. Commit uitsluitend knowledge/codex_audit lokaal; behoud alle overige staged wijzigingen. Geen push. De huidige tools kunnen dit niet door read-only .git.
-2. Zodra canonical coordinator/Git binnen toegestane rechten beschikbaar zijn: registreer eigen sessie/lease en branch/worktree volgens parallel/buildprotocol. Niet gedeeld op main muteren.
-3. Lees remediation/proposal_manifest.json: hashes moeten vóór toepassing matchen. Routervoorstel is gebaseerd op reeds staged ownerwerk; eerst dat werk veilig integreren of voorstel expliciet op juiste basis beoordelen. Geen blind git apply tegen schone HEAD.
-4. Integreer per finding met relevante tests, lokale commit en statusupdate pas na focused plus subsystem/brede regressie. prepared_latest.patch is een reviewartefact, geen deploymentautorisatie buiten sandbox.
-5. Los resterende version/SLA/dedupe/retryverschillen op met echte gedragsinvarianten; geen static safeguards simpelweg schrappen. Voer socket/DOM/runtime-canary uit waar veilig toegestaan, zonder orders of betaald verkeer.
-6. Verzamel correcte prospectieve data; registreer meetgaten. Ontwikkel geen strategie zonder warrant; behoud NO_PROVEN_EDGE en historisch negatieve evidence.
+## 22. CONTINUATION / aanbevelingen
 
-Reproductie zonder productiemutatie: `python3 knowledge/codex_audit/remediation/reproduce_proposals.py`. Verwachte pytest-exit 1 wegens acht expliciet open failures. Geen reset/credits/push/liveactie nodig.
+1. Maak de zes afgebakende lokale commits volgens `canonical/COMMIT_PLAN.md`. Het geteste script bewaart overige staged ownerbestanden. Routercommit omvat expliciet de vooraf staged consumer-routingbasis plus reparatie; geen blind opnieuw toepassen van de patch.
+2. Binnen normale toegestane runtimecontext: beslis het 15s/600s-SLAconflict, test de ongewijzigde sockettest, attesteer werkelijk geladen code en voer een read-only/shadow browser/hourly-canary uit. Geen handels-, wallet- of betaalde activatie.
+3. Reconcile legacy weathercheckout en canonical repair via gecontroleerde deployment; registreer eventuele meetgaten. Niet aannemen dat wijziging in prod de legacy recorder heeft bijgewerkt.
+4. Pas na echte runtime/recovery-evidence en passende wetenschappelijke gates herkwalificeren. Geen holdout relabeling, geen edgepromotie uit technische PASS.
 
-## 23. Evidence en commitreferenties
+Geen verdere reset geactiveerd. De resterende grenscontroles vereisen een andere feitelijk toegankelijke runtime/Git-context of inhoudelijke SLAkeuze; ze zijn niet opgelost door ruimere rechten te vragen.
 
-Permanente baseline: 80a5ff7. Geen nieuwe canonical commit kon worden gemaakt; dit is een expliciete onvolledigheid van het gevraagde Git-ledger. FINDINGS.jsonl bevat exacte bewijzen/statussen; SYSTEM_MAP.md en oorspronkelijke evidence/ blijven geldig als baselineobservaties. Hervatting: remediation/resume_baseline.json, interruption_verification.json, policy_dependency_provenance.json, proposal_manifest.json, TRIAGE.md, alle testlogs/metadatasets en runtime_final.json. Bestaande baseline-rapportversie blijft via `git show 80a5ff7:knowledge/codex_audit/FINAL_AUDIT_REPORT.md` beschikbaar.
+## 23. Exacte evidence/commitreferenties
+
+80a5ff7: baseline. db6c0f3: gecommitte eerdere audit/proposals. Geen volgende canonical commit beschikbaar binnen sandbox.
+
+`canonical/preflight.json`, `integration.jsonl`, `canonical_change_manifest.json`, `canonical_changes.patch` en `before/` koppelen bronbasis aan reparaties zonder userwerkverlies. `remediation/canonical_*.json/.log` bevatten reproduceerbare tests. `canonical/runtime_and_git_blockers.json` onderbouwt grenzen. `canonical/commit_plan_test.json` bewijst alleen veilige commitselectie in een eigen lokale testrepo. FINDINGS.jsonl is het actuele permanente register; eerdere rapportversies/evidence blijven in Git beschikbaar.

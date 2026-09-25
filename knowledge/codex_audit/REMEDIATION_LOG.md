@@ -30,3 +30,18 @@ Baseline door eigenaar veilig gecommit en geverifieerd. Vervolgcommits/coordinat
 ## Actuele hervattingsstatus — 25 september 2026
 
 Baseline 80a5ff7 is geverifieerd en veilig. Oudere tekst over ontbrekende baselinecommit is historisch; vervolgcommits/lease blijven geblokkeerd door read-only .git. Productie ongewijzigd. Zie FINAL_AUDIT_REPORT.md en remediation/TRIAGE.md: 20 bevindingen, 64 auditchecks geslaagd op voorstelbron; brede suite en duurzame replay beide 447 passed / 8 failed. Geen productie-FIXED/RETESTED. Frozen acceptancecriteria zijn niet versoepeld. Exact vervolg staat in CONTINUATION.
+
+## Canonical herstel — 25 september 2026
+
+De eerdere voorstelstatus is opgevolgd door echte canonical integratie op db6c0f3. Alle 17 bronbases matchten exact; userindex en niet-gerelateerde tracked bestanden zijn ongewijzigd. 64 oorspronkelijke auditchecks en nieuwe relevante suites slagen. Nieuwe bevindingen 021–023 gerepareerd en gericht hergetest. Eerste brede canonical run: 447/8; na extra safeguards 469/5, waarvan drie stale bronpatronen nu door gedragstests gedekt zijn. Definitieve hertest volgt. Geen production-deployment-PASS; Git blijft read-only. Zie canonical/canonical_change_manifest.json en canonical_changes.patch.
+
+## Canonical eindcheckpoint
+
+- 17 bronbases exact match; integratie per groep tests/weather/proof/bridge/executor volgens integration.jsonl.
+- 64 auditchecks tegen canonical groen. Nieuwe deliverytests eerst 5 rood/2 groen, daarna 7 groen; vervolgens persistente herstart/event-before-ACK toegevoegd.
+- Nieuwe falsificaties: raw upstream TimeoutError/OSError, grote integer-overflow en cityreceipt/batchvolgorde. Minimale canonical fixes; focused 25 groen.
+- Drie extra static-failures na v0.4.7 waren oude literal/versiepatronen; echte storage/herstart/ACK-gedragstests behouden de veiligheidsinvariant.
+- Definitieve brede canonical run: 474 passed / 2 failed. Geen skip/xfail; socket en owner-SLA afzonderlijk open.
+- Git-staging/coordinator blijven read-only. Geen canonical commit gemaakt. Canonical repair ondanks die blokkade expliciet door eigenaar geautoriseerd; eigen index/diffs bewaard en niet omzeild.
+- Userindex en niet-gerelateerde tracked bestanden ongewijzigd. Manual commitplan in afzonderlijke tijdelijke Gitfixture getest; zes lokale commits, unrelated staged file behouden, geen push.
+- Statussen op basis van echte bron plus tests bijgewerkt; deployed runtime niet gelijkgesteld aan source.

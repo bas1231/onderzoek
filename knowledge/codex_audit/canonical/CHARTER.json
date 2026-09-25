@@ -1,0 +1,63 @@
+{
+  "build_id": "AUD-CANONICAL-db6c0f3",
+  "protocol_version": 1,
+  "objective": "Integreer bevestigde auditreparaties in canonical bron en kwalificeer werkelijk gedrag zonder userwerkverlies.",
+  "source_commit": "db6c0f3c98b0b8fbc8b89544c3745cfba311e8e6",
+  "allowed_capabilities": [
+    "read_repository",
+    "local_tests",
+    "repair_source",
+    "write_audit_evidence",
+    "local_git_commit"
+  ],
+  "allowed_paths": [
+    "/home/leonh/prediction_research_prod"
+  ],
+  "planned_paths": [
+    "control/weather/kalshi_weather_index_recorder.py",
+    "control/weather/twc_hourly_recorder.py",
+    "control/weather/market_reaction.py",
+    "control/jobs/evaluate_kwi_full_station_checkpoint_e369.py",
+    "control/hourly/agent_orchestrator.py",
+    "control/executor.py",
+    "control/tampermonkey_multichat/command_router.py",
+    "control/tampermonkey_multichat/prediction-chat-wake.user.js",
+    "control/policy_check.py",
+    "control/policy.json",
+    "tests/audit/test_reliability_regressions.py",
+    "tests/edge_hunter/test_warrant_issuer.py",
+    "tests/hourly/test_research_os_six_domain_e007.py",
+    "control/weather/test_market_reaction.py",
+    "control/weather/test_market_reaction_ws.py",
+    "control/tampermonkey_multichat/test_patch_v045_task_dedupe_static.py",
+    "knowledge/codex_audit/evidence/reproduce_defects.py",
+    "tests/audit",
+    "control/tampermonkey_multichat/test_userscript_v046_guard_static.py",
+    "knowledge/codex_audit"
+  ],
+  "acceptance_criteria": [
+    "64 bestaande auditchecks slagen tegen canonical bron",
+    "Alle resterende failures afzonderlijk onderzocht, geen safetyassertions versoepeld",
+    "Geen userwerkverlies",
+    "Geen runtime/edge-PASS zonder bewijs"
+  ],
+  "non_goals": [
+    "trade",
+    "push",
+    "paid services",
+    "strategy tuning",
+    "holdout mutation",
+    "service activation"
+  ],
+  "independent_verification": "Nieuwe adversari\u00eble gedragstests na integratie; geen afzonderlijke reviewer beschikbaar.",
+  "rollback_plan": "Gerichte reverse diff alleen voor eigen reparatie na hashcontrole; voorafgaande userinhoud behouden.",
+  "cleanup_plan": "Alleen eigen tijdelijke pytest-artifacts; logs blijven.",
+  "max_attempts": 5,
+  "governance_change": false,
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false
+  },
+  "coordination_exception": "Gebruiker autoriseert expliciet canonical repair ondanks read-only .git; geen grensuitbreiding. Per-bestand hashcompare beschermt userwerk. Lease/worktree geblokkeerd en niet nagebootst."
+}

@@ -1,0 +1,30 @@
+FFF                                                                      [100%]
+=================================== FAILURES ===================================
+__________ test_huge_json_integer_does_not_crash_proof_gate[net_edge] __________
+tests/audit/test_canonical_falsification.py:73: in test_huge_json_integer_does_not_crash_proof_gate
+    accepted,reasons=m.proof_gate(row,{'SYNTHETIC'})
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+control/hourly/agent_orchestrator.py:235: in proof_gate
+    if isinstance(net, bool) or not isinstance(net, (int, float)) or not math.isfinite(net) or net <= 0:
+                                                                         ^^^^^^^^^^^^^^^^^^
+E   OverflowError: int too large to convert to float
+____________ test_huge_json_integer_does_not_crash_proof_gate[fees] ____________
+tests/audit/test_canonical_falsification.py:73: in test_huge_json_integer_does_not_crash_proof_gate
+    accepted,reasons=m.proof_gate(row,{'SYNTHETIC'})
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+control/hourly/agent_orchestrator.py:230: in proof_gate
+    if not isinstance(value, (int, float)) or not math.isfinite(value) or value < 0:
+                                                  ^^^^^^^^^^^^^^^^^^^^
+E   OverflowError: int too large to convert to float
+__________ test_earliest_city_receipt_overrules_manifest_batch_order ___________
+/home/leonh/prediction_research_prod/tests/audit/test_canonical_falsification.py:91: in test_earliest_city_receipt_overrules_manifest_batch_order
+    assert out['eligible']==[]
+E   AssertionError: assert [{'city': 'ny...+00:00', ...}] == []
+E     
+E     Left contains one more item: {'city': 'nyc', 'config_version': 'v1', 't': 101, 'first_incomplete_at': '2026-09-25T00:00:10+00:00', ...}
+E     Use -v to get more diff
+=========================== short test summary info ============================
+FAILED tests/audit/test_canonical_falsification.py::test_huge_json_integer_does_not_crash_proof_gate[net_edge]
+FAILED tests/audit/test_canonical_falsification.py::test_huge_json_integer_does_not_crash_proof_gate[fees]
+FAILED tests/audit/test_canonical_falsification.py::test_earliest_city_receipt_overrules_manifest_batch_order
+3 failed, 9 deselected in 0.66s

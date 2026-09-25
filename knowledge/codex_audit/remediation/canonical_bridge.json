@@ -1,0 +1,23 @@
+{
+  "command": [
+    "/home/leonh/prediction_research_prod/.venv/bin/python",
+    "-m",
+    "pytest",
+    "-q",
+    "tests/bridge/test_tampermonkey_multichat.py",
+    "tests/audit/test_reliability_regressions.py",
+    "-k",
+    "route or envelope or upstream or composer or multichat",
+    "--tb=short",
+    "-o",
+    "cache_dir=/tmp/codex-remediation-pytest-cache"
+  ],
+  "cwd": "/home/leonh/prediction_research_prod",
+  "started_at": "2026-09-25T08:26:44.891686+00:00",
+  "ended_at": "2026-09-25T08:26:46.910014+00:00",
+  "exit_code": 0,
+  "environment": {
+    "PYTHONDONTWRITEBYTECODE": "1",
+    "PYTHONPATH": "/home/leonh/prediction_research_prod:/home/leonh/prediction_research_prod/control/weather"
+  }
+}

@@ -1,0 +1,61 @@
+{
+  "timestamp": "2026-09-25T09:38:52.353712+00:00",
+  "receipts": [
+    {
+      "path": "/home/leonh/.local/state/prediction-research/prod-runtime-sync-latest.json",
+      "sha256": "47d98740df14c73a56783bd23a21e5b83ae7ce41a29a898a7e22c0d31701163e",
+      "fields": {
+        "status": "BLOCKED",
+        "timestamp_utc": "2026-09-25T09:00:18.617679+00:00"
+      }
+    },
+    {
+      "path": "/home/leonh/.local/state/prediction-research/runtime-sync-latest.json",
+      "sha256": "ebe2985dc6d3285bd465a858140ee43641a19c52783317974525e80c67c19de3",
+      "fields": {
+        "status": "BLOCKED_TRACKED_CHANGES",
+        "timestamp": "2026-09-22T09:13:19+02:00"
+      }
+    },
+    {
+      "path": "/home/leonh/.local/state/prediction-research/scheduled-cycle-latest.json",
+      "sha256": "7a910cacfff4e8a1cdeab6904c2ce6de4afabde26503acbc8ea470f933307401",
+      "fields": {
+        "status": "COMPLETED",
+        "timestamp_utc": "2026-09-24T14:04:16.186272+00:00",
+        "run_id": "hourly-20260924T160000+0200",
+        "claims": {
+          "browser_bridge_running": false,
+          "required_checkpoints_completed": true,
+          "runtime_exchange_running": false,
+          "scheduled_wrapper_completed": true
+        }
+      }
+    },
+    {
+      "path": "/home/leonh/.local/state/prediction-research/runtime-health-latest.json",
+      "sha256": "66ee69db66ab797d44d50befbda4a9c77cca76ecc9885ac98914daf8ac4b3a01",
+      "fields": {
+        "timestamp_utc": "2026-09-24T14:04:16.286387+00:00",
+        "reason": "recent preflight plus correlated completed scheduled-cycle receipt observed",
+        "claims": {
+          "browser_bridge_running": false,
+          "runtime_exchange_running": false,
+          "scheduled_cycle_recently_completed": true,
+          "scheduler_preflight_recent": true,
+          "scheduler_service_running": false
+        }
+      }
+    },
+    {
+      "path": "/home/leonh/.local/state/prediction-research/git-checkpoint-latest.json",
+      "sha256": "24687bbc0a1514628f99b7379cd12f5c7a9c07e12bc15d1b07c9256b2bc1b823",
+      "fields": {
+        "status": "FAIL_CLOSED",
+        "timestamp_utc": "2026-09-24T15:13:35.113193+00:00",
+        "reason": "local HEAD differs from origin/main; manual reconciliation required"
+      }
+    }
+  ],
+  "source_change_does_not_imply_process_reload": true
+}

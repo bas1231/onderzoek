@@ -1,0 +1,27 @@
+{
+  "objective": "Herstel aangetoonde canonical delivery dedupe/retry/page-recovery guards zonder onbewezen ACK.",
+  "findings": [
+    "AUD-CODEX-007",
+    "AUD-CODEX-009",
+    "AUD-CODEX-019"
+  ],
+  "paths": [
+    "control/tampermonkey_multichat/prediction-chat-wake.user.js",
+    "control/tampermonkey_multichat/test_userscript_v046_guard_static.py",
+    "tests/audit/test_delivery_behavior.py"
+  ],
+  "acceptance": [
+    "zelfde task/payload ander event \u00e9\u00e9n verzending",
+    "gewijzigde payload niet laten verdwijnen",
+    "exact userturn recovery",
+    "geen partial anchor ACK",
+    "60s retrybackoff",
+    "taskmemory v\u00f3\u00f3r ACK",
+    "bestaande composer/falsedelivery-tests behouden"
+  ],
+  "non_goals": [
+    "installer-SLA wijzigen",
+    "live browser deployment"
+  ],
+  "max_attempts": 3
+}

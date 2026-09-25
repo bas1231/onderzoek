@@ -1,0 +1,36 @@
+FF.F.FF                                                                  [100%]
+=================================== FAILURES ===================================
+_____________ test_task_replayed_with_new_event_is_not_resubmitted _____________
+tests/audit/test_delivery_behavior.py:44: in test_task_replayed_with_new_event_is_not_resubmitted
+    assert len(out['sent'])==1 and len(out['acks'])==2
+E   AssertionError: assert (2 == 1)
+E    +  where 2 = len(['RESULT_READY: T full evidence', 'RESULT_READY: T full evidence'])
+____________________ test_ack_failure_keeps_delivery_memory ____________________
+tests/audit/test_delivery_behavior.py:48: in test_ack_failure_keeps_delivery_memory
+    assert len(out['sent'])==1 and len(out['acks'])==2
+E   AssertionError: assert (2 == 1)
+E    +  where 2 = len(['RESULT_READY: T full evidence', 'RESULT_READY: T full evidence'])
+________________ test_exact_visible_user_turn_recovers_delivery ________________
+tests/audit/test_delivery_behavior.py:56: in test_exact_visible_user_turn_recovers_delivery
+    assert out['sent']==[] and len(out['acks'])==1
+E   AssertionError: assert (['RESULT_READ...ull evidence'] == []
+E     
+E     Left contains one more item: 'RESULT_READY: T full evidence'
+E     Use -v to get more diff)
+__________________ test_retry_backoff_preserves_unacked_event __________________
+tests/audit/test_delivery_behavior.py:64: in test_retry_backoff_preserves_unacked_event
+    assert len(out['sent'])==2 and out['acks']==[]
+E   AssertionError: assert (3 == 2)
+E    +  where 3 = len(['RESULT_READY: T full evidence', 'RESULT_READY: T full evidence', 'RESULT_READY: T full evidence'])
+_____________________ test_task_memory_written_before_ack ______________________
+tests/audit/test_delivery_behavior.py:68: in test_task_memory_written_before_ack
+    assert any('sent_tasks' in k and v for k,v in out['acks'][0]['cache'])
+E   assert False
+E    +  where False = any(<generator object test_task_memory_written_before_ack.<locals>.<genexpr> at 0x79c2d93ceb50>)
+=========================== short test summary info ============================
+FAILED tests/audit/test_delivery_behavior.py::test_task_replayed_with_new_event_is_not_resubmitted
+FAILED tests/audit/test_delivery_behavior.py::test_ack_failure_keeps_delivery_memory
+FAILED tests/audit/test_delivery_behavior.py::test_exact_visible_user_turn_recovers_delivery
+FAILED tests/audit/test_delivery_behavior.py::test_retry_backoff_preserves_unacked_event
+FAILED tests/audit/test_delivery_behavior.py::test_task_memory_written_before_ack
+5 failed, 2 passed in 1.13s

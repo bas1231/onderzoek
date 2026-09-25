@@ -1,0 +1,42 @@
+FF.....F.                                                                [100%]
+=================================== FAILURES ===================================
+___________ test_upstream_transport_error_is_explicit_failure[exc0] ____________
+tests/audit/test_canonical_falsification.py:18: in test_upstream_transport_error_is_explicit_failure
+    code,body=m.forward_command({'action':'BRIDGE_PING','task_id':'SYNTHETIC'},'synthetic')
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+control/tampermonkey_multichat/command_router.py:122: in forward_command
+    with urlopen(req, timeout=15) as resp:
+         ^^^^^^^^^^^^^^^^^^^^^^^^
+tests/audit/test_canonical_falsification.py:16: in fail
+    def fail(*a,**k):raise exc
+                     ^^^^^^^^^
+E   TimeoutError: synthetic
+___________ test_upstream_transport_error_is_explicit_failure[exc1] ____________
+tests/audit/test_canonical_falsification.py:18: in test_upstream_transport_error_is_explicit_failure
+    code,body=m.forward_command({'action':'BRIDGE_PING','task_id':'SYNTHETIC'},'synthetic')
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+control/tampermonkey_multichat/command_router.py:122: in forward_command
+    with urlopen(req, timeout=15) as resp:
+         ^^^^^^^^^^^^^^^^^^^^^^^^
+tests/audit/test_canonical_falsification.py:16: in fail
+    def fail(*a,**k):raise exc
+                     ^^^^^^^^^
+E   OSError: synthetic
+______________ test_repeated_ack_handler_persists_without_socket _______________
+tests/audit/test_canonical_falsification.py:47: in test_repeated_ack_handler_persists_without_socket
+    h.do_POST()
+control/tampermonkey_multichat/bridge_server_v2.py:302: in do_POST
+    self.reply_json(200, {"ok": True, "event_id": event_id})
+control/tampermonkey_multichat/bridge_server_v2.py:162: in reply_json
+    self.send_response(status)
+/usr/lib/python3.12/http/server.py:501: in send_response
+    self.log_request(code)
+/usr/lib/python3.12/http/server.py:554: in log_request
+    self.requestline, str(code), str(size))
+    ^^^^^^^^^^^^^^^^
+E   AttributeError: 'Handler' object has no attribute 'requestline'
+=========================== short test summary info ============================
+FAILED tests/audit/test_canonical_falsification.py::test_upstream_transport_error_is_explicit_failure[exc0]
+FAILED tests/audit/test_canonical_falsification.py::test_upstream_transport_error_is_explicit_failure[exc1]
+FAILED tests/audit/test_canonical_falsification.py::test_repeated_ack_handler_persists_without_socket
+3 failed, 6 passed in 0.32s

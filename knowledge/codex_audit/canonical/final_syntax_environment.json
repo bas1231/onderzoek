@@ -1,0 +1,56 @@
+{
+  "timestamp": "2026-09-25T09:38:52.770917+00:00",
+  "python_ast_checked": [
+    "control/executor.py",
+    "control/hourly/agent_orchestrator.py",
+    "control/jobs/evaluate_kwi_full_station_checkpoint_e369.py",
+    "control/policy_check.py",
+    "control/tampermonkey_multichat/command_router.py",
+    "control/tampermonkey_multichat/test_patch_v045_task_dedupe_static.py",
+    "control/tampermonkey_multichat/test_userscript_delivery_dedupe_static.py",
+    "control/tampermonkey_multichat/test_userscript_v046_guard_static.py",
+    "control/weather/kalshi_weather_index_recorder.py",
+    "control/weather/market_reaction.py",
+    "control/weather/test_market_reaction.py",
+    "control/weather/test_market_reaction_ws.py",
+    "control/weather/twc_hourly_recorder.py",
+    "knowledge/codex_audit/evidence/reproduce_defects.py",
+    "tests/audit/test_canonical_falsification.py",
+    "tests/audit/test_delivery_behavior.py",
+    "tests/audit/test_reliability_regressions.py",
+    "tests/bridge/test_tampermonkey_multichat.py",
+    "tests/edge_hunter/test_warrant_issuer.py",
+    "tests/hourly/test_research_os_six_domain_e007.py"
+  ],
+  "checks": [
+    {
+      "command": [
+        "/home/leonh/prediction_research_prod/.venv/bin/python",
+        "-c",
+        "import sys,pytest; print(sys.version); print(\"pytest\",pytest.__version__)"
+      ],
+      "exit_code": 0,
+      "stdout": "3.12.3 (main, Aug 31 2026, 10:18:26) [GCC 13.3.0]\npytest 9.1.1\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "node",
+        "--version"
+      ],
+      "exit_code": 0,
+      "stdout": "v18.19.1\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "node",
+        "--check",
+        "control/tampermonkey_multichat/prediction-chat-wake.user.js"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    }
+  ]
+}

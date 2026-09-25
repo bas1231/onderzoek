@@ -29,3 +29,23 @@ Baseline door eigenaar veilig gecommit en geverifieerd. Vervolgcommits/coordinat
 ## Actuele hervattingsstatus — 25 september 2026
 
 Baseline 80a5ff7 is geverifieerd en veilig. Oudere tekst over ontbrekende baselinecommit is historisch; vervolgcommits/lease blijven geblokkeerd door read-only .git. Productie ongewijzigd. Zie FINAL_AUDIT_REPORT.md en remediation/TRIAGE.md: 20 bevindingen, 64 auditchecks geslaagd op voorstelbron; brede suite en duurzame replay beide 447 passed / 8 failed. Geen productie-FIXED/RETESTED. Frozen acceptancecriteria zijn niet versoepeld. Exact vervolg staat in CONTINUATION.
+
+## Canonical herstel — 25 september 2026
+
+De eerdere voorstelstatus is opgevolgd door echte canonical integratie op db6c0f3. Alle 17 bronbases matchten exact; userindex en niet-gerelateerde tracked bestanden zijn ongewijzigd. 64 oorspronkelijke auditchecks en nieuwe relevante suites slagen. Nieuwe bevindingen 021–023 gerepareerd en gericht hergetest. Eerste brede canonical run: 447/8; na extra safeguards 469/5, waarvan drie stale bronpatronen nu door gedragstests gedekt zijn. Definitieve hertest volgt. Geen production-deployment-PASS; Git blijft read-only. Zie canonical/canonical_change_manifest.json en canonical_changes.patch.
+
+## Definitieve canonical matrix
+
+| Scope | Bewijs | Resultaat |
+|---|---|---|
+| Weather/PIT | canonical_weather | 39 pass |
+| Proof | canonical_proof | 16 pass |
+| Bridge | canonical_bridge | 34 pass |
+| Executor/policy | canonical_executor | 20 pass |
+| Oorspronkelijke audit + delivery | canonical_delivery_green | 71 pass |
+| Nieuwe falsificatie + guards | canonical_falsification_green | 25 pass |
+| Scoped persistent deliverycontracts | canonical_static_contract_reconciled | 27 pass |
+| Volledige veilige canonical scope | canonical_final_regression | 474 pass / 2 fail |
+| Gitcommitselectie, aparte fixture | canonical/commit_plan_test.json | 6 lokale fixturecommits; ownerindex behouden |
+
+Logs/metadatasets onder remediation/, altijd werkelijke cwd en exitstatus inspecteren. De definitieve suite omvat oorspronkelijke 64 auditchecks. Sockettest faalt door PermissionError; oude installer15s-check conflicteert met staged600s-ownerbeleid. Geen tests versoepeld of stil overgeslagen.

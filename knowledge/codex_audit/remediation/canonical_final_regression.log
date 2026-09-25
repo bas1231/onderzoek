@@ -1,0 +1,26 @@
+........................................................................ [ 15%]
+........................................................................ [ 30%]
+........................................................................ [ 45%]
+........................................................................ [ 60%]
+........................................................................ [ 75%]
+........................................................................ [ 90%]
+.....F.F....................................                             [100%]
+=================================== FAILURES ===================================
+_ SentOutboxSemanticsTest.test_repeated_ack_is_idempotent_and_does_not_restore_outbox _
+control/tampermonkey_multichat/test_bridge_server_sent_semantics.py:110: in test_repeated_ack_is_idempotent_and_does_not_restore_outbox
+    httpd = self.bridge.ThreadingHTTPServer(("127.0.0.1", 0), self.bridge.Handler)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/socketserver.py:453: in __init__
+    self.socket = socket.socket(self.address_family,
+/usr/lib/python3.12/socket.py:233: in __init__
+    _socket.socket.__init__(self, family, type, proto, fileno)
+E   PermissionError: [Errno 1] Operation not permitted
+_______________ test_installer_keeps_fast_deadman_runtime_guards _______________
+control/tampermonkey_multichat/test_install_hardened_bridge_fast_deadman_static.py:20: in test_installer_keeps_fast_deadman_runtime_guards
+    assert not missing, f"missing durable fast-deadman guards: {missing}"
+E   AssertionError: missing durable fast-deadman guards: ['FAST_DEADMAN_SECONDS = 15.0', 'DEFAULT_HEARTBEAT_INTERVAL = 15.0', 'HEARTBEAT_FAST_DEADMAN=1']
+E   assert not ['FAST_DEADMAN_SECONDS = 15.0', 'DEFAULT_HEARTBEAT_INTERVAL = 15.0', 'HEARTBEAT_FAST_DEADMAN=1']
+=========================== short test summary info ============================
+FAILED control/tampermonkey_multichat/test_bridge_server_sent_semantics.py::SentOutboxSemanticsTest::test_repeated_ack_is_idempotent_and_does_not_restore_outbox
+FAILED control/tampermonkey_multichat/test_install_hardened_bridge_fast_deadman_static.py::test_installer_keeps_fast_deadman_runtime_guards
+2 failed, 474 passed in 11.76s
