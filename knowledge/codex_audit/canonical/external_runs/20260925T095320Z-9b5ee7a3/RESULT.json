@@ -1,0 +1,303 @@
+{
+  "started_at": "2026-09-25T09:53:20.475208+00:00",
+  "scope": "Offline canonical tests, temporary loopback, read-only deployed health/systemd/receipts",
+  "runtime_e2e": "UNPROVEN",
+  "execution_context": "LOCAL_INVOCATION_UNATTESTED",
+  "runner_sha256": "4ec9012914860b7620ce3dde68509c062129f8782e5eac9d8eda912e852a4518",
+  "scientific_status": "NO_PROVEN_EDGE",
+  "checks": [
+    {
+      "label": "git_head",
+      "command": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "exit_code": 0,
+      "stdout": "538c20c8503a0efda607db363cd967c98f6bb442\n",
+      "stderr": ""
+    },
+    {
+      "label": "git_status",
+      "command": [
+        "git",
+        "status",
+        "--short"
+      ],
+      "exit_code": 0,
+      "stdout": "M  control/tampermonkey_multichat/bridge_server_v2.py\nA  control/tampermonkey_multichat/deploy_consumer_routing_e010.py\nM  control/tampermonkey_multichat/install_hardened_bridge.py\n M control/tampermonkey_multichat/test_install_hardened_bridge_fast_deadman_static.py\n M hourly-reports/hourly-bridge-efficiency-benchmark-latest.md\n M knowledge/candidates/ASSET-RANK-MAKER-HEDGE-V1.json\n M knowledge/candidates/KWI-FULL-STATION-PRECANONICAL-V1.json\nAM knowledge/candidates/MANUAL-SCOUT-HENGELTJES-20260924.json\n M knowledge/candidates/PAYOFF-IDENTITY-MINING-V1.json\n M knowledge/codex_audit/FINAL_AUDIT_REPORT.md\n M knowledge/codex_audit/FINDINGS.jsonl\n M knowledge/codex_audit/OPEN_FINDINGS.md\n M knowledge/codex_audit/README.md\n M knowledge/codex_audit/REMEDIATION_LOG.md\n M knowledge/codex_audit/RESIDUAL_RISKS.md\n M knowledge/codex_audit/TEST_MATRIX.md\nA  knowledge/manual_scout_seeds/2026-09-24-hengeltjes-late-passive-liquidity.md\n M knowledge/recon/opportunity_graph.json\n M knowledge/recon/watchlist.json\n M knowledge/research_os/evidence_graph.json\n M knowledge/research_os/failure_graph.json\n?? control/__pycache__/\n?? control/edge_hunter/__pycache__/\n?? control/hourly/__pycache__/\n?? control/jobs/__pycache__/\n?? hourly-reports/bridge-three-port-probe-latest.md\n?? hourly-reports/hourly-20260924T180000+0200.md\n?? hourly-reports/hourly-20260924T190000+0200.md\n?? knowledge/codex_audit/canonical/WSL_QUALIFICATION.md\n?? knowledge/codex_audit/canonical/external_runs/\n?? knowledge/codex_audit/canonical/final_qualification/\n?? knowledge/codex_audit/canonical/qualify_wsl.py\n?? knowledge/codex_audit/canonical/test_external_runtime.py\n?? knowledge/codex_audit/remediation/qualification_final_regression.json\n?? knowledge/codex_audit/remediation/qualification_final_regression.log\n?? knowledge/codex_audit/remediation/qualification_policy.json\n?? knowledge/codex_audit/remediation/qualification_policy.log\n?? knowledge/recon/market_instance_state.json\n?? knowledge/runs/hourly-20260924T130000+0200-ai-response-receipt.json\n?? knowledge/runs/hourly-20260924T130000+0200-ai-response.json\n?? knowledge/runs/hourly-20260924T160000+0200-ai-response-receipt.json\n?? knowledge/runs/hourly-20260924T160000+0200-ai-response.json\n?? knowledge/runs/hourly-20260924T180000+0200-ai-response-receipt.json\n?? knowledge/runs/hourly-20260924T180000+0200-ai-response.json\n?? knowledge/runs/hourly-20260924T180000+0200.json\n?? knowledge/runs/hourly-20260924T190000+0200-ai-response-receipt.json\n?? knowledge/runs/hourly-20260924T190000+0200-ai-response.json\n?? knowledge/runs/hourly-20260924T190000+0200.json\n?? knowledge/runs/market_instance_scan/\n?? tests/__pycache__/\n?? tests/hourly/__pycache__/\n",
+      "stderr": ""
+    },
+    {
+      "label": "offline_contracts",
+      "command": [
+        "/home/leonh/prediction_research_prod/.venv/bin/python",
+        "-m",
+        "pytest",
+        "-q",
+        "tests/audit",
+        "knowledge/codex_audit/evidence/test_audit_regressions.py",
+        "control/weather",
+        "tests/hourly/test_agent_orchestrator.py",
+        "control/tampermonkey_multichat/test_install_hardened_bridge_fast_deadman_static.py",
+        "--tb=short",
+        "-o",
+        "cache_dir=/tmp/codex-wsl-qualification-7s0amu65/cache",
+        "--basetemp=/tmp/codex-wsl-qualification-7s0amu65/offline_contracts"
+      ],
+      "exit_code": 0,
+      "log": "offline_contracts.log"
+    },
+    {
+      "label": "real_loopback",
+      "command": [
+        "/home/leonh/prediction_research_prod/.venv/bin/python",
+        "-m",
+        "pytest",
+        "-q",
+        "control/tampermonkey_multichat/test_bridge_server_sent_semantics.py",
+        "knowledge/codex_audit/canonical/test_external_runtime.py",
+        "--tb=short",
+        "-o",
+        "cache_dir=/tmp/codex-wsl-qualification-7s0amu65/cache",
+        "--basetemp=/tmp/codex-wsl-qualification-7s0amu65/real_loopback"
+      ],
+      "exit_code": 0,
+      "log": "real_loopback.log"
+    },
+    {
+      "label": "systemd_observation",
+      "command": [
+        "systemctl",
+        "--user",
+        "show",
+        "prediction-chat-wake.service",
+        "prediction-chat-router.service",
+        "prediction-research-executor.service",
+        "prediction-research-hourly-director.service",
+        "prediction-research-hourly-director.timer",
+        "prediction-runtime-sync.service",
+        "prediction-research-kalshi-weather-index-recorder.service",
+        "prediction-research-twc-recorder.service",
+        "--property=Id,LoadState,ActiveState,SubState,MainPID,NRestarts,ActiveEnterTimestamp,ExecMainStatus,LastTriggerUSec,NextElapseUSecRealtime",
+        "--no-pager"
+      ],
+      "exit_code": 0,
+      "stdout": "MainPID=385\nNRestarts=0\nExecMainStatus=0\nId=prediction-chat-wake.service\nLoadState=loaded\nActiveState=active\nSubState=running\nActiveEnterTimestamp=Fri 2026-09-25 08:23:05 CEST\n\nMainPID=383\nNRestarts=0\nExecMainStatus=0\nId=prediction-chat-router.service\nLoadState=loaded\nActiveState=active\nSubState=running\nActiveEnterTimestamp=Fri 2026-09-25 08:23:05 CEST\n\nMainPID=16446\nNRestarts=1293\nExecMainStatus=0\nId=prediction-research-executor.service\nLoadState=loaded\nActiveState=active\nSubState=running\nActiveEnterTimestamp=Fri 2026-09-25 10:27:00 CEST\n\nMainPID=0\nNRestarts=0\nExecMainStatus=0\nId=prediction-research-hourly-director.service\nLoadState=loaded\nActiveState=failed\nSubState=failed\nActiveEnterTimestamp=\n\nNextElapseUSecRealtime=Fri 2026-09-25 12:00:00 CEST\nLastTriggerUSec=Fri 2026-09-25 11:00:18 CEST\nId=prediction-research-hourly-director.timer\nLoadState=loaded\nActiveState=active\nSubState=waiting\nActiveEnterTimestamp=Fri 2026-09-25 08:23:05 CEST\n\nMainPID=0\nNRestarts=0\nExecMainStatus=0\nId=prediction-runtime-sync.service\nLoadState=loaded\nActiveState=inactive\nSubState=dead\nActiveEnterTimestamp=\n\nMainPID=0\nNRestarts=0\nExecMainStatus=0\nId=prediction-research-kalshi-weather-index-recorder.service\nLoadState=loaded\nActiveState=inactive\nSubState=dead\nActiveEnterTimestamp=\n\nMainPID=0\nNRestarts=0\nExecMainStatus=0\nId=prediction-research-twc-recorder.service\nLoadState=loaded\nActiveState=inactive\nSubState=dead\nActiveEnterTimestamp=\n",
+      "stderr": ""
+    }
+  ],
+  "tested_repair_hashes": [
+    {
+      "path": "control/executor.py",
+      "matches": true
+    },
+    {
+      "path": "control/hourly/agent_orchestrator.py",
+      "matches": true
+    },
+    {
+      "path": "control/jobs/evaluate_kwi_full_station_checkpoint_e369.py",
+      "matches": true
+    },
+    {
+      "path": "control/policy.json",
+      "matches": true
+    },
+    {
+      "path": "control/policy_check.py",
+      "matches": true
+    },
+    {
+      "path": "control/tampermonkey_multichat/command_router.py",
+      "matches": true
+    },
+    {
+      "path": "control/tampermonkey_multichat/prediction-chat-wake.user.js",
+      "matches": true
+    },
+    {
+      "path": "control/tampermonkey_multichat/test_patch_v045_task_dedupe_static.py",
+      "matches": true
+    },
+    {
+      "path": "control/tampermonkey_multichat/test_userscript_delivery_dedupe_static.py",
+      "matches": true
+    },
+    {
+      "path": "control/tampermonkey_multichat/test_userscript_v046_guard_static.py",
+      "matches": true
+    },
+    {
+      "path": "control/weather/kalshi_weather_index_recorder.py",
+      "matches": true
+    },
+    {
+      "path": "control/weather/market_reaction.py",
+      "matches": true
+    },
+    {
+      "path": "control/weather/test_market_reaction.py",
+      "matches": true
+    },
+    {
+      "path": "control/weather/test_market_reaction_ws.py",
+      "matches": true
+    },
+    {
+      "path": "control/weather/twc_hourly_recorder.py",
+      "matches": true
+    },
+    {
+      "path": "knowledge/codex_audit/evidence/reproduce_defects.py",
+      "matches": true
+    },
+    {
+      "path": "tests/audit/test_canonical_falsification.py",
+      "matches": true
+    },
+    {
+      "path": "tests/audit/test_delivery_behavior.py",
+      "matches": true
+    },
+    {
+      "path": "tests/audit/test_reliability_regressions.py",
+      "matches": true
+    },
+    {
+      "path": "tests/bridge/test_tampermonkey_multichat.py",
+      "matches": true
+    },
+    {
+      "path": "tests/edge_hunter/test_warrant_issuer.py",
+      "matches": true
+    },
+    {
+      "path": "tests/hourly/test_research_os_six_domain_e007.py",
+      "matches": true
+    }
+  ],
+  "read_only_local_health": [
+    {
+      "port": 8765,
+      "method": "GET",
+      "path": "/health",
+      "http_status": 200,
+      "selected_fields": {
+        "ok": true,
+        "service": "prediction-chat-wake",
+        "version": 8,
+        "server_heartbeat": true,
+        "heartbeat_done_guard": true,
+        "heartbeat_inactivity_reset": true,
+        "heartbeat_retry_nonce": true,
+        "heartbeat_fresh_task_id_required": true,
+        "heartbeat_resets_on_bridge_result": true,
+        "heartbeat_resets_on_assistant_command": true
+      }
+    },
+    {
+      "port": 8767,
+      "method": "GET",
+      "path": "/health",
+      "http_status": 200,
+      "selected_fields": {
+        "ok": true,
+        "service": "prediction-chat-command-router",
+        "version": 2,
+        "upstream_port": 8766,
+        "consumer_routing": true
+      }
+    }
+  ],
+  "deployment_file_comparison": [
+    {
+      "canonical": "control/tampermonkey_multichat/command_router.py",
+      "installed": "/home/leonh/.local/share/prediction-chat-bridge/command_router.py",
+      "canonical_sha256": "b2b39858d100909cd78a480202e4eaafdeb20dcff9e48e0a7ce10db7622db821",
+      "installed_sha256": "629de71ceb5c95004a51edf0d4a9a503e5f001188db09d992f81ac57566468f9",
+      "matches": false
+    },
+    {
+      "canonical": "control/tampermonkey_multichat/prediction-chat-wake.user.js",
+      "installed": "/home/leonh/.local/share/prediction-chat-bridge/prediction-chat-wake.user.js",
+      "canonical_sha256": "e1f3c0ae670996f7d56d2fb2c09cf69d14b6b09a2ef7a415664431f167f14a14",
+      "installed_sha256": "a2577ec7613fa947d3b9513773700888412d5d6a6e26bf936a73beb255d8b9e7",
+      "matches": false
+    },
+    {
+      "canonical": "control/weather/kalshi_weather_index_recorder.py",
+      "installed": "/home/leonh/prediction_research/control/weather/kalshi_weather_index_recorder.py",
+      "canonical_sha256": "03296693b1e188f93b88809629d4f23204aac7d7a0e23fd299adc90a634e43d0",
+      "installed_sha256": "bb60c33e4056783f860a0829c2dfaaeda345a3567c68292a7036e870d8a8c741",
+      "matches": false
+    },
+    {
+      "canonical": "control/weather/twc_hourly_recorder.py",
+      "installed": "/home/leonh/prediction_research/control/weather/twc_hourly_recorder.py",
+      "canonical_sha256": "704a16a724aef17ade8fbdb8c4cbf79484cfe886f8ec101e2753bfffda6a6734",
+      "installed_sha256": "7152fad08c72c57a5e718ec04b3f41f417f8028fa84680d9e690ddcedfefb9b7",
+      "matches": false
+    },
+    {
+      "canonical": "control/weather/market_reaction.py",
+      "installed": "/home/leonh/prediction_research/control/weather/market_reaction.py",
+      "canonical_sha256": "de3605a95a204fe420e2d1d78f1bcc57a48035ccca72d4512dadabc12d2384dc",
+      "installed_sha256": "d2b94d2330bb2a26e290e754799f3b2d3a61cd05099e79af3355289771ff0a88",
+      "matches": false
+    }
+  ],
+  "receipts": [
+    {
+      "name": "prod-runtime-sync-latest.json",
+      "sha256": "47d98740df14c73a56783bd23a21e5b83ae7ce41a29a898a7e22c0d31701163e",
+      "selected_fields": {
+        "status": "BLOCKED",
+        "timestamp_utc": "2026-09-25T09:00:18.617679+00:00"
+      },
+      "age_seconds": 3185.871433
+    },
+    {
+      "name": "scheduled-cycle-latest.json",
+      "sha256": "7a910cacfff4e8a1cdeab6904c2ce6de4afabde26503acbc8ea470f933307401",
+      "selected_fields": {
+        "status": "COMPLETED",
+        "timestamp_utc": "2026-09-24T14:04:16.186272+00:00",
+        "run_id": "hourly-20260924T160000+0200"
+      },
+      "age_seconds": 71348.303329
+    },
+    {
+      "name": "runtime-health-latest.json",
+      "sha256": "66ee69db66ab797d44d50befbda4a9c77cca76ecc9885ac98914daf8ac4b3a01",
+      "selected_fields": {
+        "timestamp_utc": "2026-09-24T14:04:16.286387+00:00"
+      },
+      "age_seconds": 71348.204147
+    },
+    {
+      "name": "git-checkpoint-latest.json",
+      "sha256": "24687bbc0a1514628f99b7379cd12f5c7a9c07e12bc15d1b07c9256b2bc1b823",
+      "selected_fields": {
+        "status": "FAIL_CLOSED",
+        "timestamp_utc": "2026-09-24T15:13:35.113193+00:00"
+      },
+      "age_seconds": 67189.378308
+    }
+  ],
+  "production_queue_counts": {
+    "pending": 28,
+    "running": 0,
+    "completed": 367,
+    "failed": 92
+  },
+  "qualified_scope": {
+    "offline_canonical_contracts": "PASS",
+    "temporary_loopback_and_persistent_rebind": "SEE_real_loopback",
+    "deployed_bridge_browser_e2e": "UNPROVEN",
+    "hourly_useful_work": "REQUIRES_RECEIPT_REVIEW",
+    "production_restart_reboot": "NOT_PERFORMED",
+    "deployed_code_loaded": "UNPROVEN_file_match_is_not_loaded_code_attestation"
+  },
+  "finished_at": "2026-09-25T09:53:24.494209+00:00"
+}

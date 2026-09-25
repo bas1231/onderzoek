@@ -1,8 +1,10 @@
-# Actuele bevindingen na canonical herstel
+# Definitieve bevindingen na externe WSL-review
 
-17 FIXED_AND_RETESTED; 1 CONFIRMED_OPEN; 1 BLOCKED; 3 RESIDUAL_RISK; 1 UNPROVEN. Softwarebron gerepareerd; volledige systeemkwalificatie FAIL/INCOMPLETE, NO_PROVEN_EDGE.
+**Software: AUDIT_INCOMPLETE + RESIDUAL_RISK. Wetenschap: NO_PROVEN_EDGE (afzonderlijk).**
 
-| ID | Ernst | Actuele status | Kern |
+17 FIXED_AND_RETESTED in canonical bron; 2 CONFIRMED_OPEN (hourly/deployment); 1 BLOCKED (nieuwe Gitwrites binnen tools); 2 RESIDUAL_RISK; 1 UNPROVEN. Externe tests128+4 groen; geen nieuwe canonical defecten gevonden.
+
+| ID | Ernst | Status | Bevinding |
 |---|---|---|---|
 | AUD-CODEX-001 | HIGH | BLOCKED | Baseline 80a5ff7 door eigenaar gecommit; vervolgauditcommits en gedeelde coordinator nog steeds geblokkeerd door read-only .git. |
 | AUD-CODEX-002 | HIGH | CONFIRMED_OPEN | Actuele runtime-sync is geblokkeerd door bestaande staged wijzigingen; laatste wrapperreceipt is verouderd. |
@@ -16,7 +18,7 @@
 | AUD-CODEX-010 | HIGH | FIXED_AND_RETESTED | Timeout met partiële bytes-output faalt tijdens timeoutafhandeling en verliest normaal RESULT-contract. |
 | AUD-CODEX-011 | HIGH | FIXED_AND_RETESTED | Interne websocket-meetgaten en ontbrekende executable prijzen worden als bewezen geen reactie geclassificeerd. |
 | AUD-CODEX-012 | HIGH | FIXED_AND_RETESTED | Prospectieve evaluator accepteert target dat al voor voorspelling compleet was, ook bij andere config. |
-| AUD-CODEX-013 | MEDIUM | RESIDUAL_RISK | Geinstalleerde componenten gebruiken verschillende repositories en userscript wijkt af van canonical Git-bestand. |
+| AUD-CODEX-013 | HIGH | CONFIRMED_OPEN | Externe WSL-evidence bevestigt dat deployed router en drie legacy weatherbestanden exact de defecte vóór-reparatiebron bevatten; installed userscript wijkt ook af. |
 | AUD-CODEX-014 | LOW | RESIDUAL_RISK | 14 van 726 Pythonbestanden hebben syntaxfouten; historische mislukte jobs mogen niet als opnieuw uitvoerbaar worden behandeld. |
 | AUD-CODEX-015 | HIGH | FIXED_AND_RETESTED | Productie-executor importeert ontbrekende policy_check-module. |
 | AUD-CODEX-016 | MEDIUM | FIXED_AND_RETESTED | Malformed HTTP200 van upstream wordt als succes doorgegeven. |
@@ -28,4 +30,4 @@
 | AUD-CODEX-022 | HIGH | FIXED_AND_RETESTED | Batchvolgorde overschrijft echte vroegste city-receipt niet. |
 | AUD-CODEX-023 | HIGH | FIXED_AND_RETESTED | Canonical wake loop mist task/payload-dedupe, retrybackoff en userturn-recovery. |
 
-Resterende suitefailures: socket PermissionError en onbeslist 15s/600s installerbeleid. Zie FINAL_AUDIT_REPORT.md en canonical/COMMIT_PLAN.md.
+Geen nieuwe externe test gevraagd; deployment/ownerintegratie en echte ketencanary zijn opvolgwerk, geen reden om bronreparaties over te doen. Zie canonical/final_evidence_review/CLASSIFICATION.md.

@@ -1,3 +1,5 @@
+> FINAL QUALIFICATION: zes repaircommits en 22 repairhashes bevestigd; 475 pass / 1 socketbeperking. Default 600s-bronbeleid vastgesteld; ownerinstaller/index intact. Runtime wacht op externe WSL-evidence. Zie canonical/WSL_QUALIFICATION.md en FINAL_AUDIT_REPORT.md voor actuele kwalificatie. Oudere checkpointtekst hieronder is historisch.
+
 # Reparatielog
 
 ## Baseline en grens
@@ -45,3 +47,7 @@ De eerdere voorstelstatus is opgevolgd door echte canonical integratie op db6c0f
 - Git-staging/coordinator blijven read-only. Geen canonical commit gemaakt. Canonical repair ondanks die blokkade expliciet door eigenaar geautoriseerd; eigen index/diffs bewaard en niet omzeild.
 - Userindex en niet-gerelateerde tracked bestanden ongewijzigd. Manual commitplan in afzonderlijke tijdelijke Gitfixture getest; zes lokale commits, unrelated staged file behouden, geen push.
 - Statussen op basis van echte bron plus tests bijgewerkt; deployed runtime niet gelijkgesteld aan source.
+
+## Definitieve externe evidence-review
+
+Exacte run20260925T095320Z-9b5ee7a3: RESULT.json en beide logs volledig gelezen, hashes bewaard.128 offline +4 sockettests slagen. Runner-slottekst is bewust conservatief, geen failure of bug.17 canonical FIXED_AND_RETESTED blijven staan; geen reparaties herhaald. AUD-013 van residual naar HIGH CONFIRMED_OPEN op basis van exact oude deployed router/weatherhashes. AUD-002 blijft operationeel open; syncblokkade beschermt bestaande index. Geen nieuwe canonical/testbug, dus geen onnodige codewijziging of nieuwe externe test. Definitief softwareoordeel INCOMPLETE/RESIDUAL_RISK; NO_PROVEN_EDGE afzonderlijk.

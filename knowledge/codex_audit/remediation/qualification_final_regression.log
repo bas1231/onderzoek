@@ -1,0 +1,20 @@
+........................................................................ [ 15%]
+........................................................................ [ 30%]
+........................................................................ [ 45%]
+........................................................................ [ 60%]
+........................................................................ [ 75%]
+........................................................................ [ 90%]
+.....F......................................                             [100%]
+=================================== FAILURES ===================================
+_ SentOutboxSemanticsTest.test_repeated_ack_is_idempotent_and_does_not_restore_outbox _
+control/tampermonkey_multichat/test_bridge_server_sent_semantics.py:110: in test_repeated_ack_is_idempotent_and_does_not_restore_outbox
+    httpd = self.bridge.ThreadingHTTPServer(("127.0.0.1", 0), self.bridge.Handler)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/socketserver.py:453: in __init__
+    self.socket = socket.socket(self.address_family,
+/usr/lib/python3.12/socket.py:233: in __init__
+    _socket.socket.__init__(self, family, type, proto, fileno)
+E   PermissionError: [Errno 1] Operation not permitted
+=========================== short test summary info ============================
+FAILED control/tampermonkey_multichat/test_bridge_server_sent_semantics.py::SentOutboxSemanticsTest::test_repeated_ack_is_idempotent_and_does_not_restore_outbox
+1 failed, 475 passed in 12.47s

@@ -1,0 +1,29 @@
+.F.F                                                                     [100%]
+=================================== FAILURES ===================================
+_ SentOutboxSemanticsTest.test_repeated_ack_is_idempotent_and_does_not_restore_outbox _
+control/tampermonkey_multichat/test_bridge_server_sent_semantics.py:110: in test_repeated_ack_is_idempotent_and_does_not_restore_outbox
+    httpd = self.bridge.ThreadingHTTPServer(("127.0.0.1", 0), self.bridge.Handler)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/socketserver.py:453: in __init__
+    self.socket = socket.socket(self.address_family,
+/usr/lib/python3.12/socket.py:233: in __init__
+    _socket.socket.__init__(self, family, type, proto, fileno)
+E   PermissionError: [Errno 1] Operation not permitted
+___________ test_real_router_socket_envelope_and_restart_persistence ___________
+knowledge/codex_audit/canonical/test_external_runtime.py:36: in test_real_router_socket_envelope_and_restart_persistence
+    with router_server(routes) as port:
+/usr/lib/python3.12/contextlib.py:137: in __enter__
+    return next(self.gen)
+           ^^^^^^^^^^^^^^
+knowledge/codex_audit/canonical/test_external_runtime.py:18: in router_server
+    server=module.ThreadingHTTPServer(('127.0.0.1',0),module.Handler)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/socketserver.py:453: in __init__
+    self.socket = socket.socket(self.address_family,
+/usr/lib/python3.12/socket.py:233: in __init__
+    _socket.socket.__init__(self, family, type, proto, fileno)
+E   PermissionError: [Errno 1] Operation not permitted
+=========================== short test summary info ============================
+FAILED control/tampermonkey_multichat/test_bridge_server_sent_semantics.py::SentOutboxSemanticsTest::test_repeated_ack_is_idempotent_and_does_not_restore_outbox
+FAILED knowledge/codex_audit/canonical/test_external_runtime.py::test_real_router_socket_envelope_and_restart_persistence
+2 failed, 2 passed in 0.18s

@@ -1,0 +1,26 @@
+{
+  "objective": "Final qualification only: verify six commits, reconcile intended policy test, create nonmutating WSL qualification runner.",
+  "source_commit": "538c20c8503a0efda607db363cd967c98f6bb442",
+  "allowed_paths": [
+    "knowledge/codex_audit",
+    "control/tampermonkey_multichat/test_install_hardened_bridge_fast_deadman_static.py"
+  ],
+  "acceptance": [
+    "22 committed repair hashes match tested source",
+    "owner installer/index unchanged",
+    "policy test follows explicit staged owner intent",
+    "WSL script no production writes/actions/network except local read-only health and temporary fixture sockets",
+    "No E2E promotion without evidence"
+  ],
+  "non_goals": [
+    "new broad audit",
+    "redo repairs",
+    "deployment",
+    "restart production",
+    "queue resume",
+    "paid API",
+    "orders",
+    "push"
+  ],
+  "max_attempts": 3
+}

@@ -1,3 +1,5 @@
+> FINAL QUALIFICATION: zes repaircommits en 22 repairhashes bevestigd; 475 pass / 1 socketbeperking. Default 600s-bronbeleid vastgesteld; ownerinstaller/index intact. Runtime wacht op externe WSL-evidence. Zie canonical/WSL_QUALIFICATION.md en FINAL_AUDIT_REPORT.md voor actuele kwalificatie. Oudere checkpointtekst hieronder is historisch.
+
 # Testmatrix
 
 | Test | Resultaat | Beperking |
@@ -49,3 +51,15 @@ De eerdere voorstelstatus is opgevolgd door echte canonical integratie op db6c0f
 | Gitcommitselectie, aparte fixture | canonical/commit_plan_test.json | 6 lokale fixturecommits; ownerindex behouden |
 
 Logs/metadatasets onder remediation/, altijd werkelijke cwd en exitstatus inspecteren. De definitieve suite omvat oorspronkelijke 64 auditchecks. Sockettest faalt door PermissionError; oude installer15s-check conflicteert met staged600s-ownerbeleid. Geen tests versoepeld of stil overgeslagen.
+
+## Externe eindresultaten (werkelijk WSL, geen sandboxselftest)
+
+| Evidence | Uitkomst | Betekenis |
+|---|---|---|
+| external_runs/20260925T095320Z-9b5ee7a3/offline_contracts.log |128 passed, exit0 | Bestaande canonical contracts; overlap met vorige475 |
+| Zelfde map/real_loopback.log |4 passed, exit0 | Werkelijke tijdelijke HTTP/ACK/routing/rebind |
+| RESULT.json/systemd_observation |exit0 | Services observeerbaar; hourly failed, niet automatisch PASS |
+| RESULT.json/health |8765/8767 HTTP200 | Bereikbaar; geen code-/ketenattestatie |
+| RESULT.json/deployment_file_comparison |5 verschillen;4 exact oude bekende bron | Deploymentgap, geen nieuwe canonical bug |
+
+De oude socketfailure slaagt extern. Geen nieuwe volledige476-test-run of optelling van overlappende suites verzonnen. Globale productie-E2E blijft ongekwalificeerd wegens concrete operationele blockers.

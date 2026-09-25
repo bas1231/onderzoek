@@ -1,13 +1,17 @@
-# Residuele risico's na canonical herstel
+# Definitieve residuele risico's
 
-- Geen nieuwe canonical commit binnen read-only .git; exact diff/manifest en getest lokaal commitplan beschikbaar.
-- Huidige hourly/sync blokkeert op ownerwerk/divergentie; onderzoek niet zelfstandig hervat.
-- Bestaande processen/browser/legacycheckout gebruiken niet aantoonbaar de gewijzigde bron. Geen automatische restart/deploy verricht.
-- Socket/systemd/browser/reboot-E2E blijft BLOCKED/UNPROVEN. Socketloze ACK/terminalisatie is begrensde integratie-evidence.
-- 15s fast-deadman versus owner600s inactivity is onbeslist. Staged installer ongewijzigd, test intact rood.
-- Historische responseklokken niet herstelbaar door codewijziging; onbekende manifests uitgesloten.
-- TWC-final 1–4h target, volledige PIT, untouched holdout, signal-edge en market-edge UNPROVEN/NO_PROVEN_EDGE.
-- Lexicale policy is geen volledige sandbox; Node DOM is geen bewijs voor alle echte browser-/multitab-/virtualisatiegevallen. Nieuwe scoped cache vereist deploymentcanary.
-- Volledige crash/reboot/concurrencyrecovery is niet bewezen. Historische failure-evidence blijft behouden.
+## Bevestigde operationele blockers
 
-Geen resterend risico is stilzwijgend geaccepteerd als volledige audit-PASS.
+- AUD-013: deployed router en drie weatherbronnen matchen oude defecte baselinehashes. Canonical bron is gerepareerd; artifactdeployment naar buiten de writable workspace is niet uitgevoerd. Geïnstalleerde gebruikersscriptversie verschilt; geladen browserversie onbekend.
+- AUD-002: hourly failed en completed receipt circa19,82uur oud tijdens externe run. Sync/checkpoint weigeren terecht bij ownerwerk/divergentie. Die guards niet verwijderen om PASS te krijgen.
+
+## Resterende onzekerheden
+
+- Werkelijke productie browser→Director→executor→resultaat→browserketen en reboot/recovery zijn niet getest. Tijdelijke socket-/serverrebindtests zijn geen vervanging.
+- Executor NRestarts1293 is cumulatief; één snapshot bewijst geen actuele crashloop. Running0 en active-status bewijzen geen nuttige nieuwe taakuitvoering.
+- Oneshoot weather inactive/dead is op zichzelf geen fout. Actuele timer/collectorcontinuïteit niet uit die velden afleiden.
+- Bron-default600s staat vast; actieve override niet uit ontbrekend healthveld afleiden. Ownerinstaller blijft staged en behouden.
+- Volledige TWC/forecast/PIT/holdout- en economische bewijsvoering blijft UNPROVEN/NO_PROVEN_EDGE, los van softwarekwalificatie.
+- Nieuwe eindrapportage nog lokaal te committen; zes canonical repaircommits geverifieerd. Geen push nodig voor auditvastlegging; niet proberen runtime-sync te forceren onder no-push/ownerbehoudrestricties.
+
+De sandbox-socketbeperking is extern opgeheven:128 offline en4 echte loopbacktests groen. Die beperking is geen resterende productiebug. Geen kwalificatierunnerdefect aangetoond.

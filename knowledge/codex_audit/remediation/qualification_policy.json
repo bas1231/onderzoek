@@ -1,0 +1,24 @@
+{
+  "command": [
+    "/home/leonh/prediction_research_prod/.venv/bin/python",
+    "-m",
+    "pytest",
+    "-q",
+    "control/tampermonkey_multichat/test_install_hardened_bridge_fast_deadman_static.py",
+    "control/tampermonkey_multichat/test_bridge_server_hardened.py",
+    "tests/audit/test_canonical_falsification.py",
+    "-k",
+    "installer or HardenedBridge",
+    "--tb=short",
+    "-o",
+    "cache_dir=/tmp/codex-remediation-pytest-cache"
+  ],
+  "cwd": "/home/leonh/prediction_research_prod",
+  "started_at": "2026-09-25T09:44:53.714490+00:00",
+  "ended_at": "2026-09-25T09:44:57.915289+00:00",
+  "exit_code": 0,
+  "environment": {
+    "PYTHONDONTWRITEBYTECODE": "1",
+    "PYTHONPATH": "/home/leonh/prediction_research_prod:/home/leonh/prediction_research_prod/control/weather"
+  }
+}

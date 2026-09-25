@@ -1,0 +1,85 @@
+{
+  "reviewed_at": "2026-09-25T09:55:18.962177+00:00",
+  "external_evidence": "knowledge/codex_audit/canonical/external_runs/20260925T095320Z-9b5ee7a3",
+  "external_origin": "Uitdrukkelijk door eigenaar bevestigd als normale WSL-uitvoering; onveranderde runnerlabel LOCAL_INVOCATION_UNATTESTED is geen tegenbewijs.",
+  "evidence_hashes": {
+    "RESULT.json": "e7633a9d4972a633eebbb5ceed0fdaf3585dc47bbd8fe05361b709b56d291065",
+    "offline_contracts.log": "3d7b11cd36a87cb010b4b79bf3d4f250423410246d36392bb1f61f5d3c086b61",
+    "real_loopback.log": "0eacbb311e3262b8e169bc9222d8bcef3a5e747e6a5db1997d88dbc7d33f2b17"
+  },
+  "runner_hash_matches_current": true,
+  "current_repair_hashes_match": {
+    "control/executor.py": true,
+    "control/hourly/agent_orchestrator.py": true,
+    "control/jobs/evaluate_kwi_full_station_checkpoint_e369.py": true,
+    "control/policy.json": true,
+    "control/policy_check.py": true,
+    "control/tampermonkey_multichat/command_router.py": true,
+    "control/tampermonkey_multichat/prediction-chat-wake.user.js": true,
+    "control/tampermonkey_multichat/test_patch_v045_task_dedupe_static.py": true,
+    "control/tampermonkey_multichat/test_userscript_delivery_dedupe_static.py": true,
+    "control/tampermonkey_multichat/test_userscript_v046_guard_static.py": true,
+    "control/weather/kalshi_weather_index_recorder.py": true,
+    "control/weather/market_reaction.py": true,
+    "control/weather/test_market_reaction.py": true,
+    "control/weather/test_market_reaction_ws.py": true,
+    "control/weather/twc_hourly_recorder.py": true,
+    "knowledge/codex_audit/evidence/reproduce_defects.py": true,
+    "tests/audit/test_canonical_falsification.py": true,
+    "tests/audit/test_delivery_behavior.py": true,
+    "tests/audit/test_reliability_regressions.py": true,
+    "tests/bridge/test_tampermonkey_multichat.py": true,
+    "tests/edge_hunter/test_warrant_issuer.py": true,
+    "tests/hourly/test_research_os_six_domain_e007.py": true
+  },
+  "installed_before_basis_comparison": [
+    {
+      "canonical": "control/tampermonkey_multichat/command_router.py",
+      "matches_known_defective_pre_repair_basis": true,
+      "matches_canonical": false
+    },
+    {
+      "canonical": "control/tampermonkey_multichat/prediction-chat-wake.user.js",
+      "matches_known_defective_pre_repair_basis": false,
+      "matches_canonical": false
+    },
+    {
+      "canonical": "control/weather/kalshi_weather_index_recorder.py",
+      "matches_known_defective_pre_repair_basis": true,
+      "matches_canonical": false
+    },
+    {
+      "canonical": "control/weather/twc_hourly_recorder.py",
+      "matches_known_defective_pre_repair_basis": true,
+      "matches_canonical": false
+    },
+    {
+      "canonical": "control/weather/market_reaction.py",
+      "matches_known_defective_pre_repair_basis": true,
+      "matches_canonical": false
+    }
+  ],
+  "observed_tests": {
+    "offline": {
+      "passed": 128,
+      "exit_code": 0
+    },
+    "actual_loopback": {
+      "passed": 4,
+      "exit_code": 0
+    }
+  },
+  "prior_regression": "475 pass / 1 sandbox socket failure; that exact test now passes externally. No fabricated combined fresh full-suite run.",
+  "software_qualification": "AUDIT_INCOMPLETE + RESIDUAL_RISK",
+  "scientific_qualification": "NO_PROVEN_EDGE",
+  "reason_no_global_pass": [
+    "Installed router and three weather artifacts match known defective pre-repair source; userscript differs but loaded browser version unknown.",
+    "Hourly service failed and last successful cycle receipt about 19.82 hours old.",
+    "Sync BLOCKED on non-empty owner index: expected fail-closed refusal, not a guard to remove.",
+    "No production browser/Director/queue/reboot E2E exercised."
+  ],
+  "runner_defect_found": false,
+  "new_canonical_production_defect_found": false,
+  "new_external_test_required_for_this_verdict": false,
+  "owner_index_sha256_before_review": "2bf4ba83340d155e1c2b0dc23e1c733156492c45c44da896192919740ddc26bf"
+}

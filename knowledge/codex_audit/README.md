@@ -1,3 +1,7 @@
+> DEFINITIEF: externe WSL-run beoordeeld,128 offline/4 sockettests groen. Software AUDIT_INCOMPLETE + RESIDUAL_RISK wegens deployed oude bron en hourlyblokkade; NO_PROVEN_EDGE afzonderlijk. Geen nieuwe externe run gevraagd. Zie FINAL_AUDIT_REPORT.md en canonical/final_evidence_review/. Oudere overdrachtsinstructies hieronder zijn historisch.
+
+> FINAL QUALIFICATION: zes repaircommits en 22 repairhashes bevestigd; 475 pass / 1 socketbeperking. Default 600s-bronbeleid vastgesteld; ownerinstaller/index intact. Runtime wacht op externe WSL-evidence. Zie canonical/WSL_QUALIFICATION.md en FINAL_AUDIT_REPORT.md voor actuele kwalificatie. Oudere checkpointtekst hieronder is historisch.
+
 > Actueel canonical checkpoint: bronherstel uitgevoerd; 474 tests geslaagd / 2 geclassificeerde failures. 17 bevindingen FIXED_AND_RETESTED, runtimekwalificatie onvolledig. Zie FINAL_AUDIT_REPORT.md en canonical/COMMIT_PLAN.md. Oudere passages hieronder beschrijven de oorspronkelijke baseline.
 
 # Onafhankelijke Codex-audit

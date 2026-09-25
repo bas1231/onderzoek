@@ -1,0 +1,250 @@
+{
+  "at": "2026-09-25T09:44:53.656682+00:00",
+  "commits": [
+    {
+      "commit": "e6e0f731ef9f8a1a0729c2e253704dda3fb9399d",
+      "summary": "test: preserve canonical audit regression contracts",
+      "paths": [
+        "control/tampermonkey_multichat/test_patch_v045_task_dedupe_static.py",
+        "control/tampermonkey_multichat/test_userscript_delivery_dedupe_static.py",
+        "control/tampermonkey_multichat/test_userscript_v046_guard_static.py",
+        "control/weather/test_market_reaction.py",
+        "control/weather/test_market_reaction_ws.py",
+        "tests/audit/test_canonical_falsification.py",
+        "tests/audit/test_delivery_behavior.py",
+        "tests/audit/test_reliability_regressions.py",
+        "tests/bridge/test_tampermonkey_multichat.py",
+        "tests/edge_hunter/test_warrant_issuer.py",
+        "tests/hourly/test_research_os_six_domain_e007.py"
+      ]
+    },
+    {
+      "commit": "3206ec14a385ddfbbda597ac5b0943d64af555fc",
+      "summary": "fix: enforce weather receipt and prospective target validity",
+      "paths": [
+        "control/jobs/evaluate_kwi_full_station_checkpoint_e369.py",
+        "control/weather/kalshi_weather_index_recorder.py",
+        "control/weather/market_reaction.py",
+        "control/weather/twc_hourly_recorder.py"
+      ]
+    },
+    {
+      "commit": "2b5e137729389824db781f0a5d28b897e4e8a9f9",
+      "summary": "fix: reject invalid economics in proof gate",
+      "paths": [
+        "control/hourly/agent_orchestrator.py"
+      ]
+    },
+    {
+      "commit": "28d3e10e1c72ae7aadcd95bf947c7cba6625c957",
+      "summary": "fix: restore executor policy and terminal failure handling",
+      "paths": [
+        "control/executor.py",
+        "control/policy.json",
+        "control/policy_check.py"
+      ]
+    },
+    {
+      "commit": "b1766edd2d28fb46df964b7fef6f50be5e6e1a79",
+      "summary": "fix: reconcile consumer routing and verified browser delivery",
+      "paths": [
+        "control/tampermonkey_multichat/command_router.py",
+        "control/tampermonkey_multichat/prediction-chat-wake.user.js"
+      ]
+    },
+    {
+      "commit": "538c20c8503a0efda607db363cd967c98f6bb442",
+      "summary": "audit: qualify canonical repairs and remaining blockers",
+      "paths": [
+        "knowledge/codex_audit/AUDIT_PLAN.md",
+        "knowledge/codex_audit/FINAL_AUDIT_REPORT.md",
+        "knowledge/codex_audit/FINDINGS.jsonl",
+        "knowledge/codex_audit/OPEN_FINDINGS.md",
+        "knowledge/codex_audit/README.md",
+        "knowledge/codex_audit/REMEDIATION_LOG.md",
+        "knowledge/codex_audit/RESIDUAL_RISKS.md",
+        "knowledge/codex_audit/SYSTEM_MAP.md",
+        "knowledge/codex_audit/TEST_MATRIX.md",
+        "knowledge/codex_audit/canonical/CHARTER.json",
+        "knowledge/codex_audit/canonical/COMMIT_PLAN.md",
+        "knowledge/codex_audit/canonical/DELIVERY_CHARTER.json",
+        "knowledge/codex_audit/canonical/before/control/executor.py",
+        "knowledge/codex_audit/canonical/before/control/hourly/agent_orchestrator.py",
+        "knowledge/codex_audit/canonical/before/control/jobs/evaluate_kwi_full_station_checkpoint_e369.py",
+        "knowledge/codex_audit/canonical/before/control/tampermonkey_multichat/command_router.py",
+        "knowledge/codex_audit/canonical/before/control/tampermonkey_multichat/prediction-chat-wake.user.js",
+        "knowledge/codex_audit/canonical/before/control/tampermonkey_multichat/test_patch_v045_task_dedupe_static.py",
+        "knowledge/codex_audit/canonical/before/control/tampermonkey_multichat/test_userscript_delivery_dedupe_static.py",
+        "knowledge/codex_audit/canonical/before/control/tampermonkey_multichat/test_userscript_v046_guard_static.py",
+        "knowledge/codex_audit/canonical/before/control/weather/kalshi_weather_index_recorder.py",
+        "knowledge/codex_audit/canonical/before/control/weather/market_reaction.py",
+        "knowledge/codex_audit/canonical/before/control/weather/test_market_reaction.py",
+        "knowledge/codex_audit/canonical/before/control/weather/test_market_reaction_ws.py",
+        "knowledge/codex_audit/canonical/before/control/weather/twc_hourly_recorder.py",
+        "knowledge/codex_audit/canonical/before/knowledge/codex_audit/evidence/reproduce_defects.py",
+        "knowledge/codex_audit/canonical/before/tests/bridge/test_tampermonkey_multichat.py",
+        "knowledge/codex_audit/canonical/before/tests/edge_hunter/test_warrant_issuer.py",
+        "knowledge/codex_audit/canonical/before/tests/hourly/test_research_os_six_domain_e007.py",
+        "knowledge/codex_audit/canonical/canonical_change_manifest.json",
+        "knowledge/codex_audit/canonical/canonical_changes.patch",
+        "knowledge/codex_audit/canonical/cleanup.json",
+        "knowledge/codex_audit/canonical/commit_locally.py",
+        "knowledge/codex_audit/canonical/commit_plan_test.json",
+        "knowledge/codex_audit/canonical/export_canonical.py",
+        "knowledge/codex_audit/canonical/final_syntax_environment.json",
+        "knowledge/codex_audit/canonical/integrate_verified.py",
+        "knowledge/codex_audit/canonical/integration.jsonl",
+        "knowledge/codex_audit/canonical/preflight.json",
+        "knowledge/codex_audit/canonical/runtime_and_git_blockers.json",
+        "knowledge/codex_audit/canonical/runtime_receipts_after_repair.json",
+        "knowledge/codex_audit/canonical/test_manual_commit_plan.py",
+        "knowledge/codex_audit/evidence/reproduce_defects.py",
+        "knowledge/codex_audit/remediation/canonical_bridge.json",
+        "knowledge/codex_audit/remediation/canonical_bridge.log",
+        "knowledge/codex_audit/remediation/canonical_delivery_green.json",
+        "knowledge/codex_audit/remediation/canonical_delivery_green.log",
+        "knowledge/codex_audit/remediation/canonical_delivery_red.json",
+        "knowledge/codex_audit/remediation/canonical_delivery_red.log",
+        "knowledge/codex_audit/remediation/canonical_executor.json",
+        "knowledge/codex_audit/remediation/canonical_executor.log",
+        "knowledge/codex_audit/remediation/canonical_falsification_green.json",
+        "knowledge/codex_audit/remediation/canonical_falsification_green.log",
+        "knowledge/codex_audit/remediation/canonical_falsification_red.json",
+        "knowledge/codex_audit/remediation/canonical_falsification_red.log",
+        "knowledge/codex_audit/remediation/canonical_final_full.json",
+        "knowledge/codex_audit/remediation/canonical_final_full.log",
+        "knowledge/codex_audit/remediation/canonical_final_regression.json",
+        "knowledge/codex_audit/remediation/canonical_final_regression.log",
+        "knowledge/codex_audit/remediation/canonical_initial_full.json",
+        "knowledge/codex_audit/remediation/canonical_initial_full.log",
+        "knowledge/codex_audit/remediation/canonical_new_counterexamples.json",
+        "knowledge/codex_audit/remediation/canonical_new_counterexamples.log",
+        "knowledge/codex_audit/remediation/canonical_proof.json",
+        "knowledge/codex_audit/remediation/canonical_proof.log",
+        "knowledge/codex_audit/remediation/canonical_static_contract_reconciled.json",
+        "knowledge/codex_audit/remediation/canonical_static_contract_reconciled.log",
+        "knowledge/codex_audit/remediation/canonical_weather.json",
+        "knowledge/codex_audit/remediation/canonical_weather.log"
+      ]
+    }
+  ],
+  "repaired_paths": [
+    {
+      "path": "control/executor.py",
+      "working_matches_tested": true,
+      "committed_matches_tested": true
+    },
+    {
+      "path": "control/hourly/agent_orchestrator.py",
+      "working_matches_tested": true,
+      "committed_matches_tested": true
+    },
+    {
+      "path": "control/jobs/evaluate_kwi_full_station_checkpoint_e369.py",
+      "working_matches_tested": true,
+      "committed_matches_tested": true
+    },
+    {
+      "path": "control/policy.json",
+      "working_matches_tested": true,
+      "committed_matches_tested": true
+    },
+    {
+      "path": "control/policy_check.py",
+      "working_matches_tested": true,
+      "committed_matches_tested": true
+    },
+    {
+      "path": "control/tampermonkey_multichat/command_router.py",
+      "working_matches_tested": true,
+      "committed_matches_tested": true
+    },
+    {
+      "path": "control/tampermonkey_multichat/prediction-chat-wake.user.js",
+      "working_matches_tested": true,
+      "committed_matches_tested": true
+    },
+    {
+      "path": "control/tampermonkey_multichat/test_patch_v045_task_dedupe_static.py",
+      "working_matches_tested": true,
+      "committed_matches_tested": true
+    },
+    {
+      "path": "control/tampermonkey_multichat/test_userscript_delivery_dedupe_static.py",
+      "working_matches_tested": true,
+      "committed_matches_tested": true
+    },
+    {
+      "path": "control/tampermonkey_multichat/test_userscript_v046_guard_static.py",
+      "working_matches_tested": true,
+      "committed_matches_tested": true
+    },
+    {
+      "path": "control/weather/kalshi_weather_index_recorder.py",
+      "working_matches_tested": true,
+      "committed_matches_tested": true
+    },
+    {
+      "path": "control/weather/market_reaction.py",
+      "working_matches_tested": true,
+      "committed_matches_tested": true
+    },
+    {
+      "path": "control/weather/test_market_reaction.py",
+      "working_matches_tested": true,
+      "committed_matches_tested": true
+    },
+    {
+      "path": "control/weather/test_market_reaction_ws.py",
+      "working_matches_tested": true,
+      "committed_matches_tested": true
+    },
+    {
+      "path": "control/weather/twc_hourly_recorder.py",
+      "working_matches_tested": true,
+      "committed_matches_tested": true
+    },
+    {
+      "path": "knowledge/codex_audit/evidence/reproduce_defects.py",
+      "working_matches_tested": true,
+      "committed_matches_tested": true
+    },
+    {
+      "path": "tests/audit/test_canonical_falsification.py",
+      "working_matches_tested": true,
+      "committed_matches_tested": true
+    },
+    {
+      "path": "tests/audit/test_delivery_behavior.py",
+      "working_matches_tested": true,
+      "committed_matches_tested": true
+    },
+    {
+      "path": "tests/audit/test_reliability_regressions.py",
+      "working_matches_tested": true,
+      "committed_matches_tested": true
+    },
+    {
+      "path": "tests/bridge/test_tampermonkey_multichat.py",
+      "working_matches_tested": true,
+      "committed_matches_tested": true
+    },
+    {
+      "path": "tests/edge_hunter/test_warrant_issuer.py",
+      "working_matches_tested": true,
+      "committed_matches_tested": true
+    },
+    {
+      "path": "tests/hourly/test_research_os_six_domain_e007.py",
+      "working_matches_tested": true,
+      "committed_matches_tested": true
+    }
+  ],
+  "index_sha256": "2bf4ba83340d155e1c2b0dc23e1c733156492c45c44da896192919740ddc26bf",
+  "installer_sha256": "d41f2447e12857754eb99bd38f8ec6730031f338842272d1882ec9849ba792ec",
+  "preserved_owner_source_matches_prior_tests": {
+    "control/tampermonkey_multichat/bridge_server_v2.py": true,
+    "control/tampermonkey_multichat/install_hardened_bridge.py": true,
+    "control/tampermonkey_multichat/deploy_consumer_routing_e010.py": true
+  }
+}
