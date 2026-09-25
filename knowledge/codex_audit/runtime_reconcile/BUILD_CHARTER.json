@@ -1,0 +1,40 @@
+{
+  "build_id": "AUD-RUNTIME-RECONCILE-20260925",
+  "protocol_version": "V1",
+  "objective": "Uitsluitend vijf bewezen deploymentdeltas bewaren en veilig uitrollen; hourly blokkade verklaren",
+  "source_commit": "50ef28765e271e63ae356cfe537a586a46520c88",
+  "allowed_capabilities": [
+    "local_file_reconciliation",
+    "offline_tests",
+    "read_only_systemd"
+  ],
+  "allowed_paths": [
+    "/home/leonh/.local/share/prediction-chat-bridge/command_router.py",
+    "/home/leonh/prediction_research/control/weather/kalshi_weather_index_recorder.py",
+    "/home/leonh/prediction_research/control/weather/twc_hourly_recorder.py",
+    "/home/leonh/prediction_research/control/weather/market_reaction.py",
+    "/home/leonh/prediction_research/control/jobs/evaluate_kwi_full_station_checkpoint_e369.py"
+  ],
+  "planned_paths": [
+    "knowledge/codex_audit/runtime_reconcile"
+  ],
+  "acceptance_criteria": [
+    "Exacte basisprovenance",
+    "Ownerindex en unrelated werk ongewijzigd",
+    "Gedragstests op payload groen",
+    "Geen push of productiequeueacties",
+    "Geen globale PASS zonder ketenevidence"
+  ],
+  "non_goals": [
+    "hourly guards omzeilen",
+    "userscript deployment",
+    "trading",
+    "nieuw onderzoek"
+  ],
+  "independent_verification": "Bestaande adversarial tests plus hashcontrole; geen onafhankelijke reviewer geclaimd",
+  "rollback_plan": "Voorbestanden bewaren; geen automatische rollback over nieuw ownerwerk",
+  "cleanup_plan": "Alleen tijdelijke testdirectory via TemporaryDirectory; bewijs behouden",
+  "max_attempts": 1,
+  "governance_change": false,
+  "safety": "Geen betaalde API, orders, wallets, push of queuehervatting"
+}

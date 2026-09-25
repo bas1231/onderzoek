@@ -1,0 +1,14 @@
+{
+  "receipt_sha256": "2a60c4246fa751c0de5eec72ef0d19ea22f16009e117b50f9917078d8b8aa272",
+  "selected_receipt": {
+    "status": "BLOCKED",
+    "timestamp_utc": "2026-09-25T10:00:18.619865+00:00",
+    "error_type": "RuntimeSyncError",
+    "error": "git index is not empty: control/tampermonkey_multichat/bridge_server_v2.py, control/tampermonkey_multichat/deploy_consumer_routing_e010.py, control/tampermonkey_multichat/install_hardened_bridge.py, knowledge/candidates/MANUAL-SCOUT-HENGELTJES-20260924.json, knowledge/manual_scout_seeds/2026-09-24-hengeltjes-late-passive-liquidity.md"
+  },
+  "local_head": "50ef28765e271e63ae356cfe537a586a46520c88",
+  "cached_origin_main": "8c92519e618352022f89f8ed8448440499910c1c",
+  "remote_fetched": false,
+  "runtime_sync_sha256": "666f8100acf09a0c61ce78b2f1edb93071096ef0974d738a0ef0e7d28d64f6cd",
+  "checkpoint_sha256": "290e582681d34e0d38e2cd97a1657f9eca19c6a7cb72aed872b5f61ff3370fbb"
+}

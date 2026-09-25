@@ -1,0 +1,131 @@
+........................................................................ [ 56%]
+....EEEEEEEEF......................................F....                 [100%]
+==================================== ERRORS ====================================
+_________ ERROR at setup of test_receipt_never_precedes_response_body __________
+knowledge/codex_audit/evidence/test_audit_regressions.py:11: in observed
+    return json.loads(subprocess.check_output([sys.executable, "knowledge/codex_audit/evidence/reproduce_defects.py"], text=True))
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/subprocess.py:466: in check_output
+    return run(*popenargs, stdout=PIPE, timeout=timeout, check=True,
+/usr/lib/python3.12/subprocess.py:571: in run
+    raise CalledProcessError(retcode, process.args,
+E   subprocess.CalledProcessError: Command '['/home/leonh/prediction_research_prod/.venv/bin/python', 'knowledge/codex_audit/evidence/reproduce_defects.py']' returned non-zero exit status 2.
+---------------------------- Captured stderr setup -----------------------------
+/home/leonh/prediction_research_prod/.venv/bin/python: can't open file '/tmp/runtime-reconcile-tests-cbkt40sq/repo/knowledge/codex_audit/evidence/reproduce_defects.py': [Errno 2] No such file or directory
+_________ ERROR at setup of test_invalid_economics_never_passes_proof __________
+knowledge/codex_audit/evidence/test_audit_regressions.py:11: in observed
+    return json.loads(subprocess.check_output([sys.executable, "knowledge/codex_audit/evidence/reproduce_defects.py"], text=True))
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/subprocess.py:466: in check_output
+    return run(*popenargs, stdout=PIPE, timeout=timeout, check=True,
+/usr/lib/python3.12/subprocess.py:571: in run
+    raise CalledProcessError(retcode, process.args,
+E   subprocess.CalledProcessError: Command '['/home/leonh/prediction_research_prod/.venv/bin/python', 'knowledge/codex_audit/evidence/reproduce_defects.py']' returned non-zero exit status 2.
+_____________ ERROR at setup of test_successful_route_is_persisted _____________
+knowledge/codex_audit/evidence/test_audit_regressions.py:11: in observed
+    return json.loads(subprocess.check_output([sys.executable, "knowledge/codex_audit/evidence/reproduce_defects.py"], text=True))
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/subprocess.py:466: in check_output
+    return run(*popenargs, stdout=PIPE, timeout=timeout, check=True,
+/usr/lib/python3.12/subprocess.py:571: in run
+    raise CalledProcessError(retcode, process.args,
+E   subprocess.CalledProcessError: Command '['/home/leonh/prediction_research_prod/.venv/bin/python', 'knowledge/codex_audit/evidence/reproduce_defects.py']' returned non-zero exit status 2.
+__________ ERROR at setup of test_nonobject_payload_gets_explicit_400 __________
+knowledge/codex_audit/evidence/test_audit_regressions.py:11: in observed
+    return json.loads(subprocess.check_output([sys.executable, "knowledge/codex_audit/evidence/reproduce_defects.py"], text=True))
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/subprocess.py:466: in check_output
+    return run(*popenargs, stdout=PIPE, timeout=timeout, check=True,
+/usr/lib/python3.12/subprocess.py:571: in run
+    raise CalledProcessError(retcode, process.args,
+E   subprocess.CalledProcessError: Command '['/home/leonh/prediction_research_prod/.venv/bin/python', 'knowledge/codex_audit/evidence/reproduce_defects.py']' returned non-zero exit status 2.
+_________________ ERROR at setup of test_timeout_writes_result _________________
+knowledge/codex_audit/evidence/test_audit_regressions.py:11: in observed
+    return json.loads(subprocess.check_output([sys.executable, "knowledge/codex_audit/evidence/reproduce_defects.py"], text=True))
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/subprocess.py:466: in check_output
+    return run(*popenargs, stdout=PIPE, timeout=timeout, check=True,
+/usr/lib/python3.12/subprocess.py:571: in run
+    raise CalledProcessError(retcode, process.args,
+E   subprocess.CalledProcessError: Command '['/home/leonh/prediction_research_prod/.venv/bin/python', 'knowledge/codex_audit/evidence/reproduce_defects.py']' returned non-zero exit status 2.
+__________ ERROR at setup of test_internal_coverage_hole_is_unproven ___________
+knowledge/codex_audit/evidence/test_audit_regressions.py:11: in observed
+    return json.loads(subprocess.check_output([sys.executable, "knowledge/codex_audit/evidence/reproduce_defects.py"], text=True))
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/subprocess.py:466: in check_output
+    return run(*popenargs, stdout=PIPE, timeout=timeout, check=True,
+/usr/lib/python3.12/subprocess.py:571: in run
+    raise CalledProcessError(retcode, process.args,
+E   subprocess.CalledProcessError: Command '['/home/leonh/prediction_research_prod/.venv/bin/python', 'knowledge/codex_audit/evidence/reproduce_defects.py']' returned non-zero exit status 2.
+____________ ERROR at setup of test_no_executable_book_is_unproven _____________
+knowledge/codex_audit/evidence/test_audit_regressions.py:11: in observed
+    return json.loads(subprocess.check_output([sys.executable, "knowledge/codex_audit/evidence/reproduce_defects.py"], text=True))
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/subprocess.py:466: in check_output
+    return run(*popenargs, stdout=PIPE, timeout=timeout, check=True,
+/usr/lib/python3.12/subprocess.py:571: in run
+    raise CalledProcessError(retcode, process.args,
+E   subprocess.CalledProcessError: Command '['/home/leonh/prediction_research_prod/.venv/bin/python', 'knowledge/codex_audit/evidence/reproduce_defects.py']' returned non-zero exit status 2.
+___________ ERROR at setup of test_nonprospective_target_is_excluded ___________
+knowledge/codex_audit/evidence/test_audit_regressions.py:11: in observed
+    return json.loads(subprocess.check_output([sys.executable, "knowledge/codex_audit/evidence/reproduce_defects.py"], text=True))
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/subprocess.py:466: in check_output
+    return run(*popenargs, stdout=PIPE, timeout=timeout, check=True,
+/usr/lib/python3.12/subprocess.py:571: in run
+    raise CalledProcessError(retcode, process.args,
+E   subprocess.CalledProcessError: Command '['/home/leonh/prediction_research_prod/.venv/bin/python', 'knowledge/codex_audit/evidence/reproduce_defects.py']' returned non-zero exit status 2.
+=================================== FAILURES ===================================
+_____________________ test_unsent_user_draft_is_preserved ______________________
+knowledge/codex_audit/evidence/test_audit_regressions.py:48: in test_unsent_user_draft_is_preserved
+    row = json.loads(subprocess.check_output(["node", "knowledge/codex_audit/evidence/composer_reproduction.js"], text=True))
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/subprocess.py:466: in check_output
+    return run(*popenargs, stdout=PIPE, timeout=timeout, check=True,
+/usr/lib/python3.12/subprocess.py:571: in run
+    raise CalledProcessError(retcode, process.args,
+E   subprocess.CalledProcessError: Command '['node', 'knowledge/codex_audit/evidence/composer_reproduction.js']' returned non-zero exit status 1.
+----------------------------- Captured stderr call -----------------------------
+node:internal/modules/cjs/loader:1137
+  throw err;
+  ^
+
+Error: Cannot find module '/tmp/runtime-reconcile-tests-cbkt40sq/repo/knowledge/codex_audit/evidence/composer_reproduction.js'
+    at Module._resolveFilename (node:internal/modules/cjs/loader:1134:15)
+    at Module._load (node:internal/modules/cjs/loader:975:27)
+    at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:128:12)
+    at node:internal/main/run_main_module:28:49 {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: []
+}
+
+Node.js v18.19.1
+_______ test_transient_reproducer_is_created_only_for_serious_candidate ________
+tests/hourly/test_agent_orchestrator.py:179: in test_transient_reproducer_is_created_only_for_serious_candidate
+    assert mod.ensure_transient_reproducer(run, serious) == ["SERIOUS"]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+control/hourly/agent_orchestrator.py:278: in ensure_transient_reproducer
+    contract = load_json(contract_path)
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+control/hourly/agent_orchestrator.py:93: in load_json
+    return json.loads(path.read_text(encoding="utf-8"))
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/pathlib.py:1029: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/pathlib.py:1015: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: '/tmp/runtime-reconcile-tests-cbkt40sq/repo/agents/contracts/independent_reproducer.json'
+=========================== short test summary info ============================
+FAILED knowledge/codex_audit/evidence/test_audit_regressions.py::test_unsent_user_draft_is_preserved
+FAILED tests/hourly/test_agent_orchestrator.py::test_transient_reproducer_is_created_only_for_serious_candidate
+ERROR knowledge/codex_audit/evidence/test_audit_regressions.py::test_receipt_never_precedes_response_body
+ERROR knowledge/codex_audit/evidence/test_audit_regressions.py::test_invalid_economics_never_passes_proof
+ERROR knowledge/codex_audit/evidence/test_audit_regressions.py::test_successful_route_is_persisted
+ERROR knowledge/codex_audit/evidence/test_audit_regressions.py::test_nonobject_payload_gets_explicit_400
+ERROR knowledge/codex_audit/evidence/test_audit_regressions.py::test_timeout_writes_result
+ERROR knowledge/codex_audit/evidence/test_audit_regressions.py::test_internal_coverage_hole_is_unproven
+ERROR knowledge/codex_audit/evidence/test_audit_regressions.py::test_no_executable_book_is_unproven
+ERROR knowledge/codex_audit/evidence/test_audit_regressions.py::test_nonprospective_target_is_excluded
+2 failed, 118 passed, 8 errors in 3.63s

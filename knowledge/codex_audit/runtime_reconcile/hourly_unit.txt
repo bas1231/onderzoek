@@ -1,0 +1,14 @@
+[Unit]
+Description=Prediction Research hourly director wake
+
+[Service]
+Type=oneshot
+WorkingDirectory=%h/prediction_research_prod
+ExecStartPre=%h/prediction_research_prod/.venv/bin/python %h/prediction_research_prod/control/hourly/runtime_sync.py
+ExecStart=%h/prediction_research_prod/.venv/bin/python %h/prediction_research_prod/control/hourly/edge_hunter_cycle.py
+# Emit a bounded local receipt only after a successful/cooldown cycle. The
+# receipt deliberately distinguishes recent preflight evidence from RUNNING.
+ExecStartPost=%h/prediction_research_prod/.venv/bin/python %h/prediction_research_prod/control/hourly/runtime_health.py
+# work_cadence.py uses 75 for an intentional cooldown/no-work cycle. Keep that
+# state visible in logs without marking the timer/service failed.
+SuccessExitStatus=75

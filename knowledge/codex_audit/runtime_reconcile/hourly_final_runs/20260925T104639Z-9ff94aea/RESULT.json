@@ -1,0 +1,14 @@
+{
+  "software_status": "AUDIT_INCOMPLETE",
+  "scientific_status": "NO_PROVEN_EDGE",
+  "scope": "Originele preflightguard met read-only Gitadapter; downstream niet uitgevoerd",
+  "timestamp": "2026-09-25T10:46:39.620830+00:00",
+  "preflight": {
+    "status": "BLOCKED",
+    "error_type": "RuntimeSyncError",
+    "error": "git index is not empty: control/tampermonkey_multichat/bridge_server_v2.py, control/tampermonkey_multichat/deploy_consumer_routing_e010.py, control/tampermonkey_multichat/install_hardened_bridge.py, knowledge/candidates/MANUAL-SCOUT-HENGELTJES-20260924.json, knowledge/manual_scout_seeds/2026-09-24-hengeltjes-late-passive-liquidity.md"
+  },
+  "owner_preserved": true,
+  "blocker": "git index is not empty: control/tampermonkey_multichat/bridge_server_v2.py, control/tampermonkey_multichat/deploy_consumer_routing_e010.py, control/tampermonkey_multichat/install_hardened_bridge.py, knowledge/candidates/MANUAL-SCOUT-HENGELTJES-20260924.json, knowledge/manual_scout_seeds/2026-09-24-hengeltjes-late-passive-liquidity.md",
+  "downstream_blocker": "Originele verplichte Gitcheckpoint kan pushen. Omleiding/mock/skip bewijst geen volledige echte keten; geen downstream gestart."
+}

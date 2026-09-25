@@ -1,0 +1,64 @@
+{
+  "timestamp": "2026-09-25T10:16:53.149251+00:00",
+  "head": "50ef28765e271e63ae356cfe537a586a46520c88",
+  "index_sha256": "948f39fe541fa75e66a5f584ec790f24226587ec43ecdc04e3c235985e3b4ed3",
+  "owner_work": {
+    "control/tampermonkey_multichat/bridge_server_v2.py": "5a5e13c19754a73dd2112ac0bf5f20e127ab6e719d547ff2aa65abf67ce7ba43",
+    "control/tampermonkey_multichat/deploy_consumer_routing_e010.py": "7e78bde9cc9da2b70327f552cb8c58a978f9d107fb2f52e132971641190cede3",
+    "control/tampermonkey_multichat/install_hardened_bridge.py": "d41f2447e12857754eb99bd38f8ec6730031f338842272d1882ec9849ba792ec",
+    "control/tampermonkey_multichat/test_install_hardened_bridge_fast_deadman_static.py": "81f90b78f0c10d7ccea75c5e126ce768dc104c9f59dc12330dadc7d72d512b6c",
+    "hourly-reports/hourly-bridge-efficiency-benchmark-latest.md": "41ac2ceadd4d7eaed2e7322377d04c9b2bd102428a5d9094e95d800bad153291",
+    "knowledge/candidates/ASSET-RANK-MAKER-HEDGE-V1.json": "fa1cbda4b17672c9908de3494bd742890bb74c85f6702182ee633be1d6b2b2c2",
+    "knowledge/candidates/KWI-FULL-STATION-PRECANONICAL-V1.json": "ee0212bc8bec8cc6bc62877932ce3a9686f721d0f5472d64ac4a4ff29137e448",
+    "knowledge/candidates/MANUAL-SCOUT-HENGELTJES-20260924.json": "85071ff0d3c649fec426a08e10a6cf2af6677c260e5780eea1ee6a0de7c08336",
+    "knowledge/candidates/PAYOFF-IDENTITY-MINING-V1.json": "2ff9e76bfd819eb1730697ba6f5932d8e2b201376c67bc39f7c6469a648404fc",
+    "knowledge/manual_scout_seeds/2026-09-24-hengeltjes-late-passive-liquidity.md": "ab286f039a26e6b65a70819bac6c10cc8a3d0d5b51c51b5e0c1dfefa15cca4bd",
+    "knowledge/recon/opportunity_graph.json": "8e956470d7d151b6964cf94f45fb369b9b5f2ba2eda2dc0c2b9cfb92a957af00",
+    "knowledge/recon/watchlist.json": "c6b458c9d5bb7b497180b0bd8437ed038b640f802f565b526bff14b2cc08b233",
+    "knowledge/research_os/evidence_graph.json": "832ca0ed4efca62896392178d7b730f7dfd3b1d81912e5985f29f5f44b971699",
+    "knowledge/research_os/failure_graph.json": "5c66b228f3a7594ff77390698d694b4e3769b689e0dfffc9b0407a83af3b8d59"
+  },
+  "status": "M  control/tampermonkey_multichat/bridge_server_v2.py\nA  control/tampermonkey_multichat/deploy_consumer_routing_e010.py\nM  control/tampermonkey_multichat/install_hardened_bridge.py\n M control/tampermonkey_multichat/test_install_hardened_bridge_fast_deadman_static.py\n M hourly-reports/hourly-bridge-efficiency-benchmark-latest.md\n M knowledge/candidates/ASSET-RANK-MAKER-HEDGE-V1.json\n M knowledge/candidates/KWI-FULL-STATION-PRECANONICAL-V1.json\nAM knowledge/candidates/MANUAL-SCOUT-HENGELTJES-20260924.json\n M knowledge/candidates/PAYOFF-IDENTITY-MINING-V1.json\nA  knowledge/manual_scout_seeds/2026-09-24-hengeltjes-late-passive-liquidity.md\n M knowledge/recon/opportunity_graph.json\n M knowledge/recon/watchlist.json\n M knowledge/research_os/evidence_graph.json\n M knowledge/research_os/failure_graph.json\n?? control/__pycache__/\n?? control/edge_hunter/__pycache__/\n?? control/hourly/__pycache__/\n?? control/jobs/__pycache__/\n?? hourly-reports/bridge-three-port-probe-latest.md\n?? hourly-reports/hourly-20260924T180000+0200.md\n?? hourly-reports/hourly-20260924T190000+0200.md\n?? knowledge/codex_audit/runtime_reconcile/\n?? knowledge/recon/market_instance_state.json\n?? knowledge/runs/hourly-20260924T130000+0200-ai-response-receipt.json\n?? knowledge/runs/hourly-20260924T130000+0200-ai-response.json\n?? knowledge/runs/hourly-20260924T160000+0200-ai-response-receipt.json\n?? knowledge/runs/hourly-20260924T160000+0200-ai-response.json\n?? knowledge/runs/hourly-20260924T180000+0200-ai-response-receipt.json\n?? knowledge/runs/hourly-20260924T180000+0200-ai-response.json\n?? knowledge/runs/hourly-20260924T180000+0200.json\n?? knowledge/runs/hourly-20260924T190000+0200-ai-response-receipt.json\n?? knowledge/runs/hourly-20260924T190000+0200-ai-response.json\n?? knowledge/runs/hourly-20260924T190000+0200.json\n?? knowledge/runs/market_instance_scan/\n?? tests/__pycache__/\n?? tests/hourly/__pycache__/",
+  "paths": [
+    {
+      "source": "control/tampermonkey_multichat/command_router.py",
+      "target": "/home/leonh/.local/share/prediction-chat-bridge/command_router.py",
+      "before_sha256": "629de71ceb5c95004a51edf0d4a9a503e5f001188db09d992f81ac57566468f9",
+      "after_sha256": "b2b39858d100909cd78a480202e4eaafdeb20dcff9e48e0a7ce10db7622db821",
+      "classification": "BASE_IDENTICAL_NO_OWNER_CONFLICT",
+      "mode": 493
+    },
+    {
+      "source": "control/weather/kalshi_weather_index_recorder.py",
+      "target": "/home/leonh/prediction_research/control/weather/kalshi_weather_index_recorder.py",
+      "before_sha256": "bb60c33e4056783f860a0829c2dfaaeda345a3567c68292a7036e870d8a8c741",
+      "after_sha256": "03296693b1e188f93b88809629d4f23204aac7d7a0e23fd299adc90a634e43d0",
+      "classification": "BASE_IDENTICAL_NO_OWNER_CONFLICT",
+      "mode": 436
+    },
+    {
+      "source": "control/weather/twc_hourly_recorder.py",
+      "target": "/home/leonh/prediction_research/control/weather/twc_hourly_recorder.py",
+      "before_sha256": "7152fad08c72c57a5e718ec04b3f41f417f8028fa84680d9e690ddcedfefb9b7",
+      "after_sha256": "704a16a724aef17ade8fbdb8c4cbf79484cfe886f8ec101e2753bfffda6a6734",
+      "classification": "BASE_IDENTICAL_NO_OWNER_CONFLICT",
+      "mode": 436
+    },
+    {
+      "source": "control/weather/market_reaction.py",
+      "target": "/home/leonh/prediction_research/control/weather/market_reaction.py",
+      "before_sha256": "d2b94d2330bb2a26e290e754799f3b2d3a61cd05099e79af3355289771ff0a88",
+      "after_sha256": "de3605a95a204fe420e2d1d78f1bcc57a48035ccca72d4512dadabc12d2384dc",
+      "classification": "BASE_IDENTICAL_NO_OWNER_CONFLICT",
+      "mode": 420
+    },
+    {
+      "source": "control/jobs/evaluate_kwi_full_station_checkpoint_e369.py",
+      "target": "/home/leonh/prediction_research/control/jobs/evaluate_kwi_full_station_checkpoint_e369.py",
+      "before_sha256": "da854cb34dfacb13a22d3907fd1ec60e1292aa276a28b19c839560cb374edbbd",
+      "after_sha256": "e0e0b2f4b96bdfa239f387f73944489f39bf0abb1d3e8f6c94edf6c7da5b7cc3",
+      "classification": "BASE_IDENTICAL_NO_OWNER_CONFLICT",
+      "mode": 436
+    }
+  ]
+}

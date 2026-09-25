@@ -1,0 +1,50 @@
+--- /home/leonh/.local/share/prediction-chat-bridge/command_router.py
++++ control/tampermonkey_multichat/command_router.py
+@@ -63,7 +63,9 @@
+         fd = os.open(path, os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o600)
+     except FileExistsError:
+         existing = read_route(task_id)
+-        old_chat = str((existing or {}).get("chat_id") or "")
++        if not isinstance(existing, dict) or existing.get("task_id") != task_id or not CHAT_RE.fullmatch(str(existing.get("chat_id") or "")):
++            raise ValueError("TASK_ROUTE_CORRUPT")
++        old_chat = str(existing.get("chat_id") or "")
+         old_consumer = str((existing or {}).get("consumer_id") or "")
+         if old_chat and old_chat != chat_id:
+             raise ValueError("TASK_ROUTE_CONFLICT")
+@@ -126,10 +128,17 @@
+     except URLError as exc:
+         return 503, {"ok": False, "error": "upstream_unreachable", "detail": str(exc.reason)}
+ 
++    except OSError as exc:
++        return 503, {"ok": False, "error": "upstream_transport_error", "detail": type(exc).__name__}
++
+     try:
+         data = json.loads(raw or b"{}")
+-    except Exception:
+-        data = {"ok": 200 <= status < 300, "raw": raw.decode("utf-8", errors="replace")}
++    except (ValueError, UnicodeDecodeError):
++        return 502, {"ok": False, "error": "invalid_upstream_json"}
++    if not isinstance(data, dict):
++        return 502, {"ok": False, "error": "invalid_upstream_envelope"}
++    if 200 <= status < 300 and data.get("ok") is not True:
++        return 502, {"ok": False, "error": "upstream_success_unconfirmed"}
+     return status, data
+ 
+ 
+@@ -178,7 +187,15 @@
+ 
+         try:
+             length = int(self.headers.get("Content-Length", "0"))
+-            payload = json.loads(self.rfile.read(min(length, 32768)) or b"{}")
++            if length <= 0 or length > 32768:
++                self.reply(413 if length > 32768 else 400, {"ok": False, "error": "bad_length"})
++                return
++            raw = self.rfile.read(length)
++            if len(raw) != length:
++                raise ValueError("truncated body")
++            payload = json.loads(raw)
++            if not isinstance(payload, dict):
++                raise ValueError("payload must be object")
+         except Exception:
+             self.reply(400, {"ok": False, "error": "bad_json"})
+             return

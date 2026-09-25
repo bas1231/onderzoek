@@ -1,0 +1,53 @@
+--- /home/leonh/prediction_research/control/weather/kalshi_weather_index_recorder.py
++++ control/weather/kalshi_weather_index_recorder.py
+@@ -19,10 +19,12 @@
+ def fetch_city(city):
+     url = BASE + "/live_data/weather/" + city + "?" + urlencode({"last_sec": 10800, "detailed": "true"})
+     req = urllib.request.Request(url, headers={"User-Agent": "PredictionResearch-public-weather-index-recorder"})
++    request_started_at = datetime.now(timezone.utc).isoformat()
+     with urllib.request.urlopen(req, timeout=20) as r:
+         body = r.read(5_000_000)
+         status = int(getattr(r, "status", 200))
+         ctype = r.headers.get("Content-Type")
++    received_at = datetime.now(timezone.utc).isoformat()
+     sha = hashlib.sha256(body).hexdigest()
+     city_dir = RAW / city
+     city_dir.mkdir(parents=True, exist_ok=True)
+@@ -33,6 +35,8 @@
+     return {
+         "city": city,
+         "url": url,
++        "request_started_at": request_started_at,
++        "retrieved_at": received_at,
+         "status": status,
+         "content_type": ctype,
+         "sha256": sha,
+@@ -60,7 +64,7 @@
+                 return row
+     return None
+ 
+-retrieved_at = datetime.now(timezone.utc).isoformat()
++cycle_started_at = datetime.now(timezone.utc).isoformat()
+ rows = []
+ 
+ for city in CITIES:
+@@ -72,6 +76,8 @@
+     row = {
+         "city": city,
+         "status": res["status"],
++        "request_started_at": res["request_started_at"],
++        "retrieved_at": res["retrieved_at"],
+         "content_type": res["content_type"],
+         "sha256": res["sha256"],
+         "bytes": res["bytes"],
+@@ -98,7 +104,10 @@
+     }
+     rows.append(row)
+ 
++retrieved_at = datetime.now(timezone.utc).isoformat()
+ manifest = {
++    "timestamp_semantics": "response_body_received",
++    "request_started_at": cycle_started_at,
+     "retrieved_at": retrieved_at,
+     "source": "Kalshi public live_data weather endpoint",
+     "cities": rows,

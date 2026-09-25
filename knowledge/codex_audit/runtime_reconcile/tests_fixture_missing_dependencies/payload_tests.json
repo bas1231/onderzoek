@@ -1,0 +1,20 @@
+{
+  "timestamp": "2026-09-25T10:17:28.833593+00:00",
+  "command": [
+    "/home/leonh/prediction_research_prod/.venv/bin/python",
+    "-m",
+    "pytest",
+    "-q",
+    "tests/audit",
+    "knowledge/codex_audit/evidence/test_audit_regressions.py",
+    "control/weather",
+    "tests/hourly/test_agent_orchestrator.py",
+    "control/tampermonkey_multichat/test_install_hardened_bridge_fast_deadman_static.py",
+    "--tb=short",
+    "-o",
+    "cache_dir=/tmp/runtime-reconcile-tests-cbkt40sq/cache"
+  ],
+  "exit_code": 1,
+  "sockets": false,
+  "scope": "Ge\u00efsoleerde bronboom met exact bewaarde deploymentpayload; geen productie-E2E"
+}

@@ -1,0 +1,27 @@
+{
+  "timestamp": "2026-09-25T10:37:45.928344+00:00",
+  "qualification": "AUDIT_INCOMPLETE",
+  "additional_status": "RESIDUAL_RISK",
+  "scientific_status": "NO_PROVEN_EDGE",
+  "preservation": {
+    "index_unchanged": true,
+    "owner_files_unchanged": true,
+    "deployed_sources_match": true
+  },
+  "external_evidence": {
+    "runtime_reconcile/external_runs/20260925T102628Z-8cb294ae/RESULT.json": "0903fc52cfcc1fb69af7c6d44ae77e8b912f909277c3bcb7b0fcf8f77bc0f5fd",
+    "runtime_reconcile/external_runs/20260925T102628Z-8cb294ae/tests/payload_tests.json": "a4d0b58b3b4ff0a227c916c94e7ec11671e0d891df5bcb88a62ebbe097979458",
+    "runtime_reconcile/external_runs/20260925T102628Z-8cb294ae/tests/payload_tests.log": "df1183c480d75e292c6c61a11cd9e5be58a4d9d07437450ad1b2ff86f14fcd75"
+  },
+  "head": "50ef28765e271e63ae356cfe537a586a46520c88",
+  "acceptance_criteria_sha256": "f9cd0299b0d921134fded4d458d290142350123d525a7de15cb188265174e8f2",
+  "hourly_required": true,
+  "hourly_classification": "EXPECTED_FAIL_CLOSED_OPERATIONAL_BLOCKER",
+  "external_check_required_for_this_verdict": false,
+  "remaining_blockers": [
+    "Geen traceerbare echte hourly-keten; staged ownerwerk blokkeert sync terecht",
+    "Bestaande checkpointworkflow kan pushen; onder huidige autorisatie niet hervatten",
+    "Browser-loaded code en volledige productie-agent/Director/recoveryketen blijven onbewezen"
+  ],
+  "no_new_production_defect_demonstrated": true
+}

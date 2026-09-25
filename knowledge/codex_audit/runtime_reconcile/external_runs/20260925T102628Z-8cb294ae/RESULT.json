@@ -1,0 +1,35 @@
+{
+  "status": "DEPLOYED_SOURCE_VERIFIED",
+  "runtime_e2e": "UNPROVEN",
+  "scientific_status": "NO_PROVEN_EDGE",
+  "changes": [
+    {
+      "target": "/home/leonh/.local/share/prediction-chat-bridge/command_router.py",
+      "sha256": "b2b39858d100909cd78a480202e4eaafdeb20dcff9e48e0a7ce10db7622db821"
+    },
+    {
+      "target": "/home/leonh/prediction_research/control/weather/kalshi_weather_index_recorder.py",
+      "sha256": "03296693b1e188f93b88809629d4f23204aac7d7a0e23fd299adc90a634e43d0"
+    },
+    {
+      "target": "/home/leonh/prediction_research/control/weather/twc_hourly_recorder.py",
+      "sha256": "704a16a724aef17ade8fbdb8c4cbf79484cfe886f8ec101e2753bfffda6a6734"
+    },
+    {
+      "target": "/home/leonh/prediction_research/control/weather/market_reaction.py",
+      "sha256": "de3605a95a204fe420e2d1d78f1bcc57a48035ccca72d4512dadabc12d2384dc"
+    },
+    {
+      "target": "/home/leonh/prediction_research/control/jobs/evaluate_kwi_full_station_checkpoint_e369.py",
+      "sha256": "e0e0b2f4b96bdfa239f387f73944489f39bf0abb1d3e8f6c94edf6c7da5b7cc3"
+    }
+  ],
+  "systemd": "MainPID=33760\nResult=success\nExecMainStatus=0\nId=prediction-chat-router.service\nActiveState=active\nSubState=running\n\nMainPID=0\nResult=exit-code\nExecMainStatus=0\nId=prediction-research-hourly-director.service\nActiveState=failed\nSubState=failed",
+  "limits": [
+    "Hourly blijft door ownerindex/no-push geblokkeerd; niet gestart",
+    "Weatherprocessen niet herstart: nieuwe invocaties laden bron; bestaande imports niet geattesteerd",
+    "Router try-restart bewijst geen browser/Director E2E",
+    "Geen userscript gewijzigd"
+  ],
+  "preservation": "Beide indices en vastgelegde ownerbestanden ongewijzigd"
+}
