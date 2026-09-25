@@ -1,0 +1,13 @@
+{
+  "timestamp": "2026-09-25T06:46:00.692438+00:00",
+  "command": [
+    "systemctl",
+    "--user",
+    "list-timers",
+    "--all",
+    "--no-pager"
+  ],
+  "exit_code": 1,
+  "stdout": "",
+  "stderr": "Failed to connect to bus: Operation not permitted\n"
+}

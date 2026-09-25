@@ -1,0 +1,452 @@
+{
+  "observed_at": "2026-09-25T06:49:25.411754+00:00",
+  "local_receipts": {
+    "git-checkpoint-latest.json": {
+      "sha256": "24687bbc0a1514628f99b7379cd12f5c7a9c07e12bc15d1b07c9256b2bc1b823",
+      "mtime": "2026-09-24T15:13:35.113314+00:00",
+      "fields": {
+        "status": "FAIL_CLOSED",
+        "timestamp_utc": "2026-09-24T15:13:35.113193+00:00",
+        "reason": "local HEAD differs from origin/main; manual reconciliation required"
+      }
+    },
+    "runtime-health-latest.json": {
+      "sha256": "66ee69db66ab797d44d50befbda4a9c77cca76ecc9885ac98914daf8ac4b3a01",
+      "mtime": "2026-09-24T14:04:16.287152+00:00",
+      "fields": {
+        "timestamp_utc": "2026-09-24T14:04:16.286387+00:00",
+        "claims": {
+          "browser_bridge_running": false,
+          "runtime_exchange_running": false,
+          "scheduled_cycle_recently_completed": true,
+          "scheduler_preflight_recent": true,
+          "scheduler_service_running": false
+        },
+        "reason": "recent preflight plus correlated completed scheduled-cycle receipt observed"
+      }
+    },
+    "scheduled-cycle-latest.json": {
+      "sha256": "7a910cacfff4e8a1cdeab6904c2ce6de4afabde26503acbc8ea470f933307401",
+      "mtime": "2026-09-24T14:04:16.186410+00:00",
+      "fields": {
+        "status": "COMPLETED",
+        "run_id": "hourly-20260924T160000+0200",
+        "timestamp_utc": "2026-09-24T14:04:16.186272+00:00",
+        "claims": {
+          "browser_bridge_running": false,
+          "required_checkpoints_completed": true,
+          "runtime_exchange_running": false,
+          "scheduled_wrapper_completed": true
+        }
+      }
+    },
+    "runtime-sync-latest.json": {
+      "sha256": "ebe2985dc6d3285bd465a858140ee43641a19c52783317974525e80c67c19de3",
+      "mtime": "2026-09-22T07:13:19.407309+00:00",
+      "fields": {
+        "status": "BLOCKED_TRACKED_CHANGES"
+      }
+    },
+    "prod-runtime-sync-latest.json": {
+      "sha256": "0497c2c27c0bd42c3f56f3296c3cc89c39d278c92bc43727a6fd601c3e16f5e8",
+      "mtime": "2026-09-25T06:23:05.378146+00:00",
+      "fields": {
+        "status": "BLOCKED",
+        "timestamp_utc": "2026-09-25T06:23:05.377503+00:00",
+        "error": "git index is not empty: control/tampermonkey_multichat/bridge_server_v2.py, control/tampermonkey_multichat/command_router.py, control/tampermonkey_multichat/deploy_consumer_routing_e010.py, control/tampermonkey_multichat/install_hardened_bridge.py, knowledge/candidates/MANUAL-SCOUT-HENGELTJES-20260924.json, knowledge/manual_scout_seeds/2026-09-24-hengeltjes-late-passive-liquidity.md"
+      }
+    },
+    "supervisor_status.json": {
+      "sha256": "fe0686c7949898d43dd8bbfec7dfd921c8e3d2a7b572eb583f53513336cf04ee",
+      "mtime": "2026-09-25T06:49:08.306520+00:00",
+      "fields": {
+        "status": "INCIDENTS_OPEN"
+      }
+    }
+  },
+  "agent_traces": [
+    {
+      "run_id": "hourly-20260924T080000+0200",
+      "response_ref": "knowledge/runs/hourly-20260924T080000+0200-ai-response.json",
+      "response_sha256": "71a9a313bb52e1391693b29acb9503a915e4dd214435c8725763bf0bc9a49d22",
+      "receipt_exists": true,
+      "bundle_exists": true,
+      "roles": [
+        {
+          "agent_id": "discovery",
+          "response_status": "WAITING_FOR_RESULT",
+          "packet_exists": true,
+          "packet_status": "WAITING_FOR_RESULT",
+          "ai_result_present": true,
+          "applied_at": "2026-09-24T14:04:04.050921+00:00",
+          "evidence_ref_count": 1,
+          "missing_local_refs": []
+        },
+        {
+          "agent_id": "market_research",
+          "response_status": "WAITING_FOR_RESULT",
+          "packet_exists": true,
+          "packet_status": "WAITING_FOR_RESULT",
+          "ai_result_present": true,
+          "applied_at": "2026-09-24T14:04:04.050961+00:00",
+          "evidence_ref_count": 1,
+          "missing_local_refs": []
+        },
+        {
+          "agent_id": "mechanics",
+          "response_status": "WAITING_FOR_DATA",
+          "packet_exists": true,
+          "packet_status": "WAITING_FOR_DATA",
+          "ai_result_present": true,
+          "applied_at": "2026-09-24T14:04:04.051039+00:00",
+          "evidence_ref_count": 2,
+          "missing_local_refs": []
+        },
+        {
+          "agent_id": "algebra",
+          "response_status": "WAITING_FOR_DATA",
+          "packet_exists": true,
+          "packet_status": "WAITING_FOR_DATA",
+          "ai_result_present": true,
+          "applied_at": "2026-09-24T14:04:04.051086+00:00",
+          "evidence_ref_count": 2,
+          "missing_local_refs": []
+        },
+        {
+          "agent_id": "red_team_pentest",
+          "response_status": "COMPLETED",
+          "packet_exists": true,
+          "packet_status": "COMPLETED",
+          "ai_result_present": true,
+          "applied_at": "2026-09-24T14:04:04.051127+00:00",
+          "evidence_ref_count": 3,
+          "missing_local_refs": []
+        },
+        {
+          "agent_id": "research_director",
+          "response_status": "COMPLETED",
+          "packet_exists": true,
+          "packet_status": "COMPLETED",
+          "ai_result_present": true,
+          "applied_at": "2026-09-24T14:04:04.051156+00:00",
+          "evidence_ref_count": 3,
+          "missing_local_refs": []
+        }
+      ]
+    },
+    {
+      "run_id": "hourly-20260924T130000+0200",
+      "response_ref": "knowledge/runs/hourly-20260924T130000+0200-ai-response.json",
+      "response_sha256": "e448928fcea2e9e0657699a442ee64b1baf9227eae58b3e827fd448b001b7165",
+      "receipt_exists": true,
+      "bundle_exists": true,
+      "roles": [
+        {
+          "agent_id": "discovery",
+          "response_status": "WAITING_FOR_RESULT",
+          "packet_exists": true,
+          "packet_status": "WAITING_FOR_RESULT",
+          "ai_result_present": true,
+          "applied_at": "2026-09-24T16:21:51.141829+00:00",
+          "evidence_ref_count": 2,
+          "missing_local_refs": [
+            "kalshi_weather:routed_evidence:2026-09-24T11:05:31Z"
+          ]
+        },
+        {
+          "agent_id": "market_research",
+          "response_status": "WAITING_FOR_RESULT",
+          "packet_exists": true,
+          "packet_status": "WAITING_FOR_RESULT",
+          "ai_result_present": true,
+          "applied_at": "2026-09-24T16:21:51.141877+00:00",
+          "evidence_ref_count": 2,
+          "missing_local_refs": [
+            "kalshi_weather:routed_evidence:2026-09-24T11:05:31Z"
+          ]
+        },
+        {
+          "agent_id": "mechanics",
+          "response_status": "WAITING_FOR_DATA",
+          "packet_exists": true,
+          "packet_status": "WAITING_FOR_DATA",
+          "ai_result_present": true,
+          "applied_at": "2026-09-24T16:21:51.142263+00:00",
+          "evidence_ref_count": 2,
+          "missing_local_refs": []
+        },
+        {
+          "agent_id": "algebra",
+          "response_status": "WAITING_FOR_DATA",
+          "packet_exists": true,
+          "packet_status": "WAITING_FOR_DATA",
+          "ai_result_present": true,
+          "applied_at": "2026-09-24T16:21:51.142479+00:00",
+          "evidence_ref_count": 2,
+          "missing_local_refs": []
+        },
+        {
+          "agent_id": "red_team_pentest",
+          "response_status": "COMPLETED",
+          "packet_exists": true,
+          "packet_status": "COMPLETED",
+          "ai_result_present": true,
+          "applied_at": "2026-09-24T16:21:51.142527+00:00",
+          "evidence_ref_count": 3,
+          "missing_local_refs": []
+        },
+        {
+          "agent_id": "research_director",
+          "response_status": "COMPLETED",
+          "packet_exists": true,
+          "packet_status": "COMPLETED",
+          "ai_result_present": true,
+          "applied_at": "2026-09-24T16:21:51.142601+00:00",
+          "evidence_ref_count": 3,
+          "missing_local_refs": []
+        }
+      ]
+    },
+    {
+      "run_id": "hourly-20260924T160000+0200",
+      "response_ref": "knowledge/runs/hourly-20260924T160000+0200-ai-response.json",
+      "response_sha256": "a49eddd8387fc13a36995c098d3025dbc4f1dd49edaaa27f795cecfa64792c60",
+      "receipt_exists": true,
+      "bundle_exists": true,
+      "roles": [
+        {
+          "agent_id": "discovery",
+          "response_status": "WAITING_FOR_RESULT",
+          "packet_exists": true,
+          "packet_status": "WAITING_FOR_RESULT",
+          "ai_result_present": true,
+          "applied_at": "2026-09-24T16:21:51.190268+00:00",
+          "evidence_ref_count": 1,
+          "missing_local_refs": []
+        },
+        {
+          "agent_id": "market_research",
+          "response_status": "WAITING_FOR_RESULT",
+          "packet_exists": true,
+          "packet_status": "WAITING_FOR_RESULT",
+          "ai_result_present": true,
+          "applied_at": "2026-09-24T16:21:51.190348+00:00",
+          "evidence_ref_count": 1,
+          "missing_local_refs": []
+        },
+        {
+          "agent_id": "mechanics",
+          "response_status": "WAITING_FOR_DATA",
+          "packet_exists": true,
+          "packet_status": "WAITING_FOR_DATA",
+          "ai_result_present": true,
+          "applied_at": "2026-09-24T16:21:51.190710+00:00",
+          "evidence_ref_count": 2,
+          "missing_local_refs": []
+        },
+        {
+          "agent_id": "algebra",
+          "response_status": "WAITING_FOR_DATA",
+          "packet_exists": true,
+          "packet_status": "WAITING_FOR_DATA",
+          "ai_result_present": true,
+          "applied_at": "2026-09-24T16:21:51.190913+00:00",
+          "evidence_ref_count": 2,
+          "missing_local_refs": []
+        },
+        {
+          "agent_id": "red_team_pentest",
+          "response_status": "COMPLETED",
+          "packet_exists": true,
+          "packet_status": "COMPLETED",
+          "ai_result_present": true,
+          "applied_at": "2026-09-24T16:21:51.190956+00:00",
+          "evidence_ref_count": 3,
+          "missing_local_refs": []
+        },
+        {
+          "agent_id": "research_director",
+          "response_status": "COMPLETED",
+          "packet_exists": true,
+          "packet_status": "COMPLETED",
+          "ai_result_present": true,
+          "applied_at": "2026-09-24T16:21:51.190984+00:00",
+          "evidence_ref_count": 3,
+          "missing_local_refs": []
+        }
+      ]
+    },
+    {
+      "run_id": "hourly-20260924T180000+0200",
+      "response_ref": "knowledge/runs/hourly-20260924T180000+0200-ai-response.json",
+      "response_sha256": "91f63ffe4ea0d335e95af562d31325984aa0d39c8e6ec491d437a524299e7552",
+      "receipt_exists": true,
+      "bundle_exists": true,
+      "roles": [
+        {
+          "agent_id": "discovery",
+          "response_status": "COMPLETED",
+          "packet_exists": true,
+          "packet_status": "COMPLETED",
+          "ai_result_present": true,
+          "applied_at": "2026-09-24T17:02:21.179537+00:00",
+          "evidence_ref_count": 3,
+          "missing_local_refs": []
+        },
+        {
+          "agent_id": "market_research",
+          "response_status": "WAITING_FOR_RESULT",
+          "packet_exists": true,
+          "packet_status": "WAITING_FOR_RESULT",
+          "ai_result_present": true,
+          "applied_at": "2026-09-24T17:02:21.179614+00:00",
+          "evidence_ref_count": 1,
+          "missing_local_refs": []
+        },
+        {
+          "agent_id": "mechanics",
+          "response_status": "WAITING_FOR_DATA",
+          "packet_exists": true,
+          "packet_status": "WAITING_FOR_DATA",
+          "ai_result_present": true,
+          "applied_at": "2026-09-24T17:02:21.179682+00:00",
+          "evidence_ref_count": 2,
+          "missing_local_refs": []
+        },
+        {
+          "agent_id": "algebra",
+          "response_status": "WAITING_FOR_DATA",
+          "packet_exists": true,
+          "packet_status": "WAITING_FOR_DATA",
+          "ai_result_present": true,
+          "applied_at": "2026-09-24T17:02:21.179743+00:00",
+          "evidence_ref_count": 2,
+          "missing_local_refs": []
+        },
+        {
+          "agent_id": "red_team_pentest",
+          "response_status": "COMPLETED",
+          "packet_exists": true,
+          "packet_status": "COMPLETED",
+          "ai_result_present": true,
+          "applied_at": "2026-09-24T17:02:21.179809+00:00",
+          "evidence_ref_count": 5,
+          "missing_local_refs": []
+        },
+        {
+          "agent_id": "research_director",
+          "response_status": "COMPLETED",
+          "packet_exists": true,
+          "packet_status": "COMPLETED",
+          "ai_result_present": true,
+          "applied_at": "2026-09-24T17:02:21.179857+00:00",
+          "evidence_ref_count": 5,
+          "missing_local_refs": []
+        }
+      ]
+    },
+    {
+      "run_id": "hourly-20260924T190000+0200",
+      "response_ref": "knowledge/runs/hourly-20260924T190000+0200-ai-response.json",
+      "response_sha256": "7129940b222b73406d55d064d9d21fcc3d6a545e09719985109a0dcac232c372",
+      "receipt_exists": true,
+      "bundle_exists": true,
+      "roles": [
+        {
+          "agent_id": "discovery",
+          "response_status": "COMPLETED",
+          "packet_exists": true,
+          "packet_status": "COMPLETED",
+          "ai_result_present": true,
+          "applied_at": "2026-09-24T17:22:15.156555+00:00",
+          "evidence_ref_count": 2,
+          "missing_local_refs": []
+        },
+        {
+          "agent_id": "market_research",
+          "response_status": "WAITING_FOR_RESULT",
+          "packet_exists": true,
+          "packet_status": "WAITING_FOR_RESULT",
+          "ai_result_present": true,
+          "applied_at": "2026-09-24T17:22:15.156652+00:00",
+          "evidence_ref_count": 1,
+          "missing_local_refs": []
+        },
+        {
+          "agent_id": "mechanics",
+          "response_status": "COMPLETED",
+          "packet_exists": true,
+          "packet_status": "COMPLETED",
+          "ai_result_present": true,
+          "applied_at": "2026-09-24T17:22:15.156738+00:00",
+          "evidence_ref_count": 4,
+          "missing_local_refs": []
+        },
+        {
+          "agent_id": "algebra",
+          "response_status": "WAITING_FOR_DATA",
+          "packet_exists": true,
+          "packet_status": "WAITING_FOR_DATA",
+          "ai_result_present": true,
+          "applied_at": "2026-09-24T17:22:15.156801+00:00",
+          "evidence_ref_count": 2,
+          "missing_local_refs": []
+        },
+        {
+          "agent_id": "red_team_pentest",
+          "response_status": "COMPLETED",
+          "packet_exists": true,
+          "packet_status": "COMPLETED",
+          "ai_result_present": true,
+          "applied_at": "2026-09-24T17:22:15.156868+00:00",
+          "evidence_ref_count": 5,
+          "missing_local_refs": []
+        },
+        {
+          "agent_id": "research_director",
+          "response_status": "COMPLETED",
+          "packet_exists": true,
+          "packet_status": "COMPLETED",
+          "ai_result_present": true,
+          "applied_at": "2026-09-24T17:22:15.156915+00:00",
+          "evidence_ref_count": 2,
+          "missing_local_refs": []
+        }
+      ]
+    }
+  ],
+  "hourly_counts": {
+    "hourly-20260919": 2,
+    "hourly-20260920": 10,
+    "hourly-20260922": 7,
+    "hourly-20260923": 14,
+    "hourly-20260924": 6
+  },
+  "raw_inventory": {
+    "kalshi_weather_index_manifests": {
+      "count": 6425,
+      "first": "kwi-20260919T232453.632399+0000-1b37b1771461.json",
+      "last": "kwi-20260925T064920.375545+0000-16d8d6c80b8c.json"
+    },
+    "twc_hourly_manifests": {
+      "count": 438,
+      "first": "twc-hourly-20260919T224908Z-1e3bfafc2390.json",
+      "last": "twc-hourly-20260925T063505Z-d9801e1a3002.json"
+    },
+    "e401_prospective_manifests": {
+      "count": 9912,
+      "first": "cycle-20260921T160805.702056Z-3972fab453db.json",
+      "last": "discovery-20260925T064912.994137Z-ea9edcea317a.json"
+    },
+    "e401_reaction_reports": {
+      "count": 2,
+      "first": "e401-a17-latest.json",
+      "last": "e401-a18-latency-latest.json"
+    },
+    "kalshi_market_reaction_logs": {
+      "count": 4626,
+      "first": "ws-20260921T153248Z.ndjson",
+      "last": "ws-20260925T064913Z.ndjson"
+    }
+  }
+}

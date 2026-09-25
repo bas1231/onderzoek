@@ -1,0 +1,26 @@
+[
+  {
+    "task_id": "CONTROL-BRIDGE-INCIDENT-HYGIENE-E402R2",
+    "status": "failed",
+    "exit_code": 1,
+    "source_commit": "4389b1344ad22f91f1207d9160ed902d28b330e5",
+    "stderr_sha256": "c6ee50e7ab61caccac2d65884a703837880ea0b27207363a615bbfc4b5c2f8fc",
+    "error_line": "NameError: name 'file' is not defined. Did you mean: 'filter'?"
+  },
+  {
+    "task_id": "CONTROL-DOCUMENT-INFRA-AUTH-RULE-E403",
+    "status": "failed",
+    "exit_code": 1,
+    "source_commit": "650f02c40ef5a7f78c803a476d5294870ed1f744",
+    "stderr_sha256": "1988ea9f1d52a77575c50830456eed4d330e7d2beda7ae34f99e1fce0c4601b8",
+    "error_line": "SyntaxError: unterminated string literal (detected at line 43)"
+  },
+  {
+    "task_id": "CONTROL-PERSIST-E402-AND-AGENTS-RULES-E404",
+    "status": "failed",
+    "exit_code": 1,
+    "source_commit": "e32eb19ad82556837f340a5c08ea89c2fb2fb7fa",
+    "stderr_sha256": "08f50719f3eac2f17de8f3df4db229d9b18562c8f9babb4d836c62bed3a2b96b",
+    "error_line": "NameError: name 'name' is not defined"
+  }
+]

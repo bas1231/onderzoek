@@ -1,0 +1,111 @@
+{
+  "as_of": "2026-09-25T06:58:55.816857+00:00",
+  "legacy_source_comparison": {
+    "control/weather/kalshi_weather_index_recorder.py": {
+      "exists": true,
+      "matches_prod": true
+    },
+    "control/weather/twc_hourly_recorder.py": {
+      "exists": true,
+      "matches_prod": true
+    },
+    "control/weather/market_reaction.py": {
+      "exists": true,
+      "matches_prod": true
+    },
+    "control/jobs/evaluate_kwi_full_station_checkpoint_e369.py": {
+      "exists": true,
+      "matches_prod": true
+    }
+  },
+  "historical_checkpoints": [
+    {
+      "name": "20260920T024031Z-kwi-full-station-checkpoint.json",
+      "sha256": "3b14ff05a4384c279d3769857697f8cb7130efa030cfcbfec0d593d4d090d23f",
+      "n": 0,
+      "nonpositive_lead_count": 0,
+      "survival_pass": null,
+      "scorable_pairs": 0
+    },
+    {
+      "name": "20260920T024141Z-kwi-full-station-checkpoint.json",
+      "sha256": "10c4c57b5a4182b4d09ed49ee89557e909385ccfaecc1135850814615030348b",
+      "n": 0,
+      "nonpositive_lead_count": 0,
+      "survival_pass": null,
+      "scorable_pairs": 0
+    },
+    {
+      "name": "20260920T024254Z-kwi-full-station-checkpoint.json",
+      "sha256": "f18cb320feea66024d51d93a409afd0a98668e03d686c960d0c4914ee688a660",
+      "n": 2,
+      "nonpositive_lead_count": 0,
+      "survival_pass": null,
+      "scorable_pairs": 2
+    },
+    {
+      "name": "20260920T030021Z-kwi-full-station-checkpoint.json",
+      "sha256": "93599a264b1119ed98c45dce86df2d3ad3b8c46f5574e3f81f0b5b0b4d8ae4cf",
+      "n": 34,
+      "nonpositive_lead_count": 0,
+      "survival_pass": null,
+      "scorable_pairs": 34
+    },
+    {
+      "name": "20260920T040021Z-kwi-full-station-checkpoint.json",
+      "sha256": "65aa65ae50e2b8f5177634269a81b8cb69d73b70ea39d94f8591fb16d1bf59d9",
+      "n": 113,
+      "nonpositive_lead_count": 0,
+      "survival_pass": null,
+      "scorable_pairs": 113
+    },
+    {
+      "name": "20260920T050021Z-kwi-full-station-checkpoint.json",
+      "sha256": "1272b2f4ce58a4b47fb77a24e00d34530122f2235a56cc9cd82b94eb0b5eef0a",
+      "n": 196,
+      "nonpositive_lead_count": 0,
+      "survival_pass": null,
+      "scorable_pairs": 196
+    },
+    {
+      "name": "20260920T141925Z-kwi-full-station-checkpoint.json",
+      "sha256": "30799ffc4307456de8713ce177abd07d18ae8451ffc7a363ff9d75ab9b9c6752",
+      "n": 256,
+      "nonpositive_lead_count": 0,
+      "survival_pass": null,
+      "scorable_pairs": 256
+    },
+    {
+      "name": "20260920T150019Z-kwi-full-station-checkpoint.json",
+      "sha256": "f398ebe3e0efb582e88d571ba2e9de4b95545cb6ae44b21551abef38040e01d5",
+      "n": 311,
+      "nonpositive_lead_count": 0,
+      "survival_pass": null,
+      "scorable_pairs": 311
+    },
+    {
+      "name": "20260921T075352Z-kwi-full-station-checkpoint.json",
+      "sha256": "6dcdac0b1cd49b6c4e705b4db1219a52d8868d707b11536f635e7d0a4f669200",
+      "n": 1377,
+      "nonpositive_lead_count": 0,
+      "survival_pass": true,
+      "scorable_pairs": 1377
+    },
+    {
+      "name": "20260924T055946Z-kwi-full-station-checkpoint.json",
+      "sha256": "cddad71be2b9b87dec35251509eef3bc8f9fabf63b243250df83f9f16cace1a2",
+      "n": 1377,
+      "nonpositive_lead_count": 0,
+      "survival_pass": true,
+      "scorable_pairs": 1377
+    },
+    {
+      "name": "KWI-FULL-STATION-PRECANONICAL-24H-V1-finalized.json",
+      "sha256": "f4ffdde8edc62564f7b0a1cacde1a46dbab70da2f4edee06c291acd437fe43e1",
+      "n": 0,
+      "nonpositive_lead_count": 0,
+      "survival_pass": null,
+      "scorable_pairs": null
+    }
+  ]
+}

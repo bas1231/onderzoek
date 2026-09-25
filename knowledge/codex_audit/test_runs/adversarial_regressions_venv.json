@@ -1,0 +1,16 @@
+{
+  "command": [
+    "/home/leonh/prediction_research_prod/.venv/bin/python",
+    "-m",
+    "pytest",
+    "-q",
+    "knowledge/codex_audit/evidence/test_audit_regressions.py",
+    "--tb=short",
+    "-o",
+    "cache_dir=/tmp/codex-audit-regression-cache"
+  ],
+  "started_at": "2026-09-25T06:54:59.899350+00:00",
+  "ended_at": "2026-09-25T06:55:00.783309+00:00",
+  "exit_code": 1,
+  "expected": "RED: gewenste invarianten, geen productieherstel"
+}

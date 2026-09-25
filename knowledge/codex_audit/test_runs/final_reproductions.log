@@ -1,0 +1,107 @@
+{
+  "synthetic_only": true,
+  "recorders": [
+    {
+      "source": "control/weather/kalshi_weather_index_recorder.py",
+      "reported_retrieved_at": "2026-09-25T00:00:00+00:00",
+      "actual_mock_body_receipts": [
+        "2026-09-25T00:00:05+00:00",
+        "2026-09-25T00:00:10+00:00",
+        "2026-09-25T00:00:15+00:00"
+      ],
+      "backdated": true
+    },
+    {
+      "source": "control/weather/twc_hourly_recorder.py",
+      "reported_retrieved_at": "2026-09-25T00:00:00+00:00",
+      "actual_mock_body_receipts": [
+        "2026-09-25T00:00:05+00:00"
+      ],
+      "backdated": true
+    }
+  ],
+  "proof_gate": [
+    {
+      "net_edge": -1,
+      "accepted": true,
+      "reasons": []
+    },
+    {
+      "net_edge": 0,
+      "accepted": true,
+      "reasons": []
+    },
+    {
+      "net_edge": "unknown",
+      "accepted": true,
+      "reasons": []
+    }
+  ],
+  "corrupt_route": {
+    "rejected": false,
+    "reported_route": {
+      "version": 2,
+      "task_id": "SYNTHETIC",
+      "chat_id": "chat-test",
+      "consumer_id": "consumer-test",
+      "created_at_unix": 1790319563.3445196
+    },
+    "persisted_route": null,
+    "raw_still_corrupt": true
+  },
+  "nonobject_json": {
+    "exception": "AttributeError",
+    "http_replies": []
+  },
+  "executor_timeout": {
+    "exception": "TypeError: can't concat str to bytes",
+    "result_written": false,
+    "running_task_remains": true
+  },
+  "coverage_hole": {
+    "status": "NO_REACTION_OBSERVED_WITHIN_WINDOW",
+    "economic_conclusion": "NO_PROVEN_EDGE",
+    "latency_lower_bound_ms": 30000,
+    "kwi_event": {
+      "available_at_ms": 10000
+    },
+    "baseline": {
+      "ticker": "SYNTHETIC",
+      "ts_ms": 9000,
+      "yes_bid": "0.4",
+      "yes_ask": "0.6",
+      "no_bid": "0.4",
+      "no_ask": "0.6",
+      "yes_bid_qty": "1",
+      "no_bid_qty": "1",
+      "transport": "ws",
+      "seq": null
+    }
+  },
+  "empty_executable_book": {
+    "status": "NO_REACTION_OBSERVED_WITHIN_WINDOW",
+    "economic_conclusion": "NO_PROVEN_EDGE",
+    "latency_lower_bound_ms": 30000,
+    "kwi_event": {
+      "available_at_ms": 10000
+    },
+    "baseline": {
+      "ticker": "SYNTHETIC",
+      "ts_ms": 9000,
+      "yes_bid": null,
+      "yes_ask": null,
+      "no_bid": null,
+      "no_ask": null,
+      "yes_bid_qty": "1",
+      "no_bid_qty": "1",
+      "transport": "ws",
+      "seq": null
+    }
+  },
+  "negative_lead_cross_config": {
+    "eligible_rows": 1,
+    "leads": [
+      -10.0
+    ]
+  }
+}

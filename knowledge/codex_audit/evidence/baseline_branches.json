@@ -1,0 +1,11 @@
+{
+  "timestamp": "2026-09-25T06:46:00.692438+00:00",
+  "command": [
+    "git",
+    "branch",
+    "-vv"
+  ],
+  "exit_code": 0,
+  "stdout": "  ai/fix-6ai-role-contract-e001              0e1a20d hourly: align AI exchange with six-role Research OS\n  ai/fix-hourly-bundle-idempotency-e002      661c68e hourly: make AI work bundle create-once per cycle\n  ai/fix-validation-result-contract-e003     814fd68 hourly: make validation result schema explicit\n* main                                       6b33058 [origin/main: behind 8] research(checkpoint): durable Director state 2026-09-24 16:26:21 +0200\n  reconcile/20260924-123909                  7023468 [origin/main: ahead 2, behind 25] preserve local recon opportunity graph before reconcile\n  repair/director-checkpoint-20260922-221836 6ea5ab6 research(checkpoint): durable Director state 2026-09-22 22:14:56 +0200\n  safety/pre-reconcile-20260924-123518       b0768c7 preserve local recon opportunity graph before reconcile\n  safety/pre-reconcile-20260924-123558       bb81cea diag: narrow remaining tracked project file\n  safety/stash-pre-reconcile-20260924-123909 6a50f6b On main: pre-reconcile preserve all local state 2026-09-24\n",
+  "stderr": ""
+}

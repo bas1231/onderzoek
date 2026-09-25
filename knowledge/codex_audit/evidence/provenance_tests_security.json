@@ -1,0 +1,583 @@
+{
+  "observed_at": "2026-09-25T06:50:00.966275+00:00",
+  "raw_checks": [
+    {
+      "manifest": "kwi-20260919T232453.632399+0000-1b37b1771461.json",
+      "city": "nyc",
+      "retrieved_at": "2026-09-19T23:24:53.632399+00:00",
+      "raw_exists": true,
+      "hash_matches": true
+    },
+    {
+      "manifest": "kwi-20260919T232453.632399+0000-1b37b1771461.json",
+      "city": "miami",
+      "retrieved_at": "2026-09-19T23:24:53.632399+00:00",
+      "raw_exists": true,
+      "hash_matches": true
+    },
+    {
+      "manifest": "kwi-20260919T232453.632399+0000-1b37b1771461.json",
+      "city": "chicago",
+      "retrieved_at": "2026-09-19T23:24:53.632399+00:00",
+      "raw_exists": true,
+      "hash_matches": true
+    },
+    {
+      "manifest": "kwi-20260921T105519.425878+0000-c9d2fa42a632.json",
+      "city": "nyc",
+      "retrieved_at": "2026-09-21T10:55:19.425878+00:00",
+      "raw_exists": true,
+      "hash_matches": true
+    },
+    {
+      "manifest": "kwi-20260921T105519.425878+0000-c9d2fa42a632.json",
+      "city": "miami",
+      "retrieved_at": "2026-09-21T10:55:19.425878+00:00",
+      "raw_exists": true,
+      "hash_matches": true
+    },
+    {
+      "manifest": "kwi-20260921T105519.425878+0000-c9d2fa42a632.json",
+      "city": "chicago",
+      "retrieved_at": "2026-09-21T10:55:19.425878+00:00",
+      "raw_exists": true,
+      "hash_matches": true
+    },
+    {
+      "manifest": "kwi-20260922T134519.348918+0000-023ab59f59c9.json",
+      "city": "nyc",
+      "retrieved_at": "2026-09-22T13:45:19.348918+00:00",
+      "raw_exists": true,
+      "hash_matches": true
+    },
+    {
+      "manifest": "kwi-20260922T134519.348918+0000-023ab59f59c9.json",
+      "city": "miami",
+      "retrieved_at": "2026-09-22T13:45:19.348918+00:00",
+      "raw_exists": true,
+      "hash_matches": true
+    },
+    {
+      "manifest": "kwi-20260922T134519.348918+0000-023ab59f59c9.json",
+      "city": "chicago",
+      "retrieved_at": "2026-09-22T13:45:19.348918+00:00",
+      "raw_exists": true,
+      "hash_matches": true
+    },
+    {
+      "manifest": "kwi-20260923T163958.473012+0000-b6a8ad656f95.json",
+      "city": "nyc",
+      "retrieved_at": "2026-09-23T16:39:58.473012+00:00",
+      "raw_exists": true,
+      "hash_matches": true
+    },
+    {
+      "manifest": "kwi-20260923T163958.473012+0000-b6a8ad656f95.json",
+      "city": "miami",
+      "retrieved_at": "2026-09-23T16:39:58.473012+00:00",
+      "raw_exists": true,
+      "hash_matches": true
+    },
+    {
+      "manifest": "kwi-20260923T163958.473012+0000-b6a8ad656f95.json",
+      "city": "chicago",
+      "retrieved_at": "2026-09-23T16:39:58.473012+00:00",
+      "raw_exists": true,
+      "hash_matches": true
+    },
+    {
+      "manifest": "kwi-20260925T064920.375545+0000-16d8d6c80b8c.json",
+      "city": "nyc",
+      "retrieved_at": "2026-09-25T06:49:20.375545+00:00",
+      "raw_exists": true,
+      "hash_matches": true
+    },
+    {
+      "manifest": "kwi-20260925T064920.375545+0000-16d8d6c80b8c.json",
+      "city": "miami",
+      "retrieved_at": "2026-09-25T06:49:20.375545+00:00",
+      "raw_exists": true,
+      "hash_matches": true
+    },
+    {
+      "manifest": "kwi-20260925T064920.375545+0000-16d8d6c80b8c.json",
+      "city": "chicago",
+      "retrieved_at": "2026-09-25T06:49:20.375545+00:00",
+      "raw_exists": true,
+      "hash_matches": true
+    },
+    {
+      "manifest": "twc-hourly-20260919T224908Z-1e3bfafc2390.json",
+      "city": null,
+      "retrieved_at": "2026-09-19T22:49:08.113632+00:00",
+      "raw_exists": true,
+      "hash_matches": true
+    },
+    {
+      "manifest": "twc-hourly-20260921T095012Z-e8282e3394ae.json",
+      "city": null,
+      "retrieved_at": "2026-09-21T09:50:12.392868+00:00",
+      "raw_exists": true,
+      "hash_matches": true
+    },
+    {
+      "manifest": "twc-hourly-20260922T132012Z-cbca9b6d90f4.json",
+      "city": null,
+      "retrieved_at": "2026-09-22T13:20:12.361934+00:00",
+      "raw_exists": true,
+      "hash_matches": true
+    },
+    {
+      "manifest": "twc-hourly-20260923T163500Z-b1235e196319.json",
+      "city": null,
+      "retrieved_at": "2026-09-23T16:35:00.993551+00:00",
+      "raw_exists": true,
+      "hash_matches": true
+    },
+    {
+      "manifest": "twc-hourly-20260925T063505Z-d9801e1a3002.json",
+      "city": null,
+      "retrieved_at": "2026-09-25T06:35:05.002958+00:00",
+      "raw_exists": true,
+      "hash_matches": true
+    }
+  ],
+  "report_summaries": {
+    "e401-a18-latency-latest.json": {
+      "analyzed_primary_events": 104,
+      "base_evaluable_primary_events": 104,
+      "base_primary_events_total": 490,
+      "economic_conclusion": "NO_PROVEN_EDGE",
+      "generated_at": "2026-09-21T20:25:04.354220+00:00",
+      "live_trading": false,
+      "paid_action": false,
+      "schema": "KAL_WX_MARKET_REACTION_LATENCY_A18_V1",
+      "wallet_action": false,
+      "window_ms": 30000
+    },
+    "e401-a17-latest.json": {
+      "economic_conclusion": "NO_PROVEN_EDGE",
+      "evaluable_primary_events": 13,
+      "generated_at": "2026-09-21T16:45:12.257766+00:00",
+      "ignored_nonprimary_events_total": 0,
+      "latest_completed_capture_at_ms": 1790008945889,
+      "live_trading": false,
+      "paid_action": false,
+      "pending_primary_events_total": 2,
+      "primary_events_total": 68,
+      "prospective_start_at_ms": 1790006888053,
+      "revision_events_total": 0,
+      "schema": "KAL_WX_MARKET_REACTION_E401_V2",
+      "status": "COLLECTING",
+      "valid_synchronized_capture_fraction": 0.19117647058823528,
+      "wallet_action": false,
+      "window_ms": 30000
+    }
+  },
+  "test_inventory": {
+    "tests/test_runtime_cycle_correlation.py": {
+      "test_defs": 3,
+      "skip_markers": 0,
+      "static_text_assertions": 0
+    },
+    "tests/test_recon_engine.py": {
+      "test_defs": 12,
+      "skip_markers": 0,
+      "static_text_assertions": 0
+    },
+    "tests/test_runtime_health.py": {
+      "test_defs": 5,
+      "skip_markers": 0,
+      "static_text_assertions": 0
+    },
+    "tests/test_market_instance_scanner.py": {
+      "test_defs": 9,
+      "skip_markers": 0,
+      "static_text_assertions": 0
+    },
+    "tests/test_parallel_build_coordination.py": {
+      "test_defs": 6,
+      "skip_markers": 0,
+      "static_text_assertions": 0
+    },
+    "tests/test_hourly_timer_deployer.py": {
+      "test_defs": 3,
+      "skip_markers": 0,
+      "static_text_assertions": 0
+    },
+    "tests/test_parallel_build_coordination_shared.py": {
+      "test_defs": 2,
+      "skip_markers": 0,
+      "static_text_assertions": 0
+    },
+    "tests/bridge/test_executor_preflight_atomic_support.py": {
+      "test_defs": 7,
+      "skip_markers": 0,
+      "static_text_assertions": 0
+    },
+    "tests/bridge/test_repair_bridge_forward_only.py": {
+      "test_defs": 3,
+      "skip_markers": 0,
+      "static_text_assertions": 0
+    },
+    "tests/bridge/test_tampermonkey_multichat.py": {
+      "test_defs": 14,
+      "skip_markers": 0,
+      "static_text_assertions": 0
+    },
+    "tests/bridge/test_nightshift_commandmarker_optin.py": {
+      "test_defs": 2,
+      "skip_markers": 0,
+      "static_text_assertions": 6
+    },
+    "tests/bridge/test_transport_ack_hardening.py": {
+      "test_defs": 2,
+      "skip_markers": 0,
+      "static_text_assertions": 8
+    },
+    "tests/bridge/test_task_candidate_filter_e415.py": {
+      "test_defs": 4,
+      "skip_markers": 0,
+      "static_text_assertions": 0
+    },
+    "tests/bridge/test_ws_sid_sequence_e401.py": {
+      "test_defs": 0,
+      "skip_markers": 0,
+      "static_text_assertions": 0
+    },
+    "tests/bridge/test_popup_telemetry_e414r1.py": {
+      "test_defs": 5,
+      "skip_markers": 0,
+      "static_text_assertions": 0
+    },
+    "tests/bridge/test_bridge_reliability_e408.py": {
+      "test_defs": 7,
+      "skip_markers": 0,
+      "static_text_assertions": 15
+    },
+    "tests/bridge/test_watchdog_v1.py": {
+      "test_defs": 4,
+      "skip_markers": 0,
+      "static_text_assertions": 0
+    },
+    "tests/bridge/test_chatgpt_marker_discovery_e412.py": {
+      "test_defs": 4,
+      "skip_markers": 0,
+      "static_text_assertions": 8
+    },
+    "tests/bridge/test_bridge_runtime_attestation.py": {
+      "test_defs": 4,
+      "skip_markers": 0,
+      "static_text_assertions": 0
+    },
+    "tests/bridge/test_ai_response_endpoint_v13.py": {
+      "test_defs": 4,
+      "skip_markers": 0,
+      "static_text_assertions": 0
+    },
+    "tests/bridge/test_outbox_fairness.py": {
+      "test_defs": 1,
+      "skip_markers": 0,
+      "static_text_assertions": 0
+    },
+    "tests/bridge/test_control_auto_continue.py": {
+      "test_defs": 2,
+      "skip_markers": 0,
+      "static_text_assertions": 0
+    },
+    "tests/bridge/test_validator_pytest_venv.py": {
+      "test_defs": 3,
+      "skip_markers": 0,
+      "static_text_assertions": 0
+    },
+    "tests/bridge/test_bridge_model_rebuild_e410.py": {
+      "test_defs": 2,
+      "skip_markers": 0,
+      "static_text_assertions": 3
+    },
+    "tests/bridge/test_extension_runtime_e413.py": {
+      "test_defs": 4,
+      "skip_markers": 0,
+      "static_text_assertions": 0
+    },
+    "tests/bridge/test_chatgpt_marker_discovery_e411.py": {
+      "test_defs": 5,
+      "skip_markers": 0,
+      "static_text_assertions": 8
+    },
+    "tests/bridge/test_work_cadence_enforcement.py": {
+      "test_defs": 0,
+      "skip_markers": 0,
+      "static_text_assertions": 0
+    },
+    "tests/bridge/test_autonomous_build_governance_v1.py": {
+      "test_defs": 4,
+      "skip_markers": 0,
+      "static_text_assertions": 0
+    },
+    "tests/bridge/test_result_ack_presend_patch.py": {
+      "test_defs": 3,
+      "skip_markers": 0,
+      "static_text_assertions": 0
+    },
+    "tests/edge_hunter/test_autonomous_build_governance.py": {
+      "test_defs": 11,
+      "skip_markers": 0,
+      "static_text_assertions": 0
+    },
+    "tests/edge_hunter/test_candidate_store.py": {
+      "test_defs": 2,
+      "skip_markers": 0,
+      "static_text_assertions": 0
+    },
+    "tests/edge_hunter/test_prebuild_warrant.py": {
+      "test_defs": 10,
+      "skip_markers": 0,
+      "static_text_assertions": 0
+    },
+    "tests/edge_hunter/test_foundation.py": {
+      "test_defs": 2,
+      "skip_markers": 0,
+      "static_text_assertions": 0
+    },
+    "tests/edge_hunter/test_build_gate.py": {
+      "test_defs": 9,
+      "skip_markers": 0,
+      "static_text_assertions": 0
+    },
+    "tests/edge_hunter/test_warrant_issuer.py": {
+      "test_defs": 8,
+      "skip_markers": 0,
+      "static_text_assertions": 0
+    },
+    "tests/hourly/test_git_ai_exchange_v14.py": {
+      "test_defs": 6,
+      "skip_markers": 0,
+      "static_text_assertions": 0
+    },
+    "tests/hourly/test_candidate_queue.py": {
+      "test_defs": 8,
+      "skip_markers": 0,
+      "static_text_assertions": 0
+    },
+    "tests/hourly/test_hourly_cycle_loader.py": {
+      "test_defs": 2,
+      "skip_markers": 0,
+      "static_text_assertions": 0
+    },
+    "tests/hourly/test_packet_hydrator.py": {
+      "test_defs": 7,
+      "skip_markers": 0,
+      "static_text_assertions": 0
+    },
+    "tests/hourly/test_ai_transport.py": {
+      "test_defs": 9,
+      "skip_markers": 0,
+      "static_text_assertions": 0
+    },
+    "tests/hourly/test_candidate_worker_routing_e006.py": {
+      "test_defs": 9,
+      "skip_markers": 0,
+      "static_text_assertions": 1
+    },
+    "tests/hourly/test_work_cadence.py": {
+      "test_defs": 9,
+      "skip_markers": 0,
+      "static_text_assertions": 0
+    },
+    "tests/hourly/test_ai_response_receiver.py": {
+      "test_defs": 7,
+      "skip_markers": 0,
+      "static_text_assertions": 0
+    },
+    "tests/hourly/test_specialist_worker_wiring_v13.py": {
+      "test_defs": 2,
+      "skip_markers": 0,
+      "static_text_assertions": 12
+    },
+    "tests/hourly/test_ai_handoff.py": {
+      "test_defs": 6,
+      "skip_markers": 0,
+      "static_text_assertions": 5
+    },
+    "tests/hourly/test_memory_context.py": {
+      "test_defs": 1,
+      "skip_markers": 0,
+      "static_text_assertions": 0
+    },
+    "tests/hourly/test_agent_orchestrator.py": {
+      "test_defs": 12,
+      "skip_markers": 0,
+      "static_text_assertions": 0
+    },
+    "tests/hourly/test_worker_role_contract_v13.py": {
+      "test_defs": 2,
+      "skip_markers": 0,
+      "static_text_assertions": 0
+    },
+    "tests/hourly/test_validation_result_contract_e003.py": {
+      "test_defs": 2,
+      "skip_markers": 0,
+      "static_text_assertions": 3
+    },
+    "tests/hourly/test_scheduled_worker_contract_v14.py": {
+      "test_defs": 3,
+      "skip_markers": 0,
+      "static_text_assertions": 0
+    },
+    "tests/hourly/test_ai_work_exchange_v14.py": {
+      "test_defs": 5,
+      "skip_markers": 0,
+      "static_text_assertions": 0
+    },
+    "tests/hourly/test_ai_work_exchange_current_roles.py": {
+      "test_defs": 4,
+      "skip_markers": 0,
+      "static_text_assertions": 0
+    },
+    "tests/hourly/test_ai_result_state_preservation_v13.py": {
+      "test_defs": 2,
+      "skip_markers": 0,
+      "static_text_assertions": 0
+    },
+    "tests/hourly/test_ai_bridge_outbox.py": {
+      "test_defs": 9,
+      "skip_markers": 0,
+      "static_text_assertions": 6
+    },
+    "tests/hourly/test_runtime_sync_v15.py": {
+      "test_defs": 6,
+      "skip_markers": 0,
+      "static_text_assertions": 0
+    },
+    "tests/hourly/test_candidate_worker_routing_taxonomy_e006.py": {
+      "test_defs": 1,
+      "skip_markers": 0,
+      "static_text_assertions": 0
+    },
+    "tests/hourly/test_hourly_cycle_gate.py": {
+      "test_defs": 1,
+      "skip_markers": 0,
+      "static_text_assertions": 0
+    },
+    "tests/hourly/test_research_os_six_domain_e007.py": {
+      "test_defs": 6,
+      "skip_markers": 0,
+      "static_text_assertions": 0
+    },
+    "tests/hourly/test_git_checkpoint_v15.py": {
+      "test_defs": 5,
+      "skip_markers": 0,
+      "static_text_assertions": 0
+    },
+    "tests/hourly/test_ai_response.py": {
+      "test_defs": 11,
+      "skip_markers": 0,
+      "static_text_assertions": 0
+    },
+    "tests/hourly/test_hourly_wake_git_exchange_v14.py": {
+      "test_defs": 3,
+      "skip_markers": 0,
+      "static_text_assertions": 0
+    },
+    "tests/hourly/test_edge_hunter_cycle_scheduler.py": {
+      "test_defs": 4,
+      "skip_markers": 0,
+      "static_text_assertions": 0
+    },
+    "tests/research_os_v1/test_u3_semantics_e452.py": {
+      "test_defs": 4,
+      "skip_markers": 0,
+      "static_text_assertions": 0
+    },
+    "tests/browser/test_durable_queue_repair.py": {
+      "test_defs": 7,
+      "skip_markers": 0,
+      "static_text_assertions": 0
+    },
+    "tests/browser/test_ai_extension_delivery.py": {
+      "test_defs": 7,
+      "skip_markers": 0,
+      "static_text_assertions": 0
+    },
+    "control/weather/test_market_reaction_ws.py": {
+      "test_defs": 5,
+      "skip_markers": 0,
+      "static_text_assertions": 2
+    },
+    "control/weather/test_analyze_kwi_market_reaction.py": {
+      "test_defs": 2,
+      "skip_markers": 0,
+      "static_text_assertions": 0
+    },
+    "control/weather/test_market_reaction.py": {
+      "test_defs": 13,
+      "skip_markers": 0,
+      "static_text_assertions": 4
+    },
+    "control/weather/test_summarize_kwi_market_reaction_e401.py": {
+      "test_defs": 6,
+      "skip_markers": 0,
+      "static_text_assertions": 0
+    },
+    "control/weather/test_e401_sync_linker.py": {
+      "test_defs": 4,
+      "skip_markers": 0,
+      "static_text_assertions": 0
+    },
+    "control/tampermonkey_multichat/test_userscript_delivery_dedupe_static.py": {
+      "test_defs": 4,
+      "skip_markers": 0,
+      "static_text_assertions": 2
+    },
+    "control/tampermonkey_multichat/test_bridge_server_hardened.py": {
+      "test_defs": 3,
+      "skip_markers": 0,
+      "static_text_assertions": 3
+    },
+    "control/tampermonkey_multichat/test_v04x_task_dedupe_patch_static.py": {
+      "test_defs": 5,
+      "skip_markers": 0,
+      "static_text_assertions": 11
+    },
+    "control/tampermonkey_multichat/test_bridge_server_sent_semantics.py": {
+      "test_defs": 3,
+      "skip_markers": 0,
+      "static_text_assertions": 0
+    },
+    "control/tampermonkey_multichat/test_patch_v045_task_dedupe_static.py": {
+      "test_defs": 6,
+      "skip_markers": 0,
+      "static_text_assertions": 9
+    },
+    "control/tampermonkey_multichat/test_install_hardened_bridge_fast_deadman_static.py": {
+      "test_defs": 1,
+      "skip_markers": 0,
+      "static_text_assertions": 0
+    },
+    "control/tampermonkey_multichat/test_nightshift_wsl_transport_static.py": {
+      "test_defs": 6,
+      "skip_markers": 0,
+      "static_text_assertions": 15
+    },
+    "control/tampermonkey_multichat/test_userscript_v046_guard_static.py": {
+      "test_defs": 6,
+      "skip_markers": 0,
+      "static_text_assertions": 14
+    }
+  },
+  "secret_candidates": [
+    {
+      "path": "control/jobs/kwi_auth_structure_e401a8.py",
+      "type": "private_key",
+      "line": 19,
+      "value": "NIET_OPGESLAGEN"
+    },
+    {
+      "path": "control/jobs/kwi_auth_structure_e401a8.py",
+      "type": "private_key",
+      "line": 20,
+      "value": "NIET_OPGESLAGEN"
+    }
+  ]
+}

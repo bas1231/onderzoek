@@ -1,0 +1,128 @@
+[
+  {
+    "path": "control/jobs/enforce_no_cost_policy.py",
+    "task_refs": [
+      {
+        "task": "COST-POLICY-001",
+        "directory_status": "failed"
+      }
+    ]
+  },
+  {
+    "path": "control/jobs/inspect_polymarket_neg_risk_e285.py",
+    "task_refs": [
+      {
+        "task": "EDGE-HUNTER-POLYMARKET-NEG-RISK-E285",
+        "directory_status": "failed"
+      }
+    ]
+  },
+  {
+    "path": "control/jobs/install_watchdog_v1.py",
+    "task_refs": [
+      {
+        "task": "WATCHDOG-V1-E016",
+        "directory_status": "failed"
+      }
+    ]
+  },
+  {
+    "path": "control/jobs/install_watchdog_v2.py",
+    "task_refs": [
+      {
+        "task": "WATCHDOG-V1-E017",
+        "directory_status": "failed"
+      }
+    ]
+  },
+  {
+    "path": "control/jobs/kwi_e390_redteam_e392.py",
+    "task_refs": [
+      {
+        "task": "EDGE-HUNTER-KWI-E390-REDTEAM-E392",
+        "directory_status": "failed"
+      }
+    ]
+  },
+  {
+    "path": "control/jobs/kxtemp_l2_capture_e399r1.py",
+    "task_refs": [
+      {
+        "task": "EDGE-HUNTER-KXTEMP-L2-CAPTURE-E399R1",
+        "directory_status": "failed"
+      }
+    ]
+  },
+  {
+    "path": "control/jobs/kxtemp_l2_recorder_e399.py",
+    "task_refs": [
+      {
+        "task": "EDGE-HUNTER-KXTEMP-L2-RECORDER-E399",
+        "directory_status": "failed"
+      }
+    ]
+  },
+  {
+    "path": "control/jobs/record_bridge_transport_rules_e014r3.py",
+    "task_refs": [
+      {
+        "task": "CONTROL-AGENTS-BRIDGE-VISIBILITY-E014R3",
+        "directory_status": "failed"
+      }
+    ]
+  },
+  {
+    "path": "control/jobs/smoke_asset_stdlib_ws_e339.py",
+    "task_refs": [
+      {
+        "task": "EDGE-HUNTER-ASSET-STDLIB-WS-E339",
+        "directory_status": "failed"
+      }
+    ]
+  },
+  {
+    "path": "experiments/bridge/e061.py",
+    "task_refs": [
+      {
+        "task": "AUTONOMOUS-FOUNDATION-E061",
+        "directory_status": "failed"
+      }
+    ]
+  },
+  {
+    "path": "experiments/bridge/e134.py",
+    "task_refs": [
+      {
+        "task": "ACK-CODE-INSPECT-E134",
+        "directory_status": "failed"
+      }
+    ]
+  },
+  {
+    "path": "experiments/bridge/e195.py",
+    "task_refs": [
+      {
+        "task": "TWC-RECORDER-AUTO-SUMMARY-E195",
+        "directory_status": "failed"
+      }
+    ]
+  },
+  {
+    "path": "experiments/bridge/e207.py",
+    "task_refs": [
+      {
+        "task": "KALSHI-WEATHER-TIMESERIES-MARKETS-E207",
+        "directory_status": "failed"
+      }
+    ]
+  },
+  {
+    "path": "experiments/bridge/e219.py",
+    "task_refs": [
+      {
+        "task": "KALSHI-WEATHER-INDEX-DEGRADED-E219",
+        "directory_status": "failed"
+      }
+    ]
+  }
+]

@@ -1,0 +1,55 @@
+{
+  "synthetic_only": true,
+  "recorders": [
+    {
+      "source": "control/weather/kalshi_weather_index_recorder.py",
+      "reported_retrieved_at": "2026-09-25T00:00:00+00:00",
+      "actual_mock_body_receipts": [
+        "2026-09-25T00:00:05+00:00",
+        "2026-09-25T00:00:10+00:00",
+        "2026-09-25T00:00:15+00:00"
+      ],
+      "backdated": true
+    },
+    {
+      "source": "control/weather/twc_hourly_recorder.py",
+      "reported_retrieved_at": "2026-09-25T00:00:00+00:00",
+      "actual_mock_body_receipts": [
+        "2026-09-25T00:00:05+00:00"
+      ],
+      "backdated": true
+    }
+  ],
+  "proof_gate": [
+    {
+      "net_edge": -1,
+      "accepted": true,
+      "reasons": []
+    },
+    {
+      "net_edge": 0,
+      "accepted": true,
+      "reasons": []
+    },
+    {
+      "net_edge": "unknown",
+      "accepted": true,
+      "reasons": []
+    }
+  ],
+  "corrupt_route": {
+    "reported_route": {
+      "version": 2,
+      "task_id": "SYNTHETIC",
+      "chat_id": "chat-test",
+      "consumer_id": "consumer-test",
+      "created_at_unix": 1790318921.0631413
+    },
+    "persisted_route": null,
+    "raw_still_corrupt": true
+  },
+  "nonobject_json": {
+    "exception": "AttributeError",
+    "http_replies": []
+  }
+}

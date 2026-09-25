@@ -1,0 +1,24 @@
+{
+  "command": [
+    "/home/leonh/prediction_research_prod/.venv/bin/python",
+    "-m",
+    "pytest",
+    "-q",
+    "tests",
+    "control/weather",
+    "control/tampermonkey_multichat",
+    "--disable-warnings",
+    "--tb=short",
+    "-o",
+    "cache_dir=/tmp/codex-audit-pytest-cache"
+  ],
+  "cwd": "/tmp/codex-audit-fixture-20260925",
+  "started_at": "2026-09-25T06:46:42.289999+00:00",
+  "ended_at": "2026-09-25T06:46:50.121397+00:00",
+  "exit_code": 1,
+  "environment": {
+    "PYTHONPATH": "/tmp/codex-audit-fixture-20260925:/tmp/codex-audit-fixture-20260925/control/weather",
+    "PYTHONDONTWRITEBYTECODE": "1"
+  },
+  "scope": "Kopie van baseline getrackte werkboombestanden; Git-remotes in tests uitsluitend tijdelijke lokale fixtures."
+}

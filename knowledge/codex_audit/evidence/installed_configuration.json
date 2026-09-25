@@ -1,0 +1,188 @@
+{
+  "observed_at": "2026-09-25T06:53:47.781719+00:00",
+  "installed_units": {
+    "prediction-chat-command.service": {
+      "sha256": "75d8a1e5ff1d4decc057e9e14ec1782628d5c0b73df3b504acd54e09def3f9e4",
+      "selected_config": [
+        "ExecStart=/usr/bin/python3 %h/.local/share/prediction-chat-bridge/command_receiver.py --host 127.0.0.1 --port 8766",
+        "Restart=always",
+        "RestartSec=2"
+      ]
+    },
+    "prediction-chat-router.service": {
+      "sha256": "36ca457a74183404070f5718e13dde99761e5828c318227d92f9bbf0387d180a",
+      "selected_config": [
+        "ExecStart=/usr/bin/python3 %h/.local/share/prediction-chat-bridge/command_router.py --host 127.0.0.1 --port 8767",
+        "Restart=always",
+        "RestartSec=2"
+      ]
+    },
+    "prediction-chat-wake.service": {
+      "sha256": "19c75312ec6c9c246e258510e4c17537441a2eb7f281db9af0ec82c285ae9ee6",
+      "selected_config": [
+        "ExecStart=/usr/bin/python3 %h/.local/share/prediction-chat-bridge/bridge_server.py --host 127.0.0.1 --port 8765",
+        "Restart=always",
+        "RestartSec=2"
+      ]
+    },
+    "prediction-research-browser-bridge.service": {
+      "sha256": "8d875eeb1aef9a68f1dec521f333359c96dd82066aacf1ea4c7f84ac738d5ffa",
+      "selected_config": [
+        "WorkingDirectory=%h/prediction_research_prod",
+        "ExecStartPre=/usr/bin/test -x %h/prediction_research_prod/.venv/bin/python",
+        "ExecStartPre=/usr/bin/test -f %h/prediction_research_prod/control/browser_bridge.py",
+        "ExecStart=%h/prediction_research_prod/.venv/bin/python %h/prediction_research_prod/control/browser_bridge.py",
+        "Restart=always",
+        "RestartSec=2"
+      ]
+    },
+    "prediction-research-browser-bridge.service.bak-20260922": {
+      "sha256": "31e98a48dce8647119ef2c16f2837533a4b269ec1b2e04cc7c6b147758f7025d",
+      "selected_config": [
+        "WorkingDirectory=%h/prediction_research",
+        "ExecStart=%h/prediction_research/.venv/bin/python %h/prediction_research/control/browser_bridge.py",
+        "Restart=on-failure",
+        "RestartSec=5"
+      ]
+    },
+    "prediction-research-e401-prospective.service": {
+      "sha256": "c59bdb34998f11ad05b3ec0391ee74060e59215ab0f11588e258673771193813",
+      "selected_config": [
+        "WorkingDirectory=%h/prediction_research",
+        "ExecStart=%h/prediction_research/.venv/bin/python %h/prediction_research/control/weather/e401_prospective_supervisor.py",
+        "Restart=always",
+        "RestartSec=3"
+      ]
+    },
+    "prediction-research-executor.service": {
+      "sha256": "e99b4f620115b35176687261617e8b361eaa0ac916101e660feb23f69a04a7ef",
+      "selected_config": [
+        "WorkingDirectory=%h/prediction_research_prod",
+        "ExecStart=%h/prediction_research_prod/.venv/bin/python %h/prediction_research_prod/control/executor.py",
+        "Restart=on-failure",
+        "RestartSec=5"
+      ]
+    },
+    "prediction-research-executor.service.backup-20260922-232808": {
+      "sha256": "ac1b29f5fe64fd9091b1962a9f35bebb8e946f7217c8bed879cebb6ce2a1c52c",
+      "selected_config": [
+        "WorkingDirectory=%h/prediction_research",
+        "ExecStart=%h/prediction_research/.venv/bin/python %h/prediction_research/control/executor.py",
+        "Restart=on-failure",
+        "RestartSec=5"
+      ]
+    },
+    "prediction-research-hourly-director.service": {
+      "sha256": "8b1d22f58f9b93b8f0835dfe438a149e0159c1a46d54ab323ce9daf04d2d6282",
+      "selected_config": [
+        "WorkingDirectory=%h/prediction_research_prod",
+        "ExecStartPre=%h/prediction_research_prod/.venv/bin/python %h/prediction_research_prod/control/hourly/runtime_sync.py",
+        "ExecStart=%h/prediction_research_prod/.venv/bin/python %h/prediction_research_prod/control/hourly/edge_hunter_cycle.py",
+        "ExecStartPost=%h/prediction_research_prod/.venv/bin/python %h/prediction_research_prod/control/hourly/runtime_health.py"
+      ]
+    },
+    "prediction-research-hourly-director.timer": {
+      "sha256": "d4e2feef36afc3e284026d336963e7ae7ee95facb521030f06da730a1ed2b760",
+      "selected_config": [
+        "OnCalendar=*-*-* *:00:00",
+        "Persistent=true",
+        "Unit=prediction-research-hourly-director.service"
+      ]
+    },
+    "prediction-research-kalshi-weather-index-recorder.service": {
+      "sha256": "f22db6dd953a27c012db6e9592089f62653bd130279039db5046926a4245fd97",
+      "selected_config": [
+        "WorkingDirectory=%h/prediction_research",
+        "ExecStart=%h/prediction_research/.venv/bin/python %h/prediction_research/control/weather/kalshi_weather_index_recorder.py"
+      ]
+    },
+    "prediction-research-kalshi-weather-index-recorder.timer": {
+      "sha256": "92b09e046eeef7d03cb39092d986636edf948cbfedbfb32c1b3f8c03e5b88f9c",
+      "selected_config": [
+        "OnCalendar=*-*-* *:*:15",
+        "Persistent=true"
+      ]
+    },
+    "prediction-research-lifecycle-supervisor.service": {
+      "sha256": "68645d416e9152ad1599233cd802a4b24bac85fb919b4f69118ad4d9f0df5e30",
+      "selected_config": [
+        "WorkingDirectory=%h/prediction_research",
+        "ExecStart=%h/prediction_research/.venv/bin/python %h/prediction_research/control/jobs/lifecycle_supervisor.py",
+        "Restart=always",
+        "RestartSec=5"
+      ]
+    },
+    "prediction-research-twc-recorder.service": {
+      "sha256": "3781a52197856d9c120c40f7a8dc4da54a8407bff5604b9e370849661158a281",
+      "selected_config": [
+        "WorkingDirectory=%h/prediction_research",
+        "ExecStart=%h/prediction_research/.venv/bin/python %h/prediction_research/control/weather/twc_hourly_recorder.py",
+        "ExecStartPost=%h/prediction_research/.venv/bin/python %h/prediction_research/control/jobs/twc_revision_summary.py"
+      ]
+    },
+    "prediction-research-twc-recorder.timer": {
+      "sha256": "3e4b09e8d667fd66a65c6fed06753afdf686e960685fc86cea730b05ecea59ff",
+      "selected_config": [
+        "OnCalendar=*-*-* *:05,20,35,50:00",
+        "Persistent=true"
+      ]
+    },
+    "prediction-runtime-cycle-smoke.service": {
+      "sha256": "9832fdeea74458e91b80e87b1348416a85bbee2c4712241a284367da215cf116",
+      "selected_config": [
+        "WorkingDirectory=%h/prediction_research_runtime",
+        "ExecStartPre=%h/.local/bin/prediction-runtime-sync",
+        "ExecStart=%h/prediction_research_runtime/.venv/bin/python %h/prediction_research_runtime/control/hourly/hourly_cycle.py"
+      ]
+    },
+    "prediction-runtime-sync.service": {
+      "sha256": "d6128907d6f7f3cfded53f7ca45d3f98f1dff9d0727117c2b540465bbfaba024",
+      "selected_config": [
+        "ExecStart=%h/.local/bin/prediction-runtime-sync"
+      ]
+    },
+    "prediction-runtime-sync.timer": {
+      "sha256": "aaca5e3d0fdb08a797e28578dd77448dc5a7b49c8ae3cf0121850dd19862a851",
+      "selected_config": [
+        "Persistent=true",
+        "Unit=prediction-runtime-sync.service"
+      ]
+    }
+  },
+  "installed_bridge_sources": {
+    "bridge_server.py": {
+      "sha256": "19015eff0c62d1f1e99f74bf790e2a86c46b63a93556542a352810725c5d033d",
+      "repository_same_name_exists": false,
+      "matches_repository_same_name": false
+    },
+    "bridge_server_v2.py": {
+      "sha256": "5a5e13c19754a73dd2112ac0bf5f20e127ab6e719d547ff2aa65abf67ce7ba43",
+      "repository_same_name_exists": true,
+      "matches_repository_same_name": true
+    },
+    "command_router.py": {
+      "sha256": "629de71ceb5c95004a51edf0d4a9a503e5f001188db09d992f81ac57566468f9",
+      "repository_same_name_exists": true,
+      "matches_repository_same_name": true
+    },
+    "prediction-chat-wake.user.js": {
+      "sha256": "a2577ec7613fa947d3b9513773700888412d5d6a6e26bf936a73beb255d8b9e7",
+      "repository_same_name_exists": true,
+      "matches_repository_same_name": false
+    },
+    "prediction-nightshift-wake.user.js": {
+      "sha256": "7deb3113f4f5b519bd357f7a91c06c5f16f20fa89c93eef765646639ce6299fa",
+      "repository_same_name_exists": true,
+      "matches_repository_same_name": true
+    }
+  },
+  "history": {
+    "clock": "e2cfb82 2026-09-20T01:24:54+02:00 build(weather): add Kalshi Weather Index recorder\n",
+    "userscript": "7d583e2 2026-09-23T14:58:09+02:00 bridge: harden new-chat SPA routing v0.3.3\ndfb5c5f 2026-09-23T14:38:40+02:00 bridge: use Tampermonkey tab API for multichat identity\nc29fda5 2026-09-23T14:17:54+02:00 bridge: make Tampermonkey startup fail-safe v0.3.1\ne3d8362 2026-09-23T13:23:16+02:00 bridge: preserve legacy fallback chat automatically\nd977c38 2026-09-23T13:20:20+02:00 bridge: add multichat Tampermonkey userscript\n",
+    "executor": "d0dac22 2026-09-22T06:20:45+02:00 control: fail closed on task commit provenance\ndfcc152 2026-09-22T03:38:34+02:00 control: fail closed on stale executor checkout\nc927bf7 2026-09-20T22:24:08+02:00 control: enforce 4h work 1h cooldown across task intake\n787e2ce 2026-09-20T21:30:36+02:00 security: add executor policy provenance logging\n9ee35c7 2026-09-19T22:22:22+02:00 fix(control): close browser discovery reliability gaps\n"
+  },
+  "legacy_repository": {
+    "exists": true,
+    "resolved_path": "/home/leonh/prediction_research"
+  }
+}

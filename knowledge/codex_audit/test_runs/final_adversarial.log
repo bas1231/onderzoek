@@ -1,0 +1,64 @@
+FFFFFFFFF                                                                [100%]
+=================================== FAILURES ===================================
+__________________ test_receipt_never_precedes_response_body ___________________
+knowledge/codex_audit/evidence/test_audit_regressions.py:15: in test_receipt_never_precedes_response_body
+    assert all(not row["backdated"] for row in observed["recorders"])
+E   assert False
+E    +  where False = all(<generator object test_receipt_never_precedes_response_body.<locals>.<genexpr> at 0x7082fded5080>)
+__________________ test_invalid_economics_never_passes_proof ___________________
+knowledge/codex_audit/evidence/test_audit_regressions.py:19: in test_invalid_economics_never_passes_proof
+    assert all(not row["accepted"] for row in observed["proof_gate"])
+E   assert False
+E    +  where False = all(<generator object test_invalid_economics_never_passes_proof.<locals>.<genexpr> at 0x7082fdd0c1e0>)
+______________________ test_successful_route_is_persisted ______________________
+knowledge/codex_audit/evidence/test_audit_regressions.py:24: in test_successful_route_is_persisted
+    assert row["rejected"] or row["persisted_route"] == row["reported_route"]
+E   AssertionError: assert (False or None == {'version': 2, 'task_id': 'SYNTHETIC', 'chat_id': 'chat-test', 'consumer_id': 'consumer-test', ...})
+___________________ test_nonobject_payload_gets_explicit_400 ___________________
+knowledge/codex_audit/evidence/test_audit_regressions.py:28: in test_nonobject_payload_gets_explicit_400
+    assert observed["nonobject_json"] == {"exception": None, "http_replies": [400]}
+E   AssertionError: assert {'exception':..._replies': []} == {'exception':...plies': [400]}
+E     
+E     Differing items:
+E     {'http_replies': []} != {'http_replies': [400]}
+E     {'exception': 'AttributeError'} != {'exception': None}
+E     Use -v to get more diff
+__________________________ test_timeout_writes_result __________________________
+knowledge/codex_audit/evidence/test_audit_regressions.py:32: in test_timeout_writes_result
+    assert observed["executor_timeout"]["result_written"]
+E   assert False
+___________________ test_internal_coverage_hole_is_unproven ____________________
+knowledge/codex_audit/evidence/test_audit_regressions.py:36: in test_internal_coverage_hole_is_unproven
+    assert observed["coverage_hole"]["status"] == "UNPROVEN_REACTION"
+E   AssertionError: assert 'NO_REACTION_...WITHIN_WINDOW' == 'UNPROVEN_REACTION'
+E     
+E     - UNPROVEN_REACTION
+E     + NO_REACTION_OBSERVED_WITHIN_WINDOW
+_____________________ test_no_executable_book_is_unproven ______________________
+knowledge/codex_audit/evidence/test_audit_regressions.py:40: in test_no_executable_book_is_unproven
+    assert observed["empty_executable_book"]["status"] == "UNPROVEN_REACTION"
+E   AssertionError: assert 'NO_REACTION_...WITHIN_WINDOW' == 'UNPROVEN_REACTION'
+E     
+E     - UNPROVEN_REACTION
+E     + NO_REACTION_OBSERVED_WITHIN_WINDOW
+____________________ test_nonprospective_target_is_excluded ____________________
+knowledge/codex_audit/evidence/test_audit_regressions.py:44: in test_nonprospective_target_is_excluded
+    assert observed["negative_lead_cross_config"]["eligible_rows"] == 0
+E   assert 1 == 0
+_____________________ test_unsent_user_draft_is_preserved ______________________
+knowledge/codex_audit/evidence/test_audit_regressions.py:49: in test_unsent_user_draft_is_preserved
+    assert row["remaining"] == row["initial_draft"] and row["sent"] == []
+E   AssertionError: assert ('' == 'UNSENT USER DRAFT'
+E     
+E     - UNSENT USER DRAFT)
+=========================== short test summary info ============================
+FAILED knowledge/codex_audit/evidence/test_audit_regressions.py::test_receipt_never_precedes_response_body
+FAILED knowledge/codex_audit/evidence/test_audit_regressions.py::test_invalid_economics_never_passes_proof
+FAILED knowledge/codex_audit/evidence/test_audit_regressions.py::test_successful_route_is_persisted
+FAILED knowledge/codex_audit/evidence/test_audit_regressions.py::test_nonobject_payload_gets_explicit_400
+FAILED knowledge/codex_audit/evidence/test_audit_regressions.py::test_timeout_writes_result
+FAILED knowledge/codex_audit/evidence/test_audit_regressions.py::test_internal_coverage_hole_is_unproven
+FAILED knowledge/codex_audit/evidence/test_audit_regressions.py::test_no_executable_book_is_unproven
+FAILED knowledge/codex_audit/evidence/test_audit_regressions.py::test_nonprospective_target_is_excluded
+FAILED knowledge/codex_audit/evidence/test_audit_regressions.py::test_unsent_user_draft_is_preserved
+9 failed in 0.45s

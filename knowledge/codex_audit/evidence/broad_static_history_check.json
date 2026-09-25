@@ -1,0 +1,96 @@
+{
+  "timestamp": "2026-09-25T07:03:09.924487+00:00",
+  "python_syntax": {
+    "checked": 726,
+    "failures": [
+      {
+        "path": "control/jobs/enforce_no_cost_policy.py",
+        "line": 44,
+        "error": "unterminated string literal (detected at line 44)"
+      },
+      {
+        "path": "control/jobs/inspect_polymarket_neg_risk_e285.py",
+        "line": 35,
+        "error": "invalid syntax"
+      },
+      {
+        "path": "control/jobs/install_watchdog_v1.py",
+        "line": 32,
+        "error": "unterminated string literal (detected at line 32)"
+      },
+      {
+        "path": "control/jobs/install_watchdog_v2.py",
+        "line": 30,
+        "error": "expected an indented block after 'if' statement on line 29"
+      },
+      {
+        "path": "control/jobs/kwi_e390_redteam_e392.py",
+        "line": 22,
+        "error": "invalid syntax"
+      },
+      {
+        "path": "control/jobs/kxtemp_l2_capture_e399r1.py",
+        "line": 96,
+        "error": "unterminated string literal (detected at line 96)"
+      },
+      {
+        "path": "control/jobs/kxtemp_l2_recorder_e399.py",
+        "line": 108,
+        "error": "unterminated string literal (detected at line 108)"
+      },
+      {
+        "path": "control/jobs/record_bridge_transport_rules_e014r3.py",
+        "line": 10,
+        "error": "unterminated string literal (detected at line 10)"
+      },
+      {
+        "path": "control/jobs/smoke_asset_stdlib_ws_e339.py",
+        "line": 78,
+        "error": "unterminated string literal (detected at line 78)"
+      },
+      {
+        "path": "experiments/bridge/e061.py",
+        "line": 6,
+        "error": "unterminated string literal (detected at line 6)"
+      },
+      {
+        "path": "experiments/bridge/e134.py",
+        "line": 6,
+        "error": "unterminated string literal (detected at line 6)"
+      },
+      {
+        "path": "experiments/bridge/e195.py",
+        "line": 18,
+        "error": "unterminated string literal (detected at line 18)"
+      },
+      {
+        "path": "experiments/bridge/e207.py",
+        "line": 1,
+        "error": "unterminated string literal (detected at line 1)"
+      },
+      {
+        "path": "experiments/bridge/e219.py",
+        "line": 1,
+        "error": "unterminated string literal (detected at line 1)"
+      }
+    ]
+  },
+  "javascript_syntax": {
+    "checked": 6,
+    "failures": []
+  },
+  "result_integrity": {
+    "results": 454,
+    "hashes_checked": 904,
+    "mismatches": [],
+    "missing_files": [],
+    "parse_failures": []
+  },
+  "environment": {
+    "pytest": "9.1.1",
+    "pydantic": "2.13.5",
+    "requests": "2.34.2",
+    "websockets": "17.1",
+    "cryptography": "50.0.1"
+  }
+}

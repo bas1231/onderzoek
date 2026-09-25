@@ -1,0 +1,12 @@
+{
+  "timestamp": "2026-09-25T06:46:00.692438+00:00",
+  "command": [
+    "git",
+    "log",
+    "-30",
+    "--oneline"
+  ],
+  "exit_code": 0,
+  "stdout": "6b33058 research(checkpoint): durable Director state 2026-09-24 16:26:21 +0200\n574b324 research(checkpoint): durable Director state 2026-09-24 16:04:26 +0200\ncc10ea3 research(checkpoint): durable Director state 2026-09-24 16:04:10 +0200\necdbdd6 research(checkpoint): durable Director state 2026-09-24 16:00:09 +0200\n85c821f docs: record AI exchange cadence and bridge latency findings\n20afb5e hourly: record 2026-09-24 15:11 native Research-OS run\n60107df research: add Public AI-agent prediction-market access watch\nf3009e8 research(checkpoint): durable Director state 2026-09-24 14:36:04 +0200\nba4e2c8 research(checkpoint): durable Director state 2026-09-24 14:19:34 +0200\n3480d64 research(checkpoint): durable Director state 2026-09-24 14:14:30 +0200\n0d87745 test: guard durable fast dead-man installer\n41ee276 bridge: make fast dead-man durable on reinstall\ne94dd60 fix: quarantine exact legacy exchange envelopes\n61c0370 research(checkpoint): durable Director state 2026-09-24 13:11:11 +0200\n72f415e tests: guard hourly prod runtime service path\nd995c03 fix: deploy hourly service with prod runtime paths\n0ed5e41 fix: point hourly systemd service at prod runtime\n86fa9a4 tests: preserve unrelated staged state during checkpoint\n0c2d3e8 fix: checkpoint without clobbering staged local state\nbb81cea diag: narrow remaining tracked project file\ne7e388a diag: classify residual after preserved recon state\n4744567 hourly: analyze profitable-trader seeds and verification lane\n5b6097d recon: analyze profitable-trader seeds and public profile verification lane\nd5c6052 repair: preserve recon state then reconcile local main\nb8241e7 research: record 18:22 incentive-volume guardrail run\nd006a22 research: record Kalshi incentive-volume execution guardrail\n3c33057 diag: identify residual recon knowledge file\nf07747c diag: identify residual knowledge family\n8dfff9b Fix shared coordinator test loader\naf710a9 tests: fix shared coordinator loader path\n",
+  "stderr": ""
+}

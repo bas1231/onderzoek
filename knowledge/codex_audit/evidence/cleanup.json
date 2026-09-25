@@ -1,0 +1,12 @@
+{
+  "timestamp": "2026-09-25T07:02:39.323152+00:00",
+  "status": "COMPLETED_FOR_OWNED_SCRATCH",
+  "removed_allowlist": [
+    "/tmp/codex-audit-fixture-20260925",
+    "/tmp/codex-audit-pytest-cache",
+    "/tmp/codex-audit-regression-cache"
+  ],
+  "services_started": false,
+  "raw_evidence_removed": false,
+  "note": "Gedeelde pytest-runtimepaden niet generiek verwijderd wegens onvoldoende exclusief ownership."
+}
