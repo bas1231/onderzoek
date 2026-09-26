@@ -1,0 +1,64 @@
+{
+  "task": {
+    "task_class": "infrastructure",
+    "build_authorization": {
+      "mode": "control_plane",
+      "build_kind": "control_plane",
+      "objective": "Bestaande canonical kandidaatqueue zonder dubbele uitvoering autonoom naar de bestaande SQLite AI-queue laten doorstromen.",
+      "capabilities": [
+        "local_code_change",
+        "run_tests",
+        "user_service_install"
+      ],
+      "build_contract": {
+        "build_id": "BUILD-QUEUE-DRAIN-20260926",
+        "protocol_version": 1,
+        "objective": "Bestaande canonical kandidaatqueue zonder dubbele uitvoering autonoom naar de bestaande SQLite AI-queue laten doorstromen.",
+        "source_commit": "398f1493c9e30a7581d12f26e7f2f395f2ee0873",
+        "allowed_capabilities": [
+          "local_code_change",
+          "run_tests",
+          "user_service_install"
+        ],
+        "allowed_paths": [
+          "control/codex_supervisor",
+          "tests/codex_supervisor",
+          "knowledge/codex_runtime",
+          "knowledge/codex_audit/runtime_reconcile/local_hourly/tested_provenance.json"
+        ],
+        "planned_paths": [
+          "control/codex_supervisor",
+          "tests/codex_supervisor",
+          "knowledge/codex_runtime",
+          "knowledge/codex_audit/runtime_reconcile/local_hourly/tested_provenance.json"
+        ],
+        "acceptance_criteria": [
+          "Hoogste bestaande prioriteit eligible kandidaat",
+          "Een uitvoering per inputversie",
+          "Gates, locks, quota en ownerstate behouden",
+          "Echte automatische timer-canary",
+          "Leeg is IDLE/QUEUE_EMPTY"
+        ],
+        "non_goals": [
+          "Tradingresearch",
+          "Economische promotie"
+        ],
+        "independent_verification": "Gerichte adversarial fixtures en afzonderlijke echte model-receiptreview; geen volledige onafhankelijke codeverifier geclaimd.",
+        "rollback_plan": "Uitsluitend eigen drop-in na hashcontrole verwijderen; geen ownerreset.",
+        "cleanup_plan": "Tijdelijke canaryunits automatisch collect; evidence behouden.",
+        "max_attempts": 3,
+        "governance_change": false,
+        "safety": {
+          "live_trading": false,
+          "paid_actions": false,
+          "wallet_actions": false
+        }
+      }
+    }
+  },
+  "validation": {
+    "allowed": true,
+    "decision": "ALLOW_GOVERNED_BUILD",
+    "reasons": []
+  }
+}

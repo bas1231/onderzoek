@@ -36,7 +36,8 @@ def test_recover_completed_events_after_supervisor_crash(tmp_path):
     s=m.Supervisor(tmp_path,crash);s.enqueue(task())
     with pytest.raises(KeyboardInterrupt):s.tick()
     s.worker=lambda *a:pytest.fail('completed task must not execute again')
-    assert s.tick()['state']=='COMPLETE'
+    assert s.tick()['state']=='IDLE'
+    with s.locked():assert s.db.execute("select status from tasks where id='TASK-A'").fetchone()[0]=='COMPLETE'
 
 def test_partial_event_is_not_success(tmp_path):
     def crash(t,thread,folder,fd):m.atomic(folder/'events.jsonl','{"type":"turn.completed"');raise KeyboardInterrupt()

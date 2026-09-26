@@ -58,7 +58,7 @@
   "mechanism": "The three outcomes are a proven one-hot partition. A maker fill can improve one leg by one spread tick while maker fees are zero under the observed taker-only schedule. After a confirmed passive fill, buying the other two YES legs can complete a payout-one portfolio.",
   "needed_data": [],
   "negative_evidence": [],
-  "next_decisive_test": "Continue preregistered prospective conservative fill monitoring; only a proven full passive fill may trigger synchronized first-executable hedge economics.",
+  "next_decisive_test": "Continue preregistered conservative fill monitoring; only a proven full passive fill may trigger synchronized executable hedge economics.",
   "open_question": null,
   "origin_candidate": "PAYOFF-IDENTITY-MINING-V1",
   "paid_actions": false,
@@ -95,12 +95,12 @@
     "knowledge/candidates/protocols/ASSET-RANK-MAKER-HEDGE-V1-fill-feasibility-24h-v1.json"
   ],
   "queue_entered_at": "2026-09-20T02:10:18.043370+00:00",
-  "queue_reason": "Prospective conservative fill monitoring remains the required execution gate; no full passive fill is proven in supplied evidence.",
+  "queue_reason": "No proven full passive fill has changed its existing execution gate.",
   "queue_status": "RUNNING",
   "resume_condition": null,
   "resurrection_condition": null,
   "signal_metric": "Conservative shadow fill rate plus realized fee-adjusted locked value per filled 5-contract episode.",
   "stop_condition": null,
-  "updated_at": "2026-09-24T14:04:04.051198+00:00",
+  "updated_at": "2026-09-24T17:22:15.156979+00:00",
   "wallet_actions": false
 }

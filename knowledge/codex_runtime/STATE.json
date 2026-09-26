@@ -1,10 +1,10 @@
 {
-  "state": "COMPLETE",
-  "task_id": "AUTO-HOURLY-20260926T064415Z-76e4c682",
-  "reason": "COMPLETE",
+  "state": "PAUSED_USAGE_LIMIT",
+  "task_id": "CANDIDATE-d7e1a2032094c32a-5ff2e4cf112aebd8f566480a6562402e",
+  "reason": "USAGE_LIMIT",
   "attempt": 1,
-  "checkpoint": "runs/AUTO-HOURLY-20260926T064415Z-76e4c682-1-809d28b8",
-  "next_action": "Selecteer hoogste prioriteit",
-  "timestamp": 1790405257.4370556,
-  "retry_at": 0.0
+  "checkpoint": "runs/CANDIDATE-d7e1a2032094c32a-5ff2e4cf112aebd8f566480a6562402e-1-59afff26",
+  "next_action": "Hervat dezelfde taak na provenancecontrole",
+  "timestamp": 1790408153.3626142,
+  "retry_at": 1790426153.3624048
 }

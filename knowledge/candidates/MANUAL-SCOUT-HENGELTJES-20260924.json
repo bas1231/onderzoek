@@ -1,0 +1,38 @@
+{
+  "active_experiment_ids": [],
+  "candidate_id": "MANUAL-SCOUT-HENGELTJES-20260924",
+  "created_at": "2026-09-24T15:57:00+00:00",
+  "decision": "UNPROVEN",
+  "lane": "DISCOVERY",
+  "live_trading": false,
+  "manual_seed_payload": {
+    "core_question": "Do strict queue-realistic fills of unusually favorable late passive orders occur often enough, and do the filled subset win often enough after settlement and friction, to have positive expected value?",
+    "origin_context": "Short-duration Kalshi weather/rain markets motivated leaving unusually favorable passive limit orders rather than paying near-certain 97-99 cent prices.",
+    "proof_of_mechanism": "Confirmed historical example: Miami hourly-temperature 76F-or-above NO, resting 5 NO at 89 cents, full unexpected fill around 22:58, final settlement NO, cost $4.45, payout $5.00, realized profit +$0.55 (~12.36% ROI). This is not proof of edge.",
+    "required_kill_tests": [
+      "false-positive fill simulation",
+      "hindsight leakage",
+      "adverse selection/toxic fills",
+      "sequence-gap or reconnect ambiguity",
+      "profitability only under optimistic fill assumptions"
+    ]
+  },
+  "manual_seed_ref": "knowledge/manual_scout_seeds/2026-09-24-hengeltjes-late-passive-liquidity.md",
+  "needed_data": [],
+  "next_decisive_test": "Freeze and run a read-only prospective shadow protocol for late passive maker orders using conservative price-time queue reconstruction, sequence/reconnect/restart fail-closed handling, partial-fill accounting, post-fill markouts, authoritative final settlement and net EV after fees/friction. Keep optimistic fill assumptions outside PRIMARY results.",
+  "open_question": "Discovery must read the manual seed, classify the mechanism without assuming a domain in advance, and identify the cheapest decisive falsification path.",
+  "openai_api": false,
+  "paid_actions": false,
+  "phase": "DISCOVERED",
+  "priority": "P2",
+  "provenance": "MANUAL_SCOUT_SEED",
+  "provenance_note": "User-supplied lead. Do not represent it as autonomously discovered by a scout.",
+  "queue_entered_at": "2026-09-24T15:57:00+00:00",
+  "queue_reason": "Discovery and Mechanics now agree on a testable microstructure/settlement mechanism, but no prospective queue-realistic sample exists yet and adverse selection remains unmeasured.",
+  "queue_status": "EXPERIMENT_REQUIRED",
+  "resume_condition": null,
+  "resurrection_condition": null,
+  "stop_condition": null,
+  "updated_at": "2026-09-24T17:22:15.157080+00:00",
+  "wallet_actions": false
+}

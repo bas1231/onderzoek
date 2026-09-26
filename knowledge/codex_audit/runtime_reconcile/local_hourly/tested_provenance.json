@@ -468,7 +468,7 @@
   "control/weather/e401_sync_linker.py": "ee07d00d671fa87e1d33c0d49b0065ab81d54beaa8b078e094ad1412d10eb1c6",
   "control/weather/market_reaction.py": "de3605a95a204fe420e2d1d78f1bcc57a48035ccca72d4512dadabc12d2384dc",
   "control/weather/test_e401_sync_linker.py": "db5ae94e8cbd431dee3fa47ca9fd54e9e492b6acb317abe20bbf588db68ff60c",
-  "control/codex_supervisor/supervisor.py": "bf93797fc21989608ab8a8c8d797ab629a2b243ed70b9f786491b85bf0e7bfd9",
+  "control/codex_supervisor/supervisor.py": "b4ffc53706cdc8747e411aaf827bb029e55131d6acf8afa0adb25f214897c74c",
   "control/tampermonkey_multichat/test_userscript_delivery_dedupe_static.py": "b3f6c6a63f9b043a5d88fe057c21b9af4f1feb085d62be33e6c6d0052a985a0a",
   "control/tampermonkey_multichat/patch_v036_assistant_turn.py": "f9749e3376e9a54c47f7fe343a2439c6339ee36d2c539b0e517adc16ae45e859",
   "control/tampermonkey_multichat/bridge_server_v2.py": "5a5e13c19754a73dd2112ac0bf5f20e127ab6e719d547ff2aa65abf67ce7ba43",
@@ -495,5 +495,6 @@
   "control/tampermonkey_multichat/patch_v040_response_cycle.py": "bf20e5b7aa45a3c506c861494ead9ea47da544abb32e097bf203f9a6ebc24106",
   "knowledge/codex_audit/runtime_reconcile/local_hourly/run_isolated.py": "2d044bbe0f121b42a95c3f3198f41073f07300082711374e8f001721b18e7a07",
   "knowledge/codex_audit/runtime_reconcile/local_hourly/qualification_entry.py": "ab6835cfd474c7f6ebb8292bd741ad52682fde60c4c8fc1e4960ab9d15b69671",
-  "knowledge/codex_audit/runtime_reconcile/local_hourly/public_broker.py": "319bea416b29fe4c81f346cf2792fd5f20b7e2fdbb19bfbb0deec3b697369962"
+  "knowledge/codex_audit/runtime_reconcile/local_hourly/public_broker.py": "319bea416b29fe4c81f346cf2792fd5f20b7e2fdbb19bfbb0deec3b697369962",
+  "control/codex_supervisor/candidate_dispatch.py": "f146f0e11c7f0d7cb8474eb5134c65898e06cedec9c1f064a5898bbb876031d6"
 }

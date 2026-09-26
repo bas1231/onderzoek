@@ -64,9 +64,9 @@ def validate_task(t):
     return t
 
 class Supervisor:
-    def __init__(self,root,worker=None,clock=time.time):
+    def __init__(self,root,worker=None,clock=time.time,candidate_source=None):
         self.root=P(root);self.root.mkdir(parents=True,exist_ok=True);self.worker=worker or CodexWorker();self.clock=clock
-        self.lock=None;self.db=None
+        self.lock=None;self.db=None;self.candidate_source=candidate_source
     @contextlib.contextmanager
     def locked(self):
         with (self.root/'worker.lock').open('a+') as f:
@@ -85,7 +85,7 @@ class Supervisor:
         return dict(zip(['state','task_id','reason','attempt','checkpoint','next_action','timestamp','retry_at'],row)) if row else {'state':'IDLE','retry_at':0}
     def transition(self,state,task,reason,attempt,checkpoint='',retry=0):
         if state not in STATES:raise Blocked('INVALID_STATE')
-        self.db.execute('insert into transitions(state,task,reason,attempt,checkpoint,next_action,stamp,retry) values(?,?,?,?,?,?,?,?)',(state,task,reason,attempt,checkpoint,'Hervat dezelfde taak na provenancecontrole' if state!='COMPLETE' else 'Selecteer hoogste prioriteit',self.clock(),retry))
+        self.db.execute('insert into transitions(state,task,reason,attempt,checkpoint,next_action,stamp,retry) values(?,?,?,?,?,?,?,?)',(state,task,reason,attempt,checkpoint,'Wacht op nieuwe eligible input' if reason=='QUEUE_EMPTY' else ('Hervat dezelfde taak na provenancecontrole' if state!='COMPLETE' else 'Selecteer hoogste prioriteit'),self.clock(),retry))
     def views(self):
         atomic(self.root/'STATE.json',self.state())
         print(json.dumps({'event':'SUPERVISOR_STATE',**self.state()}),flush=True)
@@ -131,6 +131,14 @@ class Supervisor:
         category,thread,final=classify(events,rc)
         err=folder/'stderr.log'
         if not events and err.exists() and 'Read-only file system' in err.read_text():category='ENVIRONMENT_FAILURE'
+        if category=='COMPLETE' and t.get('candidate_dispatch'):
+            try:
+                import candidate_dispatch
+                result=candidate_dispatch.validate_result(t,final)
+                atomic(folder/'CANDIDATE_APPLIED.json',{'task_id':t['task_id'],'input_sha256':t['input_sha256'],'result':result,'owner_source_mutated':False})
+                print(json.dumps({'event':'RESULT_APPLIED_NEXT_ACTION_RECORDED','task_id':t['task_id'],'candidate_id':t['candidate_id']}),flush=True)
+            except (ValueError,OSError,KeyError) as exc:
+                atomic(folder/'CANDIDATE_REJECTED.json',{'reason':str(exc)});category='TASK_FAILURE'
         if category=='COMPLETE':
             completion={'task_id':t['task_id'],'input_sha256':t['input_sha256'],'attempt':attempt,'thread_id':thread,'final':final,'timestamp':self.clock()}
             atomic(folder/'COMPLETE.json',completion)
@@ -174,7 +182,18 @@ class Supervisor:
             if state.get('retry_at',0)>self.clock():return state
             if mode=='CRITICAL':return {'state':'IDLE','reason':'CRITICAL_NO_NEW_WORK'}
             rows=self.db.execute("select body,attempt,thread,status from tasks where status in ('QUEUED','PAUSED_USAGE_LIMIT','WAITING_RETRY')").fetchall()
-            if not rows:return self.state()
+            if not rows and self.candidate_source:
+                candidate=self.candidate_source(self)
+                if candidate:
+                    validate_task(candidate)
+                    with self.db:
+                        self.db.execute('insert into tasks(id,body,status) values(?,?,?)',(candidate['task_id'],json.dumps(candidate,sort_keys=True),'QUEUED'))
+                        self.transition('IDLE',candidate['task_id'],'TASK_QUEUED',0)
+                    self.views()
+                    rows=[(json.dumps(candidate),0,None,'QUEUED')]
+            if not rows:
+                with self.db:self.transition('IDLE','','QUEUE_EMPTY',0)
+                self.views();return self.state()
             choices=[(validate_task(json.loads(b)),a,th,st) for b,a,th,st in rows]
             choices=[x for x in choices if (self.db.execute('select retry from transitions where task=? order by seq desc limit 1',(x[0]['task_id'],)).fetchone() or (0,))[0]<=self.clock()]
             if mode=='CONSERVE':choices=[x for x in choices if x[0]['priority']>=80]
@@ -231,6 +250,10 @@ def verify_installation(root):
     data=json.loads(config.read_text())
     if data.get('supervisor_sha256')!=digest(P(__file__).read_bytes()):raise Blocked('SUPERVISOR_SOURCE_CHANGED')
     if data.get('policy')!='CHATGPT_REASONING_ONLY_NO_TOOLS_NO_RESET':raise Blocked('SUPERVISOR_POLICY_CHANGED')
+    policy=P(__file__).resolve().parents[1]/'hourly/candidate_queue.py'
+    if data.get('candidate_policy_sha256')!=digest(policy.read_bytes()):raise Blocked('CANDIDATE_POLICY_SOURCE_CHANGED')
+    for name in ('candidate_dispatch.py',):
+        if data.get(name+'_sha256')!=digest(P(__file__).with_name(name).read_bytes()):raise Blocked('CANDIDATE_DISPATCH_SOURCE_CHANGED')
 
 def main():
     import argparse
@@ -239,7 +262,10 @@ def main():
         verify_installation(a.root)
         if a.action=='enqueue':s.enqueue(json.loads(a.task.read_text()));print('QUEUED')
         elif a.action=='recover-environment':s.recover_environment();print('ENVIRONMENT_RETRY_READY')
-        elif a.action=='tick':print(json.dumps(s.tick(a.mode)))
+        elif a.action=='tick':
+            import candidate_dispatch
+            s.candidate_source=lambda current:candidate_dispatch.select_task(current,P(__file__).resolve().parents[2])
+            print(json.dumps(s.tick(a.mode)))
         else:
             with s.locked():print(json.dumps(s.state()))
     except (Blocked,sqlite3.DatabaseError,ValueError) as e:

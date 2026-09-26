@@ -15,7 +15,7 @@
   "market_edge_test": "not started; signal edge must survive first",
   "mechanism": "Possible publication or completion-status lag after all expected station observations are already present.",
   "needed_data": [],
-  "next_decisive_test": "Await and evaluate post-cutoff cases under the preregistered 24h full-station protocol; discovery rows cannot count as validation.",
+  "next_decisive_test": "Await and evaluate post-cutoff cases under the preregistered 24h full-station protocol.",
   "open_question": null,
   "origin": "post-hoc mechanism discovered in KWI-INCOMPLETE-SIGNAL-FEASIBILITY-V1 development data; all pre-cutoff evidence is discovery only",
   "paid_actions": false,
@@ -33,12 +33,12 @@
     "knowledge/candidates/protocols/KWI-FULL-STATION-PRECANONICAL-24H-V1.json"
   ],
   "queue_entered_at": "2026-09-20T15:32:05.855330+00:00",
-  "queue_reason": "No new post-cutoff result is present; discovery rows remain inadmissible as validation.",
+  "queue_reason": "No new admissible post-cutoff full-station evidence is present.",
   "queue_status": "WAITING_FOR_RESULT",
   "resume_condition": null,
   "resurrection_condition": null,
   "signal_metric": "MAE and RMSE of full-station incomplete arithmetic mean versus later canonical v",
   "stop_condition": null,
-  "updated_at": "2026-09-24T14:04:04.051228+00:00",
+  "updated_at": "2026-09-24T17:22:15.157031+00:00",
   "wallet_actions": false
 }

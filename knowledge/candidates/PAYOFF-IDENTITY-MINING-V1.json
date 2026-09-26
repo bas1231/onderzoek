@@ -31,7 +31,7 @@
   "mechanism": "Canonicalize payouts and prove equivalence or dominance before price comparison.",
   "needed_data": [],
   "negative_evidence": [],
-  "next_decisive_test": "Find one concrete contract pair with primary-rule statewise payout semantics, then compare synchronized executable L2 only after formal equivalence/dominance proof.",
+  "next_decisive_test": "Find a concrete primary-rule-proven statewise pair before synchronized executable L2 comparison.",
   "open_question": null,
   "paid_actions": false,
   "phase": "DISCOVERED",
@@ -41,12 +41,12 @@
   ],
   "priority": "P2",
   "queue_entered_at": "2026-09-20T00:42:14.997558+00:00",
-  "queue_reason": "No complete concrete statewise identity/dominance proof is present; price comparison remains premature.",
+  "queue_reason": "No complete concrete statewise identity/dominance proof is present.",
   "queue_status": "NEEDS_DIRECTOR",
   "resume_condition": null,
   "resurrection_condition": null,
   "signal_metric": "Verified equivalence/dominance count",
   "stop_condition": null,
-  "updated_at": "2026-09-24T14:04:04.051256+00:00",
+  "updated_at": "2026-09-24T17:22:15.157127+00:00",
   "wallet_actions": false
 }
