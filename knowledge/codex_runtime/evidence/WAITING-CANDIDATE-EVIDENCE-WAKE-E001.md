@@ -86,4 +86,4 @@ Dit zijn fixture-canaries, geen bewijs dat de echte kandidaten al evidence publi
 
 `REQUIRES_HIGH_INTELLIGENCE_REVIEW`
 
-Geen remote push is uitgevoerd of toegestaan. De lokale commit volgt na path-only staging; daarin komen uitsluitend de bovenstaande eigen code/test/config/evidencebestanden. De reeds gewijzigde runtime-queue/statusbestanden en overige untracked owner-/runartefacten blijven buiten staging en worden niet aangepast.
+Geen remote push is uitgevoerd of toegestaan. De path-only implementatie-/test-/evidencecommit is lokaal gemaakt: `2765bbe` (`fix: add candidate evidence wake routing`). De reeds gewijzigde runtime-queue/statusbestanden en overige untracked owner-/runartefacten bleven buiten die commit en zijn niet aangepast.
