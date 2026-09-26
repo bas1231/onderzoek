@@ -1,0 +1,7 @@
+ValidationError: 2 validation errors for Task
+operation
+  Input should be 'health_check', 'pytest' or 'python' [type=literal_error, input_value='ai_research', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.13/v/literal_error
+command
+  Field required [type=missing, input_value={'task_id': 'RECON-PROFIT...le evidence reference.'}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.13/v/missing
