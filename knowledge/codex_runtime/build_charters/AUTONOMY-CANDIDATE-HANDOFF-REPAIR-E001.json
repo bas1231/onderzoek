@@ -1,0 +1,49 @@
+{
+  "build_id": "AUTONOMY-CANDIDATE-HANDOFF-REPAIR-E001",
+  "protocol_version": 1,
+  "objective": "Route candidate protocol evidence into deterministic Director review, durable state overlays, and fixed local validation tasks without executing model text or changing owner candidate files.",
+  "source_commit": "0f5b80e27ab16af16da7d4aa8e455b96ccbbff59",
+  "allowed_capabilities": [
+    "read_repository",
+    "read_runtime",
+    "read_git",
+    "run_tests",
+    "compile",
+    "write_project_files"
+  ],
+  "allowed_paths": [
+    "control/codex_supervisor",
+    "tests/codex_supervisor",
+    "knowledge/codex_runtime/build_charters",
+    "knowledge/codex_runtime/evidence"
+  ],
+  "planned_paths": [
+    "control/codex_supervisor/candidate_dispatch.py",
+    "control/codex_supervisor/supervisor.py",
+    "control/codex_supervisor/shadow_protocol.py",
+    "control/codex_supervisor/candidate_validation.py",
+    "tests/codex_supervisor/test_candidate_dispatch.py",
+    "tests/codex_supervisor/test_shadow_protocol.py",
+    "knowledge/codex_runtime/build_charters/AUTONOMY-CANDIDATE-HANDOFF-REPAIR-E001.json",
+    "knowledge/codex_runtime/evidence/AUTONOMY-CANDIDATE-HANDOFF-REPAIR-E001.json"
+  ],
+  "acceptance_criteria": [
+    "Referenced protocol/evidence is safely allowlisted, hashed, included in reasoning, and revalidated after reasoning.",
+    "Structured candidate decisions are applied idempotently to durable overlays without modifying candidate source files.",
+    "Only fixed local validation operations may be dispatched; free-form next_action is inert data.",
+    "Deathcheck validation records three clean local runs and never authorizes prospective activation without the required collector and prospective evidence."
+  ],
+  "non_goals": [
+    "Live execution, trading, orders, wallet actions, paid services, remote Git mutation, changing scientific status, or modifying preregistration."
+  ],
+  "independent_verification": "Focused existing codex_supervisor tests plus adversarial reference, idempotency, validation provenance, and no-activation tests.",
+  "rollback_plan": "Revert only files named in the path-specific local commit; preserve all candidate/runtime owner files and evidence.",
+  "cleanup_plan": "No operational service or temporary persistent resource is created; retain test logs and validation evidence.",
+  "max_attempts": 2,
+  "governance_change": false,
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false
+  }
+}

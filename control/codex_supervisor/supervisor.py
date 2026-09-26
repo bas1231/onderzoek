@@ -54,7 +54,7 @@ def bridge_ready():
 def validate_task(t):
     if not isinstance(t,dict) or not re.fullmatch(r'[A-Za-z0-9_-]{1,100}',str(t.get('task_id',''))):raise Blocked('MALFORMED_TASK_ID')
     required={'task_id','task_class','priority','expected_value','estimated_reasoning_cost','created_at','prompt','input_sha256'}
-    if not required<=t.keys() or t['task_class'] not in ('research_review','infrastructure_review'):raise Blocked('MALFORMED_TASK')
+    if not required<=t.keys() or t['task_class'] not in ('research_review','infrastructure_review','local_validation'):raise Blocked('MALFORMED_TASK')
     if not isinstance(t['prompt'],str) or not t['prompt'].strip() or len(t['prompt'])>100000:raise Blocked('MALFORMED_PROMPT')
     if digest(t['prompt'].encode())!=t['input_sha256']:raise Blocked('PROVENANCE_MISMATCH')
     for key in ['priority','expected_value','estimated_reasoning_cost']:
@@ -85,7 +85,11 @@ class Supervisor:
         return dict(zip(['state','task_id','reason','attempt','checkpoint','next_action','timestamp','retry_at'],row)) if row else {'state':'IDLE','retry_at':0}
     def transition(self,state,task,reason,attempt,checkpoint='',retry=0):
         if state not in STATES:raise Blocked('INVALID_STATE')
-        self.db.execute('insert into transitions(state,task,reason,attempt,checkpoint,next_action,stamp,retry) values(?,?,?,?,?,?,?,?)',(state,task,reason,attempt,checkpoint,'Wacht op nieuwe eligible input' if reason=='QUEUE_EMPTY' else ('Hervat dezelfde taak na provenancecontrole' if state!='COMPLETE' else 'Selecteer hoogste prioriteit'),self.clock(),retry))
+        if reason=='QUEUE_EMPTY':next_action='Wacht op nieuwe eligible input'
+        elif reason=='NEEDS_REVISION_REQUIRES_NEW_VERSION_AND_REVIEW':next_action='Nieuwe protocolversie en Director-herbeoordeling vereist'
+        elif state=='BLOCKED':next_action='Los de geregistreerde blokkade op; hervat pas na provenancecontrole'
+        else:next_action='Hervat dezelfde taak na provenancecontrole' if state!='COMPLETE' else 'Selecteer hoogste prioriteit'
+        self.db.execute('insert into transitions(state,task,reason,attempt,checkpoint,next_action,stamp,retry) values(?,?,?,?,?,?,?,?)',(state,task,reason,attempt,checkpoint,next_action,self.clock(),retry))
     def views(self):
         atomic(self.root/'STATE.json',self.state())
         print(json.dumps({'event':'SUPERVISOR_STATE',**self.state()}),flush=True)
@@ -135,8 +139,10 @@ class Supervisor:
             try:
                 import candidate_dispatch
                 result=candidate_dispatch.validate_result(t,final)
-                atomic(folder/'CANDIDATE_APPLIED.json',{'task_id':t['task_id'],'input_sha256':t['input_sha256'],'result':result,'owner_source_mutated':False})
-                print(json.dumps({'event':'RESULT_APPLIED_NEXT_ACTION_RECORDED','task_id':t['task_id'],'candidate_id':t['candidate_id']}),flush=True)
+                completion_hash=digest(final.encode())
+                overlay,record,already=candidate_dispatch.apply_candidate_result(self,t,result,completion_hash,self.clock())
+                atomic(folder/'CANDIDATE_APPLIED.json',{'task_id':t['task_id'],'input_sha256':t['input_sha256'],'completion_hash':completion_hash,'overlay_ref':str(overlay.relative_to(self.root)),'queue_status':record['queue_status'],'already_applied':already,'owner_source_mutated':False})
+                print(json.dumps({'event':'RESULT_APPLIED_NEXT_ACTION_RECORDED','task_id':t['task_id'],'candidate_id':t['candidate_id'],'queue_status':record['queue_status']}),flush=True)
             except (ValueError,OSError,KeyError) as exc:
                 atomic(folder/'CANDIDATE_REJECTED.json',{'reason':str(exc)});category='TASK_FAILURE'
         if category=='COMPLETE':
@@ -153,6 +159,24 @@ class Supervisor:
         atomic(self.root/'CONTINUATION.json',{'task_id':t['task_id'],'input_sha256':t['input_sha256'],'state':state,'checkpoint':str(folder.relative_to(self.root)),'next_action':'resume_same_task' if state!='COMPLETE' else 'select_next'})
         atomic(self.root/'CONTINUATION.md',f"# Hervatting\n\nTaak: {t['task_id']}\nStatus: {state}\nReden: {category}\nInputsha: {t['input_sha256']}\nCheckpoint: {folder.name}\nVolgende stap: dezelfde onveranderde taak hervatten na retry_at; geen resets, push, API keys of tools.\n")
         self.views()
+    def execute_validation(self,t,attempt,folder):
+        try:
+            import candidate_validation,candidate_dispatch
+            t['run_path']=str(folder.relative_to(self.root))
+            report=candidate_validation.run(t,P(__file__).resolve().parents[2],folder)
+            overlay,state=candidate_dispatch.apply_validation(self,t,report)
+            atomic(folder/'COMPLETE.json',{'task_id':t['task_id'],'input_sha256':t['input_sha256'],'attempt':attempt,'validation_hash':report['runs'][0]['result']['protocol_id'],'timestamp':self.clock()})
+            with self.db:
+                self.db.execute('update tasks set status=? where id=?',('COMPLETE',t['task_id']))
+                self.transition('COMPLETE',t['task_id'],'VALIDATION_COMPLETE',attempt,str(folder.relative_to(self.root)))
+            atomic(self.root/'CONTINUATION.json',{'task_id':t['task_id'],'input_sha256':t['input_sha256'],'state':'COMPLETE','checkpoint':str(folder.relative_to(self.root)),'next_action':'candidate_validation'})
+            self.views();print(json.dumps({'event':'CANDIDATE_VALIDATION_COMPLETE','candidate_id':t['candidate_id'],'activation_authorized':False}),flush=True)
+        except Exception as exc:
+            atomic(folder/'VALIDATION_FAILURE.json',{'type':type(exc).__name__,'reason':str(exc)})
+            with self.db:
+                self.db.execute('update tasks set status=? where id=?',('FAILED',t['task_id']))
+                self.transition('FAILED',t['task_id'],'VALIDATION_FAILURE',attempt,str(folder.relative_to(self.root)))
+            self.views();print(json.dumps({'event':'QUEUE_BLOCKED','candidate_id':t.get('candidate_id'),'reason':'VALIDATION_FAILURE'}),flush=True)
     def recover_environment(self):
         with self.locked():
             self.validate_views();state=self.state()
@@ -173,6 +197,8 @@ class Supervisor:
                     c=json.loads(complete.read_text())
                     if c.get('task_id')!=tid or c.get('input_sha256')!=t['input_sha256']:raise Blocked('CORRUPT_COMPLETION')
                     self.apply_result(t,attempt,folder,'COMPLETE',c.get('thread_id'))
+                elif t.get('candidate_validation'):
+                    self.execute_validation(t,attempt,folder)
                 else:
                     events=events_from(folder/'events.jsonl');rc=0 if any(e.get('type')=='turn.completed' for e in events) else -1
                     self.finish(t,attempt,folder,rc)
@@ -184,6 +210,14 @@ class Supervisor:
             rows=self.db.execute("select body,attempt,thread,status from tasks where status in ('QUEUED','PAUSED_USAGE_LIMIT','WAITING_RETRY')").fetchall()
             if not rows and self.candidate_source:
                 candidate=self.candidate_source(self)
+                if candidate and candidate.get('queue_blocked'):
+                    reason=candidate['reason'];state=self.state()
+                    next_action='Nieuwe protocolversie en Director-herbeoordeling vereist' if reason=='NEEDS_REVISION_REQUIRES_NEW_VERSION_AND_REVIEW' else 'Los de geregistreerde blokkade op; hervat pas na provenancecontrole'
+                    if state.get('state')!='BLOCKED' or state.get('reason')!=reason or state.get('next_action')!=next_action:
+                        with self.db:self.transition('BLOCKED',candidate.get('candidate_id',''),reason,0)
+                        self.views()
+                    print(json.dumps({'event':'QUEUE_BLOCKED','candidate_id':candidate.get('candidate_id'),'reason':reason}),flush=True)
+                    return {**self.state(),'state':'BLOCKED','reason':reason}
                 if candidate:
                     validate_task(candidate)
                     with self.db:
@@ -212,6 +246,8 @@ class Supervisor:
                 self.transition('RUNNING',t['task_id'],'WORKER_START',attempt,str(folder.relative_to(self.root)))
             self.views()
             atomic(self.root/'ACTIVE_GOAL.md',f"# Actieve taak\n\n{t['task_id']}\n\n{t['prompt']}\n")
+            if t.get('candidate_validation'):
+                self.execute_validation(t,attempt,folder);return self.state()
             try:rc=self.worker(t,thread,folder,self.lock.fileno())
             except Blocked as exc:
                 atomic(folder/'worker_error.json',{'type':type(exc).__name__,'reason':str(exc)})
@@ -264,7 +300,7 @@ def main():
         elif a.action=='recover-environment':s.recover_environment();print('ENVIRONMENT_RETRY_READY')
         elif a.action=='tick':
             import candidate_dispatch
-            s.candidate_source=lambda current:candidate_dispatch.select_task(current,P(__file__).resolve().parents[2])
+            s.candidate_source=lambda current:candidate_dispatch.select_next(current,P(__file__).resolve().parents[2])
             print(json.dumps(s.tick(a.mode)))
         else:
             with s.locked():print(json.dumps(s.state()))

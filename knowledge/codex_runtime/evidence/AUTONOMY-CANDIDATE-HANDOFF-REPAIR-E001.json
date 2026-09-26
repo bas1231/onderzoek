@@ -1,0 +1,98 @@
+{
+  "task_id": "AUTONOMY-CANDIDATE-HANDOFF-REPAIR-E001",
+  "recorded_at": "2026-09-26T15:29:56.123350+00:00",
+  "source_commit": "0f5b80e27ab16af16da7d4aa8e455b96ccbbff59",
+  "root_cause": {
+    "evidence_not_injected": "fixed: candidate referenced evidence content and hashes are now part of task input/prompt; hashes rechecked after reasoning",
+    "result_not_applied_to_durable_state": "fixed: deterministic candidate overlay persists result/provenance without mutating owner source",
+    "no_build_validation_handoff": "fixed for preregistered pending deathchecks: only fixed local dispatcher can launch pinned tests; free-form next_action is inert",
+    "queue_idle_misclassification": "fixed: unresolved NEEDS_REVISION surfaces durable QUEUE_BLOCKED rather than QUEUE_EMPTY"
+  },
+  "reused_architecture": [
+    "control/hourly/candidate_queue.py::build_queue(write_candidates=False)",
+    "control/codex_supervisor/supervisor.py SQLite task queue and timer",
+    "candidate JSON files remain owner sources; overlays under knowledge/codex_runtime/candidate_states are derived state"
+  ],
+  "tests": {
+    "command": ".venv/bin/python -m pytest -q tests/codex_supervisor",
+    "exit_code": 0,
+    "summary": "84 passed",
+    "log": "knowledge/codex_runtime/autonomy_candidate_repair_tests.log",
+    "log_sha256": "b4f580aed07b1962f3f0f958488ea91971f35ed78fdb2dd441c8f02cd6396944"
+  },
+  "real_canary": {
+    "trigger": "prediction-codex-supervisor.timer",
+    "selected_by_existing_priority_order": true,
+    "task_id": "CANDIDATE-960dcdb97aae8865-dd56aef8ea2a2d333186e3aa32fd40a4",
+    "candidate_id": "MANUAL-SCOUT-HENGELTJES-20260924",
+    "candidate_task_path": "knowledge/codex_runtime/runs/CANDIDATE-960dcdb97aae8865-dd56aef8ea2a2d333186e3aa32fd40a4-1-c2ea0d12/TASK.json",
+    "completed_path": "knowledge/codex_runtime/runs/CANDIDATE-960dcdb97aae8865-dd56aef8ea2a2d333186e3aa32fd40a4-1-c2ea0d12/COMPLETE.json",
+    "applied_path": "knowledge/codex_runtime/runs/CANDIDATE-960dcdb97aae8865-dd56aef8ea2a2d333186e3aa32fd40a4-1-c2ea0d12/CANDIDATE_APPLIED.json",
+    "input_sha256": "e84af6223e3d63a4e08abae701850c44e0b5d8d4a8ff4671c80f270c2b335f56",
+    "completion_hash": "9f98ef0abef04f38a78b5c4100282b5b863baa416a3680b56f1778ea6e1877bc",
+    "result_state": "NEEDS_REVISION",
+    "owner_source_mutated": false,
+    "referenced_evidence_hashes": {
+      "knowledge/candidates/MANUAL-SCOUT-HENGELTJES-20260924.json": "1aa3e0fc93ac1e5c1ed27e92e84cad55172752ef47946a53cc9f1be2a4532c3d",
+      "knowledge/candidates/protocols/MANUAL-SCOUT-HENGELTJES-20260924-shadow-v1.json": "fa22f6b46adb2e5c923d6282f55205dd0a0d42343ff15484c4b302fdd8bd56b1",
+      "knowledge/manual_scout_seeds/2026-09-24-hengeltjes-late-passive-liquidity.md": "ab286f039a26e6b65a70819bac6c10cc8a3d0d5b51c51b5e0c1dfefa15cca4bd"
+    },
+    "protocol_in_prompt": true,
+    "model": "gpt-6-astra",
+    "result_summary": "Director marked NEEDS_REVISION: frozen market/side-selection details and several pre-execution/markout/evaluation definitions remain underspecified; no preregistration was changed.",
+    "queue_blocked_followup": {
+      "state": "BLOCKED",
+      "reason": "NEEDS_REVISION_REQUIRES_NEW_VERSION_AND_REVIEW",
+      "task_id": "MANUAL-SCOUT-HENGELTJES-20260924",
+      "timestamp": 1790436644.5029118,
+      "automatically_repeated": false,
+      "journal_unit": "prediction-codex-supervisor.service"
+    },
+    "overlay_path": "knowledge/codex_runtime/candidate_states/960dcdb97aae8865-dd56aef8ea2a2d333186e3aa32fd40a4.json",
+    "overlay_sha256": "d020649c2a0b909ddd3425070a028323a3c8b6b1bc5c45f731ba0c0377d99786",
+    "protocol_refs": [
+      "knowledge/candidates/MANUAL-SCOUT-HENGELTJES-20260924.json",
+      "knowledge/candidates/protocols/MANUAL-SCOUT-HENGELTJES-20260924-shadow-v1.json",
+      "knowledge/manual_scout_seeds/2026-09-24-hengeltjes-late-passive-liquidity.md"
+    ],
+    "build_handoff_created": false,
+    "reason_build_not_dispatched": "Director returned NEEDS_REVISION; preregistration changes require a new version and must not be made retroactively."
+  },
+  "handoff_state_machine": [
+    "NEEDS_DIRECTOR/EXPERIMENT_REQUIRED -> deterministic review task",
+    "structured result -> idempotent overlay",
+    "PREREGISTERED_PENDING_DEATHCHECKS + actionable review result -> NEEDS_BUILD fixed local operation",
+    "fixed operation -> three repeated local deathcheck test runs -> VALIDATION only",
+    "prospective shadow run gate remains NOT_RUN; no activation"
+  ],
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_push": false,
+    "owner_candidate_mutation": false,
+    "scientific_status": "NO_PROVEN_EDGE"
+  },
+  "remaining_blocker": "Human-controlled new protocol version/review is required because Director identified missing preregistration decisions; existing preregistration is immutable for this run. No read-only raw orderbook sequence collector or prospective data exists.",
+  "local_handoff_tests": {
+    "build_validation_route_exercised_in_isolated_fixture": true,
+    "three_local_test_runs": true,
+    "prospective_runs": 0,
+    "activation_authorized": false,
+    "limitation": "Fixture proves fixed dispatcher behavior; actual Hengeltjes canary stopped at NEEDS_REVISION before handoff."
+  },
+  "source_hashes": {
+    "control/codex_supervisor/supervisor.py": "772a12e6388bdb23cf79a34a5d460afc2a293108e04499efdb34f5a7bdc58c59",
+    "control/codex_supervisor/candidate_dispatch.py": "8b404afa18ac2691716bfae1e8bf7be8c3d11e31b16daf54d6208f566339a201",
+    "control/codex_supervisor/candidate_validation.py": "e131bad23827c1ee1aa6c4f0bb2ca8d9380b93adff80ea11d7a517b18ad86db7",
+    "control/codex_supervisor/shadow_protocol.py": "1c75ce3b070683f4433ec54dfd5e21d4200bceafcec572cc4afd9302f5de28d3",
+    "control/hourly/candidate_queue.py": "da20328e15642d1998583b66f5084ca0c16d926b282f6a19e8137da2947a161c",
+    "tests/codex_supervisor/test_candidate_dispatch.py": "b7d2e4d2e63e80a04b504cf8630650dd7a68a67727d1f2b01584e336bf0a0b20",
+    "tests/codex_supervisor/test_shadow_protocol.py": "08336e36bda3423c694f9b8ff323049d76359610dc9025c361c5864562f10261"
+  },
+  "runtime_state_after_timer": {
+    "state": "BLOCKED",
+    "reason": "NEEDS_REVISION_REQUIRES_NEW_VERSION_AND_REVIEW",
+    "task_id": "MANUAL-SCOUT-HENGELTJES-20260924"
+  }
+}
