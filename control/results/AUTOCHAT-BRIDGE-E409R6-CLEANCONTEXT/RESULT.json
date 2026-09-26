@@ -1,0 +1,41 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "experiments/health_check.py"
+  ],
+  "execution_provenance": {
+    "command_text": ".venv/bin/python experiments/health_check.py",
+    "executor_commit": "b03d0ccdef7dfecfad481b025f8c75932a4f5885",
+    "policy_reason": "research action permitted",
+    "policy_status": "ALLOWED",
+    "support_preflight": {
+      "ok": true,
+      "script": "experiments/health_check.py",
+      "status": "SUPPORT_SCRIPT_TRACKED"
+    },
+    "task_provenance": {
+      "execution_commit": "b03d0ccdef7dfecfad481b025f8c75932a4f5885",
+      "ok": true,
+      "relationship": "ancestor",
+      "status": "TASK_COMMIT_PROVEN",
+      "support_provenance": {
+        "script": "experiments/health_check.py",
+        "script_blob": "8cb7418661aa3dca7b95f416cb4ad982ceab4a6b",
+        "status": "SUPPORT_SCRIPT_BOUND_TO_TASK_COMMIT"
+      },
+      "task_blob": "a41949240d05f2202edbc9680ad2e328976723cf",
+      "task_commit": "40bd79fa4e4ab757fe24a64526f3b4f7e1cb5e80",
+      "task_path": "control/tasks/pending/AUTOCHAT-BRIDGE-E409R6-CLEANCONTEXT.json"
+    }
+  },
+  "exit_code": 0,
+  "finished_at": "2026-09-26T14:10:03.617646+00:00",
+  "hypothesis_id": "CONTROL-BRIDGE-E409",
+  "source_commit": "b03d0ccdef7dfecfad481b025f8c75932a4f5885",
+  "started_at": "2026-09-26T14:10:03.591115+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "ea4f6e01a2fd20436268fcb5124ad1684017e76f404e1f2cd3de63cc2454234e",
+  "task_class": "infrastructure",
+  "task_id": "AUTOCHAT-BRIDGE-E409R6-CLEANCONTEXT"
+}
