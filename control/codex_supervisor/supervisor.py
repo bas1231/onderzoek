@@ -130,6 +130,7 @@ class Supervisor:
                 quota=self.db.execute("select max(retry) from transitions where reason='USAGE_LIMIT'").fetchone()[0] or 0
                 if not old and quota<=self.clock():self.transition('IDLE',t['task_id'],'QUEUED',0)
             self.views()
+            if not old:print(json.dumps({'event':'TASK_QUEUED','task_id':t['task_id'],'task_class':t['task_class']}),flush=True)
     def finish(self,t,attempt,folder,rc):
         events=events_from(folder/'events.jsonl')
         category,thread,final=classify(events,rc)
@@ -224,6 +225,7 @@ class Supervisor:
                         self.db.execute('insert into tasks(id,body,status) values(?,?,?)',(candidate['task_id'],json.dumps(candidate,sort_keys=True),'QUEUED'))
                         self.transition('IDLE',candidate['task_id'],'TASK_QUEUED',0)
                     self.views()
+                    print(json.dumps({'event':'TASK_QUEUED','task_id':candidate['task_id'],'task_class':candidate['task_class']}),flush=True)
                     rows=[(json.dumps(candidate),0,None,'QUEUED')]
             if not rows:
                 with self.db:self.transition('IDLE','','QUEUE_EMPTY',0)
@@ -245,6 +247,7 @@ class Supervisor:
                 self.db.execute('update tasks set status=?,attempt=?,run=? where id=?',('RUNNING',attempt,str(folder.relative_to(self.root)),t['task_id']))
                 self.transition('RUNNING',t['task_id'],'WORKER_START',attempt,str(folder.relative_to(self.root)))
             self.views()
+            print(json.dumps({'event':'WORKER_START','task_id':t['task_id'],'attempt':attempt,'task_class':t['task_class']}),flush=True)
             atomic(self.root/'ACTIVE_GOAL.md',f"# Actieve taak\n\n{t['task_id']}\n\n{t['prompt']}\n")
             if t.get('candidate_validation'):
                 self.execute_validation(t,attempt,folder);return self.state()
@@ -288,8 +291,8 @@ def verify_installation(root):
     if data.get('policy')!='CHATGPT_REASONING_ONLY_NO_TOOLS_NO_RESET':raise Blocked('SUPERVISOR_POLICY_CHANGED')
     policy=P(__file__).resolve().parents[1]/'hourly/candidate_queue.py'
     if data.get('candidate_policy_sha256')!=digest(policy.read_bytes()):raise Blocked('CANDIDATE_POLICY_SOURCE_CHANGED')
-    for name in ('candidate_dispatch.py',):
-        if data.get(name+'_sha256')!=digest(P(__file__).with_name(name).read_bytes()):raise Blocked('CANDIDATE_DISPATCH_SOURCE_CHANGED')
+    for name in ('candidate_dispatch.py','evidence_wake.py'):
+        if data.get(name+'_sha256')!=digest(P(__file__).with_name(name).read_bytes()):raise Blocked('PINNED_CANDIDATE_SOURCE_CHANGED:'+name)
 
 def main():
     import argparse

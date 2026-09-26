@@ -13,7 +13,7 @@ def candidate(repo,cid='A',priority='P2',status='NEEDS_DIRECTOR',**extra):
 def setup(tmp_path,worker=None,clock=None):
     calls=[];repo=tmp_path/'repo'
     package=repo/'control/codex_supervisor';package.mkdir(parents=True,exist_ok=True)
-    for name in ('supervisor.py','candidate_dispatch.py','shadow_protocol.py','candidate_validation.py'):(package/name).write_bytes((ROOT/'control/codex_supervisor'/name).read_bytes())
+    for name in ('supervisor.py','candidate_dispatch.py','evidence_wake.py','shadow_protocol.py','candidate_validation.py'):(package/name).write_bytes((ROOT/'control/codex_supervisor'/name).read_bytes())
     queue=repo/'control/hourly';queue.mkdir(parents=True,exist_ok=True);(queue/'candidate_queue.py').write_bytes((ROOT/'control/hourly/candidate_queue.py').read_bytes())
     tests=repo/'tests/codex_supervisor';tests.mkdir(parents=True,exist_ok=True);(tests/'test_shadow_protocol.py').write_bytes((ROOT/'tests/codex_supervisor/test_shadow_protocol.py').read_bytes())
     protocol_path=repo/'knowledge/candidates/protocols/MANUAL-SCOUT-HENGELTJES-20260924-shadow-v1.json';protocol_path.parent.mkdir(parents=True,exist_ok=True);protocol_path.write_bytes((ROOT/'knowledge/candidates/protocols/MANUAL-SCOUT-HENGELTJES-20260924-shadow-v1.json').read_bytes())
@@ -207,3 +207,219 @@ def test_validation_report_cannot_be_replayed_across_task_or_enable_activation(t
     folder=s.root/'runs'/'valid-report';folder.mkdir(parents=True);good=candidate_validation.run(task,repo,folder)
     with pytest.raises(ValueError,match='BINDING'):d.apply_validation(s,task,{**good,'task_id':'OTHER'})
     with pytest.raises(ValueError,match='NOT_PASS'):d.apply_validation(s,task,{**good,'activation_authorized':True})
+
+
+def wake_condition(kind,**extra):
+    return {'schema':'PVA_EVIDENCE_WAKE_CONDITION_V1','evidence_kinds':[kind],**extra}
+
+
+def waiting_canary(tmp_path,cid,status,condition,condition_key='evidence_wake_condition'):
+    import time
+    clock=[time.time()-60]
+    repo,s,calls,_=setup(tmp_path,clock=lambda:clock[0])
+    extra={condition_key:condition}
+    candidate(repo,cid,'P1','NEEDS_DIRECTOR',**extra)
+    def worker(t,thread,folder,fd):
+        calls.append(t['candidate_id'])
+        state=status if len(calls)==1 else 'WAITING_FOR_DATA'
+        final=dict(candidate_id=t['candidate_id'],queue_status=state,finding='Fixture-only test evidence',next_action='Beoordeel uitsluitend nieuwe fixture evidence',scientific_status='NO_PROVEN_EDGE')
+        events=[{'type':'thread.started','thread_id':'fixture-thread'},{'type':'item.completed','item':{'type':'agent_message','text':json.dumps(final)}},{'type':'turn.completed'}]
+        m.atomic(folder/'events.jsonl',''.join(json.dumps(e)+'\n' for e in events));return 0
+    s.worker=worker
+    assert s.tick()['state']=='COMPLETE'
+    clock[0]+=10
+    return repo,s,calls,clock
+
+
+def write_candidate_evidence(repo,cid,kind,**extra):
+    import datetime as dt
+    now=dt.datetime.now(dt.timezone.utc)
+    evidence_id='fixture-'+str(len(list((repo/'knowledge/evidence/candidate_events').glob('*.json'))) if (repo/'knowledge/evidence/candidate_events').exists() else 0)
+    manifest={'schema':'PVA_IMMUTABLE_EVIDENCE_MANIFEST_V1','source_ref':'fixture://point-in-time-source/'+evidence_id,'source_sha256':'a'*64,
+              'retrieved_at':(now-dt.timedelta(seconds=10)).isoformat(),'archived_at':(now-dt.timedelta(seconds=5)).isoformat(),'backfill':False}
+    mp=repo/'knowledge/evidence/manifests'/(evidence_id+'.json');mp.parent.mkdir(parents=True,exist_ok=True);mb=json.dumps(manifest,sort_keys=True).encode();mp.write_bytes(mb)
+    doc={'schema':'PVA_CANDIDATE_EVIDENCE_V1','evidence_id':'fixture-'+str(len(list((repo/'knowledge/evidence/candidate_events').glob('*.json'))) if (repo/'knowledge/evidence/candidate_events').exists() else 0),
+         'candidate_id':cid,'evidence_kind':kind,'status':'VALID','evidence_timestamp':(now-dt.timedelta(seconds=3)).isoformat(),
+         'available_at':(now-dt.timedelta(seconds=2)).isoformat(),'archived_at':now.isoformat(),'backfill':False,
+         'source_manifest_ref':str(mp.relative_to(repo)),'source_manifest_sha256':m.digest(mb),**extra}
+    p=repo/'knowledge/evidence/candidate_events'/(doc['evidence_id']+'.json');p.parent.mkdir(parents=True,exist_ok=True);p.write_text(json.dumps(doc,sort_keys=True));return p
+
+
+@pytest.mark.parametrize('kind,condition,artifact,initial_state',[
+    ('kwi_evaluator_result',wake_condition('kwi_evaluator_result',minimum_groups=2,minimum_scorable_pairs_per_group=30,required_status='VALID'),{'scorable_pairs_by_group':{'CITY-A':0,'CITY-B':0}},'WAITING_FOR_RESULT'),
+    ('asset_fill_result',wake_condition('asset_fill_result',minimum_full_fills=1,require_conservative_proof=True,required_hash_fields=['full_fill_evidence_sha256']),{'conservative_full_fills':0,'conservative_proof':False},'RUNNING'),
+    ('weather_observation',wake_condition('statewise_rule_portfolio'),{},'WAITING_FOR_DATA'),
+])
+def test_canary_irrelevant_or_insufficient_evidence_does_not_wake(tmp_path,kind,condition,artifact,initial_state):
+    repo,s,calls,_=waiting_canary(tmp_path,'CANARY',initial_state,condition)
+    write_candidate_evidence(repo,'CANARY',kind,**artifact)
+    assert s.tick()['reason']=='QUEUE_EMPTY'
+    assert calls==['CANARY']
+    assert not list((s.root/'candidate_wakes').glob('*.json'))
+
+
+@pytest.mark.parametrize('cid,state,condition,kind,fields',[
+    ('KWI-FULL-STATION-PRECANONICAL-V1','WAITING_FOR_RESULT',wake_condition('kwi_evaluator_result',minimum_groups=2,minimum_scorable_pairs_per_group=30,required_status='VALID'),'kwi_evaluator_result',{'scorable_pairs_by_group':{'CITY-A':30,'CITY-B':30}}),
+    ('ASSET-RANK-MAKER-HEDGE-V1','RUNNING',wake_condition('asset_fill_result',minimum_full_fills=1,require_conservative_proof=True,required_hash_fields=['full_fill_evidence_sha256']),'asset_fill_result',{'conservative_full_fills':1,'conservative_proof':True,'full_fill_evidence_sha256':'b'*64}),
+    ('PAYOFF-IDENTITY-MINING-V1','WAITING_FOR_DATA',wake_condition('statewise_rule_portfolio',required_status='VALID',required_hash_fields=['portfolio_sha256','rule_sha256']),'statewise_rule_portfolio',{'portfolio_sha256':'a'*64,'rule_sha256':'c'*64}),
+])
+def test_typed_post_cutoff_evidence_wakes_canary_once(tmp_path,cid,state,condition,kind,fields):
+    repo,s,calls,clock=waiting_canary(tmp_path,cid,state,condition)
+    # An unrelated weather artifact is discovered but cannot match the payoff condition.
+    if cid=='PAYOFF-IDENTITY-MINING-V1':
+        write_candidate_evidence(repo,cid,'weather_observation')
+        assert s.tick()['reason']=='QUEUE_EMPTY'
+        clock[0]+=10
+    write_candidate_evidence(repo,cid,kind,**fields)
+    assert s.tick()['state']=='COMPLETE'
+    assert calls==[cid,cid]
+    wakes=list((s.root/'candidate_wakes').glob('*.json'))
+    assert len(wakes)==1
+    wake=json.loads(wakes[0].read_text())
+    assert wake['candidate_id']==cid and wake['scientific_status']=='NO_PROVEN_EDGE'
+    assert s.tick()['reason']=='QUEUE_EMPTY'
+    assert calls==[cid,cid]
+
+
+def test_heng_revision_wakes_only_on_new_protocol_revision_artifact(tmp_path):
+    condition=wake_condition('protocol_revision',protocol_ref='knowledge/candidates/protocols/protocol-v1.json')
+    repo,s,calls,_=waiting_canary(tmp_path,'MANUAL-SCOUT-HENGELTJES-20260924','NEEDS_REVISION',condition,'resurrection_condition')
+    write_candidate_evidence(repo,'MANUAL-SCOUT-HENGELTJES-20260924','hourly_weather')
+    assert s.tick()['reason']=='QUEUE_EMPTY'
+    p=write_candidate_evidence(repo,'MANUAL-SCOUT-HENGELTJES-20260924','protocol_revision',protocol_ref='knowledge/candidates/protocols/protocol-v1.json',protocol_sha256='b'*64,prior_protocol_sha256='a'*64)
+    assert s.tick()['state']=='COMPLETE'
+    assert calls==['MANUAL-SCOUT-HENGELTJES-20260924']*2
+    assert len(list((s.root/'candidate_wakes').glob('*.json')))==1
+
+
+def test_evidence_before_cutoff_mutation_symlink_and_free_text_fail_closed(tmp_path):
+    import datetime as dt
+    repo,s,calls,clock=waiting_canary(tmp_path,'CANARY','WAITING_FOR_DATA',wake_condition('statewise_rule_portfolio'))
+    p=write_candidate_evidence(repo,'CANARY','statewise_rule_portfolio')
+    doc=json.loads(p.read_text());old=(dt.datetime.fromtimestamp(clock[0]-20,dt.timezone.utc)).isoformat();doc.update(evidence_timestamp=old,available_at=old,archived_at=dt.datetime.now(dt.timezone.utc).isoformat())
+    mp=repo/doc['source_manifest_ref'];manifest=json.loads(mp.read_text());old_dt=dt.datetime.fromisoformat(old);manifest.update(retrieved_at=(old_dt-dt.timedelta(seconds=10)).isoformat(),archived_at=(old_dt-dt.timedelta(seconds=5)).isoformat());mb=json.dumps(manifest,sort_keys=True).encode();mp.write_bytes(mb);doc['source_manifest_sha256']=m.digest(mb);p.write_text(json.dumps(doc))
+    assert s.tick()['reason']=='QUEUE_EMPTY'
+    doc.update(evidence_timestamp=dt.datetime.now(dt.timezone.utc).isoformat(),available_at=dt.datetime.now(dt.timezone.utc).isoformat(),archived_at=dt.datetime.now(dt.timezone.utc).isoformat());p.write_text(json.dumps(doc))
+    with s.locked():task=d.select_next(s,repo)
+    p.write_text(p.read_text()+' ')
+    with pytest.raises(ValueError,match='CHANGED'):d.validate_result(task,json.dumps({'candidate_id':'CANARY','queue_status':'WAITING_FOR_DATA','finding':'f','next_action':'n','scientific_status':'NO_PROVEN_EDGE'}))
+    p.unlink()
+    outside=repo/'outside.json';outside.write_text('{}');link=repo/'knowledge/experiment_results'/'link.json';link.parent.mkdir(parents=True,exist_ok=True);link.symlink_to(outside)
+    with s.locked(),pytest.raises(ValueError,match='SYMLINK'):d.select_next(s,repo)
+
+
+def test_wake_record_crash_recovery_and_new_hash_are_exactly_once(tmp_path,monkeypatch):
+    repo,s,calls,clock=waiting_canary(tmp_path,'CANARY','WAITING_FOR_RESULT',wake_condition('kwi_evaluator_result',minimum_scorable_pairs=1))
+    write_candidate_evidence(repo,'CANARY','kwi_evaluator_result',scorable_pairs=2)
+    original=m.validate_task;raised=[False]
+    def crash(task):
+        if task.get('candidate_wake') and not raised[0]:
+            raised[0]=True;raise KeyboardInterrupt()
+        return original(task)
+    monkeypatch.setattr(m,'validate_task',crash)
+    with pytest.raises(KeyboardInterrupt):s.tick()
+    assert len(list((s.root/'candidate_wakes').glob('*.json')))==1 and calls==['CANARY']
+    monkeypatch.setattr(m,'validate_task',original)
+    assert s.tick()['state']=='COMPLETE';assert calls==['CANARY','CANARY']
+    s.tick();assert calls==['CANARY','CANARY']
+    clock[0]+=10
+    write_candidate_evidence(repo,'CANARY','kwi_evaluator_result',scorable_pairs=3)
+    assert s.tick()['state']=='COMPLETE';assert calls==['CANARY','CANARY','CANARY']
+
+
+def test_waiting_candidate_protocol_hash_change_creates_new_review(tmp_path):
+    repo,s,calls,_=setup(tmp_path)
+    p=candidate(repo,'WAITING-PROTOCOL','P1','NEEDS_DIRECTOR',prospective_protocols=['knowledge/candidates/protocols/protocol-v1.json'])
+    protocol=repo/'knowledge/candidates/protocols/protocol-v1.json';protocol.parent.mkdir(parents=True,exist_ok=True);protocol.write_text(json.dumps({'protocol_id':'v1','status':'ACTIVE'}))
+    assert s.tick()['state']=='COMPLETE'
+    x=json.loads(p.read_text());x['queue_status']='WAITING_FOR_RESULT';p.write_text(json.dumps(x))
+    protocol.write_text(json.dumps({'protocol_id':'v2','status':'ACTIVE'}))
+    assert s.tick()['state']=='COMPLETE'
+    assert calls==['WAITING-PROTOCOL','WAITING-PROTOCOL']
+
+
+def test_overlay_mutation_during_wake_reasoning_fails_closed(tmp_path):
+    repo,s,calls,_=waiting_canary(tmp_path,'CANARY','WAITING_FOR_DATA',wake_condition('statewise_rule_portfolio'))
+    write_candidate_evidence(repo,'CANARY','statewise_rule_portfolio')
+    with s.locked():task=d.select_next(s,repo)
+    prior=pathlib.Path(task['candidate_runtime_root'])/task['wake_record']['previous_overlay']
+    prior.write_text(prior.read_text()+' ')
+    with pytest.raises(ValueError,match='OVERLAY_CHANGED'):
+        d.validate_result(task,json.dumps({'candidate_id':'CANARY','queue_status':'WAITING_FOR_DATA','finding':'f','next_action':'n','scientific_status':'NO_PROVEN_EDGE'}))
+
+
+def test_protocol_mutation_after_wake_selection_fails_closed(tmp_path):
+    repo,s,calls,_=setup(tmp_path)
+    p=candidate(repo,'CANARY','P1','NEEDS_DIRECTOR',prospective_protocols=['knowledge/candidates/protocols/p.json'],evidence_wake_condition=wake_condition('kwi_evaluator_result',minimum_scorable_pairs=1))
+    protocol=repo/'knowledge/candidates/protocols/p.json';protocol.parent.mkdir(parents=True,exist_ok=True);protocol.write_text(json.dumps({'protocol_id':'p-v1'}))
+    def worker(t,thread,folder,fd):
+        calls.append(t['candidate_id']);final={'candidate_id':'CANARY','queue_status':'WAITING_FOR_RESULT','finding':'waiting','next_action':'wacht op resultaat','scientific_status':'NO_PROVEN_EDGE'}
+        events=[{'type':'thread.started','thread_id':'t'},{'type':'item.completed','item':{'type':'agent_message','text':json.dumps(final)}},{'type':'turn.completed'}];m.atomic(folder/'events.jsonl',''.join(json.dumps(x)+'\n' for x in events));return 0
+    s.worker=worker;assert s.tick()['state']=='COMPLETE'
+    write_candidate_evidence(repo,'CANARY','kwi_evaluator_result',scorable_pairs=1)
+    with s.locked():task=d.select_next(s,repo)
+    protocol.write_text(json.dumps({'protocol_id':'p-v2'}))
+    with pytest.raises(ValueError,match='CANDIDATE_SOURCE_CHANGED'):
+        d.validate_result(task,json.dumps({'candidate_id':'CANARY','queue_status':'WAITING_FOR_DATA','finding':'f','next_action':'n','scientific_status':'NO_PROVEN_EDGE'}))
+
+
+def test_source_waiting_candidate_registers_only_explicit_typed_condition(tmp_path):
+    import datetime as dt
+    repo,s,calls,_=setup(tmp_path)
+    cutoff=(dt.datetime.now(dt.timezone.utc)-dt.timedelta(seconds=30)).isoformat()
+    condition=wake_condition('statewise_rule_portfolio',cutoff=cutoff,required_status='VALID')
+    p=candidate(repo,'SOURCE-WAITER','P1','WAITING_FOR_DATA',resume_condition=condition)
+    before=p.read_bytes();write_candidate_evidence(repo,'SOURCE-WAITER','statewise_rule_portfolio')
+    assert s.tick()['state']=='COMPLETE'
+    assert calls==['SOURCE-WAITER'] and p.read_bytes()==before
+    assert len(list((s.root/'candidate_wakes').glob('*.json')))==1
+
+
+def test_source_waiting_free_text_condition_never_registers_or_wakes(tmp_path):
+    repo,s,calls,_=setup(tmp_path)
+    candidate(repo,'SOURCE-WAITER','P1','WAITING_FOR_DATA',resume_condition='when useful new data appears')
+    write_candidate_evidence(repo,'SOURCE-WAITER','statewise_rule_portfolio')
+    assert s.tick()['reason']=='QUEUE_EMPTY'
+    assert calls==[] and not list((s.root/'candidate_states').glob('*.json'))
+
+
+def test_fixture_canary_emits_ordered_wake_to_result_events(tmp_path,capsys):
+    repo,s,calls,_=waiting_canary(tmp_path,'CANARY','WAITING_FOR_DATA',wake_condition('statewise_rule_portfolio'))
+    capsys.readouterr()
+    write_candidate_evidence(repo,'CANARY','statewise_rule_portfolio')
+    assert s.tick()['state']=='COMPLETE'
+    output=capsys.readouterr().out
+    events=[json.loads(line).get('event') for line in output.splitlines() if line.startswith('{')]
+    expected=['EVIDENCE_DISCOVERED','EVIDENCE_MATCHED','CANDIDATE_WAKE_RECORDED','NEXT_TASK_SELECTED','TASK_QUEUED','WORKER_START','RESULT_APPLIED_NEXT_ACTION_RECORDED']
+    positions=[events.index(name) for name in expected]
+    assert positions==sorted(positions) and calls==['CANARY','CANARY']
+
+
+def test_multiple_wakes_follow_existing_candidate_priority(tmp_path):
+    import datetime as dt,time
+    clock=[time.time()-60];repo=tmp_path/'repo';pkg=repo/'control/codex_supervisor';pkg.mkdir(parents=True)
+    for name in ('supervisor.py','candidate_dispatch.py','evidence_wake.py','shadow_protocol.py','candidate_validation.py'):(pkg/name).write_bytes((ROOT/'control/codex_supervisor'/name).read_bytes())
+    q=repo/'control/hourly';q.mkdir(parents=True);(q/'candidate_queue.py').write_bytes((ROOT/'control/hourly/candidate_queue.py').read_bytes())
+    import subprocess
+    subprocess.run(['git','init','-b','main'],cwd=repo,capture_output=True,check=True)
+    subprocess.run(['git','-c','user.name=Fixture','-c','user.email=fixture@localhost','add','--all'],cwd=repo,capture_output=True,check=True)
+    subprocess.run(['git','-c','user.name=Fixture','-c','user.email=fixture@localhost','commit','-qm','fixture'],cwd=repo,capture_output=True,check=True)
+    condition=wake_condition('statewise_rule_portfolio')
+    candidate(repo,'LOW','P3','NEEDS_DIRECTOR',evidence_wake_condition=condition)
+    candidate(repo,'HIGH','P1','NEEDS_DIRECTOR',evidence_wake_condition=condition)
+    calls=[]
+    def worker(t,thread,folder,fd):
+        calls.append(t['candidate_id']);final={'candidate_id':t['candidate_id'],'queue_status':'WAITING_FOR_DATA','finding':'wait','next_action':'wacht','scientific_status':'NO_PROVEN_EDGE'}
+        es=[{'type':'thread.started','thread_id':'t'},{'type':'item.completed','item':{'type':'agent_message','text':json.dumps(final)}},{'type':'turn.completed'}];m.atomic(folder/'events.jsonl',''.join(json.dumps(e)+'\n' for e in es));return 0
+    s=m.Supervisor(tmp_path/'runtime',worker,lambda:clock[0],candidate_source=lambda current:d.select_next(current,repo))
+    assert s.tick()['state']=='COMPLETE' and calls==['HIGH']
+    clock[0]+=1;assert s.tick()['state']=='COMPLETE' and calls==['HIGH','LOW']
+    write_candidate_evidence(repo,'HIGH','statewise_rule_portfolio');write_candidate_evidence(repo,'LOW','statewise_rule_portfolio')
+    clock[0]+=10;assert s.tick()['state']=='COMPLETE' and calls[-1]=='HIGH'
+
+
+def test_waiting_candidate_does_not_block_other_queue_work(tmp_path):
+    repo,s,calls,clock=waiting_canary(tmp_path,'WAITER','WAITING_FOR_DATA',wake_condition('statewise_rule_portfolio'))
+    candidate(repo,'OTHER','P1','NEEDS_DIRECTOR')
+    assert s.tick()['state']=='COMPLETE'
+    assert calls==['WAITER','OTHER']

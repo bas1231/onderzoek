@@ -1,0 +1,27 @@
+{
+  "schema": "AUTONOMOUS_BUILD_CHARTER_V1",
+  "build_id": "AUTONOMY-CANDIDATE-EVIDENCE-WAKE-E001",
+  "protocol_version": 1,
+  "objective": "Voeg een generieke fail-closed wake-laag toe die wachtende kandidaten uitsluitend na nieuwe, getypeerde en point-in-time geverifieerde evidence opnieuw aan Director-review aanbiedt.",
+  "source_commit": "a050c6f4b2642de05481e1ab45bb2baac2a77fb1",
+  "allowed_capabilities": ["read_repository", "write_repository", "run_tests", "compile"],
+  "allowed_paths": ["control/codex_supervisor", "tests/codex_supervisor", "knowledge/codex_runtime/CONFIG.json", "knowledge/codex_runtime/evidence"],
+  "planned_paths": ["control/codex_supervisor/evidence_wake.py", "control/codex_supervisor/candidate_dispatch.py", "control/codex_supervisor/supervisor.py", "tests/codex_supervisor/test_candidate_dispatch.py", "knowledge/codex_runtime/CONFIG.json", "knowledge/codex_runtime/evidence/BUILD-AUTONOMY-CANDIDATE-EVIDENCE-WAKE-E001.json", "knowledge/codex_runtime/evidence/CANDIDATE-EVIDENCE-WAKE-V1.md", "knowledge/codex_runtime/evidence/WAITING-CANDIDATE-EVIDENCE-WAKE-E001.md", "knowledge/codex_runtime/evidence/WAITING-CANDIDATE-EVIDENCE-WAKE-E001-tests.log", "knowledge/codex_runtime/evidence/BUILD-GOVERNANCE-WAKE-E001.json"],
+  "acceptance_criteria": [
+    "Typed structured conditions are required; model prose never triggers a wake or executes.",
+    "Evidence and immutable source manifest hashes, symlink/path allowlists, archive/retrieval chronology, backfill, and post-cutoff availability are checked fail-closed.",
+    "Duplicate evidence, reboot/crash after wake recording, and changed candidate/protocol/overlay/evidence sources do not create duplicate or stale reasoning.",
+    "KWI zero-scorable evidence, ASSET zero-full-fill evidence, unrelated PAYOFF weather evidence, and ordinary HENGELTJES hourly evidence do not wake.",
+    "Synthetic qualifying KWI/ASSET/PAYOFF and explicit protocol-revision fixtures produce one durable wake and ordered queue/review/result events.",
+    "Focused supervisor and hourly candidate-queue regression passes; owner candidate/protocol files remain unchanged.",
+    "Final state is marked REQUIRES_HIGH_INTELLIGENCE_REVIEW; no final Tier-A acceptance is claimed."
+  ],
+  "non_goals": ["No candidate-specific production condition authoring", "No research edge promotion", "No live/cost/wallet actions", "No remote Git mutation", "No broad historical audit rerun"],
+  "independent_verification": "Een onafhankelijke Tier-A-review door highest_available_model met de hoogste beschikbare reasoning-instelling is verplicht na implementatie; deze huidige run mag die gate niet zelf accepteren.",
+  "rollback_plan": "Lokale codewijzigingen kunnen als afzonderlijke commit worden teruggedraaid; kandidaatbronbestanden en preregistraties zijn niet gewijzigd.",
+  "cleanup_plan": "Alleen tijdelijke pytest-fixtures worden door pytest opgeruimd; blijvende tests en auditlogs blijven bewaard. Geen owner/runtime queuebestanden verwijderen.",
+  "max_attempts": 3,
+  "governance_change": false,
+  "safety": {"live_trading": false, "paid_actions": false, "wallet_actions": false},
+  "governance_note": "Charter vastgelegd nadat de eerste implementatie-edit al had plaatsgevonden; dit is een expliciete procesafwijking van de eis voorafgaand charter. Geen claim dat de charter voorafgaande autorisatie vormde."
+}
