@@ -16,6 +16,52 @@ def _git(root: Path, *args: str) -> subprocess.CompletedProcess[str]:
     )
 
 
+# Tracked paths which are expected to be mutated by autonomous research/runtime
+# processes between commits.  Dirty files outside these scopes remain a hard
+# execution blocker.
+_RUNTIME_DIRTY_PREFIXES = (
+    "hourly-reports/",
+    "knowledge/candidates/",
+    "knowledge/codex_audit/",
+    "knowledge/codex_runtime/",
+    "knowledge/recon/",
+    "knowledge/research_os/",
+    "knowledge/runs/",
+)
+
+_RUNTIME_DIRTY_EXACT = {
+    "knowledge/manual_scout_seeds/2026-09-24-hengeltjes-late-passive-liquidity.md",
+}
+
+
+def _runtime_dirty_allowed(path: str) -> bool:
+    path = path.strip()
+    return (
+        path in _RUNTIME_DIRTY_EXACT
+        or any(path.startswith(prefix) for prefix in _RUNTIME_DIRTY_PREFIXES)
+    )
+
+
+def _tracked_dirty_paths(root: Path) -> tuple[list[str], str | None]:
+    # Use diff rather than porcelain parsing so staged and unstaged tracked
+    # modifications are handled explicitly.  Untracked files are deliberately
+    # irrelevant to executor provenance.
+    unstaged = _git(root, "diff", "--name-only")
+    if unstaged.returncode != 0:
+        return [], "TRACKED_STATUS_FAILED"
+
+    staged = _git(root, "diff", "--cached", "--name-only")
+    if staged.returncode != 0:
+        return [], "TRACKED_STATUS_FAILED"
+
+    paths = sorted({
+        line.strip()
+        for line in (unstaged.stdout + "\n" + staged.stdout).splitlines()
+        if line.strip()
+    })
+    return paths, None
+
+
 def sync_main_fail_closed(root: Path) -> dict[str, Any]:
     """Safely synchronize an executor checkout with origin/main.
 
@@ -36,11 +82,18 @@ def sync_main_fail_closed(root: Path) -> dict[str, Any]:
     if branch_name != "main":
         return {"ok": False, "reason": "NOT_MAIN_BRANCH", "branch": branch_name}
 
-    dirty = _git(root, "status", "--porcelain", "--untracked-files=no")
-    if dirty.returncode != 0:
-        return {"ok": False, "reason": "TRACKED_STATUS_FAILED", "stderr": dirty.stderr[-4000:]}
-    if dirty.stdout.strip():
-        return {"ok": False, "reason": "TRACKED_WORKTREE_DIRTY", "detail": dirty.stdout[-4000:]}
+    dirty_paths, dirty_error = _tracked_dirty_paths(root)
+    if dirty_error:
+        return {"ok": False, "reason": dirty_error}
+
+    unsafe_dirty = [p for p in dirty_paths if not _runtime_dirty_allowed(p)]
+    if unsafe_dirty:
+        return {
+            "ok": False,
+            "reason": "TRACKED_WORKTREE_DIRTY",
+            "dirty_paths": dirty_paths,
+            "unsafe_dirty_paths": unsafe_dirty,
+        }
 
     fetch = _git(root, "fetch", "origin", "main")
     if fetch.returncode != 0:
@@ -63,6 +116,30 @@ def sync_main_fail_closed(root: Path) -> dict[str, Any]:
 
     local_is_ancestor = _git(root, "merge-base", "--is-ancestor", "HEAD", "origin/main")
     if local_is_ancestor.returncode == 0:
+        if dirty_paths:
+            remote_changed = _git(root, "diff", "--name-only", "HEAD..origin/main")
+            if remote_changed.returncode != 0:
+                return {
+                    "ok": False,
+                    "reason": "REMOTE_DIFF_READ_FAILED",
+                    "stderr": remote_changed.stderr[-4000:],
+                }
+            remote_paths = {
+                line.strip()
+                for line in remote_changed.stdout.splitlines()
+                if line.strip()
+            }
+            overlap = sorted(set(dirty_paths) & remote_paths)
+            if overlap:
+                return {
+                    "ok": False,
+                    "reason": "REMOTE_TOUCHES_DIRTY_RUNTIME_PATH",
+                    "dirty_paths": dirty_paths,
+                    "overlap": overlap,
+                    "head": local_sha,
+                    "origin_main": remote_sha,
+                }
+
         ff = _git(root, "merge", "--ff-only", "origin/main")
         if ff.returncode != 0:
             return {
