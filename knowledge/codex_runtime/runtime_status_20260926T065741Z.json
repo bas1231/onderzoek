@@ -1,0 +1,53 @@
+{
+  "timestamp": "2026-09-26T06:57:41.757850+00:00",
+  "checks": [
+    {
+      "command": [
+        "systemctl",
+        "--user",
+        "show",
+        "prediction-chat-command.service",
+        "prediction-chat-router.service",
+        "prediction-chat-wake.service",
+        "prediction-research-executor.service",
+        "prediction-research-lifecycle-supervisor.service",
+        "prediction-research-hourly-director.service",
+        "prediction-research-hourly-director.timer",
+        "prediction-codex-supervisor.service",
+        "prediction-codex-supervisor.timer",
+        "prediction-research-kalshi-weather-index-recorder.service",
+        "prediction-research-kalshi-weather-index-recorder.timer",
+        "prediction-research-twc-recorder.service",
+        "prediction-research-twc-recorder.timer",
+        "prediction-hourly-wiring-canary-20260926.timer",
+        "prediction-hourly-wiring-canary-20260926.service",
+        "--property=Id,LoadState,ActiveState,SubState,Result,ExecMainStatus,UnitFileState,LastTriggerUSec,NextElapseUSecRealtime",
+        "--no-pager"
+      ],
+      "exit_code": 0,
+      "stdout": "Result=success\nExecMainStatus=0\nId=prediction-chat-command.service\nLoadState=loaded\nActiveState=active\nSubState=running\nUnitFileState=enabled\n\nResult=success\nExecMainStatus=0\nId=prediction-chat-router.service\nLoadState=loaded\nActiveState=active\nSubState=running\nUnitFileState=enabled\n\nResult=success\nExecMainStatus=0\nId=prediction-chat-wake.service\nLoadState=loaded\nActiveState=active\nSubState=running\nUnitFileState=enabled\n\nResult=success\nExecMainStatus=0\nId=prediction-research-executor.service\nLoadState=loaded\nActiveState=active\nSubState=running\nUnitFileState=enabled\n\nResult=success\nExecMainStatus=0\nId=prediction-research-lifecycle-supervisor.service\nLoadState=loaded\nActiveState=active\nSubState=running\nUnitFileState=enabled\n\nResult=success\nExecMainStatus=0\nId=prediction-research-hourly-director.service\nLoadState=loaded\nActiveState=inactive\nSubState=dead\nUnitFileState=static\n\nNextElapseUSecRealtime=Sat 2026-09-26 09:00:00 CEST\nLastTriggerUSec=Sat 2026-09-26 08:00:17 CEST\nResult=success\nId=prediction-research-hourly-director.timer\nLoadState=loaded\nActiveState=active\nSubState=waiting\nUnitFileState=enabled\n\nResult=success\nExecMainStatus=0\nId=prediction-codex-supervisor.service\nLoadState=loaded\nActiveState=inactive\nSubState=dead\nUnitFileState=static\n\nNextElapseUSecRealtime=Sat 2026-09-26 09:00:23 CEST\nLastTriggerUSec=Sat 2026-09-26 08:55:47 CEST\nResult=success\nId=prediction-codex-supervisor.timer\nLoadState=loaded\nActiveState=active\nSubState=waiting\nUnitFileState=enabled\n\nResult=success\nExecMainStatus=0\nId=prediction-research-kalshi-weather-index-recorder.service\nLoadState=loaded\nActiveState=inactive\nSubState=dead\nUnitFileState=static\n\nNextElapseUSecRealtime=Sat 2026-09-26 08:58:15 CEST\nLastTriggerUSec=Sat 2026-09-26 08:57:17 CEST\nResult=success\nId=prediction-research-kalshi-weather-index-recorder.timer\nLoadState=loaded\nActiveState=active\nSubState=waiting\nUnitFileState=enabled\n\nResult=success\nExecMainStatus=0\nId=prediction-research-twc-recorder.service\nLoadState=loaded\nActiveState=inactive\nSubState=dead\nUnitFileState=static\n\nNextElapseUSecRealtime=Sat 2026-09-26 09:05:00 CEST\nLastTriggerUSec=Sat 2026-09-26 08:50:17 CEST\nResult=success\nId=prediction-research-twc-recorder.timer\nLoadState=loaded\nActiveState=active\nSubState=waiting\nUnitFileState=enabled\n\nNextElapseUSecRealtime=\nLastTriggerUSec=\nResult=success\nId=prediction-hourly-wiring-canary-20260926.timer\nLoadState=not-found\nActiveState=inactive\nSubState=dead\nUnitFileState=\n\nResult=success\nExecMainStatus=0\nId=prediction-hourly-wiring-canary-20260926.service\nLoadState=not-found\nActiveState=inactive\nSubState=dead\nUnitFileState=\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "loginctl",
+        "show-user",
+        "leonh",
+        "-p",
+        "Linger"
+      ],
+      "exit_code": 0,
+      "stdout": "Linger=yes\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "python3",
+        "/home/leonh/prediction_research_prod/knowledge/codex_audit/runtime_reconcile/local_hourly/probe_bridge.py"
+      ],
+      "exit_code": 0,
+      "stdout": "[\n  {\n    \"port\": 8765,\n    \"timestamp\": \"2026-09-26T06:57:41.812254+00:00\",\n    \"http_status\": 200,\n    \"health\": {\n      \"ok\": true,\n      \"service\": \"prediction-chat-wake\",\n      \"version\": 8\n    }\n  },\n  {\n    \"port\": 8766,\n    \"timestamp\": \"2026-09-26T06:57:41.814203+00:00\",\n    \"http_status\": 200,\n    \"health\": {\n      \"ok\": true,\n      \"service\": \"prediction-command-receiver\",\n      \"allowed_actions\": [\n        \"SIX_AI_HEALTH\",\n        \"BRIDGE_PING\"\n      ]\n    }\n  },\n  {\n    \"port\": 8767,\n    \"timestamp\": \"2026-09-26T06:57:41.818258+00:00\",\n    \"http_status\": 200,\n    \"health\": {\n      \"ok\": true,\n      \"service\": \"prediction-chat-command-router\",\n      \"version\": 2,\n      \"upstream_port\": 8766,\n      \"consumer_routing\": true\n    }\n  }\n]\n",
+      "stderr": ""
+    }
+  ]
+}

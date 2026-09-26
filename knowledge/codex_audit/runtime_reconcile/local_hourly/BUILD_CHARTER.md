@@ -1,0 +1,9 @@
+# BUILD-HOURLY-LOCAL-20260925 — bevroren charter
+
+Doel: echte hourly productielogica uitvoeren met expliciete qualification_local capability, zonder remote publicatie of ownerwrites. Broncommit3c57e7b; bestaande17 fixes niet opnieuw auditen. Normale productie blijft bestaande index/syncguards gebruiken. Scope: runtime_sync, git_checkpoint, git_ai_exchange defense, nieuwe local_runtime, hourly_wake/local_ai_exchange, geïsoleerde launcher en gerichte tests. Geen tradingresearch of strategieparameters.
+
+Acceptance: no-network namespace + lege geïsoleerde filesystemroot, uitsluitend kopieën als writable input; echte productie-entrypoints; echte lokale Gitcheckpoint; expliciete bronprovenance; geen remote fallback; bestaande normale guards onverzwakt; failclosed bij onbekende mode/root/provenance; geen E2E-PASS zonder echte agentrespons/receipts/downstream. Brondatafailures mogen niet als succes worden gekwalificeerd. Ownerindex/hash voor/na gelijk.
+
+Veiligheid: geen kosten, orders, wallet, externe Gitmutatie, secretimport of rawoverschrijving. Geen sudo. Namespaceproblemen stoppen uitvoering; niet onbeveiligd opnieuw proberen. Tests bevatten mocks uitsluitend voor negatieve unitpaden. Independent review: narrow transportreview door aparte agent; geen onafhankelijke totale verifier geclaimd. Agentdelta in gedeelde hourly_wake is vastgesteld; overige voorstellen komen uitsluitend uit /tmp en worden serieel geïntegreerd.
+
+Lifecycle: tijdelijke namespace eindigt met proces; geïsoleerde output blijft auditbewijs. Geen permanente service aanmaken vóór echte kwalificatie. Cleanup alleen tijdelijke eigen mount/processen, niet evidence. Maximaal3 infrastructuurpogingen per concrete blocker; daarna oorzaakanalyse. Herstel: alleen eigen bronwijzigingen afzonderlijk reviewen, geen ownerrollback.

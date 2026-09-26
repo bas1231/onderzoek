@@ -1,0 +1,33 @@
+F                                                                        [100%]
+=================================== FAILURES ===================================
+____________________ test_busy_worker_keeps_durable_outbox _____________________
+
+tmp_path = PosixPath('/tmp/pytest-of-leonh/pytest-18/test_busy_worker_keeps_durable0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x755e3fc6dd90>
+
+    def test_busy_worker_keeps_durable_outbox(tmp_path,monkeypatch):
+        fixture(tmp_path);monkeypatch.setattr(op,'ROOT',tmp_path.parent)
+        class Busy:
+            def __init__(self,*args):pass
+            def enqueue(self,t):raise op.Blocked('WORKER_ALREADY_RUNNING')
+        monkeypatch.setattr(op,'Supervisor',Busy)
+>       op.enqueue_run(tmp_path)
+
+tests/codex_supervisor/test_operations.py:69: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+control/codex_supervisor/operations.py:39: in enqueue_run
+    task=task_for(run);Supervisor(STATE).enqueue(task)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <test_operations.test_busy_worker_keeps_durable_outbox.<locals>.Busy object at 0x755e3fc6dd30>
+t = {'task_id': 'AUTO-HOURLY-test_busy_worker_keeps_durable0', 'task_class': 'research_review', 'priority': 90, 'expected_value': 5, ...}
+
+>   def enqueue(self,t):raise op.Blocked('WORKER_ALREADY_RUNNING')
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   supervisor.Blocked: WORKER_ALREADY_RUNNING
+
+tests/codex_supervisor/test_operations.py:67: Blocked
+=========================== short test summary info ============================
+FAILED tests/codex_supervisor/test_operations.py::test_busy_worker_keeps_durable_outbox
+1 failed in 0.04s

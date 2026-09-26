@@ -1,0 +1,128 @@
+[
+  {
+    "url": "https://aviationweather.gov/",
+    "request_started_at": "2026-09-25T15:48:06.550824+00:00",
+    "ok": true,
+    "status": 200,
+    "sha256": "dd6e0cc4b237e05406554eb33d2b7963367175f44a5a0ae0feb4e59f707b0edf",
+    "received_at": "2026-09-25T15:48:06.922807+00:00"
+  },
+  {
+    "url": "https://docs.kalshi.com/",
+    "request_started_at": "2026-09-25T15:48:06.551353+00:00",
+    "ok": true,
+    "status": 200,
+    "sha256": "fb96da0fb073a20afb53aec3d3d82469edb66772db76556d2852dba7b6051afb",
+    "received_at": "2026-09-25T15:48:07.218431+00:00"
+  },
+  {
+    "url": "https://docs.polymarket.com/",
+    "request_started_at": "2026-09-25T15:48:06.552360+00:00",
+    "ok": true,
+    "status": 200,
+    "sha256": "5a37d7f0e992ae6be636f46241a0be01dd0fe1b4165251d700c2ce365659a930",
+    "received_at": "2026-09-25T15:48:06.928449+00:00"
+  },
+  {
+    "url": "https://www.cftc.gov/",
+    "request_started_at": "2026-09-25T15:48:06.552645+00:00",
+    "ok": true,
+    "status": 200,
+    "sha256": "0342d58b1d0a0492c6ce7549b7378af33c5a7524c678c440cc147cd6810b36bb",
+    "received_at": "2026-09-25T15:48:06.811766+00:00"
+  },
+  {
+    "url": "https://www.weather.gov/",
+    "request_started_at": "2026-09-25T15:48:06.904008+00:00",
+    "ok": true,
+    "status": 200,
+    "sha256": "7151e7f469fb723cdef1bcc27a18c38ce1cb93209d0c613e325e1035d31f09e6",
+    "received_at": "2026-09-25T15:48:07.198421+00:00"
+  },
+  {
+    "url": "https://www.ecmwf.int/en/forecasts/datasets/open-data",
+    "request_started_at": "2026-09-25T15:48:07.004686+00:00",
+    "ok": true,
+    "status": 200,
+    "sha256": "678de021af4a13c8a4da362110dbdd9dbcacf11148154ba22ce415313cb21c8b",
+    "received_at": "2026-09-25T15:48:07.386397+00:00"
+  },
+  {
+    "url": "https://nomads.ncep.noaa.gov/",
+    "request_started_at": "2026-09-25T15:48:07.004861+00:00",
+    "ok": true,
+    "status": 200,
+    "sha256": "94c340a4b9af2bf8980e6682d5df93cb1c4c1774d8beb00bd21e5802bc284d7a",
+    "received_at": "2026-09-25T15:48:07.680017+00:00"
+  },
+  {
+    "url": "https://github.com/",
+    "request_started_at": "2026-09-25T15:48:07.306176+00:00",
+    "ok": true,
+    "status": 200,
+    "sha256": "90ddd4f9b2918bbe359ee83207c4235988e331b99a183e779cdca2edc3f56ada",
+    "received_at": "2026-09-25T15:48:07.654907+00:00"
+  },
+  {
+    "url": "https://arxiv.org/",
+    "request_started_at": "2026-09-25T15:48:07.305980+00:00",
+    "ok": true,
+    "status": 200,
+    "sha256": "d7ed6c1e9723edcceae8a3d3f258a7ca991bd64f841fad43632caa13a7fad746",
+    "received_at": "2026-09-25T15:48:07.579035+00:00"
+  },
+  {
+    "url": "https://www.reddit.com/",
+    "request_started_at": "2026-09-25T15:48:07.456284+00:00",
+    "ok": true,
+    "status": 200,
+    "sha256": "54dde3e2c768b7bcb52079b1fa77e37b25916c7d58e6bf53030f775b98827f58",
+    "received_at": "2026-09-25T15:48:07.612987+00:00"
+  },
+  {
+    "url": "https://help.kalshi.com/en/articles/13823837-weather-markets",
+    "request_started_at": "2026-09-25T15:48:07.657752+00:00",
+    "ok": true,
+    "status": 200,
+    "sha256": "3d57476ddacee672df4326cb12d1b1011bedab3b133db2c90b4a14c71092e547",
+    "received_at": "2026-09-25T15:48:08.549869+00:00"
+  },
+  {
+    "url": "https://www.youtube.com/",
+    "request_started_at": "2026-09-25T15:48:07.657957+00:00",
+    "ok": true,
+    "status": 200,
+    "sha256": "8e1af51cd7754c75f47af75e284f384b919eb7494f0ca330f0aa631c135b5b61",
+    "received_at": "2026-09-25T15:48:08.120062+00:00"
+  },
+  {
+    "url": "https://weather.com/kalshi",
+    "request_started_at": "2026-09-25T15:48:07.707841+00:00",
+    "ok": true,
+    "status": 200,
+    "sha256": "c8185e1cb9fde81215dd1c614f7f75201e92a19f90697f267576950c6bce5d1b",
+    "received_at": "2026-09-25T15:48:07.960103+00:00"
+  },
+  {
+    "url": "https://external-api.kalshi.com/trade-api/v2/events?limit=200&status=open&with_nested_markets=true",
+    "request_started_at": "2026-09-25T15:48:08.763761+00:00",
+    "ok": false,
+    "error_type": "ValueError"
+  },
+  {
+    "url": "https://data-api.polymarket.com/v2/trades?event_id=106981&limit=100&taker_only=true",
+    "request_started_at": "2026-09-25T15:48:13.584820+00:00",
+    "ok": true,
+    "status": 200,
+    "sha256": "cf91fb029acefc1eef79c490c8939366cda33f671873e7b5d0855d0a8abd3ee0",
+    "received_at": "2026-09-25T15:48:13.881522+00:00"
+  },
+  {
+    "url": "https://data-api.polymarket.com/v2/trades?event_id=106981&limit=100&taker_only=true&cursor=eyJkYXRhIjp7InR5cGUiOiJ0cmFkZXMiLCJwYXJhbXMiOnsibCI6MTAwLCJ0cyI6MTc4OTkwMzI3Mywic3EiOiI5NDEzMjEzNDAwMDYwMDk5NjAiLCJkIjoxMDB9fSwic2lnIjoiYjE0NjAyZWEyNzhlN2ZkNzI3MGY0MGQ0NDAzMGNhZDIifQ",
+    "request_started_at": "2026-09-25T15:48:13.936446+00:00",
+    "ok": true,
+    "status": 200,
+    "sha256": "aeea1d13b4ce46cd8a15685b44f610bca2cb9c1a11401a1cd043d4e16ecd3fbe",
+    "received_at": "2026-09-25T15:48:14.216964+00:00"
+  }
+]

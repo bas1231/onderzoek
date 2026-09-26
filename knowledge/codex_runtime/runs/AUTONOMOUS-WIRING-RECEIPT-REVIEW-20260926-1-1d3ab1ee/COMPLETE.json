@@ -1,0 +1,8 @@
+{
+  "task_id": "AUTONOMOUS-WIRING-RECEIPT-REVIEW-20260926",
+  "input_sha256": "89b96531bb07b43d911536e18dc67f4c25ba0bd5ec63eadbe0bdbd805d5f43ba",
+  "attempt": 1,
+  "thread_id": "01a0d937-dbf1-70e2-8ef2-f8a692a78fbe",
+  "final": "{\n  \"status\": \"APPLIED_LOCAL_PERMANENTE_HOURLY_WIRING_ONBEWEZEN\",\n  \"blockers\": [\n    \"De receipt bevestigt één toegepaste response en een lokaal checkpoint; bewijs van een actief, persistent hourly-schema ontbreekt.\",\n    \"Geen bewijs van opeenvolgende autonoom getriggerde cycli met nieuwe run_ids en volledige dispatch-response-ingest-receiptketen.\",\n    \"Herstel na onderbreking en bescherming tegen dubbele toepassing zijn niet aangetoond; already_applied=false toont alleen deze eerste toepassing.\"\n  ],\n  \"next_action\": \"Laat bestaande schedulerconfiguratie en uitvoeringsreceipts aanleveren die deze technische kwalificaties aantonen. Tot die beoordeling blijft uitsluitend de geïsoleerde lokale toepassing bevestigd en blijft de economische conclusie NO_PROVEN_EDGE.\"\n}",
+  "timestamp": 1790404533.3653743
+}

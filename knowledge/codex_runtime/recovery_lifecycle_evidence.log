@@ -1,0 +1,12 @@
+{"event": "SUPERVISOR_STATE", "state": "IDLE", "task_id": "TASK-A", "reason": "QUEUED", "attempt": 0, "checkpoint": "", "next_action": "Hervat dezelfde taak na provenancecontrole", "timestamp": 1000.0, "retry_at": 0.0}
+{"event": "SUPERVISOR_STATE", "state": "RUNNING", "task_id": "TASK-A", "reason": "WORKER_START", "attempt": 1, "checkpoint": "runs/TASK-A-1-de84d93d", "next_action": "Hervat dezelfde taak na provenancecontrole", "timestamp": 1000.0, "retry_at": 0.0}
+{"event": "SUPERVISOR_STATE", "state": "PAUSED_USAGE_LIMIT", "task_id": "TASK-A", "reason": "USAGE_LIMIT", "attempt": 1, "checkpoint": "runs/TASK-A-1-de84d93d", "next_action": "Hervat dezelfde taak na provenancecontrole", "timestamp": 1000.0, "retry_at": 19000.0}
+{"event": "SUPERVISOR_STATE", "state": "IDLE", "task_id": "TASK-B", "reason": "QUEUED", "attempt": 0, "checkpoint": "", "next_action": "Hervat dezelfde taak na provenancecontrole", "timestamp": 1000.0, "retry_at": 0.0}
+{"event": "SUPERVISOR_STATE", "state": "RUNNING", "task_id": "TASK-A", "reason": "WORKER_START", "attempt": 2, "checkpoint": "runs/TASK-A-2-c7bac5a2", "next_action": "Hervat dezelfde taak na provenancecontrole", "timestamp": 19001.0, "retry_at": 0.0}
+{"event": "SUPERVISOR_STATE", "state": "COMPLETE", "task_id": "TASK-A", "reason": "COMPLETE", "attempt": 2, "checkpoint": "runs/TASK-A-2-c7bac5a2", "next_action": "Selecteer hoogste prioriteit", "timestamp": 19001.0, "retry_at": 0.0}
+{"event": "SUPERVISOR_STATE", "state": "COMPLETE", "task_id": "TASK-A", "reason": "COMPLETE", "attempt": 2, "checkpoint": "runs/TASK-A-2-c7bac5a2", "next_action": "Selecteer hoogste prioriteit", "timestamp": 19001.0, "retry_at": 0.0}
+.{"event": "SUPERVISOR_STATE", "state": "IDLE", "task_id": "TASK-A", "reason": "QUEUED", "attempt": 0, "checkpoint": "", "next_action": "Hervat dezelfde taak na provenancecontrole", "timestamp": 1790404853.041489, "retry_at": 0.0}
+{"event": "SUPERVISOR_STATE", "state": "RUNNING", "task_id": "TASK-A", "reason": "WORKER_START", "attempt": 1, "checkpoint": "runs/TASK-A-1-e3dc74e3", "next_action": "Hervat dezelfde taak na provenancecontrole", "timestamp": 1790404853.0553434, "retry_at": 0.0}
+{"event": "SUPERVISOR_STATE", "state": "COMPLETE", "task_id": "TASK-A", "reason": "COMPLETE", "attempt": 1, "checkpoint": "runs/TASK-A-1-e3dc74e3", "next_action": "Selecteer hoogste prioriteit", "timestamp": 1790404853.0752046, "retry_at": 0.0}
+..
+3 passed in 0.22s

@@ -1,0 +1,23 @@
+{
+  "started_at": "2026-09-25T15:48:06.267682+00:00",
+  "stages": [
+    {
+      "entrypoint": "runtime_sync.py",
+      "exit_code": 0
+    },
+    {
+      "entrypoint": "edge_hunter_cycle.py",
+      "exit_code": 0
+    }
+  ],
+  "isolation_checks": {
+    "owner_home_absent": true,
+    "root_readonly": true,
+    "external_network_blocked": true,
+    "no_capabilities": true,
+    "no_remote": true
+  },
+  "wrapper_completed": true,
+  "model_roundtrip": "UNPROVEN",
+  "finished_at": "2026-09-25T15:48:15.181316+00:00"
+}

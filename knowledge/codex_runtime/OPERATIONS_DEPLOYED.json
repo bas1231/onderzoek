@@ -1,0 +1,7 @@
+{
+  "dropins": {
+    "prediction-research-hourly-director.service.d/90-isolated-local.conf": "[Service]\nExecStartPre=\nExecStart=\nExecStartPost=\nExecStart=/usr/bin/python3 %h/prediction_research_prod/control/codex_supervisor/operations.py collect\nTimeoutStartSec=5min\nKillMode=control-group\n",
+    "prediction-codex-supervisor.service.d/90-local-delivery.conf": "[Service]\nExecStartPost=/usr/bin/python3 %h/prediction_research_prod/control/codex_supervisor/operations.py deliver\n"
+  },
+  "status": "INSTALLED_NOT_YET_RUNTIME_QUALIFIED"
+}

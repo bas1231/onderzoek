@@ -1,0 +1,46 @@
+Sep 26 08:00:17 Strix systemd[300]: Starting prediction-research-hourly-director.service - Prediction Research hourly director wake...
+Sep 26 08:00:17 Strix python[113241]: {
+Sep 26 08:00:17 Strix python[113241]:   "error": "git index is not empty: control/tampermonkey_multichat/bridge_server_v2.py, control/tampermonkey_multichat/deploy_consumer_routing_e010.py, control/tampermonkey_multichat/install_hardened_bridge.py, knowledge/candidates/MANUAL-SCOUT-HENGELTJES-20260924.json, knowledge/manual_scout_seeds/2026-09-24-hengeltjes-late-passive-liquidity.md",
+Sep 26 08:00:17 Strix python[113241]:   "error_type": "RuntimeSyncError",
+Sep 26 08:00:17 Strix python[113241]:   "live_trading": false,
+Sep 26 08:00:17 Strix python[113241]:   "openai_api": false,
+Sep 26 08:00:17 Strix python[113241]:   "paid_actions": false,
+Sep 26 08:00:17 Strix python[113241]:   "schema": "PVA_PROD_RUNTIME_SYNC_V1",
+Sep 26 08:00:17 Strix python[113241]:   "status": "BLOCKED",
+Sep 26 08:00:17 Strix python[113241]:   "timestamp_utc": "2026-09-26T06:00:17.582048+00:00",
+Sep 26 08:00:17 Strix python[113241]:   "wallet_actions": false
+Sep 26 08:00:17 Strix python[113241]: }
+Sep 26 08:00:17 Strix systemd[300]: prediction-research-hourly-director.service: Control process exited, code=exited, status=2/INVALIDARGUMENT
+Sep 26 08:00:17 Strix systemd[300]: prediction-research-hourly-director.service: Failed with result 'exit-code'.
+Sep 26 08:00:17 Strix systemd[300]: Failed to start prediction-research-hourly-director.service - Prediction Research hourly director wake.
+Sep 26 08:38:27 Strix systemd[300]: Starting prediction-research-hourly-director.service - Prediction Research hourly director wake...
+Sep 26 08:38:27 Strix python3[117329]: {"event": "CADENCE", "timestamp": "2026-09-26T06:38:27.776371+00:00", "allowed": true, "mode": "WORK", "reason": "WORK_BLOCK_STARTED", "state_path": "/home/leonh/prediction_research_prod/knowledge/codex_runtime/hourly_cadence.json", "schema_version": 1, "work_started_at": "2026-09-26T06:38:27.770388Z", "work_until": "2026-09-26T10:38:27.770388Z", "cooldown_until": "2026-09-26T11:38:27.770388Z", "last_transition_at": "2026-09-26T06:38:27.770388Z", "last_reason": "hourly_research_task"}
+Sep 26 08:38:27 Strix python3[117330]: Traceback (most recent call last):
+Sep 26 08:38:27 Strix python3[117330]:   File "/home/leonh/prediction_research_prod/knowledge/codex_audit/runtime_reconcile/local_hourly/run_isolated.py", line 102, in <module>
+Sep 26 08:38:27 Strix python3[117330]:     if __name__=='__main__':raise SystemExit(inner(sys.argv[2],sys.argv[1]=='--inner-response') if len(sys.argv)>1 and sys.argv[1] in ('--inner','--inner-response') else main())
+Sep 26 08:38:27 Strix python3[117330]:                                                                                                                                                                           ^^^^^^
+Sep 26 08:38:27 Strix python3[117330]:   File "/home/leonh/prediction_research_prod/knowledge/codex_audit/runtime_reconcile/local_hourly/run_isolated.py", line 49, in main
+Sep 26 08:38:27 Strix python3[117330]:     if sha(ROOT/name)!=digest:raise RuntimeError("UNTESTED_SOURCE_CHANGE: "+name)
+Sep 26 08:38:27 Strix python3[117330]:                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Sep 26 08:38:27 Strix python3[117330]: RuntimeError: UNTESTED_SOURCE_CHANGE: control/codex_supervisor/supervisor.py
+Sep 26 08:38:27 Strix python3[117329]: Traceback (most recent call last):
+Sep 26 08:38:27 Strix python3[117329]:   File "/home/leonh/prediction_research_prod/control/codex_supervisor/operations.py", line 100, in <module>
+Sep 26 08:38:27 Strix python3[117329]:     try:main()
+Sep 26 08:38:27 Strix python3[117329]:         ^^^^^^
+Sep 26 08:38:27 Strix python3[117329]:   File "/home/leonh/prediction_research_prod/control/codex_supervisor/operations.py", line 96, in main
+Sep 26 08:38:27 Strix python3[117329]:     if sys.argv[1:] == ['collect']:collect()
+Sep 26 08:38:27 Strix python3[117329]:                                    ^^^^^^^^^
+Sep 26 08:38:27 Strix python3[117329]:   File "/home/leonh/prediction_research_prod/control/codex_supervisor/operations.py", line 68, in collect
+Sep 26 08:38:27 Strix python3[117329]:     if result.returncode or len(after)!=1:raise Blocked('HOURLY_COLLECT_FAILED')
+Sep 26 08:38:27 Strix python3[117329]:                                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Sep 26 08:38:27 Strix python3[117329]: supervisor.Blocked: HOURLY_COLLECT_FAILED
+Sep 26 08:38:28 Strix systemd[300]: prediction-research-hourly-director.service: Main process exited, code=exited, status=1/FAILURE
+Sep 26 08:38:28 Strix systemd[300]: prediction-research-hourly-director.service: Failed with result 'exit-code'.
+Sep 26 08:38:28 Strix systemd[300]: Failed to start prediction-research-hourly-director.service - Prediction Research hourly director wake.
+Sep 26 08:38:55 Strix systemd[300]: Starting prediction-research-hourly-director.service - Prediction Research hourly director wake...
+Sep 26 08:38:55 Strix python3[117408]: {"event": "CADENCE", "timestamp": "2026-09-26T06:38:55.952202+00:00", "allowed": true, "reason": "WITHIN_WORK_BLOCK", "state_path": "/home/leonh/prediction_research_prod/knowledge/codex_runtime/hourly_cadence.json", "cooldown_until": "2026-09-26T11:38:27.770388Z", "last_reason": "hourly_research_task", "last_transition_at": "2026-09-26T06:38:27.770388Z", "mode": "WORK", "schema_version": 1, "work_started_at": "2026-09-26T06:38:27.770388Z", "work_until": "2026-09-26T10:38:27.770388Z"}
+Sep 26 08:39:04 Strix python3[117409]: /home/leonh/prediction_research_prod/knowledge/codex_audit/runtime_reconcile/local_hourly/runs/20260926T063856Z-e43bdc98
+Sep 26 08:39:04 Strix python3[117409]: {"started_at": "2026-09-26T06:38:56.007614+00:00", "exit_code": 0, "owner_preserved": true, "command": ["/usr/bin/unshare", "--user", "--map-root-user", "--mount", "--net", "--pid", "--fork", "--kill-child", "/usr/bin/python3", "/home/leonh/prediction_research_prod/knowledge/codex_audit/runtime_reconcile/local_hourly/run_isolated.py", "--inner", "/home/leonh/prediction_research_prod/knowledge/codex_audit/runtime_reconcile/local_hourly/runs/20260926T063856Z-e43bdc98"], "qualification": "AUDIT_INCOMPLETE", "scientific_status": "NO_PROVEN_EDGE", "evidence_scope": "Echte lokale pipeline in kernelisolatie; geen automatische globale E2E-PASS", "chain": {"started_at": "2026-09-26T06:38:59.065799+00:00", "stages": [{"entrypoint": "runtime_sync.py", "exit_code": 0}, {"entrypoint": "edge_hunter_cycle.py", "exit_code": 0}], "isolation_checks": {"owner_home_absent": true, "root_readonly": true, "external_network_blocked": true, "no_capabilities": true, "no_remote": true}, "wrapper_completed": true, "model_roundtrip": "UNPROVEN", "finished_at": "2026-09-26T06:39:04.665383+00:00"}}
+Sep 26 08:39:04 Strix python3[117408]: {"event": "TASK_QUEUED", "timestamp": "2026-09-26T06:39:04.772923+00:00", "task_id": "AUTO-HOURLY-20260926T063856Z-e43bdc98"}
+Sep 26 08:39:04 Strix systemd[300]: Finished prediction-research-hourly-director.service - Prediction Research hourly director wake.
+Sep 26 08:39:04 Strix systemd[300]: prediction-research-hourly-director.service: Consumed 4.706s CPU time.

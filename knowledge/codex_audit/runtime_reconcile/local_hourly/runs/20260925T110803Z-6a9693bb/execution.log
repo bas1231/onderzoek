@@ -1,0 +1,7 @@
+Traceback (most recent call last):
+  File "/repo/qualification_entry.py", line 10, in <module>
+    s=socket.socket();s.settimeout(1)
+      ^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/socket.py", line 233, in __init__
+    _socket.socket.__init__(self, family, type, proto, fileno)
+PermissionError: [Errno 1] Operation not permitted

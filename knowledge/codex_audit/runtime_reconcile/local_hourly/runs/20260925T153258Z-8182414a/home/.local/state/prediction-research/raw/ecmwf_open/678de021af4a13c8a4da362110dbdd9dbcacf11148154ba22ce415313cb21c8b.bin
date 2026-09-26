@@ -1,0 +1,3227 @@
+
+<!DOCTYPE html>
+<html lang="en" dir="ltr" prefix="dcat: http://www.w3.org/ns/dcat#">
+  <head>
+    <!-- Google Tag Manager -->
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-P5T597');</script>
+    <!-- End Google Tag Manager -->
+
+    <meta charset="utf-8" />
+<meta name="description" content="A subset of ECMWF real-time forecast data from the IFS and AIFS models is made available to the public free of charge. Their use is governed by the Creative Commons CC-BY-4.0 licence and the ECMWF Terms of Use. This means that the data may be redistributed and used commercially, subject to appropriate attribution." />
+<link rel="canonical" href="https://www.ecmwf.int/en/forecasts/datasets/open-data" />
+<link rel="shortlink" href="https://www.ecmwf.int/node/28188" />
+<meta name="generator" content="Drupal 9 (http://drupal.org)" />
+<meta property="og:site_name" content="ECMWF" />
+<meta property="og:type" content="Dataset" />
+<meta property="og:url" content="https://www.ecmwf.int/en/forecasts/datasets/open-data" />
+<meta property="og:title" content="Open data" />
+<meta property="og:description" content="A subset of ECMWF real-time forecast data from the IFS and AIFS models is made available to the public free of charge. Their use is governed by the Creative Commons CC-BY-4.0 licence and the ECMWF Terms of Use. This means that the data may be redistributed and used commercially, subject to appropriate attribution." />
+<meta property="og:updated_time" content="2026-08-11T14:56:06+00:00" />
+<meta name="dcterms.title" content="Open data" />
+<meta name="dcterms.description" content="A subset of ECMWF real-time forecast data from the IFS and AIFS models is made available to the public free of charge. Their use is governed by the Creative Commons CC-BY-4.0 licence and the ECMWF Terms of Use. This means that the data may be redistributed and used commercially, subject to appropriate attribution." />
+<meta name="dcterms.date" content="2021-12-14T11:41+00:00" />
+<meta name="dcterms.type" content="Dataset" />
+<meta name="dcterms.format" content="application/x-grib,application/x-netcdf" />
+<meta name="dcterms.identifier" content="https://www.ecmwf.int/en/forecasts/datasets/open-data" />
+<meta name="dcterms.rights" content="Public" />
+<meta name="dcterms.accessRights" content="info:eu-repo/semantics/openAccess" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Open data" />
+<meta name="twitter:description" content="A subset of ECMWF real-time forecast data from the IFS and AIFS models is made available to the public free of charge. Their use is governed by the Creative Commons CC-BY-4.0 licence and the ECMWF Terms of Use. This means that the data may be redistributed and used commercially, subject to appropriate attribution." />
+<meta name="twitter:site" content="@ecmwf" />
+<meta name="twitter:creator" content="@ecmwf" />
+<meta name="Generator" content="Drupal 10 (https://www.drupal.org)" />
+<meta name="MobileOptimized" content="width" />
+<meta name="HandheldFriendly" content="true" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="dc.identifier" content="https://doi.org/10.21957/open-data" />
+<meta name="dc.format" content="application/x-grib,application/x-netcdf" />
+<meta name="dcat:registry" content="https://apps.ecmwf.int/datasets/" />
+<script type="application/ld+json">{
+    "@context": "https://schema.org",
+    "@graph": [
+        {
+            "@id": "httpsdata.ecmwf.intforecasts",
+            "@type": "Dataset",
+            "distribution": [
+                {
+                    "@type": "DataDownload",
+                    "contentSize": "1 datasets",
+                    "contentUrl": "https://apps.ecmwf.int/datasets/licences/general/",
+                    "encodingFormat": "application/x-grib"
+                },
+                {
+                    "@type": "DataDownload",
+                    "contentSize": "1 datasets",
+                    "contentUrl": "https://data.ecmwf.int/forecasts/",
+                    "encodingFormat": "application/x-netcdf"
+                }
+            ],
+            "keywords": ";Dataset; Public data",
+            "name": "Open data",
+            "creator": {
+                "@type": "Organization",
+                "@id": "ECMWF",
+                "name": "European Centre for Medium-Range Weather Forecasts",
+                "url": "https://www.ecmwf.int",
+                "sameAs": "https://ror.org/014w0fd65",
+                "contactPoint": {
+                    "@type": "ContactPoint",
+                    "contactType": "Service Desk",
+                    "telephone": "+44 118 949 9000",
+                    "url": "https://confluence.ecmwf.int/category/cd"
+                }
+            },
+            "includedInDataCatalog": [
+                {
+                    "@type": "DataCatalog",
+                    "name": "ECMWF Catalogue of Archive Products",
+                    "url": "https://apps.ecmwf.int/datasets/"
+                },
+                {
+                    "@type": "DataCatalog",
+                    "name": "ECMWF FTP Server",
+                    "url": "ftp://data-portal.ecmwf.int/"
+                }
+            ],
+            "url": "https://www.ecmwf.int/en/forecasts/datasets/open-data",
+            "description": [
+                "A subset of ECMWF real-time forecast data from the IFS and AIFS models is made available to the public free of charge. Their use is governed by the Creative Commons CC-BY-4.0 licence and the ECMWF Terms of Use. This means that the data may be redistributed and used commercially",
+                "subject to appropriate attribution."
+            ],
+            "identifier": "httpsdata.ecmwf.intforecasts",
+            "license": "http://apps.ecmwf.int/datasets/licences/general"
+        },
+        {
+            "@id": "https://www.ecmwf.int/en/forecasts/datasets/open-data",
+            "description": "A subset of ECMWF real-time forecast data from the IFS and AIFS models is made available to the public free of charge. Their use is governed by the Creative Commons CC-BY-4.0 licence and the ECMWF Terms of Use. This means that the data may be redistributed and used commercially, subject to appropriate attribution.",
+            "author": {
+                "@type": "Organization",
+                "@id": "ECMWF",
+                "name": "European Centre for Medium-Range Weather Forecasts",
+                "url": "https://www.ecmwf.int"
+            },
+            "isAccessibleForFree": "True"
+        }
+    ]
+}</script>
+<link rel="icon" href="/sites/default/files/favicon.ico.production.ico" type="image/vnd.microsoft.icon" />
+<script>window.a2a_config=window.a2a_config||{};a2a_config.callbacks=[];a2a_config.overlays=[];a2a_config.templates={};var a2a_config = a2a_config || {};
+    a2a_config.callbacks = a2a_config.callbacks || [];
+    a2a_config.callbacks.push({
+        share: function(data) {
+            // Track shares in Google Analytics with Google Tag Manager
+            dataLayer.push({
+                'event': 'AddToAnyShare',
+                'socialNetwork': 'AddToAny',
+                'socialAction': data.service,
+                'socialTarget': data.url
+            });
+        }
+    });</script>
+
+    <title>Open data | ECMWF</title>
+    <link rel="stylesheet" media="all" href="/sites/default/files/css/css_7eN3xHmRmwakIiw81KQH_lEaPtXBJ1fuE24YS-J7Aqo.css?delta=0&amp;language=en&amp;theme=ecmwf&amp;include=eJxFjEEOwjAMwD5U1idNaZN1FVlSJamgvwcJBDfbBwNiKMjK8IXtMJVIhSLIdnoOdcL96PxWz42EDDjVO2EPtR1qVcOukn_0OZBgono9jtxYC_DNY3GXlgYYNINxekabA3j7l23KmIW7n4TJlwdduYDTC2yiQYI" />
+<link rel="stylesheet" media="all" href="/sites/default/files/css/css_SwAz8zZOk9c7YhWKJiyGoMPPmanf1PMtdyCcVJqaAVM.css?delta=1&amp;language=en&amp;theme=ecmwf&amp;include=eJxFjEEOwjAMwD5U1idNaZN1FVlSJamgvwcJBDfbBwNiKMjK8IXtMJVIhSLIdnoOdcL96PxWz42EDDjVO2EPtR1qVcOukn_0OZBgono9jtxYC_DNY3GXlgYYNINxekabA3j7l23KmIW7n4TJlwdduYDTC2yiQYI" />
+<link rel="stylesheet" media="print" href="/sites/default/files/css/css_AbMRdkqu8KAujx38oUCeSUjkFrO3eQ6p7yVweIe8ayY.css?delta=2&amp;language=en&amp;theme=ecmwf&amp;include=eJxFjEEOwjAMwD5U1idNaZN1FVlSJamgvwcJBDfbBwNiKMjK8IXtMJVIhSLIdnoOdcL96PxWz42EDDjVO2EPtR1qVcOukn_0OZBgono9jtxYC_DNY3GXlgYYNINxekabA3j7l23KmIW7n4TJlwdduYDTC2yiQYI" />
+
+    
+  </head>
+  <!--
+
+  #######  ######  ##     ## ##       ## #######
+  ##      ##    ## ###   ### ##       ## ##
+  #####   ##       #### #### ##   #   ## #####
+  ##      ##    ## ## ### ##  ## ### ##  ##
+  #######  ######  ##  #  ##   ### ###   ##
+
+  European Centre for Medium-Range Weather Forecasts
+
+  (c)-->
+
+  <body class="layout-one-sidebar layout-sidebar-first page__type__open-data path-node page-node-type-numerical-product" vocab="http://www.w3.org/ns/dcat#" typeof="dcat:Dataset">
+
+    <!-- Google Tag Manager (noscript) -->
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-P5T597"
+    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    <!-- End Google Tag Manager (noscript) -->
+
+        <a href="#main-content" class="skip-link visually-hidden-focusable">
+      Skip to main content
+    </a>
+    
+      <div class="dialog-off-canvas-main-canvas" data-off-canvas-main-canvas>
+    
+
+
+<div class="menu-collapse-overlay"></div>
+<header id="header" class="header w-100" role="banner">
+    <div class="ecmwf-header text-white">
+		<div class="ecmwf-top-header border-bottom">
+			<div class="container ecmwf-top-header___wrapper">
+				<div class="row">
+					<div class="col-lg-6 col-4 mobile justify-content-start">
+						<a id="btn-mobile"><span class="material-icons-outlined md-24">menu</span></a>
+						<a class="support navbar-toggle" href="/en/support"><span class="material-icons-outlined md-24">help_outline</span></a> 
+					</div>
+					
+					<div class="nav-brand col-lg-6 col-4 col-md-4">
+						    <div id="block-sitebranding" class="site-branding block block-system block-system-branding-block">
+  
+    
+        <a href="/" rel="home" class="site-logo">
+      <img class="logo" src="/themes/ecmwf/logo.svg" alt="Home" fetchpriority="high" />
+    </a>
+      </div>
+
+
+					</div>
+
+					<div class="nav-user col-lg-6 d-flex p-0 justify-content-end col-md-8">
+						    <div class="views-exposed-form bef-exposed-form block block-views block-views-exposed-filter-blocksearch-site-page-1" data-drupal-selector="views-exposed-form-search-site-page-1" id="block-exposedformsearch-sitepage-1-2">
+  
+    
+      <div class="content">
+      
+  <form action="/search/site" method="get" id="views-exposed-form-search-site-page-1" accept-charset="UTF-8">
+    <div class="js-form-item form-item js-form-type-textfield form-item-search-api-fulltext js-form-item-search-api-fulltext">
+      
+        <input placeholder="Search site..." data-drupal-selector="edit-search-api-fulltext" data-msg-maxlength="This field has a maximum length of 128." type="text" id="edit-search-api-fulltext" name="search_api_fulltext" value="" size="30" maxlength="128" class="form-control" />
+
+        </div>
+<div data-drupal-selector="edit-actions" class="form-actions js-form-wrapper form-wrapper" id="edit-actions"><input data-drupal-selector="edit-submit-search-site" type="submit" id="edit-submit-search-site" value="Go" class="button js-form-submit form-submit form-control" />
+</div>
+
+
+  </form>
+
+    </div>
+  </div>
+
+<div class="header-menu float-start py-3 collapse" id="navbar-search" aria-expanded="false">
+  
+    
+      <form action="/search/node" method="get" id="search-block-form" accept-charset="UTF-8" class="search-form d-flex search-block-form">
+  <div class="js-form-item form-item js-form-type-search form-item-keys js-form-item-keys form-no-label">
+      <label for="edit-keys" class="visually-hidden">Search</label>
+        <input title="Enter the terms you wish to search for." class="input-sm form-search form-control" placeholder="Search site..." data-drupal-selector="edit-keys" data-msg-maxlength="Search field has a maximum length of 128." type="search" id="edit-keys" name="keys" value="" size="15" maxlength="128" />
+
+        </div>
+<div data-drupal-selector="edit-actions" class="form-actions js-form-wrapper form-wrapper" id="edit-actions--3"><input class="search-form__submit button js-form-submit form-submit form-control" data-drupal-selector="edit-submit" type="submit" id="edit-submit" value="" />
+</div>
+
+</form>
+
+
+  </div>
+
+<div class="collapse navbar-collapse" data-bs-parent="#navbar-kicker" id="user_block">
+  
+    
+      <div class="content">
+              
+
+              <ul id="navbar-user" class="nav navbar-right nav-pills navigation--level-1">
+                                                    <li class="nav-item navigation__item--level-1">
+                             <a href="/en/support" class="help__section nav-link navigation__link--level-1" data-drupal-link-system-path="node/26479"><span class="material-icons-outlined md-18"> help_outline </span>Help</a>
+              
+        </li>
+                                                <li class="nav-item navigation__item--level-1  navigation__item--last">
+                             
+          <a href="/user/login?destination=/en/forecasts/datasets/open-data" class="nav-link navigation__link--level-1 ">
+            <span class="material-icons-outlined md-18">login</span> Log in
+          </a>
+
+              
+        </li>
+        </ul>
+  
+
+
+    </div>
+  </div>
+
+
+					</div>   
+
+					<div class="nav-mobile col-4 d-flex justify-content-end">    
+						<a class="navbar-toggle collapsed" id="toggle-search" type="button" data-bs-toggle="collapse" data-bs-target="#navbar-search" aria-label="Search" aria-expanded="false" aria-controls="navbar-search"><span class="material-icons-outlined md-24">search</span></a> 
+						<a class="navbar-toggle collapsed" data-bs-toggle="collapse" id="toggle-user"  data-bs-target="#user_block" aria-label="Toggle user menu" aria-expanded="false" aria-controls="user_block"><span class="material-icons-outlined md-24">account_circle</span></a>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div id="navbar-menu">
+			<div class="container">
+				<div class="row">
+					<div class="d-flex align-items-center justify-content-center">	
+							    <nav role="navigation" aria-labelledby="block-ecmwf-main-menu-menu" id="block-ecmwf-main-menu">
+            
+  <h1 class="visually-hidden" id="block-ecmwf-main-menu-menu">Main navigation</h1>
+  
+
+                
+
+              <ul class="nav navigation--level-1">
+                                                    <li class="nav-item nav-item--level-1">
+                          <a href="/" class="nav-link text-white nav-link--level-1" data-drupal-link-system-path="&lt;front&gt;">Home</a>
+                          </li>
+                                                <li class="nav-item nav-item--level-1">
+                          <a href="/en/about" class="nav-link text-white nav-link--level-1" data-drupal-link-system-path="node/9">About</a>
+                          </li>
+                                                <li class="nav-item nav-item--level-1 active-trail">
+                          <a href="/en/forecasts" class="nav-link text-white nav-link--level-1 active-trail" data-drupal-link-system-path="node/39">Forecasts</a>
+                          </li>
+                                                <li class="nav-item nav-item--level-1">
+                          <a href="/en/computing" class="nav-link text-white nav-link--level-1" data-drupal-link-system-path="node/104">Computing</a>
+                          </li>
+                                                <li class="nav-item nav-item--level-1">
+                          <a href="/en/research" class="nav-link text-white nav-link--level-1" data-drupal-link-system-path="node/105">Research</a>
+                          </li>
+                                                <li class="nav-item nav-item--level-1">
+                          <a href="/en/learning" class="nav-link text-white nav-link--level-1" data-drupal-link-system-path="node/146">Learning</a>
+                          </li>
+                                                <li class="nav-item nav-item--level-1  nav-item--last">
+                          <a href="/en/publications" class="nav-link text-white nav-link--level-1" data-drupal-link-system-path="node/187">Publications</a>
+                          </li>
+        </ul>
+  
+
+
+  </nav>
+
+
+					</div>
+				</div>
+				
+			</div>
+		</div>	
+	</div>	
+	<div class="header-menu" id="navbar-kicker">
+		<div class="container">
+			    <nav role="navigation" aria-labelledby="block-mainnavigation-3-menu" id="block-mainnavigation-3">
+            
+  <h1 class="visually-hidden" id="block-mainnavigation-3-menu">Main navigation</h1>
+  
+
+        
+              <ul>
+        
+            
+      <li class="nav-item">
+                <a href="/en/forecasts/charts" class="nav-link nav-link--en-forecasts-charts" data-drupal-link-system-path="node/42">Charts</a>
+              </li>
+    
+            
+      <li class="nav-item menu-item--active-trail">
+                <a href="/en/forecasts/datasets" class="nav-link active nav-link--en-forecasts-datasets" data-drupal-link-system-path="node/83">Datasets</a>
+              </li>
+    
+            
+      <li class="nav-item menu-item--collapsed">
+                <a href="/en/forecasts/quality-our-forecasts" class="nav-link nav-link--en-forecasts-quality-our-forecasts" data-drupal-link-system-path="node/20991">Quality of our forecasts</a>
+              </li>
+    
+            
+      <li class="nav-item menu-item--collapsed">
+                <a href="/en/forecasts/documentation-and-support" class="nav-link nav-link--en-forecasts-documentation-and-support" data-drupal-link-system-path="node/20961">About our forecasts</a>
+              </li>
+    
+            
+      <li class="nav-item menu-item--collapsed">
+                <a href="/en/forecasts/accessing-forecasts" class="nav-link nav-link--en-forecasts-accessing-forecasts" data-drupal-link-system-path="node/20999">Access to forecasts</a>
+              </li>
+        </ul>
+  
+
+
+
+  </nav>
+
+
+		</div>
+    </div>
+	  <div id="edit-tabs" class="collapsed">
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-12">
+          
+        </div>
+      </div>
+    </div>
+  </div></header> 
+
+
+<div id="page-wrapper">
+  <main>
+      
+              <div class="container">
+          <div class="row">
+              <div data-drupal-messages-fallback class="hidden"></div>
+
+
+          </div>
+        </div>
+      
+      
+       
+
+              <section class="container">
+          <div class="row">
+                  <div id="block-ecmwf-page-title" class="block block-core block-page-title-block">
+  
+    
+      <div class="content">
+      <div class="col-xl-6 offset-xl-3 my-4">
+  
+      <h1 class="title page-title earpiece-">Open data</h1>
+    
+</div>
+
+
+    </div>
+  </div>
+
+
+          </div>
+        </section>
+      
+
+
+
+      <div id="main-wrapper" class="layout-main-wrapper clearfix">
+                  <div id="main" class="container">
+            
+            <div class="row row-offcanvas row-offcanvas-left clearfix">
+                                  <main class="col-lg-9">
+                                  <section class="section">
+                    <a id="main-content" tabindex="-1"></a>
+                    
+                    
+                        <div id="block-ecmwf-content" class="block block-system block-system-main-block">
+  
+    
+      <div class="content">
+      
+<article data-history-node-id="28188" class="node node--type-numerical-product node--promoted node--sticky node--view-mode-full clearfix">
+
+  <div class="pull-right">
+    <fieldset class="url_licence js-form-item form-item js-form-wrapper form-wrapper" id="url-licence">
+      <legend>
+    <span class="fieldset-legend"></span>
+  </legend>
+  <div class="fieldset-wrapper">
+                
+
+
+
+            <div class="field field--name-field-dataset-public-url field--type-link field--label-hidden field__item">
+
+         
+        <a href="https://apps.ecmwf.int/datasets/licences/general/" class="btn btn-primary">ECMWF Terms of Use</a>
+    
+      
+      
+      </div>
+      
+
+
+
+            <div class="field field--name-field-dataset-ftp-url field--type-link field--label-hidden field__item">
+
+         
+        <a href="https://data.ecmwf.int/forecasts/" class="btn btn-primary arrow-right">Browse the data files</a>
+     
+      
+      
+      </div>
+      
+
+  <div class="field field--name-field-dataset-licence field--type-entity-reference field--label-above">
+    <div class="field__label">Licence:</div>
+                              <div class="field__dataset__licence"><a href="http://apps.ecmwf.int/datasets/licences/general" target="_blank"><span class="material-icons-round">description</span> View licence</a></div>
+                </div>
+
+          </div>
+</fieldset>
+
+  </div>
+
+  <header>
+    
+          
+      </header>
+  <div class="node__content clearfix">
+    
+
+
+
+            <div class="field field--name-body field--type-text-with-summary field--label-hidden field__item"><div class="tex2jax_process"><p>A subset of ECMWF real-time forecast data from the IFS and AIFS models is made&nbsp;available to the public free of charge. Their use is governed by the&nbsp;<a href="https://creativecommons.org/licenses/by/4.0/deed.en">Creative Commons CC-BY-4.0 licence</a> and the <a href="https://apps.ecmwf.int/datasets/licences/general/">ECMWF Terms of Use</a>. This means that the data may be redistributed and used commercially, subject to&nbsp;<a href="https://apps.ecmwf.int/datasets/licences/general/" rel="nofollow">appropriate attribution</a>.</p>
+
+<p data-end="638" data-start="378">Accessing this data, or arranging for any open data to be delivered directly to you, may be subject to <a href="https://confluence.ecmwf.int/display/DAC/Service+Charges%3A+From+01+July+2024">Service Charges</a> and a <strong>Service Agreement</strong>. If you are interested in this, please see our <a href="https://www.ecmwf.int/en/forecasts/accessing-forecasts/licences-available">Service Agreement and Use Cases</a> page.</p>
+
+<p data-end="745" data-start="640">For more information, please refer to the <a href="https://confluence.ecmwf.int/display/DAC/ECMWF+open+data%3A+real-time+forecasts+from+IFS+and+AIFS">U<span data-end="704" data-start="682" style="">ser Documentation</span></a>&nbsp;or visit the <a href="https://confluence.ecmwf.int/site/support">ECMWF Support Portal.</a></p>
+
+<p data-end="745" data-start="640">This page outlines the subset of <strong data-end="821" data-start="780">free and open IFS and AIFS parameters</strong> available.</p>
+
+<div class="alert-success">
+<p data-end="745" data-start="640"><a class="text-decoration-underline" href="mailto:open-data-community-subscribe@lists.ecmwf.int?subject=subscribe">Sign up</a> for an open data community mailing list, a joint project with EUMETSAT, Met Norway and German national meteorological service DWD to share new and updated open datasets, relevant resources, conferences and articles <a class="text-decoration-underline" href="mailto:open-data-community-subscribe@lists.ecmwf.int?subject=subscribe">&gt;&gt;&gt;</a></p>
+</div>
+
+<p><strong>Updated for IFS Cycle 50r1 (13 May 2026):</strong> The scda and scwv streams have been discontinued. Data for 06z/18z runs is now available under <code>stream=oper</code> (atmospheric) and <code>stream=wave</code> (wave). New wave parameters and an additional pressure level (10 hPa) have also been added, please see parameter tables below.</p>
+</div></div>
+      <div class="field field--name-field-product-set field--type-text-long field--label-above">
+    <h2>Product description</h2>
+              <div class="field__item"><div class="tex2jax_process"><p>These products are a subset of the full&nbsp;<a href="/en/forecasts/datasets/catalogue-ecmwf-real-time-products">Catalogue of ECMWF Real-time Products</a>&nbsp;and are based on the medium-range&nbsp;(<a href="/en/forecasts/documentation-and-support/medium-range-forecasts">high-resolution and ensemble</a>) and <a href="/en/forecasts/documentation-and-support/long-range">seasonal</a> forecast models.</p>
+
+<p>IFS data are released <span style="color:#4d4d4d;">at the end of the</span>&nbsp;<a href="https://confluence.ecmwf.int/display/DAC/Dissemination+schedule">real-time dissemination schedule</a>.&nbsp;AIFS data are released as soon the data are produced.</p>
+
+<p>For further details about the available AIFS products, see the dataset descriptions for the <a href="https://www.ecmwf.int/en/forecasts/datasets/set-ix">Deterministic&nbsp;AIFS</a>&nbsp;and <a href="https://www.ecmwf.int/en/forecasts/datasets/set-x">Ensemble&nbsp;AIFS</a>.</p>
+
+<p>Products are available at 0.25 degrees resolution in GRIB2 format unless stated otherwise. Future updates to the Open Data catalog may include further resolution improvement, in line with developments in the ECMWF product catalogue. Since July 2023, the <a href="https://confluence.ecmwf.int/display/FCST/Implementation+of+IFS+Cycle+48r1#ImplementationofIFSCycle48r1-Technicalcontent">ending of products in GRIB2 has changed to use CCSDS compression</a>.</p>
+
+<div class="alert-info">
+<p><strong data-end="396" data-start="382">Important:</strong></p>
+
+<ul>
+	<li data-end="681" data-start="399">
+	<p data-end="681" data-start="401"><strong data-end="432" data-start="401">Higher-resolution products:</strong> Higher-resolution versions of the same products are available via the <a href="https://products.ecmwf.int/requirements/">Product Requirements Catalogue</a>&nbsp;and are subject to a Real-time Dissemination Service Agreement. Please see the <a href="https://www.ecmwf.int/en/forecasts/accessing-forecasts/licences-available">Service Agreements and Use cases</a> for more information.</p>
+	</li>
+	<li data-end="1016" data-start="688">
+	<p data-end="1016" data-start="690"><strong data-end="729" data-start="690">System stability and access limits:</strong> To ensure the stability of our systems and to preserve resources for operational activities, access to the&nbsp;<span data-end="857" data-start="837">Open-Data Portal</span> is currently limited to <strong data-end="904" data-start="872">500 simultaneous connections</strong>. This limit helps guarantee reliable service for operational users, especially during periods of high demand.</p>
+	</li>
+	<li data-end="1444" data-start="1023">
+	<p data-end="1444" data-start="1025"><strong data-end="1067" data-start="1025">Rolling archive and data availability:</strong> ECMWF Open Data provides access to <span data-end="1154" data-start="1103">real-time forecast data on a rolling archive basis</span>. Data are retained for the <span data-end="1214" data-start="1182">most recent 12 forecast runs</span>, corresponding to approximately <span data-end="1259" data-start="1247">2–3 days&nbsp;</span>of forecasts based on the four daily IFS and AIFS cycles (00, 06, 12 and 18 UTC). If you are interested in accessing the full historical data archive, please see the <a href="https://www.ecmwf.int/en/forecasts/accessing-forecasts/licences-available">Service Agreements and Use cases</a> for more information.</p>
+	</li>
+</ul>
+</div>
+
+<p>&nbsp;</p>
+
+<p><strong data-end="1893" data-start="1843">Alternative access methods and cloud platforms</strong></p>
+
+<p data-end="2162" data-start="1919">For improved global accessibility and added redundancy, ECMWF Open Data subset is&nbsp;<strong data-end="2060" data-start="1995">replicated and available on major public cloud platforms</strong>, including <a href="https://registry.opendata.aws/ecmwf-forecasts/">Amazon Web Services (AWS)</a>, <a href="https://ai4edataeuwest.blob.core.windows.net/ecmwf/">Microsoft Azure</a>&nbsp;and <a href="https://console.cloud.google.com/marketplace/product/bigquery-public-data/open-data-ecmwf">Google Cloud Platform (GCP)</a>. These alternative access methods can be particularly useful for users who experience <span data-end="1027" data-start="999">connectivity limitations</span>, <span data-end="1052" data-start="1029">high demand periods</span>, or <span data-end="1084" data-start="1057">performance constraints</span>&nbsp;when accessing the Open-Data Portal directly. Users may either access the data <span data-end="2214" data-start="2202">directly</span> via these public cloud storage services or use the <a href="https://github.com/ecmwf/ecmwf-opendata">ecmwf-opendata</a> Python client, which allows selecting the data source (ecmwf, aws, azure or google)&nbsp;while providing a consistent interface across platforms. If you experience difficulties accessing the Open-Data Portal directly, retrieving the data from one of these cloud service providers is recommended.&nbsp;For more detailed technical documentation, file naming conventions, and download examples, please see the ECMWF Open Data technical <a href="https://confluence.ecmwf.int/display/DAC/ECMWF+open+data%3A+real-time+forecasts+from+IFS+and+AIFS">documentation</a>.</p>
+
+<p>&nbsp;</p>
+
+<hr />
+<h1><strong>IFS Data </strong></h1>
+
+<h2><font color="#4d4d4d"><b>Medium-range Control: Forecast (atmosphere)</b></font></h2>
+
+<p><u>class=od; stream=oper; type=fc</u></p>
+
+<p>Steps:</p>
+
+<ul>
+	<li>For times 00z &amp;12z: 0 to 144 by 3, 150 to 360 by 6.</li>
+	<li>For times 06z &amp; 18z: 0 to 144 by 3.&nbsp;(From IFS Cycle 50r1, data for 06z/18z is available under "stream=oper" replacing the former "stream=scda".)</li>
+</ul>
+
+<p>Type of level data:</p>
+
+<p>Surface (sfc), Surface Other level (sol) and Pressure Level (pl)</p>
+
+<p>Pressure levels available (hPa): 1000, 925, 850, 700, 600, 500, 400, 300, 250, 200, 150, 100, 50, 10</p>
+
+<p>Only a single ID is used for Volumetric soil water and Soil Temperature with layer 1 having level=1, layer 2 having level=2 etc. Layers 1-4 are available.</p>
+
+<p>Parameters: as described below</p>
+
+<table>
+	<thead>
+		<tr>
+			<th>Short name</th>
+			<th>Long name</th>
+			<th>ID</th>
+			<th>Type of level</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td><code>asn</code></td>
+			<td>Snow albedo</td>
+			<td>32</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>rsn</code></td>
+			<td>Snow density</td>
+			<td>33</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>10fg</code></td>
+			<td>Maximum 10 metre wind gust since previous post-processing - (appears as 10fg3 for steps 3 to 144)</td>
+			<td>49 / 228028</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>mx2t6</code></td>
+			<td>Maximum temperature at 2 metres in the last 6 hours</td>
+			<td>121</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>mn2t6</code></td>
+			<td>Minimum temperature at 2 metres in the last 6 hours</td>
+			<td>122</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>z</code></td>
+			<td>Geopotential (step 0)</td>
+			<td>129</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>z</code></td>
+			<td>Geopotential</td>
+			<td>129</td>
+			<td>pl</td>
+		</tr>
+		<tr>
+			<td><code>t</code></td>
+			<td>Temperature</td>
+			<td>130</td>
+			<td>pl</td>
+		</tr>
+		<tr>
+			<td><code>u</code></td>
+			<td>U component of wind</td>
+			<td>131</td>
+			<td>pl</td>
+		</tr>
+		<tr>
+			<td><code>v</code></td>
+			<td>V component of wind</td>
+			<td>132</td>
+			<td>pl</td>
+		</tr>
+		<tr>
+			<td><code>q</code></td>
+			<td>Specific humidity</td>
+			<td>133</td>
+			<td>pl</td>
+		</tr>
+		<tr>
+			<td><code>sp</code></td>
+			<td>Surface pressure</td>
+			<td>134</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>w</code></td>
+			<td>Vertical velocity</td>
+			<td>135</td>
+			<td>pl</td>
+		</tr>
+		<tr>
+			<td><code>tcw</code></td>
+			<td>Total column water</td>
+			<td>136</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>tcwv</code></td>
+			<td>Total column vertically-integrated water vapour</td>
+			<td>137</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>vo</code></td>
+			<td>Vorticity (relative)</td>
+			<td>138</td>
+			<td>pl</td>
+		</tr>
+		<tr>
+			<td><code>sd</code></td>
+			<td>Snow depth water equivalent</td>
+			<td>141</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>sf</code></td>
+			<td>Snowfall water equivalent</td>
+			<td>144</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>msl</code></td>
+			<td>Mean sea level pressure</td>
+			<td>151</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>d</code></td>
+			<td>Divergence</td>
+			<td>155</td>
+			<td>pl</td>
+		</tr>
+		<tr>
+			<td><code>gh</code></td>
+			<td>Geopotential height</td>
+			<td>156</td>
+			<td>pl</td>
+		</tr>
+		<tr>
+			<td><code>r</code></td>
+			<td>Relative humidity</td>
+			<td>157</td>
+			<td>pl</td>
+		</tr>
+		<tr>
+			<td><code>sdor</code></td>
+			<td>Standard deviation of sub-gridscale orography (step 0)</td>
+			<td>160</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>slor</code></td>
+			<td>Slope of sub-gridscale orography (step 0)</td>
+			<td>163</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>tcc</code></td>
+			<td>Total cloud cover</td>
+			<td>164</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>10u</code></td>
+			<td>10 metre U wind component</td>
+			<td>165</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>10v</code></td>
+			<td>10 metre V wind component</td>
+			<td>166</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>2t</code></td>
+			<td>2 metre temperature</td>
+			<td>167</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>2d</code></td>
+			<td>2 metre dewpoint temperature</td>
+			<td>168</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>ssrd</code></td>
+			<td>Surface net short-wave (solar) radiation downwards</td>
+			<td>169</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>lsm</code></td>
+			<td>Land Sea Mask</td>
+			<td>172</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>strd</code></td>
+			<td>Surface net long-wave (thermal) radiation downwards</td>
+			<td>175</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>ssr</code></td>
+			<td>Surface net short-wave (solar) radiation</td>
+			<td>176</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>str</code></td>
+			<td>Surface net long-wave (thermal) radiation</td>
+			<td>177</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>ttr</code></td>
+			<td>Top net long-wave (thermal) radiation</td>
+			<td>179</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>ewss</code></td>
+			<td>Time-integrated eastward turbulent surface stress</td>
+			<td>180</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>nsss</code></td>
+			<td>Time-integrated northward turbulent surface stress</td>
+			<td>181</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>ro</code></td>
+			<td>Runoff</td>
+			<td>205</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>tp</code></td>
+			<td>Total Precipitation</td>
+			<td>228</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>skt</code></td>
+			<td>Skin temperature</td>
+			<td>235</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>mx2t3</code></td>
+			<td>Maximum temperature at 2 metres in the last 3 hours</td>
+			<td>228026</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>mn2t3</code></td>
+			<td>Minimum temperature at 2 metres in the last 3 hours</td>
+			<td>228027</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>mucape</code></td>
+			<td>Most-unstable convective available potential energy</td>
+			<td>228235</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>100u</code></td>
+			<td>100 metre U wind component</td>
+			<td>228246</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>100v</code></td>
+			<td>100 metre V wind component</td>
+			<td>228247</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>ptype</code></td>
+			<td>Precipitation type</td>
+			<td>260015</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>tprate</code></td>
+			<td>Total precipitation rate</td>
+			<td>260048</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>vsw</code></td>
+			<td>Volumetric soil water (layers 1-4)</td>
+			<td>260199</td>
+			<td>sol</td>
+		</tr>
+		<tr>
+			<td><code>sot</code></td>
+			<td>Soil temperature (layers 1-4)</td>
+			<td>260360</td>
+			<td>sol</td>
+		</tr>
+		<tr>
+			<td><code>sithick</code></td>
+			<td>Sea ice thickness</td>
+			<td>262000</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>zos</code></td>
+			<td>Sea surface height</td>
+			<td>262124</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>svn</code></td>
+			<td>Northward sea water velocity</td>
+			<td>262139</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>sve</code></td>
+			<td>Eastward sea water velocity</td>
+			<td>262140</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><em><code>t20d</code></em></td>
+			<td><em>Depth of 20C isotherm - currently unavailable (Aug 2026)</em></td>
+			<td><em>—</em></td>
+			<td><em>sfc</em></td>
+		</tr>
+		<tr>
+			<td><em><code>sav300</code></em></td>
+			<td><em>Average salinity in the upper 300m - currently unavailable (Aug 2026)</em></td>
+			<td><em>—</em></td>
+			<td><em>sfc</em></td>
+		</tr>
+	</tbody>
+</table>
+
+<h2><strong>Medium-range Control: Forecast (wave)</strong></h2>
+
+<p><u>class=od; stream=wave; type=fc</u></p>
+
+<p>Steps:</p>
+
+<ul>
+	<li>For times 00z &amp;12z: 0 to 144 by 3, 150 to 360 by 6.</li>
+	<li>For times 06z &amp; 18z: 0 to 144 by 3.&nbsp;(From IFS Cycle 50r1, data for 06z/18z is available under "stream=wave" replacing the former "stream=scwv".)</li>
+</ul>
+
+<p>Type of level data: Surface (sfc)</p>
+
+<p>Parameters: as described below</p>
+
+<table>
+	<thead>
+		<tr>
+			<th>Short name</th>
+			<th>Long name</th>
+			<th>ID</th>
+			<th>Type of level</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td><code>h1012</code></td>
+			<td>Significant wave height of all waves with period within the inclusive range of 10 to 12 seconds</td>
+			<td>140114</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>h1214</code></td>
+			<td>Significant wave height of all waves with period within the inclusive range of 12 to 14 seconds</td>
+			<td>140115</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>h1417</code></td>
+			<td>Significant wave height of all waves with period within the inclusive range of 14 to 17 seconds</td>
+			<td>140116</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>h1721</code></td>
+			<td>Significant wave height of all waves with period within the inclusive range of 17 to 21 seconds</td>
+			<td>140117</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>h2125</code></td>
+			<td>Significant wave height of all waves with period within the inclusive range of 21 to 25 seconds</td>
+			<td>140118</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>h2530</code></td>
+			<td>Significant wave height of all waves with period within the inclusive range of 25 to 30 seconds</td>
+			<td>140119</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>wmb</code></td>
+			<td>Model bathymetry</td>
+			<td>140219</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>mp2</code></td>
+			<td>Mean zero-crossing wave period</td>
+			<td>140221</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>swh</code></td>
+			<td>Significant height of combined wind waves and swell</td>
+			<td>140229</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>mwd</code></td>
+			<td>Mean wave direction</td>
+			<td>140230</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>pp1d</code></td>
+			<td>Peak wave period</td>
+			<td>140231</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>mwp</code></td>
+			<td>Mean wave period</td>
+			<td>140232</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>cdww</code></td>
+			<td>Coefficient of drag with waves</td>
+			<td>140233</td>
+			<td>sfc</td>
+		</tr>
+	</tbody>
+</table>
+
+<h2><strong>Medium-range Control: Tropical Cyclones Tracks</strong></h2>
+
+<p><u>class=od; stream=oper; type=tf</u></p>
+
+<table border="0" cellpadding="0" cellspacing="0">
+	<thead>
+		<tr>
+			<th scope="col">Long name</th>
+			<th scope="col">Format</th>
+			<th scope="col"><strong>&nbsp;Type of &nbsp;level</strong></th>
+			<th scope="col">Steps for times 00 &amp;12</th>
+			<th scope="col">Steps for times 06 &amp;18</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td>
+			<p>Tropical Cyclone Trajectory (TC track including genesis)</p>
+			</td>
+			<td>BUFR</td>
+			<td>sfc</td>
+			<td>up to step 360</td>
+			<td>up to step 144</td>
+		</tr>
+	</tbody>
+</table>
+
+<h2><font color="#4d4d4d"><b>Medium-range Ensemble: Forecast (atmosphere)</b></font></h2>
+
+<p><u>class=od; stream=enfo; type=pf</u></p>
+
+<p>Steps:</p>
+
+<ul>
+	<li>For times 00z &amp;12z: 0 to 144 by 3, 150 to 360 by 6.</li>
+	<li>For times 06z &amp; 18z: 0 to 144 by 3.&nbsp;(From IFS Cycle 50r1, data for 06z/18z is available under "stream=oper" replacing the former "stream=scda".)</li>
+</ul>
+
+<p>Type of&nbsp; level data:</p>
+
+<p>Surface (sfc), Surface Other level (sol) and Pressure Level (pl)</p>
+
+<p>Pressure levels available (hPa): 1000, 925, 850, 700, 600, 500, 400, 300, 250, 200, 150, 100, 50, 10</p>
+
+<p>Only a single ID is used for Volumetric soil water and Soil Temperature with layer 1 having level=1, layer 2 having level=2 etc. Layers 1-4 are available.</p>
+
+<p>Parameters: as described below</p>
+
+<table>
+	<thead>
+		<tr>
+			<th>Short name</th>
+			<th>Long name</th>
+			<th>ID</th>
+			<th>Type of level</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td><code>asn</code></td>
+			<td>Snow albedo</td>
+			<td>32</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>rsn</code></td>
+			<td>Snow density</td>
+			<td>33</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>10fg</code></td>
+			<td>Maximum 10 metre wind gust since previous post-processing - (appears as 10fg3 for steps 3 to 144)</td>
+			<td>49 / 228028</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>mx2t6</code></td>
+			<td>Maximum temperature at 2 metres in the last 6 hours</td>
+			<td>121</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>mn2t6</code></td>
+			<td>Minimum temperature at 2 metres in the last 6 hours</td>
+			<td>122</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>z</code></td>
+			<td>Geopotential (step 0)</td>
+			<td>129</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>z</code></td>
+			<td>Geopotential</td>
+			<td>129</td>
+			<td>pl</td>
+		</tr>
+		<tr>
+			<td><code>t</code></td>
+			<td>Temperature</td>
+			<td>130</td>
+			<td>pl</td>
+		</tr>
+		<tr>
+			<td><code>u</code></td>
+			<td>U component of wind</td>
+			<td>131</td>
+			<td>pl</td>
+		</tr>
+		<tr>
+			<td><code>v</code></td>
+			<td>V component of wind</td>
+			<td>132</td>
+			<td>pl</td>
+		</tr>
+		<tr>
+			<td><code>q</code></td>
+			<td>Specific humidity</td>
+			<td>133</td>
+			<td>pl</td>
+		</tr>
+		<tr>
+			<td><code>sp</code></td>
+			<td>Surface pressure</td>
+			<td>134</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>w</code></td>
+			<td>Vertical velocity</td>
+			<td>135</td>
+			<td>pl</td>
+		</tr>
+		<tr>
+			<td><code>tcw</code></td>
+			<td>Total column water</td>
+			<td>136</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>tcwv</code></td>
+			<td>Total column vertically-integrated water vapour</td>
+			<td>137</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>vo</code></td>
+			<td>Vorticity (relative)</td>
+			<td>138</td>
+			<td>pl</td>
+		</tr>
+		<tr>
+			<td><code>sd</code></td>
+			<td>Snow depth water equivalent</td>
+			<td>141</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>sf</code></td>
+			<td>Snowfall water equivalent</td>
+			<td>144</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>msl</code></td>
+			<td>Mean sea level pressure</td>
+			<td>151</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>d</code></td>
+			<td>Divergence</td>
+			<td>155</td>
+			<td>pl</td>
+		</tr>
+		<tr>
+			<td><code>gh</code></td>
+			<td>Geopotential height</td>
+			<td>156</td>
+			<td>pl</td>
+		</tr>
+		<tr>
+			<td><code>r</code></td>
+			<td>Relative humidity</td>
+			<td>157</td>
+			<td>pl</td>
+		</tr>
+		<tr>
+			<td><code>sdor</code></td>
+			<td>Standard deviation of sub-gridscale orography (step 0)</td>
+			<td>160</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>slor</code></td>
+			<td>Slope of sub-gridscale orography (step 0)</td>
+			<td>163</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>tcc</code></td>
+			<td>Total cloud cover</td>
+			<td>164</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>10u</code></td>
+			<td>10 metre U wind component</td>
+			<td>165</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>10v</code></td>
+			<td>10 metre V wind component</td>
+			<td>166</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>2t</code></td>
+			<td>2 metre temperature</td>
+			<td>167</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>2d</code></td>
+			<td>2 metre dewpoint temperature</td>
+			<td>168</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>ssrd</code></td>
+			<td>Surface net short-wave (solar) radiation downwards</td>
+			<td>169</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>lsm</code></td>
+			<td>Land Sea Mask</td>
+			<td>172</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>strd</code></td>
+			<td>Surface net long-wave (thermal) radiation downwards</td>
+			<td>175</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>ssr</code></td>
+			<td>Surface net short-wave (solar) radiation</td>
+			<td>176</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>str</code></td>
+			<td>Surface net long-wave (thermal) radiation</td>
+			<td>177</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>ttr</code></td>
+			<td>Top net long-wave (thermal) radiation</td>
+			<td>179</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>ewss</code></td>
+			<td>Time-integrated eastward turbulent surface stress</td>
+			<td>180</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>nsss</code></td>
+			<td>Time-integrated northward turbulent surface stress</td>
+			<td>181</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>ro</code></td>
+			<td>Runoff</td>
+			<td>205</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>tp</code></td>
+			<td>Total Precipitation</td>
+			<td>228</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>skt</code></td>
+			<td>Skin temperature</td>
+			<td>235</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>mx2t3</code></td>
+			<td>Maximum temperature at 2 metres in the last 3 hours</td>
+			<td>228026</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>mn2t3</code></td>
+			<td>Minimum temperature at 2 metres in the last 3 hours</td>
+			<td>228027</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>mucape</code></td>
+			<td>Most unstable convective available potential energy</td>
+			<td>228235</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>100u</code></td>
+			<td>100 metre U wind component</td>
+			<td>228246</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>100v</code></td>
+			<td>100 metre V wind component</td>
+			<td>228247</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>ptype</code></td>
+			<td>Precipitation type</td>
+			<td>260015</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>tprate</code></td>
+			<td>Total precipitation rate</td>
+			<td>260048</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>vsw</code></td>
+			<td>Volumetric soil water (layers 1-4)</td>
+			<td>260199</td>
+			<td>sol</td>
+		</tr>
+		<tr>
+			<td><code>sot</code></td>
+			<td>Soil temperature (layers 1-4)</td>
+			<td>260360</td>
+			<td>sol</td>
+		</tr>
+		<tr>
+			<td><code>sithick</code></td>
+			<td>Sea ice thickness</td>
+			<td>262000</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>zos</code></td>
+			<td>Sea surface height</td>
+			<td>262124</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>svn</code></td>
+			<td>Northward sea water velocity</td>
+			<td>262139</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>sve</code></td>
+			<td>Eastward sea water velocity</td>
+			<td>262140</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><em><code>t20d</code></em></td>
+			<td><em>Depth of 20C isotherm - currently unavailable (Aug 2026)</em></td>
+			<td><em>—</em></td>
+			<td><em>sfc</em></td>
+		</tr>
+		<tr>
+			<td><em><code>sav300</code></em></td>
+			<td><em>Average salinity in the upper 300m - currently unavailable (Aug 2026)</em></td>
+			<td><em>—</em></td>
+			<td><em>sfc</em></td>
+		</tr>
+	</tbody>
+</table>
+
+<h2><font color="#4d4d4d"><b>Medium-range Ensemble: Forecast (wave)</b></font></h2>
+
+<p><u>class=od; stream=waef; type=pf</u></p>
+
+<p>Steps:</p>
+
+<ul>
+	<li>For times 00z &amp;12z: 0 to 144 by 3, 150 to 360 by 6.</li>
+	<li>For times 06z &amp; 18z: 0 to 144 by 3.&nbsp;(From IFS Cycle 50r1, data for 06z/18z is available under "stream=wave" replacing the former "stream=scwv".)</li>
+</ul>
+
+<p>Type of&nbsp; level data: Surface (sfc)</p>
+
+<p>Parameters: as described below</p>
+
+<table>
+	<thead>
+		<tr>
+			<th>Short name</th>
+			<th>Long name</th>
+			<th>ID</th>
+			<th>Type of level</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td><code>h1012</code></td>
+			<td>Significant wave height of all waves with period within the inclusive range of 10 to 12 seconds</td>
+			<td>140114</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>h1214</code></td>
+			<td>Significant wave height of all waves with period within the inclusive range of 12 to 14 seconds</td>
+			<td>140115</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>h1417</code></td>
+			<td>Significant wave height of all waves with period within the inclusive range of 14 to 17 seconds</td>
+			<td>140116</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>h1721</code></td>
+			<td>Significant wave height of all waves with period within the inclusive range of 17 to 21 seconds</td>
+			<td>140117</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>h2125</code></td>
+			<td>Significant wave height of all waves with period within the inclusive range of 21 to 25 seconds</td>
+			<td>140118</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>h2530</code></td>
+			<td>Significant wave height of all waves with period within the inclusive range of 25 to 30 seconds</td>
+			<td>140119</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>wmb</code></td>
+			<td>Model bathymetry</td>
+			<td>140219</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>mp2</code></td>
+			<td>Mean zero-crossing wave period</td>
+			<td>140221</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>swh</code></td>
+			<td>Significant height of combined wind waves and swell</td>
+			<td>140229</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>mwd</code></td>
+			<td>Mean wave direction</td>
+			<td>140230</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>pp1d</code></td>
+			<td>Peak wave period</td>
+			<td>140231</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>mwp</code></td>
+			<td>Mean wave period</td>
+			<td>140232</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>cdww</code></td>
+			<td>Coefficient of drag with waves</td>
+			<td>140233</td>
+			<td>sfc</td>
+		</tr>
+	</tbody>
+</table>
+
+<h2><strong>Medium-range Ensemble: Tropical Cyclones Tracks</strong></h2>
+
+<p><u>class=od; stream=enfo; type=tf</u></p>
+
+<p>The tropical cyclone trajectories are computed independently for each ensemble member; a given tropical cyclone may dissipate at different times in different members, so the number of members predicting a given tropical cyclone may vary through the forecast.</p>
+
+<table border="0" cellpadding="0" cellspacing="0">
+	<thead>
+		<tr>
+			<th scope="col">Long name</th>
+			<th scope="col">Format</th>
+			<th scope="col"><strong>&nbsp;Type of&nbsp;level</strong></th>
+			<th scope="col">Steps for times 00 &amp;12</th>
+			<th scope="col">Steps for times 06 &amp;18</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td>
+			<p>Tropical Cyclone Trajectory (TC track including genesis)</p>
+			</td>
+			<td>BUFR</td>
+			<td>sfc</td>
+			<td>up to step 360</td>
+			<td>up to step 144</td>
+		</tr>
+	</tbody>
+</table>
+
+<h2><strong>Medium-range Ensemble: Means and Standard Deviations</strong></h2>
+
+<p><u>class=od; stream=enfo; type=em/es</u></p>
+
+<p>​​Steps for times 00z &amp;12z: 0 to 144 by 3, 150 to 360 by 6.</p>
+
+<table>
+	<thead>
+		<tr>
+			<th>Short Name</th>
+			<th>Long Name</th>
+			<th>ID</th>
+			<th>Level</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td><code>ws</code></td>
+			<td>Wind speed</td>
+			<td>10</td>
+			<td>pl: 250, 850</td>
+		</tr>
+		<tr>
+			<td><code>t</code></td>
+			<td>Temperature</td>
+			<td>130</td>
+			<td>pl: 250, 500, 850</td>
+		</tr>
+		<tr>
+			<td><code>msl</code></td>
+			<td>Mean sea level pressure</td>
+			<td>151</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>gh</code></td>
+			<td>Geopotential height</td>
+			<td>156</td>
+			<td>pl: 300, 500, 1000</td>
+		</tr>
+	</tbody>
+</table>
+&nbsp;
+
+<h2><strong>Medium-range Ensemble: Probabilities, Daily Weather Events</strong></h2>
+
+<p><u>class=od; stream=enfo; type=ep</u></p>
+
+<p>Ranges for times 00z &amp;12z:&nbsp; 0-24 to 336-360 by 12​ (24-hour ranges with 12-hour increments)</p>
+
+<p>&nbsp;</p>
+
+<table>
+	<thead>
+		<tr>
+			<th>Short Name</th>
+			<th>Long Name</th>
+			<th>ID</th>
+			<th>Threshold</th>
+			<th>Type of level</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td><code>tpg1</code></td>
+			<td>Total precipitation of at least 1 mm</td>
+			<td>131060</td>
+			<td>≥ 1 mm</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>tpg5</code></td>
+			<td>Total precipitation of at least 5 mm</td>
+			<td>131061</td>
+			<td>≥ 5 mm</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>tpg10</code></td>
+			<td>Total precipitation of at least 10 mm</td>
+			<td>131062</td>
+			<td>≥ 10 mm</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>tpg20</code></td>
+			<td>Total precipitation of at least 20 mm</td>
+			<td>131063</td>
+			<td>≥ 20 mm</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>tpg25</code></td>
+			<td>Total precipitation of at least 25 mm</td>
+			<td>131098</td>
+			<td>≥ 25 mm</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>tpg50</code></td>
+			<td>Total precipitation of at least 50 mm</td>
+			<td>131099</td>
+			<td>≥ 50 mm</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>tpg100</code></td>
+			<td>Total precipitation of at least 100 mm</td>
+			<td>131085</td>
+			<td>≥ 100 mm</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>10fgg10</code></td>
+			<td>10 metre wind gusts of at least 10 m/s</td>
+			<td>131100</td>
+			<td>≥ 10 m/s</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>10fgg15</code></td>
+			<td>10 metre wind gusts of at least 15 m/s</td>
+			<td>131070</td>
+			<td>≥ 15 m/s</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>10fgg25</code></td>
+			<td>10 metre wind gusts of at least 25 m/s</td>
+			<td>131072</td>
+			<td>≥ 25 m/s</td>
+			<td>sfc</td>
+		</tr>
+	</tbody>
+</table>
+
+<h2><em><strong>​</strong></em><strong>Medium-range Ensemble: Probabilities, Instantaneous Weather Events (atmosphere)</strong></h2>
+
+<p><u>class=od; stream=enfo; type=ep</u></p>
+
+<p>Steps for times 00z &amp;12z: 12 to 360 by 12​</p>
+
+<p>Level: 850 hPa</p>
+
+<table>
+	<thead>
+		<tr>
+			<th>Short Name</th>
+			<th>Long Name</th>
+			<th>ID</th>
+			<th>Type of level</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td><code>ptsa_gt_1stdev</code></td>
+			<td>Probability of temperature standardized anomaly greater than 1 standard deviation</td>
+			<td>133093</td>
+			<td>pl</td>
+		</tr>
+		<tr>
+			<td><code>ptsa_gt_1p5stdev</code></td>
+			<td>Probability of temperature standardized anomaly greater than 1.5 standard deviation</td>
+			<td>133094</td>
+			<td>pl</td>
+		</tr>
+		<tr>
+			<td><code>ptsa_gt_2stdev</code></td>
+			<td>Probability of temperature standardized anomaly greater than 2 standard deviation</td>
+			<td>133095</td>
+			<td>pl</td>
+		</tr>
+		<tr>
+			<td><code>ptsa_lt_1stdev</code></td>
+			<td>Probability of temperature standardized anomaly less than -1 standard deviation</td>
+			<td>133096</td>
+			<td>pl</td>
+		</tr>
+		<tr>
+			<td><code>ptsa_lt_1p5stdev</code></td>
+			<td>Probability of temperature standardized anomaly less than -1.5 standard deviation</td>
+			<td>133097</td>
+			<td>pl</td>
+		</tr>
+		<tr>
+			<td><code>ptsa_lt_2stdev</code></td>
+			<td>Probability of temperature standardized anomaly less than -2 standard deviation</td>
+			<td>133098</td>
+			<td>pl</td>
+		</tr>
+	</tbody>
+</table>
+
+<h2><strong>Medium-range Ensemble: Probabilities, Instantaneous Weather Events (wave)</strong></h2>
+
+<p><u>class=od; stream=waef; type=ep</u></p>
+
+<p>​Steps for times 00z &amp;12z: 12 to 360 by 12</p>
+
+<table>
+	<thead>
+		<tr>
+			<th>Short Name</th>
+			<th>Long Name</th>
+			<th>ID</th>
+			<th>Threshold</th>
+			<th>Type of level</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td><code>swhg2</code></td>
+			<td>Significant wave height of at least 2 m</td>
+			<td>131074</td>
+			<td>≥ 2 m</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>swhg4</code></td>
+			<td>Significant wave height of at least 4 m</td>
+			<td>131075</td>
+			<td>≥ 4 m</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>swhg6</code></td>
+			<td>Significant wave height of at least 6 m</td>
+			<td>131076</td>
+			<td>≥ 6 m</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>swhg8</code></td>
+			<td>Significant wave height of at least 8 m</td>
+			<td>131077</td>
+			<td>≥ 8 m</td>
+			<td>sfc</td>
+		</tr>
+	</tbody>
+</table>
+
+<h2><strong>Seasonal Products - Not yet available (as of August 2026)</strong></h2>
+
+<p>&nbsp;</p>
+
+<table>
+	<thead>
+		<tr>
+			<th>Name</th>
+			<th>Long Name</th>
+			<th>ID</th>
+			<th>Type of Level</th>
+			<th>Steps for time 00</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td><code>sst</code></td>
+			<td>Sea Surface Temperature</td>
+			<td>34</td>
+			<td>sfc</td>
+			<td>1 to 6 months</td>
+		</tr>
+	</tbody>
+</table>
+
+<h1><strong>AIFS data&nbsp;</strong></h1>
+
+<ul>
+	<li>4 forecast runs per day (00/06/12/18)</li>
+	<li>6 hourly steps to 360 (15 days)</li>
+</ul>
+
+<h2><span style="color:#4d4d4d;"><b>AIFS Single:&nbsp;</b></span><span style="color:#4d4d4d;"><b>Forecast (atmosphere)</b></span></h2>
+
+<p><u>model=aifs-single; class=ai; stream=oper; type=fc</u></p>
+
+<p>Steps for times&nbsp;00/06/12/18: 0 to 360 by 6</p>
+
+<table>
+	<thead>
+		<tr>
+			<th>Short Name</th>
+			<th>Long Name</th>
+			<th>ID</th>
+			<th>Type of level</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td><code>z</code></td>
+			<td>Geopotential</td>
+			<td>129</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>z</code></td>
+			<td>Geopotential</td>
+			<td>129</td>
+			<td>pl</td>
+		</tr>
+		<tr>
+			<td><code>t</code></td>
+			<td>Temperature</td>
+			<td>130</td>
+			<td>pl</td>
+		</tr>
+		<tr>
+			<td><code>u</code></td>
+			<td>U component of the wind</td>
+			<td>131</td>
+			<td>pl</td>
+		</tr>
+		<tr>
+			<td><code>v</code></td>
+			<td>V component of the wind</td>
+			<td>132</td>
+			<td>pl</td>
+		</tr>
+		<tr>
+			<td><code>q</code></td>
+			<td>Specific humidity</td>
+			<td>133</td>
+			<td>pl</td>
+		</tr>
+		<tr>
+			<td><code>sp</code></td>
+			<td>Surface pressure</td>
+			<td>134</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>w</code></td>
+			<td>Vertical velocity</td>
+			<td>135</td>
+			<td>pl</td>
+		</tr>
+		<tr>
+			<td><code>tcw</code></td>
+			<td>Total column water</td>
+			<td>136</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>msl</code></td>
+			<td>Mean sea level pressure</td>
+			<td>151</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>sdor</code></td>
+			<td>Standard deviation of sub-gridscale orography</td>
+			<td>160</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>slor</code></td>
+			<td>Slope of sub-gridscale orography</td>
+			<td>163</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>10u</code></td>
+			<td>10 metre U wind component</td>
+			<td>165</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>10v</code></td>
+			<td>10 metre V wind component</td>
+			<td>166</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>2t</code></td>
+			<td>2 metre temperature</td>
+			<td>167</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>2d</code></td>
+			<td>2 metre dewpoint temperature</td>
+			<td>168</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>ssrd</code></td>
+			<td>Surface short-wave (solar) radiation downwards</td>
+			<td>169</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>lsm</code></td>
+			<td>Land-sea mask</td>
+			<td>172</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>strd</code></td>
+			<td>Surface long-wave (thermal) radiation downwards</td>
+			<td>175</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>skt</code></td>
+			<td>Skin temperature</td>
+			<td>235</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>lcc</code></td>
+			<td>Low cloud cover</td>
+			<td>3073</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>mcc</code></td>
+			<td>Medium cloud cover</td>
+			<td>3074</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>hcc</code></td>
+			<td>High cloud cover</td>
+			<td>3075</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>cp</code></td>
+			<td>Convective precipitation</td>
+			<td>228143</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>sf</code></td>
+			<td>Snowfall water equivalent</td>
+			<td>228144</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>tcc</code></td>
+			<td>Total cloud cover</td>
+			<td>228164</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>tp</code></td>
+			<td>Total precipitation</td>
+			<td>228228</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>100u</code></td>
+			<td>100 metre U wind component</td>
+			<td>228246</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>100v</code></td>
+			<td>100 metre V wind component</td>
+			<td>228247</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>rowe</code></td>
+			<td>Runoff water equivalent (surface plus subsurface)</td>
+			<td>231002</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>vsw</code></td>
+			<td>Volumetric soil moisture (layers 1-2)</td>
+			<td>260199</td>
+			<td>sol</td>
+		</tr>
+		<tr>
+			<td><code>fscov</code></td>
+			<td>Fraction of snow cover</td>
+			<td>260289</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>sot</code></td>
+			<td>Soil temperature (layers 1-2)</td>
+			<td>260360</td>
+			<td>sol</td>
+		</tr>
+	</tbody>
+</table>
+
+<h2><span style="color:#4d4d4d;"><b>AIFS Single: F</b></span><span style="color:#4d4d4d;"><b>orecast (wave)</b></span></h2>
+
+<p><u>model=aifs-single; class=ai; stream=wave; type=fc</u></p>
+
+<p>Steps for times&nbsp;00/06/12/18: 0 to 360 by 6</p>
+
+<table>
+	<thead>
+		<tr>
+			<th>Short name</th>
+			<th>Long name</th>
+			<th>ID</th>
+			<th>Type of level</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td><code>h1012</code></td>
+			<td>Significant wave height of all waves with period within the inclusive range of 10 to 12 seconds</td>
+			<td>140114</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>h1214</code></td>
+			<td>Significant wave height of all waves with period within the inclusive range of 12 to 14 seconds</td>
+			<td>140115</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>h1417</code></td>
+			<td>Significant wave height of all waves with period within the inclusive range of 14 to 17 seconds</td>
+			<td>140116</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>h1721</code></td>
+			<td>Significant wave height of all waves with period within the inclusive range of 17 to 21 seconds</td>
+			<td>140117</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>h2125</code></td>
+			<td>Significant wave height of all waves with period within the inclusive range of 21 to 25 seconds</td>
+			<td>140118</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>h2530</code></td>
+			<td>Significant wave height of all waves with period within the inclusive range of 25 to 30 seconds</td>
+			<td>140119</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>wmb</code></td>
+			<td>Model bathymetry</td>
+			<td>140219</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>swh</code></td>
+			<td>Significant wave height</td>
+			<td>140229</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>mwd</code></td>
+			<td>Mean wave direction</td>
+			<td>140230</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>mwp</code></td>
+			<td>Mean wave period</td>
+			<td>140232</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>cdww</code></td>
+			<td>Coefficient of drag with waves</td>
+			<td>140233</td>
+			<td>sfc</td>
+		</tr>
+	</tbody>
+</table>
+
+<h2><span style="color:#4d4d4d;"><b>AIFS Single:&nbsp;</b></span><span style="color:#4d4d4d;"><b>Tropical Cyclones Tracks</b></span></h2>
+
+<p><u>model=aifs-single; class=ai; stream=oper; type=tf</u></p>
+
+<table border="0" cellpadding="0" cellspacing="0">
+	<thead>
+		<tr>
+			<th scope="col">Long name</th>
+			<th scope="col">Format</th>
+			<th scope="col"><strong>&nbsp;Type of &nbsp;level</strong></th>
+			<th scope="col">Steps for times 00 &amp;12</th>
+			<th scope="col">Steps for times 06 &amp;18</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td>
+			<p>Tropical Cyclone Trajectory (TC track including genesis)</p>
+			</td>
+			<td>BUFR</td>
+			<td>sfc</td>
+			<td>up to step 360</td>
+			<td>up to step 360</td>
+		</tr>
+	</tbody>
+</table>
+
+<h2><span style="color:#4d4d4d;"><b>AIFS ENS: Forecast (atmosphere)</b></span></h2>
+
+<p><u>model=aifs-ens; class=ai; stream=enfo; type=pf/cf</u></p>
+
+<p>Steps for times&nbsp;00/06/12/18: 0 to 360 by 6</p>
+
+<table>
+	<thead>
+		<tr>
+			<th>Short Name</th>
+			<th>Long Name</th>
+			<th>ID</th>
+			<th>Type of level</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td><code>z</code></td>
+			<td>Geopotential</td>
+			<td>129</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>z</code></td>
+			<td>Geopotential</td>
+			<td>129</td>
+			<td>pl</td>
+		</tr>
+		<tr>
+			<td><code>t</code></td>
+			<td>Temperature</td>
+			<td>130</td>
+			<td>pl</td>
+		</tr>
+		<tr>
+			<td><code>u</code></td>
+			<td>U component of wind</td>
+			<td>131</td>
+			<td>pl</td>
+		</tr>
+		<tr>
+			<td><code>v</code></td>
+			<td>V component of wind</td>
+			<td>132</td>
+			<td>pl</td>
+		</tr>
+		<tr>
+			<td><code>q</code></td>
+			<td>Specific humidity</td>
+			<td>133</td>
+			<td>pl</td>
+		</tr>
+		<tr>
+			<td><code>sp</code></td>
+			<td>Surface pressure</td>
+			<td>134</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>w</code></td>
+			<td>Vertical velocity</td>
+			<td>135</td>
+			<td>pl</td>
+		</tr>
+		<tr>
+			<td><code>tcw</code></td>
+			<td>Total column water</td>
+			<td>136</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>msl</code></td>
+			<td>Mean sea level pressure</td>
+			<td>151</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>sdor</code></td>
+			<td>Standard deviation of sub-gridscale orography</td>
+			<td>160</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>slor</code></td>
+			<td>Slope of sub-gridscale orography</td>
+			<td>163</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>10u</code></td>
+			<td>10 metre U wind component</td>
+			<td>165</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>10v</code></td>
+			<td>10 metre V wind component</td>
+			<td>166</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>2t</code></td>
+			<td>2 metre temperature</td>
+			<td>167</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>2d</code></td>
+			<td>2 metre dewpoint temperature</td>
+			<td>168</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>ssrd</code></td>
+			<td>Surface short-wave (solar) radiation downwards</td>
+			<td>169</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>lsm</code></td>
+			<td>Land-sea mask</td>
+			<td>172</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>strd</code></td>
+			<td>Surface long-wave (thermal) radiation downwards</td>
+			<td>175</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>skt</code></td>
+			<td>Skin temperature</td>
+			<td>235</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>lcc</code></td>
+			<td>Low cloud cover</td>
+			<td>3073</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>mcc</code></td>
+			<td>Medium cloud cover</td>
+			<td>3074</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>hcc</code></td>
+			<td>High cloud cover</td>
+			<td>3075</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>cp</code></td>
+			<td>Convective precipitation</td>
+			<td>228143</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>sf</code></td>
+			<td>Snowfall water equivalent</td>
+			<td>228144</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>tcc</code></td>
+			<td>Total cloud cover</td>
+			<td>228164</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>tp</code></td>
+			<td>Total precipitation</td>
+			<td>228228</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>100u</code></td>
+			<td>100 metre U wind component</td>
+			<td>228246</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>100v</code></td>
+			<td>100 metre V wind component</td>
+			<td>228247</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>rowe</code></td>
+			<td>Runoff water equivalent (surface plus subsurface)</td>
+			<td>231002</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>vsw</code></td>
+			<td>Volumetric soil moisture&nbsp;(layers 1-2)</td>
+			<td>260199</td>
+			<td>sol</td>
+		</tr>
+		<tr>
+			<td><code>fscov</code></td>
+			<td>Fraction of snow cover</td>
+			<td>260289</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>sot</code></td>
+			<td>Soil temperature&nbsp;(layers 1-2)</td>
+			<td>260360</td>
+			<td>sol</td>
+		</tr>
+	</tbody>
+</table>
+
+<h2><span style="color:#4d4d4d;"><b>AIFS ENS: Forecast (wave)</b></span></h2>
+
+<p><u>model=aifs-ens; class=ai; stream=waef; type=pf/cf</u></p>
+
+<p>Steps for times&nbsp;00/06/12/18: 0 to 360 by 6</p>
+
+<table>
+	<thead>
+		<tr>
+			<th>Short name</th>
+			<th>Long name</th>
+			<th>ID</th>
+			<th>Type of level</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td><code>h1012</code></td>
+			<td>Significant wave height of all waves with periods within the inclusive range from 10 to 12 seconds</td>
+			<td>140114</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>h1214</code></td>
+			<td>Significant wave height of all waves with periods within the inclusive range from 12 to 14 seconds</td>
+			<td>140115</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>h1417</code></td>
+			<td>Significant wave height of all waves with periods within the inclusive range from 14 to 17 seconds</td>
+			<td>140116</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>h1721</code></td>
+			<td>Significant wave height of all waves with periods within the inclusive range from 17 to 21 seconds</td>
+			<td>140117</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>h2125</code></td>
+			<td>Significant wave height of all waves with periods within the inclusive range from 21 to 25 seconds</td>
+			<td>140118</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>h2530</code></td>
+			<td>Significant wave height of all waves with periods within the inclusive range from 25 to 30 seconds</td>
+			<td>140119</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>wmb</code></td>
+			<td>Model bathymetry</td>
+			<td>140219</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>swh</code></td>
+			<td>Significant wave height</td>
+			<td>140229</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>mwd</code></td>
+			<td>Mean wave direction</td>
+			<td>140230</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>mwp</code></td>
+			<td>Mean wave period</td>
+			<td>140232</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>cdww</code></td>
+			<td>Coefficient of drag with waves</td>
+			<td>140233</td>
+			<td>sfc</td>
+		</tr>
+	</tbody>
+</table>
+
+<h2><strong>AIFS ENS: Tropical Cyclones Tracks</strong></h2>
+
+<p><u>model=aifs-ens; class=ai; stream=enfo; type=tf</u></p>
+
+<table border="0" cellpadding="0" cellspacing="0">
+	<thead>
+		<tr>
+			<th scope="col">Long name</th>
+			<th scope="col">Format</th>
+			<th scope="col"><strong>&nbsp;Type of &nbsp;level</strong></th>
+			<th scope="col">Steps for times 00 &amp;12</th>
+			<th scope="col">Steps for times 06 &amp;18</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td>
+			<p>Tropical Cyclone Trajectory (TC track including genesis)</p>
+			</td>
+			<td>BUFR</td>
+			<td>sfc</td>
+			<td>up to step 360</td>
+			<td>up to step 360</td>
+		</tr>
+	</tbody>
+</table>
+
+<h2><strong>AIFS ENS: Means and Standard Deviations</strong></h2>
+
+<p><u>model=aifs-ens; class=ai; stream=enfo; type=em/es</u></p>
+
+<p>Steps for times&nbsp;00/06/12/18: 0 to 360 by 6</p>
+
+<table>
+	<thead>
+		<tr>
+			<th>Short Name</th>
+			<th>Long Name</th>
+			<th>ID</th>
+			<th>Type of level</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td><code>ws</code></td>
+			<td>Wind speed</td>
+			<td>10</td>
+			<td>pl</td>
+		</tr>
+		<tr>
+			<td><code>z</code></td>
+			<td>Geopotential</td>
+			<td>129</td>
+			<td>pl</td>
+		</tr>
+		<tr>
+			<td><code>t</code></td>
+			<td>Temperature</td>
+			<td>130</td>
+			<td>pl</td>
+		</tr>
+		<tr>
+			<td><code>msl</code></td>
+			<td>Mean sea level pressure</td>
+			<td>151</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>2t</code></td>
+			<td>2 metre temperature</td>
+			<td>167</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>10si</code></td>
+			<td>10 metre wind speed</td>
+			<td>207</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>100si</code></td>
+			<td>100 metre wind speed</td>
+			<td>228249</td>
+			<td>sfc</td>
+		</tr>
+	</tbody>
+</table>
+
+<h2><strong>AIFS ENS: Probabilities, Daily Weather Events&nbsp;</strong></h2>
+
+<p><u>model=aifs-ens; class=ai; stream=enfo; type=ep</u></p>
+
+<p>Ranges for times 00/06/12/18:&nbsp; 0-24 to 336-360 by 12​ (24-hour ranges with 12-hour increments)</p>
+
+<table>
+	<thead>
+		<tr>
+			<th>Short Name</th>
+			<th>Long Name</th>
+			<th>ID</th>
+			<th>Threshold</th>
+			<th>Type of level</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td><code>tpg1</code></td>
+			<td>Total precipitation of at least 1 mm</td>
+			<td>131060</td>
+			<td>≥ 1 mm</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>tpg5</code></td>
+			<td>Total precipitation of at least 5 mm</td>
+			<td>131061</td>
+			<td>≥ 5 mm</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>tpg10</code></td>
+			<td>Total precipitation of at least 10 mm</td>
+			<td>131062</td>
+			<td>≥ 10 mm</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>tpg20</code></td>
+			<td>Total precipitation of at least 20 mm</td>
+			<td>131063</td>
+			<td>≥ 20 mm</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>tpg25</code></td>
+			<td>Total precipitation of at least 25 mm</td>
+			<td>131098</td>
+			<td>≥ 25 mm</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>tpg50</code></td>
+			<td>Total precipitation of at least 50 mm</td>
+			<td>131099</td>
+			<td>≥ 50 mm</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>tpg100</code></td>
+			<td>Total precipitation of at least 100 mm</td>
+			<td>131085</td>
+			<td>≥ 100 mm</td>
+			<td>sfc</td>
+		</tr>
+	</tbody>
+</table>
+
+<h2><em><strong>​</strong></em><strong>AIFS ENS: Probabilities,&nbsp;Averaged Events (atmosphere)</strong></h2>
+
+<p><u>model=aifs-ens; class=ai; stream=enfo; type=ep</u></p>
+
+<p>Ranges for times 00/06/12/18: 120-168, 168-240, and 120-240</p>
+
+<table>
+	<thead>
+		<tr>
+			<th>Short Name</th>
+			<th>Long Name</th>
+			<th>ID</th>
+			<th>Threshold</th>
+			<th>Type of level</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td><code>tpl01</code></td>
+			<td>Total precipitation less than 0.1 mm</td>
+			<td>131064</td>
+			<td>&lt; 0.1 mm</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>tprl1</code></td>
+			<td>Total precipitation rate less than 1 mm/day</td>
+			<td>131065</td>
+			<td>&lt; 1 mm/day</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>tprg3</code></td>
+			<td>Total precipitation rate of at least 3 mm/day</td>
+			<td>131066</td>
+			<td>≥ 3 mm/day</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>tprg5</code></td>
+			<td>Total precipitation rate of at least 5 mm/day</td>
+			<td>131067</td>
+			<td>≥ 5 mm/day</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>2tl273</code></td>
+			<td>2 metre temperature less than 273.15 K</td>
+			<td>131073</td>
+			<td>&lt; 273.15 K</td>
+			<td>sfc</td>
+		</tr>
+	</tbody>
+</table>
+
+<h2><strong>AIFS ENS: Probabilities, Instantaneous Events (atmosphere)</strong></h2>
+
+<p><u>model=aifs-ens; class=ai; stream=enfo; type=ep</u></p>
+
+<p>Steps for times 00/06/12/18: 12 to 360 by 12​</p>
+
+<table>
+	<thead>
+		<tr>
+			<th>Short Name</th>
+			<th>Long Name</th>
+			<th>ID</th>
+			<th>Type of level</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td><code>2tl273</code></td>
+			<td>2 metre temperature less than 273.15 K</td>
+			<td>131073</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>10spg10</code></td>
+			<td>10 metre wind speed probability of at least 10 m/s</td>
+			<td>133021</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>10spg15</code></td>
+			<td>10 metre wind speed probability of at least 15 m/s</td>
+			<td>133022</td>
+			<td>sfc</td>
+		</tr>
+	</tbody>
+</table>
+
+<h2><strong>AIFS ENS: Probabilities,&nbsp;Averaged Events (wave)</strong></h2>
+
+<p><u>model=aifs-ens; class=ai; stream=waef; type=ep</u></p>
+
+<p>Ranges for times 00/06/12/18: 120-168, 168-240, and 120-240</p>
+
+<table>
+	<thead>
+		<tr>
+			<th>Short Name</th>
+			<th>Long Name</th>
+			<th>ID</th>
+			<th>Type of level</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td><code>swhg2</code></td>
+			<td>Significant wave height of at least 2 m</td>
+			<td>131074</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>swhg4</code></td>
+			<td>Significant wave height of at least 4 m</td>
+			<td>131075</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>swhg6</code></td>
+			<td>Significant wave height of at least 6 m</td>
+			<td>131076</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>swhg8</code></td>
+			<td>Significant wave height of at least 8 m</td>
+			<td>131077</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>mwpg8</code></td>
+			<td>Mean wave period of at least 8 s</td>
+			<td>131078</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>mwpg10</code></td>
+			<td>Mean wave period of at least 10 s</td>
+			<td>131079</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>mwpg12</code></td>
+			<td>Mean wave period of at least 12 s</td>
+			<td>131080</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>mwpg15</code></td>
+			<td>Mean wave period of at least 15 s</td>
+			<td>131081</td>
+			<td>sfc</td>
+		</tr>
+	</tbody>
+</table>
+
+<h2><strong>AIFS ENS: Probabilities, Instantaneous Events (wave)</strong></h2>
+
+<p><u>model=aifs-ens; class=ai; stream=waef; type=ep</u></p>
+
+<p>Steps for times 00/06/12/18: 12 to 360 by 12​</p>
+
+<table>
+	<thead>
+		<tr>
+			<th>Short Name</th>
+			<th>Long Name</th>
+			<th>ID</th>
+			<th>Type of level</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td><code>swhg2</code></td>
+			<td>Significant wave height of at least 2 m</td>
+			<td>131074</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>swhg4</code></td>
+			<td>Significant wave height of at least 4 m</td>
+			<td>131075</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>swhg6</code></td>
+			<td>Significant wave height of at least 6 m</td>
+			<td>131076</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>swhg8</code></td>
+			<td>Significant wave height of at least 8 m</td>
+			<td>131077</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>mwpg8</code></td>
+			<td>Mean wave period of at least 8 s</td>
+			<td>131078</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>mwpg10</code></td>
+			<td>Mean wave period of at least 10 s</td>
+			<td>131079</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>mwpg12</code></td>
+			<td>Mean wave period of at least 12 s</td>
+			<td>131080</td>
+			<td>sfc</td>
+		</tr>
+		<tr>
+			<td><code>mwpg15</code></td>
+			<td>Mean wave period of at least 15 s</td>
+			<td>131081</td>
+			<td>sfc</td>
+		</tr>
+	</tbody>
+</table>
+</div></div>
+        </div>
+
+
+
+      <div class="field field--name-field-parameters-table field--type-entity-reference-revisions field--label-hidden field__items">
+              <div class="field__item">          
+    </div>
+          </div>
+  
+
+
+
+  <div class="field field--name-field-dataset-type field--type-string field--label-inline">
+    <div class="field__label">Type:</div>
+          <div class='field__items'>
+              <div class="field__item">Real-time</div>
+              </div>
+      </div>
+
+
+
+
+  <div class="field field--name-field-dataset-range field--type-entity-reference field--label-inline">
+    <div class="field__label">Range:</div>
+          <div class='field__items'>
+              <div class="field__item">Medium (15 days)</div>
+          <div class="field__item">Long (Months)</div>
+              </div>
+      </div>
+
+
+
+
+  <div class="field field--name-field-dataset-doi field--type-string field--label-inline">
+    <div class="field__label">DOI:</div>
+              <div class="field__item"> <a href="https://doi.org/10.21957/open-data">https://doi.org/10.21957/open-data</a></div>
+          </div>
+
+
+
+
+      <div class="field field--name-field-dataset-doi-contributors field--type-string field--label-hidden field__items">
+              <div class="field__item"><em>Provided by: ECMWF</em></div>
+          </div>
+  
+  </div>
+  
+   </article>
+
+
+
+    </div>
+  </div>
+
+
+                    
+                    
+                  </section>
+                </main>
+
+                              <div class="sidebar_first sidebar col-lg-3 order-first" id="sidebar_first">
+                  <aside class="section" role="complementary">
+                        <div id="block-ecmwfdatasetsbacktosearch" class="block block-block-content block-block-content72e7cbac-1dbc-44b0-aa5f-0a51beda4e95">
+  
+    
+      <div class="content">
+      
+
+
+
+            <div class="field field--name-body field--type-text-with-summary field--label-hidden field__item"><div class="tex2jax_process"><p class="sectionnav--list-item"><a href="/en/forecasts/datasets/search">◀&nbsp; View Datasets search</a></p>
+</div></div>
+      
+    </div>
+  </div>
+
+
+                  </aside>
+                </div>
+                            
+                          </div>
+          </div>
+              </div>
+        </main>
+</div>
+<button id="back-to-top" class="btn__func back-to-top" role="button" aria-label="back to top">
+	<span class="material-icons-outlined" aria-hidden="true">expand_less</span>
+</button>
+<button id="to-bottom" class="btn__func to-bottom" role="button" aria-label="to bottom">
+	<span class="material-icons-outlined" aria-hidden="true">expand_more</span>
+</button>
+<footer id="ecmwf__footer" class="site-footer">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12" id="flags-top">
+                      <div class="flags-wrapper">
+          <span class="flag-icon flag-icon-at" title="Austria" tabindex="0"></span>
+          <span class="flag-icon flag-icon-be" title="Belgium" tabindex="1"></span>
+          <span class="flag-icon flag-icon-hr" title="Croatia" tabindex="2"></span>
+          <span class="flag-icon flag-icon-dk" title="Denmark" tabindex="3"></span>
+          <span class="flag-icon flag-icon-ee" title="Estonia" tabindex="4"></span>
+          <span class="flag-icon flag-icon-fi" title="Finland" tabindex="5"></span>
+          <span class="flag-icon flag-icon-fr" title="France" tabindex="6"></span>
+          <span class="flag-icon flag-icon-de" title="Germany" tabindex="7"></span>
+          <span class="flag-icon flag-icon-gr" title="Greece" tabindex="8"></span>
+          <span class="flag-icon flag-icon-is" title="Iceland" tabindex="9"></span>
+          <span class="flag-icon flag-icon-ie" title="Ireland" tabindex="10"></span>
+          <span class="flag-icon flag-icon-it" title="Italy" tabindex="11"></span>
+          <span class="flag-icon flag-icon-lu" title="Luxembourg" tabindex="12"></span>
+          <span class="flag-icon flag-icon-nl" title="The Netherlands" tabindex="13"></span>
+          <span class="flag-icon flag-icon-no" title="Norway" tabindex="14"></span>
+          <span class="flag-icon flag-icon-pt" title="Portugal" tabindex="15"></span>
+          <span class="flag-icon flag-icon-rs" title="Serbia" tabindex="16"></span>
+          <span class="flag-icon flag-icon-si" title="Slovenia" tabindex="17"></span>
+          <div class="d-block d-lg-none d-sm-block  break"></div>
+          <span class="flag-icon flag-icon-es" title="Spain" tabindex="18"></span>
+          <span class="flag-icon flag-icon-se" title="Sweden" tabindex="19"></span>
+          <span class="flag-icon flag-icon-ch" title="Switzerland" tabindex="20"></span>
+          <span class="flag-icon flag-icon-tr" title="Republic of Türkiye" tabindex="21"></span>
+          <span class="flag-icon flag-icon-gb" title="United Kingdom" tabindex="22"></span>
+          <span class="flag-icon flag-icon-bg" title="Bulgaria" tabindex="23"></span>
+          <span class="flag-icon flag-icon-cz" title="Czech Republic" tabindex="24"></span>
+          <span class="flag-icon flag-icon-ge" title="Georgia" tabindex="25"></span>
+          <span class="flag-icon flag-icon-hu" title="Hungary" tabindex="26"></span>
+          <span class="flag-icon flag-icon-il" title="Israel" tabindex="27"></span>
+          <span class="flag-icon flag-icon-lv" title="Latvia" tabindex="28"></span>
+          <span class="flag-icon flag-icon-lt" title="Lithuania" tabindex="29"></span>
+          <span class="flag-icon flag-icon-me" title="Montenegro" tabindex="30"></span>
+          <span class="flag-icon flag-icon-ma" title="Morocco" tabindex="31"></span>
+          <span class="flag-icon flag-icon-mk" title="North Macedonia" tabindex="32"></span>
+          <span class="flag-icon flag-icon-ro" title="Romania" tabindex="33"></span>
+          <span class="flag-icon flag-icon-sk" title="Slovak Republic" tabindex="34"></span>
+        </div>
+          </div>
+      </div>
+    </div>
+      <div class="container">
+        <div class="col-md-12"><hr></div>
+                    <div class="site-footer__top clearfix row">          
+                              <div class="col-lg-2 col-md-4">
+                        <div class="block_menu_footer">
+  
+      <h2 class="title_items__footer"><a href="/en/about" data-drupal-link-system-path="node/9">About</a></h2>
+    
+      <div class="footer__items__content">
+      
+              <div class="row">
+                    <div class="menu__footer_items menu__footer_collapsed">
+                <a href="/en/about/who-we-are" class="link-light fw-light text-decoration-none menu__footer_link menu__footer_link--en-about-who-we-are" data-drupal-link-system-path="node/21042">Who we are</a>
+              </div>
+                <div class="menu__footer_items menu__footer_collapsed">
+                <a href="/en/about/what-we-do" class="link-light fw-light text-decoration-none menu__footer_link menu__footer_link--en-about-what-we-do" data-drupal-link-system-path="node/21007">What we do</a>
+              </div>
+                <div class="menu__footer_items menu__footer_collapsed">
+                <a href="/en/about/jobs" class="link-light fw-light text-decoration-none menu__footer_link menu__footer_link--en-about-jobs" data-drupal-link-system-path="node/21022">Jobs</a>
+              </div>
+                <div class="menu__footer_items menu__footer_collapsed">
+                <a href="/en/about/media-centre" class="link-light fw-light text-decoration-none menu__footer_link menu__footer_link--en-about-media-centre" data-drupal-link-system-path="node/21014">Media centre</a>
+              </div>
+                <div class="menu__footer_items menu__footer_collapsed">
+                <a href="/en/about/suppliers" class="link-light fw-light text-decoration-none menu__footer_link menu__footer_link--en-about-suppliers" data-drupal-link-system-path="node/21021">Suppliers</a>
+              </div>
+                <div class="menu__footer_items menu__footer_collapsed">
+                <a href="/en/about/grants" class="link-light fw-light text-decoration-none menu__footer_link menu__footer_link--en-about-grants" data-drupal-link-system-path="node/29371">Grants</a>
+              </div>
+                <div class="menu__footer_items menu__footer_collapsed">
+                <a href="/en/about/contact-us/location" class="link-light fw-light text-decoration-none menu__footer_link menu__footer_link--en-about-contact-us-location" data-drupal-link-system-path="node/21005">Location</a>
+              </div>
+        </div>
+  
+
+
+    </div>
+  </div>
+
+
+                </div>
+                                            <div class="col-lg-2 col-md-4">
+                        <div class="block_menu_footer">
+  
+      <h2 class="title_items__footer"><a href="/en/forecasts" class="menu-item--active-trail" data-drupal-link-system-path="node/39">Forecasts</a></h2>
+    
+      <div class="footer__items__content">
+      
+              <div class="row">
+                    <div class="menu__footer_items">
+                <a href="/en/forecasts/charts" class="link-light fw-light text-decoration-none menu__footer_link menu__footer_link--en-forecasts-charts" data-drupal-link-system-path="node/42">Charts</a>
+              </div>
+                <div class="menu__footer_items active">
+                <a href="/en/forecasts/datasets" class="link-light fw-light text-decoration-none menu__footer_link active menu__footer_link--en-forecasts-datasets" data-drupal-link-system-path="node/83">Datasets</a>
+              </div>
+                <div class="menu__footer_items menu__footer_collapsed">
+                <a href="/en/forecasts/quality-our-forecasts" class="link-light fw-light text-decoration-none menu__footer_link menu__footer_link--en-forecasts-quality-our-forecasts" data-drupal-link-system-path="node/20991">Quality of our forecasts</a>
+              </div>
+                <div class="menu__footer_items menu__footer_collapsed">
+                <a href="/en/forecasts/documentation-and-support" class="link-light fw-light text-decoration-none menu__footer_link menu__footer_link--en-forecasts-documentation-and-support" data-drupal-link-system-path="node/20961">About our forecasts</a>
+              </div>
+                <div class="menu__footer_items menu__footer_collapsed">
+                <a href="/en/forecasts/accessing-forecasts" class="link-light fw-light text-decoration-none menu__footer_link menu__footer_link--en-forecasts-accessing-forecasts" data-drupal-link-system-path="node/20999">Access to forecasts</a>
+              </div>
+        </div>
+  
+
+
+    </div>
+  </div>
+
+
+                </div>
+                                            <div class="col-lg-2 col-md-4">
+                        <div class="block_menu_footer">
+  
+      <h2 class="title_items__footer"><a href="/en/computing" data-drupal-link-system-path="node/104">Computing</a></h2>
+    
+      <div class="footer__items__content">
+      
+              <div class="row">
+                    <div class="menu__footer_items menu__footer_collapsed">
+                <a href="/en/computing/our-facilities" class="link-light fw-light text-decoration-none menu__footer_link menu__footer_link--en-computing-our-facilities" data-drupal-link-system-path="node/21040">Our facilities</a>
+              </div>
+                <div class="menu__footer_items menu__footer_collapsed">
+                <a href="/en/computing/access-computing-facilities" class="link-light fw-light text-decoration-none menu__footer_link menu__footer_link--en-computing-access-computing-facilities" data-drupal-link-system-path="node/21044">Access to computing facilities</a>
+              </div>
+                <div class="menu__footer_items menu__footer_collapsed">
+                <a href="/en/computing/software" class="link-light fw-light text-decoration-none menu__footer_link menu__footer_link--en-computing-software" data-drupal-link-system-path="node/20992">Software</a>
+              </div>
+                <div class="menu__footer_items">
+                <a href="https://status.ecmwf.int" class="link-light fw-light text-decoration-none menu__footer_link menu__footer_link-https--statusecmwfint">Service status</a>
+              </div>
+        </div>
+  
+
+
+    </div>
+  </div>
+
+
+                </div>
+                                            <div class="col-lg-2 col-md-4">
+                        <div class="block_menu_footer">
+  
+      <h2 class="title_items__footer"><a href="/en/research" data-drupal-link-system-path="node/105">Research</a></h2>
+    
+      <div class="footer__items__content">
+      
+              <div class="row">
+                    <div class="menu__footer_items menu__footer_collapsed">
+                <a href="/en/research/data-assimilation" class="link-light fw-light text-decoration-none menu__footer_link menu__footer_link--en-research-data-assimilation" data-drupal-link-system-path="node/20823">Data assimilation</a>
+              </div>
+                <div class="menu__footer_items menu__footer_collapsed">
+                <a href="/en/research/modelling-and-prediction" class="link-light fw-light text-decoration-none menu__footer_link menu__footer_link--en-research-modelling-and-prediction" data-drupal-link-system-path="node/21030">Modelling and Prediction</a>
+              </div>
+                <div class="menu__footer_items menu__footer_collapsed">
+                <a href="/en/research/climate-reanalysis" class="link-light fw-light text-decoration-none menu__footer_link menu__footer_link--en-research-climate-reanalysis" data-drupal-link-system-path="node/21012">Climate reanalysis</a>
+              </div>
+                <div class="menu__footer_items menu__footer_collapsed">
+                <a href="/en/research/projects" class="link-light fw-light text-decoration-none menu__footer_link menu__footer_link--en-research-projects" data-drupal-link-system-path="node/21036">Projects</a>
+              </div>
+                <div class="menu__footer_items menu__footer_collapsed">
+                <a href="/en/research/emi-rd-projects" class="link-light fw-light text-decoration-none menu__footer_link menu__footer_link--en-research-emi-rd-projects" data-drupal-link-system-path="en/research/emi-rd-projects">EMI R&amp;D Projects</a>
+              </div>
+        </div>
+  
+
+
+    </div>
+  </div>
+
+
+                </div>
+                                            <div class="col-lg-2 col-md-4">
+                        <div class="block_menu_footer">
+  
+      <h2 class="title_items__footer"><a href="/en/learning" data-drupal-link-system-path="node/146">Learning</a></h2>
+    
+      <div class="footer__items__content">
+      
+              <div class="row">
+                    <div class="menu__footer_items">
+                <a href="/en/learning/training" class="link-light fw-light text-decoration-none menu__footer_link menu__footer_link--en-learning-training" data-drupal-link-system-path="node/29610">Training</a>
+              </div>
+                <div class="menu__footer_items">
+                <a href="https://events.ecmwf.int/category/2/" class="link-light fw-light text-decoration-none menu__footer_link menu__footer_link-https--eventsecmwfint-category-2-">Workshops</a>
+              </div>
+                <div class="menu__footer_items menu__footer_collapsed">
+                <a href="https://events.ecmwf.int/category/9/" class="link-light fw-light text-decoration-none menu__footer_link menu__footer_link-https--eventsecmwfint-category-9-">Seminars</a>
+              </div>
+        </div>
+  
+
+
+    </div>
+  </div>
+
+
+                </div>
+                                            <div class="col-lg-2 col-md-4">
+                        <div class="block_menu_footer">
+  
+      <h2 class="title_items__footer"><a href="/en/publications" data-drupal-link-system-path="node/187">Publications</a></h2>
+    
+      <div class="footer__items__content">
+      
+              <div class="row">
+                    <div class="menu__footer_items">
+                <a href="/en/publications/search?f%5B0%5D=filter_by_type_of_publication%3Anewsletter&amp;sort=bibcite_year&amp;order=desc" class="link-light fw-light text-decoration-none menu__footer_link menu__footer_link--en-publications-searchf5b05dfilter-by-type-of-publication3anewslettersortbibcite-yearorderdesc" data-drupal-link-query="{&quot;f&quot;:[&quot;filter_by_type_of_publication:newsletter&quot;],&quot;order&quot;:&quot;desc&quot;,&quot;sort&quot;:&quot;bibcite_year&quot;}" data-drupal-link-system-path="en/publications/search">Newsletter</a>
+              </div>
+                <div class="menu__footer_items">
+                <a href="/en/publications/search?f%5B0%5D=filter_by_type_of_publication%3Atechnical_memorandum&amp;sort=bibcite_year&amp;order=desc" class="link-light fw-light text-decoration-none menu__footer_link menu__footer_link--en-publications-searchf5b05dfilter-by-type-of-publication3atechnical-memorandumsortbibcite-yearorderdesc" data-drupal-link-query="{&quot;f&quot;:[&quot;filter_by_type_of_publication:technical_memorandum&quot;],&quot;order&quot;:&quot;desc&quot;,&quot;sort&quot;:&quot;bibcite_year&quot;}" data-drupal-link-system-path="en/publications/search">Technical memoranda</a>
+              </div>
+                <div class="menu__footer_items">
+                <a href="/en/publications/search?f%5B0%5D=filter_by_type_of_publication%3Areport&amp;sort=bibcite_year&amp;order=desc" class="link-light fw-light text-decoration-none menu__footer_link menu__footer_link--en-publications-searchf5b05dfilter-by-type-of-publication3areportsortbibcite-yearorderdesc" data-drupal-link-query="{&quot;f&quot;:[&quot;filter_by_type_of_publication:report&quot;],&quot;order&quot;:&quot;desc&quot;,&quot;sort&quot;:&quot;bibcite_year&quot;}" data-drupal-link-system-path="en/publications/search">Reports</a>
+              </div>
+                <div class="menu__footer_items">
+                <a href="/en/publications/search?bib_event_series=IFS%20Documentation&amp;sort=bibcite_year&amp;order=desc" class="link-light fw-light text-decoration-none menu__footer_link menu__footer_link--en-publications-searchbib-event-seriesifs20documentationsortbibcite-yearorderdesc" data-drupal-link-query="{&quot;bib_event_series&quot;:&quot;IFS Documentation&quot;,&quot;order&quot;:&quot;desc&quot;,&quot;sort&quot;:&quot;bibcite_year&quot;}" data-drupal-link-system-path="en/publications/search">IFS documentation</a>
+              </div>
+        </div>
+  
+
+
+    </div>
+  </div>
+
+
+                </div>
+                          </div>
+                <div class="col-md--12"><hr></div>
+                  <div class="site-footer__bottom row text-light">
+           
+            <div id="copyright" class="col-xl-4  order-lg-1 order-sm-3 order-md-1 order-1">
+                    <div id="block-copyright" class="block block-block-content block-block-content7047e01a-f082-46cf-89ab-51f943e83d3b">
+  
+    
+      <div class="content">
+      
+
+
+
+            <div class="field field--name-body field--type-text-with-summary field--label-hidden field__item"><p class="copyright d-none d-lg-block"> © European Centre for Medium-Range Weather Forecasts</p>
+<p class="copyright d-block d-xs-none d-lg-none">  © ECMWF</p></div>
+      
+    </div>
+  </div>
+
+
+            </div>
+            <div id="social" class="col-xl-4 text-center order-lg-2 order-sm-1 order-md-3">
+              <ul class="list-unstyled p-0 m-0 d-flex justify-content-center">
+                <li>
+                  <a class="text-light" href="https://www.linkedin.com/company/ecmwf" aria-label="ECMWF Linkedin profile" target="_blank">
+                   <img class="social-svg" src="/themes/ecmwf/src/images/svg/linkedin.svg" alt=""/>
+                  </a>
+                </li>
+                <li>
+                  <a class="text-light" href="https://bsky.app/profile/ecmwf.int" aria-label="ECMWF blusky profile" target="_blank">
+                    <img class="social-svg" src="/themes/ecmwf/src/images/svg/bluesky.svg" alt=""/>
+                  </a>
+                </li>
+                <li>
+                  <a class="text-light" href="https://www.facebook.com/ECMWF" aria-label="ECMWF Facebook profile" target="_blank">
+                    <img class="social-svg" style="height:24px; padding: 0 5px;" src="/themes/ecmwf/src/images/svg/facebook.svg" alt=""/>
+                  </a>
+                </li>
+                <li>
+                  <a class="text-light" href="https://www.flickr.com/photos/ecmwf" aria-label="ECMWF Flickr profile" target="_blank">
+                    <img class="social-svg" src="/themes/ecmwf/src/images/svg/flickr.svg" alt=""/>
+                  </a>
+                </li>
+                <li>
+                  <a class="text-light" href="https://www.instagram.com/ecmwf.official/" aria-label="ECMWF instagram profile" target="_blank">
+                    <img class="social-svg" src="/themes/ecmwf/src/images/svg/instagram.svg" alt=""/>
+                  </a>
+                </li>
+                <li>
+                  <a class="text-light" href="https://youtube.com/ecmwf" aria-label="ECMWF YouTube profile" target="_blank">
+                    <img class="social-svg" src="/themes/ecmwf/src/images/svg/youtube.svg" alt=""/>
+                  </a>
+                </li>
+              </ul>
+            </div>
+           
+            <div id="link" class="col-xl-4 order-lg-2 order-sm-1 order-md-2">
+                  <nav role="navigation" aria-labelledby="block-footerlink-menu" id="block-footerlink">
+            
+  <h1 class="visually-hidden" id="block-footerlink-menu">Footer link </h1>
+  
+
+                
+                                      <ul>
+                          <li>
+            <a href="/en/accessibility" title="Useful footer links and privacy" data-drupal-link-system-path="node/20981">Accessibility</a>
+                      </li>
+                  <li>
+            <a href="/en/privacy" data-drupal-link-system-path="node/20982">Privacy</a>
+                      </li>
+                  <li>
+            <a href="/en/terms-use" data-drupal-link-system-path="node/20983">Terms of use</a>
+                      </li>
+                  <li>
+            <a href="/en/about/contact-us" data-drupal-link-system-path="node/20980">Contact</a>
+                      </li>
+                </ul>
+          
+
+    
+  </nav>
+
+
+            </div>
+          </div>
+            </div>
+  </footer>
+
+
+
+  </div>
+
+    
+    <script type="application/json" data-drupal-selector="drupal-settings-json">{"path":{"baseUrl":"\/","pathPrefix":"","currentPath":"","currentPathIsAdmin":false,"isFront":false,"currentLanguage":"en"},"pluralDelimiter":"\u0003","suppressDeprecationErrors":true,"clientside_validation_jquery":{"validate_all_ajax_forms":2,"force_validate_on_blur":false,"force_html5_validation":false,"messages":{"required":"This field is required.","remote":"Please fix this field.","email":"Please enter a valid email address.","url":"Please enter a valid URL.","date":"Please enter a valid date.","dateISO":"Please enter a valid date (ISO).","number":"Please enter a valid number.","digits":"Please enter only digits.","equalTo":"Please enter the same value again.","maxlength":"Please enter no more than {0} characters.","minlength":"Please enter at least {0} characters.","rangelength":"Please enter a value between {0} and {1} characters long.","range":"Please enter a value between {0} and {1}.","max":"Please enter a value less than or equal to {0}.","min":"Please enter a value greater than or equal to {0}.","step":"Please enter a multiple of {0}."}},"ckeditorAccordion":{"accordionStyle":{"collapseAll":null,"keepRowsOpen":null,"animateAccordionOpenAndClose":1,"openTabsWithHash":1,"allowHtmlInTitles":0}},"mathjax":{"config_type":0,"config":{"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"processEscapes":"true"},"showProcessingMessages":"false","messageStyle":"none"}},"field_group":{"fieldset":{"mode":"default","context":"view","settings":{"classes":"url_licence","show_empty_fields":false,"id":"url_licence","description":""}}},"ajaxTrustedUrl":{"\/search\/node":true,"\/search\/site":true},"user":{"uid":0,"permissionsHash":"22f1c3d1614bf8e7cfdff3b249f032c8b15567877dbc326002abb9dd8182ba56"}}</script>
+<script src="/sites/default/files/js/js_i7qYn5Uta7NkioVnoaRb8uAn3WHFYTjcaOx9iI9hu7g.js?scope=footer&amp;delta=0&amp;language=en&amp;theme=ecmwf&amp;include=eJyNjEEOgzAMBD-UkidFJt5Q0xDTxFD4fZGgPXOb1ayGmE2p7J4u6FLVYq6HGWrANmsDhyT5mM0PKKiUXXyBxbQGilErixb_p7OAwi5mQbEmjLBSFiY7dBjfC-ru49qd1P1id_-ScPd6OTjE6ZN8r2rNKs3XHrL2lB_N9ixlcBPZc6TNN9gyfwEDZm_h"></script>
+<script src="https://static.addtoany.com/menu/page.js" defer></script>
+<script src="/sites/default/files/js/js_5cVE-aawn8dNa8d_bLjxNMLng1fZRZjV46AsQtn8YEM.js?scope=footer&amp;delta=2&amp;language=en&amp;theme=ecmwf&amp;include=eJyNjEEOgzAMBD-UkidFJt5Q0xDTxFD4fZGgPXOb1ayGmE2p7J4u6FLVYq6HGWrANmsDhyT5mM0PKKiUXXyBxbQGilErixb_p7OAwi5mQbEmjLBSFiY7dBjfC-ru49qd1P1id_-ScPd6OTjE6ZN8r2rNKs3XHrL2lB_N9ixlcBPZc6TNN9gyfwEDZm_h"></script>
+<script src="/modules/contrib/ckeditor_accordion/js/accordion.frontend.min.js?tlvt8b"></script>
+<script src="/sites/default/files/js/js_T0UNBZtlIP4pRXaiLzBl9wH3ita-AICi8qQJIa3WCRU.js?scope=footer&amp;delta=4&amp;language=en&amp;theme=ecmwf&amp;include=eJyNjEEOgzAMBD-UkidFJt5Q0xDTxFD4fZGgPXOb1ayGmE2p7J4u6FLVYq6HGWrANmsDhyT5mM0PKKiUXXyBxbQGilErixb_p7OAwi5mQbEmjLBSFiY7dBjfC-ru49qd1P1id_-ScPd6OTjE6ZN8r2rNKs3XHrL2lB_N9ixlcBPZc6TNN9gyfwEDZm_h"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<script src="/sites/default/files/js/js_55zuElgpuY6G3bM3OM2kxi6kpDoBAx02ie6auVoHoE0.js?scope=footer&amp;delta=6&amp;language=en&amp;theme=ecmwf&amp;include=eJyNjEEOgzAMBD-UkidFJt5Q0xDTxFD4fZGgPXOb1ayGmE2p7J4u6FLVYq6HGWrANmsDhyT5mM0PKKiUXXyBxbQGilErixb_p7OAwi5mQbEmjLBSFiY7dBjfC-ru49qd1P1id_-ScPd6OTjE6ZN8r2rNKs3XHrL2lB_N9ixlcBPZc6TNN9gyfwEDZm_h"></script>
+
+    
+    
+  </body>
+</html>

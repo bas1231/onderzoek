@@ -1,0 +1,83 @@
+{
+  "head": "f100a7381f67f629ed3cfcab859eda99664da3b3",
+  "live_trading": false,
+  "mode": "qualification_local",
+  "openai_api": false,
+  "paid_actions": false,
+  "remote_capability": false,
+  "schema": "PVA_PROD_RUNTIME_SYNC_V1",
+  "status": "READY",
+  "timestamp_utc": "2026-09-26T06:44:18.329925+00:00",
+  "wallet_actions": false
+}
+{"browser_bridge_required": true, "browser_fallback": {"incident": "/home/research/.local/state/prediction-research/incidents/hourly-research-20260926T0600+0000__HOURLY_RESEARCH_WAKE.json", "reason": "DISPATCH_PENDING", "used": true}, "economic_conclusion": "NO_PROVEN_EDGE", "execution_mode": "qualification_local", "ingest": {"applied": [], "errors": [], "ok": true, "status": "NO_APPLICABLE_RESPONSES"}, "live_trading": false, "local_request_ref": "knowledge/ai_exchange/requests/hourly-20260926T060000+0000.json", "openai_api": false, "paid_actions": false, "publish": {"live_trading": false, "model_roundtrip_proven": false, "ok": true, "openai_api": false, "paid_actions": false, "published": false, "request_path": "knowledge/ai_exchange/requests/hourly-20260926T060000+0000.json", "run_id": "hourly-20260926T060000+0000", "status": "DISPATCH_PENDING", "wallet_actions": false}, "run_id": "hourly-20260926T060000+0000", "schema": "PVA_AI_WAKE_STATUS_V2", "status_ref": "knowledge/ai_exchange/status/hourly-20260926T060000+0000.json", "transport_preference": "local_browser", "wallet_actions": false}
+MARKET 950852
+MAKER_BID 0.2
+INITIAL_QUEUE_AHEAD 158.07
+REQUIRED_VOLUME 163.07
+QUALIFYING_TRADE_COUNT 0
+QUALIFYING_VOLUME 0.0
+REMAINING_TO_FILL 163.07
+FULL_SHADOW_FILL False
+---
+MARKET 950854
+MAKER_BID 0.54
+INITIAL_QUEUE_AHEAD 70.0
+REQUIRED_VOLUME 75.0
+QUALIFYING_TRADE_COUNT 1
+QUALIFYING_VOLUME 1.44
+REMAINING_TO_FILL 73.56
+FULL_SHADOW_FILL False
+---
+MARKET 950853
+MAKER_BID 0.21
+INITIAL_QUEUE_AHEAD 81.06
+REQUIRED_VOLUME 86.06
+QUALIFYING_TRADE_COUNT 0
+QUALIFYING_VOLUME 0.0
+REMAINING_TO_FILL 86.06
+FULL_SHADOW_FILL False
+---
+BASELINE 20260920T022654Z106981_fill_baseline.json
+EFFECTIVE_CREDIT_START 2026-09-20T02:26:55+00:00
+FETCHED_PAGES 2
+FETCHED_ROWS 200
+FULL_SHADOW_FILL_COUNT 0
+PATH /repo/knowledge/raw/market_data/polymarket_fill_checkpoints/20260926T064422Z106981_fill_checkpoint.json
+ASSET_FILL_CHECKPOINT_PASS
+ASSET_FILL_HOURLY_EVALUATOR_RC 0
+ASSET_FILL_FINAL_MARKER /repo/knowledge/raw/market_data/polymarket_fill_checkpoints/ASSET-RANK-MAKER-HEDGE-V1-24h-finalized.json
+ASSET_FILL_HOURLY_PASS
+PROTOCOL_ID KWI-FULL-STATION-PRECANONICAL-24H-V1
+CUTOFF 2026-09-20T02:39:35.684848+00:00
+WINDOW_END 2026-09-21T02:39:35.684848+00:00
+MANIFEST_COUNT 1213
+SCORABLE_PROSPECTIVE_PAIRS 0
+OPEN_ELIGIBLE_PAIRS 0
+EXCLUDED_PRE_CUTOFF 0
+EXCLUDED_STATION_COUNT 0
+EXCLUDED_MISSING_BASELINE 0
+OVERALL_N 0
+OVERALL_PRIMARY_MAE None
+OVERALL_BASELINE_MAE None
+OVERALL_PRIMARY_RMSE None
+OVERALL_BASELINE_RMSE None
+CITY chicago N 0 PRIMARY_MAE None BASELINE_MAE None LEAD_MEAN None
+CITY miami N 0 PRIMARY_MAE None BASELINE_MAE None LEAD_MEAN None
+CITY nyc N 0 PRIMARY_MAE None BASELINE_MAE None LEAD_MEAN None
+QUALIFIED_CITY_COUNT 0
+WINDOW_FINISHED True
+SURVIVAL_EVALUABLE False
+SURVIVAL_PASS None
+INTERPRETATION PROSPECTIVE_CHECKPOINT_ONLY_NO_MARKET_EDGE_NO_PHASE_PROMOTION
+PATH /home/research/.local/state/prediction-research/analysis/kwi_full_station_checkpoints/20260926T064423Z-kwi-full-station-checkpoint.json
+KWI_FULL_STATION_CHECKPOINT_PASS
+KWI_FULL_STATION_EVALUATOR_RC 0
+KWI_FULL_STATION_FINAL_MARKER /home/research/.local/state/prediction-research/analysis/kwi_full_station_checkpoints/KWI-FULL-STATION-PRECANONICAL-24H-V1-finalized.json
+KWI_FULL_STATION_HOURLY_PASS
+hourly-20260926T060000+0000 13 0 10 80 0 0 E007_SIX_DOMAIN
+EDGE_HUNTER_PACKET /repo/knowledge/runs/edge_hunter/edge-hunt-hourly-20260926T060000+0000.json
+ASSET_FILL_CHECKPOINT_RC 0
+KWI_FULL_STATION_CHECKPOINT_RC 0
+GIT_CHECKPOINT_RC 0
+SCHEDULED_CYCLE_RECEIPT hourly-20260926T060000+0000

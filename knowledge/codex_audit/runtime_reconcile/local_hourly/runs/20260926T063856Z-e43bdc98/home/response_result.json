@@ -1,0 +1,43 @@
+{
+  "ok": true,
+  "status": "APPLIED",
+  "applied": [
+    {
+      "ok": true,
+      "run_id": "hourly-20260926T060000+0000",
+      "already_applied": false,
+      "response_sha256": "7e97b969f24b6217120124c8779d20fccc4f87302afbff71dab2e6cda728678e",
+      "response_ref": "knowledge/runs/hourly-20260926T060000+0000-ai-response.json",
+      "receipt_ref": "knowledge/runs/hourly-20260926T060000+0000-ai-response-receipt.json",
+      "orchestration_ref": "knowledge/runs/agent_packets/hourly-20260926T060000+0000/_orchestration.json",
+      "role_statuses": {
+        "research_director": "COMPLETED",
+        "red_team_pentest": "WAITING_FOR_DATA",
+        "algebra": "WAITING_FOR_DATA",
+        "discovery": "WAITING_FOR_DATA",
+        "market_research": "WAITING_FOR_RESULT",
+        "mechanics": "WAITING_FOR_DATA"
+      },
+      "validation_pipeline": {
+        "architecture": "E007_SIX_DOMAIN",
+        "quick_kill_pass": [],
+        "deep_falsification_pass": [],
+        "reproduction_candidates": [],
+        "proof_candidates": [],
+        "proof_rejections": {},
+        "economic_conclusion": "NO_PROVEN_EDGE"
+      },
+      "economic_conclusion": "NO_PROVEN_EDGE",
+      "live_trading": false,
+      "paid_actions": false,
+      "wallet_actions": false
+    }
+  ],
+  "errors": [],
+  "checkpoint": {
+    "status": "LOCAL_COMMITTED",
+    "mode": "qualification_local",
+    "head": "a71520eb06217d4b85cd5c06a43bb0a1acc2b71e",
+    "remote_capability": false
+  }
+}

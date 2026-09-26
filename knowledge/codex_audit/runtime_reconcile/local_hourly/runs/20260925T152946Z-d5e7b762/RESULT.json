@@ -1,0 +1,45 @@
+{
+  "started_at": "2026-09-25T15:29:46.274665+00:00",
+  "exit_code": 0,
+  "owner_preserved": true,
+  "command": [
+    "/usr/bin/unshare",
+    "--user",
+    "--map-root-user",
+    "--mount",
+    "--net",
+    "--pid",
+    "--fork",
+    "--kill-child",
+    "/usr/bin/python3",
+    "/home/leonh/prediction_research_prod/knowledge/codex_audit/runtime_reconcile/local_hourly/run_isolated.py",
+    "--inner",
+    "/home/leonh/prediction_research_prod/knowledge/codex_audit/runtime_reconcile/local_hourly/runs/20260925T152946Z-d5e7b762"
+  ],
+  "qualification": "AUDIT_INCOMPLETE",
+  "scientific_status": "NO_PROVEN_EDGE",
+  "evidence_scope": "Echte lokale pipeline in kernelisolatie; geen automatische globale E2E-PASS",
+  "chain": {
+    "started_at": "2026-09-25T15:29:47.247055+00:00",
+    "stages": [
+      {
+        "entrypoint": "runtime_sync.py",
+        "exit_code": 0
+      },
+      {
+        "entrypoint": "edge_hunter_cycle.py",
+        "exit_code": 0
+      }
+    ],
+    "isolation_checks": {
+      "owner_home_absent": true,
+      "root_readonly": true,
+      "external_network_blocked": true,
+      "no_capabilities": true,
+      "no_remote": true
+    },
+    "wrapper_completed": true,
+    "model_roundtrip": "UNPROVEN",
+    "finished_at": "2026-09-25T15:29:48.023294+00:00"
+  }
+}

@@ -1,3 +1,13 @@
+## Operationele aanvulling 26 september 2026
+
+De permanente Codex user-service/timer is geïnstalleerd en enabled. Hourly gebruikt nu een eigen additive drop-in naar de geteste geïsoleerde no-push route; de oorspronkelijke unit en ownerindex zijn behouden. De oude failure was correcte indexbescherming, geen reden om die guard te omzeilen. Een eerste echte service→queue→automatisch door timer gestarte Astra→receiver→lokale checkpoint→NEXT_ACTIONS-keten is geslaagd: runtime_reconcile/local_hourly/runs/20260926T063856Z-e43bdc98. Ook de tweede timer-canaryketen is volledig geslaagd: 20260926T064415Z-76e4c682, automatische Astra-completion en AUTO_APPLIED.json/NEXT_ACTIONS.json. Een volgende supervisor-tick herhaalde geen voltooid werk. De tijdelijke canaryunits zijn automatisch opgeruimd.
+
+Broncommit: 28b6325 (lokaal, geen push; staged ownerentries ongewijzigd). Gerichte integratie: 38 tests geslaagd; eerder 158 relevante regressietests geslaagd. Quota-pauze/resume, crashcompletion en geërfde locks afzonderlijk met simulaties getest. Backendservices en collector-timers gezond; Linger=yes. Geen echte Windows/WSL-hostreboot of browser-origin BRIDGE_PING/PONG bewezen. Globale kwalificatie blijft daarom AUDIT_INCOMPLETE + RESIDUAL_RISK; NO_PROVEN_EDGE staat afzonderlijk. Volledige operationele details: ../codex_runtime/OPERATIONS.md en daar opgeslagen logs. Findings 024–026 zijn aanvullende lokale correctnessreparaties; de eerdere 17 reparaties blijven staan.
+
+---
+
+## Eerdere auditregistratie (historisch; bovenstaande aanvulling is actueler)
+
 # Definitieve bevindingen na externe WSL-review
 
 **Software: AUDIT_INCOMPLETE + RESIDUAL_RISK. Wetenschap: NO_PROVEN_EDGE (afzonderlijk).**

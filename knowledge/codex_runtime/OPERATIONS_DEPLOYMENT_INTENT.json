@@ -1,0 +1,11 @@
+{
+  "original_unit_hashes": {
+    "prediction-research-hourly-director.service": "8b1d22f58f9b93b8f0835dfe438a149e0159c1a46d54ab323ce9daf04d2d6282",
+    "prediction-codex-supervisor.service": "552bc0654f3e41ae5d049f6b468626df9e3d69f97e072e2e0f0563797eef2e4f"
+  },
+  "dropins": {
+    "prediction-research-hourly-director.service.d/90-isolated-local.conf": "[Service]\nExecStartPre=\nExecStart=\nExecStartPost=\nExecStart=/usr/bin/python3 %h/prediction_research_prod/control/codex_supervisor/operations.py collect\nTimeoutStartSec=5min\nKillMode=control-group\n",
+    "prediction-codex-supervisor.service.d/90-local-delivery.conf": "[Service]\nExecStartPost=/usr/bin/python3 %h/prediction_research_prod/control/codex_supervisor/operations.py deliver\n"
+  },
+  "normal_unit_files_unchanged": true
+}

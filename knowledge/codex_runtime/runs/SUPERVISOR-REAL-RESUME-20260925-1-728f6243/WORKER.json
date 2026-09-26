@@ -1,0 +1,33 @@
+{
+  "pid": 32911,
+  "model": "gpt-6-astra",
+  "thread_id": "01a0d937-dbf1-70e2-8ef2-f8a692a78fbe",
+  "started_at": 1790351117.1336346,
+  "command_flags": [
+    "exec",
+    "resume",
+    "01a0d937-dbf1-70e2-8ef2-f8a692a78fbe",
+    "--json",
+    "--ignore-user-config",
+    "--ignore-rules",
+    "--skip-git-repo-check",
+    "-m",
+    "gpt-6-astra",
+    "-c",
+    "sandbox_mode=\"read-only\"",
+    "-c",
+    "approval_policy=\"never\"",
+    "-c",
+    "web_search=\"disabled\"",
+    "-c",
+    "model_reasoning_effort=\"high\"",
+    "--disable",
+    "shell_tool",
+    "--disable",
+    "unified_exec",
+    "--disable",
+    "apps",
+    "--disable",
+    "apply_patch_freeform"
+  ]
+}

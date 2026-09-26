@@ -1,0 +1,86 @@
+{
+  "task": {
+    "task_class": "infrastructure",
+    "build_authorization": {
+      "mode": "control_plane",
+      "build_kind": "control_plane",
+      "objective": "Bestaande echte ge\u00efsoleerde hourlyketen aan duurzame reasoningqueue en receiver koppelen zonder ownerverlies, push of financi\u00eble uitvoering.",
+      "capabilities": [
+        "local_code_change",
+        "run_tests",
+        "user_service_install"
+      ],
+      "build_contract": {
+        "build_id": "BUILD-AUTONOMOUS-WIRING-20260926",
+        "protocol_version": 1,
+        "objective": "Bestaande echte ge\u00efsoleerde hourlyketen aan duurzame reasoningqueue en receiver koppelen zonder ownerverlies, push of financi\u00eble uitvoering.",
+        "source_commit": "3c57e7b3ee16663203d80eb779943e2ec82cc53c",
+        "allowed_capabilities": [
+          "local_code_change",
+          "run_tests",
+          "user_service_install"
+        ],
+        "allowed_paths": [
+          "control/hourly",
+          "control/codex_supervisor",
+          "control/jobs/evaluate_asset_fill_checkpoint_e352.py",
+          "control/jobs/hourly_asset_fill_checkpoint_e354.py",
+          "control/jobs/hourly_kwi_full_station_checkpoint_e371.py",
+          "tests/codex_supervisor",
+          "tests/hourly/test_checkpoint_failure_propagation.py",
+          "tests/hourly/test_local_ai_exchange.py",
+          "tests/hourly/test_local_runtime.py",
+          "knowledge/codex_audit",
+          "knowledge/codex_runtime"
+        ],
+        "planned_paths": [
+          "control/hourly",
+          "control/codex_supervisor",
+          "control/jobs/evaluate_asset_fill_checkpoint_e352.py",
+          "control/jobs/hourly_asset_fill_checkpoint_e354.py",
+          "control/jobs/hourly_kwi_full_station_checkpoint_e371.py",
+          "tests/codex_supervisor",
+          "tests/hourly/test_checkpoint_failure_propagation.py",
+          "tests/hourly/test_local_ai_exchange.py",
+          "tests/hourly/test_local_runtime.py",
+          "knowledge/codex_audit",
+          "knowledge/codex_runtime"
+        ],
+        "acceptance_criteria": [
+          "Echte timer-hourly-queue-model-receiverketen",
+          "Ownerwerk behouden",
+          "Geen push, orders, wallet of kosten",
+          "Quota/crashherstel en duurzame vervolgacties"
+        ],
+        "non_goals": [
+          "Tradingresearch",
+          "Economische promotie"
+        ],
+        "independent_verification": "Gerichte adversarial fixtures en afzonderlijke echte model-receiptreview; geen volledige onafhankelijke codeverifier geclaimd.",
+        "rollback_plan": "Uitsluitend eigen drop-in na hashcontrole verwijderen; geen ownerreset.",
+        "cleanup_plan": "Tijdelijke canaryunits automatisch collect; evidence behouden.",
+        "max_attempts": 3,
+        "governance_change": false,
+        "safety": {
+          "live_trading": false,
+          "paid_actions": false,
+          "wallet_actions": false
+        }
+      }
+    }
+  },
+  "result": {
+    "contract": {
+      "allowed": true,
+      "decision": "ALLOW_GOVERNED_BUILD",
+      "reasons": []
+    },
+    "changed_paths": {
+      "allowed": true,
+      "decision": "CHANGES_WITHIN_PLAN",
+      "reasons": []
+    },
+    "phase": "POST_BUILD_RECONCILIATION_NOT_RETROACTIVE_PREFLIGHT",
+    "note": "Tekstcharters bestonden vooraf; machinevalidatie hier achteraf. Geen voorafgaande machinegate gefingeerd."
+  }
+}

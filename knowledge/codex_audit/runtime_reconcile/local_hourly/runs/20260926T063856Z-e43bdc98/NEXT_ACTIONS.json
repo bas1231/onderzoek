@@ -1,0 +1,42 @@
+{
+  "candidate_decisions": [
+    {
+      "candidate_id": "KWI-INCOMPLETE-TO-CANONICAL-V1",
+      "queue_status": "PARKED",
+      "reason": "De queue vermeldt een eerder verworpen eenvoudig incomplete mean-mechanisme. De oorspronkelijke analyse en nieuwe holdoutresultaten ontbreken; er is geen grond om deze negatieve voorgeschiedenis te herzien.",
+      "next_decisive_test": "Alleen nieuwe holdout-evidence of een werkelijk vooraf geregistreerd orthogonaal mechanisme beoordelen; dezelfde ontwikkeldata niet opnieuw afstemmen.",
+      "resurrection_condition": "Nieuwe holdout-evidence of een vooraf geregistreerd orthogonaal mechanisme met controleerbare bron- en tijdsprovenance."
+    },
+    {
+      "candidate_id": "PAYOFF-IDENTITY-MINING-V1",
+      "queue_status": "WAITING_FOR_DATA",
+      "reason": "Geen concreet contractpaar, primaire contractregels of toestandsgewijze uitbetalingstabel aangeleverd. Identiteit en uitvoerbare prijsafwijking zijn daardoor niet toetsbaar.",
+      "next_decisive_test": "Een concreet paar aan primaire regels toetsen, inclusief grensgevallen, annulering en revisies. Eén toegestane toestand met verschillende uitbetalingen weerlegt de identiteit. Alleen bij bewezen identiteit is een gesynchroniseerde L2-kostenvergelijking zinvol.",
+      "resurrection_condition": null
+    },
+    {
+      "candidate_id": "ASSET-RANK-MAKER-HEDGE-V1",
+      "queue_status": "RUNNING",
+      "reason": "RUNNING is uitsluitend de aangeleverde queuestatus, geen bevestiging van uitvoering in deze beoordeling. Bewijs van volledige passieve vulling, het geregistreerde protocol en gesynchroniseerde hedgeprijzen ontbreken.",
+      "next_decisive_test": "De geregistreerde conservatieve vulcriteria aan tijdgestempelde queue- en transactiegegevens toetsen. Pas na bewezen volledige passieve vulling de uitvoerbare hedge na alle kosten beoordelen; netto-opbrengst van nul of lager weerlegt de economische kans voor die observatie.",
+      "resurrection_condition": null
+    },
+    {
+      "candidate_id": "KWI-FULL-STATION-PRECANONICAL-V1",
+      "queue_status": "WAITING_FOR_RESULT",
+      "reason": "De queue noemt een vooraf geregistreerd 24-uursprotocol, maar bevat geen protocoltekst, cutoff, post-cutoff stationcases of definitieve uitkomsten. De algemene weerbronnen leveren deze resultaten niet.",
+      "next_decisive_test": "Post-cutoff cases volgens het bestaande protocol beoordelen op volledige stationsdekking, beschikbaarheid vóór het beslismoment, overeenkomst met de contractuele afwikkelingsbron en de vooraf vastgelegde acceptatiecriteria.",
+      "resurrection_condition": null
+    },
+    {
+      "candidate_id": "MANUAL-SCOUT-HENGELTJES-20260924",
+      "queue_status": "EXPERIMENT_REQUIRED",
+      "reason": "De manual seed ontbreekt. Late passieve makerorders zijn een hypothese uit de routingtekst, geen onafhankelijk vastgestelde classificatie. Ook een bevroren protocol en empirische resultaten ontbreken.",
+      "next_decisive_test": "Eerst de manual seed en concrete contractregels beoordelen. Indien het makermechanisme wordt bevestigd, vereist toetsing een vooraf vastgelegd prospectief shadowprotocol met conservatieve queue-reconstructie, uitsluiting van onbetrouwbare sequence/reconnect/restart-intervallen, gedeeltelijke fills, markouts, definitieve settlement en netto-EV. Optimistische fills blijven buiten PRIMARY; niet-positieve netto-EV volgens het vastgelegde criterium weerlegt de getoetste edgeclaim.",
+      "resurrection_condition": null
+    }
+  ],
+  "local_execution_authorized": false,
+  "next_trigger": "volgende echte hourlydata",
+  "scientific_status": "NO_PROVEN_EDGE"
+}

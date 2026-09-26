@@ -1,0 +1,11 @@
+{
+  "created_at": "2026-09-26T06:34:47.977979+00:00",
+  "estimated_reasoning_cost": 1,
+  "expected_value": 5,
+  "input_sha256": "89b96531bb07b43d911536e18dc67f4c25ba0bd5ec63eadbe0bdbd805d5f43ba",
+  "parent_task_id": "HOURLY-LOCAL-20260925T154801-REVIEW",
+  "priority": 90,
+  "prompt": "Controleer deze echte receiverreceipt op ontbrekende technische kwalificatie. Geef uitsluitend JSON met status, blockers en next_action. Geen nieuwe research, tools of economische promotie. Een succesvolle geïsoleerde run bewijst geen permanente hourly-wiring.\n{\n  \"ok\": true,\n  \"status\": \"APPLIED\",\n  \"applied\": [\n    {\n      \"ok\": true,\n      \"run_id\": \"hourly-20260925T150000+0000\",\n      \"already_applied\": false,\n      \"response_sha256\": \"fe5531993908088dec293ce269f33848c5086873fee3b38cafa1ba75f79e7364\",\n      \"response_ref\": \"knowledge/runs/hourly-20260925T150000+0000-ai-response.json\",\n      \"receipt_ref\": \"knowledge/runs/hourly-20260925T150000+0000-ai-response-receipt.json\",\n      \"orchestration_ref\": \"knowledge/runs/agent_packets/hourly-20260925T150000+0000/_orchestration.json\",\n      \"role_statuses\": {\n        \"research_director\": \"COMPLETED\",\n        \"red_team_pentest\": \"COMPLETED\",\n        \"algebra\": \"WAITING_FOR_DATA\",\n        \"discovery\": \"WAITING_FOR_DATA\",\n        \"market_research\": \"RESULT_READY\",\n        \"mechanics\": \"RESULT_READY\"\n      },\n      \"validation_pipeline\": {\n        \"architecture\": \"E007_SIX_DOMAIN\",\n        \"quick_kill_pass\": [],\n        \"deep_falsification_pass\": [],\n        \"reproduction_candidates\": [],\n        \"proof_candidates\": [],\n        \"proof_rejections\": {},\n        \"economic_conclusion\": \"NO_PROVEN_EDGE\"\n      },\n      \"economic_conclusion\": \"NO_PROVEN_EDGE\",\n      \"live_trading\": false,\n      \"paid_actions\": false,\n      \"wallet_actions\": false\n    }\n  ],\n  \"errors\": [],\n  \"checkpoint\": {\n    \"status\": \"LOCAL_COMMITTED\",\n    \"mode\": \"qualification_local\",\n    \"head\": \"ed98680b60074cc6bcc8451db3079995d0096504\",\n    \"remote_capability\": false\n  }\n}\n",
+  "task_class": "infrastructure_review",
+  "task_id": "AUTONOMOUS-WIRING-RECEIPT-REVIEW-20260926"
+}

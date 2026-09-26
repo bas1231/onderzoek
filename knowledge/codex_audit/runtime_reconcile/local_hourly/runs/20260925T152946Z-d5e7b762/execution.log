@@ -1,0 +1,23 @@
+{
+  "head": "12ec55ec115d118666d9dc6e81f5c2043ab0313f",
+  "live_trading": false,
+  "mode": "qualification_local",
+  "openai_api": false,
+  "paid_actions": false,
+  "remote_capability": false,
+  "schema": "PVA_PROD_RUNTIME_SYNC_V1",
+  "status": "READY",
+  "timestamp_utc": "2026-09-25T15:29:47.356146+00:00",
+  "wallet_actions": false
+}
+{"browser_bridge_required": true, "browser_fallback": {"incident": "/home/research/.local/state/prediction-research/incidents/hourly-research-20260925T1500+0000__HOURLY_RESEARCH_WAKE.json", "reason": "DISPATCH_PENDING", "used": true}, "economic_conclusion": "NO_PROVEN_EDGE", "execution_mode": "qualification_local", "ingest": {"applied": [], "errors": [], "ok": true, "status": "NO_APPLICABLE_RESPONSES"}, "live_trading": false, "local_request_ref": "knowledge/ai_exchange/requests/hourly-20260925T150000+0000.json", "openai_api": false, "paid_actions": false, "publish": {"live_trading": false, "model_roundtrip_proven": false, "ok": true, "openai_api": false, "paid_actions": false, "published": false, "request_path": "knowledge/ai_exchange/requests/hourly-20260925T150000+0000.json", "run_id": "hourly-20260925T150000+0000", "status": "DISPATCH_PENDING", "wallet_actions": false}, "run_id": "hourly-20260925T150000+0000", "schema": "PVA_AI_WAKE_STATUS_V2", "status_ref": "knowledge/ai_exchange/status/hourly-20260925T150000+0000.json", "transport_preference": "local_browser", "wallet_actions": false}
+baseline_missing
+ASSET_FILL_HOURLY_EVALUATOR_RC 1
+manifest_dir_missing
+KWI_FULL_STATION_EVALUATOR_RC 1
+hourly-20260925T150000+0000 0 13 0 80 0 0 E007_SIX_DOMAIN
+EDGE_HUNTER_PACKET /repo/knowledge/runs/edge_hunter/edge-hunt-hourly-20260925T150000+0000.json
+ASSET_FILL_CHECKPOINT_RC 0
+KWI_FULL_STATION_CHECKPOINT_RC 0
+GIT_CHECKPOINT_RC 0
+SCHEDULED_CYCLE_RECEIPT hourly-20260925T150000+0000

@@ -1,0 +1,17 @@
+mount: /home/leonh/prediction_research_prod/knowledge/codex_audit/runtime_reconcile/local_hourly/runs/20260925T110736Z-bc6bcd68/jail: mount point not mounted or bad option.
+       dmesg(1) may have more information after failed mount system call.
+Traceback (most recent call last):
+  File "/home/leonh/prediction_research_prod/knowledge/codex_audit/runtime_reconcile/local_hourly/run_isolated.py", line 74, in <module>
+    if __name__=='__main__':raise SystemExit(inner(sys.argv[2]) if len(sys.argv)>1 and sys.argv[1]=='--inner' else main())
+                                             ^^^^^^^^^^^^^^^^^^
+  File "/home/leonh/prediction_research_prod/knowledge/codex_audit/runtime_reconcile/local_hourly/run_isolated.py", line 31, in inner
+    mount('-o','remount,ro',jail)
+  File "/home/leonh/prediction_research_prod/knowledge/codex_audit/runtime_reconcile/local_hourly/run_isolated.py", line 10, in mount
+    def mount(*args):run(['/usr/bin/mount',*map(str,args)],stdout=subprocess.DEVNULL)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/leonh/prediction_research_prod/knowledge/codex_audit/runtime_reconcile/local_hourly/run_isolated.py", line 9, in run
+    def run(args,**kw):return subprocess.run(args,check=True,timeout=60,**kw)
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/subprocess.py", line 571, in run
+    raise CalledProcessError(retcode, process.args,
+subprocess.CalledProcessError: Command '['/usr/bin/mount', '-o', 'remount,ro', '/home/leonh/prediction_research_prod/knowledge/codex_audit/runtime_reconcile/local_hourly/runs/20260925T110736Z-bc6bcd68/jail']' returned non-zero exit status 32.

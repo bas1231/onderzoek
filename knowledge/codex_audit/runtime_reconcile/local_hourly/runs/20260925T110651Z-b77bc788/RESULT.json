@@ -1,0 +1,22 @@
+{
+  "started_at": "2026-09-25T11:06:51.959987+00:00",
+  "exit_code": 1,
+  "owner_preserved": true,
+  "command": [
+    "/usr/bin/unshare",
+    "--user",
+    "--map-root-user",
+    "--mount",
+    "--net",
+    "--pid",
+    "--fork",
+    "--kill-child",
+    "/usr/bin/python3",
+    "/home/leonh/prediction_research_prod/knowledge/codex_audit/runtime_reconcile/local_hourly/run_isolated.py",
+    "--inner",
+    "/home/leonh/prediction_research_prod/knowledge/codex_audit/runtime_reconcile/local_hourly/runs/20260925T110651Z-b77bc788"
+  ],
+  "qualification": "AUDIT_INCOMPLETE",
+  "scientific_status": "NO_PROVEN_EDGE",
+  "evidence_scope": "Echte lokale pipeline in kernelisolatie; geen automatische globale E2E-PASS"
+}

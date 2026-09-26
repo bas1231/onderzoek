@@ -1,0 +1,42 @@
+{
+  "candidate_decisions": [
+    {
+      "candidate_id": "KWI-INCOMPLETE-TO-CANONICAL-V1",
+      "queue_status": "PARKED",
+      "reason": "De wachtrij vermeldt een eerder verworpen eenvoudige incomplete mean. De oorspronkelijke resultaten ontbreken, zodat die verwerping hier niet onafhankelijk kan worden gecontroleerd. Er is geen nieuwe evidence voor heropening.",
+      "next_decisive_test": "Alleen nieuwe holdout-evidence of een daadwerkelijk vooraf geregistreerd orthogonaal mechanisme kan herbeoordeling dragen; geen hertuning op dezelfde ontwikkeldata.",
+      "resurrection_condition": "Nieuwe onafhankelijke holdout-evidence of een vooraf geregistreerd orthogonaal mechanisme met controleerbare provenance."
+    },
+    {
+      "candidate_id": "PAYOFF-IDENTITY-MINING-V1",
+      "queue_status": "NEEDS_DIRECTOR",
+      "reason": "Geen concreet contractpaar, primaire contractregels of statewise uitbetalingstabel aangeleverd. De vermelding van Combos bewijst geen payoff-identiteit.",
+      "next_decisive_test": "Toets een concreet paar aan primaire regels in alle toegestane toestanden, inclusief gelijkstanden, annuleringen en revisies. Eén verschil weerlegt de identiteit. Pas na een sluitend bewijs is een gesynchroniseerde uitvoerbare L2-kostenvergelijking zinvol.",
+      "resurrection_condition": null
+    },
+    {
+      "candidate_id": "ASSET-RANK-MAKER-HEDGE-V1",
+      "queue_status": "RUNNING",
+      "reason": "RUNNING is uitsluitend de aangeleverde administratieve status. Actieve experiment-ID's, protocolinhoud, orderboekevents en bewijs van een volledige passieve fill ontbreken; hedge-economie is niet vastgesteld.",
+      "next_decisive_test": "Beoordeel aangeleverde monitoring onder het bestaande preregistratieprotocol. Alleen een conservatief bewezen volledige passieve fill opent de toets van gesynchroniseerde uitvoerbare hedgeprijzen, diepte, fees, slippage en latency.",
+      "resurrection_condition": null
+    },
+    {
+      "candidate_id": "KWI-FULL-STATION-PRECANONICAL-V1",
+      "queue_status": "WAITING_FOR_RESULT",
+      "reason": "Geen post-cutoff cases, volledige protocolinhoud, cutofftijd of canonieke uitkomsten aangeleverd. Algemene weerbronbeschrijvingen valideren het kandidaatmechanisme niet.",
+      "next_decisive_test": "Beoordeel post-cutoff cases volgens het bestaande vooraf geregistreerde 24-uurs full-station-protocol, met beschikbaarheidstijden, stationsdekking en gezaghebbende eindwaarden. Toets aan de oorspronkelijke criteria zonder achteraf selectie of hertuning.",
+      "resurrection_condition": null
+    },
+    {
+      "candidate_id": "MANUAL-SCOUT-HENGELTJES-20260924",
+      "queue_status": "EXPERIMENT_REQUIRED",
+      "reason": "De handmatige seed zelf ontbreekt. Late passieve makerorders zijn alleen een hypothese uit de routingbeschrijving; domein, mechanisme en economische opbrengst zijn niet onafhankelijk vastgesteld.",
+      "next_decisive_test": "Eerste toetsvoorwaarde is de oorspronkelijke seed met concrete claim, markt en regels. Daarna vereist de beschreven shadow-toets een vooraf vastgelegd protocol met conservatieve prijs-tijdwachtrij, fail-closed verwerking van sequencegaten, reconnects en restarts, gedeeltelijke fills, markouts, definitieve settlement en netto-opbrengst na fricties. Optimistische fills blijven buiten PRIMARY.",
+      "resurrection_condition": null
+    }
+  ],
+  "local_execution_authorized": false,
+  "next_trigger": "volgende echte hourlydata",
+  "scientific_status": "NO_PROVEN_EDGE"
+}
