@@ -1,0 +1,56 @@
+{
+  "schema": "AUTONOMOUS_BUILD_CHARTER_V1",
+  "build_id": "BUILD-CONTROL-ROOM-V0-20260924",
+  "protocol_version": 1,
+  "objective": "Bouw een lokale read-only Prediction Control Room V0 die bestaande Research-OS/Git/runtime-evidence zichtbaar maakt zonder nieuwe externe markt/API-polls of muterende control-plane acties.",
+  "source_commit": "0c77ac683fe88a165362c53c4eddfa89ffddfdfb",
+  "allowed_capabilities": [
+    "read_repository",
+    "read_runtime",
+    "read_git",
+    "run_tests",
+    "compile",
+    "health_check",
+    "inspect_status"
+  ],
+  "allowed_paths": [
+    "control/control_room",
+    "control/tests/test_control_room.py",
+    "docs/CONTROL_ROOM_V0.md",
+    "control/builds/BUILD-CONTROL-ROOM-V0-20260924.json"
+  ],
+  "planned_paths": [
+    "control/control_room",
+    "control/tests/test_control_room.py",
+    "docs/CONTROL_ROOM_V0.md",
+    "control/builds/BUILD-CONTROL-ROOM-V0-20260924.json"
+  ],
+  "acceptance_criteria": [
+    "Server bindt standaard uitsluitend op 127.0.0.1 en gebruikt alleen Python-stdlib/runtimebestanden/Git; geen outbound markt- of externe API-calls.",
+    "HTTP-laag is read-only: alleen GET/HEAD; POST/PUT/PATCH/DELETE leveren 405 en kunnen geen projectstate wijzigen.",
+    "Snapshot toont minimaal project/economic status, Git-status, geregistreerde agents, recente lokale taken/resultaten/activiteit, alerts en host-resource-indicatoren met provenance.",
+    "Ontbrekende, onleesbare of stale evidence wordt als UNKNOWN/WARNING weergegeven en nooit stil als HEALTHY geïnterpreteerd.",
+    "Dashboard toont geen secrets of credentialwaarden; alleen vooraf geselecteerde veilige metadata wordt geëxtraheerd.",
+    "UI bevat System Health, Live Activity, Agents, Tasks, Git, Alerts en Resources en ververst vanuit dezelfde lokale snapshot-endpoint.",
+    "Unit/integratietests bewijzen read-only gedrag, fail-closed ontbrekende data, veilige task-extractie en werkende snapshot/health endpoints.",
+    "Alle nieuwe Python-bestanden compileren en de control-room test-suite slaagt zonder extra package-installatie.",
+    "Geen protected governance-bestand wordt gewijzigd en live trading, paid actions en wallet actions blijven false."
+  ],
+  "non_goals": [
+    "Live trading, orderplaatsing, wallet/fund movement of credentials beheren.",
+    "Remote/public exposure, authentication of internet-facing deployment.",
+    "Nieuwe Kalshi/Polymarket/TWC/weather/news polling vanuit het dashboard.",
+    "Researchlogica, candidate ranking of economische status automatisch wijzigen.",
+    "WebSocket/SQLite/productie-deployment; V0 mag lokale GET-polling en filesystem/Git reads gebruiken."
+  ],
+  "independent_verification": "Een aparte unittest-laag maakt een tijdelijke fixture-repository en verifieert snapshotsemantiek en HTTP read-only/fail-closed gedrag los van de live Research-OS data.",
+  "rollback_plan": "Verwijder control/control_room, control/tests/test_control_room.py en docs/CONTROL_ROOM_V0.md of revert de build-commit; er worden geen runtime/datastoremigraties uitgevoerd.",
+  "cleanup_plan": "Tests gebruiken tijdelijke directories en servers en sluiten/verwijderen die automatisch; de dashboardserver maakt standaard geen persistente state aan.",
+  "max_attempts": 2,
+  "governance_change": false,
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false
+  }
+}

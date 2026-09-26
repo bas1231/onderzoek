@@ -1,14 +1,19 @@
 {
-  "active_experiment_ids": [],
   "candidate_id": "MANUAL-SCOUT-HENGELTJES-20260924",
   "created_at": "2026-09-24T15:57:00+00:00",
+  "updated_at": "2026-09-24T17:22:15.157080+00:00",
+  "provenance": "MANUAL_SCOUT_SEED",
+  "provenance_note": "User-supplied lead. Do not represent it as autonomously discovered by a scout.",
+  "lane": "microstructure",
+  "phase": "DISCOVERED",
   "decision": "UNPROVEN",
-  "lane": "DISCOVERY",
-  "live_trading": false,
+  "queue_status": "EXPERIMENT_REQUIRED",
+  "priority": "P2",
+  "manual_seed_ref": "knowledge/manual_scout_seeds/2026-09-24-hengeltjes-late-passive-liquidity.md",
   "manual_seed_payload": {
-    "core_question": "Do strict queue-realistic fills of unusually favorable late passive orders occur often enough, and do the filled subset win often enough after settlement and friction, to have positive expected value?",
     "origin_context": "Short-duration Kalshi weather/rain markets motivated leaving unusually favorable passive limit orders rather than paying near-certain 97-99 cent prices.",
     "proof_of_mechanism": "Confirmed historical example: Miami hourly-temperature 76F-or-above NO, resting 5 NO at 89 cents, full unexpected fill around 22:58, final settlement NO, cost $4.45, payout $5.00, realized profit +$0.55 (~12.36% ROI). This is not proof of edge.",
+    "core_question": "Do strict queue-realistic fills of unusually favorable late passive orders occur often enough, and do the filled subset win often enough after settlement and friction, to have positive expected value?",
     "required_kill_tests": [
       "false-positive fill simulation",
       "hindsight leakage",
@@ -17,22 +22,32 @@
       "profitability only under optimistic fill assumptions"
     ]
   },
-  "manual_seed_ref": "knowledge/manual_scout_seeds/2026-09-24-hengeltjes-late-passive-liquidity.md",
-  "needed_data": [],
-  "next_decisive_test": "Freeze and run a read-only prospective shadow protocol for late passive maker orders using conservative price-time queue reconstruction, sequence/reconnect/restart fail-closed handling, partial-fill accounting, post-fill markouts, authoritative final settlement and net EV after fees/friction. Keep optimistic fill assumptions outside PRIMARY results.",
-  "open_question": "Discovery must read the manual seed, classify the mechanism without assuming a domain in advance, and identify the cheapest decisive falsification path.",
-  "openai_api": false,
+  "mechanism": "Late-settlement passive-liquidity hypothesis in Kalshi weather markets. The hypothesized edge is favorable maker execution conditional on strict queue-realistic fills, not meteorological forecast accuracy.",
+  "open_question": "Can queue-realistic prospective shadow fills at predefined late-settlement passive bids survive false-positive-fill and adverse-selection kill tests after fees/friction?",
+  "next_decisive_test": "Execute the preregistered mandatory deathchecks for the read-only shadow protocol, prove three clean no-live/no-cost runs and the Miami regression fixture, then activate prospective collection only if every activation gate passes. PRIMARY evaluation must use conservative price-time queue reconstruction, sequence/reconnect/restart fail-closed handling, partial-fill accounting, +10/+30/+60/+120 markouts, authoritative final settlement and net EV after fees/friction; optimistic fill assumptions remain separate.",
+  "prospective_protocols": [
+    "knowledge/candidates/protocols/MANUAL-SCOUT-HENGELTJES-20260924-shadow-v1.json"
+  ],
+  "director_trace": {
+    "run_id": "hourly-20260924T190000+0200",
+    "response_commit": "bd839f714dc9ec0995f5fc51799185703338198a",
+    "discovery": "COMPLETED",
+    "mechanics_microstructure": "COMPLETED",
+    "mechanics_settlement": "COMPLETED",
+    "red_team_quick_kill": "INCONCLUSIVE",
+    "research_director": "COMPLETED",
+    "director_decision": "Proceed only as a frozen prospective read-only shadow experiment; no promotion, live execution or cost-bearing action is authorized.",
+    "economic_conclusion": "NO_PROVEN_EDGE"
+  },
+  "live_trading": false,
   "paid_actions": false,
-  "phase": "DISCOVERED",
-  "priority": "P2",
-  "provenance": "MANUAL_SCOUT_SEED",
-  "provenance_note": "User-supplied lead. Do not represent it as autonomously discovered by a scout.",
+  "wallet_actions": false,
+  "openai_api": false,
+  "active_experiment_ids": [],
+  "needed_data": [],
   "queue_entered_at": "2026-09-24T15:57:00+00:00",
   "queue_reason": "Discovery and Mechanics now agree on a testable microstructure/settlement mechanism, but no prospective queue-realistic sample exists yet and adverse selection remains unmeasured.",
-  "queue_status": "EXPERIMENT_REQUIRED",
   "resume_condition": null,
   "resurrection_condition": null,
-  "stop_condition": null,
-  "updated_at": "2026-09-24T17:22:15.157080+00:00",
-  "wallet_actions": false
+  "stop_condition": null
 }
