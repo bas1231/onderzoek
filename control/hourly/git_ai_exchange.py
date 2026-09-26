@@ -80,6 +80,8 @@ def _git(
     env: dict[str, str] | None = None,
     timeout: int = 45,
 ) -> subprocess.CompletedProcess[str]:
+    if os.environ.get("PREDICTION_EXECUTION_MODE", "production") != "production":
+        raise RuntimeError("REMOTE_GIT_CAPABILITY_FORBIDDEN")
     merged = os.environ.copy()
     if env:
         merged.update(env)

@@ -4,6 +4,7 @@ from pathlib import Path
 from datetime import datetime
 import importlib.util
 import json
+import os
 import sys
 import time
 
@@ -84,6 +85,9 @@ def browser_fallback(now: datetime, run_id: str, reason: str) -> dict:
 
 
 def main() -> int:
+    mode = os.environ.get("PREDICTION_EXECUTION_MODE", "production")
+    if mode not in {"production", "qualification_local"}:
+        raise ValueError("unsupported PREDICTION_EXECUTION_MODE")
     now = datetime.now().astimezone()
     run_id = current_run_id(now)
 
@@ -92,14 +96,17 @@ def main() -> int:
         ROOT / "control/hourly/ai_work_exchange.py",
     )
     transport = load_module(
-        "prediction_git_ai_exchange_wake",
-        ROOT / "control/hourly/git_ai_exchange.py",
+        "prediction_ai_exchange_wake_" + mode,
+        ROOT / "control/hourly" / (
+            "local_ai_exchange.py" if mode == "qualification_local" else "git_ai_exchange.py"
+        ),
     )
 
     # Pull completed specialist work first. The receiver is idempotent and
     # re-runs orchestration after application. A transport outage never widens
     # authority and does not block the local research cycle.
-    ingest = transport.safe_ingest_remote_responses()
+    ingest = (transport.ingest_local_responses() if mode == "qualification_local"
+              else transport.safe_ingest_remote_responses())
 
     bundle_path = ROOT / "knowledge/runs" / f"{run_id}-ai-work-bundle.json"
     publish: dict
@@ -109,7 +116,8 @@ def main() -> int:
         bundle = json.loads(bundle_path.read_text(encoding="utf-8"))
         request, local_request_path = contract.build_and_write(bundle)
         request_path = str(local_request_path.relative_to(ROOT))
-        publish = transport.safe_publish_request(request)
+        publish = (transport.publish_request(request) if mode == "qualification_local"
+                   else transport.safe_publish_request(request))
     else:
         publish = {
             "ok": False,
@@ -138,8 +146,9 @@ def main() -> int:
     status = {
         "schema": "PVA_AI_WAKE_STATUS_V2",
         "run_id": run_id,
-        "transport_preference": "git",
-        "browser_bridge_required": False,
+        "transport_preference": "local_browser" if mode == "qualification_local" else "git",
+        "execution_mode": mode,
+        "browser_bridge_required": mode == "qualification_local" and not no_ai_work,
         "ingest": ingest,
         "publish": publish,
         "local_request_ref": request_path,
@@ -153,7 +162,7 @@ def main() -> int:
     status_path = write_status(run_id, status)
     status["status_ref"] = str(status_path.relative_to(ROOT))
     print(json.dumps(status, sort_keys=True))
-    return 0
+    return 1 if mode == "qualification_local" and (not ingest.get("ok") or not publish.get("ok")) else 0
 
 
 if __name__ == "__main__":

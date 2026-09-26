@@ -2,6 +2,7 @@ from pathlib import Path
 from datetime import datetime, timezone
 import hashlib
 import json
+import os
 import urllib.request
 
 ROOT = Path.cwd()
@@ -18,6 +19,9 @@ def load_sources():
     return sources
 
 def fetch(source):
+    if os.environ.get("PREDICTION_EXECUTION_MODE") == "qualification_local":
+        from control.hourly.qualification_http import fetch as public_fetch
+        return public_fetch(source["url"], timeout=15)
     request = urllib.request.Request(source["url"], headers={"User-Agent":"PredictionResearch-public"})
     with urllib.request.urlopen(request, timeout=15) as response:
         body = response.read(750000)

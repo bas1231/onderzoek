@@ -24,10 +24,10 @@ try:
     result=subprocess.run(cmd,check=False,timeout=180,cwd=str(root))
 except Exception as exc:
     print('ASSET_FILL_HOURLY_ERROR',str(exc))
-    raise SystemExit(0)
+    raise SystemExit(1)
 print('ASSET_FILL_HOURLY_EVALUATOR_RC',result.returncode)
 if result.returncode!=0:
-    raise SystemExit(0)
+    raise SystemExit(result.returncode)
 if now>end:
     marker_path.parent.mkdir(parents=True,exist_ok=True)
     marker=dict(protocol_id=protocol.get('protocol_id'),window_end=end.isoformat(),finalized_at=datetime.now(timezone.utc).isoformat(),evaluator='control/jobs/evaluate_asset_fill_checkpoint_e352.py')

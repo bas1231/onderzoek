@@ -55,6 +55,13 @@ def _save_json(path: Path, obj: Any) -> None:
 def _request_json(base_url: str, endpoint: str, params: dict[str, Any], timeout: int) -> dict[str, Any]:
     query = urlencode({k: v for k, v in params.items() if v is not None})
     url = base_url.rstrip("/") + endpoint + ("?" + query if query else "")
+    if os.environ.get("PREDICTION_EXECUTION_MODE") == "qualification_local":
+        from control.hourly.qualification_http import fetch as public_fetch
+        body, _, _ = public_fetch(url, timeout=timeout)
+        payload = json.loads(body)
+        if not isinstance(payload, dict):
+            raise ValueError("invalid public response")
+        return payload
     req = Request(
         url,
         headers={

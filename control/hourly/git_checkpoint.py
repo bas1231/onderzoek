@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import fnmatch
+import importlib.util
 import json
 import os
 import subprocess
@@ -188,6 +189,16 @@ def restore_real_index_for_checkpoint_paths(paths: list[str]) -> bool:
 
 
 def main() -> int:
+    mode = os.environ.get("PREDICTION_EXECUTION_MODE", "production")
+    if mode not in ("production", "qualification_local"):
+        return fail("UNKNOWN_EXECUTION_MODE")
+    if mode == "qualification_local":
+        spec = importlib.util.spec_from_file_location("prediction_local_runtime", ROOT / "control/hourly/local_runtime.py")
+        local = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(local)
+        result = local.checkpoint(ROOT)
+        write_status(result.pop("status"), **result)
+        return 0
     branch = git("branch", "--show-current").stdout.strip()
     if branch != "main":
         return fail(f"unexpected branch: {branch!r}")

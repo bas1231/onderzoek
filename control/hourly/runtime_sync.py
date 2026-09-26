@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import importlib.util
 import json
+import os
 import subprocess
 import sys
 from datetime import datetime, timezone
@@ -165,6 +166,13 @@ def run_checkpoint() -> dict[str, Any]:
 
 
 def sync() -> dict[str, Any]:
+    mode = os.environ.get("PREDICTION_EXECUTION_MODE", "production")
+    if mode not in ("production", "qualification_local"):
+        raise RuntimeSyncError("UNKNOWN_EXECUTION_MODE")
+    if mode == "qualification_local":
+        local = load_module("prediction_local_runtime", ROOT / "control/hourly/local_runtime.py")
+        result = local.preflight(ROOT)
+        return write_status("READY", **{k:v for k,v in result.items() if k != "status"})
     checkpoint = load_module(
         "prediction_runtime_sync_checkpoint",
         ROOT / "control/hourly/git_checkpoint.py",

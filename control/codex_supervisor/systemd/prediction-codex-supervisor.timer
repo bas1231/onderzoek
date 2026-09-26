@@ -1,0 +1,12 @@
+[Unit]
+Description=Prediction Codex queue/backoff inspectie
+
+[Timer]
+OnBootSec=2min
+OnCalendar=*:0/5
+RandomizedDelaySec=30s
+Persistent=true
+Unit=prediction-codex-supervisor.service
+
+[Install]
+WantedBy=timers.target

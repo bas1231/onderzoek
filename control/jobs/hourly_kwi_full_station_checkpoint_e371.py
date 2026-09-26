@@ -23,10 +23,10 @@ try:
     result=subprocess.run([str(root/'.venv/bin/python'),str(evaluator)],check=False,timeout=180,cwd=str(root))
 except Exception as exc:
     print('KWI_FULL_STATION_HOURLY_ERROR',str(exc))
-    raise SystemExit(0)
+    raise SystemExit(1)
 print('KWI_FULL_STATION_EVALUATOR_RC',result.returncode)
 if result.returncode!=0:
-    raise SystemExit(0)
+    raise SystemExit(result.returncode)
 if now>end:
     marker.parent.mkdir(parents=True,exist_ok=True)
     payload=dict(protocol_id=protocol.get('protocol_id'),window_end=end.isoformat(),finalized_at=datetime.now(timezone.utc).isoformat(),evaluator='control/jobs/evaluate_kwi_full_station_checkpoint_e369.py')

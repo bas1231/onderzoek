@@ -3,6 +3,7 @@ from urllib.request import Request,urlopen
 from urllib.parse import quote
 from datetime import datetime,timezone
 import json
+import os
 
 root=Path.cwd()
 base_dir=root/'knowledge/raw/market_data/polymarket_shadow_baselines'
@@ -48,9 +49,13 @@ for page_index in range(20):
     if cursor:
         url=url+'&cursor='+quote(cursor,safe='')
     req=Request(url,headers={'User-Agent':'PredictionEdgeHunter/1.0','Accept':'application/json'})
-    with urlopen(req,timeout=30) as r:
-        raw=r.read()
-        status=r.status
+    if os.environ.get('PREDICTION_EXECUTION_MODE') == 'qualification_local':
+        from control.hourly.qualification_http import fetch
+        raw, _, status = fetch(url, timeout=30)
+    else:
+        with urlopen(req,timeout=30) as r:
+            raw=r.read()
+            status=r.status
     if status!=200:
         raise SystemExit('trade_http_non_200')
     data=json.loads(raw)

@@ -1,0 +1,16 @@
+[Unit]
+Description=Prediction inbegrepen Codex reasoning supervisor (geen uitvoeringstools)
+After=network-online.target
+
+[Service]
+Type=oneshot
+WorkingDirectory=%h/prediction_research_prod
+Environment=PREDICTION_CODEX_BUDGET_MODE=NORMAL
+EnvironmentFile=-%h/.config/prediction-research/codex-supervisor.env
+ExecStart=/usr/bin/python3 %h/prediction_research_prod/control/codex_supervisor/supervisor.py tick --mode ${PREDICTION_CODEX_BUDGET_MODE}
+TimeoutStartSec=35min
+TimeoutStopSec=30s
+KillMode=control-group
+NoNewPrivileges=true
+UMask=0077
+SuccessExitStatus=75

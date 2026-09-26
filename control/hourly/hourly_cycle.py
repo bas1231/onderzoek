@@ -1,6 +1,7 @@
 from pathlib import Path
 import importlib.util
 import json
+import os
 import subprocess
 import sys
 
@@ -251,10 +252,13 @@ def main() -> int:
             handle.write('Evidence Graph: ' + str(graph_input_state.get('evidence_graph_ref')) + chr(10))
             handle.write('Economic default: NO_PROVEN_EDGE' + chr(10))
 
-    subprocess.run(
+    wake_result = subprocess.run(
         [str(R / '.venv/bin/python'), str(R / 'control/hourly/hourly_wake.py')],
         check=False,
     )
+
+    if os.environ.get("PREDICTION_EXECUTION_MODE") == "qualification_local" and wake_result.returncode != 0:
+        raise RuntimeError("LOCAL_AI_WAKE_FAILED")
 
     print(
         run['run_id'],
