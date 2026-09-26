@@ -1,0 +1,41 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "experiments/health_check.py"
+  ],
+  "execution_provenance": {
+    "command_text": ".venv/bin/python experiments/health_check.py",
+    "executor_commit": "dc86af258e7af0b94ff3376305dfe73ecef736fc",
+    "policy_reason": "research action permitted",
+    "policy_status": "ALLOWED",
+    "support_preflight": {
+      "ok": true,
+      "script": "experiments/health_check.py",
+      "status": "SUPPORT_SCRIPT_TRACKED"
+    },
+    "task_provenance": {
+      "execution_commit": "dc86af258e7af0b94ff3376305dfe73ecef736fc",
+      "ok": true,
+      "relationship": "ancestor",
+      "status": "TASK_COMMIT_PROVEN",
+      "support_provenance": {
+        "script": "experiments/health_check.py",
+        "script_blob": "8cb7418661aa3dca7b95f416cb4ad982ceab4a6b",
+        "status": "SUPPORT_SCRIPT_BOUND_TO_TASK_COMMIT"
+      },
+      "task_blob": "770dc197aee15ad1f86733218a359a9b4d2b8862",
+      "task_commit": "ac0beef68de590d9219294a59534cacb2280ad8f",
+      "task_path": "control/tasks/pending/AUTOCHAT-BRIDGE-E415-CANARY-01.json"
+    }
+  },
+  "exit_code": 0,
+  "finished_at": "2026-09-26T14:10:08.498981+00:00",
+  "hypothesis_id": "CONTROL-BRIDGE-E415",
+  "source_commit": "dc86af258e7af0b94ff3376305dfe73ecef736fc",
+  "started_at": "2026-09-26T14:10:08.468068+00:00",
+  "status": "completed",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "7a329e5eb18b5df2a8487300e337e9153d99af42d0e8626ebaf55aa95a1c83dc",
+  "task_class": "infrastructure",
+  "task_id": "AUTOCHAT-BRIDGE-E415-CANARY-01"
+}
