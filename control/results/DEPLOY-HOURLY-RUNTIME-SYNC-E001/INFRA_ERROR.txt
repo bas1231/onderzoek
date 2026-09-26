@@ -1,0 +1,3 @@
+ValidationError: 1 validation error for Task
+  Value error, build authorization denied: build_contract_objective_mismatch [type=value_error, input_value={'task_id': 'DEPLOY-HOURL...llet_actions': False}}}}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.13/v/value_error
