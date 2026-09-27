@@ -1,0 +1,90 @@
+{
+  "schema_version": 2,
+  "status": "PREREGISTERED_BEFORE_UNSEEN_SHADOW_DATA",
+  "amendment": {
+    "timing": "before_first_unseen_shadow_observation",
+    "reason": "Fail-closed anti-gaming hardening discovered during static architecture audit before unseen benchmark data were collected.",
+    "changes": [
+      "Require identical preregistered case IDs for baseline and challenger.",
+      "Require every case ID to be present and unique.",
+      "Freeze case metadata across baseline/challenger: active_hour_id, task_shape and ground_truth_class must be identical for each case ID.",
+      "Treat malformed benchmark record types and invalid numeric/boolean fields as validation failures rather than coercing them.",
+      "Treat missing or zero metric denominators as UNKNOWN rather than favorable zero values.",
+      "Require both baseline and challenger to satisfy the minimum observation set before replacement can pass."
+    ]
+  },
+  "baseline": "current_hourly_factory_single_chatgpt_turn",
+  "challenger": "research_os_v1_shadow",
+  "minimum_observation_set": {
+    "unseen_candidate_events": 20,
+    "active_hour_cycles": 10,
+    "require_multiple_task_shapes": true,
+    "require_at_least_one_survivor_case": true,
+    "require_at_least_one_decisive_negative_case": true,
+    "case_id_required": true,
+    "case_id_unique": true,
+    "baseline_and_challenger_same_case_set": true,
+    "baseline_and_challenger_same_case_metadata": true
+  },
+  "primary_metrics": [
+    {"id":"M1","name":"unique_relevant_evidence_per_worker_run","direction":"HIGHER_IS_BETTER"},
+    {"id":"M2","name":"duplicate_research_ratio","direction":"LOWER_IS_BETTER"},
+    {"id":"M3","name":"steps_to_decisive_falsification","direction":"LOWER_IS_BETTER_WHEN_NEGATIVE_IS_VALID"},
+    {"id":"M4","name":"known_failure_pattern_detection_before_expensive_work","direction":"HIGHER_IS_BETTER"},
+    {"id":"M5","name":"survivor_preservation","direction":"NO_REGRESSION"},
+    {"id":"M6","name":"false_survivors","direction":"NO_REGRESSION_OR_LOWER"},
+    {"id":"M7","name":"contradictions_found","direction":"HIGHER_IS_BETTER"},
+    {"id":"M8","name":"point_in_time_and_provenance_completeness","direction":"NO_REGRESSION"},
+    {"id":"M9","name":"source_family_coverage","direction":"HIGHER_IS_BETTER"},
+    {"id":"M10","name":"queue_starvation_events","direction":"ZERO_TARGET"},
+    {"id":"M11","name":"coordination_overhead","direction":"LOWER_IS_BETTER_CONDITIONAL_ON_QUALITY"},
+    {"id":"M12","name":"plan_usage_consumption_if_observable","direction":"LOWER_IS_BETTER_CONDITIONAL_ON_QUALITY"}
+  ],
+  "missing_metric_policy": {
+    "missing_denominator": "UNKNOWN",
+    "zero_denominator": "UNKNOWN",
+    "unknown_metric_may_count_as_improvement": false,
+    "unknown_no_regression_metric_may_pass_gate": false
+  },
+  "hard_fail_conditions": [
+    "Any paid action without specific user approval.",
+    "Any live order/trade or wallet action without specific user approval.",
+    "Any promotion that overrides a failed required gate.",
+    "Any point-in-time leakage accepted as valid evidence.",
+    "Any deleted/suppressed negative evidence used to improve a thesis.",
+    "Any known survivor benchmark killed solely because it was waiting for data.",
+    "Any independent-reproduction pass where shared upstream evidence was knowingly ignored.",
+    "Any baseline/challenger comparison performed on different preregistered case sets.",
+    "Any baseline/challenger comparison where the same case ID has different frozen case metadata.",
+    "Any malformed benchmark value coerced into a favorable metric instead of failing validation.",
+    "Any missing metric denominator interpreted as zero to improve a comparison."
+  ],
+  "replacement_rule": [
+    "All hard-fail conditions must remain false.",
+    "Both baseline and challenger must satisfy the minimum observation set.",
+    "Baseline and challenger must contain the exact same unique preregistered case IDs.",
+    "For each case ID, active_hour_id, task_shape and ground_truth_class must be identical between baseline and challenger.",
+    "V1 must show no material regression in survivor preservation, false-survivor control, or provenance completeness.",
+    "Unknown, malformed or denominatorless metrics cannot satisfy an improvement or no-regression requirement.",
+    "V1 must show a strict improvement in at least two of: unique evidence efficiency, duplicate reduction, decisive falsification efficiency, contradiction detection, source-family coverage.",
+    "If quality improves only by materially increasing usage/coordination, retain the simpler baseline unless the gain is operationally important and documented.",
+    "If results differ by task shape, adopt task-shape-specific concurrency rather than forcing one global worker count."
+  ],
+  "anti_gaming": {
+    "metrics_frozen_before_unseen_shadow_data": true,
+    "no_post_hoc_case_removal": true,
+    "no_relabeling_failed_candidate_as_out_of_scope_after_result": true,
+    "no_generated_text_volume_metric": true,
+    "case_ids_required_and_unique": true,
+    "baseline_and_challenger_identical_case_ids": true,
+    "baseline_and_challenger_identical_case_metadata": true,
+    "frozen_case_metadata_fields": [
+      "active_hour_id",
+      "task_shape",
+      "ground_truth_class"
+    ],
+    "malformed_values_fail_validation_without_coercion": true,
+    "missing_denominators_are_unknown_not_zero": true,
+    "both_sides_must_meet_minimum_observation_set": true
+  }
+}

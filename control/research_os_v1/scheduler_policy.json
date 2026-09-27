@@ -1,0 +1,47 @@
+{
+  "schema_version": 1,
+  "status": "PREREGISTERED_SHADOW_POLICY",
+  "principle": "Prefer the cheapest admissible task that can change a decisive gate or unlock multiple downstream tasks, while preserving protected discovery capacity.",
+  "ordinal_levels": ["LOW", "MEDIUM", "HIGH", "DECISIVE"],
+  "dimensions": {
+    "decision_relevance": ["LOW", "MEDIUM", "HIGH", "DECISIVE"],
+    "uncertainty_reduction": ["LOW", "MEDIUM", "HIGH", "DECISIVE"],
+    "novelty": ["DUPLICATE", "INCREMENTAL", "NOVEL"],
+    "time_sensitivity": ["LOW", "MEDIUM", "HIGH"],
+    "dependency_unlock_value": ["NONE", "ONE", "MULTIPLE"],
+    "evidence_cost": ["LOW", "MEDIUM", "HIGH"],
+    "model_cost": ["LOW", "MEDIUM", "HIGH"],
+    "duplication_risk": ["LOW", "MEDIUM", "HIGH"]
+  },
+  "hard_ordering": [
+    "GOVERNOR_ADMISSIBLE_ONLY",
+    "DECISIVE_SEMANTIC_OR_SOURCE_KILL_CHECK",
+    "CHEAP_DECISIVE_FALSIFICATION",
+    "POINT_IN_TIME_OR_EXECUTION_EVIDENCE",
+    "MULTI_DEPENDENCY_UNLOCK",
+    "TIME_SENSITIVE_EVIDENCE",
+    "NOVEL_EVIDENCE",
+    "AGE_TIE_BREAK"
+  ],
+  "protected_capacity": {
+    "discovery_required_each_active_hour": true,
+    "exploration_share_target": "10-20_PERCENT_OF_DISCOVERY",
+    "override_requires_logged_reason": true
+  },
+  "waiting_policy": {
+    "waiting_for_data_consumes_specialist_capacity": false,
+    "blocked_task_may_run_only_if_blocker_resolved": true,
+    "plausible_candidate_starvation_forbidden": true
+  },
+  "parallelism_policy": {
+    "high_parallelism_independent_tasks_may_fan_out": true,
+    "strictly_sequential_tasks_should_not_fan_out": true,
+    "fanout_requires_distinct_question_or_source_family": true,
+    "duplicate_workers_on_same_prompt_not_counted_as_diversity": true
+  },
+  "reproducibility": {
+    "policy_frozen_during_shadow_benchmark": true,
+    "post_hoc_weight_changes_forbidden": true,
+    "fake_decimal_expected_value_scores_forbidden": true
+  }
+}
