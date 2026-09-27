@@ -1,0 +1,43 @@
+{
+  "schema_version": 1,
+  "status": "PREREGISTERED_NOT_RUN",
+  "question": "What is the smallest worker concurrency that captures nearly all useful parallel research value without excessive duplication or coordination overhead?",
+  "levels": [1, 2, 3, 4, 5, 6],
+  "task_families": [
+    {"id":"CX-DISCOVERY","shape":"HIGH_PARALLELISM_INDEPENDENT","example":"venue-agnostic source sweep across distinct source families"},
+    {"id":"CX-MIXED","shape":"PARTIAL_DEPENDENCIES","example":"candidate requiring independent source check, rules check, market check and red-team"},
+    {"id":"CX-SEQUENTIAL","shape":"LOW_PARALLELISM_SEQUENTIAL","example":"contract semantics -> payoff proof -> executable economics"}
+  ],
+  "frozen_metrics": [
+    "unique_relevant_evidence_items",
+    "duplicate_evidence_items",
+    "duplicate_research_ratio",
+    "decisive_failure_modes_found",
+    "contradictions_found",
+    "known_failure_patterns_triggered_correctly",
+    "premature_kills",
+    "false_survivors",
+    "coordinator_messages_or_handoffs",
+    "wall_clock_if_observable",
+    "plan_usage_consumption_if_observable"
+  ],
+  "normalization": {
+    "evidence_item_requires_provenance": true,
+    "same_upstream_source_counts_once_for_uniqueness": true,
+    "paraphrases_of_same_fact_count_once": true,
+    "activity_or_generated_text_is_not_a_positive_metric": true
+  },
+  "selection_rule": [
+    "Reject any concurrency level that materially increases premature kills or false survivors relative to lower concurrency.",
+    "For each task family, prefer the smallest concurrency level whose unique-evidence and decisive-failure coverage is not meaningfully improved by the next level.",
+    "If 5->6 mainly adds duplicate work/coordination, choose <=5.",
+    "If sequential task quality falls as concurrency rises, task-shape classifier must force lower fan-out rather than averaging across task types.",
+    "No single global worker count is required if task-shape-specific optima differ."
+  ],
+  "anti_overfit": {
+    "policy_may_not_change_mid_benchmark": true,
+    "unseen_events_required_for_final_selection": true,
+    "historical_replay_may_only_validate_coverage": true
+  },
+  "current_prior": "3-5 workers for parallelizable research is a hypothesis to test, not a fixed truth."
+}
