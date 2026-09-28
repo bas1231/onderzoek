@@ -1,0 +1,56 @@
+{
+  "schema_version": 1,
+  "status": "PREREGISTERED_SHADOW_POLICY",
+  "principle": "Discovery is judged by novel relevant coverage and provenance, not raw page count or keyword hits.",
+  "source_families": [
+    "official_rules_contracts",
+    "official_api_changelog_fees_rewards",
+    "official_market_product_changes",
+    "academic_primary_papers_datasets",
+    "public_code_repositories",
+    "incidents_failures_postmortems",
+    "reputable_secondary_analysis",
+    "community_discussion_weak_signals",
+    "new_or_undercovered_venues",
+    "cross_venue_mechanism_evidence"
+  ],
+  "primary_scout_bias": [
+    "official_rules_contracts",
+    "official_api_changelog_fees_rewards",
+    "academic_primary_papers_datasets",
+    "public_code_repositories"
+  ],
+  "recon_scout_bias": [
+    "incidents_failures_postmortems",
+    "community_discussion_weak_signals",
+    "new_or_undercovered_venues",
+    "cross_venue_mechanism_evidence"
+  ],
+  "per_run_metrics": [
+    "families_attempted",
+    "retrievals_succeeded",
+    "documents_new_or_changed",
+    "unique_relevant_evidence",
+    "primary_source_ratio",
+    "cross_scout_duplicate_ratio",
+    "unsupported_weak_signal_count",
+    "coverage_gaps",
+    "stale_or_failed_sources"
+  ],
+  "coverage_debt": {
+    "track_across_active_hours": true,
+    "rule": "A source family repeatedly skipped without a logged reason accumulates coverage debt and gains priority in later discovery cycles.",
+    "hot_candidate_may_not_permanently_starve_broad_discovery": true
+  },
+  "dedupe": {
+    "same_document_hash_counts_once": true,
+    "same_upstream_fact_via_multiple_summaries_counts_once_for_uniqueness": true,
+    "independent_primary_sources_may_count_separately": true,
+    "community_reposts_do_not_create_source_independence": true
+  },
+  "promotion": {
+    "community_lead_is_discovery_only": true,
+    "weak_signal_requires_independent_support_before_candidate_promotion": true,
+    "source_count_alone_never_proves_mechanism_or_edge": true
+  }
+}

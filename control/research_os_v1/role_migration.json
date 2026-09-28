@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "status": "MIGRATION_SPEC_ONLY",
+  "principle": "Remove permanent role processes, not domain expertise or mandatory gates.",
+  "legacy_to_domain": {
+    "recon_scout": {"domain":"discovery","mode":"RECON"},
+    "scout": {"domain":"discovery","mode":"PRIMARY"},
+    "weather_twc": {"domain":"market_research","capabilities":["weather","nowcasting","settlement_value_modeling"]},
+    "behavioral": {"domain":"market_research","capabilities":["behavioral","favorite_longshot","crowd_bias"]},
+    "informed_flow": {"domain":"market_research","capabilities":["informed_flow","information_flow"]},
+    "microstructure": {"domain":"mechanics","capabilities":["orderbook","maker_taker","fees","depth","fills","execution"]},
+    "settlement": {"domain":"mechanics","capabilities":["rules","settlement","oracle","finality","revisions"]},
+    "algebra": {"domain":"algebra","capabilities":["payout_identity","equivalence","dominance","synthetic_portfolio","formal_verification"]},
+    "prebuild_killer": {"domain":"red_team","mode":"QUICK_KILL"},
+    "chief_falsifier": {"domain":"red_team","mode":"DEEP_FALSIFICATION"},
+    "independent_reproducer": {"domain":"independent_reproducer","mode":"TEMPORARY_ISOLATED"},
+    "research_director": {"domain":"research_director","mode":"ORCHESTRATION"}
+  },
+  "task_role_mapping": {
+    "RULES": ["mechanics"],
+    "DATA": ["market_research", "mechanics"],
+    "MICROSTRUCTURE": ["mechanics"],
+    "SIGNALS": ["market_research"],
+    "SIGNALS_MICROSTRUCTURE": ["market_research", "mechanics"],
+    "RED_TEAM": ["red_team"],
+    "SCOUT": ["discovery"],
+    "BUILD_VALIDATION": ["mechanics"],
+    "INFRASTRUCTURE": ["research_director"]
+  },
+  "migration_rules": [
+    "A task may require multiple domains; do not force a single owner when dependencies are genuinely cross-domain.",
+    "Settlement checks remain mandatory where relevant even though settlement ceases to be a permanent standalone role.",
+    "Behavioral and informed-flow methods remain named capabilities under Market Research.",
+    "Pre-Build Killer and Chief Falsifier remain separate Red Team modes with different depth/trigger semantics.",
+    "Independent reproduction remains a promotion gate and gains stronger isolation despite losing permanent-agent status.",
+    "No legacy negative evidence or agent finding is deleted during migration."
+  ]
+}
