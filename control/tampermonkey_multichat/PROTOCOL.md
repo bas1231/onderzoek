@@ -1,100 +1,173 @@
-# Prediction Chat Multi-Chat Bridge Protocol
+# Prediction Chat ↔ WSL Bridge Protocol
 
-Status: canonical
-Protocolversie: 0.3.5+
-Vastgelegd: 2026-09-23
+Status: canonical, provisional Tier-A infrastructure
+Protocolversie: 0.6
+Vastgelegd: 2026-09-29
+Qualification: `REQUIRES_HIGH_INTELLIGENCE_REVIEW`
 
 ## Doel
 
-Dit document beschrijft het actuele protocol waarmee een ChatGPT-sessie via Tampermonkey opdrachten naar de lokale WSL Prediction control-plane stuurt en het resultaat naar exact dezelfde ChatGPT-sessie terug ontvangt.
+Dit document beschrijft de actuele Prediction-commandoroute tussen ChatGPT en lokale WSL.
 
-## Architectuur
+De primaire heenweg gebruikt niet langer ChatGPT-DOM-detectie. Nieuwe sessies moeten voor normale opdrachten de private GitHub command bus gebruiken.
 
-`ChatGPT assistanttekst -> Tampermonkey -> localhost:8767 command router -> localhost:8766 command receiver -> WSL -> localhost:8765 wake bridge -> oorspronkelijke ChatGPT-chat`
+## Primaire architectuur
 
-Iedere ChatGPT-tab krijgt automatisch een eigen `chat_id` en `consumer_id`. Een agent hoeft deze IDs niet zelf te verzinnen.
+Command path:
 
-## Actueel commandoprotocol
+`ChatGPT assistant -> private GitHub repo -> read-only local poller -> localhost:8767 command router -> localhost:8766 command receiver -> WSL`
 
-Gebruik voor lokale bridge-commands gewone zichtbare assistanttekst in dit formaat:
+Result path:
+
+`WSL -> localhost:8765 wake bridge -> ChatGPT`
+
+Na installatie van de inflight-patch gebruikt de result queue:
+
+`outbox -> inflight -> sent`
+
+Een event wordt atomair van `outbox` naar `inflight` verplaatst voordat `/next` het aan de browser teruggeeft. Een ambigu browserresultaat blokkeert daardoor nooit nieuwere resultaten en wordt niet automatisch opnieuw aangeboden.
+
+## Primaire commandoprotocol: GitHub command bus
+
+Canonical operations-document:
+
+`control/bridge_commands/OPERATIONS.md`
+
+Schema:
+
+`control/bridge_commands/COMMAND_SCHEMA_V1.json`
+
+Een ChatGPT-sessie maakt via de GitHub connector precies één nieuw bestand aan:
+
+`control/bridge_commands/inbox/<TASK_ID>.json`
+
+Task-ID's zijn immutable en uniek. Wijzig of hergebruik een bestaand task-ID nooit. Bij een fout wordt een nieuwe task aangemaakt.
+
+Verplichte safetyvelden:
+
+- `live_trading: false`
+- `paid_actions: false`
+- `wallet_actions: false`
+
+De lokale poller faalt gesloten wanneer één van deze velden niet exact `false` is.
+
+De poller schrijft nooit naar GitHub en raakt de working tree `~/prediction_research_prod` niet aan. Remote fetch gebeurt in een aparte lokale mirror.
+
+## Routing
+
+Een command kan optioneel `route_task_id` bevatten. Dan gebruikt de poller de bestaande lokale route van die taak.
+
+Zonder `route_task_id` gebruikt de poller de lokaal gepinde route:
+
+`~/.config/prediction-command-bus/route.json`
+
+De eerste bewezen control-route is `BRIDGE-BUS-E001` van 2026-09-29.
+
+Als een nieuwe ChatGPT-chat nog geen lokale route heeft, mag uitsluitend voor route-bootstrap de legacy Tampermonkey-route of menu-PING worden gebruikt. Daarna kan die route als nieuwe control-route worden gepind.
+
+## Durable command semantics
+
+De poller voert deterministische schema-, safety-, provenance- en deduplicatiechecks uit.
+
+Voor iedere task wordt vóór localhost-dispatch een duurzame lokale claim geschreven. Hierdoor geldt fail-closed at-most-once dispatch:
+
+- `DISPATCHED`: localhost bevestigde 2xx + `ok:true`;
+- `REJECTED`: deterministisch ongeldig of localhost expliciet geweigerd;
+- `AMBIGUOUS`: request kan wel of niet zijn aangekomen; nooit automatisch retryen;
+- `BLOCKED_ROUTE`: geen geldige route; geen dispatch uitgevoerd.
+
+Wanneer dezelfde task-ID later met andere bytes verschijnt: `TASK_ID_CONTENT_CONFLICT`; niet uitvoeren.
+
+## Result queue semantics
+
+Na inflight-installatie:
+
+- `outbox/`: nog niet geleased;
+- `inflight/`: exact eenmaal geleased; levering kan bevestigd of ambigu zijn;
+- `sent/`: browser-ACK bevestigd;
+- `quarantine/`: bewaarde legacy/ambigue evidence; niet als sent behandelen.
+
+Er is geen automatische `inflight -> outbox` retry. Replay vereist een expliciete, gecontroleerde handeling.
+
+## Legacy zichtbare DOM-route
+
+Het oude zichtbare protocol blijft alleen diagnostische fallback:
 
 `[[PREDICTION_CMD:<ACTION>:<TASK_ID>]]`
 
 Regels:
 
-- `ACTION` moet door de command receiver zijn toegestaan.
-- `TASK_ID` moet uniek zijn voor die uitvoering.
-- `<ACTION>` en `<TASK_ID>` zijn uitsluitend documentatieplaceholders en mogen nooit letterlijk worden verstuurd.
-- Genereer een echte unieke task-ID, bijvoorbeeld `BRIDGE-PING-20260923-163501-A7K2`.
-- Gebruik nooit letterlijke placeholdernamen zoals `UNIQUE_TASK_ID`, `UNIEKE-ID`, `TEST-ID` of `TASK_ID` als task-ID.
-- De marker moet letterlijk exact de tekens `[[PREDICTION_CMD:` + action + `:` + task-ID + `]]` bevatten.
-- Escape de dubbele punten nooit. Een vorm als `[[PREDICTION_CMD\:BRIDGE_PING\:...]]` is ongeldig voor de parser.
-- Voeg geen backslashes, Markdown-escaping of alternatieve scheidingstekens toe aan de marker.
-- Stuur de echte commandmarker als één gewone zichtbare assistanttekstregel; niet alleen in commentary/tool-output.
-- Gebruik niet automatisch het legacy `PREDICTION_BRIDGE_TASK`-formaat.
+- gebruik dit niet als primaire commandotransport;
+- `ACTION` moet receiver-allowed zijn;
+- `TASK_ID` moet uniek zijn;
+- niet escapen en niet in een code fence zetten;
+- voor bridge-diagnose is `BRIDGE_PING` toegestaan;
+- PASS vereist dezelfde task-ID, action `BRIDGE_PING`, exit code `0` en `BRIDGE_PONG`.
 
-De receiver `/health` is autoritatief voor de op dat moment toegestane acties.
+De oude DOM-route is in 2026-09-29 onbetrouwbaar gebleken voor assistant -> WSL commandodetectie en mag niet opnieuw als primaire route worden aangenomen zonder nieuwe Tier-A kwalificatie.
 
-## Bridge testen
+## Services en paden
 
-Wanneer de eigenaar vraagt de bridge te testen:
+Command bus runtime:
 
-1. Gebruik `BRIDGE_PING`.
-2. Genereer een nieuwe unieke task-ID; hergebruik nooit een eerder gebruikte of voorbeeld-ID.
-3. Plaats de commandmarker als gewone zichtbare assistanttekst zonder backslash-escaping.
-4. Verklaar de test pas PASS wanneer `RESULT_READY` exact dezelfde task-ID teruggeeft.
-5. Voor `BRIDGE_PING` vereist PASS tevens:
-   - action = `BRIDGE_PING`;
-   - exit code = `0`;
-   - WSL-resultaat bevat `BRIDGE_PONG`.
-6. Een resultaat met een andere task-ID is geen bewijs voor de huidige test.
-7. De Tampermonkey-menuoptie `Bridge-test (PING)` is alleen een diagnostische transporttest en vervangt de zichtbare-DOM-test niet wanneer juist DOM-detectie wordt onderzocht.
+- `~/.local/share/prediction-command-bus/command_bus_poller.py`
+- `~/.local/share/prediction-command-bus/repo`
+- `~/.local/state/prediction-command-bus/tasks/`
+- `~/.local/state/prediction-command-bus/incidents/`
+- `~/.config/prediction-command-bus/route.json`
+- `prediction-command-bus.service`
+- `prediction-command-bus.timer`
 
-## Multi-chat routing
+Bridge services:
 
-De router op poort 8767 registreert per task-ID de `chat_id` van de sessie die de opdracht creëerde. Resultaten voor een geroute task horen uitsluitend naar die chat terug te gaan.
+- `127.0.0.1:8765` wake/result bridge
+- `127.0.0.1:8766` command receiver
+- `127.0.0.1:8767` command router
 
-Autonome, ongeroute wakeups gebruiken alleen de expliciet ingestelde fallback-chat.
+## Installatie
 
-## Diagnosevolgorde
+Canonical installer:
 
-Controleer bij uitblijvend resultaat afzonderlijk:
+`control/bridge_commands/install_command_bus.py`
 
-1. Tampermonkey draait op ChatGPT;
-2. userscriptversie;
-3. poort 8765 wake bridge;
-4. poort 8767 command router;
-5. poort 8766 command receiver;
-6. `/health` van alle drie;
-7. DOM-scanner ziet de commandmarker;
-8. route bestaat voor de task-ID;
-9. resultaat staat in outbox;
-10. dezelfde chat consumeert en ACKt het resultaat.
+Deterministische self-tests:
 
-Een gezonde 8765/8766/8767-keten met een ontbrekende commandrequest wijst op de browser/DOM-detectielaag en niet op een WSL-servicefailure.
+`control/bridge_commands/selftest.py`
 
-## Performance-regel
+De installer:
 
-Gebruik geen globale `MutationObserver` die bij iedere streaming DOM-mutatie de volledige conversatie opnieuw scant. De werkende 0.3.5-lijn gebruikt een begrensde periodieke scan van recente conversation roots en vermijdt commandoscanning terwijl ChatGPT actief antwoordt.
+1. controleert bestaande 8765/8766/8767 services;
+2. gebruikt een aparte read-only Git mirror;
+3. pint een bewezen chatroute;
+4. seeddet eerder bewezen `BRIDGE-BUS-E001` zodat die niet opnieuw wordt uitgevoerd;
+5. stopt tijdelijk de wake service;
+6. bewaart bestaande outbox-events in quarantine met hashes/manifest;
+7. patcht de actieve wake-server narrow/in-place naar fail-closed inflight;
+8. start en health-checkt de wake service;
+9. installeert de 30-seconden command-bus timer;
+10. houdt qualification op `REQUIRES_HIGH_INTELLIGENCE_REVIEW` totdat onafhankelijke Tier-A review gereed is.
 
-## Bewezen baseline 2026-09-23
+## Bewezen baseline 2026-09-29
 
-### Menu/direct transport
+Task: `BRIDGE-BUS-E001`
 
-Task: `TM-PING-1790173270993`
+Bewezen:
 
-Resultaat: `BRIDGE_PING`, exit code `0`, `BRIDGE_PONG`, retour naar dezelfde chat.
+- assistant schreef command naar private GitHub repo;
+- WSL fetchte het command read-only;
+- router antwoordde HTTP 200, `exit_code:0`, `routed:true`;
+- matching result-event werd lokaal aangemaakt;
+- na verwijderen van oudere queue blockers ontving ChatGPT:
+  `NIGHTSHIFT_WSL_RESULT_V1 task=BRIDGE-BUS-E001 status=PASS exit=0`.
 
-Status: PASS.
+Conclusie: functionele end-to-end baseline PASS. Finale Tier-A kwalificatie is nog niet verleend.
 
-### Automatische zichtbare-DOM-route
+## Nieuwe sessies
 
-Tasks: `TM-DOM-20260923-001` en `DOM-AUTO-20260923-001`
+Een nieuwe Prediction-sessie moet eerst lezen:
 
-Beide werden als gewone zichtbare assistanttekst verstuurd en kwamen automatisch terug met `BRIDGE_PING`, exit code `0` en `BRIDGE_PONG` in dezelfde ChatGPT-chat.
+1. `control/bridge_commands/OPERATIONS.md`
+2. dit `PROTOCOL.md`
+3. `control/tampermonkey_multichat/CHATGPT_PROJECT_INSTRUCTIONS.md`
 
-Status: PASS.
-
-## Canonicaliteit
-
-Wanneer oude sessiekennis of documentatie conflicteert met dit bestand, is dit protocol voor `control/tampermonkey_multichat/` autoritatief.
+Bij conflict met oudere bridge-documentatie of sessiegeheugen is dit protocol autoritatief.
