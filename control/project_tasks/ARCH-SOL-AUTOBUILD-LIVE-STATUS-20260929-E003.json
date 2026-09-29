@@ -1,0 +1,56 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "ARCH-SOL-AUTOBUILD-LIVE-STATUS-20260929-E003",
+  "build_id": "ARCH-SOL-BUILDER-ASTRA-REVIEWER-20260929",
+  "source_commit": "65c2d5d330838d55f87275217542008ad36a6159",
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "local_git",
+    "user_service_manage",
+    "read_logs"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 120,
+  "operations": [
+    {
+      "type": "git",
+      "args": ["rev-parse", "architecture/sol-builder-astra-reviewer"]
+    },
+    {
+      "type": "git",
+      "args": ["log", "-1", "--format=%H%x09%s", "architecture/sol-builder-astra-reviewer"]
+    },
+    {
+      "type": "service",
+      "verb": "is-active",
+      "unit": "prediction-codex-supervisor.service"
+    },
+    {
+      "type": "service",
+      "verb": "is-active",
+      "unit": "prediction-codex-supervisor.timer"
+    },
+    {
+      "type": "journal",
+      "unit": "prediction-codex-supervisor.service",
+      "lines": 80
+    },
+    {
+      "type": "git",
+      "args": ["status", "--short"]
+    }
+  ],
+  "notes": "Read-only live status probe: determine whether autonomous Sol build/supervisor work is currently active and inspect recent runtime evidence. No project mutation, no remote Git write, no live trading, paid action, wallet action or credential access."
+}
