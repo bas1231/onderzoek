@@ -2,6 +2,8 @@
 
 Status: **RESEARCH ONLY — NO_PROVEN_EDGE**
 
+> **ChatGPT / nieuwe Prediction-sessie:** lees eerst [`00_CHATGPT_START_HERE.md`](00_CHATGPT_START_HERE.md). Dat bestand is de verplichte start voor lokale WSL-uitvoering, command-bus routing en de projectexecutor. Gebruik niet automatisch oudere bridge-instructies uit chatgeheugen.
+
 Deze repository is de canonieke, agent-leesbare kennislaag voor **venue-onafhankelijk onderzoek naar prediction markets**. Kalshi is een belangrijke venue, maar niet het centrum of de grens van het project. Het doel is niet om winstgevendheid te veronderstellen, maar om bekende feiten, mechanismen, hypotheses, falsificaties, experimenten en execution-beperkingen zodanig vast te leggen dat AI-agents continu nieuwe toetsbare verbanden kunnen ontdekken zonder eerder onderzoek steeds opnieuw te doen.
 
 De overkoepelende methodologie staat in `methodology/CONTINUOUS_PREDICTION_MARKET_RED_TEAM.md`.
@@ -75,17 +77,37 @@ Dark-web/illicit markets mogen als **intelligencebron** worden onderzocht via pu
 
 Onderzoek naar legale contract-, settlement-, collateral-, fee-, information-, behavioral-, oracle- en microstructurele inefficiënties is in scope. Marktmanipulatie, fraude, misleiding, sabotage, credentialmisbruik, ongeautoriseerde toegang en operationeel misbruik van softwarekwetsbaarheden zijn niet in scope. Publieke security-/incidentinformatie mag wel als defensieve, intelligence- of falsificatiecontext worden vastgelegd zonder exploit-instructies.
 
-## Actuele lokale multi-chat bridge
+## Actuele lokale ChatGPT ↔ WSL uitvoering
 
-Voor iedere Prediction-sessie die de lokale ChatGPT ↔ WSL bridge gebruikt is `control/tampermonkey_multichat/PROTOCOL.md` autoritatief.
+De primaire uitvoeringsmethode is nu de private GitHub **command bus** met de capability-scoped **project executor**.
 
-Wanneer de eigenaar vraagt de bridge te testen of een lokale bridge-command uit te voeren:
+Architectuur:
 
-- lees eerst dat protocol;
-- gebruik het actuele zichtbare multi-chat markerprotocol;
-- gebruik niet automatisch het legacy `PREDICTION_BRIDGE_TASK`-formaat;
-- een bridge-test gebruikt `BRIDGE_PING` met een unieke task-ID;
-- verklaar PASS alleen wanneer `RESULT_READY` exact dezelfde task-ID teruggeeft en de acceptance criteria in het protocol slagen;
-- iedere chat wordt door Tampermonkey afzonderlijk gerouteerd; verzin daarom niet handmatig een `chat_id`.
+`ChatGPT -> private GitHub command bus -> read-only WSL poller/router -> project executor -> WSL -> wake/result bridge -> dezelfde ChatGPT-sessie`
 
-Bewezen baseline op 2026-09-23: automatische zichtbare-DOM-detectie en volledige same-chat roundtrip zijn PASS met `TM-DOM-20260923-001` en `DOM-AUTO-20260923-001`.
+Voor iedere nieuwe Prediction-sessie die lokale uitvoering nodig kan hebben:
+
+1. lees eerst `00_CHATGPT_START_HERE.md`;
+2. lees daarna `control/bridge_commands/CURRENT_STATE.md` en `control/bridge_commands/SESSION_ROUTING.md`;
+3. stel een session-specific `route_task_id` vast uit een taak die aantoonbaar naar **diezelfde chat** terugkwam;
+4. gebruik voor normale lokale opdrachten een verse immutable task onder `control/bridge_commands/inbox/<TASK_ID>.json`;
+5. gebruik voor code/build/test/beheer de projectexecutor via `control/project_tasks/<TASK_ID>.json` plus het matching `bas1231/fg-assistent/dev_tasks/<TASK_ID>.json` manifest;
+6. claim alleen succes wanneer hetzelfde task-ID terugkomt met de verwachte status en assertions.
+
+De zichtbare `[[PREDICTION_CMD:...]]` DOM/Tampermonkey-route is alleen fallback/route-bootstrap voor een nieuwe chat zonder bewezen sessieroute; hij is niet meer de primaire commandotransport.
+
+Harde grenzen blijven bestaan: geen sudo/root, geen autonome WSL GitHub-push, geen credential writes, geen live trades/orders, geen wallet/crypto/fund movement en geen betaalde actie zonder expliciete goedkeuring voor die specifieke actie.
+
+Bewezen actuele same-chat command-bus baseline op 2026-09-29: `BRIDGE-COMMAND-BUS-CURRENT-ROUTE-E008` → `status=PASS exit=0`.
+
+Volledige canonical instructies:
+
+- `00_CHATGPT_START_HERE.md`
+- `control/NEW_SESSION_LOCAL_EXECUTION.md`
+- `control/bridge_commands/CURRENT_STATE.md`
+- `control/bridge_commands/SESSION_ROUTING.md`
+- `control/PROJECT_EXECUTOR.md`
+- `control/bridge_commands/OPERATIONS.md`
+- `control/tampermonkey_multichat/PROTOCOL.md`
+- `control/tampermonkey_multichat/CHATGPT_PROJECT_INSTRUCTIONS.md`
+- `PREDICTION_GPT_PROJECT_INSTRUCTIONS.md` — paste-ready blok voor ChatGPT Project Instructions.
