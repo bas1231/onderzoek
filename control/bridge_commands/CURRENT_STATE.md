@@ -11,13 +11,21 @@ Qualification: `REQUIRES_HIGH_INTELLIGENCE_REVIEW`
 
 The local command bus bootstrap completed successfully with `BOOTSTRAP_RC=0`. The terminal-safe installer preserved the hardened wake wrapper, patched the queue semantics in the underlying `bridge_server_v2.py`, installed the read-only GitHub poller and activated the systemd timer.
 
-Automated end-to-end verification also passed without manual dispatch:
+Automated end-to-end verification passed without manual dispatch:
 
 `NIGHTSHIFT_WSL_RESULT_V1 task=BRIDGE-BUS-AUTO-20260929-E001 status=PASS exit=0 event=1790680366-d92bee7475cb`
 
+A fresh session-specific route verification on 2026-09-29 also passed:
+
+`NIGHTSHIFT_WSL_RESULT_V1 task=TM-PING-1790690332005 status=PASS exit=0 event=1790690348-70b82c023090`
+
+Using that exact known-good route, the primary GitHub command bus was then re-tested end-to-end:
+
+`NIGHTSHIFT_WSL_RESULT_V1 task=BRIDGE-COMMAND-BUS-CURRENT-ROUTE-E008 status=PASS exit=0 event=1790690527-75b1ec98e0b6`
+
 This proves the active primary path:
 
-`ChatGPT assistant -> private GitHub command file -> read-only WSL poller -> localhost router/receiver -> WSL execution -> wake bridge -> same ChatGPT route`
+`ChatGPT assistant -> private GitHub command file -> read-only WSL poller -> localhost router/receiver -> WSL execution -> wake bridge -> same ChatGPT session route`
 
 ## Proven baseline
 
@@ -27,9 +35,25 @@ The main failure found in the legacy result path was head-of-line blocking: an o
 
 The installed result queue now uses fail-closed `outbox -> inflight -> sent` semantics in the base queue implementation. The hardened v0.8 wrapper remains responsible for compact delivery formatting, task dedupe and heartbeat behaviour.
 
+## Session routing incident and rule
+
+A later test exposed a separate multi-session routing problem: commands could execute correctly while their result was routed to an older/global pinned ChatGPT route rather than the session that issued the command. The local bridge services themselves remained healthy; the issue was addressing, not WSL execution.
+
+Current canonical rule:
+
+- every active Prediction chat/session should establish a task whose result is proven to return to that same chat;
+- use that task as explicit `route_task_id` for subsequent command-bus work in that session;
+- do not rely on `route_task_id:null` for normal build/test/diagnostic work when multiple Prediction sessions may exist;
+- a fresh session may bootstrap its route once through the documented fallback/menu ping, then reuse that successful task ID explicitly;
+- never reuse an already-claimed task to repair delivery; create a new immutable task ID.
+
+Canonical routing documentation: `control/bridge_commands/SESSION_ROUTING.md`.
+
+The successful pair `TM-PING-1790690332005` -> `BRIDGE-COMMAND-BUS-CURRENT-ROUTE-E008` is current functional evidence that explicit session routing works end-to-end.
+
 ## Project executor operational proof
 
-The capability-scoped Prediction project executor is operational for day-to-day project build/management work. It has now passed both deterministic safety tests and live WSL canaries.
+The capability-scoped Prediction project executor is operational for day-to-day project build/management work. It has passed deterministic safety tests and live WSL canaries.
 
 Successful evidence:
 
@@ -45,6 +69,7 @@ Formal Tier-A qualification is still recorded separately as `REQUIRES_HIGH_INTEL
 ## Canonical implementation
 
 - `OPERATIONS.md` — operator/new-session guide.
+- `SESSION_ROUTING.md` — canonical per-session result-routing rule.
 - `COMMAND_SCHEMA_V1.json` — immutable command schema.
 - `command_bus_poller.py` — read-only GitHub poller with durable local at-most-once claims.
 - `patch_wake_inflight.py` — wrapper-aware queue patch; hardened wrapper stays intact and `bridge_server_v2.py` receives the inflight semantics.
@@ -58,12 +83,16 @@ Canonical protocol and ChatGPT project instructions prefer the GitHub command bu
 
 ## How new ChatGPT sessions operate it
 
-1. Read `control/bridge_commands/OPERATIONS.md`.
-2. Read `control/tampermonkey_multichat/PROTOCOL.md` and `CHATGPT_PROJECT_INSTRUCTIONS.md`.
-3. For a normal local command, create one new immutable file under `control/bridge_commands/inbox/<TASK_ID>.json` using `COMMAND_SCHEMA_V1.json`.
-4. Do not edit or reuse a previous task ID.
-5. WSL polls GitHub read-only and normally picks up the command automatically within roughly 30 seconds.
-6. Results return through the wake bridge to the pinned route. The old visible `[[PREDICTION_CMD:...]]` DOM route is diagnostic/route-bootstrap fallback only.
+1. Read `control/bridge_commands/CURRENT_STATE.md`.
+2. Read `control/bridge_commands/SESSION_ROUTING.md`.
+3. Read `control/bridge_commands/OPERATIONS.md`.
+4. Read `control/NEW_SESSION_LOCAL_EXECUTION.md`, `control/PROJECT_EXECUTOR.md`, `control/tampermonkey_multichat/PROTOCOL.md` and `CHATGPT_PROJECT_INSTRUCTIONS.md` as applicable.
+5. Establish one session-specific route task whose result is proven to have returned to the current chat.
+6. For a normal local command, create one new immutable file under `control/bridge_commands/inbox/<TASK_ID>.json` using `COMMAND_SCHEMA_V1.json` and set `route_task_id` to the proven current-session route.
+7. Do not edit or reuse a previous task ID.
+8. WSL polls GitHub read-only and normally picks up the command automatically within roughly 30 seconds.
+9. Claim success only when the same task ID returns through the wake bridge with the expected result.
+10. The old visible `[[PREDICTION_CMD:...]]` DOM route is diagnostic/route-bootstrap fallback only.
 
 ## Guardrails
 
@@ -75,7 +104,8 @@ Canonical protocol and ChatGPT project instructions prefer the GitHub command bu
 - command claims are durable before localhost dispatch;
 - ambiguous dispatches are never automatically retried;
 - ambiguous result delivery remains in `inflight` and never automatically requeues;
-- the production working tree is not used as the command-bus fetch target.
+- the production working tree is not used as the command-bus fetch target;
+- session routing does not relax any execution, cost, trade, wallet, provenance or credential guardrail.
 
 ## Installation evidence
 
@@ -87,6 +117,8 @@ Observed 2026-09-29:
 - command-bus timer: installed/active as part of successful bootstrap;
 - qualification record: written by installer;
 - automated command `BRIDGE-BUS-AUTO-20260929-E001`: PASS, exit 0, returned to ChatGPT;
+- session route bootstrap `TM-PING-1790690332005`: PASS, exit 0, returned to the intended ChatGPT session;
+- explicit current-route command-bus test `BRIDGE-COMMAND-BUS-CURRENT-ROUTE-E008`: PASS, exit 0, returned to the same session;
 - bootstrap return code: `0`;
 - interactive terminal remained open;
 - project executor deterministic suite: PASS;
