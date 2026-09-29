@@ -1,0 +1,16 @@
+{
+  "schema": "PREDICTION_BRIDGE_COMMAND_V1",
+  "task_id": "DEV-PRED-CODE-DEMO-E001",
+  "action": "SIX_AI_HEALTH",
+  "created_at_utc": "2026-09-29T10:55:00Z",
+  "route_task_id": null,
+  "live_trading": false,
+  "paid_actions": false,
+  "wallet_actions": false,
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "notes": "Safe end-to-end proof that the bridge can execute repository-owned Python in WSL and write/read an in-project runtime artifact."
+}
