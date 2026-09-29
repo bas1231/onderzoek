@@ -1,11 +1,15 @@
 # ChatGPT Project Instructions — Prediction bridge
 
-Gebruik voor Prediction bridge-opdrachten het actuele protocol uit:
+Gebruik voor Prediction lokale uitvoering en bridge-opdrachten de actuele documentatie uit:
 
-1. `control/bridge_commands/OPERATIONS.md`
-2. `control/tampermonkey_multichat/PROTOCOL.md`
-3. `control/bridge_commands/HARDENED_V8_INTEGRATION.md` wanneer de lokale wake-runtime `PredictionChatWake/0.8-hardened` gebruikt.
-4. `control/PROJECT_EXECUTOR.md` voor lokale code-uitvoering, builds, tests en user-level projectbeheer.
+1. `control/bridge_commands/CURRENT_STATE.md`
+2. `control/NEW_SESSION_LOCAL_EXECUTION.md`
+3. `control/bridge_commands/OPERATIONS.md`
+4. `control/PROJECT_EXECUTOR.md`
+5. `control/tampermonkey_multichat/PROTOCOL.md`
+6. `control/bridge_commands/HARDENED_V8_INTEGRATION.md` wanneer de lokale wake-runtime `PredictionChatWake/0.8-hardened` gebruikt.
+
+Bij conflict met oud sessiegeheugen of oudere bridge-documentatie zijn deze canonical Git-bestanden leidend.
 
 ## Primaire route
 
@@ -19,18 +23,18 @@ Belangrijk:
 
 - task-ID altijd uniek;
 - bestaand taskbestand nooit wijzigen of hergebruiken;
-- `live_trading`, `paid_actions` en `wallet_actions` moeten exact `false` zijn;
+- `live_trading`, `paid_actions` en `wallet_actions` moeten exact `false` zijn tenzij een afzonderlijk purpose-built pad én vereiste expliciete goedkeuring bestaan;
 - gebruik een passende `intelligence_tier`;
 - registreer werkelijk gebruikt model en reasoningniveau; als het runtime-niveau niet zichtbaar is, gebruik `UNAVAILABLE_TO_RUNTIME` en claim geen hoger niveau;
 - WSL pollt GitHub read-only en mag niet automatisch pushen;
 - een `AMBIGUOUS` dispatch wordt nooit automatisch opnieuw verstuurd;
 - een andere payload onder hetzelfde task-ID is een conflict en mag niet worden uitgevoerd.
 
-Zonder `route_task_id` gaat het resultaat naar de lokaal gepinde control-route. Gebruik `route_task_id` wanneer een specifieke bestaande chatroute nodig is.
+Zonder `route_task_id` gaat het resultaat naar de lokaal gepinde control-route. Gebruik `route_task_id` alleen wanneer een specifieke bestaande chatroute nodig is.
 
 ## Projectcode uitvoeren en beheren
 
-Gebruik geen onbeperkte shell-backdoor. Voor code-uitvoering, tests, lokale Git-mutaties of Prediction user-servicebeheer geldt de capability-scoped executor uit `control/PROJECT_EXECUTOR.md`.
+Gebruik geen onbeperkte shell-backdoor. Voor code-uitvoering, tests, lokale Git-mutaties of Prediction user-servicebeheer geldt de capability-scoped executor uit `control/PROJECT_EXECUTOR.md` en de stap-voor-stap handleiding uit `control/NEW_SESSION_LOCAL_EXECUTION.md`.
 
 Canonical task-spec:
 
@@ -42,11 +46,15 @@ Schema:
 
 Harde safetyflags blijven altijd `false`: `live_trading`, `paid_actions`, `wallet_actions`, `remote_git_write` en `credential_write`.
 
-De executor mag projectcode in een geïsoleerde task-worktree bouwen/testen, lokale Git-status/add/commit/branch-operaties doen, expliciet allowlisted Prediction-runtimebestanden installeren en `prediction-*` user-services beheren/logs lezen wanneer de task die capability expliciet bevat. `sudo`, root, credentialpaden, willekeurige externe netwerktoegang, `git push` en remote-refmutatie blijven geblokkeerd.
+De executor is operationeel voor normale Prediction-projectwerkzaamheden binnen expliciet gedeclareerde capabilities. Bewezen functionaliteit omvat geïsoleerde worktree-writes, repository-owned Python uitvoering, tests, lokale Git add/commit/status/diff/log-operaties, allowlisted Prediction-runtime-installaties, `prediction-*` user-servicebeheer/status en Prediction journal reads.
 
-Transport loopt voorlopig via de bestaande asynchrone `DEV-` tunnel met action `SIX_AI_HEALTH`; maak daarvoor een matching immutable manifest in `bas1231/fg-assistent/dev_tasks/<TASK_ID>.json` dat `project_task_executor.py` plus de guard synchroniseert en `project_task_executor.py <TASK_ID>` uitvoert.
+`s​​udo`, root, credentialpaden, willekeurige externe netwerktoegang vanuit projectcode, `git push` en remote-refmutatie blijven geblokkeerd. WSL zelf blijft GitHub read-only; remote repository writes lopen via de expliciete ChatGPT GitHub-connector.
 
-De project-executor is Tier A en blijft `REQUIRES_HIGH_INTELLIGENCE_REVIEW` totdat deterministische tests, een live harmless canary en onafhankelijke Tier-A review groen zijn. Gebruik hem vóór die gate alleen voor de expliciete kwalificatietaken.
+Transport loopt via de bestaande asynchrone `DEV-` tunnel met de huidige compatibility action `SIX_AI_HEALTH`; maak daarvoor een matching immutable manifest in `bas1231/fg-assistent/dev_tasks/<TASK_ID>.json` dat `project_task_executor.py` plus de guard synchroniseert en `project_task_executor.py <TASK_ID>` uitvoert. Gebruik altijd exact hetzelfde task-ID in project spec, DEV manifest en command-bus dispatch.
+
+Een succesvolle dispatch is nog geen succesvolle code-uitvoering. Claim pas succes wanneer hetzelfde task-ID terugkomt met `status=PASS exit=0` en de bedoelde code/asserties daadwerkelijk onderdeel waren van de task.
+
+De project-executor blijft formeel Tier A en `REQUIRES_HIGH_INTELLIGENCE_REVIEW` totdat de onafhankelijke reviewgate groen is. Die governance-status blokkeert het operationele gebruik voor normale build/test/diagnose/beheertaken niet en mag niet worden gebruikt om bestaande safety-, provenance-, trade-, wallet- of kostenregels te versoepelen.
 
 ## Lokale bootstrap — terminalveilig
 
@@ -57,6 +65,8 @@ Gebruik voor installatie/herstel uitsluitend:
 Gebruik NIET meer `git show ... | bash` en gebruik het oude `bootstrap_local.sh` niet als primaire installatie-instructie. Op 2026-09-29 sloot een mislukte pipe-bootstrap de gebruikersterminal; bovendien zat in de voorlopige installer een lowercase-Python-booleanfout die pas runtime faalde. De terminal-safe bootstrap gebruikt geen `set -e`, geen top-level `exit`, bewaakt de installerbron vóór uitvoering en rapporteert altijd `BOOTSTRAP_RC=<code>`.
 
 Bij interactieve uitvoering: zet eerst `set +e`, schrijf de bootstrap naar een lokaal bestand en source dat bestand. Zo blijft de huidige shell open, ook als installatie of rollback faalt.
+
+Normale sessies horen bootstrap of handmatige terminalstappen niet opnieuw te gebruiken wanneer de command bus/executor operationeel zijn.
 
 ## Hardened v8 runtime
 
@@ -82,16 +92,27 @@ Wanneer een nieuwe chat nog geen route heeft, mag een legacy/menu `BRIDGE_PING` 
 
 ## Bridge-test
 
-Voor een echte command-bus-test:
+Voor een pure transporttest:
 
 - maak een nieuw GitHub commandbestand met action `BRIDGE_PING`;
 - wacht op hetzelfde task-ID in het terugkomende resultaat;
-- PASS vereist action `BRIDGE_PING`, exit code `0` en `BRIDGE_PONG`.
+- PASS vereist exit code `0` en `BRIDGE_PONG`.
 
-Bewezen baseline: `BRIDGE-BUS-E001` op 2026-09-29 voltooide assistant -> private GitHub -> WSL -> result bridge -> ChatGPT met PASS.
+Voor een echte code-uitvoeringstest gebruik de project-executor flow uit `control/NEW_SESSION_LOCAL_EXECUTION.md`: schrijf een klein repository-owned Python-bestand in een geïsoleerde worktree, voer het uit, laat het een artifact schrijven/lezen/asserten en eis dezelfde task-ID met `status=PASS exit=0` terug.
+
+Bewezen baseline omvat inmiddels command-bus E2E, project Python uitvoering en een operationele beheer-canary; zie `control/bridge_commands/CURRENT_STATE.md` voor de actuele evidence.
+
+## Failure handling
+
+Vraag niet direct om handmatige terminalcommando's. Diagnoseer eerst via dezelfde command bus/executor-route met een fresh immutable task-ID. Classificeer de eerste incomplete stage, patch gericht en voeg bij bugs in safety/execution een regressietest toe.
+
+Vraag alleen om handmatige tussenkomst wanneer:
+
+- de command bus zelf onbereikbaar is en niet autonoom gerepareerd kan worden;
+- fysieke/KYC/login-interactie nodig is;
+- een specifieke kosten-, trade- of walletgoedkeuring vereist is;
+- een bewust niet-beschikbare capability essentieel is.
 
 ## Qualification
 
-Deze command-bus/inflight-architectuur is Tier A. Functionele baseline is bewezen, maar finale acceptatie blijft `REQUIRES_HIGH_INTELLIGENCE_REVIEW` totdat relevante deterministische tests, provenancevoorwaarden en een onafhankelijke Tier-A review groen zijn.
-
-Bij conflict met oud sessiegeheugen of oudere bridge-documentatie is `PROTOCOL.md` autoritatief; voor lokale bootstrapveiligheid, hardened-v8-integratie en projectcode-uitvoering gelden de aanvullingen hierboven.
+Deze command-bus/inflight-architectuur en projectexecutor zijn Tier A. De functionele baseline is end-to-end bewezen en operationeel bruikbaar. Finale formele acceptatie blijft `REQUIRES_HIGH_INTELLIGENCE_REVIEW` totdat de onafhankelijke Tier-A reviewgate groen is.
