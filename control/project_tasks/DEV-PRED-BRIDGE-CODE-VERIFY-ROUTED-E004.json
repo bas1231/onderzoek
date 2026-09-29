@@ -1,0 +1,43 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-BRIDGE-CODE-VERIFY-ROUTED-E004",
+  "build_id": "TIERA-BRIDGE-COMMAND-BUS-20260929-E001",
+  "source_commit": "5a1bd70224c60732f321a14f8d7ad1a5c094000b",
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "local_git"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 180,
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/bridge_code_verify_routed_e004.py",
+      "content": "from pathlib import Path\nimport hashlib\n\np=Path('.runtime/bridge_code_verify_routed_e004.txt')\np.parent.mkdir(parents=True,exist_ok=True)\npayload='bridge routed code execution e004\\n'\np.write_text(payload,encoding='utf-8')\nreadback=p.read_text(encoding='utf-8')\nassert readback==payload\nprint('BRIDGE_CODE_EXECUTION_E004=PASS')\nprint(hashlib.sha256(readback.encode()).hexdigest())\n"
+    },
+    {
+      "type": "python",
+      "argv": ["python3", "control/dev_checks/bridge_code_verify_routed_e004.py"],
+      "timeout_seconds": 60
+    },
+    {
+      "type": "git",
+      "args": ["status", "--short"]
+    }
+  ],
+  "notes": "Fresh harmless code-execution verification using an explicit known-good result route."
+}
