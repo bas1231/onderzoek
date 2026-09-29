@@ -48,7 +48,7 @@ Harde safetyflags blijven altijd `false`: `live_trading`, `paid_actions`, `walle
 
 De executor is operationeel voor normale Prediction-projectwerkzaamheden binnen expliciet gedeclareerde capabilities. Bewezen functionaliteit omvat geïsoleerde worktree-writes, repository-owned Python uitvoering, tests, lokale Git add/commit/status/diff/log-operaties, allowlisted Prediction-runtime-installaties, `prediction-*` user-servicebeheer/status en Prediction journal reads.
 
-`s​​udo`, root, credentialpaden, willekeurige externe netwerktoegang vanuit projectcode, `git push` en remote-refmutatie blijven geblokkeerd. WSL zelf blijft GitHub read-only; remote repository writes lopen via de expliciete ChatGPT GitHub-connector.
+`sudo`, root, credentialpaden, willekeurige externe netwerktoegang vanuit projectcode, `git push` en remote-refmutatie blijven geblokkeerd. WSL zelf blijft GitHub read-only; remote repository writes lopen via de expliciete ChatGPT GitHub-connector.
 
 Transport loopt via de bestaande asynchrone `DEV-` tunnel met de huidige compatibility action `SIX_AI_HEALTH`; maak daarvoor een matching immutable manifest in `bas1231/fg-assistent/dev_tasks/<TASK_ID>.json` dat `project_task_executor.py` plus de guard synchroniseert en `project_task_executor.py <TASK_ID>` uitvoert. Gebruik altijd exact hetzelfde task-ID in project spec, DEV manifest en command-bus dispatch.
 
