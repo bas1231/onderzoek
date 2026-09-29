@@ -1,0 +1,16 @@
+{
+  "schema": "PREDICTION_BRIDGE_COMMAND_V1",
+  "task_id": "DEV-PRED-BRIDGE-CODE-VERIFY-ROUTED-E004",
+  "action": "SIX_AI_HEALTH",
+  "created_at_utc": "2026-09-29T13:28:00Z",
+  "route_task_id": "DEV-PRED-PROJECT-EXEC-OPS-E003",
+  "live_trading": false,
+  "paid_actions": false,
+  "wallet_actions": false,
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "notes": "Fresh end-to-end code execution test routed explicitly through the last known-good chat route."
+}
