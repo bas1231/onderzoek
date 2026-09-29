@@ -1,0 +1,16 @@
+{
+  "schema": "PREDICTION_BRIDGE_COMMAND_V1",
+  "task_id": "BRIDGE-NEWCHAT-ROUNDTRIP-20260929-287E6972",
+  "action": "BRIDGE_PING",
+  "created_at_utc": "2026-09-29T17:35:20Z",
+  "route_task_id": "SESSION-ROUTE-b8daf55db89e9c111bf39d1b",
+  "live_trading": false,
+  "paid_actions": false,
+  "wallet_actions": false,
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "notes": "Brand-new-chat end-to-end same-chat routing acceptance ping. No live trading, paid actions, wallet actions, credential actions or costs. Success requires this exact task ID to return to this chat with status=PASS exit=0."
+}
