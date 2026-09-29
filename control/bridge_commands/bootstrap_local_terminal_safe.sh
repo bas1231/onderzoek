@@ -10,7 +10,10 @@ main() {
     MIRROR="$HOME/.local/share/prediction-command-bus-bootstrap-safe"
     TMP="$(mktemp -d)" || { echo "FOUT: mktemp"; return 1; }
 
-    cleanup() { rm -rf "$TMP" >/dev/null 2>&1 || true; }
+    cleanup() {
+        trap - RETURN
+        rm -rf "$TMP" >/dev/null 2>&1 || true
+    }
     trap cleanup RETURN
 
     echo "=== PREDICTION COMMAND BUS SAFE BOOTSTRAP ==="
