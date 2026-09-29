@@ -27,6 +27,21 @@ The main failure found in the legacy result path was head-of-line blocking: an o
 
 The installed result queue now uses fail-closed `outbox -> inflight -> sent` semantics in the base queue implementation. The hardened v0.8 wrapper remains responsible for compact delivery formatting, task dedupe and heartbeat behaviour.
 
+## Project executor operational proof
+
+The capability-scoped Prediction project executor is operational for day-to-day project build/management work. It has now passed both deterministic safety tests and live WSL canaries.
+
+Successful evidence:
+
+- `DEV-PRED-PROJECT-EXEC-INSTALL-E002`: PASS, exit 0, compile + full unittest suite green;
+- `DEV-PRED-PROJECT-EXEC-CANARY-E001`: PASS, exit 0; isolated worktree creation, repository-owned Python write/execute and local Git inspection proven;
+- `DEV-PRED-PROJECT-EXEC-OPS-E003`: PASS, exit 0; project Python execution, isolated local Git commit, bounded runtime install, `prediction-*` user-service inspection and Prediction journal-read path proven;
+- local Git identity for executor worktrees is repo-local only (`Prediction Project Executor <prediction-executor@local.invalid>`), not a global user Git mutation.
+
+The executor may therefore be used operationally for ordinary Prediction project work within its declared capabilities. Existing hard guardrails remain unchanged: no live trading, no paid actions, no wallet/crypto actions, no credential writes, no unrestricted root/sudo, and no autonomous remote Git push from WSL.
+
+Formal Tier-A qualification is still recorded separately as `REQUIRES_HIGH_INTELLIGENCE_REVIEW`; operational use does not convert that governance record into a completed independent review.
+
 ## Canonical implementation
 
 - `OPERATIONS.md` — operator/new-session guide.
@@ -73,8 +88,11 @@ Observed 2026-09-29:
 - qualification record: written by installer;
 - automated command `BRIDGE-BUS-AUTO-20260929-E001`: PASS, exit 0, returned to ChatGPT;
 - bootstrap return code: `0`;
-- interactive terminal remained open.
+- interactive terminal remained open;
+- project executor deterministic suite: PASS;
+- project executor runtime canary: PASS;
+- project executor operational management canary: PASS.
 
 ## Qualification gate
 
-The command bus is now functionally installed and proven end-to-end. It remains formally `REQUIRES_HIGH_INTELLIGENCE_REVIEW` until an independent Tier-A review finds no open critical issue. Do not use this provisional state to relax any trading, cost, wallet, provenance, evidence or autonomy guardrail.
+The command bus and capability-scoped project executor are functionally installed and proven end-to-end for operational project work. They remain formally `REQUIRES_HIGH_INTELLIGENCE_REVIEW` until an independent Tier-A review finds no open critical issue. Do not use this provisional qualification state to relax any trading, cost, wallet, provenance, evidence or autonomy guardrail.
