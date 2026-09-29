@@ -1,0 +1,16 @@
+{
+  "schema": "PREDICTION_BRIDGE_COMMAND_V1",
+  "task_id": "DEV-PRED-BUS-CODE-CANARY-20260929-E015",
+  "action": "SIX_AI_HEALTH",
+  "created_at_utc": "2026-09-29T15:35:00Z",
+  "route_task_id": "BRIDGE-PING-20260929-1734-E001",
+  "live_trading": false,
+  "paid_actions": false,
+  "wallet_actions": false,
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "notes": "Harmless end-to-end WSL code canary. Route is the one-time diagnostic same-chat BRIDGE_PING emitted immediately before dispatch; fail closed if that route is unavailable."
+}
