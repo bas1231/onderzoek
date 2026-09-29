@@ -1,0 +1,71 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "PREDICTION_PROJECT_TASK_V1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "task_id",
+    "source_commit",
+    "intelligence_tier",
+    "issuer",
+    "safety",
+    "capabilities",
+    "operations"
+  ],
+  "properties": {
+    "schema": {"const": "PREDICTION_PROJECT_TASK_V1"},
+    "task_id": {"type": "string", "pattern": "^[A-Za-z0-9._:-]{1,160}$"},
+    "source_commit": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+    "build_id": {"type": "string", "maxLength": 160},
+    "intelligence_tier": {"enum": ["A", "B", "C"]},
+    "issuer": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["model", "reasoning_level"],
+      "properties": {
+        "model": {"type": "string", "minLength": 1, "maxLength": 120},
+        "reasoning_level": {"type": "string", "minLength": 1, "maxLength": 120}
+      }
+    },
+    "safety": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["live_trading", "paid_actions", "wallet_actions", "remote_git_write", "credential_write"],
+      "properties": {
+        "live_trading": {"const": false},
+        "paid_actions": {"const": false},
+        "wallet_actions": {"const": false},
+        "remote_git_write": {"const": false},
+        "credential_write": {"const": false}
+      }
+    },
+    "capabilities": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "enum": [
+          "read_repository",
+          "write_worktree",
+          "run_project_python",
+          "run_tests",
+          "local_git",
+          "read_runtime",
+          "write_runtime",
+          "user_service_manage",
+          "read_logs"
+        ]
+      }
+    },
+    "working_directory": {"type": "string", "minLength": 1, "maxLength": 400},
+    "timeout_seconds": {"type": "integer", "minimum": 1, "maximum": 1800},
+    "notes": {"type": "string", "maxLength": 4000},
+    "operations": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 40,
+      "items": {"type": "object"}
+    }
+  }
+}
