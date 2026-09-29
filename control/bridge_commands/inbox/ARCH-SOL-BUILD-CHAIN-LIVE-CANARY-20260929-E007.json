@@ -1,0 +1,16 @@
+{
+  "schema": "PREDICTION_BRIDGE_COMMAND_V1",
+  "task_id": "ARCH-SOL-BUILD-CHAIN-LIVE-CANARY-20260929-E007",
+  "action": "SIX_AI_HEALTH",
+  "created_at_utc": "2026-09-29T17:33:00Z",
+  "route_task_id": "SESSION-ROUTE-805a64c89480ecb2640715a5",
+  "live_trading": false,
+  "paid_actions": false,
+  "wallet_actions": false,
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "notes": "Dispatch capability-scoped live build-chain canary E007. PASS requires a real completed candidate build-planner task and a real infrastructure_build task for the current MANUAL-SCOUT-HENGELTJES candidate. Bounded to three supervisor starts; no live trading, paid action, wallet action, credential access or remote Git write."
+}
