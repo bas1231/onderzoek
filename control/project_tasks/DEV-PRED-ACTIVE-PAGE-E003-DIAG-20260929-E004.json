@@ -1,0 +1,39 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-ACTIVE-PAGE-E003-DIAG-20260929-E004",
+  "build_id": "DIAG-ACTIVE-PAGE-E003-20260929-E004",
+  "source_commit": "5e643b7090824041e36f55c8fae745bca7d1628b",
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_runtime"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 180,
+  "notes": "Deterministically classify BRIDGE-ACTIVE-PAGE-ACCEPT-20260929-E003. No mutations outside isolated worktree/temp; runtime is read-only.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/diag_active_page_e003_e004.py",
+      "content": "from pathlib import Path\nimport json, sys, time\n\nTARGET='BRIDGE-ACTIVE-PAGE-ACCEPT-20260929-E003'\nSESSION='SESSION-ROUTE-06b02c18b66873daa2c4548a'\nhome=Path.home()\nstate_path=home/'.local/state/prediction-command-bus/tasks'/f'{TARGET}.json'\nroute_path=home/'.local/share/prediction-chat-bridge/routes'/f'{SESSION}.json'\nactive_path=home/'.local/share/prediction-chat-bridge/active_page.json'\nbridge=home/'.local/share/prediction-chat-bridge'\n\ndef load(p):\n    try:\n        x=json.loads(p.read_text(encoding='utf-8'))\n        return x if isinstance(x,dict) else None\n    except Exception:\n        return None\n\ndef fail(code):\n    print('ERROR_CLASS='+code)\n    raise SystemExit(2)\n\nstate=load(state_path)\nif not state:\n    fail('E003_TASK_STATE_MISSING')\nstatus=str(state.get('status') or 'UNKNOWN')\nprint('E003_STATE='+status)\nif status!='DISPATCHED':\n    fail('E003_'+status)\nif str(state.get('route_source') or '')!='active_page':\n    fail('E003_ROUTE_SOURCE_'+str(state.get('route_source') or 'MISSING').upper().replace(':','_'))\nsession=load(route_path)\nif not session:\n    fail('SESSION_ROUTE_FILE_MISSING')\nif str(state.get('chat_id') or '')!=str(session.get('chat_id') or ''):\n    fail('E003_WRONG_CHAT')\nif not str(state.get('consumer_id') or ''):\n    fail('E003_CONSUMER_MISSING')\nactive=load(active_path)\nif not active:\n    fail('ACTIVE_PAGE_FILE_MISSING')\nif str(active.get('source') or '')!='tampermonkey_focus_presence':\n    fail('ACTIVE_PAGE_BAD_SOURCE')\nlocations=[]\nfor name in ('outbox','inflight','sent'):\n    d=bridge/name\n    if not d.exists():\n        continue\n    for p in d.glob('*.json'):\n        obj=load(p)\n        if obj and str(obj.get('task_id') or '')==TARGET:\n            locations.append(name)\n            break\nprint('E003_EVENT_LOCATIONS='+','.join(locations))\nif 'sent' not in locations:\n    if 'inflight' in locations:\n        fail('E003_RESULT_INFLIGHT_NOT_ACKED')\n    if 'outbox' in locations:\n        fail('E003_RESULT_OUTBOX_NOT_LEASED')\n    fail('E003_RESULT_EVENT_NOT_FOUND')\nprint('E003_ACTIVE_PAGE_ACCEPTANCE=PASS')\n"
+    },
+    {
+      "type": "python",
+      "argv": ["python3", "control/dev_checks/diag_active_page_e003_e004.py"],
+      "timeout_seconds": 60
+    }
+  ]
+}
