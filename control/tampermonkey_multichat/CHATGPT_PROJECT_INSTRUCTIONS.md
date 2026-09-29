@@ -26,6 +26,16 @@ Belangrijk:
 
 Zonder `route_task_id` gaat het resultaat naar de lokaal gepinde control-route. Gebruik `route_task_id` wanneer een specifieke bestaande chatroute nodig is.
 
+## Lokale bootstrap — terminalveilig
+
+Gebruik voor installatie/herstel uitsluitend:
+
+`control/bridge_commands/bootstrap_local_terminal_safe.sh`
+
+Gebruik NIET meer `git show ... | bash` en gebruik het oude `bootstrap_local.sh` niet als primaire installatie-instructie. Op 2026-09-29 sloot een mislukte pipe-bootstrap de gebruikersterminal; bovendien zat in de voorlopige installer een lowercase-Python-booleanfout die pas runtime faalde. De terminal-safe bootstrap gebruikt geen `set -e`, geen top-level `exit`, patcht die bekende voorlopige installerfout alleen in een tijdelijke kopie en rapporteert altijd `BOOTSTRAP_RC=<code>`.
+
+Bij interactieve uitvoering: zet eerst `set +e`, schrijf de bootstrap naar een lokaal bestand en source dat bestand. Zo blijft de huidige shell open, ook als installatie of rollback faalt.
+
 ## Resultaten
 
 De result bridge gebruikt na installatie fail-closed queue-semantiek:
@@ -58,4 +68,4 @@ Bewezen baseline: `BRIDGE-BUS-E001` op 2026-09-29 voltooide assistant -> private
 
 Deze command-bus/inflight-architectuur is Tier A. Functionele baseline is bewezen, maar finale acceptatie blijft `REQUIRES_HIGH_INTELLIGENCE_REVIEW` totdat relevante deterministische tests, provenancevoorwaarden en een onafhankelijke Tier-A review groen zijn.
 
-Bij conflict met oud sessiegeheugen of oudere bridge-documentatie is `PROTOCOL.md` autoritatief.
+Bij conflict met oud sessiegeheugen of oudere bridge-documentatie is `PROTOCOL.md` autoritatief; voor lokale bootstrapveiligheid geldt de terminal-safe instructie hierboven als verplichte aanvulling.
