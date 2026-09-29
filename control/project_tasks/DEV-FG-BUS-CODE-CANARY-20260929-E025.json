@@ -1,0 +1,43 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-FG-BUS-CODE-CANARY-20260929-E025",
+  "build_id": "TIERA-PROJECT-EXECUTOR-20260929-E001",
+  "source_commit": "e782854610b3fa90979841530c291912adf18a9c",
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "local_git"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 180,
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/fg_bus_code_canary_e025.py",
+      "content": "from pathlib import Path\nimport hashlib\n\np = Path('.runtime/fg_bus_code_canary_e025.txt')\np.parent.mkdir(parents=True, exist_ok=True)\npayload = 'FG bus code canary E025 executed in WSL.\\n'\np.write_text(payload, encoding='utf-8')\nreadback = p.read_text(encoding='utf-8')\nassert readback == payload\nprint('FG_BUS_CODE_CANARY=PASS')\nprint('SHA256=' + hashlib.sha256(readback.encode()).hexdigest())\n"
+    },
+    {
+      "type": "python",
+      "argv": ["python3", "control/dev_checks/fg_bus_code_canary_e025.py"],
+      "timeout_seconds": 30
+    },
+    {
+      "type": "git",
+      "args": ["status", "--short"]
+    }
+  ],
+  "notes": "Harmless code-execution canary for this FG chat. Writes only inside the isolated project-executor worktree; no privacy files, production FG tree, network, credentials, trading, paid actions or wallet actions."
+}
