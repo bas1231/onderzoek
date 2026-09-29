@@ -1,0 +1,16 @@
+{
+  "schema": "PREDICTION_BRIDGE_COMMAND_V1",
+  "task_id": "BRIDGE-POST-BOOTSTRAP-REGRESSION-E012",
+  "action": "BRIDGE_PING",
+  "created_at_utc": "2026-09-29T14:58:00Z",
+  "route_task_id": "DEV-PRED-SESSION-BOOTSTRAP-INSTALL-20260929-E010",
+  "live_trading": false,
+  "paid_actions": false,
+  "wallet_actions": false,
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "notes": "Post-install regression: verify ordinary GitHub command-bus delivery still works through the newly installed session-bootstrap wake runtime."
+}
