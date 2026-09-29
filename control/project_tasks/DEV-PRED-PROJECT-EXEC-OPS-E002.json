@@ -1,0 +1,75 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-PROJECT-EXEC-OPS-E002",
+  "build_id": "TIERA-PROJECT-EXECUTOR-20260929-E001",
+  "source_commit": "b3c1abbf6e38029e12d818559e0b7bf30fcfb2f0",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "local_git",
+    "write_runtime",
+    "user_service_manage",
+    "read_logs"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 300,
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/project_executor_ops_probe.py",
+      "content": "from pathlib import Path\nimport hashlib\n\np = Path('.runtime/project_executor_ops_e002.txt')\np.parent.mkdir(parents=True, exist_ok=True)\npayload = 'project-executor-ops-e002\\n'\np.write_text(payload, encoding='utf-8')\nreadback = p.read_text(encoding='utf-8')\nprint('PROJECT_EXECUTOR_OPS_PYTHON=PASS')\nprint(f'SHA256={hashlib.sha256(readback.encode()).hexdigest()}')\n"
+    },
+    {
+      "type": "python",
+      "argv": ["python3", "control/dev_checks/project_executor_ops_probe.py"],
+      "timeout_seconds": 60
+    },
+    {
+      "type": "git",
+      "args": ["add", "control/dev_checks/project_executor_ops_probe.py"]
+    },
+    {
+      "type": "git",
+      "args": ["commit", "-m", "canary: local project executor commit E002"]
+    },
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/project_executor_runtime_payload_e002.txt",
+      "content": "project-executor-runtime-install-e002\n"
+    },
+    {
+      "type": "install_runtime",
+      "source": "control/dev_checks/project_executor_runtime_payload_e002.txt",
+      "destination": "/home/leonh/.local/share/prediction-project-executor/ops_probe_e002.txt",
+      "mode": 420
+    },
+    {
+      "type": "service",
+      "verb": "is-active",
+      "unit": "prediction-command-bus.timer"
+    },
+    {
+      "type": "journal",
+      "unit": "prediction-command-bus.service",
+      "lines": 20
+    },
+    {
+      "type": "git",
+      "args": ["status", "--short"]
+    }
+  ],
+  "notes": "Operational Tier-A canary. Proves project Python execution, isolated local commit, bounded runtime install, command-bus service visibility and log access. No remote Git write, live trading, paid or wallet actions."
+}
