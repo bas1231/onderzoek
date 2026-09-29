@@ -1,7 +1,7 @@
 # Prediction Chat ↔ WSL Bridge Protocol
 
 Status: canonical, provisional Tier-A infrastructure
-Protocolversie: 0.6
+Protocolversie: 0.7
 Vastgelegd: 2026-09-29
 Qualification: `REQUIRES_HIGH_INTELLIGENCE_REVIEW`
 
@@ -9,7 +9,7 @@ Qualification: `REQUIRES_HIGH_INTELLIGENCE_REVIEW`
 
 Dit document beschrijft de actuele Prediction-commandoroute tussen ChatGPT en lokale WSL.
 
-De primaire heenweg gebruikt niet langer ChatGPT-DOM-detectie. Nieuwe sessies moeten voor normale opdrachten de private GitHub command bus gebruiken.
+De primaire heenweg gebruikt geen ChatGPT-DOM-detectie. Nieuwe sessies gebruiken voor normale opdrachten de private GitHub command bus.
 
 ## Primaire architectuur
 
@@ -25,7 +25,7 @@ Na installatie van de inflight-patch gebruikt de result queue:
 
 `outbox -> inflight -> sent`
 
-Een event wordt atomair van `outbox` naar `inflight` verplaatst voordat `/next` het aan de browser teruggeeft. Een ambigu browserresultaat blokkeert daardoor nooit nieuwere resultaten en wordt niet automatisch opnieuw aangeboden.
+Een normaal resultevent wordt atomair van `outbox` naar `inflight` verplaatst voordat `/next` het aan de browser teruggeeft. Ambigue levering van normale command-resultaten wordt niet stil herhaald of als sent beschouwd.
 
 ## Primaire commandoprotocol: GitHub command bus
 
@@ -41,7 +41,7 @@ Een ChatGPT-sessie maakt via de GitHub connector precies één nieuw bestand aan
 
 `control/bridge_commands/inbox/<TASK_ID>.json`
 
-Task-ID's zijn immutable en uniek. Wijzig of hergebruik een bestaand task-ID nooit. Bij een fout wordt een nieuwe task aangemaakt.
+Task-ID's zijn immutable en uniek. Wijzig of hergebruik een bestaand command-task-ID nooit. Bij een fout wordt een nieuwe task aangemaakt.
 
 Verplichte safetyvelden:
 
@@ -51,60 +51,77 @@ Verplichte safetyvelden:
 
 De lokale poller faalt gesloten wanneer één van deze velden niet exact `false` is.
 
-De poller schrijft nooit naar GitHub en raakt de working tree `~/prediction_research_prod` niet aan. Remote fetch gebeurt in een aparte lokale mirror.
+De poller schrijft nooit naar GitHub en raakt de production working tree `~/prediction_research_prod` niet aan. Remote fetch gebeurt in een aparte lokale mirror.
 
 ## Routing
 
-Een command kan optioneel `route_task_id` bevatten. Dan gebruikt de poller de bestaande lokale route van die taak.
+Een command kan `route_task_id` bevatten. Dan gebruikt de poller de bestaande lokale route van die taak.
 
 Zonder `route_task_id` gebruikt de poller de lokaal gepinde route:
 
 `~/.config/prediction-command-bus/route.json`
 
-De eerste bewezen control-route is `BRIDGE-BUS-E001` van 2026-09-29.
+Bij meerdere actieve Prediction-sessies is expliciete per-command routing de standaard; de globale pinned route is dan niet voldoende.
 
-Als een nieuwe ChatGPT-chat nog geen lokale route heeft, mag uitsluitend voor route-bootstrap de legacy Tampermonkey-route of menu-PING worden gebruikt. Daarna kan die route als nieuwe control-route worden gepind.
+### Automatische bootstrap voor een nieuwe chat
+
+Sinds `DEV-PRED-SESSION-BOOTSTRAP-INSTALL-20260929-E010` is server-side automatische session bootstrap geïnstalleerd.
+
+De bestaande Prediction Chat Wake userscript pollt `/next` al met een stabiele `chat_id` plus `consumer_id`. De wake server gebruikt die informatie om voor een chat zonder eerder bewezen routed result automatisch een chat-scoped route aan te maken en een klein idempotent resultevent terug te sturen:
+
+`NIGHTSHIFT_WSL_RESULT_V1 task=SESSION-ROUTE-... status=PASS exit=0 kind=SESSION_ROUTE_BOOTSTRAP`
+
+Na ontvangst in dezelfde chat wordt die `SESSION-ROUTE-*` task-ID de `route_task_id` voor normale GitHub command-bus taken uit die sessie.
+
+Een zichtbare assistant `[[PREDICTION_CMD:...]]` marker is niet langer de normale bootstrapmethode. Legacy/menu PING blijft alleen diagnostische fallback.
+
+De bootstrap voert geen projectcommand uit. Het is uitsluitend idempotente routingmetadata. Een stale/ambigue bootstrap-announcement mag na een begrensde delay opnieuw worden aangekondigd; deze uitzondering geldt niet voor normale command execution en verandert de at-most-once commandosemantiek niet.
+
+Canonical routing-document:
+
+`control/bridge_commands/SESSION_ROUTING.md`
 
 ## Durable command semantics
 
 De poller voert deterministische schema-, safety-, provenance- en deduplicatiechecks uit.
 
-Voor iedere task wordt vóór localhost-dispatch een duurzame lokale claim geschreven. Hierdoor geldt fail-closed at-most-once dispatch:
+Voor iedere normale command-task wordt vóór localhost-dispatch een duurzame lokale claim geschreven. Hierdoor geldt fail-closed at-most-once dispatch:
 
 - `DISPATCHED`: localhost bevestigde 2xx + `ok:true`;
 - `REJECTED`: deterministisch ongeldig of localhost expliciet geweigerd;
 - `AMBIGUOUS`: request kan wel of niet zijn aangekomen; nooit automatisch retryen;
 - `BLOCKED_ROUTE`: geen geldige route; geen dispatch uitgevoerd.
 
-Wanneer dezelfde task-ID later met andere bytes verschijnt: `TASK_ID_CONTENT_CONFLICT`; niet uitvoeren.
+Wanneer hetzelfde command-task-ID later met andere bytes verschijnt: `TASK_ID_CONTENT_CONFLICT`; niet uitvoeren.
 
 ## Result queue semantics
 
 Na inflight-installatie:
 
 - `outbox/`: nog niet geleased;
-- `inflight/`: exact eenmaal geleased; levering kan bevestigd of ambigu zijn;
+- `inflight/`: exact eenmaal geleased; browserlevering kan bevestigd of ambigu zijn;
 - `sent/`: browser-ACK bevestigd;
 - `quarantine/`: bewaarde legacy/ambigue evidence; niet als sent behandelen.
 
-Er is geen automatische `inflight -> outbox` retry. Replay vereist een expliciete, gecontroleerde handeling.
+Normale command-resultaten krijgen geen automatische `inflight -> outbox` retry. Replay vereist een expliciete gecontroleerde handeling. Alleen de idempotente `SESSION-ROUTE-*` bootstrap-announcement heeft een aparte begrensde re-announcementregel, omdat daarbij geen command opnieuw wordt uitgevoerd.
 
 ## Legacy zichtbare DOM-route
 
-Het oude zichtbare protocol blijft alleen diagnostische fallback:
+Het oude zichtbare protocol blijft uitsluitend diagnostische fallback:
 
 `[[PREDICTION_CMD:<ACTION>:<TASK_ID>]]`
 
 Regels:
 
 - gebruik dit niet als primaire commandotransport;
+- gebruik dit niet als normale new-session bootstrap;
 - `ACTION` moet receiver-allowed zijn;
 - `TASK_ID` moet uniek zijn;
 - niet escapen en niet in een code fence zetten;
 - voor bridge-diagnose is `BRIDGE_PING` toegestaan;
 - PASS vereist dezelfde task-ID, action `BRIDGE_PING`, exit code `0` en `BRIDGE_PONG`.
 
-De oude DOM-route is in 2026-09-29 onbetrouwbaar gebleken voor assistant -> WSL commandodetectie en mag niet opnieuw als primaire route worden aangenomen zonder nieuwe Tier-A kwalificatie.
+De DOM-route is op 2026-09-29 onbetrouwbaar gebleken voor assistant -> WSL commandodetectie en mag niet opnieuw als primaire route worden aangenomen zonder nieuwe Tier-A kwalificatie.
 
 ## Services en paden
 
@@ -124,50 +141,37 @@ Bridge services:
 - `127.0.0.1:8766` command receiver
 - `127.0.0.1:8767` command router
 
-## Installatie
+Active wake wrapper after E010:
 
-Canonical installer:
+`PredictionChatWake/0.9-session-bootstrap`
 
-`control/bridge_commands/install_command_bus.py`
+Canonical source:
 
-Deterministische self-tests:
-
-`control/bridge_commands/selftest.py`
-
-De installer:
-
-1. controleert bestaande 8765/8766/8767 services;
-2. gebruikt een aparte read-only Git mirror;
-3. pint een bewezen chatroute;
-4. seeddet eerder bewezen `BRIDGE-BUS-E001` zodat die niet opnieuw wordt uitgevoerd;
-5. stopt tijdelijk de wake service;
-6. bewaart bestaande outbox-events in quarantine met hashes/manifest;
-7. patcht de actieve wake-server narrow/in-place naar fail-closed inflight;
-8. start en health-checkt de wake service;
-9. installeert de 30-seconden command-bus timer;
-10. houdt qualification op `REQUIRES_HIGH_INTELLIGENCE_REVIEW` totdat onafhankelijke Tier-A review gereed is.
+`control/tampermonkey_multichat/bridge_server_session_bootstrap.py`
 
 ## Bewezen baseline 2026-09-29
 
-Task: `BRIDGE-BUS-E001`
+Functioneel bewezen:
 
-Bewezen:
+- `BRIDGE-BUS-E001` — eerste assistant -> GitHub -> WSL -> wake bridge -> ChatGPT baseline PASS;
+- `BRIDGE-BUS-AUTO-20260929-E001` — automated command-bus PASS;
+- `TM-PING-1790690332005` — session-specific route returned to intended chat PASS;
+- `BRIDGE-COMMAND-BUS-CURRENT-ROUTE-E008` — GitHub command bus over explicit same-chat route PASS;
+- `DEV-PRED-SESSION-BOOTSTRAP-INSTALL-20260929-E010` — automatic session-bootstrap regression tests, compile checks, runtime install, wake-service restart/is-active check and installed-runtime canary PASS.
 
-- assistant schreef command naar private GitHub repo;
-- WSL fetchte het command read-only;
-- router antwoordde HTTP 200, `exit_code:0`, `routed:true`;
-- matching result-event werd lokaal aangemaakt;
-- na verwijderen van oudere queue blockers ontving ChatGPT:
-  `NIGHTSHIFT_WSL_RESULT_V1 task=BRIDGE-BUS-E001 status=PASS exit=0`.
-
-Conclusie: functionele end-to-end baseline PASS. Finale Tier-A kwalificatie is nog niet verleend.
+De laatste externe acceptatie voor automatic bootstrap is een werkelijk nieuwe Prediction-chat die zonder DOM marker of handmatige ping automatisch zijn eigen `SESSION-ROUTE-*` PASS ontvangt. Zie `control/bridge_commands/CURRENT_STATE.md` voor actuele evidence.
 
 ## Nieuwe sessies
 
-Een nieuwe Prediction-sessie moet eerst lezen:
+Een nieuwe Prediction-sessie leest eerst:
 
-1. `control/bridge_commands/OPERATIONS.md`
-2. dit `PROTOCOL.md`
-3. `control/tampermonkey_multichat/CHATGPT_PROJECT_INSTRUCTIONS.md`
+1. `00_CHATGPT_START_HERE.md`
+2. `control/bridge_commands/CURRENT_STATE.md`
+3. `control/bridge_commands/SESSION_ROUTING.md`
+4. `control/NEW_SESSION_LOCAL_EXECUTION.md`
+5. `control/PROJECT_EXECUTOR.md`
+6. `control/bridge_commands/OPERATIONS.md`
+7. dit `PROTOCOL.md`
+8. `control/tampermonkey_multichat/CHATGPT_PROJECT_INSTRUCTIONS.md`
 
-Bij conflict met oudere bridge-documentatie of sessiegeheugen is dit protocol autoritatief.
+Wacht bij een volledig nieuwe chat op de automatische `SESSION-ROUTE-*` PASS en gebruik die daarna expliciet als `route_task_id`. Bij conflict met oudere bridge-documentatie of sessiegeheugen is dit protocol samen met `CURRENT_STATE.md` en `SESSION_ROUTING.md` autoritatief.
