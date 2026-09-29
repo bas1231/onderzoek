@@ -4,6 +4,7 @@ Gebruik voor Prediction bridge-opdrachten het actuele protocol uit:
 
 1. `control/bridge_commands/OPERATIONS.md`
 2. `control/tampermonkey_multichat/PROTOCOL.md`
+3. `control/bridge_commands/HARDENED_V8_INTEGRATION.md` wanneer de lokale wake-runtime `PredictionChatWake/0.8-hardened` gebruikt.
 
 ## Primaire route
 
@@ -32,9 +33,13 @@ Gebruik voor installatie/herstel uitsluitend:
 
 `control/bridge_commands/bootstrap_local_terminal_safe.sh`
 
-Gebruik NIET meer `git show ... | bash` en gebruik het oude `bootstrap_local.sh` niet als primaire installatie-instructie. Op 2026-09-29 sloot een mislukte pipe-bootstrap de gebruikersterminal; bovendien zat in de voorlopige installer een lowercase-Python-booleanfout die pas runtime faalde. De terminal-safe bootstrap gebruikt geen `set -e`, geen top-level `exit`, patcht die bekende voorlopige installerfout alleen in een tijdelijke kopie en rapporteert altijd `BOOTSTRAP_RC=<code>`.
+Gebruik NIET meer `git show ... | bash` en gebruik het oude `bootstrap_local.sh` niet als primaire installatie-instructie. Op 2026-09-29 sloot een mislukte pipe-bootstrap de gebruikersterminal; bovendien zat in de voorlopige installer een lowercase-Python-booleanfout die pas runtime faalde. De terminal-safe bootstrap gebruikt geen `set -e`, geen top-level `exit`, bewaakt de installerbron vóór uitvoering en rapporteert altijd `BOOTSTRAP_RC=<code>`.
 
 Bij interactieve uitvoering: zet eerst `set +e`, schrijf de bootstrap naar een lokaal bestand en source dat bestand. Zo blijft de huidige shell open, ook als installatie of rollback faalt.
+
+## Hardened v8 runtime
+
+Wanneer de actieve lokale `bridge_server.py` `import bridge_server_v2 as base` bevat en `PredictionChatWake/0.8-hardened` rapporteert, mag de inflight-installatie de wrapper niet vervangen of flattenen. De queue- en ACK-semantiek hoort in de sibling `bridge_server_v2.py`; de hardened wrapper moet zijn compaction, task-dedupe, heartbeat en nightshiftgedrag behouden. De installer moet beide bestanden back-uppen en op failure beide plus de outbox herstellen.
 
 ## Resultaten
 
@@ -68,4 +73,4 @@ Bewezen baseline: `BRIDGE-BUS-E001` op 2026-09-29 voltooide assistant -> private
 
 Deze command-bus/inflight-architectuur is Tier A. Functionele baseline is bewezen, maar finale acceptatie blijft `REQUIRES_HIGH_INTELLIGENCE_REVIEW` totdat relevante deterministische tests, provenancevoorwaarden en een onafhankelijke Tier-A review groen zijn.
 
-Bij conflict met oud sessiegeheugen of oudere bridge-documentatie is `PROTOCOL.md` autoritatief; voor lokale bootstrapveiligheid geldt de terminal-safe instructie hierboven als verplichte aanvulling.
+Bij conflict met oud sessiegeheugen of oudere bridge-documentatie is `PROTOCOL.md` autoritatief; voor lokale bootstrapveiligheid en hardened-v8-integratie gelden de aanvullingen hierboven.
