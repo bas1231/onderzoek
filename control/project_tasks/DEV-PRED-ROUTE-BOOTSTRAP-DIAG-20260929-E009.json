@@ -1,0 +1,55 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-ROUTE-BOOTSTRAP-DIAG-20260929-E009",
+  "build_id": "TIERA-SESSION-BOOTSTRAP-20260929-E001",
+  "source_commit": "3d1196cd30870ee080d29181b92c7622ca6121b6",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_runtime",
+    "read_logs"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 240,
+  "notes": "Read-only diagnosis of why brand-new Prediction chats fail to bootstrap a route while an existing explicit route works. No browser mutation, no trading/cost/wallet action.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/route_bootstrap_diag_e009.py",
+      "content": "from pathlib import Path\nimport hashlib, json, re\n\nhome=Path.home()\nbridge=home/'.local/share/prediction-chat-bridge'\nbus_state=home/'.local/state/prediction-command-bus/tasks'\nids=[\n 'TM-PING-1790690332005',\n 'BRIDGE-COMMAND-BUS-CURRENT-ROUTE-E008',\n 'BRIDGE-COMMAND-BUS-TEST-1790691850',\n 'TM-PING-20260929-1630-E001',\n 'TM-PING-20260929-RETRY-E002',\n]\n\ndef digest(value):\n    return hashlib.sha256(str(value or '').encode()).hexdigest()[:12] if value else '-'\n\ndef jload(path):\n    try: return json.loads(path.read_text(encoding='utf-8'))\n    except Exception: return None\n\nprint('ROUTE_BOOTSTRAP_DIAG_E009=START')\nfor task in ids:\n    route=jload(bridge/'routes'/f'{task}.json')\n    state=jload(bus_state/f'{task}.json')\n    queues=[]\n    for q in ('outbox','inflight','sent','quarantine'):\n        d=bridge/q\n        if d.exists():\n            for p in d.glob('*.json'):\n                obj=jload(p)\n                if isinstance(obj,dict) and str(obj.get('task_id') or '')==task:\n                    queues.append(q)\n                    break\n    print('TASK',task,'route',bool(route),'chat',digest(route.get('chat_id') if route else ''),'consumer',digest(route.get('consumer_id') if route else ''),'bus',state.get('status') if state else '-','queues',','.join(queues) or '-')\n\nroute_dir=bridge/'routes'\nrecent=[]\nif route_dir.exists():\n    for p in route_dir.glob('*.json'):\n        try: recent.append((p.stat().st_mtime,p))\n        except OSError: pass\nrecent.sort(reverse=True)\nprint('RECENT_ROUTES',len(recent))\nfor _,p in recent[:12]:\n    obj=jload(p) or {}\n    print('ROUTE',p.stem,'chat',digest(obj.get('chat_id')),'consumer',digest(obj.get('consumer_id')),'source',str(obj.get('source') or '-'))\n\nfor name in ('prediction-chat-wake.user.js','bridge_server.py','bridge_server_v2.py','command_router.py'):\n    p=bridge/name\n    if not p.exists():\n        print('RUNTIME_FILE',name,'MISSING'); continue\n    text=p.read_text(encoding='utf-8',errors='replace')\n    version='-'\n    m=re.search(r'@version\\s+([^\\s]+)',text) or re.search(r'server_version\\s*=\\s*[\\\"\\\']([^\\\"\\\']+)',text)\n    if m: version=m.group(1)\n    print('RUNTIME_FILE',name,'sha',hashlib.sha256(text.encode()).hexdigest()[:16],'version',version,'bytes',len(text.encode()))\n\nprint('ROUTE_BOOTSTRAP_DIAG_E009=PASS')\n"
+    },
+    {
+      "type": "python",
+      "argv": ["python3", "control/dev_checks/route_bootstrap_diag_e009.py"],
+      "timeout_seconds": 60
+    },
+    {
+      "type": "journal",
+      "unit": "prediction-chat-router.service",
+      "lines": 120
+    },
+    {
+      "type": "journal",
+      "unit": "prediction-chat-wake.service",
+      "lines": 120
+    },
+    {
+      "type": "journal",
+      "unit": "prediction-command-bus.service",
+      "lines": 120
+    }
+  ]
+}
