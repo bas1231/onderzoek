@@ -1,0 +1,60 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-BRIDGE-RECOVER-20260929-E001",
+  "build_id": "TIERA-BRIDGE-COMMAND-BUS-20260929-E001",
+  "source_commit": "b90b415d1fd43bb575ac32eb1a7119077c71a1fb",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "local_git",
+    "user_service_manage",
+    "read_logs"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 300,
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/bridge_recovery_runtime.py",
+      "content": "from pathlib import Path\nimport hashlib\n\np = Path('.runtime/bridge_recovery_e001.txt')\np.parent.mkdir(parents=True, exist_ok=True)\npayload = 'bridge recovery explicit-route code execution PASS\\n'\np.write_text(payload, encoding='utf-8')\nreadback = p.read_text(encoding='utf-8')\nassert readback == payload\nprint('BRIDGE_RECOVERY_CODE=PASS')\nprint(f'SHA256={hashlib.sha256(readback.encode()).hexdigest()}')\n"
+    },
+    {
+      "type": "python",
+      "argv": ["python3", "control/dev_checks/bridge_recovery_runtime.py"],
+      "timeout_seconds": 60
+    },
+    {
+      "type": "service",
+      "verb": "restart",
+      "unit": "prediction-command-bus.timer"
+    },
+    {
+      "type": "service",
+      "verb": "is-active",
+      "unit": "prediction-command-bus.timer"
+    },
+    {
+      "type": "journal",
+      "unit": "prediction-command-bus.service",
+      "lines": 40
+    },
+    {
+      "type": "git",
+      "args": ["status", "--short"]
+    }
+  ],
+  "notes": "Recovery canary routed explicitly to a task known to return to the current chat. Proves code execution and restarts/verifies the command-bus timer. No remote Git writes, trading, wallet or paid actions."
+}
