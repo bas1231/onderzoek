@@ -1,0 +1,64 @@
+{
+  "schema": "AUTONOMOUS_BUILD_CHARTER_V1",
+  "build_id": "TIERA-PROJECT-EXECUTOR-20260929-E001",
+  "protocol_version": 1,
+  "objective": "Provide a capability-scoped local Prediction project executor that can build, test and manage the user-level project without granting root, live trading, paid, wallet, credential-write or autonomous remote-Git-write capabilities.",
+  "source_commit": "4bfb11679a36af7c996f69cd274adcf469ba06a4",
+  "allowed_capabilities": [
+    "read_repository",
+    "write_repository",
+    "run_tests",
+    "compile",
+    "health_check",
+    "inspect_status"
+  ],
+  "allowed_paths": [
+    "control/builds/TIERA-PROJECT-EXECUTOR-20260929-E001.json",
+    "control/project_tasks",
+    "control/PROJECT_EXECUTOR.md",
+    "control/tampermonkey_multichat/CHATGPT_PROJECT_INSTRUCTIONS.md",
+    "external:bas1231/fg-assistent/project_task_executor.py",
+    "external:bas1231/fg-assistent/project_task_guard/sitecustomize.py",
+    "external:bas1231/fg-assistent/dev_tasks",
+    "external:bas1231/fg-assistent/tests"
+  ],
+  "planned_paths": [
+    "control/project_tasks/PROJECT_TASK_SCHEMA_V1.json",
+    "control/PROJECT_EXECUTOR.md",
+    "control/tampermonkey_multichat/CHATGPT_PROJECT_INSTRUCTIONS.md",
+    "external:bas1231/fg-assistent/project_task_executor.py",
+    "external:bas1231/fg-assistent/project_task_guard/sitecustomize.py",
+    "external:bas1231/fg-assistent/tests/test_project_task_executor.py"
+  ],
+  "acceptance_criteria": [
+    "A safe task can execute repository-owned Python in an isolated task worktree and return evidence to ChatGPT",
+    "Project-file writes are limited to the task worktree or task temp root for child Python",
+    "sudo/root, shell=True, credential paths, arbitrary external network and non-Prediction service management are blocked",
+    "git push and remote/credential Git mutation are blocked while local status/diff/add/commit/branch operations remain available",
+    "Prediction user services and journals are accessible only through explicit capabilities",
+    "task provenance records task id, exact spec hash, remote commit, pinned source commit, model, intelligence tier and outcome",
+    "duplicate task IDs do not execute twice and ambiguous/failing tasks are not silently retried",
+    "deterministic negative tests cover privilege, path, Git, service and network boundaries",
+    "existing live_trading=false, paid_actions=false and wallet_actions=false guardrails remain intact"
+  ],
+  "non_goals": [
+    "No root or sudo access",
+    "No live order submission or cancellation",
+    "No wallet, crypto or fund movement",
+    "No paid actions",
+    "No credential writes",
+    "No autonomous git push, GitHub publication or remote ref mutation",
+    "No weakening of scientific NO_PROVEN_EDGE gates",
+    "No change to collector recovery or evidence/provenance research logic"
+  ],
+  "independent_verification": "Final acceptance requires an independent Tier-A review plus deterministic self-tests and a live harmless end-to-end canary; until then status remains REQUIRES_HIGH_INTELLIGENCE_REVIEW.",
+  "rollback_plan": "Disable use of the PROJECT executor, revert the executor/guard commits, and retain existing BRIDGE_PING plus DEV task tunnel; no live-trading component is modified.",
+  "cleanup_plan": "Task worktrees and temp directories are bounded under ~/.local/share/prediction-project-executor; evidence/state is retained under ~/.local/state/prediction-project-executor and may only be cleaned by an explicit maintenance task.",
+  "max_attempts": 2,
+  "governance_change": false,
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false
+  }
+}
