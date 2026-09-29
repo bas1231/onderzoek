@@ -1,0 +1,15 @@
+{
+  "schema": "PREDICTION_BRIDGE_COMMAND_V1",
+  "task_id": "DEV-PRED-BUS-CODE-CANARY-ROUTED-20260929-E016",
+  "action": "DEV_TASK",
+  "created_at_utc": "2026-09-29T15:46:00Z",
+  "route_task_id": "SESSION-ROUTE-a8556026047ca81b151171c5",
+  "live_trading": false,
+  "paid_actions": false,
+  "wallet_actions": false,
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  }
+}
