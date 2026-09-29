@@ -35,8 +35,13 @@ For every chat session that expects WSL results back in that same chat:
 
 1. Establish a `session_route_task_id` from **this exact chat**.
 2. If this chat already has a task whose result demonstrably returned here, reuse that task ID as `route_task_id` for subsequent command-bus tasks.
-3. If this is a brand-new chat with no proven route, create one once using the documented legacy/menu `BRIDGE_PING` bootstrap path, wait for the matching `NIGHTSHIFT_WSL_RESULT_V1 ... status=PASS exit=0`, then use that bootstrap task ID as the session route for the rest of the chat.
-4. Do not normally use `route_task_id: null` when more than one Prediction chat may be active.
+3. If this is a brand-new chat with no proven route, **do not use the visible assistant DOM marker as the normal bootstrap**. The installed wake bridge automatically creates a chat-scoped route from the existing `/next` browser poll and returns:
+
+   `NIGHTSHIFT_WSL_RESULT_V1 task=SESSION-ROUTE-... status=PASS exit=0 kind=SESSION_ROUTE_BOOTSTRAP`
+
+4. Wait for that automatic `SESSION-ROUTE-*` PASS to appear in the same chat, then use that task ID as `route_task_id` for the rest of the session.
+5. The legacy/menu `BRIDGE_PING` path is diagnostic fallback only if automatic bootstrap does not appear; it is not the default workflow.
+6. Do not normally use `route_task_id: null` when more than one Prediction chat may be active.
 
 A task is successful only when the same task ID returns to the intended chat with the expected status and assertions. `DISPATCHED` alone is not success.
 
@@ -121,4 +126,6 @@ Manual WSL commands are fallback only. If unavoidable, keep them terminal-safe: 
 
 ## Current proven baseline
 
-The command bus and project executor have passed end-to-end operational tests. The most recent same-chat pure command-bus proof on 2026-09-29 was `BRIDGE-COMMAND-BUS-CURRENT-ROUTE-E008`, which returned `status=PASS exit=0` to the intended chat. See `control/bridge_commands/CURRENT_STATE.md` for the full current evidence.
+The command bus and project executor have passed end-to-end operational tests. `BRIDGE-COMMAND-BUS-CURRENT-ROUTE-E008` returned `status=PASS exit=0` to the intended chat. The automatic server-side session bootstrap was then installed and runtime-tested by `DEV-PRED-SESSION-BOOTSTRAP-INSTALL-20260929-E010`, which returned `status=PASS exit=0` after regression tests, compile checks, runtime install, service restart/active check and installed-runtime canary.
+
+The final product-level acceptance criterion for automatic bootstrap is a genuinely brand-new Prediction chat receiving its own `SESSION-ROUTE-*` PASS without an assistant DOM marker or manual ping. See `control/bridge_commands/CURRENT_STATE.md` and `SESSION_ROUTING.md` for the latest evidence.
