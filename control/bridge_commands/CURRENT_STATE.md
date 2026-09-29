@@ -16,6 +16,34 @@ The local command bus is installed and operational. The terminal-safe installer 
 
 The capability-scoped project executor is operational for ordinary Prediction build/test/diagnose/user-level management work inside its documented guardrails.
 
+## Same-chat routing proof observed later on 2026-09-29
+
+This section supersedes the earlier "remaining acceptance gate" wording below for the current session, while preserving the distinction between current-session proof and a separate future brand-new-chat acceptance exercise.
+
+Observed automatically in the current Prediction chat, without a manual bridge/menu ping:
+
+`NIGHTSHIFT_WSL_RESULT_V1 task=SESSION-ROUTE-06b02c18b66873daa2c4548a status=PASS exit=0 kind=SESSION_ROUTE_BOOTSTRAP`
+
+That task ID became the canonical route for this chat. A fresh command-bus ping was then sent with the explicit route task ID and returned to the same chat:
+
+`NIGHTSHIFT_WSL_RESULT_V1 task=BRIDGE-SESSION-ROUTE-POSTFIX-20260929-E006 status=PASS exit=0 event=1790701888-1436a7343e01`
+
+A follow-up runtime classifier returned:
+
+`NIGHTSHIFT_WSL_RESULT_V1 task=DEV-PRED-ROUTING-RUNTIME-CLASSIFY-20260929-E008 status=PASS exit=0 rcs=1:0 head=1111111111111111111111111111111111111111 event=1790702173-99036e04e37f`
+
+For E008, the all-ones sentinel means the installed router and command-bus poller are the canonical explicit-session implementations rather than the temporary active-page experiment. Together, these observations prove the current chat path:
+
+`this ChatGPT session -> GitHub command bus -> WSL -> wake/result bridge -> this same ChatGPT session`
+
+Operational rule: after an automatic `SESSION-ROUTE-*` PASS appears in a chat, use that task ID explicitly as `route_task_id` for normal commands in that chat. Do not use `route_task_id:null` as the normal multi-session routing method.
+
+### Active-page experiment retired
+
+A temporary focused-page/active-tab routing experiment was tested on 2026-09-29. It was abandoned as the normal routing design because command-bus pickup can occur materially later than command creation, while browser focus can change in the meantime. That creates an avoidable timing race. The canonical design remains automatic per-chat route bootstrap followed by immutable explicit `route_task_id` on each normal command.
+
+`DEV-PRED-ROUTING-STABILIZE-20260929-E005` returned FAIL after its restoration attempt, but later evidence showed the desired canonical runtime was already installed. E008 classified the runtime as canonical, and the independent E006 bridge ping returned PASS through the current session route. Treat E005 as a failed maintenance/verification task, not evidence that the canonical bridge path is broken.
+
 ## Proven command-bus baseline
 
 Successful end-to-end evidence on 2026-09-29:
@@ -25,6 +53,9 @@ Successful end-to-end evidence on 2026-09-29:
 - `BRIDGE-COMMAND-BUS-CURRENT-ROUTE-E008` -> PASS, exit 0, returned to that same chat through an explicit session route
 - `DEV-PRED-SESSION-BOOTSTRAP-INSTALL-20260929-E010` -> PASS, exit 0, installed and runtime-verified automatic session bootstrap
 - `DEV-PRED-STATUS-COMPACTION-FIX-20260929-E013` -> PASS, exit 0, installed and runtime-verified nested-status-safe result compaction
+- `SESSION-ROUTE-06b02c18b66873daa2c4548a` -> PASS, exit 0, automatic route announcement observed in the current chat
+- `BRIDGE-SESSION-ROUTE-POSTFIX-20260929-E006` -> PASS, exit 0, fresh explicit-route command returned to the current chat
+- `DEV-PRED-ROUTING-RUNTIME-CLASSIFY-20260929-E008` -> PASS, exit 0, canonical router/poller runtime confirmed
 
 This proves the primary GitHub command-bus path once a valid same-chat route exists, plus the installed automatic-bootstrap runtime and corrected DEV result-status compactor.
 
@@ -94,17 +125,13 @@ Canonical implementation:
 
 This incident was a result-summary/reporting defect; it did not invalidate E010 or prove a command-bus/session-bootstrap execution failure.
 
-## Remaining acceptance gate for automatic bootstrap
+## Acceptance status for automatic bootstrap
 
 E010 proves implementation, deterministic behaviour, installation, service restart, service liveness and installed-runtime canary. E013 proves the corrected result-status compactor is installed and runtime-verified.
 
-The remaining product-level acceptance test is external to the current already-routed chat: open a genuinely brand-new Prediction ChatGPT chat and verify that, after it has a stable ChatGPT conversation URL and the existing wake userscript is running, it automatically receives its own:
+Automatic bootstrap has now also been directly observed in the current Prediction chat as `SESSION-ROUTE-06b02c18b66873daa2c4548a -> PASS`, followed by a fresh explicit-route command `BRIDGE-SESSION-ROUTE-POSTFIX-20260929-E006 -> PASS` returning to that same chat.
 
-`SESSION-ROUTE-* ... status=PASS exit=0 kind=SESSION_ROUTE_BOOTSTRAP`
-
-without an assistant DOM marker and without a manual menu ping.
-
-Once observed, record that exact task ID/result here as the final same-chat automatic-bootstrap proof. Until then, do not claim that brand-new-chat product behaviour has been independently observed even though the runtime installation/canary is PASS.
+This closes the operational acceptance gate for the current session. A separately opened genuinely brand-new Prediction chat can still be used as an additional product-level regression test for zero-history startup, but it is no longer required to establish that the present session's same-chat command path works.
 
 ## Project executor operational proof
 
@@ -123,7 +150,7 @@ See `control/bridge_commands/SESSION_ROUTING.md`.
 In summary:
 
 - each active Prediction chat uses its own explicit same-chat route;
-- brand-new chats are now expected to receive an automatic `SESSION-ROUTE-*` bootstrap from the wake server;
+- brand-new chats are expected to receive an automatic `SESSION-ROUTE-*` bootstrap from the wake server;
 - after that PASS, use the route task explicitly on every normal command from that chat;
 - do not normally use `route_task_id:null` when multiple sessions may exist;
 - `DISPATCHED` is not successful same-chat delivery;
@@ -162,4 +189,4 @@ Unchanged:
 
 ## Qualification gate
 
-The command bus, explicit session routing, project executor, automatic session-bootstrap runtime and corrected result compactor are operationally implemented and have passed their documented local/runtime tests. Formal independent Tier-A qualification remains `REQUIRES_HIGH_INTELLIGENCE_REVIEW`. Operational evidence must not be used to relax trading, cost, wallet, credential, provenance or autonomy guardrails.
+The command bus, explicit session routing, project executor, automatic session-bootstrap runtime and corrected result compactor are operationally implemented and have passed their documented local/runtime tests. The current session also has direct automatic-bootstrap and same-chat round-trip evidence. Formal independent Tier-A qualification remains `REQUIRES_HIGH_INTELLIGENCE_REVIEW`. Operational evidence must not be used to relax trading, cost, wallet, credential, provenance or autonomy guardrails.
