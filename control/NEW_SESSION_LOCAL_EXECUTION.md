@@ -8,34 +8,46 @@ A new Prediction session must not rediscover how ChatGPT reaches WSL. The instal
 
 Primary control path:
 
-`ChatGPT -> private GitHub bas1231/onderzoek -> read-only WSL command-bus poller -> localhost router/receiver -> project executor / approved local action -> wake/result bridge -> same ChatGPT route`
+`ChatGPT -> private GitHub bas1231/onderzoek -> read-only WSL command-bus poller -> localhost router/receiver -> project executor / approved local action -> wake/result bridge -> same ChatGPT session`
 
 GitHub remote writes are done by ChatGPT through the GitHub connector. Autonomous WSL processes remain GitHub read-only and do not push.
 
 ## Mandatory read order for a new session
 
-Before changing local execution infrastructure, read:
+Read:
 
-1. `control/bridge_commands/CURRENT_STATE.md`
-2. `control/bridge_commands/OPERATIONS.md`
-3. `control/PROJECT_EXECUTOR.md`
-4. `control/tampermonkey_multichat/PROTOCOL.md`
-5. `control/tampermonkey_multichat/CHATGPT_PROJECT_INSTRUCTIONS.md`
+1. `00_CHATGPT_START_HERE.md`
+2. `control/bridge_commands/CURRENT_STATE.md`
+3. `control/bridge_commands/SESSION_ROUTING.md`
+4. `control/bridge_commands/OPERATIONS.md`
+5. `control/PROJECT_EXECUTOR.md`
+6. `control/tampermonkey_multichat/PROTOCOL.md`
+7. `control/tampermonkey_multichat/CHATGPT_PROJECT_INSTRUCTIONS.md`
 
-Treat these files as canonical over old chat memory or obsolete bridge instructions.
+Treat current Git documentation as canonical over old chat memory or obsolete bridge instructions.
+
+## Step 0 — establish the current chat route
+
+Before dispatching a task that must return to this chat, establish a `session_route_task_id` for this exact chat.
+
+- If a previous task result demonstrably returned successfully to this chat, use that task ID.
+- If this is a brand-new chat with no proven route, create one once using the documented legacy/menu `BRIDGE_PING` bootstrap path, wait for the matching `NIGHTSHIFT_WSL_RESULT_V1 ... status=PASS exit=0`, then use that task ID for subsequent command-bus tasks in this session.
+- Do not normally use `route_task_id: null` when multiple Prediction sessions may exist.
+
+The shared pinned route is not a reliable same-chat addressing mechanism in a multi-session setup. See `control/bridge_commands/SESSION_ROUTING.md`.
 
 ## When to use the plain command bus
 
-Use `control/bridge_commands/inbox/<TASK_ID>.json` for approved local actions such as a bridge heartbeat/ping or the current DEV transport adapter.
+Use `control/bridge_commands/inbox/<TASK_ID>.json` for approved local actions such as a bridge ping or the current DEV transport adapter.
 
 Rules:
 
 - every task ID is unique and immutable;
 - never edit or reuse a dispatched task ID;
+- use the current session's proven `route_task_id`;
 - `live_trading`, `paid_actions`, and `wallet_actions` are explicit `false` unless a separate user approval and purpose-built path exists;
 - record intelligence tier, actual model and actual reasoning level; use `UNAVAILABLE_TO_RUNTIME` rather than inventing a value;
-- an ambiguous dispatch is not automatically retried;
-- normally omit `route_task_id` so the pinned route returns to the current configured control chat.
+- an ambiguous dispatch is not automatically retried.
 
 ## How to execute project code in WSL
 
@@ -88,11 +100,11 @@ Repository code runs in an isolated worktree under the project-executor runtime,
 
 ### Step 2 — create the matching DEV transport manifest
 
-Current transport adapter uses the existing asynchronous DEV tunnel. Create a matching immutable file in private repo `bas1231/fg-assistent`:
+Create a matching immutable file in private repo `bas1231/fg-assistent`:
 
 `dev_tasks/<TASK_ID>.json`
 
-It must sync the canonical executor and guard and invoke:
+It must sync the canonical executor/guard and invoke:
 
 `python3 project_task_executor.py <TASK_ID>`
 
@@ -138,7 +150,7 @@ Example:
   "task_id": "<TASK_ID>",
   "action": "SIX_AI_HEALTH",
   "created_at_utc": "<UTC timestamp>",
-  "route_task_id": null,
+  "route_task_id": "<SESSION_ROUTE_TASK_ID_FROM_THIS_CHAT>",
   "live_trading": false,
   "paid_actions": false,
   "wallet_actions": false,
@@ -191,12 +203,12 @@ Do not bypass these via a broader shell:
 - no autonomous WSL `git push` or remote-ref mutation;
 - no credential reads/writes or known credential paths;
 - no unrestricted external network from project code;
-- no live trading/orders;
+- no live trading/orders/cancellations/withdrawals;
 - no wallet/crypto/fund movement;
 - no paid API/cloud/subscription action without specific user approval;
 - no writes outside task worktree/temp or allowlisted Prediction runtime paths.
 
-When a requested action falls outside these capabilities, fail closed and ask only for the missing approval/capability that is actually required.
+When a requested action falls outside these capabilities, fail closed and ask only for the missing approval/capability actually required.
 
 ## Failure handling
 
@@ -210,9 +222,9 @@ First use the same automation path to diagnose:
 4. classify the first incomplete operation;
 5. make one targeted fix;
 6. add a regression test when the failure exposed a safety or execution bug;
-7. rerun with a fresh task ID.
+7. rerun with a fresh task ID and the current session route.
 
-Ask for manual intervention only when the command bus itself is unreachable and cannot be repaired autonomously, physical/KYC/login interaction is required, or a specific cost/trade/wallet approval is required.
+Ask for manual intervention only when the command bus itself is unreachable and cannot be repaired autonomously, physical/KYC/login interaction is required, a specific cost/trade/wallet approval is required, or an intentionally unavailable capability is essential.
 
 ## Terminal fallback
 
@@ -220,4 +232,4 @@ Manual terminal use is fallback, not normal operation. If unavoidable, keep it t
 
 ## Current proven baseline
 
-See `control/bridge_commands/CURRENT_STATE.md` for current evidence. At the time this guide was written, the command bus, Python execution canary and operational project-management canary had already passed end-to-end. A new session should use the installed system rather than rebuilding it from scratch.
+See `control/bridge_commands/CURRENT_STATE.md` for current evidence. The command bus, Python execution canary, operational project-management canary and explicit same-chat routing have passed end-to-end. Most recent same-chat pure command-bus proof on 2026-09-29: `BRIDGE-COMMAND-BUS-CURRENT-ROUTE-E008` -> `status=PASS exit=0`.
