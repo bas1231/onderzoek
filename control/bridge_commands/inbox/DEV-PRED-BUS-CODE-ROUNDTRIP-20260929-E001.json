@@ -1,0 +1,16 @@
+{
+  "schema": "PREDICTION_BRIDGE_COMMAND_V1",
+  "task_id": "DEV-PRED-BUS-CODE-ROUNDTRIP-20260929-E001",
+  "action": "SIX_AI_HEALTH",
+  "created_at_utc": "2026-09-29T17:37:45Z",
+  "route_task_id": "SESSION-ROUTE-9f9fd46c002c07a145f8dd11",
+  "live_trading": false,
+  "paid_actions": false,
+  "wallet_actions": false,
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "notes": "End-to-end same-chat test: dispatch capability-scoped WSL Python execution and return exact result to this session."
+}
