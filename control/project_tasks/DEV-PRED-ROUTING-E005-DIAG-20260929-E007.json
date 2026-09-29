@@ -1,0 +1,21 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-ROUTING-E005-DIAG-20260929-E007",
+  "build_id": "DIAG-ROUTING-E005-20260929-E007",
+  "source_commit": "b013ce4e3d0beaf1a0ef7b14ec27329340afe338",
+  "intelligence_tier": "C",
+  "issuer": {"model": "GPT-5.6 Sol", "reasoning_level": "UNAVAILABLE_TO_RUNTIME"},
+  "safety": {"live_trading": false, "paid_actions": false, "wallet_actions": false, "remote_git_write": false, "credential_write": false},
+  "capabilities": ["read_repository","write_worktree","run_project_python","read_runtime"],
+  "working_directory": ".",
+  "timeout_seconds": 180,
+  "notes": "Read-only diagnosis of failed E005 executor state. Print first failure and completed operations; do not mutate runtime.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/diag_routing_e005_e007.py",
+      "content": "from pathlib import Path\nimport json\n\ntarget='DEV-PRED-ROUTING-STABILIZE-20260929-E005'\np=Path.home()/'.local/state/prediction-project-executor'/f'{target}.json'\nprint('TARGET='+target)\nif not p.exists():\n    print('DIAG_CLASS=STATE_MISSING')\n    raise SystemExit(0)\ntry:\n    obj=json.loads(p.read_text(encoding='utf-8'))\nexcept Exception as e:\n    print('DIAG_CLASS=STATE_UNREADABLE')\n    print('DETAIL='+type(e).__name__)\n    raise SystemExit(0)\nprint('TARGET_STATUS='+str(obj.get('status')))\nfor key in ('error','detail','reason','failed_operation','failed_operation_index','completed_at_utc','source_commit','remote_commit'):\n    if key in obj:\n        print(key.upper()+'='+str(obj.get(key)).replace('\\n',' | ')[:2000])\nresults=obj.get('results')\nif isinstance(results,list):\n    print('RESULT_COUNT='+str(len(results)))\n    for i,r in enumerate(results[-5:], start=max(1,len(results)-4)):\n        print(f'RESULT_{i}='+str(r).replace('\\n',' | ')[:2500])\nprint('STATE_KEYS='+','.join(sorted(obj.keys())))\nprint('E005_DIAG_E007=PASS')\n"
+    },
+    {"type":"python","argv":["python3","control/dev_checks/diag_routing_e005_e007.py"],"timeout_seconds":60}
+  ]
+}
