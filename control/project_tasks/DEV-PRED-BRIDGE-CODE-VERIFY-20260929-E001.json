@@ -1,0 +1,43 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-BRIDGE-CODE-VERIFY-20260929-E001",
+  "build_id": "TIERA-BRIDGE-COMMAND-BUS-20260929-E001",
+  "source_commit": "0922e35ff6e527a6bd95173621220b663fb50de8",
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "local_git"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 180,
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/bridge_code_verify_runtime.py",
+      "content": "from pathlib import Path\nimport hashlib\n\np = Path('.runtime/bridge_code_verify_20260929_e001.txt')\np.parent.mkdir(parents=True, exist_ok=True)\npayload = 'fresh bridge code execution verified in WSL\\n'\np.write_text(payload, encoding='utf-8')\nreadback = p.read_text(encoding='utf-8')\nassert readback == payload\nprint('BRIDGE_CODE_EXECUTION=PASS')\nprint(f'ARTIFACT={p.resolve()}')\nprint(f'SHA256={hashlib.sha256(readback.encode()).hexdigest()}')\n"
+    },
+    {
+      "type": "python",
+      "argv": ["python3", "control/dev_checks/bridge_code_verify_runtime.py"],
+      "timeout_seconds": 60
+    },
+    {
+      "type": "git",
+      "args": ["status", "--short"]
+    }
+  ],
+  "notes": "Fresh deterministic end-to-end verification that the Prediction command bus can cause repository-owned Python to be written and executed in WSL through the capability-scoped project executor."
+}
