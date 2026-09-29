@@ -1,0 +1,56 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-ACTIVE-PAGE-DIAG-20260929-E002",
+  "build_id": "TIERA-ACTIVE-PAGE-DIAG-20260929-E002",
+  "source_commit": "a3f9152ffa9f5dde00da5efc1ce2e7e7564b989b",
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_runtime",
+    "user_service_manage",
+    "read_logs"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 300,
+  "notes": "Read-only diagnostic of active-page routing installation after same-chat session bootstrap proof.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/diag_active_page_e002.py",
+      "content": "from pathlib import Path\nimport json, re\nbridge=Path.home()/'.local/share/prediction-chat-bridge'\nbus=Path.home()/'.local/share/prediction-command-bus'\nrouter=(bridge/'command_router.py').read_text(encoding='utf-8') if (bridge/'command_router.py').exists() else ''\npoller=(bus/'command_bus_poller.py').read_text(encoding='utf-8') if (bus/'command_bus_poller.py').exists() else ''\nscript=(bridge/'prediction-chat-wake.user.js').read_text(encoding='utf-8') if (bridge/'prediction-chat-wake.user.js').exists() else ''\nm=re.search(r'@version\\s+([^\\s]+)',script)\nprint('ROUTER_ACTIVE_PAGE='+str('PredictionChatCommandRouter/0.3-active-page' in router))\nprint('POLLER_ACTIVE_PAGE='+str('active_page_required' in poller and 'ACTIVE_PAGE_FILE' in poller))\nprint('USERSCRIPT_VERSION='+(m.group(1) if m else 'MISSING'))\nprint('USERSCRIPT_PRESENCE='+str('/presence' in script and 'document.hasFocus()' in script))\nactive=bridge/'active_page.json'\nif active.exists():\n    try:\n        obj=json.loads(active.read_text(encoding='utf-8'))\n        print('ACTIVE_PAGE_EXISTS=True')\n        print('ACTIVE_PAGE_ACTIVE='+str(bool(obj.get('active'))))\n        print('ACTIVE_PAGE_CHAT='+str(obj.get('chat_id') or ''))\n        print('ACTIVE_PAGE_CONSUMER='+str(obj.get('consumer_id') or ''))\n    except Exception as exc:\n        print('ACTIVE_PAGE_PARSE='+type(exc).__name__)\nelse:\n    print('ACTIVE_PAGE_EXISTS=False')\n"
+    },
+    {
+      "type": "python",
+      "argv": ["python3", "control/dev_checks/diag_active_page_e002.py"],
+      "timeout_seconds": 60
+    },
+    {
+      "type": "service",
+      "verb": "is-active",
+      "unit": "prediction-chat-router.service"
+    },
+    {
+      "type": "service",
+      "verb": "is-active",
+      "unit": "prediction-chat-wake.service"
+    },
+    {
+      "type": "service",
+      "verb": "is-active",
+      "unit": "prediction-command-bus.timer"
+    }
+  ]
+}
