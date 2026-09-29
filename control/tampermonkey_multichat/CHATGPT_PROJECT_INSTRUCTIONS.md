@@ -5,6 +5,7 @@ Gebruik voor Prediction bridge-opdrachten het actuele protocol uit:
 1. `control/bridge_commands/OPERATIONS.md`
 2. `control/tampermonkey_multichat/PROTOCOL.md`
 3. `control/bridge_commands/HARDENED_V8_INTEGRATION.md` wanneer de lokale wake-runtime `PredictionChatWake/0.8-hardened` gebruikt.
+4. `control/PROJECT_EXECUTOR.md` voor lokale code-uitvoering, builds, tests en user-level projectbeheer.
 
 ## Primaire route
 
@@ -26,6 +27,26 @@ Belangrijk:
 - een andere payload onder hetzelfde task-ID is een conflict en mag niet worden uitgevoerd.
 
 Zonder `route_task_id` gaat het resultaat naar de lokaal gepinde control-route. Gebruik `route_task_id` wanneer een specifieke bestaande chatroute nodig is.
+
+## Projectcode uitvoeren en beheren
+
+Gebruik geen onbeperkte shell-backdoor. Voor code-uitvoering, tests, lokale Git-mutaties of Prediction user-servicebeheer geldt de capability-scoped executor uit `control/PROJECT_EXECUTOR.md`.
+
+Canonical task-spec:
+
+`control/project_tasks/<TASK_ID>.json`
+
+Schema:
+
+`control/project_tasks/PROJECT_TASK_SCHEMA_V1.json`
+
+Harde safetyflags blijven altijd `false`: `live_trading`, `paid_actions`, `wallet_actions`, `remote_git_write` en `credential_write`.
+
+De executor mag projectcode in een geïsoleerde task-worktree bouwen/testen, lokale Git-status/add/commit/branch-operaties doen, expliciet allowlisted Prediction-runtimebestanden installeren en `prediction-*` user-services beheren/logs lezen wanneer de task die capability expliciet bevat. `sudo`, root, credentialpaden, willekeurige externe netwerktoegang, `git push` en remote-refmutatie blijven geblokkeerd.
+
+Transport loopt voorlopig via de bestaande asynchrone `DEV-` tunnel met action `SIX_AI_HEALTH`; maak daarvoor een matching immutable manifest in `bas1231/fg-assistent/dev_tasks/<TASK_ID>.json` dat `project_task_executor.py` plus de guard synchroniseert en `project_task_executor.py <TASK_ID>` uitvoert.
+
+De project-executor is Tier A en blijft `REQUIRES_HIGH_INTELLIGENCE_REVIEW` totdat deterministische tests, een live harmless canary en onafhankelijke Tier-A review groen zijn. Gebruik hem vóór die gate alleen voor de expliciete kwalificatietaken.
 
 ## Lokale bootstrap — terminalveilig
 
@@ -73,4 +94,4 @@ Bewezen baseline: `BRIDGE-BUS-E001` op 2026-09-29 voltooide assistant -> private
 
 Deze command-bus/inflight-architectuur is Tier A. Functionele baseline is bewezen, maar finale acceptatie blijft `REQUIRES_HIGH_INTELLIGENCE_REVIEW` totdat relevante deterministische tests, provenancevoorwaarden en een onafhankelijke Tier-A review groen zijn.
 
-Bij conflict met oud sessiegeheugen of oudere bridge-documentatie is `PROTOCOL.md` autoritatief; voor lokale bootstrapveiligheid en hardened-v8-integratie gelden de aanvullingen hierboven.
+Bij conflict met oud sessiegeheugen of oudere bridge-documentatie is `PROTOCOL.md` autoritatief; voor lokale bootstrapveiligheid, hardened-v8-integratie en projectcode-uitvoering gelden de aanvullingen hierboven.
