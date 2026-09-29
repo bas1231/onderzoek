@@ -1,0 +1,16 @@
+{
+  "schema": "PREDICTION_BRIDGE_COMMAND_V1",
+  "task_id": "PRED-HOURLY-STATUS-20260929-E001",
+  "action": "SIX_AI_HEALTH",
+  "created_at_utc": "2026-09-29T14:36:00Z",
+  "route_task_id": "TM-PING-1790692500-HOURLY",
+  "live_trading": false,
+  "paid_actions": false,
+  "wallet_actions": false,
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "notes": "Read-only six-AI/runtime health for the user's 16:35 CEST hourly report. No live trading, paid actions, wallet actions, or project mutation. Report actual recent run evidence and failures."
+}
