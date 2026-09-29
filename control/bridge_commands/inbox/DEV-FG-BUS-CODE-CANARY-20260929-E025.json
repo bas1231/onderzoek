@@ -1,0 +1,16 @@
+{
+  "schema": "PREDICTION_BRIDGE_COMMAND_V1",
+  "task_id": "DEV-FG-BUS-CODE-CANARY-20260929-E025",
+  "action": "SIX_AI_HEALTH",
+  "created_at_utc": "2026-09-29T16:33:34Z",
+  "route_task_id": "BRIDGE-FG-THISCHAT-GITHUB-PING-20260929-E024",
+  "live_trading": false,
+  "paid_actions": false,
+  "wallet_actions": false,
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "notes": "Harmless capability-scoped WSL code-execution canary using the proven same-chat GitHub bus route. No privacy files, production FG tree, credentials, network devices, trading, paid actions or wallet actions."
+}
