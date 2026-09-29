@@ -67,6 +67,24 @@ After that result is ACKed in the same chat, the `SESSION-ROUTE-*` task ID is th
 
 The normal new-session procedure therefore no longer requires the assistant to emit a visible `[[PREDICTION_CMD:...]]` marker. Legacy/menu PING remains diagnostic fallback only.
 
+## Result compaction incident — reporting only
+
+A follow-up diagnostic exposed a browser-facing status compaction bug. Task `DEV-PRED-ROUTE-BOOTSTRAP-DIAG-20260929-E011` returned the contradictory summary:
+
+`status=FAIL exit=0 rcs=1:2,1:0 error=TaskError`
+
+E011 intentionally printed the stored receipt of the older failed E009 task. The outer DEV runner then completed its own command with RC 0 and printed its final `DEV_TASK_STATUS=PASS`. The installed hardened compactor selected the first `DEV_TASK_STATUS`, first `ERROR_CLASS`, and all `COMMAND_n_RC` markers from raw output, so an embedded historical failure could incorrectly flip the browser summary of a successful diagnostic to FAIL.
+
+This is a result-summary/reporting defect; it does not invalidate E010 or prove a command-bus/session-bootstrap execution failure.
+
+Canonical fix staged on Git but not yet claimed installed:
+
+- `control/tampermonkey_multichat/bridge_server_status_compaction.py`
+- `control/tampermonkey_multichat/test_status_compaction_nested.py`
+- preregistered project task `DEV-PRED-STATUS-COMPACTION-FIX-20260929-E013`
+
+The staged parser makes final outer `DEV_TASK_STATUS` authoritative, keeps the last RC per command index, and only emits `ERROR_CLASS` when the final outer status is FAIL. Do not claim this parser is installed until E013 or an equivalent fresh task returns `status=PASS exit=0` after runtime verification.
+
 ## Remaining acceptance gate for automatic bootstrap
 
 E010 proves implementation, deterministic behaviour, installation, service restart, service liveness and installed-runtime canary.
@@ -112,6 +130,8 @@ In summary:
 - `control/tampermonkey_multichat/PROTOCOL.md` — bridge protocol.
 - `control/tampermonkey_multichat/bridge_server_session_bootstrap.py` — automatic bootstrap wrapper.
 - `control/tampermonkey_multichat/test_session_route_bootstrap.py` — regression suite.
+- `control/tampermonkey_multichat/bridge_server_status_compaction.py` — staged nested-receipt-safe result compactor.
+- `control/tampermonkey_multichat/test_status_compaction_nested.py` — staged regression suite for result status parsing.
 - `control/bridge_commands/COMMAND_SCHEMA_V1.json` — immutable command schema.
 - `control/bridge_commands/command_bus_poller.py` — read-only GitHub poller with durable command claims.
 
