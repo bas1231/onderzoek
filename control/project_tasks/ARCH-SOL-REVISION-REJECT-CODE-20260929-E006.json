@@ -1,0 +1,39 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "ARCH-SOL-REVISION-REJECT-CODE-20260929-E006",
+  "build_id": "ARCH-SOL-BUILDER-ASTRA-REVIEWER-20260929",
+  "source_commit": "c3c94fd27e345a26979c0a4700ac9f4ceed49921",
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_runtime"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 120,
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/diag_revision_reject_code_e006.py",
+      "content": "from pathlib import Path\nimport json\n\nroot = Path.home() / 'prediction_research_prod' / 'knowledge' / 'codex_runtime' / 'runs'\nhits = []\nfor p in root.glob('REVISION-*/CANDIDATE_REJECTED.json'):\n    try:\n        hits.append((p.stat().st_mtime, p))\n    except OSError:\n        pass\nmarkers = {\n    'REVISION_RESULT_INVALID_JSON': 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',\n    'REVISION_RESULT_UNKNOWN_FIELDS': 'bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb',\n    'REVISION_RESULT_MISSING_FIELDS': 'cccccccccccccccccccccccccccccccccccccccc',\n    'REVISION_RESULT_CANDIDATE_MISMATCH': 'dddddddddddddddddddddddddddddddddddddddd',\n    'REVISION_RESULT_BAD_STATUS': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',\n    'REVISION_RESULT_BAD_SCIENTIFIC_STATUS': 'ffffffffffffffffffffffffffffffffffffffff',\n    'REVISION_RESULT_BAD_FINDING': '1111111111111111111111111111111111111111',\n    'REVISION_RESULT_BAD_NEXT_ACTION': '2222222222222222222222222222222222222222',\n    'REVISION_RESULT_BAD_SCOPE': '3333333333333333333333333333333333333333',\n    'REVISION_RESULT_BAD_SCOPE_ITEM': '4444444444444444444444444444444444444444',\n    'REVISION_READY_REQUIRES_SCOPE': '5555555555555555555555555555555555555555',\n    'REVISION_OVERLAY_STALE': '6666666666666666666666666666666666666666',\n    'REVISION_OVERLAY_STATUS_CHANGED': '7777777777777777777777777777777777777777',\n    'REVISION_OVERLAY_SCIENTIFIC_STATUS_CHANGED': '8888888888888888888888888888888888888888'\n}\nif not hits:\n    print('9999999999999999999999999999999999999999')\nelse:\n    p = max(hits)[1]\n    try:\n        reason = str(json.loads(p.read_text()).get('reason') or '').strip()\n    except Exception:\n        reason = '__UNREADABLE__'\n    marker = markers.get(reason, '0000000000000000000000000000000000000000')\n    print(marker)\n"
+    },
+    {
+      "type": "python",
+      "argv": ["python3", "control/dev_checks/diag_revision_reject_code_e006.py"],
+      "timeout_seconds": 60
+    }
+  ],
+  "notes": "Read-only diagnosis. Encodes the latest revision CANDIDATE_REJECTED reason as a 40-hex marker so the same-chat wake compactor preserves it as head. No production mutation or economic action. Marker map: a=INVALID_JSON, b=UNKNOWN_FIELDS, c=MISSING_FIELDS, d=CANDIDATE_MISMATCH, e=BAD_STATUS, f=BAD_SCIENTIFIC_STATUS, 1=BAD_FINDING, 2=BAD_NEXT_ACTION, 3=BAD_SCOPE, 4=BAD_SCOPE_ITEM, 5=REVISION_READY_REQUIRES_SCOPE, 6=OVERLAY_STALE, 7=OVERLAY_STATUS_CHANGED, 8=SCIENTIFIC_STATUS_CHANGED, 9=no rejection, 0=other/unreadable."
+}
