@@ -28,7 +28,10 @@ Multiple Prediction chats may be active concurrently. Do not blindly rely on the
 Every session that expects local results back in the same chat must establish a `session_route_task_id` from **that exact chat**.
 
 - If a task result already returned successfully to this chat, use that task ID as `route_task_id` on later command-bus tasks.
-- If a brand-new chat has no proven route, establish one once using the documented legacy/menu `BRIDGE_PING` bootstrap, wait for the matching PASS result in this chat, then reuse that bootstrap task ID for the rest of the session.
+- If a brand-new chat has no proven route, the installed wake bridge automatically bootstraps a chat-scoped route from the browser's ordinary `/next` result poll and returns `NIGHTSHIFT_WSL_RESULT_V1 task=SESSION-ROUTE-... status=PASS exit=0 kind=SESSION_ROUTE_BOOTSTRAP` to that same chat.
+- Once that automatic route result appears, reuse its `SESSION-ROUTE-*` task ID for the rest of the session.
+- Do not use a visible assistant `[[PREDICTION_CMD:...]]` marker as the normal bootstrap mechanism.
+- Legacy/menu `BRIDGE_PING` is diagnostic fallback only when automatic bootstrap is absent.
 - Do not normally use `route_task_id: null` when multiple Prediction sessions may be active.
 - A `DISPATCHED` state only proves local acceptance; it does not prove successful same-chat delivery.
 
@@ -45,13 +48,15 @@ Follow `control/bridge_commands/COMMAND_SCHEMA_V1.json`.
 Rules:
 
 - task ID always unique;
-- never edit or reuse an already-dispatched task ID;
+- never edit or reuse an already-dispatched command task ID;
 - use the current session's proven `route_task_id`;
 - `live_trading`, `paid_actions` and `wallet_actions` remain exactly `false` unless a separate purpose-built path and required explicit approval exist;
-- record the actual model and reasoning availability; if runtime reasoning is not exposed, use `UNAVAILABLE_TO_RUNTIME`;
+- record actual model and reasoning availability; if runtime reasoning is not exposed, use `UNAVAILABLE_TO_RUNTIME`;
 - WSL polls GitHub read-only and never auto-pushes;
-- ambiguous dispatches are never silently retried;
+- ambiguous command dispatches are never silently retried;
 - different bytes under the same task ID are a conflict and must not execute.
+
+The automatic `SESSION-ROUTE-*` bootstrap result is idempotent routing metadata, not project command execution. Its bounded re-announcement does not relax normal at-most-once command semantics.
 
 ## Building/changing project code in WSL
 
@@ -99,9 +104,7 @@ Ask the user for manual intervention only when:
 
 ## Legacy visible route
 
-`[[PREDICTION_CMD:<ACTION>:<TASK_ID>]]` is fallback/diagnostic/route-bootstrap only. It is not the primary command transport.
-
-A new chat without a proven session route may use a one-time legacy/menu `BRIDGE_PING` to create a route. After that, use the GitHub command bus with that task ID as `route_task_id`.
+`[[PREDICTION_CMD:<ACTION>:<TASK_ID>]]` is diagnostic fallback only. It is not the primary command transport and no longer the normal new-session route-bootstrap mechanism.
 
 ## Result semantics
 
@@ -109,7 +112,7 @@ The result bridge uses fail-closed queue semantics:
 
 `outbox -> inflight -> sent`
 
-`inflight` means the event has been leased to the browser; delivery may be confirmed or ambiguous. It is not silently requeued.
+`inflight` means the event has been leased to the browser; delivery may be confirmed or ambiguous. It is not silently requeued as a normal command result.
 
 ## Terminal fallback
 
@@ -119,6 +122,6 @@ Manual terminal use is fallback only. If unavoidable, keep it terminal-safe: no 
 
 Follow the project's Tier A/B/C intelligence-routing rules. `NO_PROVEN_EDGE` remains the scientific default until documented proof gates clear.
 
-The command bus and project executor are operationally proven. Most recent same-chat pure command-bus proof on 2026-09-29: `BRIDGE-COMMAND-BUS-CURRENT-ROUTE-E008` returned `status=PASS exit=0` to the intended chat.
+The command bus and project executor are operationally proven. `BRIDGE-COMMAND-BUS-CURRENT-ROUTE-E008` returned `status=PASS exit=0` to the intended chat. The automatic session-bootstrap runtime was regression-tested, installed, service-restarted/checked and runtime-canary-tested by `DEV-PRED-SESSION-BOOTSTRAP-INSTALL-20260929-E010`, which returned `status=PASS exit=0`.
 
-Formal independent Tier-A review status remains tracked separately and is not implied complete by operational use.
+The remaining external acceptance criterion is a genuinely brand-new Prediction chat receiving its own automatic `SESSION-ROUTE-*` PASS without an assistant DOM marker or manual ping. Formal independent Tier-A review status remains tracked separately and is not implied complete by operational use.
