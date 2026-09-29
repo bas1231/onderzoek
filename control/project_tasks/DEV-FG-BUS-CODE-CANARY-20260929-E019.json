@@ -1,0 +1,43 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-FG-BUS-CODE-CANARY-20260929-E019",
+  "build_id": "TIERA-BRIDGE-COMMAND-BUS-20260929-E001",
+  "source_commit": "7cefb68b06d01dac868cd1e244cd2522017884a9",
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "local_git"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 180,
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/fg_bus_code_canary_20260929_e019.py",
+      "content": "from pathlib import Path\nimport hashlib\n\nnonce = 'FG_BUS_WSL_CODE_CANARY_20260929_E019'\np = Path('.runtime/fg_bus_code_canary_20260929_e019.txt')\np.parent.mkdir(parents=True, exist_ok=True)\npayload = nonce + '\\n'\np.write_text(payload, encoding='utf-8')\nreadback = p.read_text(encoding='utf-8')\nassert readback == payload\ndigest = hashlib.sha256(readback.encode('utf-8')).hexdigest()\nassert len(digest) == 64\nprint(nonce + '=PASS')\nprint('READBACK_SHA256=' + digest)\n"
+    },
+    {
+      "type": "python",
+      "argv": ["python3", "control/dev_checks/fg_bus_code_canary_20260929_e019.py"],
+      "timeout_seconds": 60
+    },
+    {
+      "type": "git",
+      "args": ["status", "--short"]
+    }
+  ],
+  "notes": "Corrected same-chat harmless WSL code-execution canary using the canonical SIX_AI_HEALTH compatibility dispatch. No FG privacy files are read or modified."
+}
