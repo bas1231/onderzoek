@@ -39,7 +39,9 @@ For every session that expects WSL results back in the same chat:
 
 - establish a `session_route_task_id` from THIS exact chat;
 - if a task result has already returned successfully to this chat, use that task ID as `route_task_id` on subsequent command-bus tasks;
-- if a brand-new chat has no proven route, bootstrap one once with the documented legacy/menu `BRIDGE_PING`, verify that the matching PASS result returns to this chat, then reuse that bootstrap task ID as the session route;
+- if a brand-new chat has no proven route, do NOT use a visible assistant `[[PREDICTION_CMD:...]]` marker as the normal bootstrap. The installed wake bridge automatically creates a chat-scoped route from the existing `/next` poll and returns `NIGHTSHIFT_WSL_RESULT_V1 task=SESSION-ROUTE-... status=PASS exit=0 kind=SESSION_ROUTE_BOOTSTRAP` to that same chat;
+- once that automatic `SESSION-ROUTE-*` PASS appears, reuse that task ID as the `route_task_id` for the rest of the session;
+- legacy/menu `BRIDGE_PING` is diagnostic fallback only if automatic bootstrap is absent;
 - do not normally use `route_task_id: null` when multiple Prediction sessions may be active.
 
 A local command is not considered successful merely because it was `DISPATCHED`. Require the same task ID to return to the intended chat with the expected `status`, `exit` and task-specific assertions.
@@ -58,7 +60,8 @@ Rules:
 - use the current session's proven `route_task_id`;
 - `live_trading`, `paid_actions` and `wallet_actions` remain `false` unless a separate purpose-built path and explicit user approval exist;
 - WSL polls GitHub read-only and never autonomously pushes;
-- ambiguous dispatches are never silently retried;
+- ambiguous command dispatches are never silently retried;
+- the automatic `SESSION-ROUTE-*` bootstrap announcement is idempotent control metadata, not command execution; its bounded re-announcement does not relax command at-most-once semantics;
 - record actual model/reasoning provenance; if runtime reasoning level is unavailable, use `UNAVAILABLE_TO_RUNTIME`.
 
 ### Building/changing code in WSL
@@ -119,6 +122,8 @@ Operational use of the command bus/project executor does not itself mean that th
 
 ### Current baseline
 
-The command bus and project executor are operational. A same-chat command-bus proof on 2026-09-29, `BRIDGE-COMMAND-BUS-CURRENT-ROUTE-E008`, returned `status=PASS exit=0`. Always check `control/bridge_commands/CURRENT_STATE.md` for newer evidence before changing infrastructure.
+The command bus and project executor are operational. A same-chat command-bus proof on 2026-09-29, `BRIDGE-COMMAND-BUS-CURRENT-ROUTE-E008`, returned `status=PASS exit=0`. The automatic server-side route bootstrap was then regression-tested, installed, restarted and runtime-canary-tested by `DEV-PRED-SESSION-BOOTSTRAP-INSTALL-20260929-E010`, which returned `status=PASS exit=0`.
+
+The remaining product-level acceptance check is a genuinely brand-new Prediction chat receiving its own `SESSION-ROUTE-*` PASS automatically, without an assistant DOM marker or manual menu ping. Always check `control/bridge_commands/CURRENT_STATE.md` for newer evidence before changing infrastructure.
 
 ---
