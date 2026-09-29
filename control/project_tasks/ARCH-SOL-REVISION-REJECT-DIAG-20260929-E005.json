@@ -1,0 +1,39 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "ARCH-SOL-REVISION-REJECT-DIAG-20260929-E005",
+  "build_id": "ARCH-SOL-BUILDER-ASTRA-REVIEWER-20260929",
+  "source_commit": "c3c94fd27e345a26979c0a4700ac9f4ceed49921",
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_runtime"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 120,
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/diag_revision_reject_e005.py",
+      "content": "from pathlib import Path\nimport json\n\nroot = Path.home() / 'prediction_research_prod' / 'knowledge' / 'codex_runtime' / 'runs'\nhits = []\nfor p in root.glob('REVISION-*/CANDIDATE_REJECTED.json'):\n    try:\n        hits.append((p.stat().st_mtime, p))\n    except OSError:\n        pass\nif not hits:\n    print('ERROR_CLASS=NO_REVISION_CANDIDATE_REJECTION_FOUND')\n    raise SystemExit(1)\np = max(hits)[1]\ntry:\n    obj = json.loads(p.read_text())\nexcept Exception as exc:\n    print('ERROR_CLASS=REJECT_RECORD_UNREADABLE_' + type(exc).__name__)\n    raise SystemExit(1)\nreason = str(obj.get('reason') or 'EMPTY_REJECT_REASON').strip().replace('\\n',' ')\nprint('REJECT_PATH=' + str(p))\nprint('ERROR_CLASS=' + reason[:120])\nraise SystemExit(1)\n"
+    },
+    {
+      "type": "python",
+      "argv": ["python3", "control/dev_checks/diag_revision_reject_e005.py"],
+      "timeout_seconds": 60
+    }
+  ],
+  "notes": "Read-only diagnosis of the latest autonomous revision CANDIDATE_REJECTED reason. Worktree-only diagnostic script; intentional nonzero exit so the compact wake result preserves ERROR_CLASS. No production mutation, remote Git write, live trading, paid action, wallet action or credential access."
+}
