@@ -1,21 +1,61 @@
 # ChatGPT Project Instructions — Prediction bridge
 
-Gebruik voor lokale ChatGPT ↔ WSL bridge-opdrachten uitsluitend het actuele multi-chat protocol uit `control/tampermonkey_multichat/PROTOCOL.md`.
+Gebruik voor Prediction bridge-opdrachten het actuele protocol uit:
 
-Harde regels:
+1. `control/bridge_commands/OPERATIONS.md`
+2. `control/tampermonkey_multichat/PROTOCOL.md`
 
-- Voor bridge-commands gebruik je gewone zichtbare assistanttekst in exact dit formaat: `[[PREDICTION_CMD:<ACTION>:<TASK_ID>]]`.
-- De marker moet letterlijk exact de tekens `[[PREDICTION_CMD:` + action + `:` + task-ID + `]]` bevatten.
-- Escape de dubbele punten NIET. `[[PREDICTION_CMD\:BRIDGE_PING\:...]]` is ongeldig. Er mogen nergens backslashes in de marker worden toegevoegd door Markdown-escaping.
-- Zet de echte commandmarker niet in een code fence en verander geen leestekens; stuur hem als één gewone zichtbare tekstregel.
-- `<ACTION>` en `<TASK_ID>` zijn placeholders in documentatie en mogen nooit letterlijk worden verstuurd.
-- Genereer voor iedere uitvoering een werkelijk nieuwe task-ID, bijvoorbeeld `BRIDGE-PING-20260923-163501-A7K2`. Gebruik nooit letterlijke placeholdernamen zoals `UNIQUE_TASK_ID`, `UNIEKE-ID`, `TEST-ID` of `TASK_ID`.
-- Gebruik niet het legacy `<<<PREDICTION_BRIDGE_TASK>>> ... <<<END_PREDICTION_BRIDGE_TASK>>>`-formaat.
-- Wanneer de gebruiker vraagt de bridge te testen, gebruik `BRIDGE_PING` met een nieuw gegenereerde unieke task-ID.
-- Een bridge-test is pas PASS wanneer `RESULT_READY` terugkomt met exact dezelfde task-ID, `Action: BRIDGE_PING`, `Exit code: 0` en `BRIDGE_PONG` in het WSL-resultaat.
-- Een resultaat met een andere task-ID bewijst de huidige test niet.
-- Iedere ChatGPT-tab/chat wordt door Tampermonkey automatisch afzonderlijk gerouteerd via de multi-chat bridge. Verzin daarom niet handmatig een `chat_id`.
-- De Tampermonkey-menuoptie `Bridge-test (PING)` is alleen een diagnostische transporttest; voor een echte end-to-end DOM-test moet de assistant zelf de zichtbare `PREDICTION_CMD`-marker uitsturen.
-- Als bridge-documentatie of oud sessiegeheugen conflicteert met `control/tampermonkey_multichat/PROTOCOL.md`, volg dan het protocolbestand.
+## Primaire route
 
-Bewezen baseline op 2026-09-23: de zichtbare-DOM-route en same-chat roundtrip zijn PASS met `TM-DOM-20260923-001` en `DOM-AUTO-20260923-001`.
+Gebruik voor normale ChatGPT -> WSL opdrachten de private GitHub command bus. Maak via de GitHub connector precies één nieuw immutable commandbestand:
+
+`control/bridge_commands/inbox/<TASK_ID>.json`
+
+Volg `control/bridge_commands/COMMAND_SCHEMA_V1.json`.
+
+Belangrijk:
+
+- task-ID altijd uniek;
+- bestaand taskbestand nooit wijzigen of hergebruiken;
+- `live_trading`, `paid_actions` en `wallet_actions` moeten exact `false` zijn;
+- gebruik een passende `intelligence_tier`;
+- registreer werkelijk gebruikt model en reasoningniveau; als het runtime-niveau niet zichtbaar is, gebruik `UNAVAILABLE_TO_RUNTIME` en claim geen hoger niveau;
+- WSL pollt GitHub read-only en mag niet automatisch pushen;
+- een `AMBIGUOUS` dispatch wordt nooit automatisch opnieuw verstuurd;
+- een andere payload onder hetzelfde task-ID is een conflict en mag niet worden uitgevoerd.
+
+Zonder `route_task_id` gaat het resultaat naar de lokaal gepinde control-route. Gebruik `route_task_id` wanneer een specifieke bestaande chatroute nodig is.
+
+## Resultaten
+
+De result bridge gebruikt na installatie fail-closed queue-semantiek:
+
+`outbox -> inflight -> sent`
+
+`inflight` betekent: exact eenmaal aan de browser aangeboden; delivery kan bevestigd of ambigu zijn. Een inflight-event wordt niet automatisch opnieuw aangeboden en blokkeert nieuwere resultaten niet.
+
+## Legacy route — alleen diagnostisch
+
+De zichtbare assistantmarker blijft uitsluitend fallback/diagnose:
+
+`[[PREDICTION_CMD:<ACTION>:<TASK_ID>]]`
+
+Gebruik hem niet meer als primaire commandotransport. De DOM-route bleek op 2026-09-29 onbetrouwbaar voor commandodetectie.
+
+Wanneer een nieuwe chat nog geen route heeft, mag een legacy/menu `BRIDGE_PING` eenmalig worden gebruikt om een lokale route te creëren; daarna moet de GitHub command bus weer de primaire route zijn.
+
+## Bridge-test
+
+Voor een echte command-bus-test:
+
+- maak een nieuw GitHub commandbestand met action `BRIDGE_PING`;
+- wacht op hetzelfde task-ID in het terugkomende resultaat;
+- PASS vereist action `BRIDGE_PING`, exit code `0` en `BRIDGE_PONG`.
+
+Bewezen baseline: `BRIDGE-BUS-E001` op 2026-09-29 voltooide assistant -> private GitHub -> WSL -> result bridge -> ChatGPT met PASS.
+
+## Qualification
+
+Deze command-bus/inflight-architectuur is Tier A. Functionele baseline is bewezen, maar finale acceptatie blijft `REQUIRES_HIGH_INTELLIGENCE_REVIEW` totdat relevante deterministische tests, provenancevoorwaarden en een onafhankelijke Tier-A review groen zijn.
+
+Bij conflict met oud sessiegeheugen of oudere bridge-documentatie is `PROTOCOL.md` autoritatief.
