@@ -1,0 +1,135 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-ACTIVE-PAGE-ROUTING-20260929-E001",
+  "build_id": "TIERA-ACTIVE-PAGE-ROUTING-20260929-E001",
+  "source_commit": "a3f9152ffa9f5dde00da5efc1ce2e7e7564b989b",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "run_tests",
+    "read_runtime",
+    "write_runtime",
+    "user_service_manage",
+    "read_logs"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 700,
+  "notes": "Replace bootstrap-dependent default routing with direct focused-page binding. Preserve explicit route_task_id semantics. Unrouted commands require a fresh authenticated focused/visible Tampermonkey page; otherwise fail closed. Test before installing runtime files.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/verify_active_page_routing_e001.py",
+      "content": "from pathlib import Path\nimport importlib.util, json, sys, tempfile, time\n\nbridge=Path.home()/'.local/share/prediction-chat-bridge'\nbus=Path.home()/'.local/share/prediction-command-bus'\nsys.path.insert(0,str(bridge))\nsys.path.insert(0,str(bus))\n\ndef load(name,path):\n    spec=importlib.util.spec_from_file_location(name,path)\n    mod=importlib.util.module_from_spec(spec)\n    sys.modules[name]=mod\n    spec.loader.exec_module(mod)\n    return mod\n\nrouter=load('installed_active_router',bridge/'command_router.py')\nassert getattr(router.Handler,'server_version','')=='PredictionChatCommandRouter/0.3-active-page'\nwith tempfile.TemporaryDirectory() as td:\n    active=Path(td)/'active_page.json'\n    router.ACTIVE_PAGE_FILE=active\n    state=router.update_presence('chat-runtime-1234','tab-runtime-1234',True,True)\n    assert state['active'] is True\n    poller=load('installed_active_poller',bus/'command_bus_poller.py')\n    poller.ACTIVE_PAGE_FILE=active\n    route,source=poller.resolve_route({'notes':''})\n    assert source=='active_page'\n    assert route=={'chat_id':'chat-runtime-1234','consumer_id':'tab-runtime-1234'}\n    active.write_text(json.dumps({'active':True,'chat_id':'chat-runtime-1234','consumer_id':'tab-runtime-1234','updated_at_unix':time.time()-60}))\n    route,source=poller.resolve_route({'notes':''})\n    assert route is None and source=='active_page_required'\nscript=(bridge/'prediction-chat-wake.user.js').read_text(encoding='utf-8')\nfor needle in ('// @version      0.5.0','async function publishPresence()','`${COMMAND_BASE}/presence`','document.hasFocus()','setInterval(publishPresence, 2000)','@updateURL    http://localhost:8765/prediction-chat-wake.user.js'):\n    assert needle in script, needle\nprint('INSTALLED_ACTIVE_PAGE_ROUTING_E001=PASS')\nprint('ROUTER_VERSION='+router.Handler.server_version)\n"
+    },
+    {
+      "type": "python",
+      "argv": ["python3", "-m", "unittest", "control.tampermonkey_multichat.test_active_page_routing"],
+      "test": true,
+      "timeout_seconds": 120
+    },
+    {
+      "type": "python",
+      "argv": ["python3", "-m", "compileall", "control/tampermonkey_multichat/command_router_active_page.py", "control/bridge_commands/command_bus_poller_active_page.py", "control/tampermonkey_multichat/patch_v050_active_page.py", "control/tampermonkey_multichat/test_active_page_routing.py"],
+      "timeout_seconds": 60
+    },
+    {
+      "type": "python",
+      "argv": ["python3", "control/tampermonkey_multichat/patch_v050_active_page.py"],
+      "timeout_seconds": 60
+    },
+    {
+      "type": "python",
+      "argv": ["python3", "-m", "unittest", "control.tampermonkey_multichat.test_active_page_routing"],
+      "test": true,
+      "timeout_seconds": 120
+    },
+    {
+      "type": "install_runtime",
+      "source": "control/tampermonkey_multichat/command_router.py",
+      "destination": "~/.local/share/prediction-chat-bridge/command_router_base.py",
+      "mode": 420
+    },
+    {
+      "type": "install_runtime",
+      "source": "control/tampermonkey_multichat/command_router_active_page.py",
+      "destination": "~/.local/share/prediction-chat-bridge/command_router.py",
+      "mode": 493
+    },
+    {
+      "type": "install_runtime",
+      "source": "control/bridge_commands/command_bus_poller.py",
+      "destination": "~/.local/share/prediction-command-bus/command_bus_poller_base.py",
+      "mode": 420
+    },
+    {
+      "type": "install_runtime",
+      "source": "control/bridge_commands/command_bus_poller_active_page.py",
+      "destination": "~/.local/share/prediction-command-bus/command_bus_poller.py",
+      "mode": 493
+    },
+    {
+      "type": "install_runtime",
+      "source": "control/tampermonkey_multichat/prediction-chat-wake.user.js",
+      "destination": "~/.local/share/prediction-chat-bridge/prediction-chat-wake.user.js",
+      "mode": 420
+    },
+    {
+      "type": "service",
+      "verb": "restart",
+      "unit": "prediction-chat-router.service"
+    },
+    {
+      "type": "service",
+      "verb": "is-active",
+      "unit": "prediction-chat-router.service"
+    },
+    {
+      "type": "service",
+      "verb": "restart",
+      "unit": "prediction-chat-wake.service"
+    },
+    {
+      "type": "service",
+      "verb": "is-active",
+      "unit": "prediction-chat-wake.service"
+    },
+    {
+      "type": "service",
+      "verb": "restart",
+      "unit": "prediction-command-bus.timer"
+    },
+    {
+      "type": "service",
+      "verb": "is-active",
+      "unit": "prediction-command-bus.timer"
+    },
+    {
+      "type": "python",
+      "argv": ["python3", "control/dev_checks/verify_active_page_routing_e001.py"],
+      "timeout_seconds": 60
+    },
+    {
+      "type": "journal",
+      "unit": "prediction-chat-router.service",
+      "lines": 80
+    },
+    {
+      "type": "journal",
+      "unit": "prediction-command-bus.service",
+      "lines": 80
+    }
+  ]
+}
