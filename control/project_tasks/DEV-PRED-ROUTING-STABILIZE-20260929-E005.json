@@ -1,0 +1,28 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-ROUTING-STABILIZE-20260929-E005",
+  "build_id": "TIERA-ROUTING-STABILIZE-20260929-E005",
+  "source_commit": "7b7ee057ea8d1efe397ae21eb07071ee26a3305a",
+  "intelligence_tier": "A",
+  "issuer": {"model": "GPT-5.6 Sol", "reasoning_level": "UNAVAILABLE_TO_RUNTIME"},
+  "safety": {"live_trading": false, "paid_actions": false, "wallet_actions": false, "remote_git_write": false, "credential_write": false},
+  "capabilities": ["read_repository","write_worktree","run_project_python","run_tests","read_runtime","write_runtime","user_service_manage","read_logs"],
+  "working_directory": ".",
+  "timeout_seconds": 600,
+  "notes": "Restore canonical explicit-session routing after the active-page experiment. Preserve automatic SESSION-ROUTE bootstrap and wake/status-compaction runtime. Test before runtime install.",
+  "operations": [
+    {"type":"write_text","path":"control/dev_checks/verify_canonical_session_routing_e005.py","content":"from pathlib import Path\nimport importlib.util, json, sys, tempfile\n\nhome=Path.home()\nbridge=home/'.local/share/prediction-chat-bridge'\nbus=home/'.local/share/prediction-command-bus'\nsys.path.insert(0,str(bridge)); sys.path.insert(0,str(bus))\n\ndef load(name,path):\n    spec=importlib.util.spec_from_file_location(name,path)\n    mod=importlib.util.module_from_spec(spec); sys.modules[name]=mod; spec.loader.exec_module(mod); return mod\n\nrouter=load('runtime_router_e005',bridge/'command_router.py')\nassert getattr(router.Handler,'server_version','')=='PredictionChatCommandRouter/0.2'\npoller=load('runtime_poller_e005',bus/'command_bus_poller.py')\nwith tempfile.TemporaryDirectory() as td:\n    routes=Path(td)/'routes'; routes.mkdir()\n    poller.ROUTES=routes\n    task='SESSION-ROUTE-06b02c18b66873daa2c4548a'\n    (routes/f'{task}.json').write_text(json.dumps({'task_id':task,'chat_id':'chat-e005-canonical','consumer_id':'tab-e005-canonical'}),encoding='utf-8')\n    route,source=poller.resolve_route({'route_task_id':task})\n    assert source==f'task:{task}'\n    assert route=={'chat_id':'chat-e005-canonical','consumer_id':'tab-e005-canonical'}\nwake=load('runtime_wake_e005',bridge/'bridge_server.py')\nassert 'status-compaction' in getattr(wake.Handler,'server_version','')\nprint('CANONICAL_SESSION_ROUTING_E005=PASS')\nprint('ROUTER_VERSION='+router.Handler.server_version)\nprint('WAKE_VERSION='+wake.Handler.server_version)\n"},
+    {"type":"python","argv":["python3","-m","unittest","control.tampermonkey_multichat.test_session_route_bootstrap"],"test":true,"timeout_seconds":120},
+    {"type":"python","argv":["python3","-m","unittest","control.tampermonkey_multichat.test_status_compaction_nested"],"test":true,"timeout_seconds":120},
+    {"type":"python","argv":["python3","-m","compileall","control/tampermonkey_multichat/command_router.py","control/bridge_commands/command_bus_poller.py"],"timeout_seconds":60},
+    {"type":"install_runtime","source":"control/tampermonkey_multichat/command_router.py","destination":"~/.local/share/prediction-chat-bridge/command_router.py","mode":493},
+    {"type":"install_runtime","source":"control/bridge_commands/command_bus_poller.py","destination":"~/.local/share/prediction-command-bus/command_bus_poller.py","mode":493},
+    {"type":"service","verb":"restart","unit":"prediction-chat-router.service"},
+    {"type":"service","verb":"is-active","unit":"prediction-chat-router.service"},
+    {"type":"service","verb":"restart","unit":"prediction-command-bus.timer"},
+    {"type":"service","verb":"is-active","unit":"prediction-command-bus.timer"},
+    {"type":"python","argv":["python3","control/dev_checks/verify_canonical_session_routing_e005.py"],"timeout_seconds":60},
+    {"type":"journal","unit":"prediction-chat-router.service","lines":40},
+    {"type":"journal","unit":"prediction-command-bus.service","lines":40}
+  ]
+}
