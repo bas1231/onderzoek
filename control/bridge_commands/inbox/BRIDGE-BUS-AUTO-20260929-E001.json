@@ -1,0 +1,16 @@
+{
+  "schema": "PREDICTION_BRIDGE_COMMAND_V1",
+  "task_id": "BRIDGE-BUS-AUTO-20260929-E001",
+  "action": "BRIDGE_PING",
+  "created_at_utc": "2026-09-29T10:35:00Z",
+  "route_task_id": "BRIDGE-BUS-E001",
+  "live_trading": false,
+  "paid_actions": false,
+  "wallet_actions": false,
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "notes": "One-shot automated post-install end-to-end proof. Safe BRIDGE_PING only."
+}
