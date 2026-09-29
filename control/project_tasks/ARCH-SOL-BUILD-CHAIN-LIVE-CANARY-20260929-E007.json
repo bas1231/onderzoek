@@ -1,0 +1,76 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "ARCH-SOL-BUILD-CHAIN-LIVE-CANARY-20260929-E007",
+  "build_id": "ARCH-SOL-BUILDER-ASTRA-REVIEWER-20260929",
+  "source_commit": "1c6f15f536038958ed66f0b961bdca30f304b98a",
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_runtime",
+    "user_service_manage",
+    "read_logs"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 1200,
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/live_build_chain_canary_e007.py",
+      "content": "from pathlib import Path\nimport json, sqlite3, sys\n\nCID='MANUAL-SCOUT-HENGELTJES-20260924'\nroot=Path.home()/'prediction_research_prod'/'knowledge'/'codex_runtime'\n\ndef overlay():\n    xs=[]\n    for p in (root/'candidate_states').glob('*.json'):\n        try: x=json.loads(p.read_text())\n        except Exception: continue\n        if x.get('candidate_id')==CID:\n            xs.append((p.stat().st_mtime,p,x))\n    if not xs: raise SystemExit('NO_CANDIDATE_OVERLAY')\n    return max(xs)[1:]\n\ndef tasks():\n    db=sqlite3.connect(f\"file:{root/'runtime.sqlite'}?mode=ro\",uri=True)\n    try: rows=db.execute('select id,body,status,attempt from tasks order by rowid').fetchall()\n    finally: db.close()\n    out=[]\n    for tid,body,status,attempt in rows:\n        try:b=json.loads(body)\n        except Exception:continue\n        if b.get('candidate_id')==CID:\n            out.append((tid,b,status,attempt))\n    return out\n\ndef snap(label):\n    p,x=overlay(); ts=tasks()\n    print('CANARY_PHASE='+label)\n    print('OVERLAY_FILE='+str(p))\n    print('QUEUE_STATUS='+str(x.get('queue_status')))\n    print('BUILD_CONTRACT='+str(isinstance(x.get('build_contract'),dict)))\n    print('BUILD_HANDOFF='+json.dumps(x.get('build_handoff'),sort_keys=True))\n    for tid,b,status,attempt in ts[-12:]:\n        print('TASK',tid,status,'attempt='+str(attempt),'class='+str(b.get('task_class')),'planner='+str(bool(b.get('candidate_build_planner'))),'builder='+str(bool(b.get('candidate_builder') or b.get('sol_builder'))))\n    return x,ts\n\nmode=sys.argv[1] if len(sys.argv)>1 else 'snapshot'\nx,ts=snap(mode)\nif mode!='final': raise SystemExit(0)\nplanners=[(tid,b,status) for tid,b,status,_ in ts if b.get('candidate_build_planner')]\nbuilds=[(tid,b,status) for tid,b,status,_ in ts if b.get('task_class')=='infrastructure_build']\nif not planners:\n    print('ASSERT_FAIL=NO_BUILD_PLANNER_TASK')\n    raise SystemExit(21)\nif not any(status=='COMPLETE' for _,_,status in planners):\n    print('ASSERT_FAIL=BUILD_PLANNER_NOT_COMPLETE')\n    raise SystemExit(22)\nif not builds:\n    print('ASSERT_FAIL=NO_INFRASTRUCTURE_BUILD_TASK')\n    raise SystemExit(23)\nif any(status=='COMPLETE' for _,_,status in builds):\n    print('BUILD_CHAIN_ASSERT=BUILDER_COMPLETE')\n    print('3333333333333333333333333333333333333333')\nelse:\n    print('BUILD_CHAIN_ASSERT=BUILDER_SELECTED')\n    print('2222222222222222222222222222222222222222')\n"
+    },
+    {
+      "type": "python",
+      "argv": ["python3", "control/dev_checks/live_build_chain_canary_e007.py", "pre"],
+      "timeout_seconds": 60
+    },
+    {
+      "type": "service",
+      "verb": "start",
+      "unit": "prediction-codex-supervisor.service"
+    },
+    {
+      "type": "python",
+      "argv": ["python3", "control/dev_checks/live_build_chain_canary_e007.py", "tick1"],
+      "timeout_seconds": 60
+    },
+    {
+      "type": "service",
+      "verb": "start",
+      "unit": "prediction-codex-supervisor.service"
+    },
+    {
+      "type": "python",
+      "argv": ["python3", "control/dev_checks/live_build_chain_canary_e007.py", "tick2"],
+      "timeout_seconds": 60
+    },
+    {
+      "type": "service",
+      "verb": "start",
+      "unit": "prediction-codex-supervisor.service"
+    },
+    {
+      "type": "journal",
+      "unit": "prediction-codex-supervisor.service",
+      "lines": 100
+    },
+    {
+      "type": "python",
+      "argv": ["python3", "control/dev_checks/live_build_chain_canary_e007.py", "final"],
+      "timeout_seconds": 60
+    }
+  ],
+  "notes": "Bounded live canary for the real MANUAL-SCOUT-HENGELTJES candidate after E004P moved it to NEEDS_BUILD. Three supervisor ticks maximum. PASS requires a real candidate_build_planner task COMPLETE and a real infrastructure_build task present; final 40-hex sentinel 222... means builder selected, 333... means builder COMPLETE. No live trading, paid action, wallet action, credential access or remote Git write."
+}
