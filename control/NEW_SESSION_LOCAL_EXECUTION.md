@@ -1,6 +1,7 @@
 # Prediction — New Session Local Execution Guide
 
 Status: canonical operating guide for new ChatGPT sessions.
+Updated: 2026-09-29 after automatic route-bootstrap install PASS.
 
 ## Purpose
 
@@ -31,10 +32,18 @@ Treat current Git documentation as canonical over old chat memory or obsolete br
 Before dispatching a task that must return to this chat, establish a `session_route_task_id` for this exact chat.
 
 - If a previous task result demonstrably returned successfully to this chat, use that task ID.
-- If this is a brand-new chat with no proven route, create one once using the documented legacy/menu `BRIDGE_PING` bootstrap path, wait for the matching `NIGHTSHIFT_WSL_RESULT_V1 ... status=PASS exit=0`, then use that task ID for subsequent command-bus tasks in this session.
+- If this is a brand-new chat with no proven route, the installed wake bridge now automatically bootstraps one from the browser's existing `/next` poll. Wait for:
+
+  `NIGHTSHIFT_WSL_RESULT_V1 task=SESSION-ROUTE-... status=PASS exit=0 kind=SESSION_ROUTE_BOOTSTRAP`
+
+- Use that `SESSION-ROUTE-*` task ID as `route_task_id` on subsequent command-bus tasks from this chat.
+- Do not emit a visible assistant `[[PREDICTION_CMD:...]]` marker as the normal bootstrap procedure.
+- Legacy/menu `BRIDGE_PING` is diagnostic fallback only if the automatic bootstrap does not appear.
 - Do not normally use `route_task_id: null` when multiple Prediction sessions may exist.
 
 The shared pinned route is not a reliable same-chat addressing mechanism in a multi-session setup. See `control/bridge_commands/SESSION_ROUTING.md`.
+
+The automatic bootstrap is idempotent control metadata, not command execution. Normal commands retain their durable at-most-once semantics.
 
 ## When to use the plain command bus
 
@@ -43,11 +52,11 @@ Use `control/bridge_commands/inbox/<TASK_ID>.json` for approved local actions su
 Rules:
 
 - every task ID is unique and immutable;
-- never edit or reuse a dispatched task ID;
+- never edit or reuse a dispatched command task ID;
 - use the current session's proven `route_task_id`;
 - `live_trading`, `paid_actions`, and `wallet_actions` are explicit `false` unless a separate user approval and purpose-built path exists;
-- record intelligence tier, actual model and actual reasoning level; use `UNAVAILABLE_TO_RUNTIME` rather than inventing a value;
-- an ambiguous dispatch is not automatically retried.
+- record intelligence tier, actual model and actual reasoning availability; use `UNAVAILABLE_TO_RUNTIME` rather than inventing a value;
+- an ambiguous command dispatch is not automatically retried.
 
 ## How to execute project code in WSL
 
@@ -172,14 +181,7 @@ A successful local execution returns through the wake bridge with the same task 
 
 Do not treat mere dispatch as success. For code execution require the executor task itself to return `PASS`/exit `0` and make the task's intended observable assertion part of the code or operation sequence.
 
-For a fresh code-execution proof, prefer a harmless task that:
-
-1. writes a small repository-owned Python file into an isolated worktree;
-2. executes it with the project executor;
-3. writes and reads back an artifact under the worktree;
-4. asserts the exact payload;
-5. optionally computes a SHA-256;
-6. returns exit `0` only if all assertions pass.
+For a fresh code-execution proof, prefer a harmless task that writes a repository-owned Python file in an isolated worktree, executes it, writes/reads back an artifact, asserts exact content and returns exit 0 only when the assertions pass.
 
 ## What the executor is allowed to manage
 
@@ -232,4 +234,4 @@ Manual terminal use is fallback, not normal operation. If unavoidable, keep it t
 
 ## Current proven baseline
 
-See `control/bridge_commands/CURRENT_STATE.md` for current evidence. The command bus, Python execution canary, operational project-management canary and explicit same-chat routing have passed end-to-end. Most recent same-chat pure command-bus proof on 2026-09-29: `BRIDGE-COMMAND-BUS-CURRENT-ROUTE-E008` -> `status=PASS exit=0`.
+See `control/bridge_commands/CURRENT_STATE.md` for current evidence. Explicit same-chat routing and command-bus execution are proven by `BRIDGE-COMMAND-BUS-CURRENT-ROUTE-E008` -> PASS. Automatic new-session route bootstrap was regression-tested, installed, restarted, service-checked and runtime-canary-tested by `DEV-PRED-SESSION-BOOTSTRAP-INSTALL-20260929-E010` -> PASS. The remaining product-level acceptance test is a genuinely new chat receiving its automatic `SESSION-ROUTE-*` PASS without DOM marker/manual ping.
