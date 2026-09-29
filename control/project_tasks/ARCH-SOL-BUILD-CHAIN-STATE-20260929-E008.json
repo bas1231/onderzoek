@@ -1,0 +1,25 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "ARCH-SOL-BUILD-CHAIN-STATE-20260929-E008",
+  "build_id": "ARCH-SOL-BUILDER-ASTRA-REVIEWER-20260929",
+  "source_commit": "e7991b982652fc645926b70e4dd2e78cbb8a3715",
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": ["read_repository","user_service_manage"],
+  "working_directory": ".",
+  "timeout_seconds": 120,
+  "operations": [
+    {"type":"service","verb":"is-active","unit":"prediction-codex-supervisor.timer"}
+  ],
+  "notes": "Read-only E008 preflight. Matching DEV manifest runs a read-only local runtime classifier as final command so the wake compactor receives the state sentinel directly. No supervisor start or project mutation."
+}
