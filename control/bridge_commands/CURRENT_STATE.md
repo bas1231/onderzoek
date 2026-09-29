@@ -23,8 +23,10 @@ Successful end-to-end evidence on 2026-09-29:
 - `BRIDGE-BUS-AUTO-20260929-E001` -> PASS, exit 0
 - `TM-PING-1790690332005` -> PASS, exit 0, returned to the intended chat
 - `BRIDGE-COMMAND-BUS-CURRENT-ROUTE-E008` -> PASS, exit 0, returned to that same chat through an explicit session route
+- `DEV-PRED-SESSION-BOOTSTRAP-INSTALL-20260929-E010` -> PASS, exit 0, installed and runtime-verified automatic session bootstrap
+- `DEV-PRED-STATUS-COMPACTION-FIX-20260929-E013` -> PASS, exit 0, installed and runtime-verified nested-status-safe result compaction
 
-This proves the primary GitHub command-bus path once a valid same-chat route exists.
+This proves the primary GitHub command-bus path once a valid same-chat route exists, plus the installed automatic-bootstrap runtime and corrected DEV result-status compactor.
 
 The main legacy result-path failure found earlier was head-of-line blocking. The installed result queue uses fail-closed `outbox -> inflight -> sent` semantics; ambiguous `inflight` delivery is not silently treated as sent or automatically replayed.
 
@@ -67,27 +69,34 @@ After that result is ACKed in the same chat, the `SESSION-ROUTE-*` task ID is th
 
 The normal new-session procedure therefore no longer requires the assistant to emit a visible `[[PREDICTION_CMD:...]]` marker. Legacy/menu PING remains diagnostic fallback only.
 
-## Result compaction incident — reporting only
+## Result compaction incident — fixed and installed
 
 A follow-up diagnostic exposed a browser-facing status compaction bug. Task `DEV-PRED-ROUTE-BOOTSTRAP-DIAG-20260929-E011` returned the contradictory summary:
 
 `status=FAIL exit=0 rcs=1:2,1:0 error=TaskError`
 
-E011 intentionally printed the stored receipt of the older failed E009 task. The outer DEV runner then completed its own command with RC 0 and printed its final `DEV_TASK_STATUS=PASS`. The installed hardened compactor selected the first `DEV_TASK_STATUS`, first `ERROR_CLASS`, and all `COMMAND_n_RC` markers from raw output, so an embedded historical failure could incorrectly flip the browser summary of a successful diagnostic to FAIL.
+E011 intentionally printed the stored receipt of the older failed E009 task. The outer DEV runner then completed its own command with RC 0 and printed its final `DEV_TASK_STATUS=PASS`. The old hardened compactor selected the first embedded `DEV_TASK_STATUS`, first `ERROR_CLASS`, and historical `COMMAND_n_RC` markers from raw output, so an embedded historical failure could incorrectly flip the browser summary of a successful diagnostic to FAIL.
 
-This is a result-summary/reporting defect; it does not invalidate E010 or prove a command-bus/session-bootstrap execution failure.
+The fix was installed by:
 
-Canonical fix staged on Git but not yet claimed installed:
+`DEV-PRED-STATUS-COMPACTION-FIX-20260929-E013`
+
+Observed result in the controlling chat:
+
+`NIGHTSHIFT_WSL_RESULT_V1 task=DEV-PRED-STATUS-COMPACTION-FIX-20260929-E013 status=PASS exit=0 rcs=1:0 head=a43ad4a2a3014e36ec1932b4b4b31b7fd269f140 event=1790695022-7d3aaf3f690e`
+
+E013 ran the nested-status regression test and compile checks, installed `bridge_server_status_compaction.py` as the active wake runtime, restarted and required `prediction-chat-wake.service` active, and executed a runtime assertion requiring the outer PASS to remain authoritative even when an embedded older receipt contains FAIL/TaskError/RC=2.
+
+Canonical implementation:
 
 - `control/tampermonkey_multichat/bridge_server_status_compaction.py`
 - `control/tampermonkey_multichat/test_status_compaction_nested.py`
-- preregistered project task `DEV-PRED-STATUS-COMPACTION-FIX-20260929-E013`
 
-The staged parser makes final outer `DEV_TASK_STATUS` authoritative, keeps the last RC per command index, and only emits `ERROR_CLASS` when the final outer status is FAIL. Do not claim this parser is installed until E013 or an equivalent fresh task returns `status=PASS exit=0` after runtime verification.
+This incident was a result-summary/reporting defect; it did not invalidate E010 or prove a command-bus/session-bootstrap execution failure.
 
 ## Remaining acceptance gate for automatic bootstrap
 
-E010 proves implementation, deterministic behaviour, installation, service restart, service liveness and installed-runtime canary.
+E010 proves implementation, deterministic behaviour, installation, service restart, service liveness and installed-runtime canary. E013 proves the corrected result-status compactor is installed and runtime-verified.
 
 The remaining product-level acceptance test is external to the current already-routed chat: open a genuinely brand-new Prediction ChatGPT chat and verify that, after it has a stable ChatGPT conversation URL and the existing wake userscript is running, it automatically receives its own:
 
@@ -130,8 +139,8 @@ In summary:
 - `control/tampermonkey_multichat/PROTOCOL.md` — bridge protocol.
 - `control/tampermonkey_multichat/bridge_server_session_bootstrap.py` — automatic bootstrap wrapper.
 - `control/tampermonkey_multichat/test_session_route_bootstrap.py` — regression suite.
-- `control/tampermonkey_multichat/bridge_server_status_compaction.py` — staged nested-receipt-safe result compactor.
-- `control/tampermonkey_multichat/test_status_compaction_nested.py` — staged regression suite for result status parsing.
+- `control/tampermonkey_multichat/bridge_server_status_compaction.py` — installed nested-receipt-safe result compactor.
+- `control/tampermonkey_multichat/test_status_compaction_nested.py` — regression suite for result status parsing.
 - `control/bridge_commands/COMMAND_SCHEMA_V1.json` — immutable command schema.
 - `control/bridge_commands/command_bus_poller.py` — read-only GitHub poller with durable command claims.
 
@@ -153,4 +162,4 @@ Unchanged:
 
 ## Qualification gate
 
-The command bus, explicit session routing, project executor and automatic session-bootstrap runtime are operationally implemented and have passed their documented local/runtime tests. Formal independent Tier-A qualification remains `REQUIRES_HIGH_INTELLIGENCE_REVIEW`. Operational evidence must not be used to relax trading, cost, wallet, credential, provenance or autonomy guardrails.
+The command bus, explicit session routing, project executor, automatic session-bootstrap runtime and corrected result compactor are operationally implemented and have passed their documented local/runtime tests. Formal independent Tier-A qualification remains `REQUIRES_HIGH_INTELLIGENCE_REVIEW`. Operational evidence must not be used to relax trading, cost, wallet, credential, provenance or autonomy guardrails.
