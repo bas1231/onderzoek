@@ -1,0 +1,21 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-ROUTING-RUNTIME-CLASSIFY-20260929-E008",
+  "build_id": "DIAG-ROUTING-RUNTIME-20260929-E008",
+  "source_commit": "412da9d392e5f4ca37f08af3b4edbe556fc72d18",
+  "intelligence_tier": "C",
+  "issuer": {"model": "GPT-5.6 Sol", "reasoning_level": "UNAVAILABLE_TO_RUNTIME"},
+  "safety": {"live_trading": false, "paid_actions": false, "wallet_actions": false, "remote_git_write": false, "credential_write": false},
+  "capabilities": ["read_repository","write_worktree","run_project_python","read_runtime"],
+  "working_directory": ".",
+  "timeout_seconds": 180,
+  "notes": "Read-only classify E005 raw bridge receipt and current router/poller runtime. The final 40-hex token is a deterministic diagnostic code surfaced by browser compaction.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/classify_routing_runtime_e008.py",
+      "content": "from pathlib import Path\nimport json, re\n\nTARGET='DEV-PRED-ROUTING-STABILIZE-20260929-E005'\nh=Path.home(); bridge=h/'.local/share/prediction-chat-bridge'; bus=h/'.local/share/prediction-command-bus'\nTOKENS={\n 'CANONICAL_RUNTIME':'1111111111111111111111111111111111111111',\n 'ACTIVE_PAGE_RUNTIME':'2222222222222222222222222222222222222222',\n 'MIXED_RUNTIME':'3333333333333333333333333333333333333333',\n 'RAW_UNITTEST_FAIL':'4444444444444444444444444444444444444444',\n 'RAW_SERVICE_FAIL':'5555555555555555555555555555555555555555',\n 'RAW_VERIFY_FAIL':'6666666666666666666666666666666666666666',\n 'RAW_INSTALL_FAIL':'7777777777777777777777777777777777777777',\n 'RAW_OTHER_FAIL':'8888888888888888888888888888888888888888',\n 'RAW_NOT_FOUND':'9999999999999999999999999999999999999999'}\n\ndef load(p):\n    try:\n        o=json.loads(p.read_text(encoding='utf-8')); return o if isinstance(o,dict) else None\n    except Exception: return None\n\nraw=''\nfor dname in ('sent','inflight','outbox'):\n    d=bridge/dname\n    if not d.exists(): continue\n    for p in d.glob('*.json'):\n        o=load(p)\n        if o and str(o.get('task_id') or '')==TARGET:\n            raw=str(o.get('message') or '')\n            break\n    if raw: break\n\nif not raw:\n    rawclass='RAW_NOT_FOUND'\nelif 'python rc=' in raw and ('unittest' in raw or 'FAILED' in raw or 'Traceback' in raw):\n    rawclass='RAW_UNITTEST_FAIL'\nelif 'systemctl rc=' in raw:\n    rawclass='RAW_SERVICE_FAIL'\nelif 'runtime source invalid' in raw or 'runtime destination' in raw or 'INSTALL_RUNTIME' in raw:\n    rawclass='RAW_INSTALL_FAIL'\nelif 'verify_canonical_session_routing_e005.py' in raw or 'AssertionError' in raw:\n    rawclass='RAW_VERIFY_FAIL'\nelse:\n    rawclass='RAW_OTHER_FAIL'\n\nrouter=(bridge/'command_router.py').read_text(encoding='utf-8',errors='replace') if (bridge/'command_router.py').exists() else ''\npoller=(bus/'command_bus_poller.py').read_text(encoding='utf-8',errors='replace') if (bus/'command_bus_poller.py').exists() else ''\nrouter_canonical='PredictionChatCommandRouter/0.2' in router and '0.3-active-page' not in router\npoller_canonical='ACTIVE_PAGE_FILE' not in poller and 'active_page_required' not in poller\nif router_canonical and poller_canonical:\n    runtime='CANONICAL_RUNTIME'\nelif (not router_canonical) and (not poller_canonical):\n    runtime='ACTIVE_PAGE_RUNTIME'\nelse:\n    runtime='MIXED_RUNTIME'\nprint('RAW_CLASS='+rawclass)\nprint('RUNTIME_CLASS='+runtime)\nprint('RAW_TOKEN='+TOKENS[rawclass])\nprint('RUNTIME_TOKEN='+TOKENS[runtime])\n# Print runtime token last so browser compaction head=... directly represents current runtime state.\nprint(TOKENS[runtime])\n"
+    },
+    {"type":"python","argv":["python3","control/dev_checks/classify_routing_runtime_e008.py"],"timeout_seconds":60}
+  ]
+}
