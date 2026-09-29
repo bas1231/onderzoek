@@ -1,0 +1,16 @@
+{
+  "schema": "PREDICTION_BRIDGE_COMMAND_V1",
+  "task_id": "BRIDGE-COMMAND-BUS-CURRENT-ROUTE-E008",
+  "action": "BRIDGE_PING",
+  "created_at_utc": "2026-09-29T13:59:30Z",
+  "route_task_id": "TM-PING-1790690332005",
+  "live_trading": false,
+  "paid_actions": false,
+  "wallet_actions": false,
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "notes": "Fresh command-bus transport test using the just-proven current-chat TM route."
+}
