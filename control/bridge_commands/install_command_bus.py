@@ -4,6 +4,10 @@
 The installer never pushes to GitHub and never touches the production repo working
 tree. Existing outbox evidence is preserved in quarantine before queue semantics
 change from OUTBOX retry to OUTBOX -> INFLIGHT at-most-once delivery.
+
+The active wake runtime may be a hardened wrapper around bridge_server_v2.py.
+In that case only the base queue/ACK module is patched; wrapper compaction,
+heartbeat, dedupe and browser formatting remain intact.
 """
 
 from __future__ import annotations
@@ -35,6 +39,8 @@ PROD_REPO = HOME / "prediction_research_prod"
 WAKE_SERVICE = "prediction-chat-wake.service"
 BUS_SERVICE = "prediction-command-bus.service"
 BUS_TIMER = "prediction-command-bus.timer"
+INFLIGHT_MARKER = "# INFLIGHT_RUNTIME_V1"
+WRAPPER_IMPORT = "import bridge_server_v2 as base"
 
 
 def utc_now() -> str:
@@ -190,6 +196,29 @@ def restore_outbox(qdir: Path | None) -> None:
             os.replace(src, dst)
 
 
+def runtime_patch_target(active_server: Path) -> tuple[Path, str]:
+    source = active_server.read_text(encoding="utf-8")
+    if WRAPPER_IMPORT in source:
+        base = active_server.with_name("bridge_server_v2.py")
+        if not base.is_file():
+            raise RuntimeError(f"HARDENED_BASE_MISSING:{base}")
+        return base, "hardened_wrapper"
+    return active_server, "direct_base"
+
+
+def inflight_static_ok(path: Path) -> bool:
+    try:
+        source = path.read_text(encoding="utf-8")
+    except Exception:
+        return False
+    return all(x in source for x in (
+        INFLIGHT_MARKER,
+        'INFLIGHT = DATA_DIR / "inflight"',
+        "os.replace(path, claimed)",
+        "inflight_src if inflight_src.exists() else outbox_src",
+    ))
+
+
 def write_units() -> None:
     UNIT_DIR.mkdir(parents=True, exist_ok=True)
     (UNIT_DIR / BUS_SERVICE).write_text(
@@ -220,7 +249,10 @@ def main() -> int:
     if not poller_src.is_file() or not patch_src.is_file():
         raise SystemExit("FOUT: run installer beside poller and inflight patch")
 
-    for p in (BUS, BUS_CONFIG, BUS_STATE, TASK_STATE, UNIT_DIR, BRIDGE / "outbox", BRIDGE / "sent", BRIDGE / "routes"):
+    for p in (
+        BUS, BUS_CONFIG, BUS_STATE, TASK_STATE, UNIT_DIR,
+        BRIDGE / "outbox", BRIDGE / "sent", BRIDGE / "routes"
+    ):
         p.mkdir(parents=True, exist_ok=True)
 
     if not TOKEN_FILE.is_file():
@@ -231,7 +263,10 @@ def main() -> int:
 
     health("http://127.0.0.1:8765/health", token)
     health("http://127.0.0.1:8767/health", token)
-    if run(["systemctl", "--user", "is-active", "--quiet", "prediction-chat-command.service"], check=False).returncode != 0:
+    if run(
+        ["systemctl", "--user", "is-active", "--quiet", "prediction-chat-command.service"],
+        check=False,
+    ).returncode != 0:
         raise SystemExit("FOUT: prediction-chat-command.service not active")
 
     py_compile.compile(str(poller_src), doraise=True)
@@ -247,13 +282,26 @@ def main() -> int:
     active_server = BRIDGE / "bridge_server.py"
     if not active_server.is_file():
         raise SystemExit("FOUT: active bridge_server.py missing")
+
+    patch_target, runtime_kind = runtime_patch_target(active_server)
     shutil.copy2(active_server, backup_dir / "bridge_server.py")
+    if patch_target != active_server:
+        shutil.copy2(patch_target, backup_dir / "bridge_server_v2.py")
 
     qdir: Path | None = None
     try:
         run(["systemctl", "--user", "stop", WAKE_SERVICE])
         qdir, moved = archive_outbox(stamp)
-        run([sys.executable, str(patch_src), "--target", str(active_server)])
+
+        patch_run = run(
+            [sys.executable, str(patch_src), "--target", str(active_server)],
+            capture=True,
+        )
+        patch_output = patch_run.stdout.strip()
+        if not inflight_static_ok(patch_target):
+            raise RuntimeError(f"INFLIGHT_STATIC_CHECK_FAILED:{patch_target}")
+        py_compile.compile(str(patch_target), doraise=True)
+        py_compile.compile(str(active_server), doraise=True)
         (BRIDGE / "inflight").mkdir(parents=True, exist_ok=True)
 
         shutil.copy2(poller_src, BUS / "command_bus_poller.py")
@@ -263,12 +311,21 @@ def main() -> int:
         run(["systemctl", "--user", "restart", WAKE_SERVICE])
 
         wake = health("http://127.0.0.1:8765/health", token)
-        if wake.get("inflight_claim") is not True:
-            raise RuntimeError(f"WAKE_INFLIGHT_HEALTH_MISSING:{wake}")
+        if runtime_kind == "hardened_wrapper":
+            if wake.get("server_compaction") is not True or wake.get("task_dedupe") is not True:
+                raise RuntimeError(f"HARDENED_GUARDRAILS_MISSING:{wake}")
+        elif wake.get("inflight_claim") is not True:
+            raise RuntimeError(f"DIRECT_BASE_INFLIGHT_HEALTH_MISSING:{wake}")
 
-        test = run([sys.executable, str(BUS / "command_bus_poller.py"), "--once"], capture=True).stdout.strip()
+        test = run(
+            [sys.executable, str(BUS / "command_bus_poller.py"), "--once"],
+            capture=True,
+        ).stdout.strip()
         run(["systemctl", "--user", "enable", "--now", BUS_TIMER])
-        if run(["systemctl", "--user", "is-active", "--quiet", BUS_TIMER], check=False).returncode != 0:
+        if run(
+            ["systemctl", "--user", "is-active", "--quiet", BUS_TIMER],
+            check=False,
+        ).returncode != 0:
             raise RuntimeError("BUS_TIMER_NOT_ACTIVE")
 
         atomic_json(BUS_STATE / "qualification.json", {
@@ -280,18 +337,27 @@ def main() -> int:
             "status": "REQUIRES_HIGH_INTELLIGENCE_REVIEW",
             "installed_at_utc": utc_now(),
             "pinned_route": route,
+            "remote_commit": remote_commit,
+            "runtime_kind": runtime_kind,
+            "inflight_patch_target": str(patch_target),
+            "inflight_static_verified": True,
+            "wake_health": wake,
             "legacy_outbox_quarantine": str(qdir),
             "legacy_outbox_count": len(moved),
             "poller_self_test": test,
+            "patch_output": patch_output,
             "guardrails": {
                 "live_trading": False,
                 "paid_actions": False,
                 "wallet_actions": False,
-                "wsl_remote_writes": False
-            }
+                "wsl_remote_writes": False,
+            },
         })
 
         print("PASS: command bus installed")
+        print("RUNTIME_KIND:", runtime_kind)
+        print("INFLIGHT_PATCH_TARGET:", patch_target)
+        print("PATCH:", patch_output)
         print("ROUTE:", json.dumps(route, sort_keys=True))
         print("WAKE:", json.dumps(wake, sort_keys=True))
         print("POLLER:", test)
@@ -299,14 +365,18 @@ def main() -> int:
         print("LEGACY_OUTBOX_QUARANTINE:", qdir)
         print("STATUS: REQUIRES_HIGH_INTELLIGENCE_REVIEW")
         return 0
+
     except Exception as exc:
         print(f"FOUT: {type(exc).__name__}: {exc}")
         run(["systemctl", "--user", "disable", "--now", BUS_TIMER], check=False)
         shutil.copy2(backup_dir / "bridge_server.py", active_server)
+        base_backup = backup_dir / "bridge_server_v2.py"
+        if base_backup.exists():
+            shutil.copy2(base_backup, patch_target)
         restore_outbox(qdir)
         run(["systemctl", "--user", "daemon-reload"], check=False)
         run(["systemctl", "--user", "restart", WAKE_SERVICE], check=False)
-        print("ROLLBACK: wake server and outbox restored")
+        print("ROLLBACK: wake runtime/base and outbox restored")
         return 1
 
 
