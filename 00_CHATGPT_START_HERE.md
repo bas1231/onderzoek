@@ -12,18 +12,23 @@ The installed operational path is:
 
 The **command bus is transport**. The **project executor is the controlled local build/execution layer**.
 
+A single technical overview of all components, task flow, runtime paths, safety boundaries and end-to-end evidence is maintained at:
+
+`control/bridge_commands/ARCHITECTURE.md`
+
 ## Mandatory read order
 
 Before doing local Prediction work, read these files from `bas1231/onderzoek`:
 
 1. `00_CHATGPT_START_HERE.md` — this file.
 2. `control/bridge_commands/CURRENT_STATE.md` — current proven state and evidence.
-3. `control/bridge_commands/SESSION_ROUTING.md` — mandatory same-chat routing rule.
-4. `control/NEW_SESSION_LOCAL_EXECUTION.md` — step-by-step execution flow.
-5. `control/PROJECT_EXECUTOR.md` — executor capabilities and hard boundaries.
-6. `control/bridge_commands/OPERATIONS.md` — command-bus operations.
-7. `control/tampermonkey_multichat/PROTOCOL.md` — canonical bridge protocol.
-8. `control/tampermonkey_multichat/CHATGPT_PROJECT_INSTRUCTIONS.md` — full project-specific bridge instructions.
+3. `control/bridge_commands/ARCHITECTURE.md` — complete technical view of the local execution chain.
+4. `control/bridge_commands/SESSION_ROUTING.md` — mandatory same-chat routing rule.
+5. `control/NEW_SESSION_LOCAL_EXECUTION.md` — step-by-step execution flow.
+6. `control/PROJECT_EXECUTOR.md` — executor capabilities and hard boundaries.
+7. `control/bridge_commands/OPERATIONS.md` — command-bus operations.
+8. `control/tampermonkey_multichat/PROTOCOL.md` — canonical bridge protocol.
+9. `control/tampermonkey_multichat/CHATGPT_PROJECT_INSTRUCTIONS.md` — full project-specific bridge instructions.
 
 When old chat memory or older docs conflict with these files, the current Git documentation above is authoritative.
 
@@ -126,6 +131,8 @@ Manual WSL commands are fallback only. If unavoidable, keep them terminal-safe: 
 
 ## Current proven baseline
 
-The command bus and project executor have passed end-to-end operational tests. `BRIDGE-COMMAND-BUS-CURRENT-ROUTE-E008` returned `status=PASS exit=0` to the intended chat. The automatic server-side session bootstrap was then installed and runtime-tested by `DEV-PRED-SESSION-BOOTSTRAP-INSTALL-20260929-E010`, which returned `status=PASS exit=0` after regression tests, compile checks, runtime install, service restart/active check and installed-runtime canary.
+The command bus and project executor have passed end-to-end operational tests. `BRIDGE-COMMAND-BUS-CURRENT-ROUTE-E008` returned `status=PASS exit=0` to the intended chat. The automatic server-side session bootstrap was installed and runtime-tested by `DEV-PRED-SESSION-BOOTSTRAP-INSTALL-20260929-E010`, which returned `status=PASS exit=0` after regression tests, compile checks, runtime install, service restart/active check and installed-runtime canary.
 
-The final product-level acceptance criterion for automatic bootstrap is a genuinely brand-new Prediction chat receiving its own `SESSION-ROUTE-*` PASS without an assistant DOM marker or manual ping. See `control/bridge_commands/CURRENT_STATE.md` and `SESSION_ROUTING.md` for the latest evidence.
+A later fresh-session proof on 2026-09-29 automatically returned `SESSION-ROUTE-9f9fd46c002c07a145f8dd11 -> PASS` without a manual ping. That exact route was then used for `DEV-PRED-BUS-CODE-ROUNDTRIP-20260929-E001`, which wrote and executed repository-owned Python through the capability-scoped WSL executor and returned to the same chat as `status=PASS exit=0 rcs=1:0` against pinned source commit `0f90a20e7cbb02eb2308a9b917d571f110b0fadb`.
+
+This proves the complete operational code path from a fresh ChatGPT session through GitHub, WSL and back to that same session. See `control/bridge_commands/ARCHITECTURE.md`, `control/bridge_commands/CURRENT_STATE.md` and `control/bridge_commands/SESSION_ROUTING.md` for details and the distinction between operational proof and formal Tier-A qualification.
