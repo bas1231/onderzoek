@@ -1,14 +1,18 @@
 # Prediction Project Executor
 
-Status: **provisional Tier-A infrastructure**  
+Status: **operational capability-scoped Tier-A infrastructure**  
 Build: `TIERA-PROJECT-EXECUTOR-20260929-E001`  
-Qualification: `REQUIRES_HIGH_INTELLIGENCE_REVIEW`
+Formal qualification: `REQUIRES_HIGH_INTELLIGENCE_REVIEW`
+
+Operational use for normal Prediction build/test/diagnose/user-level management work is enabled. The open qualification record is a governance status and does not block ordinary use inside the documented hard guardrails.
+
+New sessions should first read `control/NEW_SESSION_LOCAL_EXECUTION.md` and `control/bridge_commands/CURRENT_STATE.md`.
 
 ## Doel
 
 De project executor geeft ChatGPT voldoende lokale rechten om het Prediction-project te bouwen, testen en op user-level te beheren, zonder een onbeperkte root/shell-backdoor te maken.
 
-De bestaande GitHub command bus blijft het transport. Voor daadwerkelijke code-uitvoering wordt het bestaande `DEV-` tunnelpad gebruikt, maar de nieuwe `project_task_executor.py` valideert een apart immutable task-spec uit deze repository en voert alleen expliciete capabilities uit.
+De bestaande GitHub command bus blijft het transport. Voor daadwerkelijke code-uitvoering wordt het bestaande `DEV-` tunnelpad gebruikt, maar `project_task_executor.py` valideert een apart immutable task-spec uit deze repository en voert alleen expliciete capabilities uit.
 
 ## Harde grenzen
 
@@ -17,9 +21,9 @@ Altijd geblokkeerd:
 - `sudo`, `su`, root/elevatie;
 - live trading/order submission/order cancellation;
 - wallet/crypto/fund movement;
-- betaalde acties;
+- betaalde acties zonder specifieke voorafgaande goedkeuring via een daarvoor bedoeld pad;
 - credential writes of toegang tot bekende credentialpaden;
-- `git push`, remote-refmutaties, credential-Git en autonome GitHub-publicatie;
+- `git push`, remote-refmutaties, credential-Git en autonome GitHub-publicatie vanuit WSL;
 - willekeurige externe netwerkverbindingen vanuit projectcode;
 - `shell=True` en onbeperkte shellcommando's;
 - niet-Prediction systemd user-units;
@@ -45,7 +49,7 @@ Elke task bevat daarnaast verplicht `live_trading:false`, `paid_actions:false`, 
 
 ## Uitvoeringsmodel
 
-1. ChatGPT schrijft een immutable spec naar `control/project_tasks/<TASK_ID>.json`.
+1. ChatGPT schrijft via de GitHub connector een immutable spec naar `control/project_tasks/<TASK_ID>.json`.
 2. Het spec bevriest `source_commit`, intelligence tier, model/reasoningregistratie, capabilities, operations en safetyflags.
 3. De lokale executor haalt `bas1231/onderzoek` read-only op in een aparte mirror.
 4. Voor repositorywerk maakt hij een geïsoleerde worktree/branch onder `~/.local/share/prediction-project-executor/worktrees/<TASK_ID>` vanaf exact `source_commit`.
@@ -74,12 +78,22 @@ Elke task bevat daarnaast verplicht `live_trading:false`, `paid_actions:false`, 
 
 ## Transport via bestaande DEV tunnel
 
-De receiver heeft al een asynchrone `DEV-` tunnel. Nieuwe projecttaken gebruiken een klein manifest in `bas1231/fg-assistent/dev_tasks/<TASK_ID>.json` dat de canonical `project_task_executor.py` en guard synchroniseert en vervolgens `project_task_executor.py <TASK_ID>` start. De primaire command bus verstuurt hetzelfde task-ID via action `SIX_AI_HEALTH`.
+De receiver heeft al een asynchrone `DEV-` tunnel. Projecttaken gebruiken een klein manifest in `bas1231/fg-assistent/dev_tasks/<TASK_ID>.json` dat de canonical `project_task_executor.py` en guard synchroniseert en vervolgens `project_task_executor.py <TASK_ID>` start. De primaire command bus verstuurt hetzelfde task-ID via de huidige compatibility action `SIX_AI_HEALTH`.
 
-Dit vermijdt een tweede lokale HTTP-executor en houdt één bestaande, bewezen wake/result-route.
+Dit vermijdt een tweede lokale HTTP-executor en houdt één bestaande, bewezen wake/result-route. De exacte stap-voor-stap procedure staat in `control/NEW_SESSION_LOCAL_EXECUTION.md`.
+
+## Bewezen operationele baseline
+
+Live bewijs op 2026-09-29:
+
+- `DEV-PRED-PROJECT-EXEC-INSTALL-E002` — compile + volledige deterministic unittest suite PASS;
+- `DEV-PRED-PROJECT-EXEC-CANARY-E001` — isolated worktree, repository-owned Python write/execute en lokale Git-inspectie PASS;
+- `DEV-PRED-PROJECT-EXEC-OPS-E003` — Python uitvoering, geïsoleerde lokale Git commit, bounded runtime install, `prediction-*` service status en journal read PASS.
+
+Zie `control/bridge_commands/CURRENT_STATE.md` voor de nieuwste evidence.
 
 ## Governance
 
 Muterende projecttaken blijven onder `methodology/AUTONOMOUS_BUILD_PROTOCOL.md` en, bij parallel werk, `methodology/PARALLEL_BUILD_PROTOCOL.md` vallen. Een capability is geen vrijbrief om objective, paden of acceptance criteria achteraf te verruimen.
 
-Tier-A wijzigingen blijven `REQUIRES_HIGH_INTELLIGENCE_REVIEW` totdat onafhankelijke Tier-A review, relevante deterministische tests en runtime-canary groen zijn.
+Tier-A wijzigingen blijven formeel `REQUIRES_HIGH_INTELLIGENCE_REVIEW` totdat onafhankelijke Tier-A review, relevante deterministische tests en runtime-canary groen zijn. Die formele status mag niet worden voorgesteld als afgerond wanneer alleen functionaliteit is bewezen, maar blokkeert het normale operationele gebruik van de reeds bewezen executor niet.
