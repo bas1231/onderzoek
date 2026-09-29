@@ -1,0 +1,80 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-STATUS-COMPACTION-FIX-20260929-E013",
+  "build_id": "TIERA-BRIDGE-STATUS-COMPACTION-20260929-E001",
+  "source_commit": "a43ad4a2a3014e36ec1932b4b4b31b7fd269f140",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "run_tests",
+    "write_runtime",
+    "user_service_manage",
+    "read_logs"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 600,
+  "notes": "Fix browser-facing result compaction so nested receipts cannot report a successful outer DEV task as FAIL. Preserve E010 automatic session bootstrap and existing safety/routing semantics.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/verify_status_compaction_e013.py",
+      "content": "from pathlib import Path\nimport importlib.util, sys\nruntime=Path.home()/'.local/share/prediction-chat-bridge'\nsys.path.insert(0,str(runtime))\nspec=importlib.util.spec_from_file_location('installed_bridge_status_compaction',runtime/'bridge_server.py')\nmod=importlib.util.module_from_spec(spec)\nspec.loader.exec_module(mod)\nassert getattr(mod.Handler,'server_version','')=='PredictionChatWake/1.0-status-compaction'\nraw='\\n'.join([\n 'RESULT_READY: DEV-OUTER-E001',\n 'Exit code: 0',\n '=== WSL RESULT ===',\n 'DEV_TASK_ID=DEV-OUTER-E001',\n 'COMMAND_1_BEGIN=python3',\n 'DEV_TASK_ID=DEV-INNER-E009',\n 'COMMAND_1_RC=2',\n 'DEV_TASK_STATUS=FAIL',\n 'ERROR_CLASS=TaskError',\n 'COMMAND_1_RC=0',\n 'DEV_TASK_STATUS=PASS',\n])\nmsg=mod.compact_delivery_event({'event_id':'runtime-e013','task_id':'DEV-OUTER-E001','message':raw})['message']\nassert 'status=PASS' in msg and 'exit=0' in msg and 'rcs=1:0' in msg\nassert 'error=' not in msg and '1:2' not in msg\nassert getattr(mod.session.Handler,'server_version','')=='PredictionChatWake/0.9-session-bootstrap'\nassert callable(getattr(mod.session,'ensure_session_bootstrap',None))\nprint('STATUS_COMPACTION_E013=PASS')\nprint('HANDLER_VERSION='+mod.Handler.server_version)\nprint('COMPACTED='+msg)\n"
+    },
+    {
+      "type": "python",
+      "argv": ["python3", "-m", "unittest", "control.tampermonkey_multichat.test_status_compaction_nested"],
+      "test": true,
+      "timeout_seconds": 120
+    },
+    {
+      "type": "python",
+      "argv": ["python3", "-m", "compileall", "control/tampermonkey_multichat/bridge_server_status_compaction.py", "control/tampermonkey_multichat/bridge_server_session_bootstrap.py", "control/tampermonkey_multichat/bridge_server_hardened.py"],
+      "timeout_seconds": 60
+    },
+    {
+      "type": "install_runtime",
+      "source": "control/tampermonkey_multichat/bridge_server_session_bootstrap.py",
+      "destination": "~/.local/share/prediction-chat-bridge/bridge_server_session_bootstrap.py",
+      "mode": 420
+    },
+    {
+      "type": "install_runtime",
+      "source": "control/tampermonkey_multichat/bridge_server_status_compaction.py",
+      "destination": "~/.local/share/prediction-chat-bridge/bridge_server.py",
+      "mode": 493
+    },
+    {
+      "type": "service",
+      "verb": "restart",
+      "unit": "prediction-chat-wake.service"
+    },
+    {
+      "type": "service",
+      "verb": "is-active",
+      "unit": "prediction-chat-wake.service"
+    },
+    {
+      "type": "python",
+      "argv": ["python3", "control/dev_checks/verify_status_compaction_e013.py"],
+      "timeout_seconds": 60
+    },
+    {
+      "type": "journal",
+      "unit": "prediction-chat-wake.service",
+      "lines": 80
+    }
+  ]
+}
