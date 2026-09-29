@@ -1,0 +1,80 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-BRIDGE-PING-STATUS-FIX-20260929-E014",
+  "build_id": "TIERA-BRIDGE-PING-STATUS-20260929-E001",
+  "source_commit": "1bdfc21eb6c88143a6f380f1e93300966e9cd696",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "run_tests",
+    "write_runtime",
+    "user_service_manage",
+    "read_logs"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 600,
+  "notes": "Repair product-level BRIDGE_PING status compaction exposed by the new automatic session-bootstrap acceptance test. Preserve E013 nested DEV status semantics and E010 session bootstrap. No changes to command routing, trading, wallets, credentials or paid actions.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/verify_bridge_ping_status_e014.py",
+      "content": "from pathlib import Path\nimport importlib.util, sys\nruntime=Path.home()/'.local/share/prediction-chat-bridge'\nsys.path.insert(0,str(runtime))\nspec=importlib.util.spec_from_file_location('installed_bridge_ping_status',runtime/'bridge_server.py')\nmod=importlib.util.module_from_spec(spec)\nspec.loader.exec_module(mod)\nassert getattr(mod.Handler,'server_version','')=='PredictionChatWake/1.1-bridge-ping-status'\nraw='\\n'.join(['RESULT_READY: BRIDGE-PING-RUNTIME-E001','Action: BRIDGE_PING','Exit code: 0','=== WSL RESULT ===','BRIDGE_PONG'])\nmsg=mod.compact_delivery_event({'event_id':'runtime-e014','task_id':'BRIDGE-PING-RUNTIME-E001','message':raw})['message']\nassert 'status=PASS' in msg and 'exit=0' in msg, msg\nunknown='\\n'.join(['RESULT_READY: OTHER-E001','Exit code: 0','=== WSL RESULT ===','OTHER_OUTPUT'])\nunknown_msg=mod.compact_delivery_event({'event_id':'runtime-e014-u','task_id':'OTHER-E001','message':unknown})['message']\nassert 'status=UNKNOWN' in unknown_msg, unknown_msg\ndev='\\n'.join(['RESULT_READY: DEV-OUTER-E001','Exit code: 0','=== WSL RESULT ===','DEV_TASK_STATUS=FAIL','ERROR_CLASS=OldFailure','COMMAND_1_RC=2','COMMAND_1_RC=0','DEV_TASK_STATUS=PASS'])\ndev_msg=mod.compact_delivery_event({'event_id':'runtime-e014-d','task_id':'DEV-OUTER-E001','message':dev})['message']\nassert 'status=PASS' in dev_msg and 'rcs=1:0' in dev_msg and 'error=' not in dev_msg, dev_msg\nassert getattr(mod.session.Handler,'server_version','')=='PredictionChatWake/0.9-session-bootstrap'\nassert callable(getattr(mod.session,'ensure_session_bootstrap',None))\nprint('BRIDGE_PING_STATUS_E014=PASS')\nprint('HANDLER_VERSION='+mod.Handler.server_version)\nprint('PING_COMPACTED='+msg)\nprint('DEV_COMPACTED='+dev_msg)\n"
+    },
+    {
+      "type": "python",
+      "argv": ["python3", "-m", "unittest", "control.tampermonkey_multichat.test_bridge_ping_status_compaction", "control.tampermonkey_multichat.test_status_compaction_nested"],
+      "test": true,
+      "timeout_seconds": 120
+    },
+    {
+      "type": "python",
+      "argv": ["python3", "-m", "compileall", "control/tampermonkey_multichat/bridge_server_status_compaction_v11.py", "control/tampermonkey_multichat/bridge_server_session_bootstrap.py", "control/tampermonkey_multichat/bridge_server_hardened.py"],
+      "timeout_seconds": 60
+    },
+    {
+      "type": "install_runtime",
+      "source": "control/tampermonkey_multichat/bridge_server_session_bootstrap.py",
+      "destination": "~/.local/share/prediction-chat-bridge/bridge_server_session_bootstrap.py",
+      "mode": 420
+    },
+    {
+      "type": "install_runtime",
+      "source": "control/tampermonkey_multichat/bridge_server_status_compaction_v11.py",
+      "destination": "~/.local/share/prediction-chat-bridge/bridge_server.py",
+      "mode": 493
+    },
+    {
+      "type": "service",
+      "verb": "restart",
+      "unit": "prediction-chat-wake.service"
+    },
+    {
+      "type": "service",
+      "verb": "is-active",
+      "unit": "prediction-chat-wake.service"
+    },
+    {
+      "type": "python",
+      "argv": ["python3", "control/dev_checks/verify_bridge_ping_status_e014.py"],
+      "timeout_seconds": 60
+    },
+    {
+      "type": "journal",
+      "unit": "prediction-chat-wake.service",
+      "lines": 80
+    }
+  ]
+}
