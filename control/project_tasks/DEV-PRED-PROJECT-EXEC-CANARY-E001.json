@@ -1,0 +1,43 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-PROJECT-EXEC-CANARY-E001",
+  "build_id": "TIERA-PROJECT-EXECUTOR-20260929-E001",
+  "source_commit": "2f9563ce7a1fc2b5421fb379fa8724e219cd15a6",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "local_git"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 300,
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/project_executor_canary_runtime.py",
+      "content": "from pathlib import Path\nimport hashlib\n\np = Path('.runtime/project_executor_canary_e001.txt')\np.parent.mkdir(parents=True, exist_ok=True)\npayload = 'Capability-scoped Prediction project executor ran Python in WSL.\\n'\np.write_text(payload, encoding='utf-8')\nreadback = p.read_text(encoding='utf-8')\nprint('PROJECT_EXECUTOR_CANARY=PASS')\nprint(f'ARTIFACT={p.resolve()}')\nprint(f'READBACK={readback.strip()}')\nprint(f'SHA256={hashlib.sha256(readback.encode()).hexdigest()}')\n"
+    },
+    {
+      "type": "python",
+      "argv": ["python3", "control/dev_checks/project_executor_canary_runtime.py"],
+      "timeout_seconds": 60
+    },
+    {
+      "type": "git",
+      "args": ["status", "--short"]
+    }
+  ],
+  "notes": "Harmless Tier-A runtime canary: writes only inside an isolated worktree, executes repository-owned Python under the project guard, and inspects local Git status."
+}
