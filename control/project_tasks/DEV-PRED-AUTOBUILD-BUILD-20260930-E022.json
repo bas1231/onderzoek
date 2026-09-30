@@ -1,0 +1,46 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-AUTOBUILD-BUILD-20260930-E022",
+  "build_id": "GENERIC-AUTOBUILD-LIFECYCLE-20260930",
+  "source_commit": "40058e0d7ac914daff1c9640c268e27d95d3bcfe",
+  "intelligence_tier": "A",
+  "issuer": {"model": "GPT-5.6 Sol", "reasoning_level": "UNAVAILABLE_TO_RUNTIME"},
+  "safety": {"live_trading": false, "paid_actions": false, "wallet_actions": false, "remote_git_write": false, "credential_write": false},
+  "capabilities": ["read_repository", "write_worktree", "run_project_python", "run_tests", "local_git"],
+  "working_directory": ".",
+  "timeout_seconds": 880,
+  "operations": [
+    {
+      "type": "python",
+      "argv": ["python3", "control/dev_checks/autobuild_build_e022_runner.py", "build"],
+      "test": true,
+      "timeout_seconds": 720
+    },
+    {
+      "type": "git",
+      "args": ["diff", "--check", "--", "control/codex_supervisor/build_planner.py", "tests/control/test_build_planner_nonbuildable_components.py", "tests/control/test_build_planner_retry.py", "knowledge/codex_runtime/CONFIG.json"],
+      "timeout_seconds": 60
+    },
+    {
+      "type": "git",
+      "args": ["add", "--", "control/codex_supervisor/build_planner.py", "tests/control/test_build_planner_nonbuildable_components.py", "tests/control/test_build_planner_retry.py", "knowledge/codex_runtime/CONFIG.json"],
+      "timeout_seconds": 60
+    },
+    {
+      "type": "python",
+      "argv": ["python3", "control/dev_checks/autobuild_build_e022_runner.py", "verify"],
+      "timeout_seconds": 60
+    },
+    {
+      "type": "git",
+      "args": ["commit", "-m", "fix: harden generic autobuild planner lifecycle"],
+      "timeout_seconds": 60
+    },
+    {
+      "type": "git",
+      "args": ["rev-parse", "HEAD"],
+      "timeout_seconds": 30
+    }
+  ],
+  "notes": "Focused generic autobuild build. Uses a worktree-local pytest logfile and strips inherited PYTEST_ADDOPTS, preserves exact build_planner pin selection, runs targeted/wiring/full tests, stages exactly four intended autobuild files and commits locally. Production index remains untouched; no live/cost/wallet/credential/remote-Git actions; NO_PROVEN_EDGE unchanged."
+}
