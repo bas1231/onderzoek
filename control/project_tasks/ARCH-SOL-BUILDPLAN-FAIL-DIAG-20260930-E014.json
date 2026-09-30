@@ -1,0 +1,21 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "ARCH-SOL-BUILDPLAN-FAIL-DIAG-20260930-E014",
+  "build_id": "ARCH-SOL-BUILDER-ASTRA-REVIEWER-20260929",
+  "source_commit": "5d8f770b9a9e8bcda0afb633d3812dcaf0ad8fc8",
+  "intelligence_tier": "C",
+  "issuer": {"model": "GPT-5.6 Sol", "reasoning_level": "UNAVAILABLE_TO_RUNTIME"},
+  "safety": {"live_trading": false, "paid_actions": false, "wallet_actions": false, "remote_git_write": false, "credential_write": false},
+  "capabilities": ["read_repository", "write_worktree", "run_project_python", "read_runtime"],
+  "working_directory": ".",
+  "timeout_seconds": 180,
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/buildplan_fail_diag_e014.py",
+      "content": "from pathlib import Path\nimport json, sqlite3\nT='BUILDPLAN-f13331a398cbc3d1890411e1c35abdae'\nh=Path.home(); r=h/'prediction_research_prod'/'knowledge'/'codex_runtime'\ndb=sqlite3.connect(f\"file:{r/'runtime.sqlite'}?mode=ro\",uri=True)\ntry:\n row=db.execute('select id,body,status,attempt,thread,run from tasks where id=?',(T,)).fetchone()\nfinally: db.close()\nprint('TASK_ROW='+json.dumps(row,ensure_ascii=False))\nfor p in sorted((r/'runs').glob(T+'-*')):\n print('RUN_DIR='+str(p))\n for name in ('CANDIDATE_REJECTED.json','COMPLETE.json','FAILED.json','result.json','events.jsonl'):\n  f=p/name\n  if not f.exists(): continue\n  print('FILE='+str(f))\n  txt=f.read_text(errors='replace')\n  if name=='events.jsonl':\n   lines=txt.splitlines()[-12:]\n   print('EVENT_TAIL='+json.dumps(lines,ensure_ascii=False))\n  else:\n   print('CONTENT='+txt[:12000])\n"
+    },
+    {"type": "python", "argv": ["python3", "control/dev_checks/buildplan_fail_diag_e014.py"], "timeout_seconds": 60}
+  ],
+  "notes": "Read-only diagnosis of the failed build planner for MANUAL-SCOUT-HENGELTJES. Reads runtime DB and task run artifacts only. No supervisor start, production mutation, live trading, paid action, wallet action, credential access or remote Git write."
+}
