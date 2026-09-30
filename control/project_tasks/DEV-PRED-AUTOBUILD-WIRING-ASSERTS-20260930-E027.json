@@ -1,0 +1,20 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-AUTOBUILD-WIRING-ASSERTS-20260930-E027",
+  "build_id": "GENERIC-AUTOBUILD-LIFECYCLE-20260930",
+  "source_commit": "279156871b7659eb564ab9f58aef5208a0f3c38f",
+  "intelligence_tier": "A",
+  "issuer": {"model": "GPT-5.6 Sol", "reasoning_level": "UNAVAILABLE_TO_RUNTIME"},
+  "safety": {"live_trading": false, "paid_actions": false, "wallet_actions": false, "remote_git_write": false, "credential_write": false},
+  "capabilities": ["read_repository", "run_project_python"],
+  "working_directory": ".",
+  "timeout_seconds": 120,
+  "operations": [
+    {
+      "type": "python",
+      "argv": ["python3", "control/dev_checks/autobuild_e027_asserts.py"],
+      "timeout_seconds": 60
+    }
+  ],
+  "notes": "Return only the exact assertions from the local GENERIC-NO-PROTOCOL wiring test so the generic NEEDS_BUILD transition can be patched precisely. Read-only, no live/cost/wallet/credential/network actions."
+}
