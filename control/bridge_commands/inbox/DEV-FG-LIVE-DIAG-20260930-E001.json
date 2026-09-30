@@ -1,0 +1,15 @@
+{
+  "schema": "PREDICTION_BRIDGE_COMMAND_V1",
+  "task_id": "DEV-FG-LIVE-DIAG-20260930-E001",
+  "action": "SIX_AI_HEALTH",
+  "created_at_utc": "2026-09-30T12:48:30Z",
+  "route_task_id": "TM-PING-1790772867100",
+  "live_trading": false,
+  "paid_actions": false,
+  "wallet_actions": false,
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  }
+}
