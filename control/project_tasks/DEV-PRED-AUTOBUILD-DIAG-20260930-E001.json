@@ -1,0 +1,39 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-AUTOBUILD-DIAG-20260930-E001",
+  "build_id": "GENERIC-AUTOBUILD-LIFECYCLE-20260930",
+  "source_commit": "9d7a4e6b8360c4c1087f5b9324c3c9766422bdb4",
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "local_git"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 180,
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/autobuild_local_diag_e001.py",
+      "content": "from __future__ import annotations\n\nimport hashlib\nimport json\nimport subprocess\nfrom pathlib import Path\n\nPROD = Path.home() / 'prediction_research_prod'\nTARGETS = [\n    'control/codex_supervisor/build_planner.py',\n    'tests/control/test_build_planner_nonbuildable_components.py',\n    'tests/control/test_build_planner_retry.py',\n    'knowledge/codex_runtime/CONFIG.json',\n    'control/dev_checks/project_executor_demo_e001.py',\n]\n\ndef git(*args: str) -> tuple[int, str]:\n    cp = subprocess.run(['git', *args], cwd=PROD, text=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)\n    return cp.returncode, cp.stdout\n\ndef sha(path: Path) -> str:\n    return hashlib.sha256(path.read_bytes()).hexdigest()\n\ndef lines_with(path: Path, needles: tuple[str, ...], radius: int = 3) -> None:\n    if not path.is_file():\n        print(f'MISSING {path.relative_to(PROD)}')\n        return\n    lines = path.read_text(encoding='utf-8', errors='replace').splitlines()\n    picked: set[int] = set()\n    for i, line in enumerate(lines):\n        if any(n in line for n in needles):\n            for j in range(max(0, i-radius), min(len(lines), i+radius+1)):\n                picked.add(j)\n    print(f'--- SNIPPETS {path.relative_to(PROD)} ---')\n    for j in sorted(picked):\n        print(f'{j+1}: {lines[j]}')\n\nprint('AUTOBUILD_LOCAL_DIAG_V1')\nfor args, label in [\n    (('rev-parse','HEAD'), 'PROD_HEAD'),\n    (('branch','--show-current'), 'PROD_BRANCH'),\n]:\n    rc, out = git(*args)\n    print(f'{label} rc={rc} value={out.strip()}')\n\nrc, status = git('status','--porcelain=v1')\nstatus_lines = [x for x in status.splitlines() if x]\nprint(f'STATUS rc={rc} total_entries={len(status_lines)}')\nprint('TRACKED_OR_STAGED_STATUS_BEGIN')\nfor line in status_lines:\n    xy = line[:2]\n    path = line[3:] if len(line) > 3 else ''\n    if xy != '??' or path in TARGETS:\n        print(line)\nprint('TRACKED_OR_STAGED_STATUS_END')\n\nfor rel in TARGETS:\n    p = PROD / rel\n    print(f'TARGET {rel} exists={p.is_file()} size={p.stat().st_size if p.is_file() else -1} sha256={sha(p) if p.is_file() else "MISSING"}')\n\nplanner = PROD / 'control/codex_supervisor/build_planner.py'\nif planner.is_file():\n    lines_with(planner, ('components MUST be an empty list', 'BUILD_PLANNER_RETRY_LIMIT_REACHED', 'BUILD_PLANNER_COMPLETE_WITHOUT_STATE_ADVANCE', 'NONBUILDABLE_COMPONENTS_MUST_BE_EMPTY'), 4)\n\nconfig = PROD / 'knowledge/codex_runtime/CONFIG.json'\nif config.is_file():\n    obj = json.loads(config.read_text(encoding='utf-8'))\n    print('CONFIG_RELEVANT_BEGIN')\n    def walk(v, prefix=''):\n        if isinstance(v, dict):\n            for k, x in v.items():\n                walk(x, f'{prefix}.{k}' if prefix else k)\n        elif isinstance(v, list):\n            for i, x in enumerate(v):\n                walk(x, f'{prefix}[{i}]')\n        elif isinstance(v, str) and ('build_planner' in prefix.lower() or 'build_planner' in v.lower() or (len(v) == 64 and all(c in '0123456789abcdef' for c in v.lower()))):\n            print(f'{prefix}={v}')\n    walk(obj)\n    print('CONFIG_RELEVANT_END')\n\nfor rel in [\n    'tests/codex_supervisor/test_autobuild_runtime_wiring_e004i.py',\n    'control/codex_supervisor/install_runtime.py',\n    'control/codex_supervisor/verify_installation.py',\n]:\n    p = PROD / rel\n    if p.is_file():\n        lines_with(p, ('CONFIG.json','build_planner.py','PINNED_AUTOBUILD_SOURCE_CHANGED','sha256','install','verify'), 2)\n\nprint('SEARCH_HITS_BEGIN')\nneedles = ('PINNED_AUTOBUILD_SOURCE_CHANGED', 'pinned_autobuild', 'codex_runtime/CONFIG.json')\nfor base in [PROD / 'control', PROD / 'tests']:\n    if not base.exists():\n        continue\n    for p in base.rglob('*.py'):\n        try:\n            txt = p.read_text(encoding='utf-8', errors='replace')\n        except OSError:\n            continue\n        if any(n in txt for n in needles):\n            print(p.relative_to(PROD))\nprint('SEARCH_HITS_END')\n\nprint('TARGET_DIFF_BEGIN')\nrc, diff = git('diff','--',*TARGETS[:4])\nprint(f'diff_rc={rc}')\nprint(diff[-24000:])\nprint('TARGET_DIFF_END')\nprint('CACHED_TARGETS_BEGIN')\nrc, cached = git('diff','--cached','--name-status')\nprint(f'cached_rc={rc}')\nprint(cached.strip())\nprint('CACHED_TARGETS_END')\n"
+    },
+    {
+      "type": "python",
+      "argv": ["python3", "control/dev_checks/autobuild_local_diag_e001.py"],
+      "timeout_seconds": 120
+    }
+  ],
+  "notes": "Read-only diagnosis of the production Prediction repository. Do not mutate production. Inspect local build-planner changes, tests, runtime CONFIG pin/update pattern, and staged state so unrelated existing changes remain untouched."
+}
