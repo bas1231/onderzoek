@@ -1,0 +1,21 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-AUTOBUILD-E005-PRECREATE-20260930-E009",
+  "build_id": "GENERIC-AUTOBUILD-LIFECYCLE-20260930",
+  "source_commit": "6f62c670b48774bae92f213460273653cc3ae576",
+  "intelligence_tier": "C",
+  "issuer": {"model": "GPT-5.6 Sol", "reasoning_level": "UNAVAILABLE_TO_RUNTIME"},
+  "safety": {"live_trading": false, "paid_actions": false, "wallet_actions": false, "remote_git_write": false, "credential_write": false},
+  "capabilities": ["read_repository", "write_worktree", "run_project_python", "read_runtime"],
+  "working_directory": ".",
+  "timeout_seconds": 180,
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/autobuild_e005_precreate_e009.py",
+      "content": "from pathlib import Path\nimport json,subprocess\n\ntid='DEV-PRED-AUTOBUILD-PINFIX-20260930-E005'\nsource='57d1aa8b59a31b8b776b264aa3ac663ebc0277c1'\nmirror=Path.home()/'.local/share/prediction-project-executor/repo'\nwtroot=Path.home()/'.local/share/prediction-project-executor/worktrees'\nstate=Path.home()/'.local/state/prediction-project-executor'/(tid+'.json')\nbranch='ai/'+tid\n\ndef run(args,cwd):\n    cp=subprocess.run(['git',*args],cwd=cwd,text=True,stdout=subprocess.PIPE,stderr=subprocess.STDOUT)\n    return cp.returncode,cp.stdout\n\ncode='6000000000000000000000000000000000000009'\nif not mirror.is_dir():\n    code='6000000000000000000000000000000000000001'\nelse:\n    rc,_=run(['rev-parse',source+'^{commit}'],mirror)\n    if rc!=0:\n        code='6000000000000000000000000000000000000002'\n    else:\n        rc,b=run(['branch','--list',branch],mirror)\n        branch_exists=(rc==0 and bool(b.strip()))\n        wt=(wtroot/tid)\n        regroot=mirror/'.git/worktrees'\n        stale_reg=False\n        if regroot.is_dir():\n            for p in regroot.iterdir():\n                try:\n                    gd=(p/'gitdir').read_text(errors='replace') if (p/'gitdir').is_file() else ''\n                except Exception:\n                    gd=''\n                if tid in gd or tid in p.name:\n                    stale_reg=True\n        claimed=False\n        if state.is_file():\n            try:\n                obj=json.loads(state.read_text())\n                claimed=(obj.get('status')=='CLAIMED' and obj.get('source_commit')==source)\n            except Exception:\n                pass\n        if wt.exists():\n            code='6000000000000000000000000000000000000003'\n        elif branch_exists and stale_reg:\n            code='6000000000000000000000000000000000000004'\n        elif branch_exists:\n            code='6000000000000000000000000000000000000005'\n        elif stale_reg:\n            code='6000000000000000000000000000000000000006'\n        elif not claimed:\n            code='6000000000000000000000000000000000000007'\n        else:\n            code='6000000000000000000000000000000000000008'\nprint(code)\n"
+    },
+    {"type": "python", "argv": ["python3", "control/dev_checks/autobuild_e005_precreate_e009.py"], "timeout_seconds": 60}
+  ],
+  "notes": "Read-only diagnosis of E005 failure before worktree creation. Check mirror source availability, stale branch/worktree registration, and durable claim only. No production mutation, services, external network, live/cost/wallet/credential actions."
+}
