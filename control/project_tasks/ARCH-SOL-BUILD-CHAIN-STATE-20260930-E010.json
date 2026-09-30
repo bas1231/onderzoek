@@ -1,0 +1,25 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "ARCH-SOL-BUILD-CHAIN-STATE-20260930-E010",
+  "build_id": "ARCH-SOL-BUILDER-ASTRA-REVIEWER-20260929",
+  "source_commit": "019ba391330134076f1b02b80f6e8807615269ae",
+  "intelligence_tier": "C",
+  "issuer": {"model":"GPT-5.6 Sol","reasoning_level":"UNAVAILABLE_TO_RUNTIME"},
+  "safety": {"live_trading":false,"paid_actions":false,"wallet_actions":false,"remote_git_write":false,"credential_write":false},
+  "capabilities": ["read_repository","write_worktree","run_project_python","read_runtime"],
+  "working_directory": ".",
+  "timeout_seconds": 180,
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/build_chain_state_e010.py",
+      "content": "from pathlib import Path\nimport json, sqlite3\nCID='MANUAL-SCOUT-HENGELTJES-20260924'\nroot=Path.home()/'prediction_research_prod'/'knowledge'/'codex_runtime'\nhits=[]\nfor p in (root/'candidate_states').glob('*.json'):\n    try:x=json.loads(p.read_text())\n    except Exception:continue\n    if x.get('candidate_id')==CID:hits.append((p.stat().st_mtime,p,x))\nif not hits:\n    print('0000000000000000000000000000000000000000'); raise SystemExit(0)\n_,p,x=max(hits)\ndb=sqlite3.connect(f\"file:{root/'runtime.sqlite'}?mode=ro\",uri=True)\nrows=db.execute('select id,body,status,attempt from tasks order by rowid').fetchall(); db.close()\nts=[]\nfor tid,body,status,attempt in rows:\n    try:b=json.loads(body)\n    except Exception:continue\n    if b.get('candidate_id')==CID:ts.append((tid,b,status,attempt))\npl=[t for t in ts if t[1].get('candidate_build_planner')]\nbu=[t for t in ts if t[1].get('task_class')=='infrastructure_build']\nprint('QUEUE_STATUS='+str(x.get('queue_status')))\nprint('PLANNERS='+str([(t[0],t[2]) for t in pl]))\nprint('BUILDS='+str([(t[0],t[2]) for t in bu]))\nif not pl: code='0000000000000000000000000000000000000000'\nelif not any(t[2]=='COMPLETE' for t in pl): code='aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'\nelif not bu: code='1111111111111111111111111111111111111111'\nelif any(t[2]=='FAILED' for t in bu): code='4444444444444444444444444444444444444444'\nelif any(t[2]=='COMPLETE' for t in bu): code='3333333333333333333333333333333333333333'\nelse: code='2222222222222222222222222222222222222222'\nprint(code)\n"
+    },
+    {
+      "type": "python",
+      "argv": ["python3", "control/dev_checks/build_chain_state_e010.py"],
+      "timeout_seconds": 60
+    }
+  ],
+  "notes": "Executor-only read-runtime classifier. Always exits 0 and prints a final 40-hex sentinel: 000 no planner; aaaa planner not complete; 111 planner complete/no builder; 222 builder selected; 333 builder complete; 444 builder failed. No supervisor start or mutation outside isolated worktree."
+}
