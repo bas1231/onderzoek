@@ -1,0 +1,20 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-AUTOBUILD-WIRING-CONTEXT-20260930-E026",
+  "build_id": "GENERIC-AUTOBUILD-LIFECYCLE-20260930",
+  "source_commit": "2e899979b95f81014b865d2bdb5bb75b16700f7b",
+  "intelligence_tier": "A",
+  "issuer": {"model": "GPT-5.6 Sol", "reasoning_level": "UNAVAILABLE_TO_RUNTIME"},
+  "safety": {"live_trading": false, "paid_actions": false, "wallet_actions": false, "remote_git_write": false, "credential_write": false},
+  "capabilities": ["read_repository", "run_project_python"],
+  "working_directory": ".",
+  "timeout_seconds": 180,
+  "operations": [
+    {
+      "type": "python",
+      "argv": ["python3", "control/dev_checks/autobuild_e026_probe.py"],
+      "timeout_seconds": 120
+    }
+  ],
+  "notes": "Focused read-only extraction of the exact local GENERIC-NO-PROTOCOL wiring assertions and current apply_candidate_result implementation after E025 exposed the generic NEEDS_BUILD mismatch. No repository/runtime writes, no live/cost/wallet/credential/network actions."
+}
