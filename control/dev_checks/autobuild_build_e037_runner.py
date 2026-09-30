@@ -27,12 +27,12 @@ def guard_git_canary() -> None:
         pass
     else:
         raise AssertionError("GUARD_ALLOWED_REMOTE_CONFIG")
-    print("GIT_GUARD_CANARY_PASS")
 
 
 def main() -> None:
     guard_git_canary()
     load_e034().main()
+    print("GIT_GUARD_CANARY_PASS")
 
 
 if __name__ == "__main__":
