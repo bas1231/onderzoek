@@ -1,0 +1,76 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-HENGELTJE-AUTOBUILD-20260930-E001",
+  "build_id": "HENGELTJE-PREASTRA-SHADOW-20260930",
+  "source_commit": "96495ffd910e32a819eb950a2d97201652f4eb87",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_runtime",
+    "user_service_manage",
+    "read_logs"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 1800,
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/hengeltje_autobuild_kick_e001.py",
+      "content": "from pathlib import Path\nimport json, sqlite3, sys\nCID='MANUAL-SCOUT-HENGELTJES-20260924'\nroot=Path.home()/'prediction_research_prod'/'knowledge'/'codex_runtime'\nlabel=sys.argv[1] if len(sys.argv)>1 else 'snapshot'\nprint('HENGELTJE_AUTOBUILD_PHASE='+label)\nhits=[]\nfor p in (root/'candidate_states').glob('*.json'):\n    try:x=json.loads(p.read_text())\n    except Exception:continue\n    if x.get('candidate_id')==CID:hits.append((p.stat().st_mtime,p,x))\nif not hits:\n    print('HENGELTJE_OVERLAY=ABSENT')\nelse:\n    _,p,x=max(hits)\n    print('HENGELTJE_OVERLAY='+str(p))\n    print('HENGELTJE_QUEUE_STATUS='+str(x.get('queue_status')))\n    print('HENGELTJE_SCIENTIFIC_STATUS='+str(x.get('scientific_status') or x.get('economic_conclusion') or 'NO_PROVEN_EDGE'))\n    print('HENGELTJE_BUILD_HANDOFF='+str(bool(x.get('build_handoff'))))\n    print('HENGELTJE_RUNTIME_HEALTH='+str(x.get('runtime_health')))\n    print('HENGELTJE_PROSPECTIVE_OUTCOME='+str(x.get('prospective_outcome') or x.get('prospective_status')))\ntry:\n    db=sqlite3.connect(f\"file:{root/'runtime.sqlite'}?mode=ro\",uri=True)\n    rows=db.execute('select id,body,status,attempt from tasks order by rowid').fetchall()\n    db.close()\nexcept Exception as exc:\n    print('HENGELTJE_RUNTIME_DB='+type(exc).__name__)\nelse:\n    ts=[]\n    for tid,body,status,attempt in rows:\n        try:b=json.loads(body)\n        except Exception:continue\n        if b.get('candidate_id')==CID:ts.append((tid,b,status,attempt))\n    print('HENGELTJE_TASK_COUNT='+str(len(ts)))\n    for tid,b,status,attempt in ts[-12:]:\n        print('HENGELTJE_TASK='+tid+' status='+status+' attempt='+str(attempt)+' class='+str(b.get('task_class'))+' planner='+str(bool(b.get('candidate_build_planner')))+' builder='+str(bool(b.get('candidate_builder') or b.get('sol_builder'))))\nprint('NO_LIVE_TRADING=YES')\nprint('NO_PAID_ACTIONS=YES')\nprint('NO_WALLET_ACTIONS=YES')\nprint('NO_REMOTE_PUSH=YES')\n"
+    },
+    {
+      "type": "python",
+      "argv": ["python3", "control/dev_checks/hengeltje_autobuild_kick_e001.py", "pre"],
+      "timeout_seconds": 60
+    },
+    {
+      "type": "service",
+      "verb": "start",
+      "unit": "prediction-codex-supervisor.service"
+    },
+    {
+      "type": "service",
+      "verb": "start",
+      "unit": "prediction-codex-supervisor.service"
+    },
+    {
+      "type": "service",
+      "verb": "start",
+      "unit": "prediction-codex-supervisor.service"
+    },
+    {
+      "type": "journal",
+      "unit": "prediction-codex-supervisor.service",
+      "lines": 160
+    },
+    {
+      "type": "service",
+      "verb": "start",
+      "unit": "prediction-research-hourly-director.service"
+    },
+    {
+      "type": "journal",
+      "unit": "prediction-research-hourly-director.service",
+      "lines": 100
+    },
+    {
+      "type": "python",
+      "argv": ["python3", "control/dev_checks/hengeltje_autobuild_kick_e001.py", "post"],
+      "timeout_seconds": 60
+    }
+  ],
+  "notes": "Kick the existing autonomous Hengeltje candidate build path and refresh hourly reporting. The frozen candidate protocol remains authoritative, including all mandatory deathchecks and three clean activation runs. This task itself does not bypass Astra, place/cancel/amend orders, use paid actions, move funds, access credentials, or push Git. User requested browser/Tampermonkey-independent operation and will use hourly reports as the primary observation channel. Any later pre-Astra read-only shadow activation must remain explicitly labelled UNREVIEWED/PRE_REVIEW and must not be promoted as formal prospective evidence until independent review accepts it."
+}
