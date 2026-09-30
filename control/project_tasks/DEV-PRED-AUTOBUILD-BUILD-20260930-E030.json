@@ -1,0 +1,18 @@
+{
+  "schema":"PREDICTION_PROJECT_TASK_V1",
+  "task_id":"DEV-PRED-AUTOBUILD-BUILD-20260930-E030",
+  "build_id":"GENERIC-AUTOBUILD-LIFECYCLE-20260930",
+  "source_commit":"cf190e640fbefaaa3cf05585e49c46faf73ac9fc",
+  "intelligence_tier":"A",
+  "issuer":{"model":"GPT-5.6 Sol","reasoning_level":"UNAVAILABLE_TO_RUNTIME"},
+  "safety":{"live_trading":false,"paid_actions":false,"wallet_actions":false,"remote_git_write":false,"credential_write":false},
+  "capabilities":["read_repository","write_worktree","run_project_python","run_tests","local_git"],
+  "working_directory":".",
+  "timeout_seconds":880,
+  "operations":[
+    {"type":"python","argv":["python3","control/dev_checks/autobuild_build_e030_runner.py"],"test":true,"timeout_seconds":760},
+    {"type":"git","args":["commit","-m","fix: harden generic autobuild lifecycle and runtime pins"],"timeout_seconds":60},
+    {"type":"git","args":["rev-parse","HEAD"],"timeout_seconds":30}
+  ],
+  "notes":"Atomic generic autobuild repair. Reuses proven E028 preparation, makes runtime SHA pins self-consistent with the exact copied autobuild control-plane sources, runs targeted/wiring/full tests, stages only changed pinned control-plane sources plus CONFIG and planner tests, then commits locally. No live, paid, wallet, credential or remote-Git actions; NO_PROVEN_EDGE unchanged."
+}
