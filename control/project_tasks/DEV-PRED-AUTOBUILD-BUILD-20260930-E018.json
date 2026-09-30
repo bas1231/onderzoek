@@ -1,0 +1,34 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-AUTOBUILD-BUILD-20260930-E018",
+  "build_id": "GENERIC-AUTOBUILD-LIFECYCLE-20260930",
+  "source_commit": "ac882e73348f8f0649de91a237da4c6d81ef428e",
+  "intelligence_tier": "A",
+  "issuer": {"model": "GPT-5.6 Sol", "reasoning_level": "UNAVAILABLE_TO_RUNTIME"},
+  "safety": {"live_trading": false, "paid_actions": false, "wallet_actions": false, "remote_git_write": false, "credential_write": false},
+  "capabilities": ["read_repository", "write_worktree", "run_project_python", "run_tests", "local_git"],
+  "working_directory": ".",
+  "timeout_seconds": 840,
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/autobuild_build_e018_prepare.py",
+      "content": "from __future__ import annotations\nimport hashlib,re,shutil,subprocess\nfrom pathlib import Path\nROOT=Path.cwd(); PROD=Path.home()/'prediction_research_prod'\nDEMO='control/dev_checks/project_executor_demo_e001.py'\nINTENDED=['control/codex_supervisor/build_planner.py','tests/control/test_build_planner_nonbuildable_components.py','tests/control/test_build_planner_retry.py','knowledge/codex_runtime/CONFIG.json']\nplanner_dst=ROOT/INTENDED[0]\nbase_sha=hashlib.sha256(planner_dst.read_bytes()).hexdigest() if planner_dst.is_file() else None\ndef gp(*args):\n cp=subprocess.run(['git',*args],cwd=PROD,text=True,stdout=subprocess.PIPE,stderr=subprocess.STDOUT)\n assert cp.returncode==0,cp.stdout[-1200:]\n return [x.strip() for x in cp.stdout.splitlines() if x.strip()]\ndef allowed(rel):\n if rel==DEMO or rel.startswith('control/project_tasks/') or rel.startswith('control/bridge_commands/inbox/'): return False\n return rel.startswith('control/') or rel.startswith('tests/') or rel=='knowledge/codex_runtime/CONFIG.json'\nfor rel in sorted(set(gp('diff','--name-only','HEAD'))|set(gp('ls-files','--others','--exclude-standard'))):\n if not allowed(rel): continue\n src=PROD/rel; dst=ROOT/rel\n if src.is_file(): dst.parent.mkdir(parents=True,exist_ok=True); shutil.copy2(src,dst)\nfor rel in INTENDED:\n src=PROD/rel; dst=ROOT/rel\n assert src.is_file(),'REQUIRED_LOCAL_FILE_MISSING:'+rel\n dst.parent.mkdir(parents=True,exist_ok=True); shutil.copy2(src,dst)\nplanner=ROOT/INTENDED[0]; text=planner.read_text(encoding='utf-8')\nfor marker in ['For REQUIRES_SHARED_INFRA or INSUFFICIENT_SPEC, components MUST be an empty list []','NONBUILDABLE_COMPONENTS_MUST_BE_EMPTY','BUILD_PLANNER_RETRY_LIMIT_REACHED','BUILD_PLANNER_COMPLETE_WITHOUT_STATE_ADVANCE']:\n assert marker in text,'PLANNER_MARKER_MISSING:'+marker\nnew_sha=hashlib.sha256(planner.read_bytes()).hexdigest(); cfg=ROOT/INTENDED[3]; raw=cfg.read_text(encoding='utf-8')\nif new_sha not in raw:\n candidates=[]\n if base_sha and raw.count(base_sha)==1: candidates=[base_sha]\n if not candidates:\n  for m in re.finditer(r'[0-9a-fA-F]{64}',raw):\n   lo=max(0,m.start()-160); hi=min(len(raw),m.end()+160); window=raw[lo:hi].lower()\n   if 'build_planner' in window: candidates.append(m.group(0))\n  candidates=list(dict.fromkeys(candidates))\n assert len(candidates)==1,'BUILD_PLANNER_OLD_PIN_COUNT:'+str(len(candidates))\n old=candidates[0]; assert raw.count(old)==1,'BUILD_PLANNER_OLD_PIN_NOT_UNIQUE'\n cfg.write_text(raw.replace(old,new_sha,1),encoding='utf-8')\nassert new_sha in cfg.read_text(encoding='utf-8'),'BUILD_PLANNER_PIN_NOT_UPDATED'\nprint('AUTOBUILD_PREPARED '+new_sha)\n"
+    },
+    {"type": "python", "argv": ["python3", "control/dev_checks/autobuild_build_e018_prepare.py"], "timeout_seconds": 180},
+    {"type": "python", "argv": ["/home/leonh/prediction_research_prod/.venv/bin/python", "-m", "pytest", "-q", "tests/control/test_build_planner_nonbuildable_components.py", "tests/control/test_build_planner_retry.py"], "test": true, "timeout_seconds": 180},
+    {"type": "python", "argv": ["/home/leonh/prediction_research_prod/.venv/bin/python", "-m", "pytest", "-q", "tests/codex_supervisor/test_autobuild_runtime_wiring_e004i.py"], "test": true, "timeout_seconds": 180},
+    {"type": "python", "argv": ["/home/leonh/prediction_research_prod/.venv/bin/python", "-m", "pytest", "-q", "tests"], "test": true, "timeout_seconds": 540},
+    {"type": "git", "args": ["diff", "--check", "--", "control/codex_supervisor/build_planner.py", "tests/control/test_build_planner_nonbuildable_components.py", "tests/control/test_build_planner_retry.py", "knowledge/codex_runtime/CONFIG.json"], "timeout_seconds": 60},
+    {"type": "git", "args": ["add", "--", "control/codex_supervisor/build_planner.py", "tests/control/test_build_planner_nonbuildable_components.py", "tests/control/test_build_planner_retry.py", "knowledge/codex_runtime/CONFIG.json"], "timeout_seconds": 60},
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/autobuild_build_e018_verify.py",
+      "content": "import subprocess\nfrom pathlib import Path\nwant={'control/codex_supervisor/build_planner.py','tests/control/test_build_planner_nonbuildable_components.py','tests/control/test_build_planner_retry.py','knowledge/codex_runtime/CONFIG.json'}\ncp=subprocess.run(['git','diff','--cached','--name-only'],cwd=Path.cwd(),text=True,stdout=subprocess.PIPE,stderr=subprocess.STDOUT); assert cp.returncode==0,cp.stdout; got={x.strip() for x in cp.stdout.splitlines() if x.strip()}; assert got==want,'STAGED_SET_MISMATCH:'+repr(sorted(got)); print('STAGED_SET_EXACT')\n"
+    },
+    {"type": "python", "argv": ["python3", "control/dev_checks/autobuild_build_e018_verify.py"], "timeout_seconds": 60},
+    {"type": "git", "args": ["commit", "-m", "fix: harden generic autobuild planner lifecycle"], "timeout_seconds": 60},
+    {"type": "git", "args": ["rev-parse", "HEAD"], "timeout_seconds": 30}
+  ],
+  "notes": "Exact rerun of the generic autobuild build after installing detailed TaskError reporting. Reproduce current local source/test baseline in isolated worktree, update build planner runtime pin, run planner/retry/runtime/full tests, diff-check, stage exactly four intended files and commit locally. Production remains untouched; NO_PROVEN_EDGE unchanged."
+}
