@@ -9,10 +9,9 @@ ROOT = Path.cwd()
 E031 = ROOT / "control/dev_checks/autobuild_build_e031_runner.py"
 PROD = Path.home() / "prediction_research_prod"
 PY = str(PROD / ".venv/bin/python")
-NODES = [
-    "tests/hourly/test_git_ai_exchange_v14.py::test_existing_request_verified_and_conflict_still_blocked",
-    "tests/hourly/test_git_checkpoint_v15.py::test_checkpoint_preserves_unrelated_preexisting_staged_state",
-    "tests/hourly/test_git_checkpoint_v15.py::test_checkpoint_fails_closed_on_conflicting_target_state",
+PATHS = [
+    "tests/hourly/test_git_ai_exchange_v14.py",
+    "tests/hourly/test_git_checkpoint_v15.py",
 ]
 
 
@@ -41,7 +40,7 @@ def main() -> None:
         env[key] = str(tmp_root)
 
     cp = subprocess.run(
-        [PY, "-m", "pytest", "-q", "--tb=short", f"--basetemp={base_temp}", f"--log-file={log_path}", *NODES],
+        [PY, "-m", "pytest", "-q", "--tb=short", f"--basetemp={base_temp}", f"--log-file={log_path}", *PATHS],
         cwd=ROOT,
         env=env,
         text=True,
@@ -50,7 +49,7 @@ def main() -> None:
     )
     out = cp.stdout or ""
     if cp.returncode == 0:
-        print("HOURLY3=PASS")
+        print("HOURLY_FILES=PASS")
         return
     lines = [line.strip() for line in out.splitlines() if line.strip()]
     keep = [
@@ -64,8 +63,8 @@ def main() -> None:
         or "blocked" in line.casefold()
         or "conflict" in line.casefold()
     ]
-    payload = keep[-30:] if keep else lines[-50:]
-    raise SystemExit("HOURLY3_FAIL=" + " | ".join(payload)[:7000])
+    payload = keep[-40:] if keep else lines[-60:]
+    raise SystemExit("HOURLY_FILES_FAIL=" + " | ".join(payload)[:7000])
 
 
 if __name__ == "__main__":
