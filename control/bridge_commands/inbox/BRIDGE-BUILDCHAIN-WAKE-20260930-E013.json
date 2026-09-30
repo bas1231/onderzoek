@@ -1,0 +1,16 @@
+{
+  "schema": "PREDICTION_BRIDGE_COMMAND_V1",
+  "task_id": "BRIDGE-BUILDCHAIN-WAKE-20260930-E013",
+  "action": "BRIDGE_PING",
+  "created_at_utc": "2026-09-30T05:52:00Z",
+  "route_task_id": "SESSION-ROUTE-06b02c18b66873daa2c4548a",
+  "live_trading": false,
+  "paid_actions": false,
+  "wallet_actions": false,
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "notes": "Fresh same-chat wake/route ping after E011/E012 delivery ambiguity. No project mutation, no live trading, paid action or wallet action."
+}
