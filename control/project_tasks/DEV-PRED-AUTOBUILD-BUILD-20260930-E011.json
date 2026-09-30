@@ -1,0 +1,34 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-AUTOBUILD-BUILD-20260930-E011",
+  "build_id": "GENERIC-AUTOBUILD-LIFECYCLE-20260930",
+  "source_commit": "6f62c670b48774bae92f213460273653cc3ae576",
+  "intelligence_tier": "A",
+  "issuer": {"model": "GPT-5.6 Sol", "reasoning_level": "UNAVAILABLE_TO_RUNTIME"},
+  "safety": {"live_trading": false, "paid_actions": false, "wallet_actions": false, "remote_git_write": false, "credential_write": false},
+  "capabilities": ["read_repository", "write_worktree", "run_project_python", "run_tests", "local_git"],
+  "working_directory": ".",
+  "timeout_seconds": 1800,
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/autobuild_build_e011_sync.py",
+      "content": "from __future__ import annotations\nimport hashlib,json,re,shutil\nfrom pathlib import Path\n\nROOT=Path.cwd()\nPROD=Path.home()/'prediction_research_prod'\nINTENDED=[\n 'control/codex_supervisor/build_planner.py',\n 'tests/control/test_build_planner_nonbuildable_components.py',\n 'tests/control/test_build_planner_retry.py',\n 'knowledge/codex_runtime/CONFIG.json',\n]\nDEMO='control/dev_checks/project_executor_demo_e001.py'\nassert PROD.is_dir(),'PROD_MISSING'\nfor rel in ['control/codex_supervisor','tests/control','tests/codex_supervisor']:\n src=PROD/rel\n assert src.exists(),'LOCAL_BASE_MISSING:'+rel\n for p in src.rglob('*'):\n  if not p.is_file() or '__pycache__' in p.parts or p.suffix in {'.pyc','.pyo'}: continue\n  r=p.relative_to(PROD)\n  if str(r)==DEMO: continue\n  q=ROOT/r; q.parent.mkdir(parents=True,exist_ok=True); shutil.copy2(p,q)\n# CONFIG is copied as the local baseline, then exactly one build_planner pin value is changed.\nsrc_cfg=PROD/INTENDED[3]; dst_cfg=ROOT/INTENDED[3]\nassert src_cfg.is_file(),'LOCAL_CONFIG_MISSING'\ndst_cfg.parent.mkdir(parents=True,exist_ok=True); shutil.copy2(src_cfg,dst_cfg)\nplanner=ROOT/INTENDED[0]\nassert planner.is_file(),'PLANNER_MISSING'\ntext=planner.read_text(encoding='utf-8')\nfor marker in [\n 'For REQUIRES_SHARED_INFRA or INSUFFICIENT_SPEC, components MUST be an empty list []',\n 'NONBUILDABLE_COMPONENTS_MUST_BE_EMPTY',\n 'BUILD_PLANNER_RETRY_LIMIT_REACHED',\n 'BUILD_PLANNER_COMPLETE_WITHOUT_STATE_ADVANCE',\n]: assert marker in text,'PLANNER_MARKER_MISSING:'+marker\nnew_sha=hashlib.sha256(planner.read_bytes()).hexdigest()\nraw=dst_cfg.read_text(encoding='utf-8'); obj=json.loads(raw)\nhex64=re.compile(r'^[0-9a-f]{64}$'); hits=[]\ndef walk(v,path=()):\n if isinstance(v,dict):\n  for k,x in v.items():\n   ks=str(k)\n   if isinstance(x,str) and hex64.fullmatch(x) and 'build_planner' in ks.lower(): hits.append((path+(ks,),x))\n   if isinstance(x,(dict,list)): walk(x,path+(ks,))\n elif isinstance(v,list):\n  for i,x in enumerate(v): walk(x,path+(str(i),))\nwalk(obj)\nuniq=[]; seen=set()\nfor p,v in hits:\n if p not in seen: seen.add(p); uniq.append((p,v))\nassert len(uniq)==1,'BUILD_PLANNER_PIN_COUNT:'+str(len(uniq))\n_,old_sha=uniq[0]\nassert old_sha!=new_sha,'PIN_ALREADY_CURRENT'\nassert raw.count(old_sha)==1,'OLD_PIN_NOT_UNIQUE'\ndst_cfg.write_text(raw.replace(old_sha,new_sha,1),encoding='utf-8')\nassert hashlib.sha256(src_cfg.read_bytes()).hexdigest()!=hashlib.sha256(dst_cfg.read_bytes()).hexdigest(),'CONFIG_NOT_CHANGED'\nprint('SYNC_AND_PIN_PASS')\nprint('PLANNER_SHA256='+new_sha)\n"
+    },
+    {"type": "python", "argv": ["python3", "control/dev_checks/autobuild_build_e011_sync.py"], "timeout_seconds": 120},
+    {"type": "python", "argv": ["/home/leonh/prediction_research_prod/.venv/bin/python", "-m", "pytest", "-q", "tests/control/test_build_planner_nonbuildable_components.py", "tests/control/test_build_planner_retry.py"], "test": true, "timeout_seconds": 300},
+    {"type": "python", "argv": ["/home/leonh/prediction_research_prod/.venv/bin/python", "-m", "pytest", "-q", "tests/codex_supervisor/test_autobuild_runtime_wiring_e004i.py"], "test": true, "timeout_seconds": 300},
+    {"type": "python", "argv": ["/home/leonh/prediction_research_prod/.venv/bin/python", "-m", "pytest", "-q", "tests"], "test": true, "timeout_seconds": 900},
+    {"type": "git", "args": ["diff", "--check", "--", "control/codex_supervisor/build_planner.py", "tests/control/test_build_planner_nonbuildable_components.py", "tests/control/test_build_planner_retry.py", "knowledge/codex_runtime/CONFIG.json"], "timeout_seconds": 120},
+    {"type": "git", "args": ["add", "--", "control/codex_supervisor/build_planner.py", "tests/control/test_build_planner_nonbuildable_components.py", "tests/control/test_build_planner_retry.py", "knowledge/codex_runtime/CONFIG.json"], "timeout_seconds": 120},
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/autobuild_build_e011_verify_stage.py",
+      "content": "import subprocess\nfrom pathlib import Path\nroot=Path.cwd()\nwant={'control/codex_supervisor/build_planner.py','tests/control/test_build_planner_nonbuildable_components.py','tests/control/test_build_planner_retry.py','knowledge/codex_runtime/CONFIG.json'}\ncp=subprocess.run(['git','diff','--cached','--name-only'],cwd=root,text=True,stdout=subprocess.PIPE,stderr=subprocess.STDOUT)\nassert cp.returncode==0,'CACHED_DIFF_FAILED'\ngot={x.strip() for x in cp.stdout.splitlines() if x.strip()}\nassert got==want,'STAGED_SET_MISMATCH:'+repr(sorted(got))\nprint('STAGED_SET_EXACT')\n"
+    },
+    {"type": "python", "argv": ["python3", "control/dev_checks/autobuild_build_e011_verify_stage.py"], "timeout_seconds": 60},
+    {"type": "git", "args": ["commit", "-m", "fix: harden generic autobuild planner lifecycle"], "timeout_seconds": 120},
+    {"type": "git", "args": ["rev-parse", "HEAD"], "timeout_seconds": 30}
+  ],
+  "notes": "Focused generic autobuild build. Use the known-good E009 executor source baseline, copy the current local autobuild source/test context read-only into the isolated task worktree, change exactly the build_planner SHA pin relative to the local CONFIG baseline, run targeted/runtime/full tests, diff-check, stage exactly four intended files and make one local worktree commit. Do not modify the production working tree/index or staged project_executor_demo_e001.py. No live/cost/wallet/credential/network actions; NO_PROVEN_EDGE unchanged."
+}
