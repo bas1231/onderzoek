@@ -33,6 +33,7 @@ class NestedStatusCompactionTests(unittest.TestCase):
             "COMMAND_1_RC=2",
             "DEV_TASK_STATUS=FAIL",
             "ERROR_CLASS=TaskError",
+            "ERROR=old nested failure detail",
             "--- END_RECEIPT_TAIL ---",
             "DIAG=PASS",
             "COMMAND_1_RC=0",
@@ -44,9 +45,10 @@ class NestedStatusCompactionTests(unittest.TestCase):
         self.assertIn("exit=0", message)
         self.assertIn("rcs=1:0", message)
         self.assertNotIn("error=", message)
+        self.assertNotIn("detail=", message)
         self.assertNotIn("1:2", message)
 
-    def test_outer_fail_wins_over_nested_pass(self):
+    def test_outer_fail_wins_over_nested_pass_and_surfaces_detail(self):
         raw = "\n".join([
             "RESULT_READY: DEV-OUTER-E001",
             "Exit code: 2",
@@ -58,6 +60,7 @@ class NestedStatusCompactionTests(unittest.TestCase):
             "DEV_TASK_STATUS=PASS",
             "COMMAND_1_RC=2",
             "ERROR_CLASS=TaskError",
+            "ERROR=python rc=1: BUILD_PLANNER_PIN_NOT_UPDATED",
             "DEV_TASK_STATUS=FAIL",
         ])
         message = self.compact(raw)
@@ -65,6 +68,7 @@ class NestedStatusCompactionTests(unittest.TestCase):
         self.assertIn("exit=2", message)
         self.assertIn("rcs=1:2", message)
         self.assertIn("error=TaskError", message)
+        self.assertIn("detail=python rc=1: BUILD_PLANNER_PIN_NOT_UPDATED", message)
 
     def test_non_wsl_message_is_unchanged(self):
         message = self.compact("ordinary bridge message")
