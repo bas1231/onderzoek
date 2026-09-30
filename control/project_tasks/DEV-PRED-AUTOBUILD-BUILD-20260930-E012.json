@@ -1,0 +1,29 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-AUTOBUILD-BUILD-20260930-E012",
+  "build_id": "GENERIC-AUTOBUILD-LIFECYCLE-20260930",
+  "source_commit": "6f62c670b48774bae92f213460273653cc3ae576",
+  "intelligence_tier": "A",
+  "issuer": {"model": "GPT-5.6 Sol", "reasoning_level": "UNAVAILABLE_TO_RUNTIME"},
+  "safety": {"live_trading": false, "paid_actions": false, "wallet_actions": false, "remote_git_write": false, "credential_write": false},
+  "capabilities": ["read_repository", "write_worktree", "run_project_python", "run_tests", "local_git"],
+  "working_directory": ".",
+  "timeout_seconds": 1800,
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/autobuild_build_e012_prepare.py",
+      "content": "from pathlib import Path\nimport hashlib,json,re\nROOT=Path.cwd(); PROD=Path.home()/'prediction_research_prod'\nfor rel in ['control/codex_supervisor','tests/control','tests/codex_supervisor']:\n src=PROD/rel\n assert src.is_dir(), 'MISSING:'+rel\n for p in src.glob('*.py'):\n  q=ROOT/p.relative_to(PROD); q.parent.mkdir(parents=True,exist_ok=True); q.write_bytes(p.read_bytes())\nfor rel in ['tests/control/test_build_planner_nonbuildable_components.py','tests/control/test_build_planner_retry.py','tests/codex_supervisor/test_autobuild_runtime_wiring_e004i.py']:\n assert (ROOT/rel).is_file(), 'MISSING_TEST:'+rel\ncfg_src=PROD/'knowledge/codex_runtime/CONFIG.json'; cfg=ROOT/'knowledge/codex_runtime/CONFIG.json'\nassert cfg_src.is_file(), 'MISSING_LOCAL_CONFIG'; cfg.parent.mkdir(parents=True,exist_ok=True); cfg.write_bytes(cfg_src.read_bytes())\nplanner=ROOT/'control/codex_supervisor/build_planner.py'; assert planner.is_file(),'MISSING_PLANNER'\ntext=planner.read_text()\nfor m in ['For REQUIRES_SHARED_INFRA or INSUFFICIENT_SPEC, components MUST be an empty list []','NONBUILDABLE_COMPONENTS_MUST_BE_EMPTY','BUILD_PLANNER_RETRY_LIMIT_REACHED','BUILD_PLANNER_COMPLETE_WITHOUT_STATE_ADVANCE']:\n assert m in text, 'MISSING_MARKER:'+m\nnew=hashlib.sha256(planner.read_bytes()).hexdigest(); raw=cfg.read_text(); obj=json.loads(raw); hits=[]\ndef walk(v):\n if isinstance(v,dict):\n  path=str(v.get('path',''))\n  if path.endswith('build_planner.py'):\n   for k,x in v.items():\n    if isinstance(x,str) and re.fullmatch(r'[0-9a-f]{64}',x) and k.lower() in {'sha256','source_sha256','hash','digest'}: hits.append(x)\n  for k,x in v.items():\n   if isinstance(x,str) and re.fullmatch(r'[0-9a-f]{64}',x) and 'build_planner' in str(k).lower(): hits.append(x)\n   elif isinstance(x,(dict,list)): walk(x)\n elif isinstance(v,list):\n  for x in v: walk(x)\nwalk(obj); hits=list(dict.fromkeys(hits)); assert len(hits)==1, 'PIN_COUNT:'+str(len(hits)); old=hits[0]; assert old!=new,'PIN_ALREADY_CURRENT'; assert raw.count(old)==1,'OLD_PIN_COUNT:'+str(raw.count(old)); cfg.write_text(raw.replace(old,new,1)); print('PREPARED',new)\n"
+    },
+    {"type": "python", "argv": ["python3", "control/dev_checks/autobuild_build_e012_prepare.py"], "timeout_seconds": 120},
+    {"type": "python", "argv": ["/home/leonh/prediction_research_prod/.venv/bin/python", "-m", "pytest", "-q", "tests/control/test_build_planner_nonbuildable_components.py", "tests/control/test_build_planner_retry.py"], "test": true, "timeout_seconds": 300},
+    {"type": "python", "argv": ["/home/leonh/prediction_research_prod/.venv/bin/python", "-m", "pytest", "-q", "tests/codex_supervisor/test_autobuild_runtime_wiring_e004i.py"], "test": true, "timeout_seconds": 300},
+    {"type": "python", "argv": ["/home/leonh/prediction_research_prod/.venv/bin/python", "-m", "pytest", "-q", "tests"], "test": true, "timeout_seconds": 900},
+    {"type": "git", "args": ["diff", "--check", "--", "control/codex_supervisor/build_planner.py", "tests/control/test_build_planner_nonbuildable_components.py", "tests/control/test_build_planner_retry.py", "knowledge/codex_runtime/CONFIG.json"], "timeout_seconds": 120},
+    {"type": "git", "args": ["add", "--", "control/codex_supervisor/build_planner.py", "tests/control/test_build_planner_nonbuildable_components.py", "tests/control/test_build_planner_retry.py", "knowledge/codex_runtime/CONFIG.json"], "timeout_seconds": 120},
+    {"type": "git", "args": ["diff", "--cached", "--name-only"], "timeout_seconds": 60},
+    {"type": "git", "args": ["commit", "-m", "fix: harden generic autobuild planner lifecycle"], "timeout_seconds": 120},
+    {"type": "git", "args": ["rev-parse", "HEAD"], "timeout_seconds": 30}
+  ],
+  "notes": "Direct focused generic autobuild build. Copy only current local Python test/source context plus local CONFIG into isolated worktree, update unique build_planner pin, run targeted/runtime/full tests, diff-check, stage exactly intended four paths and commit locally. No production write, remote push, live/cost/wallet/credential actions. NO_PROVEN_EDGE unchanged."
+}
