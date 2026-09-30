@@ -1,0 +1,74 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-ROUTE-CONSUMER-RESILIENCE-20260930-E001",
+  "build_id": "TIERA-BRIDGE-ROUTE-CONSUMER-RESILIENCE-20260930-E001",
+  "source_commit": "6161a515f9dfd3e3f4d9cf41160174ab4f51f95e",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "run_tests",
+    "write_runtime",
+    "user_service_manage",
+    "read_logs"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 600,
+  "notes": "Fix stale consumer-bound wake routes: keep chat_id as the durable routing boundary, use consumer_id only for the active lease, preserve inflight fail-closed semantics and result compaction, then verify E004 is deliverable at chat scope.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/verify_route_consumer_resilience_e001.py",
+      "content": "from pathlib import Path\nimport importlib.util, sys\nruntime=Path.home()/'.local/share/prediction-chat-bridge'\nsys.path.insert(0,str(runtime))\nspec=importlib.util.spec_from_file_location('installed_bridge_route_resilience',runtime/'bridge_server.py')\nmod=importlib.util.module_from_spec(spec)\nspec.loader.exec_module(mod)\nassert getattr(mod.Handler,'server_version','')=='PredictionChatWake/1.2-chat-scoped-route'\ntask='BRIDGE-MANUAL-PIN-CHECK-20260930-E004'\nbinding=mod.base.route_binding_for_task(task)\nassert binding is not None, 'E004 route missing'\nassert binding.get('chat_id')=='chat-c-1f222c10-10', binding\nassert binding.get('consumer_id') is None, binding\nbase_source=(runtime/'bridge_server_v2.py').read_text(encoding='utf-8')\nassert '# INFLIGHT_RUNTIME_V1' in base_source, 'inflight runtime patch lost'\nlocations=[]\nfor name in ('outbox','inflight','sent'):\n    d=runtime/name\n    if d.exists():\n        for p in d.glob('*.json'):\n            try:\n                text=p.read_text(encoding='utf-8')\n            except Exception:\n                continue\n            if task in text:\n                locations.append(f'{name}/{p.name}')\nassert locations, 'E004 result evidence missing'\nprint('ROUTE_CONSUMER_RESILIENCE=PASS')\nprint('HANDLER_VERSION='+mod.Handler.server_version)\nprint('E004_CHAT='+binding['chat_id'])\nprint('E004_CONSUMER_SCOPE=CHAT')\nprint('INFLIGHT_PATCH=PRESERVED')\nprint('E004_LOCATIONS='+','.join(locations))\n"
+    },
+    {
+      "type": "python",
+      "argv": ["python3", "-m", "unittest", "control.tampermonkey_multichat.test_route_consumer_resilience"],
+      "test": true,
+      "timeout_seconds": 120
+    },
+    {
+      "type": "python",
+      "argv": ["python3", "-m", "compileall", "control/tampermonkey_multichat/bridge_server_route_resilience.py", "control/tampermonkey_multichat/test_route_consumer_resilience.py"],
+      "timeout_seconds": 60
+    },
+    {
+      "type": "install_runtime",
+      "source": "control/tampermonkey_multichat/bridge_server_route_resilience.py",
+      "destination": "~/.local/share/prediction-chat-bridge/bridge_server.py",
+      "mode": 493
+    },
+    {
+      "type": "service",
+      "verb": "restart",
+      "unit": "prediction-chat-wake.service"
+    },
+    {
+      "type": "service",
+      "verb": "is-active",
+      "unit": "prediction-chat-wake.service"
+    },
+    {
+      "type": "python",
+      "argv": ["python3", "control/dev_checks/verify_route_consumer_resilience_e001.py"],
+      "timeout_seconds": 60
+    },
+    {
+      "type": "journal",
+      "unit": "prediction-chat-wake.service",
+      "lines": 80
+    }
+  ]
+}
