@@ -1,0 +1,39 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "ARCH-SOL-BUILD-CHAIN-DELIVERY-DIAG-20260930-E011",
+  "build_id": "ARCH-SOL-BUILDER-ASTRA-REVIEWER-20260929",
+  "source_commit": "3ecc3a08d54719e91c38393b7c2b88690ad30060",
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_runtime"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 180,
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/build_chain_delivery_diag_e011.py",
+      "content": "from pathlib import Path\nimport json, sqlite3\n\nE010='ARCH-SOL-BUILD-CHAIN-STATE-20260930-E010'\nCID='MANUAL-SCOUT-HENGELTJES-20260924'\nhome=Path.home()\n\ndef load_json(path):\n    try:\n        return json.loads(path.read_text())\n    except Exception:\n        return None\n\n# Transport/executor evidence for E010.\ncb=home/'.local/state/prediction-command-bus/tasks'/f'{E010}.json'\npe=home/'.local/state/prediction-project-executor'/f'{E010}.json'\nprint('E010_COMMAND_BUS_STATE='+json.dumps(load_json(cb),sort_keys=True))\nprint('E010_PROJECT_EXEC_STATE='+json.dumps(load_json(pe),sort_keys=True))\n\nroot=home/'prediction_research_prod'/'knowledge'/'codex_runtime'\nhits=[]\nfor p in (root/'candidate_states').glob('*.json'):\n    x=load_json(p)\n    if isinstance(x,dict) and x.get('candidate_id')==CID:\n        hits.append((p.stat().st_mtime,p,x))\nif not hits:\n    print('CHAIN=NO_OVERLAY')\n    print('eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee')\n    raise SystemExit(0)\n_,p,x=max(hits)\nprint('OVERLAY_FILE='+str(p))\nprint('QUEUE_STATUS='+str(x.get('queue_status')))\nprint('BUILD_HANDOFF='+json.dumps(x.get('build_handoff'),sort_keys=True))\n\ndb=sqlite3.connect(f\"file:{root/'runtime.sqlite'}?mode=ro\",uri=True)\ntry:\n    rows=db.execute('select id,body,status,attempt from tasks order by rowid').fetchall()\nfinally:\n    db.close()\nitems=[]\nfor tid,body,status,attempt in rows:\n    try:b=json.loads(body)\n    except Exception:continue\n    if b.get('candidate_id')==CID:\n        items.append((tid,b,status,attempt))\nfor tid,b,status,attempt in items[-20:]:\n    print('TASK',tid,status,'attempt='+str(attempt),'class='+str(b.get('task_class')),'planner='+str(bool(b.get('candidate_build_planner'))))\nplanners=[r for r in items if r[1].get('candidate_build_planner')]\nbuilds=[r for r in items if r[1].get('task_class')=='infrastructure_build']\nif not planners:\n    print('CHAIN=NO_BUILD_PLANNER')\n    print('0000000000000000000000000000000000000000')\nelif not any(r[2]=='COMPLETE' for r in planners):\n    print('CHAIN=PLANNER_NOT_COMPLETE')\n    print('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa')\nelif not builds:\n    print('CHAIN=PLANNER_COMPLETE_NO_BUILDER')\n    print('1111111111111111111111111111111111111111')\nelif any(r[2]=='FAILED' for r in builds):\n    print('CHAIN=BUILDER_FAILED')\n    print('4444444444444444444444444444444444444444')\nelif any(r[2]=='COMPLETE' for r in builds):\n    print('CHAIN=BUILDER_COMPLETE')\n    print('3333333333333333333333333333333333333333')\nelse:\n    print('CHAIN=BUILDER_SELECTED')\n    print('2222222222222222222222222222222222222222')\n"
+    },
+    {
+      "type": "python",
+      "argv": ["python3", "control/dev_checks/build_chain_delivery_diag_e011.py"],
+      "timeout_seconds": 60
+    }
+  ],
+  "notes": "Read-only combined diagnosis: inspect E010 command-bus/project-executor state and current MANUAL-SCOUT-HENGELTJES build-chain. Final 40-hex sentinel encodes chain state. No supervisor start, no production mutation, no live trading, paid action, wallet action, credential access or remote Git write."
+}
