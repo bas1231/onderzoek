@@ -1,0 +1,41 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-BUS-CODE-ROUNDTRIP-20260930-E001",
+  "build_id": "BUS-CODE-ROUNDTRIP-20260930",
+  "source_commit": "5d3279ef616d5822a8ab12c581b68c4f0471d933",
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 300,
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/bus_code_roundtrip_20260930_e001.py",
+      "content": "from pathlib import Path\n\nanswer = sum(n * n for n in range(1, 21))\nexpected = 2870\nassert answer == expected, (answer, expected)\np = Path('.runtime/bus_code_roundtrip_20260930_e001.txt')\np.parent.mkdir(parents=True, exist_ok=True)\np.write_text(f'{answer}\\n', encoding='utf-8')\nreadback = int(p.read_text(encoding='utf-8').strip())\nassert readback == answer\nprint('BUS_CODE_EXECUTION=PASS')\nprint(f'WSL_ANSWER={readback}')\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/bus_code_roundtrip_20260930_e001.py"
+      ],
+      "timeout_seconds": 60
+    }
+  ],
+  "notes": "Harmless same-chat WSL code roundtrip test. Computes the sum of squares 1..20, asserts 2870, writes and reads back the result in the isolated worktree, and prints WSL_ANSWER=2870."
+}
