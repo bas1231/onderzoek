@@ -1,0 +1,16 @@
+{
+  "schema": "PREDICTION_BRIDGE_COMMAND_V1",
+  "task_id": "BRIDGE-HENGELTJE-ROUTE-20260930-E001",
+  "action": "BRIDGE_PING",
+  "created_at_utc": "2026-09-30T19:28:06Z",
+  "route_task_id": null,
+  "live_trading": false,
+  "paid_actions": false,
+  "wallet_actions": false,
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "notes": "Diagnostic route bootstrap fallback for this chat only. No project work. If result returns here with PASS, reuse this task ID as this chat's explicit route_task_id."
+}
