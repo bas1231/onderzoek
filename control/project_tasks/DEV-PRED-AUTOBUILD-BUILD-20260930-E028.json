@@ -1,0 +1,21 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-AUTOBUILD-BUILD-20260930-E028",
+  "build_id": "GENERIC-AUTOBUILD-LIFECYCLE-20260930",
+  "source_commit": "e86ac66b9ded6dd7fdd5727ba495bc2ff7c5a92d",
+  "intelligence_tier": "A",
+  "issuer": {"model": "GPT-5.6 Sol", "reasoning_level": "UNAVAILABLE_TO_RUNTIME"},
+  "safety": {"live_trading": false, "paid_actions": false, "wallet_actions": false, "remote_git_write": false, "credential_write": false},
+  "capabilities": ["read_repository", "write_worktree", "run_project_python", "run_tests", "local_git"],
+  "working_directory": ".",
+  "timeout_seconds": 880,
+  "operations": [
+    {"type": "python", "argv": ["python3", "control/dev_checks/autobuild_build_e028_runner.py", "build"], "test": true, "timeout_seconds": 720},
+    {"type": "git", "args": ["diff", "--check", "--", "control/codex_supervisor/build_planner.py", "control/codex_supervisor/candidate_dispatch.py", "tests/control/test_build_planner_nonbuildable_components.py", "tests/control/test_build_planner_retry.py", "knowledge/codex_runtime/CONFIG.json"], "timeout_seconds": 60},
+    {"type": "git", "args": ["add", "--", "control/codex_supervisor/build_planner.py", "control/codex_supervisor/candidate_dispatch.py", "tests/control/test_build_planner_nonbuildable_components.py", "tests/control/test_build_planner_retry.py", "knowledge/codex_runtime/CONFIG.json"], "timeout_seconds": 60},
+    {"type": "python", "argv": ["python3", "control/dev_checks/autobuild_build_e028_runner.py", "verify"], "timeout_seconds": 60},
+    {"type": "git", "args": ["commit", "-m", "fix: route generic NEEDS_BUILD into autobuild planner"], "timeout_seconds": 60},
+    {"type": "git", "args": ["rev-parse", "HEAD"], "timeout_seconds": 30}
+  ],
+  "notes": "Fix the concrete E025 wiring mismatch: protocol-specific build_handoff is only attached when prospective_protocols exist; generic NEEDS_BUILD remains unadorned for the generic build planner. Update planner and candidate_dispatch runtime pins, run targeted planner/retry tests, wiring tests, full tests, then stage exactly five intended files and commit locally. No live/cost/wallet/credential/remote-Git actions; NO_PROVEN_EDGE unchanged."
+}
