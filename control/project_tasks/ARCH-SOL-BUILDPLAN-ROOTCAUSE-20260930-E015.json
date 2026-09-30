@@ -1,0 +1,21 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "ARCH-SOL-BUILDPLAN-ROOTCAUSE-20260930-E015",
+  "build_id": "ARCH-SOL-BUILDER-ASTRA-REVIEWER-20260929",
+  "source_commit": "7d03dd411ac99234e9a2766daf0439c9b36f107a",
+  "intelligence_tier": "C",
+  "issuer": {"model": "GPT-5.6 Sol", "reasoning_level": "UNAVAILABLE_TO_RUNTIME"},
+  "safety": {"live_trading": false, "paid_actions": false, "wallet_actions": false, "remote_git_write": false, "credential_write": false},
+  "capabilities": ["read_repository", "write_worktree", "run_project_python", "read_runtime"],
+  "working_directory": ".",
+  "timeout_seconds": 180,
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/buildplan_rootcause_e015.py",
+      "content": "from pathlib import Path\nimport json\n\nT='BUILDPLAN-f13331a398cbc3d1890411e1c35abdae'\nprod=Path.home()/'prediction_research_prod'\nplanner=prod/'control/codex_supervisor/build_planner.py'\ntext=planner.read_text(errors='replace')\nlines=text.splitlines()\nhits=[i for i,l in enumerate(lines) if 'NONBUILDABLE_COMPONENTS_MUST_BE_EMPTY' in l or 'nonbuildable_components' in l or 'buildable_components' in l]\nprint('PLANNER_PATH='+str(planner))\nfor i in sorted(set(hits)):\n    a=max(0,i-18); b=min(len(lines),i+19)\n    print(f'--- PLANNER_CONTEXT_{i+1} ---')\n    for n in range(a,b): print(f'{n+1}: {lines[n]}')\nrunroot=prod/'knowledge/codex_runtime/runs'\nfor p in sorted(runroot.glob(T+'-*')):\n    print('RUN_DIR='+str(p))\n    for f in sorted(p.iterdir()):\n        if not f.is_file(): continue\n        print('FILE='+f.name)\n        raw=f.read_text(errors='replace')\n        if f.suffix=='.json':\n            try:\n                obj=json.loads(raw)\n                print(json.dumps(obj,ensure_ascii=False,sort_keys=True)[:10000])\n            except Exception:\n                print(raw[:10000])\n        elif f.name=='events.jsonl':\n            for line in raw.splitlines()[-20:]: print(line[:2000])\n        else:\n            print(raw[-8000:])\n"
+    },
+    {"type": "python", "argv": ["python3", "control/dev_checks/buildplan_rootcause_e015.py"], "timeout_seconds": 60}
+  ],
+  "notes": "Read-only root-cause inspection of local build_planner validator and failed BUILDPLAN-f13331a398cbc3d1890411e1c35abdae run artifacts. No supervisor start or mutation."
+}
