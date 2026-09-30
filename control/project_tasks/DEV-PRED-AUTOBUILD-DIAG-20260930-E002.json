@@ -1,0 +1,39 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-AUTOBUILD-DIAG-20260930-E002",
+  "build_id": "GENERIC-AUTOBUILD-LIFECYCLE-20260930",
+  "source_commit": "d713f98d404a0966f05b56871d3f4a4e5daddc23",
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_runtime"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 180,
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/autobuild_diag_failure_e002.py",
+      "content": "from pathlib import Path\n\ntarget='DEV-PRED-AUTOBUILD-DIAG-20260930-E001'\nroots=[\n    Path.home()/'.local/state/prediction-project-executor',\n    Path.home()/'.local/state/prediction-command-bus',\n    Path.home()/'.local/share/prediction-project-executor',\n]\nprint('TARGET='+target)\nfound=0\nfor root in roots:\n    print('ROOT='+str(root))\n    if not root.exists():\n        print('ROOT_MISSING')\n        continue\n    for p in sorted(root.rglob('*')):\n        if target not in p.name and target not in str(p):\n            continue\n        found += 1\n        print('PATH='+str(p))\n        if p.is_file():\n            try:\n                raw=p.read_text(errors='replace')\n            except Exception as e:\n                print('READ_ERROR='+repr(e))\n                continue\n            print(raw[-12000:])\nprint('FOUND='+str(found))\n"
+    },
+    {
+      "type": "python",
+      "argv": ["python3", "control/dev_checks/autobuild_diag_failure_e002.py"],
+      "timeout_seconds": 60
+    }
+  ],
+  "notes": "Read only the durable local state/receipt for failed task DEV-PRED-AUTOBUILD-DIAG-20260930-E001 and report the first concrete failure cause. No production mutation, no service changes, no external network, no live/cost/wallet/credential actions."
+}
