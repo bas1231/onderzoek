@@ -1,0 +1,16 @@
+{
+  "schema": "PREDICTION_BRIDGE_COMMAND_V1",
+  "task_id": "DEV-PRED-RESULT-DRIVE-COMPAT-20261001-E017",
+  "action": "SIX_AI_HEALTH",
+  "created_at_utc": "2026-10-01T12:34:00Z",
+  "delivery_mode": "headless",
+  "live_trading": false,
+  "paid_actions": false,
+  "wallet_actions": false,
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "notes": "Install/test WSL-compatible Google Drive result exporter using existing command bus/projectexecutor. Path+timer triggers, compact results only, no Tampermonkey, no live trading, paid, wallet, credentials, network or WSL remote Git writes."
+}
