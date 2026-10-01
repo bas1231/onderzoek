@@ -1,0 +1,91 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-HENGELTJE-RECOVER-20261001-E003",
+  "build_id": "HENGELTJE-AUTONOMOUS-RECOVERY-20261001",
+  "source_commit": "d4bb2ff59e3dd25f4c511f6995eccba23cbb1786",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_runtime",
+    "user_service_manage",
+    "read_logs"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 1800,
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/hengeltje_recover_e003.py",
+      "content": "from pathlib import Path\nimport json, sqlite3, sys\nHOME=Path.home()\nCID='MANUAL-SCOUT-HENGELTJES-20260924'\nOLD=['DEV-PRED-HENGELTJE-AUTOBUILD-20260930-E001','DEV-PRED-HENGELTJE-DIAG-20261001-E002']\nlabel=sys.argv[1] if len(sys.argv)>1 else 'snapshot'\nprint('HENGELTJE_RECOVERY_PHASE='+label)\nfor tid in OLD:\n    p=HOME/'.local/state/prediction-command-bus/tasks'/f'{tid}.json'\n    if not p.is_file():\n        print(f'BUS_STATE {tid}=ABSENT')\n        continue\n    try: x=json.loads(p.read_text())\n    except Exception as exc:\n        print(f'BUS_STATE {tid}=UNREADABLE:{type(exc).__name__}')\n        continue\n    print(f\"BUS_STATE {tid} status={x.get('status')} reason={x.get('reason')} route={x.get('route_source')} http={x.get('http_status')}\")\nfor tid in OLD:\n    roots=[HOME/'.local/state/prediction-project-executor', HOME/'.local/share/prediction-project-executor/worktrees']\n    hits=[]\n    for root in roots:\n        if root.exists():\n            for p in root.rglob('*'):\n                if tid in p.name or tid in str(p): hits.append(str(p))\n    print(f'EXEC_STATE {tid} hits={len(hits)}')\nprod=HOME/'prediction_research_prod'/'knowledge'/'codex_runtime'\ncs=prod/'candidate_states'\nhits=[]\nif cs.exists():\n    for p in cs.glob('*.json'):\n        try:x=json.loads(p.read_text())\n        except Exception:continue\n        if x.get('candidate_id')==CID:hits.append((p.stat().st_mtime,p,x))\nif not hits:\n    print('HENGELTJE_OVERLAY=ABSENT')\nelse:\n    _,p,x=max(hits)\n    print('HENGELTJE_OVERLAY='+str(p))\n    print('HENGELTJE_QUEUE_STATUS='+str(x.get('queue_status')))\n    print('HENGELTJE_BUILD_HANDOFF='+str(bool(x.get('build_handoff'))))\n    print('HENGELTJE_RUNTIME_HEALTH='+str(x.get('runtime_health')))\n    print('HENGELTJE_PROSPECTIVE='+str(x.get('prospective_outcome') or x.get('prospective_status')))\ntry:\n    dbp=prod/'runtime.sqlite'\n    db=sqlite3.connect(f'file:{dbp}?mode=ro',uri=True)\n    rows=db.execute('select id,body,status,attempt from tasks order by rowid').fetchall()\n    db.close()\nexcept Exception as exc:\n    print('RUNTIME_DB='+type(exc).__name__)\nelse:\n    rows2=[]\n    for tid,body,status,attempt in rows:\n        try:b=json.loads(body)\n        except Exception:continue\n        if b.get('candidate_id')==CID: rows2.append((tid,b,status,attempt))\n    print('HENGELTJE_TASK_COUNT='+str(len(rows2)))\n    for tid,b,status,attempt in rows2[-12:]:\n        print('HENGELTJE_TASK='+str(tid)+' status='+str(status)+' attempt='+str(attempt)+' class='+str(b.get('task_class')))\nprint('SAFETY live_trading=false paid_actions=false wallet_actions=false remote_push=false')\n"
+    },
+    {
+      "type": "python",
+      "argv": ["python3", "control/dev_checks/hengeltje_recover_e003.py", "pre"],
+      "timeout_seconds": 90
+    },
+    {
+      "type": "service",
+      "verb": "restart",
+      "unit": "prediction-command-bus.timer"
+    },
+    {
+      "type": "service",
+      "verb": "start",
+      "unit": "prediction-command-bus.service"
+    },
+    {
+      "type": "journal",
+      "unit": "prediction-command-bus.service",
+      "lines": 120
+    },
+    {
+      "type": "service",
+      "verb": "start",
+      "unit": "prediction-codex-supervisor.service"
+    },
+    {
+      "type": "service",
+      "verb": "start",
+      "unit": "prediction-codex-supervisor.service"
+    },
+    {
+      "type": "service",
+      "verb": "start",
+      "unit": "prediction-codex-supervisor.service"
+    },
+    {
+      "type": "journal",
+      "unit": "prediction-codex-supervisor.service",
+      "lines": 220
+    },
+    {
+      "type": "service",
+      "verb": "start",
+      "unit": "prediction-research-hourly-director.service"
+    },
+    {
+      "type": "journal",
+      "unit": "prediction-research-hourly-director.service",
+      "lines": 140
+    },
+    {
+      "type": "python",
+      "argv": ["python3", "control/dev_checks/hengeltje_recover_e003.py", "post"],
+      "timeout_seconds": 90
+    }
+  ],
+  "notes": "Autonomous recovery after E001/E002 produced no observable result. This fresh task uses an explicit previously proven session route at the command-bus layer. It diagnoses prior bus/executor state without exposing chat IDs or credentials, refreshes the command-bus timer, kicks the existing Hengeltje candidate supervisor three times, refreshes hourly reporting, and snapshots candidate state. No Astra, no trading, no paid action, no wallet/fund action, no credential access, no remote Git write. NO_PROVEN_EDGE remains authoritative."
+}
