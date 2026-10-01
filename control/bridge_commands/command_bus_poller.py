@@ -133,7 +133,7 @@ def validate_command(obj: dict) -> tuple[bool, str]:
         "schema", "task_id", "action", "created_at_utc", "live_trading",
         "paid_actions", "wallet_actions", "intelligence_tier", "issuer",
     }
-    allowed = required | {"route_task_id", "notes"}
+    allowed = required | {"route_task_id", "delivery_mode", "notes"}
     if set(obj) - allowed:
         return False, "UNKNOWN_FIELDS"
     if not required.issubset(obj):
@@ -160,6 +160,11 @@ def validate_command(obj: dict) -> tuple[bool, str]:
     route_task_id = obj.get("route_task_id")
     if route_task_id is not None and not TASK_RE.fullmatch(str(route_task_id)):
         return False, "BAD_ROUTE_TASK_ID"
+    delivery_mode = obj.get("delivery_mode", "chat")
+    if delivery_mode not in {"chat", "headless"}:
+        return False, "BAD_DELIVERY_MODE"
+    if delivery_mode == "headless" and route_task_id is not None:
+        return False, "HEADLESS_ROUTE_FORBIDDEN"
     if not isinstance(obj.get("created_at_utc"), str) or not obj["created_at_utc"].strip():
         return False, "BAD_CREATED_AT"
     if "notes" in obj and not isinstance(obj["notes"], str):
@@ -180,6 +185,8 @@ def validate_route(route: dict | None) -> dict | None:
 
 
 def resolve_route(command: dict) -> tuple[dict | None, str]:
+    if command.get("delivery_mode", "chat") == "headless":
+        return {"chat_id": "HEADLESS_CONTROL", "consumer_id": None}, "headless"
     route_task_id = command.get("route_task_id")
     if route_task_id:
         path = ROUTES / f"{route_task_id}.json"
@@ -295,6 +302,7 @@ def process_one(path: str, remote_commit: str, token: str) -> str:
         "path": path,
         "remote_commit": remote_commit,
         "content_sha256": content_sha,
+        "delivery_mode": obj.get("delivery_mode", "chat"),
         "route_source": route_source,
         "chat_id": route["chat_id"],
         "consumer_id": route.get("consumer_id"),
@@ -368,7 +376,7 @@ def run_once() -> int:
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--once", action="store_true", help="poll once; default behavior")
-    args = parser.parse_args()
+    parser.parse_args()
     try:
         return run_once()
     except Exception as exc:
