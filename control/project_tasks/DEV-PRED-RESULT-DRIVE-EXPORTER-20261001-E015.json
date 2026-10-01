@@ -1,0 +1,63 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-RESULT-DRIVE-EXPORTER-20261001-E015",
+  "build_id": "PREDICTION-DRIVE-RESULT-BRIDGE-20261001",
+  "source_commit": "f555520e27a8d4c80eaf95e0fac0fc6d61d0e293",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "run_project_python",
+    "write_runtime",
+    "user_service_manage"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 900,
+  "notes": "Test and install the compact network-free Prediction DEV receipt exporter. The user confirmed /mnt/c/Users/leonh/Prediction-Results exists and is synchronized by Google Drive Desktop. Full receipts are not exported.",
+  "operations": [
+    {
+      "type": "python",
+      "argv": ["python3", "-m", "compileall", "-q", "control/result_drive/result_exporter.py"],
+      "timeout_seconds": 120
+    },
+    {
+      "type": "python",
+      "argv": ["python3", "control/result_drive/result_exporter.py", "--selftest"],
+      "timeout_seconds": 120
+    },
+    {
+      "type": "install_runtime",
+      "source": "control/result_drive/result_exporter.py",
+      "destination": "/home/leonh/.local/share/prediction-result-exporter/result_exporter.py",
+      "mode": 493
+    },
+    {
+      "type": "install_runtime",
+      "source": "control/result_drive/prediction-result-exporter.service",
+      "destination": "/home/leonh/.config/systemd/user/prediction-result-exporter.service",
+      "mode": 420
+    },
+    {
+      "type": "install_runtime",
+      "source": "control/result_drive/prediction-result-exporter.path",
+      "destination": "/home/leonh/.config/systemd/user/prediction-result-exporter.path",
+      "mode": 420
+    },
+    {"type": "daemon_reload"},
+    {"type": "service", "verb": "enable", "unit": "prediction-result-exporter.path"},
+    {"type": "service", "verb": "start", "unit": "prediction-result-exporter.path"},
+    {"type": "service", "verb": "start", "unit": "prediction-result-exporter.service"},
+    {"type": "service", "verb": "is-enabled", "unit": "prediction-result-exporter.path"},
+    {"type": "service", "verb": "is-active", "unit": "prediction-result-exporter.path"}
+  ]
+}
