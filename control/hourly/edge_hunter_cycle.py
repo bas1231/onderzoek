@@ -57,6 +57,38 @@ def run_required_checkpoint(script: str, label: str, timeout: int = 180) -> None
         raise RuntimeError(f"{label} failed with rc={proc.returncode}")
 
 
+def run_optional_command_bus_selfheal() -> None:
+    """Repair the user-level command bus without making hourly research depend on it.
+
+    runtime_sync.py fast-forwards main before this wrapper starts, so this hook is
+    an independent recovery path when the command-bus poller itself is stale or
+    stopped. It is deliberately bounded to the repository-owned self-heal helper.
+    """
+    helper = ROOT / "control/hourly/command_bus_selfheal.py"
+    if not helper.is_file():
+        print("COMMAND_BUS_SELFHEAL=ABSENT")
+        return
+    try:
+        proc = subprocess.run(
+            [str(ROOT / ".venv/bin/python"), str(helper)],
+            cwd=str(ROOT),
+            text=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
+            check=False,
+            timeout=240,
+        )
+        output = (proc.stdout or "").strip()
+        if len(output) > 6000:
+            output = output[-6000:]
+        print("COMMAND_BUS_SELFHEAL_RC", proc.returncode)
+        if output:
+            print("COMMAND_BUS_SELFHEAL_OUTPUT", output)
+    except Exception as exc:
+        # Do not break the research cycle because infrastructure recovery failed.
+        print("COMMAND_BUS_SELFHEAL_EXCEPTION", type(exc).__name__, str(exc)[:1000])
+
+
 def read_json(path: Path) -> dict | None:
     try:
         data = json.loads(path.read_text(encoding="utf-8"))
@@ -97,6 +129,10 @@ def write_cycle_receipt(run_id: str) -> None:
 
 
 def main() -> int:
+    # Independent bootstrap path for a broken/stale command-bus poller. This is
+    # intentionally before the normal research cycle and fail-soft for research.
+    run_optional_command_bus_selfheal()
+
     # Do not use runpy(..., run_name='__main__') here. hourly_cycle.py ends in
     # SystemExit(main()), which used to terminate this wrapper with rc=0 before
     # Edge Hunter and durable checkpoints ever ran.
