@@ -1,0 +1,13 @@
+{
+  "schema": "PREDICTION_BRIDGE_COMMAND_V1",
+  "task_id": "DEV-PRED-HENGELTJE-SHADOW-CORE-REPAIR-20261001-E017",
+  "action": "SIX_AI_HEALTH",
+  "created_at_utc": "2026-10-01T12:24:00Z",
+  "delivery_mode": "headless",
+  "live_trading": false,
+  "paid_actions": false,
+  "wallet_actions": false,
+  "intelligence_tier": "A",
+  "issuer": {"model": "GPT-5.6 Sol", "reasoning_level": "UNAVAILABLE_TO_RUNTIME"},
+  "notes": "Targeted repair of E013 import-path failure. Rebuild/test dormant Hengeltje shadow core only. No activation, network, live orders/cancels, funds, paid actions, credentials, or WSL remote Git writes. Keep NO_PROVEN_EDGE and UNREVIEWED/PRE_REVIEW."
+}
