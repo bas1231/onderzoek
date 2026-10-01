@@ -3,7 +3,7 @@ Description=Prediction result exporter to Google Drive
 
 [Service]
 Type=oneshot
-ExecStart=/usr/bin/python3 /home/leonh/.local/share/prediction-result-exporter/result_exporter.py --scan
+ExecStart=/usr/bin/python3 /home/leonh/.local/share/prediction-project-executor/result_drive/result_exporter.py --scan
 NoNewPrivileges=yes
 PrivateTmp=yes
 ProtectSystem=strict
