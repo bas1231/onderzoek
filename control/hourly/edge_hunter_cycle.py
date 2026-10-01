@@ -11,6 +11,7 @@ ROOT = Path(__file__).resolve().parents[2]
 STATE = Path.home() / ".local/state/prediction-research"
 CYCLE_RECEIPT = STATE / "scheduled-cycle-latest.json"
 GIT_CHECKPOINT = STATE / "git-checkpoint-latest.json"
+SELFHEAL_STATUS = STATE / "command-bus-selfheal-latest.json"
 
 
 def load_hourly_cycle():
@@ -97,6 +98,44 @@ def read_json(path: Path) -> dict | None:
     return data if isinstance(data, dict) else None
 
 
+def append_selfheal_evidence(run_id: str) -> None:
+    """Attach bounded local recovery evidence to the normal hourly artifacts.
+
+    This does not publish by itself. It only makes the already-existing hourly
+    checkpoint/report path able to show whether self-heal and the E008 canary
+    actually completed.
+    """
+    status = read_json(SELFHEAL_STATUS)
+    if not status:
+        return
+
+    run_path = ROOT / "knowledge/runs" / f"{run_id}.json"
+    current = read_json(run_path)
+    if current is not None:
+        current["command_bus_selfheal"] = status
+        tmp = run_path.with_suffix(".tmp")
+        tmp.write_text(json.dumps(current, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+        tmp.replace(run_path)
+
+    report_path = ROOT / "hourly-reports" / f"{run_id}.md"
+    marker = "## Command-bus self-heal"
+    existing = report_path.read_text(encoding="utf-8", errors="replace") if report_path.exists() else ""
+    if marker in existing:
+        return
+    canary = status.get("canary") if isinstance(status.get("canary"), dict) else {}
+    with report_path.open("a", encoding="utf-8") as handle:
+        handle.write("\n" + marker + "\n\n")
+        handle.write("Status: **" + str(status.get("status")) + "**\n")
+        handle.write("Canary task: `" + str(status.get("canary_task_id")) + "`\n")
+        handle.write("Timer active: " + str(status.get("timer_active")) + "\n")
+        handle.write("Poll-once rc: " + str(status.get("poll_once_rc")) + "\n")
+        handle.write("Command state: " + str(canary.get("task_state_status")) + "\n")
+        handle.write("DEV receipt finished: " + str(canary.get("receipt_finished")) + "\n")
+        handle.write("DEV receipt exit 0: " + str(canary.get("receipt_exit_zero")) + "\n")
+        handle.write("E2E PASS marker: " + str(canary.get("receipt_has_pass_marker")) + "\n")
+        handle.write("Safety: live_trading=false, paid_actions=false, wallet_actions=false, remote_git_write=false.\n")
+
+
 def write_cycle_receipt(run_id: str) -> None:
     """Persist one bounded correlation receipt after every required checkpoint passed.
 
@@ -145,6 +184,8 @@ def main() -> int:
         raise RuntimeError(f"hourly cycle failed with rc={cycle_rc}")
 
     run_id = latest_canonical_run_id()
+    append_selfheal_evidence(run_id)
+
     sys.path.insert(0, str(ROOT / "control/edge_hunter"))
     from director import prepare
 
