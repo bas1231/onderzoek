@@ -1,0 +1,106 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-COMMAND-BUS-HEADLESS-20261001-E004",
+  "build_id": "COMMAND-BUS-HEADLESS-20261001",
+  "source_commit": "f99f2ede88428c74667eaff846835ff7487d2a1d",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "run_tests",
+    "local_git",
+    "write_runtime",
+    "user_service_manage",
+    "read_logs"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 1800,
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/patch_command_bus_headless_e004.py",
+      "content": "from pathlib import Path\nimport json\n\nROOT=Path.cwd()\nP=ROOT/'control/bridge_commands/command_bus_poller.py'\nS=ROOT/'control/bridge_commands/COMMAND_SCHEMA_V1.json'\ntext=P.read_text(encoding='utf-8')\nold='allowed = required | {\"route_task_id\", \"notes\"}'\nnew='allowed = required | {\"route_task_id\", \"delivery_mode\", \"notes\"}'\nif new not in text:\n    if text.count(old)!=1: raise SystemExit('E004_ALLOWED_ANCHOR='+str(text.count(old)))\n    text=text.replace(old,new,1)\nold2='''    route_task_id = obj.get(\"route_task_id\")\n    if route_task_id is not None and not TASK_RE.fullmatch(str(route_task_id)):\n        return False, \"BAD_ROUTE_TASK_ID\"\n    if not isinstance(obj.get(\"created_at_utc\"), str) or not obj[\"created_at_utc\"].strip():\n'''
+new2='''    route_task_id = obj.get(\"route_task_id\")\n    if route_task_id is not None and not TASK_RE.fullmatch(str(route_task_id)):\n        return False, \"BAD_ROUTE_TASK_ID\"\n    delivery_mode = obj.get(\"delivery_mode\", \"chat\")\n    if delivery_mode not in {\"chat\", \"headless\"}:\n        return False, \"BAD_DELIVERY_MODE\"\n    if delivery_mode == \"headless\" and route_task_id is not None:\n        return False, \"HEADLESS_ROUTE_FORBIDDEN\"\n    if not isinstance(obj.get(\"created_at_utc\"), str) or not obj[\"created_at_utc\"].strip():\n'''
+if 'HEADLESS_ROUTE_FORBIDDEN' not in text:\n    if text.count(old2)!=1: raise SystemExit('E004_VALIDATE_ANCHOR='+str(text.count(old2)))\n    text=text.replace(old2,new2,1)\nold3='''def resolve_route(command: dict) -> tuple[dict | None, str]:\n    route_task_id = command.get(\"route_task_id\")\n'''
+new3='''def resolve_route(command: dict) -> tuple[dict | None, str]:\n    if command.get(\"delivery_mode\", \"chat\") == \"headless\":\n        return {\"chat_id\": \"HEADLESS_CONTROL\", \"consumer_id\": None}, \"headless\"\n    route_task_id = command.get(\"route_task_id\")\n'''
+if 'HEADLESS_CONTROL' not in text:\n    if text.count(old3)!=1: raise SystemExit('E004_RESOLVE_ANCHOR='+str(text.count(old3)))\n    text=text.replace(old3,new3,1)\nold4='''        \"content_sha256\": content_sha,\n        \"route_source\": route_source,\n'''
+new4='''        \"content_sha256\": content_sha,\n        \"delivery_mode\": obj.get(\"delivery_mode\", \"chat\"),\n        \"route_source\": route_source,\n'''
+if '\"delivery_mode\": obj.get(\"delivery_mode\", \"chat\")' not in text:\n    if text.count(old4)!=1: raise SystemExit('E004_CLAIM_ANCHOR='+str(text.count(old4)))\n    text=text.replace(old4,new4,1)\nP.write_text(text,encoding='utf-8')\nobj=json.loads(S.read_text(encoding='utf-8'))\nprops=obj['properties']\nprops['delivery_mode']={\"type\":\"string\",\"enum\":[\"chat\",\"headless\"],\"default\":\"chat\"}\nS.write_text(json.dumps(obj,indent=2,sort_keys=False)+'\\n',encoding='utf-8')\n\nsections={\n'control/bridge_commands/OPERATIONS.md':'''\\n## Headless execution mode\\n\\nFor tasks whose result is intentionally observed through local state/hourly reporting rather than a ChatGPT tab, the command may set `delivery_mode: \"headless\"` and must set no `route_task_id`. The poller then uses a synthetic local-only route (`HEADLESS_CONTROL`) solely so the existing router/receiver can execute the command. No browser/Tampermonkey route is required for command execution. Normal chat delivery remains the default and still fails closed on a missing route. Headless mode does not relax at-most-once claims or any trading/cost/wallet/credential guardrail.\\n''',\n'control/bridge_commands/SESSION_ROUTING.md':'''\\n## Headless exception for non-chat observation\\n\\nThe session-route requirement applies when a result must return to a ChatGPT chat. A task explicitly marked `delivery_mode: \"headless\"` is different: it is intentionally observed through local state/hourly reporting, carries no `route_task_id`, and does not depend on browser/Tampermonkey delivery. This mode must never be used to claim same-chat delivery.\\n''',\n'control/NEW_SESSION_LOCAL_EXECUTION.md':'''\\n## Headless project execution\\n\\nWhen the user explicitly chooses hourly/local observation instead of same-chat result delivery, a fresh command may use `delivery_mode: \"headless\"` with no `route_task_id`. This removes browser/Tampermonkey from the execution dependency while preserving the same immutable command, executor, safety and at-most-once rules. Chat delivery remains the default for ordinary interactive tasks.\\n''',\n'control/tampermonkey_multichat/PROTOCOL.md':'''\\n## Headless command-bus mode\\n\\n`delivery_mode: \"headless\"` is the supported browser-independent execution mode. It creates a synthetic local route only for the existing router/receiver plumbing and does not require `/next`, Tampermonkey, a browser tab or a session route to dispatch project work. Results are not represented as same-chat delivered; operational status must be read from local state/hourly reporting.\\n''',\n'control/tampermonkey_multichat/CHATGPT_PROJECT_INSTRUCTIONS.md':'''\\n## Browser-independent headless mode\\n\\nIf the user explicitly wants local work to continue without Tampermonkey/browser result delivery and will observe it through hourly/local status, use `delivery_mode: \"headless\"` and omit `route_task_id`. Do not use `route_task_id: null` as an accidental substitute for headless mode.\\n'''}\nfor rel,section in sections.items():\n    path=ROOT/rel\n    cur=path.read_text(encoding='utf-8')\n    title=section.strip().splitlines()[0]\n    if title not in cur:\n        path.write_text(cur.rstrip()+ '\\n' + section,encoding='utf-8')\nprint('E004_PATCH_APPLIED')\n"
+    },
+    {
+      "type": "write_text",
+      "path": "tests/bridge/test_command_bus_headless_e004.py",
+      "content": "from __future__ import annotations\n\nimport importlib.util\nimport json\nfrom pathlib import Path\n\nROOT = Path(__file__).resolve().parents[2]\nMODULE_PATH = ROOT / 'control/bridge_commands/command_bus_poller.py'\n\ndef load_module():\n    spec = importlib.util.spec_from_file_location('command_bus_poller_headless_e004', MODULE_PATH)\n    mod = importlib.util.module_from_spec(spec)\n    assert spec.loader is not None\n    spec.loader.exec_module(mod)\n    return mod\n\ndef command(**overrides):\n    base = {\n        'schema': 'PREDICTION_BRIDGE_COMMAND_V1',\n        'task_id': 'HEADLESS-E004-TEST',\n        'action': 'SIX_AI_HEALTH',\n        'created_at_utc': '2026-10-01T06:00:00Z',\n        'route_task_id': None,\n        'live_trading': False,\n        'paid_actions': False,\n        'wallet_actions': False,\n        'intelligence_tier': 'C',\n        'issuer': {'model': 'GPT-5.6 Sol', 'reasoning_level': 'UNAVAILABLE_TO_RUNTIME'},\n    }\n    base.update(overrides)\n    return base\n\ndef test_headless_validates_without_route():\n    mod = load_module()\n    ok, reason = mod.validate_command(command(delivery_mode='headless'))\n    assert ok is True\n    assert reason == 'OK'\n\ndef test_headless_resolves_without_route_files(tmp_path):\n    mod = load_module()\n    mod.ROUTES = tmp_path / 'missing-routes'\n    mod.ROUTE_FILE = tmp_path / 'missing-route.json'\n    route, source = mod.resolve_route(command(delivery_mode='headless'))\n    assert route == {'chat_id': 'HEADLESS_CONTROL', 'consumer_id': None}\n    assert source == 'headless'\n\ndef test_headless_forbids_route_task_id():\n    mod = load_module()\n    ok, reason = mod.validate_command(command(delivery_mode='headless', route_task_id='SESSION-ROUTE-EXAMPLE'))\n    assert ok is False\n    assert reason == 'HEADLESS_ROUTE_FORBIDDEN'\n\ndef test_unknown_delivery_mode_fails_closed():\n    mod = load_module()\n    ok, reason = mod.validate_command(command(delivery_mode='magic'))\n    assert ok is False\n    assert reason == 'BAD_DELIVERY_MODE'\n\ndef test_chat_mode_still_requires_route(tmp_path):\n    mod = load_module()\n    mod.ROUTES = tmp_path / 'routes'\n    mod.ROUTE_FILE = tmp_path / 'missing-route.json'\n    route, source = mod.resolve_route(command())\n    assert route is None\n    assert source == 'pinned'\n\ndef test_headless_process_one_dispatches_with_synthetic_route(tmp_path, monkeypatch):\n    mod = load_module()\n    payload = command(delivery_mode='headless')\n    raw = (json.dumps(payload, sort_keys=True) + '\\n').encode()\n    state = tmp_path / 'state.json'\n    monkeypatch.setattr(mod, 'remote_bytes', lambda _path: raw)\n    monkeypatch.setattr(mod, 'task_state_path', lambda _tid: state)\n    seen = {}\n    def fake_dispatch(cmd, route, token):\n        seen['route'] = route\n        return 'RESPONSE', 200, '{\"ok\":true}'\n    monkeypatch.setattr(mod, 'dispatch', fake_dispatch)\n    result = mod.process_one('control/bridge_commands/inbox/HEADLESS-E004-TEST.json', '0' * 40, 'token')\n    assert result == 'DISPATCHED'\n    assert seen['route']['chat_id'] == 'HEADLESS_CONTROL'\n    saved = json.loads(state.read_text())\n    assert saved['status'] == 'DISPATCHED'\n    assert saved['delivery_mode'] == 'headless'\n    assert saved['route_source'] == 'headless'\n"
+    },
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/headless_installed_canary_e004.py",
+      "content": "from pathlib import Path\nimport importlib.util\n\npath=Path.home()/'.local/share/prediction-command-bus/command_bus_poller.py'\nspec=importlib.util.spec_from_file_location('installed_headless_e004',path)\nmod=importlib.util.module_from_spec(spec)\nassert spec.loader is not None\nspec.loader.exec_module(mod)\ncmd={'schema':'PREDICTION_BRIDGE_COMMAND_V1','task_id':'HEADLESS-E004-INSTALLED','action':'BRIDGE_PING','created_at_utc':'2026-10-01T06:00:00Z','delivery_mode':'headless','live_trading':False,'paid_actions':False,'wallet_actions':False,'intelligence_tier':'C','issuer':{'model':'GPT-5.6 Sol','reasoning_level':'UNAVAILABLE_TO_RUNTIME'}}\nok,reason=mod.validate_command(cmd)\nassert ok and reason=='OK'\nroute,source=mod.resolve_route(cmd)\nassert source=='headless' and route=={'chat_id':'HEADLESS_CONTROL','consumer_id':None}\nprint('HEADLESS_INSTALLED_CANARY_E004=PASS')\n"
+    },
+    {
+      "type": "python",
+      "argv": ["python3", "control/dev_checks/patch_command_bus_headless_e004.py"],
+      "timeout_seconds": 120
+    },
+    {
+      "type": "python",
+      "argv": ["/home/leonh/prediction_research_prod/.venv/bin/python", "-m", "pytest", "-q", "tests/bridge/test_command_bus_headless_e004.py"],
+      "test": true,
+      "timeout_seconds": 300
+    },
+    {
+      "type": "git",
+      "args": ["diff", "--check"],
+      "timeout_seconds": 60
+    },
+    {
+      "type": "git",
+      "args": ["add", "control/bridge_commands/command_bus_poller.py", "control/bridge_commands/COMMAND_SCHEMA_V1.json", "control/bridge_commands/OPERATIONS.md", "control/bridge_commands/SESSION_ROUTING.md", "control/NEW_SESSION_LOCAL_EXECUTION.md", "control/tampermonkey_multichat/PROTOCOL.md", "control/tampermonkey_multichat/CHATGPT_PROJECT_INSTRUCTIONS.md", "tests/bridge/test_command_bus_headless_e004.py", "control/dev_checks/patch_command_bus_headless_e004.py", "control/dev_checks/headless_installed_canary_e004.py"],
+      "timeout_seconds": 60
+    },
+    {
+      "type": "git",
+      "args": ["commit", "-m", "repair: add browser-independent headless command bus mode"],
+      "timeout_seconds": 120
+    },
+    {
+      "type": "install_runtime",
+      "source": "control/bridge_commands/command_bus_poller.py",
+      "destination": "/home/leonh/.local/share/prediction-command-bus/command_bus_poller.py",
+      "mode": 493
+    },
+    {
+      "type": "service",
+      "verb": "restart",
+      "unit": "prediction-command-bus.timer"
+    },
+    {
+      "type": "service",
+      "verb": "start",
+      "unit": "prediction-command-bus.service"
+    },
+    {
+      "type": "python",
+      "argv": ["python3", "control/dev_checks/headless_installed_canary_e004.py"],
+      "timeout_seconds": 90
+    },
+    {
+      "type": "journal",
+      "unit": "prediction-command-bus.service",
+      "lines": 120
+    }
+  ],
+  "notes": "Infrastructure repair requested after browser/Tampermonkey-dependent routing prevented reliable autonomous work observation. Adds explicit delivery_mode=headless so command execution can proceed without a browser/session route while retaining chat delivery as default. Headless uses a synthetic local route only for existing router/receiver plumbing, preserves at-most-once semantics and all safety blocks, includes deterministic regression tests, local commit, bounded runtime install and installed-runtime canary. This does not authorize trading, paid actions, wallet/funds, credentials, remote push, or Astra. Formal Tier-A qualification remains separate."
+}
