@@ -1,0 +1,17 @@
+{
+  "schema": "PREDICTION_BRIDGE_COMMAND_V1",
+  "task_id": "DEV-PRED-COMMAND-BUS-HEADLESS-CANARY-20261001-E008",
+  "action": "SIX_AI_HEALTH",
+  "created_at_utc": "2026-10-01T07:30:00Z",
+  "route_task_id": null,
+  "delivery_mode": "headless",
+  "live_trading": false,
+  "paid_actions": false,
+  "wallet_actions": false,
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "notes": "Browser-independent end-to-end recovery canary. The hourly runtime self-heal installs/starts the existing command bus and this immutable task must reach the capability-scoped projectexecutor. No live trading, paid actions, wallet/funds, credentials or WSL remote Git writes."
+}
