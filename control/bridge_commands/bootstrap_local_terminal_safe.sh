@@ -140,6 +140,17 @@ PY
         return "$RC"
     fi
 
+    # A timer enabled long after user-systemd boot can be active without a first
+    # OnUnitActiveSec reference. Prime one successful oneshot so the recurring
+    # 30-second cadence has a concrete activation timestamp immediately.
+    echo "4b/6 prime recurring timer"
+    systemctl --user start prediction-command-bus.service
+    RC=$?
+    if [ "$RC" -ne 0 ]; then
+        echo "FOUT: command-bus first poll rc=$RC"
+        return "$RC"
+    fi
+
     echo "5/6 systemd status"
     systemctl --user is-active prediction-command-bus.timer || true
     systemctl --user is-active prediction-chat-wake.service || true
