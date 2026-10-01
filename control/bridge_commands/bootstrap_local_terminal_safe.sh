@@ -50,12 +50,15 @@ main() {
     DIR="$TMP/control/bridge_commands"
 
     echo "2/6 installer source guard"
-    python3 - "$DIR/install_command_bus.py" <<'PY'
+    python3 - "$DIR/install_command_bus.py" "$DIR/patch_wake_inflight.py" <<'PY'
 from pathlib import Path
 import py_compile, sys
-p = Path(sys.argv[1])
-s = p.read_text(encoding="utf-8")
-# Hotfix the 2026-09-29 provisional installer typo only in the temporary copy.
+
+installer = Path(sys.argv[1])
+patcher = Path(sys.argv[2])
+
+# Guard known provisional installer typo in the temporary copy only.
+s = installer.read_text(encoding="utf-8")
 repls = {
     '"live_trading": false,': '"live_trading": False,',
     '"paid_actions": false,': '"paid_actions": False,',
@@ -67,8 +70,50 @@ for old, new in repls.items():
     if old in s:
         s = s.replace(old, new)
         changed = True
-p.write_text(s, encoding="utf-8")
-py_compile.compile(str(p), doraise=True)
+
+# The installed wake server may now be a layered wrapper:
+# bridge_server.py -> bridge_server_session_bootstrap -> bridge_server_hardened
+# -> bridge_server_v2.  Older installer logic only recognized a direct
+# `import bridge_server_v2 as base`, misclassified the layered wrapper as the
+# queue-owning base and then failed closed during the inflight patch.
+layer_decl = (
+    'WRAPPER_IMPORT = "import bridge_server_v2 as base"\n'
+    'LAYERED_WRAPPER_IMPORTS = (\n'
+    '    "import bridge_server_session_bootstrap as session",\n'
+    '    "import bridge_server_hardened as hardened",\n'
+    ')\n'
+)
+if 'LAYERED_WRAPPER_IMPORTS' not in s:
+    needle = 'WRAPPER_IMPORT = "import bridge_server_v2 as base"\n'
+    if needle not in s:
+        raise SystemExit("FOUT: installer wrapper declaration anchor missing")
+    s = s.replace(needle, layer_decl, 1)
+    changed = True
+old_cond = '    if WRAPPER_IMPORT in source:\n'
+new_cond = '    if WRAPPER_IMPORT in source or any(marker in source for marker in LAYERED_WRAPPER_IMPORTS):\n'
+if old_cond in s:
+    s = s.replace(old_cond, new_cond, 1)
+    changed = True
+elif new_cond not in s:
+    raise SystemExit("FOUT: installer wrapper condition anchor missing")
+installer.write_text(s, encoding="utf-8")
+
+p = patcher.read_text(encoding="utf-8")
+if 'LAYERED_WRAPPER_IMPORTS' not in p:
+    needle = 'WRAPPER_IMPORT = "import bridge_server_v2 as base"\n'
+    if needle not in p:
+        raise SystemExit("FOUT: patcher wrapper declaration anchor missing")
+    p = p.replace(needle, layer_decl, 1)
+    changed = True
+if old_cond in p:
+    p = p.replace(old_cond, new_cond, 1)
+    changed = True
+elif new_cond not in p:
+    raise SystemExit("FOUT: patcher wrapper condition anchor missing")
+patcher.write_text(p, encoding="utf-8")
+
+py_compile.compile(str(installer), doraise=True)
+py_compile.compile(str(patcher), doraise=True)
 if any(x in s for x in repls):
     raise SystemExit("FOUT: lowercase boolean installer typo remains")
 print("PASS: installer temporary source guarded" + (" (hotfixed)" if changed else ""))
