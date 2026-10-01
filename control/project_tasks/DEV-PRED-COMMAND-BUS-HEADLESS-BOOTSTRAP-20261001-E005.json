@@ -1,0 +1,72 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-COMMAND-BUS-HEADLESS-BOOTSTRAP-20261001-E005",
+  "build_id": "COMMAND-BUS-HEADLESS-BOOTSTRAP-20261001",
+  "source_commit": "2912b6db8b0c2849be51b4416350f887e60c6388",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "write_runtime",
+    "user_service_manage",
+    "read_logs"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 1200,
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/headless_bootstrap_e005.py",
+      "content": "from pathlib import Path\nimport importlib.util, py_compile, tempfile\nROOT=Path.cwd()\nP=ROOT/'control/bridge_commands/command_bus_poller.py'\npy_compile.compile(str(P), doraise=True)\nspec=importlib.util.spec_from_file_location('bus_e005',P)\nmod=importlib.util.module_from_spec(spec)\nassert spec.loader is not None\nspec.loader.exec_module(mod)\nbase={'schema':'PREDICTION_BRIDGE_COMMAND_V1','task_id':'HEADLESS-E005-TEST','action':'BRIDGE_PING','created_at_utc':'2026-10-01T06:30:00Z','live_trading':False,'paid_actions':False,'wallet_actions':False,'intelligence_tier':'C','issuer':{'model':'GPT-5.6 Sol','reasoning_level':'UNAVAILABLE_TO_RUNTIME'}}\ncmd=dict(base,delivery_mode='headless')\nok,reason=mod.validate_command(cmd)\nassert ok and reason=='OK', (ok,reason)\nroute,source=mod.resolve_route(cmd)\nassert source=='headless' and route=={'chat_id':'HEADLESS_CONTROL','consumer_id':None}\nbad=dict(cmd,route_task_id='SOME-ROUTE')\nok,reason=mod.validate_command(bad)\nassert not ok and reason=='HEADLESS_ROUTE_FORBIDDEN'\nunknown=dict(base,delivery_mode='magic')\nok,reason=mod.validate_command(unknown)\nassert not ok and reason=='BAD_DELIVERY_MODE'\nwith tempfile.TemporaryDirectory() as td:\n    t=Path(td)\n    mod.ROUTES=t/'routes'\n    mod.ROUTE_FILE=t/'route.json'\n    chat=dict(base)\n    route,source=mod.resolve_route(chat)\n    assert route is None and source=='pinned'\nprint('HEADLESS_SOURCE_CANARY_E005=PASS')\n"
+    },
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/headless_installed_e005.py",
+      "content": "from pathlib import Path\nimport importlib.util, py_compile\nP=Path.home()/'.local/share/prediction-command-bus/command_bus_poller.py'\npy_compile.compile(str(P), doraise=True)\nspec=importlib.util.spec_from_file_location('installed_bus_e005',P)\nmod=importlib.util.module_from_spec(spec)\nassert spec.loader is not None\nspec.loader.exec_module(mod)\ncmd={'schema':'PREDICTION_BRIDGE_COMMAND_V1','task_id':'HEADLESS-E005-INSTALLED','action':'BRIDGE_PING','created_at_utc':'2026-10-01T06:30:00Z','delivery_mode':'headless','live_trading':False,'paid_actions':False,'wallet_actions':False,'intelligence_tier':'C','issuer':{'model':'GPT-5.6 Sol','reasoning_level':'UNAVAILABLE_TO_RUNTIME'}}\nok,reason=mod.validate_command(cmd)\nassert ok and reason=='OK'\nroute,source=mod.resolve_route(cmd)\nassert source=='headless' and route=={'chat_id':'HEADLESS_CONTROL','consumer_id':None}\nprint('HEADLESS_INSTALLED_CANARY_E005=PASS')\n"
+    },
+    {
+      "type": "python",
+      "argv": ["python3", "control/dev_checks/headless_bootstrap_e005.py"],
+      "timeout_seconds": 90
+    },
+    {
+      "type": "install_runtime",
+      "source": "control/bridge_commands/command_bus_poller.py",
+      "destination": "/home/leonh/.local/share/prediction-command-bus/command_bus_poller.py",
+      "mode": 493
+    },
+    {
+      "type": "service",
+      "verb": "restart",
+      "unit": "prediction-command-bus.timer"
+    },
+    {
+      "type": "service",
+      "verb": "start",
+      "unit": "prediction-command-bus.service"
+    },
+    {
+      "type": "python",
+      "argv": ["python3", "control/dev_checks/headless_installed_e005.py"],
+      "timeout_seconds": 90
+    },
+    {
+      "type": "journal",
+      "unit": "prediction-command-bus.service",
+      "lines": 160
+    }
+  ],
+  "notes": "Alternate-route bootstrap for the browser-independent command-bus mode. Source code is already committed on main. This task performs deterministic source canary, bounded runtime install, timer restart, installed-runtime canary and journal read. No live trading, paid action, wallet/funds, credentials, remote Git write or Astra."
+}
