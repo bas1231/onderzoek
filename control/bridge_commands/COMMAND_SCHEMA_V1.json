@@ -34,6 +34,11 @@
       "type": ["string", "null"],
       "pattern": "^[A-Za-z0-9._:-]{1,160}$"
     },
+    "delivery_mode": {
+      "type": "string",
+      "enum": ["chat", "headless"],
+      "default": "chat"
+    },
     "live_trading": {
       "const": false
     },
