@@ -1,0 +1,78 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-COMMAND-BUS-RECOVERY-20261001-E007",
+  "build_id": "COMMAND-BUS-DIRECT-RECEIVER-RECOVERY-20261001",
+  "source_commit": "5d92acd446ba68df260495be9a9b4b6655609416",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_runtime",
+    "write_runtime",
+    "user_service_manage",
+    "read_logs"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 1200,
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/command_bus_recovery_e007.py",
+      "content": "from pathlib import Path\nimport importlib.util, py_compile\nROOT=Path.cwd()\nSRC=ROOT/'control/bridge_commands/command_bus_poller.py'\npy_compile.compile(str(SRC), doraise=True)\nspec=importlib.util.spec_from_file_location('bus_recovery_e007', SRC)\nmod=importlib.util.module_from_spec(spec)\nassert spec.loader is not None\nspec.loader.exec_module(mod)\ncmd={'schema':'PREDICTION_BRIDGE_COMMAND_V1','task_id':'HEADLESS-E007-SOURCE','action':'BRIDGE_PING','created_at_utc':'2026-10-01T06:40:00Z','delivery_mode':'headless','live_trading':False,'paid_actions':False,'wallet_actions':False,'intelligence_tier':'C','issuer':{'model':'GPT-5.6 Sol','reasoning_level':'UNAVAILABLE_TO_RUNTIME'}}\nok,reason=mod.validate_command(cmd)\nassert ok and reason=='OK', (ok,reason)\nroute,source=mod.resolve_route(cmd)\nassert source=='headless' and route=={'chat_id':'HEADLESS_CONTROL','consumer_id':None}, (route,source)\nbad=dict(cmd, route_task_id='SESSION-ROUTE-BAD')\nok,reason=mod.validate_command(bad)\nassert not ok and reason=='HEADLESS_ROUTE_FORBIDDEN', (ok,reason)\nprint('E007_SOURCE_HEADLESS_CANARY=PASS')\n"
+    },
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/command_bus_installed_e007.py",
+      "content": "from pathlib import Path\nimport importlib.util, py_compile\nP=Path.home()/'.local/share/prediction-command-bus/command_bus_poller.py'\nassert P.is_file(), P\npy_compile.compile(str(P), doraise=True)\nspec=importlib.util.spec_from_file_location('installed_bus_recovery_e007', P)\nmod=importlib.util.module_from_spec(spec)\nassert spec.loader is not None\nspec.loader.exec_module(mod)\ncmd={'schema':'PREDICTION_BRIDGE_COMMAND_V1','task_id':'HEADLESS-E007-INSTALLED','action':'BRIDGE_PING','created_at_utc':'2026-10-01T06:40:00Z','delivery_mode':'headless','live_trading':False,'paid_actions':False,'wallet_actions':False,'intelligence_tier':'C','issuer':{'model':'GPT-5.6 Sol','reasoning_level':'UNAVAILABLE_TO_RUNTIME'}}\nok,reason=mod.validate_command(cmd)\nassert ok and reason=='OK', (ok,reason)\nroute,source=mod.resolve_route(cmd)\nassert source=='headless' and route=={'chat_id':'HEADLESS_CONTROL','consumer_id':None}, (route,source)\nprint('E007_INSTALLED_HEADLESS_CANARY=PASS')\n"
+    },
+    {
+      "type": "python",
+      "argv": ["python3", "control/dev_checks/command_bus_recovery_e007.py"],
+      "timeout_seconds": 90
+    },
+    {
+      "type": "install_runtime",
+      "source": "control/bridge_commands/command_bus_poller.py",
+      "destination": "/home/leonh/.local/share/prediction-command-bus/command_bus_poller.py",
+      "mode": 493
+    },
+    {
+      "type": "service",
+      "verb": "restart",
+      "unit": "prediction-command-bus.timer"
+    },
+    {
+      "type": "service",
+      "verb": "start",
+      "unit": "prediction-command-bus.service"
+    },
+    {
+      "type": "python",
+      "argv": ["python3", "control/dev_checks/command_bus_installed_e007.py"],
+      "timeout_seconds": 90
+    },
+    {
+      "type": "service",
+      "verb": "is-active",
+      "unit": "prediction-command-bus.timer"
+    },
+    {
+      "type": "journal",
+      "unit": "prediction-command-bus.service",
+      "lines": 180
+    }
+  ],
+  "notes": "Emergency diagnostic-fallback recovery for the GitHub command-bus poller itself. Intended to be triggered through the already-installed localhost receiver DEV compatibility path rather than through the broken GitHub poller. It installs only the already-reviewed main-branch poller into its allowlisted runtime path, restarts the prediction-command-bus user timer/service, and proves source plus installed headless semantics. No live trading, paid actions, wallet/funds, credentials, remote Git write, unrestricted shell, or Astra."
+}
