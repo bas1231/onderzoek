@@ -1,0 +1,41 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-COMMAND-BUS-HEADLESS-CANARY-20261001-E008",
+  "build_id": "COMMAND-BUS-HEADLESS-E2E-20261001",
+  "source_commit": "2eac392546a998be98cdfec14aed81d6644f4996",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 300,
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/headless_command_bus_e008.py",
+      "content": "from hashlib import sha256\nTOKEN='PREDICTION_HEADLESS_E2E_E008'\ndigest=sha256(TOKEN.encode()).hexdigest()\nassert len(digest)==64\nprint('HEADLESS_E2E_E008=PASS')\nprint('HEADLESS_E2E_E008_SHA256='+digest)\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/headless_command_bus_e008.py"
+      ],
+      "timeout_seconds": 60
+    }
+  ],
+  "notes": "Harmless deterministic end-to-end canary for the repaired browser-independent command bus. Success requires the immutable GitHub task to reach the existing DEV adapter/projectexecutor and execute repository-owned Python in an isolated worktree. No trading, paid actions, wallet/funds, credentials, remote Git writes or external project networking."
+}
