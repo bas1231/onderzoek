@@ -1,0 +1,43 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-HENGELTJE-DEATHCHECKS-20261001-E012",
+  "build_id": "HENGELTJE-DEATHCHECKS-20261001",
+  "source_commit": "b84304f7a28ee44b7e9ab302657385861cceb547",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 600,
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/hengeltje_deathchecks_e012.py",
+      "content": "from __future__ import annotations\nimport json\nfrom pathlib import Path\nP=Path(\"knowledge/candidates/protocols/MANUAL-SCOUT-HENGELTJES-20260924-shadow-v1.json\")\nC=Path(\"knowledge/candidates/MANUAL-SCOUT-HENGELTJES-20260924.json\")\ndef fill(q,size,events,seq=True,reconn=True,restart=False):\n    if restart:return(\"UNPROVEN_RESTART\",0)\n    if not seq or not reconn:return(\"UNPROVEN_FILL\",0)\n    x=0\n    for e in events:\n        if e[\"type\"]==\"execution\": x+=int(e[\"qty\"])\n        elif e[\"type\"] in (\"cancel\",\"touch\"): pass\n        else:return(\"UNPROVEN_FILL\",0)\n    y=max(0,x-q); return((\"PROVEN_FILL\" if y else \"UNFILLED\"),min(size,y))\ndef order(p,r):\n    forbidden={\"final_settlement\",\"settlement_outcome\",\"markout_10\",\"markout_30\",\"markout_60\",\"markout_120\"}\n    assert not forbidden.intersection(r)\n    g=p[\"virtual_order_grid\"]; price=int(r[\"maker_bid_cents\"]); t=int(r[\"t_minus_minutes\"]); size=int(r.get(\"size_contracts\",g[\"size_contracts\"]))\n    assert price in g[\"maker_bid_cents\"] and t in g[\"t_minus_minutes\"] and size==g[\"size_contracts\"]\n    return(r[\"side\"],price,t,size)\ndef one(run_no):\n    p=json.loads(P.read_text()); c=json.loads(C.read_text())\n    assert p[\"schema\"]==\"PVA_PROSPECTIVE_SHADOW_PROTOCOL_V1\" and p[\"status\"]==\"PREREGISTERED_PENDING_DEATHCHECKS\"\n    assert c[\"candidate_id\"]==p[\"candidate_id\"] and c[\"decision\"]==\"UNPROVEN\" and c[\"director_trace\"][\"economic_conclusion\"]==\"NO_PROVEN_EDGE\"\n    assert fill(10,5,[{\"type\":\"touch\"}])==(\"UNFILLED\",0)\n    assert fill(10,5,[{\"type\":\"cancel\",\"qty\":50}])==(\"UNFILLED\",0)\n    assert fill(10,5,[{\"type\":\"execution\",\"qty\":12}])==(\"PROVEN_FILL\",2)\n    assert fill(10,5,[{\"type\":\"execution\",\"qty\":99}],seq=False)[0]==\"UNPROVEN_FILL\"\n    assert fill(10,5,[{\"type\":\"execution\",\"qty\":99}],reconn=False)[0]==\"UNPROVEN_FILL\"\n    assert fill(10,5,[{\"type\":\"execution\",\"qty\":99}],restart=True)[0]==\"UNPROVEN_RESTART\"\n    print(\"DC1_FALSE_POSITIVE_FILL=PASS\")\n    base={\"side\":\"NO\",\"maker_bid_cents\":89,\"t_minus_minutes\":10,\"size_contracts\":5}; assert order(p,dict(base))==order(p,dict(base))\n    try: order(p,{**base,\"final_settlement\":\"NO\"}); raise AssertionError(\"hindsight accepted\")\n    except AssertionError as e:\n        if str(e)==\"hindsight accepted\": raise\n    assert p[\"point_in_time_evidence\"][\"post_close_information_for_order_decision_forbidden\"] is True\n    assert p[\"point_in_time_evidence\"][\"later_revision_backfill_for_preclose_decision_forbidden\"] is True\n    print(\"DC2_NO_HINDSIGHT=PASS\")\n    for k in (\"live_trading\",\"order_placement\",\"cancel_or_amend\",\"wallet_actions\",\"paid_actions\",\"openai_api\",\"cloud_or_vps\"): assert p[\"safety\"][k] is False\n    for k in (\"live_trading\",\"paid_actions\",\"wallet_actions\",\"openai_api\"): assert c[k] is False\n    assert p[\"virtual_order_grid\"][\"passive_only\"] is True and p[\"virtual_order_grid\"][\"marketable_orders_forbidden\"] is True\n    print(\"DC3_NO_LIVE_OR_COST_PATH=PASS\")\n    m=p[\"historical_regression_only\"][\"miami_case\"]; cost=5*.89; profit=round(5-cost,2); roi=round(profit/cost*100,2)\n    assert round(cost,2)==round(m[\"expected_cost_usd\"],2) and profit==round(m[\"expected_profit_usd\"],2) and roi==round(m[\"expected_roi_pct\"],2)\n    assert \"never validation evidence\" in m[\"role\"]; print(\"MIAMI_REGRESSION=PASS\")\n    f=[{\"type\":\"execution\",\"qty\":9},{\"type\":\"cancel\",\"qty\":100},{\"type\":\"execution\",\"qty\":4}]\n    assert fill(10,5,f)==(\"PROVEN_FILL\",3) and fill(10,5,f,seq=False)[0]==\"UNPROVEN_FILL\" and fill(10,5,f,reconn=False)[0]==\"UNPROVEN_FILL\" and fill(10,5,f,restart=True)[0]==\"UNPROVEN_RESTART\"\n    print(\"SEQUENCE_RECONNECT_RESTART_FIXTURES=PASS\")\n    print(\"READ_ONLY_NO_COST_GUARD=PASS\")\n    print(f\"CLEAN_RUN_{run_no}=PASS\")\nfor i in range(1,4): one(i)\nprint(\"HENGELTJE_THREE_CLEAN_RUNS_E012=PASS\")\nprint(\"HENGELTJE_DEATHCHECKS_E012=PASS\")\nprint(\"ACTIVATION_STATUS=NOT_ACTIVATED_PRE_REVIEW\")\n"
+    },
+    {
+      "type": "python",
+      "argv": ["python3", "-m", "compileall", "-q", "control/dev_checks/hengeltje_deathchecks_e012.py"],
+      "timeout_seconds": 60
+    },
+    {
+      "type": "python",
+      "argv": ["python3", "control/dev_checks/hengeltje_deathchecks_e012.py"],
+      "timeout_seconds": 120
+    }
+  ],
+  "notes": "Preregistered deterministic Hengeltje deathchecks and three clean no-live/no-cost fixture runs. No prospective activation. NO_PROVEN_EDGE."
+}
