@@ -1,0 +1,40 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-RESULT-DRIVE-PREFLIGHT-20261001-E014",
+  "build_id": "RESULT-DRIVE-PREFLIGHT-20261001",
+  "source_commit": "a7a96c6ca5ec8e033f2a868f4e03f348b980e190",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 300,
+  "notes": "Read-only preflight for a Tampermonkey-free result return path using an existing Google Drive Desktop sync folder. No external writes, no credentials, no network, no paid actions, no trading.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/drive_result_preflight_e014.py",
+      "content": "from __future__ import annotations\n\nimport json\nimport os\nfrom pathlib import Path\n\nUSER = 'leonh'\nchecks = [\n    Path('/mnt/g/My Drive'),\n    Path('/mnt/g/Shared drives'),\n    Path(f'/mnt/c/Users/{USER}/My Drive'),\n    Path(f'/mnt/c/Users/{USER}/Google Drive'),\n    Path(f'/mnt/c/Users/{USER}/Google Drive/My Drive'),\n]\ninstall_checks = [\n    Path('/mnt/c/Program Files/Google/Drive File Stream'),\n    Path('/mnt/c/Program Files/Google/Drive'),\n    Path(f'/mnt/c/Users/{USER}/AppData/Local/Google/DriveFS'),\n]\nmounts = []\nroot = Path('/mnt')\nif root.exists():\n    for p in sorted(root.iterdir()):\n        if p.is_dir() and len(p.name) == 1 and p.name.isalpha():\n            mounts.append(str(p))\nrows = []\nfor p in checks:\n    rows.append({\n        'path': str(p),\n        'exists': p.exists(),\n        'is_dir': p.is_dir(),\n        'writable_by_current_user': bool(p.exists() and os.access(p, os.W_OK)),\n    })\ninstalled = [str(p) for p in install_checks if p.exists()]\nready = [r for r in rows if r['is_dir'] and r['writable_by_current_user']]\nresult = {\n    'schema': 'PREDICTION_DRIVE_RESULT_PREFLIGHT_V1',\n    'mounted_windows_drives': mounts,\n    'google_drive_desktop_install_evidence': installed,\n    'candidate_sync_paths': rows,\n    'ready_paths': ready,\n    'ready_for_export': bool(ready),\n    'credentials_read': False,\n    'external_write_attempted': False,\n}\nprint(json.dumps(result, sort_keys=True))\nprint('DRIVE_RESULT_PREFLIGHT_E014=PASS')\nprint('READY_FOR_EXPORT=' + ('TRUE' if ready else 'FALSE'))\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/drive_result_preflight_e014.py"
+      ]
+    }
+  ]
+}
