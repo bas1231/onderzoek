@@ -1,0 +1,14 @@
+[Unit]
+Description=Prediction result exporter to Google Drive
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/python3 /home/leonh/.local/share/prediction-result-exporter/result_exporter.py --scan
+NoNewPrivileges=yes
+PrivateTmp=yes
+ProtectSystem=strict
+ProtectHome=read-only
+RestrictAddressFamilies=AF_UNIX
+ReadOnlyPaths=/home/leonh/.local/share/prediction-chat-bridge/dev-task-receipts
+ReadWritePaths=/mnt/c/Users/leonh/Prediction-Results
+UMask=0077
