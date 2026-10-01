@@ -1,0 +1,76 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-HENGELTJE-DIAG-20261001-E002",
+  "build_id": "HENGELTJE-E001-DIAG-20261001",
+  "source_commit": "5d34bcc556852ec9a3826b9926a97006a6232cc6",
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_runtime",
+    "user_service_manage",
+    "read_logs"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 900,
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/hengeltje_e001_diagnose_e002.py",
+      "content": "from pathlib import Path\nimport json\n\nTARGET = 'DEV-PRED-HENGELTJE-AUTOBUILD-20260930-E001'\nHOME = Path.home()\nROOTS = {\n    'command_bus_state': HOME / '.local/state/prediction-command-bus',\n    'project_executor_state': HOME / '.local/state/prediction-project-executor',\n    'project_executor_worktrees': HOME / '.local/share/prediction-project-executor/worktrees',\n}\n\ndef safe_text(p: Path) -> str:\n    try:\n        if p.stat().st_size > 2_000_000:\n            return ''\n        return p.read_text(encoding='utf-8', errors='replace')\n    except Exception:\n        return ''\n\ndef summarize_json(text: str):\n    try:\n        obj = json.loads(text)\n    except Exception:\n        return None\n    if not isinstance(obj, dict):\n        return None\n    keep = {}\n    for k in ('task_id','status','state','result','exit_code','error','error_class','detail','created_at','started_at','finished_at','remote_commit','source_commit','worktree','branch'):\n        if k in obj:\n            v = obj[k]\n            if isinstance(v, (dict,list)):\n                v = str(v)[:1200]\n            keep[k] = v\n    return keep\n\nprint('HENGELTJE_E001_DIAG_BEGIN')\nfound_any = False\nfor label, root in ROOTS.items():\n    print(f'ROOT {label} exists={root.exists()} path={root}')\n    if not root.exists():\n        continue\n    matches = []\n    try:\n        paths = list(root.rglob('*'))\n    except Exception as exc:\n        print(f'ROOT_SCAN_ERROR {label} {type(exc).__name__}')\n        continue\n    for p in paths:\n        try:\n            if not p.is_file():\n                continue\n        except Exception:\n            continue\n        name_hit = TARGET in p.name\n        text = safe_text(p)\n        body_hit = TARGET in text\n        if name_hit or body_hit:\n            found_any = True\n            rel = str(p)\n            summary = summarize_json(text)\n            matches.append((rel, summary, text[-1500:] if summary is None else ''))\n    print(f'MATCH_COUNT {label} {len(matches)}')\n    for rel, summary, tail in matches[:20]:\n        print('MATCH_FILE', rel)\n        if summary is not None:\n            print('MATCH_JSON', json.dumps(summary, ensure_ascii=False, sort_keys=True))\n        elif tail:\n            compact = ' '.join(tail.split())\n            print('MATCH_TAIL', compact[:1500])\n\nwt = ROOTS['project_executor_worktrees'] / TARGET\nprint('TARGET_WORKTREE_EXISTS=' + ('YES' if wt.exists() else 'NO'))\nif wt.exists():\n    gitfile = wt / '.git'\n    print('TARGET_WORKTREE_GIT_POINTER=' + safe_text(gitfile).strip()[:500])\n\ncb_tasks = ROOTS['command_bus_state'] / 'tasks'\nif cb_tasks.exists():\n    direct = list(cb_tasks.glob('*' + TARGET + '*'))\n    print('DIRECT_COMMAND_BUS_TASK_FILES=' + str(len(direct)))\n    for p in direct[:20]:\n        print('DIRECT_CB_FILE', p)\n        txt = safe_text(p)\n        summary = summarize_json(txt)\n        if summary is not None:\n            print('DIRECT_CB_JSON', json.dumps(summary, ensure_ascii=False, sort_keys=True))\n\nprint('TARGET_FOUND_ANYWHERE=' + ('YES' if found_any else 'NO'))\nprint('NO_LIVE_TRADING=YES')\nprint('NO_PAID_ACTIONS=YES')\nprint('NO_WALLET_ACTIONS=YES')\nprint('NO_REMOTE_PUSH=YES')\nprint('HENGELTJE_E001_DIAG_END')\n"
+    },
+    {
+      "type": "python",
+      "argv": ["python3", "control/dev_checks/hengeltje_e001_diagnose_e002.py"],
+      "timeout_seconds": 120
+    },
+    {
+      "type": "service",
+      "verb": "show",
+      "unit": "prediction-command-bus.timer"
+    },
+    {
+      "type": "service",
+      "verb": "show",
+      "unit": "prediction-command-bus.service"
+    },
+    {
+      "type": "journal",
+      "unit": "prediction-command-bus.service",
+      "lines": 240
+    },
+    {
+      "type": "service",
+      "verb": "show",
+      "unit": "prediction-codex-supervisor.service"
+    },
+    {
+      "type": "journal",
+      "unit": "prediction-codex-supervisor.service",
+      "lines": 240
+    },
+    {
+      "type": "service",
+      "verb": "show",
+      "unit": "prediction-research-hourly-director.service"
+    },
+    {
+      "type": "journal",
+      "unit": "prediction-research-hourly-director.service",
+      "lines": 160
+    }
+  ],
+  "notes": "Read-only diagnosis of why DEV-PRED-HENGELTJE-AUTOBUILD-20260930-E001 did not produce a confirmed build/runtime result. Determine first incomplete layer: command-bus claim/dispatch, project-executor claim/receipt/worktree, supervisor execution, or hourly reporting. No repair in this task. No trading, paid, wallet, credential or remote-push action."
+}
