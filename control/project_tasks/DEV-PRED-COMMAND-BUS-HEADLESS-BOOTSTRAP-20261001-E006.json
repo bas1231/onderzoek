@@ -1,0 +1,72 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-COMMAND-BUS-HEADLESS-BOOTSTRAP-20261001-E006",
+  "build_id": "COMMAND-BUS-HEADLESS-BOOTSTRAP-PINNED-20261001",
+  "source_commit": "2912b6db8b0c2849be51b4416350f887e60c6388",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "write_runtime",
+    "user_service_manage",
+    "read_logs"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 1200,
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/headless_bootstrap_e006.py",
+      "content": "from pathlib import Path\nimport importlib.util, py_compile\nROOT=Path.cwd(); P=ROOT/'control/bridge_commands/command_bus_poller.py'\npy_compile.compile(str(P), doraise=True)\nspec=importlib.util.spec_from_file_location('bus_e006',P); mod=importlib.util.module_from_spec(spec); assert spec.loader is not None; spec.loader.exec_module(mod)\ncmd={'schema':'PREDICTION_BRIDGE_COMMAND_V1','task_id':'HEADLESS-E006-TEST','action':'BRIDGE_PING','created_at_utc':'2026-10-01T06:30:00Z','delivery_mode':'headless','live_trading':False,'paid_actions':False,'wallet_actions':False,'intelligence_tier':'C','issuer':{'model':'GPT-5.6 Sol','reasoning_level':'UNAVAILABLE_TO_RUNTIME'}}\nok,reason=mod.validate_command(cmd); assert ok and reason=='OK'\nroute,source=mod.resolve_route(cmd); assert source=='headless' and route=={'chat_id':'HEADLESS_CONTROL','consumer_id':None}\nprint('HEADLESS_SOURCE_CANARY_E006=PASS')\n"
+    },
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/headless_installed_e006.py",
+      "content": "from pathlib import Path\nimport importlib.util, py_compile\nP=Path.home()/'.local/share/prediction-command-bus/command_bus_poller.py'; py_compile.compile(str(P), doraise=True)\nspec=importlib.util.spec_from_file_location('installed_bus_e006',P); mod=importlib.util.module_from_spec(spec); assert spec.loader is not None; spec.loader.exec_module(mod)\ncmd={'schema':'PREDICTION_BRIDGE_COMMAND_V1','task_id':'HEADLESS-E006-INSTALLED','action':'BRIDGE_PING','created_at_utc':'2026-10-01T06:30:00Z','delivery_mode':'headless','live_trading':False,'paid_actions':False,'wallet_actions':False,'intelligence_tier':'C','issuer':{'model':'GPT-5.6 Sol','reasoning_level':'UNAVAILABLE_TO_RUNTIME'}}\nok,reason=mod.validate_command(cmd); assert ok and reason=='OK'; route,source=mod.resolve_route(cmd); assert source=='headless'\nprint('HEADLESS_INSTALLED_CANARY_E006=PASS')\n"
+    },
+    {
+      "type": "python",
+      "argv": ["python3", "control/dev_checks/headless_bootstrap_e006.py"],
+      "timeout_seconds": 90
+    },
+    {
+      "type": "install_runtime",
+      "source": "control/bridge_commands/command_bus_poller.py",
+      "destination": "/home/leonh/.local/share/prediction-command-bus/command_bus_poller.py",
+      "mode": 493
+    },
+    {
+      "type": "service",
+      "verb": "restart",
+      "unit": "prediction-command-bus.timer"
+    },
+    {
+      "type": "service",
+      "verb": "start",
+      "unit": "prediction-command-bus.service"
+    },
+    {
+      "type": "python",
+      "argv": ["python3", "control/dev_checks/headless_installed_e006.py"],
+      "timeout_seconds": 90
+    },
+    {
+      "type": "journal",
+      "unit": "prediction-command-bus.service",
+      "lines": 160
+    }
+  ],
+  "notes": "Pinned-route fallback bootstrap for the same browser-independent command-bus runtime. Safe/idempotent runtime copy and service restart only. No trading, paid actions, wallet/funds, credentials, remote Git write or Astra."
+}
