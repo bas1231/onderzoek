@@ -1,0 +1,41 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-COMMAND-BUS-HEADLESS-CANARY-20261001-E009",
+  "build_id": "COMMAND-BUS-HEADLESS-E2E-RECOVERY-20261001",
+  "source_commit": "64159adb585bffa7baa60bc770bfbf1dda0d9329",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 300,
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/headless_command_bus_e009.py",
+      "content": "from hashlib import sha256\nTOKEN='PREDICTION_HEADLESS_E2E_E009_AFTER_BOOTSTRAP'\ndigest=sha256(TOKEN.encode()).hexdigest()\nassert len(digest)==64\nprint('HEADLESS_E2E_E009=PASS')\nprint('HEADLESS_E2E_E009_SHA256='+digest)\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/headless_command_bus_e009.py"
+      ],
+      "timeout_seconds": 60
+    }
+  ],
+  "notes": "Fresh post-bootstrap browser-independent E2E canary. Success requires GitHub command-bus pickup, localhost dispatch, DEV adapter, capability-scoped projectexecutor and deterministic repository-owned Python execution. No trading, paid actions, wallet/funds, credentials, remote Git writes or unrestricted networking."
+}
