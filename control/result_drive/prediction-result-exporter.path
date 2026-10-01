@@ -1,0 +1,9 @@
+[Unit]
+Description=Watch Prediction DEV receipts for Drive export
+
+[Path]
+PathChanged=/home/leonh/.local/share/prediction-chat-bridge/dev-task-receipts
+Unit=prediction-result-exporter.service
+
+[Install]
+WantedBy=default.target
