@@ -37,6 +37,7 @@
   let sendingResult = false;
   let sendingAiWork = false;
   let wakePolling = false;
+  let wakeTransportDetected = false;
   let scanning = false;
   let scanStartedAt = 0;
 
@@ -600,6 +601,16 @@
           undefined,
           26000
         );
+
+      if (
+        response &&
+        (
+          response.status === 204 ||
+          response.status === 200
+        )
+      ) {
+        wakeTransportDetected = true;
+      }
 
       if (
         response &&
@@ -1674,6 +1685,7 @@
 
   async function pollAiOutbox() {
     if (
+      wakeTransportDetected ||
       polling ||
       sendingResult ||
       sendingAiWork
@@ -1777,7 +1789,11 @@
   }
 
   async function pollOutbox() {
-    if (polling || sendingResult) {
+    if (
+      wakeTransportDetected ||
+      polling ||
+      sendingResult
+    ) {
       return;
     }
 
