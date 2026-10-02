@@ -1,0 +1,17 @@
+{
+  "schema": "PREDICTION_BRIDGE_COMMAND_V1",
+  "task_id": "DEV-PRED-CONT-INFLIGHT-RECOVERY-INSTALL-20261002-E004",
+  "action": "SIX_AI_HEALTH",
+  "created_at_utc": "2026-10-02T19:05:00Z",
+  "delivery_mode": "headless",
+  "live_trading": false,
+  "paid_actions": false,
+  "wallet_actions": false,
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "auto_continue": false,
+  "notes": "Headless local verification/install for stale continuation INFLIGHT recovery. No Tampermonkey changes. Preserve generic fail-closed result semantics."
+}
