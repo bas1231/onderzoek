@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """Transactional control-continuation overlay for the canonical wake bridge.
 
-This layer does not change browser/Tampermonkey code. It reuses the existing
-/next + /ack transport and treats browser ACK only as delivery evidence.
-Durable success is derived from the existing command-bus task state.
+This layer does not depend on Tampermonkey. It reuses the canonical /next +
+/ack wake transport. Browser ACK is delivery evidence only; durable success is
+derived from deterministic command-bus outcome task state.
 """
 from __future__ import annotations
 
@@ -15,83 +15,90 @@ import bridge_server_status_compaction as current
 import continuation_manager as continuation
 
 base = current.base
-TASK_STATE_DIR = Path.home() / ".local" / "state" / "prediction-command-bus" / "tasks"
-
+TASK_STATE_DIR = (
+    Path.home()
+    / ".local"
+    / "state"
+    / "prediction-command-bus"
+    / "tasks"
+)
 _CURRENT_OLDEST_EVENT = base.oldest_event
-_ORIGINAL_RELEASE_LEASE = base.release_lease
 
 
-def _start_continuation_for_sent_event(event_id: str) -> None:
-    sent = base.SENT / f"{event_id}.json"
-    obj = base.load_event(sent)
-    if not obj:
+def continuation_ack_hook(
+    event: dict,
+    *,
+    chat_id: str | None,
+    consumer_id: str | None,
+    already_acked: bool,
+) -> None:
+    del consumer_id, already_acked
+
+    # ACK of a continuation wake proves only delivery as a real browser user
+    # turn. It must never consume the logical continuation.
+    if continuation.mark_delivery_acked(
+        data_dir=base.DATA_DIR,
+        event=event,
+    ):
         return
 
-    source_task_id = str(obj.get("task_id") or "").strip()
-    if not source_task_id:
-        return
-
-    binding = base.route_binding_for_task(source_task_id)
-    if not binding:
-        return
-
-    chat_id = str(binding.get("chat_id") or "").strip()
-    if not chat_id:
+    source_task_id = str(event.get("task_id") or "").strip()
+    if not source_task_id or not chat_id:
         return
 
     continuation.start_for_result_ack(
         data_dir=base.DATA_DIR,
         task_state_dir=TASK_STATE_DIR,
         source_task_id=source_task_id,
-        chat_id=chat_id,
+        chat_id=str(chat_id),
     )
 
 
-def continuation_release_lease(event_id: str) -> None:
-    """Observe durable SENT after the existing ACK path releases its lease."""
-    _ORIGINAL_RELEASE_LEASE(event_id)
-    try:
-        _start_continuation_for_sent_event(event_id)
-    except Exception as exc:
-        # Result ACK must remain authoritative even if continuation bookkeeping
-        # fails. Fail closed by leaving no continuation rather than corrupting
-        # the already-proven result delivery.
-        print(
-            f"continuation ack hook failed event={event_id} "
-            f"error={type(exc).__name__}:{exc}",
-            flush=True,
-        )
-
-
 def continuation_oldest_event(chat_id=None, consumer_id=None):
-    """Reconcile/reoffer only unresolved continuations for this chat."""
+    """Reconcile/reoffer unresolved continuations before serving /next."""
     if chat_id:
-        try:
-            continuation.maintain_for_chat(
-                data_dir=base.DATA_DIR,
-                task_state_dir=TASK_STATE_DIR,
-                routes_dir=base.ROUTES,
-                outbox_dir=base.OUTBOX,
-                chat_id=str(chat_id),
-            )
-        except Exception as exc:
-            print(
-                f"continuation maintenance failed chat={chat_id} "
-                f"error={type(exc).__name__}:{exc}",
-                flush=True,
-            )
+        continuation.maintain_for_chat(
+            data_dir=base.DATA_DIR,
+            task_state_dir=TASK_STATE_DIR,
+            routes_dir=base.ROUTES,
+            outbox_dir=base.OUTBOX,
+            chat_id=str(chat_id),
+        )
     return _CURRENT_OLDEST_EVENT(chat_id, consumer_id)
 
 
-# bridge_server_v2.Handler resolves these module globals at request time.
-# Replacing them composes with the existing inflight/session/bootstrap/status
-# layers without duplicating their routing or ACK implementations.
-base.release_lease = continuation_release_lease
+# bridge_server_v2 resolves these globals at request time. This composes with
+# the existing inflight/session/bootstrap/status layers without duplicating
+# their routing or ACK implementation.
+base.ACK_HOOK = continuation_ack_hook
 base.oldest_event = continuation_oldest_event
 
 
 class Handler(current.Handler):
     server_version = "PredictionChatWake/1.2-continuation-v2"
+
+    def do_GET(self):
+        from urllib.parse import urlparse
+
+        parsed = urlparse(self.path)
+        if parsed.path == "/health":
+            if not self.authorized():
+                self.reply_json(401, {"ok": False, "error": "unauthorized"})
+                return
+            self.reply_json(200, {
+                "ok": True,
+                "service": "prediction-chat-wake",
+                "version": 12,
+                "server_compaction": True,
+                "task_dedupe": True,
+                "auto_session_bootstrap": True,
+                "transactional_continuation": True,
+                "continuation_browser_ack_terminal": False,
+                "continuation_max_attempts": continuation.MAX_ATTEMPTS,
+                "continuation_retry_after_seconds": continuation.RETRY_AFTER_SECONDS,
+            })
+            return
+        super().do_GET()
 
 
 def main() -> int:
@@ -100,12 +107,13 @@ def main() -> int:
     parser.add_argument("--port", type=int, default=8765)
     args = parser.parse_args()
     base.ensure_dirs()
+    continuation.continuation_dir(base.DATA_DIR).mkdir(parents=True, exist_ok=True)
     token = base.load_token()
     httpd = ThreadingHTTPServer((args.host, args.port), Handler)
     httpd.daemon_threads = True
     httpd.bridge_token = token
     print(
-        f"prediction-chat-wake continuation-v2 listening "
+        "prediction-chat-wake continuation-v2 listening "
         f"on http://{args.host}:{args.port}",
         flush=True,
     )
