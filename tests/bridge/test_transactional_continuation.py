@@ -287,3 +287,131 @@ def test_stale_claim_fails_closed_instead_of_stalling(tmp_path):
     assert cm.reconcile(record, states, now=1790935801.0) is True
     assert record["state"] == "BLOCKED"
     assert "CLAIMED" in record["history"][-1]["detail"]
+
+def test_stale_continuation_inflight_is_archived_and_retried(tmp_path):
+    data = tmp_path / "bridge"
+    routes = data / "routes"
+    outbox = data / "outbox"
+    inflight = data / "inflight"
+    states = tmp_path / "task-state"
+    source = "AUTO-CONTINUE-SOURCE-INFLIGHT-STALE"
+
+    write_state(states, source, "DISPATCHED", auto_continue=True)
+    record = cm.start_for_result_ack(
+        data_dir=data,
+        task_state_dir=states,
+        source_task_id=source,
+        chat_id="chat-continuation-inflight-stale",
+    )
+    assert record is not None
+
+    cm.maintain_for_chat(
+        data_dir=data,
+        task_state_dir=states,
+        routes_dir=routes,
+        outbox_dir=outbox,
+        chat_id="chat-continuation-inflight-stale",
+        now=1000.0,
+    )
+    record = load_record(data, record["continuation_id"])
+    first_event_id = record["last_event_id"]
+    first_event = outbox / f"{first_event_id}.json"
+    inflight.mkdir(parents=True, exist_ok=True)
+    first_event.rename(inflight / first_event.name)
+
+    # Generic result delivery remains fail-closed, but a continuation is
+    # logically idempotent and must get a fresh delivery ID after ambiguity.
+    cm.maintain_for_chat(
+        data_dir=data,
+        task_state_dir=states,
+        routes_dir=routes,
+        outbox_dir=outbox,
+        chat_id="chat-continuation-inflight-stale",
+        now=1000.0 + cm.RETRY_AFTER_SECONDS + 1,
+    )
+
+    record = load_record(data, record["continuation_id"])
+    assert record["attempts"] == 2
+    assert record["state"] == "CONTINUE_QUEUED"
+    assert record["last_event_id"] != first_event_id
+    assert record["last_attempt_task_id"].endswith("-A02")
+    assert not (inflight / f"{first_event_id}.json").exists()
+    archived = data / "continuation_abandoned" / f"{first_event_id}.json"
+    assert archived.is_file()
+    assert record["last_abandoned_event_id"] == first_event_id
+    assert any(
+        item["state"] == "DELIVERY_AMBIGUOUS"
+        for item in record["history"]
+    )
+
+
+def test_recent_continuation_inflight_is_not_retried(tmp_path):
+    data = tmp_path / "bridge"
+    routes = data / "routes"
+    outbox = data / "outbox"
+    inflight = data / "inflight"
+    states = tmp_path / "task-state"
+    source = "AUTO-CONTINUE-SOURCE-INFLIGHT-RECENT"
+
+    write_state(states, source, "DISPATCHED", auto_continue=True)
+    record = cm.start_for_result_ack(
+        data_dir=data,
+        task_state_dir=states,
+        source_task_id=source,
+        chat_id="chat-continuation-inflight-recent",
+    )
+    assert record is not None
+
+    cm.maintain_for_chat(
+        data_dir=data,
+        task_state_dir=states,
+        routes_dir=routes,
+        outbox_dir=outbox,
+        chat_id="chat-continuation-inflight-recent",
+        now=2000.0,
+    )
+    record = load_record(data, record["continuation_id"])
+    event_id = record["last_event_id"]
+    event_path = outbox / f"{event_id}.json"
+    inflight.mkdir(parents=True, exist_ok=True)
+    event_path.rename(inflight / event_path.name)
+
+    cm.maintain_for_chat(
+        data_dir=data,
+        task_state_dir=states,
+        routes_dir=routes,
+        outbox_dir=outbox,
+        chat_id="chat-continuation-inflight-recent",
+        now=2000.0 + cm.RETRY_AFTER_SECONDS - 1,
+    )
+
+    after = load_record(data, record["continuation_id"])
+    assert after["attempts"] == 1
+    assert after["last_event_id"] == event_id
+    assert (inflight / f"{event_id}.json").is_file()
+    assert not (data / "continuation_abandoned").exists()
+
+
+def test_noncontinuation_inflight_is_never_rewritten_by_continuation_recovery(tmp_path):
+    data = tmp_path / "bridge"
+    inflight = data / "inflight"
+    inflight.mkdir(parents=True, exist_ok=True)
+    record = {
+        "continuation_id": "CONT-" + ("a" * 24),
+        "last_event_id": "foreign-event",
+    }
+    foreign = inflight / "foreign-event.json"
+    foreign.write_text(json.dumps({
+        "event_id": "foreign-event",
+        "source": "ordinary_result",
+        "created_at": 1.0,
+    }), encoding="utf-8")
+
+    assert cm._delivery_still_pending(
+        record,
+        data,
+        now=9999999999.0,
+    ) is True
+    assert foreign.is_file()
+    assert not (data / "continuation_abandoned").exists()
+

@@ -241,14 +241,79 @@ def mark_delivery_acked(*, data_dir: Path, event: dict) -> bool:
     return True
 
 
-def _delivery_still_pending(record: dict, data_dir: Path) -> bool:
+def _delivery_still_pending(
+    record: dict,
+    data_dir: Path,
+    *,
+    now: float | None = None,
+) -> bool:
+    """Return whether the latest delivery attempt still owns the transport slot.
+
+    OUTBOX is always left alone: if no browser has leased the event, creating
+    more copies cannot improve delivery.
+
+    INFLIGHT is different for continuation events. The generic wake queue is
+    deliberately at-most-once and never requeues ambiguous inflight results.
+    A continuation prompt is safe to retry because all downstream outcomes use
+    deterministic task IDs. Therefore only a stale, identity-matching
+    continuation inflight event may be retired to an evidence-preserving
+    abandoned directory so a fresh delivery ID can be created.
+    """
     event_id = str(record.get("last_event_id") or "")
     if not event_id:
         return False
-    return any(
-        (data_dir / name / f"{event_id}.json").exists()
-        for name in ("outbox", "inflight")
+
+    outbox = data_dir / "outbox" / f"{event_id}.json"
+    if outbox.exists():
+        return True
+
+    inflight = data_dir / "inflight" / f"{event_id}.json"
+    if not inflight.exists():
+        return False
+
+    event = _load_json(inflight)
+    if not event:
+        return True
+
+    if (
+        str(event.get("source") or "") != "control_continuation_v2"
+        or str(event.get("continuation_id") or "") != str(record.get("continuation_id") or "")
+        or str(event.get("event_id") or "") != event_id
+    ):
+        return True
+
+    current = time.time() if now is None else float(now)
+    try:
+        created_at = float(event.get("created_at"))
+    except (TypeError, ValueError):
+        try:
+            created_at = inflight.stat().st_mtime
+        except OSError:
+            return False
+
+    if current - created_at < RETRY_AFTER_SECONDS:
+        return True
+
+    abandoned = data_dir / "continuation_abandoned"
+    abandoned.mkdir(parents=True, exist_ok=True)
+    destination = abandoned / inflight.name
+
+    try:
+        os.replace(inflight, destination)
+    except FileNotFoundError:
+        return False
+
+    record["last_abandoned_event_id"] = event_id
+    _append_history(
+        record,
+        "DELIVERY_AMBIGUOUS",
+        f"stale continuation inflight {event_id} retired before retry",
     )
+    _atomic_json(
+        continuation_path(data_dir, str(record["continuation_id"])),
+        record,
+    )
+    return False
 
 
 def _attempt_message(record: dict, attempt: int) -> str:
@@ -285,7 +350,7 @@ def enqueue_attempt(
     attempts = int(record.get("attempts") or 0)
     last = record.get("last_delivery_acked_at") or record.get("last_attempt_at")
 
-    if _delivery_still_pending(record, data_dir):
+    if _delivery_still_pending(record, data_dir, now=now):
         return False
 
     if attempts >= MAX_ATTEMPTS:
