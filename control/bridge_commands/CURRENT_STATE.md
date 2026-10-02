@@ -44,6 +44,36 @@ A temporary focused-page/active-tab routing experiment was tested on 2026-09-29.
 
 `DEV-PRED-ROUTING-STABILIZE-20260929-E005` returned FAIL after its restoration attempt, but later evidence showed the desired canonical runtime was already installed. E008 classified the runtime as canonical, and the independent E006 bridge ping returned PASS through the current session route. Treat E005 as a failed maintenance/verification task, not evidence that the canonical bridge path is broken.
 
+## Transactional auto-continuation status — 2026-10-02
+
+The remaining automatic next-turn problem has been narrowed and implemented repo-side without repairing or depending on Tampermonkey.
+
+Current source on `main` includes:
+
+- deterministic continuation identity derived from the full source task ID;
+- explicit command-bus lineage fields `auto_continue` and `parent_continuation_id`;
+- durable states separating `CONTINUE_QUEUED` from browser-ACKed `CONTINUE_SENT`;
+- downstream success based only on deterministic command-bus outcomes (`NEXT`, `DONE`, `BLOCKED`), never on a send click or browser ACK;
+- bounded retry attempts with unique delivery IDs but stable logical continuation/outcome IDs;
+- explicit wake ACK hook with compatibility for the installed inflight-patched runtime;
+- Chrome extension wake consumer v1.0.0 using canonical `/next` + `/ack`, stable chat identity, and exact observed user-turn confirmation before ACK;
+- no dependency on Tampermonkey for the new wake consumer;
+- continuation-only recovery of stale ambiguous `inflight` deliveries: stale `control_continuation_v2` events with exact matching continuation identity are moved to an evidence-preserving `continuation_abandoned` directory before a fresh delivery attempt is created. Ordinary result events remain fail-closed and are never automatically replayed.
+
+Source merge for stale-inflight recovery:
+
+`59b4feb048a9b0d1a3ce419e5018b0b9287ce93c`
+
+Headless verification/install task dispatched:
+
+`DEV-PRED-CONT-INFLIGHT-RECOVERY-INSTALL-20261002-E004`
+
+E004 is designed to run continuation regressions, compile checks, install the current command-bus/wake overlay/continuation manager, stage Chrome extension v1.0.0, restart only Prediction user services, and execute an installed-runtime canary for stale-inflight recovery.
+
+**Do not claim E004 runtime success from Git history alone.** Because this chat currently has no proven browser wake route, headless dispatch does not return its local executor result here. Runtime acceptance still requires observed executor `PASS exit=0` plus the final product-level no-human-input `A -> ChatGPT turn -> B -> DONE` canary.
+
+Tampermonkey repair is explicitly out of scope for this continuation path.
+
 ## Proven command-bus baseline
 
 Successful end-to-end evidence on 2026-09-29:
