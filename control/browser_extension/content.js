@@ -1,5 +1,5 @@
 (() => {
-  const CONTENT_VERSION = "0.9.1";
+  const CONTENT_VERSION = "0.10.0";
 
   if (
     window.__PREDICTION_RESEARCH_BRIDGE_LOADED__ ===
@@ -36,8 +36,14 @@
   let polling = false;
   let sendingResult = false;
   let sendingAiWork = false;
+  let wakePolling = false;
   let scanning = false;
   let scanStartedAt = 0;
+
+  const WAKE_SEEN_EVENTS_KEY =
+    "predictionWakeSeenEventsV1";
+  const WAKE_CONSUMER_KEY =
+    "predictionWakeConsumerIdV1";
 
   function extensionContextAlive() {
     try {
@@ -285,7 +291,8 @@
   async function bridgeFetch(
     path,
     method = "GET",
-    body = undefined
+    body = undefined,
+    timeoutMs = 10000
   ) {
     if (!extensionContextAlive()) {
       throw new Error(
@@ -311,7 +318,7 @@
               )
             );
           },
-          10000
+          timeoutMs
         );
 
         chrome.runtime.sendMessage({
@@ -342,6 +349,350 @@
       }
     );
   }
+
+  function stableHash(text) {
+    let hash = 2166136261;
+
+    for (let i = 0; i < text.length; i += 1) {
+      hash ^= text.charCodeAt(i);
+      hash = Math.imul(hash, 16777619);
+    }
+
+    return (hash >>> 0)
+      .toString(16)
+      .padStart(8, "0");
+  }
+
+
+  function wakeConversationState() {
+    const raw = normalizedCurrentUrl();
+    const match = location.pathname.match(
+      /(?:^|\\/)c\\/([^/?#]+)/
+    );
+
+    if (!match || !match[1]) {
+      return {
+        stable: false,
+        chatId:
+          "chat-pending-" +
+          stableHash(raw) +
+          "-" +
+          raw.length.toString(36)
+      };
+    }
+
+    const conversationId = match[1];
+
+    return {
+      stable: true,
+      chatId:
+        "chat-c-" +
+        stableHash(conversationId) +
+        "-" +
+        conversationId.length.toString(36)
+    };
+  }
+
+
+  function wakeConsumerId() {
+    try {
+      const existing =
+        sessionStorage.getItem(
+          WAKE_CONSUMER_KEY
+        );
+
+      if (existing) {
+        return existing;
+      }
+
+      const created =
+        "ext-tab-" +
+        Date.now().toString(36) +
+        "-" +
+        Math.random()
+          .toString(36)
+          .slice(2, 10);
+
+      sessionStorage.setItem(
+        WAKE_CONSUMER_KEY,
+        created
+      );
+
+      return created;
+    } catch {
+      return (
+        "ext-tab-fallback-" +
+        stableHash(normalizedCurrentUrl())
+      );
+    }
+  }
+
+
+  async function wakeSeenEvents() {
+    const stored =
+      await chrome.storage.local.get([
+        WAKE_SEEN_EVENTS_KEY
+      ]);
+
+    return Array.isArray(
+      stored[WAKE_SEEN_EVENTS_KEY]
+    )
+      ? stored[WAKE_SEEN_EVENTS_KEY]
+      : [];
+  }
+
+
+  async function wakeEventSeen(eventId) {
+    const seen = await wakeSeenEvents();
+    return seen.includes(String(eventId));
+  }
+
+
+  async function markWakeEventSeen(eventId) {
+    const value = String(eventId);
+    const seen = await wakeSeenEvents();
+    const next = seen.filter(
+      item => item !== value
+    );
+
+    next.push(value);
+
+    while (next.length > 800) {
+      next.shift();
+    }
+
+    await chrome.storage.local.set({
+      [WAKE_SEEN_EVENTS_KEY]: next
+    });
+  }
+
+
+  function normalizeWakeText(value) {
+    return String(value || "")
+      .replace(/\\s+/g, " ")
+      .trim();
+  }
+
+
+  function matchingUserTurnCount(text) {
+    const wanted = normalizeWakeText(text);
+
+    return Array.from(
+      document.querySelectorAll(
+        '[data-message-author-role="user"]'
+      )
+    ).filter(
+      node =>
+        normalizeWakeText(
+          node.innerText ||
+          node.textContent ||
+          ""
+        ) === wanted
+    ).length;
+  }
+
+
+  function recentUserTurnHasWakeMessage(text) {
+    const wanted = normalizeWakeText(text);
+    const nodes = Array.from(
+      document.querySelectorAll(
+        '[data-message-author-role="user"]'
+      )
+    );
+
+    return nodes
+      .slice(-80)
+      .some(
+        node =>
+          normalizeWakeText(
+            node.innerText ||
+            node.textContent ||
+            ""
+          ) === wanted
+      );
+  }
+
+
+  async function insertAndConfirmUserTurn(text) {
+    const before =
+      matchingUserTurnCount(text);
+
+    const clicked =
+      await insertAndSend(text);
+
+    if (!clicked) {
+      return false;
+    }
+
+    for (let i = 0; i < 24; i += 1) {
+      await new Promise(
+        resolve => setTimeout(resolve, 250)
+      );
+
+      if (
+        matchingUserTurnCount(text) >
+        before
+      ) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+
+  async function ackWakeEvent(
+    eventId,
+    chatId,
+    consumerId
+  ) {
+    return await bridgeFetch(
+      "/ack",
+      "POST",
+      {
+        event_id: String(eventId),
+        chat_id: chatId,
+        consumer_id: consumerId
+      },
+      10000
+    );
+  }
+
+
+  async function pollWakeQueue() {
+    if (
+      wakePolling ||
+      polling ||
+      sendingResult ||
+      sendingAiWork
+    ) {
+      return;
+    }
+
+    if (!(await isArmed())) {
+      return;
+    }
+
+    const identity =
+      wakeConversationState();
+
+    if (!identity.stable) {
+      return;
+    }
+
+    const consumerId =
+      wakeConsumerId();
+
+    wakePolling = true;
+
+    try {
+      const response =
+        await bridgeFetch(
+          "/next?chat_id=" +
+            encodeURIComponent(
+              identity.chatId
+            ) +
+            "&consumer_id=" +
+            encodeURIComponent(
+              consumerId
+            ),
+          "GET",
+          undefined,
+          26000
+        );
+
+      if (
+        response &&
+        response.status === 204
+      ) {
+        return;
+      }
+
+      const event =
+        response &&
+        response.ok &&
+        response.data;
+
+      if (
+        !event ||
+        !event.event_id ||
+        !event.message
+      ) {
+        return;
+      }
+
+      const eventId =
+        String(event.event_id);
+
+      const message =
+        String(event.message);
+
+      const alreadyObserved =
+        await wakeEventSeen(eventId) ||
+        recentUserTurnHasWakeMessage(
+          message
+        );
+
+      if (!alreadyObserved) {
+        const sent =
+          await insertAndConfirmUserTurn(
+            message
+          );
+
+        if (
+          !sent &&
+          !recentUserTurnHasWakeMessage(
+            message
+          )
+        ) {
+          console.warn(
+            "[Prediction Bridge] wake delivery not proven; not ACKing:",
+            eventId
+          );
+          return;
+        }
+
+        await markWakeEventSeen(
+          eventId
+        );
+      }
+
+      const ack =
+        await ackWakeEvent(
+          eventId,
+          identity.chatId,
+          consumerId
+        );
+
+      if (!(ack && ack.ok)) {
+        console.warn(
+          "[Prediction Bridge] wake ACK failed:",
+          eventId,
+          ack
+        );
+        return;
+      }
+
+      await markWakeEventSeen(
+        eventId
+      );
+
+      console.log(
+        "[Prediction Bridge] wake event delivered and ACKed:",
+        eventId,
+        event.task_id || ""
+      );
+
+    } catch (error) {
+      console.warn(
+        "[Prediction Bridge] wake poll error:",
+        error
+      );
+    } finally {
+      wakePolling = false;
+    }
+  }
+
 
   function bridgeFingerprint(text) {
     let hash = 2166136261;
@@ -1528,6 +1879,7 @@
       scanForTasks();
       flushDurableQueue();
       flushPendingResultAcks();
+      pollWakeQueue();
       pollAiOutbox();
       pollOutbox();
     },
@@ -1576,6 +1928,7 @@
           try {
             await scanForTasks();
             await flushDurableQueue();
+            await pollWakeQueue();
             await pollOutbox();
 
             sendResponse({
@@ -1611,6 +1964,7 @@
       scanning = false;
       polling = false;
       sendingResult = false;
+      wakePolling = false;
       scanStartedAt = 0;
 
       if (scanTimer) {
@@ -1622,6 +1976,7 @@
         try {
           await scanForTasks();
           await flushDurableQueue();
+          await pollWakeQueue();
           await pollOutbox();
 
           sendResponse({
@@ -1651,6 +2006,7 @@
       await Promise.allSettled([
         scanForTasks(),
         flushDurableQueue(),
+        pollWakeQueue(),
         pollAiOutbox(),
         pollOutbox()
       ]);
