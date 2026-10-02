@@ -1,0 +1,142 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-CONTINUATION-V2-INSTALL-20261002-E001",
+  "build_id": "TRANSACTIONAL-CONTINUATION-V2-20261002",
+  "source_commit": "17b2e19a643a3533c5cc529dc0f2d9d9eb5d3499",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "run_tests",
+    "read_runtime",
+    "write_runtime",
+    "user_service_manage",
+    "read_logs"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 1200,
+  "notes": "Install transactional server-side continuation v2 without Tampermonkey/browser changes. Preserve the existing inflight-patched bridge_server_v2 runtime; install only wrapper modules plus active overlay and updated command-bus poller. Run deterministic source tests and installed-runtime canary before PASS.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/verify_continuation_v2_install_e001.py",
+      "content": "from pathlib import Path\nimport importlib.util\nimport json\nimport os\nimport sys\n\nhome = Path.home()\nbus_path = home / \".local/share/prediction-command-bus/command_bus_poller.py\"\nwake_dir = home / \".local/share/prediction-chat-bridge\"\n\nspec = importlib.util.spec_from_file_location(\"installed_cont_bus\", bus_path)\nbus = importlib.util.module_from_spec(spec)\nassert spec.loader is not None\nspec.loader.exec_module(bus)\n\nparent = \"CONT-\" + (\"a\" * 24)\ncmd = {\n    \"schema\": \"PREDICTION_BRIDGE_COMMAND_V1\",\n    \"task_id\": \"DEV-PRED-CONT-INSTALLED-CHECK\",\n    \"action\": \"BRIDGE_PING\",\n    \"created_at_utc\": \"2026-10-02T16:00:00Z\",\n    \"route_task_id\": \"SESSION-ROUTE-INSTALLED-CHECK\",\n    \"live_trading\": False,\n    \"paid_actions\": False,\n    \"wallet_actions\": False,\n    \"intelligence_tier\": \"C\",\n    \"issuer\": {\"model\": \"GPT-5.6 Sol\", \"reasoning_level\": \"UNAVAILABLE_TO_RUNTIME\"},\n    \"auto_continue\": True,\n    \"parent_continuation_id\": parent,\n}\nok, reason = bus.validate_command(cmd)\nassert ok and reason == \"OK\", (ok, reason)\n\nsys.path.insert(0, str(wake_dir))\nspec2 = importlib.util.spec_from_file_location(\"installed_cont_wake\", wake_dir / \"bridge_server.py\")\nwake = importlib.util.module_from_spec(spec2)\nassert spec2.loader is not None\nspec2.loader.exec_module(wake)\n\nassert getattr(wake.Handler, \"server_version\", \"\") == \"PredictionChatWake/1.2-continuation-v2\"\nassert hasattr(wake.base, \"INFLIGHT\"), \"existing fail-closed inflight patch missing\"\nassert wake.base.release_lease is wake.continuation_release_lease\nassert wake.base.oldest_event is wake.continuation_oldest_event\n\nids = wake.continuation.ids_for(\"SOURCE-\" + (\"x\" * 140) + \"-tail\")\nassert ids[\"continuation_id\"].startswith(\"CONT-\")\nassert ids[\"expected_next_task_id\"].startswith(\"DEV-PRED-CONT-NEXT-\")\n\nroot = Path(os.environ[\"PRED_PROJECT_TEMP_ROOT\"]) / \"continuation-v2-installed\"\ndata = root / \"bridge\"\nsent = data / \"sent\"\nroutes = data / \"routes\"\noutbox = data / \"outbox\"\nstates = root / \"task-state\"\nfor p in (sent, routes, outbox, states):\n    p.mkdir(parents=True, exist_ok=True)\n\nwake.base.DATA_DIR = data\nwake.base.SENT = sent\nwake.base.ROUTES = routes\nwake.base.OUTBOX = outbox\nwake.TASK_STATE_DIR = states\n\nsource = \"DEV-PRED-CONT-INSTALLED-SOURCE\"\nevent_id = \"installed-cont-event-001\"\n(states / f\"{source}.json\").write_text(json.dumps({\n    \"schema\": \"PREDICTION_COMMAND_BUS_TASK_STATE_V1\",\n    \"task_id\": source,\n    \"status\": \"DISPATCHED\",\n    \"auto_continue\": True,\n}), encoding=\"utf-8\")\n(routes / f\"{source}.json\").write_text(json.dumps({\n    \"version\": 2,\n    \"task_id\": source,\n    \"chat_id\": \"chat-installed-cont-001\",\n    \"consumer_id\": None,\n}), encoding=\"utf-8\")\n(sent / f\"{event_id}.json\").write_text(json.dumps({\n    \"event_id\": event_id,\n    \"task_id\": source,\n    \"message\": \"NIGHTSHIFT_WSL_RESULT_V1 task=DEV-PRED-CONT-INSTALLED-SOURCE status=PASS exit=0\",\n}), encoding=\"utf-8\")\n\nwake.continuation_release_lease(event_id)\nrecords = list((data / \"continuations\").glob(\"CONT-*.json\"))\nassert len(records) == 1\nrecord = json.loads(records[0].read_text(encoding=\"utf-8\"))\nassert record[\"state\"] == \"CONTINUE_REQUESTED\"\nassert record[\"expected_next_task_id\"].startswith(\"DEV-PRED-CONT-NEXT-\")\nassert record[\"expected_route_task_id\"] == source\n\nwake.continuation.maintain_for_chat(\n    data_dir=data,\n    task_state_dir=states,\n    routes_dir=routes,\n    outbox_dir=outbox,\n    chat_id=\"chat-installed-cont-001\",\n    now=1000.0,\n)\nrecord = json.loads(records[0].read_text(encoding=\"utf-8\"))\nassert record[\"state\"] == \"CONTINUE_SENT\"\nevents = list(outbox.glob(\"*.json\"))\nassert len(events) == 1\nattempt = json.loads(events[0].read_text(encoding=\"utf-8\"))\nassert attempt[\"continuation_id\"] == record[\"continuation_id\"]\nassert \"Browser send/ACK is not success\" in attempt[\"message\"]\nassert f\"route_task_id={source}\" in attempt[\"message\"]\n\nprint(\"CONTINUATION_V2_INSTALLED=PASS\")\nprint(\"WAKE_HANDLER=\" + wake.Handler.server_version)\nprint(\"INFLIGHT_PATCH=PRESERVED\")\nprint(\"COMMAND_BUS_METADATA=PASS\")\nprint(\"ACK_HOOK=PASS\")\nprint(\"RETRY_EVENT=PASS\")\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "-m",
+        "pytest",
+        "-q",
+        "tests/bridge/test_transactional_continuation.py",
+        "tests/bridge/test_continuation_wake_overlay.py",
+        "tests/bridge/test_command_bus_continuation_metadata.py"
+      ],
+      "test": true,
+      "timeout_seconds": 180
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "-m",
+        "compileall",
+        "-q",
+        "control/bridge_commands/command_bus_poller.py",
+        "control/tampermonkey_multichat/continuation_manager.py",
+        "control/tampermonkey_multichat/bridge_server_continuation.py",
+        "control/tampermonkey_multichat/bridge_server_status_compaction.py",
+        "control/tampermonkey_multichat/bridge_server_session_bootstrap.py",
+        "control/tampermonkey_multichat/bridge_server_hardened.py"
+      ],
+      "timeout_seconds": 120
+    },
+    {
+      "type": "install_runtime",
+      "source": "control/bridge_commands/command_bus_poller.py",
+      "destination": "/home/leonh/.local/share/prediction-command-bus/command_bus_poller.py",
+      "mode": 493
+    },
+    {
+      "type": "install_runtime",
+      "source": "control/tampermonkey_multichat/bridge_server_hardened.py",
+      "destination": "/home/leonh/.local/share/prediction-chat-bridge/bridge_server_hardened.py",
+      "mode": 420
+    },
+    {
+      "type": "install_runtime",
+      "source": "control/tampermonkey_multichat/bridge_server_session_bootstrap.py",
+      "destination": "/home/leonh/.local/share/prediction-chat-bridge/bridge_server_session_bootstrap.py",
+      "mode": 420
+    },
+    {
+      "type": "install_runtime",
+      "source": "control/tampermonkey_multichat/bridge_server_status_compaction.py",
+      "destination": "/home/leonh/.local/share/prediction-chat-bridge/bridge_server_status_compaction.py",
+      "mode": 420
+    },
+    {
+      "type": "install_runtime",
+      "source": "control/tampermonkey_multichat/continuation_manager.py",
+      "destination": "/home/leonh/.local/share/prediction-chat-bridge/continuation_manager.py",
+      "mode": 420
+    },
+    {
+      "type": "install_runtime",
+      "source": "control/tampermonkey_multichat/bridge_server_continuation.py",
+      "destination": "/home/leonh/.local/share/prediction-chat-bridge/bridge_server.py",
+      "mode": 493
+    },
+    {
+      "type": "service",
+      "verb": "restart",
+      "unit": "prediction-chat-wake.service"
+    },
+    {
+      "type": "service",
+      "verb": "is-active",
+      "unit": "prediction-chat-wake.service"
+    },
+    {
+      "type": "service",
+      "verb": "restart",
+      "unit": "prediction-command-bus.timer"
+    },
+    {
+      "type": "service",
+      "verb": "start",
+      "unit": "prediction-command-bus.service"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/verify_continuation_v2_install_e001.py"
+      ],
+      "timeout_seconds": 120
+    },
+    {
+      "type": "journal",
+      "unit": "prediction-chat-wake.service",
+      "lines": 100
+    },
+    {
+      "type": "journal",
+      "unit": "prediction-command-bus.service",
+      "lines": 120
+    }
+  ]
+}
