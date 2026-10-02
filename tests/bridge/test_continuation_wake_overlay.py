@@ -21,44 +21,50 @@ def load_overlay():
     return importlib.import_module("bridge_server_continuation")
 
 
-def test_sent_ack_hook_creates_exactly_one_continuation(tmp_path, monkeypatch):
-    mod = load_overlay()
+def setup_paths(mod, tmp_path, monkeypatch):
     base = mod.base
     data = tmp_path / "bridge"
-    sent = data / "sent"
     routes = data / "routes"
     outbox = data / "outbox"
+    sent = data / "sent"
     states = tmp_path / "task-state"
-    for path in (sent, routes, outbox, states):
+    for path in (routes, outbox, sent, states):
         path.mkdir(parents=True, exist_ok=True)
-
     monkeypatch.setattr(base, "DATA_DIR", data)
-    monkeypatch.setattr(base, "SENT", sent)
     monkeypatch.setattr(base, "ROUTES", routes)
     monkeypatch.setattr(base, "OUTBOX", outbox)
+    monkeypatch.setattr(base, "SENT", sent)
     monkeypatch.setattr(mod, "TASK_STATE_DIR", states)
+    return base, data, routes, outbox, sent, states
+
+
+def write_source_state(states, task_id, auto_continue):
+    (states / f"{task_id}.json").write_text(json.dumps({
+        "schema": "PREDICTION_COMMAND_BUS_TASK_STATE_V1",
+        "task_id": task_id,
+        "status": "DISPATCHED",
+        "auto_continue": auto_continue,
+    }), encoding="utf-8")
+
+
+def test_ack_hook_creates_exactly_one_continuation(tmp_path, monkeypatch):
+    mod = load_overlay()
+    _, data, _, _, _, states = setup_paths(mod, tmp_path, monkeypatch)
 
     source = "ACK-HOOK-SOURCE-001"
-    event_id = "event-ack-hook-001"
-    (states / f"{source}.json").write_text(json.dumps({
-        "schema": "PREDICTION_COMMAND_BUS_TASK_STATE_V1",
-        "task_id": source,
-        "status": "DISPATCHED",
-        "auto_continue": True,
-    }), encoding="utf-8")
-    (routes / f"{source}.json").write_text(json.dumps({
-        "version": 2,
-        "task_id": source,
-        "chat_id": "chat-ack-hook-001",
-        "consumer_id": None,
-    }), encoding="utf-8")
-    (sent / f"{event_id}.json").write_text(json.dumps({
-        "event_id": event_id,
+    event = {
+        "event_id": "event-ack-hook-001",
         "task_id": source,
         "message": "NIGHTSHIFT_WSL_RESULT_V1 task=ACK-HOOK-SOURCE-001 status=PASS exit=0",
-    }), encoding="utf-8")
+    }
+    write_source_state(states, source, True)
 
-    mod.continuation_release_lease(event_id)
+    mod.continuation_ack_hook(
+        event,
+        chat_id="chat-ack-hook-001",
+        consumer_id="tab-ack-hook-001",
+        already_acked=False,
+    )
     records = list((data / "continuations").glob("CONT-*.json"))
     assert len(records) == 1
     first = json.loads(records[0].read_text(encoding="utf-8"))
@@ -66,45 +72,120 @@ def test_sent_ack_hook_creates_exactly_one_continuation(tmp_path, monkeypatch):
     assert first["chat_id"] == "chat-ack-hook-001"
     assert first["state"] == "CONTINUE_REQUESTED"
 
-    # Duplicate /ack or process-level replay is idempotent.
-    mod.continuation_release_lease(event_id)
+    # Duplicate /ack is idempotent.
+    mod.continuation_ack_hook(
+        event,
+        chat_id="chat-ack-hook-001",
+        consumer_id="tab-ack-hook-001",
+        already_acked=True,
+    )
     records2 = list((data / "continuations").glob("CONT-*.json"))
     assert len(records2) == 1
     second = json.loads(records2[0].read_text(encoding="utf-8"))
     assert second["continuation_id"] == first["continuation_id"]
 
+    if hasattr(mod.base, "ACK_HOOK"):
+        assert mod.base.ACK_HOOK is mod.continuation_ack_hook
 
-def test_sent_ack_hook_ignores_normal_tasks(tmp_path, monkeypatch):
+
+def test_ack_hook_ignores_normal_tasks(tmp_path, monkeypatch):
     mod = load_overlay()
-    base = mod.base
-    data = tmp_path / "bridge"
-    sent = data / "sent"
-    routes = data / "routes"
-    states = tmp_path / "task-state"
-    for path in (sent, routes, states):
-        path.mkdir(parents=True, exist_ok=True)
-
-    monkeypatch.setattr(base, "DATA_DIR", data)
-    monkeypatch.setattr(base, "SENT", sent)
-    monkeypatch.setattr(base, "ROUTES", routes)
-    monkeypatch.setattr(mod, "TASK_STATE_DIR", states)
+    _, data, _, _, _, states = setup_paths(mod, tmp_path, monkeypatch)
 
     source = "ACK-HOOK-NORMAL-001"
-    event_id = "event-ack-hook-normal-001"
-    (states / f"{source}.json").write_text(json.dumps({
-        "task_id": source,
-        "status": "DISPATCHED",
-        "auto_continue": False,
-    }), encoding="utf-8")
+    write_source_state(states, source, False)
+    mod.continuation_ack_hook(
+        {"event_id": "normal-event", "task_id": source, "message": "ordinary result"},
+        chat_id="chat-ack-hook-002",
+        consumer_id="tab-ack-hook-002",
+        already_acked=False,
+    )
+    assert not (data / "continuations").exists()
+
+
+def test_continuation_delivery_ack_is_nonterminal_transport_evidence(tmp_path, monkeypatch):
+    mod = load_overlay()
+    _, data, routes, outbox, _, states = setup_paths(mod, tmp_path, monkeypatch)
+
+    source = "ACK-HOOK-CONTINUATION-001"
+    write_source_state(states, source, True)
+    record = mod.continuation.start_for_result_ack(
+        data_dir=data,
+        task_state_dir=states,
+        source_task_id=source,
+        chat_id="chat-ack-hook-003",
+    )
+    assert record is not None
+
+    mod.continuation.maintain_for_chat(
+        data_dir=data,
+        task_state_dir=states,
+        routes_dir=routes,
+        outbox_dir=outbox,
+        chat_id="chat-ack-hook-003",
+        now=1000.0,
+    )
+    record = json.loads(
+        mod.continuation.continuation_path(data, record["continuation_id"]).read_text(encoding="utf-8")
+    )
+    assert record["state"] == "CONTINUE_QUEUED"
+    assert record["attempts"] == 1
+
+    event_path = outbox / f"{record['last_event_id']}.json"
+    event = json.loads(event_path.read_text(encoding="utf-8"))
+    event_path.unlink()
+
+    mod.continuation_ack_hook(
+        event,
+        chat_id="chat-ack-hook-003",
+        consumer_id="tab-ack-hook-003",
+        already_acked=False,
+    )
+    after = json.loads(
+        mod.continuation.continuation_path(data, record["continuation_id"]).read_text(encoding="utf-8")
+    )
+    assert after["state"] == "CONTINUE_SENT"
+    assert after["attempts"] == 1
+    assert after["last_acked_attempt"] == 1
+
+    # A duplicate browser ACK must not consume the continuation or add attempts.
+    mod.continuation_ack_hook(
+        event,
+        chat_id="chat-ack-hook-003",
+        consumer_id="tab-ack-hook-003",
+        already_acked=True,
+    )
+    duplicate = json.loads(
+        mod.continuation.continuation_path(data, record["continuation_id"]).read_text(encoding="utf-8")
+    )
+    assert duplicate["state"] == "CONTINUE_SENT"
+    assert duplicate["attempts"] == 1
+    assert duplicate["last_acked_attempt"] == 1
+
+
+def test_compatibility_release_hook_uses_sent_event_and_propagates_failures(tmp_path, monkeypatch):
+    mod = load_overlay()
+    base, _, routes, _, sent, states = setup_paths(mod, tmp_path, monkeypatch)
+
+    source = "ACK-HOOK-COMPAT-001"
+    event_id = "compat-event-001"
+    write_source_state(states, source, True)
     (routes / f"{source}.json").write_text(json.dumps({
+        "version": 2,
         "task_id": source,
-        "chat_id": "chat-ack-hook-002",
+        "chat_id": "chat-ack-hook-004",
+        "consumer_id": None,
     }), encoding="utf-8")
     (sent / f"{event_id}.json").write_text(json.dumps({
         "event_id": event_id,
         "task_id": source,
-        "message": "ordinary result",
+        "message": "compat result",
     }), encoding="utf-8")
 
+    # The compatibility function is retained even on fresh runtimes so the
+    # installed inflight-patched base can compose without being overwritten.
     mod.continuation_release_lease(event_id)
-    assert not (data / "continuations").exists()
+    records = list((base.DATA_DIR / "continuations").glob("CONT-*.json"))
+    assert len(records) == 1
+    record = json.loads(records[0].read_text(encoding="utf-8"))
+    assert record["chat_id"] == "chat-ack-hook-004"
