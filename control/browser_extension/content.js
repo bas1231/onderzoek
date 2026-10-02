@@ -249,18 +249,25 @@
 
   function wakeConversationState() {
     const raw = normalizedCurrentUrl();
-    const match =
-      location.pathname.match(/(?:^|\\/)c\\/([^/?#]+)/);
+    const parts =
+      location.pathname
+        .split("/")
+        .filter(Boolean);
+    const cIndex = parts.indexOf("c");
+    const conversationId =
+      cIndex >= 0 && parts[cIndex + 1]
+        ? parts[cIndex + 1]
+        : "";
 
-    if (match && match[1]) {
+    if (conversationId) {
       return {
         stable: true,
-        conversationId: match[1],
+        conversationId,
         chatId:
           "chat-c-" +
-          wakeStableHash(match[1]) +
+          wakeStableHash(conversationId) +
           "-" +
-          match[1].length.toString(36)
+          conversationId.length.toString(36)
       };
     }
 
