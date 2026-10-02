@@ -31,12 +31,18 @@
       "format": "date-time"
     },
     "route_task_id": {
-      "type": ["string", "null"],
+      "type": [
+        "string",
+        "null"
+      ],
       "pattern": "^[A-Za-z0-9._:-]{1,160}$"
     },
     "delivery_mode": {
       "type": "string",
-      "enum": ["chat", "headless"],
+      "enum": [
+        "chat",
+        "headless"
+      ],
       "default": "chat"
     },
     "live_trading": {
@@ -49,12 +55,19 @@
       "const": false
     },
     "intelligence_tier": {
-      "enum": ["A", "B", "C"]
+      "enum": [
+        "A",
+        "B",
+        "C"
+      ]
     },
     "issuer": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["model", "reasoning_level"],
+      "required": [
+        "model",
+        "reasoning_level"
+      ],
       "properties": {
         "model": {
           "type": "string",
@@ -71,6 +84,17 @@
     "notes": {
       "type": "string",
       "maxLength": 2000
+    },
+    "auto_continue": {
+      "type": "boolean",
+      "default": false
+    },
+    "parent_continuation_id": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "pattern": "^CONT-[a-f0-9]{24}$"
     }
   }
 }
