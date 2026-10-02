@@ -1,10 +1,14 @@
 #!/usr/bin/env python3
 """Transactional auto-continuation overlay for PredictionChatWake.
 
-This layer does not depend on Tampermonkey. It hooks the canonical wake ACK
-boundary and emits continuation wake events through the same /next queue used
-for ordinary results. Browser delivery is intentionally non-terminal; only
-one durable command-bus outcome can close a continuation.
+This layer does not depend on Tampermonkey. It uses the canonical wake /next
+and /ack transport. Browser delivery is intentionally non-terminal; only one
+durable command-bus outcome can close a continuation.
+
+Fresh runtimes use bridge_server_v2.ACK_HOOK. Older installed runtimes may
+still contain the separately inflight-patched bridge_server_v2 from the
+command-bus installer. For those runtimes this overlay provides a compatibility
+hook through release_lease without replacing the inflight-patched base file.
 """
 from __future__ import annotations
 
@@ -18,6 +22,8 @@ import continuation_manager as continuation
 base = current.base
 TASK_STATE_DIR = Path.home() / ".local" / "state" / "prediction-command-bus" / "tasks"
 _CURRENT_OLDEST_EVENT = base.oldest_event
+_ORIGINAL_RELEASE_LEASE = base.release_lease
+_BASE_HAS_ACK_HOOK = hasattr(base, "ACK_HOOK")
 
 
 def continuation_ack_hook(
@@ -47,6 +53,38 @@ def continuation_ack_hook(
     )
 
 
+def continuation_release_lease(event_id: str) -> None:
+    """Compatibility ACK hook for installed inflight-patched base runtimes.
+
+    bridge_server_v2 moves a newly ACKed event to SENT before release_lease.
+    Duplicate ACKs also call release_lease while the SENT copy exists.  We load
+    that durable event and invoke the same idempotent continuation hook.
+
+    Deliberately do not swallow hook exceptions: an ACK-side bookkeeping
+    failure must make the HTTP ACK fail so the browser agent retries. Because
+    the event is already in SENT, the retry cannot redeliver the user message.
+    """
+    _ORIGINAL_RELEASE_LEASE(event_id)
+
+    sent = base.SENT / f"{event_id}.json"
+    event = base.load_event(sent)
+    if not event:
+        return
+
+    task_id = str(event.get("task_id") or "").strip()
+    binding = base.route_binding_for_task(task_id) if task_id else None
+    chat_id = str(binding.get("chat_id") or "").strip() if binding else ""
+    if not chat_id:
+        return
+
+    continuation_ack_hook(
+        event,
+        chat_id=chat_id,
+        consumer_id=None,
+        already_acked=True,
+    )
+
+
 def continuation_oldest_event(chat_id=None, consumer_id=None):
     """Reconcile/reoffer only unresolved continuations for this chat."""
     if chat_id:
@@ -60,8 +98,14 @@ def continuation_oldest_event(chat_id=None, consumer_id=None):
     return _CURRENT_OLDEST_EVENT(chat_id, consumer_id)
 
 
-# bridge_server_v2.Handler resolves both globals at request time.
-base.ACK_HOOK = continuation_ack_hook
+# Fresh source runtimes resolve ACK_HOOK at request time. Existing installed
+# inflight runtimes predate ACK_HOOK, so compose through release_lease instead
+# of overwriting their patched bridge_server_v2.py.
+if _BASE_HAS_ACK_HOOK:
+    base.ACK_HOOK = continuation_ack_hook
+else:
+    base.release_lease = continuation_release_lease
+
 base.oldest_event = continuation_oldest_event
 
 
