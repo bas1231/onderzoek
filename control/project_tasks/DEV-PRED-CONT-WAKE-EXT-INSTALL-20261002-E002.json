@@ -1,0 +1,181 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-CONT-WAKE-EXT-INSTALL-20261002-E002",
+  "build_id": "CONTINUATION-V2-CHROME-WAKE-E002",
+  "source_commit": "e12899d7901401c6f1f04c7d67eca0f03e0bd05c",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "run_tests",
+    "read_runtime",
+    "write_runtime",
+    "user_service_manage",
+    "read_logs"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 1200,
+  "notes": "Test and install continuation v2 E002 plus stage the Chrome extension as the wake consumer. Do not modify or install Tampermonkey. Preserve the installed inflight-patched bridge_server_v2; install only wrappers/overlay/continuation manager, command-bus poller, and extension package. No live trading, paid actions, wallet/funds, credentials, or WSL remote Git writes.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/verify_continuation_e002_install.py",
+      "content": "from pathlib import Path\nimport importlib.util\nimport json\nimport os\nimport sys\n\nhome = Path.home()\nbus_path = home / \".local/share/prediction-command-bus/command_bus_poller.py\"\nwake_dir = home / \".local/share/prediction-chat-bridge\"\next_dir = wake_dir / \"browser_extension\"\n\nspec = importlib.util.spec_from_file_location(\"installed_cont_bus_e002\", bus_path)\nbus = importlib.util.module_from_spec(spec)\nassert spec.loader is not None\nspec.loader.exec_module(bus)\n\ncmd = {\n    \"schema\": \"PREDICTION_BRIDGE_COMMAND_V1\",\n    \"task_id\": \"DEV-PRED-CONT-E002-CHECK\",\n    \"action\": \"BRIDGE_PING\",\n    \"created_at_utc\": \"2026-10-02T16:30:00Z\",\n    \"route_task_id\": \"SESSION-ROUTE-E002-CHECK\",\n    \"live_trading\": False,\n    \"paid_actions\": False,\n    \"wallet_actions\": False,\n    \"intelligence_tier\": \"C\",\n    \"issuer\": {\"model\": \"GPT-5.6 Sol\", \"reasoning_level\": \"UNAVAILABLE_TO_RUNTIME\"},\n    \"auto_continue\": True,\n    \"parent_continuation_id\": \"CONT-\" + (\"a\" * 24),\n}\nok, reason = bus.validate_command(cmd)\nassert ok and reason == \"OK\", (ok, reason)\n\nsys.path.insert(0, str(wake_dir))\nspec2 = importlib.util.spec_from_file_location(\"installed_cont_wake_e002\", wake_dir / \"bridge_server.py\")\nwake = importlib.util.module_from_spec(spec2)\nassert spec2.loader is not None\nspec2.loader.exec_module(wake)\n\nassert getattr(wake.Handler, \"server_version\", \"\") == \"PredictionChatWake/1.3-continuation-v2\"\nassert hasattr(wake.base, \"INFLIGHT\"), \"fail-closed inflight patch must remain installed\"\nassert wake.base.oldest_event is wake.continuation_oldest_event\nif hasattr(wake.base, \"ACK_HOOK\"):\n    assert wake.base.ACK_HOOK is wake.continuation_ack_hook\nelse:\n    assert wake.base.release_lease is wake.continuation_release_lease\n\nroot = Path(os.environ[\"PRED_PROJECT_TEMP_ROOT\"]) / \"continuation-e002-installed\"\ndata = root / \"bridge\"\nroutes = data / \"routes\"\noutbox = data / \"outbox\"\nstates = root / \"task-state\"\nfor p in (routes, outbox, states):\n    p.mkdir(parents=True, exist_ok=True)\n\nwake.base.DATA_DIR = data\nwake.base.ROUTES = routes\nwake.base.OUTBOX = outbox\nwake.TASK_STATE_DIR = states\n\nsource = \"DEV-PRED-CONT-E002-SOURCE\"\n(states / f\"{source}.json\").write_text(json.dumps({\n    \"schema\": \"PREDICTION_COMMAND_BUS_TASK_STATE_V1\",\n    \"task_id\": source,\n    \"status\": \"DISPATCHED\",\n    \"auto_continue\": True,\n}), encoding=\"utf-8\")\n\nwake.continuation_ack_hook(\n    {\n        \"event_id\": \"e002-source-result\",\n        \"task_id\": source,\n        \"message\": \"NIGHTSHIFT_WSL_RESULT_V1 task=DEV-PRED-CONT-E002-SOURCE status=PASS exit=0\",\n    },\n    chat_id=\"chat-e002-installed\",\n    consumer_id=\"ext-e002-installed\",\n    already_acked=False,\n)\nrecords = list((data / \"continuations\").glob(\"CONT-*.json\"))\nassert len(records) == 1\nrecord = json.loads(records[0].read_text(encoding=\"utf-8\"))\nassert record[\"state\"] == \"CONTINUE_REQUESTED\"\n\nwake.continuation.maintain_for_chat(\n    data_dir=data,\n    task_state_dir=states,\n    routes_dir=routes,\n    outbox_dir=outbox,\n    chat_id=\"chat-e002-installed\",\n    now=1000.0,\n)\nrecord = json.loads(records[0].read_text(encoding=\"utf-8\"))\nassert record[\"state\"] == \"CONTINUE_QUEUED\"\nassert record[\"attempts\"] == 1\nevent_path = outbox / f\"{record['last_event_id']}.json\"\nassert event_path.is_file()\n\nwake.continuation.maintain_for_chat(\n    data_dir=data,\n    task_state_dir=states,\n    routes_dir=routes,\n    outbox_dir=outbox,\n    chat_id=\"chat-e002-installed\",\n    now=9999999999.0,\n)\nrecord2 = json.loads(records[0].read_text(encoding=\"utf-8\"))\nassert record2[\"attempts\"] == 1, \"pending delivery must suppress duplicate retry\"\n\nevent = json.loads(event_path.read_text(encoding=\"utf-8\"))\nevent_path.unlink()\nwake.continuation_ack_hook(\n    event,\n    chat_id=\"chat-e002-installed\",\n    consumer_id=\"ext-e002-installed\",\n    already_acked=False,\n)\nrecord3 = json.loads(records[0].read_text(encoding=\"utf-8\"))\nassert record3[\"state\"] == \"CONTINUE_SENT\"\nassert record3[\"last_acked_attempt\"] == 1\nassert record3[\"attempts\"] == 1\n\nmanifest = json.loads((ext_dir / \"manifest.json\").read_text(encoding=\"utf-8\"))\ncontent = (ext_dir / \"content.js\").read_text(encoding=\"utf-8\")\nassert manifest[\"version\"] == \"1.0.0\"\nassert \"async function pollWake()\" in content\nassert '\"/next?chat_id=\"' in content\nassert '\"/ack\"' in content\nassert \"exactUserTurnCount\" in content\nassert \"pollAiOutbox();\" not in content[content.index(\"  setInterval(\"):]\nassert \"pollOutbox();\" not in content[content.index(\"  setInterval(\"):]\n\nprint(\"CONTINUATION_E002_INSTALLED=PASS\")\nprint(\"WAKE_HANDLER=\" + wake.Handler.server_version)\nprint(\"INFLIGHT_PATCH=PRESERVED\")\nprint(\"COMMAND_BUS_METADATA=PASS\")\nprint(\"QUEUED_SENT_SPLIT=PASS\")\nprint(\"PENDING_RETRY_SUPPRESSION=PASS\")\nprint(\"EXTENSION_STAGED=PASS\")\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "-m",
+        "pytest",
+        "-q",
+        "tests/bridge/test_transactional_continuation.py",
+        "tests/bridge/test_continuation_wake_overlay.py",
+        "tests/bridge/test_command_bus_continuation_metadata.py",
+        "tests/bridge/test_extension_wake_consumer.py",
+        "tests/bridge/test_status_compaction_nested.py",
+        "control/tampermonkey_multichat/test_session_route_bootstrap.py"
+      ],
+      "test": true,
+      "timeout_seconds": 240
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "-m",
+        "compileall",
+        "-q",
+        "control/bridge_commands/command_bus_poller.py",
+        "control/tampermonkey_multichat/continuation_manager.py",
+        "control/tampermonkey_multichat/bridge_server_continuation.py",
+        "control/tampermonkey_multichat/bridge_server_status_compaction.py",
+        "control/tampermonkey_multichat/bridge_server_session_bootstrap.py",
+        "control/tampermonkey_multichat/bridge_server_hardened.py"
+      ],
+      "timeout_seconds": 120
+    },
+    {
+      "type": "install_runtime",
+      "source": "control/bridge_commands/command_bus_poller.py",
+      "destination": "/home/leonh/.local/share/prediction-command-bus/command_bus_poller.py",
+      "mode": 493
+    },
+    {
+      "type": "install_runtime",
+      "source": "control/tampermonkey_multichat/bridge_server_hardened.py",
+      "destination": "/home/leonh/.local/share/prediction-chat-bridge/bridge_server_hardened.py",
+      "mode": 420
+    },
+    {
+      "type": "install_runtime",
+      "source": "control/tampermonkey_multichat/bridge_server_session_bootstrap.py",
+      "destination": "/home/leonh/.local/share/prediction-chat-bridge/bridge_server_session_bootstrap.py",
+      "mode": 420
+    },
+    {
+      "type": "install_runtime",
+      "source": "control/tampermonkey_multichat/bridge_server_status_compaction.py",
+      "destination": "/home/leonh/.local/share/prediction-chat-bridge/bridge_server_status_compaction.py",
+      "mode": 420
+    },
+    {
+      "type": "install_runtime",
+      "source": "control/tampermonkey_multichat/continuation_manager.py",
+      "destination": "/home/leonh/.local/share/prediction-chat-bridge/continuation_manager.py",
+      "mode": 420
+    },
+    {
+      "type": "install_runtime",
+      "source": "control/tampermonkey_multichat/bridge_server_continuation.py",
+      "destination": "/home/leonh/.local/share/prediction-chat-bridge/bridge_server.py",
+      "mode": 493
+    },
+    {
+      "type": "install_runtime",
+      "source": "control/browser_extension/manifest.json",
+      "destination": "/home/leonh/.local/share/prediction-chat-bridge/browser_extension/manifest.json",
+      "mode": 420
+    },
+    {
+      "type": "install_runtime",
+      "source": "control/browser_extension/background.js",
+      "destination": "/home/leonh/.local/share/prediction-chat-bridge/browser_extension/background.js",
+      "mode": 420
+    },
+    {
+      "type": "install_runtime",
+      "source": "control/browser_extension/content.js",
+      "destination": "/home/leonh/.local/share/prediction-chat-bridge/browser_extension/content.js",
+      "mode": 420
+    },
+    {
+      "type": "install_runtime",
+      "source": "control/browser_extension/ai_response_capture.js",
+      "destination": "/home/leonh/.local/share/prediction-chat-bridge/browser_extension/ai_response_capture.js",
+      "mode": 420
+    },
+    {
+      "type": "install_runtime",
+      "source": "control/browser_extension/popup.html",
+      "destination": "/home/leonh/.local/share/prediction-chat-bridge/browser_extension/popup.html",
+      "mode": 420
+    },
+    {
+      "type": "install_runtime",
+      "source": "control/browser_extension/popup.js",
+      "destination": "/home/leonh/.local/share/prediction-chat-bridge/browser_extension/popup.js",
+      "mode": 420
+    },
+    {
+      "type": "service",
+      "verb": "restart",
+      "unit": "prediction-chat-wake.service"
+    },
+    {
+      "type": "service",
+      "verb": "is-active",
+      "unit": "prediction-chat-wake.service"
+    },
+    {
+      "type": "service",
+      "verb": "restart",
+      "unit": "prediction-command-bus.timer"
+    },
+    {
+      "type": "service",
+      "verb": "start",
+      "unit": "prediction-command-bus.service"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/verify_continuation_e002_install.py"
+      ],
+      "timeout_seconds": 120
+    },
+    {
+      "type": "journal",
+      "unit": "prediction-chat-wake.service",
+      "lines": 100
+    },
+    {
+      "type": "journal",
+      "unit": "prediction-command-bus.service",
+      "lines": 120
+    }
+  ]
+}
