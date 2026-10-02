@@ -25,6 +25,7 @@ CONSUMER_RE = re.compile(r"^[A-Za-z0-9._:-]{4,220}$")
 LEASE_SECONDS = 45.0
 LEASES = {}
 LEASE_LOCK = threading.Lock()
+ACK_HOOK = None
 
 
 def ensure_dirs():
@@ -106,6 +107,18 @@ def lease_available(event_id, chat_id, consumer_id):
 def release_lease(event_id):
     with LEASE_LOCK:
         LEASES.pop(event_id, None)
+
+
+def run_ack_hook(obj, chat_id, consumer_id, already_acked=False):
+    hook = ACK_HOOK
+    if hook is None:
+        return
+    hook(
+        dict(obj or {}),
+        chat_id=chat_id,
+        consumer_id=consumer_id,
+        already_acked=bool(already_acked),
+    )
 
 
 def oldest_event(chat_id=None, consumer_id=None):
@@ -299,11 +312,35 @@ class Handler(BaseHTTPRequestHandler):
 
             os.replace(src, dst)
             release_lease(event_id)
+            try:
+                run_ack_hook(obj, chat_id, consumer_id, already_acked=False)
+            except Exception as exc:
+                self.reply_json(503, {
+                    "ok": False,
+                    "error": "ack_hook_failed",
+                    "event_id": event_id,
+                    "detail": type(exc).__name__,
+                })
+                return
             self.reply_json(200, {"ok": True, "event_id": event_id})
             return
 
         if dst.exists():
             release_lease(event_id)
+            obj = load_event(dst)
+            if obj is None:
+                self.reply_json(409, {"ok": False, "error": "invalid_sent_event"})
+                return
+            try:
+                run_ack_hook(obj, chat_id, consumer_id, already_acked=True)
+            except Exception as exc:
+                self.reply_json(503, {
+                    "ok": False,
+                    "error": "ack_hook_failed",
+                    "event_id": event_id,
+                    "detail": type(exc).__name__,
+                })
+                return
             self.reply_json(200, {"ok": True, "event_id": event_id, "already_acked": True})
             return
 
