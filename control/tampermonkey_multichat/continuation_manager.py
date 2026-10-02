@@ -5,11 +5,13 @@ import json
 import os
 import secrets
 import time
+from datetime import datetime, timezone
 from pathlib import Path
 
 SCHEMA = "PREDICTION_CONTINUATION_V2"
 MAX_ATTEMPTS = 4
 RETRY_AFTER_SECONDS = 120.0
+CLAIM_STALE_SECONDS = 300.0
 
 TERMINAL_STATES = {
     "NEXT_TASK_ACCEPTED",
@@ -43,7 +45,7 @@ def ids_for(source_task_id: str) -> dict[str, str]:
     digest = _digest(source_task_id)
     return {
         "continuation_id": f"CONT-{digest}",
-        "expected_next_task_id": f"CONT-NEXT-{digest}",
+        "expected_next_task_id": f"DEV-PRED-CONT-NEXT-{digest}",
         "expected_done_task_id": f"CONT-DONE-{digest}",
         "expected_blocked_task_id": f"CONT-BLOCKED-{digest}",
     }
@@ -99,6 +101,7 @@ def start_for_result_ack(
         **ids,
         "source_task_id": source_task_id,
         "chat_id": chat_id,
+        "expected_route_task_id": source_task_id,
         "state": "CONTINUE_REQUESTED",
         "attempts": 0,
         "last_attempt_at": None,
@@ -128,7 +131,21 @@ def _outcome_candidates(record: dict, task_state_dir: Path) -> list[tuple[str, d
     return out
 
 
-def reconcile(record: dict, task_state_dir: Path) -> bool:
+def _claimed_is_stale(state: dict, now: float | None = None) -> bool:
+    raw = str(state.get("claimed_at_utc") or "").strip()
+    if not raw:
+        return False
+    try:
+        claimed = datetime.fromisoformat(raw.replace("Z", "+00:00"))
+    except ValueError:
+        return False
+    if claimed.tzinfo is None:
+        claimed = claimed.replace(tzinfo=timezone.utc)
+    current = time.time() if now is None else float(now)
+    return current - claimed.timestamp() >= CLAIM_STALE_SECONDS
+
+
+def reconcile(record: dict, task_state_dir: Path, now: float | None = None) -> bool:
     if record.get("state") in TERMINAL_STATES:
         return False
 
@@ -149,6 +166,9 @@ def reconcile(record: dict, task_state_dir: Path) -> bool:
 
     if label == "NEXT":
         if status == "CLAIMED":
+            if _claimed_is_stale(state, now):
+                _append_history(record, "BLOCKED", "expected child command remained CLAIMED past bounded timeout")
+                return True
             if record.get("state") != "NEXT_TASK_CREATED":
                 _append_history(record, "NEXT_TASK_CREATED", "expected child command claimed")
                 return True
@@ -162,6 +182,9 @@ def reconcile(record: dict, task_state_dir: Path) -> bool:
         return False
 
     if status == "CLAIMED":
+        if _claimed_is_stale(state, now):
+            _append_history(record, "BLOCKED", f"{label.lower()} receipt remained CLAIMED past bounded timeout")
+            return True
         target = f"{label}_RECEIPT_CREATED"
         if record.get("state") != target:
             _append_history(record, target, f"{label.lower()} receipt claimed")
@@ -192,7 +215,8 @@ def _attempt_message(record: dict, attempt: int) -> str:
         f"attempt={attempt}\n"
         "No human input is required. Inspect the current Prediction source of truth and select exactly one durable outcome.\n"
         f"NEXT: create the next authorized Prediction task using exactly task_id={record['expected_next_task_id']}; "
-        "for project work use that same ID in project task, DEV manifest and command-bus inbox; set auto_continue=true "
+        "for project work use that same ID in project task, DEV manifest and command-bus inbox; "
+        f"use route_task_id={record['expected_route_task_id']}; set auto_continue=true "
         f"and parent_continuation_id={record['continuation_id']}. If that exact task already exists, do not modify or replace it.\n"
         f"DONE: create exactly one headless BRIDGE_PING command-bus receipt with task_id={record['expected_done_task_id']}, "
         f"delivery_mode=headless, auto_continue=false and parent_continuation_id={record['continuation_id']}.\n"
@@ -277,7 +301,7 @@ def maintain_for_chat(
         if str(record.get("chat_id") or "") != str(chat_id):
             continue
 
-        changed = reconcile(record, task_state_dir)
+        changed = reconcile(record, task_state_dir, now=now)
         if changed:
             _atomic_json(path, record)
 
