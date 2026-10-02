@@ -42,6 +42,7 @@ SCHEMA = "PREDICTION_BRIDGE_COMMAND_V1"
 TASK_RE = re.compile(r"^[A-Za-z0-9._:-]{1,160}$")
 ACTION_RE = re.compile(r"^[A-Z][A-Z0-9_]{1,79}$")
 ID_RE = re.compile(r"^[A-Za-z0-9._:-]{4,220}$")
+CONTINUATION_RE = re.compile(r"^CONT-[a-f0-9]{24}$")
 
 
 def utc_now() -> str:
@@ -133,7 +134,7 @@ def validate_command(obj: dict) -> tuple[bool, str]:
         "schema", "task_id", "action", "created_at_utc", "live_trading",
         "paid_actions", "wallet_actions", "intelligence_tier", "issuer",
     }
-    allowed = required | {"route_task_id", "delivery_mode", "notes"}
+    allowed = required | {"route_task_id", "delivery_mode", "notes", "auto_continue", "parent_continuation_id"}
     if set(obj) - allowed:
         return False, "UNKNOWN_FIELDS"
     if not required.issubset(obj):
@@ -169,6 +170,16 @@ def validate_command(obj: dict) -> tuple[bool, str]:
         return False, "BAD_CREATED_AT"
     if "notes" in obj and not isinstance(obj["notes"], str):
         return False, "BAD_NOTES"
+    if "auto_continue" in obj and not isinstance(obj["auto_continue"], bool):
+        return False, "BAD_AUTO_CONTINUE"
+    parent_continuation_id = obj.get("parent_continuation_id")
+    if (
+        parent_continuation_id is not None
+        and not CONTINUATION_RE.fullmatch(str(parent_continuation_id))
+    ):
+        return False, "BAD_PARENT_CONTINUATION_ID"
+    if delivery_mode == "headless" and obj.get("auto_continue") is True:
+        return False, "HEADLESS_AUTO_CONTINUE_FORBIDDEN"
     return True, "OK"
 
 
@@ -306,6 +317,8 @@ def process_one(path: str, remote_commit: str, token: str) -> str:
         "route_source": route_source,
         "chat_id": route["chat_id"],
         "consumer_id": route.get("consumer_id"),
+        "auto_continue": obj.get("auto_continue", False),
+        "parent_continuation_id": obj.get("parent_continuation_id"),
         "claimed_at_utc": utc_now(),
     }
     atomic_json(state_path, claim)
