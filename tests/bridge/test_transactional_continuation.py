@@ -14,16 +14,21 @@ def write_state(root: Path, task_id: str, status: str, *, auto_continue=False, c
     }
     if claimed_at_utc is not None:
         payload["claimed_at_utc"] = claimed_at_utc
-    (root / f"{task_id}.json").write_text(
-        json.dumps(payload),
-        encoding="utf-8",
-    )
+    (root / f"{task_id}.json").write_text(json.dumps(payload), encoding="utf-8")
 
 
 def load_record(data_dir: Path, continuation_id: str):
     return json.loads(
         cm.continuation_path(data_dir, continuation_id).read_text(encoding="utf-8")
     )
+
+
+def ack_queued_attempt(data: Path, outbox: Path, record: dict) -> tuple[dict, dict]:
+    event_path = outbox / f"{record['last_event_id']}.json"
+    event = json.loads(event_path.read_text(encoding="utf-8"))
+    event_path.unlink()
+    assert cm.mark_delivery_acked(data_dir=data, event=event) is True
+    return load_record(data, record["continuation_id"]), event
 
 
 def test_full_next_flow_retry_and_restart(tmp_path):
@@ -55,7 +60,7 @@ def test_full_next_flow_retry_and_restart(tmp_path):
         now=1000.0,
     )
     record = load_record(data, cid)
-    assert record["state"] == "CONTINUE_SENT"
+    assert record["state"] == "CONTINUE_QUEUED"
     assert record["attempts"] == 1
     first_events = sorted(outbox.glob("*.json"))
     assert len(first_events) == 1
@@ -64,32 +69,42 @@ def test_full_next_flow_retry_and_restart(tmp_path):
     assert first["task_id"].endswith("-A01")
     assert f"continuation_id={cid}" in first["message"]
 
-    # Before the retry deadline there is no second delivery.
+    # Even after the retry deadline, a still-pending outbox/inflight delivery
+    # cannot create another attempt.
     cm.maintain_for_chat(
         data_dir=data,
         task_state_dir=states,
         routes_dir=routes,
         outbox_dir=outbox,
         chat_id="chat-continuation-test-001",
-        now=1119.0,
-    )
-    assert len(list(outbox.glob("*.json"))) == 1
-
-    # After the deadline a new delivery ID/task ID is used but the same
-    # logical continuation and expected child IDs remain.
-    cm.maintain_for_chat(
-        data_dir=data,
-        task_state_dir=states,
-        routes_dir=routes,
-        outbox_dir=outbox,
-        chat_id="chat-continuation-test-001",
-        now=1121.0,
+        now=5000.0,
     )
     record = load_record(data, cid)
+    assert record["attempts"] == 1
+    assert len(list(outbox.glob("*.json"))) == 1
+
+    # Browser ACK is transport evidence only. It changes QUEUED -> SENT but
+    # leaves the logical continuation unresolved.
+    record, acked_first = ack_queued_attempt(data, outbox, record)
+    assert acked_first["task_id"].endswith("-A01")
+    assert record["state"] == "CONTINUE_SENT"
+    assert record["last_acked_attempt"] == 1
+
+    retry_at = float(record["last_delivery_acked_at"]) + cm.RETRY_AFTER_SECONDS + 1
+    cm.maintain_for_chat(
+        data_dir=data,
+        task_state_dir=states,
+        routes_dir=routes,
+        outbox_dir=outbox,
+        chat_id="chat-continuation-test-001",
+        now=retry_at,
+    )
+    record = load_record(data, cid)
+    assert record["state"] == "CONTINUE_QUEUED"
     assert record["attempts"] == 2
     events = sorted(outbox.glob("*.json"))
-    assert len(events) == 2
-    second = json.loads(events[1].read_text(encoding="utf-8"))
+    assert len(events) == 1
+    second = json.loads(events[0].read_text(encoding="utf-8"))
     assert second["continuation_id"] == cid
     assert second["task_id"].endswith("-A02")
     assert second["task_id"] != first["task_id"]
@@ -102,11 +117,11 @@ def test_full_next_flow_retry_and_restart(tmp_path):
         routes_dir=routes,
         outbox_dir=outbox,
         chat_id="chat-continuation-test-001",
-        now=1400.0,
+        now=retry_at + 1,
     )
     record = load_record(data, cid)
     assert record["state"] == "NEXT_TASK_CREATED"
-    assert len(list(outbox.glob("*.json"))) == 2
+    assert len(list(outbox.glob("*.json"))) == 1
 
     write_state(states, child, "DISPATCHED")
     cm.maintain_for_chat(
@@ -115,7 +130,7 @@ def test_full_next_flow_retry_and_restart(tmp_path):
         routes_dir=routes,
         outbox_dir=outbox,
         chat_id="chat-continuation-test-001",
-        now=1600.0,
+        now=retry_at + 2,
     )
     record = load_record(data, cid)
     assert record["state"] == "NEXT_TASK_ACCEPTED"
@@ -127,9 +142,9 @@ def test_full_next_flow_retry_and_restart(tmp_path):
         routes_dir=routes,
         outbox_dir=outbox,
         chat_id="chat-continuation-test-001",
-        now=9999.0,
+        now=9999999999.0,
     )
-    assert len(list(outbox.glob("*.json"))) == 2
+    assert len(list(outbox.glob("*.json"))) == 1
 
 
 def test_done_and_blocked_are_durable_command_bus_outcomes(tmp_path):
@@ -154,7 +169,6 @@ def test_done_and_blocked_are_durable_command_bus_outcomes(tmp_path):
     assert cm.reconcile(record, states) is True
     assert record["state"] == "DONE"
 
-    # Terminal outcome is never reoffered.
     cm._atomic_json(cm.continuation_path(data, record["continuation_id"]), record)
     cm.maintain_for_chat(
         data_dir=data,
@@ -223,25 +237,32 @@ def test_bounded_attempts_end_blocked_transport(tmp_path):
     )
     assert record is not None
 
-    for n in range(cm.MAX_ATTEMPTS):
+    now = 1000.0
+    for attempt in range(1, cm.MAX_ATTEMPTS + 1):
         assert cm.enqueue_attempt(
             record=record,
             data_dir=data,
             routes_dir=routes,
             outbox_dir=outbox,
-            now=1000.0 + n * (cm.RETRY_AFTER_SECONDS + 1),
+            now=now,
         ) is True
+        record = load_record(data, record["continuation_id"])
+        assert record["state"] == "CONTINUE_QUEUED"
+        assert record["attempts"] == attempt
+        record, _ = ack_queued_attempt(data, outbox, record)
+        assert record["state"] == "CONTINUE_SENT"
+        now = float(record["last_delivery_acked_at"]) + cm.RETRY_AFTER_SECONDS + 1
 
     assert cm.enqueue_attempt(
         record=record,
         data_dir=data,
         routes_dir=routes,
         outbox_dir=outbox,
-        now=1000.0 + cm.MAX_ATTEMPTS * (cm.RETRY_AFTER_SECONDS + 1),
+        now=now,
     ) is False
     record = load_record(data, record["continuation_id"])
     assert record["state"] == "BLOCKED_TRANSPORT"
-    assert len(list(outbox.glob("*.json"))) == cm.MAX_ATTEMPTS
+    assert list(outbox.glob("*.json")) == []
 
 
 def test_stale_claim_fails_closed_instead_of_stalling(tmp_path):
@@ -263,10 +284,6 @@ def test_stale_claim_fails_closed_instead_of_stalling(tmp_path):
         "CLAIMED",
         claimed_at_utc="2026-10-02T10:00:00Z",
     )
-    assert cm.reconcile(
-        record,
-        states,
-        now=1790935801.0,
-    ) is True
+    assert cm.reconcile(record, states, now=1790935801.0) is True
     assert record["state"] == "BLOCKED"
     assert "CLAIMED" in record["history"][-1]["detail"]
