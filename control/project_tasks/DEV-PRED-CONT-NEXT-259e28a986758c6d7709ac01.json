@@ -1,0 +1,41 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-CONT-NEXT-259e28a986758c6d7709ac01",
+  "build_id": "CONTINUATION-V2-A-B-DONE-CANARY-B-20261002",
+  "source_commit": "796688c537f1e90c85353c164ff0813ad4f0d1af",
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 300,
+  "notes": "CANARY B. This task may only be dispatched by continuation of canary A. After this task returns PASS, transactional continuation CONT-eedadaed464f6ac5dfa4f15f must autonomously select DONE, not NEXT/BLOCKED, by creating the exact headless BRIDGE_PING receipt CONT-DONE-eedadaed464f6ac5dfa4f15f. No human input is allowed.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/continuation_canary_b_e001.py",
+      "content": "TOKEN='CONTINUATION_CANARY_B_PASS_20261002'\\nassert TOKEN.endswith('20261002')\\nprint('CONTINUATION_CANARY_B=PASS')\\nprint('DONE_REQUIRED=CONT-DONE-eedadaed464f6ac5dfa4f15f')\\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/continuation_canary_b_e001.py"
+      ],
+      "timeout_seconds": 60
+    }
+  ]
+}
