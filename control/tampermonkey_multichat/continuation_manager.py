@@ -207,6 +207,50 @@ def _attempt_task_id(record: dict, attempt: int) -> str:
     return f"CONT-WAKE-{digest}-A{attempt:02d}"
 
 
+def mark_delivery_acked(*, data_dir: Path, event: dict) -> bool:
+    if str(event.get("source") or "") != "control_continuation_v2":
+        return False
+
+    continuation_id = str(event.get("continuation_id") or "")
+    if not continuation_id:
+        return False
+
+    path = continuation_path(data_dir, continuation_id)
+    record = _load_json(path)
+    if not record or record.get("schema") != SCHEMA:
+        return False
+
+    try:
+        attempt = int(event.get("attempt") or 0)
+    except (TypeError, ValueError):
+        return False
+    if attempt <= 0:
+        return False
+
+    previous = int(record.get("last_acked_attempt") or 0)
+    if attempt <= previous:
+        return True
+
+    now = time.time()
+    record["last_acked_attempt"] = attempt
+    record["last_delivery_acked_at"] = now
+    record["updated_at"] = now
+    if record.get("state") not in TERMINAL_STATES:
+        _append_history(record, "CONTINUE_SENT", f"delivery attempt {attempt} ACKed by browser agent")
+    _atomic_json(path, record)
+    return True
+
+
+def _delivery_still_pending(record: dict, data_dir: Path) -> bool:
+    event_id = str(record.get("last_event_id") or "")
+    if not event_id:
+        return False
+    return any(
+        (data_dir / name / f"{event_id}.json").exists()
+        for name in ("outbox", "inflight")
+    )
+
+
 def _attempt_message(record: dict, attempt: int) -> str:
     return (
         "PREDICTION_CONTROL_CONTINUE_V2\n"
@@ -239,7 +283,10 @@ def enqueue_attempt(
 
     now = time.time() if now is None else float(now)
     attempts = int(record.get("attempts") or 0)
-    last = record.get("last_attempt_at")
+    last = record.get("last_delivery_acked_at") or record.get("last_attempt_at")
+
+    if _delivery_still_pending(record, data_dir):
+        return False
 
     if attempts >= MAX_ATTEMPTS:
         _append_history(record, "BLOCKED_TRANSPORT", "continuation exhausted bounded delivery attempts")
@@ -276,7 +323,9 @@ def enqueue_attempt(
 
     record["attempts"] = attempt
     record["last_attempt_at"] = now
-    _append_history(record, "CONTINUE_SENT", f"delivery attempt {attempt} queued as {attempt_task_id}")
+    record["last_event_id"] = event_id
+    record["last_attempt_task_id"] = attempt_task_id
+    _append_history(record, "CONTINUE_QUEUED", f"delivery attempt {attempt} queued as {attempt_task_id}")
     _atomic_json(continuation_path(data_dir, record["continuation_id"]), record)
     return True
 
