@@ -4,15 +4,18 @@ import json
 from control.tampermonkey_multichat import continuation_manager as cm
 
 
-def write_state(root: Path, task_id: str, status: str, *, auto_continue=False):
+def write_state(root: Path, task_id: str, status: str, *, auto_continue=False, claimed_at_utc=None):
     root.mkdir(parents=True, exist_ok=True)
+    payload = {
+        "schema": "PREDICTION_COMMAND_BUS_TASK_STATE_V1",
+        "task_id": task_id,
+        "status": status,
+        "auto_continue": auto_continue,
+    }
+    if claimed_at_utc is not None:
+        payload["claimed_at_utc"] = claimed_at_utc
     (root / f"{task_id}.json").write_text(
-        json.dumps({
-            "schema": "PREDICTION_COMMAND_BUS_TASK_STATE_V1",
-            "task_id": task_id,
-            "status": status,
-            "auto_continue": auto_continue,
-        }),
+        json.dumps(payload),
         encoding="utf-8",
     )
 
@@ -40,6 +43,8 @@ def test_full_next_flow_retry_and_restart(tmp_path):
     assert record is not None
     cid = record["continuation_id"]
     assert record["state"] == "CONTINUE_REQUESTED"
+    assert record["expected_next_task_id"].startswith("DEV-PRED-CONT-NEXT-")
+    assert record["expected_route_task_id"] == source
 
     cm.maintain_for_chat(
         data_dir=data,
@@ -237,3 +242,31 @@ def test_bounded_attempts_end_blocked_transport(tmp_path):
     record = load_record(data, record["continuation_id"])
     assert record["state"] == "BLOCKED_TRANSPORT"
     assert len(list(outbox.glob("*.json"))) == cm.MAX_ATTEMPTS
+
+
+def test_stale_claim_fails_closed_instead_of_stalling(tmp_path):
+    data = tmp_path / "bridge"
+    states = tmp_path / "task-state"
+    source = "AUTO-CONTINUE-SOURCE-STALE"
+    write_state(states, source, "DISPATCHED", auto_continue=True)
+    record = cm.start_for_result_ack(
+        data_dir=data,
+        task_state_dir=states,
+        source_task_id=source,
+        chat_id="chat-continuation-stale",
+    )
+    assert record is not None
+
+    write_state(
+        states,
+        record["expected_next_task_id"],
+        "CLAIMED",
+        claimed_at_utc="2026-10-02T10:00:00Z",
+    )
+    assert cm.reconcile(
+        record,
+        states,
+        now=1790935801.0,
+    ) is True
+    assert record["state"] == "BLOCKED"
+    assert "CLAIMED" in record["history"][-1]["detail"]
