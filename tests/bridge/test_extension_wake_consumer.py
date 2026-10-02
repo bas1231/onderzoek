@@ -67,7 +67,7 @@ def test_extension_chat_identity_matches_canonical_userscript_contract():
         "16777619",
         '.padStart(8, "0")',
         '"chat-c-"',
-        'match[1].length.toString(36)',
+        'conversationId.length.toString(36)',
     ):
         assert fragment in extension
 
