@@ -1,5 +1,5 @@
 (() => {
-  const CONTENT_VERSION = "0.9.1";
+  const CONTENT_VERSION = "1.0.0";
 
   if (
     window.__PREDICTION_RESEARCH_BRIDGE_LOADED__ ===
@@ -36,7 +36,19 @@
   let polling = false;
   let sendingResult = false;
   let sendingAiWork = false;
+  let wakePolling = false;
   let scanning = false;
+
+  const WAKE_RECEIPTS_KEY =
+    "predictionWakeReceiptsV1";
+
+  if (!window.__PREDICTION_WAKE_CONSUMER_ID__) {
+    window.__PREDICTION_WAKE_CONSUMER_ID__ =
+      "ext-" +
+      Date.now().toString(36) +
+      "-" +
+      Math.random().toString(36).slice(2, 10);
+  }
   let scanStartedAt = 0;
 
   function extensionContextAlive() {
@@ -222,6 +234,54 @@
     return `${location.origin}${location.pathname}`;
   }
 
+  function wakeStableHash(text) {
+    let hash = 2166136261;
+
+    for (let index = 0; index < text.length; index += 1) {
+      hash ^= text.charCodeAt(index);
+      hash = Math.imul(hash, 16777619);
+    }
+
+    return (hash >>> 0)
+      .toString(16)
+      .padStart(8, "0");
+  }
+
+  function wakeConversationState() {
+    const raw = normalizedCurrentUrl();
+    const parts =
+      location.pathname
+        .split("/")
+        .filter(Boolean);
+    const cIndex = parts.indexOf("c");
+    const conversationId =
+      cIndex >= 0 && parts[cIndex + 1]
+        ? parts[cIndex + 1]
+        : "";
+
+    if (conversationId) {
+      return {
+        stable: true,
+        conversationId,
+        chatId:
+          "chat-c-" +
+          wakeStableHash(conversationId) +
+          "-" +
+          conversationId.length.toString(36)
+      };
+    }
+
+    return {
+      stable: false,
+      conversationId: "",
+      chatId:
+        "chat-pending-" +
+        wakeStableHash(raw) +
+        "-" +
+        raw.length.toString(36)
+    };
+  }
+
   function projectKeyFromCurrentUrl() {
     const parts = location.pathname
       .split("/")
@@ -285,7 +345,8 @@
   async function bridgeFetch(
     path,
     method = "GET",
-    body = undefined
+    body = undefined,
+    timeoutMs = 10000
   ) {
     if (!extensionContextAlive()) {
       throw new Error(
@@ -311,7 +372,7 @@
               )
             );
           },
-          10000
+          timeoutMs
         );
 
         chrome.runtime.sendMessage({
@@ -1163,6 +1224,29 @@
     );
   }
 
+  function normalizedTurnText(value) {
+    return String(value || "")
+      .replace(/\\s+/g, " ")
+      .trim();
+  }
+
+  function exactUserTurnCount(text) {
+    const expected = normalizedTurnText(text);
+
+    return Array.from(
+      document.querySelectorAll(
+        '[data-message-author-role="user"]'
+      )
+    ).filter(
+      node =>
+        normalizedTurnText(
+          node.innerText ||
+          node.textContent ||
+          ""
+        ) === expected
+    ).length;
+  }
+
   async function insertAndSend(text) {
     const box = composer();
 
@@ -1235,9 +1319,23 @@
       return false;
     }
 
+    const before = exactUserTurnCount(text);
     button.click();
 
-    return true;
+    for (let index = 0; index < 20; index += 1) {
+      await new Promise(
+        resolve => setTimeout(resolve, 250)
+      );
+
+      if (exactUserTurnCount(text) > before) {
+        return true;
+      }
+    }
+
+    console.warn(
+      "[Prediction Bridge] send click had no observed user-turn receipt"
+    );
+    return false;
   }
 
   function resultMessage(item) {
@@ -1320,6 +1418,163 @@
       AI_WORK_END
     );
   }
+
+  async function loadWakeReceipts() {
+    const stored = await chrome.storage.local.get([
+      WAKE_RECEIPTS_KEY
+    ]);
+    const value = stored[WAKE_RECEIPTS_KEY];
+    return Array.isArray(value) ? value : [];
+  }
+
+  async function wakeReceiptSeen(key) {
+    return (await loadWakeReceipts()).includes(key);
+  }
+
+  async function rememberWakeReceipt(key) {
+    const receipts = await loadWakeReceipts();
+
+    if (!receipts.includes(key)) {
+      receipts.push(key);
+    }
+
+    while (receipts.length > 500) {
+      receipts.shift();
+    }
+
+    await chrome.storage.local.set({
+      [WAKE_RECEIPTS_KEY]: receipts
+    });
+  }
+
+  async function pollWake() {
+    if (
+      wakePolling ||
+      sendingResult ||
+      sendingAiWork
+    ) {
+      return;
+    }
+
+    if (!(await isArmed())) {
+      return;
+    }
+
+    const identity = wakeConversationState();
+    if (!identity.stable) {
+      return;
+    }
+
+    const consumerId =
+      String(
+        window.__PREDICTION_WAKE_CONSUMER_ID__ ||
+        ""
+      );
+
+    if (!consumerId) {
+      return;
+    }
+
+    wakePolling = true;
+
+    try {
+      const response = await bridgeFetch(
+        "/next?chat_id=" +
+          encodeURIComponent(identity.chatId) +
+          "&consumer_id=" +
+          encodeURIComponent(consumerId),
+        "GET",
+        undefined,
+        26000
+      );
+
+      if (!response || response.status === 204) {
+        return;
+      }
+
+      if (
+        !response.ok ||
+        response.status !== 200 ||
+        !response.data
+      ) {
+        console.warn(
+          "[Prediction Bridge] wake poll rejected:",
+          response && response.status
+        );
+        return;
+      }
+
+      const event = response.data;
+      const eventId = String(event.event_id || "");
+      const message = String(event.message || "");
+
+      if (!eventId || !message) {
+        console.warn(
+          "[Prediction Bridge] invalid wake event"
+        );
+        return;
+      }
+
+      const receiptKey = JSON.stringify([
+        identity.chatId,
+        eventId,
+        message
+      ]);
+
+      let delivered =
+        await wakeReceiptSeen(receiptKey);
+
+      if (!delivered && exactUserTurnCount(message) > 0) {
+        delivered = true;
+        await rememberWakeReceipt(receiptKey);
+      }
+
+      if (!delivered) {
+        const sent = await insertAndSend(message);
+        if (!sent) {
+          return;
+        }
+
+        await rememberWakeReceipt(receiptKey);
+      }
+
+      const ack = await bridgeFetch(
+        "/ack",
+        "POST",
+        {
+          event_id: eventId,
+          chat_id: identity.chatId,
+          consumer_id: consumerId
+        },
+        10000
+      );
+
+      if (!(ack && ack.ok)) {
+        console.warn(
+          "[Prediction Bridge] wake event delivered but ACK pending:",
+          eventId
+        );
+        return;
+      }
+
+      console.log(
+        "[Prediction Bridge] wake event delivered and ACKed:",
+        event.task_id || eventId
+      );
+
+    } catch (error) {
+      if (!contextInvalidated(error)) {
+        console.warn(
+          "[Prediction Bridge] wake poll error:",
+          error
+        );
+      }
+
+    } finally {
+      wakePolling = false;
+    }
+  }
+
 
   async function pollAiOutbox() {
     if (
@@ -1528,8 +1783,7 @@
       scanForTasks();
       flushDurableQueue();
       flushPendingResultAcks();
-      pollAiOutbox();
-      pollOutbox();
+      pollWake();
     },
     4000
   );
@@ -1576,7 +1830,7 @@
           try {
             await scanForTasks();
             await flushDurableQueue();
-            await pollOutbox();
+            await pollWake();
 
             sendResponse({
               ok: true
@@ -1611,6 +1865,7 @@
       scanning = false;
       polling = false;
       sendingResult = false;
+      wakePolling = false;
       scanStartedAt = 0;
 
       if (scanTimer) {
@@ -1622,7 +1877,7 @@
         try {
           await scanForTasks();
           await flushDurableQueue();
-          await pollOutbox();
+          await pollWake();
 
           sendResponse({
             ok: true
@@ -1651,8 +1906,7 @@
       await Promise.allSettled([
         scanForTasks(),
         flushDurableQueue(),
-        pollAiOutbox(),
-        pollOutbox()
+        pollWake()
       ]);
     } catch (error) {
       console.error(
