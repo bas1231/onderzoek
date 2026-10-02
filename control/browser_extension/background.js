@@ -1,4 +1,4 @@
-const RUNTIME_VERSION = "0.9.0";
+const RUNTIME_VERSION = "1.0.0";
 
 
 function normalizedChatUrl(rawUrl) {
