@@ -1,0 +1,40 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-AUTOBUILD-LOCAL-INVENTORY2-20261003-E040",
+  "build_id": "AUTOBUILD-LOCAL-INVENTORY2-20261003-E040",
+  "source_commit": "58f40f9e78f06b64fe580e222207bb8eb21c3baf",
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "write_worktree",
+    "run_project_python"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 180,
+  "notes": "Compact read-only inventory of local generic autobuild source/test files; intentional rc42 preserves diagnostic payload.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/autobuild_local_inventory_e040.py",
+      "content": "from pathlib import Path\nimport hashlib,json\nroot=Path.home()/\"prediction_research_prod\"\npaths=[\n\"control/codex_supervisor/build_planner.py\",\n\"tests/codex_supervisor/test_sol_builder_route.py\",\n\"tests/control/test_build_planner_retry.py\",\n\"tests/control/test_build_planner_nonbuildable_components.py\",\n\"control/codex_supervisor/candidate_dispatch.py\",\n\"knowledge/codex_runtime/CONFIG.json\",\n]\nrows=[]\nfor rel in paths:\n p=root/rel\n rows.append({\"path\":rel,\"exists\":p.is_file(),\"size\":p.stat().st_size if p.is_file() else None,\"sha256\":hashlib.sha256(p.read_bytes()).hexdigest() if p.is_file() else None})\nprint(\"INVENTORY=\"+json.dumps(rows,separators=(\",\",\":\")),flush=True)\nraise SystemExit(42)\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/autobuild_local_inventory_e040.py"
+      ],
+      "timeout_seconds": 60
+    }
+  ]
+}
