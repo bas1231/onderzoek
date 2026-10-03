@@ -1,0 +1,42 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-CONT-ACK-PATH-COMPACT-20261003-E018",
+  "build_id": "CONTINUATION-ACK-PATH-COMPACT-20261003",
+  "source_commit": "ffc6110d8b2d7b007cb4c969b0ca767659dc849f",
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_runtime"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 300,
+  "notes": "Read-only compact diagnosis of B continuation ACK path.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/diag_ack_path_compact_e018.py",
+      "content": "from pathlib import Path\nimport importlib.util, json, sys\nhome=Path.home()\nwake=home/\".local/share/prediction-chat-bridge\"\nstates=home/\".local/state/prediction-command-bus/tasks\"\ntid=\"DEV-PRED-CONT-NEXT-09bfdedea81fbfe9f3b3291e\"\ndef load(p):\n    try: return json.loads(p.read_text(encoding=\"utf-8\"))\n    except Exception: return None\ns=load(states/f\"{tid}.json\")\nr=load(wake/\"routes\"/f\"{tid}.json\")\nloc=[]\nfor n in (\"outbox\",\"inflight\",\"sent\"):\n    d=wake/n\n    if d.is_dir():\n        for p in d.glob(\"*.json\"):\n            o=load(p)\n            if isinstance(o,dict) and o.get(\"task_id\")==tid: loc.append(n)\nsys.path.insert(0,str(wake))\nsp=importlib.util.spec_from_file_location(\"bridge_e018\",wake/\"bridge_server.py\")\nm=importlib.util.module_from_spec(sp); sp.loader.exec_module(m)\nb=m.base\ncid=m.continuation.ids_for(tid)[\"continuation_id\"]\nvals=[\n f\"status={s.get('status') if isinstance(s,dict) else None}\",\n f\"auto={s.get('auto_continue') if isinstance(s,dict) else None}\",\n f\"route={bool(r)}\",\n f\"binding={bool(b.route_binding_for_task(tid))}\",\n f\"loc={','.join(sorted(set(loc))) or 'none'}\",\n f\"ack={getattr(getattr(b,'ACK_HOOK',None),'__name__',None)}\",\n f\"release={getattr(getattr(b,'release_lease',None),'__name__',None)}\",\n f\"allows={m.continuation.source_allows_auto_continue(states,tid)}\",\n f\"cont={m.continuation.continuation_path(b.DATA_DIR,cid).is_file()}\",\n]\nraise AssertionError(\"ACKPATH \"+\" \".join(vals))\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/diag_ack_path_compact_e018.py"
+      ],
+      "timeout_seconds": 120
+    }
+  ]
+}
