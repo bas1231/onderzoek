@@ -1,0 +1,86 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-PROD-FF-ACCEPTANCE-20261003-E054",
+  "source_commit": "a6cfabcd9cebbfeb570d6db2bfc55770186587ec",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "run_project_python",
+    "run_tests",
+    "production_fast_forward",
+    "user_service_manage"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 600,
+  "notes": "Promote canonical no-remote-push runtime to production through bounded production_fast_forward. Preserve non-overlapping allowlisted durable state; fail closed on staged state, unexpected drift, divergence or overlap. No remote Git write.",
+  "operations": [
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "-m",
+        "pytest",
+        "-q",
+        "tests/hourly/test_no_remote_git_write_runtime.py"
+      ],
+      "test": true,
+      "timeout_seconds": 120
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "-m",
+        "compileall",
+        "control/hourly/git_checkpoint.py",
+        "control/hourly/runtime_sync.py",
+        "control/dev_checks/prod_post_ff_verify_e054.py"
+      ],
+      "timeout_seconds": 60
+    },
+    {
+      "type": "production_ff",
+      "target_commit": "a6cfabcd9cebbfeb570d6db2bfc55770186587ec"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/prod_post_ff_verify_e054.py",
+        "a6cfabcd9cebbfeb570d6db2bfc55770186587ec"
+      ],
+      "timeout_seconds": 60
+    },
+    {
+      "type": "service",
+      "verb": "is-active",
+      "unit": "prediction-research-hourly-director.timer"
+    },
+    {
+      "type": "service",
+      "verb": "is-active",
+      "unit": "prediction-codex-supervisor.timer"
+    },
+    {
+      "type": "service",
+      "verb": "is-active",
+      "unit": "prediction-command-bus.timer"
+    },
+    {
+      "type": "service",
+      "verb": "is-active",
+      "unit": "prediction-chat-wake.service"
+    }
+  ]
+}
