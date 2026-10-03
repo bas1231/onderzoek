@@ -1,0 +1,65 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-CONT-RUNTIME-VERIFY-20261003-E005",
+  "build_id": "CONTINUATION-V2-RUNTIME-VERIFY-20261003",
+  "source_commit": "41048a5d4734f7117619e3eb44635fd1853b47a7",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "run_tests",
+    "read_runtime",
+    "user_service_manage",
+    "read_logs"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 600,
+  "notes": "Read-only runtime verification after same-chat route bootstrap. Verify E004 local command-bus state, installed continuation v2 stale-inflight recovery, wake runtime, staged Chrome bridge files and Prediction service liveness. No runtime writes, no Tampermonkey changes, no external network.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/verify_continuation_runtime_e005.py",
+      "content": "from pathlib import Path\nimport importlib.util\nimport json\nimport sys\n\nhome = Path.home()\ntask_id = \"DEV-PRED-CONT-INFLIGHT-RECOVERY-INSTALL-20261002-E004\"\nstate_path = home / \".local/state/prediction-command-bus/tasks\" / f\"{task_id}.json\"\nwake_dir = home / \".local/share/prediction-chat-bridge\"\next_dir = wake_dir / \"browser_extension\"\nmanager_path = wake_dir / \"continuation_manager.py\"\nserver_path = wake_dir / \"bridge_server.py\"\n\nassert state_path.is_file(), f\"E004 task state missing: {state_path}\"\nstate = json.loads(state_path.read_text(encoding=\"utf-8\"))\nprint(\"E004_COMMAND_STATE=\" + str(state.get(\"status\")))\nprint(\"E004_HTTP_STATUS=\" + str(state.get(\"http_status\")))\nprint(\"E004_RESPONSE=\" + str(state.get(\"response\", \"\"))[:1200])\nassert state.get(\"status\") == \"DISPATCHED\", state\n\nassert manager_path.is_file()\nmanager_text = manager_path.read_text(encoding=\"utf-8\")\nassert \"continuation_abandoned\" in manager_text\nassert \"DELIVERY_AMBIGUOUS\" in manager_text\nprint(\"INSTALLED_STALE_INFLIGHT_CODE=PASS\")\n\nsys.path.insert(0, str(wake_dir))\nspec = importlib.util.spec_from_file_location(\"installed_bridge_e005\", server_path)\nwake = importlib.util.module_from_spec(spec)\nassert spec.loader is not None\nspec.loader.exec_module(wake)\nprint(\"WAKE_HANDLER=\" + str(getattr(wake.Handler, \"server_version\", \"\")))\nassert \"continuation-v2\" in str(getattr(wake.Handler, \"server_version\", \"\"))\nassert hasattr(wake.base, \"INFLIGHT\")\nprint(\"GENERIC_INFLIGHT_PATCH=PRESERVED\")\n\nmanifest_path = ext_dir / \"manifest.json\"\ncontent_path = ext_dir / \"content.js\"\nbackground_path = ext_dir / \"background.js\"\nassert manifest_path.is_file() and content_path.is_file() and background_path.is_file()\nmanifest = json.loads(manifest_path.read_text(encoding=\"utf-8\"))\ncontent = content_path.read_text(encoding=\"utf-8\")\nbackground = background_path.read_text(encoding=\"utf-8\")\nprint(\"STAGED_EXTENSION_VERSION=\" + str(manifest.get(\"version\")))\nassert manifest.get(\"version\") == \"1.0.0\"\nassert 'const CONTENT_VERSION = \"1.0.0\";' in content\nassert 'const RUNTIME_VERSION = \"1.0.0\";' in background\nassert \"async function pollWake()\" in content\nassert \"exactUserTurnCount\" in content\nprint(\"STAGED_CHROME_WAKE=PASS\")\nprint(\"TAMPERMONKEY_REQUIRED=NO\")\nprint(\"RUNTIME_VERIFY_E005=PASS\")\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/verify_continuation_runtime_e005.py"
+      ],
+      "timeout_seconds": 120
+    },
+    {
+      "type": "service",
+      "verb": "is-active",
+      "unit": "prediction-chat-wake.service"
+    },
+    {
+      "type": "service",
+      "verb": "is-active",
+      "unit": "prediction-command-bus.timer"
+    },
+    {
+      "type": "journal",
+      "unit": "prediction-chat-wake.service",
+      "lines": 80
+    },
+    {
+      "type": "journal",
+      "unit": "prediction-command-bus.service",
+      "lines": 80
+    }
+  ]
+}
