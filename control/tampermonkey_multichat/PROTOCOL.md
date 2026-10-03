@@ -175,3 +175,14 @@ Een nieuwe Prediction-sessie leest eerst:
 8. `control/tampermonkey_multichat/CHATGPT_PROJECT_INSTRUCTIONS.md`
 
 Wacht bij een volledig nieuwe chat op de automatische `SESSION-ROUTE-*` PASS en gebruik die daarna expliciet als `route_task_id`. Bij conflict met oudere bridge-documentatie of sessiegeheugen is dit protocol samen met `CURRENT_STATE.md` en `SESSION_ROUTING.md` autoritatief.
+
+
+## Assistant-side delivery receipt
+
+Current transport supports an assistant-side durable receipt in addition to browser ACK.
+
+When a delivered result contains an exact event identifier, ChatGPT may acknowledge the transport by creating the deterministic immutable receipt described in `control/bridge_commands/OPERATIONS.md` and `control/bridge_commands/RESULT_RECEIPT_SCHEMA_V1.json`.
+
+This receipt reuses the existing wake `/ack` path after local event/task/route verification. It therefore does not weaken `outbox -> inflight -> sent` semantics.
+
+Important: a delivery receipt proves only that the message reached ChatGPT. It does **not** mean a continuation is logically complete. Raw `NIGHTSHIFT_WSL_RESULT_V1` still does not authorize NEXT/DONE/BLOCKED. A `PREDICTION_CONTROL_CONTINUE_V2` still requires exactly one durable outcome under the continuation protocol.
