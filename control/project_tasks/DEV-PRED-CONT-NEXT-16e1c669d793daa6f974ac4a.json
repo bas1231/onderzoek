@@ -1,0 +1,31 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-CONT-NEXT-16e1c669d793daa6f974ac4a",
+  "source_commit": "933a9dc874c3066c0f1e71a10e416248b92e82a0",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "production_inspect"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 240,
+  "notes": "Continuation of unresolved production topology/release chain. Read-only dirty/staged production status report only. Intentionally fail closed while HEAD differs from local main so compact status evidence survives bridge compaction. No production mutation.",
+  "operations": [
+    {
+      "type": "production_inspect",
+      "require_head_equals_main": true,
+      "report_mode": "status"
+    }
+  ]
+}
