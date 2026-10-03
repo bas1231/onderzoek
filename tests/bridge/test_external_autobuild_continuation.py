@@ -52,6 +52,8 @@ def test_external_continuation_is_idempotent_context_bound_and_routable(tmp_path
     assert "PREDICTION_AUTOBUILD_REQUEST_V1" in event["message"]
     assert "candidate_id=CANARY" in event["message"]
     assert "route_task_id=SESSION-ROUTE-abc123" in event["message"]
+    assert f"delivery_event_id={event['event_id']}" in event["message"]
+    assert f"delivery_task_id={event['task_id']}" in event["message"]
 
     with pytest.raises(ValueError, match="EXTERNAL_CONTINUATION_CONFLICT"):
         c.start_external_continuation(
