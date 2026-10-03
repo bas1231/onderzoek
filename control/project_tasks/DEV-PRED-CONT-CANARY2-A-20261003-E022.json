@@ -1,0 +1,41 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-CONT-CANARY2-A-20261003-E022",
+  "build_id": "CONTINUATION-NATIVE-ACK-CANARY-A-20261003",
+  "source_commit": "15853ffe9d61b2c0723d4d923d21f65d66dbacba",
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 300,
+  "notes": "Fresh post-native-ACK canary A. Expected continuation CONT-e91d594cb6c782b9e7b2668d and exact child DEV-PRED-CONT-NEXT-e91d594cb6c782b9e7b2668d.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/cont_canary2_a_e022.py",
+      "content": "print(\"CONT_CANARY2_A=PASS\")\nprint(\"NEXT=DEV-PRED-CONT-NEXT-e91d594cb6c782b9e7b2668d\")\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/cont_canary2_a_e022.py"
+      ],
+      "timeout_seconds": 60
+    }
+  ]
+}
