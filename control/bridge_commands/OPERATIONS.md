@@ -124,3 +124,33 @@ This is functional evidence, not final Tier-A qualification.
 ## New-session rule
 
 A new Prediction chat/session must read this file first and then `control/tampermonkey_multichat/PROTOCOL.md`. For normal commands prefer this GitHub command bus. Use visible `[[PREDICTION_CMD:...]]` only as a diagnostic/route-bootstrap fallback, not as the primary command transport.
+
+
+## Assistant-side result receipt
+
+The browser `/ack` remains supported, but delivery no longer has to depend on the active userscript version.
+
+When ChatGPT actually receives a message containing an exact result event ID, it should create exactly one immutable file:
+
+`control/bridge_commands/receipts/RESULT-RECEIPT-<EVENT_ID>.json`
+
+using `RESULT_RECEIPT_SCHEMA_V1.json`.
+
+For a normal `NIGHTSHIFT_WSL_RESULT_V1`:
+
+- `event_id` is the exact value after `event=`;
+- `source_task_id` is the exact value after `task=`;
+- `receipt_id` is exactly `RESULT-RECEIPT-<EVENT_ID>`.
+
+For `PREDICTION_CONTROL_CONTINUE_V2`, current runtimes include both:
+
+- `delivery_event_id=<EVENT_ID>`;
+- `delivery_task_id=<TASK_ID>`.
+
+Use those as `event_id` and `source_task_id`.
+
+A result receipt is **transport evidence only**. It is not NEXT, DONE or BLOCKED and does not authorize any continuation outcome by itself. For continuation messages, create the transport receipt independently and still select exactly one durable NEXT/DONE/BLOCKED outcome.
+
+The read-only GitHub poller validates that the local `inflight/` or `sent/` event has the exact event ID and exact source task ID, resolves the locally stored route, and POSTs to the existing wake `/ack` endpoint. The wake server therefore retains the canonical `inflight -> sent` transition, route checks, consumer checks and ACK hook.
+
+Receipt IDs are deterministic and immutable. If the exact receipt already exists, verify it; never modify or recreate it. An ambiguous receipt dispatch is never retried under the same receipt ID.
