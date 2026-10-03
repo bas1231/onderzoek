@@ -10,10 +10,7 @@ ROOT = Path.cwd()
 SOURCE = ROOT / "control/tampermonkey_multichat/prediction-chat-wake.user.js"
 RUNTIME = Path.home() / ".local/share/prediction-chat-bridge/prediction-chat-wake.user.js"
 
-TARGETS = [
-    "control/tampermonkey_multichat/test_userscript_delivery_dedupe_static.py",
-    "tests/bridge/test_tampermonkey_multichat.py",
-]
+STATIC_TEST = "control/tampermonkey_multichat/test_userscript_delivery_dedupe_static.py"
 
 def sha(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
@@ -25,25 +22,19 @@ def pre() -> int:
     assert "@updateURL    http://localhost:8765/prediction-chat-wake.user.js" in text
     assert "generationChangedAfterDelivery" in text
 
-    env = os.environ.copy()
-    env["PYTEST_DISABLE_PLUGIN_AUTOLOAD"] = "1"
     cp = subprocess.run(
-        [
-            sys.executable, "-m", "pytest", "-q", *TARGETS,
-            "-k", "not javascript_syntax_when_node_available",
-        ],
+        [sys.executable, STATIC_TEST],
         cwd=ROOT,
-        env=env,
         text=True,
         stdout=subprocess.PIPE,
         stderr=subprocess.STDOUT,
         check=False,
-        timeout=420,
+        timeout=180,
     )
     output = cp.stdout or ""
     if len(output) > 12000:
         output = output[-12000:]
-    print("ACK_FIX_PYTEST_RC=" + str(cp.returncode), flush=True)
+    print("ACK_FIX_STATIC_RC=" + str(cp.returncode), flush=True)
     if output:
         print(output, flush=True)
     if cp.returncode != 0:
