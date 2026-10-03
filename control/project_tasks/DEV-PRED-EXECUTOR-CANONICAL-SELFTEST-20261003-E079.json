@@ -1,0 +1,36 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-EXECUTOR-CANONICAL-SELFTEST-20261003-E079",
+  "source_commit": "2e2eda6d95d3d6f174aed0384683374b2d529e13",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "run_project_python"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 300,
+  "notes": "Independent rerun after canonical blob-hashing fix. No production mutation. DEV manifest first runs complete project_task_executor regression suite, then executor runs a small compile check.",
+  "operations": [
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "-m",
+        "compileall",
+        "control/dev_checks/prod_ref_state_e058.py"
+      ],
+      "timeout_seconds": 60
+    }
+  ]
+}
