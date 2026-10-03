@@ -105,7 +105,18 @@ def ensure_publication(path: str, *, root: Path = ROOT) -> dict:
     if not target.is_file():
         raise PublicationBlocked("SOURCE_MISSING")
 
-    item = package(rel, target.read_bytes())
+    data = target.read_bytes()
+    try:
+        text = data.decode("utf-8")
+    except UnicodeDecodeError as exc:
+        raise PublicationBlocked("SOURCE_NOT_UTF8") from exc
+    if rel.endswith(".json"):
+        try:
+            json.loads(text)
+        except Exception as exc:
+            raise PublicationBlocked("SOURCE_JSON_INVALID") from exc
+
+    item = package(rel, data)
     if not item["publishable"]:
         return {
             "status": "OVERSIZED_LOCAL_ONLY",
