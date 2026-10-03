@@ -1,0 +1,30 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-PROD-WORKTREE-CANONICAL-20261003-E070",
+  "source_commit": "937974860d3ab137cc44841acad022d13ec92a0f",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "production_compare_worktree"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 300,
+  "notes": "Read-only comparison of all dirty/untracked production working-tree bytes against pinned canonical main. Fail closed with compact unique-path evidence when any local bytes are not represented in canonical. No production mutation.",
+  "operations": [
+    {
+      "type": "production_compare_worktree",
+      "require_exact": true
+    }
+  ]
+}
