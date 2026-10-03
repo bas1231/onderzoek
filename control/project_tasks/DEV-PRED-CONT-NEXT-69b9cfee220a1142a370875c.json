@@ -1,0 +1,51 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-CONT-NEXT-69b9cfee220a1142a370875c",
+  "source_commit": "c77d0a50328652333b4cd867ca82b25f5b8642b5",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "production_inspect",
+    "user_service_manage"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 300,
+  "notes": "Superseded production-gate continuation. Read-only convergence check only: require production HEAD equals local main and verify four Prediction units active. No switch, cleanup, reset, fast-forward or remote Git write.",
+  "operations": [
+    {
+      "type": "production_inspect",
+      "require_head_equals_main": true,
+      "report_mode": "status"
+    },
+    {
+      "type": "service",
+      "verb": "is-active",
+      "unit": "prediction-research-hourly-director.timer"
+    },
+    {
+      "type": "service",
+      "verb": "is-active",
+      "unit": "prediction-codex-supervisor.timer"
+    },
+    {
+      "type": "service",
+      "verb": "is-active",
+      "unit": "prediction-command-bus.timer"
+    },
+    {
+      "type": "service",
+      "verb": "is-active",
+      "unit": "prediction-chat-wake.service"
+    }
+  ]
+}
