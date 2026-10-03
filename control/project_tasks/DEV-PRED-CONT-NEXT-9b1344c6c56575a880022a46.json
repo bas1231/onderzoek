@@ -1,0 +1,41 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-CONT-NEXT-9b1344c6c56575a880022a46",
+  "build_id": "CONTINUATION-RETEST-B-20261003",
+  "source_commit": "023dcc1a2ace1a92b26f6eaed1a016a1fbc85d25",
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 300,
+  "notes": "Fresh end-to-end continuation retest B. Expected terminal continuation CONT-2293c6f3c830ec1ffe928c50 and exact DONE receipt CONT-DONE-2293c6f3c830ec1ffe928c50.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/cont_retest_b_e036.py",
+      "content": "print(\"CONT_RETEST_B=PASS\")\nprint(\"DONE=CONT-DONE-2293c6f3c830ec1ffe928c50\")\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/cont_retest_b_e036.py"
+      ],
+      "timeout_seconds": 60
+    }
+  ]
+}
