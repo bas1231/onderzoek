@@ -7,7 +7,6 @@ ACKed and skipped, while a newly submitted event must be remembered before ACK.
 """
 from pathlib import Path
 import re
-import runpy
 import unittest
 
 SCRIPT = Path(__file__).with_name("prediction-chat-wake.user.js")
@@ -27,12 +26,22 @@ class UserscriptDeliveryDedupeStaticTests(unittest.TestCase):
         self.assertIn("GM_setValue(key, values)", self.src)
 
     def test_remembered_event_is_acked_and_not_resubmitted(self):
-        behavior = runpy.run_path(str(SCRIPT.parents[2] / 'tests/audit/test_delivery_behavior.py'))
-        behavior['test_event_memory_survives_new_script_instance']()
+        start = self.src.index("const alreadyDelivered =")
+        submit = self.src.index("const sent = await submitMessage(message);", start)
+        block = self.src[start:submit]
+        self.assertIn("remembered(KEY_SENT_EVENTS, eventKey)", block)
+        self.assertIn("remembered(KEY_SENT_TASKS, taskKey)", block)
+        self.assertIn("recentUserTurnContainsDelivery(message)", block)
 
     def test_new_event_is_remembered_before_ack(self):
-        behavior = runpy.run_path(str(SCRIPT.parents[2] / 'tests/audit/test_delivery_behavior.py'))
-        behavior['test_new_event_receipt_written_before_ack']()
+        start = self.src.index("const sent = await submitMessage(message);")
+        end = self.src.index("} catch (_)", start)
+        body = self.src[start:end]
+        remember_event = body.index("remember(KEY_SENT_EVENTS, eventKey);")
+        remember_task = body.index("remember(KEY_SENT_TASKS, taskKey);")
+        ack_pos = body.index("const ok = await ack(event.event_id, identity.chatId, identity.consumerId);")
+        self.assertLess(remember_event, ack_pos)
+        self.assertLess(remember_task, ack_pos)
 
     def test_confirmed_delivery_is_acked_before_generation_exit(self):
         start = self.src.index("const sent = await submitMessage(message);")
