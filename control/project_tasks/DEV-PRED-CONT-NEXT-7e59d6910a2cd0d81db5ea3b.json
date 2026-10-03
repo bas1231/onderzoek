@@ -1,0 +1,30 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-CONT-NEXT-7e59d6910a2cd0d81db5ea3b",
+  "source_commit": "28e925b9aefe5b34db66c34777d7e77da5eaabfa",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "production_fast_forward"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 300,
+  "notes": "Continuation of production divergence/status chain. Attempt bounded reconciliation only if the temporary production branch is fully clean and every committed branch-delta path is byte-identical to canonical target 28e925b9. Preserve the divergent branch ref, switch to main only after those gates, then fast-forward main from the local mirror. Fail closed before switch on dirty state or any missing/different canonical path. No remote Git write.",
+  "operations": [
+    {
+      "type": "production_ff",
+      "target_commit": "28e925b9aefe5b34db66c34777d7e77da5eaabfa"
+    }
+  ]
+}
