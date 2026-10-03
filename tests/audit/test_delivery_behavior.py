@@ -25,7 +25,7 @@ gmRequest=async()=>{
  const e=events[index++];now=e.now||0;currentChat=e.chat||'chat-a';
  return {status:200,responseText:JSON.stringify(e)};
 };
-submitMessage=async(text)=>{sent.push(text);return ${config.succeeds!==false};};
+submitMessage=async(text)=>{sent.push(text);if(${config.restartDuringSubmit===true})wakeGeneration++;return ${config.succeeds!==false};};
 ack=async(event,chat)=>{acks.push({event,chat,cache:Array.from(cache.entries())});return ${config.ack!==false};};
 wakeGeneration=1;
 wakeLoop(1).then(()=>console.log(JSON.stringify({sent,acks})));
@@ -66,6 +66,13 @@ def test_retry_backoff_preserves_unacked_event():
 def test_task_memory_written_before_ack():
     out=run([event()])
     assert any('sent_tasks' in k and v for k,v in out['acks'][0]['cache'])
+
+
+def test_generation_change_after_confirmed_submit_still_acks():
+    out=run([event()],restartDuringSubmit=True)
+    assert len(out['sent'])==1
+    assert len(out['acks'])==1
+    assert any('sent_events' in k and v for k,v in out['acks'][0]['cache'])
 
 
 def test_event_memory_survives_new_script_instance():
