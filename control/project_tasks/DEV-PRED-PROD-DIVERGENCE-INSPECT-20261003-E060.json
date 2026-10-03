@@ -1,0 +1,30 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-PROD-DIVERGENCE-INSPECT-20261003-E060",
+  "source_commit": "c09ba1a21de966d8c95cdfb2b0cbb279e26b41d0",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "production_inspect"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 240,
+  "notes": "Read-only production divergence report. Intentionally fail closed when production HEAD differs from local main so compact bridge detail includes local commits, status and changed paths. No production mutation, switch, fetch, merge or remote write.",
+  "operations": [
+    {
+      "type": "production_inspect",
+      "require_head_equals_main": true
+    }
+  ]
+}
