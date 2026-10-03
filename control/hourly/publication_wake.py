@@ -114,6 +114,9 @@ def ensure_publication(path: str, *, root: Path = ROOT) -> dict:
         raise PublicationBlocked("CONTEXT_LIMIT")
 
     continuation = _load_continuation()
+    ids = continuation.ids_for(source_task_id)
+    record_path = continuation.continuation_path(BRIDGE_DATA, ids["continuation_id"])
+    existed_before = record_path.exists()
     record = continuation.start_external_continuation(
         data_dir=BRIDGE_DATA,
         source_task_id=source_task_id,
@@ -151,5 +154,7 @@ def ensure_publication(path: str, *, root: Path = ROOT) -> dict:
         "sha256": item["sha256"],
         "bytes": item["bytes"],
         "continuation_id": record["continuation_id"],
+        "continuation_state": record["state"],
         "source_task_id": source_task_id,
+        "new_continuation": not existed_before,
     }
