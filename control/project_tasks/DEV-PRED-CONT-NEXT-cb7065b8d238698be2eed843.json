@@ -1,0 +1,31 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-CONT-NEXT-cb7065b8d238698be2eed843",
+  "source_commit": "232563be3b4fa5b3d0eb4df4293485678275ba0e",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "production_inspect"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 240,
+  "notes": "Continuation of unresolved production fast-forward chain. Read-only topology report only: merge-base and ahead/behind between local main and temporary production branch. Intentionally fail closed to surface compact topology evidence. No production mutation.",
+  "operations": [
+    {
+      "type": "production_inspect",
+      "require_head_equals_main": true,
+      "report_mode": "topology"
+    }
+  ]
+}
