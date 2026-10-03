@@ -288,3 +288,35 @@ def test_unacked_result_heartbeat_is_bounded_to_stale_auto_continue_same_chat(tm
         event_path.unlink()
         (routes / f"{source}.json").unlink()
         (states / f"{source}.json").unlink()
+
+
+def test_top_level_next_handler_runs_heartbeat_before_parent(monkeypatch):
+    mod = load_overlay()
+    calls = []
+
+    monkeypatch.setattr(
+        mod,
+        "recover_unacked_result_heartbeat",
+        lambda chat_id: calls.append(("recover", chat_id)) or 0,
+    )
+    monkeypatch.setattr(
+        mod.continuation,
+        "maintain_for_chat",
+        lambda **kwargs: calls.append(("maintain", kwargs["chat_id"])),
+    )
+    monkeypatch.setattr(
+        mod.current.Handler,
+        "do_GET",
+        lambda self: calls.append(("parent", self.path)),
+    )
+
+    handler = object.__new__(mod.Handler)
+    handler.path = "/next?chat_id=chat-heartbeat-direct-001&consumer_id=tab-heartbeat-direct-001"
+    handler.authorized = lambda: True
+    handler.do_GET()
+
+    assert calls == [
+        ("recover", "chat-heartbeat-direct-001"),
+        ("maintain", "chat-heartbeat-direct-001"),
+        ("parent", handler.path),
+    ]

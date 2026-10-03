@@ -18,6 +18,7 @@ import argparse
 import time
 from http.server import ThreadingHTTPServer
 from pathlib import Path
+from urllib.parse import parse_qs, urlparse
 
 import bridge_server_status_compaction as current
 import continuation_manager as continuation
@@ -182,11 +183,25 @@ if _BASE_HAS_ACK_HOOK:
 else:
     base.release_lease = continuation_release_lease
 
-base.oldest_event = continuation_oldest_event
-
-
 class Handler(current.Handler):
-    server_version = "PredictionChatWake/1.3-continuation-v2"
+    server_version = "PredictionChatWake/1.4-continuation-heartbeat"
+
+    def do_GET(self):
+        parsed = urlparse(self.path)
+        if parsed.path == "/next" and self.authorized():
+            qs = parse_qs(parsed.query)
+            raw_chat = (qs.get("chat_id") or [""])[0]
+            chat_id = base.safe_id(raw_chat, base.CHAT_RE) if raw_chat else None
+            if chat_id:
+                recover_unacked_result_heartbeat(str(chat_id))
+                continuation.maintain_for_chat(
+                    data_dir=base.DATA_DIR,
+                    task_state_dir=TASK_STATE_DIR,
+                    routes_dir=base.ROUTES,
+                    outbox_dir=base.OUTBOX,
+                    chat_id=str(chat_id),
+                )
+        super().do_GET()
 
 
 def main() -> int:
