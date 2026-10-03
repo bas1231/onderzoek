@@ -1,0 +1,41 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-CONT-NEXT-e91d594cb6c782b9e7b2668d",
+  "build_id": "CONTINUATION-NATIVE-ACK-CANARY-B-20261003",
+  "source_commit": "15853ffe9d61b2c0723d4d923d21f65d66dbacba",
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 300,
+  "notes": "Fresh post-native-ACK canary B. Expected terminal continuation CONT-1d1f90643d3df345f8db080e and exact DONE receipt CONT-DONE-1d1f90643d3df345f8db080e.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/cont_canary2_b_e022.py",
+      "content": "print(\"CONT_CANARY2_B=PASS\")\nprint(\"DONE=CONT-DONE-1d1f90643d3df345f8db080e\")\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/cont_canary2_b_e022.py"
+      ],
+      "timeout_seconds": 60
+    }
+  ]
+}
