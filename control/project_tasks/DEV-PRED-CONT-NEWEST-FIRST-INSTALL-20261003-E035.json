@@ -1,0 +1,90 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-CONT-NEWEST-FIRST-INSTALL-20261003-E035",
+  "build_id": "CONTINUATION-NEWEST-FIRST-20261003-E035",
+  "source_commit": "fc513b02ef3f1de58aad272160c67737de7f80dc",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_runtime",
+    "write_runtime",
+    "user_service_manage",
+    "read_logs"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 900,
+  "notes": "Retry newest-first install with stdlib unittest harness instead of executor test adapter. Preserve stale canary A INFLIGHT evidence; do not invoke production recovery manually.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/run_heartbeat_tests_e035.py",
+      "content": "from pathlib import Path\nimport importlib.util\nimport sys\nimport unittest\n\nroot=Path.cwd()\npath=root/\"tests/bridge/test_continuation_wake_overlay.py\"\nspec=importlib.util.spec_from_file_location(\"test_continuation_wake_overlay_e035\",path)\nmod=importlib.util.module_from_spec(spec)\nassert spec.loader is not None\nspec.loader.exec_module(mod)\nsuite=unittest.defaultTestLoader.loadTestsFromModule(mod)\nresult=unittest.TextTestRunner(verbosity=2).run(suite)\nif not result.wasSuccessful():\n    raise SystemExit(1)\nprint(\"HEARTBEAT_TESTS_E035=PASS\")\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/run_heartbeat_tests_e035.py"
+      ],
+      "timeout_seconds": 180
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "-m",
+        "compileall",
+        "-q",
+        "control/tampermonkey_multichat/bridge_server_continuation.py"
+      ],
+      "timeout_seconds": 120
+    },
+    {
+      "type": "install_runtime",
+      "source": "control/tampermonkey_multichat/bridge_server_continuation.py",
+      "destination": "/home/leonh/.local/share/prediction-chat-bridge/bridge_server.py",
+      "mode": 493
+    },
+    {
+      "type": "service",
+      "verb": "restart",
+      "unit": "prediction-chat-wake.service"
+    },
+    {
+      "type": "service",
+      "verb": "is-active",
+      "unit": "prediction-chat-wake.service"
+    },
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/verify_newest_first_e035.py",
+      "content": "from pathlib import Path\nimport importlib.util\nimport inspect\nimport sys\n\nruntime=Path.home()/\".local/share/prediction-chat-bridge\"\nsys.path.insert(0,str(runtime))\nsp=importlib.util.spec_from_file_location(\"installed_bridge_e035\",runtime/\"bridge_server.py\")\nm=importlib.util.module_from_spec(sp)\nassert sp.loader is not None\nsp.loader.exec_module(m)\nassert m.Handler.server_version==\"PredictionChatWake/1.4-continuation-heartbeat\"\nsrc=inspect.getsource(m.recover_unacked_result_heartbeat)\nassert \"reverse=True\" in src\nassert m.MAX_RECOVERY_SCAN==256\nassert m.UNACKED_RESULT_HEARTBEAT_SECONDS==45.0\nprint(\"NEWEST_FIRST_RUNTIME_E035=PASS\")\nprint(\"HEARTBEAT_SCAN=NEWEST_FIRST\")\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/verify_newest_first_e035.py"
+      ],
+      "timeout_seconds": 120
+    },
+    {
+      "type": "journal",
+      "unit": "prediction-chat-wake.service",
+      "lines": 80
+    }
+  ]
+}
