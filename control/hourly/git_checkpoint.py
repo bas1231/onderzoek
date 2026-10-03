@@ -256,82 +256,28 @@ def main() -> int:
         print("GIT_CHECKPOINT_NO_CHANGES")
         return 0
 
-    stamp = datetime.now().astimezone().strftime("%Y-%m-%d %H:%M:%S %z")
-    new_head, staged, build_error = build_checkpoint_commit(
-        base_head=local_before,
-        candidates=candidates,
-        stamp=stamp,
-    )
-
-    if build_error:
-        return fail(build_error)
-
-    if not staged or not new_head:
-        write_status(
-            "NO_CHANGES",
-            head=local_before,
-            candidate_count=len(candidates),
-            preserved_staged_count=len(pre_staged),
-        )
-        print("GIT_CHECKPOINT_NO_CHANGES")
-        return 0
-
-    fetch2 = git("fetch", "origin", "main", check=False)
-    if fetch2.returncode != 0:
-        return fail("second fetch failed; checkpoint commit object not published")
-
-    remote_after = git("rev-parse", "origin/main").stdout.strip()
-
-    if remote_after != local_before:
-        return fail(
-            "origin/main changed during checkpoint; checkpoint commit object "
-            "not attached to local main"
-        )
-
-    update = git(
-        "update-ref",
-        "refs/heads/main",
-        new_head,
-        local_before,
-        check=False,
-    )
-    if update.returncode != 0:
-        return fail("failed to attach checkpoint commit to local main")
-
-    if not restore_real_index_for_checkpoint_paths(staged):
-        git("update-ref", "refs/heads/main", local_before, new_head, check=False)
-        restore_real_index_for_checkpoint_paths(staged)
-        return fail("failed to refresh checkpoint paths in real index")
-
-    post_staged_patch = git("diff", "--cached", "--binary").stdout
-    if post_staged_patch != pre_staged_patch:
-        git("update-ref", "refs/heads/main", local_before, new_head, check=False)
-        restore_real_index_for_checkpoint_paths(staged)
-        return fail("pre-existing staged state changed; checkpoint rolled back")
-
-    push = git("push", "origin", "main", check=False)
-
-    if push.returncode != 0:
-        return fail(
-            "push failed; checkpoint committed locally but not pushed"
-        )
+    invalid_json = []
+    for path in candidates:
+        if not path.endswith(".json"):
+            continue
+        try:
+            json.loads((ROOT / path).read_text(encoding="utf-8"))
+        except Exception as exc:
+            invalid_json.append(f"{path}:{type(exc).__name__}")
+    if invalid_json:
+        return fail("invalid JSON: " + ", ".join(invalid_json[:20]))
 
     write_status(
-        "PUBLISHED",
-        previous_head=local_before,
-        head=new_head,
-        files=staged,
-        file_count=len(staged),
+        "LOCAL_ONLY_PENDING_CHATGPT_PUBLICATION",
+        head=local_before,
+        files=candidates,
+        file_count=len(candidates),
         preserved_staged_count=len(pre_staged),
     )
-
-    print("GIT_CHECKPOINT_PUBLISHED", new_head)
-    print("GIT_CHECKPOINT_FILE_COUNT", len(staged))
-    print("GIT_CHECKPOINT_PRESERVED_STAGED_COUNT", len(pre_staged))
-
-    for path in staged:
+    print("GIT_CHECKPOINT_LOCAL_ONLY_PENDING")
+    print("GIT_CHECKPOINT_FILE_COUNT", len(candidates))
+    for path in candidates:
         print("GIT_CHECKPOINT_FILE", path)
-
     return 0
 
 
