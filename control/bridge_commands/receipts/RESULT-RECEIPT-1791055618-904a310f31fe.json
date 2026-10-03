@@ -1,0 +1,14 @@
+{
+  "schema": "PREDICTION_RESULT_RECEIPT_V1",
+  "receipt_id": "RESULT-RECEIPT-1791055618-904a310f31fe",
+  "event_id": "1791055618-904a310f31fe",
+  "source_task_id": "BRIDGE-RESULT-RECEIPT-LIVE-20261003-E074",
+  "created_at_utc": "2026-10-03T20:14:00Z",
+  "live_trading": false,
+  "paid_actions": false,
+  "wallet_actions": false,
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  }
+}
