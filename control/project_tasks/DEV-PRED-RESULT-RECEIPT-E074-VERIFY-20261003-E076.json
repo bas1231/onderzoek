@@ -1,0 +1,37 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-RESULT-RECEIPT-E074-VERIFY-20261003-E076",
+  "source_commit": "9d988dd6228b42b4cd5d8d4df66941f0b2c686b0",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "run_project_python",
+    "read_runtime"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 180,
+  "notes": "Read-only verification that the immutable GitHub result receipt for the observed E074 bridge event was consumed locally, moved the exact event to sent/, and removed it from inflight. No production mutation.",
+  "operations": [
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/result_receipt_roundtrip_e066.py",
+        "1791055618-904a310f31fe",
+        "BRIDGE-RESULT-RECEIPT-LIVE-20261003-E074"
+      ],
+      "timeout_seconds": 120
+    }
+  ]
+}
