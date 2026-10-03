@@ -1,0 +1,30 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-CONT-NEXT-580ab8ca63181c7210843228",
+  "source_commit": "28e925b9aefe5b34db66c34777d7e77da5eaabfa",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "production_fast_forward"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 300,
+  "notes": "Idempotent continuation after production reconciliation/fast-forward attempt. Re-run the bounded production_ff to the exact canonical target. If production is already current, return already_current; otherwise mutate only if all existing clean-tree, branch-preservation, byte-identity, ancestry and overlap gates pass. No remote Git write.",
+  "operations": [
+    {
+      "type": "production_ff",
+      "target_commit": "28e925b9aefe5b34db66c34777d7e77da5eaabfa"
+    }
+  ]
+}
