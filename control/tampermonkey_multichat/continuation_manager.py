@@ -79,12 +79,14 @@ def _append_history(record: dict, state: str, detail: str) -> None:
     })
 
 
-def start_for_result_ack(
+def _start_continuation(
     *,
     data_dir: Path,
     task_state_dir: Path,
     source_task_id: str,
     chat_id: str,
+    detail: str,
+    recovery_reason: str | None = None,
 ) -> dict | None:
     if not source_allows_auto_continue(task_state_dir, source_task_id):
         return None
@@ -110,11 +112,46 @@ def start_for_result_ack(
         "history": [{
             "at": now,
             "state": "CONTINUE_REQUESTED",
-            "detail": "source result ACKed in originating chat",
+            "detail": str(detail)[:500],
         }],
     }
+    if recovery_reason:
+        record["recovery_reason"] = str(recovery_reason)[:120]
     _atomic_json(path, record)
     return record
+
+
+def start_for_result_ack(
+    *,
+    data_dir: Path,
+    task_state_dir: Path,
+    source_task_id: str,
+    chat_id: str,
+) -> dict | None:
+    return _start_continuation(
+        data_dir=data_dir,
+        task_state_dir=task_state_dir,
+        source_task_id=source_task_id,
+        chat_id=chat_id,
+        detail="source result ACKed in originating chat",
+    )
+
+
+def start_for_unacked_result_heartbeat(
+    *,
+    data_dir: Path,
+    task_state_dir: Path,
+    source_task_id: str,
+    chat_id: str,
+) -> dict | None:
+    return _start_continuation(
+        data_dir=data_dir,
+        task_state_dir=task_state_dir,
+        source_task_id=source_task_id,
+        chat_id=chat_id,
+        detail="source result remained INFLIGHT past ACK timeout; recovery heartbeat armed",
+        recovery_reason="RESULT_ACK_TIMEOUT",
+    )
 
 
 def _outcome_candidates(record: dict, task_state_dir: Path) -> list[tuple[str, dict]]:
@@ -322,7 +359,8 @@ def _attempt_message(record: dict, attempt: int) -> str:
         f"continuation_id={record['continuation_id']}\n"
         f"source_task_id={record['source_task_id']}\n"
         f"attempt={attempt}\n"
-        "No human input is required. Inspect the current Prediction source of truth and select exactly one durable outcome.\n"
+        + (f"recovery_reason={record['recovery_reason']}\n" if record.get("recovery_reason") else "")
+        + "No human input is required. Inspect the current Prediction source of truth and select exactly one durable outcome.\n"
         f"NEXT: create the next authorized Prediction task using exactly task_id={record['expected_next_task_id']}; "
         "for project work use that same ID in project task, DEV manifest and command-bus inbox; "
         f"use route_task_id={record['expected_route_task_id']}; set auto_continue=true "

@@ -26,13 +26,15 @@ def setup_paths(mod, tmp_path, monkeypatch):
     data = tmp_path / "bridge"
     routes = data / "routes"
     outbox = data / "outbox"
+    inflight = data / "inflight"
     sent = data / "sent"
     states = tmp_path / "task-state"
-    for path in (routes, outbox, sent, states):
+    for path in (routes, outbox, inflight, sent, states):
         path.mkdir(parents=True, exist_ok=True)
     monkeypatch.setattr(base, "DATA_DIR", data)
     monkeypatch.setattr(base, "ROUTES", routes)
     monkeypatch.setattr(base, "OUTBOX", outbox)
+    monkeypatch.setattr(base, "INFLIGHT", inflight)
     monkeypatch.setattr(base, "SENT", sent)
     monkeypatch.setattr(mod, "TASK_STATE_DIR", states)
     return base, data, routes, outbox, sent, states
@@ -189,3 +191,100 @@ def test_compatibility_release_hook_uses_sent_event_and_propagates_failures(tmp_
     assert len(records) == 1
     record = json.loads(records[0].read_text(encoding="utf-8"))
     assert record["chat_id"] == "chat-ack-hook-004"
+
+
+def test_stale_unacked_auto_continue_result_arms_recovery_heartbeat(tmp_path, monkeypatch):
+    mod = load_overlay()
+    base, data, routes, outbox, _, states = setup_paths(mod, tmp_path, monkeypatch)
+
+    source = "ACK-HEARTBEAT-SOURCE-001"
+    chat = "chat-ack-heartbeat-001"
+    write_source_state(states, source, True)
+    (routes / f"{source}.json").write_text(json.dumps({
+        "version": 2,
+        "task_id": source,
+        "chat_id": chat,
+        "consumer_id": None,
+    }), encoding="utf-8")
+
+    event_id = "stale-unacked-result-001"
+    inflight = base.INFLIGHT / f"{event_id}.json"
+    inflight.write_text(json.dumps({
+        "event_id": event_id,
+        "task_id": source,
+        "message": "NIGHTSHIFT_WSL_RESULT_V1 task=ACK-HEARTBEAT-SOURCE-001 status=PASS exit=0",
+        "created_at": 1000.0,
+        "source": "wsl_result",
+    }), encoding="utf-8")
+
+    recovered = mod.recover_unacked_result_heartbeat(
+        chat,
+        now=1000.0 + mod.UNACKED_RESULT_HEARTBEAT_SECONDS + 1,
+    )
+    assert recovered == 1
+    assert inflight.is_file()
+
+    cid = mod.continuation.ids_for(source)["continuation_id"]
+    record = json.loads(
+        mod.continuation.continuation_path(data, cid).read_text(encoding="utf-8")
+    )
+    assert record["state"] == "CONTINUE_REQUESTED"
+    assert record["recovery_reason"] == "RESULT_ACK_TIMEOUT"
+    assert "INFLIGHT" in record["history"][0]["detail"]
+
+    mod.continuation.maintain_for_chat(
+        data_dir=data,
+        task_state_dir=states,
+        routes_dir=routes,
+        outbox_dir=outbox,
+        chat_id=chat,
+        now=2000.0,
+    )
+    record = json.loads(
+        mod.continuation.continuation_path(data, cid).read_text(encoding="utf-8")
+    )
+    assert record["state"] == "CONTINUE_QUEUED"
+    assert record["attempts"] == 1
+    wake = json.loads((outbox / f"{record['last_event_id']}.json").read_text(encoding="utf-8"))
+    assert wake["source"] == "control_continuation_v2"
+    assert "recovery_reason=RESULT_ACK_TIMEOUT" in wake["message"]
+    assert inflight.is_file()
+
+
+def test_unacked_result_heartbeat_is_bounded_to_stale_auto_continue_same_chat(tmp_path, monkeypatch):
+    mod = load_overlay()
+    base, data, routes, _, _, states = setup_paths(mod, tmp_path, monkeypatch)
+
+    chat = "chat-ack-heartbeat-guard"
+    other_chat = "chat-ack-heartbeat-other"
+
+    cases = [
+        ("FRESH-AUTO", True, chat, 1000.0 + mod.UNACKED_RESULT_HEARTBEAT_SECONDS - 1),
+        ("ORDINARY-NO-AUTO", False, chat, 1000.0 + mod.UNACKED_RESULT_HEARTBEAT_SECONDS + 1),
+        ("OTHER-CHAT-AUTO", True, other_chat, 1000.0 + mod.UNACKED_RESULT_HEARTBEAT_SECONDS + 1),
+    ]
+
+    for source, auto, route_chat, now in cases:
+        write_source_state(states, source, auto)
+        (routes / f"{source}.json").write_text(json.dumps({
+            "version": 2,
+            "task_id": source,
+            "chat_id": route_chat,
+            "consumer_id": None,
+        }), encoding="utf-8")
+        event_id = f"event-{source.lower()}"
+        (base.INFLIGHT / f"{event_id}.json").write_text(json.dumps({
+            "event_id": event_id,
+            "task_id": source,
+            "message": "result",
+            "created_at": 1000.0,
+            "source": "wsl_result",
+        }), encoding="utf-8")
+        assert mod.recover_unacked_result_heartbeat(chat, now=now) == 0
+        cid = mod.continuation.ids_for(source)["continuation_id"]
+        assert not mod.continuation.continuation_path(data, cid).exists()
+        event_path = base.INFLIGHT / f"{event_id}.json"
+        assert event_path.is_file()
+        event_path.unlink()
+        (routes / f"{source}.json").unlink()
+        (states / f"{source}.json").unlink()
