@@ -1,0 +1,124 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-CONT-NATIVE-ACK-INSTALL-20261003-E023",
+  "build_id": "CONTINUATION-NATIVE-ACK-INSTALL-20261003-E023",
+  "source_commit": "403ed21d0dd5f651b55dc0806dfb94c03d51618b",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "run_tests",
+    "read_runtime",
+    "write_runtime",
+    "user_service_manage",
+    "read_logs"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 900,
+  "notes": "Install merged native INFLIGHT+ACK_HOOK base and existing continuation overlay. Run only targeted unittest/compile/runtime assertions. No Tampermonkey changes.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/verify_native_ack_e023.py",
+      "content": "from pathlib import Path\nimport importlib.util\nimport json\nimport os\nimport sys\n\nhome=Path.home()\nruntime=home/\".local/share/prediction-chat-bridge\"\nsys.path.insert(0,str(runtime))\nsp=importlib.util.spec_from_file_location(\"installed_bridge_e023\",runtime/\"bridge_server.py\")\nm=importlib.util.module_from_spec(sp)\nassert sp.loader is not None\nsp.loader.exec_module(m)\nbase=m.base\n\nassert getattr(m.Handler,\"server_version\",\"\")==\"PredictionChatWake/1.3-continuation-v2\"\nassert hasattr(base,\"INFLIGHT\")\nassert hasattr(base,\"ACK_HOOK\")\nassert base.ACK_HOOK is m.continuation_ack_hook\n\nsource_text=(runtime/\"bridge_server_v2.py\").read_text(encoding=\"utf-8\")\nassert 'INFLIGHT = DATA_DIR / \"inflight\"' in source_text\nassert \"os.replace(path, claimed)\" in source_text\nassert \"inflight_src if inflight_src.exists() else outbox_src\" in source_text\n\nroot=Path(os.environ[\"PRED_PROJECT_TEMP_ROOT\"])/\"native-ack-e023\"\ndata=root/\"bridge\"\nstates=root/\"states\"\ndata.mkdir(parents=True,exist_ok=True)\nstates.mkdir(parents=True,exist_ok=True)\n\nold_data=base.DATA_DIR\nold_states=m.TASK_STATE_DIR\ntry:\n    base.DATA_DIR=data\n    m.TASK_STATE_DIR=states\n    source=\"DEV-PRED-CONT-E023-SOURCE\"\n    (states/f\"{source}.json\").write_text(json.dumps({\n        \"schema\":\"PREDICTION_COMMAND_BUS_TASK_STATE_V1\",\n        \"task_id\":source,\n        \"status\":\"DISPATCHED\",\n        \"auto_continue\":True,\n    }),encoding=\"utf-8\")\n    m.continuation_ack_hook(\n        {\"event_id\":\"e023-result\",\"task_id\":source,\"source\":\"result\"},\n        chat_id=\"chat-e023-native\",\n        consumer_id=\"tab-e023-native\",\n        already_acked=False,\n    )\n    cid=m.continuation.ids_for(source)[\"continuation_id\"]\n    cp=m.continuation.continuation_path(data,cid)\n    assert cp.is_file()\n    rec=json.loads(cp.read_text(encoding=\"utf-8\"))\n    assert rec[\"source_task_id\"]==source\n    assert rec[\"chat_id\"]==\"chat-e023-native\"\nfinally:\n    base.DATA_DIR=old_data\n    m.TASK_STATE_DIR=old_states\n\nprint(\"NATIVE_ACK_INSTALL_E023=PASS\")\nprint(\"INFLIGHT_NATIVE=PASS\")\nprint(\"ACK_HOOK_BOUND=PASS\")\nprint(\"SYNTHETIC_RESULT_ACK_CREATES_CONTINUATION=PASS\")\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "-m",
+        "unittest",
+        "tests.bridge.test_native_inflight_ack"
+      ],
+      "test": true,
+      "timeout_seconds": 120
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "-m",
+        "compileall",
+        "-q",
+        "control/tampermonkey_multichat/bridge_server_v2.py",
+        "control/tampermonkey_multichat/bridge_server_hardened.py",
+        "control/tampermonkey_multichat/bridge_server_session_bootstrap.py",
+        "control/tampermonkey_multichat/bridge_server_status_compaction.py",
+        "control/tampermonkey_multichat/bridge_server_continuation.py",
+        "control/tampermonkey_multichat/continuation_manager.py"
+      ],
+      "timeout_seconds": 120
+    },
+    {
+      "type": "install_runtime",
+      "source": "control/tampermonkey_multichat/bridge_server_v2.py",
+      "destination": "/home/leonh/.local/share/prediction-chat-bridge/bridge_server_v2.py",
+      "mode": 420
+    },
+    {
+      "type": "install_runtime",
+      "source": "control/tampermonkey_multichat/bridge_server_hardened.py",
+      "destination": "/home/leonh/.local/share/prediction-chat-bridge/bridge_server_hardened.py",
+      "mode": 420
+    },
+    {
+      "type": "install_runtime",
+      "source": "control/tampermonkey_multichat/bridge_server_session_bootstrap.py",
+      "destination": "/home/leonh/.local/share/prediction-chat-bridge/bridge_server_session_bootstrap.py",
+      "mode": 420
+    },
+    {
+      "type": "install_runtime",
+      "source": "control/tampermonkey_multichat/bridge_server_status_compaction.py",
+      "destination": "/home/leonh/.local/share/prediction-chat-bridge/bridge_server_status_compaction.py",
+      "mode": 420
+    },
+    {
+      "type": "install_runtime",
+      "source": "control/tampermonkey_multichat/continuation_manager.py",
+      "destination": "/home/leonh/.local/share/prediction-chat-bridge/continuation_manager.py",
+      "mode": 420
+    },
+    {
+      "type": "install_runtime",
+      "source": "control/tampermonkey_multichat/bridge_server_continuation.py",
+      "destination": "/home/leonh/.local/share/prediction-chat-bridge/bridge_server.py",
+      "mode": 493
+    },
+    {
+      "type": "service",
+      "verb": "restart",
+      "unit": "prediction-chat-wake.service"
+    },
+    {
+      "type": "service",
+      "verb": "is-active",
+      "unit": "prediction-chat-wake.service"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/verify_native_ack_e023.py"
+      ],
+      "timeout_seconds": 120
+    },
+    {
+      "type": "journal",
+      "unit": "prediction-chat-wake.service",
+      "lines": 80
+    }
+  ]
+}
