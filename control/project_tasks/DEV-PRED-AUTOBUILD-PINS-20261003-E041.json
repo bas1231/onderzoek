@@ -1,0 +1,40 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-AUTOBUILD-PINS-20261003-E041",
+  "build_id": "BUILD-GENERIC-AUTOBUILD-CHAT-WAKE-20261003",
+  "source_commit": "435f2dd8b8cab8f5ad8e21aab25bae5ce6300194",
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "write_worktree",
+    "run_project_python"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 180,
+  "notes": "Read-only hash extraction for canonical autobuild provenance pins. Intentional rc42 preserves exact compact SHA256 output; no runtime mutation.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/autobuild_pins_e041.py",
+      "content": "from pathlib import Path\nimport hashlib\npaths=[\n\"control/codex_supervisor/supervisor.py\",\n\"control/codex_supervisor/candidate_dispatch.py\",\n\"control/codex_supervisor/build_wake.py\",\n\"control/tampermonkey_multichat/continuation_manager.py\",\n]\nfor rel in paths:\n p=Path(rel)\n print(rel+\"=\"+hashlib.sha256(p.read_bytes()).hexdigest(),flush=True)\nraise SystemExit(42)\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/autobuild_pins_e041.py"
+      ],
+      "timeout_seconds": 60
+    }
+  ]
+}
