@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import base64
+import fnmatch
 import hashlib
 import importlib.util
 import json
@@ -19,6 +20,24 @@ TASK_RE = re.compile(r"^[A-Za-z0-9._:-]{1,160}$")
 CHAT_RE = re.compile(r"^[A-Za-z0-9._:-]{4,180}$")
 MAX_CONTEXT = 6000
 MAX_ENCODED_PAYLOAD = 4300
+ALLOW = (
+    "hourly-reports/hourly-*.md",
+    "knowledge/candidates/*.json",
+    "knowledge/candidates/protocols/*.json",
+    "knowledge/candidates/protocols/**/*.json",
+    "knowledge/recon/watchlist.json",
+    "knowledge/recon/opportunity_graph.json",
+    "knowledge/research_os/*.json",
+    "knowledge/runs/hourly-*.json",
+    "knowledge/runs/twc-revision-summary-latest.json",
+)
+DENY_PREFIXES = (
+    "knowledge/raw/",
+    "knowledge/documents/",
+    "knowledge/runs/source_sweeps/",
+    "knowledge/runs/agent_packets/",
+    "knowledge/runs/edge_hunter/",
+)
 
 
 class PublicationBlocked(RuntimeError):
@@ -74,6 +93,10 @@ def package(path: str, data: bytes) -> dict:
 
 def ensure_publication(path: str, *, root: Path = ROOT) -> dict:
     rel = Path(path).as_posix()
+    if any(rel.startswith(prefix) for prefix in DENY_PREFIXES):
+        raise PublicationBlocked("PATH_DENIED")
+    if not any(fnmatch.fnmatch(rel, pattern) for pattern in ALLOW):
+        raise PublicationBlocked("PATH_NOT_ALLOWLISTED")
     target = (root / rel).resolve()
     try:
         target.relative_to(root.resolve())
