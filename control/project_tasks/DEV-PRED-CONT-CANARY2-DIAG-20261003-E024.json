@@ -1,0 +1,48 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-CONT-CANARY2-DIAG-20261003-E024",
+  "build_id": "CONTINUATION-CANARY2-DIAG-20261003",
+  "source_commit": "b8665a8b27eee8f33b0711a952433d6bf01620e3",
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_runtime",
+    "read_logs"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 300,
+  "notes": "Read-only canary2 diagnosis. Check only A continuation record and continuation wake event location; do not reconcile/maintain or mutate runtime.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/diag_canary2_e024.py",
+      "content": "from pathlib import Path\nimport json\n\nhome=Path.home()\ndata=home/\".local/share/prediction-chat-bridge\"\nstates=home/\".local/state/prediction-command-bus/tasks\"\nsource=\"DEV-PRED-CONT-CANARY2-A-20261003-E022\"\ncid=\"CONT-e91d594cb6c782b9e7b2668d\"\n\ndef load(p):\n    try:\n        return json.loads(p.read_text(encoding=\"utf-8\"))\n    except Exception:\n        return None\n\ns=load(states/f\"{source}.json\")\ncp=data/\"continuations\"/f\"{cid}.json\"\nc=load(cp)\nloc=[]\nevent_id=None\nif isinstance(c,dict):\n    event_id=c.get(\"last_event_id\")\n    if event_id:\n        for n in (\"outbox\",\"inflight\",\"sent\"):\n            if (data/n/f\"{event_id}.json\").is_file():\n                loc.append(n)\n\nassert isinstance(s,dict), \"A_STATE_MISSING\"\nassert s.get(\"status\")==\"DISPATCHED\", \"A_NOT_DISPATCHED\"\nassert s.get(\"auto_continue\") is True, \"A_AUTO_FALSE\"\nassert cp.is_file(), \"A_CONTINUATION_RECORD_MISSING\"\nassert isinstance(c,dict), \"A_CONTINUATION_INVALID\"\nassert c.get(\"continuation_id\")==cid, \"A_CONTINUATION_ID_WRONG\"\nassert c.get(\"source_task_id\")==source, \"A_CONTINUATION_SOURCE_WRONG\"\nassert c.get(\"state\") in {\"CONTINUE_REQUESTED\",\"CONTINUE_QUEUED\",\"CONTINUE_SENT\",\"NEXT_TASK_CREATED\",\"NEXT_TASK_ACCEPTED\"}, \"A_CONTINUATION_BAD_STATE\"\nassert event_id, \"A_CONTINUATION_NO_EVENT\"\nassert loc, \"A_CONTINUATION_EVENT_NOT_FOUND\"\nprint(\"CANARY2_A_CONTINUATION_EXISTS=PASS\")\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/diag_canary2_e024.py"
+      ],
+      "timeout_seconds": 120
+    },
+    {
+      "type": "journal",
+      "unit": "prediction-chat-wake.service",
+      "lines": 120
+    }
+  ]
+}
