@@ -1,0 +1,142 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-CONT-INSTALL-STDLIB-20261003-E010",
+  "build_id": "CONTINUATION-V2-STDLIB-INSTALL-20261003-E010",
+  "source_commit": "3ba39d73f8f6f6bc4ae367ea93919765622a06f2",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "run_tests",
+    "read_runtime",
+    "write_runtime",
+    "user_service_manage",
+    "read_logs"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 900,
+  "notes": "Fresh routed replacement for E009. No pytest dependency: run stdlib-only deterministic continuation regression harness, compile checks, install server-side continuation/poller runtime, restart Prediction user services, then run installed-runtime canary. Do not modify/install Tampermonkey.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/continuation_stdlib_regression_e010.py",
+      "content": "from pathlib import Path\nimport importlib\nimport importlib.util\nimport json\nimport shutil\nimport sys\nimport tempfile\n\nfrom control.tampermonkey_multichat import continuation_manager as cm\n\n\ndef write_state(root: Path, task_id: str, status: str, **extra):\n    root.mkdir(parents=True, exist_ok=True)\n    payload = {\n        \"schema\": \"PREDICTION_COMMAND_BUS_TASK_STATE_V1\",\n        \"task_id\": task_id,\n        \"status\": status,\n        **extra,\n    }\n    (root / f\"{task_id}.json\").write_text(json.dumps(payload), encoding=\"utf-8\")\n\n\n# Full source identity, not truncation.\ncommon = \"X\" * 140\nassert cm.ids_for(common + \"-A\")[\"continuation_id\"] != cm.ids_for(common + \"-B\")[\"continuation_id\"]\n\nwith tempfile.TemporaryDirectory() as td:\n    root = Path(td)\n    data = root / \"bridge\"\n    routes = data / \"routes\"\n    outbox = data / \"outbox\"\n    inflight = data / \"inflight\"\n    states = root / \"states\"\n    for p in (routes, outbox, inflight, states):\n        p.mkdir(parents=True, exist_ok=True)\n\n    # Explicit opt-in only.\n    write_state(states, \"NORMAL-NO-AUTO\", \"DISPATCHED\", auto_continue=False)\n    assert cm.start_for_result_ack(\n        data_dir=data,\n        task_state_dir=states,\n        source_task_id=\"NORMAL-NO-AUTO\",\n        chat_id=\"chat-e010\",\n    ) is None\n\n    source = \"AUTO-E010\"\n    write_state(states, source, \"DISPATCHED\", auto_continue=True)\n    record = cm.start_for_result_ack(\n        data_dir=data,\n        task_state_dir=states,\n        source_task_id=source,\n        chat_id=\"chat-e010\",\n    )\n    assert record is not None\n    cid = record[\"continuation_id\"]\n\n    cm.maintain_for_chat(\n        data_dir=data,\n        task_state_dir=states,\n        routes_dir=routes,\n        outbox_dir=outbox,\n        chat_id=\"chat-e010\",\n        now=1000.0,\n    )\n    record = json.loads(cm.continuation_path(data, cid).read_text(encoding=\"utf-8\"))\n    assert record[\"state\"] == \"CONTINUE_QUEUED\"\n    assert record[\"attempts\"] == 1\n\n    # Lease ambiguity: recent inflight suppresses duplicates.\n    first_event = record[\"last_event_id\"]\n    (outbox / f\"{first_event}.json\").rename(inflight / f\"{first_event}.json\")\n    cm.maintain_for_chat(\n        data_dir=data,\n        task_state_dir=states,\n        routes_dir=routes,\n        outbox_dir=outbox,\n        chat_id=\"chat-e010\",\n        now=1000.0 + cm.RETRY_AFTER_SECONDS - 1,\n    )\n    recent = json.loads(cm.continuation_path(data, cid).read_text(encoding=\"utf-8\"))\n    assert recent[\"attempts\"] == 1\n    assert (inflight / f\"{first_event}.json\").is_file()\n\n    # Stale continuation inflight is evidence-preserved and safely retried.\n    cm.maintain_for_chat(\n        data_dir=data,\n        task_state_dir=states,\n        routes_dir=routes,\n        outbox_dir=outbox,\n        chat_id=\"chat-e010\",\n        now=1000.0 + cm.RETRY_AFTER_SECONDS + 1,\n    )\n    retried = json.loads(cm.continuation_path(data, cid).read_text(encoding=\"utf-8\"))\n    assert retried[\"attempts\"] == 2\n    assert retried[\"state\"] == \"CONTINUE_QUEUED\"\n    assert retried[\"last_event_id\"] != first_event\n    assert (data / \"continuation_abandoned\" / f\"{first_event}.json\").is_file()\n\n    # Browser ACK is transport evidence only.\n    second_path = outbox / f\"{retried['last_event_id']}.json\"\n    second = json.loads(second_path.read_text(encoding=\"utf-8\"))\n    second_path.unlink()\n    assert cm.mark_delivery_acked(data_dir=data, event=second) is True\n    sent = json.loads(cm.continuation_path(data, cid).read_text(encoding=\"utf-8\"))\n    assert sent[\"state\"] == \"CONTINUE_SENT\"\n    assert sent[\"state\"] not in cm.TERMINAL_STATES\n\n    # Durable command-bus outcome is terminal.\n    child = sent[\"expected_next_task_id\"]\n    write_state(states, child, \"DISPATCHED\", parent_continuation_id=cid)\n    assert cm.reconcile(sent, states) is True\n    assert sent[\"state\"] == \"NEXT_TASK_ACCEPTED\"\n\n    # Multiple mutually-exclusive outcomes fail closed.\n    conflict_source = \"AUTO-E010-CONFLICT\"\n    write_state(states, conflict_source, \"DISPATCHED\", auto_continue=True)\n    conflict = cm.start_for_result_ack(\n        data_dir=data,\n        task_state_dir=states,\n        source_task_id=conflict_source,\n        chat_id=\"chat-e010\",\n    )\n    assert conflict is not None\n    write_state(states, conflict[\"expected_next_task_id\"], \"CLAIMED\")\n    write_state(states, conflict[\"expected_done_task_id\"], \"CLAIMED\")\n    assert cm.reconcile(conflict, states) is True\n    assert conflict[\"state\"] == \"CONFLICT\"\n\n    # Ordinary non-continuation inflight is never touched.\n    foreign_record = {\n        \"continuation_id\": \"CONT-\" + (\"a\" * 24),\n        \"last_event_id\": \"foreign-event\",\n    }\n    foreign = inflight / \"foreign-event.json\"\n    foreign.write_text(json.dumps({\n        \"event_id\": \"foreign-event\",\n        \"source\": \"ordinary_result\",\n        \"created_at\": 1.0,\n    }), encoding=\"utf-8\")\n    assert cm._delivery_still_pending(\n        foreign_record,\n        data,\n        now=9999999999.0,\n    ) is True\n    assert foreign.is_file()\n\n# Command-bus lineage contract.\npoller_path = Path(\"control/bridge_commands/command_bus_poller.py\").resolve()\nspec = importlib.util.spec_from_file_location(\"poller_e010\", poller_path)\npoller = importlib.util.module_from_spec(spec)\nassert spec.loader is not None\nspec.loader.exec_module(poller)\nbase = {\n    \"schema\": \"PREDICTION_BRIDGE_COMMAND_V1\",\n    \"task_id\": \"CONT-E010-META\",\n    \"action\": \"BRIDGE_PING\",\n    \"created_at_utc\": \"2026-10-03T08:30:00Z\",\n    \"live_trading\": False,\n    \"paid_actions\": False,\n    \"wallet_actions\": False,\n    \"intelligence_tier\": \"C\",\n    \"issuer\": {\"model\": \"GPT-5.6 Sol\", \"reasoning_level\": \"UNAVAILABLE_TO_RUNTIME\"},\n}\ncmd = dict(base, auto_continue=True, parent_continuation_id=\"CONT-\" + (\"b\" * 24))\nok, reason = poller.validate_command(cmd)\nassert ok and reason == \"OK\", (ok, reason)\nbad = dict(cmd, delivery_mode=\"headless\")\nok, reason = poller.validate_command(bad)\nassert not ok and reason == \"HEADLESS_AUTO_CONTINUE_FORBIDDEN\", (ok, reason)\n\n# Wake overlay installs an explicit ACK hook on fresh source runtimes.\nmodule_dir = Path(\"control/tampermonkey_multichat\").resolve()\nsys.path.insert(0, str(module_dir))\nfor name in (\n    \"bridge_server_continuation\",\n    \"bridge_server_status_compaction\",\n    \"bridge_server_session_bootstrap\",\n    \"bridge_server_hardened\",\n    \"bridge_server_v2\",\n):\n    sys.modules.pop(name, None)\noverlay = importlib.import_module(\"bridge_server_continuation\")\nassert hasattr(overlay.base, \"ACK_HOOK\")\nassert overlay.base.ACK_HOOK is overlay.continuation_ack_hook\n\nprint(\"STDLIB_CONTINUATION_REGRESSION_E010=PASS\")\n"
+    },
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/verify_continuation_e010_install.py",
+      "content": "from pathlib import Path\nimport importlib.util\nimport json\nimport os\nimport sys\n\nhome = Path.home()\nwake_dir = home / \".local/share/prediction-chat-bridge\"\nbus_path = home / \".local/share/prediction-command-bus/command_bus_poller.py\"\n\nspec = importlib.util.spec_from_file_location(\"installed_cont_bus_e010\", bus_path)\nbus = importlib.util.module_from_spec(spec)\nassert spec.loader is not None\nspec.loader.exec_module(bus)\n\ncmd = {\n    \"schema\": \"PREDICTION_BRIDGE_COMMAND_V1\",\n    \"task_id\": \"DEV-PRED-CONT-E010-CHECK\",\n    \"action\": \"BRIDGE_PING\",\n    \"created_at_utc\": \"2026-10-03T08:30:00Z\",\n    \"route_task_id\": \"SESSION-ROUTE-E010-CHECK\",\n    \"live_trading\": False,\n    \"paid_actions\": False,\n    \"wallet_actions\": False,\n    \"intelligence_tier\": \"C\",\n    \"issuer\": {\"model\": \"GPT-5.6 Sol\", \"reasoning_level\": \"UNAVAILABLE_TO_RUNTIME\"},\n    \"auto_continue\": True,\n    \"parent_continuation_id\": \"CONT-\" + (\"a\" * 24),\n}\nok, reason = bus.validate_command(cmd)\nassert ok and reason == \"OK\", (ok, reason)\n\nsys.path.insert(0, str(wake_dir))\nspec2 = importlib.util.spec_from_file_location(\"installed_cont_wake_e010\", wake_dir / \"bridge_server.py\")\nwake = importlib.util.module_from_spec(spec2)\nassert spec2.loader is not None\nspec2.loader.exec_module(wake)\nassert \"continuation-v2\" in str(getattr(wake.Handler, \"server_version\", \"\"))\nassert hasattr(wake.base, \"INFLIGHT\")\nassert wake.base.oldest_event is wake.continuation_oldest_event\n\nmanager_text = (wake_dir / \"continuation_manager.py\").read_text(encoding=\"utf-8\")\nassert \"continuation_abandoned\" in manager_text\nassert \"DELIVERY_AMBIGUOUS\" in manager_text\n\nroot = Path(os.environ[\"PRED_PROJECT_TEMP_ROOT\"]) / \"continuation-e010-installed\"\ndata = root / \"bridge\"\nroutes = data / \"routes\"\noutbox = data / \"outbox\"\ninflight = data / \"inflight\"\nstates = root / \"task-state\"\nfor p in (routes, outbox, inflight, states):\n    p.mkdir(parents=True, exist_ok=True)\n\ncm = wake.continuation\nsource = \"DEV-PRED-CONT-E010-SOURCE\"\n(states / f\"{source}.json\").write_text(json.dumps({\n    \"schema\": \"PREDICTION_COMMAND_BUS_TASK_STATE_V1\",\n    \"task_id\": source,\n    \"status\": \"DISPATCHED\",\n    \"auto_continue\": True,\n}), encoding=\"utf-8\")\nrecord = cm.start_for_result_ack(\n    data_dir=data,\n    task_state_dir=states,\n    source_task_id=source,\n    chat_id=\"chat-e010-installed\",\n)\nassert record is not None\ncm.maintain_for_chat(\n    data_dir=data,\n    task_state_dir=states,\n    routes_dir=routes,\n    outbox_dir=outbox,\n    chat_id=\"chat-e010-installed\",\n    now=1000.0,\n)\nrecord_path = cm.continuation_path(data, record[\"continuation_id\"])\nrecord = json.loads(record_path.read_text(encoding=\"utf-8\"))\nfirst = record[\"last_event_id\"]\n(outbox / f\"{first}.json\").rename(inflight / f\"{first}.json\")\ncm.maintain_for_chat(\n    data_dir=data,\n    task_state_dir=states,\n    routes_dir=routes,\n    outbox_dir=outbox,\n    chat_id=\"chat-e010-installed\",\n    now=1000.0 + cm.RETRY_AFTER_SECONDS + 1,\n)\nafter = json.loads(record_path.read_text(encoding=\"utf-8\"))\nassert after[\"attempts\"] == 2\nassert after[\"last_event_id\"] != first\nassert (data / \"continuation_abandoned\" / f\"{first}.json\").is_file()\n\nprint(\"CONTINUATION_E010_INSTALLED=PASS\")\nprint(\"WAKE_HANDLER=\" + str(getattr(wake.Handler, \"server_version\", \"\")))\nprint(\"GENERIC_INFLIGHT_PATCH=PRESERVED\")\nprint(\"STALE_CONTINUATION_INFLIGHT_RECOVERY=PASS\")\nprint(\"TAMPERMONKEY_TOUCHED=NO\")\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/continuation_stdlib_regression_e010.py"
+      ],
+      "test": true,
+      "timeout_seconds": 180
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "-m",
+        "compileall",
+        "-q",
+        "control/bridge_commands/command_bus_poller.py",
+        "control/tampermonkey_multichat/continuation_manager.py",
+        "control/tampermonkey_multichat/bridge_server_continuation.py",
+        "control/tampermonkey_multichat/bridge_server_status_compaction.py",
+        "control/tampermonkey_multichat/bridge_server_session_bootstrap.py",
+        "control/tampermonkey_multichat/bridge_server_hardened.py"
+      ],
+      "timeout_seconds": 120
+    },
+    {
+      "type": "install_runtime",
+      "source": "control/bridge_commands/command_bus_poller.py",
+      "destination": "/home/leonh/.local/share/prediction-command-bus/command_bus_poller.py",
+      "mode": 493
+    },
+    {
+      "type": "install_runtime",
+      "source": "control/tampermonkey_multichat/bridge_server_hardened.py",
+      "destination": "/home/leonh/.local/share/prediction-chat-bridge/bridge_server_hardened.py",
+      "mode": 420
+    },
+    {
+      "type": "install_runtime",
+      "source": "control/tampermonkey_multichat/bridge_server_session_bootstrap.py",
+      "destination": "/home/leonh/.local/share/prediction-chat-bridge/bridge_server_session_bootstrap.py",
+      "mode": 420
+    },
+    {
+      "type": "install_runtime",
+      "source": "control/tampermonkey_multichat/bridge_server_status_compaction.py",
+      "destination": "/home/leonh/.local/share/prediction-chat-bridge/bridge_server_status_compaction.py",
+      "mode": 420
+    },
+    {
+      "type": "install_runtime",
+      "source": "control/tampermonkey_multichat/continuation_manager.py",
+      "destination": "/home/leonh/.local/share/prediction-chat-bridge/continuation_manager.py",
+      "mode": 420
+    },
+    {
+      "type": "install_runtime",
+      "source": "control/tampermonkey_multichat/bridge_server_continuation.py",
+      "destination": "/home/leonh/.local/share/prediction-chat-bridge/bridge_server.py",
+      "mode": 493
+    },
+    {
+      "type": "service",
+      "verb": "restart",
+      "unit": "prediction-chat-wake.service"
+    },
+    {
+      "type": "service",
+      "verb": "is-active",
+      "unit": "prediction-chat-wake.service"
+    },
+    {
+      "type": "service",
+      "verb": "restart",
+      "unit": "prediction-command-bus.timer"
+    },
+    {
+      "type": "service",
+      "verb": "start",
+      "unit": "prediction-command-bus.service"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/verify_continuation_e010_install.py"
+      ],
+      "timeout_seconds": 120
+    },
+    {
+      "type": "journal",
+      "unit": "prediction-chat-wake.service",
+      "lines": 100
+    },
+    {
+      "type": "journal",
+      "unit": "prediction-command-bus.service",
+      "lines": 100
+    }
+  ]
+}
