@@ -24,6 +24,8 @@ TASK_STATE_DIR = Path.home() / ".local" / "state" / "prediction-command-bus" / "
 _CURRENT_OLDEST_EVENT = base.oldest_event
 _ORIGINAL_RELEASE_LEASE = base.release_lease
 _BASE_HAS_ACK_HOOK = hasattr(base, "ACK_HOOK")
+UNACKED_RESULT_HEARTBEAT_SECONDS = 45.0
+MAX_RECOVERY_SCAN = 256
 
 
 def continuation_ack_hook(
@@ -85,9 +87,79 @@ def continuation_release_lease(event_id: str) -> None:
     )
 
 
+
+
+
+def _event_created_at(path: Path, event: dict) -> float:
+    try:
+        return float(event.get("created_at"))
+    except (TypeError, ValueError):
+        try:
+            return path.stat().st_mtime
+        except OSError:
+            return 0.0
+
+
+def recover_unacked_result_heartbeat(chat_id: str, *, now: float | None = None) -> int:
+    """Recover only stale, route-matching auto-continue result deliveries.
+
+    The original result remains INFLIGHT as ambiguity evidence. Recovery never
+    re-executes or replays that result. It only creates the deterministic
+    continuation record so the existing bounded continuation wake mechanism can
+    generate a fresh ChatGPT turn.
+    """
+    inflight = getattr(base, "INFLIGHT", base.DATA_DIR / "inflight")
+    if not inflight.is_dir():
+        return 0
+
+    current = continuation.time.time() if now is None else float(now)
+    recovered = 0
+    paths = sorted(
+        inflight.glob("*.json"),
+        key=lambda p: p.stat().st_mtime_ns if p.exists() else 0,
+    )
+
+    for path in paths[:MAX_RECOVERY_SCAN]:
+        event = base.load_event(path)
+        if not event:
+            continue
+        if str(event.get("source") or "") == "control_continuation_v2":
+            continue
+
+        source_task_id = str(event.get("task_id") or "").strip()
+        if not source_task_id:
+            continue
+        if not continuation.source_allows_auto_continue(TASK_STATE_DIR, source_task_id):
+            continue
+
+        binding = base.route_binding_for_task(source_task_id)
+        if not binding or str(binding.get("chat_id") or "") != str(chat_id):
+            continue
+
+        ids = continuation.ids_for(source_task_id)
+        if continuation.continuation_path(base.DATA_DIR, ids["continuation_id"]).exists():
+            continue
+
+        created_at = _event_created_at(path, event)
+        if created_at <= 0 or current - created_at < UNACKED_RESULT_HEARTBEAT_SECONDS:
+            continue
+
+        record = continuation.start_for_unacked_result_heartbeat(
+            data_dir=base.DATA_DIR,
+            task_state_dir=TASK_STATE_DIR,
+            source_task_id=source_task_id,
+            chat_id=str(chat_id),
+        )
+        if record is not None:
+            recovered += 1
+
+    return recovered
+
+
 def continuation_oldest_event(chat_id=None, consumer_id=None):
-    """Reconcile/reoffer only unresolved continuations for this chat."""
+    """Recover, reconcile and reoffer only continuations for this chat."""
     if chat_id:
+        recover_unacked_result_heartbeat(str(chat_id))
         continuation.maintain_for_chat(
             data_dir=base.DATA_DIR,
             task_state_dir=TASK_STATE_DIR,
