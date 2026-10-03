@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Prediction Chat Wake Bridge
 // @namespace    local.prediction.chatbridge
-// @version      0.4.7
+// @version      0.4.8
 // @description  Multi-chat transport for the local Prediction control plane.
 // @match        https://chatgpt.com/*
 // @grant        GM_xmlhttpRequest
@@ -30,7 +30,7 @@
   const KEY_SENT_TASKS = 'prediction_sent_tasks_v047';
   const deliveryRetryAfter = new Map();
   const KEY_FALLBACK_REGISTERED = 'prediction_fallback_registered_v3';
-  const SCRIPT_VERSION = '0.4.7';
+  const SCRIPT_VERSION = '0.4.8';
 
   let statusEl = null;
   let scanBusy = false;
@@ -88,7 +88,7 @@
         });
         (document.documentElement || document.body).appendChild(statusEl);
       }
-      statusEl.textContent = `WSL bridge v4.7: ${text}`;
+      statusEl.textContent = `WSL bridge v4.8: ${text}`;
       statusEl.style.outline = bad ? '1px solid #c33' : '1px solid #555';
     } catch (_) {}
   }
@@ -449,8 +449,16 @@
             if (expiry < Date.now()) deliveryRetryAfter.delete(key);
           }
           const sent = await submitMessage(message);
-          if (generation !== wakeGeneration) return;
-          if (!sent && !recentUserTurnContainsDelivery(message)) { await sleep(1000); continue; }
+          const generationChangedAfterDelivery = generation !== wakeGeneration;
+          if (!sent && !recentUserTurnContainsDelivery(message)) {
+            if (generationChangedAfterDelivery) return;
+            await sleep(1000);
+            continue;
+          }
+          // Once a real user turn is proven, finish the durable receipt + ACK
+          // for the leased event even if a SPA URL change restarted the wake loop.
+          // The captured identity belongs to the event lease and is therefore
+          // the only safe identity for this ACK.
         }
         remember(KEY_SENT_EVENTS, eventKey);
         remember(KEY_SENT_TASKS, taskKey);
@@ -458,6 +466,7 @@
         const ok = await ack(event.event_id, identity.chatId, identity.consumerId);
         status(ok ? `verzonden: ${event.task_id || event.event_id}` : 'ACK mislukt', !ok);
         if (!ok) await sleep(1200);
+        if (generation !== wakeGeneration) return;
       } catch (_) {
         if (generation !== wakeGeneration) return;
         status('WSL niet bereikbaar', true);
