@@ -74,16 +74,37 @@ def canary() -> None:
         "wallet_actions": False,
     }
     root = Path("control/dev_checks/autobuild_canary_runtime_e042")
+    staged_bridge = Path("control/dev_checks/autobuild_canary_bridge_e046")
     root.mkdir(parents=True, exist_ok=True)
-    result = build_wake.ensure_build_continuation(Supervisor(root), overlay)
-    bridge = Path.home() / ".local/share/prediction-chat-bridge"
-    record = json.loads((bridge / "continuations" / f"{result['continuation_id']}.json").read_text())
+    runtime_bridge = Path.home() / ".local/share/prediction-chat-bridge"
+    result = build_wake.ensure_build_continuation(
+        Supervisor(root),
+        overlay,
+        bridge_data=staged_bridge,
+        route_config=runtime_bridge / "autobuild_control_route.json",
+        routes_dir=runtime_bridge / "routes",
+    )
+    expected = "CONT-5d571fc985680819187c2a88"
+    assert result["continuation_id"] == expected
+    record_path = staged_bridge / "continuations" / f"{expected}.json"
+    record = json.loads(record_path.read_text())
     assert record["external_source"] is True
     assert record["external_source_kind"] == "AUTOBUILD"
     assert record["expected_route_task_id"] == ROUTE_TASK
     assert candidate["candidate_id"] in record["context_message"]
     assert "live_trading:false" in record["context_message"]
-    print("AUTOBUILD_SYNTHETIC_WAKE=PASS continuation_id=" + result["continuation_id"], flush=True)
+    print("AUTOBUILD_SYNTHETIC_STAGE=PASS continuation_id=" + result["continuation_id"], flush=True)
+
+
+def canary_post() -> None:
+    runtime = Path.home() / ".local/share/prediction-chat-bridge"
+    path = runtime / "continuations" / "CONT-5d571fc985680819187c2a88.json"
+    record = json.loads(path.read_text())
+    assert record["external_source"] is True
+    assert record["external_source_kind"] == "AUTOBUILD"
+    assert record["expected_route_task_id"] == ROUTE_TASK
+    assert "AUTOBUILD_CANARY_20261003_E042" in record["context_message"]
+    print("AUTOBUILD_SYNTHETIC_RUNTIME=PASS continuation_id=" + record["continuation_id"], flush=True)
 
 
 if __name__ == "__main__":
@@ -94,5 +115,7 @@ if __name__ == "__main__":
         post()
     elif mode == "canary":
         canary()
+    elif mode == "canary_post":
+        canary_post()
     else:
-        raise SystemExit("usage: autobuild_acceptance_e042.py pre|post|canary")
+        raise SystemExit("usage: autobuild_acceptance_e042.py pre|post|canary|canary_post")
