@@ -1,0 +1,35 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-PROD-SYNC-COMPACT-DIAG-20261003-E050",
+  "source_commit": "ebd2f01b19183d3a7fbf9477f8ed6764d6b8adef",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "run_project_python",
+    "read_runtime"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 180,
+  "notes": "Compact read-only production-sync diagnosis after E047 mismatch. Report only production HEAD/branch/dirty count, mismatching autobuild paths, and last runtime-sync status/error. No production mutation or network.",
+  "operations": [
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/prod_sync_compact_diag_e050.py"
+      ],
+      "timeout_seconds": 60
+    }
+  ]
+}
