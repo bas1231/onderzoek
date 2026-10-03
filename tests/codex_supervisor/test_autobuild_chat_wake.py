@@ -118,3 +118,33 @@ def test_protocol_builds_stay_on_fixed_validator_path(tmp_path):
             route_config=config,
             routes_dir=routes,
         )
+
+
+def test_candidate_dispatch_generic_needs_build_routes_to_chat_wake(tmp_path, monkeypatch):
+    import candidate_dispatch as d
+    runtime = tmp_path / "runtime"
+    states = runtime / "candidate_states"
+    states.mkdir(parents=True)
+    item = overlay()
+    item["finding"] = "generic build needed"
+    item["next_action"] = "build bounded collector"
+    (states / "generic.json").write_text(json.dumps(item))
+
+    class S:
+        def __init__(self, root):
+            self.root = root
+
+    monkeypatch.setattr(d, "pending_validation_task", lambda *args, **kwargs: None)
+    monkeypatch.setattr(d, "select_task", lambda *args, **kwargs: None)
+    monkeypatch.setattr(
+        b,
+        "ensure_build_continuation",
+        lambda supervisor, candidate: {
+            "continuation_id": "CONT-1234567890abcdef12345678",
+            "continuation_state": "CONTINUE_REQUESTED",
+        },
+    )
+    result = d.select_next(S(runtime), tmp_path / "repo")
+    assert result["queue_blocked"] is True
+    assert result["reason"] == "AUTOBUILD_CHAT_WAKE_QUEUED"
+    assert result["continuation_id"] == "CONT-1234567890abcdef12345678"
