@@ -1,0 +1,30 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-CONT-NEXT-c0c2bdae79a93b2dc44cd6d4",
+  "source_commit": "7932f108366d6dbeaee27e0c71cb422b52b344bc",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "production_inspect"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 240,
+  "notes": "Continuation of unresolved production divergence. Read-only inspect only; intentionally fail closed when HEAD differs from local main so compact bridge detail includes local commits, status and changed paths. No production mutation or remote Git write.",
+  "operations": [
+    {
+      "type": "production_inspect",
+      "require_head_equals_main": true
+    }
+  ]
+}
