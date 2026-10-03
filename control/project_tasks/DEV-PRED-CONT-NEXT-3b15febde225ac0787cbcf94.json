@@ -1,0 +1,36 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-CONT-NEXT-3b15febde225ac0787cbcf94",
+  "build_id": "BUILD-GENERIC-AUTOBUILD-CHAT-WAKE-20261003",
+  "source_commit": "068764c9e29c32b13451b1d860aa301427821aa2",
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 300,
+  "notes": "Continuation root-cause probe for pytest INTERNALERROR under project-task guard. Run one hermetic test target and compact only the final exception/PermissionError. Intentional rc42 preserves diagnostics. No runtime mutation.",
+  "operations": [
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/autobuild_pytest_rootcause_e045.py"
+      ],
+      "timeout_seconds": 240
+    }
+  ]
+}
