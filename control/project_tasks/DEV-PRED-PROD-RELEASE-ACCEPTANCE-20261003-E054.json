@@ -1,0 +1,74 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-PROD-RELEASE-ACCEPTANCE-20261003-E054",
+  "source_commit": "995cd86995f8080d0ae7774bf13b063fa54bcf33",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "run_project_python",
+    "production_fast_forward",
+    "user_service_manage"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 900,
+  "notes": "Release acceptance for safe production convergence. Preconditions are executor self-tests in DEV manifest. Then assert canonical no-remote-push runtime, compile relevant modules, fast-forward production only via local read-only mirror to exact source_commit, and require core Prediction timers/services active. No remote Git write, no reset/rebase/stash/clean, no live/paid/wallet action.",
+  "operations": [
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/no_remote_push_acceptance_e054.py"
+      ],
+      "timeout_seconds": 60
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "-m",
+        "compileall",
+        "control/hourly/git_checkpoint.py",
+        "control/hourly/runtime_sync.py",
+        "control/codex_supervisor/supervisor.py",
+        "control/codex_supervisor/candidate_dispatch.py",
+        "control/codex_supervisor/build_wake.py"
+      ],
+      "timeout_seconds": 90
+    },
+    {
+      "type": "production_ff",
+      "target_commit": "995cd86995f8080d0ae7774bf13b063fa54bcf33"
+    },
+    {
+      "type": "service",
+      "verb": "is-active",
+      "unit": "prediction-research-hourly-director.timer"
+    },
+    {
+      "type": "service",
+      "verb": "is-active",
+      "unit": "prediction-codex-supervisor.timer"
+    },
+    {
+      "type": "service",
+      "verb": "is-active",
+      "unit": "prediction-command-bus.timer"
+    },
+    {
+      "type": "service",
+      "verb": "is-active",
+      "unit": "prediction-chat-wake.service"
+    }
+  ]
+}
