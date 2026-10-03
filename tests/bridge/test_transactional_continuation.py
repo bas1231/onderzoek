@@ -68,6 +68,9 @@ def test_full_next_flow_retry_and_restart(tmp_path):
     assert first["continuation_id"] == cid
     assert first["task_id"].endswith("-A01")
     assert f"continuation_id={cid}" in first["message"]
+    assert f"delivery_event_id={first['event_id']}" in first["message"]
+    assert f"delivery_task_id={first['task_id']}" in first["message"]
+    assert "TRANSPORT RECEIPT:" in first["message"]
 
     # Even after the retry deadline, a still-pending outbox/inflight delivery
     # cannot create another attempt.
