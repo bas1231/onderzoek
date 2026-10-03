@@ -1,0 +1,30 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-EXECUTOR-SELFTEST-DIAG-20261003-E073",
+  "source_commit": "9fbb8fdcaa3d0ef07a42e4e4cab8d43455e1ccaa",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "run_tests"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 420,
+  "notes": "Diagnose the first failing current project-executor regression after E071. Runs only the executor's own unittest suite and surfaces the tail as TaskError detail. No production mutation.",
+  "operations": [
+    {
+      "type": "executor_selftest",
+      "timeout_seconds": 300
+    }
+  ]
+}
