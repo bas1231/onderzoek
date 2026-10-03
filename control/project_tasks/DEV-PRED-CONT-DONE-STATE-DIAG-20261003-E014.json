@@ -1,0 +1,42 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-CONT-DONE-STATE-DIAG-20261003-E014",
+  "build_id": "CONTINUATION-DONE-STATE-DIAG-20261003",
+  "source_commit": "d5e4f27685c73670e6f2dd84f9873a9c660de620",
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_runtime"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 300,
+  "notes": "Read-only diagnosis of final continuation terminal state. Print only compact relevant fields. Do not call reconcile/maintain and do not mutate runtime.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/diag_done_state_e014.py",
+      "content": "from pathlib import Path\nimport json\n\nhome = Path.home()\ndone_task = \"CONT-DONE-eba52c84b60e5eb693d28b3d\"\ncid = \"CONT-eba52c84b60e5eb693d28b3d\"\n\ntp = home / \".local/state/prediction-command-bus/tasks\" / f\"{done_task}.json\"\ncp = home / \".local/share/prediction-chat-bridge/continuations\" / f\"{cid}.json\"\n\ntask = json.loads(tp.read_text(encoding=\"utf-8\")) if tp.is_file() else None\ncont = json.loads(cp.read_text(encoding=\"utf-8\")) if cp.is_file() else None\n\nprint(\"DONE_STATUS=\" + repr(task.get(\"status\") if isinstance(task, dict) else None))\nprint(\"DONE_PARENT=\" + repr(task.get(\"parent_continuation_id\") if isinstance(task, dict) else None))\nprint(\"DONE_AUTO=\" + repr(task.get(\"auto_continue\") if isinstance(task, dict) else None))\nprint(\"DONE_CHAT=\" + repr(task.get(\"chat_id\") if isinstance(task, dict) else None))\n\nprint(\"CONT_EXISTS=\" + repr(cp.is_file()))\nprint(\"CONT_STATE=\" + repr(cont.get(\"state\") if isinstance(cont, dict) else None))\nprint(\"CONT_EXPECTED_DONE=\" + repr(cont.get(\"expected_done_task_id\") if isinstance(cont, dict) else None))\nprint(\"CONT_SOURCE=\" + repr(cont.get(\"source_task_id\") if isinstance(cont, dict) else None))\nhist = cont.get(\"history\") if isinstance(cont, dict) else None\nlast = hist[-1] if isinstance(hist, list) and hist else None\nprint(\"CONT_LAST_HISTORY=\" + repr(last))\nprint(\"E014_DIAG=PASS\")\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/diag_done_state_e014.py"
+      ],
+      "timeout_seconds": 120
+    }
+  ]
+}
