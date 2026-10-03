@@ -1,0 +1,42 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-CONT-A-ACK-CLASSIFY-20261003-E026",
+  "build_id": "CONTINUATION-A-ACK-CLASSIFY-20261003",
+  "source_commit": "a7ecd6724017a50683e5b1223d2bace10dbd568e",
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_runtime"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 300,
+  "notes": "Read-only binary classifier: locate canary A result event only. No reconciliation, no maintenance, no mutation.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/classify_a_ack_e026.py",
+      "content": "from pathlib import Path\nimport json\n\ndata=Path.home()/\".local/share/prediction-chat-bridge\"\ntid=\"DEV-PRED-CONT-CANARY2-A-20261003-E022\"\n\ndef load(p):\n    try:\n        return json.loads(p.read_text(encoding=\"utf-8\"))\n    except Exception:\n        return None\n\nhits={}\nfor name in (\"outbox\",\"inflight\",\"sent\"):\n    found=[]\n    d=data/name\n    if d.is_dir():\n        for p in d.glob(\"*.json\"):\n            o=load(p)\n            if isinstance(o,dict) and o.get(\"task_id\")==tid:\n                found.append(p.name)\n    hits[name]=found\n\nif hits[\"sent\"]:\n    print(\"A_RESULT_LOCATION=SENT\",flush=True)\n    raise SystemExit(11)\nif hits[\"inflight\"]:\n    print(\"A_RESULT_LOCATION=INFLIGHT\",flush=True)\n    raise SystemExit(12)\nif hits[\"outbox\"]:\n    print(\"A_RESULT_LOCATION=OUTBOX\",flush=True)\n    raise SystemExit(13)\nprint(\"A_RESULT_LOCATION=MISSING\",flush=True)\nraise SystemExit(14)\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/classify_a_ack_e026.py"
+      ],
+      "timeout_seconds": 120
+    }
+  ]
+}
