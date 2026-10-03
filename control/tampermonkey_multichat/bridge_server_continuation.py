@@ -3,7 +3,9 @@
 
 This layer does not depend on Tampermonkey. It uses the canonical wake /next
 and /ack transport. Browser delivery is intentionally non-terminal; only one
-durable command-bus outcome can close a continuation.
+durable command-bus outcome can close a continuation. A stale unacked
+auto-continue result may arm one bounded recovery heartbeat without replaying
+or re-executing the original result.
 
 Fresh runtimes use bridge_server_v2.ACK_HOOK. Older installed runtimes may
 still contain the separately inflight-patched bridge_server_v2 from the
@@ -89,8 +91,6 @@ def continuation_release_lease(event_id: str) -> None:
 
 
 
-
-
 def _event_created_at(path: Path, event: dict) -> float:
     try:
         return float(event.get("created_at"))
@@ -155,7 +155,7 @@ def recover_unacked_result_heartbeat(chat_id: str, *, now: float | None = None) 
             chat_id=str(chat_id),
         )
         if record is not None:
-            recovered += 1
+            return 1
 
     return recovered
 
