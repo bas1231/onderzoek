@@ -1,0 +1,31 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-PROD-DIRTY-SUMMARY-20261003-E066",
+  "source_commit": "0571205b2fbf7e485585d0f78b81c0e328c133d7",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "production_inspect"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 240,
+  "notes": "Read-only compact summary of dirty production state. Report only counts/categories/small samples so bridge output cannot truncate the decision evidence. No production mutation.",
+  "operations": [
+    {
+      "type": "production_inspect",
+      "require_head_equals_main": true,
+      "report_mode": "status_summary"
+    }
+  ]
+}
