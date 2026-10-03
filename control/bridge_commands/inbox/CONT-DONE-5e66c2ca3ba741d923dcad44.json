@@ -1,0 +1,17 @@
+{
+  "schema": "PREDICTION_BRIDGE_COMMAND_V1",
+  "task_id": "CONT-DONE-5e66c2ca3ba741d923dcad44",
+  "action": "BRIDGE_PING",
+  "created_at_utc": "2026-10-03T17:40:45Z",
+  "delivery_mode": "headless",
+  "live_trading": false,
+  "paid_actions": false,
+  "wallet_actions": false,
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "auto_continue": false,
+  "parent_continuation_id": "CONT-5e66c2ca3ba741d923dcad44"
+}
