@@ -1,0 +1,110 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-CONT-NEXT-c98ff8f182205cfbb7bc1d60",
+  "build_id": "BUILD-GENERIC-AUTOBUILD-CHAT-WAKE-20261003",
+  "source_commit": "cd3d30bd5899c706a0d1a36450b6f75eb8f6e682",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "run_tests",
+    "read_runtime",
+    "write_runtime",
+    "user_service_manage"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 900,
+  "notes": "Accept and install generic NEEDS_BUILD -> ChatGPT continuation bridge. Canonical repo code is tested in an isolated worktree. Only the allowlisted chat-wake runtime and explicit autobuild route are installed. No production repo sync is forced; WSL remains remote-Git read-only. NO_PROVEN_EDGE unchanged.",
+  "operations": [
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/autobuild_acceptance_e042.py",
+        "pre"
+      ],
+      "timeout_seconds": 60
+    },
+    {
+      "type": "python",
+      "argv": [
+        "/home/leonh/prediction_research_prod/.venv/bin/python",
+        "-m",
+        "pytest",
+        "-q",
+        "tests/bridge/test_external_autobuild_continuation.py",
+        "tests/bridge/test_continuation_wake_overlay.py",
+        "tests/codex_supervisor/test_autobuild_chat_wake.py",
+        "tests/codex_supervisor/test_candidate_dispatch.py",
+        "tests/codex_supervisor/test_supervisor.py"
+      ],
+      "test": true,
+      "timeout_seconds": 600
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "-m",
+        "compileall",
+        "control/tampermonkey_multichat/continuation_manager.py",
+        "control/codex_supervisor/build_wake.py",
+        "control/codex_supervisor/candidate_dispatch.py",
+        "control/codex_supervisor/supervisor.py"
+      ],
+      "timeout_seconds": 60
+    },
+    {
+      "type": "install_runtime",
+      "source": "control/tampermonkey_multichat/continuation_manager.py",
+      "destination": "/home/leonh/.local/share/prediction-chat-bridge/continuation_manager.py",
+      "mode": 420
+    },
+    {
+      "type": "install_runtime",
+      "source": "control/dev_checks/autobuild_control_route_e042.json",
+      "destination": "/home/leonh/.local/share/prediction-chat-bridge/autobuild_control_route.json",
+      "mode": 384
+    },
+    {
+      "type": "service",
+      "verb": "restart",
+      "unit": "prediction-chat-wake.service"
+    },
+    {
+      "type": "service",
+      "verb": "is-active",
+      "unit": "prediction-chat-wake.service"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/autobuild_acceptance_e042.py",
+        "post"
+      ],
+      "timeout_seconds": 60
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/autobuild_acceptance_e042.py",
+        "canary"
+      ],
+      "timeout_seconds": 60
+    }
+  ]
+}
