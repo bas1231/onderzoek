@@ -1,0 +1,42 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-CONT-CANARY2-FIRSTFAIL-20261003-E025",
+  "build_id": "CONTINUATION-CANARY2-FIRSTFAIL-20261003",
+  "source_commit": "d3b7eed50f8fbf339d85cff86a734d0df2e6481a",
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_runtime"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 300,
+  "notes": "Read-only first-failure classifier for E024. No reconcile/maintain and no runtime mutation.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/firstfail_canary2_e025.py",
+      "content": "from pathlib import Path\nimport json\n\nhome=Path.home()\ndata=home/\".local/share/prediction-chat-bridge\"\nstates=home/\".local/state/prediction-command-bus/tasks\"\nsource=\"DEV-PRED-CONT-CANARY2-A-20261003-E022\"\ncid=\"CONT-e91d594cb6c782b9e7b2668d\"\n\ndef load(p):\n    try:\n        return json.loads(p.read_text(encoding=\"utf-8\"))\n    except Exception:\n        return None\n\ns=load(states/f\"{source}.json\")\ncp=data/\"continuations\"/f\"{cid}.json\"\nc=load(cp)\n\nchecks=[\n    (\"A_STATE_MISSING\", isinstance(s,dict)),\n    (\"A_NOT_DISPATCHED\", isinstance(s,dict) and s.get(\"status\")==\"DISPATCHED\"),\n    (\"A_AUTO_FALSE\", isinstance(s,dict) and s.get(\"auto_continue\") is True),\n    (\"A_CONTINUATION_RECORD_MISSING\", cp.is_file()),\n    (\"A_CONTINUATION_INVALID\", isinstance(c,dict)),\n    (\"A_CONTINUATION_ID_WRONG\", isinstance(c,dict) and c.get(\"continuation_id\")==cid),\n    (\"A_CONTINUATION_SOURCE_WRONG\", isinstance(c,dict) and c.get(\"source_task_id\")==source),\n]\n\nfor name,ok in checks:\n    if not ok:\n        print(\"E024_FIRST_FAIL=\"+name, flush=True)\n        raise SystemExit(7)\n\nstate=c.get(\"state\")\nevent_id=c.get(\"last_event_id\")\nloc=[]\nif event_id:\n    for n in (\"outbox\",\"inflight\",\"sent\"):\n        if (data/n/f\"{event_id}.json\").is_file():\n            loc.append(n)\n\nif state not in {\"CONTINUE_REQUESTED\",\"CONTINUE_QUEUED\",\"CONTINUE_SENT\",\"NEXT_TASK_CREATED\",\"NEXT_TASK_ACCEPTED\"}:\n    print(\"E024_FIRST_FAIL=A_CONTINUATION_BAD_STATE state=\"+repr(state), flush=True)\n    raise SystemExit(7)\nif not event_id:\n    print(\"E024_FIRST_FAIL=A_CONTINUATION_NO_EVENT state=\"+repr(state), flush=True)\n    raise SystemExit(7)\nif not loc:\n    print(\"E024_FIRST_FAIL=A_CONTINUATION_EVENT_NOT_FOUND state=\"+repr(state)+\" event=\"+repr(event_id), flush=True)\n    raise SystemExit(7)\n\nprint(\"E024_FIRST_FAIL=NONE state=\"+repr(state)+\" loc=\"+\",\".join(loc), flush=True)\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/firstfail_canary2_e025.py"
+      ],
+      "timeout_seconds": 120
+    }
+  ]
+}
