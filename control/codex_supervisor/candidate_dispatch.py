@@ -118,7 +118,7 @@ def apply_candidate_result(supervisor,task,result,completion_hash,decision_time)
     snapshot=task['candidate_snapshot']
     wake_condition=task.get('wake_condition') or snapshot.get('evidence_wake_condition') or snapshot.get('resume_condition')
     record={'candidate_id':cid,'source_hashes':task['candidate_source_hashes'],'input_sha256':task['input_sha256'],'decision_timestamp':decision_time,'wait_cutoff':decision_time,'queue_status':state,'finding':result['finding'],'next_action':result['next_action'],'scientific_status':'NO_PROVEN_EDGE','originating_task_id':task['task_id'],'completion_hash':completion_hash,'evidence_refs':sorted(task['candidate_source_hashes']),'applied_version':version,'candidate_snapshot':snapshot,'referenced_evidence':task['referenced_evidence'],'wake_condition':wake_condition,'resurrection_condition':snapshot.get('resurrection_condition'),'wake_provenance':task.get('wake_record'),'live_trading':False,'paid_actions':False,'wallet_actions':False,'remote_push':False}
-    if state=='NEEDS_BUILD':
+    if state=='NEEDS_BUILD' and protocols:
         repo=P(task['candidate_source_root'])
         implementation={name:hashlib.sha256((repo/name).read_bytes()).hexdigest() for name in ('control/codex_supervisor/supervisor.py','control/codex_supervisor/candidate_dispatch.py','control/codex_supervisor/shadow_protocol.py','control/codex_supervisor/candidate_validation.py','control/hourly/candidate_queue.py','tests/codex_supervisor/test_shadow_protocol.py')}
         record['build_handoff']={'status':'BUILD_TASK_QUEUED','operation':'PROTOCOL_DEATHCHECK_VALIDATION','protocol_refs':protocols,'executor':'local_fixed_dispatcher','model_code_execution':False,'implementation_hashes':implementation,'activation_forbidden_until_prospective_gates':True}
@@ -153,7 +153,23 @@ def select_next(supervisor,repo):
     if root.exists():
         for path in sorted(root.glob('*.json')):
             item=json.loads(path.read_text())
-            if item.get('queue_status')=='NEEDS_BUILD':return {'queue_blocked':True,'reason':'NEEDS_BUILD_BUT_NO_ALLOWLISTED_LOCAL_OPERATION','candidate_id':item.get('candidate_id')}
+            if item.get('queue_status')=='NEEDS_BUILD':
+                plan=item.get('build_handoff',{})
+                if plan.get('operation')=='PROTOCOL_DEATHCHECK_VALIDATION':
+                    return {'queue_blocked':True,'reason':'NEEDS_BUILD_FIXED_VALIDATOR_PENDING','candidate_id':item.get('candidate_id')}
+                import build_wake
+                try:
+                    wake=build_wake.ensure_build_continuation(supervisor,item)
+                except build_wake.BuildWakeBlocked as exc:
+                    reason=str(exc)[:120] or 'AUTOBUILD_WAKE_BLOCKED'
+                    print(json.dumps({'event':'QUEUE_BLOCKED','candidate_id':item.get('candidate_id'),'reason':reason}),flush=True)
+                    return {'queue_blocked':True,'reason':reason,'candidate_id':item.get('candidate_id')}
+                state=str(wake.get('continuation_state') or '')
+                reason='AUTOBUILD_CHAT_WAKE_QUEUED'
+                if state=='DONE':reason='AUTOBUILD_DONE_AWAITING_CANDIDATE_SOURCE_UPDATE'
+                elif state in {'BLOCKED','CONFLICT','BLOCKED_TRANSPORT'}:reason='AUTOBUILD_CONTINUATION_'+state
+                print(json.dumps({'event':'AUTOBUILD_CHAT_WAKE','candidate_id':item.get('candidate_id'),'continuation_id':wake.get('continuation_id'),'state':state}),flush=True)
+                return {'queue_blocked':True,'reason':reason,'candidate_id':item.get('candidate_id'),'continuation_id':wake.get('continuation_id')}
             if item.get('queue_status')=='VALIDATION':return {'queue_blocked':True,'reason':'VALIDATION_COMPLETE_PROSPECTIVE_COLLECTOR_MISSING','candidate_id':item.get('candidate_id')}
             if item.get('queue_status')=='NEEDS_REVISION':return {'queue_blocked':True,'reason':'NEEDS_REVISION_REQUIRES_NEW_VERSION_AND_REVIEW','candidate_id':item.get('candidate_id')}
     return None
