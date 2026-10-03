@@ -1,0 +1,35 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-CONT-NEXT-2d40621dddf0596ccdc5ba18",
+  "source_commit": "a701fb33ff42b35e08b7db1f7c5760bbebb869f2",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "run_project_python",
+    "read_runtime"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 180,
+  "notes": "Continuation of production-sync remediation. Read-only production head-state diagnosis only. Determine branch/detached/worktree ref and exact HEAD directly from .git metadata; no production mutation and no remote Git write.",
+  "operations": [
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/prod_head_state_e056.py"
+      ],
+      "timeout_seconds": 60
+    }
+  ]
+}
