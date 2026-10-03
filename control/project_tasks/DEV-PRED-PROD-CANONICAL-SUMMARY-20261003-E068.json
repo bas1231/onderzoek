@@ -1,0 +1,31 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-PROD-CANONICAL-SUMMARY-20261003-E068",
+  "source_commit": "eb1ea50595bafaae5b282a44ce9e51563c84653b",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "production_compare_source"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 300,
+  "notes": "Read-only compact comparison of production temporary branch delta against exact current canonical source. Intentionally fail closed with counts and bounded samples only when differences remain. No production mutation.",
+  "operations": [
+    {
+      "type": "production_compare_source",
+      "require_equal": true,
+      "report_mode": "summary"
+    }
+  ]
+}
