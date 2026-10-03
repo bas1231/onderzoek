@@ -1,0 +1,41 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-CONT-CANARY-A-20261003-E008",
+  "build_id": "CONTINUATION-V2-A-B-DONE-CANARY-A-20261003",
+  "source_commit": "56c204df4436c33b92c0234d7fad5bd968afc4ea",
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 300,
+  "notes": "CANARY A. After PASS returns to originating chat, continuation CONT-09bfdedea81fbfe9f3b3291e must select NEXT only. Exact preregistered child: DEV-PRED-CONT-NEXT-09bfdedea81fbfe9f3b3291e. No human continue.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/continuation_canary_a_e008.py",
+      "content": "print(\"CONTINUATION_CANARY_A_E008=PASS\")\nprint(\"NEXT_REQUIRED=DEV-PRED-CONT-NEXT-09bfdedea81fbfe9f3b3291e\")\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/continuation_canary_a_e008.py"
+      ],
+      "timeout_seconds": 60
+    }
+  ]
+}
