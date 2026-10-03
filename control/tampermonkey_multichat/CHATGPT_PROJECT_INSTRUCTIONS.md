@@ -125,3 +125,14 @@ Follow the project's Tier A/B/C intelligence-routing rules. `NO_PROVEN_EDGE` rem
 The command bus and project executor are operationally proven. `BRIDGE-COMMAND-BUS-CURRENT-ROUTE-E008` returned `status=PASS exit=0` to the intended chat. The automatic session-bootstrap runtime was regression-tested, installed, service-restarted/checked and runtime-canary-tested by `DEV-PRED-SESSION-BOOTSTRAP-INSTALL-20260929-E010`, which returned `status=PASS exit=0`.
 
 The remaining external acceptance criterion is a genuinely brand-new Prediction chat receiving its own automatic `SESSION-ROUTE-*` PASS without an assistant DOM marker or manual ping. Formal independent Tier-A review status remains tracked separately and is not implied complete by operational use.
+
+
+## Assistant-side delivery receipt
+
+Current transport supports an assistant-side durable receipt in addition to browser ACK.
+
+When a delivered result contains an exact event identifier, ChatGPT may acknowledge the transport by creating the deterministic immutable receipt described in `control/bridge_commands/OPERATIONS.md` and `control/bridge_commands/RESULT_RECEIPT_SCHEMA_V1.json`.
+
+This receipt reuses the existing wake `/ack` path after local event/task/route verification. It therefore does not weaken `outbox -> inflight -> sent` semantics.
+
+Important: a delivery receipt proves only that the message reached ChatGPT. It does **not** mean a continuation is logically complete. Raw `NIGHTSHIFT_WSL_RESULT_V1` still does not authorize NEXT/DONE/BLOCKED. A `PREDICTION_CONTROL_CONTINUE_V2` still requires exactly one durable outcome under the continuation protocol.
