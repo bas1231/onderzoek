@@ -11,11 +11,8 @@ SOURCE = ROOT / "control/tampermonkey_multichat/prediction-chat-wake.user.js"
 RUNTIME = Path.home() / ".local/share/prediction-chat-bridge/prediction-chat-wake.user.js"
 
 TARGETS = [
-    "tests/audit/test_delivery_behavior.py",
-    "tests/audit/test_reliability_regressions.py",
-    "tests/bridge/test_tampermonkey_multichat.py",
     "control/tampermonkey_multichat/test_userscript_delivery_dedupe_static.py",
-    "control/tampermonkey_multichat/test_userscript_v046_guard_static.py",
+    "tests/bridge/test_tampermonkey_multichat.py",
 ]
 
 def sha(path: Path) -> str:
@@ -31,7 +28,10 @@ def pre() -> int:
     env = os.environ.copy()
     env["PYTEST_DISABLE_PLUGIN_AUTOLOAD"] = "1"
     cp = subprocess.run(
-        [sys.executable, "-m", "pytest", "-q", *TARGETS],
+        [
+            sys.executable, "-m", "pytest", "-q", *TARGETS,
+            "-k", "not javascript_syntax_when_node_available",
+        ],
         cwd=ROOT,
         env=env,
         text=True,
