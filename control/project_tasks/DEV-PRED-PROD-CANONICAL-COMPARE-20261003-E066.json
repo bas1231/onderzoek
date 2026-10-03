@@ -1,0 +1,30 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-PROD-CANONICAL-COMPARE-20261003-E066",
+  "source_commit": "9a7e9415b19a622608ab6a05df46928c3c20e0c4",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "production_compare_source"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 300,
+  "notes": "Read-only compare of production temporary branch delta against exact canonical source commit using Git tree blob IDs. Intentionally fail closed when any branch-delta path is not byte-identical to canonical source. No production mutation.",
+  "operations": [
+    {
+      "type": "production_compare_source",
+      "require_equal": true
+    }
+  ]
+}
