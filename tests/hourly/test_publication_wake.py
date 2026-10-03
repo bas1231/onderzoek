@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import base64
 import importlib.util
+import hashlib
 import json
 from pathlib import Path
 import zlib
@@ -80,8 +81,10 @@ def test_oversized_payload_stays_local_without_continuation(tmp_path):
     rel = "knowledge/candidates/large.json"
     target = tmp_path / rel
     target.parent.mkdir(parents=True, exist_ok=True)
-    # incompressible enough to exceed the bounded continuation payload
-    data = bytes(range(256)) * 40
+    # Deterministic high-entropy valid JSON, large enough to exceed the
+    # bounded compressed continuation payload.
+    tokens = [hashlib.sha256(str(i).encode()).hexdigest() for i in range(500)]
+    data = json.dumps({"tokens": tokens}, separators=(",", ":")).encode() + b"\n"
     target.write_bytes(data)
     result = mod.ensure_publication(rel, root=tmp_path)
     assert result["status"] == "OVERSIZED_LOCAL_ONLY"
