@@ -90,49 +90,41 @@ def test_existing_sensitive_runtime_prefixes_remain_denied():
         assert mod.denied(path)
 
 
-def test_checkpoint_preserves_unrelated_preexisting_staged_state(tmp_path):
+def test_checkpoint_preserves_staged_state_and_never_publishes(tmp_path):
     repo, remote = make_repo(tmp_path)
     mod = load_module()
     mod.ROOT = repo
     mod.STATUS_PATH = tmp_path / "state.json"
 
-    # Simulate a different local process/session with intentional staged work.
     (repo / "notes.txt").write_text("staged-local-work\n", encoding="utf-8")
     run_git(repo, "add", "notes.txt")
     staged_patch_before = run_git(repo, "diff", "--cached", "--binary").stdout
+    head_before = run_git(repo, "rev-parse", "HEAD").stdout.strip()
+    remote_before = subprocess.run(
+        ["git", f"--git-dir={remote}", "rev-parse", "main"],
+        text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=True,
+    ).stdout.strip()
 
-    report = repo / "hourly-reports/hourly-20260924T080000+0200.md"
+    rel = "hourly-reports/hourly-20260924T080000+0200.md"
+    report = repo / rel
     report.parent.mkdir(parents=True)
     report.write_text("# durable hourly report\n", encoding="utf-8")
 
     assert mod.main() == 0
 
-    # The unrelated staged patch must survive byte-for-byte.
     assert run_git(repo, "diff", "--cached", "--binary").stdout == staged_patch_before
-    assert run_git(repo, "diff", "--cached", "--name-only").stdout.splitlines() == [
-        "notes.txt"
-    ]
-
-    assert (
-        run_git(repo, "show", "HEAD:hourly-reports/hourly-20260924T080000+0200.md")
-        .stdout
-        == "# durable hourly report\n"
-    )
-    assert subprocess.run(
-        [
-            "git",
-            f"--git-dir={remote}",
-            "show",
-            "main:hourly-reports/hourly-20260924T080000+0200.md",
-        ],
-        text=True,
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE,
-        check=True,
-    ).stdout == "# durable hourly report\n"
+    assert run_git(repo, "diff", "--cached", "--name-only").stdout.splitlines() == ["notes.txt"]
+    assert run_git(repo, "rev-parse", "HEAD").stdout.strip() == head_before
+    remote_after = subprocess.run(
+        ["git", f"--git-dir={remote}", "rev-parse", "main"],
+        text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=True,
+    ).stdout.strip()
+    assert remote_after == remote_before
+    assert report.read_text(encoding="utf-8") == "# durable hourly report\n"
 
     state = json.loads(mod.STATUS_PATH.read_text(encoding="utf-8"))
-    assert state["status"] == "PUBLISHED"
+    assert state["status"] == "LOCAL_ONLY_PENDING_CHATGPT_PUBLICATION"
+    assert state["files"] == [rel]
     assert state["preserved_staged_count"] == 1
 
 
@@ -157,3 +149,9 @@ def test_checkpoint_fails_closed_on_preexisting_staged_candidate(tmp_path):
     state = json.loads(mod.STATUS_PATH.read_text(encoding="utf-8"))
     assert state["status"] == "FAIL_CLOSED"
     assert "already staged" in state["reason"]
+
+
+def test_production_checkpoint_contains_no_remote_push_call():
+    text = MODULE_PATH.read_text(encoding="utf-8")
+    assert 'git("push"' not in text
+    assert "GIT_CHECKPOINT_PUBLISHED" not in text
