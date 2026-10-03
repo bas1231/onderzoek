@@ -422,7 +422,7 @@ def _delivery_still_pending(
     return False
 
 
-def _attempt_message(record: dict, attempt: int) -> str:
+def _attempt_message(record: dict, attempt: int, delivery_event_id: str, delivery_task_id: str) -> str:
     context = str(record.get("context_message") or "").strip()
     context_block = ""
     if context:
@@ -437,6 +437,8 @@ def _attempt_message(record: dict, attempt: int) -> str:
         f"continuation_id={record['continuation_id']}\n"
         f"source_task_id={record['source_task_id']}\n"
         f"attempt={attempt}\n"
+        f"delivery_event_id={delivery_event_id}\n"
+        f"delivery_task_id={delivery_task_id}\n"
         + (f"recovery_reason={record['recovery_reason']}\n" if record.get("recovery_reason") else "")
         + "No human input is required. Inspect the current Prediction source of truth and select exactly one durable outcome.\n"
         + context_block
@@ -448,6 +450,9 @@ def _attempt_message(record: dict, attempt: int) -> str:
         f"delivery_mode=headless, auto_continue=false and parent_continuation_id={record['continuation_id']}.\n"
         f"BLOCKED: create exactly one headless BRIDGE_PING command-bus receipt with task_id={record['expected_blocked_task_id']}, "
         f"delivery_mode=headless, auto_continue=false and parent_continuation_id={record['continuation_id']}.\n"
+        "TRANSPORT RECEIPT: independently acknowledge this delivered prompt by creating the immutable result receipt "
+        "for delivery_event_id + delivery_task_id under control/bridge_commands/receipts. "
+        "That transport receipt is not a NEXT/DONE/BLOCKED outcome.\n"
         "Never create more than one of NEXT/DONE/BLOCKED. Browser send/ACK is not success; the durable command-bus state is authoritative."
     )
 
@@ -481,7 +486,7 @@ def enqueue_attempt(
     attempt = attempts + 1
     attempt_task_id = _attempt_task_id(record, attempt)
     event_id = f"cont-{int(now * 1000)}-{secrets.token_hex(4)}"
-    message = _attempt_message(record, attempt)
+    message = _attempt_message(record, attempt, event_id, attempt_task_id)
 
     _atomic_json(routes_dir / f"{attempt_task_id}.json", {
         "version": 2,
