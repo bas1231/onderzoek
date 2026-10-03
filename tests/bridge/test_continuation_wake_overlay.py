@@ -283,4 +283,8 @@ def test_unacked_result_heartbeat_is_bounded_to_stale_auto_continue_same_chat(tm
         assert mod.recover_unacked_result_heartbeat(chat, now=now) == 0
         cid = mod.continuation.ids_for(source)["continuation_id"]
         assert not mod.continuation.continuation_path(data, cid).exists()
-        assert (base.INFLIGHT / f"{event_id}.json").is_file()
+        event_path = base.INFLIGHT / f"{event_id}.json"
+        assert event_path.is_file()
+        event_path.unlink()
+        (routes / f"{source}.json").unlink()
+        (states / f"{source}.json").unlink()
