@@ -1,0 +1,67 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "PREDICTION_RESULT_RECEIPT_V1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "receipt_id",
+    "event_id",
+    "source_task_id",
+    "created_at_utc",
+    "live_trading",
+    "paid_actions",
+    "wallet_actions",
+    "issuer"
+  ],
+  "properties": {
+    "schema": {
+      "const": "PREDICTION_RESULT_RECEIPT_V1"
+    },
+    "receipt_id": {
+      "type": "string",
+      "pattern": "^RESULT-RECEIPT-[A-Za-z0-9_-]{1,120}$"
+    },
+    "event_id": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9_-]{1,120}$"
+    },
+    "source_task_id": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9._:-]{1,160}$"
+    },
+    "created_at_utc": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "live_trading": {
+      "const": false
+    },
+    "paid_actions": {
+      "const": false
+    },
+    "wallet_actions": {
+      "const": false
+    },
+    "issuer": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "model",
+        "reasoning_level"
+      ],
+      "properties": {
+        "model": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 120
+        },
+        "reasoning_level": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 120
+        }
+      }
+    }
+  }
+}
