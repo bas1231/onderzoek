@@ -1,0 +1,30 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-PROD-COMPARE-CANONICAL-20261003-E065",
+  "source_commit": "5bafd00f9e778f81ffc22cd9bc5ced14ccd64563",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "production_compare_source"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 300,
+  "notes": "Read-only compare of committed production architecture-branch delta against current canonical source commit. Intentionally fail closed only if branch content is not represented in canonical source. No production mutation.",
+  "operations": [
+    {
+      "type": "production_compare_source",
+      "require_equal": true,
+      "report_mode": "summary"
+    }
+  ]
+}
