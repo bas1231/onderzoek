@@ -267,17 +267,50 @@ def main() -> int:
     if invalid_json:
         return fail("invalid JSON: " + ", ".join(invalid_json[:20]))
 
+    pub_spec = importlib.util.spec_from_file_location(
+        "prediction_publication_wake",
+        ROOT / "control/hourly/publication_wake.py",
+    )
+    publication_results = []
+    publication_errors = []
+    deferred = []
+    new_wakes = 0
+    if pub_spec is None or pub_spec.loader is None:
+        publication_errors.append({"path": None, "error": "PUBLICATION_MODULE_UNAVAILABLE"})
+    else:
+        publication = importlib.util.module_from_spec(pub_spec)
+        pub_spec.loader.exec_module(publication)
+        for index, path in enumerate(candidates):
+            if new_wakes >= 3:
+                deferred.extend(candidates[index:])
+                break
+            try:
+                result = publication.ensure_publication(path, root=ROOT)
+                publication_results.append(result)
+                if result.get("new_continuation"):
+                    new_wakes += 1
+            except Exception as exc:
+                publication_errors.append({
+                    "path": path,
+                    "error": f"{type(exc).__name__}:{str(exc)[:300]}",
+                })
+
     write_status(
         "LOCAL_ONLY_PENDING_CHATGPT_PUBLICATION",
         head=local_before,
         files=candidates,
         file_count=len(candidates),
         preserved_staged_count=len(pre_staged),
+        publication_results=publication_results,
+        publication_errors=publication_errors,
+        publication_deferred=deferred,
+        new_publication_wakes=new_wakes,
     )
     print("GIT_CHECKPOINT_LOCAL_ONLY_PENDING")
     print("GIT_CHECKPOINT_FILE_COUNT", len(candidates))
-    for path in candidates:
-        print("GIT_CHECKPOINT_FILE", path)
+    print("GIT_CHECKPOINT_NEW_PUBLICATION_WAKES", new_wakes)
+    print("GIT_CHECKPOINT_PUBLICATION_ERRORS", len(publication_errors))
+    print("GIT_CHECKPOINT_PUBLICATION_DEFERRED", len(deferred))
     return 0
 
 
