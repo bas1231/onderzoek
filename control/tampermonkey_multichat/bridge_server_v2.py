@@ -13,7 +13,9 @@ from urllib.parse import parse_qs, urlparse
 HOME = Path.home()
 DATA_DIR = HOME / ".local" / "share" / "prediction-chat-bridge"
 OUTBOX = DATA_DIR / "outbox"
+INFLIGHT = DATA_DIR / "inflight"
 SENT = DATA_DIR / "sent"
+# INFLIGHT_RUNTIME_V1
 ROUTES = DATA_DIR / "routes"
 TOKEN_FILE = HOME / ".config" / "prediction-chat-bridge" / "token"
 DEFAULT_CHAT_FILE = DATA_DIR / "default_chat.json"
@@ -29,7 +31,7 @@ ACK_HOOK = None
 
 
 def ensure_dirs():
-    for p in (OUTBOX, SENT, ROUTES):
+    for p in (OUTBOX, INFLIGHT, SENT, ROUTES):
         p.mkdir(parents=True, exist_ok=True)
     TOKEN_FILE.parent.mkdir(parents=True, exist_ok=True)
 
@@ -211,6 +213,7 @@ class Handler(BaseHTTPRequestHandler):
                 "version": 4,
                 "multichat": True,
                 "consumer_routing": True,
+                "inflight_claim": True,
             })
             return
         if parsed.path != "/next":
@@ -235,8 +238,15 @@ class Handler(BaseHTTPRequestHandler):
 
         deadline = time.monotonic() + 20.0
         while time.monotonic() < deadline:
-            _, obj = oldest_event(chat_id, consumer_id)
-            if obj is not None:
+            path, obj = oldest_event(chat_id, consumer_id)
+            if obj is not None and path is not None:
+                # Fail closed: claim before browser delivery. Ambiguous normal
+                # result delivery remains INFLIGHT and is never silently replayed.
+                claimed = INFLIGHT / path.name
+                try:
+                    os.replace(path, claimed)
+                except FileNotFoundError:
+                    continue
                 self.reply_json(200, obj)
                 return
             time.sleep(0.25)
@@ -278,7 +288,9 @@ class Handler(BaseHTTPRequestHandler):
             self.reply_json(400, {"ok": False, "error": "bad_consumer_id"})
             return
 
-        src = OUTBOX / f"{event_id}.json"
+        inflight_src = INFLIGHT / f"{event_id}.json"
+        outbox_src = OUTBOX / f"{event_id}.json"
+        src = inflight_src if inflight_src.exists() else outbox_src
         dst = SENT / f"{event_id}.json"
         if src.exists():
             obj = load_event(src)
