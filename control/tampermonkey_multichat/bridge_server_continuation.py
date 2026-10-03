@@ -119,6 +119,7 @@ def recover_unacked_result_heartbeat(chat_id: str, *, now: float | None = None) 
     paths = sorted(
         inflight.glob("*.json"),
         key=lambda p: p.stat().st_mtime_ns if p.exists() else 0,
+        reverse=True,
     )
 
     for path in paths[:MAX_RECOVERY_SCAN]:
