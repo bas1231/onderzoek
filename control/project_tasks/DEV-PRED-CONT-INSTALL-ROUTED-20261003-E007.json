@@ -1,0 +1,144 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-CONT-INSTALL-ROUTED-20261003-E007",
+  "build_id": "CONTINUATION-V2-ROUTED-INSTALL-20261003",
+  "source_commit": "6f52a02fea88ae9d54180c26d492f31bf0ce0995",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "run_tests",
+    "read_runtime",
+    "write_runtime",
+    "user_service_manage",
+    "read_logs"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 1200,
+  "notes": "Routed install/verification of transactional continuation v2 and stale continuation INFLIGHT recovery. Do not modify or install Tampermonkey. Do not stage/use Chrome extension. Preserve generic result fail-closed inflight semantics.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/verify_continuation_e007_install.py",
+      "content": "from pathlib import Path\nimport importlib.util\nimport json\nimport os\nimport sys\n\nhome = Path.home()\nwake_dir = home / \".local/share/prediction-chat-bridge\"\nbus_path = home / \".local/share/prediction-command-bus/command_bus_poller.py\"\n\nspec = importlib.util.spec_from_file_location(\"installed_cont_bus_e007\", bus_path)\nbus = importlib.util.module_from_spec(spec)\nassert spec.loader is not None\nspec.loader.exec_module(bus)\n\ncmd = {\n    \"schema\": \"PREDICTION_BRIDGE_COMMAND_V1\",\n    \"task_id\": \"DEV-PRED-CONT-E007-CHECK\",\n    \"action\": \"BRIDGE_PING\",\n    \"created_at_utc\": \"2026-10-03T08:20:00Z\",\n    \"route_task_id\": \"SESSION-ROUTE-E007-CHECK\",\n    \"live_trading\": False,\n    \"paid_actions\": False,\n    \"wallet_actions\": False,\n    \"intelligence_tier\": \"C\",\n    \"issuer\": {\"model\": \"GPT-5.6 Sol\", \"reasoning_level\": \"UNAVAILABLE_TO_RUNTIME\"},\n    \"auto_continue\": True,\n    \"parent_continuation_id\": \"CONT-\" + (\"a\" * 24),\n}\nok, reason = bus.validate_command(cmd)\nassert ok and reason == \"OK\", (ok, reason)\n\nsys.path.insert(0, str(wake_dir))\nspec2 = importlib.util.spec_from_file_location(\"installed_cont_wake_e007\", wake_dir / \"bridge_server.py\")\nwake = importlib.util.module_from_spec(spec2)\nassert spec2.loader is not None\nspec2.loader.exec_module(wake)\n\nassert \"continuation-v2\" in str(getattr(wake.Handler, \"server_version\", \"\"))\nassert hasattr(wake.base, \"INFLIGHT\"), \"generic fail-closed inflight patch missing\"\nassert wake.base.oldest_event is wake.continuation_oldest_event\nif hasattr(wake.base, \"ACK_HOOK\"):\n    assert wake.base.ACK_HOOK is wake.continuation_ack_hook\nelse:\n    assert wake.base.release_lease is wake.continuation_release_lease\n\nroot = Path(os.environ[\"PRED_PROJECT_TEMP_ROOT\"]) / \"continuation-e007-installed\"\ndata = root / \"bridge\"\nroutes = data / \"routes\"\noutbox = data / \"outbox\"\ninflight = data / \"inflight\"\nstates = root / \"task-state\"\nfor p in (routes, outbox, inflight, states):\n    p.mkdir(parents=True, exist_ok=True)\n\ncm = wake.continuation\nsource = \"DEV-PRED-CONT-E007-SOURCE\"\n(states / f\"{source}.json\").write_text(json.dumps({\n    \"schema\": \"PREDICTION_COMMAND_BUS_TASK_STATE_V1\",\n    \"task_id\": source,\n    \"status\": \"DISPATCHED\",\n    \"auto_continue\": True,\n}), encoding=\"utf-8\")\n\nrecord = cm.start_for_result_ack(\n    data_dir=data,\n    task_state_dir=states,\n    source_task_id=source,\n    chat_id=\"chat-e007-installed\",\n)\nassert record is not None\n\ncm.maintain_for_chat(\n    data_dir=data,\n    task_state_dir=states,\n    routes_dir=routes,\n    outbox_dir=outbox,\n    chat_id=\"chat-e007-installed\",\n    now=1000.0,\n)\nrecord_path = cm.continuation_path(data, record[\"continuation_id\"])\nrecord = json.loads(record_path.read_text(encoding=\"utf-8\"))\nassert record[\"state\"] == \"CONTINUE_QUEUED\"\nassert record[\"attempts\"] == 1\n\nfirst_event_id = record[\"last_event_id\"]\nfirst = outbox / f\"{first_event_id}.json\"\nfirst.rename(inflight / first.name)\n\ncm.maintain_for_chat(\n    data_dir=data,\n    task_state_dir=states,\n    routes_dir=routes,\n    outbox_dir=outbox,\n    chat_id=\"chat-e007-installed\",\n    now=1000.0 + cm.RETRY_AFTER_SECONDS + 1,\n)\nafter = json.loads(record_path.read_text(encoding=\"utf-8\"))\nassert after[\"attempts\"] == 2\nassert after[\"state\"] == \"CONTINUE_QUEUED\"\nassert after[\"last_event_id\"] != first_event_id\nassert (data / \"continuation_abandoned\" / f\"{first_event_id}.json\").is_file()\nassert not (inflight / f\"{first_event_id}.json\").exists()\n\nprint(\"CONTINUATION_E007_INSTALLED=PASS\")\nprint(\"WAKE_HANDLER=\" + str(getattr(wake.Handler, \"server_version\", \"\")))\nprint(\"GENERIC_INFLIGHT_PATCH=PRESERVED\")\nprint(\"STALE_CONTINUATION_INFLIGHT_RECOVERY=PASS\")\nprint(\"COMMAND_BUS_METADATA=PASS\")\nprint(\"TAMPERMONKEY_TOUCHED=NO\")\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "-m",
+        "pytest",
+        "-q",
+        "tests/bridge/test_transactional_continuation.py",
+        "tests/bridge/test_continuation_wake_overlay.py",
+        "tests/bridge/test_command_bus_continuation_metadata.py",
+        "tests/bridge/test_status_compaction_nested.py",
+        "control/tampermonkey_multichat/test_session_route_bootstrap.py"
+      ],
+      "test": true,
+      "timeout_seconds": 300
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "-m",
+        "compileall",
+        "-q",
+        "control/bridge_commands/command_bus_poller.py",
+        "control/tampermonkey_multichat/continuation_manager.py",
+        "control/tampermonkey_multichat/bridge_server_continuation.py",
+        "control/tampermonkey_multichat/bridge_server_status_compaction.py",
+        "control/tampermonkey_multichat/bridge_server_session_bootstrap.py",
+        "control/tampermonkey_multichat/bridge_server_hardened.py"
+      ],
+      "timeout_seconds": 120
+    },
+    {
+      "type": "install_runtime",
+      "source": "control/bridge_commands/command_bus_poller.py",
+      "destination": "/home/leonh/.local/share/prediction-command-bus/command_bus_poller.py",
+      "mode": 493
+    },
+    {
+      "type": "install_runtime",
+      "source": "control/tampermonkey_multichat/bridge_server_hardened.py",
+      "destination": "/home/leonh/.local/share/prediction-chat-bridge/bridge_server_hardened.py",
+      "mode": 420
+    },
+    {
+      "type": "install_runtime",
+      "source": "control/tampermonkey_multichat/bridge_server_session_bootstrap.py",
+      "destination": "/home/leonh/.local/share/prediction-chat-bridge/bridge_server_session_bootstrap.py",
+      "mode": 420
+    },
+    {
+      "type": "install_runtime",
+      "source": "control/tampermonkey_multichat/bridge_server_status_compaction.py",
+      "destination": "/home/leonh/.local/share/prediction-chat-bridge/bridge_server_status_compaction.py",
+      "mode": 420
+    },
+    {
+      "type": "install_runtime",
+      "source": "control/tampermonkey_multichat/continuation_manager.py",
+      "destination": "/home/leonh/.local/share/prediction-chat-bridge/continuation_manager.py",
+      "mode": 420
+    },
+    {
+      "type": "install_runtime",
+      "source": "control/tampermonkey_multichat/bridge_server_continuation.py",
+      "destination": "/home/leonh/.local/share/prediction-chat-bridge/bridge_server.py",
+      "mode": 493
+    },
+    {
+      "type": "service",
+      "verb": "restart",
+      "unit": "prediction-chat-wake.service"
+    },
+    {
+      "type": "service",
+      "verb": "is-active",
+      "unit": "prediction-chat-wake.service"
+    },
+    {
+      "type": "service",
+      "verb": "restart",
+      "unit": "prediction-command-bus.timer"
+    },
+    {
+      "type": "service",
+      "verb": "start",
+      "unit": "prediction-command-bus.service"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/verify_continuation_e007_install.py"
+      ],
+      "timeout_seconds": 120
+    },
+    {
+      "type": "journal",
+      "unit": "prediction-chat-wake.service",
+      "lines": 100
+    },
+    {
+      "type": "journal",
+      "unit": "prediction-command-bus.service",
+      "lines": 120
+    }
+  ]
+}
