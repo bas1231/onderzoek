@@ -1,0 +1,16 @@
+{
+  "schema": "PREDICTION_BRIDGE_COMMAND_V1",
+  "task_id": "DEV-PRED-PROD-CONVERGE-DIFFPATHS-20261004-E083",
+  "action": "SIX_AI_HEALTH",
+  "created_at_utc": "2026-10-03T22:16:00Z",
+  "route_task_id": "DEV-PRED-PROD-CONVERGE-20261004-E082",
+  "live_trading": false,
+  "paid_actions": false,
+  "wallet_actions": false,
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "auto_continue": false
+}
