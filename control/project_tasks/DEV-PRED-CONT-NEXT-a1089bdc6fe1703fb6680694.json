@@ -1,0 +1,35 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-CONT-NEXT-a1089bdc6fe1703fb6680694",
+  "source_commit": "ba8fb4a6b59004bdd20742d68da41f4e1a6c9ea3",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "run_project_python",
+    "read_runtime"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 240,
+  "notes": "Live end-to-end acceptance for assistant-side immutable result receipt installed by E064. Wait boundedly for this continuation delivery receipt to be processed, require receipt DISPATCHED, continuation attempt 1 ACKed, exactly one attempt, event in sent and not inflight. No runtime mutation.",
+  "operations": [
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/result_receipt_live_acceptance_e065.py"
+      ],
+      "timeout_seconds": 120
+    }
+  ]
+}
