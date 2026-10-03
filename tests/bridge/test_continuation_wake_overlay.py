@@ -320,3 +320,59 @@ def test_top_level_next_handler_runs_heartbeat_before_parent(monkeypatch):
         ("maintain", "chat-heartbeat-direct-001"),
         ("parent", handler.path),
     ]
+
+
+def test_heartbeat_scan_prefers_newest_and_does_not_starve_recent_auto_continue(tmp_path, monkeypatch):
+    mod = load_overlay()
+    base, data, routes, _, _, states = setup_paths(mod, tmp_path, monkeypatch)
+
+    chat = "chat-heartbeat-newest-first"
+    # Fill INFLIGHT beyond MAX_RECOVERY_SCAN with older unrelated evidence.
+    for i in range(mod.MAX_RECOVERY_SCAN + 40):
+        source = f"OLD-NORMAL-{i:03d}"
+        write_source_state(states, source, False)
+        (routes / f"{source}.json").write_text(json.dumps({
+            "version": 2,
+            "task_id": source,
+            "chat_id": chat,
+            "consumer_id": None,
+        }), encoding="utf-8")
+        path = base.INFLIGHT / f"old-{i:03d}.json"
+        path.write_text(json.dumps({
+            "event_id": f"old-{i:03d}",
+            "task_id": source,
+            "message": "old result",
+            "created_at": 1000.0 + i,
+            "source": "wsl_result",
+        }), encoding="utf-8")
+        ts = 1000.0 + i
+        import os
+        os.utime(path, (ts, ts))
+
+    source = "RECENT-AUTO-CONTINUE"
+    write_source_state(states, source, True)
+    (routes / f"{source}.json").write_text(json.dumps({
+        "version": 2,
+        "task_id": source,
+        "chat_id": chat,
+        "consumer_id": None,
+    }), encoding="utf-8")
+    recent = base.INFLIGHT / "recent-auto.json"
+    recent.write_text(json.dumps({
+        "event_id": "recent-auto",
+        "task_id": source,
+        "message": "recent auto result",
+        "created_at": 2000.0,
+        "source": "wsl_result",
+    }), encoding="utf-8")
+    import os
+    os.utime(recent, (2000.0, 2000.0))
+
+    assert mod.recover_unacked_result_heartbeat(chat, now=2100.0) == 1
+    cid = mod.continuation.ids_for(source)["continuation_id"]
+    record = json.loads(
+        mod.continuation.continuation_path(data, cid).read_text(encoding="utf-8")
+    )
+    assert record["source_task_id"] == source
+    assert record["recovery_reason"] == "RESULT_ACK_TIMEOUT"
+    assert recent.is_file()
