@@ -1,0 +1,40 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-CONT-NEXT-9bc61d67f5718acd295626c7",
+  "build_id": "BUILD-GENERIC-AUTOBUILD-CHAT-WAKE-20261003",
+  "source_commit": "77331681f9d92889482bbf911da8aeb3e0201ea1",
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "write_worktree",
+    "run_project_python"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 180,
+  "notes": "Continuation child for E041. Emit all canonical autobuild provenance hashes on one compact line. Intentional rc42 preserves the diagnostic payload.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/autobuild_pins_compact_cont.py",
+      "content": "from pathlib import Path\nimport hashlib\npaths={\n\"s\":\"control/codex_supervisor/supervisor.py\",\n\"d\":\"control/codex_supervisor/candidate_dispatch.py\",\n\"b\":\"control/codex_supervisor/build_wake.py\",\n\"e\":\"control/codex_supervisor/evidence_wake.py\",\n\"q\":\"control/hourly/candidate_queue.py\",\n\"c\":\"control/tampermonkey_multichat/continuation_manager.py\",\n}\nvals={k:hashlib.sha256(Path(v).read_bytes()).hexdigest() for k,v in paths.items()}\nprint(\"PINS=\"+\";\".join(f\"{k}:{vals[k]}\" for k in (\"s\",\"d\",\"b\",\"e\",\"q\",\"c\")),flush=True)\nraise SystemExit(42)\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/autobuild_pins_compact_cont.py"
+      ],
+      "timeout_seconds": 60
+    }
+  ]
+}
