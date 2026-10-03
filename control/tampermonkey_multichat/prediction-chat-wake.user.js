@@ -4,6 +4,8 @@
 // @version      0.4.8
 // @description  Multi-chat transport for the local Prediction control plane.
 // @match        https://chatgpt.com/*
+// @updateURL    http://localhost:8765/prediction-chat-wake.user.js
+// @downloadURL  http://localhost:8765/prediction-chat-wake.user.js
 // @grant        GM_xmlhttpRequest
 // @grant        GM_getValue
 // @grant        GM_setValue
