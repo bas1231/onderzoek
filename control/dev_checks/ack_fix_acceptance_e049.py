@@ -46,6 +46,13 @@ def pre() -> int:
     print("ACK_FIX_PYTEST_RC=" + str(cp.returncode), flush=True)
     if output:
         print(output, flush=True)
+    if cp.returncode != 0:
+        failed = []
+        for line in output.splitlines():
+            stripped = line.strip()
+            if stripped.startswith("FAILED "):
+                failed.append(stripped.split(" - ", 1)[0])
+        print("ACK_FIX_FAILS=" + ("|".join(failed[-12:]) if failed else "NO_FAILED_LINES"), flush=True)
     return cp.returncode
 
 def post() -> int:
