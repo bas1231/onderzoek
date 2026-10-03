@@ -1,0 +1,42 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-CONT-HEARTBEAT-LIVE-STATE-20261003-E031",
+  "build_id": "CONTINUATION-HEARTBEAT-LIVE-STATE-20261003",
+  "source_commit": "f569399c179453b8fa137932450e98586ea37398",
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_runtime"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 300,
+  "notes": "Read-only live heartbeat state classifier. Check A continuation and whether any RESULT_ACK_TIMEOUT recovery records exist. No mutation, no recovery call.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/heartbeat_live_state_e031.py",
+      "content": "from pathlib import Path\nimport json\n\ndata=Path.home()/\".local/share/prediction-chat-bridge\"\ncid=\"CONT-e91d594cb6c782b9e7b2668d\"\ncp=data/\"continuations\"/f\"{cid}.json\"\n\ndef load(p):\n    try:return json.loads(p.read_text(encoding=\"utf-8\"))\n    except Exception:return None\n\nif cp.is_file():\n    c=load(cp) or {}\n    print(\"HEARTBEAT_LIVE=A_EXISTS state=\"+str(c.get(\"state\"))+\" recovery=\"+str(c.get(\"recovery_reason\")),flush=True)\n    raise SystemExit(41)\n\nrecoveries=[]\nroot=data/\"continuations\"\nif root.is_dir():\n    for p in root.glob(\"CONT-*.json\"):\n        o=load(p)\n        if isinstance(o,dict) and o.get(\"recovery_reason\")==\"RESULT_ACK_TIMEOUT\":\n            recoveries.append((float(o.get(\"created_at\") or 0),str(o.get(\"source_task_id\") or \"\")))\nrecoveries.sort(reverse=True)\n\nif recoveries:\n    print(\"HEARTBEAT_LIVE=OTHER_RECOVERY count=\"+str(len(recoveries))+\" newest=\"+recoveries[0][1],flush=True)\n    raise SystemExit(42)\n\nprint(\"HEARTBEAT_LIVE=NO_RECOVERY_RECORDS\",flush=True)\nraise SystemExit(43)\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/heartbeat_live_state_e031.py"
+      ],
+      "timeout_seconds": 120
+    }
+  ]
+}
