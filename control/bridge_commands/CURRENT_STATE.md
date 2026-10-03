@@ -1,5 +1,38 @@
 # Prediction Command Bus — Current State
 
+## Operational update — 2026-10-03
+
+The continuation/result path has advanced beyond the 2026-09-29 baseline below.
+
+### Result receipt route
+
+A GitHub-backed immutable result-receipt mechanism is now operational for browser-delivered Prediction results/continuations. ChatGPT writes a small `PREDICTION_RESULT_RECEIPT_V1` file keyed by the exact wake `event_id` and `source_task_id`; the read-only local command-bus side consumes that receipt and durably moves the matching event to `sent`.
+
+Observed 2026-10-03 evidence includes multiple independent receipt commits and roundtrip verification. In particular:
+
+- `DEV-PRED-CONT-NEXT-97c1e16e78d248be34072b2d` returned `PASS exit=0` for the third independent receipt roundtrip acceptance;
+- the acceptance required receipt state `DISPATCHED`, the exact event present in `sent`, and absent from `inflight`;
+- a later live continuation receipt `RESULT-RECEIPT-cont-1791058993287-c286ba8f` was followed by durable headless `CONT-DONE-352e53185231a24b9f944580`.
+
+This means the current continuation route no longer depends on Tampermonkey `POST /ack` to establish durable receipt. A diagnostic on the legacy userscript path still observed `runtime_version=0.4.8|ack_count=0`; treat that as a legacy-browser-path defect, not as evidence that the new GitHub result-receipt path is broken.
+
+### Production reconciliation
+
+Production is not yet eligible for an unconditional branch switch/fast-forward.
+
+Read-only inspection proved that the temporary production branch `architecture/sol-builder-astra-reviewer` contains real local architecture commits, including:
+
+- `1170607 build: complete prospective shadow lifecycle`
+- `16dcfb2 build: complete autonomous Sol Astra runtime lifecycle`
+- `8896d1d fix: accept bounded revision scope`
+
+and changed paths including `control/browser_bridge.py`, new Codex-supervisor build dispatch/planner modules, and related supervisor changes.
+
+Current canonical reconciliation therefore uses fail-closed representation gates. Tasks `DEV-PRED-CONT-NEXT-824b7686cbf56be905e3c2d0` and `DEV-PRED-CONT-NEXT-3c5fd15e7e51abdd487d5847` require both the committed temporary-branch delta and any dirty/untracked production worktree content to be exactly represented in pinned canonical source before any cleanup, switch or fast-forward is authorized.
+
+Do not discard, reset, or overwrite the temporary production branch merely because canonical `main` has advanced. Preserve its ref until the representation gates and final production verification have passed.
+
+
 Updated: 2026-09-29
 Infrastructure track: `TIERA-BRIDGE-COMMAND-BUS-20260929-E001`
 Session-bootstrap build: `TIERA-SESSION-BOOTSTRAP-20260929-E001`
