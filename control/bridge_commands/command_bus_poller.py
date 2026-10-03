@@ -37,9 +37,13 @@ BRIDGE_DATA = HOME / ".local" / "share" / "prediction-chat-bridge"
 ROUTES = BRIDGE_DATA / "routes"
 ROUTER_URL = "http://127.0.0.1:8767/command"
 HEALTH_URL = "http://127.0.0.1:8767/health"
+WAKE_ACK_URL = "http://127.0.0.1:8765/ack"
 INBOX_PREFIX = "control/bridge_commands/inbox/"
+RECEIPT_PREFIX = "control/bridge_commands/receipts/"
 SCHEMA = "PREDICTION_BRIDGE_COMMAND_V1"
+RECEIPT_SCHEMA = "PREDICTION_RESULT_RECEIPT_V1"
 TASK_RE = re.compile(r"^[A-Za-z0-9._:-]{1,160}$")
+EVENT_RE = re.compile(r"^[A-Za-z0-9_-]{1,120}$")
 ACTION_RE = re.compile(r"^[A-Z][A-Z0-9_]{1,79}$")
 ID_RE = re.compile(r"^[A-Za-z0-9._:-]{4,220}$")
 CONTINUATION_RE = re.compile(r"^CONT-[a-f0-9]{24}$")
@@ -94,6 +98,15 @@ def list_inbox_paths() -> list[str]:
         p.strip()
         for p in cp.stdout.splitlines()
         if p.strip().startswith(INBOX_PREFIX) and p.strip().endswith(".json")
+    )
+
+
+def list_receipt_paths() -> list[str]:
+    cp = git("ls-tree", "-r", "--name-only", "FETCH_HEAD", "--", "control/bridge_commands/receipts")
+    return sorted(
+        p.strip()
+        for p in cp.stdout.splitlines()
+        if p.strip().startswith(RECEIPT_PREFIX) and p.strip().endswith(".json")
     )
 
 
@@ -183,6 +196,62 @@ def validate_command(obj: dict) -> tuple[bool, str]:
     return True, "OK"
 
 
+def validate_result_receipt(obj: dict) -> tuple[bool, str]:
+    required = {
+        "schema", "receipt_id", "event_id", "source_task_id", "created_at_utc",
+        "live_trading", "paid_actions", "wallet_actions", "issuer",
+    }
+    if set(obj) != required:
+        return False, "BAD_RECEIPT_FIELDS"
+    if obj.get("schema") != RECEIPT_SCHEMA:
+        return False, "BAD_RECEIPT_SCHEMA"
+    event_id = str(obj.get("event_id") or "")
+    receipt_id = str(obj.get("receipt_id") or "")
+    source_task_id = str(obj.get("source_task_id") or "")
+    if not EVENT_RE.fullmatch(event_id):
+        return False, "BAD_EVENT_ID"
+    if receipt_id != f"RESULT-RECEIPT-{event_id}" or not TASK_RE.fullmatch(receipt_id):
+        return False, "BAD_RECEIPT_ID"
+    if not TASK_RE.fullmatch(source_task_id):
+        return False, "BAD_SOURCE_TASK_ID"
+    for field, code in (
+        ("live_trading", "LIVE_TRADING_BLOCKED"),
+        ("paid_actions", "PAID_ACTIONS_BLOCKED"),
+        ("wallet_actions", "WALLET_ACTIONS_BLOCKED"),
+    ):
+        if obj.get(field) is not False:
+            return False, code
+    issuer = obj.get("issuer")
+    if not isinstance(issuer, dict) or set(issuer) != {"model", "reasoning_level"}:
+        return False, "BAD_ISSUER"
+    if not str(issuer.get("model") or "").strip() or not str(issuer.get("reasoning_level") or "").strip():
+        return False, "BAD_ISSUER"
+    if not isinstance(obj.get("created_at_utc"), str) or not obj["created_at_utc"].strip():
+        return False, "BAD_CREATED_AT"
+    return True, "OK"
+
+
+def verify_receipt_event(obj: dict) -> tuple[bool, str]:
+    event_id = str(obj["event_id"])
+    source_task_id = str(obj["source_task_id"])
+    candidates = [
+        BRIDGE_DATA / "inflight" / f"{event_id}.json",
+        BRIDGE_DATA / "sent" / f"{event_id}.json",
+    ]
+    for path in candidates:
+        if not path.is_file():
+            continue
+        event = load_json(path)
+        if not event:
+            return False, "INVALID_LOCAL_EVENT"
+        if str(event.get("event_id") or "") != event_id:
+            return False, "EVENT_ID_MISMATCH"
+        if str(event.get("task_id") or "") != source_task_id:
+            return False, "EVENT_TASK_MISMATCH"
+        return True, "OK"
+    return False, "EVENT_NOT_FOUND"
+
+
 def validate_route(route: dict | None) -> dict | None:
     if not isinstance(route, dict):
         return None
@@ -238,6 +307,159 @@ def dispatch(command: dict, route: dict, token: str) -> tuple[str, int | None, s
         return "HTTP_ERROR", exc.code, raw.decode("utf-8", errors="replace")
     except (URLError, OSError, TimeoutError) as exc:
         return "TRANSPORT_ERROR", None, f"{type(exc).__name__}:{exc}"
+
+
+def dispatch_result_receipt(obj: dict, route: dict, token: str) -> tuple[str, int | None, str]:
+    payload = {
+        "event_id": obj["event_id"],
+        "chat_id": route["chat_id"],
+        "consumer_id": route.get("consumer_id"),
+    }
+    body = json.dumps(payload, separators=(",", ":")).encode("utf-8")
+    req = Request(
+        WAKE_ACK_URL,
+        data=body,
+        method="POST",
+        headers={"Authorization": f"Bearer {token}", "Content-Type": "application/json"},
+    )
+    try:
+        with urlopen(req, timeout=15) as resp:
+            raw = resp.read(65536)
+            return "RESPONSE", resp.status, raw.decode("utf-8", errors="replace")
+    except HTTPError as exc:
+        raw = exc.read(65536)
+        return "HTTP_ERROR", exc.code, raw.decode("utf-8", errors="replace")
+    except (URLError, OSError, TimeoutError) as exc:
+        return "TRANSPORT_ERROR", None, f"{type(exc).__name__}:{exc}"
+
+
+def process_receipt(path: str, remote_commit: str, token: str) -> str:
+    raw = remote_bytes(path)
+    content_sha = sha256(raw)
+    try:
+        obj = json.loads(raw.decode("utf-8"))
+    except Exception as exc:
+        incident("BAD_RECEIPT_JSON", {"path": path, "remote_commit": remote_commit, "detail": type(exc).__name__})
+        return "RECEIPT_BAD_JSON"
+    if not isinstance(obj, dict):
+        return "RECEIPT_BAD_ENVELOPE"
+
+    receipt_id = str(obj.get("receipt_id") or "")
+    if not TASK_RE.fullmatch(receipt_id):
+        return "RECEIPT_BAD_ID"
+    if path != f"{RECEIPT_PREFIX}{receipt_id}.json":
+        return "RECEIPT_PATH_ID_MISMATCH"
+
+    state_path = task_state_path(receipt_id)
+    existing = load_json(state_path)
+    if existing is not None:
+        if existing.get("content_sha256") != content_sha:
+            incident("TASK_ID_CONTENT_CONFLICT", {
+                "task_id": receipt_id,
+                "path": path,
+                "remote_commit": remote_commit,
+                "old_content_sha256": existing.get("content_sha256"),
+                "new_content_sha256": content_sha,
+            })
+            return "RECEIPT_CONFLICT"
+        return "RECEIPT_ALREADY_CLAIMED"
+
+    ok, reason = validate_result_receipt(obj)
+    if not ok:
+        record = {
+            "schema": "PREDICTION_COMMAND_BUS_TASK_STATE_V1",
+            "task_id": receipt_id,
+            "status": "REJECTED",
+            "reason": reason,
+            "path": path,
+            "remote_commit": remote_commit,
+            "content_sha256": content_sha,
+            "recorded_at_utc": utc_now(),
+        }
+        atomic_json(state_path, record)
+        incident(reason, record)
+        return "RECEIPT_REJECTED"
+
+    source_task_id = str(obj["source_task_id"])
+    route = validate_route(load_json(ROUTES / f"{source_task_id}.json"))
+    if route is None:
+        record = {
+            "schema": "PREDICTION_COMMAND_BUS_TASK_STATE_V1",
+            "task_id": receipt_id,
+            "status": "BLOCKED_ROUTE",
+            "reason": "RECEIPT_SOURCE_ROUTE_MISSING",
+            "path": path,
+            "remote_commit": remote_commit,
+            "content_sha256": content_sha,
+            "source_task_id": source_task_id,
+            "recorded_at_utc": utc_now(),
+        }
+        atomic_json(state_path, record)
+        return "RECEIPT_BLOCKED_ROUTE"
+
+    event_ok, event_reason = verify_receipt_event(obj)
+    if not event_ok:
+        record = {
+            "schema": "PREDICTION_COMMAND_BUS_TASK_STATE_V1",
+            "task_id": receipt_id,
+            "status": "REJECTED",
+            "reason": event_reason,
+            "path": path,
+            "remote_commit": remote_commit,
+            "content_sha256": content_sha,
+            "source_task_id": source_task_id,
+            "event_id": obj["event_id"],
+            "recorded_at_utc": utc_now(),
+        }
+        atomic_json(state_path, record)
+        return "RECEIPT_REJECTED"
+
+    claim = {
+        "schema": "PREDICTION_COMMAND_BUS_TASK_STATE_V1",
+        "task_id": receipt_id,
+        "status": "CLAIMED",
+        "action": "RESULT_RECEIPT",
+        "path": path,
+        "remote_commit": remote_commit,
+        "content_sha256": content_sha,
+        "source_task_id": source_task_id,
+        "event_id": obj["event_id"],
+        "chat_id": route["chat_id"],
+        "consumer_id": route.get("consumer_id"),
+        "claimed_at_utc": utc_now(),
+    }
+    atomic_json(state_path, claim)
+
+    kind, http_status, response = dispatch_result_receipt(obj, route, token)
+    final = dict(claim)
+    final["completed_at_utc"] = utc_now()
+    final["http_status"] = http_status
+    final["response"] = response[:8192]
+
+    if kind == "RESPONSE" and http_status is not None and 200 <= http_status < 300:
+        try:
+            envelope = json.loads(response or "{}")
+        except Exception:
+            envelope = None
+        if isinstance(envelope, dict) and envelope.get("ok") is True:
+            final["status"] = "DISPATCHED"
+            atomic_json(state_path, final)
+            return "RECEIPT_DISPATCHED"
+        final["status"] = "AMBIGUOUS"
+        final["reason"] = "SUCCESS_STATUS_WITHOUT_OK_TRUE"
+        atomic_json(state_path, final)
+        return "RECEIPT_AMBIGUOUS"
+
+    if kind == "HTTP_ERROR":
+        final["status"] = "REJECTED"
+        final["reason"] = "WAKE_ACK_REJECTED"
+        atomic_json(state_path, final)
+        return "RECEIPT_REJECTED"
+
+    final["status"] = "AMBIGUOUS"
+    final["reason"] = "WAKE_ACK_TRANSPORT_AMBIGUOUS"
+    atomic_json(state_path, final)
+    return "RECEIPT_AMBIGUOUS"
 
 
 def process_one(path: str, remote_commit: str, token: str) -> str:
@@ -375,6 +597,9 @@ def run_once() -> int:
     counts: dict[str, int] = {}
     for path in list_inbox_paths():
         result = process_one(path, remote_commit, token)
+        counts[result] = counts.get(result, 0) + 1
+    for path in list_receipt_paths():
+        result = process_receipt(path, remote_commit, token)
         counts[result] = counts.get(result, 0) + 1
     print(json.dumps({
         "ok": True,
