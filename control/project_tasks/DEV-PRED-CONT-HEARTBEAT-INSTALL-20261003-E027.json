@@ -1,0 +1,97 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-CONT-HEARTBEAT-INSTALL-20261003-E027",
+  "build_id": "CONTINUATION-RECOVERY-HEARTBEAT-20261003",
+  "source_commit": "71c6165b1efd7859d025f4e7b40e6bf337dc9de3",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_runtime",
+    "write_runtime",
+    "user_service_manage",
+    "read_logs"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 900,
+  "notes": "Install only continuation recovery-heartbeat overlay/manager. Preserve current stale canary A INFLIGHT evidence; do not reconcile or manually create its continuation. After restart the normal browser /next poll must recover it autonomously.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/verify_heartbeat_e027.py",
+      "content": "from pathlib import Path\nimport importlib\nimport json\nimport os\nimport sys\nimport tempfile\n\nroot=Path.cwd()\nmods=root/\"control/tampermonkey_multichat\"\nsys.path.insert(0,str(mods))\nfor name in (\"bridge_server_continuation\",\"bridge_server_status_compaction\",\"bridge_server_session_bootstrap\",\"bridge_server_hardened\",\"bridge_server_v2\",\"continuation_manager\"):\n    sys.modules.pop(name,None)\nm=importlib.import_module(\"bridge_server_continuation\")\nbase=m.base\n\nwith tempfile.TemporaryDirectory(dir=os.environ[\"PRED_PROJECT_TEMP_ROOT\"]) as td:\n    data=Path(td)/\"bridge\"\n    states=Path(td)/\"states\"\n    routes=data/\"routes\"\n    outbox=data/\"outbox\"\n    inflight=data/\"inflight\"\n    sent=data/\"sent\"\n    for p in (states,routes,outbox,inflight,sent):\n        p.mkdir(parents=True,exist_ok=True)\n\n    old=(base.DATA_DIR,base.ROUTES,base.OUTBOX,base.INFLIGHT,base.SENT,m.TASK_STATE_DIR)\n    base.DATA_DIR=data; base.ROUTES=routes; base.OUTBOX=outbox; base.INFLIGHT=inflight; base.SENT=sent\n    m.TASK_STATE_DIR=states\n    try:\n        source=\"HEARTBEAT-E027-SOURCE\"\n        chat=\"chat-heartbeat-e027\"\n        (states/f\"{source}.json\").write_text(json.dumps({\n            \"schema\":\"PREDICTION_COMMAND_BUS_TASK_STATE_V1\",\n            \"task_id\":source,\n            \"status\":\"DISPATCHED\",\n            \"auto_continue\":True,\n        }),encoding=\"utf-8\")\n        (routes/f\"{source}.json\").write_text(json.dumps({\n            \"version\":2,\"task_id\":source,\"chat_id\":chat,\"consumer_id\":None\n        }),encoding=\"utf-8\")\n        event_id=\"heartbeat-e027-result\"\n        original=inflight/f\"{event_id}.json\"\n        original.write_text(json.dumps({\n            \"event_id\":event_id,\n            \"task_id\":source,\n            \"message\":\"NIGHTSHIFT_WSL_RESULT_V1 task=HEARTBEAT-E027-SOURCE status=PASS exit=0\",\n            \"created_at\":1000.0,\n            \"source\":\"wsl_result\",\n        }),encoding=\"utf-8\")\n\n        assert m.recover_unacked_result_heartbeat(chat,now=1044.0)==0\n        assert original.is_file()\n        assert m.recover_unacked_result_heartbeat(chat,now=1046.0)==1\n        assert original.is_file()\n\n        cid=m.continuation.ids_for(source)[\"continuation_id\"]\n        cp=m.continuation.continuation_path(data,cid)\n        rec=json.loads(cp.read_text(encoding=\"utf-8\"))\n        assert rec[\"recovery_reason\"]==\"RESULT_ACK_TIMEOUT\"\n        assert rec[\"state\"]==\"CONTINUE_REQUESTED\"\n\n        m.continuation.maintain_for_chat(\n            data_dir=data,task_state_dir=states,routes_dir=routes,\n            outbox_dir=outbox,chat_id=chat,now=1100.0,\n        )\n        rec=json.loads(cp.read_text(encoding=\"utf-8\"))\n        assert rec[\"state\"]==\"CONTINUE_QUEUED\"\n        wake=json.loads((outbox/f\"{rec['last_event_id']}.json\").read_text(encoding=\"utf-8\"))\n        assert wake[\"source\"]==\"control_continuation_v2\"\n        assert \"recovery_reason=RESULT_ACK_TIMEOUT\" in wake[\"message\"]\n        assert original.is_file()\n\n        normal=\"HEARTBEAT-E027-NORMAL\"\n        (states/f\"{normal}.json\").write_text(json.dumps({\n            \"schema\":\"PREDICTION_COMMAND_BUS_TASK_STATE_V1\",\n            \"task_id\":normal,\n            \"status\":\"DISPATCHED\",\n            \"auto_continue\":False,\n        }),encoding=\"utf-8\")\n        (routes/f\"{normal}.json\").write_text(json.dumps({\n            \"version\":2,\"task_id\":normal,\"chat_id\":chat,\"consumer_id\":None\n        }),encoding=\"utf-8\")\n        (inflight/\"normal.json\").write_text(json.dumps({\n            \"event_id\":\"normal\",\"task_id\":normal,\"message\":\"result\",\"created_at\":1.0\n        }),encoding=\"utf-8\")\n        assert m.recover_unacked_result_heartbeat(chat,now=9999.0)==0\n    finally:\n        base.DATA_DIR,base.ROUTES,base.OUTBOX,base.INFLIGHT,base.SENT,m.TASK_STATE_DIR=old\n\nprint(\"HEARTBEAT_SOURCE_TEST=PASS\")\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "-m",
+        "compileall",
+        "-q",
+        "control/tampermonkey_multichat/continuation_manager.py",
+        "control/tampermonkey_multichat/bridge_server_continuation.py"
+      ],
+      "timeout_seconds": 120
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/verify_heartbeat_e027.py"
+      ],
+      "timeout_seconds": 120
+    },
+    {
+      "type": "install_runtime",
+      "source": "control/tampermonkey_multichat/continuation_manager.py",
+      "destination": "/home/leonh/.local/share/prediction-chat-bridge/continuation_manager.py",
+      "mode": 420
+    },
+    {
+      "type": "install_runtime",
+      "source": "control/tampermonkey_multichat/bridge_server_continuation.py",
+      "destination": "/home/leonh/.local/share/prediction-chat-bridge/bridge_server.py",
+      "mode": 493
+    },
+    {
+      "type": "service",
+      "verb": "restart",
+      "unit": "prediction-chat-wake.service"
+    },
+    {
+      "type": "service",
+      "verb": "is-active",
+      "unit": "prediction-chat-wake.service"
+    },
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/verify_installed_heartbeat_e027.py",
+      "content": "from pathlib import Path\nimport importlib.util\nimport sys\n\nruntime=Path.home()/\".local/share/prediction-chat-bridge\"\nsys.path.insert(0,str(runtime))\nsp=importlib.util.spec_from_file_location(\"installed_bridge_e027\",runtime/\"bridge_server.py\")\nm=importlib.util.module_from_spec(sp)\nassert sp.loader is not None\nsp.loader.exec_module(m)\nassert getattr(m.Handler,\"server_version\",\"\")==\"PredictionChatWake/1.3-continuation-v2\"\nassert m.UNACKED_RESULT_HEARTBEAT_SECONDS==45.0\nassert callable(m.recover_unacked_result_heartbeat)\nassert hasattr(m.base,\"INFLIGHT\")\nassert hasattr(m.base,\"ACK_HOOK\")\nassert m.base.ACK_HOOK is m.continuation_ack_hook\nprint(\"HEARTBEAT_RUNTIME_E027=PASS\")\nprint(\"UNACKED_TIMEOUT_SECONDS=45\")\nprint(\"NATIVE_ACK_STILL_BOUND=PASS\")\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/verify_installed_heartbeat_e027.py"
+      ],
+      "timeout_seconds": 120
+    },
+    {
+      "type": "journal",
+      "unit": "prediction-chat-wake.service",
+      "lines": 100
+    }
+  ]
+}
