@@ -1,0 +1,42 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-AUTONOMY-RUNTIME-DIAG-20261003-E038",
+  "build_id": "AUTONOMY-RUNTIME-DIAG-20261003-E038",
+  "source_commit": "5a57c201eeaf9157d132000c2e5cec11122b7d4b",
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "write_worktree",
+    "run_project_python",
+    "user_service_manage",
+    "read_logs"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 300,
+  "notes": "Read-only robust autonomy runtime diagnostic. Oneshot services may be inactive; required active units are timers plus wake service.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/autonomy_runtime_diag_e038.py",
+      "content": "import subprocess\n\nunits = [\n    (\"prediction-research-hourly-director.timer\", True),\n    (\"prediction-codex-supervisor.timer\", True),\n    (\"prediction-command-bus.timer\", True),\n    (\"prediction-chat-wake.service\", True),\n    (\"prediction-research-hourly-director.service\", False),\n    (\"prediction-codex-supervisor.service\", False),\n]\n\nrows = []\nfor unit, must_be_active in units:\n    p = subprocess.run([\"systemctl\",\"--user\",\"is-active\",unit], text=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)\n    active = (p.stdout or \"\").strip()\n    q = subprocess.run([\"systemctl\",\"--user\",\"is-enabled\",unit], text=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)\n    enabled = (q.stdout or \"\").strip()\n    show = subprocess.run([\"systemctl\",\"--user\",\"show\",unit], text=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)\n    props = {}\n    for line in (show.stdout or \"\").splitlines():\n        if \"=\" in line:\n            k,v=line.split(\"=\",1)\n            if k in {\"ActiveState\",\"SubState\",\"Result\",\"ExecMainStatus\",\"UnitFileState\",\"NextElapseUSecRealtime\",\"LastTriggerUSec\",\"InactiveExitTimestamp\",\"ActiveEnterTimestamp\"}:\n                props[k]=v\n    rows.append((unit,must_be_active,active,enabled,props))\n\nfor unit,must_be_active,active,enabled,props in rows:\n    print(\"UNIT\",unit,\"ACTIVE\",active,\"ENABLED\",enabled,\"PROPS\",props, flush=True)\n\nfor unit in [\"prediction-research-hourly-director.service\",\"prediction-codex-supervisor.service\",\"prediction-command-bus.service\",\"prediction-chat-wake.service\"]:\n    p=subprocess.run([\"journalctl\",\"--user\",\"-u\",unit,\"-n\",\"20\",\"--no-pager\"],text=True,stdout=subprocess.PIPE,stderr=subprocess.STDOUT)\n    tail=\"\\n\".join((p.stdout or \"\").splitlines()[-8:])\n    print(\"JOURNAL\",unit,tail.replace(\"\\n\",\" || \"),flush=True)\n\nbad=[unit for unit,must,active,_,_ in rows if must and active!=\"active\"]\nsummary=\";\".join(f\"{u}={a}\" for u,_,a,_,_ in rows)\nprint(\"AUTONOMY_RUNTIME_SUMMARY=\"+summary,flush=True)\nif bad:\n    print(\"AUTONOMY_REQUIRED_INACTIVE=\"+\",\".join(bad),flush=True)\n    raise SystemExit(41)\nprint(\"AUTONOMY_REQUIRED_ACTIVE=PASS\",flush=True)\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/autonomy_runtime_diag_e038.py"
+      ],
+      "timeout_seconds": 120
+    }
+  ]
+}
