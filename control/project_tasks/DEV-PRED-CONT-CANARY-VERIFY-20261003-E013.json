@@ -1,0 +1,42 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-CONT-CANARY-VERIFY-20261003-E013",
+  "build_id": "CONTINUATION-V2-A-B-DONE-VERIFY-20261003",
+  "source_commit": "28cb4eb6367cc8c85f6348dd629fc6c6f5508a98",
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_runtime"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 300,
+  "notes": "Read-only proof of the automatic A -> B -> DONE canary. Observe only; do not call continuation maintenance/reconcile and do not mutate runtime state.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/verify_ab_done_e013.py",
+      "content": "from pathlib import Path\nimport json\nimport time\n\nhome = Path.home()\ndone_task = \"CONT-DONE-eba52c84b60e5eb693d28b3d\"\ncontinuation_id = \"CONT-eba52c84b60e5eb693d28b3d\"\ntask_state = home / \".local/state/prediction-command-bus/tasks\" / f\"{done_task}.json\"\ncont_state = home / \".local/share/prediction-chat-bridge/continuations\" / f\"{continuation_id}.json\"\n\ndeadline = time.time() + 150\nlast_task = None\nlast_cont = None\nwhile time.time() < deadline:\n    if task_state.is_file():\n        try:\n            last_task = json.loads(task_state.read_text(encoding=\"utf-8\"))\n        except Exception:\n            last_task = None\n    if cont_state.is_file():\n        try:\n            last_cont = json.loads(cont_state.read_text(encoding=\"utf-8\"))\n        except Exception:\n            last_cont = None\n    if (\n        isinstance(last_task, dict)\n        and last_task.get(\"status\") == \"DISPATCHED\"\n        and isinstance(last_cont, dict)\n        and last_cont.get(\"state\") == \"DONE\"\n    ):\n        break\n    time.sleep(2)\n\nprint(\"DONE_TASK_STATE=\" + repr(last_task))\nprint(\"CONTINUATION_STATE=\" + repr(last_cont))\n\nassert isinstance(last_task, dict), \"DONE command-bus state missing\"\nassert last_task.get(\"task_id\") == done_task, last_task\nassert last_task.get(\"status\") == \"DISPATCHED\", last_task\nassert last_task.get(\"parent_continuation_id\") == continuation_id, last_task\n\nassert isinstance(last_cont, dict), \"continuation state missing\"\nassert last_cont.get(\"continuation_id\") == continuation_id, last_cont\nassert last_cont.get(\"expected_done_task_id\") == done_task, last_cont\nassert last_cont.get(\"state\") == \"DONE\", last_cont\n\nprint(\"A_B_DONE_CANARY=PASS\")\nprint(\"DONE_RECEIPT_DISPATCHED=PASS\")\nprint(\"CONTINUATION_TERMINAL_DONE=PASS\")\nprint(\"HUMAN_CONTINUE_REQUIRED=NO\")\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/verify_ab_done_e013.py"
+      ],
+      "timeout_seconds": 180
+    }
+  ]
+}
