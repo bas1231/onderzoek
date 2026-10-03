@@ -1,0 +1,37 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-CONT-NEXT-862e7fb91984bc0def099664",
+  "source_commit": "d8e0c9794af082b3b2cd7d751a4fcbae9a6adff8",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "run_project_python",
+    "read_runtime"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 180,
+  "notes": "Third clean live result-receipt proof. Verify the immutable receipt for this exact delivered continuation event is locally DISPATCHED, the event is in sent/, and no longer inflight. Read-only verification; no production mutation.",
+  "operations": [
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/result_receipt_roundtrip_e066.py",
+        "cont-1791053639159-b6f504d9",
+        "CONT-WAKE-862e7fb91984bc0def099664-A01"
+      ],
+      "timeout_seconds": 120
+    }
+  ]
+}
