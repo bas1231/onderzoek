@@ -1,0 +1,37 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-CONT-NEXT-97c1e16e78d248be34072b2d",
+  "source_commit": "830e0b3093e20c83513d9857051ec7db8172b3cb",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "run_project_python",
+    "read_runtime"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 180,
+  "notes": "Third independent result-receipt roundtrip acceptance. Verify the continuation delivery receipt is DISPATCHED, present in sent, and absent from inflight. No runtime mutation.",
+  "operations": [
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/result_receipt_roundtrip_e066.py",
+        "cont-1791056823973-4c6f2f86",
+        "CONT-WAKE-97c1e16e78d248be34072b2d-A01"
+      ],
+      "timeout_seconds": 120
+    }
+  ]
+}
