@@ -1,0 +1,64 @@
+{
+  "schema": "AUTONOMOUS_BUILD_CHARTER_V1",
+  "build_id": "BUILD-GENERIC-AUTOBUILD-CHAT-WAKE-20261003",
+  "protocol_version": 1,
+  "objective": "Route a generic safety-eligible candidate in NEEDS_BUILD through the existing bounded ChatGPT continuation transport so ChatGPT can author exactly-scoped projectexecutor work, while preserving fixed protocol validators, explicit same-chat routing, NO_PROVEN_EDGE, no-autopush and all live/cost/wallet guardrails.",
+  "source_commit": "7c2f618919fb9658dccc27474798a4b71e3a2618",
+  "allowed_capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "run_tests",
+    "read_runtime",
+    "write_runtime",
+    "user_service_manage",
+    "read_logs"
+  ],
+  "allowed_paths": [
+    "control/codex_supervisor",
+    "control/tampermonkey_multichat",
+    "knowledge/codex_runtime",
+    "tests/codex_supervisor",
+    "tests/bridge",
+    "control/builds"
+  ],
+  "planned_paths": [
+    "control/codex_supervisor/build_wake.py",
+    "control/codex_supervisor/candidate_dispatch.py",
+    "control/codex_supervisor/supervisor.py",
+    "control/tampermonkey_multichat/continuation_manager.py",
+    "knowledge/codex_runtime/CONFIG.json",
+    "tests/codex_supervisor/test_autobuild_chat_wake.py",
+    "tests/bridge/test_external_autobuild_continuation.py",
+    "control/builds/BUILD-GENERIC-AUTOBUILD-CHAT-WAKE-20261003.json"
+  ],
+  "acceptance_criteria": [
+    "A generic NEEDS_BUILD overlay with no prospective protocol creates exactly one idempotent external continuation bound to an explicit proven control route.",
+    "Protocol-backed NEEDS_BUILD candidates continue using the existing fixed local deathcheck validator and do not enter the generic ChatGPT build route.",
+    "The external continuation preserves deterministic NEXT/DONE/BLOCKED task identities, bounded delivery retries and conflict detection, and includes bounded project context without treating candidate prose as authority.",
+    "Missing/invalid route configuration, unsafe live/paid/wallet flags, ambiguous candidate provenance or continuation identity conflict fail closed.",
+    "Supervisor installation provenance pins build_wake.py in addition to the existing supervisor/candidate/evidence policy files.",
+    "Targeted continuation, build-wake, candidate-dispatch and supervisor regressions pass from the canonical remote source.",
+    "The updated continuation_manager.py is installed to the allowlisted prediction-chat-bridge runtime, prediction-chat-wake.service restarts active, and an installed-runtime import assertion passes.",
+    "A local autobuild control-route file points to a route task demonstrably delivered to this chat and its referenced route binding exists.",
+    "A synthetic safe generic NEEDS_BUILD canary creates a continuation wake record without live trading, paid actions, wallet actions, remote Git push or owner-source mutation."
+  ],
+  "non_goals": [
+    "Live trading, order placement/cancellation, wallet or fund movement.",
+    "Paid APIs, cloud/VPS or subscriptions.",
+    "Automatic economic promotion or changing NO_PROVEN_EDGE.",
+    "Replacing the fixed prospective-protocol deathcheck validator.",
+    "Allowing WSL to push to GitHub.",
+    "General unrestricted shell or code execution by the Codex supervisor."
+  ],
+  "independent_verification": "Deterministic pytest/unittest regressions plus an installed-runtime canary executed through the capability-scoped projectexecutor; technical PASS does not qualify an economic edge.",
+  "rollback_plan": "Revert the GitHub commits for this build, reinstall the previous continuation_manager.py from the pre-build canonical commit into the allowlisted chat-bridge runtime, remove the autobuild_control_route.json runtime file, restart prediction-chat-wake.service, and leave candidate/runtime evidence intact.",
+  "cleanup_plan": "Keep immutable task/build evidence. Remove only synthetic canary runtime records after verification if they are not needed for the audit trail; never delete real candidate evidence.",
+  "max_attempts": 2,
+  "governance_change": false,
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false
+  }
+}
