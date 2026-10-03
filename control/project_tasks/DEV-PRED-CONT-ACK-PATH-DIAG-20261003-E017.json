@@ -1,0 +1,48 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-CONT-ACK-PATH-DIAG-20261003-E017",
+  "build_id": "CONTINUATION-ACK-PATH-DIAG-20261003",
+  "source_commit": "c26ac543df09bb95822568f15d155e8849e50215",
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_runtime",
+    "read_logs"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 300,
+  "notes": "Read-only diagnosis of why auto-continuation record was not created for B. Inspect B command state, route, delivery evidence and installed wake hook composition. No reconcile, no maintain, no runtime mutation.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/diag_ack_path_e017.py",
+      "content": "from pathlib import Path\nimport importlib.util\nimport json\nimport sys\n\nhome = Path.home()\nwake_dir = home / \".local/share/prediction-chat-bridge\"\nstate_dir = home / \".local/state/prediction-command-bus/tasks\"\ntask_id = \"DEV-PRED-CONT-NEXT-09bfdedea81fbfe9f3b3291e\"\n\ndef load(path):\n    try:\n        return json.loads(path.read_text(encoding=\"utf-8\"))\n    except Exception:\n        return None\n\nstate = load(state_dir / f\"{task_id}.json\")\nroute = load(wake_dir / \"routes\" / f\"{task_id}.json\")\nprint(\"B_STATE_STATUS=\" + repr(state.get(\"status\") if isinstance(state, dict) else None))\nprint(\"B_STATE_AUTO=\" + repr(state.get(\"auto_continue\") if isinstance(state, dict) else None))\nprint(\"B_STATE_PARENT=\" + repr(state.get(\"parent_continuation_id\") if isinstance(state, dict) else None))\nprint(\"B_STATE_CHAT=\" + repr(state.get(\"chat_id\") if isinstance(state, dict) else None))\nprint(\"B_ROUTE=\" + repr(route))\n\nfor name in (\"outbox\",\"inflight\",\"sent\"):\n    d = wake_dir / name\n    hits = []\n    if d.is_dir():\n        for p in d.glob(\"*.json\"):\n            obj = load(p)\n            if isinstance(obj, dict) and obj.get(\"task_id\") == task_id:\n                hits.append({\n                    \"file\": p.name,\n                    \"event_id\": obj.get(\"event_id\"),\n                    \"source\": obj.get(\"source\"),\n                    \"message_prefix\": str(obj.get(\"message\") or \"\")[:80],\n                })\n    print(f\"B_{name.upper()}=\" + repr(hits))\n\nsys.path.insert(0, str(wake_dir))\nspec = importlib.util.spec_from_file_location(\"installed_bridge_e017\", wake_dir / \"bridge_server.py\")\nwake = importlib.util.module_from_spec(spec)\nassert spec.loader is not None\nspec.loader.exec_module(wake)\nbase = wake.base\nprint(\"WAKE_SERVER_VERSION=\" + repr(getattr(wake.Handler,\"server_version\",None)))\nprint(\"BASE_HAS_ACK_HOOK=\" + repr(hasattr(base,\"ACK_HOOK\")))\nprint(\"BASE_ACK_HOOK=\" + repr(getattr(getattr(base,\"ACK_HOOK\",None),\"__name__\",None)))\nprint(\"BASE_RELEASE_LEASE=\" + repr(getattr(getattr(base,\"release_lease\",None),\"__name__\",None)))\nprint(\"BASE_RELEASE_MODULE=\" + repr(getattr(getattr(base,\"release_lease\",None),\"__module__\",None)))\nprint(\"CONT_HOOK_EXPECTED=\" + repr(getattr(wake,\"continuation_ack_hook\",None) is getattr(base,\"ACK_HOOK\",None)))\nprint(\"CONT_RELEASE_EXPECTED=\" + repr(getattr(wake,\"continuation_release_lease\",None) is getattr(base,\"release_lease\",None)))\nprint(\"ROUTE_BINDING=\" + repr(base.route_binding_for_task(task_id)))\nprint(\"SOURCE_ALLOWS_AUTO=\" + repr(wake.continuation.source_allows_auto_continue(state_dir, task_id)))\ncid = wake.continuation.ids_for(task_id)[\"continuation_id\"]\ncp = wake.continuation.continuation_path(base.DATA_DIR, cid)\nprint(\"EXPECTED_CID=\" + cid)\nprint(\"CONT_FILE=\" + str(cp))\nprint(\"CONT_EXISTS=\" + repr(cp.is_file()))\nprint(\"E017_DIAG=PASS\")\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/diag_ack_path_e017.py"
+      ],
+      "timeout_seconds": 120
+    },
+    {
+      "type": "journal",
+      "unit": "prediction-chat-wake.service",
+      "lines": 120
+    }
+  ]
+}
