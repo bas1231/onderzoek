@@ -1,0 +1,15 @@
+{
+  "schema": "PREDICTION_BRIDGE_COMMAND_V1",
+  "task_id": "DEV-PRED-CONT-INSTALL-ROUTED-20261003-E007",
+  "action": "SIX_AI_HEALTH",
+  "created_at_utc": "2026-10-03T08:22:00Z",
+  "route_task_id": "SESSION-ROUTE-8f2705acab7f9f6d665e7333",
+  "live_trading": false,
+  "paid_actions": false,
+  "wallet_actions": false,
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  }
+}
