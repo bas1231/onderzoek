@@ -1,0 +1,48 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-CONT-HEARTBEAT-ELIGIBILITY-20261003-E028",
+  "build_id": "CONTINUATION-HEARTBEAT-ELIGIBILITY-20261003",
+  "source_commit": "342e4d5cc457e8dfd6b8df7a9a7e4893926ebffc",
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_runtime",
+    "read_logs"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 300,
+  "notes": "Read-only classifier. Determine whether stale canary A currently satisfies every heartbeat guard without invoking recovery/maintain or mutating runtime.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/heartbeat_eligibility_e028.py",
+      "content": "from pathlib import Path\nimport json,time\n\nhome=Path.home()\ndata=home/\".local/share/prediction-chat-bridge\"\nstates=home/\".local/state/prediction-command-bus/tasks\"\ntid=\"DEV-PRED-CONT-CANARY2-A-20261003-E022\"\ncid=\"CONT-e91d594cb6c782b9e7b2668d\"\n\ndef load(p):\n    try:return json.loads(p.read_text(encoding=\"utf-8\"))\n    except Exception:return None\n\ns=load(states/f\"{tid}.json\")\nroute=load(data/\"routes\"/f\"{tid}.json\")\ncp=data/\"continuations\"/f\"{cid}.json\"\n\nevent_path=None\nevent=None\nfor p in (data/\"inflight\").glob(\"*.json\"):\n    o=load(p)\n    if isinstance(o,dict) and o.get(\"task_id\")==tid:\n        event_path=p\n        event=o\n        break\n\nchecks=[\n (\"STATE\",isinstance(s,dict)),\n (\"DISPATCHED\",isinstance(s,dict) and s.get(\"status\")==\"DISPATCHED\"),\n (\"AUTO\",isinstance(s,dict) and s.get(\"auto_continue\") is True),\n (\"ROUTE\",isinstance(route,dict) and bool(route.get(\"chat_id\"))),\n (\"INFLIGHT\",event_path is not None),\n (\"NO_CONT\",not cp.exists()),\n]\nfor name,ok in checks:\n    if not ok:\n        print(\"HEARTBEAT_ELIGIBILITY=BLOCKED_\"+name,flush=True)\n        raise SystemExit(20)\n\ncreated=event.get(\"created_at\") if isinstance(event,dict) else None\ntry:\n    created=float(created)\nexcept Exception:\n    created=event_path.stat().st_mtime\nage=time.time()-created\nif age<45:\n    print(\"HEARTBEAT_ELIGIBILITY=TOO_FRESH age=\"+str(round(age,1)),flush=True)\n    raise SystemExit(21)\n\nprint(\"HEARTBEAT_ELIGIBILITY=YES age=\"+str(round(age,1))+\" chat=\"+str(route.get(\"chat_id\")),flush=True)\nraise SystemExit(22)\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/heartbeat_eligibility_e028.py"
+      ],
+      "timeout_seconds": 120
+    },
+    {
+      "type": "journal",
+      "unit": "prediction-chat-wake.service",
+      "lines": 120
+    }
+  ]
+}
