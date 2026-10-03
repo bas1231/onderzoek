@@ -299,6 +299,7 @@ def sync() -> dict[str, Any]:
         checkpoint=checkpoint_result,
         durable_state_seen=sorted(set(safe).union(safe_untracked)),
         durable_untracked_seen=safe_untracked,
+        durable_pending_local=sorted(set(safe_remaining).union(safe_untracked_remaining)),
         remote_change_count=len(remote_changes),
         untracked_file_count=untracked,
     )
