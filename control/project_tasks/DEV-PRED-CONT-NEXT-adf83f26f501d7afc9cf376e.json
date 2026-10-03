@@ -1,0 +1,116 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-CONT-NEXT-adf83f26f501d7afc9cf376e",
+  "build_id": "BUILD-GENERIC-AUTOBUILD-CHAT-WAKE-20261003",
+  "source_commit": "f166e91642beddccd9d622d34ff61771c750714f",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_runtime",
+    "write_runtime",
+    "user_service_manage"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 900,
+  "notes": "Full generic autobuild chat-wake acceptance after narrow project-task guard fixes for /dev/null write sinks and bounded git -c local identity. Guard regressions run in the DEV transport before this executor task. Within Prediction, fail before runtime mutation unless provenance pins and hermetic regressions pass. Synthetic continuation is staged in the isolated worktree and only then copied by allowlisted install_runtime. No WSL remote Git write, no live trading, paid action, wallet action or economic promotion; NO_PROVEN_EDGE remains authoritative.",
+  "operations": [
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/autobuild_acceptance_e042.py",
+        "pre"
+      ],
+      "timeout_seconds": 60
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/autobuild_hermetic_pytest_e044.py"
+      ],
+      "timeout_seconds": 480
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "-m",
+        "compileall",
+        "control/tampermonkey_multichat/continuation_manager.py",
+        "control/codex_supervisor/build_wake.py",
+        "control/codex_supervisor/candidate_dispatch.py",
+        "control/codex_supervisor/supervisor.py"
+      ],
+      "timeout_seconds": 60
+    },
+    {
+      "type": "install_runtime",
+      "source": "control/tampermonkey_multichat/continuation_manager.py",
+      "destination": "/home/leonh/.local/share/prediction-chat-bridge/continuation_manager.py",
+      "mode": 420
+    },
+    {
+      "type": "install_runtime",
+      "source": "control/dev_checks/autobuild_control_route_e042.json",
+      "destination": "/home/leonh/.local/share/prediction-chat-bridge/autobuild_control_route.json",
+      "mode": 384
+    },
+    {
+      "type": "service",
+      "verb": "restart",
+      "unit": "prediction-chat-wake.service"
+    },
+    {
+      "type": "service",
+      "verb": "is-active",
+      "unit": "prediction-chat-wake.service"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/autobuild_acceptance_e042.py",
+        "post"
+      ],
+      "timeout_seconds": 60
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/autobuild_acceptance_e042.py",
+        "canary"
+      ],
+      "timeout_seconds": 60
+    },
+    {
+      "type": "install_runtime",
+      "source": "control/dev_checks/autobuild_canary_bridge_e046/continuations/CONT-5d571fc985680819187c2a88.json",
+      "destination": "/home/leonh/.local/share/prediction-chat-bridge/continuations/CONT-5d571fc985680819187c2a88.json",
+      "mode": 384
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/autobuild_acceptance_e042.py",
+        "canary_post"
+      ],
+      "timeout_seconds": 60
+    }
+  ]
+}
