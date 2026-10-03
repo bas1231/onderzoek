@@ -48,6 +48,49 @@ def test_poller_validation() -> None:
     assert poller.validate_command(bad) == (False, "UNKNOWN_FIELDS")
 
 
+    receipt = {
+        "schema": "PREDICTION_RESULT_RECEIPT_V1",
+        "receipt_id": "RESULT-RECEIPT-1791038786-c25e0ee643be",
+        "event_id": "1791038786-c25e0ee643be",
+        "source_task_id": "DEV-PRED-EXAMPLE-E001",
+        "created_at_utc": "2026-10-03T15:00:00Z",
+        "live_trading": False,
+        "paid_actions": False,
+        "wallet_actions": False,
+        "issuer": {"model": "deterministic-selftest", "reasoning_level": "none"},
+    }
+    assert poller.validate_result_receipt(receipt) == (True, "OK")
+    bad_receipt = dict(receipt)
+    bad_receipt["receipt_id"] = "RESULT-RECEIPT-wrong"
+    assert poller.validate_result_receipt(bad_receipt) == (False, "BAD_RECEIPT_ID")
+    bad_receipt = dict(receipt)
+    bad_receipt["live_trading"] = True
+    assert poller.validate_result_receipt(bad_receipt) == (False, "LIVE_TRADING_BLOCKED")
+
+    with tempfile.TemporaryDirectory() as td:
+        root = Path(td)
+        old_bridge = poller.BRIDGE_DATA
+        try:
+            poller.BRIDGE_DATA = root
+            (root / "inflight").mkdir(parents=True)
+            (root / "sent").mkdir(parents=True)
+            event = {
+                "event_id": receipt["event_id"],
+                "task_id": receipt["source_task_id"],
+                "message": "demo",
+            }
+            (root / "inflight" / f"{receipt['event_id']}.json").write_text(
+                __import__("json").dumps(event) + "\n",
+                encoding="utf-8",
+            )
+            assert poller.verify_receipt_event(receipt) == (True, "OK")
+            wrong = dict(receipt)
+            wrong["source_task_id"] = "DEV-PRED-OTHER-E001"
+            assert poller.verify_receipt_event(wrong) == (False, "EVENT_TASK_MISMATCH")
+        finally:
+            poller.BRIDGE_DATA = old_bridge
+
+
 BASE_FIXTURE = '''#!/usr/bin/env python3
 import os
 import time
