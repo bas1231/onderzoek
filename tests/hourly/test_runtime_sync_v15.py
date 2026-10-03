@@ -100,7 +100,7 @@ def test_clean_runtime_fast_forwards_and_preserves_untracked(tmp_path, monkeypat
     assert result["durable_untracked_seen"] == []
 
 
-def test_allowlisted_untracked_durable_state_triggers_checkpoint(tmp_path, monkeypatch):
+def test_allowlisted_untracked_durable_state_stays_local_after_validation(tmp_path, monkeypatch):
     remote, _seed, prod = make_repos(tmp_path)
     mod = load_module()
     configure_module(mod, monkeypatch, prod, tmp_path)
@@ -112,19 +112,16 @@ def test_allowlisted_untracked_durable_state_triggers_checkpoint(tmp_path, monke
 
     calls = []
 
-    def publish_checkpoint():
+    def validate_checkpoint():
         calls.append(rel)
-        run(prod, "add", "--", rel)
-        run(prod, "commit", "-m", "test durable checkpoint")
-        run(prod, "push", "origin", "main")
         return {
             "ok": True,
             "returncode": 0,
-            "stdout": "published",
+            "stdout": "LOCAL_ONLY_PENDING_CHATGPT_PUBLICATION",
             "stderr": "",
         }
 
-    monkeypatch.setattr(mod, "run_checkpoint", publish_checkpoint)
+    monkeypatch.setattr(mod, "run_checkpoint", validate_checkpoint)
 
     result = mod.sync()
 
@@ -133,7 +130,8 @@ def test_allowlisted_untracked_durable_state_triggers_checkpoint(tmp_path, monke
     assert result["checkpoint"]["ok"] is True
     assert result["durable_untracked_seen"] == [rel]
     assert result["durable_state_seen"] == [rel]
-    assert run(prod, "ls-files", "--error-unmatch", rel) == rel
+    assert result["durable_pending_local"] == [rel]
+    assert target.read_text(encoding="utf-8") == '{"watch": true}\n'
     assert run(prod, "rev-parse", "HEAD") == run(remote, "rev-parse", "main")
 
 
@@ -205,7 +203,7 @@ def test_runtime_sync_never_invokes_destructive_git_commands():
     import ast
 
     tree = ast.parse(MODULE_PATH.read_text(encoding="utf-8"))
-    forbidden = {"reset", "rebase", "stash", "clean"}
+    forbidden = {"reset", "rebase", "stash", "clean", "push"}
     seen = set()
 
     for node in ast.walk(tree):
