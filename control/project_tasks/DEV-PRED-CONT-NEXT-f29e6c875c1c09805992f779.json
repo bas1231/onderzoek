@@ -1,0 +1,101 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-CONT-NEXT-f29e6c875c1c09805992f779",
+  "build_id": "BUILD-GENERIC-AUTOBUILD-CHAT-WAKE-20261003",
+  "source_commit": "96879ff1c296a673039d8b2b14f28824a10371b6",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_runtime",
+    "write_runtime",
+    "user_service_manage"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 900,
+  "notes": "Retry generic autobuild acceptance with hermetic pytest plugin autoload disabled. Fail before runtime mutation if pin or regression checks fail. If checks pass, install only allowlisted continuation runtime + explicit control-route, restart wake service, verify, and create a synthetic safe NEEDS_BUILD continuation. WSL remote Git writes remain forbidden; NO_PROVEN_EDGE unchanged.",
+  "operations": [
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/autobuild_acceptance_e042.py",
+        "pre"
+      ],
+      "timeout_seconds": 60
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/autobuild_hermetic_pytest_e044.py"
+      ],
+      "timeout_seconds": 480
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "-m",
+        "compileall",
+        "control/tampermonkey_multichat/continuation_manager.py",
+        "control/codex_supervisor/build_wake.py",
+        "control/codex_supervisor/candidate_dispatch.py",
+        "control/codex_supervisor/supervisor.py"
+      ],
+      "timeout_seconds": 60
+    },
+    {
+      "type": "install_runtime",
+      "source": "control/tampermonkey_multichat/continuation_manager.py",
+      "destination": "/home/leonh/.local/share/prediction-chat-bridge/continuation_manager.py",
+      "mode": 420
+    },
+    {
+      "type": "install_runtime",
+      "source": "control/dev_checks/autobuild_control_route_e042.json",
+      "destination": "/home/leonh/.local/share/prediction-chat-bridge/autobuild_control_route.json",
+      "mode": 384
+    },
+    {
+      "type": "service",
+      "verb": "restart",
+      "unit": "prediction-chat-wake.service"
+    },
+    {
+      "type": "service",
+      "verb": "is-active",
+      "unit": "prediction-chat-wake.service"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/autobuild_acceptance_e042.py",
+        "post"
+      ],
+      "timeout_seconds": 60
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/autobuild_acceptance_e042.py",
+        "canary"
+      ],
+      "timeout_seconds": 60
+    }
+  ]
+}
