@@ -1,0 +1,45 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-RESULT-RECEIPT-E061-ROUNDTRIP-20261003-E069",
+  "source_commit": "0ec4c44d405e58d107451e18862bfaa79facd079",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "run_project_python",
+    "read_runtime"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 240,
+  "notes": "Verify installed browser-independent result-receipt runtime and exact E061 observed event roundtrip: receipt DISPATCHED, event sent, inflight absent. No production mutation.",
+  "operations": [
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/result_receipt_runtime_verify_e064.py"
+      ],
+      "timeout_seconds": 90
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/result_receipt_roundtrip_e066.py",
+        "1791038786-c25e0ee643be",
+        "DEV-PRED-CONT-NEXT-4bc667283cb41c24f0294c35"
+      ],
+      "timeout_seconds": 120
+    }
+  ]
+}
