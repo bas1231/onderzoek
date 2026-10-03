@@ -1,0 +1,123 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-CONT-NATIVE-ACK-INSTALL-20261003-E021",
+  "build_id": "CONTINUATION-NATIVE-ACK-RUNTIME-20261003",
+  "source_commit": "d03a5069f828e09a0acdc52742052b61140d83bb",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_runtime",
+    "write_runtime",
+    "user_service_manage",
+    "read_logs"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 900,
+  "notes": "Targeted runtime fix only: install current native ACK_HOOK base, preserve fail-closed INFLIGHT via existing patch, keep continuation overlay, restart wake service, verify hook identity and synthetic result-ACK continuation creation. No Tampermonkey changes.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/verify_native_ack_e021.py",
+      "content": "from pathlib import Path\nimport importlib.util\nimport json\nimport os\nimport sys\n\nhome=Path.home()\nruntime=home/\".local/share/prediction-chat-bridge\"\nsys.path.insert(0,str(runtime))\nsp=importlib.util.spec_from_file_location(\"installed_bridge_e021\",runtime/\"bridge_server.py\")\nm=importlib.util.module_from_spec(sp)\nassert sp.loader is not None\nsp.loader.exec_module(m)\nbase=m.base\nassert getattr(m.Handler,\"server_version\",\"\")==\"PredictionChatWake/1.3-continuation-v2\"\nassert hasattr(base,\"ACK_HOOK\")\nassert base.ACK_HOOK is m.continuation_ack_hook\nassert hasattr(base,\"INFLIGHT\")\nassert callable(base.oldest_event)\n\nroot=Path(os.environ[\"PRED_PROJECT_TEMP_ROOT\"])/\"native-ack-e021\"\ndata=root/\"bridge\"\nstates=root/\"states\"\nfor p in (data,states):\n    p.mkdir(parents=True,exist_ok=True)\nold_data=base.DATA_DIR\nold_states=m.TASK_STATE_DIR\ntry:\n    base.DATA_DIR=data\n    m.TASK_STATE_DIR=states\n    source=\"DEV-PRED-CONT-E021-SOURCE\"\n    (states/f\"{source}.json\").write_text(json.dumps({\n        \"schema\":\"PREDICTION_COMMAND_BUS_TASK_STATE_V1\",\n        \"task_id\":source,\n        \"status\":\"DISPATCHED\",\n        \"auto_continue\":True,\n    }),encoding=\"utf-8\")\n    event={\"event_id\":\"e021-result\",\"task_id\":source,\"source\":\"result\"}\n    m.continuation_ack_hook(event,chat_id=\"chat-e021-native\",consumer_id=\"tab-e021\",already_acked=False)\n    cid=m.continuation.ids_for(source)[\"continuation_id\"]\n    cp=m.continuation.continuation_path(data,cid)\n    assert cp.is_file()\n    rec=json.loads(cp.read_text(encoding=\"utf-8\"))\n    assert rec[\"source_task_id\"]==source\n    assert rec[\"chat_id\"]==\"chat-e021-native\"\nfinally:\n    base.DATA_DIR=old_data\n    m.TASK_STATE_DIR=old_states\n\nprint(\"NATIVE_ACK_RUNTIME_E021=PASS\")\nprint(\"ACK_HOOK_BOUND=PASS\")\nprint(\"INFLIGHT_PRESERVED=PASS\")\nprint(\"SYNTHETIC_RESULT_ACK_CREATES_CONTINUATION=PASS\")\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "-m",
+        "compileall",
+        "-q",
+        "control/tampermonkey_multichat/bridge_server_v2.py",
+        "control/tampermonkey_multichat/bridge_server_hardened.py",
+        "control/tampermonkey_multichat/bridge_server_session_bootstrap.py",
+        "control/tampermonkey_multichat/bridge_server_status_compaction.py",
+        "control/tampermonkey_multichat/bridge_server_continuation.py",
+        "control/tampermonkey_multichat/continuation_manager.py",
+        "control/bridge_commands/patch_wake_inflight.py"
+      ],
+      "timeout_seconds": 120
+    },
+    {
+      "type": "install_runtime",
+      "source": "control/tampermonkey_multichat/bridge_server_v2.py",
+      "destination": "/home/leonh/.local/share/prediction-chat-bridge/bridge_server_v2.py",
+      "mode": 420
+    },
+    {
+      "type": "install_runtime",
+      "source": "control/tampermonkey_multichat/bridge_server_hardened.py",
+      "destination": "/home/leonh/.local/share/prediction-chat-bridge/bridge_server_hardened.py",
+      "mode": 420
+    },
+    {
+      "type": "install_runtime",
+      "source": "control/tampermonkey_multichat/bridge_server_session_bootstrap.py",
+      "destination": "/home/leonh/.local/share/prediction-chat-bridge/bridge_server_session_bootstrap.py",
+      "mode": 420
+    },
+    {
+      "type": "install_runtime",
+      "source": "control/tampermonkey_multichat/bridge_server_status_compaction.py",
+      "destination": "/home/leonh/.local/share/prediction-chat-bridge/bridge_server_status_compaction.py",
+      "mode": 420
+    },
+    {
+      "type": "install_runtime",
+      "source": "control/tampermonkey_multichat/continuation_manager.py",
+      "destination": "/home/leonh/.local/share/prediction-chat-bridge/continuation_manager.py",
+      "mode": 420
+    },
+    {
+      "type": "install_runtime",
+      "source": "control/tampermonkey_multichat/bridge_server_continuation.py",
+      "destination": "/home/leonh/.local/share/prediction-chat-bridge/bridge_server.py",
+      "mode": 493
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/bridge_commands/patch_wake_inflight.py",
+        "--target",
+        "/home/leonh/.local/share/prediction-chat-bridge/bridge_server.py"
+      ],
+      "timeout_seconds": 120
+    },
+    {
+      "type": "service",
+      "verb": "restart",
+      "unit": "prediction-chat-wake.service"
+    },
+    {
+      "type": "service",
+      "verb": "is-active",
+      "unit": "prediction-chat-wake.service"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/verify_native_ack_e021.py"
+      ],
+      "timeout_seconds": 120
+    },
+    {
+      "type": "journal",
+      "unit": "prediction-chat-wake.service",
+      "lines": 80
+    }
+  ]
+}
