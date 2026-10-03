@@ -13,6 +13,7 @@ hook through release_lease without replacing the inflight-patched base file.
 from __future__ import annotations
 
 import argparse
+import time
 from http.server import ThreadingHTTPServer
 from pathlib import Path
 
@@ -112,7 +113,7 @@ def recover_unacked_result_heartbeat(chat_id: str, *, now: float | None = None) 
     if not inflight.is_dir():
         return 0
 
-    current = continuation.time.time() if now is None else float(now)
+    current = time.time() if now is None else float(now)
     recovered = 0
     paths = sorted(
         inflight.glob("*.json"),
@@ -129,7 +130,10 @@ def recover_unacked_result_heartbeat(chat_id: str, *, now: float | None = None) 
         source_task_id = str(event.get("task_id") or "").strip()
         if not source_task_id:
             continue
-        if not continuation.source_allows_auto_continue(TASK_STATE_DIR, source_task_id):
+        state = continuation.command_state(TASK_STATE_DIR, source_task_id)
+        if not state or state.get("auto_continue") is not True:
+            continue
+        if str(state.get("status") or "") != "DISPATCHED":
             continue
 
         binding = base.route_binding_for_task(source_task_id)
