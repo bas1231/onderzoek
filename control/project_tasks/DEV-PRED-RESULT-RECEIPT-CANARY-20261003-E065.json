@@ -1,0 +1,35 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-RESULT-RECEIPT-CANARY-20261003-E065",
+  "source_commit": "b70ff0e6a5bd53b51094a7b8cdde61f65684ceec",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "run_project_python",
+    "read_runtime"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 180,
+  "notes": "Live acceptance of assistant-side immutable result receipts. Verify three observed receipts reached DISPATCHED and corresponding wake events reached sent. No production mutation. auto_continue command used to prove receipt-triggered continuation without RESULT_ACK_TIMEOUT.",
+  "operations": [
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/result_receipt_live_canary_e065.py"
+      ],
+      "timeout_seconds": 90
+    }
+  ]
+}
