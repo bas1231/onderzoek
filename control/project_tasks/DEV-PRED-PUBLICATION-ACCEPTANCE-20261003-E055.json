@@ -1,0 +1,88 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-PUBLICATION-ACCEPTANCE-20261003-E055",
+  "source_commit": "9a5429c390c74890263679544c2d12d25924d824",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "run_tests",
+    "run_project_python",
+    "production_fast_forward",
+    "user_service_manage"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 600,
+  "notes": "Acceptance for bounded ChatGPT/GitHub publication handoff replacing legacy WSL remote push. Run only guard-native Python/static regressions, compile publication/checkpoint/sync modules, fast-forward production from local mirror to exact source_commit with overlap protection, verify exact hashes and no-push invariant, then require core Prediction units active.",
+  "operations": [
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "-m",
+        "pytest",
+        "-q",
+        "tests/hourly/test_publication_wake.py",
+        "tests/hourly/test_no_remote_git_write_runtime.py"
+      ],
+      "test": true,
+      "timeout_seconds": 180
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "-m",
+        "compileall",
+        "control/hourly/publication_wake.py",
+        "control/hourly/git_checkpoint.py",
+        "control/hourly/runtime_sync.py",
+        "control/dev_checks/prod_publication_post_verify_e055.py"
+      ],
+      "timeout_seconds": 90
+    },
+    {
+      "type": "production_ff",
+      "target_commit": "9a5429c390c74890263679544c2d12d25924d824"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/prod_publication_post_verify_e055.py",
+        "9a5429c390c74890263679544c2d12d25924d824"
+      ],
+      "timeout_seconds": 60
+    },
+    {
+      "type": "service",
+      "verb": "is-active",
+      "unit": "prediction-research-hourly-director.timer"
+    },
+    {
+      "type": "service",
+      "verb": "is-active",
+      "unit": "prediction-codex-supervisor.timer"
+    },
+    {
+      "type": "service",
+      "verb": "is-active",
+      "unit": "prediction-command-bus.timer"
+    },
+    {
+      "type": "service",
+      "verb": "is-active",
+      "unit": "prediction-chat-wake.service"
+    }
+  ]
+}
