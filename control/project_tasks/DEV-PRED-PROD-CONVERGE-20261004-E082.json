@@ -1,0 +1,72 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-PROD-CONVERGE-20261004-E082",
+  "source_commit": "823360df4c74831266e0c3f68eaa81d3c4c78b83",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "production_compare_source",
+    "production_compare_worktree",
+    "production_clean_canonical",
+    "production_fast_forward",
+    "production_inspect",
+    "user_service_manage"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 900,
+  "notes": "Final fail-closed production convergence against pinned canonical release target 823360df. First require committed temporary-branch delta and all dirty/untracked worktree content to be exactly represented in target. Only then clean canonical-represented dirty/staged state, preserve the divergent architecture branch ref, switch production to main, fast-forward to target, verify clean main state, and require the four core Prediction user services active. No remote Git write or financial action.",
+  "operations": [
+    {
+      "type": "production_compare_source",
+      "require_equal": true,
+      "report_mode": "summary"
+    },
+    {
+      "type": "production_compare_worktree",
+      "require_exact": true,
+      "report_mode": "counts"
+    },
+    {
+      "type": "production_clean_canonical"
+    },
+    {
+      "type": "production_ff",
+      "target_commit": "823360df4c74831266e0c3f68eaa81d3c4c78b83"
+    },
+    {
+      "type": "production_inspect",
+      "require_head_equals_main": true,
+      "report_mode": "status"
+    },
+    {
+      "type": "service",
+      "verb": "is-active",
+      "unit": "prediction-research-hourly-director.timer"
+    },
+    {
+      "type": "service",
+      "verb": "is-active",
+      "unit": "prediction-codex-supervisor.timer"
+    },
+    {
+      "type": "service",
+      "verb": "is-active",
+      "unit": "prediction-command-bus.timer"
+    },
+    {
+      "type": "service",
+      "verb": "is-active",
+      "unit": "prediction-chat-wake.service"
+    }
+  ]
+}
