@@ -1,0 +1,42 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-CONT-DONE-TRACE-DIAG-20261003-E016",
+  "build_id": "CONTINUATION-DONE-TRACE-DIAG-20261003",
+  "source_commit": "04a454f86a661393f09df7067c08586b39d36d18",
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_runtime"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 300,
+  "notes": "Read-only compact reproduction of E015 final assertions. No reconcile/maintain, no runtime mutation.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/diag_e015_trace_e016.py",
+      "content": "import traceback\nCODE=\"from pathlib import Path\\nimport json\\n\\nhome = Path.home()\\ndone_task = \\\"CONT-DONE-eba52c84b60e5eb693d28b3d\\\"\\ncid = \\\"CONT-eba52c84b60e5eb693d28b3d\\\"\\n\\ntp = home / \\\".local/state/prediction-command-bus/tasks\\\" / f\\\"{done_task}.json\\\"\\ncp = home / \\\".local/share/prediction-chat-bridge/continuations\\\" / f\\\"{cid}.json\\\"\\n\\nassert tp.is_file(), \\\"DONE_TASK_STATE_MISSING\\\"\\nassert cp.is_file(), \\\"CONTINUATION_STATE_MISSING\\\"\\n\\ntask = json.loads(tp.read_text(encoding=\\\"utf-8\\\"))\\ncont = json.loads(cp.read_text(encoding=\\\"utf-8\\\"))\\n\\nassert task.get(\\\"task_id\\\") == done_task, task\\nassert task.get(\\\"status\\\") == \\\"DISPATCHED\\\", task\\nassert task.get(\\\"parent_continuation_id\\\") == cid, task\\nassert task.get(\\\"auto_continue\\\") is False, task\\n\\nassert cont.get(\\\"continuation_id\\\") == cid, cont\\nassert cont.get(\\\"expected_done_task_id\\\") == done_task, cont\\nassert cont.get(\\\"state\\\") == \\\"DONE\\\", cont\\n\\nprint(\\\"A_B_DONE_CANARY=PASS\\\")\\nprint(\\\"DONE_RECEIPT_DISPATCHED=PASS\\\")\\nprint(\\\"CONTINUATION_TERMINAL_DONE=PASS\\\")\\nprint(\\\"HUMAN_CONTINUE_REQUIRED=NO\\\")\\n\"\ntry:\n    exec(compile(CODE,\"assert_done_e015.py\",\"exec\"),{\"__name__\":\"__main__\"})\nexcept BaseException as exc:\n    frames=traceback.extract_tb(exc.__traceback__)\n    trail=\" > \".join(f\"{f.filename}:{f.lineno}:{f.name}\" for f in frames[-8:])\n    msg=str(exc).replace(\"\\n\",\" \")[:1800]\n    print(f\"E015_DIAG type={exc.__class__.__name__} msg={msg!r} trace={trail}\")\n    raise SystemExit(7)\nprint(\"E015_DIAG unexpected=ASSERTIONS_PASS\")\nraise SystemExit(8)\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/diag_e015_trace_e016.py"
+      ],
+      "timeout_seconds": 120
+    }
+  ]
+}
