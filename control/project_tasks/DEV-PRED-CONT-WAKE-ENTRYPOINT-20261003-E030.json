@@ -1,0 +1,44 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-CONT-WAKE-ENTRYPOINT-20261003-E030",
+  "build_id": "WAKE-ACTIVE-ENTRYPOINT-DIAG-20261003",
+  "source_commit": "5b083eecaf98b98ff52efb320c18594a5f637738",
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_runtime",
+    "user_service_manage",
+    "read_logs"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 300,
+  "notes": "Read-only active wake entrypoint classifier. Do not mutate service or runtime.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/classify_wake_entrypoint_e030.py",
+      "content": "from pathlib import Path\nimport subprocess\n\nunit=Path.home()/\".config/systemd/user/prediction-chat-wake.service\"\ntext=unit.read_text(encoding=\"utf-8\") if unit.is_file() else \"\"\nif \"bridge_server.py\" in text:\n    print(\"WAKE_ENTRYPOINT=BRIDGE_SERVER_PY\",flush=True)\n    raise SystemExit(31)\nif \"bridge_server_continuation.py\" in text:\n    print(\"WAKE_ENTRYPOINT=CONTINUATION_SOURCE\",flush=True)\n    raise SystemExit(32)\nif \"bridge_server_status_compaction.py\" in text:\n    print(\"WAKE_ENTRYPOINT=STATUS_COMPACTION\",flush=True)\n    raise SystemExit(33)\nif \"bridge_server_session_bootstrap.py\" in text:\n    print(\"WAKE_ENTRYPOINT=SESSION_BOOTSTRAP\",flush=True)\n    raise SystemExit(34)\nif \"bridge_server_hardened.py\" in text:\n    print(\"WAKE_ENTRYPOINT=HARDENED\",flush=True)\n    raise SystemExit(35)\n\nprint(\"WAKE_ENTRYPOINT=UNKNOWN\",flush=True)\nraise SystemExit(36)\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/classify_wake_entrypoint_e030.py"
+      ],
+      "timeout_seconds": 120
+    }
+  ]
+}
