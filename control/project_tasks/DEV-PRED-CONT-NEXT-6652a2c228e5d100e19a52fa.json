@@ -1,0 +1,47 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-CONT-NEXT-6652a2c228e5d100e19a52fa",
+  "source_commit": "ccff7d50e68f70063d9fcf3cd700c3041ca86ec5",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "run_project_python"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 300,
+  "notes": "Continuation of failed publication acceptance E055. Run only stdlib-only publication handoff acceptance and compile checks. Do not mutate production; production branch reconciliation is handled separately.",
+  "operations": [
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/publication_acceptance_e057.py"
+      ],
+      "timeout_seconds": 180
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "-m",
+        "compileall",
+        "control/hourly/publication_wake.py",
+        "control/hourly/git_checkpoint.py",
+        "control/hourly/runtime_sync.py",
+        "control/dev_checks/publication_acceptance_e057.py"
+      ],
+      "timeout_seconds": 90
+    }
+  ]
+}
