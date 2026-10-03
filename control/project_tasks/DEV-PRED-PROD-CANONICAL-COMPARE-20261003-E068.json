@@ -1,0 +1,31 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-PROD-CANONICAL-COMPARE-20261003-E068",
+  "source_commit": "ac8d4af0f443ad5e872eec329cd3f740eeb3c9fb",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "production_compare_source"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 300,
+  "notes": "Read-only compare of the temporary production branch committed delta against current canonical main using Git tree entries. Fail closed with compact summary when any branch-delta path differs. No production mutation or remote Git write.",
+  "operations": [
+    {
+      "type": "production_compare_source",
+      "require_equal": true,
+      "report_mode": "summary"
+    }
+  ]
+}
