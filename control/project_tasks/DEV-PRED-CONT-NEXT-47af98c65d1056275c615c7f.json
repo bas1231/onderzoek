@@ -1,0 +1,36 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-CONT-NEXT-47af98c65d1056275c615c7f",
+  "build_id": "BUILD-GENERIC-AUTOBUILD-CHAT-WAKE-20261003",
+  "source_commit": "eebddf3f230452fa9ed4d03e375d27a57080f713",
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 420,
+  "notes": "Continuation diagnostic after acceptance pytest INTERNALERROR. Re-run the same target set via repository-owned wrapper, capture the real traceback compactly, then intentionally exit 42 so the bridge preserves the diagnostic. No runtime mutation.",
+  "operations": [
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/autobuild_pytest_internal_diag_e043.py"
+      ],
+      "timeout_seconds": 360
+    }
+  ]
+}
