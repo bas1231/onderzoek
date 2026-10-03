@@ -1,0 +1,42 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-CONT-INFLIGHT-RANK-20261003-E032",
+  "build_id": "CONTINUATION-INFLIGHT-RANK-20261003",
+  "source_commit": "5a16fc4fc2a26c89a6e4ee4c9bed8917d8f513ce",
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_runtime"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 300,
+  "notes": "Read-only classifier for stale canary A rank within current heartbeat MAX_RECOVERY_SCAN. No runtime mutation.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/inflight_rank_e032.py",
+      "content": "from pathlib import Path\nimport json\n\ndata=Path.home()/\".local/share/prediction-chat-bridge\"\ntid=\"DEV-PRED-CONT-CANARY2-A-20261003-E022\"\nitems=[]\nfor p in (data/\"inflight\").glob(\"*.json\"):\n    try:o=json.loads(p.read_text(encoding=\"utf-8\"))\n    except Exception:continue\n    try:mt=p.stat().st_mtime_ns\n    except OSError:continue\n    items.append((mt,p,o))\n\ntarget=None\nfor item in items:\n    if isinstance(item[2],dict) and item[2].get(\"task_id\")==tid:\n        target=item\n        break\nif target is None:\n    print(\"INFLIGHT_RANK=A_MISSING\",flush=True); raise SystemExit(51)\n\noldest=sorted(items,key=lambda x:x[0])\nnewest=sorted(items,key=lambda x:x[0],reverse=True)\nold_rank=next(i+1 for i,x in enumerate(oldest) if x[1]==target[1])\nnew_rank=next(i+1 for i,x in enumerate(newest) if x[1]==target[1])\ntotal=len(items)\nif old_rank>256 and new_rank<=256:\n    print(f\"INFLIGHT_RANK=STARVED total={total} old_rank={old_rank} new_rank={new_rank}\",flush=True); raise SystemExit(52)\nif old_rank<=256:\n    print(f\"INFLIGHT_RANK=WITHIN_OLD_SCAN total={total} old_rank={old_rank} new_rank={new_rank}\",flush=True); raise SystemExit(53)\nprint(f\"INFLIGHT_RANK=OUTSIDE_BOTH total={total} old_rank={old_rank} new_rank={new_rank}\",flush=True); raise SystemExit(54)\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/inflight_rank_e032.py"
+      ],
+      "timeout_seconds": 120
+    }
+  ]
+}
