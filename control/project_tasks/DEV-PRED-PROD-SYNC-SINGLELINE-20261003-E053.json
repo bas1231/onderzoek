@@ -1,0 +1,35 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-PROD-SYNC-SINGLELINE-20261003-E053",
+  "source_commit": "9d782d67f08a1cee82e61a3cc1e6edcfb22ff7f2",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "run_project_python",
+    "read_runtime"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 180,
+  "notes": "Single-line read-only production sync diagnostic wrapper. Intentionally returns rc=42 so compact bridge result preserves the diagnostic line. No production mutation or network.",
+  "operations": [
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/prod_sync_singleline_e053.py"
+      ],
+      "timeout_seconds": 60
+    }
+  ]
+}
