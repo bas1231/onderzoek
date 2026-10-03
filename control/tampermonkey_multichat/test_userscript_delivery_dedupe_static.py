@@ -34,6 +34,21 @@ class UserscriptDeliveryDedupeStaticTests(unittest.TestCase):
         behavior = runpy.run_path(str(SCRIPT.parents[2] / 'tests/audit/test_delivery_behavior.py'))
         behavior['test_new_event_receipt_written_before_ack']()
 
+    def test_confirmed_delivery_is_acked_before_generation_exit(self):
+        start = self.src.index("const sent = await submitMessage(message);")
+        end = self.src.index("} catch (_)", start)
+        body = self.src[start:end]
+        remember_pos = body.index("remember(KEY_SENT_EVENTS, eventKey);")
+        ack_pos = body.index("const ok = await ack(event.event_id, identity.chatId, identity.consumerId);")
+        generation_exit_pos = body.rindex("if (generation !== wakeGeneration) return;")
+        self.assertGreater(remember_pos, 0)
+        self.assertGreater(ack_pos, remember_pos)
+        self.assertGreater(generation_exit_pos, ack_pos)
+        self.assertNotIn(
+            "if (generation !== wakeGeneration) return;\n          if (!sent",
+            body,
+        )
+
     def test_restart_does_not_clear_sent_event_memory(self):
         match = re.search(
             r"function restartWakeLoop\(reason\) \{(?P<body>.*?)\n  \}",
