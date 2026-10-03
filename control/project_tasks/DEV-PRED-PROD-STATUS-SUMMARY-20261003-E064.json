@@ -1,0 +1,30 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-PROD-STATUS-SUMMARY-20261003-E064",
+  "source_commit": "5bafd00f9e778f81ffc22cd9bc5ced14ccd64563",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "production_inspect"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 300,
+  "notes": "Read-only compact classification of dirty production working tree on divergent architecture branch. Intentionally fail closed to surface counts/samples. No production mutation.",
+  "operations": [
+    {
+      "type": "production_inspect",
+      "require_head_equals_main": true,
+      "report_mode": "status_summary"
+    }
+  ]
+}
