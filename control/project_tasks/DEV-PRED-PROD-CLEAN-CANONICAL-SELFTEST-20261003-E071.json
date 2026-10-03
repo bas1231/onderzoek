@@ -1,0 +1,36 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-PROD-CLEAN-CANONICAL-SELFTEST-20261003-E071",
+  "source_commit": "fc80d90bf118c645f8389a21938de64d3a3c219c",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "run_project_python"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 180,
+  "notes": "Fixture-only selftest for new fail-closed production canonical cleanup capability. Production itself must not be mutated.",
+  "operations": [
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "-m",
+        "compileall",
+        "control/dev_checks/prod_ref_state_e058.py"
+      ],
+      "timeout_seconds": 60
+    }
+  ]
+}
