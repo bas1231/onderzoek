@@ -283,15 +283,10 @@ def sync() -> dict[str, Any]:
         untracked_paths(),
         checkpoint,
     )
-    durable_remaining = (
-        safe_remaining
-        + unexpected_remaining
-        + safe_untracked_remaining
-    )
-    if durable_remaining:
+    if unexpected_remaining:
         raise RuntimeSyncError(
-            "durable changes remain after sync/checkpoint: "
-            + ", ".join(durable_remaining[:20])
+            "unexpected tracked changes remain after sync: "
+            + ", ".join(unexpected_remaining[:20])
         )
 
     return write_status(
