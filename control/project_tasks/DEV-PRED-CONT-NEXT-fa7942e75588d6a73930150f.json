@@ -1,0 +1,35 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-CONT-NEXT-fa7942e75588d6a73930150f",
+  "source_commit": "50fb802f1e7b646e73ec9358f0544f7006e952c6",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "run_project_python",
+    "read_runtime"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 180,
+  "notes": "Continuation of failed E054 production fast-forward acceptance. First establish whether temporary production branch HEAD exactly equals local refs/heads/main. Read-only only: no branch switch, no fast-forward, no production mutation, no remote Git write.",
+  "operations": [
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/prod_ref_state_e058.py"
+      ],
+      "timeout_seconds": 60
+    }
+  ]
+}
