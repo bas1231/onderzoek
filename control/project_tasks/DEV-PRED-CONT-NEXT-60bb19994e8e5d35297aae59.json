@@ -1,0 +1,50 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-CONT-NEXT-60bb19994e8e5d35297aae59",
+  "source_commit": "823360df4c74831266e0c3f68eaa81d3c4c78b83",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "production_compare_source",
+    "production_compare_worktree",
+    "production_clean_canonical",
+    "production_fast_forward",
+    "production_inspect"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 600,
+  "notes": "Continuation of production divergence reconciliation. Target is the same canonical release commit used by E067/E068. Fail closed unless committed architecture-branch delta and any dirty worktree bytes are already represented exactly in target. Clean only target-identical dirty state, preserve the divergent branch ref, switch to main and fast-forward from local mirror only. No remote Git write, live trading, paid action, wallet action or credential mutation.",
+  "operations": [
+    {
+      "type": "production_compare_source",
+      "require_equal": true,
+      "report_mode": "summary"
+    },
+    {
+      "type": "production_compare_worktree",
+      "require_exact": true
+    },
+    {
+      "type": "production_clean_canonical"
+    },
+    {
+      "type": "production_ff",
+      "target_commit": "823360df4c74831266e0c3f68eaa81d3c4c78b83"
+    },
+    {
+      "type": "production_inspect",
+      "require_head_equals_main": true,
+      "report_mode": "status"
+    }
+  ]
+}
