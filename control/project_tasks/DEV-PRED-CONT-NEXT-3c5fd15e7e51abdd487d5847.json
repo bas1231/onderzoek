@@ -1,0 +1,37 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-CONT-NEXT-3c5fd15e7e51abdd487d5847",
+  "source_commit": "12b43a47ce66cc0d1cc4ccf462e971028ab3a464",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "production_compare_source",
+    "production_compare_worktree"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 300,
+  "notes": "Continuation of superseded production_ff target. Follow current canonical reconcile flow: read-only representation gates only. Require committed temporary-branch delta and any dirty/untracked production worktree content to be exactly represented in pinned canonical source before any cleanup, switch or fast-forward.",
+  "operations": [
+    {
+      "type": "production_compare_source",
+      "require_equal": true,
+      "report_mode": "summary"
+    },
+    {
+      "type": "production_compare_worktree",
+      "require_exact": true,
+      "report_mode": "counts"
+    }
+  ]
+}
