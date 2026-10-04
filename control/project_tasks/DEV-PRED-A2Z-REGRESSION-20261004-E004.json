@@ -1,0 +1,20 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-A2Z-REGRESSION-20261004-E004",
+  "source_commit": "da85cb266918f19f130c277feed5e1cc49e9ae22",
+  "intelligence_tier": "A",
+  "issuer": {"model": "GPT-5.6 Sol", "reasoning_level": "UNAVAILABLE_TO_RUNTIME"},
+  "safety": {"live_trading": false, "paid_actions": false, "wallet_actions": false, "remote_git_write": false, "credential_write": false},
+  "capabilities": ["read_repository", "run_project_python", "run_tests"],
+  "working_directory": ".",
+  "timeout_seconds": 850,
+  "notes": "A-to-Z regression suite retry after confirming DEV transport also caps command timeout at 900 seconds. No runtime mutation or financial actions.",
+  "operations": [
+    {
+      "type": "python",
+      "argv": ["python3", "-m", "pytest", "-q", "tests/hourly", "tests/codex_supervisor", "tests/edge_hunter", "tests/test_runtime_health.py", "tests/test_market_instance_scanner.py", "tests/test_recon_engine.py", "tests/test_parallel_build_coordination_shared.py"],
+      "test": true,
+      "timeout_seconds": 780
+    }
+  ]
+}
