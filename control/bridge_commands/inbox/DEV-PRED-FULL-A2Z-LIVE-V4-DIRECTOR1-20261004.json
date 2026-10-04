@@ -1,0 +1,19 @@
+{
+  "schema": "PREDICTION_BRIDGE_COMMAND_V1",
+  "task_id": "DEV-PRED-FULL-A2Z-LIVE-V4-DIRECTOR1-20261004",
+  "action": "SIX_AI_HEALTH",
+  "created_at_utc": "2026-10-04T21:40:00Z",
+  "route_task_id": "SESSION-ROUTE-ab8536120fbe276f56e18b8d",
+  "delivery_mode": "chat",
+  "live_trading": false,
+  "paid_actions": false,
+  "wallet_actions": false,
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "notes": "Full live A-to-Z qualification V4 stage 1: validate primary scout fixture, candidate queue, and real Director reasoning. No trading, cost, wallet or external market action.",
+  "auto_continue": true,
+  "parent_continuation_id": null
+}
