@@ -164,6 +164,14 @@ def select_next(supervisor,repo):
     if root.exists():
         for path in sorted(root.glob('*.json')):
             item=json.loads(path.read_text())
+            # Runtime overlays are immutable audit history. Only the overlay whose
+            # pinned candidate/evidence bytes are still current may trigger new work.
+            current=True
+            for ref,expected in (item.get('source_hashes') or {}).items():
+                p=P(repo)/ref
+                if not p.is_file() or p.is_symlink() or hashlib.sha256(p.read_bytes()).hexdigest()!=expected:
+                    current=False;break
+            if not current:continue
             state=item.get('queue_status')
 
             if state=='ASTRA_PREBUILD_REVIEW':
