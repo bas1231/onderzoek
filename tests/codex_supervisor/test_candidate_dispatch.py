@@ -3,6 +3,7 @@ import pytest
 sys.path.insert(0,str(pathlib.Path(__file__).resolve().parents[2]/'control/codex_supervisor'))
 import supervisor as m
 import candidate_dispatch as d
+import model_quality_gate as q
 ROOT=pathlib.Path(__file__).resolve().parents[2]
 PROTOCOL=ROOT/'knowledge/candidates/protocols/MANUAL-SCOUT-HENGELTJES-20260924-shadow-v1.json'
 
@@ -111,6 +112,23 @@ def test_complete_task_then_existing_queued_task(tmp_path):
     s.enqueue(next_task)
     assert s.tick()['state']=='COMPLETE';assert calls==['A','B']
 
+def approve_astra(repo,s,phase='PREBUILD',decision='APPROVE',reviewer_model='GPT-6 Astra'):
+    path=next((s.root/'candidate_states').glob('*.json'))
+    overlay=json.loads(path.read_text())
+    review=q.review_template(overlay,phase)
+    review.update(
+        decision=decision,
+        reviewer_model=reviewer_model,
+        finding='Astra fixture review binds to this exact candidate version.',
+        next_action='Proceed only within the governed next gate.'
+    )
+    ref=q.expected_review_ref(overlay,phase)
+    review_path=repo/ref
+    review_path.parent.mkdir(parents=True,exist_ok=True)
+    review_path.write_text(json.dumps(review))
+    return q.apply_review(s,repo,path,phase)
+
+
 def heng_protocol(repo):
     original=json.loads((ROOT/'knowledge/candidates/protocols/MANUAL-SCOUT-HENGELTJES-20260924-shadow-v1.json').read_text())
     original['candidate_id']='A';p=repo/'knowledge/candidates/protocols/protocol-v1.json';p.parent.mkdir(parents=True,exist_ok=True);p.write_text(json.dumps(original));return p
@@ -149,11 +167,14 @@ def test_needs_revision_is_human_blocked_not_queue_empty(tmp_path):
     assert decision['state']=='BLOCKED' and decision['reason']=='NEEDS_REVISION_REQUIRES_NEW_VERSION_AND_REVIEW'
     assert decision['next_action']=='Nieuwe protocolversie en Director-herbeoordeling vereist'
 
-def test_protocol_pending_overrides_idle_to_deterministic_build_handoff(tmp_path):
+def test_protocol_pending_overrides_idle_to_astra_prebuild_gate(tmp_path):
     repo,s,calls,_=setup(tmp_path);candidate(repo,prospective_protocols=['knowledge/candidates/protocols/protocol-v1.json']);heng_protocol(repo)
-    # Director cannot suppress required registered gates with WAITING_FOR_DATA.
+    # Director cannot suppress required registered gates with WAITING_FOR_DATA,
+    # but build is still blocked until exact Astra pre-build review.
     assert s.tick()['state']=='COMPLETE';overlay=json.loads(next((s.root/'candidate_states').glob('*.json')).read_text())
-    assert overlay['queue_status']=='NEEDS_BUILD' and overlay['build_handoff']['operation']=='PROTOCOL_DEATHCHECK_VALIDATION'
+    assert overlay['queue_status']=='ASTRA_PREBUILD_REVIEW'
+    assert overlay['pending_build_handoff']['operation']=='PROTOCOL_DEATHCHECK_VALIDATION'
+    assert 'build_handoff' not in overlay
 
 def test_duplicate_application_idempotent_and_next_action_is_data(tmp_path):
     repo,s,_,_=setup(tmp_path);candidate(repo);s.tick();run=next((s.root/'runs').glob('CANDIDATE-*'));t=json.loads((run/'TASK.json').read_text());result=d.validate_result(t,json.loads((run/'COMPLETE.json').read_text())['final'])
@@ -180,6 +201,9 @@ def test_pending_protocol_build_validation_runs_three_pinned_clean_suites(tmp_pa
     import candidate_validation as v
     repo,s,calls,_=setup(tmp_path);candidate(repo,prospective_protocols=['knowledge/candidates/protocols/protocol-v1.json']);heng_protocol(repo)
     assert s.tick()['state']=='COMPLETE'
+    updated,_=approve_astra(repo,s,'PREBUILD')
+    assert updated['queue_status']=='NEEDS_BUILD'
+    assert updated['build_handoff']['astra_prebuild_review_ref'].startswith('knowledge/reviews/astra/')
     with s.locked():t=d.pending_validation_task(s,repo)
     assert t and t['local_operation']=='PROTOCOL_DEATHCHECK_VALIDATION'
     folder=s.root/'runs'/f"{t['task_id']}-1-test";folder.mkdir(parents=True)
@@ -187,13 +211,14 @@ def test_pending_protocol_build_validation_runs_three_pinned_clean_suites(tmp_pa
     assert report['status']=='PASS' and report['local_test_runs']==3 and report['local_test_runs_passed']==3 and report['prospective_clean_runs']==0 and report['prospective_runs']==0
     t['run_path']=str(folder.relative_to(s.root))
     overlay=json.loads(pathlib.Path(t['overlay_path']).read_text());_,updated=d.apply_validation(s,t,report)
-    assert updated['queue_status']=='VALIDATION' and updated['activation']['authorized'] is False
+    assert updated['queue_status']=='ASTRA_PREMEASUREMENT_REVIEW' and updated['activation']['authorized'] is False
+    assert 'astra_premeasurement_review_required' in updated['activation']['blockers']
     assert not list((repo/'knowledge/candidates').glob('*.tmp'))
 
 def test_validation_requires_durable_in_root_report(tmp_path):
     import candidate_validation as v
     repo,s,_,_=setup(tmp_path);candidate(repo,prospective_protocols=['knowledge/candidates/protocols/protocol-v1.json']);heng_protocol(repo)
-    s.tick()
+    s.tick();approve_astra(repo,s,'PREBUILD')
     with s.locked():task=d.pending_validation_task(s,repo)
     folder=s.root/'runs'/'valid-report';folder.mkdir(parents=True);report=v.run(task,repo,folder)
     task['run_path']='runs/missing'
@@ -202,7 +227,7 @@ def test_validation_requires_durable_in_root_report(tmp_path):
 def test_validation_report_cannot_be_replayed_across_task_or_enable_activation(tmp_path):
     import candidate_validation
     repo,s,_,_=setup(tmp_path);candidate(repo,prospective_protocols=['knowledge/candidates/protocols/protocol-v1.json']);heng_protocol(repo)
-    s.tick()
+    s.tick();approve_astra(repo,s,'PREBUILD')
     with s.locked():task=d.pending_validation_task(s,repo)
     folder=s.root/'runs'/'valid-report';folder.mkdir(parents=True);good=candidate_validation.run(task,repo,folder)
     with pytest.raises(ValueError,match='BINDING'):d.apply_validation(s,task,{**good,'task_id':'OTHER'})
