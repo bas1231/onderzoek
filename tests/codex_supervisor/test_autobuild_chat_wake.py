@@ -94,6 +94,19 @@ def test_generic_needs_build_creates_one_external_continuation_and_audit(tmp_pat
     assert audit["live_trading"] is False
 
 
+def test_direct_build_wake_requires_astra_prebuild_approval(tmp_path):
+    bridge, routes, config = route_fixture(tmp_path)
+    s = Supervisor(tmp_path / "runtime")
+    with pytest.raises(b.BuildWakeBlocked, match="ASTRA_PREBUILD_APPROVAL_REQUIRED"):
+        b.ensure_build_continuation(
+            s,
+            overlay(approved=False),
+            bridge_data=bridge,
+            route_config=config,
+            routes_dir=routes,
+        )
+
+
 def test_autobuild_route_and_safety_fail_closed(tmp_path):
     s = Supervisor(tmp_path / "runtime")
     with pytest.raises(b.BuildWakeBlocked, match="ROUTE_CONFIG_MISSING"):
