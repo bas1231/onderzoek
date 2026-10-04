@@ -308,7 +308,7 @@ def verify_installation(root):
     if data.get('policy')!='CHATGPT_REASONING_ONLY_NO_TOOLS_NO_RESET':raise Blocked('SUPERVISOR_POLICY_CHANGED')
     policy=P(__file__).resolve().parents[1]/'hourly/candidate_queue.py'
     if data.get('candidate_policy_sha256')!=digest(policy.read_bytes()):raise Blocked('CANDIDATE_POLICY_SOURCE_CHANGED')
-    for name in ('candidate_dispatch.py','evidence_wake.py','build_wake.py'):
+    for name in ('candidate_dispatch.py','evidence_wake.py','build_wake.py','model_quality_gate.py','astra_review_wake.py','measurement_wake.py'):
         if data.get(name+'_sha256')!=digest(P(__file__).with_name(name).read_bytes()):raise Blocked('PINNED_CANDIDATE_SOURCE_CHANGED:'+name)
 
 def main():
