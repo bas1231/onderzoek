@@ -1,0 +1,19 @@
+{
+  "schema": "PREDICTION_BRIDGE_COMMAND_V1",
+  "task_id": "DEV-PRED-CONT-NEXT-352389037745dfe1f8620bf6",
+  "action": "SIX_AI_HEALTH",
+  "created_at_utc": "2026-10-04T21:49:00Z",
+  "route_task_id": "DEV-PRED-FULL-A2Z-LIVE-V4-DIRECTOR1-R2-20261004",
+  "delivery_mode": "chat",
+  "live_trading": false,
+  "paid_actions": false,
+  "wallet_actions": false,
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "notes": "Read-only A-to-Z continuation probe only. Inspect existing V4 test/candidate/overlay state; do not modify code, infrastructure, services, runtime state, market state or costs.",
+  "auto_continue": true,
+  "parent_continuation_id": "CONT-352389037745dfe1f8620bf6"
+}
