@@ -49,6 +49,7 @@ def main() -> int:
     hydrator = load('packet_hydrator', R / 'control/hourly/packet_hydrator.py')
     orchestrator = load('agent_orchestrator', R / 'control/hourly/agent_orchestrator.py')
     candidate_queue = load('candidate_queue', R / 'control/hourly/candidate_queue.py')
+    candidate_reporting = load('candidate_reporting', R / 'control/hourly/candidate_reporting.py')
     scheduler = load('task_shape_scheduler', R / 'control/hourly/task_shape_scheduler.py')
     graph = load('evidence_failure_graph', R / 'control/hourly/evidence_failure_graph.py')
     ai_handoff = load('ai_handoff', R / 'control/hourly/ai_handoff.py')
@@ -263,6 +264,15 @@ def main() -> int:
             handle.write('Candidate→domain/capability assignments: ' + str(len(orchestration_data.get('candidate_routing', []))) + chr(10))
             handle.write('Evidence Graph: ' + str(graph_input_state.get('evidence_graph_ref')) + chr(10))
             handle.write('Economic default: NO_PROVEN_EDGE' + chr(10))
+
+    # Reconcile durable supervisor overlays into the human-readable hourly
+    # report. The economic conclusion remains fail-closed until formal proof
+    # gates are satisfied elsewhere.
+    candidate_reporting.append_to_report(
+        report_path,
+        queue_data,
+        R / 'knowledge/codex_runtime',
+    )
 
     wake_result = subprocess.run(
         [str(R / '.venv/bin/python'), str(R / 'control/hourly/hourly_wake.py')],
