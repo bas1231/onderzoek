@@ -1,0 +1,67 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-PRODUCTION-RELEASE-20261004-E065",
+  "source_commit": "1f891a5adcf2eac595c3b43e6c8f64fa6d4fad5e",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "production_compare_source",
+    "production_compare_worktree",
+    "production_clean_canonical",
+    "production_fast_forward",
+    "user_service_manage"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 900,
+  "notes": "Deterministic production release. Preserve divergent architecture branch. Proceed only if every path unique to production branch is already represented byte-for-byte in canonical source and every dirty worktree path is exactly represented by target. Clean only canonical-represented dirty state, then switch preserving branch ref and fast-forward from local mirror. No remote Git write.",
+  "operations": [
+    {
+      "type": "production_compare_source",
+      "require_equal": true,
+      "report_mode": "summary"
+    },
+    {
+      "type": "production_compare_worktree",
+      "require_exact": true,
+      "report_mode": "counts"
+    },
+    {
+      "type": "production_clean_canonical"
+    },
+    {
+      "type": "production_ff",
+      "target_commit": "1f891a5adcf2eac595c3b43e6c8f64fa6d4fad5e"
+    },
+    {
+      "type": "service",
+      "verb": "is-active",
+      "unit": "prediction-research-hourly-director.timer"
+    },
+    {
+      "type": "service",
+      "verb": "is-active",
+      "unit": "prediction-codex-supervisor.timer"
+    },
+    {
+      "type": "service",
+      "verb": "is-active",
+      "unit": "prediction-command-bus.timer"
+    },
+    {
+      "type": "service",
+      "verb": "is-active",
+      "unit": "prediction-chat-wake.service"
+    }
+  ]
+}
