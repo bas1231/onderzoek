@@ -143,6 +143,9 @@ def pending_validation_task(supervisor,repo):
         if path.is_symlink():raise ValueError('CANDIDATE_OVERLAY_SYMLINK')
         overlay=json.loads(path.read_text())
         if overlay.get('queue_status')!='NEEDS_BUILD':continue
+        reviews=overlay.get('astra_reviews',{})
+        approval=reviews.get('PREBUILD') if isinstance(reviews,dict) else None
+        if not isinstance(approval,dict) or approval.get('decision')!='APPROVE' or approval.get('reviewer_model')!='GPT-6 Astra':continue
         plan=overlay.get('build_handoff',{})
         if plan.get('operation')!='PROTOCOL_DEATHCHECK_VALIDATION' or plan.get('status')!='BUILD_TASK_QUEUED':continue
         tid='VALIDATE-'+hashlib.sha256((overlay['originating_task_id']+overlay['completion_hash']).encode()).hexdigest()[:32]
