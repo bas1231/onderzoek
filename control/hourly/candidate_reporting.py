@@ -46,6 +46,10 @@ def summarize(queue_data: dict[str, Any], runtime_root: Path) -> dict[str, Any]:
         if not isinstance(cid, str) or not cid:
             continue
         overlay = latest_overlay(runtime_root, cid)
+        reviews = overlay.get("astra_reviews", {}) if overlay else {}
+        prebuild = reviews.get("PREBUILD", {}) if isinstance(reviews, dict) else {}
+        premeasurement = reviews.get("PREMEASUREMENT", {}) if isinstance(reviews, dict) else {}
+        measurement = overlay.get("measurement_authorization", {}) if overlay else {}
         rows.append({
             "candidate_id": cid,
             "source_queue_status": row.get("queue_status"),
@@ -53,6 +57,10 @@ def summarize(queue_data: dict[str, Any], runtime_root: Path) -> dict[str, Any]:
             "finding": overlay.get("finding") if overlay else None,
             "next_action": overlay.get("next_action") if overlay else row.get("next_decisive_test"),
             "scientific_status": (overlay.get("scientific_status") if overlay else None) or "NO_PROVEN_EDGE",
+            "astra_prebuild": prebuild.get("decision"),
+            "astra_premeasurement": premeasurement.get("decision"),
+            "measurement_scope": measurement.get("scope"),
+            "measurement_order_submission": measurement.get("order_submission"),
         })
     return {
         "candidate_count": len(rows),
@@ -72,6 +80,13 @@ def render(summary: dict[str, Any]) -> str:
         lines.append(f"- Source queue: {row.get('source_queue_status')}")
         lines.append(f"- Runtime result: {row.get('runtime_queue_status') or 'NO_RUNTIME_RESULT'}")
         lines.append(f"- Scientific status: {row.get('scientific_status') or 'NO_PROVEN_EDGE'}")
+        if row.get("astra_prebuild"):
+            lines.append(f"- Astra pre-build: {row['astra_prebuild']}")
+        if row.get("astra_premeasurement"):
+            lines.append(f"- Astra pre-measurement: {row['astra_premeasurement']}")
+        if row.get("measurement_scope"):
+            lines.append(f"- Measurement scope: {row['measurement_scope']}")
+            lines.append(f"- Order submission: {row.get('measurement_order_submission')}")
         if row.get("finding"):
             lines.append(f"- Finding: {row['finding']}")
         if row.get("next_action"):
