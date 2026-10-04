@@ -1,0 +1,36 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-CONT-NEXT-2509a69daacaa66edb9f7ace",
+  "source_commit": "92419ba71c523a78d89256ee8cd191e3b5051baf",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "production_merge_representation",
+    "production_compare_worktree"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 600,
+  "notes": "Continuation of production release E068 after strict byte representation gate failed. No production mutation. First prove with a temporary-object-store three-way merge that current canonical source semantically subsumes the committed architecture branch. Then require every dirty/untracked production worktree path to be exactly represented by the same pinned canonical source. Fail closed otherwise.",
+  "operations": [
+    {
+      "type": "production_merge_representation",
+      "require_subsumed": true
+    },
+    {
+      "type": "production_compare_worktree",
+      "require_exact": true,
+      "report_mode": "counts"
+    }
+  ]
+}
