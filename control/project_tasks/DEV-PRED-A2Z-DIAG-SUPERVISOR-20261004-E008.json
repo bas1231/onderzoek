@@ -1,0 +1,46 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-A2Z-DIAG-SUPERVISOR-20261004-E008",
+  "source_commit": "6f81cf3170f0fb67d5a78161db9113cf27cd2d43",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "user_service_manage",
+    "read_logs"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 300,
+  "notes": "Read-only diagnosis after live A-to-Z cycle failed at prediction-codex-supervisor.service. Capture show/journal for supervisor and hourly service; no mutation.",
+  "operations": [
+    {
+      "type": "service",
+      "verb": "show",
+      "unit": "prediction-codex-supervisor.service"
+    },
+    {
+      "type": "journal",
+      "unit": "prediction-codex-supervisor.service",
+      "lines": 260
+    },
+    {
+      "type": "service",
+      "verb": "show",
+      "unit": "prediction-research-hourly-director.service"
+    },
+    {
+      "type": "journal",
+      "unit": "prediction-research-hourly-director.service",
+      "lines": 260
+    }
+  ]
+}
