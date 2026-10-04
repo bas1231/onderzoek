@@ -169,6 +169,37 @@ def test_candidate_dispatch_legacy_needs_build_cannot_bypass_astra(tmp_path, mon
     assert migrated["queue_status"] == "ASTRA_PREBUILD_REVIEW"
 
 
+def test_stale_approved_overlay_cannot_retrigger_build_after_source_change(tmp_path, monkeypatch):
+    import hashlib
+    import candidate_dispatch as d
+    runtime = tmp_path / "runtime"
+    states = runtime / "candidate_states"
+    states.mkdir(parents=True)
+    repo = tmp_path / "repo"
+    source = repo / "knowledge/candidates/CANARY.json"
+    source.parent.mkdir(parents=True)
+    source.write_text('{"candidate_id":"CANARY","version":1}')
+    old_hash = hashlib.sha256(source.read_bytes()).hexdigest()
+
+    item = overlay()
+    item["source_hashes"] = {"knowledge/candidates/CANARY.json": old_hash}
+    (states / "generic.json").write_text(json.dumps(item))
+    source.write_text('{"candidate_id":"CANARY","version":2}')
+
+    class S:
+        def __init__(self, root):
+            self.root = root
+
+    monkeypatch.setattr(d, "pending_validation_task", lambda *args, **kwargs: None)
+    monkeypatch.setattr(d, "select_task", lambda *args, **kwargs: None)
+    monkeypatch.setattr(
+        b,
+        "ensure_build_continuation",
+        lambda *args, **kwargs: (_ for _ in ()).throw(AssertionError("stale overlay triggered build")),
+    )
+    assert d.select_next(S(runtime), repo) is None
+
+
 def test_candidate_dispatch_astra_approved_needs_build_routes_to_chat_wake(tmp_path, monkeypatch):
     import candidate_dispatch as d
     runtime = tmp_path / "runtime"
