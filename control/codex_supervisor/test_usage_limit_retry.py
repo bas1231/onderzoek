@@ -85,3 +85,76 @@ def test_usage_limit_retries_same_task_after_15_minutes(tmp_path):
             "select status,attempt from tasks where id=?", (task["task_id"],)
         ).fetchone()
     assert row == ("COMPLETE", 2)
+
+
+def test_legacy_five_hour_usage_pause_is_effectively_capped(tmp_path):
+    now = [1899.0]
+    calls = []
+
+    def clock():
+        return now[0]
+
+    def worker(task, thread, folder, lock_fd):
+        calls.append(task["task_id"])
+        events = [
+            {"type": "thread.started", "thread_id": "thread-legacy"},
+            {"type": "item.completed", "item": {"type": "agent_message", "text": "done"}},
+            {"type": "turn.completed"},
+        ]
+        (folder / "events.jsonl").write_text(
+            "".join(json.dumps(event) + "\n" for event in events)
+        )
+        return 0
+
+    s = supervisor.Supervisor(tmp_path, worker=worker, clock=clock)
+    task = _task()
+    task["task_id"] = "TEST-USAGE-LEGACY"
+    first_run = tmp_path / "runs" / "TEST-USAGE-LEGACY-1-seed"
+    first_run.mkdir(parents=True)
+
+    with s.locked():
+        s.db.execute(
+            "insert into tasks(id,body,status,attempt,run) values(?,?,?,?,?)",
+            (
+                task["task_id"],
+                json.dumps(task, sort_keys=True),
+                "PAUSED_USAGE_LIMIT",
+                1,
+                str(first_run.relative_to(tmp_path)),
+            ),
+        )
+        s.db.execute(
+            "insert into transitions(state,task,reason,attempt,checkpoint,next_action,stamp,retry) "
+            "values(?,?,?,?,?,?,?,?)",
+            (
+                "PAUSED_USAGE_LIMIT",
+                task["task_id"],
+                "USAGE_LIMIT",
+                1,
+                str(first_run.relative_to(tmp_path)),
+                "resume_same_task",
+                1000.0,
+                19000.0,
+            ),
+        )
+
+    paused = s.tick()
+    assert paused["state"] == "PAUSED_USAGE_LIMIT"
+    assert paused["retry_at"] == 1900.0
+    assert calls == []
+
+    now[0] = 1900.0
+    completed = s.tick()
+    assert completed["state"] == "COMPLETE"
+    assert calls == [task["task_id"]]
+
+    with s.locked():
+        persisted = s.db.execute(
+            "select retry from transitions where task=? and reason='USAGE_LIMIT' order by seq limit 1",
+            (task["task_id"],),
+        ).fetchone()
+        row = s.db.execute(
+            "select status,attempt from tasks where id=?", (task["task_id"],)
+        ).fetchone()
+    assert persisted == (19000.0,)
+    assert row == ("COMPLETE", 2)
