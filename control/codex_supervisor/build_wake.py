@@ -99,6 +99,10 @@ def ensure_build_continuation(
         raise BuildWakeBlocked("AUTOBUILD_CANDIDATE_ID_INVALID")
     if any(overlay.get(flag) is not False for flag in ("live_trading", "paid_actions", "wallet_actions")):
         raise BuildWakeBlocked("AUTOBUILD_UNSAFE_FLAGS")
+    reviews = overlay.get("astra_reviews")
+    approval = reviews.get("PREBUILD") if isinstance(reviews, dict) else None
+    if not isinstance(approval, dict) or approval.get("decision") != "APPROVE" or approval.get("reviewer_model") != "GPT-6 Astra":
+        raise BuildWakeBlocked("ASTRA_PREBUILD_APPROVAL_REQUIRED")
     snapshot = overlay.get("candidate_snapshot")
     if not isinstance(snapshot, dict) or snapshot.get("candidate_id") != cid:
         raise BuildWakeBlocked("AUTOBUILD_CANDIDATE_SNAPSHOT_MISSING")
