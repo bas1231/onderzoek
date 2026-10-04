@@ -2,6 +2,7 @@
 import contextlib,datetime,fcntl,hashlib,json,os,pathlib,re,signal,sqlite3,subprocess,tempfile,time,uuid
 P=pathlib.Path
 STATES={'IDLE','RUNNING','PAUSED_USAGE_LIMIT','WAITING_RETRY','BLOCKED','FAILED','COMPLETE'}
+USAGE_LIMIT_RETRY_SECONDS=900
 class Blocked(RuntimeError):pass
 
 def digest(data):return hashlib.sha256(data).hexdigest()
@@ -153,7 +154,7 @@ class Supervisor:
     def apply_result(self,t,attempt,folder,category,thread):
         state={'COMPLETE':'COMPLETE','USAGE_LIMIT':'PAUSED_USAGE_LIMIT','SAFETY_BLOCK':'BLOCKED','CODEX_PROCESS_FAILURE':'WAITING_RETRY','TASK_FAILURE':'FAILED','ENVIRONMENT_FAILURE':'WAITING_RETRY','BRIDGE_FAILURE':'WAITING_RETRY','REPOSITORY_CONFLICT':'BLOCKED'}.get(category,'BLOCKED')
         if state=='WAITING_RETRY' and attempt>=3:state='FAILED'
-        retry=self.clock()+(18000 if category=='USAGE_LIMIT' else 3600) if state in ('PAUSED_USAGE_LIMIT','WAITING_RETRY') else 0
+        retry=self.clock()+(USAGE_LIMIT_RETRY_SECONDS if category=='USAGE_LIMIT' else 3600) if state in ('PAUSED_USAGE_LIMIT','WAITING_RETRY') else 0
         with self.db:
             self.db.execute('update tasks set status=?,thread=coalesce(?,thread) where id=?',(state,thread,t['task_id']))
             self.transition(state,t['task_id'],category,attempt,str(folder.relative_to(self.root)),retry)
