@@ -1,0 +1,56 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "UURRAPPORT-LIVE-DIAG-20261004-2205-B",
+  "source_commit": "2360c7ec95f410cb5377de44eec06b84f92cc6dd",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "user_service_manage",
+    "read_logs"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 300,
+  "notes": "Read-only live hourly-report diagnosis after a command-only SIX_AI_HEALTH probe returned UNKNOWN. Verify research timers/services and capture recent journals. No mutation, no paid actions, no trading.",
+  "operations": [
+    {
+      "type": "service",
+      "verb": "is-active",
+      "unit": "prediction-research-hourly-director.timer"
+    },
+    {
+      "type": "service",
+      "verb": "is-active",
+      "unit": "prediction-codex-supervisor.timer"
+    },
+    {
+      "type": "service",
+      "verb": "show",
+      "unit": "prediction-research-hourly-director.service"
+    },
+    {
+      "type": "journal",
+      "unit": "prediction-research-hourly-director.service",
+      "lines": 180
+    },
+    {
+      "type": "service",
+      "verb": "show",
+      "unit": "prediction-codex-supervisor.service"
+    },
+    {
+      "type": "journal",
+      "unit": "prediction-codex-supervisor.service",
+      "lines": 220
+    }
+  ]
+}
