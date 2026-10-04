@@ -1,0 +1,29 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-EXECUTOR-SELFTEST-DIAG-20261004-E073",
+  "source_commit": "708947ff7dea821aca20f422197923122a9ba4ed",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "run_tests"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 420,
+  "notes": "Read-only executor regression diagnostic after DEV-PRED-CONT-NEXT-2509a69daacaa66edb9f7ace stopped at command 1. Run the executor's compact selftest operation so failing test names and traceback sections survive result compaction. No production mutation.",
+  "operations": [
+    {
+      "type": "executor_selftest",
+      "timeout_seconds": 300
+    }
+  ]
+}
