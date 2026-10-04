@@ -245,6 +245,23 @@ def invoke_build_wake(s, overlay, work: Path):
     return wake
 
 
+def invoke_measurement_wake(s, overlay, work: Path):
+    bridge = work / "bridge"
+    routes = bridge / "routes"
+    config = bridge / "autobuild_control_route.json"
+    old = (measurement_wake.BRIDGE_DATA, measurement_wake.ROUTE_CONFIG, measurement_wake.ROUTES)
+    try:
+        measurement_wake.BRIDGE_DATA = bridge
+        measurement_wake.ROUTE_CONFIG = config
+        measurement_wake.ROUTES = routes
+        wake = measurement_wake.ensure_measurement_continuation(s, overlay)
+    finally:
+        measurement_wake.BRIDGE_DATA, measurement_wake.ROUTE_CONFIG, measurement_wake.ROUTES = old
+    if wake.get("continuation_state") != "CONTINUE_REQUESTED":
+        raise RuntimeError("MEASUREMENT_CONTINUATION_NOT_CREATED")
+    return wake
+
+
 def build_and_test(repo: Path, cid: str):
     module_path = repo / "control/qualification/a2z_complement_checker.py"
     test_path = repo / "tests/qualification/test_a2z_complement_checker.py"
@@ -319,6 +336,48 @@ def build_and_test(repo: Path, cid: str):
     candidate["build_result_ref"] = evidence_rel
     save_json(candidate_path, candidate)
     return evidence_rel, frozen, positive
+
+
+def prospective_measure(repo: Path, cid: str, build_evidence_ref: str):
+    checker_path = repo / "control/qualification/a2z_complement_checker.py"
+    module = load_module(checker_path, "qualification_checker_measurement")
+    observations = [
+        {"sequence": 1, "yes_ask": 0.62, "no_ask": 0.43, "fees": 0.0},
+        {"sequence": 2, "yes_ask": 0.61, "no_ask": 0.44, "fees": 0.0},
+        {"sequence": 3, "yes_ask": 0.60, "no_ask": 0.45, "fees": 0.0},
+    ]
+    results = []
+    for obs in observations:
+        evaluated = module.evaluate(obs["yes_ask"], obs["no_ask"], obs["fees"])
+        results.append({**obs, **evaluated})
+    if any(row["has_edge"] for row in results):
+        raise RuntimeError("QUALIFICATION_PROSPECTIVE_FIXTURE_UNEXPECTED_EDGE")
+
+    evidence_rel = f"knowledge/experiment_results/{cid}-qualification-prospective-measurement.json"
+    save_json(repo / evidence_rel, {
+        "schema": "PVA_QUALIFICATION_PROSPECTIVE_MEASUREMENT_V1",
+        "candidate_id": cid,
+        "measurement_scope": "READ_ONLY_PROSPECTIVE_MARKET_DATA",
+        "qualification_fixture": True,
+        "preregistered_observations": len(results),
+        "observations": results,
+        "positive_net_observations": 0,
+        "economic_conclusion": "NO_PROVEN_EDGE",
+        "order_submission": False,
+        "live_trading": False,
+        "paid_actions": False,
+        "wallet_actions": False,
+    })
+    candidate_path = next((repo / "knowledge/candidates").glob("AUTO-DISCOVERY-*.json"))
+    candidate = json.loads(candidate_path.read_text())
+    candidate["queue_status"] = "RESULT_READY"
+    candidate["phase"] = "SHADOW"
+    candidate["updated_at"] = "2026-10-04T20:55:00+00:00"
+    candidate["evidence_refs"] = [build_evidence_ref, evidence_rel]
+    candidate["measurement_result_ref"] = evidence_rel
+    candidate["next_decisive_test"] = "Director review of the preregistered read-only prospective measurement evidence."
+    save_json(candidate_path, candidate)
+    return evidence_rel, results
 
 
 def run(mode: str, result_path: Path) -> int:
