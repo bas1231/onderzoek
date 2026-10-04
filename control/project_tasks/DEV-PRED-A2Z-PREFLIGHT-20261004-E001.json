@@ -1,0 +1,99 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-A2Z-PREFLIGHT-20261004-E001",
+  "source_commit": "4f48b0f079854e07ad187a7353dc6818b1e241e9",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "production_inspect",
+    "production_compare_source",
+    "production_compare_worktree",
+    "user_service_manage",
+    "read_logs"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 600,
+  "notes": "Read-only A-to-Z preflight requested by user. Inspect production branch/worktree representation, core timers/services, and recent journals. No production mutation, no network spend, no trading.",
+  "operations": [
+    {
+      "type": "production_inspect",
+      "report_mode": "summary"
+    },
+    {
+      "type": "production_compare_source",
+      "require_equal": false,
+      "report_mode": "summary"
+    },
+    {
+      "type": "production_compare_worktree",
+      "require_exact": false,
+      "report_mode": "counts"
+    },
+    {
+      "type": "service",
+      "verb": "is-active",
+      "unit": "prediction-research-hourly-director.timer"
+    },
+    {
+      "type": "service",
+      "verb": "is-enabled",
+      "unit": "prediction-research-hourly-director.timer"
+    },
+    {
+      "type": "service",
+      "verb": "is-active",
+      "unit": "prediction-codex-supervisor.timer"
+    },
+    {
+      "type": "service",
+      "verb": "is-enabled",
+      "unit": "prediction-codex-supervisor.timer"
+    },
+    {
+      "type": "service",
+      "verb": "is-active",
+      "unit": "prediction-command-bus.timer"
+    },
+    {
+      "type": "service",
+      "verb": "is-enabled",
+      "unit": "prediction-command-bus.timer"
+    },
+    {
+      "type": "service",
+      "verb": "is-active",
+      "unit": "prediction-chat-wake.service"
+    },
+    {
+      "type": "journal",
+      "unit": "prediction-research-hourly-director.service",
+      "lines": 120
+    },
+    {
+      "type": "journal",
+      "unit": "prediction-codex-supervisor.service",
+      "lines": 120
+    },
+    {
+      "type": "journal",
+      "unit": "prediction-command-bus.service",
+      "lines": 80
+    },
+    {
+      "type": "journal",
+      "unit": "prediction-chat-wake.service",
+      "lines": 80
+    }
+  ]
+}
