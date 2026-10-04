@@ -8,6 +8,7 @@ import pytest
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / "control/codex_supervisor"))
 import build_wake as b
+import model_quality_gate as q
 
 
 class Supervisor:
@@ -43,6 +44,26 @@ def overlay(approved=True):
     return item
 
 
+def canonical_prebuild_review(tmp_path, item):
+    repo = tmp_path / "repo"
+    review = q.review_template(item, "PREBUILD")
+    review.update(
+        decision="APPROVE",
+        finding="Fixture Astra approves exact prebuild binding.",
+        next_action="Proceed to bounded build only.",
+    )
+    ref = q.expected_review_ref(item, "PREBUILD")
+    path = repo / ref
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(review))
+    item.setdefault("astra_reviews", {})["PREBUILD"] = {
+        "decision": "APPROVE",
+        "reviewer_model": "GPT-6 Astra",
+        "ref": ref,
+    }
+    return repo
+
+
 def route_fixture(tmp_path):
     bridge = tmp_path / "bridge"
     routes = bridge / "routes"
@@ -64,19 +85,23 @@ def route_fixture(tmp_path):
 def test_generic_needs_build_creates_one_external_continuation_and_audit(tmp_path):
     bridge, routes, config = route_fixture(tmp_path)
     s = Supervisor(tmp_path / "runtime")
+    item = overlay()
+    repo = canonical_prebuild_review(tmp_path, item)
     result = b.ensure_build_continuation(
         s,
-        overlay(),
+        item,
         bridge_data=bridge,
         route_config=config,
         routes_dir=routes,
+        repo=repo,
     )
     again = b.ensure_build_continuation(
         s,
-        overlay(),
+        item,
         bridge_data=bridge,
         route_config=config,
         routes_dir=routes,
+        repo=repo,
     )
     assert again == result
     assert result["continuation_state"] == "CONTINUE_REQUESTED"
@@ -109,13 +134,16 @@ def test_direct_build_wake_requires_astra_prebuild_approval(tmp_path):
 
 def test_autobuild_route_and_safety_fail_closed(tmp_path):
     s = Supervisor(tmp_path / "runtime")
+    item = overlay()
+    repo = canonical_prebuild_review(tmp_path, item)
     with pytest.raises(b.BuildWakeBlocked, match="ROUTE_CONFIG_MISSING"):
         b.ensure_build_continuation(
             s,
-            overlay(),
+            item,
             bridge_data=tmp_path / "bridge",
             route_config=tmp_path / "missing.json",
             routes_dir=tmp_path / "routes",
+            repo=repo,
         )
     bridge, routes, config = route_fixture(tmp_path)
     unsafe = overlay()
@@ -127,6 +155,7 @@ def test_autobuild_route_and_safety_fail_closed(tmp_path):
             bridge_data=bridge,
             route_config=config,
             routes_dir=routes,
+            repo=repo,
         )
 
 
@@ -135,6 +164,7 @@ def test_protocol_builds_stay_on_fixed_validator_path(tmp_path):
     s = Supervisor(tmp_path / "runtime")
     item = overlay()
     item["candidate_snapshot"]["prospective_protocols"] = ["knowledge/candidates/protocols/p.json"]
+    repo = canonical_prebuild_review(tmp_path, item)
     with pytest.raises(b.BuildWakeBlocked, match="PROTOCOL_PATH"):
         b.ensure_build_continuation(
             s,
@@ -142,6 +172,7 @@ def test_protocol_builds_stay_on_fixed_validator_path(tmp_path):
             bridge_data=bridge,
             route_config=config,
             routes_dir=routes,
+            repo=repo,
         )
 
 
@@ -224,7 +255,7 @@ def test_candidate_dispatch_astra_approved_needs_build_routes_to_chat_wake(tmp_p
     monkeypatch.setattr(
         b,
         "ensure_build_continuation",
-        lambda supervisor, candidate: {
+        lambda supervisor, candidate, **kwargs: {
             "continuation_id": "CONT-1234567890abcdef12345678",
             "continuation_state": "CONTINUE_REQUESTED",
         },
