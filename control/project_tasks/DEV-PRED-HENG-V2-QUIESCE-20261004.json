@@ -1,0 +1,44 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-HENG-V2-QUIESCE-20261004",
+  "source_commit": "334cadc1e1d5517b2b71a39c8b2aa2b3cd14315f",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "high"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "user_service_manage"
+  ],
+  "timeout_seconds": 180,
+  "notes": "Temporarily stop only Prediction research timers/services to freeze dynamic codex runtime state during safe production Git preservation. Do not disable units and do not touch bridge/router/transport services.",
+  "operations": [
+    {
+      "type": "service",
+      "verb": "stop",
+      "unit": "prediction-research-hourly-director.timer"
+    },
+    {
+      "type": "service",
+      "verb": "stop",
+      "unit": "prediction-codex-supervisor.timer"
+    },
+    {
+      "type": "service",
+      "verb": "stop",
+      "unit": "prediction-research-hourly-director.service"
+    },
+    {
+      "type": "service",
+      "verb": "stop",
+      "unit": "prediction-codex-supervisor.service"
+    }
+  ]
+}
