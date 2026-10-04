@@ -1,0 +1,15 @@
+{
+  "schema": "PREDICTION_BRIDGE_COMMAND_V1",
+  "task_id": "UURRAPPORT-LIVE-20261004-2155-A",
+  "action": "SIX_AI_HEALTH",
+  "created_at_utc": "2026-10-04T19:55:00Z",
+  "live_trading": false,
+  "paid_actions": false,
+  "wallet_actions": false,
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "high"
+  },
+  "route_task_id": "SESSION-ROUTE-ab8536120fbe276f56e18b8d"
+}
