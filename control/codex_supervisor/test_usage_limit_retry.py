@@ -113,30 +113,31 @@ def test_legacy_five_hour_usage_pause_is_effectively_capped(tmp_path):
     first_run.mkdir(parents=True)
 
     with s.locked():
-        s.db.execute(
-            "insert into tasks(id,body,status,attempt,run) values(?,?,?,?,?)",
-            (
-                task["task_id"],
-                json.dumps(task, sort_keys=True),
-                "PAUSED_USAGE_LIMIT",
-                1,
-                str(first_run.relative_to(tmp_path)),
-            ),
-        )
-        s.db.execute(
-            "insert into transitions(state,task,reason,attempt,checkpoint,next_action,stamp,retry) "
-            "values(?,?,?,?,?,?,?,?)",
-            (
-                "PAUSED_USAGE_LIMIT",
-                task["task_id"],
-                "USAGE_LIMIT",
-                1,
-                str(first_run.relative_to(tmp_path)),
-                "resume_same_task",
-                1000.0,
-                19000.0,
-            ),
-        )
+        with s.db:
+            s.db.execute(
+                "insert into tasks(id,body,status,attempt,run) values(?,?,?,?,?)",
+                (
+                    task["task_id"],
+                    json.dumps(task, sort_keys=True),
+                    "PAUSED_USAGE_LIMIT",
+                    1,
+                    str(first_run.relative_to(tmp_path)),
+                ),
+            )
+            s.db.execute(
+                "insert into transitions(state,task,reason,attempt,checkpoint,next_action,stamp,retry) "
+                "values(?,?,?,?,?,?,?,?)",
+                (
+                    "PAUSED_USAGE_LIMIT",
+                    task["task_id"],
+                    "USAGE_LIMIT",
+                    1,
+                    str(first_run.relative_to(tmp_path)),
+                    "resume_same_task",
+                    1000.0,
+                    19000.0,
+                ),
+            )
 
     paused = s.tick()
     assert paused["state"] == "PAUSED_USAGE_LIMIT"
