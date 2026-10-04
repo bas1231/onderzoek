@@ -79,6 +79,9 @@ def test_generic_needs_build_creates_one_external_continuation_and_audit(tmp_pat
     assert len(audits) == 1
     audit = json.loads(audits[0].read_text())
     assert audit["scientific_status"] == "NO_PROVEN_EDGE"
+    assert audit["required_builder_policy"] == "HIGHEST_AVAILABLE_GPT"
+    assert audit["economic_policy"] == "ANY_POSITIVE_NET_EDGE_COUNTS"
+    assert audit["minimum_net_profit_eur"] == 0.0
     assert audit["live_trading"] is False
 
 
@@ -120,7 +123,7 @@ def test_protocol_builds_stay_on_fixed_validator_path(tmp_path):
         )
 
 
-def test_candidate_dispatch_generic_needs_build_routes_to_chat_wake(tmp_path, monkeypatch):
+def test_candidate_dispatch_legacy_needs_build_cannot_bypass_astra(tmp_path, monkeypatch):
     import candidate_dispatch as d
     runtime = tmp_path / "runtime"
     states = runtime / "candidate_states"
@@ -128,7 +131,36 @@ def test_candidate_dispatch_generic_needs_build_routes_to_chat_wake(tmp_path, mo
     item = overlay()
     item["finding"] = "generic build needed"
     item["next_action"] = "build bounded collector"
-    (states / "generic.json").write_text(json.dumps(item))
+    path = states / "generic.json"
+    path.write_text(json.dumps(item))
+
+    class S:
+        def __init__(self, root):
+            self.root = root
+
+    monkeypatch.setattr(d, "pending_validation_task", lambda *args, **kwargs: None)
+    monkeypatch.setattr(d, "select_task", lambda *args, **kwargs: None)
+    result = d.select_next(S(runtime), tmp_path / "repo")
+    assert result["queue_blocked"] is True
+    assert result["reason"] == "ASTRA_PREBUILD_REVIEW_REQUIRED"
+    migrated = json.loads(path.read_text())
+    assert migrated["queue_status"] == "ASTRA_PREBUILD_REVIEW"
+
+
+def test_candidate_dispatch_astra_approved_needs_build_routes_to_chat_wake(tmp_path, monkeypatch):
+    import candidate_dispatch as d
+    runtime = tmp_path / "runtime"
+    states = runtime / "candidate_states"
+    states.mkdir(parents=True)
+    item = overlay()
+    item["astra_reviews"] = {
+        "PREBUILD": {
+            "decision": "APPROVE",
+            "reviewer_model": "GPT-6 Astra",
+        }
+    }
+    path = states / "generic.json"
+    path.write_text(json.dumps(item))
 
     class S:
         def __init__(self, root):
