@@ -168,7 +168,17 @@ def test_critical_never_starts_worker(tmp_path):
     s=m.Supervisor(tmp_path,lambda *a:pytest.fail('CRITICAL must checkpoint not start'));s.enqueue(task())
     assert s.tick('CRITICAL')['reason']=='CRITICAL_NO_NEW_WORK'
 
-def test_installed_provenance_fails_closed(tmp_path):
+def test_installed_provenance_keeps_policy_and_candidate_pins_without_supervisor_self_hash(tmp_path):
     with pytest.raises(m.Blocked,match='NOT_PINNED'):m.verify_installation(tmp_path)
-    m.atomic(tmp_path/'CONFIG.json',{'supervisor_sha256':'wrong','policy':'CHATGPT_REASONING_ONLY_NO_TOOLS_NO_RESET'})
-    with pytest.raises(m.Blocked,match='SOURCE_CHANGED'):m.verify_installation(tmp_path)
+    config={
+        'supervisor_sha256':'legacy-value-is-ignored',
+        'policy':'CHATGPT_REASONING_ONLY_NO_TOOLS_NO_RESET',
+        'candidate_policy_sha256':m.digest((ROOT/'control/hourly/candidate_queue.py').read_bytes()),
+    }
+    for name in ('candidate_dispatch.py','evidence_wake.py','build_wake.py'):
+        config[name+'_sha256']=m.digest((ROOT/'control/codex_supervisor'/name).read_bytes())
+    m.atomic(tmp_path/'CONFIG.json',config)
+    m.verify_installation(tmp_path)
+    config['candidate_dispatch.py_sha256']='wrong'
+    m.atomic(tmp_path/'CONFIG.json',config)
+    with pytest.raises(m.Blocked,match='PINNED_CANDIDATE_SOURCE_CHANGED'):m.verify_installation(tmp_path)
