@@ -133,6 +133,13 @@ def heng_protocol(repo):
     original=json.loads((ROOT/'knowledge/candidates/protocols/MANUAL-SCOUT-HENGELTJES-20260924-shadow-v1.json').read_text())
     original['candidate_id']='A';p=repo/'knowledge/candidates/protocols/protocol-v1.json';p.parent.mkdir(parents=True,exist_ok=True);p.write_text(json.dumps(original));return p
 
+def test_director_prompt_does_not_kill_tiny_positive_net_edges(tmp_path):
+    repo,s,_,_=setup(tmp_path);candidate(repo)
+    with s.locked():t=d.select_task(s,repo)
+    assert 'iedere strikt positieve NET uitvoerbare euro-edge is het testen waard' in t['prompt']
+    assert 'fees, spread/slippage, fill probability' in t['prompt']
+
+
 def test_prospective_protocol_content_is_hashed_and_prompted(tmp_path):
     repo,s,_,_=setup(tmp_path);candidate(repo,prospective_protocols=['knowledge/candidates/protocols/protocol-v1.json']);p=heng_protocol(repo)
     with s.locked():t=d.select_task(s,repo)
