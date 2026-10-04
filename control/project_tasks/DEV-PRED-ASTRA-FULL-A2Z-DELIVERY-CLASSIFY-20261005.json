@@ -1,0 +1,41 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-ASTRA-FULL-A2Z-DELIVERY-CLASSIFY-20261005",
+  "source_commit": "1d67a200dcd14b1101aa621ad9e24eacecdd6b31",
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_runtime"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 180,
+  "notes": "Read-only classifier for the already-enqueued Astra full A2Z repair continuation delivery. No bridge or runtime mutation.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/astra_full_a2z_delivery_classify_20261005.py",
+      "content": "from pathlib import Path\nimport json\nDATA=Path.home()/'.local/share/prediction-chat-bridge'\nCID='CONT-1bd188daf0b712e863c2903f'\np=DATA/'continuations'/f'{CID}.json'\nif not p.is_file(): raise SystemExit(10)\nobj=json.loads(p.read_text(encoding='utf-8'))\nevent=str(obj.get('last_event_id') or '')\nif not event: raise SystemExit(11)\nlocs=[]\nfor name in ('outbox','inflight','sent','continuation_abandoned'):\n q=DATA/name/f'{event}.json'\n if q.is_file(): locs.append(name)\nprint('ASTRA_DELIVERY_LOCATION='+','.join(locs),flush=True)\nif locs==['outbox']: raise SystemExit(31)\nif locs==['inflight']: raise SystemExit(32)\nif locs==['sent']: raise SystemExit(33)\nif locs==['continuation_abandoned']: raise SystemExit(34)\nif not locs: raise SystemExit(35)\nraise SystemExit(36)\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/astra_full_a2z_delivery_classify_20261005.py"
+      ],
+      "timeout_seconds": 60
+    }
+  ]
+}
