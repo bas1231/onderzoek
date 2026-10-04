@@ -1,0 +1,50 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-CONT-NEXT-272eac34295783f24f9ad167",
+  "source_commit": "7ba098b8889c6ff7b35aa0bf09439842ec92717e",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "codex_review"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 900,
+  "notes": "User requested an independent Codex analysis instead of continuing piecemeal ACK repairs. Review only; no mutation.",
+  "operations": [
+    {
+      "type": "codex_review",
+      "review_task_id": "CODEX-PRED-AUTONOMY-REVIEW-20261004-E001",
+      "worker_timeout_seconds": 780,
+      "instructions": "Act as an independent senior infrastructure reviewer for the Prediction system. Do not propose broad rewrites unless required. Separate CURRENT blockers from LEGACY defects. The user wants to know exactly what is still preventing true unattended autonomy and whether too much time has been spent on ACK/continuation repair.\n\nReview the canonical source plus the live production branch/worktree evidence included in the packet. In particular:\n1. Determine whether the old Tampermonkey/browser POST /ack defect is still a real autonomy blocker now that GitHub-backed PREDICTION_RESULT_RECEIPT_V1 is operational. State whether it can be left as legacy/diagnostic debt.\n2. Identify every remaining hard blocker to safe autonomous build/research execution, especially production branch reconciliation, representation gates, dirty/untracked worktree handling, publication flow, continuation/result delivery, service/runtime sync, and final verification.\n3. Explain why production branch architecture/sol-builder-astra-reviewer cannot simply be reset/switched, and whether the current representation-gate approach is sound.\n4. Audit for circular dependencies or overengineering in continuation/ACK/result-receipt logic. Prefer the smallest architecture that preserves at-most-once, same-chat routing, fail-closed safety, and no WSL remote writes.\n5. Assess whether the current projectexecutor capabilities are sufficient to finish autonomously without human terminal intervention.\n6. Give a minimal ordered repair/closure plan, each step with deterministic acceptance evidence required before the next step.\n7. Give a final verdict using exactly one of: READY_AFTER_RECONCILIATION, NEEDS_TARGETED_REPAIR, or ARCHITECTURE_RETHINK_REQUIRED.\n8. Explicitly distinguish operational readiness from formal Tier-A qualification and keep NO_PROVEN_EDGE unchanged.\nDo not use tools, do not change files, do not spend money, do not suggest relaxing live-trading/paid/wallet/credential boundaries.",
+      "paths": [
+        "control/bridge_commands/CURRENT_STATE.md",
+        "control/bridge_commands/OPERATIONS.md",
+        "control/bridge_commands/SESSION_ROUTING.md",
+        "control/bridge_commands/RESULT_RECEIPT_SCHEMA_V1.json",
+        "control/bridge_commands/command_bus_poller.py",
+        "control/tampermonkey_multichat/PROTOCOL.md",
+        "control/tampermonkey_multichat/prediction-chat-wake.user.js",
+        "control/browser_bridge.py",
+        "control/codex_supervisor/supervisor.py",
+        "control/codex_supervisor/build_wake.py",
+        "control/codex_supervisor/build_dispatch.py",
+        "control/codex_supervisor/build_planner.py",
+        "control/codex_supervisor/candidate_dispatch.py",
+        "control/codex_supervisor/candidate_validation.py",
+        "control/PROJECT_EXECUTOR.md",
+        "control/NEW_SESSION_LOCAL_EXECUTION.md"
+      ]
+    }
+  ]
+}
