@@ -161,9 +161,44 @@ def select_next(supervisor,repo):
     if root.exists():
         for path in sorted(root.glob('*.json')):
             item=json.loads(path.read_text())
-            if item.get('queue_status')=='NEEDS_BUILD':
+            state=item.get('queue_status')
+
+            if state=='ASTRA_PREBUILD_REVIEW':
+                import model_quality_gate,astra_review_wake
+                try:
+                    applied,review_ref=model_quality_gate.apply_review(supervisor,P(repo),path,'PREBUILD')
+                except model_quality_gate.ReviewGateError as exc:
+                    reason='ASTRA_PREBUILD_REVIEW_INVALID:'+str(exc)[:90]
+                    print(json.dumps({'event':'QUEUE_BLOCKED','candidate_id':item.get('candidate_id'),'reason':reason}),flush=True)
+                    return {'queue_blocked':True,'reason':reason,'candidate_id':item.get('candidate_id')}
+                if applied is None:
+                    try:wake=astra_review_wake.ensure_review_continuation(supervisor,P(repo),item,'PREBUILD')
+                    except astra_review_wake.AstraReviewWakeBlocked as exc:
+                        reason='ASTRA_PREBUILD_WAKE_BLOCKED:'+str(exc)[:90]
+                        print(json.dumps({'event':'QUEUE_BLOCKED','candidate_id':item.get('candidate_id'),'reason':reason}),flush=True)
+                        return {'queue_blocked':True,'reason':reason,'candidate_id':item.get('candidate_id')}
+                    print(json.dumps({'event':'ASTRA_REVIEW_WAKE','candidate_id':item.get('candidate_id'),'phase':'PREBUILD','continuation_id':wake.get('continuation_id'),'state':wake.get('continuation_state')}),flush=True)
+                    return {'queue_blocked':True,'reason':'ASTRA_PREBUILD_REVIEW_QUEUED','candidate_id':item.get('candidate_id'),'continuation_id':wake.get('continuation_id')}
+                item=applied;state=item.get('queue_status')
+                if state=='REJECT':continue
+                if state=='NEEDS_REVISION':
+                    return {'queue_blocked':True,'reason':'ASTRA_PREBUILD_REVISE','candidate_id':item.get('candidate_id')}
+
+            if state=='NEEDS_BUILD':
+                # No legacy or hand-written NEEDS_BUILD may bypass the Astra gate.
+                review=item.get('astra_reviews',{}).get('PREBUILD') if isinstance(item.get('astra_reviews'),dict) else None
+                if not isinstance(review,dict) or review.get('decision')!='APPROVE' or review.get('reviewer_model')!='GPT-6 Astra':
+                    migrated=dict(item);migrated['queue_status']='ASTRA_PREBUILD_REVIEW'
+                    migrated['astra_gate']={'phase':'PREBUILD','status':'REVIEW_REQUIRED','required_model':'GPT-6 Astra','economic_policy':'ANY_POSITIVE_NET_EDGE_COUNTS','minimum_net_profit_eur':0.0}
+                    if isinstance(migrated.get('build_handoff'),dict):
+                        pending=dict(migrated.pop('build_handoff'));pending['status']='AWAITING_ASTRA_PREBUILD_REVIEW';migrated['pending_build_handoff']=pending
+                    from supervisor import atomic
+                    atomic(path,migrated)
+                    return {'queue_blocked':True,'reason':'ASTRA_PREBUILD_REVIEW_REQUIRED','candidate_id':item.get('candidate_id')}
                 plan=item.get('build_handoff',{})
                 if plan.get('operation')=='PROTOCOL_DEATHCHECK_VALIDATION':
+                    local=pending_validation_task(supervisor,repo)
+                    if local:return local
                     return {'queue_blocked':True,'reason':'NEEDS_BUILD_FIXED_VALIDATOR_PENDING','candidate_id':item.get('candidate_id')}
                 import build_wake
                 try:
@@ -172,14 +207,58 @@ def select_next(supervisor,repo):
                     reason=str(exc)[:120] or 'AUTOBUILD_WAKE_BLOCKED'
                     print(json.dumps({'event':'QUEUE_BLOCKED','candidate_id':item.get('candidate_id'),'reason':reason}),flush=True)
                     return {'queue_blocked':True,'reason':reason,'candidate_id':item.get('candidate_id')}
-                state=str(wake.get('continuation_state') or '')
+                wake_state=str(wake.get('continuation_state') or '')
                 reason='AUTOBUILD_CHAT_WAKE_QUEUED'
-                if state=='DONE':reason='AUTOBUILD_DONE_AWAITING_CANDIDATE_SOURCE_UPDATE'
-                elif state in {'BLOCKED','CONFLICT','BLOCKED_TRANSPORT'}:reason='AUTOBUILD_CONTINUATION_'+state
-                print(json.dumps({'event':'AUTOBUILD_CHAT_WAKE','candidate_id':item.get('candidate_id'),'continuation_id':wake.get('continuation_id'),'state':state}),flush=True)
+                if wake_state=='DONE':reason='AUTOBUILD_DONE_AWAITING_CANDIDATE_SOURCE_UPDATE'
+                elif wake_state in {'BLOCKED','CONFLICT','BLOCKED_TRANSPORT'}:reason='AUTOBUILD_CONTINUATION_'+wake_state
+                print(json.dumps({'event':'AUTOBUILD_CHAT_WAKE','candidate_id':item.get('candidate_id'),'continuation_id':wake.get('continuation_id'),'state':wake_state}),flush=True)
                 return {'queue_blocked':True,'reason':reason,'candidate_id':item.get('candidate_id'),'continuation_id':wake.get('continuation_id')}
-            if item.get('queue_status')=='VALIDATION':return {'queue_blocked':True,'reason':'VALIDATION_COMPLETE_PROSPECTIVE_COLLECTOR_MISSING','candidate_id':item.get('candidate_id')}
-            if item.get('queue_status')=='NEEDS_REVISION':return {'queue_blocked':True,'reason':'NEEDS_REVISION_REQUIRES_NEW_VERSION_AND_REVIEW','candidate_id':item.get('candidate_id')}
+
+            if state=='ASTRA_PREMEASUREMENT_REVIEW':
+                import model_quality_gate,astra_review_wake
+                try:
+                    applied,review_ref=model_quality_gate.apply_review(supervisor,P(repo),path,'PREMEASUREMENT')
+                except model_quality_gate.ReviewGateError as exc:
+                    reason='ASTRA_PREMEASUREMENT_REVIEW_INVALID:'+str(exc)[:80]
+                    print(json.dumps({'event':'QUEUE_BLOCKED','candidate_id':item.get('candidate_id'),'reason':reason}),flush=True)
+                    return {'queue_blocked':True,'reason':reason,'candidate_id':item.get('candidate_id')}
+                if applied is None:
+                    try:wake=astra_review_wake.ensure_review_continuation(supervisor,P(repo),item,'PREMEASUREMENT')
+                    except astra_review_wake.AstraReviewWakeBlocked as exc:
+                        reason='ASTRA_PREMEASUREMENT_WAKE_BLOCKED:'+str(exc)[:80]
+                        print(json.dumps({'event':'QUEUE_BLOCKED','candidate_id':item.get('candidate_id'),'reason':reason}),flush=True)
+                        return {'queue_blocked':True,'reason':reason,'candidate_id':item.get('candidate_id')}
+                    print(json.dumps({'event':'ASTRA_REVIEW_WAKE','candidate_id':item.get('candidate_id'),'phase':'PREMEASUREMENT','continuation_id':wake.get('continuation_id'),'state':wake.get('continuation_state')}),flush=True)
+                    return {'queue_blocked':True,'reason':'ASTRA_PREMEASUREMENT_REVIEW_QUEUED','candidate_id':item.get('candidate_id'),'continuation_id':wake.get('continuation_id')}
+                item=applied;state=item.get('queue_status')
+                if state=='REJECT':continue
+                if state=='NEEDS_REVISION':
+                    return {'queue_blocked':True,'reason':'ASTRA_PREMEASUREMENT_REVISE','candidate_id':item.get('candidate_id')}
+
+            if state=='MEASUREMENT_READY':
+                import measurement_wake
+                try:wake=measurement_wake.ensure_measurement_continuation(supervisor,item)
+                except measurement_wake.MeasurementWakeBlocked as exc:
+                    reason='MEASUREMENT_WAKE_BLOCKED:'+str(exc)[:100]
+                    print(json.dumps({'event':'QUEUE_BLOCKED','candidate_id':item.get('candidate_id'),'reason':reason}),flush=True)
+                    return {'queue_blocked':True,'reason':reason,'candidate_id':item.get('candidate_id')}
+                wake_state=str(wake.get('continuation_state') or '')
+                reason='PROSPECTIVE_MEASUREMENT_WAKE_QUEUED'
+                if wake_state=='DONE':reason='PROSPECTIVE_MEASUREMENT_DONE_AWAITING_RESULT'
+                elif wake_state in {'BLOCKED','CONFLICT','BLOCKED_TRANSPORT'}:reason='PROSPECTIVE_MEASUREMENT_CONTINUATION_'+wake_state
+                print(json.dumps({'event':'MEASUREMENT_WAKE','candidate_id':item.get('candidate_id'),'continuation_id':wake.get('continuation_id'),'state':wake_state}),flush=True)
+                return {'queue_blocked':True,'reason':reason,'candidate_id':item.get('candidate_id'),'continuation_id':wake.get('continuation_id')}
+
+            if state=='VALIDATION':
+                migrated=dict(item);migrated['queue_status']='ASTRA_PREMEASUREMENT_REVIEW'
+                migrated['astra_gate']={'phase':'PREMEASUREMENT','status':'REVIEW_REQUIRED','required_model':'GPT-6 Astra','economic_policy':'ANY_POSITIVE_NET_EDGE_COUNTS','minimum_net_profit_eur':0.0,'measurement_scope':'READ_ONLY_PROSPECTIVE_MARKET_DATA'}
+                migrated['activation']={'authorized':False,'blockers':['astra_premeasurement_review_required','read_only_prospective_measurement_only','no_order_submission']}
+                from supervisor import atomic
+                atomic(path,migrated)
+                return {'queue_blocked':True,'reason':'ASTRA_PREMEASUREMENT_REVIEW_REQUIRED','candidate_id':item.get('candidate_id')}
+
+            if state=='NEEDS_REVISION':
+                return {'queue_blocked':True,'reason':'NEEDS_REVISION_REQUIRES_NEW_VERSION_AND_REVIEW','candidate_id':item.get('candidate_id')}
     return None
 
 def apply_validation(supervisor,task,report):
