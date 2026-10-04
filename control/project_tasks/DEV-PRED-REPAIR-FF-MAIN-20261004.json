@@ -1,0 +1,29 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-REPAIR-FF-MAIN-20261004",
+  "source_commit": "0d835f16222ed117cfa4504eaf5897188dc5c861",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "high"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "production_fast_forward"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 240,
+  "notes": "Prediction production checkout repair only: fail-closed fast-forward main to canonical snapshot. Do not modify bridge/executor/routing.",
+  "operations": [
+    {
+      "type": "production_ff",
+      "target_commit": "0d835f16222ed117cfa4504eaf5897188dc5c861"
+    }
+  ]
+}
