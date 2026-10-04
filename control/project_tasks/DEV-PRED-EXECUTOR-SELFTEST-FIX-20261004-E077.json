@@ -1,0 +1,29 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-EXECUTOR-SELFTEST-FIX-20261004-E077",
+  "source_commit": "aa8d5a59f1d3743c89938167039e7bcfee091a5d",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "run_tests"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 420,
+  "notes": "Regression rerun after fixing missing import time in tests/test_project_task_executor.py. Full executor selftest only; no production mutation.",
+  "operations": [
+    {
+      "type": "executor_selftest",
+      "timeout_seconds": 300
+    }
+  ]
+}
