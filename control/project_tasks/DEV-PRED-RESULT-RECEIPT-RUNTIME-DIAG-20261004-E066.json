@@ -1,0 +1,35 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-RESULT-RECEIPT-RUNTIME-DIAG-20261004-E066",
+  "source_commit": "e1b0e2974c6fcbf91d19663d57d1dc613a7fd7c0",
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "run_project_python",
+    "read_runtime"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 180,
+  "notes": "Read-only runtime verification that an already-created assistant-side result receipt was processed and moved the exact event inflight->sent. Script intentionally exits 42 to surface one compact diagnostic line in bridge detail.",
+  "operations": [
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/result_receipt_runtime_diag_e066.py"
+      ],
+      "timeout_seconds": 60
+    }
+  ]
+}
