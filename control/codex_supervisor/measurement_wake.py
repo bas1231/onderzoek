@@ -46,7 +46,7 @@ def _control_route():
     return route_task_id, chat_id
 
 
-def ensure_measurement_continuation(supervisor, overlay: dict) -> dict:
+def ensure_measurement_continuation(supervisor, overlay: dict, *, repo: P | None = None) -> dict:
     if not isinstance(overlay, dict) or overlay.get("queue_status") != "MEASUREMENT_READY":
         raise MeasurementWakeBlocked("MEASUREMENT_READY_REQUIRED")
     cid = str(overlay.get("candidate_id") or "")
@@ -65,6 +65,16 @@ def ensure_measurement_continuation(supervisor, overlay: dict) -> dict:
         raise MeasurementWakeBlocked("ASTRA_PREMEASUREMENT_APPROVAL_REQUIRED")
     if approval.get("ref") != auth.get("astra_premeasurement_review_ref"):
         raise MeasurementWakeBlocked("ASTRA_PREMEASUREMENT_REF_MISMATCH")
+    import model_quality_gate
+    repo_root = P(repo) if repo is not None else P(__file__).resolve().parents[2]
+    try:
+        canonical_review, canonical_ref = model_quality_gate.load_review(repo_root, overlay, "PREMEASUREMENT")
+    except model_quality_gate.ReviewGateError as exc:
+        raise MeasurementWakeBlocked("ASTRA_PREMEASUREMENT_REVIEW_INVALID:" + str(exc)[:80]) from exc
+    if canonical_review is None or canonical_review.get("decision") != "APPROVE":
+        raise MeasurementWakeBlocked("ASTRA_PREMEASUREMENT_REVIEW_FILE_REQUIRED")
+    if approval.get("ref") != canonical_ref:
+        raise MeasurementWakeBlocked("ASTRA_PREMEASUREMENT_CANONICAL_REF_MISMATCH")
 
     route_task_id, chat_id = _control_route()
     identity = {
