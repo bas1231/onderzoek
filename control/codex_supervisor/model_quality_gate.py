@@ -47,7 +47,6 @@ def review_binding(overlay: dict[str, Any], phase: str) -> str:
         "originating_task_id": overlay.get("originating_task_id"),
         "completion_hash": overlay.get("completion_hash"),
         "validation_hash": overlay.get("validation_hash"),
-        "queue_status": overlay.get("queue_status"),
         "finding": overlay.get("finding"),
         "next_action": overlay.get("next_action"),
         "candidate_snapshot": overlay.get("candidate_snapshot"),
