@@ -15,8 +15,8 @@ class Supervisor:
         self.root = root
 
 
-def overlay():
-    return {
+def overlay(approved=True):
+    item = {
         "candidate_id": "CANARY",
         "queue_status": "NEEDS_BUILD",
         "source_hashes": {"knowledge/candidates/CANARY.json": "a" * 64},
@@ -32,6 +32,15 @@ def overlay():
         "paid_actions": False,
         "wallet_actions": False,
     }
+    if approved:
+        item["astra_reviews"] = {
+            "PREBUILD": {
+                "decision": "APPROVE",
+                "reviewer_model": "GPT-6 Astra",
+                "ref": "knowledge/reviews/astra/canary-prebuild.json",
+            }
+        }
+    return item
 
 
 def route_fixture(tmp_path):
@@ -128,7 +137,7 @@ def test_candidate_dispatch_legacy_needs_build_cannot_bypass_astra(tmp_path, mon
     runtime = tmp_path / "runtime"
     states = runtime / "candidate_states"
     states.mkdir(parents=True)
-    item = overlay()
+    item = overlay(approved=False)
     item["finding"] = "generic build needed"
     item["next_action"] = "build bounded collector"
     path = states / "generic.json"
