@@ -1,0 +1,36 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-CONT-NEXT-352389037745dfe1f8620bf6",
+  "source_commit": "ba9b7533be865d168e4ad5f95da6b8041e5b039b",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "run_project_python",
+    "read_runtime"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 180,
+  "notes": "Read-only continuation probe for the full live A-to-Z V4 qualification. Do not modify code, infrastructure, services, runtime state or market state. Only print the existing V4 test/candidate/overlay status.",
+  "operations": [
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/jobs/full_a2z_live_qualification_v4.py",
+        "status"
+      ],
+      "timeout_seconds": 120
+    }
+  ]
+}
