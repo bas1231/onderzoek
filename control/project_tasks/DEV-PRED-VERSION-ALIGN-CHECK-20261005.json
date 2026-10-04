@@ -1,0 +1,62 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-VERSION-ALIGN-CHECK-20261005",
+  "source_commit": "838cd3749ec457fafa511187b115c92f7ff8c6d6",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_runtime",
+    "user_service_manage"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 300,
+  "notes": "Verify that the Prediction files and installed runtime used by the A-to-Z/Astra chain are aligned with canonical Git source before diagnosing further. Read-only except task worktree.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/version_align_check_20261005.py",
+      "content": "from pathlib import Path\nimport hashlib\nROOT=Path.cwd()\nPROD=Path('/home/leonh/prediction_research_prod')\nHOME=Path.home()\nrels=[\n'control/codex_supervisor/astra_review_wake.py',\n'control/codex_supervisor/model_quality_gate.py',\n'control/codex_supervisor/build_wake.py',\n'control/codex_supervisor/measurement_wake.py',\n'control/codex_supervisor/candidate_dispatch.py',\n'control/tampermonkey_multichat/continuation_manager.py',\n'control/tampermonkey_multichat/bridge_server_continuation.py',\n'control/bridge_commands/command_bus_poller.py',\n]\nruntime_map={\n'control/tampermonkey_multichat/continuation_manager.py':HOME/'.local/share/prediction-chat-bridge/continuation_manager.py',\n'control/tampermonkey_multichat/bridge_server_continuation.py':HOME/'.local/share/prediction-chat-bridge/bridge_server.py',\n'control/bridge_commands/command_bus_poller.py':HOME/'.local/share/prediction-command-bus/command_bus_poller.py',\n}\ndef sha(p):\n    try:return hashlib.sha256(p.read_bytes()).hexdigest()\n    except Exception:return None\nprod_m=[]\nruntime_m=[]\nfor rel in rels:\n    c=sha(ROOT/rel); p=sha(PROD/rel)\n    state='MATCH' if c and p==c else ('MISSING' if p is None else 'DIFF')\n    print(f'PROD {rel} {state} canonical={c} prod={p}',flush=True)\n    if state!='MATCH': prod_m.append(rel)\nfor rel,dst in runtime_map.items():\n    c=sha(ROOT/rel); r=sha(dst)\n    state='MATCH' if c and r==c else ('MISSING' if r is None else 'DIFF')\n    print(f'RUNTIME {dst} {state} canonical={c} runtime={r}',flush=True)\n    if state!='MATCH': runtime_m.append(rel)\nprint('PROD_MISMATCH_COUNT='+str(len(prod_m)),flush=True)\nprint('RUNTIME_MISMATCH_COUNT='+str(len(runtime_m)),flush=True)\nif prod_m: raise SystemExit(61)\nif runtime_m: raise SystemExit(62)\nprint('VERSION_ALIGNMENT=PASS',flush=True)\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/version_align_check_20261005.py"
+      ],
+      "timeout_seconds": 120
+    },
+    {
+      "type": "service",
+      "verb": "is-active",
+      "unit": "prediction-chat-wake.service"
+    },
+    {
+      "type": "service",
+      "verb": "is-active",
+      "unit": "prediction-command-bus.timer"
+    },
+    {
+      "type": "service",
+      "verb": "is-active",
+      "unit": "prediction-codex-supervisor.timer"
+    },
+    {
+      "type": "service",
+      "verb": "is-active",
+      "unit": "prediction-research-hourly-director.timer"
+    }
+  ]
+}
