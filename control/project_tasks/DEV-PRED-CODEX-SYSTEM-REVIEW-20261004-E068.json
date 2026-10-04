@@ -1,0 +1,65 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-CODEX-SYSTEM-REVIEW-20261004-E068",
+  "source_commit": "8ef61c083d9f99d8aa35290ad6c1ad0ec371fa37",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "run_project_python",
+    "codex_review"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 900,
+  "notes": "Independent read-only high-reasoning system review. E064 exceeded the project timeout; E067 was rejected by the DEV runner because its command timeout exceeded the hard 900-second ceiling. E068 is the first transport-valid attempt and bounds the Codex worker to 780 seconds.",
+  "operations": [
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "-m",
+        "compileall",
+        "control/codex_supervisor/supervisor.py",
+        "tests/codex_supervisor/test_supervisor.py"
+      ],
+      "timeout_seconds": 60
+    },
+    {
+      "type": "codex_review",
+      "review_task_id": "CODEX_SYSTEM_REVIEW_20261004_E068",
+      "instructions": "Voer een onafhankelijke Tier-A infrastructuurreview uit van het huidige Prediction-systeem. Wees adversarieel, evidence-driven en fail-closed. Maak geen reparaties. Financiële/wetenschappelijke status blijft NO_PROVEN_EDGE tenzij het pakket zelf het tegendeel formeel bewijst.\n\nActuele source-of-truth die je expliciet moet toetsen, niet aannemen:\n1. GitHub command bus + capability-scoped projectexecutor zijn operationeel; WSL hoort GitHub read-only te zijn. Remote GitHub-writes horen uitsluitend via ChatGPT/GitHub connector te lopen.\n2. Generic autobuild NEEDS_BUILD -> continuation -> capability-scoped projectexecutor -> tests/canary/shadow -> result is meermaals operationeel PASS geweest.\n3. Publication handoff is stdlib-only getest: strict allowlist, exact payload/hash, idempotentie, oversized local-only. WSL git push is uit checkpoint/runtimepad verwijderd.\n4. De legacy Tampermonkey browser-ACK blijft defect: v0.4.8 op runtime, maar diagnostiek gaf ack_count=0. Dit mag NIET als opgelost worden bestempeld.\n5. Sindsdien is een GitHub-backed immutable result-receipt mechanisme toegevoegd. CURRENT_STATE claimt meerdere roundtrip acceptances waarbij exact event_id + source_task_id worden gevalideerd en inflight -> sent pas daarna duurzaam gebeurt. Beoordeel of deze route werkelijk at-most-once, route/task-bound, conflict-safe en replay-safe is, en of hij de legacy browser-ACK veilig kan vervangen zonder een verkeerde event/task te ACKen.\n6. Production staat op/komt uit lokale branch architecture/sol-builder-astra-reviewer met echte lokale architectuurcommits. Bekende unieke commits omvatten minimaal 1170607 'build: complete prospective shadow lifecycle', 16dcfb2 'build: complete autonomous Sol Astra runtime lifecycle', 8896d1d 'fix: accept bounded revision scope'. Deze branch/ref en eventuele dirty/untracked content mogen niet verloren gaan.\n7. Production-reconciliation gebruikt fail-closed representation gates: committed branch delta én dirty/untracked worktree-inhoud moeten exact door pinned canonical source zijn gerepresenteerd vóór cleanup/switch/fast-forward. Controleer of die invariant voldoende sterk is en waar hij kan falen.\n8. Bestaande onafhankelijke auditstatus was AUDIT_INCOMPLETE + RESIDUAL_RISK. Benoem welke oude findings aantoonbaar achterhaald zijn door nieuw bewijs en welke nog opnieuw bewezen moeten worden.\n9. Beoordeel de codex_review capability zelf als trust boundary. Als deze capability guardrails, credentials, extern netwerk, remote Git-write, production-write of reviewisolatie onbedoeld kan omzeilen: BLOCKER/HIGH naar ernst.\n10. Geen live trades/orders/cancellations, wallets/crypto/fund movement, credentials, sudo/root of betaalde acties. Review mag geen van deze grenzen versoepelen.\n11. E064 startte niet wegens ongeldige task timeout 2400 > executor max 1800. Dit zegt niets over de inhoudelijke review; E067 is de eerste geldige poging.\n12. De huidige main kan parallelle sessietasks bevatten. Beoordeel architectuur/invarianten, niet task-ID cosmetiek.\n\nVereiste output:\n- VERDICT: exact REVIEW_PASS, REVIEW_PASS_WITH_RESIDUAL_RISK of REVIEW_BLOCKED.\n- CRITICAL/HIGH findings, elk met bewijsredenering en concrete falsificatietest.\n- Result-receipt/continuation oordeel, inclusief exacte at-most-once/replay/routebinding risico's.\n- Legacy browser-ACK oordeel apart.\n- Production branch preservation/reconciliation oordeel.\n- Publication/no-remote-push oordeel.\n- Projectexecutor + codex_review capability safety oordeel.\n- Minimaal noodzakelijke releasevolgorde, genummerd en fail-closed.\n- De 3-5 end-to-end canaries die nog moeten slagen vóór 'systeem af'.\n- Governance/science conclusie; softwarestatus en NO_PROVEN_EDGE strikt scheiden.",
+      "paths": [
+        "control/bridge_commands/CURRENT_STATE.md",
+        "control/bridge_commands/RESULT_RECEIPT_SCHEMA_V1.json",
+        "control/bridge_commands/command_bus_poller.py",
+        "control/tampermonkey_multichat/continuation_manager.py",
+        "control/tampermonkey_multichat/bridge_server_continuation.py",
+        "control/tampermonkey_multichat/bridge_server_hardened.py",
+        "control/tampermonkey_multichat/bridge_server_session_bootstrap.py",
+        "control/tampermonkey_multichat/prediction-chat-wake.user.js",
+        "control/dev_checks/result_receipt_acceptance_e064.py",
+        "control/dev_checks/result_receipt_roundtrip_e066.py",
+        "control/hourly/publication_wake.py",
+        "control/hourly/git_checkpoint.py",
+        "control/hourly/runtime_sync.py",
+        "control/codex_supervisor/supervisor.py",
+        "control/codex_supervisor/build_wake.py",
+        "control/codex_supervisor/candidate_dispatch.py",
+        "control/codex_supervisor/candidate_validation.py",
+        "control/PROJECT_EXECUTOR.md",
+        "control/bridge_commands/OPERATIONS.md"
+      ],
+      "worker_timeout_seconds": 780
+    }
+  ]
+}
