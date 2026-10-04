@@ -18,6 +18,7 @@ def _configure(monkeypatch, root: Path):
     runs = root / "knowledge/runs"
     packets = runs / "agent_packets"
     candidates = root / "knowledge/candidates"
+    candidates.mkdir(parents=True, exist_ok=True)
     monkeypatch.setattr(ai_response, "ROOT", root)
     monkeypatch.setattr(ai_response, "RUNS", runs)
     monkeypatch.setattr(ai_response, "PACKETS", packets)
