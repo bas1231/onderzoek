@@ -189,6 +189,22 @@ def test_measurement_wake_is_read_only_and_highest_gpt_builder(tmp_path, monkeyp
     assert audit["live_trading"] is False
 
 
+def test_direct_measurement_wake_requires_astra_premeasurement_approval(tmp_path):
+    s = Supervisor(tmp_path / "runtime")
+    item = overlay("MEASUREMENT_READY")
+    item["measurement_authorization"] = {
+        "authorized": True,
+        "scope": "READ_ONLY_PROSPECTIVE_MARKET_DATA",
+        "astra_premeasurement_review_ref": "knowledge/reviews/astra/r.json",
+        "order_submission": False,
+        "live_trading": False,
+        "paid_actions": False,
+        "wallet_actions": False,
+    }
+    with pytest.raises(mw.MeasurementWakeBlocked, match="ASTRA_PREMEASUREMENT_APPROVAL_REQUIRED"):
+        mw.ensure_measurement_continuation(s, item)
+
+
 def test_measurement_wake_rejects_any_order_or_live_path(tmp_path):
     s = Supervisor(tmp_path / "runtime")
     item = overlay("MEASUREMENT_READY")
