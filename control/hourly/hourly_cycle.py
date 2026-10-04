@@ -43,6 +43,7 @@ def main() -> int:
     quality = load('source_quality', R / 'control/hourly/source_quality.py')
     router = load('role_router', R / 'control/hourly/role_router.py')
     recon = load('recon_engine', R / 'control/hourly/recon_engine.py')
+    recon_candidate_bridge = load('recon_candidate_bridge', R / 'control/hourly/recon_candidate_bridge.py')
     market_scanner = load('market_instance_scanner', R / 'control/hourly/market_instance_scanner.py')
     memory = load('memory_context', R / 'control/hourly/memory_context.py')
     hydrator = load('packet_hydrator', R / 'control/hourly/packet_hydrator.py')
@@ -77,6 +78,7 @@ def main() -> int:
     routing_path.write_text(json.dumps(routing, indent=2, sort_keys=True) + chr(10))
 
     recon_data, recon_path = recon.run(run['run_id'], routing_path)
+    promotion_data, promotion_path = recon_candidate_bridge.promote(run['run_id'], root=R)
     memory_data, memory_path = memory.build(run['run_id'])
 
     # One canonical candidate snapshot per cycle: routing, Director handoff and
@@ -170,6 +172,14 @@ def main() -> int:
         'watchlist': recon_data.get('watchlist', {}),
         'economic_conclusion': recon_data.get('economic_conclusion', 'NO_PROVEN_EDGE'),
     }
+    current['autonomous_candidate_creation'] = {
+        'ref': str(promotion_path.relative_to(R)),
+        'created_count': promotion_data.get('created_count', 0),
+        'skipped_existing_count': promotion_data.get('skipped_existing_count', 0),
+        'ineligible_count': promotion_data.get('ineligible_count', 0),
+        'policy': promotion_data.get('policy', {}),
+        'economic_conclusion': 'NO_PROVEN_EDGE',
+    }
     current['agent_control_plane'] = {
         'architecture': 'E007_SIX_DOMAIN',
         'packet_dir': str(packet_dir.relative_to(R)),
@@ -236,6 +246,8 @@ def main() -> int:
             handle.write('Watchlist changes: ' + json.dumps(recon_data.get('watchlist', {}), sort_keys=True) + chr(10))
             handle.write('Economic conclusion: ' + str(recon_data.get('economic_conclusion', 'NO_PROVEN_EDGE')) + chr(10))
             handle.write('Recon evidence: ' + str(recon_path.relative_to(R)) + chr(10))
+            handle.write('Autonomous candidates created: ' + str(promotion_data.get('created_count', 0)) + chr(10))
+            handle.write('Autonomous candidate promotion receipt: ' + str(promotion_path.relative_to(R)) + chr(10))
 
             for role, data in routing.items():
                 handle.write('- capability ' + role + ': ' + str(len(data.get('evidence', []))) + ' routed evidence items' + chr(10))
