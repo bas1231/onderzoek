@@ -1,0 +1,39 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-FULL-A2Z-LIVE-V4-RO-STATUS-DUMP-20261004",
+  "source_commit": "777c81b73b9564a433ed711b175300817e40b75b",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "run_project_python",
+    "read_runtime"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 180,
+  "notes": "Pure read-only diagnostic for existing Full A2Z V4 temp runtime. Execute the already-existing status command only. No code, infra, service, runtime, market or cost mutation. allowed_exit_codes intentionally excludes 0 so stdout is surfaced in TaskError detail.",
+  "operations": [
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/jobs/full_a2z_live_qualification_v4.py",
+        "status"
+      ],
+      "timeout_seconds": 120,
+      "allowed_exit_codes": [
+        1
+      ]
+    }
+  ]
+}
