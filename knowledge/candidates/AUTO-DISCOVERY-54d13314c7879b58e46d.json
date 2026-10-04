@@ -1,0 +1,42 @@
+{
+  "candidate_id": "AUTO-DISCOVERY-54d13314c7879b58e46d",
+  "created_at": "2026-10-04T21:35:00+00:00",
+  "updated_at": "2026-10-04T21:35:00+00:00",
+  "provenance": "AUTONOMOUS_PRIMARY_SCOUT",
+  "provenance_note": "Created from a structured primary_scout candidate proposal. This is durable research intake, not economic promotion; Director review and falsification remain required.",
+  "origin_primary_scout_candidate_key": "full-a2z-live-qualification-20261004-v4",
+  "origin_run_id": "qualification-live-a2z-20261004-v4",
+  "origin_agent_id": "discovery",
+  "lane": "primary_scout",
+  "phase": "DISCOVERED",
+  "decision": "UNPROVEN",
+  "scientific_status": "NO_PROVEN_EDGE",
+  "queue_status": "NEEDS_DIRECTOR",
+  "priority": "P0",
+  "hypothesis": "A deterministic complement-price checker must identify an executable positive edge only when YES ask + NO ask + fees is strictly below the guaranteed 1.00 payout.",
+  "mechanism": "Complementary YES/NO acquisition has positive gross edge only when the synchronized executable acquisition cost plus fees is below the guaranteed payout.",
+  "open_question": "Can the complete governed research system build and validate a checker that rejects a 1.05-cost no-edge fixture, detects a 0.99-cost one-cent positive control, and then reaches NO_PROVEN_EDGE on a preregistered read-only prospective qualification stream?",
+  "next_decisive_test": "Build the bounded complement checker after Astra PREBUILD approval; require 1.05 NO_EDGE and 0.99 +0.01 EDGE controls, then require Astra PREMEASUREMENT approval before a frozen read-only prospective qualification stream and final Director review.",
+  "scout_evidence_summary": "Synthetic system-qualification fixture only. It is designed to exercise every governance and execution transition and is not market evidence.",
+  "scout_evidence_refs": [
+    "knowledge/evidence/qualification/FULL-A2Z-LIVE-20261004-V4.json"
+  ],
+  "needed_data": [],
+  "active_experiment_ids": [],
+  "prospective_protocols": [],
+  "evidence_refs": [
+    "knowledge/evidence/qualification/FULL-A2Z-LIVE-20261004-V4.json"
+  ],
+  "resume_condition": null,
+  "resurrection_condition": null,
+  "stop_condition": null,
+  "live_trading": false,
+  "paid_actions": false,
+  "wallet_actions": false,
+  "openai_api": false,
+  "qualification_fixture": true,
+  "qualification_id": "FULL-A2Z-LIVE-20261004-V4",
+  "qualification_priority_override": "P0_CONTROL_PLANE_ONLY",
+  "qualification_measurement_mode": "FROZEN_SYNTHETIC_PROSPECTIVE_STREAM",
+  "qualification_expected_final": "NO_PROVEN_EDGE"
+}
