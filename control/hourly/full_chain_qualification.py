@@ -219,7 +219,7 @@ def approve_astra_fixture(repo: Path, runtime: Path, s, cid: str, phase: str):
     return updated, ref
 
 
-def invoke_build_wake(s, overlay, work: Path):
+def invoke_build_wake(s, overlay, work: Path, repo: Path):
     bridge = work / "bridge"
     routes = bridge / "routes"
     routes.mkdir(parents=True, exist_ok=True)
@@ -239,13 +239,14 @@ def invoke_build_wake(s, overlay, work: Path):
         bridge_data=bridge,
         route_config=bridge / "autobuild_control_route.json",
         routes_dir=routes,
+        repo=repo,
     )
     if wake.get("continuation_state") != "CONTINUE_REQUESTED":
         raise RuntimeError("BUILD_CONTINUATION_NOT_CREATED")
     return wake
 
 
-def invoke_measurement_wake(s, overlay, work: Path):
+def invoke_measurement_wake(s, overlay, work: Path, repo: Path):
     bridge = work / "bridge"
     routes = bridge / "routes"
     config = bridge / "autobuild_control_route.json"
@@ -254,7 +255,7 @@ def invoke_measurement_wake(s, overlay, work: Path):
         measurement_wake.BRIDGE_DATA = bridge
         measurement_wake.ROUTE_CONFIG = config
         measurement_wake.ROUTES = routes
-        wake = measurement_wake.ensure_measurement_continuation(s, overlay)
+        wake = measurement_wake.ensure_measurement_continuation(s, overlay, repo=repo)
     finally:
         measurement_wake.BRIDGE_DATA, measurement_wake.ROUTE_CONFIG, measurement_wake.ROUTES = old
     if wake.get("continuation_state") != "CONTINUE_REQUESTED":
@@ -441,7 +442,7 @@ def run(mode: str, result_path: Path) -> int:
             result["astra_prebuild_review_ref"] = prebuild_ref
             result["stages"]["astra_prebuild_review"] = "PASS"
 
-            wake = invoke_build_wake(s, overlay1, work)
+            wake = invoke_build_wake(s, overlay1, work, repo)
             result["build_continuation_id"] = wake.get("continuation_id")
             result["stages"]["build_wake"] = "PASS"
 
@@ -476,7 +477,7 @@ def run(mode: str, result_path: Path) -> int:
             result["astra_premeasurement_review_ref"] = premeasurement_ref
             result["stages"]["astra_premeasurement_review"] = "PASS"
 
-            measurement_wake_result = invoke_measurement_wake(s, overlay2, work)
+            measurement_wake_result = invoke_measurement_wake(s, overlay2, work, repo)
             result["measurement_continuation_id"] = measurement_wake_result.get("continuation_id")
             result["stages"]["measurement_wake"] = "PASS"
 
