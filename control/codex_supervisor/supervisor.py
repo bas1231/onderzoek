@@ -278,7 +278,11 @@ class CodexWorker:
             with os.fdopen(os.open(folder/'events.jsonl',os.O_WRONLY|os.O_CREAT|os.O_EXCL|os.O_DSYNC,0o600),'w') as output,(folder/'stderr.log').open('w') as err:
                 proc=subprocess.Popen(args,cwd=cwd,env=env,stdin=subprocess.PIPE,stdout=output,stderr=err,text=True,start_new_session=True,pass_fds=(lock_fd,))
                 atomic(folder/'WORKER.json',{'pid':proc.pid,'model':model,'thread_id':thread,'started_at':time.time(),'command_flags':args[1:-1]})
-                try:proc.communicate(prompt,timeout=1800)
+                raw_timeout=os.environ.get('PREDICTION_CODEX_WORKER_TIMEOUT_SECONDS','1800')
+                try:worker_timeout=int(raw_timeout)
+                except (TypeError,ValueError):raise Blocked('CODEX_WORKER_TIMEOUT_INVALID')
+                if not 60<=worker_timeout<=1800:raise Blocked('CODEX_WORKER_TIMEOUT_INVALID')
+                try:proc.communicate(prompt,timeout=worker_timeout)
                 except subprocess.TimeoutExpired:os.killpg(proc.pid,signal.SIGTERM);proc.wait(timeout=15);return -1
                 output.flush();os.fsync(output.fileno())
                 return proc.returncode
