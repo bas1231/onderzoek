@@ -213,7 +213,7 @@ def select_next(supervisor,repo):
                     return {'queue_blocked':True,'reason':'NEEDS_BUILD_FIXED_VALIDATOR_PENDING','candidate_id':item.get('candidate_id')}
                 import build_wake
                 try:
-                    wake=build_wake.ensure_build_continuation(supervisor,item)
+                    wake=build_wake.ensure_build_continuation(supervisor,item,repo=P(repo))
                 except build_wake.BuildWakeBlocked as exc:
                     reason=str(exc)[:120] or 'AUTOBUILD_WAKE_BLOCKED'
                     print(json.dumps({'event':'QUEUE_BLOCKED','candidate_id':item.get('candidate_id'),'reason':reason}),flush=True)
@@ -248,7 +248,7 @@ def select_next(supervisor,repo):
 
             if state=='MEASUREMENT_READY':
                 import measurement_wake
-                try:wake=measurement_wake.ensure_measurement_continuation(supervisor,item)
+                try:wake=measurement_wake.ensure_measurement_continuation(supervisor,item,repo=P(repo))
                 except measurement_wake.MeasurementWakeBlocked as exc:
                     reason='MEASUREMENT_WAKE_BLOCKED:'+str(exc)[:100]
                     print(json.dumps({'event':'QUEUE_BLOCKED','candidate_id':item.get('candidate_id'),'reason':reason}),flush=True)
