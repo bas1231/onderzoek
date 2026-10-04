@@ -1,0 +1,18 @@
+{
+  "schema": "PVA_CANDIDATE_EVIDENCE_V1",
+  "evidence_id": "MANUAL-SCOUT-HENGELTJES-20260924-PROTOCOL-REVISION-V2",
+  "candidate_id": "MANUAL-SCOUT-HENGELTJES-20260924",
+  "evidence_kind": "protocol_revision",
+  "status": "VALID",
+  "evidence_timestamp": "2026-10-04T18:03:00+00:00",
+  "available_at": "2026-10-04T18:04:00+00:00",
+  "archived_at": "2026-10-04T18:05:00+00:00",
+  "backfill": false,
+  "source_manifest_ref": "knowledge/evidence/manifests/MANUAL-SCOUT-HENGELTJES-20260924-protocol-revision-v2.json",
+  "source_manifest_sha256": "88e00dd2bac0b25448e487d7f2b3266fac20b362c4e6f7e784ecc849585030e6",
+  "protocol_ref": "knowledge/candidates/protocols/MANUAL-SCOUT-HENGELTJES-20260924-shadow-v2.json",
+  "protocol_sha256": "3becc2931ebce22de3691d2c5aff64ff51be2bfda58d87834aaa75bb7ad7eebf",
+  "prior_protocol_ref": "knowledge/candidates/protocols/MANUAL-SCOUT-HENGELTJES-20260924-shadow-v1.json",
+  "prior_protocol_sha256": "fa22f6b46adb2e5c923d6282f55205dd0a0d42343ff15484c4b302fdd8bd56b1",
+  "revision_reason": "Freeze deterministic T-30m settlement-event, ticker and side selection to close the no-hindsight ambiguity before Director re-review."
+}
