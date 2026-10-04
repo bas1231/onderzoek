@@ -1,0 +1,29 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-REPAIR-SWITCH-MAIN-DIAG-20261004",
+  "source_commit": "12ec1641258d30504d99e6b33a216dfa3c5c2e04",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "high"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "production_inspect"
+  ],
+  "timeout_seconds": 180,
+  "notes": "Read-only inspect after failed switch to main during Prediction checkout repair.",
+  "operations": [
+    {
+      "type": "production_inspect",
+      "require_head_equals_main": true,
+      "report_mode": "status"
+    }
+  ]
+}
