@@ -22,6 +22,8 @@ import build_wake
 import candidate_dispatch
 import candidate_reporting
 import candidate_queue
+import model_quality_gate
+import measurement_wake
 import supervisor
 
 RUN_ID = "hourly-A2ZFULL-20261004T220000+0200"
@@ -58,15 +60,23 @@ class ScriptedWorker:
                 "candidate_id": task["candidate_id"],
                 "queue_status": "NEEDS_BUILD",
                 "finding": "The scout hypothesis is falsifiable but requires the bounded complement-price checker before any economic conclusion.",
-                "next_action": "Build the local complement checker, run the frozen no-edge fixture and a positive control, then return immutable build-result evidence.",
+                "next_action": "Build the local complement checker, run the frozen no-edge fixture and a one-cent positive control, then return immutable build-result evidence.",
+                "scientific_status": "NO_PROVEN_EDGE",
+            }
+        elif self.calls == 2:
+            payload = {
+                "candidate_id": task["candidate_id"],
+                "queue_status": "VALIDATION",
+                "finding": "The checker and controls passed; the next decisive step is prospective read-only measurement on frozen current-data fixtures.",
+                "next_action": "Require Astra pre-measurement review, then deploy read-only/shadow measurement with no order path.",
                 "scientific_status": "NO_PROVEN_EDGE",
             }
         else:
             payload = {
                 "candidate_id": task["candidate_id"],
                 "queue_status": "REJECT",
-                "finding": "The built checker passed its technical tests and the frozen qualification fixture costs 1.05 for a 1.00 payout, so this fixture has no executable complement edge.",
-                "next_action": "Record NO_PROVEN_EDGE for the qualification fixture; retain the checker only as tested research tooling.",
+                "finding": "Prospective qualification observations all cost 1.05 for a 1.00 payout; no executable complement edge was observed, while the one-cent positive control was correctly detectable.",
+                "next_action": "Record NO_PROVEN_EDGE for this qualification fixture; retain the tested measurement tooling.",
                 "scientific_status": "NO_PROVEN_EDGE",
             }
         events = [
