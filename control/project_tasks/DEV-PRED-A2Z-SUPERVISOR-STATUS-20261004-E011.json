@@ -1,0 +1,30 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-A2Z-SUPERVISOR-STATUS-20261004-E011",
+  "source_commit": "3531bfd7d6d9e619b2801802f0af4b335cfe44d2",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "user_service_manage"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 180,
+  "notes": "Read-only A-to-Z diagnosis. systemctl status intentionally returns nonzero for failed supervisor so its status text is surfaced in TaskError detail.",
+  "operations": [
+    {
+      "type": "service",
+      "verb": "status",
+      "unit": "prediction-codex-supervisor.service"
+    }
+  ]
+}
