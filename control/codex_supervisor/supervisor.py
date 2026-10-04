@@ -84,6 +84,15 @@ class Supervisor:
     def state(self):
         row=self.db.execute('select state,task,reason,attempt,checkpoint,next_action,stamp,retry from transitions order by seq desc limit 1').fetchone()
         return dict(zip(['state','task_id','reason','attempt','checkpoint','next_action','timestamp','retry_at'],row)) if row else {'state':'IDLE','retry_at':0}
+    def usage_quota_until(self):
+        rows=self.db.execute("select stamp,retry from transitions where reason='USAGE_LIMIT'").fetchall()
+        return max((min(retry,stamp+USAGE_LIMIT_RETRY_SECONDS) for stamp,retry in rows),default=0)
+    def task_retry_at(self,task_id,status):
+        row=self.db.execute('select stamp,retry,reason from transitions where task=? order by seq desc limit 1',(task_id,)).fetchone()
+        if not row:return 0
+        stamp,retry,reason=row
+        if status=='PAUSED_USAGE_LIMIT' and reason=='USAGE_LIMIT':return min(retry,stamp+USAGE_LIMIT_RETRY_SECONDS)
+        return retry
     def transition(self,state,task,reason,attempt,checkpoint='',retry=0):
         if state not in STATES:raise Blocked('INVALID_STATE')
         if reason=='QUEUE_EMPTY':next_action='Wacht op nieuwe eligible input'
@@ -128,7 +137,7 @@ class Supervisor:
                 parent_thread=parent[1]
             with self.db:
                 self.db.execute('insert or ignore into tasks(id,body,status,thread) values(?,?,?,?)',(t['task_id'],body,'QUEUED',parent_thread))
-                quota=self.db.execute("select max(retry) from transitions where reason='USAGE_LIMIT'").fetchone()[0] or 0
+                quota=self.usage_quota_until()
                 if not old and quota<=self.clock():self.transition('IDLE',t['task_id'],'QUEUED',0)
             self.views()
             if not old:print(json.dumps({'event':'TASK_QUEUED','task_id':t['task_id'],'task_class':t['task_class']}),flush=True)
@@ -205,7 +214,7 @@ class Supervisor:
                     events=events_from(folder/'events.jsonl');rc=0 if any(e.get('type')=='turn.completed' for e in events) else -1
                     self.finish(t,attempt,folder,rc)
             state=self.state()
-            quota=self.db.execute("select max(retry) from transitions where reason='USAGE_LIMIT'").fetchone()[0] or 0
+            quota=self.usage_quota_until()
             if quota>self.clock():return {'state':'PAUSED_USAGE_LIMIT','retry_at':quota}
             if state.get('retry_at',0)>self.clock():return state
             if mode=='CRITICAL':return {'state':'IDLE','reason':'CRITICAL_NO_NEW_WORK'}
@@ -232,7 +241,7 @@ class Supervisor:
                 with self.db:self.transition('IDLE','','QUEUE_EMPTY',0)
                 self.views();return self.state()
             choices=[(validate_task(json.loads(b)),a,th,st) for b,a,th,st in rows]
-            choices=[x for x in choices if (self.db.execute('select retry from transitions where task=? order by seq desc limit 1',(x[0]['task_id'],)).fetchone() or (0,))[0]<=self.clock()]
+            choices=[x for x in choices if self.task_retry_at(x[0]['task_id'],x[3])<=self.clock()]
             if mode=='CONSERVE':choices=[x for x in choices if x[0]['priority']>=80]
             if not choices:return {'state':'IDLE','reason':'CONSERVE_NO_HIGH_VALUE_WORK'}
             t,attempt,thread,st=max(choices,key=lambda x:(x[0]['priority'],x[0]['expected_value']/x[0]['estimated_reasoning_cost']))
