@@ -102,6 +102,32 @@ def test_reasoning_worker_cli_is_restricted(tmp_path,monkeypatch):
     monkeypatch.setattr(m.subprocess,'Popen',popen)
     assert m.CodexWorker('codex')(task(),None,tmp_path,7)==0
 
+def test_reasoning_worker_honors_bounded_timeout_override(tmp_path,monkeypatch):
+    cache=tmp_path/'.codex';cache.mkdir();(cache/'models_cache.json').write_text(json.dumps({'models':[{'slug':'available-model','visibility':'list','priority':1}]}))
+    monkeypatch.setattr(m.P,'home',classmethod(lambda cls:tmp_path))
+    monkeypatch.setattr(m.subprocess,'run',lambda *a,**k:subprocess.CompletedProcess(a,0,'Logged in using ChatGPT',''))
+    monkeypatch.setenv('PREDICTION_CODEX_WORKER_TIMEOUT_SECONDS','321')
+    seen={}
+    class Process:
+        pid=123;returncode=0
+        def communicate(self,*a,**k):
+            seen['timeout']=k.get('timeout')
+            return None
+    monkeypatch.setattr(m.subprocess,'Popen',lambda *a,**k:Process())
+    assert m.CodexWorker('codex')(task(),None,tmp_path,7)==0
+    assert seen['timeout']==321
+
+def test_reasoning_worker_rejects_invalid_timeout_override(tmp_path,monkeypatch):
+    cache=tmp_path/'.codex';cache.mkdir();(cache/'models_cache.json').write_text(json.dumps({'models':[{'slug':'available-model','visibility':'list','priority':1}]}))
+    monkeypatch.setattr(m.P,'home',classmethod(lambda cls:tmp_path))
+    monkeypatch.setattr(m.subprocess,'run',lambda *a,**k:subprocess.CompletedProcess(a,0,'Logged in using ChatGPT',''))
+    monkeypatch.setenv('PREDICTION_CODEX_WORKER_TIMEOUT_SECONDS','59')
+    class Process:
+        pid=123;returncode=0
+    monkeypatch.setattr(m.subprocess,'Popen',lambda *a,**k:Process())
+    with pytest.raises(m.Blocked,match='TIMEOUT_INVALID'):
+        m.CodexWorker('codex')(task(),None,tmp_path,7)
+
 def test_followup_uses_exact_completed_session(tmp_path):
     calls=[]
     def worker(t,thread,folder,fd):calls.append(thread);emit(folder,GOOD);return 0
