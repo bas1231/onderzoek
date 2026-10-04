@@ -1,0 +1,47 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-CODEX-SYSTEM-REVIEW-20261004-E064",
+  "source_commit": "3895af0eaecd8cf5f2a0c506b710fec6b4969237",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "codex_review"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 2400,
+  "notes": "Independent Codex high-reasoning read-only infrastructure review. Executor test suite runs in DEV manifest before invocation. Codex receives a frozen packet and has no tools/web/shell/write approval.",
+  "operations": [
+    {
+      "type": "codex_review",
+      "review_task_id": "CODEX_SYSTEM_REVIEW_20261004_E064",
+      "instructions": "Voer een onafhankelijke Tier-A infrastructuurreview uit van het huidige Prediction-systeem. Wees adversarieel en fail-closed. Beoordeel geen financiële edge als bewezen: wetenschappelijke status blijft NO_PROVEN_EDGE tenzij expliciet bewijs in het pakket anders afdwingt.\n\nActuele bekende evidence die je expliciet moet wegen:\n1. GitHub command bus + capability-scoped projectexecutor zijn operationeel; WSL GitHub is read-only en remote writes horen uitsluitend via ChatGPT/GitHub connector te lopen.\n2. Generic autobuild NEEDS_BUILD -> continuation -> projectexecutor -> tests/canary/shadow -> result is meermaals PASS geweest.\n3. Publication handoff is stdlib-only getest en PASS: strict allowlist, exact payload/hash, idempotentie, oversized local-only; WSL git push is uit checkpoint/runtimepad verwijderd.\n4. Browser ACK fix v0.4.8 is statisch + runtime-install PASS, maar echte continuations blijven recovery_reason=RESULT_ACK_TIMEOUT. Live diagnose: runtime_version=0.4.8, ack_count=0, last_ack=NONE. Dit is dus OPEN, niet opgelost.\n5. Production staat/stond op lokale architecture/sol-builder-astra-reviewer met unieke lokale commits; bekende HEAD 1170607dfe8f3f580857ef0236a829f2cc75532f en lokale main fe4831effd272c3cfc8d05d1f89c3ca7099a7573 waren ongelijk. Unieke commits omvatten minimaal 1170607 \"build: complete prospective shadow lifecycle\", 16dcfb2 \"build: complete autonomous Sol Astra runtime lifecycle\", 8896d1d \"fix: accept bounded revision scope...\". Deze branch mag niet verloren gaan.\n6. Production release/fast-forward is daarom bewust geblokkeerd; equal-branch reconciliation is regressiegetest, divergent branch hard-blockt.\n7. Bestaande onafhankelijke auditstatus was AUDIT_INCOMPLETE + RESIDUAL_RISK; huidige review moet aangeven welke oude findings aantoonbaar achterhaald zijn en welke opnieuw bewezen moeten worden.\n8. Geen live trades, orders, cancellations, wallets, crypto/fund movement of betaalde acties. Geen credentials. Geen sudo/root. Geen autonome remote Git writes.\n9. Beoordeel ook de nieuwe projectexecutor codex_review capability zelf: kan deze capability reviewisolatie of hard safety boundaries verzwakken? Zo ja: BLOCKER.\n10. Geef expliciet oordeel over voorstel voor assistant-side durable receipt via immutable GitHub command-bus receipt als alternatief/aanvulling op browser DOM ACK. Vereiste: zichtbaar raw result in de bedoelde ChatGPT-sessie mag nooit onterecht een andere task/event ACKen; at-most-once en routebinding moeten behouden blijven.\n\nVereiste outputstructuur:\n- VERDICT: exact één van REVIEW_PASS, REVIEW_PASS_WITH_RESIDUAL_RISK, REVIEW_BLOCKED.\n- CRITICAL/HIGH findings met bewijsredenering en concrete falsificatietest.\n- ACK/continuation oordeel.\n- production branch preservation/reconciliation oordeel.\n- publication/no-remote-push oordeel.\n- projectexecutor/codex-review capability safety oordeel.\n- minimaal noodzakelijke releasevolgorde, genummerd en fail-closed.\n- welke 3-5 end-to-end canaries nog moeten slagen vóór 'systeem af'.\n- governance/science conclusie, NO_PROVEN_EDGE apart van softwarestatus.\nMaak geen reparaties en geef geen instructies die safety-grenzen omzeilen.",
+      "paths": [
+        "control/tampermonkey_multichat/prediction-chat-wake.user.js",
+        "control/tampermonkey_multichat/continuation_manager.py",
+        "control/tampermonkey_multichat/bridge_server_hardened.py",
+        "control/tampermonkey_multichat/bridge_server_session_bootstrap.py",
+        "control/hourly/publication_wake.py",
+        "control/hourly/git_checkpoint.py",
+        "control/hourly/runtime_sync.py",
+        "control/bridge_commands/command_bus_poller.py",
+        "control/codex_supervisor/supervisor.py",
+        "control/codex_supervisor/build_wake.py",
+        "control/codex_supervisor/candidate_dispatch.py",
+        "control/codex_supervisor/candidate_validation.py",
+        "control/PROJECT_EXECUTOR.md",
+        "control/bridge_commands/OPERATIONS.md"
+      ]
+    }
+  ]
+}
