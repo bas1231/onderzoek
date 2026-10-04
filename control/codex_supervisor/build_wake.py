@@ -90,6 +90,7 @@ def ensure_build_continuation(
     bridge_data: P = BRIDGE_DATA,
     route_config: P = ROUTE_CONFIG,
     routes_dir: P = ROUTES,
+    repo: P | None = None,
 ) -> dict:
     """Create exactly one continuation for one immutable generic build request."""
     if not isinstance(overlay, dict) or overlay.get("queue_status") != "NEEDS_BUILD":
@@ -103,6 +104,16 @@ def ensure_build_continuation(
     approval = reviews.get("PREBUILD") if isinstance(reviews, dict) else None
     if not isinstance(approval, dict) or approval.get("decision") != "APPROVE" or approval.get("reviewer_model") != "GPT-6 Astra":
         raise BuildWakeBlocked("ASTRA_PREBUILD_APPROVAL_REQUIRED")
+    import model_quality_gate
+    repo_root = P(repo) if repo is not None else P(__file__).resolve().parents[2]
+    try:
+        canonical_review, canonical_ref = model_quality_gate.load_review(repo_root, overlay, "PREBUILD")
+    except model_quality_gate.ReviewGateError as exc:
+        raise BuildWakeBlocked("ASTRA_PREBUILD_REVIEW_INVALID:" + str(exc)[:90]) from exc
+    if canonical_review is None or canonical_review.get("decision") != "APPROVE":
+        raise BuildWakeBlocked("ASTRA_PREBUILD_REVIEW_FILE_REQUIRED")
+    if approval.get("ref") != canonical_ref:
+        raise BuildWakeBlocked("ASTRA_PREBUILD_REVIEW_REF_MISMATCH")
     snapshot = overlay.get("candidate_snapshot")
     if not isinstance(snapshot, dict) or snapshot.get("candidate_id") != cid:
         raise BuildWakeBlocked("AUTOBUILD_CANDIDATE_SNAPSHOT_MISSING")
