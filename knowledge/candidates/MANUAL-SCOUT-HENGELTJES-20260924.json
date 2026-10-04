@@ -1,7 +1,7 @@
 {
   "candidate_id": "MANUAL-SCOUT-HENGELTJES-20260924",
   "created_at": "2026-09-24T15:57:00+00:00",
-  "updated_at": "2026-09-24T17:22:15.157080+00:00",
+  "updated_at": "2026-10-04T18:05:00+00:00",
   "provenance": "MANUAL_SCOUT_SEED",
   "provenance_note": "User-supplied lead. Do not represent it as autonomously discovered by a scout.",
   "lane": "microstructure",
@@ -24,9 +24,9 @@
   },
   "mechanism": "Late-settlement passive-liquidity hypothesis in Kalshi weather markets. The hypothesized edge is favorable maker execution conditional on strict queue-realistic fills, not meteorological forecast accuracy.",
   "open_question": "Can queue-realistic prospective shadow fills at predefined late-settlement passive bids survive false-positive-fill and adverse-selection kill tests after fees/friction?",
-  "next_decisive_test": "Execute the preregistered mandatory deathchecks for the read-only shadow protocol, prove three clean no-live/no-cost runs and the Miami regression fixture, then activate prospective collection only if every activation gate passes. PRIMARY evaluation must use conservative price-time queue reconstruction, sequence/reconnect/restart fail-closed handling, partial-fill accounting, +10/+30/+60/+120 markouts, authoritative final settlement and net EV after fees/friction; optimistic fill assumptions remain separate.",
+  "next_decisive_test": "Director re-review of shadow protocol v2 with deterministic frozen T-30m market/side selection; if accepted, execute the existing fixed three-run deathcheck validator before any prospective activation.",
   "prospective_protocols": [
-    "knowledge/candidates/protocols/MANUAL-SCOUT-HENGELTJES-20260924-shadow-v1.json"
+    "knowledge/candidates/protocols/MANUAL-SCOUT-HENGELTJES-20260924-shadow-v2.json"
   ],
   "director_trace": {
     "run_id": "hourly-20260924T190000+0200",
@@ -46,8 +46,22 @@
   "active_experiment_ids": [],
   "needed_data": [],
   "queue_entered_at": "2026-09-24T15:57:00+00:00",
-  "queue_reason": "Discovery and Mechanics now agree on a testable microstructure/settlement mechanism, but no prospective queue-realistic sample exists yet and adverse selection remains unmeasured.",
+  "queue_reason": "Protocol v2 closes the pre-close market/side-selection ambiguity and requires Director re-review; no economic edge is proven and no live/cost action is authorized.",
   "resume_condition": null,
-  "resurrection_condition": null,
-  "stop_condition": null
+  "resurrection_condition": {
+    "schema": "PVA_EVIDENCE_WAKE_CONDITION_V1",
+    "evidence_kinds": [
+      "protocol_revision"
+    ],
+    "protocol_ref": "knowledge/candidates/protocols/MANUAL-SCOUT-HENGELTJES-20260924-shadow-v2.json",
+    "cutoff": "2026-10-04T18:00:00+00:00"
+  },
+  "stop_condition": null,
+  "protocol_history": [
+    "knowledge/candidates/protocols/MANUAL-SCOUT-HENGELTJES-20260924-shadow-v1.json",
+    "knowledge/candidates/protocols/MANUAL-SCOUT-HENGELTJES-20260924-shadow-v2.json"
+  ],
+  "evidence_refs": [
+    "knowledge/evidence/candidate_events/MANUAL-SCOUT-HENGELTJES-20260924-protocol-revision-v2.json"
+  ]
 }
