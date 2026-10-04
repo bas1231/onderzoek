@@ -519,8 +519,17 @@ def run(mode: str, result_path: Path) -> int:
             )
             summary = candidate_reporting.append_to_report(report_path, queue3, runtime)
             report = report_path.read_text(encoding="utf-8")
-            if cid not in report or "NO_PROVEN_EDGE" not in report or str(overlay3.get("queue_status")) not in report:
-                raise RuntimeError("FINAL_REPORT_MISSING_DECISION")
+            required_report_tokens = [
+                cid,
+                "NO_PROVEN_EDGE",
+                str(overlay3.get("queue_status")),
+                "Astra pre-build: APPROVE",
+                "Astra pre-measurement: APPROVE",
+                "Measurement scope: READ_ONLY_PROSPECTIVE_MARKET_DATA",
+                "Order submission: False",
+            ]
+            if any(token not in report for token in required_report_tokens):
+                raise RuntimeError("FINAL_REPORT_MISSING_DECISION_OR_MODEL_GATES")
             result["report_sha256"] = sha(report_path)
             result["report_candidate_count"] = summary.get("candidate_count")
             result["stages"]["reporting"] = "PASS"
