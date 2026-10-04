@@ -1,0 +1,18 @@
+{
+  "schema": "PREDICTION_BRIDGE_COMMAND_V1",
+  "task_id": "DEV-PRED-RESULT-RECEIPT-RUNTIME-DIAG-20261004-E066",
+  "action": "SIX_AI_HEALTH",
+  "created_at_utc": "2026-10-04T08:47:00Z",
+  "route_task_id": "DEV-PRED-CONT-NEXT-4bc667283cb41c24f0294c35",
+  "delivery_mode": "chat",
+  "live_trading": false,
+  "paid_actions": false,
+  "wallet_actions": false,
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "notes": "Read-only assistant-side result receipt runtime diagnostic.",
+  "auto_continue": false
+}
