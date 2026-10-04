@@ -59,6 +59,12 @@ def ensure_measurement_continuation(supervisor, overlay: dict) -> dict:
         raise MeasurementWakeBlocked("MEASUREMENT_UNSAFE_FLAGS")
     if auth.get("order_submission") is not False or auth.get("live_trading") is not False:
         raise MeasurementWakeBlocked("MEASUREMENT_ORDER_PATH_FORBIDDEN")
+    reviews = overlay.get("astra_reviews")
+    approval = reviews.get("PREMEASUREMENT") if isinstance(reviews, dict) else None
+    if not isinstance(approval, dict) or approval.get("decision") != "APPROVE" or approval.get("reviewer_model") != "GPT-6 Astra":
+        raise MeasurementWakeBlocked("ASTRA_PREMEASUREMENT_APPROVAL_REQUIRED")
+    if approval.get("ref") != auth.get("astra_premeasurement_review_ref"):
+        raise MeasurementWakeBlocked("ASTRA_PREMEASUREMENT_REF_MISMATCH")
 
     route_task_id, chat_id = _control_route()
     identity = {
