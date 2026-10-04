@@ -1,0 +1,29 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-REPAIR-UNTRACKED-SUMMARY-20261004",
+  "source_commit": "b96dc8f04cdb5dca9b7f0f336d82c4c20ce33426",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "high"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "production_inspect"
+  ],
+  "timeout_seconds": 180,
+  "notes": "Read-only summary of production untracked paths after failed switch to canonical main.",
+  "operations": [
+    {
+      "type": "production_inspect",
+      "require_head_equals_main": true,
+      "report_mode": "status_summary"
+    }
+  ]
+}
