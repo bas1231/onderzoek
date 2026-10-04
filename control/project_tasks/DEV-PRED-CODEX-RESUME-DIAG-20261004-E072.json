@@ -1,0 +1,34 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-CODEX-RESUME-DIAG-20261004-E072",
+  "source_commit": "dcd72a62fcf23af5f900f9d055d21b3a0b4d5621",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "run_project_python"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 180,
+  "notes": "Compact diagnosis for E071 compileall failure. Compile only control/codex_supervisor/supervisor.py and surface exact compile exception in one line. No production mutation, no Codex invocation, no remote Git write.",
+  "operations": [
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/codex_resume_compile_diag_e072.py"
+      ],
+      "timeout_seconds": 60
+    }
+  ]
+}
