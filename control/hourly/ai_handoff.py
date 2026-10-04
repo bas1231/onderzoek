@@ -214,8 +214,8 @@ def build(run_id: str) -> tuple[dict[str, Any], Path]:
             "only where red_team_modes requests it. The transient Independent Reproducer is blind: do "
             "not infer or reconstruct withheld originating conclusions; reproduce from the supplied "
             "interface and independent evidence. Preserve negative evidence and cite failure-pattern IDs "
-            "FP-001..FP-036 when applicable. Every validation_results item must contain status=PASS|FAIL|INCONCLUSIVE|WAITING; mode may be QUICK_KILL, DEEP_FALSIFICATION or REPRODUCTION. Never use result in place of the required status field. Do not invent missing evidence. AI may schedule, wait, revise "
-            "or park bundled candidates but may not close-negative or promote them. Return exactly schema "
+            "FP-001..FP-036 when applicable. Every validation_results item must contain status=PASS|FAIL|INCONCLUSIVE|WAITING; mode may be QUICK_KILL, DEEP_FALSIFICATION or REPRODUCTION. Never use result in place of the required status field. Do not invent missing evidence. Discovery may return structured candidate_proposals only for lane=primary_scout and only when each proposal cites evidence_refs from its own role result; these create UNPROVEN NEEDS_DIRECTOR research candidates and are not promotion. recon_scout findings must use the deterministic HUNT gate instead. AI may schedule, wait, revise "
+            "or park bundled candidates but may not close-negative or economically promote them. Return exactly schema "
             "PVA_AI_RESPONSE_V1 and echo response_token. Include capability_results for consolidated "
             "domains and validation_results for Red Team/Reproducer when applicable. NO_PROVEN_EDGE is "
             "valid. Never authorize live trading, paid actions, wallet actions or paid OpenAI API use."
@@ -231,6 +231,18 @@ def build(run_id: str) -> tuple[dict[str, Any], Path]:
                     "finding": "string|null",
                     "evidence_refs": ["string"],
                     "candidate_ids": ["string"],
+                    "candidate_proposals": [
+                        {
+                            "candidate_key": "stable-string",
+                            "lane": "primary_scout",
+                            "hypothesis": "string",
+                            "mechanism": "string",
+                            "open_question": "string",
+                            "next_decisive_test": "string",
+                            "evidence_summary": "string",
+                            "evidence_refs": ["string"],
+                        }
+                    ],
                     "capability_results": {},
                     # VALIDATION_RESULT_CONTRACT_E003
                     "validation_results": [
