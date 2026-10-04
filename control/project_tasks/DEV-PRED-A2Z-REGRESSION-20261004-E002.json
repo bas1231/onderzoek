@@ -1,0 +1,45 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-A2Z-REGRESSION-20261004-E002",
+  "source_commit": "9fdfdbd03d119687b1a6536166cc04b6b08f3d28",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "run_project_python",
+    "run_tests"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 1200,
+  "notes": "A-to-Z code regression test before live hourly canary. Tests control-plane, hourly/scout, candidate, supervisor, edge-hunter and runtime-health code only; no runtime mutation or trading.",
+  "operations": [
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "-m",
+        "pytest",
+        "-q",
+        "tests/hourly",
+        "tests/codex_supervisor",
+        "tests/edge_hunter",
+        "tests/test_runtime_health.py",
+        "tests/test_market_instance_scanner.py",
+        "tests/test_recon_engine.py",
+        "tests/test_parallel_build_coordination_shared.py"
+      ],
+      "test": true,
+      "timeout_seconds": 1100
+    }
+  ]
+}
