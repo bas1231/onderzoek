@@ -170,6 +170,13 @@ def test_measurement_wake_is_read_only_and_highest_gpt_builder(tmp_path, monkeyp
         "paid_actions": False,
         "wallet_actions": False,
     }
+    item["astra_reviews"] = {
+        "PREMEASUREMENT": {
+            "decision": "APPROVE",
+            "reviewer_model": "GPT-6 Astra",
+            "ref": "knowledge/reviews/astra/r.json",
+        }
+    }
     s = Supervisor(tmp_path / "runtime")
     result = mw.ensure_measurement_continuation(s, item)
     record = json.loads((bridge / "continuations" / f"{result['continuation_id']}.json").read_text())
