@@ -1,0 +1,36 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-CODEX-RESUME-SELFTEST-20261004-E071",
+  "source_commit": "e005cc8e27bb404abdcd43d615fdac553c561ec3",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "run_project_python"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 300,
+  "notes": "Regression acceptance for provenance-bound codex_review_resume. No Codex worker invocation, no production mutation, no remote Git write.",
+  "operations": [
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "-m",
+        "compileall",
+        "control/codex_supervisor/supervisor.py"
+      ],
+      "timeout_seconds": 60
+    }
+  ]
+}
