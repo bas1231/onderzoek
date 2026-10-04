@@ -1,0 +1,29 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-EXECUTOR-SELFTEST-DIAG-20261004-E076",
+  "source_commit": "b8575b3189e63e1b318a34d29885f741b6911c8a",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "run_tests"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 420,
+  "notes": "Fresh compact executor regression diagnostic after E075 stopped at DEV command 1. Run executor_selftest so failing test names and traceback survive bridge compaction. No production mutation.",
+  "operations": [
+    {
+      "type": "executor_selftest",
+      "timeout_seconds": 300
+    }
+  ]
+}
