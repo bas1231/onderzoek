@@ -83,7 +83,11 @@ class Supervisor:
             finally:self.db.close();self.db=None;self.lock=None
     def state(self):
         row=self.db.execute('select state,task,reason,attempt,checkpoint,next_action,stamp,retry from transitions order by seq desc limit 1').fetchone()
-        return dict(zip(['state','task_id','reason','attempt','checkpoint','next_action','timestamp','retry_at'],row)) if row else {'state':'IDLE','retry_at':0}
+        if not row:return {'state':'IDLE','retry_at':0}
+        state=dict(zip(['state','task_id','reason','attempt','checkpoint','next_action','timestamp','retry_at'],row))
+        if state['state']=='PAUSED_USAGE_LIMIT' and state['reason']=='USAGE_LIMIT':
+            state['retry_at']=min(state['retry_at'],state['timestamp']+USAGE_LIMIT_RETRY_SECONDS)
+        return state
     def usage_quota_until(self):
         rows=self.db.execute("select stamp,retry from transitions where reason='USAGE_LIMIT'").fetchall()
         return max((min(retry,stamp+USAGE_LIMIT_RETRY_SECONDS) for stamp,retry in rows),default=0)
