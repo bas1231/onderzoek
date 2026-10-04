@@ -1,0 +1,44 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-REPAIR-RESTART-TIMERS-20261004",
+  "source_commit": "8051b93123628a1cfc57f7432e0510ff76e0a7c9",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "high"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "user_service_manage"
+  ],
+  "timeout_seconds": 180,
+  "notes": "Restore only Prediction research timers after checkout repair. Do not start hourly wrapper service manually and do not touch bridge services.",
+  "operations": [
+    {
+      "type": "service",
+      "verb": "start",
+      "unit": "prediction-research-hourly-director.timer"
+    },
+    {
+      "type": "service",
+      "verb": "start",
+      "unit": "prediction-codex-supervisor.timer"
+    },
+    {
+      "type": "service",
+      "verb": "is-active",
+      "unit": "prediction-research-hourly-director.timer"
+    },
+    {
+      "type": "service",
+      "verb": "is-active",
+      "unit": "prediction-codex-supervisor.timer"
+    }
+  ]
+}
