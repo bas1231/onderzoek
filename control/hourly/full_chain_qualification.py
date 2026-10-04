@@ -388,10 +388,12 @@ def main() -> int:
     p.add_argument("--mode", choices=["deterministic", "live"], default="deterministic")
     p.add_argument("--result", type=Path, default=RESULT_DEFAULT)
     p.add_argument("--assert-stage")
+    p.add_argument("--record-only", action="store_true")
     a = p.parse_args()
     if a.assert_stage:
         return assert_result(a.result, a.assert_stage)
-    return run(a.mode, a.result)
+    rc = run(a.mode, a.result)
+    return 0 if a.record_only else rc
 
 
 if __name__ == "__main__":
