@@ -180,6 +180,45 @@ def latest_overlay(runtime: Path, cid: str):
     return item
 
 
+def latest_overlay_path(runtime: Path, cid: str) -> Path:
+    matches = []
+    root = runtime / "candidate_states"
+    for path in root.glob("*.json"):
+        try:
+            obj = json.loads(path.read_text())
+        except Exception:
+            continue
+        if obj.get("candidate_id") != cid:
+            continue
+        try:
+            stamp = float(obj.get("decision_timestamp"))
+        except (TypeError, ValueError):
+            stamp = -1.0
+        matches.append((stamp, path.name, path))
+    if not matches:
+        raise RuntimeError("OVERLAY_PATH_MISSING")
+    matches.sort(key=lambda x: (x[0], x[1]))
+    return matches[-1][2]
+
+
+def approve_astra_fixture(repo: Path, runtime: Path, s, cid: str, phase: str):
+    path = latest_overlay_path(runtime, cid)
+    item = json.loads(path.read_text())
+    review = model_quality_gate.review_template(item, phase)
+    review.update({
+        "decision": "APPROVE",
+        "finding": f"Qualification fixture Astra approval for {phase}; exact binding only.",
+        "next_action": "Proceed to the next bounded qualification gate only.",
+        "qualification_fixture": True,
+    })
+    ref = model_quality_gate.expected_review_ref(item, phase)
+    save_json(repo / ref, review)
+    updated, applied_ref = model_quality_gate.apply_review(s, repo, path, phase)
+    if updated is None or applied_ref != ref:
+        raise RuntimeError("ASTRA_FIXTURE_REVIEW_NOT_APPLIED")
+    return updated, ref
+
+
 def invoke_build_wake(s, overlay, work: Path):
     bridge = work / "bridge"
     routes = bridge / "routes"
@@ -223,8 +262,8 @@ def build_and_test(repo: Path, cid: str):
         "s=importlib.util.spec_from_file_location('a2z_checker',P);m=importlib.util.module_from_spec(s);s.loader.exec_module(m)\n"
         "def test_frozen_no_edge_fixture():\n"
         "    r=m.evaluate(0.62,0.43);assert r['total_cost']==1.05;assert r['gross_edge']==-0.05;assert r['has_edge'] is False\n"
-        "def test_positive_control_detects_edge():\n"
-        "    r=m.evaluate(0.45,0.45);assert r['total_cost']==0.9;assert r['gross_edge']==0.1;assert r['has_edge'] is True\n",
+        "def test_positive_control_detects_one_cent_edge():\n"
+        "    r=m.evaluate(0.495,0.495);assert r['total_cost']==0.99;assert r['gross_edge']==0.01;assert r['has_edge'] is True\n",
         encoding="utf-8",
     )
     proc = subprocess.run(
@@ -240,9 +279,13 @@ def build_and_test(repo: Path, cid: str):
 
     module = load_module(module_path, "qualification_checker")
     frozen = module.evaluate(0.62, 0.43)
-    positive = module.evaluate(0.45, 0.45)
+    positive = module.evaluate(0.495, 0.495)
     if frozen.get("has_edge") is not False or positive.get("has_edge") is not True:
         raise RuntimeError("SEMANTIC_TEST_FAILED")
+    if round(float(positive.get("gross_edge")), 10) != 0.01:
+        raise RuntimeError("TINY_EDGE_CONTROL_WRONG")
+    if model_quality_gate.economic_signal_counts(0.01) is not True:
+        raise RuntimeError("TINY_EDGE_POLICY_REJECTED")
     evidence_rel = f"knowledge/experiment_results/{cid}-qualification-build-result.json"
     evidence_path = repo / evidence_rel
     save_json(evidence_path, {
@@ -255,8 +298,11 @@ def build_and_test(repo: Path, cid: str):
         "test_sha256": sha(test_path),
         "pytest_exit_code": proc.returncode,
         "tests_passed": 2,
+        "builder_model": "QUALIFICATION_SCRIPTED_BUILDER",
+        "builder_policy": "HIGHEST_AVAILABLE_GPT",
+        "qualification_fixture": True,
         "frozen_fixture": {"yes_ask": 0.62, "no_ask": 0.43, **frozen},
-        "positive_control": {"yes_ask": 0.45, "no_ask": 0.45, **positive},
+        "positive_control": {"yes_ask": 0.495, "no_ask": 0.495, "net_eur_equivalent": 0.01, **positive},
         "economic_conclusion": "NO_PROVEN_EDGE",
         "scientific_status": "NO_PROVEN_EDGE",
         "live_trading": False,
