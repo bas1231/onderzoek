@@ -1,0 +1,84 @@
+{
+  "schema": "PVA_FULL_A2Z_LIVE_QUALIFICATION_FIXTURE_V1",
+  "qualification_id": "FULL-A2Z-LIVE-20261004-V4",
+  "run_id": "qualification-live-a2z-20261004-v4",
+  "created_at": "2026-10-04T21:35:00+00:00",
+  "purpose": "End-to-end production qualification from primary scout proposal through Director, real Astra gates, highest-available-GPT build, technical tests, read-only prospective qualification measurement, final Director decision and reporting.",
+  "scout_role_evidence_refs": [
+    "knowledge/evidence/qualification/FULL-A2Z-LIVE-20261004-V4.json"
+  ],
+  "scout_proposal": {
+    "candidate_key": "full-a2z-live-qualification-20261004-v4",
+    "lane": "primary_scout",
+    "hypothesis": "A deterministic complement-price checker must identify an executable positive edge only when YES ask + NO ask + fees is strictly below the guaranteed 1.00 payout.",
+    "mechanism": "Complementary YES/NO acquisition has positive gross edge only when the synchronized executable acquisition cost plus fees is below the guaranteed payout.",
+    "open_question": "Can the complete governed research system build and validate a checker that rejects a 1.05-cost no-edge fixture, detects a 0.99-cost one-cent positive control, and then reaches NO_PROVEN_EDGE on a preregistered read-only prospective qualification stream?",
+    "next_decisive_test": "Build the bounded complement checker after Astra PREBUILD approval; require 1.05 NO_EDGE and 0.99 +0.01 EDGE controls, then require Astra PREMEASUREMENT approval before a frozen read-only prospective qualification stream and final Director review.",
+    "evidence_summary": "Synthetic system-qualification fixture only. It is designed to exercise every governance and execution transition and is not market evidence.",
+    "evidence_refs": [
+      "knowledge/evidence/qualification/FULL-A2Z-LIVE-20261004-V4.json"
+    ],
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "openai_api": false
+  },
+  "frozen_build_controls": {
+    "no_edge": {
+      "yes_ask": 0.62,
+      "no_ask": 0.43,
+      "fees": 0,
+      "expected_total": 1.05,
+      "expected_edge": -0.05
+    },
+    "tiny_positive": {
+      "yes_ask": 0.495,
+      "no_ask": 0.495,
+      "fees": 0,
+      "expected_total": 0.99,
+      "expected_edge": 0.01
+    }
+  },
+  "preregistered_measurement": {
+    "scope": "READ_ONLY_QUALIFICATION_FIXTURE_STREAM",
+    "observations": [
+      {
+        "sequence": 1,
+        "yes_ask": 0.62,
+        "no_ask": 0.43,
+        "fees": 0,
+        "expected_edge": -0.05
+      },
+      {
+        "sequence": 2,
+        "yes_ask": 0.61,
+        "no_ask": 0.44,
+        "fees": 0,
+        "expected_edge": -0.05
+      },
+      {
+        "sequence": 3,
+        "yes_ask": 0.6,
+        "no_ask": 0.45,
+        "fees": 0,
+        "expected_edge": -0.05
+      }
+    ],
+    "expected_economic_conclusion": "NO_PROVEN_EDGE",
+    "order_submission": false,
+    "external_market_access_required": false
+  },
+  "required_model_gates": {
+    "prebuild": "GPT-6 Astra",
+    "builder_policy": "HIGHEST_AVAILABLE_GPT",
+    "premeasurement": "GPT-6 Astra"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "order_submission": false
+  },
+  "scientific_status": "NO_PROVEN_EDGE",
+  "warning": "Qualification fixture only; never count its synthetic observations as economic evidence for a real prediction-market strategy."
+}
