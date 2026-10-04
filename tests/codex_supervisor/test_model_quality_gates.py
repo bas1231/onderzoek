@@ -170,15 +170,27 @@ def test_measurement_wake_is_read_only_and_highest_gpt_builder(tmp_path, monkeyp
         "paid_actions": False,
         "wallet_actions": False,
     }
+    review = q.review_template(item, "PREMEASUREMENT")
+    review.update(
+        decision="APPROVE",
+        finding="Fixture Astra approves exact premeasurement binding.",
+        next_action="Proceed to read-only prospective measurement only.",
+    )
+    ref = q.expected_review_ref(item, "PREMEASUREMENT")
+    repo = tmp_path / "repo"
+    review_path = repo / ref
+    review_path.parent.mkdir(parents=True, exist_ok=True)
+    review_path.write_text(json.dumps(review))
+    item["measurement_authorization"]["astra_premeasurement_review_ref"] = ref
     item["astra_reviews"] = {
         "PREMEASUREMENT": {
             "decision": "APPROVE",
             "reviewer_model": "GPT-6 Astra",
-            "ref": "knowledge/reviews/astra/r.json",
+            "ref": ref,
         }
     }
     s = Supervisor(tmp_path / "runtime")
-    result = mw.ensure_measurement_continuation(s, item)
+    result = mw.ensure_measurement_continuation(s, item, repo=repo)
     record = json.loads((bridge / "continuations" / f"{result['continuation_id']}.json").read_text())
     msg = record["context_message"]
     assert "required_builder_policy=HIGHEST_AVAILABLE_GPT" in msg
