@@ -1,0 +1,36 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-CODEX-RESUME-ONE-TEST-20261004-E074",
+  "source_commit": "9b7302efc25a07d301b5c862f2b734ada08c61a3",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "run_project_python"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 180,
+  "notes": "Single-test diagnostic for the Codex review resume regression seen in E073. DEV manifest runs exactly the failing fg-assistent unittest first so traceback survives bridge result. No production mutation or Codex invocation.",
+  "operations": [
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "-m",
+        "compileall",
+        "control/dev_checks"
+      ],
+      "timeout_seconds": 60
+    }
+  ]
+}
