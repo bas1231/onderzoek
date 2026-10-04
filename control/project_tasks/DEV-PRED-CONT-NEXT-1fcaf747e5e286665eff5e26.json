@@ -1,0 +1,35 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-CONT-NEXT-1fcaf747e5e286665eff5e26",
+  "source_commit": "097f8d3ff62923447c2110d5cf7f397c8d599475",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "run_project_python",
+    "read_runtime"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 180,
+  "notes": "Continuation of executor selftest chain. Read-only lookup of the exact prior source task result in wake runtime; no production mutation and no repeated production-divergence diagnostics. Intentionally rc=42 so compact PASS/FAIL result survives bridge compaction.",
+  "operations": [
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/source_result_lookup_e078.py"
+      ],
+      "timeout_seconds": 60
+    }
+  ]
+}
