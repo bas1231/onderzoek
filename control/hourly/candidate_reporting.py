@@ -15,10 +15,10 @@ def _load_json(path: Path) -> dict[str, Any] | None:
     return value if isinstance(value, dict) else None
 
 
-def latest_overlay(runtime_root: Path, candidate_id: str) -> dict[str, Any] | None:
+def overlay_history(runtime_root: Path, candidate_id: str) -> list[dict[str, Any]]:
     root = Path(runtime_root) / "candidate_states"
     if not root.exists():
-        return None
+        return []
     matches = []
     for path in root.glob("*.json"):
         if path.is_symlink():
@@ -31,10 +31,13 @@ def latest_overlay(runtime_root: Path, candidate_id: str) -> dict[str, Any] | No
             except (TypeError, ValueError):
                 order = -1.0
             matches.append((order, path.name, obj))
-    if not matches:
-        return None
     matches.sort(key=lambda x: (x[0], x[1]))
-    return matches[-1][2]
+    return [obj for _, _, obj in matches]
+
+
+def latest_overlay(runtime_root: Path, candidate_id: str) -> dict[str, Any] | None:
+    history = overlay_history(runtime_root, candidate_id)
+    return history[-1] if history else None
 
 
 def summarize(queue_data: dict[str, Any], runtime_root: Path) -> dict[str, Any]:
@@ -45,11 +48,20 @@ def summarize(queue_data: dict[str, Any], runtime_root: Path) -> dict[str, Any]:
         cid = row.get("candidate_id")
         if not isinstance(cid, str) or not cid:
             continue
-        overlay = latest_overlay(runtime_root, cid)
-        reviews = overlay.get("astra_reviews", {}) if overlay else {}
-        prebuild = reviews.get("PREBUILD", {}) if isinstance(reviews, dict) else {}
-        premeasurement = reviews.get("PREMEASUREMENT", {}) if isinstance(reviews, dict) else {}
-        measurement = overlay.get("measurement_authorization", {}) if overlay else {}
+        history = overlay_history(runtime_root, cid)
+        overlay = history[-1] if history else None
+        prebuild = {}
+        premeasurement = {}
+        measurement = {}
+        for item in history:
+            reviews = item.get("astra_reviews", {})
+            if isinstance(reviews, dict):
+                if isinstance(reviews.get("PREBUILD"), dict):
+                    prebuild = reviews["PREBUILD"]
+                if isinstance(reviews.get("PREMEASUREMENT"), dict):
+                    premeasurement = reviews["PREMEASUREMENT"]
+            if isinstance(item.get("measurement_authorization"), dict):
+                measurement = item["measurement_authorization"]
         rows.append({
             "candidate_id": cid,
             "source_queue_status": row.get("queue_status"),
