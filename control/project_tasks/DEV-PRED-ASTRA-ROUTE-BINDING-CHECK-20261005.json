@@ -1,0 +1,41 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-ASTRA-ROUTE-BINDING-CHECK-20261005",
+  "source_commit": "5fada2bb6b224dca0caf91ad6bf668136384b86e",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_runtime"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 180,
+  "notes": "Read-only diagnosis of the configured Astra route binding and installed wake route semantics. No bridge/runtime/service mutation.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/astra_route_binding_check_20261005.py",
+      "content": "from pathlib import Path\nimport json,re\nDATA=Path.home()/'.local/share/prediction-chat-bridge'\nconfig=json.loads((DATA/'autobuild_control_route.json').read_text(encoding='utf-8'))\nroute_task=str(config.get('route_task_id') or '')\nroute_path=DATA/'routes'/f'{route_task}.json'\nif not route_path.is_file():\n print('ASTRA_ROUTE_BINDING=MISSING',flush=True); raise SystemExit(71)\nroute=json.loads(route_path.read_text(encoding='utf-8'))\nchat=str(route.get('chat_id') or '')\nconsumer=route.get('consumer_id')\nprint('ASTRA_ROUTE_TASK='+route_task,flush=True)\nprint('ASTRA_ROUTE_CHAT_PRESENT='+('YES' if chat else 'NO'),flush=True)\nprint('ASTRA_ROUTE_CONSUMER='+('NONE' if consumer in (None,'') else 'PINNED'),flush=True)\ninstalled=(DATA/'bridge_server.py').read_text(encoding='utf-8')\nchat_scoped=('chat_scoped_route_binding' in installed or 'consumer_id\": None' in installed or \"'consumer_id': None\" in installed)\nprint('INSTALLED_CHAT_SCOPED_ROUTE='+('YES' if chat_scoped else 'NO'),flush=True)\nif consumer not in (None,'') and not chat_scoped: raise SystemExit(72)\nif not chat: raise SystemExit(73)\nraise SystemExit(0)\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/astra_route_binding_check_20261005.py"
+      ],
+      "timeout_seconds": 60
+    }
+  ]
+}
