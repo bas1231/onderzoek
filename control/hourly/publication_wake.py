@@ -28,6 +28,7 @@ ALLOW = (
     "knowledge/recon/watchlist.json",
     "knowledge/recon/opportunity_graph.json",
     "knowledge/research_os/*.json",
+    "knowledge/reviews/astra/*.json",
     "knowledge/runs/hourly-*.json",
     "knowledge/runs/twc-revision-summary-latest.json",
 )
