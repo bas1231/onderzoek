@@ -1,0 +1,19 @@
+{
+  "schema": "PREDICTION_BRIDGE_COMMAND_V1",
+  "task_id": "DEV-PRED-FULL-A2Z-LIVE-V4-ASSERT-PREBUILD-R2-20261004",
+  "action": "SIX_AI_HEALTH",
+  "created_at_utc": "2026-10-04T21:55:00Z",
+  "route_task_id": "SESSION-ROUTE-ab8536120fbe276f56e18b8d",
+  "delivery_mode": "chat",
+  "live_trading": false,
+  "paid_actions": false,
+  "wallet_actions": false,
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "notes": "Pure read-only A-to-Z assertion against the correct V4 temp runtime. Verify candidate state exists and reached ASTRA_PREBUILD_REVIEW. No code, infra, services, runtime or market mutation.",
+  "auto_continue": false,
+  "parent_continuation_id": null
+}
