@@ -19,6 +19,10 @@ QUEUE_STATES = {
     "WAITING_FOR_RESULT",
     "RESULT_READY",
     "NEEDS_REVISION",
+    "ASTRA_PREBUILD_REVIEW",
+    "ASTRA_PREMEASUREMENT_REVIEW",
+    "MEASUREMENT_READY",
+    "MEASURING",
     "PARKED",
     "CLOSED_NEGATIVE",
     "PROMOTION_CANDIDATE",
@@ -105,6 +109,8 @@ def infer_priority(candidate: dict[str, Any]) -> str:
         "RUNNING",
         "WAITING_FOR_RESULT",
         "RESULT_READY",
+        "MEASUREMENT_READY",
+        "MEASURING",
     }:
         return "P1"
 
@@ -113,6 +119,8 @@ def infer_priority(candidate: dict[str, Any]) -> str:
         "NEEDS_DIRECTOR",
         "EXPERIMENT_REQUIRED",
         "NEEDS_REVISION",
+        "ASTRA_PREBUILD_REVIEW",
+        "ASTRA_PREMEASUREMENT_REVIEW",
         "PROMOTION_CANDIDATE",
     }:
         return "P2"
@@ -313,6 +321,8 @@ def write_handoff(
             "NEEDS_DIRECTOR",
             "RESULT_READY",
             "NEEDS_REVISION",
+            "ASTRA_PREBUILD_REVIEW",
+            "ASTRA_PREMEASUREMENT_REVIEW",
             "PROMOTION_CANDIDATE",
             "EXPERIMENT_REQUIRED",
         }
@@ -324,6 +334,8 @@ def write_handoff(
             "RUNNING",
             "WAITING_FOR_DATA",
             "WAITING_FOR_RESULT",
+            "MEASUREMENT_READY",
+            "MEASURING",
         }
     ]
 
