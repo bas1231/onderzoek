@@ -1,0 +1,44 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-REPAIR-QUIESCE-20261004",
+  "source_commit": "fce4f17b03ea24a46c4138a3ba4d31c03a03df97",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "high"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "user_service_manage"
+  ],
+  "timeout_seconds": 180,
+  "notes": "Temporarily stop only Prediction research timers/services during production checkout reconciliation. Do not disable units and do not touch bridge services.",
+  "operations": [
+    {
+      "type": "service",
+      "verb": "stop",
+      "unit": "prediction-research-hourly-director.timer"
+    },
+    {
+      "type": "service",
+      "verb": "stop",
+      "unit": "prediction-codex-supervisor.timer"
+    },
+    {
+      "type": "service",
+      "verb": "stop",
+      "unit": "prediction-research-hourly-director.service"
+    },
+    {
+      "type": "service",
+      "verb": "stop",
+      "unit": "prediction-codex-supervisor.service"
+    }
+  ]
+}
