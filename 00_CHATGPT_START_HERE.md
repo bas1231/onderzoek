@@ -29,6 +29,7 @@ Before doing local Prediction work, read these files from `bas1231/onderzoek`:
 7. `control/bridge_commands/OPERATIONS.md` — command-bus operations.
 8. `control/tampermonkey_multichat/PROTOCOL.md` — canonical bridge protocol.
 9. `control/tampermonkey_multichat/CHATGPT_PROJECT_INSTRUCTIONS.md` — full project-specific bridge instructions.
+10. `methodology/EDGE_DISCOVERY_MODEL_GATES.md` — mandatory model roles, Astra gates, read-only prospective measurement, and the any-positive-net-edge objective.
 
 When old chat memory or older docs conflict with these files, the current Git documentation above is authoritative.
 
@@ -126,6 +127,10 @@ Manual WSL commands are fallback only. If unavoidable, keep them terminal-safe: 
 ## Scientific and governance defaults
 
 - `NO_PROVEN_EDGE` remains the scientific default until evidence clears the project's gates.
+- The economic objective is `ANY_POSITIVE_NET_EDGE_COUNTS`: do not discard a hypothesis merely because the net euro opportunity is small.
+- Before build, exact-version GPT-6 Astra review is mandatory; building follows `HIGHEST_AVAILABLE_GPT`.
+- Before any prospective current-market measurement deployment, a second exact-version GPT-6 Astra review is mandatory.
+- Prospective "live" measurement is read-only/shadow only and never authorizes orders, cancellations, funds, wallets or paid actions.
 - Follow Tier A/B/C intelligence routing and provenance requirements.
 - Operational use of the bridge/executor does not imply that the formal independent Tier-A review record is complete.
 
