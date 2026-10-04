@@ -383,15 +383,47 @@ def assert_result(path: Path, stage: str) -> int:
     return 0 if obj.get("stages", {}).get(stage) == "PASS" else 1
 
 
+def diagnose_result(path: Path) -> int:
+    obj = json.loads(path.read_text(encoding="utf-8"))
+    first = obj.get("first_supervisor_state") or {}
+    state = str(first.get("state") or "")
+    reason = str(first.get("reason") or "")
+    error = str(obj.get("error") or "")
+    if obj.get("status") == "PASS":
+        return 0
+    if obj.get("stages", {}).get("director_reasoning_1") == "PAUSED_USAGE_LIMIT" or state == "PAUSED_USAGE_LIMIT":
+        return 10
+    if state == "BLOCKED":
+        if reason == "SAFETY_BLOCK":
+            return 11
+        return 12
+    if state == "WAITING_RETRY":
+        return 13
+    if state == "FAILED":
+        return 14
+    if "OVERLAY_MISSING" in error:
+        return 20
+    if "DIRECTOR_DID_NOT_REQUEST_BUILD" in error:
+        return 21
+    if "FIRST_CANDIDATE_APPLIED_MISSING" in error:
+        return 22
+    if "BUILD_CONTINUATION_NOT_CREATED" in error:
+        return 23
+    return 99
+
+
 def main() -> int:
     p = argparse.ArgumentParser()
     p.add_argument("--mode", choices=["deterministic", "live"], default="deterministic")
     p.add_argument("--result", type=Path, default=RESULT_DEFAULT)
     p.add_argument("--assert-stage")
+    p.add_argument("--diagnose-result", action="store_true")
     p.add_argument("--record-only", action="store_true")
     a = p.parse_args()
     if a.assert_stage:
         return assert_result(a.result, a.assert_stage)
+    if a.diagnose_result:
+        return diagnose_result(a.result)
     rc = run(a.mode, a.result)
     return 0 if a.record_only else rc
 
