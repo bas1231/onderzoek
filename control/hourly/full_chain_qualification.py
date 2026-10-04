@@ -292,7 +292,7 @@ def run(mode: str, result_path: Path) -> int:
             result["stages"]["candidate_queue"] = "PASS"
 
             worker = ScriptedWorker() if mode == "deterministic" else supervisor.CodexWorker()
-            os.environ["PREDICTION_CODEX_WORKER_TIMEOUT_SECONDS"] = "600"
+            os.environ["PREDICTION_CODEX_WORKER_TIMEOUT_SECONDS"] = "360" if mode == "live" else "600"
             s = supervisor.Supervisor(
                 runtime,
                 worker=worker,
