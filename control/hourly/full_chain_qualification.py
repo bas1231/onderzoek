@@ -382,8 +382,9 @@ def prospective_measure(repo: Path, cid: str, build_evidence_ref: str):
 
 def run(mode: str, result_path: Path) -> int:
     result = {
-        "schema": "PVA_FULL_A2Z_QUALIFICATION_V1",
+        "schema": "PVA_FULL_A2Z_QUALIFICATION_V2",
         "mode": mode,
+        "astra_review_mode": "QUALIFICATION_FIXTURE" if mode == "deterministic" else "EXTERNAL_REAL_ASTRA_REQUIRED",
         "stages": {},
         "economic_conclusion": "NO_PROVEN_EDGE",
         "live_trading": False,
@@ -400,8 +401,8 @@ def run(mode: str, result_path: Path) -> int:
             result["candidate_id"] = cid
             result["stages"]["scout_input"] = "PASS"
 
-            q = queue_snapshot(repo)
-            row = next((x for x in q["queue"] if x.get("candidate_id") == cid), None)
+            queue1 = queue_snapshot(repo)
+            row = next((x for x in queue1["queue"] if x.get("candidate_id") == cid), None)
             if not row or row.get("queue_status") != "NEEDS_DIRECTOR":
                 raise RuntimeError("QUEUE_INGRESS_FAILED")
             result["stages"]["candidate_queue"] = "PASS"
@@ -413,6 +414,7 @@ def run(mode: str, result_path: Path) -> int:
                 worker=worker,
                 candidate_source=lambda current: candidate_dispatch.select_next(current, repo),
             )
+
             state1 = s.tick()
             result["first_supervisor_state"] = state1
             if state1.get("state") == "PAUSED_USAGE_LIMIT":
@@ -420,13 +422,24 @@ def run(mode: str, result_path: Path) -> int:
                 save_json(result_path, result)
                 return 75
             overlay1 = latest_overlay(runtime, cid)
-            if overlay1.get("queue_status") != "NEEDS_BUILD":
-                raise RuntimeError("DIRECTOR_DID_NOT_REQUEST_BUILD:" + str(overlay1.get("queue_status")))
-            applied1 = list((runtime / "runs").glob("*/CANDIDATE_APPLIED.json"))
-            if not applied1:
+            if overlay1.get("queue_status") != "ASTRA_PREBUILD_REVIEW":
+                raise RuntimeError("DIRECTOR_DID_NOT_REACH_ASTRA_PREBUILD:" + str(overlay1.get("queue_status")))
+            if not list((runtime / "runs").glob("*/CANDIDATE_APPLIED.json")):
                 raise RuntimeError("FIRST_CANDIDATE_APPLIED_MISSING")
             result["stages"]["director_reasoning_1"] = "PASS"
             result["stages"]["candidate_applied_1"] = "PASS"
+
+            if mode != "deterministic":
+                result["stages"]["astra_prebuild_review"] = "EXTERNAL_REAL_ASTRA_REQUIRED"
+                result["status"] = "BLOCKED_EXTERNAL_ASTRA"
+                save_json(result_path, result)
+                return 76
+
+            overlay1, prebuild_ref = approve_astra_fixture(repo, runtime, s, cid, "PREBUILD")
+            if overlay1.get("queue_status") != "NEEDS_BUILD":
+                raise RuntimeError("ASTRA_PREBUILD_DID_NOT_UNLOCK_BUILD")
+            result["astra_prebuild_review_ref"] = prebuild_ref
+            result["stages"]["astra_prebuild_review"] = "PASS"
 
             wake = invoke_build_wake(s, overlay1, work)
             result["build_continuation_id"] = wake.get("continuation_id")
@@ -438,6 +451,7 @@ def run(mode: str, result_path: Path) -> int:
             result["positive_control"] = positive
             result["stages"]["build"] = "PASS"
             result["stages"]["tests"] = "PASS"
+            result["stages"]["tiny_positive_edge_policy"] = "PASS"
 
             state2 = s.tick()
             result["second_supervisor_state"] = state2
@@ -446,32 +460,65 @@ def run(mode: str, result_path: Path) -> int:
                 save_json(result_path, result)
                 return 75
             overlay2 = latest_overlay(runtime, cid)
-            if overlay2.get("scientific_status") != "NO_PROVEN_EDGE":
-                raise RuntimeError("UNSAFE_FINAL_SCIENTIFIC_STATUS")
-            if overlay2.get("queue_status") == "NEEDS_BUILD":
-                raise RuntimeError("FINAL_REVIEW_LOOPED_TO_BUILD")
-            applied = list((runtime / "runs").glob("*/CANDIDATE_APPLIED.json"))
-            if len(applied) < 2:
+            if overlay2.get("queue_status") != "ASTRA_PREMEASUREMENT_REVIEW":
+                raise RuntimeError("DIRECTOR_DID_NOT_REACH_ASTRA_PREMEASUREMENT:" + str(overlay2.get("queue_status")))
+            if len(list((runtime / "runs").glob("*/CANDIDATE_APPLIED.json"))) < 2:
                 raise RuntimeError("SECOND_CANDIDATE_APPLIED_MISSING")
-            result["final_runtime_status"] = overlay2.get("queue_status")
-            result["final_finding"] = overlay2.get("finding")
-            result["final_next_action"] = overlay2.get("next_action")
             result["stages"]["director_reasoning_2"] = "PASS"
             result["stages"]["candidate_applied_2"] = "PASS"
 
-            q2 = queue_snapshot(repo)
+            overlay2, premeasurement_ref = approve_astra_fixture(repo, runtime, s, cid, "PREMEASUREMENT")
+            if overlay2.get("queue_status") != "MEASUREMENT_READY":
+                raise RuntimeError("ASTRA_PREMEASUREMENT_DID_NOT_UNLOCK_MEASUREMENT")
+            auth = overlay2.get("measurement_authorization") or {}
+            if auth.get("scope") != "READ_ONLY_PROSPECTIVE_MARKET_DATA" or auth.get("order_submission") is not False:
+                raise RuntimeError("MEASUREMENT_AUTHORIZATION_UNSAFE")
+            result["astra_premeasurement_review_ref"] = premeasurement_ref
+            result["stages"]["astra_premeasurement_review"] = "PASS"
+
+            measurement_wake_result = invoke_measurement_wake(s, overlay2, work)
+            result["measurement_continuation_id"] = measurement_wake_result.get("continuation_id")
+            result["stages"]["measurement_wake"] = "PASS"
+
+            measurement_ref, observations = prospective_measure(repo, cid, evidence_ref)
+            result["measurement_evidence_ref"] = measurement_ref
+            result["measurement_observations"] = observations
+            result["stages"]["prospective_read_only_measurement"] = "PASS"
+
+            state3 = s.tick()
+            result["third_supervisor_state"] = state3
+            if state3.get("state") == "PAUSED_USAGE_LIMIT":
+                result["stages"]["director_reasoning_3"] = "PAUSED_USAGE_LIMIT"
+                save_json(result_path, result)
+                return 75
+            overlay3 = latest_overlay(runtime, cid)
+            if overlay3.get("scientific_status") != "NO_PROVEN_EDGE":
+                raise RuntimeError("UNSAFE_FINAL_SCIENTIFIC_STATUS")
+            if overlay3.get("queue_status") != "REJECT":
+                raise RuntimeError("FINAL_DIRECTOR_DID_NOT_REJECT_NO_EDGE_FIXTURE:" + str(overlay3.get("queue_status")))
+            if len(list((runtime / "runs").glob("*/CANDIDATE_APPLIED.json"))) < 3:
+                raise RuntimeError("THIRD_CANDIDATE_APPLIED_MISSING")
+            result["final_runtime_status"] = overlay3.get("queue_status")
+            result["final_finding"] = overlay3.get("finding")
+            result["final_next_action"] = overlay3.get("next_action")
+            result["stages"]["director_reasoning_3"] = "PASS"
+            result["stages"]["candidate_applied_3"] = "PASS"
+
+            queue3 = queue_snapshot(repo)
             report_path = repo / "hourly-reports/hourly-A2ZFULL-qualification.md"
             report_path.parent.mkdir(parents=True, exist_ok=True)
             report_path.write_text(
-                "# Full A-to-Z qualification\n\n"
+                "# Full A-to-Z qualification V2\n\n"
                 "Scout input: synthetic complement-price hypothesis.\n"
-                "Build: bounded deterministic checker.\n"
-                "Tests: frozen no-edge fixture plus positive control.\n\n",
+                "Astra gates: version-bound qualification fixtures.\n"
+                "Build: bounded deterministic checker under HIGHEST_AVAILABLE_GPT policy contract.\n"
+                "Tests: frozen no-edge fixture plus one-cent positive control.\n"
+                "Measurement: preregistered read-only prospective fixture; no order path.\n\n",
                 encoding="utf-8",
             )
-            summary = candidate_reporting.append_to_report(report_path, q2, runtime)
+            summary = candidate_reporting.append_to_report(report_path, queue3, runtime)
             report = report_path.read_text(encoding="utf-8")
-            if cid not in report or "NO_PROVEN_EDGE" not in report or str(overlay2.get("queue_status")) not in report:
+            if cid not in report or "NO_PROVEN_EDGE" not in report or str(overlay3.get("queue_status")) not in report:
                 raise RuntimeError("FINAL_REPORT_MISSING_DECISION")
             result["report_sha256"] = sha(report_path)
             result["report_candidate_count"] = summary.get("candidate_count")
@@ -487,7 +534,6 @@ def run(mode: str, result_path: Path) -> int:
         result["error"] = str(exc)[:1000]
         save_json(result_path, result)
         return 1
-
 
 def assert_result(path: Path, stage: str) -> int:
     obj = json.loads(path.read_text(encoding="utf-8"))
