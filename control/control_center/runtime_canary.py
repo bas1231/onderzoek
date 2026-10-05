@@ -61,6 +61,8 @@ def main() -> int:
         raise RuntimeError("CONTROL_CENTER_BUILD_LOG_INVALID")
     if "sync_request" not in snapshot:
         raise RuntimeError("CONTROL_CENTER_SYNC_REQUEST_STATE_MISSING")
+    if not isinstance(snapshot.get("session_drift_alerts"), list):
+        raise RuntimeError("CONTROL_CENTER_SESSION_DRIFT_ALERTS_MISSING")
     lifecycle = snapshot.get("lifecycle")
     if not isinstance(lifecycle, dict):
         raise RuntimeError("CONTROL_CENTER_LIFECYCLE_MISSING")
@@ -76,7 +78,7 @@ def main() -> int:
     if not isinstance(sync, dict) or sync.get("status") not in {"GREEN", "AMBER", "RED", "UNKNOWN"}:
         raise RuntimeError("CONTROL_CENTER_GIT_SYNC_MISSING")
     html = get_text("http://127.0.0.1:8770/")
-    for needle in ("Logboek", "Sync gestart…", "/api/sync", "fail-closed reconciliatie", "Actieve systeemacties", "Git-sync productie → main", "nieuwe Prediction ChatGPT-sessie", "opent altijd een nieuwe Prediction ChatGPT-sessie"):
+    for needle in ("Logboek", "Sync gestart…", "/api/sync", "fail-closed reconciliatie", "Actieve systeemacties", "Git-sync productie → main", "nieuwe Prediction ChatGPT-sessie", "opent altijd een nieuwe Prediction ChatGPT-sessie", "SESSIE WIJKT AF VAN OPDRACHT", "Sessie-afwijkingen"):
         if needle not in html:
             raise RuntimeError("CONTROL_CENTER_SYNC_UI_MISSING:" + needle)
     active_states = {
@@ -100,6 +102,7 @@ def main() -> int:
                 "sessions": counts.get("sessions"),
                 "legacy_candidates": counts.get("legacy_candidates"),
                 "chain_alerts": len(snapshot.get("chain_alerts") or []),
+                "session_drift_alerts": len(snapshot.get("session_drift_alerts") or []),
                 "git_sync": (snapshot.get("git_sync") or {}).get("status"),
                 "lifecycle": (snapshot.get("lifecycle") or {}).get("full_chain_status"),
                 "build_log_items": (snapshot.get("build_log") or {}).get("counts", {}).get("work_items"),
