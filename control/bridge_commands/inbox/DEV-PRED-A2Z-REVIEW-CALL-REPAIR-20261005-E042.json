@@ -1,0 +1,19 @@
+{
+  "schema": "PREDICTION_BRIDGE_COMMAND_V1",
+  "task_id": "DEV-PRED-A2Z-REVIEW-CALL-REPAIR-20261005-E042",
+  "action": "SIX_AI_HEALTH",
+  "created_at_utc": "2026-10-05T15:49:19.034Z",
+  "route_task_id": "SESSION-ROUTE-5cf01da95ccf0cd109d15187",
+  "delivery_mode": "chat",
+  "live_trading": false,
+  "paid_actions": false,
+  "wallet_actions": false,
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "Codex; exact model identity unavailable to runtime",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "auto_continue": true,
+  "parent_continuation_id": null,
+  "notes": "Hervat audit bij E004: expliciete provenance voor review_template, 10 gerichte regressies. Verplichte gedeelde build-lease vóór patch; bij blokkade niets wijzigen. Alleen geïsoleerde taakworktree. Geen bridgewijziging, synconderzoek, Scout-herhaling of volledige ketenrun. Gebruik retourroute uit nieuwste gebruikersopdracht."
+}
