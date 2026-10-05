@@ -1,0 +1,32 @@
+{
+  "schema": "PREDICTION_BUILD_LOG_EVENT_V1",
+  "event_id": "20261005T181500Z-CONTROL-CENTER-SYNC-BUTTON-E019-CLASSIFY",
+  "work_item_id": "CONTROL-CENTER-SYNC-BUTTON-20261005",
+  "created_at_utc": "2026-10-05T18:15:00Z",
+  "event_type": "ATTEMPT",
+  "work_item_status": "IN_PROGRESS",
+  "outcome": "STARTED",
+  "title": "One-click veilige Git-sync vanuit Control Center",
+  "objective": "Toon bij Git-sync rood een Sync-knop die één klik omzet in een automatische, fail-closed ChatGPT-reconciliatie zonder destructieve Git-shortcuts.",
+  "summary": "E019 draait de volledige Control Center-suite met failfast en codeert de eerste falende test in de proces-exitcode. Exit 0 betekent dat de volledige suite op de actuele bron slaagt.",
+  "why": "De bridge filterde de stdout van E018; een exitcode-classificatie is zichtbaar in de compacte resultregel en voorkomt opnieuw verborgen diagnostiek.",
+  "next_action": "Gebruik E019 exitcode om exact één testtak te repareren, of ga bij exit 0 direct door naar een schone installatietaak.",
+  "session_route_task_id": "SESSION-ROUTE-fc2613ecbc81e22d4c913b2a",
+  "task_ids": [
+    "DEV-PRED-CONTROL-CENTER-SYNC-E017-CLASSIFY-20261005-E019"
+  ],
+  "commits": [
+    "3b11476f1af5d91901c0a094a8f699f15522c6aa"
+  ],
+  "evidence_refs": [
+    "control/dev_checks/control_center_sync_e017_classify.py"
+  ],
+  "tags": [
+    "control-center",
+    "git-sync",
+    "diagnostic",
+    "failfast"
+  ],
+  "parent_event_id": "20261005T181300Z-CONTROL-CENTER-SYNC-BUTTON-E018-RESULT",
+  "first_incomplete_step": "Exacte eerste falende unittest of bewijs dat de volledige suite nu slaagt."
+}
