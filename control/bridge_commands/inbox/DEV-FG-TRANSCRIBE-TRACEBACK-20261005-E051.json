@@ -1,0 +1,17 @@
+{
+  "schema": "PREDICTION_BRIDGE_COMMAND_V1",
+  "task_id": "DEV-FG-TRANSCRIBE-TRACEBACK-20261005-E051",
+  "action": "SIX_AI_HEALTH",
+  "created_at_utc": "2026-10-05T15:21:00Z",
+  "route_task_id": "DEV-FG-CALLEDPROCESS-STAGE2-20261005-E050",
+  "delivery_mode": "chat",
+  "live_trading": false,
+  "paid_actions": false,
+  "wallet_actions": false,
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "notes": "Read-only extract only safe technical traceback lines from the latest failed transcription; redact paths and audio filename."
+}
