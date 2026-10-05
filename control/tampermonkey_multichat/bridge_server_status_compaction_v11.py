@@ -45,6 +45,31 @@ def compact_delivery_event(obj):
     task_id = str(obj.get("task_id") or "").strip()
     event_id = str(obj.get("event_id") or "").strip()
 
+    if "PREDICTION_SNAPSHOT_EXPORT_V1" in raw:
+        meta_match = re.search(r"^SNAPSHOT_EXPORT_META=(\{[^\r\n]+\})$", raw, re.M)
+        data_match = re.search(r"^SNAPSHOT_EXPORT_DATA=([A-Za-z0-9+/=]+)$", raw, re.M)
+        if not meta_match or not data_match:
+            message = (
+                "PREDICTION_SNAPSHOT_EXPORT_V1 "
+                f"task={task_id or 'UNKNOWN'} status=FAIL reason=EXPORT_FIELDS_MISSING"
+            )
+        else:
+            message = (
+                "PREDICTION_SNAPSHOT_EXPORT_V1 "
+                f"task={task_id or 'UNKNOWN'} "
+                f"meta={meta_match.group(1)} data={data_match.group(1)}"
+            )
+        if len(message) > MAX_SNAPSHOT_EXPORT_MESSAGE:
+            message = (
+                "PREDICTION_SNAPSHOT_EXPORT_V1 "
+                f"task={task_id or 'UNKNOWN'} status=FAIL reason=EXPORT_CHUNK_TOO_LARGE"
+            )
+        out["message"] = message
+        out["delivery_compacted"] = True
+        out["raw_message_bytes"] = len(raw.encode("utf-8", errors="replace"))
+        out["snapshot_export_delivery"] = True
+        return out
+
     looks_like_wsl = (
         raw.startswith("RESULT_READY:")
         or "=== WSL RESULT ===" in raw
