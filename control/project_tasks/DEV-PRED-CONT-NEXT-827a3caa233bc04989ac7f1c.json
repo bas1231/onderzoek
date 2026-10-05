@@ -1,0 +1,39 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-CONT-NEXT-827a3caa233bc04989ac7f1c",
+  "source_commit": "a3a61e9d8944ba4d23545bee158063d21ea244a5",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "run_tests"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 180,
+  "notes": "Read-only status verification for E040 after RESULT_ACK_TIMEOUT. Do not rerun the A-to-Z workflow and do not mutate production. Only inspect the already-written deterministic qualification result file from E040 and assert the overall stage; this distinguishes a completed green E040 from a missing/incomplete result.",
+  "operations": [
+    {
+      "type": "python",
+      "argv": [
+        "/home/leonh/prediction_research_prod/.venv/bin/python",
+        "control/hourly/full_chain_qualification.py",
+        "--result",
+        "/tmp/prediction-full-a2z-e040.json",
+        "--assert-stage",
+        "overall"
+      ],
+      "test": true,
+      "timeout_seconds": 60
+    }
+  ]
+}
