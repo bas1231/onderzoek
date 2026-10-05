@@ -1,0 +1,111 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-CONTROL-CENTER-20261005-E001",
+  "source_commit": "72f45628eee1802b96d1bca7fbd4a87e158c3053",
+  "intelligence_tier": "B",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "run_project_python",
+    "run_tests",
+    "write_runtime",
+    "user_service_manage",
+    "read_logs"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 900,
+  "notes": "Build/test/install Prediction Control Center. Read-only localhost cockpit over existing candidate/run/runtime state. Historical ideas remain immutable; revive endpoint only writes an immutable local request and does not execute research/trades/cost actions.",
+  "operations": [
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "-m",
+        "compileall",
+        "-q",
+        "control/control_center",
+        "tests/control_center"
+      ],
+      "timeout_seconds": 120
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "-m",
+        "pytest",
+        "-q",
+        "-p",
+        "no:cacheprovider",
+        "tests/control_center/test_control_center.py"
+      ],
+      "test": true,
+      "timeout_seconds": 180
+    },
+    {
+      "type": "install_runtime",
+      "source": "control/control_center/server.py",
+      "destination": "~/.local/share/prediction-project-executor/control-center/server.py",
+      "mode": 420
+    },
+    {
+      "type": "install_runtime",
+      "source": "control/control_center/static/index.html",
+      "destination": "~/.local/share/prediction-project-executor/control-center/static/index.html",
+      "mode": 420
+    },
+    {
+      "type": "install_runtime",
+      "source": "control/control_center/runtime_canary.py",
+      "destination": "~/.local/share/prediction-project-executor/control-center/runtime_canary.py",
+      "mode": 420
+    },
+    {
+      "type": "install_runtime",
+      "source": "control/control_center/prediction-control-center.service",
+      "destination": "~/.config/systemd/user/prediction-control-center.service",
+      "mode": 420
+    },
+    {
+      "type": "daemon_reload"
+    },
+    {
+      "type": "service",
+      "verb": "enable",
+      "unit": "prediction-control-center.service"
+    },
+    {
+      "type": "service",
+      "verb": "restart",
+      "unit": "prediction-control-center.service"
+    },
+    {
+      "type": "service",
+      "verb": "status",
+      "unit": "prediction-control-center.service"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/control_center/runtime_canary.py"
+      ],
+      "timeout_seconds": 120
+    },
+    {
+      "type": "journal",
+      "unit": "prediction-control-center.service",
+      "lines": 60
+    }
+  ]
+}
