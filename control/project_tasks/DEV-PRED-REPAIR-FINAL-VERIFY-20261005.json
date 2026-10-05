@@ -1,0 +1,88 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-REPAIR-FINAL-VERIFY-20261005",
+  "source_commit": "8b6222cd8657949df1008fc15c2371ed0b2c05b9",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "run_tests",
+    "production_staged_inspect",
+    "production_compare_worktree",
+    "production_compare_source",
+    "production_merge_representation"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 720,
+  "notes": "Final verification of the three product repairs only; no full A-to-Z system test. Also read-only compare production state against the repaired canonical source. No production mutation.",
+  "operations": [
+    {
+      "type": "python",
+      "argv": [
+        "/home/leonh/prediction_research_prod/.venv/bin/python",
+        "-m",
+        "pytest",
+        "-q",
+        "tests/codex_supervisor/test_supervisor.py",
+        "tests/codex_supervisor/test_model_quality_gates.py",
+        "tests/codex_supervisor/test_candidate_dispatch.py",
+        "tests/hourly/test_candidate_reporting_current_binding.py"
+      ],
+      "test": true,
+      "timeout_seconds": 480
+    },
+    {
+      "type": "python",
+      "argv": [
+        "/home/leonh/prediction_research_prod/.venv/bin/python",
+        "-m",
+        "compileall",
+        "-q",
+        "control/codex_supervisor/supervisor.py",
+        "control/hourly/candidate_reporting.py"
+      ],
+      "timeout_seconds": 120
+    },
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/repair_pin_verify_20261005.py",
+      "content": "from pathlib import Path\nimport hashlib,json\n\nroot=Path.cwd()\ncfg=json.loads((root/\"knowledge/codex_runtime/CONFIG.json\").read_text())\nmapping={\n \"candidate_dispatch.py_sha256\":\"control/codex_supervisor/candidate_dispatch.py\",\n \"candidate_policy_sha256\":\"control/hourly/candidate_queue.py\",\n \"evidence_wake.py_sha256\":\"control/codex_supervisor/evidence_wake.py\",\n \"build_wake.py_sha256\":\"control/codex_supervisor/build_wake.py\",\n \"model_quality_gate.py_sha256\":\"control/codex_supervisor/model_quality_gate.py\",\n \"astra_review_wake.py_sha256\":\"control/codex_supervisor/astra_review_wake.py\",\n \"measurement_wake.py_sha256\":\"control/codex_supervisor/measurement_wake.py\",\n \"supervisor_sha256\":\"control/codex_supervisor/supervisor.py\",\n \"astra_autonomous_review.py_sha256\":\"control/codex_supervisor/astra_autonomous_review.py\",\n}\nbad=[]\nfor key,rel in mapping.items():\n    actual=hashlib.sha256((root/rel).read_bytes()).hexdigest()\n    if cfg.get(key)!=actual:\n        bad.append({\"key\":key,\"path\":rel})\nprint(\"PIN_VERIFY=\"+json.dumps({\"checked\":len(mapping),\"mismatch\":bad},sort_keys=True),flush=True)\nif bad:\n    raise SystemExit(41)\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/repair_pin_verify_20261005.py"
+      ],
+      "timeout_seconds": 60
+    },
+    {
+      "type": "production_staged_inspect",
+      "fail_for_visibility": false
+    },
+    {
+      "type": "production_compare_worktree",
+      "require_exact": false
+    },
+    {
+      "type": "production_compare_source",
+      "require_equal": false
+    },
+    {
+      "type": "production_merge_representation",
+      "require_subsumed": false
+    }
+  ]
+}
