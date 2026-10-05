@@ -1,0 +1,57 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-E024-TRANSPORT-DIAG-20261005-E025",
+  "source_commit": "8511127a874f323cc46cf701b2e9286d287f0b9a",
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "user_service_manage",
+    "read_logs",
+    "production_inspect"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 180,
+  "notes": "Diagnose why E024 has no returned result. Read-only service/journal/production inspection only.",
+  "operations": [
+    {
+      "type": "service",
+      "verb": "show",
+      "unit": "prediction-command-bus.timer"
+    },
+    {
+      "type": "service",
+      "verb": "show",
+      "unit": "prediction-command-bus.service"
+    },
+    {
+      "type": "journal",
+      "unit": "prediction-command-bus.service",
+      "lines": 300
+    },
+    {
+      "type": "service",
+      "verb": "show",
+      "unit": "prediction-chat-wake.service"
+    },
+    {
+      "type": "journal",
+      "unit": "prediction-chat-wake.service",
+      "lines": 200
+    },
+    {
+      "type": "production_inspect",
+      "require_head_equals_main": false,
+      "report_mode": "summary"
+    }
+  ]
+}
