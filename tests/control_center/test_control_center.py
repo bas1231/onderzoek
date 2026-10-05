@@ -187,5 +187,25 @@ class ControlCenterTests(unittest.TestCase):
         self.assertIn('"run_id": "R-1"', result["content"])
 
 
+    def test_owner_ui_is_dutch_but_canonical_codes_remain(self):
+        html = (ROOT / "control/control_center/static/index.html").read_text(encoding="utf-8")
+        for expected in (
+            "Prediction Besturingscentrum",
+            "Uitvoeringen",
+            "Prestaties",
+            "Wacht op onderzoeksdirecteur",
+            "Nog geen bewezen voordeel",
+            "RUWE BEWIJSGEGEVENS",
+            "onderzoeksdashboard • alleen-lezen",
+        ):
+            self.assertIn(expected, html)
+        self.assertIn("NO_PROVEN_EDGE", html)
+        self.assertIn("NL_STATUS", html)
+        self.assertNotIn(">Control Center<", html)
+        self.assertNotIn(">Task performance<", html)
+        self.assertNotIn(">RUN DETAIL<", html)
+        self.assertNotIn(">RAW EVIDENCE<", html)
+
+
 if __name__ == "__main__":
     unittest.main()
