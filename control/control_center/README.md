@@ -74,6 +74,16 @@ run is actually evidenced.
 The visual theme follows the dark navy / magenta / cyan design language used by
 the FG-assistant.
 
+## Dashboard actions always use a fresh ChatGPT session
+
+Any dashboard button that starts ChatGPT work follows
+`control/control_center/DASHBOARD_CHAT_ACTION_PROTOCOL.md`.
+
+The existing Prediction chat is used only as a browser launcher. The action prompt is
+submitted in a new Prediction-project chat, which must obtain its own
+`SESSION-ROUTE-*` PASS before it may dispatch local tasks. If no fresh launcher is
+available, the action fails closed instead of reusing an existing work chat.
+
 ## One-click repository sync
 
 When Git-sync is red, the UI shows a `Sync` button. The button does not run
