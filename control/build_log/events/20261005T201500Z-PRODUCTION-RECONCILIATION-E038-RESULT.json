@@ -1,0 +1,33 @@
+{
+  "schema": "PREDICTION_BUILD_LOG_EVENT_V1",
+  "event_id": "20261005T201500Z-PRODUCTION-RECONCILIATION-E038-RESULT",
+  "work_item_id": "PRODUCTION-RECONCILIATION-20261005",
+  "created_at_utc": "2026-10-05T20:15:00Z",
+  "event_type": "RESULT",
+  "work_item_status": "IN_PROGRESS",
+  "outcome": "FAIL",
+  "title": "Production veilig reconciliëren met canonical main",
+  "objective": "Breng production veilig in sync met canonical main zonder lokaal werk te verliezen.",
+  "summary": "E038 inspecteerde de duurzame E034-snapshot. De 24 toegevoegde artifacts zijn samen ongeveer 100 KB: astra_review_wakes 1/954 B, candidate_states 1/10.792 B, runs 22/88.557 B.",
+  "why": "De artifacts zijn klein genoeg voor volledige bewaring, maar eerst moet worden vastgesteld of de raw runbestanden zelf canoniek nodig zijn of reeds exact/inhoudelijk worden gedekt door canonical review/provenance-output.",
+  "next_action": "Inspecteer vanuit de immutable E034 snapshot alleen run-directorystructuur, terminal markers en identificerende provenancevelden; geen live worktree-mutatie.",
+  "session_route_task_id": "SESSION-ROUTE-fc2613ecbc81e22d4c913b2a",
+  "task_ids": [
+    "DEV-PRED-PRODUCTION-SNAPSHOT-MANIFEST-20261005-E038"
+  ],
+  "evidence_refs": [
+    "event=1791227550-a279325c44ab",
+    "added_count=24",
+    "astra_review_wakes=954B",
+    "candidate_states=10792B",
+    "runs=88557B"
+  ],
+  "tags": [
+    "production",
+    "reconciliation",
+    "snapshot",
+    "evidence"
+  ],
+  "parent_event_id": "20261005T201000Z-PRODUCTION-RECONCILIATION-E038-SNAPSHOT-MANIFEST",
+  "first_incomplete_step": "Semantische/evidence-representatie van de 24 snapshot-artifacts vaststellen."
+}
