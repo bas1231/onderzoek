@@ -1,0 +1,31 @@
+{
+  "schema": "PREDICTION_BUILD_LOG_EVENT_V1",
+  "event_id": "20261005T202900Z-PRODUCTION-RECONCILIATION-E051-ARCHIVE-INFO",
+  "work_item_id": "PRODUCTION-RECONCILIATION-20261005",
+  "created_at_utc": "2026-10-05T20:29:00Z",
+  "event_type": "ATTEMPT",
+  "work_item_status": "IN_PROGRESS",
+  "outcome": "STARTED",
+  "title": "Production veilig reconciliëren met canonical main",
+  "objective": "Breng production veilig in sync met canonical main zonder lokaal werk te verliezen.",
+  "summary": "E051 meet uit de immutable E034 dirty snapshot alleen file_count, raw tar bytes, deterministic gzip bytes, base64 chars en archive SHA-256.",
+  "why": "Na E050 is de bounded export getest. Voor runtime-installatie en chunkdispatch moet exact bekend zijn hoeveel chunks nodig zijn en welke archivehash later end-to-end moet kloppen.",
+  "next_action": "Bereken chunk count bij maximaal 24.000 base64-tekens per chunk en deploy daarna alleen de geteste exportdeliverylaag.",
+  "session_route_task_id": "SESSION-ROUTE-fc2613ecbc81e22d4c913b2a",
+  "task_ids": [
+    "DEV-PRED-PRODUCTION-SNAPSHOT-ARCHIVE-INFO-20261005-E051"
+  ],
+  "evidence_refs": [
+    "DEV-PRED-PRODUCTION-DIRTY-SNAPSHOT-20261005-E034",
+    "projectexecutor:archive_info"
+  ],
+  "tags": [
+    "production",
+    "reconciliation",
+    "export",
+    "archive",
+    "read-only"
+  ],
+  "parent_event_id": "20261005T202700Z-PRODUCTION-RECONCILIATION-E050-PASS",
+  "first_incomplete_step": "Exacte exportgrootte/hash van de immutable E034 snapshot bepalen."
+}
