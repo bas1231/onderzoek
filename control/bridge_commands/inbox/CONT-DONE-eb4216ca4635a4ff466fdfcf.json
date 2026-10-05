@@ -1,0 +1,19 @@
+{
+  "schema": "PREDICTION_BRIDGE_COMMAND_V1",
+  "task_id": "CONT-DONE-eb4216ca4635a4ff466fdfcf",
+  "action": "BRIDGE_PING",
+  "created_at_utc": "2026-10-05T10:48:26.792Z",
+  "route_task_id": "DEV-PRED-PRODUCT-REPAIRS-CURRENT-ACCEPT-20261005",
+  "delivery_mode": "headless",
+  "live_trading": false,
+  "paid_actions": false,
+  "wallet_actions": false,
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "Codex; exact model identity unavailable to runtime",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "notes": "Alleen deze eerdere acceptatie-herstelvertakking afgesloten als opgevolgd. DEV-PRED-REQUESTED-REPAIRS-FINAL-ACCEPT-20261005 omvat de latere gerichte acceptatie en faalde op productieverschillen, event 1791195396-f6bca2f8d8c6. DEV-PRED-PROD-DIFF-INVENTORY-20261005-E001 staat klaar voor read-only onderzoek van die verschillen; DEV-PRED-CONT-NEXT-c8dcbf91be52fd2957116bd6 controleert reeds herstelbewijs en productie-pins. Geen dubbele test of taak; geen wijziging van productie. DONE betreft uitsluitend deze herstelvertakking. Eindacceptatie blijft FAIL en volledige systeemtest is niet als geslaagd bewezen.",
+  "auto_continue": false,
+  "parent_continuation_id": "CONT-eb4216ca4635a4ff466fdfcf"
+}
