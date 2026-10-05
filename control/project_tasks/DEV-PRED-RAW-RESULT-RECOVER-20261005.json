@@ -1,0 +1,41 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-RAW-RESULT-RECOVER-20261005",
+  "source_commit": "669b887bad87dd19907a1fa071f8eba7a8741c87",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_runtime"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 180,
+  "notes": "Read exact raw sent wake events for the Astra first-failure and production staged-diff tasks. Parse only concise diagnostic summaries, then intentionally exit 42 so the bridge exposes them. Read-only; no production mutation.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/raw_result_recover_20261005.py",
+      "content": "from pathlib import Path\nimport json,re\n\nsent=Path.home()/'.local/share/prediction-chat-bridge/sent'\n\ndef load_event(event_id):\n    p=sent/f'{event_id}.json'\n    if not p.is_file():\n        return None, f'MISSING:{p}'\n    try:\n        obj=json.loads(p.read_text(encoding='utf-8',errors='replace'))\n    except Exception as exc:\n        return None, f'BAD_JSON:{exc.__class__.__name__}'\n    return str(obj.get('message') or ''), None\n\ndef compact_astra(raw):\n    if raw is None:\n        return 'ASTRA_FIRSTFAIL=RAW_EVENT_MISSING'\n    lines=raw.splitlines()\n    test=''\n    for ln in lines:\n        s=ln.strip()\n        if re.search(r'tests/.+::.+\\s+FAILED(?:\\s|$)',s):\n            test=s\n            break\n    if not test:\n        for ln in lines:\n            s=ln.strip()\n            if s.startswith('FAILED ') and '::' in s:\n                test=s\n                break\n    details=[]\n    in_fail=False\n    for ln in lines:\n        s=ln.rstrip()\n        if ' FAILURES ' in s or s.startswith('___'):\n            in_fail=True\n        if in_fail and (s.startswith('E ') or 'AssertionError' in s or 'assert ' in s or 'KeyError' in s or 'TypeError' in s or 'ValueError' in s):\n            details.append(re.sub(r'\\s+',' ',s).strip())\n    if not details:\n        for ln in lines:\n            s=ln.strip()\n            if s.startswith('E ') or 'AssertionError' in s:\n                details.append(re.sub(r'\\s+',' ',s))\n    return 'ASTRA_FIRSTFAIL='+(test or 'UNKNOWN')+' || '+(' | '.join(details[-4:])[:1100] if details else 'NO_ASSERTION_TEXT')\n\ndef compact_diff(raw):\n    if raw is None:\n        return 'PROD_STAGED_DIFF=RAW_EVENT_MISSING'\n    payload=None\n    for ln in raw.splitlines():\n        if ln.startswith('PRODUCTION_DIFF_INSPECT '):\n            try:\n                payload=json.loads(ln.split(' ',1)[1])\n            except Exception:\n                pass\n    if payload is None:\n        m=re.search(r'PRODUCTION_DIFF_INSPECT\\s+(\\{.*\\})',raw,re.S)\n        if m:\n            try: payload=json.loads(m.group(1))\n            except Exception: pass\n    if payload is None:\n        return 'PROD_STAGED_DIFF=PAYLOAD_NOT_FOUND'\n    diff=str(payload.get('diff') or '')\n    files=[]\n    stats={}\n    cur=None\n    for line in diff.splitlines():\n        if line.startswith('diff --git a/'):\n            cur=line.split(' b/',1)[-1]\n            if cur not in stats:\n                files.append(cur);stats[cur]={'a':0,'d':0,'sig':[]}\n        elif cur and line.startswith('+') and not line.startswith('+++'):\n            stats[cur]['a']+=1\n            s=line[1:].strip()\n            if re.match(r'(def |class |async def |[A-Z][A-Z0-9_]{2,}\\s*=)',s) and len(stats[cur]['sig'])<2:\n                stats[cur]['sig'].append('+'+s[:90])\n        elif cur and line.startswith('-') and not line.startswith('---'):\n            stats[cur]['d']+=1\n            s=line[1:].strip()\n            if re.match(r'(def |class |async def |[A-Z][A-Z0-9_]{2,}\\s*=)',s) and len(stats[cur]['sig'])<2:\n                stats[cur]['sig'].append('-'+s[:90])\n    parts=[]\n    for f in files:\n        st=stats[f]\n        sig=','.join(st['sig'])\n        parts.append(f\"{f}[+{st['a']}/-{st['d']}]\" + (f\"{{{sig}}}\" if sig else ''))\n    return 'PROD_STAGED_DIFF='+' | '.join(parts)[:1800]\n\na_raw,a_err=load_event('1791185094-b2ad1bd15dcb')\nd_raw,d_err=load_event('1791185669-30977cb32a12')\nprint(compact_astra(a_raw) if not a_err else 'ASTRA_FIRSTFAIL='+a_err)\nprint(compact_diff(d_raw) if not d_err else 'PROD_STAGED_DIFF='+d_err)\nraise SystemExit(42)\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/raw_result_recover_20261005.py"
+      ],
+      "timeout_seconds": 60
+    }
+  ]
+}
