@@ -1,0 +1,19 @@
+{
+  "schema": "PREDICTION_BRIDGE_COMMAND_V1",
+  "task_id": "CONT-DONE-6ebc694b5cb568094d539cf2",
+  "action": "BRIDGE_PING",
+  "created_at_utc": "2026-10-05T13:07:30Z",
+  "route_task_id": "DEV-PRED-PROD-STAGED-DIFF-VIS-RETRY-20261005-E017C",
+  "delivery_mode": "headless",
+  "live_trading": false,
+  "paid_actions": false,
+  "wallet_actions": false,
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "notes": "Close superseded E017C continuation. The old staged visibility retry has been superseded by later E022 staged summaries and the current fail-closed production reconciliation DEV-PRED-PROD-SNAPSHOT-FF-20261005-E024. Do not create duplicate NEXT work.",
+  "auto_continue": false,
+  "parent_continuation_id": "CONT-6ebc694b5cb568094d539cf2"
+}
