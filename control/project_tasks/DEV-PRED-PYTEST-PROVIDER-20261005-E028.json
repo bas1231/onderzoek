@@ -1,0 +1,44 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-PYTEST-PROVIDER-20261005-E028",
+  "source_commit": "be1684e2170e717d17bb3ebb62ba2519b8e45d49",
+  "intelligence_tier": "B",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "run_project_python",
+    "run_tests"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 180,
+  "notes": "Diagnostic only. Pytest is already allowed by executor policy; locate an existing local pytest-capable executable/venv without package install, network, sudo, or runtime mutation. Exit 71-75 identifies provider; exit 76 means none found.",
+  "operations": [
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/find_local_pytest_provider.py"
+      ],
+      "test": true,
+      "timeout_seconds": 120,
+      "allowed_exit_codes": [
+        71,
+        72,
+        73,
+        74,
+        75,
+        76
+      ]
+    }
+  ]
+}
