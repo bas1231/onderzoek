@@ -95,3 +95,22 @@ The Control Center groups immutable events by `work_item_id` and shows:
 - duplicate/open work so circular work is visible.
 
 Historical command-bus/project-executor tasks remain forensic evidence, but they do not replace the structured build ledger.
+
+
+## Session assignment / drift detection
+
+A Prediction session may have an explicit assignment scope in any immutable build-log event via:
+
+- `session_assignment_scope.instruction`: the human-readable assignment for that session;
+- `session_assignment_scope.allowed_work_item_ids`: the work-items explicitly authorized in that session.
+
+A supporting/dependency work-item may declare `supports_work_item_id` so bounded prerequisite work does not count as session drift.
+
+Control Center drift detection is deterministic and evidence-based:
+- it only evaluates active tasks with a known `session_route_task_id`;
+- it maps each active task to the build-log work-item that names that task ID;
+- an active task outside the current session assignment scope is flagged unless its work-item explicitly supports an allowed work-item;
+- an active task with no build-log work-item mapping is flagged as untracked session work;
+- no opaque LLM similarity score is used as the sole trigger.
+
+When the user explicitly expands or changes a session's assignment, append a new immutable NOTE event with the new `session_assignment_scope`. The latest scope event for that route is authoritative.
