@@ -1,0 +1,35 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-PROD-MAIN-SUBSUMPTION-20261005-E032",
+  "source_commit": "8511127a874f323cc46cf701b2e9286d287f0b9a",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "production_inspect",
+    "production_merge_representation"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 240,
+  "notes": "Read-only gate after E031 cleaned production but found local main not ancestor of pinned canonical. Require production HEAD to equal local main and require strong merge-tree proof that canonical source_commit subsumes the complete current local-main delta. No production mutation.",
+  "operations": [
+    {
+      "type": "production_inspect",
+      "require_head_equals_main": true,
+      "report_mode": "topology"
+    },
+    {
+      "type": "production_merge_representation",
+      "require_subsumed": true
+    }
+  ]
+}
