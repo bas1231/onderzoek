@@ -1,0 +1,55 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-PROD-RECONCILE-PYCACHE-20261005-E034",
+  "source_commit": "8511127a874f323cc46cf701b2e9286d287f0b9a",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "run_tests",
+    "production_merge_representation",
+    "production_reconcile_subsumed_main",
+    "production_compare_worktree",
+    "production_inspect"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 540,
+  "notes": "Final production reconcile after read-only diagnosis proved the only dirty residue is two untracked Python bytecode files under control/hourly/__pycache__. Run executor regressions; re-prove canonical subsumes local main; allow deletion of exactly those two ephemeral .pyc paths and nothing else; require E030 dirty snapshot anchor; preserve old main under recovery ref; reconcile local main to pinned canonical; verify exact clean production.",
+  "operations": [
+    {
+      "type": "executor_selftest",
+      "timeout_seconds": 300
+    },
+    {
+      "type": "production_merge_representation",
+      "require_subsumed": true
+    },
+    {
+      "type": "production_reconcile_subsumed_main",
+      "required_snapshot_task_id": "DEV-PRED-PROD-DIRTY-SNAPSHOT-20261005-E030",
+      "expected_ephemeral_untracked": [
+        "control/hourly/__pycache__/candidate_queue.cpython-312.pyc",
+        "control/hourly/__pycache__/work_cadence.cpython-312.pyc"
+      ]
+    },
+    {
+      "type": "production_compare_worktree",
+      "require_exact": true,
+      "report_mode": "counts"
+    },
+    {
+      "type": "production_inspect",
+      "require_head_equals_main": true,
+      "report_mode": "status_summary"
+    }
+  ]
+}
