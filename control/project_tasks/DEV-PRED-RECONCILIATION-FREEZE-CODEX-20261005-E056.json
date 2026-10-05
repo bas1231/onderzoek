@@ -1,0 +1,40 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-RECONCILIATION-FREEZE-CODEX-20261005-E056",
+  "source_commit": "33c303a022957b554bf6e8795fc620a11b00187b",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "High"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "user_service_manage"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 120,
+  "notes": "Temporarily stop only the prediction-codex-supervisor timer during production reconciliation so no new scheduled Astra/Codex run starts. Do not stop an already-running service. Resume after git_sync GREEN.",
+  "operations": [
+    {
+      "type": "service",
+      "verb": "stop",
+      "unit": "prediction-codex-supervisor.timer"
+    },
+    {
+      "type": "service",
+      "verb": "status",
+      "unit": "prediction-codex-supervisor.timer"
+    },
+    {
+      "type": "service",
+      "verb": "status",
+      "unit": "prediction-codex-supervisor.service"
+    }
+  ]
+}
