@@ -1,0 +1,45 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-PROD-STAGED-DIFF-INSPECT-20261005",
+  "source_commit": "17eb0e659472000626452feb0b5479ab828dea37",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "run_tests",
+    "production_inspect",
+    "production_staged_inspect",
+    "production_diff_inspect"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 420,
+  "notes": "First self-test the updated capability-scoped executor, then read-only inspect complete staged production diff. No production writes/reset/commit/switch/ff.",
+  "operations": [
+    {
+      "type": "executor_selftest",
+      "timeout_seconds": 300
+    },
+    {
+      "type": "production_inspect"
+    },
+    {
+      "type": "production_staged_inspect",
+      "fail_for_visibility": false
+    },
+    {
+      "type": "production_diff_inspect",
+      "mode": "cached",
+      "max_chars": 60000
+    }
+  ]
+}
