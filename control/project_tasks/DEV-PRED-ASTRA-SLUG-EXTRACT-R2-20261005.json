@@ -1,0 +1,41 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-ASTRA-SLUG-EXTRACT-R2-20261005",
+  "source_commit": "6146022af088e28e687e5c0704fd0a541e5d2da6",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_runtime"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 180,
+  "notes": "Extract exact Astra model slug from the PASSed state diagnosis output. Read-only; no production mutation or new model discovery.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/astra_slug_extract_r2_20261005.py",
+      "content": "from pathlib import Path\nimport json,re\n\ntid='DEV-PRED-ASTRA-SLUG-STATE-DIAG-20261005'\nstate=Path.home()/'.local/state/prediction-project-executor'/f'{tid}.json'\nif not state.is_file():\n    print('DIAG_STATE=MISSING',flush=True)\n    raise SystemExit(31)\nobj=json.loads(state.read_text(encoding='utf-8'))\nblob='\\n'.join(str(x) for x in (obj.get('operations') or []))\n# The PASSed diagnosis printed the bounded contents of the prior details task/result files.\nmatches=re.findall(r'ASTRA_EXACT_SLUG=([^\\s\\\\\"]+)', blob)\nmatches=[m.strip() for m in matches if m.strip()]\nuniq=sorted(set(matches))\nprint('ASTRA_SLUG_MATCHES='+json.dumps(uniq),flush=True)\nif len(uniq)!=1:\n    raise SystemExit(32)\nslug=uniq[0]\nprint('ASTRA_EXACT_SLUG='+slug,flush=True)\nprint('AUTONOMOUS_MODEL_PROVENANCE_READY=true',flush=True)\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/astra_slug_extract_r2_20261005.py"
+      ],
+      "timeout_seconds": 60
+    }
+  ]
+}
