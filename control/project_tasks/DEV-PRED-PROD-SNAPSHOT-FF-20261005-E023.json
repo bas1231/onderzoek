@@ -1,0 +1,51 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-PROD-SNAPSHOT-FF-20261005-E023",
+  "source_commit": "8511127a874f323cc46cf701b2e9286d287f0b9a",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "production_merge_representation",
+    "production_snapshot_and_clear_staged",
+    "production_fast_forward",
+    "production_compare_worktree",
+    "production_inspect"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 300,
+  "notes": "Safely reconcile production to canonical. Re-prove committed temporary branch is subsumed; preserve exact staged index as a durable local refs/prediction/staged-snapshots/* commit before clearing it; fast-forward production to pinned canonical; verify clean production. No bridge/source/service/live-trading/paid/wallet mutation.",
+  "operations": [
+    {
+      "type": "production_merge_representation",
+      "require_subsumed": true
+    },
+    {
+      "type": "production_snapshot_and_clear_staged",
+      "expected_staged_count": 30
+    },
+    {
+      "type": "production_ff",
+      "target_commit": "8511127a874f323cc46cf701b2e9286d287f0b9a"
+    },
+    {
+      "type": "production_compare_worktree",
+      "require_exact": true,
+      "report_mode": "counts"
+    },
+    {
+      "type": "production_inspect",
+      "require_head_equals_main": true,
+      "report_mode": "summary"
+    }
+  ]
+}
