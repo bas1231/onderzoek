@@ -1,0 +1,41 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-PROD-DIRTY-DECISION-VIS-20261005-E010",
+  "source_commit": "8511127a874f323cc46cf701b2e9286d287f0b9a",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_runtime"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 120,
+  "notes": "Visibility-only task: re-read E009 local result and intentionally return the exact DIRTY_DECISION_READ payload as TaskError detail so browser compaction exposes it. No production/source/bridge/service mutation.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/prod_dirty_decision_vis_20261005_e010.py",
+      "content": "from pathlib import Path\nimport json,re\nevent=\"1791200248-1807923f5ec1\"\nbase=Path.home()/\".local/share/prediction-chat-bridge\"\nfor d in (\"sent\",\"inflight\",\"outbox\"):\n    p=base/d/f\"{event}.json\"\n    if p.is_file():\n        obj=json.loads(p.read_text(encoding=\"utf-8\",errors=\"replace\"))\n        msg=str(obj.get(\"message\") or \"\")\n        m=re.search(r'DIRTY_DECISION_READ=(\\{.*\\})\\s*$',msg,re.M)\n        if not m:\n            print(\"DIRTY_DECISION_VIS=MISSING\",flush=True)\n            raise SystemExit(42)\n        data=json.loads(m.group(1))\n        print(\"DIRTY_DECISION_VIS=\"+json.dumps(data,separators=(\",\",\":\"),sort_keys=True),flush=True)\n        raise SystemExit(42)\nprint(\"DIRTY_DECISION_VIS=EVENT_MISSING\",flush=True)\nraise SystemExit(42)\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/prod_dirty_decision_vis_20261005_e010.py"
+      ],
+      "timeout_seconds": 60
+    }
+  ]
+}
