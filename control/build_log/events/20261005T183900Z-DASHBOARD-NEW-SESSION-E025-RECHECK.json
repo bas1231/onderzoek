@@ -1,0 +1,34 @@
+{
+  "schema": "PREDICTION_BUILD_LOG_EVENT_V1",
+  "event_id": "20261005T183900Z-DASHBOARD-NEW-SESSION-E025-RECHECK",
+  "work_item_id": "DASHBOARD-NEW-SESSION-ACTIONS-20261005",
+  "created_at_utc": "2026-10-05T18:39:00Z",
+  "event_type": "ATTEMPT",
+  "work_item_status": "IN_PROGRESS",
+  "outcome": "STARTED",
+  "title": "Dashboardknoppen starten altijd een nieuwe ChatGPT-sessie",
+  "objective": "Maak het platformbreed verplicht dat iedere dashboardactie die ChatGPT start, het werk in een nieuwe Prediction ChatGPT-sessie opent.",
+  "summary": "De 0.5.0-userscript bevat nu opnieuw de bestaande active-page presence naast de nieuwe fresh-session launcher. E025 herhaalt de volledige bridge-moduleclassificatie.",
+  "why": "E024 wees exact naar test_active_page_routing.py; die regressie is gericht hersteld zonder de nieuwe launch-semantiek terug te draaien.",
+  "next_action": "Bij exit 0: geïntegreerde Control Center + bridge installatie uitvoeren. Bij een volgende modulecode: alleen die eerstvolgende regressie repareren.",
+  "session_route_task_id": "SESSION-ROUTE-fc2613ecbc81e22d4c913b2a",
+  "task_ids": [
+    "DEV-PRED-DASHBOARD-NEW-SESSION-RECHECK-20261005-E025"
+  ],
+  "commits": [
+    "de9122c1fdfb6eb06f322d8e02c1165fe61783d1"
+  ],
+  "evidence_refs": [
+    "control/tampermonkey_multichat/prediction-chat-wake.user.js",
+    "control/dev_checks/dashboard_new_session_e023_classify.py"
+  ],
+  "tags": [
+    "dashboard",
+    "new-session",
+    "bridge",
+    "active-page",
+    "recheck"
+  ],
+  "parent_event_id": "20261005T183600Z-DASHBOARD-NEW-SESSION-E024-RESULT",
+  "first_incomplete_step": "Bewijzen dat alle bridge-/multichat-testmodules nu groen zijn."
+}
