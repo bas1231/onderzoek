@@ -1,0 +1,41 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-CANDIDATE-INVENTORY-20261005-E001",
+  "source_commit": "365e71bcc7f0b57621d3a34abbfa05fae1c3af49",
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "high"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_runtime"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 180,
+  "notes": "Read-only live inventory of current Prediction candidates, queue states, active experiments and supervisor/qualification state. No model calls, service changes, candidate mutations, trading or paid actions.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/candidate_inventory_20261005_e001.py",
+      "content": "from pathlib import Path\nimport json, re\n\nprod = Path.home() / \"prediction_research_prod\"\n\ndef safe_json(path):\n    try:\n        if not path.is_file() or path.is_symlink():\n            return None\n        return json.loads(path.read_text())\n    except Exception as e:\n        return {\"_parse_error\": str(e)}\n\nitems = []\ncand_dir = prod / \"knowledge/candidates\"\nif cand_dir.is_dir():\n    for p in sorted(cand_dir.glob(\"*.json\")):\n        d = safe_json(p)\n        if not isinstance(d, dict) or not d.get(\"candidate_id\"):\n            continue\n        items.append({\n            \"candidate_id\": d.get(\"candidate_id\"),\n            \"queue_status\": d.get(\"queue_status\"),\n            \"phase\": d.get(\"phase\"),\n            \"decision\": d.get(\"decision\"),\n            \"priority\": d.get(\"priority\"),\n            \"updated_at\": d.get(\"updated_at\"),\n            \"active_experiment_ids\": d.get(\"active_experiment_ids\") or [],\n            \"qualification_fixture\": bool(d.get(\"qualification_fixture\")),\n            \"next_decisive_test\": d.get(\"next_decisive_test\"),\n            \"protocols\": d.get(\"prospective_protocols\") or [],\n        })\n\nactive_yaml = []\nactive_dir = prod / \"candidates/active\"\nif active_dir.is_dir():\n    for p in sorted(active_dir.iterdir()):\n        if not p.is_file() or p.is_symlink():\n            continue\n        txt = p.read_text(errors=\"replace\")\n        def grab(key):\n            m = re.search(r\"(?m)^\\s*\" + re.escape(key) + r\":\\s*[\\\"']?([^\\\"'\\n#]+)\", txt)\n            return m.group(1).strip() if m else None\n        cid = grab(\"candidate_id\") or grab(\"id\")\n        active_yaml.append({\n            \"file\": p.name,\n            \"candidate_id\": cid,\n            \"status\": grab(\"status\"),\n            \"economic_status\": grab(\"economic_status\"),\n            \"updated_at\": grab(\"updated_at\"),\n        })\n\nruntime_state = safe_json(prod / \"knowledge/codex_runtime/STATE.json\")\nqual_state = safe_json(Path(\"/tmp/prediction-full-a2z-live-v4-state.json\"))\n\nstatus_counts = {}\nfor x in items:\n    s = x.get(\"queue_status\") or \"UNSPECIFIED\"\n    status_counts[s] = status_counts.get(s, 0) + 1\n\nbuild_inbox = [x for x in items if x.get(\"queue_status\") in {\n    \"NEEDS_BUILD\",\"ASTRA_PREBUILD_REVIEW\",\"EXPERIMENT_REQUIRED\",\"NEEDS_DIRECTOR\"\n}]\nrunning = [x for x in items if x.get(\"queue_status\") == \"RUNNING\" or x.get(\"active_experiment_ids\")]\nwaiting = [x for x in items if x.get(\"queue_status\") in {\"WAITING_FOR_RESULT\",\"PARKED\"}]\n\nsummary = {\n    \"candidate_count\": len(items),\n    \"status_counts\": status_counts,\n    \"build_or_review_inbox\": build_inbox,\n    \"running\": running,\n    \"waiting_or_parked\": waiting,\n    \"active_yaml\": active_yaml,\n    \"supervisor_state\": runtime_state,\n    \"qualification_v4\": qual_state,\n}\nprint(\"CANDIDATE_INVENTORY \" + json.dumps(summary, separators=(\",\",\":\"), default=str), flush=True)\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/candidate_inventory_20261005_e001.py"
+      ],
+      "timeout_seconds": 90
+    }
+  ]
+}
