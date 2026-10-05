@@ -61,6 +61,8 @@ def validate_task(t):
     for key in ['priority','expected_value','estimated_reasoning_cost']:
         if type(t[key]) not in (int,float) or not 0<=t[key]<1e9:raise Blocked('MALFORMED_PRIORITY')
     if type(t.get('requires_bridge',False)) is not bool:raise Blocked('MALFORMED_BRIDGE_REQUIREMENT')
+    if t.get('model_policy') not in (None,'HIGHEST_AVAILABLE_GPT','ASTRA_EXACT'):raise Blocked('MALFORMED_MODEL_POLICY')
+    if t.get('astra_review_task') is not None and type(t.get('astra_review_task')) is not bool:raise Blocked('MALFORMED_ASTRA_REVIEW_FLAG')
     if t['estimated_reasoning_cost']<=0:raise Blocked('MALFORMED_COST')
     return t
 
@@ -160,6 +162,14 @@ class Supervisor:
                 print(json.dumps({'event':'RESULT_APPLIED_NEXT_ACTION_RECORDED','task_id':t['task_id'],'candidate_id':t['candidate_id'],'queue_status':record['queue_status']}),flush=True)
             except (ValueError,OSError,KeyError) as exc:
                 atomic(folder/'CANDIDATE_REJECTED.json',{'reason':str(exc)});category='TASK_FAILURE'
+        if category=='COMPLETE' and t.get('astra_review_task'):
+            try:
+                import astra_autonomous_review
+                applied=astra_autonomous_review.validate_result_and_write(self,t,final,folder)
+                atomic(folder/'ASTRA_REVIEW_APPLIED.json',applied)
+                print(json.dumps({'event':'ASTRA_AUTONOMOUS_REVIEW_WRITTEN','task_id':t['task_id'],**applied},sort_keys=True),flush=True)
+            except (ValueError,OSError,KeyError) as exc:
+                atomic(folder/'ASTRA_REVIEW_REJECTED.json',{'reason':str(exc)});category='TASK_FAILURE'
         if category=='COMPLETE':
             completion={'task_id':t['task_id'],'input_sha256':t['input_sha256'],'attempt':attempt,'thread_id':thread,'final':final,'timestamp':self.clock()}
             atomic(folder/'COMPLETE.json',completion)
@@ -284,14 +294,24 @@ class CodexWorker:
         if auth.returncode or 'Logged in using ChatGPT' not in auth.stdout+auth.stderr:raise Blocked('CHATGPT_INCLUDED_AUTH_REQUIRED')
         cache=json.loads((P.home()/'.codex/models_cache.json').read_text());models=[m for m in cache.get('models',[]) if m.get('visibility')=='list']
         if not models:raise Blocked('AVAILABLE_MODEL_UNKNOWN')
-        model=min(models,key=lambda m:m.get('priority',999))['slug']
+        policy=task.get('model_policy') or 'HIGHEST_AVAILABLE_GPT'
+        if policy=='ASTRA_EXACT':
+            astra=[m for m in models if 'astra' in str(m.get('slug') or '').lower() or 'astra' in str(m.get('display_name') or '').lower()]
+            if len(astra)!=1:raise Blocked('ASTRA_MODEL_UNAVAILABLE_OR_AMBIGUOUS')
+            selected=astra[0];model=str(selected.get('slug') or '').strip()
+            if not model:raise Blocked('ASTRA_MODEL_SLUG_MISSING')
+            selection={'policy':'ASTRA_EXACT','visible_astra_count':1,'selected_slug':model,'display_name':selected.get('display_name'),'priority':selected.get('priority')}
+        else:
+            selected=min(models,key=lambda m:m.get('priority',999));model=str(selected.get('slug') or '').strip()
+            if not model:raise Blocked('AVAILABLE_MODEL_SLUG_MISSING')
+            selection={'policy':'HIGHEST_AVAILABLE_GPT','visible_model_count':len(models),'selected_slug':model,'display_name':selected.get('display_name'),'priority':selected.get('priority')}
         args=[self.binary,'exec']+(['resume',thread] if thread else [])+['--json','--ignore-user-config','--ignore-rules','--skip-git-repo-check','-m',model,'-c','sandbox_mode="read-only"','-c','approval_policy="never"','-c','web_search="disabled"','-c','model_reasoning_effort="high"','--disable','shell_tool','--disable','unified_exec','--disable','apps','--disable','apply_patch_freeform','-']
         # Geen shell, hooks, repo-config, MCP of writable eigenaarworkspace beschikbaar.
         prompt='Reason only over the supplied input. Do not call tools, spend money, use credentials, alter files, activate resets, or execute commands. Give a falsifiable research/review conclusion; NO_PROVEN_EDGE is valid.\nTask ID: '+task['task_id']+'\n'+task['prompt']
         with tempfile.TemporaryDirectory(prefix='prediction-codex-reasoning-') as cwd:
             with os.fdopen(os.open(folder/'events.jsonl',os.O_WRONLY|os.O_CREAT|os.O_EXCL|os.O_DSYNC,0o600),'w') as output,(folder/'stderr.log').open('w') as err:
                 proc=subprocess.Popen(args,cwd=cwd,env=env,stdin=subprocess.PIPE,stdout=output,stderr=err,text=True,start_new_session=True,pass_fds=(lock_fd,))
-                atomic(folder/'WORKER.json',{'pid':proc.pid,'model':model,'thread_id':thread,'started_at':time.time(),'command_flags':args[1:-1]})
+                atomic(folder/'WORKER.json',{'pid':proc.pid,'model':model,'model_selection':selection,'thread_id':thread,'started_at':time.time(),'command_flags':args[1:-1]})
                 raw_timeout=os.environ.get('PREDICTION_CODEX_WORKER_TIMEOUT_SECONDS','1800')
                 try:worker_timeout=int(raw_timeout)
                 except (TypeError,ValueError):raise Blocked('CODEX_WORKER_TIMEOUT_INVALID')
