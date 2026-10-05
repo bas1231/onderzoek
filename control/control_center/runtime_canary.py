@@ -40,6 +40,17 @@ def main() -> int:
         raise RuntimeError("CONTROL_CENTER_SESSIONS_MISSING")
     if not isinstance(snapshot.get("chain_alerts"), list):
         raise RuntimeError("CONTROL_CENTER_CHAIN_ALERTS_MISSING")
+    lifecycle = snapshot.get("lifecycle")
+    if not isinstance(lifecycle, dict):
+        raise RuntimeError("CONTROL_CENTER_LIFECYCLE_MISSING")
+    if lifecycle.get("full_chain_status") != "NOT_PROVEN":
+        raise RuntimeError("CONTROL_CENTER_LIFECYCLE_OVERCLAIM")
+    stages = lifecycle.get("stages")
+    if not isinstance(stages, list) or len(stages) != 9:
+        raise RuntimeError("CONTROL_CENTER_LIFECYCLE_STAGES_INVALID")
+    if lifecycle.get("invariant") != "NO_TEST_OR_MEASUREMENT_BEFORE_ASTRA_POSTBUILD_APPROVAL":
+        raise RuntimeError("CONTROL_CENTER_LIFECYCLE_INVARIANT_INVALID")
+
     sync = snapshot.get("git_sync")
     if not isinstance(sync, dict) or sync.get("status") not in {"GREEN", "AMBER", "RED", "UNKNOWN"}:
         raise RuntimeError("CONTROL_CENTER_GIT_SYNC_MISSING")
@@ -65,6 +76,7 @@ def main() -> int:
                 "legacy_candidates": counts.get("legacy_candidates"),
                 "chain_alerts": len(snapshot.get("chain_alerts") or []),
                 "git_sync": (snapshot.get("git_sync") or {}).get("status"),
+                "lifecycle": (snapshot.get("lifecycle") or {}).get("full_chain_status"),
             },
             separators=(",", ":"),
         ),
