@@ -1,0 +1,46 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-PREPATCH-LOCAL-DIFF-20261005",
+  "source_commit": "a341ca35b2aec089b91338af7bbb9e1789d90bc3",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "production_diff_inspect",
+    "production_staged_inspect"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 180,
+  "notes": "Read-only prepatch inspection of the production staged variants for supervisor.py and candidate_reporting.py plus compact staged-state summary. No production mutation.",
+  "operations": [
+    {
+      "type": "production_staged_inspect",
+      "fail_for_visibility": false
+    },
+    {
+      "type": "production_diff_inspect",
+      "mode": "cached",
+      "paths": [
+        "control/codex_supervisor/supervisor.py"
+      ],
+      "max_chars": 9000
+    },
+    {
+      "type": "production_diff_inspect",
+      "mode": "cached",
+      "paths": [
+        "control/hourly/candidate_reporting.py"
+      ],
+      "max_chars": 9000
+    }
+  ]
+}
