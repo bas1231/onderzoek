@@ -175,7 +175,7 @@ def select_next(supervisor,repo):
             state=item.get('queue_status')
 
             if state=='ASTRA_PREBUILD_REVIEW':
-                import model_quality_gate,astra_review_wake
+                import model_quality_gate
                 try:
                     applied,review_ref=model_quality_gate.apply_review(supervisor,P(repo),path,'PREBUILD')
                 except model_quality_gate.ReviewGateError as exc:
@@ -183,13 +183,26 @@ def select_next(supervisor,repo):
                     print(json.dumps({'event':'QUEUE_BLOCKED','candidate_id':item.get('candidate_id'),'reason':reason}),flush=True)
                     return {'queue_blocked':True,'reason':reason,'candidate_id':item.get('candidate_id')}
                 if applied is None:
-                    try:wake=astra_review_wake.ensure_review_continuation(supervisor,P(repo),item,'PREBUILD')
-                    except astra_review_wake.AstraReviewWakeBlocked as exc:
-                        reason='ASTRA_PREBUILD_WAKE_BLOCKED:'+str(exc)[:90]
+                    if model_quality_gate.is_qualification_fixture(item):
+                        import astra_review_wake
+                        try:wake=astra_review_wake.ensure_review_continuation(supervisor,P(repo),item,'PREBUILD')
+                        except astra_review_wake.AstraReviewWakeBlocked as exc:
+                            reason='ASTRA_PREBUILD_WAKE_BLOCKED:'+str(exc)[:90]
+                            print(json.dumps({'event':'QUEUE_BLOCKED','candidate_id':item.get('candidate_id'),'reason':reason}),flush=True)
+                            return {'queue_blocked':True,'reason':reason,'candidate_id':item.get('candidate_id')}
+                        print(json.dumps({'event':'ASTRA_REVIEW_WAKE','candidate_id':item.get('candidate_id'),'phase':'PREBUILD','continuation_id':wake.get('continuation_id'),'state':wake.get('continuation_state'),'scope':'TEST_ONLY'}),flush=True)
+                        return {'queue_blocked':True,'reason':'ASTRA_PREBUILD_TEST_REVIEW_QUEUED','candidate_id':item.get('candidate_id'),'continuation_id':wake.get('continuation_id')}
+                    import astra_autonomous_review
+                    try:
+                        review_task=astra_autonomous_review.select_task(supervisor,P(repo),path,item,'PREBUILD')
+                    except astra_autonomous_review.AstraAutonomousReviewError as exc:
+                        reason='ASTRA_PREBUILD_AUTONOMOUS_BLOCKED:'+str(exc)[:90]
                         print(json.dumps({'event':'QUEUE_BLOCKED','candidate_id':item.get('candidate_id'),'reason':reason}),flush=True)
                         return {'queue_blocked':True,'reason':reason,'candidate_id':item.get('candidate_id')}
-                    print(json.dumps({'event':'ASTRA_REVIEW_WAKE','candidate_id':item.get('candidate_id'),'phase':'PREBUILD','continuation_id':wake.get('continuation_id'),'state':wake.get('continuation_state')}),flush=True)
-                    return {'queue_blocked':True,'reason':'ASTRA_PREBUILD_REVIEW_QUEUED','candidate_id':item.get('candidate_id'),'continuation_id':wake.get('continuation_id')}
+                    if review_task:
+                        print(json.dumps({'event':'ASTRA_AUTONOMOUS_REVIEW_SELECTED','candidate_id':item.get('candidate_id'),'phase':'PREBUILD','task_id':review_task.get('task_id')}),flush=True)
+                        return review_task
+                    return {'queue_blocked':True,'reason':'ASTRA_PREBUILD_AUTONOMOUS_REVIEW_PENDING','candidate_id':item.get('candidate_id')}
                 item=applied;state=item.get('queue_status')
                 if state=='REJECT':continue
                 if state=='NEEDS_REVISION':
@@ -226,7 +239,7 @@ def select_next(supervisor,repo):
                 return {'queue_blocked':True,'reason':reason,'candidate_id':item.get('candidate_id'),'continuation_id':wake.get('continuation_id')}
 
             if state=='ASTRA_PREMEASUREMENT_REVIEW':
-                import model_quality_gate,astra_review_wake
+                import model_quality_gate
                 try:
                     applied,review_ref=model_quality_gate.apply_review(supervisor,P(repo),path,'PREMEASUREMENT')
                 except model_quality_gate.ReviewGateError as exc:
@@ -234,13 +247,26 @@ def select_next(supervisor,repo):
                     print(json.dumps({'event':'QUEUE_BLOCKED','candidate_id':item.get('candidate_id'),'reason':reason}),flush=True)
                     return {'queue_blocked':True,'reason':reason,'candidate_id':item.get('candidate_id')}
                 if applied is None:
-                    try:wake=astra_review_wake.ensure_review_continuation(supervisor,P(repo),item,'PREMEASUREMENT')
-                    except astra_review_wake.AstraReviewWakeBlocked as exc:
-                        reason='ASTRA_PREMEASUREMENT_WAKE_BLOCKED:'+str(exc)[:80]
+                    if model_quality_gate.is_qualification_fixture(item):
+                        import astra_review_wake
+                        try:wake=astra_review_wake.ensure_review_continuation(supervisor,P(repo),item,'PREMEASUREMENT')
+                        except astra_review_wake.AstraReviewWakeBlocked as exc:
+                            reason='ASTRA_PREMEASUREMENT_WAKE_BLOCKED:'+str(exc)[:80]
+                            print(json.dumps({'event':'QUEUE_BLOCKED','candidate_id':item.get('candidate_id'),'reason':reason}),flush=True)
+                            return {'queue_blocked':True,'reason':reason,'candidate_id':item.get('candidate_id')}
+                        print(json.dumps({'event':'ASTRA_REVIEW_WAKE','candidate_id':item.get('candidate_id'),'phase':'PREMEASUREMENT','continuation_id':wake.get('continuation_id'),'state':wake.get('continuation_state'),'scope':'TEST_ONLY'}),flush=True)
+                        return {'queue_blocked':True,'reason':'ASTRA_PREMEASUREMENT_TEST_REVIEW_QUEUED','candidate_id':item.get('candidate_id'),'continuation_id':wake.get('continuation_id')}
+                    import astra_autonomous_review
+                    try:
+                        review_task=astra_autonomous_review.select_task(supervisor,P(repo),path,item,'PREMEASUREMENT')
+                    except astra_autonomous_review.AstraAutonomousReviewError as exc:
+                        reason='ASTRA_PREMEASUREMENT_AUTONOMOUS_BLOCKED:'+str(exc)[:80]
                         print(json.dumps({'event':'QUEUE_BLOCKED','candidate_id':item.get('candidate_id'),'reason':reason}),flush=True)
                         return {'queue_blocked':True,'reason':reason,'candidate_id':item.get('candidate_id')}
-                    print(json.dumps({'event':'ASTRA_REVIEW_WAKE','candidate_id':item.get('candidate_id'),'phase':'PREMEASUREMENT','continuation_id':wake.get('continuation_id'),'state':wake.get('continuation_state')}),flush=True)
-                    return {'queue_blocked':True,'reason':'ASTRA_PREMEASUREMENT_REVIEW_QUEUED','candidate_id':item.get('candidate_id'),'continuation_id':wake.get('continuation_id')}
+                    if review_task:
+                        print(json.dumps({'event':'ASTRA_AUTONOMOUS_REVIEW_SELECTED','candidate_id':item.get('candidate_id'),'phase':'PREMEASUREMENT','task_id':review_task.get('task_id')}),flush=True)
+                        return review_task
+                    return {'queue_blocked':True,'reason':'ASTRA_PREMEASUREMENT_AUTONOMOUS_REVIEW_PENDING','candidate_id':item.get('candidate_id')}
                 item=applied;state=item.get('queue_status')
                 if state=='REJECT':continue
                 if state=='NEEDS_REVISION':
