@@ -1,0 +1,41 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-CONT-NEXT-da2e4b93bf9dd8252d3d62b6",
+  "source_commit": "8511127a874f323cc46cf701b2e9286d287f0b9a",
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "Codex; exact model identity unavailable to runtime",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_runtime"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 180,
+  "notes": "Vervolg na mislukte eindacceptatie: uitsluitend opgeslagen uitvoer van bestaande productie-inventarisatie uitlezen. Bewaar volledige paden en provenance in geïsoleerde worktree. Geen test of vergelijking herhalen en productie niet wijzigen. Ontbrekend bewijs en bestaande verschillen blijven fail-closed.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/read_production_inventory_da2e4b93.py",
+      "content": "from pathlib import Path\nimport json,hashlib,collections\ntask='DEV-PRED-PROD-DIFF-INVENTORY-20261005-E001'\nsource='8511127a874f323cc46cf701b2e9286d287f0b9a'\nbase=Path.home()/'.local/share/prediction-chat-bridge'\nmarker='PRODUCTION_COMPARE_WORKTREE '\nfound=[]\nfor folder in ('sent','inflight','outbox'):\n    directory=base/folder\n    if not directory.is_dir():\n        continue\n    for p in sorted(directory.glob('*.json'),key=lambda x:x.name,reverse=True)[:500]:\n        if p.is_symlink() or not p.is_file() or p.stat().st_size>2000000:\n            continue\n        try:\n            record=json.loads(p.read_text(encoding='utf-8'))\n        except (ValueError,OSError):\n            continue\n        msg=str(record.get('message') or '')\n        if ('PROJECT_TASK_ID='+task) not in msg and ('DEV_TASK_ID='+task) not in msg:\n            continue\n        for line in msg.splitlines():\n            if line.startswith(marker):\n                try:\n                    payload=json.loads(line[len(marker):])\n                except ValueError:\n                    continue\n                if payload.get('source_commit')==source:\n                    found.append({'event_file':p.name,'message_sha256':hashlib.sha256(msg.encode()).hexdigest(),'payload':payload})\nout=Path.cwd()/'diagnostic-result'\nout.mkdir(exist_ok=True)\nif not found:\n    (out/'production-inventory-evidence.json').write_text(json.dumps({'status':'EVIDENCE_NOT_AVAILABLE','task_id':task,'production_modified':False},indent=2))\n    print('PROD_DIFF EVIDENCE_NOT_AVAILABLE inventory_log_not_found; no comparison rerun',flush=True)\n    raise SystemExit(2)\nunique={json.dumps(x['payload'],sort_keys=True) for x in found}\nif len(unique)!=1:\n    print('PROD_DIFF CONFLICTING_INVENTORY_EVIDENCE',flush=True)\n    raise SystemExit(3)\nr=found[0]['payload']\ndiff=r.get('different',[])\nmissing=r.get('missing_in_source',[])\ngroups=dict(collections.Counter(str(Path(x).parent) for x in missing))\nreport={'task_id':task,'source_commit':source,'evidence':found,'missing_groups':groups,'production_modified':False,'test_rerun':False}\n(out/'production-inventory-evidence.json').write_text(json.dumps(report,indent=2))\nshort=[Path(x).name.removesuffix('.py') for x in diff]\ncompact={'different':r.get('different_count'),'missing':r.get('missing_in_source_count'),'names':short}\nprint('PROD_DIFF '+json.dumps(compact,separators=(',',':')),flush=True)\nraise SystemExit(0 if r.get('exact') is True else 1)\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/read_production_inventory_da2e4b93.py"
+      ],
+      "timeout_seconds": 90
+    }
+  ]
+}
