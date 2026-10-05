@@ -2,11 +2,13 @@
   "policy": "CHATGPT_REASONING_ONLY_NO_TOOLS_NO_RESET",
   "usage_retry_seconds": 900,
   "percentage_usage": "UNKNOWN_NOT_SCRAPED",
-  "candidate_dispatch.py_sha256": "ebda18c11888a2c6a28372f1ab2ad935c6da8f18d6f2c7a8edbfe0ee5b318150",
+  "candidate_dispatch.py_sha256": "5ac0e9b9fd495c3b3d1ba72dd55232c0b4bec02b2dbd76c4e98f18c095dd0897",
   "candidate_policy_sha256": "84d2b21cbac0d5177f4e9057107650b2fc3b71892d8abb1b0ca0641647bc0f44",
   "evidence_wake.py_sha256": "cd7b6e21a30094098cfd10c07c42eb46dd287548aef52cb81641c3236f9aaf3c",
   "build_wake.py_sha256": "122b6c792e3157ece15e6f5232e36831f03706343c4ca29dbc1ce26e4f76ba39",
-  "model_quality_gate.py_sha256": "bff333b2da3d91b4515126ec1c6cbeee295aa32dd72d89c80eada79c8ca74698",
-  "astra_review_wake.py_sha256": "58442e4fb0ec738c9fc767dad695c734c0fc823163c190f3d2dfd186bbe76c55",
-  "measurement_wake.py_sha256": "0a876480b64d416a7726e88f5580ef97f4a79587432ba3f8e07fed80b4277721"
+  "model_quality_gate.py_sha256": "d2be64cf92bb4bbd2996cc3fe07863e9ee0a963a60065ec4cb402ff18fa1f855",
+  "astra_review_wake.py_sha256": "8727551695ed03fc047f1492d1784633e00a59285dd079f090c3a9d7fa224116",
+  "measurement_wake.py_sha256": "0a876480b64d416a7726e88f5580ef97f4a79587432ba3f8e07fed80b4277721",
+  "supervisor_sha256": "dbc5c524403276f34b977f87418910ddb9c29870692ef4aefff84c1a7c3bf249",
+  "astra_autonomous_review.py_sha256": "a185dc932634abf09ce042e9d38138c35e0f939a2d3f3f4607502a951c6e0580"
 }
