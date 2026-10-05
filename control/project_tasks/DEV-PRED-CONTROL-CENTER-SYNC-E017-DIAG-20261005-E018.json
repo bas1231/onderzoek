@@ -1,0 +1,35 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-CONTROL-CENTER-SYNC-E017-DIAG-20261005-E018",
+  "source_commit": "ba268c882f33af0fab8b0456516f5a7be53fee9c",
+  "intelligence_tier": "B",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "run_project_python",
+    "run_tests"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 180,
+  "notes": "Diagnostic only. Reproduce the E017 Control Center unittest suite and print the first full failure/error traceback. The diagnostic script intentionally exits 0 after printing evidence. No runtime install, no service changes.",
+  "operations": [
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/control_center_sync_e017_diag.py"
+      ],
+      "timeout_seconds": 150
+    }
+  ]
+}
