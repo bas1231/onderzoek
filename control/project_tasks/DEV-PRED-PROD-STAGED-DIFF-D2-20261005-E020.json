@@ -1,0 +1,34 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-PROD-STAGED-DIFF-D2-20261005-E020",
+  "source_commit": "8511127a874f323cc46cf701b2e9286d287f0b9a",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "production_diff_inspect"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 120,
+  "notes": "Read-only single-file staged production diff visibility after E017D detail was compacted away. Intentional TaskError expected. No cleanup/reset/ff/source/bridge/service mutation.",
+  "operations": [
+    {
+      "type": "production_diff_inspect",
+      "mode": "cached",
+      "paths": [
+        "tests/codex_supervisor/test_autobuild_chat_wake.py"
+      ],
+      "max_chars": 1800,
+      "fail_for_visibility": true
+    }
+  ]
+}
