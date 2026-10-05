@@ -1,0 +1,43 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-PROD-STAGED-DIFF-CAPTURE-20261005-E014",
+  "source_commit": "8511127a874f323cc46cf701b2e9286d287f0b9a",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "production_diff_inspect"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 180,
+  "notes": "Read-only capture of cached/staged production diff for the exact 11 paths proven different by E012/E013. No cleanup/reset/ff/source/bridge/service mutation.",
+  "operations": [
+    {
+      "type": "production_diff_inspect",
+      "mode": "cached",
+      "paths": [
+        "control/codex_supervisor/astra_review_wake.py",
+        "control/codex_supervisor/candidate_dispatch.py",
+        "control/codex_supervisor/model_quality_gate.py",
+        "control/codex_supervisor/supervisor.py",
+        "control/hourly/candidate_reporting.py",
+        "control/hourly/full_chain_qualification.py",
+        "knowledge/codex_runtime/CONFIG.json",
+        "methodology/EDGE_DISCOVERY_MODEL_GATES.md",
+        "tests/codex_supervisor/test_autobuild_chat_wake.py",
+        "tests/codex_supervisor/test_candidate_dispatch.py",
+        "tests/codex_supervisor/test_model_quality_gates.py"
+      ],
+      "max_chars": 60000
+    }
+  ]
+}
