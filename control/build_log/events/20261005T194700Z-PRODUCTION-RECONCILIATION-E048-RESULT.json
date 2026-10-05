@@ -1,0 +1,32 @@
+{
+  "schema": "PREDICTION_BUILD_LOG_EVENT_V1",
+  "event_id": "20261005T194700Z-PRODUCTION-RECONCILIATION-E048-RESULT",
+  "work_item_id": "PRODUCTION-RECONCILIATION-20261005",
+  "created_at_utc": "2026-10-05T19:47:00Z",
+  "event_type": "RESULT",
+  "work_item_status": "IN_PROGRESS",
+  "outcome": "FAIL",
+  "title": "Production veilig reconciliëren met canonical main",
+  "objective": "Breng production veilig in sync met canonical main zonder lokaal werk te verliezen.",
+  "summary": "E048 maakte de lifecycle-gate volledig zichtbaar: candidate AUTO-DISCOVERY-54d13314c7879b58e46d, originating task CANDIDATE-28cb4873995ee2ff-ea715c48db876fe8436ba0d9d5bb5911, queue_status=ASTRA_PREBUILD_REVIEW, scientific_status=NO_PROVEN_EDGE.",
+  "why": "De lokale candidate overlay is actieve governed PREBUILD-state, niet afgeronde of triviale runtimecache. De buitenste FAIL is bewust via fail_for_visibility.",
+  "next_action": "Behoud de state. Onderzoek bounded exact export van de E034 snapshot naar ChatGPT zodat de 24 artifacts zelf canoniek via de GitHub connector kunnen worden geschreven; geen ignore/cleanup voordat representatie bewezen is.",
+  "session_route_task_id": "SESSION-ROUTE-fc2613ecbc81e22d4c913b2a",
+  "task_ids": [
+    "DEV-PRED-PRODUCTION-SNAPSHOT-CANDIDATE-GATE-20261005-E048"
+  ],
+  "evidence_refs": [
+    "event=1791228891-6f6b8f0a490d",
+    "queue_status=ASTRA_PREBUILD_REVIEW",
+    "scientific_status=NO_PROVEN_EDGE"
+  ],
+  "tags": [
+    "production",
+    "reconciliation",
+    "candidate-state",
+    "astra-prebuild",
+    "no-proven-edge"
+  ],
+  "parent_event_id": "20261005T193800Z-PRODUCTION-RECONCILIATION-E048-CANDIDATE-GATE",
+  "first_incomplete_step": "Exacte snapshotbytes canoniek representeren via ChatGPT remote-writepad."
+}
