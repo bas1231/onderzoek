@@ -1,0 +1,105 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-CONTROL-CENTER-SYNC-BUTTON-20261005-E017",
+  "source_commit": "e12922c29736d5ac7afddfd181d5a01784ad326f",
+  "intelligence_tier": "B",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "run_project_python",
+    "run_tests",
+    "write_runtime",
+    "user_service_manage",
+    "read_logs"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 600,
+  "notes": "Deploy one-click safe Sync button plus shared cross-session Logboek. Regressions must prove sync request routes only to a proven chat, deduplicates repeated clicks, never authorizes destructive git/WSL remote writes, and is a no-op when already green. Install current server/UI/canary/lifecycle runtime, restart service, require service active and expanded runtime canary PASS. Do not trigger /api/sync during deployment.",
+  "operations": [
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "-m",
+        "compileall",
+        "-q",
+        "control/control_center",
+        "tests/control_center"
+      ],
+      "timeout_seconds": 120
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests/control_center",
+        "-p",
+        "test_control_center.py",
+        "-v"
+      ],
+      "test": true,
+      "timeout_seconds": 220
+    },
+    {
+      "type": "install_runtime",
+      "source": "control/control_center/server.py",
+      "destination": "~/.local/share/prediction-project-executor/control-center/server.py",
+      "mode": 420
+    },
+    {
+      "type": "install_runtime",
+      "source": "control/control_center/static/index.html",
+      "destination": "~/.local/share/prediction-project-executor/control-center/static/index.html",
+      "mode": 420
+    },
+    {
+      "type": "install_runtime",
+      "source": "control/control_center/runtime_canary.py",
+      "destination": "~/.local/share/prediction-project-executor/control-center/runtime_canary.py",
+      "mode": 420
+    },
+    {
+      "type": "install_runtime",
+      "source": "control/control_center/lifecycle_status.json",
+      "destination": "~/.local/share/prediction-project-executor/control-center/lifecycle_status.json",
+      "mode": 420
+    },
+    {
+      "type": "service",
+      "verb": "restart",
+      "unit": "prediction-control-center.service"
+    },
+    {
+      "type": "service",
+      "verb": "status",
+      "unit": "prediction-control-center.service"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/control_center/runtime_canary.py"
+      ],
+      "timeout_seconds": 150
+    },
+    {
+      "type": "journal",
+      "unit": "prediction-control-center.service",
+      "lines": 60
+    }
+  ]
+}
