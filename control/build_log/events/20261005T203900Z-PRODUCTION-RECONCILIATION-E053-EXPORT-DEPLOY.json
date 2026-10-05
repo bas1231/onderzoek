@@ -1,0 +1,31 @@
+{
+  "schema": "PREDICTION_BUILD_LOG_EVENT_V1",
+  "event_id": "20261005T203900Z-PRODUCTION-RECONCILIATION-E053-EXPORT-DEPLOY",
+  "work_item_id": "PRODUCTION-RECONCILIATION-20261005",
+  "created_at_utc": "2026-10-05T20:39:00Z",
+  "event_type": "ATTEMPT",
+  "work_item_status": "IN_PROGRESS",
+  "outcome": "STARTED",
+  "title": "Production veilig reconciliëren met canonical main",
+  "objective": "Breng production veilig in sync met canonical main zonder lokaal werk te verliezen.",
+  "summary": "E053 deployt de reeds door E050 geteste bounded snapshot-export naar de volledige wake bridge-stack: hardened, status_compaction, status_compaction_v11 en session_bootstrap. Daarna wordt alleen prediction-chat-wake.service herstart en geverifieerd.",
+  "why": "De exacte live entrypoint hoefde niet meer als afzonderlijke blocker te gelden: door alle relevante stacklagen atomisch uit canonical source te installeren is de exportregel beschikbaar ongeacht welke van deze wrappers de service start.",
+  "next_action": "Bij PASS: exporteer exact één E034 archivechunk van 12.388 base64-tekens en verifieer archive SHA-256 3e5cdf26b34f1f98527e602e561148a3630fb8cb586bf6185737607508d2f079.",
+  "session_route_task_id": "SESSION-ROUTE-fc2613ecbc81e22d4c913b2a",
+  "task_ids": [
+    "DEV-PRED-PRODUCTION-SNAPSHOT-EXPORT-DEPLOY-20261005-E053"
+  ],
+  "evidence_refs": [
+    "DEV-PRED-PRODUCTION-SNAPSHOT-EXPORT-TEST-20261005-E050",
+    "DEV-PRED-PRODUCTION-SNAPSHOT-ARCHIVE-INFO-20261005-E051"
+  ],
+  "tags": [
+    "production",
+    "reconciliation",
+    "export",
+    "bridge",
+    "runtime-deploy"
+  ],
+  "parent_event_id": "20261005T202700Z-PRODUCTION-RECONCILIATION-E050-PASS",
+  "first_incomplete_step": "Geteste bounded snapshot-export live op de wake bridge-stack installeren."
+}
