@@ -1,0 +1,19 @@
+{
+  "schema": "PREDICTION_BRIDGE_COMMAND_V1",
+  "task_id": "CONT-DONE-fd220e4363d01440dbb7c72f",
+  "action": "BRIDGE_PING",
+  "created_at_utc": "2026-10-05T15:16:40Z",
+  "route_task_id": null,
+  "delivery_mode": "headless",
+  "live_trading": false,
+  "paid_actions": false,
+  "wallet_actions": false,
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "notes": "Close verifier continuation. DEV-PRED-CONT-NEXT-827a3caa233bc04989ac7f1c failed while reading the expected E040 result file, indicating no durable A-to-Z result was available. Direct local dev-task receipt inspection is already authorized as DEV-PRED-A2Z-E040-RECEIPT-READ-20261005-E041, so no duplicate NEXT is created.",
+  "auto_continue": false,
+  "parent_continuation_id": "CONT-fd220e4363d01440dbb7c72f"
+}
