@@ -28,8 +28,8 @@ TERMINAL_FAILURES = {
 }
 SUCCESS_STATES = {"PASS", "COMPLETED", "DONE", "SUCCESS", "SENT"}
 ACTIVE_STATES = {
-    "RUNNING", "STARTED", "CLAIMED", "DISPATCHED", "INFLIGHT",
-    "CONTINUE_QUEUED", "CONTINUE_SENT", "PENDING",
+    "RUNNING", "STARTED", "CLAIMED", "INFLIGHT",
+    "CONTINUE_QUEUED", "PENDING",
 }
 
 
@@ -694,7 +694,7 @@ class ControlCenterModel:
             "chain_alerts": chain_alerts,
             "candidates": candidates,
             "runs": runs,
-            "tasks": active_tasks[:500],
+            "tasks": active_tasks,
             "sessions": sorted(
                 sessions.values(),
                 key=lambda x: (x["active"], x["tasks"]),
