@@ -1,0 +1,33 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-PRODUCTION-SNAPSHOT-EXPORT-CHUNK-20261005-E054",
+  "source_commit": "ff2f8f34bb9ccb84c32d1ae19d69c98c169f46ec",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "High"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "production_dirty_snapshot_inspect"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 180,
+  "notes": "Export the entire immutable E034 dirty snapshot as one bounded base64 chunk. E051 proved base64_chars=12388 and archive_sha256=3e5cdf26b34f1f98527e602e561148a3630fb8cb586bf6185737607508d2f079. No cleanup, production mutation, network, or remote writes.",
+  "operations": [
+    {
+      "type": "production_dirty_snapshot_inspect",
+      "snapshot_task_id": "DEV-PRED-PRODUCTION-DIRTY-SNAPSHOT-20261005-E034",
+      "report_mode": "archive_chunk",
+      "offset": 0,
+      "length": 12388
+    }
+  ]
+}
