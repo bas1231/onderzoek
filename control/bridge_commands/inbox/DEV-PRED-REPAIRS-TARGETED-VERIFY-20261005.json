@@ -1,0 +1,19 @@
+{
+  "schema": "PREDICTION_BRIDGE_COMMAND_V1",
+  "task_id": "DEV-PRED-REPAIRS-TARGETED-VERIFY-20261005",
+  "action": "SIX_AI_HEALTH",
+  "created_at_utc": "2026-10-05T09:52:00Z",
+  "route_task_id": "SESSION-ROUTE-8a0a088bb1b387e28c65b674",
+  "delivery_mode": "chat",
+  "live_trading": false,
+  "paid_actions": false,
+  "wallet_actions": false,
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "notes": "Run only targeted unit/regression verification for repaired exact Astra, GPT-only builder selection, and current-bound reporting. Excludes full system/A-to-Z test. No production mutation.",
+  "auto_continue": true,
+  "parent_continuation_id": null
+}
