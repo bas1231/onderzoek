@@ -1,0 +1,139 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-DASHBOARD-NEW-SESSION-20261005-E031",
+  "source_commit": "98e4d58a8668680155925f4a50834ed9c5e62af0",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "High"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "run_project_python",
+    "run_tests",
+    "write_runtime",
+    "user_service_manage",
+    "read_logs"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 900,
+  "notes": "Integrated deployment of canonical dashboard fresh-session policy after E030 pytest provider proof. Every dashboard action that starts ChatGPT work must open a brand-new Prediction project chat; existing chats are browser-launcher control plane only, with fail-closed no-reuse fallback. Run full Control Center regressions and full tampermonkey_multichat pytest suite before any runtime install. Then install current Control Center server/UI/canary plus wake session-bootstrap server and userscript, restart both services, require both active and runtime canary PASS. Do not trigger a real dashboard Sync during deployment.",
+  "operations": [
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "-m",
+        "compileall",
+        "-q",
+        "control/control_center",
+        "control/tampermonkey_multichat",
+        "tests/control_center"
+      ],
+      "timeout_seconds": 180
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests/control_center",
+        "-p",
+        "test_control_center.py",
+        "-v"
+      ],
+      "test": true,
+      "timeout_seconds": 260
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "-m",
+        "pytest",
+        "control/tampermonkey_multichat",
+        "-q"
+      ],
+      "test": true,
+      "timeout_seconds": 420
+    },
+    {
+      "type": "install_runtime",
+      "source": "control/control_center/server.py",
+      "destination": "~/.local/share/prediction-project-executor/control-center/server.py",
+      "mode": 420
+    },
+    {
+      "type": "install_runtime",
+      "source": "control/control_center/static/index.html",
+      "destination": "~/.local/share/prediction-project-executor/control-center/static/index.html",
+      "mode": 420
+    },
+    {
+      "type": "install_runtime",
+      "source": "control/control_center/runtime_canary.py",
+      "destination": "~/.local/share/prediction-project-executor/control-center/runtime_canary.py",
+      "mode": 420
+    },
+    {
+      "type": "install_runtime",
+      "source": "control/tampermonkey_multichat/bridge_server_session_bootstrap.py",
+      "destination": "~/.local/share/prediction-chat-bridge/bridge_server_session_bootstrap.py",
+      "mode": 420
+    },
+    {
+      "type": "install_runtime",
+      "source": "control/tampermonkey_multichat/prediction-chat-wake.user.js",
+      "destination": "~/.local/share/prediction-chat-bridge/prediction-chat-wake.user.js",
+      "mode": 420
+    },
+    {
+      "type": "service",
+      "verb": "restart",
+      "unit": "prediction-chat-wake.service"
+    },
+    {
+      "type": "service",
+      "verb": "status",
+      "unit": "prediction-chat-wake.service"
+    },
+    {
+      "type": "service",
+      "verb": "restart",
+      "unit": "prediction-control-center.service"
+    },
+    {
+      "type": "service",
+      "verb": "status",
+      "unit": "prediction-control-center.service"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/control_center/runtime_canary.py"
+      ],
+      "timeout_seconds": 180
+    },
+    {
+      "type": "journal",
+      "unit": "prediction-chat-wake.service",
+      "lines": 60
+    },
+    {
+      "type": "journal",
+      "unit": "prediction-control-center.service",
+      "lines": 50
+    }
+  ]
+}
