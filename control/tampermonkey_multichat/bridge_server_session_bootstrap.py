@@ -21,9 +21,10 @@ import json
 import os
 import secrets
 import time
+import re
 from http.server import ThreadingHTTPServer
 from pathlib import Path
-from urllib.parse import urlparse
+from urllib.parse import parse_qs, urlparse
 
 import bridge_server_hardened as hardened
 
@@ -33,6 +34,79 @@ SESSION_PREFIX = "SESSION-ROUTE-"
 SESSION_EVENT_PREFIX = "session-route-"
 REANNOUNCE_AFTER_SECONDS = 90.0
 MAX_SCAN_FILES = 4096
+DASHBOARD_LAUNCH_TOKEN_RE = re.compile(r"^[A-Za-z0-9_-]{16,96}$")
+DASHBOARD_LAUNCHER_TTL_SECONDS = 180.0
+
+
+def _dashboard_launchers_dir() -> Path:
+    return base.DATA_DIR / "dashboard_launchers"
+
+
+def _dashboard_launches_dir() -> Path:
+    return base.DATA_DIR / "dashboard_launches"
+
+
+def _validate_launch_base_url(value: str) -> str | None:
+    try:
+        parsed = urlparse(str(value or "").strip())
+    except Exception:
+        return None
+    if parsed.scheme != "https" or parsed.netloc != "chatgpt.com":
+        return None
+    if parsed.query or parsed.fragment:
+        return None
+    path = parsed.path.rstrip("/")
+    if not path or path == "/" or "/c/" in path:
+        return None
+    return f"https://chatgpt.com{path}"
+
+
+def register_dashboard_launcher(payload: dict) -> dict:
+    chat = base.safe_id(payload.get("chat_id"), base.CHAT_RE)
+    consumer = base.safe_id(payload.get("consumer_id"), base.CONSUMER_RE)
+    launch_base_url = _validate_launch_base_url(payload.get("launch_base_url"))
+    script_version = str(payload.get("script_version") or "")[:64]
+    if not chat or not consumer or not launch_base_url:
+        raise ValueError("BAD_DASHBOARD_LAUNCHER")
+    key = hashlib.sha256(f"{chat}|{consumer}".encode("utf-8")).hexdigest()[:32]
+    record = {
+        "schema": "PREDICTION_DASHBOARD_LAUNCHER_V1",
+        "chat_id": chat,
+        "consumer_id": consumer,
+        "launch_base_url": launch_base_url,
+        "script_version": script_version,
+        "updated_at_unix": time.time(),
+        "capabilities": ["dashboard_new_session_launch_v1"],
+    }
+    _atomic_json(_dashboard_launchers_dir() / f"{key}.json", record)
+    return record
+
+
+def load_dashboard_launch(token: str) -> dict | None:
+    if not DASHBOARD_LAUNCH_TOKEN_RE.fullmatch(str(token or "")):
+        return None
+    path = _dashboard_launches_dir() / f"{token}.json"
+    if not path.is_file():
+        return None
+    try:
+        obj = json.loads(path.read_text(encoding="utf-8"))
+    except Exception:
+        return None
+    if not isinstance(obj, dict) or obj.get("schema") != "PREDICTION_DASHBOARD_CHAT_LAUNCH_V1":
+        return None
+    return obj
+
+
+def acknowledge_dashboard_launch(token: str) -> dict:
+    obj = load_dashboard_launch(token)
+    if obj is None:
+        raise KeyError(token)
+    updated = dict(obj)
+    updated["state"] = "PROMPT_SUBMITTED"
+    updated["submitted_at_unix"] = time.time()
+    _atomic_json(_dashboard_launches_dir() / f"{token}.json", updated)
+    return updated
+
 
 
 def _atomic_json(path: Path, obj: dict) -> None:
@@ -161,10 +235,72 @@ base.oldest_event = session_oldest_event
 
 
 class Handler(hardened.Handler):
-    server_version = "PredictionChatWake/0.9-session-bootstrap"
+    server_version = "PredictionChatWake/1.0-dashboard-new-session"
+
+    def _read_json_body(self):
+        try:
+            length = int(self.headers.get("Content-Length", "0"))
+        except ValueError:
+            return None
+        if length < 1 or length > 65536:
+            return None
+        try:
+            return json.loads(self.rfile.read(length).decode("utf-8"))
+        except Exception:
+            return None
+
+    def do_POST(self):
+        parsed = urlparse(self.path)
+        if parsed.path not in {"/dashboard-launcher/register", "/dashboard-launch/ack"}:
+            return super().do_POST()
+        if not self.authorized():
+            self.reply_json(401, {"ok": False, "error": "unauthorized"})
+            return
+        payload = self._read_json_body()
+        if not isinstance(payload, dict):
+            self.reply_json(400, {"ok": False, "error": "bad_json"})
+            return
+        if parsed.path == "/dashboard-launcher/register":
+            try:
+                record = register_dashboard_launcher(payload)
+            except ValueError:
+                self.reply_json(400, {"ok": False, "error": "bad_launcher"})
+                return
+            self.reply_json(200, {"ok": True, "launcher": record})
+            return
+        token = str(payload.get("token") or "")
+        try:
+            updated = acknowledge_dashboard_launch(token)
+        except KeyError:
+            self.reply_json(404, {"ok": False, "error": "launch_not_found"})
+            return
+        self.reply_json(200, {
+            "ok": True,
+            "token": token,
+            "state": updated.get("state"),
+        })
 
     def do_GET(self):
         parsed = urlparse(self.path)
+        if parsed.path == "/dashboard-launch":
+            if not self.authorized():
+                self.reply_json(401, {"ok": False, "error": "unauthorized"})
+                return
+            token = (parse_qs(parsed.query).get("token") or [""])[0]
+            launch = load_dashboard_launch(token)
+            if launch is None:
+                self.reply_json(404, {"ok": False, "error": "launch_not_found"})
+                return
+            self.reply_json(200, {
+                "ok": True,
+                "token": token,
+                "request_id": launch.get("request_id"),
+                "action": launch.get("action"),
+                "work_item_id": launch.get("work_item_id"),
+                "prompt": launch.get("prompt"),
+                "state": launch.get("state"),
+            })
+            return
         if parsed.path == "/health":
             if not self.authorized():
                 self.reply_json(401, {"ok": False, "error": "unauthorized"})
@@ -173,12 +309,14 @@ class Handler(hardened.Handler):
             self.reply_json(200, {
                 "ok": True,
                 "service": "prediction-chat-wake",
-                "version": 9,
+                "version": 10,
                 "multichat": True,
                 "server_compaction": True,
                 "task_dedupe": True,
                 "server_heartbeat": True,
                 "auto_session_bootstrap": True,
+                "dashboard_new_session_launch": True,
+                "dashboard_launcher_ttl_seconds": DASHBOARD_LAUNCHER_TTL_SECONDS,
                 "session_bootstrap_transport": "wake_next",
                 "session_bootstrap_requires_dom_scan": False,
                 "session_bootstrap_reannounce_seconds": REANNOUNCE_AFTER_SECONDS,
@@ -201,11 +339,13 @@ def main() -> int:
     parser.add_argument("--port", type=int, default=8765)
     args = parser.parse_args()
     base.ensure_dirs()
+    _dashboard_launchers_dir().mkdir(parents=True, exist_ok=True)
+    _dashboard_launches_dir().mkdir(parents=True, exist_ok=True)
     token = base.load_token()
     httpd = ThreadingHTTPServer((args.host, args.port), Handler)
     httpd.daemon_threads = True
     httpd.bridge_token = token
-    print(f"prediction-chat-wake session-bootstrap listening on http://{args.host}:{args.port}", flush=True)
+    print(f"prediction-chat-wake dashboard-new-session listening on http://{args.host}:{args.port}", flush=True)
     httpd.serve_forever()
     return 0
 
