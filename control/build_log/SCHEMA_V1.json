@@ -124,6 +124,36 @@
         "string",
         "null"
       ]
+    },
+    "supports_work_item_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "session_assignment_scope": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "additionalProperties": false,
+      "required": [
+        "instruction",
+        "allowed_work_item_ids"
+      ],
+      "properties": {
+        "instruction": {
+          "type": "string"
+        },
+        "allowed_work_item_ids": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "uniqueItems": true,
+          "minItems": 1
+        }
+      }
     }
   }
 }
