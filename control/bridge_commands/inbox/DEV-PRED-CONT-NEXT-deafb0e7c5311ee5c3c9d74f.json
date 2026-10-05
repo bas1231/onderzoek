@@ -1,0 +1,19 @@
+{
+  "schema": "PREDICTION_BRIDGE_COMMAND_V1",
+  "task_id": "DEV-PRED-CONT-NEXT-deafb0e7c5311ee5c3c9d74f",
+  "action": "SIX_AI_HEALTH",
+  "created_at_utc": "2026-10-05T21:05:00Z",
+  "route_task_id": "DEV-PRED-A2Z-COORDINATION-CANARY-20261005-E049",
+  "delivery_mode": "chat",
+  "live_trading": false,
+  "paid_actions": false,
+  "wallet_actions": false,
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "High"
+  },
+  "auto_continue": true,
+  "parent_continuation_id": "CONT-deafb0e7c5311ee5c3c9d74f",
+  "notes": "Continuation NEXT after E049 ACK timeout. Run only post-E049 coordination and supervisor/model-policy readiness regressions; do not rerun Scout, experiment tests, measurement or full A2Z. Auto-continue into the already-known model-selection/postbuild-gate repair."
+}
