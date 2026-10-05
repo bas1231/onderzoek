@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Prediction Control Center</title>
+<title>Prediction Besturingscentrum</title>
 <style>
 :root{
   color-scheme:dark;
@@ -43,18 +43,18 @@ pre.raw{white-space:pre-wrap;word-break:break-word;background:#040613;border:1px
 <body>
 <div class="app">
 <aside class="side">
-  <div class="brand"><div class="logo"></div><div><b>Prediction</b><small>Control Center</small></div></div>
+  <div class="brand"><div class="logo"></div><div><b>Prediction</b><small>Besturingscentrum</small></div></div>
   <nav class="nav" id="nav">
     <button class="active" data-page="home">⌂ <span>Overzicht</span></button>
     <button data-page="live">◉ <span>Live</span></button>
     <button data-page="ideas">◇ <span>Ideeën</span></button>
-    <button data-page="runs">▤ <span>Runs</span></button>
+    <button data-page="runs">▤ <span>Uitvoeringen</span></button>
     <button data-page="errors">! <span>Fouten</span></button>
-    <button data-page="performance">↗ <span>Performance</span></button>
+    <button data-page="performance">↗ <span>Prestaties</span></button>
     <button data-page="history">↺ <span>Historie</span></button>
     <button data-page="system">⚙ <span>Systeem</span></button>
   </nav>
-  <div class="side-foot"><span class="dot"></span><span>localhost • read-only research cockpit</span></div>
+  <div class="side-foot"><span class="dot"></span><span>localhost • onderzoeksdashboard • alleen-lezen</span></div>
 </aside>
 <main>
   <header class="top"><div><h1 id="pageTitle">Overzicht</h1><p id="pageSub">Wat doet Prediction, wat gaat goed en waar moet je kijken?</p></div><div class="stamp"><div id="updated">Laden…</div><div id="health">● verbinden</div></div></header>
@@ -62,24 +62,24 @@ pre.raw{white-space:pre-wrap;word-break:break-word;background:#040613;border:1px
   <section class="page active" id="page-home">
     <div class="grid4" id="homeCards"></div>
     <div class="row2">
-      <article class="card glow"><div class="section-title"><h2>Wat gebeurt er nu?</h2><span class="pill pink live-pulse">LIVE</span></div><div id="nowList" class="list"></div></article>
+      <article class="card glow"><div class="section-title"><h2>Wat gebeurt er nu?</h2><span class="pill pink live-pulse">ACTIEF</span></div><div id="nowList" class="list"></div></article>
       <article class="card"><div class="section-title"><h2>Jouw aandacht</h2><span class="pill" id="attentionCount">0</span></div><div id="attentionList" class="list"></div></article>
     </div>
     <div class="row2">
-      <article class="card"><div class="section-title"><h2>Idea journey</h2><span class="pill cyan">A→Z</span></div>
+      <article class="card"><div class="section-title"><h2>Ideetraject</h2><span class="pill cyan">VAN A TOT Z</span></div>
         <div class="flow">
-          <div class="stage done"><b>Scout</b><small>ontdekt</small></div><div class="arrow">→</div>
+          <div class="stage done"><b>Verkenner</b><small>ontdekt</small></div><div class="arrow">→</div>
           <div class="stage done"><b>Selectie</b><small>falsificatie</small></div><div class="arrow">→</div>
-          <div class="stage done"><b>Sol-opzet</b><small>design</small></div><div class="arrow">→</div>
-          <div class="stage done"><b>Astra</b><small>pre-build</small></div><div class="arrow">→</div>
-          <div class="stage"><b>Sol-build</b><small>experiment</small></div><div class="arrow">→</div>
-          <div class="stage current"><b>Astra</b><small>post-build</small></div><div class="arrow">→</div>
-          <div class="stage"><b>Meting</b><small>read-only</small></div><div class="arrow">→</div>
-          <div class="stage"><b>Supervisor</b><small>oordeel</small></div>
+          <div class="stage done"><b>Sol-opzet</b><small>ontwerp</small></div><div class="arrow">→</div>
+          <div class="stage done"><b>Astra</b><small>vóór bouw</small></div><div class="arrow">→</div>
+          <div class="stage"><b>Sol-bouw</b><small>experiment</small></div><div class="arrow">→</div>
+          <div class="stage current"><b>Astra</b><small>na bouw</small></div><div class="arrow">→</div>
+          <div class="stage"><b>Meting</b><small>alleen-lezen</small></div><div class="arrow">→</div>
+          <div class="stage"><b>Toezichthouder</b><small>oordeel</small></div>
         </div>
         <p class="sub">Iedere kandidaat heeft straks zijn eigen lijn. Klik in Ideeën op een kandidaat om de echte geschiedenis te openen.</p>
       </article>
-      <article class="card"><div class="section-title"><h2>Wat loopt lekker?</h2><span class="pill green">HEALTH</span></div><div id="goodList" class="list"></div></article>
+      <article class="card"><div class="section-title"><h2>Wat loopt lekker?</h2><span class="pill green">GEZONDHEID</span></div><div id="goodList" class="list"></div></article>
     </div>
   </section>
 
@@ -87,22 +87,22 @@ pre.raw{white-space:pre-wrap;word-break:break-word;background:#040613;border:1px
     <div class="grid4" id="liveCards"></div>
     <div class="row2">
       <article class="card"><div class="section-title"><h2>Actieve / recente taken</h2><span class="pill cyan">alle sessies</span></div><div id="taskList" class="list"></div></article>
-      <article class="card"><div class="section-title"><h2>ChatGPT-sessies</h2><span class="pill">route-based</span></div><div id="sessionList" class="list"></div></article>
+      <article class="card"><div class="section-title"><h2>ChatGPT-sessies</h2><span class="pill">op route gegroepeerd</span></div><div id="sessionList" class="list"></div></article>
     </div>
   </section>
 
   <section class="page" id="page-ideas">
     <article class="card">
       <div class="section-title"><h2>Alle ideeën en kandidaten</h2><span class="pill pink" id="ideaCount"></span></div>
-      <div class="toolbar"><input id="ideaSearch" placeholder="Zoek hypothese, lane, status…"><select id="ideaFilter"><option value="">Alle statussen</option><option>RUNNING</option><option>NEEDS_DIRECTOR</option><option>EXPERIMENT_REQUIRED</option><option>NO_PROVEN_EDGE</option><option>NO_EDGE</option><option>EDGE</option><option>LEGACY_IMPORTED</option></select></div>
+      <div class="toolbar"><input id="ideaSearch" placeholder="Zoek hypothese, lane, status…"><select id="ideaFilter"><option value="">Alle statussen</option><option value="RUNNING">Bezig</option><option value="NEEDS_DIRECTOR">Wacht op onderzoeksdirecteur</option><option value="EXPERIMENT_REQUIRED">Experiment vereist</option><option value="NO_PROVEN_EDGE">Nog geen bewezen voordeel</option><option value="NO_EDGE">Geen voordeel</option><option value="EDGE">Bewezen voordeel</option><option value="LEGACY_IMPORTED">Historisch geïmporteerd</option></select></div>
       <div class="table-wrap"><table class="table"><thead><tr><th>Idee</th><th>Lane</th><th>Fase</th><th>Queue</th><th>Wetenschappelijk</th><th>Bijgewerkt</th></tr></thead><tbody id="ideaRows"></tbody></table></div>
     </article>
   </section>
 
   <section class="page" id="page-runs">
     <article class="card">
-      <div class="section-title"><h2>Iedere research-run</h2><span class="pill cyan" id="runCount"></span></div>
-      <div class="toolbar"><input id="runSearch" placeholder="Zoek run, candidate, agent…"><select id="runFilter"><option value="">Alle resultaten</option><option>COMPLETED</option><option>PASS</option><option>FAIL</option><option>NO_PROVEN_EDGE</option></select></div>
+      <div class="section-title"><h2>Iedere onderzoeksuitvoering</h2><span class="pill cyan" id="runCount"></span></div>
+      <div class="toolbar"><input id="runSearch" placeholder="Zoek uitvoering, kandidaat, agent…"><select id="runFilter"><option value="">Alle resultaten</option><option value="COMPLETED">Voltooid</option><option value="PASS">Geslaagd</option><option value="FAIL">Mislukt</option><option value="NO_PROVEN_EDGE">Nog geen bewezen voordeel</option></select></div>
       <div class="table-wrap"><table class="table"><thead><tr><th>Run</th><th>Status</th><th>Besluit</th><th>Agents</th><th>Candidates</th><th>Start</th></tr></thead><tbody id="runRows"></tbody></table></div>
     </article>
   </section>
@@ -114,15 +114,15 @@ pre.raw{white-space:pre-wrap;word-break:break-word;background:#040613;border:1px
 
   <section class="page" id="page-performance">
     <div class="row2">
-      <article class="card"><div class="section-title"><h2>Task performance</h2><span class="pill cyan">runtime</span></div><div id="performanceMetrics"></div></article>
-      <article class="card"><div class="section-title"><h2>Research-funnel</h2><span class="pill pink">false-negative zicht</span></div><div id="funnel"></div></article>
+      <article class="card"><div class="section-title"><h2>Taakprestaties</h2><span class="pill cyan">uitvoering</span></div><div id="performanceMetrics"></div></article>
+      <article class="card"><div class="section-title"><h2>Research-funnel</h2><span class="pill pink">zicht op gemiste kansen</span></div><div id="funnel"></div></article>
     </div>
   </section>
 
   <section class="page" id="page-history">
     <div class="row2">
       <article class="card"><div class="section-title"><h2>Heronderzoekverzoeken</h2><span class="pill amber">immutable</span></div><div id="reviveList" class="list"></div></article>
-      <article class="card"><div class="section-title"><h2>Oude research-artifacts</h2><span class="pill">legacy</span></div><div id="legacyList" class="list"></div></article>
+      <article class="card"><div class="section-title"><h2>Oude onderzoeksbestanden</h2><span class="pill">historisch</span></div><div id="legacyList" class="list"></div></article>
     </div>
   </section>
 
@@ -133,7 +133,7 @@ pre.raw{white-space:pre-wrap;word-break:break-word;background:#040613;border:1px
 </main>
 </div>
 
-<aside class="drawer" id="drawer" aria-hidden="true"><div class="drawer-head"><div><div class="kicker" id="drawerKicker">DETAIL</div><h2 id="drawerTitle" style="margin:5px 0 0;font-size:19px"></h2></div><button class="x" id="closeDrawer" aria-label="Sluiten">×</button></div><div class="drawer-body" id="drawerBody"></div></aside>
+<aside class="drawer" id="drawer" aria-hidden="true"><div class="drawer-head"><div><div class="kicker" id="drawerKicker">DETAILS</div><h2 id="drawerTitle" style="margin:5px 0 0;font-size:19px"></h2></div><button class="x" id="closeDrawer" aria-label="Sluiten">×</button></div><div class="drawer-body" id="drawerBody"></div></aside>
 <div class="toast" id="toast"></div>
 
 <script>
@@ -141,6 +141,35 @@ const S={data:null,page:'home'};
 const q=s=>document.querySelector(s), qa=s=>[...document.querySelectorAll(s)];
 const esc=s=>String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
 const fmtDate=v=>{if(!v)return'—';const d=new Date(v);return Number.isNaN(d.getTime())?esc(v):d.toLocaleString('nl-NL',{dateStyle:'short',timeStyle:'medium'})};
+const NL_STATUS={
+  UNKNOWN:'Onbekend',PASS:'Geslaagd',COMPLETED:'Voltooid',DONE:'Afgerond',SUCCESS:'Geslaagd',
+  FAIL:'Mislukt',FAILED:'Mislukt',ERROR:'Fout',INCIDENT:'Incident',REJECTED:'Afgewezen',REJECT:'Afgewezen',
+  AMBIGUOUS:'Onduidelijk',BLOCKED:'Geblokkeerd',BLOCKED_ROUTE:'Route geblokkeerd',
+  RUNNING:'Bezig',STARTED:'Gestart',CLAIMED:'Geclaimd',DISPATCHED:'Verzonden',INFLIGHT:'Onderweg',PENDING:'Wachtend',
+  NEEDS_DIRECTOR:'Wacht op onderzoeksdirecteur',EXPERIMENT_REQUIRED:'Experiment vereist',NEEDS_BUILD:'Bouw nodig',
+  VALIDATION:'Validatie',RESULT_READY:'Resultaat gereed',NEEDS_REVISION:'Herziening nodig',
+  APPROVE:'Goedgekeurd',APPROVED:'Goedgekeurd',UNPROVEN:'Onbewezen',DISCOVERED:'Ontdekt',
+  LEGACY_IMPORTED:'Historisch geïmporteerd',NO_PROVEN_EDGE:'Nog geen bewezen voordeel',NO_EDGE:'Geen voordeel',EDGE:'Bewezen voordeel',
+  ACTIVE:'Actief',READY:'Gereed',NO_EVIDENCE:'Geen bewijs',NOT_TESTED:'Niet getest',PENDING_PROSPECTIVE:'Wacht op prospectieve meting',
+  DISCOVERY_COMPLETE:'Verkenning voltooid',PASS_DISCOVERY_ONLY:'Geslaagd voor verkenning',INCONCLUSIVE:'Onbeslist'
+};
+const NL_LABEL={
+  research_director:'onderzoeksdirecteur',scout:'verkenner',discovery:'verkenning',
+  chief_falsifier:'hoofdfalsificator',independent_reproducer:'onafhankelijke reproduceerder',
+  mechanics_microstructure:'microstructuur',mechanics_settlement:'afwikkeling',
+  microstructure:'microstructuur',settlement:'afwikkeling',weather_twc:'weer/TWC',
+  algebra:'marktalgebra',behavioral:'gedrag',informed_flow:'geïnformeerde orderstroom',
+  prebuild_killer:'voorbouw-falsificatie',source_provenance:'bronherkomst',
+  execution_reality:'uitvoerbaarheid',falsification:'falsificatie',market_edge:'marktvoordeel',
+  point_in_time:'tijdstipintegriteit',reproduction:'reproductie',signal_edge:'signaalvoordeel',
+  mechanism:'mechanisme',development:'ontwikkeling',holdout:'holdout',shadow:'schaduwmeting',
+  data_ready:'data gereed',validation:'validatie',independent_reproduction:'onafhankelijke reproductie',
+  discovered:'ontdekt',selected_or_director:'geselecteerd / onderzoeksdirecteur',prebuild_review:'review vóór bouw',
+  built:'gebouwd',postbuild_review:'review na bouw',measured:'gemeten',edge:'bewezen voordeel',
+  no_edge:'geen voordeel',parked_or_rejected:'geparkeerd of afgewezen'
+};
+const nlStatus=s=>NL_STATUS[String(s||'UNKNOWN').toUpperCase()]||String(s||'Onbekend').replaceAll('_',' ').toLowerCase().replace(/^./,m=>m.toUpperCase());
+const nlLabel=s=>NL_LABEL[String(s||'').toLowerCase()]||String(s||'').replaceAll('_',' ');
 const statusClass=s=>{s=String(s||'').toUpperCase();if(/FAIL|ERROR|INCIDENT|REJECT|AMBIG|BLOCK/.test(s))return'red';if(/PASS|COMPLETE|DONE|APPROVE|EDGE$/.test(s)&&!s.includes('NO_'))return'green';if(/RUN|START|CLAIM|DISPATCH|INFLIGHT/.test(s))return'pink';if(/WAIT|PENDING|PARK|REVISION|NO_PROVEN/.test(s))return'amber';return''};
 const pill=s=>'<span class="pill '+statusClass(s)+'">'+esc(s||'UNKNOWN')+'</span>';
 const pct=v=>v==null?'—':(v*100).toFixed(1)+'%';
@@ -159,75 +188,75 @@ async function load(){try{S.data=await api('/api/snapshot');render();q('#health'
 
 function render(){
  const d=S.data,m=d.task_metrics,c=d.counts;
- q('#homeCards').innerHTML=card('Edge-status',d.edge_state,'Strenge default totdat bewijs de gates haalt.','glow')+card('Ideeën',c.candidates,c.legacy_candidates+' legacy/import')+card('Runs',c.runs,'Elke historische research-run inleesbaar')+card('Actieve taken',m.active,'Over '+c.sessions+' sessieroutes');
+ q('#homeCards').innerHTML=card('Voordeelstatus',nlStatus(d.edge_state),'Strenge standaard totdat bewijs de controles doorstaat.','glow')+card('Ideeën',c.candidates,c.legacy_candidates+' historisch geïmporteerd')+card('Uitvoeringen',c.runs,'Iedere historische onderzoeksuitvoering is inleesbaar')+card('Actieve taken',m.active,'Over '+c.sessions+' sessieroutes');
  const active=d.tasks.filter(t=>['RUNNING','STARTED','CLAIMED','DISPATCHED','INFLIGHT','PENDING'].includes(String(t.status).toUpperCase())).slice(0,12);
  q('#nowList').innerHTML=active.length?active.map(t=>'<div class="item"><div class="item-head"><b class="mono">'+esc(t.task_id)+'</b>'+pill(t.status)+'</div><div class="meta">Sessie: '+esc(t.route_task_id||'geen route metadata')+' • '+fmtDate(t.started_at)+'</div></div>').join(''):'<div class="empty">Geen actieve task-state gevonden. Het systeem kan wel wachten op een geplande research-run.</div>';
  q('#attentionCount').textContent=d.errors.length;
- q('#attentionList').innerHTML=d.errors.length?d.errors.slice(0,5).map(e=>'<div class="alert"><div class="item-head"><b>'+esc(e.task_id)+'</b>'+pill(e.status)+'</div><div class="meta">'+esc(e.reason)+'</div></div>').join(''):'<div class="ok"><b>Geen open foutstate gevonden</b><div class="meta">Op basis van de lokale task-state.</div></div>';
- const good=[]; if(m.success_rate!=null)good.push('<div class="ok"><b>Task-succes '+pct(m.success_rate)+'</b><div class="meta">'+m.success+' succesvolle complete tasks tegenover '+m.failure+' fouten.</div></div>');good.push('<div class="ok"><b>Financiële safety fail-closed</b><div class="meta">live trading, paid actions en wallet actions staan uit.</div></div>');good.push('<div class="ok"><b>'+c.candidates+' ideeën bewaard</b><div class="meta">Historie wordt niet overschreven bij heronderzoek.</div></div>');q('#goodList').innerHTML=good.join('');
+ q('#attentionList').innerHTML=d.errors.length?d.errors.slice(0,5).map(e=>'<div class="alert"><div class="item-head"><b>'+esc(e.task_id)+'</b>'+pill(e.status)+'</div><div class="meta">'+esc(e.reason)+'</div></div>').join(''):'<div class="ok"><b>Geen open foutstatus gevonden</b><div class="meta">Op basis van de lokale taakstatus.</div></div>';
+ const good=[]; if(m.success_rate!=null)good.push('<div class="ok"><b>Taaksucces '+pct(m.success_rate)+'</b><div class="meta">'+m.success+' volledig geslaagde taken tegenover '+m.failure+' fouten.</div></div>');good.push('<div class="ok"><b>Financiële beveiliging staat standaard dicht</b><div class="meta">Live handelen, betaalde acties en walletacties staan uit.</div></div>');good.push('<div class="ok"><b>'+c.candidates+' ideeën bewaard</b><div class="meta">Historie wordt niet overschreven bij heronderzoek.</div></div>');q('#goodList').innerHTML=good.join('');
 
- q('#liveCards').innerHTML=card('Sessies',c.sessions,'Gelijktijdige ChatGPT-routes')+card('Actief',m.active,'Task-states in uitvoering')+card('Complete success',m.success,'Bekende succesvolle uitvoeringen')+card('Fouten',m.failure,'Bekende task-failures');
+ q('#liveCards').innerHTML=card('Sessies',c.sessions,'Gelijktijdige ChatGPT-routes')+card('Actief',m.active,'Taakstatussen in uitvoering')+card('Volledig geslaagd',m.success,'Bekende succesvolle uitvoeringen')+card('Fouten',m.failure,'Bekende mislukte taken');
  q('#taskList').innerHTML=d.tasks.slice(0,30).map(t=>'<div class="item"><div class="item-head"><b class="mono">'+esc(t.task_id)+'</b>'+pill(t.status)+'</div><div class="meta">'+fmtDate(t.started_at)+' • exit '+esc(t.exit_code??'—')+' • '+esc(t.route_task_id||'route onbekend')+'</div></div>').join('')||'<div class="empty">Geen task-state.</div>';
  q('#sessionList').innerHTML=d.sessions.slice(0,30).map(s=>'<div class="item"><div class="item-head"><b class="mono">'+esc(s.route_task_id)+'</b><span class="pill">'+s.tasks+' tasks</span></div><div class="meta">'+s.active+' actief • '+s.failures+' fouten • laatste: '+esc(s.last_task||'—')+'</div></div>').join('')||'<div class="empty">Geen sessieroutes in task-state.</div>';
 
  q('#ideaCount').textContent=c.candidates+' totaal'; renderIdeas();
  q('#runCount').textContent=c.runs+' totaal'; renderRuns();
 
- q('#errorCards').innerHTML=card('Bekende fouten',m.failure,'Op basis van command-bus + executor')+card('Success rate',pct(m.success_rate),'Alle complete tasks met bekende uitkomst')+card('p50 duur',secs(m.duration_median_seconds),'Median complete task')+card('p95 duur',secs(m.duration_p95_seconds),'Langzame staart');
+ q('#errorCards').innerHTML=card('Bekende fouten',m.failure,'Op basis van command-bus + uitvoerder')+card('Succespercentage',pct(m.success_rate),'Alle voltooide taken met bekende uitkomst')+card('p50-duur',secs(m.duration_median_seconds),'Mediaan van voltooide taken')+card('p95-duur',secs(m.duration_p95_seconds),'Langzaamste staart');
  q('#errorList').innerHTML=d.errors.length?d.errors.map(e=>'<div class="alert"><div class="item-head"><b class="mono">'+esc(e.task_id)+'</b>'+pill(e.status)+'</div><div class="meta">'+fmtDate(e.started_at)+' • exit '+esc(e.exit_code??'—')+' • '+esc(e.reason)+'</div></div>').join(''):'<div class="ok">Geen bekende failure-state in de huidige runtime-index.</div>';
 
- q('#performanceMetrics').innerHTML=['success_rate|Succespercentage|'+pct(m.success_rate),'duration_median_seconds|Median taskduur|'+secs(m.duration_median_seconds),'duration_p95_seconds|p95 taskduur|'+secs(m.duration_p95_seconds),'active|Nu actief|'+m.active].map(x=>{const a=x.split('|');return'<div class="metric-line"><span>'+a[1]+'</span><b>'+a[2]+'</b></div>'}).join('');
- const f=d.candidate_funnel,max=Math.max(1,f.discovered);q('#funnel').innerHTML=Object.entries(f).map(([k,v])=>'<div style="margin:10px 0"><div class="metric-line"><span>'+esc(k.replaceAll('_',' '))+'</span><b>'+v+'</b></div><div class="bar"><span style="width:'+Math.max(1,v/max*100)+'%"></span></div></div>').join('');
+ q('#performanceMetrics').innerHTML=['success_rate|Succespercentage|'+pct(m.success_rate),'duration_median_seconds|Mediane taakduur|'+secs(m.duration_median_seconds),'duration_p95_seconds|p95-taakduur|'+secs(m.duration_p95_seconds),'active|Nu actief|'+m.active].map(x=>{const a=x.split('|');return'<div class="metric-line"><span>'+a[1]+'</span><b>'+a[2]+'</b></div>'}).join('');
+ const f=d.candidate_funnel,max=Math.max(1,f.discovered);q('#funnel').innerHTML=Object.entries(f).map(([k,v])=>'<div style="margin:10px 0"><div class="metric-line"><span>'+esc(nlLabel(k))+'</span><b>'+v+'</b></div><div class="bar"><span style="width:'+Math.max(1,v/max*100)+'%"></span></div></div>').join('');
 
  q('#reviveList').innerHTML=d.revive_requests.length?d.revive_requests.map(r=>'<div class="item"><div class="item-head"><b>'+esc(r.original_candidate_id)+'</b>'+pill(r.status)+'</div><div class="meta">'+fmtDate(r.requested_at)+' • '+esc(r.request_id)+'</div></div>').join(''):'<div class="empty">Nog geen heronderzoekverzoeken.</div>';
- q('#legacyList').innerHTML=d.legacy_artifacts.slice(0,80).map(a=>'<button class="item click" data-artifact="'+esc(a.path)+'"><div class="item-head"><b>'+esc(a.name)+'</b><span class="pill">legacy</span></div><div class="meta mono">'+esc(a.path)+'</div></button>').join('')||'<div class="empty">Geen legacy research-artifacts gevonden.</div>';
+ q('#legacyList').innerHTML=d.legacy_artifacts.slice(0,80).map(a=>'<button class="item click" data-artifact="'+esc(a.path)+'"><div class="item-head"><b>'+esc(a.name)+'</b><span class="pill">historisch</span></div><div class="meta mono">'+esc(a.path)+'</div></button>').join('')||'<div class="empty">Geen legacy research-artifacts gevonden.</div>';
  qa('[data-artifact]').forEach(b=>b.addEventListener('click',()=>showArtifact(b.dataset.artifact)));
 
- q('#systemCards').innerHTML=card('Repo',d.repo,'Bron voor candidates en research-runs')+card('Tasks',c.tasks,'Command-bus + projectexecutor state')+card('Revive queue',c.revive_requests,'Immutable heronderzoekverzoeken')+card('Safety','READ-ONLY','Geen live trade / paid / wallet');
+ q('#systemCards').innerHTML=card('Repository',d.repo,'Bron voor kandidaten en onderzoeksuitvoeringen')+card('Taken',c.tasks,'Command-bus + status van projectuitvoerder')+card('Wachtrij heronderzoek',c.revive_requests,'Onwijzigbare heronderzoekverzoeken')+card('Veiligheid','ALLEEN-LEZEN','Geen live handel, betaalde acties of walletacties');
  q('#systemRows').innerHTML=d.tasks.slice(0,200).map(t=>'<tr><td class="mono">'+esc(t.task_id)+'</td><td>'+pill(t.status)+'</td><td>'+esc(t.exit_code??'—')+'</td><td class="mono">'+esc(t.route_task_id||'—')+'</td><td class="mono">'+esc((t.source_commit||'—').slice(0,12))+'</td></tr>').join('');
 }
 
 function renderIdeas(){
  if(!S.data)return;const term=q('#ideaSearch').value.toLowerCase(),filter=q('#ideaFilter').value.toUpperCase();
  const rows=S.data.candidates.filter(c=>{const hay=[c.candidate_id,c.hypothesis,c.lane,c.phase,c.queue_status,c.scientific_status,c.decision].join(' ').toLowerCase();const st=[c.queue_status,c.scientific_status,c.decision].join(' ').toUpperCase();return(!term||hay.includes(term))&&(!filter||st.includes(filter))});
- q('#ideaRows').innerHTML=rows.map(c=>'<tr><td><button class="linkbtn idea-open" data-id="'+encodeURIComponent(c.candidate_id)+'">'+esc(c.title)+'</button><div class="meta mono">'+esc(c.candidate_id)+'</div></td><td>'+esc(c.lane)+'</td><td>'+esc(c.phase)+'</td><td>'+pill(c.queue_status)+'</td><td>'+pill(c.scientific_status)+'</td><td>'+fmtDate(c.updated_at)+'</td></tr>').join('')||'<tr><td colspan="6" class="empty">Geen match.</td></tr>';qa('.idea-open').forEach(b=>b.addEventListener('click',()=>showCandidate(decodeURIComponent(b.dataset.id))))
+ q('#ideaRows').innerHTML=rows.map(c=>'<tr><td><button class="linkbtn idea-open" data-id="'+encodeURIComponent(c.candidate_id)+'">'+esc(c.title)+'</button><div class="meta mono">'+esc(c.candidate_id)+'</div></td><td>'+esc(nlLabel(c.lane))+'</td><td>'+esc(nlStatus(c.phase))+'</td><td>'+pill(c.queue_status)+'</td><td>'+pill(c.scientific_status)+'</td><td>'+fmtDate(c.updated_at)+'</td></tr>').join('')||'<tr><td colspan="6" class="empty">Geen match.</td></tr>';qa('.idea-open').forEach(b=>b.addEventListener('click',()=>showCandidate(decodeURIComponent(b.dataset.id))))
 }
 q('#ideaSearch').addEventListener('input',renderIdeas);q('#ideaFilter').addEventListener('change',renderIdeas);
 
 function renderRuns(){
  if(!S.data)return;const term=q('#runSearch').value.toLowerCase(),filter=q('#runFilter').value.toUpperCase();
  const rows=S.data.runs.filter(r=>{const hay=[r.run_id,r.status,r.decision,(r.candidate_ids||[]).join(' '),Object.keys(r.agents||{}).join(' ')].join(' ').toLowerCase();const st=[r.status,r.decision].join(' ').toUpperCase();return(!term||hay.includes(term))&&(!filter||st.includes(filter))}).slice(0,1000);
- q('#runRows').innerHTML=rows.map(r=>'<tr><td><button class="linkbtn run-open" data-id="'+encodeURIComponent(r.run_id)+'">'+esc(r.run_id)+'</button><div class="meta mono">'+esc(r.path)+'</div></td><td>'+pill(r.status)+'</td><td>'+esc(r.decision||'—')+'</td><td>'+esc(Object.entries(r.agents||{}).slice(0,4).map(x=>x[0]+':'+x[1]).join(', ')||'—')+'</td><td>'+esc((r.candidate_ids||[]).join(', ')||'—')+'</td><td>'+fmtDate(r.started_at)+'</td></tr>').join('')||'<tr><td colspan="6" class="empty">Geen match.</td></tr>';qa('.run-open').forEach(b=>b.addEventListener('click',()=>showRun(decodeURIComponent(b.dataset.id))))
+ q('#runRows').innerHTML=rows.map(r=>'<tr><td><button class="linkbtn run-open" data-id="'+encodeURIComponent(r.run_id)+'">'+esc(r.run_id)+'</button><div class="meta mono">'+esc(r.path)+'</div></td><td>'+pill(r.status)+'</td><td>'+esc(nlStatus(r.decision||'—'))+'</td><td>'+esc(Object.entries(r.agents||{}).slice(0,4).map(x=>nlLabel(x[0])+': '+nlStatus(x[1])).join(', ')||'—')+'</td><td>'+esc((r.candidate_ids||[]).join(', ')||'—')+'</td><td>'+fmtDate(r.started_at)+'</td></tr>').join('')||'<tr><td colspan="6" class="empty">Geen match.</td></tr>';qa('.run-open').forEach(b=>b.addEventListener('click',()=>showRun(decodeURIComponent(b.dataset.id))))
 }
 q('#runSearch').addEventListener('input',renderRuns);q('#runFilter').addEventListener('change',renderRuns);
 
 async function showCandidate(id){
  try{
   const d=await api('/api/candidate/'+encodeURIComponent(id)),c=d.candidate;
-  const gates=Object.entries(c.gates||{}).map(([k,v])=>'<div class="metric-line"><span>'+esc(k)+'</span>'+pill(v)+'</div>').join('')||'<div class="meta">Geen legacy gate-map.</div>';
+  const gates=Object.entries(c.gates||{}).map(([k,v])=>'<div class="metric-line"><span>'+esc(nlLabel(k))+'</span>'+pill(v)+'</div>').join('')||'<div class="meta">Geen legacy gate-map.</div>';
   const timeline=d.timeline.map(e=>'<div class="event"><b>'+esc(e.stage)+' — '+esc(e.status)+'</b><p>'+fmtDate(e.at)+'<br>'+esc(e.detail||'')+'</p></div>').join('')||'<div class="meta">Nog geen timeline events.</div>';
   const refs=(c.evidence_refs||[]).map(r=>'<button class="linkbtn artifact-link" data-path="'+esc(r)+'">'+esc(r)+'</button>').join('<br>')||'—';
   const html='<div class="item"><div class="kicker">HYPOTHESE</div><div style="margin-top:6px;line-height:1.55">'+esc(c.hypothesis)+'</div></div>'+
    '<div style="margin-top:14px" class="grid4"><div class="item"><div class="kicker">FASE</div><b>'+esc(c.phase)+'</b></div><div class="item"><div class="kicker">QUEUE</div>'+pill(c.queue_status)+'</div><div class="item"><div class="kicker">STATUS</div>'+pill(c.scientific_status)+'</div><div class="item"><div class="kicker">LANE</div><b>'+esc(c.lane)+'</b></div></div>'+
-   '<h3>Volledige journey</h3><div class="timeline">'+timeline+'</div>'+
-   '<h3>Gates</h3>'+gates+
+   '<h3>Volledig traject</h3><div class="timeline">'+timeline+'</div>'+
+   '<h3>Controles</h3>'+gates+
    '<h3>Volgende beslissende test</h3><div class="item">'+esc(c.next_decisive_test||'Niet vastgelegd')+'</div>'+
-   '<h3>Evidence</h3><div class="item mono" style="font-size:11px;line-height:1.7">'+refs+'</div>'+
+   '<h3>Bewijs</h3><div class="item mono" style="font-size:11px;line-height:1.7">'+refs+'</div>'+
    '<h3>Historie behouden / opnieuw onderzoeken</h3><p class="sub">Een heronderzoek overschrijft deze kandidaat niet. Het maakt een immutable verzoek voor een nieuwe poging onder de actuele governance.</p><button class="btn" id="reviveBtn">Opnieuw laten onderzoeken</button>'+
-   '<h3>Bronrecord</h3><pre class="raw">'+esc(JSON.stringify(c.raw,null,2))+'</pre>';
-  openDrawer(c.title,'IDEA JOURNEY',html);
+   '<h3>Bronrecord (originele taal)</h3><pre class="raw">'+esc(JSON.stringify(c.raw,null,2))+'</pre>';
+  openDrawer(c.title,'IDEETRAJECT',html);
   q('#reviveBtn').addEventListener('click',()=>revive(c.candidate_id));
   qa('.artifact-link').forEach(b=>b.addEventListener('click',()=>showArtifact(b.dataset.path)));
- }catch(e){toast('Kon candidate niet openen: '+e.message)}
+ }catch(e){toast('Kon kandidaat niet openen: '+e.message)}
 }
 async function revive(id){
  if(!confirm('Nieuw heronderzoekverzoek aanmaken voor '+id+'? De bestaande historie blijft ongewijzigd.'))return;
  try{const r=await api('/api/revive',{method:'POST',headers:{'Content-Type':'application/json','X-Prediction-Control-Center':'local-ui-v1'},body:JSON.stringify({candidate_id:id})});toast('Heronderzoekverzoek opgeslagen: '+r.request_id);await load();closeDrawer()}catch(e){toast('Niet gelukt: '+e.message)}
 }
 async function showRun(id){
- try{const d=await api('/api/run/'+encodeURIComponent(id)),r=d.run;const agents=Object.entries(r.agents||{}).map(([k,v])=>'<div class="metric-line"><span>'+esc(k)+'</span>'+pill(v)+'</div>').join('')||'<div class="meta">Geen agentstatus in samenvatting.</div>';const arts=d.artifacts.map(a=>'<button class="item click run-art" data-path="'+esc(a.path)+'"><div class="item-head"><b>'+esc(a.kind)+'</b><span class="pill">'+a.size+' B</span></div><div class="meta mono">'+esc(a.path)+'</div></button>').join('')||'<div class="empty">Geen gekoppelde artifacts gevonden.</div>';openDrawer(r.run_id,'RUN DETAIL','<div class="grid4"><div class="item"><div class="kicker">STATUS</div>'+pill(r.status)+'</div><div class="item"><div class="kicker">BESLUIT</div><b>'+esc(r.decision||'—')+'</b></div><div class="item"><div class="kicker">START</div><b>'+fmtDate(r.started_at)+'</b></div><div class="item"><div class="kicker">CANDIDATES</div><b>'+esc((r.candidate_ids||[]).join(', ')||'—')+'</b></div></div><h3>Agents / scouts</h3>'+agents+'<h3>Director</h3><div class="item">'+esc(r.director_decision||'Geen compacte directorbeslissing in dit runbestand.')+'</div><h3>Alle run-artifacts</h3><div class="list">'+arts+'</div>');qa('.run-art').forEach(b=>b.addEventListener('click',()=>showArtifact(b.dataset.path)))}catch(e){toast('Kon run niet openen: '+e.message)}
+ try{const d=await api('/api/run/'+encodeURIComponent(id)),r=d.run;const agents=Object.entries(r.agents||{}).map(([k,v])=>'<div class="metric-line"><span>'+esc(nlLabel(k))+'</span>'+pill(v)+'</div>').join('')||'<div class="meta">Geen agentstatus in samenvatting.</div>';const arts=d.artifacts.map(a=>'<button class="item click run-art" data-path="'+esc(a.path)+'"><div class="item-head"><b>'+esc(a.kind)+'</b><span class="pill">'+a.size+' B</span></div><div class="meta mono">'+esc(a.path)+'</div></button>').join('')||'<div class="empty">Geen gekoppelde artifacts gevonden.</div>';openDrawer(r.run_id,'UITVOERINGSDETAILS','<div class="grid4"><div class="item"><div class="kicker">STATUS</div>'+pill(r.status)+'</div><div class="item"><div class="kicker">BESLUIT</div><b>'+esc(r.decision||'—')+'</b></div><div class="item"><div class="kicker">START</div><b>'+fmtDate(r.started_at)+'</b></div><div class="item"><div class="kicker">CANDIDATES</div><b>'+esc((r.candidate_ids||[]).join(', ')||'—')+'</b></div></div><h3>Agents / scouts</h3>'+agents+'<h3>Director</h3><div class="item">'+esc(r.director_decision||'Geen compacte beslissing van de onderzoeksdirecteur in dit uitvoeringsbestand.')+'</div><h3>Alle run-artifacts</h3><div class="list">'+arts+'</div>');qa('.run-art').forEach(b=>b.addEventListener('click',()=>showArtifact(b.dataset.path)))}catch(e){toast('Kon uitvoering niet openen: '+e.message)}
 }
-async function showArtifact(path){try{const a=await api('/api/artifact?path='+encodeURIComponent(path));openDrawer(path,'RAW EVIDENCE','<div class="item"><div class="meta">Grootte '+a.size+' bytes'+(a.truncated?' • weergave afgekapt':'')+(a.sha256?' • sha256 '+esc(a.sha256):'')+'</div></div><pre class="raw">'+esc(a.content)+'</pre>')}catch(e){toast('Artifact niet beschikbaar: '+e.message)}}
+async function showArtifact(path){try{const a=await api('/api/artifact?path='+encodeURIComponent(path));openDrawer(path,'RUWE BEWIJSGEGEVENS','<div class="item"><div class="meta">Grootte '+a.size+' bytes'+(a.truncated?' • weergave afgekapt':'')+(a.sha256?' • sha256 '+esc(a.sha256):'')+'</div></div><pre class="raw">'+esc(a.content)+'</pre>')}catch(e){toast('Bestand niet beschikbaar: '+e.message)}}
 
 document.addEventListener('keydown',e=>{if(e.key==='Escape')closeDrawer()});
 load();setInterval(load,15000);
