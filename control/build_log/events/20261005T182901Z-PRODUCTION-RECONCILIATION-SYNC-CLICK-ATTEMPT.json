@@ -1,0 +1,31 @@
+{
+  "schema": "PREDICTION_BUILD_LOG_EVENT_V1",
+  "event_id": "20261005T182901Z-PRODUCTION-RECONCILIATION-SYNC-CLICK-ATTEMPT",
+  "work_item_id": "PRODUCTION-RECONCILIATION-20261005",
+  "created_at_utc": "2026-10-05T18:29:01Z",
+  "event_type": "ATTEMPT",
+  "work_item_status": "IN_PROGRESS",
+  "outcome": "STARTED",
+  "title": "Production veilig reconciliëren met canonical main",
+  "objective": "Breng production veilig in overeenstemming met canonical main zonder lokale architectuurcommits of dirty/untracked werk te verliezen.",
+  "summary": "De eigenaar klikte Sync. De routed wake kwam aan in ChatGPT. De eerste uitvoeringsstap is een read-only actuele inspectie plus representation-gates; er wordt nog niets opgeschoond of omgeschakeld.",
+  "why": "CURRENT_STATE verbiedt een onvoorwaardelijke switch/fast-forward zolang de tijdelijke branch en dirty worktree niet aantoonbaar in canonical source vertegenwoordigd zijn.",
+  "next_action": "Inspecteer branch/HEAD/main/status en voer committed-source, merge-representation en worktree-representation gates uit tegen de gepinde canonical source.",
+  "session_route_task_id": "SESSION-ROUTE-fc2613ecbc81e22d4c913b2a",
+  "task_ids": [
+    "DEV-PRED-PRODUCTION-SYNC-INSPECT-20261005-E022"
+  ],
+  "commits": [],
+  "evidence_refs": [
+    "control/control_center/SYNC_PROTOCOL.md",
+    "control/bridge_commands/CURRENT_STATE.md"
+  ],
+  "tags": [
+    "production",
+    "git-sync",
+    "reconciliation",
+    "one-click"
+  ],
+  "parent_event_id": "20261005T173800Z-PRODUCTION-RECONCILIATION-OPEN",
+  "first_incomplete_step": "Actuele representation-gates van committed branchdelta en dirty/untracked worktree."
+}
