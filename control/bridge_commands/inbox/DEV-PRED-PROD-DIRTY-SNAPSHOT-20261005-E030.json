@@ -1,0 +1,19 @@
+{
+  "schema": "PREDICTION_BRIDGE_COMMAND_V1",
+  "task_id": "DEV-PRED-PROD-DIRTY-SNAPSHOT-20261005-E030",
+  "action": "SIX_AI_HEALTH",
+  "created_at_utc": "2026-10-05T13:41:00Z",
+  "route_task_id": "SESSION-ROUTE-b277b86c3ff1b5ff38f678be",
+  "delivery_mode": "chat",
+  "live_trading": false,
+  "paid_actions": false,
+  "wallet_actions": false,
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "notes": "Non-destructive snapshot of the current 77-path production dirty state after missing E024 snapshot proof.",
+  "auto_continue": true,
+  "parent_continuation_id": null
+}
