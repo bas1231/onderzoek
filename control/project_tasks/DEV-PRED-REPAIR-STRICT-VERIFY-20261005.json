@@ -1,0 +1,85 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-REPAIR-STRICT-VERIFY-20261005",
+  "source_commit": "d64185e3d1143117a74e0a8f7aa2073b93afe6a3",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_tests",
+    "run_project_python"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 720,
+  "notes": "Verify requested product repairs only. No full A-to-Z/system qualification.",
+  "operations": [
+    {
+      "type": "python",
+      "argv": [
+        "/home/leonh/prediction_research_prod/.venv/bin/python",
+        "-m",
+        "pytest",
+        "-q",
+        "tests/codex_supervisor/test_supervisor.py",
+        "tests/codex_supervisor/test_model_quality_gates.py",
+        "tests/codex_supervisor/test_candidate_dispatch.py",
+        "tests/hourly/test_candidate_reporting_current_binding.py"
+      ],
+      "test": true,
+      "timeout_seconds": 480
+    },
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/test_strict_model_slug_hardening_20261005.py",
+      "content": "import importlib.util,json,pathlib,subprocess\nimport pytest\n\nROOT=pathlib.Path(__file__).resolve().parents[2]\nspec=importlib.util.spec_from_file_location(\"supervisor\",ROOT/\"control/codex_supervisor/supervisor.py\")\nm=importlib.util.module_from_spec(spec);spec.loader.exec_module(m)\n\ndef task():\n    prompt=\"test\"\n    return dict(task_id=\"T\",task_class=\"research_review\",priority=1,expected_value=1,estimated_reasoning_cost=1,created_at=\"2026-10-05\",prompt=prompt,input_sha256=m.digest(prompt.encode()))\n\ndef patch_runtime(tmp_path,monkeypatch,models):\n    cache=tmp_path/\".codex\";cache.mkdir()\n    (cache/\"models_cache.json\").write_text(json.dumps({\"models\":models}))\n    monkeypatch.setattr(m.P,\"home\",classmethod(lambda cls:tmp_path))\n    monkeypatch.setattr(m.subprocess,\"run\",lambda *a,**k:subprocess.CompletedProcess(a,0,\"Logged in using ChatGPT\",\"\"))\n\ndef test_deceptive_astra_slug_is_rejected(tmp_path,monkeypatch):\n    patch_runtime(tmp_path,monkeypatch,[{\"slug\":\"wrapper-gpt-6-astra\",\"display_name\":\"GPT-6 Astra\",\"visibility\":\"list\",\"priority\":1}])\n    t=task();t[\"model_policy\"]=\"ASTRA_EXACT\";t[\"astra_review_task\"]=True\n    with pytest.raises(m.Blocked,match=\"ASTRA_MODEL_UNAVAILABLE_OR_AMBIGUOUS\"):\n        m.CodexWorker(\"codex\")(t,None,tmp_path,7)\n\ndef test_deceptive_gpt_substring_is_not_builder(tmp_path,monkeypatch):\n    patch_runtime(tmp_path,monkeypatch,[\n        {\"slug\":\"wrapper-gpt-reasoner\",\"display_name\":\"Other Reasoner\",\"visibility\":\"list\",\"priority\":1},\n        {\"slug\":\"gpt-5-6-sol\",\"display_name\":\"GPT-5.6 Sol\",\"visibility\":\"list\",\"priority\":7},\n    ])\n    seen={}\n    class Process:\n        pid=123;returncode=0\n        def communicate(self,*a,**k):return None\n    def popen(args,**kw):\n        seen[\"args\"]=args;return Process()\n    monkeypatch.setattr(m.subprocess,\"Popen\",popen)\n    assert m.CodexWorker(\"codex\")(task(),None,tmp_path,7)==0\n    assert seen[\"args\"][seen[\"args\"].index(\"-m\")+1]==\"gpt-5-6-sol\"\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "/home/leonh/prediction_research_prod/.venv/bin/python",
+        "-m",
+        "pytest",
+        "-q",
+        "control/dev_checks/test_strict_model_slug_hardening_20261005.py"
+      ],
+      "test": true,
+      "timeout_seconds": 180
+    },
+    {
+      "type": "python",
+      "argv": [
+        "/home/leonh/prediction_research_prod/.venv/bin/python",
+        "-m",
+        "compileall",
+        "-q",
+        "control/codex_supervisor/supervisor.py",
+        "control/hourly/candidate_reporting.py"
+      ],
+      "timeout_seconds": 120
+    },
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/verify_all_runtime_pins_20261005.py",
+      "content": "from pathlib import Path\nimport hashlib,json\nroot=Path.cwd()\ncfg=json.loads((root/\"knowledge/codex_runtime/CONFIG.json\").read_text())\nmapping={\n\"candidate_dispatch.py_sha256\":\"control/codex_supervisor/candidate_dispatch.py\",\n\"candidate_policy_sha256\":\"control/hourly/candidate_queue.py\",\n\"evidence_wake.py_sha256\":\"control/codex_supervisor/evidence_wake.py\",\n\"build_wake.py_sha256\":\"control/codex_supervisor/build_wake.py\",\n\"model_quality_gate.py_sha256\":\"control/codex_supervisor/model_quality_gate.py\",\n\"astra_review_wake.py_sha256\":\"control/codex_supervisor/astra_review_wake.py\",\n\"measurement_wake.py_sha256\":\"control/codex_supervisor/measurement_wake.py\",\n\"supervisor_sha256\":\"control/codex_supervisor/supervisor.py\",\n\"astra_autonomous_review.py_sha256\":\"control/codex_supervisor/astra_autonomous_review.py\"}\nbad=[]\nfor k,r in mapping.items():\n a=hashlib.sha256((root/r).read_bytes()).hexdigest()\n if cfg.get(k)!=a:bad.append(k)\nprint(\"PIN_VERIFY=\"+json.dumps({\"checked\":len(mapping),\"mismatch\":bad},sort_keys=True),flush=True)\nif bad: raise SystemExit(41)\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/verify_all_runtime_pins_20261005.py"
+      ],
+      "timeout_seconds": 60
+    }
+  ]
+}
