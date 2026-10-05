@@ -1,0 +1,19 @@
+{
+  "schema": "PREDICTION_BRIDGE_COMMAND_V1",
+  "task_id": "DEV-PRED-CONTROL-CENTER-E012-SHORT-20261005-E013",
+  "action": "SIX_AI_HEALTH",
+  "created_at_utc": "2026-10-05T17:26:00Z",
+  "route_task_id": "SESSION-ROUTE-fc2613ecbc81e22d4c913b2a",
+  "delivery_mode": "chat",
+  "live_trading": false,
+  "paid_actions": false,
+  "wallet_actions": false,
+  "intelligence_tier": "B",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "auto_continue": false,
+  "parent_continuation_id": null,
+  "notes": "Intentional short diagnostic: return only live Control Center git-sync status, active task count, any non-active task leakage, chain alert count, and first sync issue. No mutations."
+}
