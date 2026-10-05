@@ -1,0 +1,33 @@
+{
+  "schema": "PREDICTION_BUILD_LOG_EVENT_V1",
+  "event_id": "20261005T210500Z-PRODUCTION-RECONCILIATION-E045-RESULT",
+  "work_item_id": "PRODUCTION-RECONCILIATION-20261005",
+  "created_at_utc": "2026-10-05T21:05:00Z",
+  "event_type": "RESULT",
+  "work_item_status": "IN_PROGRESS",
+  "outcome": "FAIL",
+  "title": "Production veilig reconciliëren met canonical main",
+  "objective": "Breng production veilig in sync met canonical main zonder lokaal werk te verliezen.",
+  "summary": "E045 run-count retry leverde de volledige semantische runverdeling: 5 run-directories, allemaal task_class=research_review voor candidate AUTO-DISCOVERY-54d13314c7879b58e46d; 1 COMPLETE.json en 1 CANDIDATE_APPLIED.json totaal.",
+  "why": "De 22 runbestanden vertegenwoordigen één succesvolle toegepaste review-run plus vier niet-terminale/retry/partial runmappen. Dit is auditgeschiedenis, geen willekeurige cache.",
+  "next_action": "Combineer E045 met E046 candidate lifecycle status en E047 preservation basis; leg daarna een canonical preservation record vast en voer alleen snapshot-matching cleanup uit als alle gates groen zijn.",
+  "session_route_task_id": "SESSION-ROUTE-fc2613ecbc81e22d4c913b2a",
+  "task_ids": [
+    "DEV-PRED-PRODUCTION-SNAPSHOT-RUNCOUNTS-RETRY-20261005-E045"
+  ],
+  "evidence_refs": [
+    "event=1791228281-1405ae85344a",
+    "run_directory_count=5",
+    "task_classes=research_review:5",
+    "terminal_counts=COMPLETE.json:1,CANDIDATE_APPLIED.json:1"
+  ],
+  "tags": [
+    "production",
+    "reconciliation",
+    "runs",
+    "audit-history",
+    "qualification-fixture"
+  ],
+  "parent_event_id": "20261005T204500Z-PRODUCTION-RECONCILIATION-E043-RESULT",
+  "first_incomplete_step": "E046 + E047 combineren tot expliciete preservation gate."
+}
