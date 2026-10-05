@@ -269,6 +269,7 @@ class ControlCenterTests(unittest.TestCase):
             sync = self.model.git_sync_status()
         self.assertEqual(sync["status"], "RED")
         self.assertTrue(sync["dirty"])
+        self.assertIn("control/example.py", sync["dirty_paths"])
         self.assertTrue(any("Production HEAD" in x for x in sync["issues"]))
         self.assertTrue(any("niet-vastgelegde" in x for x in sync["issues"]))
 
