@@ -1,0 +1,29 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-PROD-STAGED-PATHS-20261005",
+  "source_commit": "5462bcb863fa8e88fab5a51b492d770abefac434",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "production_staged_inspect"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 120,
+  "notes": "Read-only list of all staged production paths against current canonical source. Intentionally fails for compact visibility. No production mutation.",
+  "operations": [
+    {
+      "type": "production_staged_inspect",
+      "fail_for_visibility": true
+    }
+  ]
+}
