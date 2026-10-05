@@ -1,0 +1,54 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-REPAIR-MODEL-REPORTING-TEST-20261005",
+  "source_commit": "d9c75186331aa596eb5d183e97278469654801d4",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "run_tests",
+    "run_project_python"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 600,
+  "notes": "Regression proof for three product repairs only: exact GPT-6 Astra selection, GPT-only highest builder selection, and current-binding-only candidate reporting. Full A-to-Z system qualification is intentionally out of scope per user request.",
+  "operations": [
+    {
+      "type": "python",
+      "argv": [
+        "/home/leonh/prediction_research_prod/.venv/bin/python",
+        "-m",
+        "pytest",
+        "-q",
+        "tests/codex_supervisor/test_supervisor.py",
+        "tests/codex_supervisor/test_model_quality_gates.py",
+        "tests/codex_supervisor/test_candidate_dispatch.py",
+        "tests/hourly/test_candidate_reporting_current_binding.py"
+      ],
+      "test": true,
+      "timeout_seconds": 480
+    },
+    {
+      "type": "python",
+      "argv": [
+        "/home/leonh/prediction_research_prod/.venv/bin/python",
+        "-m",
+        "compileall",
+        "-q",
+        "control/codex_supervisor/supervisor.py",
+        "control/hourly/candidate_reporting.py"
+      ],
+      "timeout_seconds": 120
+    }
+  ]
+}
