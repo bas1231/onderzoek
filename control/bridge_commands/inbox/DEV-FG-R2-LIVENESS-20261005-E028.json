@@ -1,0 +1,17 @@
+{
+  "schema": "PREDICTION_BRIDGE_COMMAND_V1",
+  "task_id": "DEV-FG-R2-LIVENESS-20261005-E028",
+  "action": "SIX_AI_HEALTH",
+  "created_at_utc": "2026-10-05T13:40:00Z",
+  "route_task_id": "DEV-FG-R2-FRESH-ARTIFACTS-20261005-E027",
+  "delivery_mode": "chat",
+  "live_trading": false,
+  "paid_actions": false,
+  "wallet_actions": false,
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "notes": "Read-only distinguish current r2 privacy computation from another popup wait."
+}
