@@ -128,12 +128,16 @@ Manual WSL commands are fallback only. If unavoidable, keep them terminal-safe: 
 
 - `NO_PROVEN_EDGE` remains the scientific default until evidence clears the project's gates.
 - The economic objective is `ANY_POSITIVE_NET_EDGE_COUNTS`: do not discard a hypothesis merely because the net euro opportunity is small.
+- **Canonical mandatory sequence:** `Scout -> selectie -> GPT-5.6 Sol-opzet -> GPT-6 Astra pre-build review -> GPT-5.6 Sol-build -> GPT-6 Astra post-build code-review -> tests en meting -> supervisor -> rapportage`.
 - For a selected edge hypothesis, **GPT-5.6 Sol first produces the version-bound experimental design**.
 - Exact-version **GPT-6 Astra must approve that design before the real experiment may be built**. `NEEDS_REVISION` returns binding feedback to Sol; Sol revises and resubmits until Astra approves or the candidate is rejected/parked.
-- After approval, **GPT-5.6 Sol is the required experiment builder** and implements the actual edge experiment.
-- The experiment is technically tested, executed and measured under the approved read-only/sandbox research boundaries.
-- Exact-version **GPT-6 Astra then performs a post-experiment review of the implemented experiment and its results**. Revisions return to Sol, followed by re-test/re-measure and another Astra review.
-- Only after a valid post-experiment Astra approval may the chain continue to final supervisor/reproducer judgment and reporting.
+- After pre-build approval, **GPT-5.6 Sol is the required experiment builder** and implements the actual edge experiment.
+- **Before any substantive experiment test, backtest, validation run, shadow run or measurement may start, exact GPT-6 Astra must review and approve the actually built code/harness.** This is the mandatory `ASTRA_POSTBUILD_REVIEW` gate.
+- If Astra rejects or requests revision after the build, Sol processes that feedback, rebuilds a newly bound version and resubmits it to Astra. The loop repeats until Astra approves or the candidate is rejected/parked.
+- **Hard invariant:** `NO_TEST_OR_MEASUREMENT_BEFORE_ASTRA_POSTBUILD_APPROVAL`.
+- Only after a valid post-build Astra approval may technical/invalidation tests and read-only/shadow measurements begin.
+- After tests and measurement, the supervisor/falsifier/reproducer evaluates the immutable evidence and the system reports `EDGE`, `NO_EDGE`, or `NO_PROVEN_EDGE`.
+- Any A→Z qualification that tests or measures before the post-build Astra approval is **not a valid full-chain PASS**, even if later steps are green.
 - Prospective current-market measurement remains read-only/shadow only and never authorizes orders, cancellations, funds, wallets or paid actions.
 - Follow Tier A/B/C intelligence routing and provenance requirements.
 - Operational use of the bridge/executor does not imply that the formal independent Tier-A review record is complete.
