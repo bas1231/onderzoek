@@ -66,7 +66,7 @@ Elke task bevat daarnaast verplicht `live_trading:false`, `paid_actions:false`, 
 
 `git`: alleen lokale allowlisted Git-subcommands zoals status/diff/add/commit/branch/switch; push/remote/credential operations zijn hard geblokkeerd.
 
-`python`: repository-owned `.py` of allowlisted modules (`pytest`, `unittest`, `compileall`) onder de child guard.
+`python`: repository-owned `.py` of allowlisted modules (`pytest`, `unittest`, `compileall`) onder de child guard. `python -m pytest ...` wordt fail-closed gerouteerd via de bestaande lokale provider `~/prediction_research/.venv/bin/python`; er wordt geen package-installatie, sudo of externe netwerktoegang toegevoegd.
 
 `service`: `systemctl --user` op units die beginnen met `prediction-`.
 
