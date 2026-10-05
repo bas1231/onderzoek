@@ -191,10 +191,21 @@ class ControlCenterTests(unittest.TestCase):
                 "exit_code": None,
             },
         )
+        write_json(
+            self.model.command_state / "T-4.json",
+            {
+                "task_id": "T-4",
+                "route_task_id": "SESSION-D",
+                "status": "DISPATCHED",
+                "claimed_at_utc": "2026-09-01T10:00:00Z",
+                "completed_at_utc": "2026-09-01T10:00:01Z",
+            },
+        )
         snapshot = self.model.build_snapshot(force=True)
         self.assertEqual(snapshot["counts"]["tasks"], 1)
         self.assertEqual(snapshot["counts"]["sessions"], 1)
         self.assertEqual([x["task_id"] for x in snapshot["tasks"]], ["T-3"])
+        self.assertNotIn("T-4", {x["task_id"] for x in snapshot["tasks"]})
         self.assertEqual(snapshot["sessions"][0]["route_task_id"], "SESSION-C")
         self.assertEqual(snapshot["task_metrics"]["success"], 1)
         self.assertEqual(snapshot["task_metrics"]["failure"], 1)
