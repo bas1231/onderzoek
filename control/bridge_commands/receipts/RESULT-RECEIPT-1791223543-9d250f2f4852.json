@@ -1,0 +1,14 @@
+{
+  "schema": "PREDICTION_RESULT_RECEIPT_V1",
+  "receipt_id": "RESULT-RECEIPT-1791223543-9d250f2f4852",
+  "event_id": "1791223543-9d250f2f4852",
+  "source_task_id": "DEV-PRED-CONTROL-CENTER-SYNC-BUTTON-20261005-E020",
+  "created_at_utc": "2026-10-05T18:26:00.000Z",
+  "live_trading": false,
+  "paid_actions": false,
+  "wallet_actions": false,
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "High"
+  }
+}
