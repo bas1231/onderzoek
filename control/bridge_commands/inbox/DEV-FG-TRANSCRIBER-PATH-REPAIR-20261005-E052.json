@@ -1,0 +1,17 @@
+{
+  "schema": "PREDICTION_BRIDGE_COMMAND_V1",
+  "task_id": "DEV-FG-TRANSCRIBER-PATH-REPAIR-20261005-E052",
+  "action": "SIX_AI_HEALTH",
+  "created_at_utc": "2026-10-05T15:24:00Z",
+  "route_task_id": "DEV-FG-TRANSCRIBE-TRACEBACK-20261005-E051",
+  "delivery_mode": "chat",
+  "live_trading": false,
+  "paid_actions": false,
+  "wallet_actions": false,
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "notes": "Safely repair stale local transcription config paths only if exactly one valid process_meeting.py + venv Python pair is found; backup config and verify before keeping change."
+}
