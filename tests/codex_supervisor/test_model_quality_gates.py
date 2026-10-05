@@ -16,7 +16,7 @@ class Supervisor:
         self.root = root
 
 
-def overlay(state="ASTRA_PREBUILD_REVIEW"):
+def overlay(state="ASTRA_PREBUILD_REVIEW", qualification_fixture=False):
     return {
         "candidate_id": "TINY-EDGE-CANARY",
         "queue_status": state,
@@ -31,7 +31,9 @@ def overlay(state="ASTRA_PREBUILD_REVIEW"):
         "candidate_snapshot": {
             "candidate_id": "TINY-EDGE-CANARY",
             "prospective_protocols": [],
+            "qualification_fixture": qualification_fixture,
         },
+        "qualification_fixture": qualification_fixture,
         "referenced_evidence": {
             "knowledge/evidence/x.json": "{\"net_candidate_eur\":0.01}",
         },
@@ -42,14 +44,25 @@ def overlay(state="ASTRA_PREBUILD_REVIEW"):
     }
 
 
-def write_attestation(repo: Path, route_task_id="SESSION-ROUTE-CANARY", **changes):
+def write_attestation(
+    repo: Path,
+    route_task_id="SESSION-ROUTE-CANARY",
+    usage_scope=q.MODEL_PROVENANCE_PRODUCTION_SCOPE,
+    **changes,
+):
+    method = (
+        q.MODEL_PROVENANCE_TEST_METHOD
+        if usage_scope == q.MODEL_PROVENANCE_TEST_SCOPE
+        else q.MODEL_PROVENANCE_PRODUCTION_METHOD
+    )
     value = {
         "schema": q.MODEL_PROVENANCE_SCHEMA,
         "route_task_id": route_task_id,
         "reviewer_model": "GPT-6 Astra",
         "reviewer_role": "INDEPENDENT_GATE_REVIEWER",
-        "verification_method": q.MODEL_PROVENANCE_METHOD,
+        "verification_method": method,
         "attestation_scope": "ROUTE",
+        "usage_scope": usage_scope,
         "attested_by": "TEST_OPERATOR",
         "attested_at": "2026-10-05T00:00:00Z",
         "revoked": False,
@@ -133,6 +146,31 @@ def test_review_route_must_match_attested_route(tmp_path):
         q.validate_review(review, item, "PREBUILD", repo=tmp_path)
 
 
+
+def test_manual_test_only_attestation_is_rejected_for_production_candidate(tmp_path):
+    item = overlay(qualification_fixture=False)
+    route = "SESSION-ROUTE-CANARY"
+    ref, _, sha = write_attestation(
+        tmp_path,
+        route,
+        usage_scope=q.MODEL_PROVENANCE_TEST_SCOPE,
+    )
+    review = q.review_template(
+        item,
+        "PREBUILD",
+        route_task_id=route,
+        model_provenance_ref=ref,
+        model_provenance_sha256=sha,
+    )
+    review.update(
+        decision="APPROVE",
+        finding="Should not authorize production.",
+        next_action="Must fail closed.",
+    )
+    with pytest.raises(q.ReviewGateError, match="TEST_ONLY_PROVENANCE_FORBIDDEN_IN_PRODUCTION"):
+        q.validate_review(review, item, "PREBUILD", repo=tmp_path)
+
+
 def test_stale_astra_review_cannot_be_reused_after_candidate_change(tmp_path):
     item = overlay()
     _, review = write_review(tmp_path, item, "PREBUILD")
@@ -193,15 +231,15 @@ def test_astra_review_wake_uses_external_route_provenance_and_small_profit_polic
     monkeypatch.setattr(a, "BRIDGE_DATA", bridge)
     monkeypatch.setattr(a, "ROUTE_CONFIG", config)
     monkeypatch.setattr(a, "ROUTES", routes)
-    item = overlay()
+    item = overlay(qualification_fixture=True)
     repo = tmp_path / "repo"
-    write_attestation(repo)
+    write_attestation(repo, usage_scope=q.MODEL_PROVENANCE_TEST_SCOPE)
     s = Supervisor(tmp_path / "runtime")
     result = a.ensure_review_continuation(s, repo, item, "PREBUILD")
     record = json.loads((bridge / "continuations" / f"{result['continuation_id']}.json").read_text())
     msg = record["context_message"]
     assert "required_model=GPT-6 Astra" in msg
-    assert "model_identity_verification=EXTERNAL_ROUTE_ATTESTATION" in msg
+    assert "model_identity_verification=EXTERNAL_ROUTE_ATTESTATION_TEST_ONLY" in msg
     assert "do not self-attest your model identity" in msg
     assert "minimum_net_profit_eur=0.0" in msg
     assert "strictly positive NET executable euro edge is worth testing" in msg
@@ -215,7 +253,12 @@ def test_astra_review_wake_fails_without_attested_route(tmp_path, monkeypatch):
     monkeypatch.setattr(a, "ROUTE_CONFIG", config)
     monkeypatch.setattr(a, "ROUTES", routes)
     with pytest.raises(a.AstraReviewWakeBlocked, match="MODEL_PROVENANCE"):
-        a.ensure_review_continuation(Supervisor(tmp_path / "runtime"), tmp_path / "repo", overlay(), "PREBUILD")
+        a.ensure_review_continuation(
+            Supervisor(tmp_path / "runtime"),
+            tmp_path / "repo",
+            overlay(qualification_fixture=True),
+            "PREBUILD",
+        )
 
 
 def test_measurement_wake_is_read_only_and_highest_gpt_builder(tmp_path, monkeypatch):
