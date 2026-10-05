@@ -1,0 +1,15 @@
+{
+  "schema": "PREDICTION_RESULT_RECEIPT_V1",
+  "receipt_id": "RESULT-RECEIPT-cont-1791204829214-9ca9b817",
+  "event_id": "cont-1791204829214-9ca9b817",
+  "source_task_id": "CONT-WAKE-2da4c61b22f8537cfc39410a-A01",
+  "created_at_utc": "2026-10-05T13:14:00Z",
+  "recovery_reason": "RESULT_ACK_TIMEOUT",
+  "live_trading": false,
+  "paid_actions": false,
+  "wallet_actions": false,
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  }
+}
