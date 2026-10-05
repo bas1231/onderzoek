@@ -194,7 +194,7 @@ const NL_STATUS={
   UNKNOWN:'Onbekend',PASS:'Geslaagd',COMPLETED:'Voltooid',DONE:'Afgerond',SUCCESS:'Geslaagd',
   FAIL:'Mislukt',FAILED:'Mislukt',ERROR:'Fout',INCIDENT:'Incident',REJECTED:'Afgewezen',REJECT:'Afgewezen',
   AMBIGUOUS:'Onduidelijk',BLOCKED:'Geblokkeerd',BLOCKED_ROUTE:'Route geblokkeerd',
-  RUNNING:'Bezig',STARTED:'Gestart',CLAIMED:'Geclaimd',DISPATCHED:'Verzonden',INFLIGHT:'Onderweg',QUEUED:'In wachtrij',DELIVERED:'Aan ChatGPT geleverd',ALREADY_IN_SYNC:'Al in sync',PENDING:'Wachtend',
+  RUNNING:'Bezig',STARTED:'Gestart',CLAIMED:'Geclaimd',DISPATCHED:'Verzonden',INFLIGHT:'Onderweg',QUEUED:'In wachtrij',DELIVERED:'Aan ChatGPT geleverd',NEW_SESSION_QUEUED:'Nieuwe sessie in wachtrij',NEW_SESSION_LAUNCHING:'Nieuwe sessie openen',NEW_SESSION_OPENED:'Nieuwe sessie geopend',NEW_SESSION_STARTED:'Nieuwe sessie gestart',ALREADY_IN_SYNC:'Al in sync',PENDING:'Wachtend',
   NEEDS_DIRECTOR:'Wacht op onderzoeksdirecteur',EXPERIMENT_REQUIRED:'Experiment vereist',NEEDS_BUILD:'Bouw nodig',
   VALIDATION:'Validatie',RESULT_READY:'Resultaat gereed',NEEDS_REVISION:'Herziening nodig',
   APPROVE:'Goedgekeurd',APPROVED:'Goedgekeurd',UNPROVEN:'Onbewezen',DISCOVERED:'Ontdekt',
@@ -242,7 +242,7 @@ async function requestSync(){
    const r=await api('/api/sync',{method:'POST',headers:{'Content-Type':'application/json','X-Prediction-Control-Center':'local-ui-v1'},body:'{}'});
    if(r.state==='ALREADY_IN_SYNC')toast('Repository is al in sync.');
    else if(r.deduplicated)toast('Sync loopt al; er is geen dubbele poging gestart.');
-   else toast('Sync gestart. ChatGPT neemt de veilige reconciliatie automatisch over.');
+   else toast('Sync gestart in een nieuwe Prediction ChatGPT-sessie.');
    await load();
  }catch(e){toast('Sync kon niet worden gestart: '+e.message);buttons.forEach(b=>{b.disabled=false;b.textContent='Sync'})}
 }
@@ -263,12 +263,13 @@ function render(){
  q('#chainAlertBar').innerHTML=alerts.length
    ? '<div class="alert"><div class="item-head"><b>🔴 Ketenfout direct gemeld</b><span class="pill red">'+alerts.length+' recent</span></div><div class="meta"><strong>'+esc(alerts[0].id||'onbekend')+'</strong> • '+fmtDate(alerts[0].at)+'<br>'+esc(alerts[0].reason||'Geen foutreden beschikbaar.')+'</div></div>'
    : '<div class="ok"><div class="item-head"><b>✓ Geen nieuwe ketenfouten</b><span class="pill green">laatste 6 uur</span></div><div class="meta">Nieuwe fouten in taken, onderzoeksuitvoeringen of agents verschijnen hier automatisch.</div></div>';
- const syncBusy=syncRequest&&['QUEUED','INFLIGHT','DELIVERED'].includes(String(syncRequest.state||'').toUpperCase());
+ const syncBusy=syncRequest&&['QUEUED','INFLIGHT','DELIVERED','NEW_SESSION_QUEUED','NEW_SESSION_LAUNCHING','NEW_SESSION_OPENED','NEW_SESSION_STARTED'].includes(String(syncRequest.state||'').toUpperCase());
  const syncAction=gs.status==='RED'?'<div style="margin-top:11px"><button class="btn sync-action" '+(syncBusy?'disabled':'')+'>'+(syncBusy?'Sync gestart…':'Sync')+'</button></div>':'';
  const syncCard='<div class="card"><div class="kicker">Git-sync</div><div class="big">'+esc(syncNaam)+'</div><div class="sub">'+esc(syncUitleg)+'</div>'+syncAction+'</div>';
  q('#homeCards').innerHTML=card('Voordeelstatus',nlStatus(d.edge_state),'Strenge standaard totdat bewijs de controles doorstaat.','glow')+card('Actieve taken',c.tasks,'Alleen wat nu bezig of wachtend is')+syncCard+card('Open bouwwerk',c.build_log_open??0,'Gedeeld over alle ChatGPT-sessies');
  const active=d.tasks.slice(0,12);
- const syncPhase=syncRequest&&gs.status!=='GREEN'?(String(syncRequest.state||'REQUESTED').toUpperCase()==='DELIVERED'?'BEZIG':String(syncRequest.state||'REQUESTED').toUpperCase()):null;
+ const syncState=String(syncRequest&&syncRequest.state||'REQUESTED').toUpperCase();
+ const syncPhase=syncRequest&&gs.status!=='GREEN'?(['DELIVERED','NEW_SESSION_STARTED'].includes(syncState)?'BEZIG':syncState):null;
  const syncNow=syncPhase?'<button class="item click sync-work-open"><div class="item-head"><b>Git-sync productie → main</b>'+pill(syncPhase)+'</div><div class="meta">Verzoek '+esc(syncRequest.request_id||'onbekend')+' • gestart '+fmtDate(syncRequest.created_at_utc)+'<br>ChatGPT voert de veilige reconciliatie uit; lokale wijzigingen blijven beschermd.</div></button>':'';
  const taskNow=active.map(t=>'<div class="item"><div class="item-head"><b class="mono">'+esc(t.task_id)+'</b>'+pill(t.status)+'</div><div class="meta">Sessie: '+esc(t.route_task_id||'geen routegegevens')+' • '+fmtDate(t.started_at)+'</div></div>').join('');
  q('#nowList').innerHTML=syncNow+taskNow||'<div class="empty">Geen actieve taken of systeemacties. Het systeem kan wel wachten op een geplande onderzoeksuitvoering.</div>';
@@ -308,7 +309,7 @@ function render(){
  qa('[data-artifact]').forEach(b=>b.addEventListener('click',()=>showArtifact(b.dataset.artifact)));
 
  q('#systemCards').innerHTML=card('Broncode-opslag',d.repo,'Bron voor kandidaten en onderzoeksuitvoeringen')+card('Actieve taken',c.tasks,'Geen historisch taakgetal')+card('Git-sync',syncNaam,syncUitleg)+card('Veiligheid','ALLEEN-LEZEN','Geen live handel, betaalde acties of walletacties');
- q('#syncDetails').innerHTML='<div class="item"><div class="item-head"><b>Status</b>'+pill(gs.status||'UNKNOWN')+'</div><div class="meta">'+esc(syncUitleg)+'</div>'+(gs.status==='RED'?'<div style="margin-top:11px"><button class="btn sync-action" '+(syncBusy?'disabled':'')+'>'+(syncBusy?'Sync gestart…':'Sync')+'</button><div class="meta">'+(syncBusy?'Verzoek '+esc(syncRequest.request_id||'')+' • '+esc(nlStatus(syncRequest.state||'QUEUED')):'Eén klik start een fail-closed reconciliatie via ChatGPT + projectexecutor; lokale wijzigingen worden nooit blind weggegooid.')+'</div></div>':'')+'</div>'+
+ q('#syncDetails').innerHTML='<div class="item"><div class="item-head"><b>Status</b>'+pill(gs.status||'UNKNOWN')+'</div><div class="meta">'+esc(syncUitleg)+'</div>'+(gs.status==='RED'?'<div style="margin-top:11px"><button class="btn sync-action" '+(syncBusy?'disabled':'')+'>'+(syncBusy?'Sync gestart…':'Sync')+'</button><div class="meta">'+(syncBusy?'Verzoek '+esc(syncRequest.request_id||'')+' • '+esc(nlStatus(syncRequest.state||'QUEUED')):'Eén klik opent altijd een nieuwe Prediction ChatGPT-sessie en start daar de fail-closed reconciliatie; lokale wijzigingen worden nooit blind weggegooid.')+'</div></div>':'')+'</div>'+
    '<div class="item"><div class="kicker">Production HEAD</div><div class="mono">'+esc(gs.production_head||'onbekend')+'</div></div>'+
    '<div class="item"><div class="kicker">Lokale main</div><div class="mono">'+esc(gs.local_main||'onbekend')+'</div></div>'+
    '<div class="item"><div class="kicker">Laatst opgehaalde GitHub-main</div><div class="mono">'+esc(gs.fetched_github_main||'onbekend')+'</div><div class="meta">Opgehaald: '+fmtDate(gs.fetched_at)+'</div></div>'+
