@@ -505,6 +505,22 @@ class ControlCenterModel:
         alerts.sort(key=lambda x: parse_time(x.get("at")) or 0, reverse=True)
         return alerts[:20]
 
+    def lifecycle_status(self):
+        path = self.repo / "control/control_center/lifecycle_status.json"
+        obj = safe_json(path)
+        if isinstance(obj, dict) and isinstance(obj.get("stages"), list):
+            return obj
+        return {
+            "schema": "PREDICTION_CONTROL_CENTER_LIFECYCLE_V1",
+            "updated_at": None,
+            "full_chain_status": "UNKNOWN",
+            "full_chain_label": "Ketenstatus onbekend",
+            "next_required": "Controleer de canonieke lifecycle-status in Git.",
+            "invariant": "NO_TEST_OR_MEASUREMENT_BEFORE_ASTRA_POSTBUILD_APPROVAL",
+            "evidence_refs": [],
+            "stages": [],
+        }
+
     def load_revive_requests(self):
         rows = []
         if not self.revive_root.is_dir():
@@ -655,6 +671,7 @@ class ControlCenterModel:
             if str(item.get("status") or "").upper() in ACTIVE_STATES
         ]
         revives = self.load_revive_requests()
+        lifecycle = self.lifecycle_status()
         git_sync = self.git_sync_status()
         chain_alerts = self._chain_alerts(all_tasks, runs)
 
@@ -697,6 +714,7 @@ class ControlCenterModel:
             },
             "task_metrics": self._task_metrics(all_tasks),
             "candidate_funnel": self._candidate_funnel(candidates),
+            "lifecycle": lifecycle,
             "git_sync": git_sync,
             "chain_alerts": chain_alerts,
             "candidates": candidates,
