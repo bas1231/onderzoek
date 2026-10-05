@@ -550,6 +550,77 @@ class ControlCenterTests(unittest.TestCase):
         ids = set(projection["duplicate_open_objectives"][0]["work_item_ids"])
         self.assertEqual(ids, {"W-1", "W-2"})
 
+    def test_session_drift_alerts_only_on_explicit_scope_violation(self):
+        events = [
+            {
+                "event_id": "SCOPE-1",
+                "created_at_utc": "2026-10-01T11:00:00Z",
+                "session_route_task_id": "SESSION-X",
+                "session_assignment_scope": {
+                    "instruction": "Repair production reconciliation only.",
+                    "allowed_work_item_ids": ["PROD-1"],
+                },
+            }
+        ]
+        build_log = {
+            "work_items": [
+                {
+                    "work_item_id": "PROD-1",
+                    "title": "Production reconciliation",
+                    "objective": "Repair production safely.",
+                    "task_ids": ["TASK-GOOD"],
+                    "supports_work_item_ids": [],
+                },
+                {
+                    "work_item_id": "OTHER-1",
+                    "title": "Unrelated weather research",
+                    "objective": "Research a weather edge.",
+                    "task_ids": ["TASK-DRIFT"],
+                    "supports_work_item_ids": [],
+                },
+            ]
+        }
+        active = [
+            {"task_id": "TASK-GOOD", "route_task_id": "SESSION-X", "status": "RUNNING"},
+            {"task_id": "TASK-DRIFT", "route_task_id": "SESSION-X", "status": "RUNNING"},
+        ]
+        alerts = self.model._session_drift_alerts(active, build_log, events)
+        self.assertEqual(len(alerts), 1)
+        self.assertEqual(alerts[0]["task_id"], "TASK-DRIFT")
+        self.assertEqual(alerts[0]["work_item_id"], "OTHER-1")
+        self.assertIn("Repair production reconciliation only", alerts[0]["assignment"])
+
+    def test_session_drift_allows_explicit_dependency_work(self):
+        events = [
+            {
+                "event_id": "SCOPE-2",
+                "created_at_utc": "2026-10-01T11:00:00Z",
+                "session_route_task_id": "SESSION-X",
+                "session_assignment_scope": {
+                    "instruction": "Deploy dashboard fresh-session support.",
+                    "allowed_work_item_ids": ["DASH-1"],
+                },
+            }
+        ]
+        build_log = {
+            "work_items": [
+                {
+                    "work_item_id": "DASH-1",
+                    "title": "Dashboard work",
+                    "task_ids": [],
+                    "supports_work_item_ids": [],
+                },
+                {
+                    "work_item_id": "PYTEST-1",
+                    "title": "Pytest dependency",
+                    "task_ids": ["TASK-PYTEST"],
+                    "supports_work_item_ids": ["DASH-1"],
+                },
+            ]
+        }
+        active = [{"task_id": "TASK-PYTEST", "route_task_id": "SESSION-X", "status": "RUNNING"}]
+        self.assertEqual(self.model._session_drift_alerts(active, build_log, events), [])
+
     def test_lifecycle_status_is_persistent_and_fail_closed(self):
         lifecycle = self.model.lifecycle_status()
         self.assertEqual(lifecycle["full_chain_status"], "NOT_PROVEN")
@@ -603,6 +674,9 @@ class ControlCenterTests(unittest.TestCase):
             "Een gestart Sync-verzoek verschijnt hier direct",
             "nieuwe Prediction ChatGPT-sessie",
             "opent altijd een nieuwe Prediction ChatGPT-sessie",
+            "SESSIE WIJKT AF VAN OPDRACHT",
+            "Sessie-afwijkingen",
+            "DIRECT KIJKEN",
         ):
             self.assertIn(expected, html)
         self.assertIn("NO_PROVEN_EDGE", html)
