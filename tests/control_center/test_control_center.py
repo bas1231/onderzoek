@@ -551,6 +551,9 @@ class ControlCenterTests(unittest.TestCase):
             "requestSync",
             "/api/sync",
             "fail-closed reconciliatie",
+            "Actieve systeemacties",
+            "Git-sync productie → main",
+            "Een gestart Sync-verzoek verschijnt hier direct",
         ):
             self.assertIn(expected, html)
         self.assertIn("NO_PROVEN_EDGE", html)
