@@ -1,0 +1,14 @@
+{
+  "schema": "PREDICTION_RESULT_RECEIPT_V1",
+  "receipt_id": "RESULT-RECEIPT-1791226121-a1f15ccc23ef",
+  "event_id": "1791226121-a1f15ccc23ef",
+  "source_task_id": "DEV-PRED-PYTEST-CANARY-20261005-E030",
+  "created_at_utc": "2026-10-05T19:17:30.000Z",
+  "live_trading": false,
+  "paid_actions": false,
+  "wallet_actions": false,
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "High"
+  }
+}
