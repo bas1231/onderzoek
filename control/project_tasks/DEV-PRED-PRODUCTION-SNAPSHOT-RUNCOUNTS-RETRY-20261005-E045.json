@@ -1,0 +1,32 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-PRODUCTION-SNAPSHOT-RUNCOUNTS-RETRY-20261005-E045",
+  "source_commit": "9527501a4985525c2686a0a2cbfceeb20ef0bf8f",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "High"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "production_dirty_snapshot_inspect"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 180,
+  "notes": "Retry only the read-only run-count semantic report from immutable E034 dirty snapshot after E043 failed in refresh_mirror before executing the operation. No cleanup, live worktree mutation, network beyond executor's normal read-only GitHub mirror refresh, or remote writes.",
+  "operations": [
+    {
+      "type": "production_dirty_snapshot_inspect",
+      "snapshot_task_id": "DEV-PRED-PRODUCTION-DIRTY-SNAPSHOT-20261005-E034",
+      "report_mode": "semantic_run_counts",
+      "fail_for_visibility": true
+    }
+  ]
+}
