@@ -6,6 +6,7 @@ import json
 import mimetypes
 import os
 import statistics
+import subprocess
 import threading
 import time
 import uuid
@@ -111,6 +112,7 @@ class ControlCenterModel:
         self.revive_root = self.state_root / "revive_requests"
         self.command_state = (Path.home() / ".local/state/prediction-command-bus/tasks").resolve()
         self.executor_state = (Path.home() / ".local/state/prediction-project-executor").resolve()
+        self.mirror_root = (Path.home() / ".local/share/prediction-project-executor/repo").resolve()
         self._cache_lock = threading.Lock()
         self._cache_at = 0.0
         self._cache = None
@@ -333,10 +335,10 @@ class ControlCenterModel:
                 st = status_of(obj)
                 if source == "project_executor" or item["status"] == "UNKNOWN":
                     item["status"] = st
-                for key in ("started_at", "created_at", "claimed_at"):
+                for key in ("started_at", "created_at", "claimed_at", "claimed_at_utc"):
                     if not item["started_at"] and isinstance(obj.get(key), str):
                         item["started_at"] = obj[key]
-                for key in ("finished_at", "completed_at", "updated_at"):
+                for key in ("finished_at", "completed_at", "updated_at", "finished_at_utc", "completed_at_utc"):
                     if not item["finished_at"] and isinstance(obj.get(key), str):
                         item["finished_at"] = obj[key]
                 if isinstance(obj.get("exit_code"), int):
@@ -352,6 +354,149 @@ class ControlCenterModel:
         rows = list(by_id.values())
         rows.sort(key=lambda x: (parse_time(x.get("started_at")) or 0, x["task_id"]), reverse=True)
         return rows
+
+    def _git_output(self, repo: Path, *args: str):
+        if not repo.is_dir():
+            return None
+        try:
+            proc = subprocess.run(
+                ["git", "-C", str(repo), *args],
+                text=True,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.STDOUT,
+                timeout=5,
+                check=False,
+            )
+        except (OSError, subprocess.SubprocessError):
+            return None
+        if proc.returncode != 0:
+            return None
+        return (proc.stdout or "").strip()
+
+    def git_sync_status(self):
+        head = self._git_output(self.repo, "rev-parse", "HEAD")
+        local_main = self._git_output(self.repo, "rev-parse", "refs/heads/main")
+        branch = self._git_output(self.repo, "branch", "--show-current")
+        dirty_text = self._git_output(self.repo, "status", "--porcelain=v1")
+        dirty = None if dirty_text is None else bool(dirty_text)
+
+        mirror_head = (
+            self._git_output(self.mirror_root, "rev-parse", "FETCH_HEAD")
+            or self._git_output(self.mirror_root, "rev-parse", "refs/remotes/origin/main")
+            or self._git_output(self.mirror_root, "rev-parse", "refs/heads/main")
+        )
+        fetch_file = self.mirror_root / ".git" / "FETCH_HEAD"
+        fetched_at = None
+        fetch_age_seconds = None
+        try:
+            if fetch_file.is_file():
+                mtime = fetch_file.stat().st_mtime
+                fetched_at = datetime.fromtimestamp(mtime, timezone.utc).isoformat()
+                fetch_age_seconds = max(0, int(time.time() - mtime))
+        except OSError:
+            pass
+
+        issues = []
+        status = "GREEN"
+        if not head or not local_main:
+            status = "UNKNOWN"
+            issues.append("Production HEAD of lokale main kon niet worden gelezen.")
+        else:
+            if head != local_main:
+                status = "RED"
+                issues.append("Production HEAD wijkt af van lokale main.")
+            if dirty is True:
+                status = "RED"
+                issues.append("Production-worktree bevat niet-vastgelegde wijzigingen.")
+            if mirror_head:
+                if local_main != mirror_head:
+                    status = "RED"
+                    issues.append("Lokale main wijkt af van de laatst opgehaalde GitHub-main.")
+            elif status != "RED":
+                status = "UNKNOWN"
+                issues.append("Laatst opgehaalde GitHub-main is niet beschikbaar.")
+
+        if status == "GREEN" and fetch_age_seconds is not None and fetch_age_seconds > 3600:
+            status = "AMBER"
+            issues.append("GitHub-main is langer dan één uur niet opnieuw opgehaald.")
+
+        return {
+            "status": status,
+            "production_head": head,
+            "local_main": local_main,
+            "fetched_github_main": mirror_head,
+            "production_branch": branch,
+            "dirty": dirty,
+            "fetched_at": fetched_at,
+            "fetch_age_seconds": fetch_age_seconds,
+            "issues": issues,
+        }
+
+    def _chain_alerts(self, tasks, runs, window_seconds=21600):
+        cutoff = time.time() - window_seconds
+        alerts = []
+
+        for item in tasks:
+            status = str(item.get("status") or "UNKNOWN").upper()
+            bad = status in TERMINAL_FAILURES or (
+                isinstance(item.get("exit_code"), int) and item["exit_code"] != 0
+            )
+            if not bad:
+                continue
+            at = item.get("finished_at") or item.get("started_at")
+            when = parse_time(at)
+            if when is None or when < cutoff:
+                continue
+            reason = ""
+            for source in ("project_executor", "command_bus"):
+                obj = item.get("sources", {}).get(source)
+                if not isinstance(obj, dict):
+                    continue
+                values = (
+                    nested_find(obj, "error")
+                    + nested_find(obj, "detail")
+                    + nested_find(obj, "message")
+                )
+                reason = next(
+                    (compact_text(x, 500) for x in values if isinstance(x, str) and x.strip()),
+                    reason,
+                )
+            alerts.append({
+                "kind": "TASK",
+                "id": item["task_id"],
+                "status": status,
+                "at": at,
+                "route_task_id": item.get("route_task_id"),
+                "reason": reason or "Taak in de keten is mislukt; open Fouten voor details.",
+            })
+
+        for run in runs:
+            status = str(run.get("status") or "UNKNOWN").upper()
+            bad_agents = [
+                f"{name}:{value}"
+                for name, value in (run.get("agents") or {}).items()
+                if str(value).upper() in TERMINAL_FAILURES
+            ]
+            if status not in TERMINAL_FAILURES and not bad_agents:
+                continue
+            at = run.get("finished_at") or run.get("started_at")
+            when = parse_time(at)
+            if when is None or when < cutoff:
+                continue
+            detail = "Onderzoeksuitvoering is mislukt."
+            if bad_agents:
+                detail = "Agentfout(en): " + ", ".join(bad_agents[:6])
+            alerts.append({
+                "kind": "RUN",
+                "id": run.get("run_id"),
+                "status": status,
+                "at": at,
+                "route_task_id": None,
+                "reason": detail,
+            })
+
+        alerts.sort(key=lambda x: parse_time(x.get("at")) or 0, reverse=True)
+        return alerts[:20]
 
     def load_revive_requests(self):
         rows = []
@@ -494,20 +639,33 @@ class ControlCenterModel:
         with self._cache_lock:
             if not force and self._cache is not None and now - self._cache_at < CACHE_SECONDS:
                 return self._cache
+
         candidates = self.load_candidates()
         runs = self.load_runs()
-        tasks = self.load_tasks()
+        all_tasks = self.load_tasks()
+        active_tasks = [
+            item for item in all_tasks
+            if str(item.get("status") or "").upper() in ACTIVE_STATES
+        ]
         revives = self.load_revive_requests()
+        git_sync = self.git_sync_status()
+        chain_alerts = self._chain_alerts(all_tasks, runs)
+
         sessions = {}
-        for item in tasks:
+        for item in active_tasks:
             route = item.get("route_task_id") or "NO_ROUTE_METADATA"
-            bucket = sessions.setdefault(route, {"route_task_id": route, "tasks": 0, "active": 0, "failures": 0, "last_task": None})
+            bucket = sessions.setdefault(
+                route,
+                {
+                    "route_task_id": route,
+                    "tasks": 0,
+                    "active": 0,
+                    "failures": 0,
+                    "last_task": None,
+                },
+            )
             bucket["tasks"] += 1
-            status = str(item.get("status") or "").upper()
-            if status in ACTIVE_STATES:
-                bucket["active"] += 1
-            if status in TERMINAL_FAILURES or (isinstance(item.get("exit_code"), int) and item["exit_code"] != 0):
-                bucket["failures"] += 1
+            bucket["active"] += 1
             if bucket["last_task"] is None:
                 bucket["last_task"] = item["task_id"]
 
@@ -515,23 +673,34 @@ class ControlCenterModel:
             "schema": SCHEMA,
             "generated_at": utc_now(),
             "repo": str(self.repo),
-            "edge_state": "EDGE" if any(c.get("scientific_status", "").upper() == "EDGE" for c in candidates) else "NO_PROVEN_EDGE",
+            "edge_state": (
+                "EDGE"
+                if any(c.get("scientific_status", "").upper() == "EDGE" for c in candidates)
+                else "NO_PROVEN_EDGE"
+            ),
             "safety": {"live_trading": False, "paid_actions": False, "wallet_actions": False},
             "counts": {
                 "candidates": len(candidates),
                 "runs": len(runs),
-                "tasks": len(tasks),
+                "tasks": len(active_tasks),
                 "sessions": len(sessions),
                 "revive_requests": len(revives),
                 "legacy_candidates": sum(1 for c in candidates if c.get("legacy_imported")),
+                "chain_alerts": len(chain_alerts),
             },
-            "task_metrics": self._task_metrics(tasks),
+            "task_metrics": self._task_metrics(all_tasks),
             "candidate_funnel": self._candidate_funnel(candidates),
+            "git_sync": git_sync,
+            "chain_alerts": chain_alerts,
             "candidates": candidates,
             "runs": runs,
-            "tasks": tasks[:500],
-            "sessions": sorted(sessions.values(), key=lambda x: (x["active"], x["tasks"]), reverse=True),
-            "errors": self._errors(tasks),
+            "tasks": active_tasks[:500],
+            "sessions": sorted(
+                sessions.values(),
+                key=lambda x: (x["active"], x["tasks"]),
+                reverse=True,
+            ),
+            "errors": self._errors(all_tasks),
             "revive_requests": revives[:100],
             "legacy_artifacts": self._research_artifacts(),
         }
