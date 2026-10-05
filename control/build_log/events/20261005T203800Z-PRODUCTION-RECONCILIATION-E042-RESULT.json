@@ -1,0 +1,34 @@
+{
+  "schema": "PREDICTION_BUILD_LOG_EVENT_V1",
+  "event_id": "20261005T203800Z-PRODUCTION-RECONCILIATION-E042-RESULT",
+  "work_item_id": "PRODUCTION-RECONCILIATION-20261005",
+  "created_at_utc": "2026-10-05T20:38:00Z",
+  "event_type": "RESULT",
+  "work_item_status": "IN_PROGRESS",
+  "outcome": "FAIL",
+  "title": "Production veilig reconciliëren met canonical main",
+  "objective": "Breng production veilig in sync met canonical main zonder lokaal werk te verliezen.",
+  "summary": "E042 identificeerde de lokale Astra wake als PREBUILD voor candidate AUTO-DISCOVERY-54d13314c7879b58e46d, continuation CONT-558bbf4eef47051559747308 en control route SESSION-ROUTE-998ca1b7029d5f4d19c7d5d9. Canonical main bevat wel de qualification candidate maar geen canonical record van deze continuation/wake.",
+  "why": "De wake is provenance/auditstate voor een governed PREBUILD gate en is niet aantoonbaar elders canoniek vertegenwoordigd.",
+  "next_action": "Controleer of de 24 snapshot blobs al in de GitHub mirror/objectdatabase voorkomen; zo ja kan canonical tree-hergebruik de veiligste transportweg zijn.",
+  "session_route_task_id": "SESSION-ROUTE-fc2613ecbc81e22d4c913b2a",
+  "task_ids": [
+    "DEV-PRED-PRODUCTION-SNAPSHOT-WAKE-20261005-E042"
+  ],
+  "evidence_refs": [
+    "event=1791227988-71ba204f6924",
+    "candidate_id=AUTO-DISCOVERY-54d13314c7879b58e46d",
+    "continuation_id=CONT-558bbf4eef47051559747308",
+    "control_route_task_id=SESSION-ROUTE-998ca1b7029d5f4d19c7d5d9",
+    "phase=PREBUILD"
+  ],
+  "tags": [
+    "production",
+    "reconciliation",
+    "astra",
+    "prebuild",
+    "provenance"
+  ],
+  "parent_event_id": "20261005T203100Z-PRODUCTION-RECONCILIATION-E040-RESULT",
+  "first_incomplete_step": "Exacte remote Git-objectdekking van de E034 snapshot bepalen."
+}
