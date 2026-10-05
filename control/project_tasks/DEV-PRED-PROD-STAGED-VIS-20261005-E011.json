@@ -1,0 +1,29 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-PROD-STAGED-VIS-20261005-E011",
+  "source_commit": "8511127a874f323cc46cf701b2e9286d287f0b9a",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "production_staged_inspect"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 120,
+  "notes": "Visibility-only built-in staged inspection after E010 parser proved unusable. Intentionally fail_for_visibility=true to expose staged/unstaged counts plus staged and differing path samples. No production/source/bridge/service mutation.",
+  "operations": [
+    {
+      "type": "production_staged_inspect",
+      "fail_for_visibility": true
+    }
+  ]
+}
