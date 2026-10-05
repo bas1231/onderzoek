@@ -74,6 +74,25 @@ run is actually evidenced.
 The visual theme follows the dark navy / magenta / cyan design language used by
 the FG-assistant.
 
+## Shared build log
+
+The `Logboek` page is a projection of immutable events under:
+
+`control/build_log/events/*.json`
+
+The canonical operating rules are in `control/build_log/PROTOCOL.md`. A stable
+`work_item_id` survives retries and ChatGPT-session handoffs; individual executor
+attempts keep fresh task IDs. The dashboard shows the current objective status,
+why attempts passed or failed, the first incomplete step, next action, related
+session routes/tasks/commits, and the complete event timeline.
+
+For multi-session freshness the server prefers the read-only command-bus
+`FETCH_HEAD` mirror, then the project-executor mirror, then the production
+working tree. Events are immutable and deduplicated by `event_id`; the dashboard
+does not write GitHub.
+
+Exact duplicate open objectives are flagged as an anti-circle warning.
+
 ## Canonical edge lifecycle displayed
 
 `Scout -> selectie -> GPT-5.6 Sol-opzet -> GPT-6 Astra pre-build review ->
