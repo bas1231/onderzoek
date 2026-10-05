@@ -1,0 +1,16 @@
+{
+  "schema": "PREDICTION_BRIDGE_COMMAND_V1",
+  "task_id": "DEV-PRED-RO-AUDIT-20261005-E003",
+  "action": "SIX_AI_HEALTH",
+  "created_at_utc": "2026-10-05T07:44:05.999Z",
+  "route_task_id": "SESSION-ROUTE-8a0a088bb1b387e28c65b674",
+  "live_trading": false,
+  "paid_actions": false,
+  "wallet_actions": false,
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "Codex; exact model identity unavailable to runtime",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "auto_continue": false
+}
