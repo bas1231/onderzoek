@@ -4,8 +4,10 @@ import sys
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / "control/hourly"))
+sys.path.insert(0, str(ROOT / "control/codex_supervisor"))
 
 import candidate_reporting as r
+import model_quality_gate as q
 
 
 def write_overlay(runtime, name, value):
@@ -119,3 +121,9 @@ def test_reporting_hides_review_with_stale_binding_even_in_latest_overlay(tmp_pa
 
     row = r.summarize(queue(), runtime)["candidates"][0]
     assert row["astra_prebuild"] is None
+
+
+def test_reporting_binding_matches_canonical_astra_gate():
+    current = base_overlay(2, 2)
+    assert r._review_binding(current, "PREBUILD") == q.review_binding(current, "PREBUILD")
+    assert r._review_binding(current, "PREMEASUREMENT") == q.review_binding(current, "PREMEASUREMENT")
