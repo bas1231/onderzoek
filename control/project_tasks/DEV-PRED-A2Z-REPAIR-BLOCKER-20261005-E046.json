@@ -1,0 +1,41 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-A2Z-REPAIR-BLOCKER-20261005-E046",
+  "source_commit": "f64f9ce73e56204caa3edcb3c65df7e8239634b1",
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "Codex; exact model identity unavailable to runtime",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_runtime"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 180,
+  "notes": "E045 bewijst ontbrekende postbuild-gate. Lees nu bestaande E042-foutdetails en modelmetadata voor gerichte reparatie. Geen tests, Scout, modellen of experiment opnieuw uitvoeren. Geen bridge-/productiewijziging. PASS betekent uitsluitend geslaagde bewijsophaling.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/a2z_repair_blocker_e046.py",
+      "content": "from pathlib import Path\nimport json,hashlib\nhome=Path.home()\nids={'repair':'DEV-PRED-A2Z-REVIEW-CALL-REPAIR-20261005-E042','resume':'DEV-PRED-A2Z-RESUME-EVIDENCE-20261005-E043'}\ndef read(p):\n    if p.is_symlink() or not p.is_file():\n        return {}\n    try:\n        v=json.loads(p.read_text())\n        return v if isinstance(v,dict) else {}\n    except (ValueError,OSError):\n        return {}\nreport={'states':{},'events':[],'source_modified':False,'experiment_executed':False}\nfor label,tid in ids.items():\n    report['states'][label]=read(home/'.local/state/prediction-project-executor'/(tid+'.json'))\nprior=read(home/'.local/share/prediction-project-executor/worktrees'/ids['resume']/'diagnostic-result/resume-evidence.json')\nreport['prior']=prior\nbase=home/'.local/share/prediction-chat-bridge'\nfor folder in ('sent','inflight','outbox','failed'):\n    directory=base/folder\n    if not directory.is_dir():\n        continue\n    for p in sorted(directory.glob('*.json'),reverse=True)[:3000]:\n        if p.is_symlink() or not p.is_file() or p.stat().st_size>2000000:\n            continue\n        value=read(p)\n        raw=json.dumps(value,ensure_ascii=False)\n        label=next((k for k,v in ids.items() if v in raw),None)\n        if label is None:\n            continue\n        texts=[]\n        def collect(v):\n            if isinstance(v,str):\n                texts.extend(v.splitlines())\n            elif isinstance(v,dict):\n                for k,x in v.items():\n                    if k in ('message','payload','result','detail','error','stdout','stderr','body','text'):\n                        collect(x)\n        collect(value)\n        errors=[x.strip()[:900] for x in texts if any(t in x for t in ('PermissionError','ERROR=','TaskError','blocked','Traceback','Error:','A2Z_RESUME'))]\n        report['events'].append({'task':label,'event_file':p.name,'errors':errors[-8:]})\nmodels=read(home/'.codex/models_cache.json').get('models',[])\nvisible=[{'slug':m.get('slug'),'display_name':m.get('display_name')} for m in models if isinstance(m,dict) and m.get('visibility')=='list']\nreport['visible_models']=visible\nrepair_root=home/'.local/share/prediction-project-executor/worktrees'/ids['repair']\ntarget=repair_root/'control/hourly/full_chain_qualification.py'\nreport['repair_source_sha256']=hashlib.sha256(target.read_bytes()).hexdigest() if target.is_file() and not target.is_symlink() else None\nmessages=' '.join(e for row in report['events'] for e in row['errors'])\nmessages+=' '+json.dumps(prior.get('repair_events',[]))\nreason='SHARED_COORDINATOR_OUTSIDE_SCOPE' if 'blocked write outside task roots' in messages else 'READ_EXACT_REPAIR_ERRORS'\nif not report['events'] and not prior:\n    reason='REPAIR_EVIDENCE_UNAVAILABLE'\nsol=[m for m in visible if str(m['display_name']).strip().casefold()=='gpt-5.6 sol']\nastra=[m for m in visible if str(m['display_name']).strip().casefold()=='gpt-6 astra']\nreport['reason']=reason\nout=Path.cwd()/'diagnostic-result'\nout.mkdir(exist_ok=True)\n(out/'repair-blocker.json').write_text(json.dumps(report,indent=2))\ndetail=next((e[-120:] for row in reversed(report['events']) for e in reversed(row['errors']) if 'Error' in e or 'ERROR=' in e),'NO_ERROR_LINE')\nprint('REPAIR_BLOCKER '+json.dumps({'reason':reason,'sol':len(sol),'astra':len(astra),'patched':report['repair_source_sha256']=='d8fc774c936c92e4e5bc65cd600f7106774f3233b0e0f5555e02e2223962198e','detail':detail},separators=(',',':')),flush=True)\nraise SystemExit(0 if report['events'] or prior else 1)\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/a2z_repair_blocker_e046.py"
+      ],
+      "timeout_seconds": 90
+    }
+  ]
+}
