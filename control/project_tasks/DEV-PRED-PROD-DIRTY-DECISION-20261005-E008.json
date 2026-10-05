@@ -1,0 +1,41 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-PROD-DIRTY-DECISION-20261005-E008",
+  "source_commit": "8511127a874f323cc46cf701b2e9286d287f0b9a",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_runtime"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 180,
+  "notes": "Read-only compact decision extraction from E007 detailed result. Report exact dirty path sets and representation counts only. No production/source/bridge/service mutation.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/prod_dirty_decision_20261005_e008.py",
+      "content": "from pathlib import Path\nimport json,re\nevent=\"1791199981-791233be95ec\"\nbase=Path.home()/\".local/share/prediction-chat-bridge\"\nmsg=None\nfor d in (\"sent\",\"inflight\",\"outbox\"):\n    p=base/d/f\"{event}.json\"\n    if p.is_file():\n        obj=json.loads(p.read_text(encoding=\"utf-8\",errors=\"replace\"))\n        msg=str(obj.get(\"message\") or \"\")\n        break\nif msg is None:\n    print(\"DIRTY_DECISION=EVENT_MISSING\",flush=True)\n    raise SystemExit(2)\nm=re.search(r'DIRTY_DETAIL=(\\{.*\\})\\s*$',msg,re.M)\nif not m:\n    print(\"DIRTY_DECISION=DETAIL_MISSING\",flush=True)\n    raise SystemExit(2)\nd=json.loads(m.group(1))\nst=d.get(\"staged\") or {}\nwt=d.get(\"worktree\") or {}\ndiffs=d.get(\"diffs\") or []\nout={\n \"staged_n\":st.get(\"staged_n\"),\n \"unstaged_n\":st.get(\"unstaged_n\"),\n \"represented_n\":st.get(\"represented_n\"),\n \"staged_different_n\":st.get(\"different_n\"),\n \"staged_paths\":st.get(\"staged_sample\") or [],\n \"staged_different\":st.get(\"different_sample\") or [],\n \"worktree_dirty_n\":wt.get(\"dirty_count\"),\n \"worktree_equal_n\":wt.get(\"equal_count\"),\n \"worktree_different_n\":wt.get(\"different_count\"),\n \"worktree_missing_source_n\":wt.get(\"missing_in_source_count\"),\n \"worktree_different\":wt.get(\"different\") or [],\n \"worktree_missing_source\":wt.get(\"missing_in_source\") or [],\n \"diff_paths\":{str(x.get(\"mode\")):x.get(\"paths\") or [] for x in diffs},\n \"diff_truncated\":{str(x.get(\"mode\")):bool(x.get(\"truncated\")) for x in diffs},\n}\nprint(\"DIRTY_DECISION=\"+json.dumps(out,separators=(\",\",\":\"),sort_keys=True),flush=True)\nraise SystemExit(0)\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/prod_dirty_decision_20261005_e008.py"
+      ],
+      "timeout_seconds": 60
+    }
+  ]
+}
