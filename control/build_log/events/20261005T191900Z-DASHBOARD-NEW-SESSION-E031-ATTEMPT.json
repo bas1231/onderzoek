@@ -1,0 +1,36 @@
+{
+  "schema": "PREDICTION_BUILD_LOG_EVENT_V1",
+  "event_id": "20261005T191900Z-DASHBOARD-NEW-SESSION-E031-ATTEMPT",
+  "work_item_id": "DASHBOARD-NEW-SESSION-ACTIONS-20261005",
+  "created_at_utc": "2026-10-05T19:19:00Z",
+  "event_type": "ATTEMPT",
+  "work_item_status": "IN_PROGRESS",
+  "outcome": "STARTED",
+  "title": "Dashboardknoppen starten altijd een nieuwe ChatGPT-sessie",
+  "objective": "Maak het platformbreed verplicht dat iedere dashboardactie die ChatGPT start, het werk in een nieuwe Prediction ChatGPT-sessie opent met eigen route en logboekspoor.",
+  "summary": "Pytest is nu structureel beschikbaar. E031 herneemt de geïntegreerde fresh-session build vanaf de eerste incomplete stap: volledige Control Center-regressies plus volledige multichat/bridge pytest-suite, daarna runtime-installatie en service/canary verificatie.",
+  "why": "De eerdere E023/E025 blokkades waren respectievelijk active-page compatibiliteit en ontbrekende pytest-provider. Beide zijn nu gericht opgelost en afzonderlijk bewezen.",
+  "next_action": "Wacht op E031. Alleen PASS exit=0 bewijst de generieke dashboard→nieuwe-sessie infrastructuur live.",
+  "session_route_task_id": "SESSION-ROUTE-fc2613ecbc81e22d4c913b2a",
+  "task_ids": [
+    "DEV-PRED-DASHBOARD-NEW-SESSION-20261005-E031"
+  ],
+  "commits": [
+    "985b9a711344094bba6be0e608f49ac2669a7d49",
+    "de605561fa0f5e54e0b0a9f23123e7de3ed44411"
+  ],
+  "evidence_refs": [
+    "control/control_center/DASHBOARD_CHAT_ACTION_PROTOCOL.md",
+    "control/tampermonkey_multichat/prediction-chat-wake.user.js",
+    "control/tampermonkey_multichat/bridge_server_session_bootstrap.py"
+  ],
+  "tags": [
+    "dashboard",
+    "new-session",
+    "bridge",
+    "control-center",
+    "runtime"
+  ],
+  "parent_event_id": "20261005T184501Z-DASHBOARD-NEW-SESSION-ACTIONS-E023-ATTEMPT",
+  "first_incomplete_step": "Volledige regressies, runtime-installatie en live verificatie van fresh-session launcher."
+}
