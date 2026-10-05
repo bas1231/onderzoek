@@ -1,0 +1,41 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-PROD-STAGED-SEMANTIC-VIS-20261005-E015",
+  "source_commit": "8511127a874f323cc46cf701b2e9286d287f0b9a",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_runtime"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 180,
+  "notes": "Visibility-only conservative semantic representation check of the exact E014 staged diff against canonical source. For each changed file, require every nonblank staged addition to already exist in canonical and every nonblank staged removal to be absent from canonical before calling it strongly represented. Intentional rc42 for visibility. No production/source/bridge/service mutation.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/prod_staged_semantic_vis_20261005_e015.py",
+      "content": "from pathlib import Path\nimport json,re\nevent=\"1791201148-f79e6fb36b9e\"\nbase=Path.home()/\".local/share/prediction-chat-bridge\"\nmsg=None\nfor d in (\"sent\",\"inflight\",\"outbox\"):\n    p=base/d/f\"{event}.json\"\n    if p.is_file():\n        obj=json.loads(p.read_text(encoding=\"utf-8\",errors=\"replace\"))\n        msg=str(obj.get(\"message\") or \"\")\n        break\nif msg is None:\n    print(\"SEMANTIC_VIS=EVENT_MISSING\",flush=True)\n    raise SystemExit(42)\n\npayload=None\nfor line in msg.splitlines():\n    k=line.find(\"PRODUCTION_DIFF_INSPECT \")\n    if k>=0:\n        raw=line[k+len(\"PRODUCTION_DIFF_INSPECT \"):].strip()\n        try:\n            payload=json.loads(raw)\n        except Exception:\n            pass\nif not isinstance(payload,dict):\n    print(\"SEMANTIC_VIS=DIFF_PAYLOAD_MISSING\",flush=True)\n    raise SystemExit(42)\n\nbody=str(payload.get(\"diff\") or \"\")\nsections=re.split(r'(?=^diff --git a/)',body,flags=re.M)\nout=[]\nroot=Path.cwd()\nfor sec in sections:\n    m=re.match(r'^diff --git a/(.+?) b/(.+?)$',sec,re.M)\n    if not m:\n        continue\n    rel=m.group(2)\n    canon=root/rel\n    try:\n        canon_lines=set(canon.read_text(encoding=\"utf-8\",errors=\"replace\").splitlines())\n    except OSError:\n        canon_lines=set()\n    adds=[]\n    rems=[]\n    for ln in sec.splitlines():\n        if ln.startswith(\"+++\") or ln.startswith(\"---\"):\n            continue\n        if ln.startswith(\"+\"):\n            x=ln[1:]\n            if x.strip():\n                adds.append(x)\n        elif ln.startswith(\"-\"):\n            x=ln[1:]\n            if x.strip():\n                rems.append(x)\n    add_missing=sorted(set(x for x in adds if x not in canon_lines))\n    rem_still=sorted(set(x for x in rems if x in canon_lines))\n    strong=(not add_missing and not rem_still)\n    out.append({\n      \"file\":rel.rsplit(\"/\",1)[-1],\n      \"strong\":strong,\n      \"add_missing_n\":len(add_missing),\n      \"rem_still_n\":len(rem_still),\n      \"add_missing_sample\":add_missing[:2],\n      \"rem_still_sample\":rem_still[:2],\n    })\nprint(\"SEMANTIC_VIS=\"+json.dumps(out,separators=(\",\",\":\"),sort_keys=True),flush=True)\nraise SystemExit(42)\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/prod_staged_semantic_vis_20261005_e015.py"
+      ],
+      "timeout_seconds": 90
+    }
+  ]
+}
