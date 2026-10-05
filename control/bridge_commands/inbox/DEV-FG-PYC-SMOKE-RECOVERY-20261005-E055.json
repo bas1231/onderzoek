@@ -1,0 +1,17 @@
+{
+  "schema": "PREDICTION_BRIDGE_COMMAND_V1",
+  "task_id": "DEV-FG-PYC-SMOKE-RECOVERY-20261005-E055",
+  "action": "SIX_AI_HEALTH",
+  "created_at_utc": "2026-10-05T15:38:00Z",
+  "route_task_id": "DEV-FG-PYC-PATH-20261005-E054",
+  "delivery_mode": "chat",
+  "live_trading": false,
+  "paid_actions": false,
+  "wallet_actions": false,
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "notes": "Extract an 8-second local clip from the latest failed audio, run the unique compiled process_meeting.pyc with the existing FG venv, and only on successful transcript creation repair config and restart/verify the watcher."
+}
