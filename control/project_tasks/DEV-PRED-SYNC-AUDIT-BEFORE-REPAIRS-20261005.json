@@ -1,0 +1,65 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-SYNC-AUDIT-BEFORE-REPAIRS-20261005",
+  "source_commit": "1fe1992ab3c01f3b959705477d60e21e4d281a8b",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "production_inspect",
+    "production_compare_source",
+    "production_merge_representation",
+    "production_staged_inspect",
+    "production_compare_worktree"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 300,
+  "notes": "Read-only pre-repair synchronization audit. Inspect production refs/status, committed representation, staged/dirty representation and current source hash pins. No production mutation.",
+  "operations": [
+    {
+      "type": "production_inspect",
+      "require_head_equals_main": false
+    },
+    {
+      "type": "production_compare_source",
+      "require_equal": false
+    },
+    {
+      "type": "production_merge_representation",
+      "require_subsumed": false
+    },
+    {
+      "type": "production_staged_inspect",
+      "fail_for_visibility": false
+    },
+    {
+      "type": "production_compare_worktree",
+      "require_exact": false
+    },
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/sync_audit_runtime_pins_20261005.py",
+      "content": "from pathlib import Path\nimport hashlib,json\n\nroot=Path.cwd()\ncfg=json.loads((root/\"knowledge/codex_runtime/CONFIG.json\").read_text())\nmapping={\n \"candidate_dispatch.py_sha256\":\"control/codex_supervisor/candidate_dispatch.py\",\n \"candidate_policy_sha256\":\"control/hourly/candidate_queue.py\",\n \"evidence_wake.py_sha256\":\"control/codex_supervisor/evidence_wake.py\",\n \"build_wake.py_sha256\":\"control/codex_supervisor/build_wake.py\",\n \"model_quality_gate.py_sha256\":\"control/codex_supervisor/model_quality_gate.py\",\n \"astra_review_wake.py_sha256\":\"control/codex_supervisor/astra_review_wake.py\",\n \"measurement_wake.py_sha256\":\"control/codex_supervisor/measurement_wake.py\",\n \"supervisor_sha256\":\"control/codex_supervisor/supervisor.py\",\n \"astra_autonomous_review.py_sha256\":\"control/codex_supervisor/astra_autonomous_review.py\",\n}\nmismatch=[]\nmissing=[]\nfor key,rel in mapping.items():\n    p=root/rel\n    if not p.is_file():\n        missing.append(rel); continue\n    actual=hashlib.sha256(p.read_bytes()).hexdigest()\n    if cfg.get(key)!=actual:\n        mismatch.append({\"key\":key,\"path\":rel,\"pinned\":cfg.get(key),\"actual\":actual})\nprint(\"RUNTIME_PIN_AUDIT=\"+json.dumps({\n \"checked\":len(mapping),\"mismatch_count\":len(mismatch),\"missing_count\":len(missing),\n \"mismatch\":[{\"key\":x[\"key\"],\"path\":x[\"path\"]} for x in mismatch],\n \"missing\":missing\n},sort_keys=True),flush=True)\nif mismatch or missing:\n    raise SystemExit(41)\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/sync_audit_runtime_pins_20261005.py"
+      ],
+      "timeout_seconds": 60
+    }
+  ]
+}
