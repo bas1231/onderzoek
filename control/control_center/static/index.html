@@ -45,7 +45,7 @@ main{padding:26px;min-width:0}.top{display:flex;align-items:flex-start;justify-c
 .lifecycle-foot{display:flex;justify-content:space-between;gap:14px;align-items:flex-start;border-top:1px solid rgba(37,44,85,.6);padding-top:8px;font-size:11px;color:var(--muted);line-height:1.45}
 .lifecycle-next{max-width:72%}.life-legend{white-space:nowrap}.life-dot{display:inline-block;width:7px;height:7px;border-radius:50%;margin:0 4px 0 8px}.life-dot:first-child{margin-left:0}.life-dot.working{background:var(--green)}.life-dot.tested{background:var(--cyan)}.life-dot.pending{background:#ffca6a}
 .drawer{position:fixed;right:0;top:0;bottom:0;width:min(680px,94vw);background:#06091a;border-left:1px solid rgba(49,214,255,.35);box-shadow:-20px 0 60px rgba(0,0,0,.38);z-index:20;transform:translateX(105%);transition:.18s ease;display:flex;flex-direction:column}.drawer.open{transform:translateX(0)}.drawer-head{display:flex;justify-content:space-between;gap:15px;padding:18px;border-bottom:1px solid var(--line)}.drawer-body{overflow:auto;padding:18px}.x{border:1px solid var(--line);background:#0b102a;border-radius:9px;width:38px;height:38px}.timeline{border-left:1px solid var(--line);margin-left:6px;padding-left:16px}.event{position:relative;margin:0 0 17px}.event:before{content:"";position:absolute;left:-21px;top:5px;width:9px;height:9px;border-radius:50%;background:var(--cyan);box-shadow:0 0 10px rgba(49,214,255,.5)}.event b{font-size:13px}.event p{margin:4px 0 0;color:var(--muted);font-size:12px;line-height:1.5}
-.btn{border:1px solid rgba(255,46,189,.45);background:linear-gradient(90deg,rgba(255,46,189,.2),rgba(84,38,255,.15));border-radius:10px;padding:10px 13px;font-weight:650}.btn:hover{box-shadow:0 0 18px rgba(255,46,189,.15)}.btn.secondary{border-color:var(--line);background:#0b1029}
+.btn{border:1px solid rgba(255,46,189,.45);background:linear-gradient(90deg,rgba(255,46,189,.2),rgba(84,38,255,.15));border-radius:10px;padding:10px 13px;font-weight:650}.btn:hover{box-shadow:0 0 18px rgba(255,46,189,.15)}.btn:disabled{opacity:.52;cursor:not-allowed;box-shadow:none}.btn.secondary{border-color:var(--line);background:#0b1029}
 pre.raw{white-space:pre-wrap;word-break:break-word;background:#040613;border:1px solid var(--line);border-radius:10px;padding:12px;font-size:11px;max-height:420px;overflow:auto}
 .empty{padding:24px;text-align:center;color:var(--muted)}.live-pulse{color:var(--pink);animation:pulse 1.7s infinite}@keyframes pulse{50%{opacity:.45}}
 .toast{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);background:#101633;border:1px solid var(--cyan);padding:10px 14px;border-radius:10px;z-index:30;display:none;max-width:min(540px,90vw)}
@@ -190,7 +190,7 @@ const NL_STATUS={
   UNKNOWN:'Onbekend',PASS:'Geslaagd',COMPLETED:'Voltooid',DONE:'Afgerond',SUCCESS:'Geslaagd',
   FAIL:'Mislukt',FAILED:'Mislukt',ERROR:'Fout',INCIDENT:'Incident',REJECTED:'Afgewezen',REJECT:'Afgewezen',
   AMBIGUOUS:'Onduidelijk',BLOCKED:'Geblokkeerd',BLOCKED_ROUTE:'Route geblokkeerd',
-  RUNNING:'Bezig',STARTED:'Gestart',CLAIMED:'Geclaimd',DISPATCHED:'Verzonden',INFLIGHT:'Onderweg',PENDING:'Wachtend',
+  RUNNING:'Bezig',STARTED:'Gestart',CLAIMED:'Geclaimd',DISPATCHED:'Verzonden',INFLIGHT:'Onderweg',QUEUED:'In wachtrij',DELIVERED:'Aan ChatGPT geleverd',ALREADY_IN_SYNC:'Al in sync',PENDING:'Wachtend',
   NEEDS_DIRECTOR:'Wacht op onderzoeksdirecteur',EXPERIMENT_REQUIRED:'Experiment vereist',NEEDS_BUILD:'Bouw nodig',
   VALIDATION:'Validatie',RESULT_READY:'Resultaat gereed',NEEDS_REVISION:'Herziening nodig',
   APPROVE:'Goedgekeurd',APPROVED:'Goedgekeurd',UNPROVEN:'Onbewezen',DISCOVERED:'Ontdekt',
@@ -232,10 +232,20 @@ function closeDrawer(){q('#drawer').classList.remove('open');q('#drawer').setAtt
 function openDrawer(title,kicker,html){q('#drawerTitle').textContent=title;q('#drawerKicker').textContent=kicker;q('#drawerBody').innerHTML=html;q('#drawer').classList.add('open');q('#drawer').setAttribute('aria-hidden','false')}
 
 async function api(path,opt={}){const r=await fetch(path,{cache:'no-store',...opt});const j=await r.json();if(!r.ok)throw new Error(j.error||r.statusText);return j}
+async function requestSync(){
+ const buttons=qa('.sync-action');buttons.forEach(b=>{b.disabled=true;b.textContent='Sync starten…'});
+ try{
+   const r=await api('/api/sync',{method:'POST',headers:{'Content-Type':'application/json','X-Prediction-Control-Center':'local-ui-v1'},body:'{}'});
+   if(r.state==='ALREADY_IN_SYNC')toast('Repository is al in sync.');
+   else if(r.deduplicated)toast('Sync loopt al; er is geen dubbele poging gestart.');
+   else toast('Sync gestart. ChatGPT neemt de veilige reconciliatie automatisch over.');
+   await load();
+ }catch(e){toast('Sync kon niet worden gestart: '+e.message);buttons.forEach(b=>{b.disabled=false;b.textContent='Sync'})}
+}
 async function load(){try{S.data=await api('/api/snapshot');render();q('#health').innerHTML='<span style="color:var(--green)">● verbonden</span>';q('#updated').textContent='Bijgewerkt '+fmtDate(S.data.generated_at)}catch(e){q('#health').innerHTML='<span style="color:var(--red)">● niet bereikbaar</span>';q('#updated').textContent=e.message}}
 
 function render(){
- const d=S.data,m=d.task_metrics,c=d.counts,gs=d.git_sync||{},alerts=d.chain_alerts||[],lc=d.lifecycle||{},bl=d.build_log||{counts:{},open_work:[],recent_events:[],duplicate_open_objectives:[]};
+ const d=S.data,m=d.task_metrics,c=d.counts,gs=d.git_sync||{},syncRequest=d.sync_request||null,alerts=d.chain_alerts||[],lc=d.lifecycle||{},bl=d.build_log||{counts:{},open_work:[],recent_events:[],duplicate_open_objectives:[]};
  const stages=Array.isArray(lc.stages)?lc.stages:[];
  q('#lifecycleSummary').textContent=(lc.full_chain_label||'Ketenstatus onbekend')+' • status per stap is bewijsgebonden, niet alleen gepland.';
  q('#lifecycleOverall').textContent=lc.full_chain_status==='NOT_PROVEN'?'VOLLEDIGE KETEN: NOG NIET BEWEZEN':nlStatus(lc.full_chain_status||'UNKNOWN').toUpperCase();
@@ -249,7 +259,10 @@ function render(){
  q('#chainAlertBar').innerHTML=alerts.length
    ? '<div class="alert"><div class="item-head"><b>🔴 Ketenfout direct gemeld</b><span class="pill red">'+alerts.length+' recent</span></div><div class="meta"><strong>'+esc(alerts[0].id||'onbekend')+'</strong> • '+fmtDate(alerts[0].at)+'<br>'+esc(alerts[0].reason||'Geen foutreden beschikbaar.')+'</div></div>'
    : '<div class="ok"><div class="item-head"><b>✓ Geen nieuwe ketenfouten</b><span class="pill green">laatste 6 uur</span></div><div class="meta">Nieuwe fouten in taken, onderzoeksuitvoeringen of agents verschijnen hier automatisch.</div></div>';
- q('#homeCards').innerHTML=card('Voordeelstatus',nlStatus(d.edge_state),'Strenge standaard totdat bewijs de controles doorstaat.','glow')+card('Actieve taken',c.tasks,'Alleen wat nu bezig of wachtend is')+card('Git-sync',syncNaam,syncUitleg)+card('Open bouwwerk',c.build_log_open??0,'Gedeeld over alle ChatGPT-sessies');
+ const syncBusy=syncRequest&&['QUEUED','INFLIGHT','DELIVERED'].includes(String(syncRequest.state||'').toUpperCase());
+ const syncAction=gs.status==='RED'?'<div style="margin-top:11px"><button class="btn sync-action" '+(syncBusy?'disabled':'')+'>'+(syncBusy?'Sync gestart…':'Sync')+'</button></div>':'';
+ const syncCard='<div class="card"><div class="kicker">Git-sync</div><div class="big">'+esc(syncNaam)+'</div><div class="sub">'+esc(syncUitleg)+'</div>'+syncAction+'</div>';
+ q('#homeCards').innerHTML=card('Voordeelstatus',nlStatus(d.edge_state),'Strenge standaard totdat bewijs de controles doorstaat.','glow')+card('Actieve taken',c.tasks,'Alleen wat nu bezig of wachtend is')+syncCard+card('Open bouwwerk',c.build_log_open??0,'Gedeeld over alle ChatGPT-sessies');
  const active=d.tasks.slice(0,12);
  q('#nowList').innerHTML=active.length?active.map(t=>'<div class="item"><div class="item-head"><b class="mono">'+esc(t.task_id)+'</b>'+pill(t.status)+'</div><div class="meta">Sessie: '+esc(t.route_task_id||'geen routegegevens')+' • '+fmtDate(t.started_at)+'</div></div>').join(''):'<div class="empty">Geen actieve taken. Het systeem kan wel wachten op een geplande onderzoeksuitvoering.</div>';
  q('#attentionCount').textContent=alerts.length;
@@ -284,11 +297,12 @@ function render(){
  qa('[data-artifact]').forEach(b=>b.addEventListener('click',()=>showArtifact(b.dataset.artifact)));
 
  q('#systemCards').innerHTML=card('Broncode-opslag',d.repo,'Bron voor kandidaten en onderzoeksuitvoeringen')+card('Actieve taken',c.tasks,'Geen historisch taakgetal')+card('Git-sync',syncNaam,syncUitleg)+card('Veiligheid','ALLEEN-LEZEN','Geen live handel, betaalde acties of walletacties');
- q('#syncDetails').innerHTML='<div class="item"><div class="item-head"><b>Status</b>'+pill(gs.status||'UNKNOWN')+'</div><div class="meta">'+esc(syncUitleg)+'</div></div>'+
+ q('#syncDetails').innerHTML='<div class="item"><div class="item-head"><b>Status</b>'+pill(gs.status||'UNKNOWN')+'</div><div class="meta">'+esc(syncUitleg)+'</div>'+(gs.status==='RED'?'<div style="margin-top:11px"><button class="btn sync-action" '+(syncBusy?'disabled':'')+'>'+(syncBusy?'Sync gestart…':'Sync')+'</button><div class="meta">'+(syncBusy?'Verzoek '+esc(syncRequest.request_id||'')+' • '+esc(nlStatus(syncRequest.state||'QUEUED')):'Eén klik start een fail-closed reconciliatie via ChatGPT + projectexecutor; lokale wijzigingen worden nooit blind weggegooid.')+'</div></div>':'')+'</div>'+
    '<div class="item"><div class="kicker">Production HEAD</div><div class="mono">'+esc(gs.production_head||'onbekend')+'</div></div>'+
    '<div class="item"><div class="kicker">Lokale main</div><div class="mono">'+esc(gs.local_main||'onbekend')+'</div></div>'+
    '<div class="item"><div class="kicker">Laatst opgehaalde GitHub-main</div><div class="mono">'+esc(gs.fetched_github_main||'onbekend')+'</div><div class="meta">Opgehaald: '+fmtDate(gs.fetched_at)+'</div></div>'+
    '<div class="item"><div class="kicker">Worktree</div><b>'+(gs.dirty===false?'Schoon':gs.dirty===true?'Niet schoon':'Onbekend')+'</b><div class="meta">'+esc((gs.dirty_paths||[]).join(' • ')||'Geen afwijkende bestanden gemeld.')+'</div></div>';
+ qa('.sync-action').forEach(b=>b.addEventListener('click',requestSync));
  q('#systemRows').innerHTML=d.tasks.slice(0,200).map(t=>'<tr><td class="mono">'+esc(t.task_id)+'</td><td>'+pill(t.status)+'</td><td>'+esc(t.exit_code??'—')+'</td><td class="mono">'+esc(t.route_task_id||'—')+'</td><td class="mono">'+esc((t.source_commit||'—').slice(0,12))+'</td></tr>').join('')||'<tr><td colspan="5" class="empty">Geen actieve taken.</td></tr>';
 }
 
