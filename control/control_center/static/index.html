@@ -60,6 +60,7 @@ pre.raw{white-space:pre-wrap;word-break:break-word;background:#040613;border:1px
   <header class="top"><div><h1 id="pageTitle">Overzicht</h1><p id="pageSub">Wat doet Prediction, wat gaat goed en waar moet je kijken?</p></div><div class="stamp"><div id="updated">Laden…</div><div id="health">● verbinden</div></div></header>
 
   <section class="page active" id="page-home">
+    <div id="chainAlertBar" style="margin-bottom:14px"></div>
     <div class="grid4" id="homeCards"></div>
     <div class="row2">
       <article class="card glow"><div class="section-title"><h2>Wat gebeurt er nu?</h2><span class="pill pink live-pulse">ACTIEF</span></div><div id="nowList" class="list"></div></article>
@@ -86,7 +87,7 @@ pre.raw{white-space:pre-wrap;word-break:break-word;background:#040613;border:1px
   <section class="page" id="page-live">
     <div class="grid4" id="liveCards"></div>
     <div class="row2">
-      <article class="card"><div class="section-title"><h2>Actieve / recente taken</h2><span class="pill cyan">alle sessies</span></div><div id="taskList" class="list"></div></article>
+      <article class="card"><div class="section-title"><h2>Actieve taken</h2><span class="pill cyan">alle sessies</span></div><div id="taskList" class="list"></div></article>
       <article class="card"><div class="section-title"><h2>ChatGPT-sessies</h2><span class="pill">op route gegroepeerd</span></div><div id="sessionList" class="list"></div></article>
     </div>
   </section>
@@ -128,7 +129,8 @@ pre.raw{white-space:pre-wrap;word-break:break-word;background:#040613;border:1px
 
   <section class="page" id="page-system">
     <div class="grid4" id="systemCards"></div>
-    <article class="card" style="margin-top:14px"><div class="section-title"><h2>Ruwe taakstatus</h2><span class="pill">techniek</span></div><div class="table-wrap"><table class="table"><thead><tr><th>Task</th><th>Status</th><th>Exit</th><th>Sessie</th><th>Source commit</th></tr></thead><tbody id="systemRows"></tbody></table></div></article>
+    <article class="card" style="margin-top:14px"><div class="section-title"><h2>Synchronisatie met main</h2><span class="pill cyan">alleen-lezen</span></div><div id="syncDetails" class="list"></div></article>
+    <article class="card" style="margin-top:14px"><div class="section-title"><h2>Actieve taakstatus</h2><span class="pill">techniek</span></div><div class="table-wrap"><table class="table"><thead><tr><th>Taak</th><th>Status</th><th>Afsluitcode</th><th>Sessie</th><th>Broncommit</th></tr></thead><tbody id="systemRows"></tbody></table></div></article>
   </section>
 </main>
 </div>
@@ -187,15 +189,20 @@ async function api(path,opt={}){const r=await fetch(path,{cache:'no-store',...op
 async function load(){try{S.data=await api('/api/snapshot');render();q('#health').innerHTML='<span style="color:var(--green)">● verbonden</span>';q('#updated').textContent='Bijgewerkt '+fmtDate(S.data.generated_at)}catch(e){q('#health').innerHTML='<span style="color:var(--red)">● niet bereikbaar</span>';q('#updated').textContent=e.message}}
 
 function render(){
- const d=S.data,m=d.task_metrics,c=d.counts;
- q('#homeCards').innerHTML=card('Voordeelstatus',nlStatus(d.edge_state),'Strenge standaard totdat bewijs de controles doorstaat.','glow')+card('Ideeën',c.candidates,c.legacy_candidates+' historisch geïmporteerd')+card('Uitvoeringen',c.runs,'Iedere historische onderzoeksuitvoering is inleesbaar')+card('Actieve taken',m.active,'Over '+c.sessions+' sessieroutes');
- const active=d.tasks.filter(t=>['RUNNING','STARTED','CLAIMED','DISPATCHED','INFLIGHT','PENDING'].includes(String(t.status).toUpperCase())).slice(0,12);
- q('#nowList').innerHTML=active.length?active.map(t=>'<div class="item"><div class="item-head"><b class="mono">'+esc(t.task_id)+'</b>'+pill(t.status)+'</div><div class="meta">Sessie: '+esc(t.route_task_id||'geen route metadata')+' • '+fmtDate(t.started_at)+'</div></div>').join(''):'<div class="empty">Geen actieve taakstatus gevonden. Het systeem kan wel wachten op een geplande onderzoeksuitvoering.</div>';
- q('#attentionCount').textContent=d.errors.length;
- q('#attentionList').innerHTML=d.errors.length?d.errors.slice(0,5).map(e=>'<div class="alert"><div class="item-head"><b>'+esc(e.task_id)+'</b>'+pill(e.status)+'</div><div class="meta">'+esc(e.reason)+'</div></div>').join(''):'<div class="ok"><b>Geen open foutstatus gevonden</b><div class="meta">Op basis van de lokale taakstatus.</div></div>';
+ const d=S.data,m=d.task_metrics,c=d.counts,gs=d.git_sync||{},alerts=d.chain_alerts||[];
+ const syncNaam=gs.status==='GREEN'?'In sync':gs.status==='RED'?'Niet in sync':gs.status==='AMBER'?'Controle verouderd':'Onbekend';
+ const syncUitleg=gs.status==='GREEN'?'Production HEAD, lokale main en opgehaalde GitHub-main zijn gelijk en de worktree is schoon.':((gs.issues||[])[0]||'Synchronisatiestatus kon niet volledig worden vastgesteld.');
+ q('#chainAlertBar').innerHTML=alerts.length
+   ? '<div class="alert"><div class="item-head"><b>🔴 Ketenfout direct gemeld</b><span class="pill red">'+alerts.length+' recent</span></div><div class="meta"><strong>'+esc(alerts[0].id||'onbekend')+'</strong> • '+fmtDate(alerts[0].at)+'<br>'+esc(alerts[0].reason||'Geen foutreden beschikbaar.')+'</div></div>'
+   : '<div class="ok"><div class="item-head"><b>✓ Geen nieuwe ketenfouten</b><span class="pill green">laatste 6 uur</span></div><div class="meta">Nieuwe fouten in taken, onderzoeksuitvoeringen of agents verschijnen hier automatisch.</div></div>';
+ q('#homeCards').innerHTML=card('Voordeelstatus',nlStatus(d.edge_state),'Strenge standaard totdat bewijs de controles doorstaat.','glow')+card('Actieve taken',c.tasks,'Alleen wat nu bezig of wachtend is')+card('Git-sync',syncNaam,syncUitleg)+card('Actieve sessies',c.sessions,'ChatGPT-routes met actieve taken');
+ const active=d.tasks.slice(0,12);
+ q('#nowList').innerHTML=active.length?active.map(t=>'<div class="item"><div class="item-head"><b class="mono">'+esc(t.task_id)+'</b>'+pill(t.status)+'</div><div class="meta">Sessie: '+esc(t.route_task_id||'geen routegegevens')+' • '+fmtDate(t.started_at)+'</div></div>').join(''):'<div class="empty">Geen actieve taken. Het systeem kan wel wachten op een geplande onderzoeksuitvoering.</div>';
+ q('#attentionCount').textContent=alerts.length;
+ q('#attentionList').innerHTML=alerts.length?alerts.slice(0,5).map(e=>'<div class="alert"><div class="item-head"><b>'+esc(e.id||'onbekend')+'</b>'+pill(e.status)+'</div><div class="meta">'+fmtDate(e.at)+' • '+esc(e.reason)+'</div></div>').join(''):'<div class="ok"><b>Geen recente ketenfouten</b><div class="meta">Nieuwe foutmeldingen verschijnen hier direct.</div></div>';
  const good=[]; if(m.success_rate!=null)good.push('<div class="ok"><b>Taaksucces '+pct(m.success_rate)+'</b><div class="meta">'+m.success+' volledig geslaagde taken tegenover '+m.failure+' fouten.</div></div>');good.push('<div class="ok"><b>Financiële beveiliging staat standaard dicht</b><div class="meta">Live handelen, betaalde acties en walletacties staan uit.</div></div>');good.push('<div class="ok"><b>'+c.candidates+' ideeën bewaard</b><div class="meta">Historie wordt niet overschreven bij heronderzoek.</div></div>');q('#goodList').innerHTML=good.join('');
 
- q('#liveCards').innerHTML=card('Sessies',c.sessions,'Gelijktijdige ChatGPT-routes')+card('Actief',m.active,'Taakstatussen in uitvoering')+card('Volledig geslaagd',m.success,'Bekende succesvolle uitvoeringen')+card('Fouten',m.failure,'Bekende mislukte taken');
+ q('#liveCards').innerHTML=card('Actieve sessies',c.sessions,'ChatGPT-routes met actief werk')+card('Actieve taken',c.tasks,'Alleen huidige taakstatussen')+card('Ketenfouten',alerts.length,'Nieuwe fouten in de laatste 6 uur')+card('Git-sync',syncNaam,syncUitleg);
  q('#taskList').innerHTML=d.tasks.slice(0,30).map(t=>'<div class="item"><div class="item-head"><b class="mono">'+esc(t.task_id)+'</b>'+pill(t.status)+'</div><div class="meta">'+fmtDate(t.started_at)+' • afsluitcode '+esc(t.exit_code??'—')+' • '+esc(t.route_task_id||'route onbekend')+'</div></div>').join('')||'<div class="empty">Geen task-state.</div>';
  q('#sessionList').innerHTML=d.sessions.slice(0,30).map(s=>'<div class="item"><div class="item-head"><b class="mono">'+esc(s.route_task_id)+'</b><span class="pill">'+s.tasks+' tasks</span></div><div class="meta">'+s.active+' actief • '+s.failures+' fouten • laatste: '+esc(s.last_task||'—')+'</div></div>').join('')||'<div class="empty">Geen sessieroutes in task-state.</div>';
 
@@ -212,8 +219,13 @@ function render(){
  q('#legacyList').innerHTML=d.legacy_artifacts.slice(0,80).map(a=>'<button class="item click" data-artifact="'+esc(a.path)+'"><div class="item-head"><b>'+esc(a.name)+'</b><span class="pill">historisch</span></div><div class="meta mono">'+esc(a.path)+'</div></button>').join('')||'<div class="empty">Geen historische onderzoeksbestanden gevonden.</div>';
  qa('[data-artifact]').forEach(b=>b.addEventListener('click',()=>showArtifact(b.dataset.artifact)));
 
- q('#systemCards').innerHTML=card('Repository',d.repo,'Bron voor kandidaten en onderzoeksuitvoeringen')+card('Taken',c.tasks,'Command-bus + status van projectuitvoerder')+card('Wachtrij heronderzoek',c.revive_requests,'Onwijzigbare heronderzoekverzoeken')+card('Veiligheid','ALLEEN-LEZEN','Geen live handel, betaalde acties of walletacties');
- q('#systemRows').innerHTML=d.tasks.slice(0,200).map(t=>'<tr><td class="mono">'+esc(t.task_id)+'</td><td>'+pill(t.status)+'</td><td>'+esc(t.exit_code??'—')+'</td><td class="mono">'+esc(t.route_task_id||'—')+'</td><td class="mono">'+esc((t.source_commit||'—').slice(0,12))+'</td></tr>').join('');
+ q('#systemCards').innerHTML=card('Repository',d.repo,'Bron voor kandidaten en onderzoeksuitvoeringen')+card('Actieve taken',c.tasks,'Geen historisch taakgetal')+card('Git-sync',syncNaam,syncUitleg)+card('Veiligheid','ALLEEN-LEZEN','Geen live handel, betaalde acties of walletacties');
+ q('#syncDetails').innerHTML='<div class="item"><div class="item-head"><b>Status</b>'+pill(gs.status||'UNKNOWN')+'</div><div class="meta">'+esc(syncUitleg)+'</div></div>'+
+   '<div class="item"><div class="kicker">Production HEAD</div><div class="mono">'+esc(gs.production_head||'onbekend')+'</div></div>'+
+   '<div class="item"><div class="kicker">Lokale main</div><div class="mono">'+esc(gs.local_main||'onbekend')+'</div></div>'+
+   '<div class="item"><div class="kicker">Laatst opgehaalde GitHub-main</div><div class="mono">'+esc(gs.fetched_github_main||'onbekend')+'</div><div class="meta">Opgehaald: '+fmtDate(gs.fetched_at)+'</div></div>'+
+   '<div class="item"><div class="kicker">Worktree</div><b>'+(gs.dirty===false?'Schoon':gs.dirty===true?'Niet schoon':'Onbekend')+'</b></div>';
+ q('#systemRows').innerHTML=d.tasks.slice(0,200).map(t=>'<tr><td class="mono">'+esc(t.task_id)+'</td><td>'+pill(t.status)+'</td><td>'+esc(t.exit_code??'—')+'</td><td class="mono">'+esc(t.route_task_id||'—')+'</td><td class="mono">'+esc((t.source_commit||'—').slice(0,12))+'</td></tr>').join('')||'<tr><td colspan="5" class="empty">Geen actieve taken.</td></tr>';
 }
 
 function renderIdeas(){
@@ -233,11 +245,11 @@ q('#runSearch').addEventListener('input',renderRuns);q('#runFilter').addEventLis
 async function showCandidate(id){
  try{
   const d=await api('/api/candidate/'+encodeURIComponent(id)),c=d.candidate;
-  const gates=Object.entries(c.gates||{}).map(([k,v])=>'<div class="metric-line"><span>'+esc(nlLabel(k))+'</span>'+pill(v)+'</div>').join('')||'<div class="meta">Geen legacy gate-map.</div>';
-  const timeline=d.timeline.map(e=>'<div class="event"><b>'+esc(e.stage)+' — '+esc(e.status)+'</b><p>'+fmtDate(e.at)+'<br>'+esc(e.detail||'')+'</p></div>').join('')||'<div class="meta">Nog geen timeline events.</div>';
+  const gates=Object.entries(c.gates||{}).map(([k,v])=>'<div class="metric-line"><span>'+esc(nlLabel(k))+'</span>'+pill(v)+'</div>').join('')||'<div class="meta">Geen historische controlekaart beschikbaar.</div>';
+  const timeline=d.timeline.map(e=>'<div class="event"><b>'+esc(nlLabel(e.stage))+' — '+esc(nlStatus(e.status))+'</b><p>'+fmtDate(e.at)+'<br>'+esc(e.detail||'')+'</p></div>').join('')||'<div class="meta">Nog geen gebeurtenissen in het traject.</div>';
   const refs=(c.evidence_refs||[]).map(r=>'<button class="linkbtn artifact-link" data-path="'+esc(r)+'">'+esc(r)+'</button>').join('<br>')||'—';
   const html='<div class="item"><div class="kicker">HYPOTHESE</div><div style="margin-top:6px;line-height:1.55">'+esc(c.hypothesis)+'</div></div>'+
-   '<div style="margin-top:14px" class="grid4"><div class="item"><div class="kicker">FASE</div><b>'+esc(c.phase)+'</b></div><div class="item"><div class="kicker">QUEUE</div>'+pill(c.queue_status)+'</div><div class="item"><div class="kicker">STATUS</div>'+pill(c.scientific_status)+'</div><div class="item"><div class="kicker">LANE</div><b>'+esc(c.lane)+'</b></div></div>'+
+   '<div style="margin-top:14px" class="grid4"><div class="item"><div class="kicker">FASE</div><b>'+esc(nlStatus(c.phase))+'</b></div><div class="item"><div class="kicker">WACHTRIJ</div>'+pill(c.queue_status)+'</div><div class="item"><div class="kicker">STATUS</div>'+pill(c.scientific_status)+'</div><div class="item"><div class="kicker">ONDERZOEKSLIJN</div><b>'+esc(c.lane)+'</b></div></div>'+
    '<h3>Volledig traject</h3><div class="timeline">'+timeline+'</div>'+
    '<h3>Controles</h3>'+gates+
    '<h3>Volgende beslissende test</h3><div class="item">'+esc(c.next_decisive_test||'Niet vastgelegd')+'</div>'+
