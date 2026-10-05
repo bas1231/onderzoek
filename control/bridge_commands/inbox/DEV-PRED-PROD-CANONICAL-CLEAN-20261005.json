@@ -1,0 +1,19 @@
+{
+  "schema": "PREDICTION_BRIDGE_COMMAND_V1",
+  "task_id": "DEV-PRED-PROD-CANONICAL-CLEAN-20261005",
+  "action": "SIX_AI_HEALTH",
+  "created_at_utc": "2026-10-05T08:36:00Z",
+  "route_task_id": "SESSION-ROUTE-ab8536120fbe276f56e18b8d",
+  "delivery_mode": "chat",
+  "live_trading": false,
+  "paid_actions": false,
+  "wallet_actions": false,
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "notes": "Safely clean production staged/dirty state only if every dirty path is byte-for-byte represented by canonical commit 01f212a365963e5d7a97122b56aa2704a468baf3. No production fast-forward.",
+  "auto_continue": true,
+  "parent_continuation_id": null
+}
