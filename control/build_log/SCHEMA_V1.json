@@ -1,0 +1,129 @@
+{
+  "title": "Prediction Build Log Event V1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "event_id",
+    "work_item_id",
+    "created_at_utc",
+    "event_type",
+    "work_item_status",
+    "outcome",
+    "title",
+    "objective",
+    "summary",
+    "why",
+    "next_action",
+    "session_route_task_id",
+    "task_ids",
+    "commits",
+    "evidence_refs",
+    "tags"
+  ],
+  "properties": {
+    "schema": {
+      "const": "PREDICTION_BUILD_LOG_EVENT_V1"
+    },
+    "event_id": {
+      "type": "string"
+    },
+    "work_item_id": {
+      "type": "string"
+    },
+    "created_at_utc": {
+      "type": "string"
+    },
+    "event_type": {
+      "enum": [
+        "PLAN",
+        "ATTEMPT",
+        "RESULT",
+        "DECISION",
+        "HANDOFF",
+        "CLOSE",
+        "NOTE"
+      ]
+    },
+    "work_item_status": {
+      "enum": [
+        "OPEN",
+        "IN_PROGRESS",
+        "BLOCKED",
+        "DONE"
+      ]
+    },
+    "outcome": {
+      "enum": [
+        "PLANNED",
+        "STARTED",
+        "PASS",
+        "FAIL",
+        "BLOCKED",
+        "INFO",
+        "SUPERSEDED"
+      ]
+    },
+    "title": {
+      "type": "string"
+    },
+    "objective": {
+      "type": "string"
+    },
+    "summary": {
+      "type": "string"
+    },
+    "why": {
+      "type": "string"
+    },
+    "next_action": {
+      "type": "string"
+    },
+    "session_route_task_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "task_ids": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "uniqueItems": true
+    },
+    "commits": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "uniqueItems": true
+    },
+    "evidence_refs": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "uniqueItems": true
+    },
+    "tags": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "uniqueItems": true
+    },
+    "parent_event_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "first_incomplete_step": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  }
+}
