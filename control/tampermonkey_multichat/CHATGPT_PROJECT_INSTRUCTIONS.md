@@ -21,6 +21,16 @@ Primary path:
 
 The command bus is transport. The project executor is the controlled local execution/build layer.
 
+## Dashboard-started ChatGPT actions
+
+Every Control Center/dashboard action that starts ChatGPT work must follow
+`control/control_center/DASHBOARD_CHAT_ACTION_PROTOCOL.md`.
+
+The work itself always starts in a brand-new Prediction ChatGPT session. Existing
+Prediction chats may only act as browser launchers. The new chat must establish its
+own automatic `SESSION-ROUTE-*` PASS before dispatching local tasks. If no fresh
+launcher is available, fail closed and do not reuse an existing work chat.
+
 ## Session-specific routing
 
 Multiple Prediction chats may be active concurrently. Do not blindly rely on the shared global pinned route.
