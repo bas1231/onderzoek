@@ -379,6 +379,12 @@ class ControlCenterModel:
         branch = self._git_output(self.repo, "branch", "--show-current")
         dirty_text = self._git_output(self.repo, "status", "--porcelain=v1")
         dirty = None if dirty_text is None else bool(dirty_text)
+        dirty_paths = []
+        if dirty_text:
+            for line in dirty_text.splitlines():
+                value = line[3:].strip() if len(line) > 3 else line.strip()
+                if value:
+                    dirty_paths.append(value)
 
         mirror_head = (
             self._git_output(self.mirror_root, "rev-parse", "FETCH_HEAD")
@@ -427,6 +433,7 @@ class ControlCenterModel:
             "fetched_github_main": mirror_head,
             "production_branch": branch,
             "dirty": dirty,
+            "dirty_paths": dirty_paths[:30],
             "fetched_at": fetched_at,
             "fetch_age_seconds": fetch_age_seconds,
             "issues": issues,
