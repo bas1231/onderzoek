@@ -1,0 +1,40 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-RO-AUDIT-20261005-E002",
+  "source_commit": "03f0d00306bdbed0ba3f15655cc0214287577b50",
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "Codex; exact model identity unavailable to runtime",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 180,
+  "notes": "Offline audit reproducers: stale report approvals and model-selection negative controls. All worker calls mocked; synthetic fixtures only in isolated worktree. No real workers or production writes.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/read_only_audit_20261005_e002.py",
+      "content": "from pathlib import Path\nimport sys,json,subprocess\nfrom unittest.mock import patch\nsys.path.insert(0,str(Path.cwd()/'control/codex_supervisor'))\nsys.path.insert(0,str(Path.cwd()/'control/hourly'))\nimport supervisor as s\nimport candidate_reporting as r\nbase=Path.cwd()/'audit-output-e002'\nbase.mkdir(exist_ok=True)\ncases={}\nruntime=base/'runtime'\nstates=runtime/'candidate_states'\nstates.mkdir(parents=True,exist_ok=True)\nold={'candidate_id':'AUDIT-CANDIDATE','decision_timestamp':1,'source_hashes':{'candidate':'old'},'queue_status':'MEASUREMENT_READY','astra_reviews':{'PREBUILD':{'decision':'APPROVE','binding_sha256':'old'},'PREMEASUREMENT':{'decision':'APPROVE','binding_sha256':'old'}},'measurement_authorization':{'scope':'READ_ONLY_PROSPECTIVE_MARKET_DATA','order_submission':False}}\nnew={'candidate_id':'AUDIT-CANDIDATE','decision_timestamp':2,'source_hashes':{'candidate':'new'},'queue_status':'ASTRA_PREBUILD_REVIEW','scientific_status':'NO_PROVEN_EDGE'}\n(states/'old.json').write_text(json.dumps(old))\n(states/'new.json').write_text(json.dumps(new))\nsummary=r.summarize({'queue':[{'candidate_id':'AUDIT-CANDIDATE','queue_status':'NEEDS_DIRECTOR'}]},runtime)\nrow=summary['candidates'][0]\ncases['report_stale_approval']=row.get('astra_prebuild')=='APPROVE' and row.get('runtime_queue_status')=='ASTRA_PREBUILD_REVIEW'\ncases['report_stale_authorization']=row.get('measurement_scope')=='READ_ONLY_PROSPECTIVE_MARKET_DATA'\nfor label,slug,display in [('wrong_astra_version','gpt-5-astra','GPT-5 Astra'),('non_gpt_builder','other-provider-model','Other Provider')]:\n    home=base/label\n    cache=home/'.codex'\n    cache.mkdir(parents=True,exist_ok=True)\n    (cache/'models_cache.json').write_text(json.dumps({'models':[{'slug':slug,'display_name':display,'visibility':'list','priority':1}]}))\n    seen={}\n    class Process:\n        pid=123\n        returncode=0\n        def communicate(self,*a,**k):return None\n    def popen(args,**kw):\n        seen['args']=args\n        return Process()\n    task={'task_id':'AUDIT-MOCK','prompt':'Test only.','model_policy':'ASTRA_EXACT' if label=='wrong_astra_version' else 'HIGHEST_AVAILABLE_GPT'}\n    try:\n        with patch.object(s.P,'home',classmethod(lambda cls:home)),patch.object(s.subprocess,'run',lambda *a,**k:subprocess.CompletedProcess(a,0,'Logged in using ChatGPT','')),patch.object(s.subprocess,'Popen',popen):\n            s.CodexWorker('mock-not-executed')(task,None,home,7)\n        cases[label]=seen.get('args',[])[seen['args'].index('-m')+1]==slug\n    except s.Blocked:\n        cases[label]=False\n(base/'findings.json').write_text(json.dumps({'defects_reproduced':cases,'report':summary},indent=2))\nprint('AUDIT_REPRO '+json.dumps(cases,separators=(',',':')),flush=True)\nraise SystemExit(1 if any(cases.values()) else 0)\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "/home/leonh/prediction_research_prod/.venv/bin/python",
+        "control/dev_checks/read_only_audit_20261005_e002.py"
+      ],
+      "timeout_seconds": 120
+    }
+  ]
+}
