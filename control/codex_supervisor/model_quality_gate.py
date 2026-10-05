@@ -7,10 +7,13 @@ from typing import Any
 
 SCHEMA = "PVA_ASTRA_REVIEW_V1"
 MODEL_PROVENANCE_SCHEMA = "PVA_MODEL_ROUTE_ATTESTATION_V1"
+AUTONOMOUS_PROVENANCE_SCHEMA = "PVA_ASTRA_RUN_PROVENANCE_V1"
 MODEL_PROVENANCE_TEST_METHOD = "HUMAN_SELECTED_CHATGPT_MODEL_UI"
 MODEL_PROVENANCE_PRODUCTION_METHOD = "AUTONOMOUS_WORKER_MODEL_SLUG"
 MODEL_PROVENANCE_TEST_SCOPE = "TEST_ONLY"
 MODEL_PROVENANCE_PRODUCTION_SCOPE = "PRODUCTION_AUTONOMOUS"
+PROVENANCE_TEST_ROUTE = "TEST_ROUTE"
+PROVENANCE_AUTONOMOUS_RUN = "AUTONOMOUS_RUN"
 REQUIRED_REVIEWER_MODEL = "GPT-6 Astra"
 ECONOMIC_POLICY = "ANY_POSITIVE_NET_EDGE_COUNTS"
 PHASES = {"PREBUILD", "PREMEASUREMENT"}
@@ -28,11 +31,6 @@ def canonical_sha(value: Any) -> str:
 
 
 def economic_signal_counts(net_profit_eur: float) -> bool:
-    """Any strictly positive net euro result is worth researching.
-
-    This is not a proof-of-edge function. Reproducibility, prospective evidence,
-    execution realism and all other scientific gates remain mandatory.
-    """
     try:
         value = float(net_profit_eur)
     except (TypeError, ValueError) as exc:
@@ -66,6 +64,13 @@ def expected_review_ref(overlay: dict[str, Any], phase: str) -> str:
     return f"knowledge/reviews/astra/{cid}-{phase.lower()}-{binding[:20]}.json"
 
 
+def is_qualification_fixture(overlay: dict[str, Any]) -> bool:
+    snapshot = overlay.get("candidate_snapshot") if isinstance(overlay, dict) else None
+    if isinstance(snapshot, dict) and snapshot.get("qualification_fixture") is True:
+        return True
+    return bool(isinstance(overlay, dict) and overlay.get("qualification_fixture") is True)
+
+
 def expected_model_provenance_ref(route_task_id: str) -> str:
     route = str(route_task_id or "").strip()
     if (
@@ -77,11 +82,12 @@ def expected_model_provenance_ref(route_task_id: str) -> str:
     return f"control/model_provenance/astra_routes/{route}.json"
 
 
-def is_qualification_fixture(overlay: dict[str, Any]) -> bool:
-    snapshot = overlay.get("candidate_snapshot") if isinstance(overlay, dict) else None
-    if isinstance(snapshot, dict) and snapshot.get("qualification_fixture") is True:
-        return True
-    return bool(isinstance(overlay, dict) and overlay.get("qualification_fixture") is True)
+def expected_autonomous_provenance_ref(overlay: dict[str, Any], phase: str) -> str:
+    cid = str(overlay.get("candidate_id") or "")
+    if not cid:
+        raise ReviewGateError("ASTRA_AUTONOMOUS_PROVENANCE_CANDIDATE")
+    binding = review_binding(overlay, phase)
+    return f"knowledge/reviews/astra/provenance/{cid}-{phase.lower()}-{binding[:20]}.json"
 
 
 def load_model_provenance(
@@ -118,13 +124,62 @@ def load_model_provenance(
         if not allow_test_only:
             raise ReviewGateError("ASTRA_TEST_ONLY_PROVENANCE_FORBIDDEN_IN_PRODUCTION")
     elif usage_scope == MODEL_PROVENANCE_PRODUCTION_SCOPE:
-        if method != MODEL_PROVENANCE_PRODUCTION_METHOD:
-            raise ReviewGateError("ASTRA_MODEL_PROVENANCE_METHOD")
+        raise ReviewGateError("ASTRA_ROUTE_PROVENANCE_FORBIDDEN_IN_PRODUCTION")
     else:
         raise ReviewGateError("ASTRA_MODEL_PROVENANCE_USAGE_SCOPE")
     if value.get("revoked") is not False:
         raise ReviewGateError("ASTRA_MODEL_PROVENANCE_REVOKED")
     return value, ref, canonical_sha(value)
+
+
+def load_autonomous_provenance(
+    repo: Path,
+    overlay: dict[str, Any],
+    phase: str,
+    review: dict[str, Any],
+) -> tuple[dict[str, Any], str, str]:
+    ref = expected_autonomous_provenance_ref(overlay, phase)
+    path = Path(repo) / ref
+    if not path.exists():
+        raise ReviewGateError("ASTRA_AUTONOMOUS_PROVENANCE_MISSING")
+    if path.is_symlink():
+        raise ReviewGateError("ASTRA_AUTONOMOUS_PROVENANCE_SYMLINK")
+    try:
+        value = json.loads(path.read_text(encoding="utf-8"))
+    except Exception as exc:
+        raise ReviewGateError("ASTRA_AUTONOMOUS_PROVENANCE_INVALID_JSON") from exc
+    if not isinstance(value, dict) or value.get("schema") != AUTONOMOUS_PROVENANCE_SCHEMA:
+        raise ReviewGateError("ASTRA_AUTONOMOUS_PROVENANCE_SCHEMA")
+    binding = review_binding(overlay, phase)
+    expected = {
+        "usage_scope": MODEL_PROVENANCE_PRODUCTION_SCOPE,
+        "verification_method": MODEL_PROVENANCE_PRODUCTION_METHOD,
+        "reviewer_model": REQUIRED_REVIEWER_MODEL,
+        "reviewer_role": "INDEPENDENT_GATE_REVIEWER",
+        "candidate_id": overlay.get("candidate_id"),
+        "phase": phase,
+        "binding_sha256": binding,
+        "model_policy": "ASTRA_EXACT",
+        "visible_astra_count": 1,
+    }
+    for key, wanted in expected.items():
+        if value.get(key) != wanted:
+            raise ReviewGateError("ASTRA_AUTONOMOUS_PROVENANCE_" + key.upper())
+    slug = value.get("reviewer_model_slug")
+    if not isinstance(slug, str) or not slug.strip():
+        raise ReviewGateError("ASTRA_AUTONOMOUS_PROVENANCE_MODEL_SLUG")
+    if review.get("reviewer_model_slug") != slug:
+        raise ReviewGateError("ASTRA_REVIEW_MODEL_SLUG_MISMATCH")
+    if review.get("model_provenance_ref") != ref:
+        raise ReviewGateError("ASTRA_REVIEW_PROVENANCE_REF")
+    digest = canonical_sha(value)
+    if review.get("model_provenance_sha256") != digest:
+        raise ReviewGateError("ASTRA_REVIEW_PROVENANCE_HASH")
+    if review.get("source_task_id") != value.get("source_task_id"):
+        raise ReviewGateError("ASTRA_REVIEW_SOURCE_TASK")
+    if review.get("completion_sha256") != value.get("completion_sha256"):
+        raise ReviewGateError("ASTRA_REVIEW_COMPLETION_HASH")
+    return value, ref, digest
 
 
 def validate_review(
@@ -160,21 +215,29 @@ def validate_review(
         raise ReviewGateError("ASTRA_REVIEW_PAID_ACTIONS")
     if review.get("wallet_actions") is not False:
         raise ReviewGateError("ASTRA_REVIEW_WALLET_ACTIONS")
-
-    route_task_id = str(review.get("reviewer_route_task_id") or "").strip()
-    if not route_task_id:
-        raise ReviewGateError("ASTRA_REVIEW_ROUTE_MISSING")
     if repo is None:
         raise ReviewGateError("ASTRA_REVIEW_PROVENANCE_CONTEXT_REQUIRED")
-    _, expected_ref, expected_sha = load_model_provenance(
-        Path(repo),
-        route_task_id,
-        allow_test_only=is_qualification_fixture(overlay),
-    )
-    if review.get("model_provenance_ref") != expected_ref:
-        raise ReviewGateError("ASTRA_REVIEW_PROVENANCE_REF")
-    if review.get("model_provenance_sha256") != expected_sha:
-        raise ReviewGateError("ASTRA_REVIEW_PROVENANCE_HASH")
+
+    kind = review.get("provenance_kind")
+    if kind == PROVENANCE_TEST_ROUTE:
+        if not is_qualification_fixture(overlay):
+            raise ReviewGateError("ASTRA_TEST_ROUTE_FORBIDDEN_IN_PRODUCTION")
+        route_task_id = str(review.get("reviewer_route_task_id") or "").strip()
+        if not route_task_id:
+            raise ReviewGateError("ASTRA_REVIEW_ROUTE_MISSING")
+        _, expected_ref, expected_sha = load_model_provenance(
+            Path(repo),
+            route_task_id,
+            allow_test_only=True,
+        )
+        if review.get("model_provenance_ref") != expected_ref:
+            raise ReviewGateError("ASTRA_REVIEW_PROVENANCE_REF")
+        if review.get("model_provenance_sha256") != expected_sha:
+            raise ReviewGateError("ASTRA_REVIEW_PROVENANCE_HASH")
+    elif kind == PROVENANCE_AUTONOMOUS_RUN:
+        load_autonomous_provenance(Path(repo), overlay, phase, review)
+    else:
+        raise ReviewGateError("ASTRA_REVIEW_PROVENANCE_KIND")
 
     finding = review.get("finding")
     next_action = review.get("next_action")
@@ -214,6 +277,7 @@ def review_template(
         "binding_sha256": review_binding(overlay, phase),
         "reviewer_model": REQUIRED_REVIEWER_MODEL,
         "reviewer_role": "INDEPENDENT_GATE_REVIEWER",
+        "provenance_kind": PROVENANCE_TEST_ROUTE,
         "reviewer_route_task_id": route_task_id,
         "model_provenance_ref": model_provenance_ref,
         "model_provenance_sha256": model_provenance_sha256,
@@ -239,18 +303,28 @@ def apply_review(supervisor, repo: Path, overlay_path: Path, phase: str):
         return None, ref
 
     decision = review["decision"]
-    next_state = dict(overlay)
-    next_state.setdefault("astra_reviews", {})[phase] = {
+    meta = {
         "ref": ref,
         "binding_sha256": review["binding_sha256"],
         "reviewer_model": review["reviewer_model"],
-        "reviewer_route_task_id": review["reviewer_route_task_id"],
+        "provenance_kind": review["provenance_kind"],
         "model_provenance_ref": review["model_provenance_ref"],
         "model_provenance_sha256": review["model_provenance_sha256"],
         "decision": decision,
         "finding": review["finding"],
         "next_action": review["next_action"],
     }
+    for key in (
+        "reviewer_route_task_id",
+        "reviewer_model_slug",
+        "source_task_id",
+        "completion_sha256",
+    ):
+        if key in review:
+            meta[key] = review[key]
+
+    next_state = dict(overlay)
+    next_state.setdefault("astra_reviews", {})[phase] = meta
 
     if decision == "REJECT":
         next_state["queue_status"] = "REJECT"
