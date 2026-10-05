@@ -42,8 +42,35 @@ def overlay(state="ASTRA_PREBUILD_REVIEW"):
     }
 
 
-def write_review(repo: Path, item: dict, phase: str, **changes):
-    review = q.review_template(item, phase)
+def write_attestation(repo: Path, route_task_id="SESSION-ROUTE-CANARY", **changes):
+    value = {
+        "schema": q.MODEL_PROVENANCE_SCHEMA,
+        "route_task_id": route_task_id,
+        "reviewer_model": "GPT-6 Astra",
+        "reviewer_role": "INDEPENDENT_GATE_REVIEWER",
+        "verification_method": q.MODEL_PROVENANCE_METHOD,
+        "attestation_scope": "ROUTE",
+        "attested_by": "TEST_OPERATOR",
+        "attested_at": "2026-10-05T00:00:00Z",
+        "revoked": False,
+    }
+    value.update(changes)
+    ref = q.expected_model_provenance_ref(route_task_id)
+    path = repo / ref
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(value))
+    return ref, value, q.canonical_sha(value)
+
+
+def write_review(repo: Path, item: dict, phase: str, route_task_id="SESSION-ROUTE-CANARY", **changes):
+    provenance_ref, _, provenance_sha = write_attestation(repo, route_task_id)
+    review = q.review_template(
+        item,
+        phase,
+        route_task_id=route_task_id,
+        model_provenance_ref=provenance_ref,
+        model_provenance_sha256=provenance_sha,
+    )
     review.update(
         decision="APPROVE",
         finding="Exact-version Astra review accepts the next research gate.",
@@ -85,7 +112,25 @@ def test_wrong_reviewer_model_fails_closed(tmp_path):
     item = overlay()
     _, review = write_review(tmp_path, item, "PREBUILD", reviewer_model="GPT-5.6 Sol")
     with pytest.raises(q.ReviewGateError, match="WRONG_MODEL"):
-        q.validate_review(review, item, "PREBUILD")
+        q.validate_review(review, item, "PREBUILD", repo=tmp_path)
+
+
+def test_missing_external_model_provenance_fails_closed(tmp_path):
+    item = overlay()
+    path, _ = write_review(tmp_path, item, "PREBUILD")
+    provenance = tmp_path / q.expected_model_provenance_ref("SESSION-ROUTE-CANARY")
+    provenance.unlink()
+    with pytest.raises(q.ReviewGateError, match="PROVENANCE_MISSING"):
+        q.load_review(tmp_path, item, "PREBUILD")
+    assert path.exists()
+
+
+def test_review_route_must_match_attested_route(tmp_path):
+    item = overlay()
+    _, review = write_review(tmp_path, item, "PREBUILD")
+    review["reviewer_route_task_id"] = "SESSION-ROUTE-OTHER"
+    with pytest.raises(q.ReviewGateError, match="PROVENANCE_MISSING"):
+        q.validate_review(review, item, "PREBUILD", repo=tmp_path)
 
 
 def test_stale_astra_review_cannot_be_reused_after_candidate_change(tmp_path):
@@ -94,7 +139,7 @@ def test_stale_astra_review_cannot_be_reused_after_candidate_change(tmp_path):
     changed = dict(item)
     changed["next_action"] = "Changed after review; old approval must expire."
     with pytest.raises(q.ReviewGateError, match="STALE_BINDING"):
-        q.validate_review(review, changed, "PREBUILD")
+        q.validate_review(review, changed, "PREBUILD", repo=tmp_path)
 
 
 def test_prebuild_astra_approval_unlocks_build_only(tmp_path):
@@ -114,7 +159,10 @@ def test_prebuild_astra_approval_unlocks_build_only(tmp_path):
 
     updated, ref = q.apply_review(Supervisor(runtime), repo, path, "PREBUILD")
     assert updated["queue_status"] == "NEEDS_BUILD"
-    assert updated["astra_reviews"]["PREBUILD"]["reviewer_model"] == "GPT-6 Astra"
+    gate = updated["astra_reviews"]["PREBUILD"]
+    assert gate["reviewer_model"] == "GPT-6 Astra"
+    assert gate["reviewer_route_task_id"] == "SESSION-ROUTE-CANARY"
+    assert gate["model_provenance_ref"] == q.expected_model_provenance_ref("SESSION-ROUTE-CANARY")
     assert updated["build_handoff"]["status"] == "BUILD_TASK_QUEUED"
     assert updated["build_handoff"]["astra_prebuild_review_ref"] == ref
     assert "pending_build_handoff" not in updated
@@ -140,19 +188,34 @@ def test_premeasurement_astra_approval_allows_read_only_measurement_not_trading(
     assert auth["astra_premeasurement_review_ref"] == ref
 
 
-def test_astra_review_wake_requires_exact_model_and_small_profit_policy(tmp_path, monkeypatch):
+def test_astra_review_wake_uses_external_route_provenance_and_small_profit_policy(tmp_path, monkeypatch):
     bridge, routes, config = route_fixture(tmp_path)
     monkeypatch.setattr(a, "BRIDGE_DATA", bridge)
     monkeypatch.setattr(a, "ROUTE_CONFIG", config)
     monkeypatch.setattr(a, "ROUTES", routes)
     item = overlay()
+    repo = tmp_path / "repo"
+    write_attestation(repo)
     s = Supervisor(tmp_path / "runtime")
-    result = a.ensure_review_continuation(s, tmp_path / "repo", item, "PREBUILD")
+    result = a.ensure_review_continuation(s, repo, item, "PREBUILD")
     record = json.loads((bridge / "continuations" / f"{result['continuation_id']}.json").read_text())
     msg = record["context_message"]
     assert "required_model=GPT-6 Astra" in msg
+    assert "model_identity_verification=EXTERNAL_ROUTE_ATTESTATION" in msg
+    assert "do not self-attest your model identity" in msg
     assert "minimum_net_profit_eur=0.0" in msg
     assert "strictly positive NET executable euro edge is worth testing" in msg
+    assert result["control_route_task_id"] == "SESSION-ROUTE-CANARY"
+    assert result["model_provenance_ref"] == q.expected_model_provenance_ref("SESSION-ROUTE-CANARY")
+
+
+def test_astra_review_wake_fails_without_attested_route(tmp_path, monkeypatch):
+    bridge, routes, config = route_fixture(tmp_path)
+    monkeypatch.setattr(a, "BRIDGE_DATA", bridge)
+    monkeypatch.setattr(a, "ROUTE_CONFIG", config)
+    monkeypatch.setattr(a, "ROUTES", routes)
+    with pytest.raises(a.AstraReviewWakeBlocked, match="MODEL_PROVENANCE"):
+        a.ensure_review_continuation(Supervisor(tmp_path / "runtime"), tmp_path / "repo", overlay(), "PREBUILD")
 
 
 def test_measurement_wake_is_read_only_and_highest_gpt_builder(tmp_path, monkeypatch):
@@ -170,14 +233,21 @@ def test_measurement_wake_is_read_only_and_highest_gpt_builder(tmp_path, monkeyp
         "paid_actions": False,
         "wallet_actions": False,
     }
-    review = q.review_template(item, "PREMEASUREMENT")
+    repo = tmp_path / "repo"
+    provenance_ref, _, provenance_sha = write_attestation(repo)
+    review = q.review_template(
+        item,
+        "PREMEASUREMENT",
+        route_task_id="SESSION-ROUTE-CANARY",
+        model_provenance_ref=provenance_ref,
+        model_provenance_sha256=provenance_sha,
+    )
     review.update(
         decision="APPROVE",
         finding="Fixture Astra approves exact premeasurement binding.",
         next_action="Proceed to read-only prospective measurement only.",
     )
     ref = q.expected_review_ref(item, "PREMEASUREMENT")
-    repo = tmp_path / "repo"
     review_path = repo / ref
     review_path.parent.mkdir(parents=True, exist_ok=True)
     review_path.write_text(json.dumps(review))
@@ -186,6 +256,9 @@ def test_measurement_wake_is_read_only_and_highest_gpt_builder(tmp_path, monkeyp
         "PREMEASUREMENT": {
             "decision": "APPROVE",
             "reviewer_model": "GPT-6 Astra",
+            "reviewer_route_task_id": "SESSION-ROUTE-CANARY",
+            "model_provenance_ref": provenance_ref,
+            "model_provenance_sha256": provenance_sha,
             "ref": ref,
         }
     }
