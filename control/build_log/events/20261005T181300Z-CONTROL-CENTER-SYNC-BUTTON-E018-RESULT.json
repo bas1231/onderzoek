@@ -1,0 +1,32 @@
+{
+  "schema": "PREDICTION_BUILD_LOG_EVENT_V1",
+  "event_id": "20261005T181300Z-CONTROL-CENTER-SYNC-BUTTON-E018-RESULT",
+  "work_item_id": "CONTROL-CENTER-SYNC-BUTTON-20261005",
+  "created_at_utc": "2026-10-05T18:13:00Z",
+  "event_type": "RESULT",
+  "work_item_status": "IN_PROGRESS",
+  "outcome": "INFO",
+  "title": "One-click veilige Git-sync vanuit Control Center",
+  "objective": "Toon bij Git-sync rood een Sync-knop die één klik omzet in een automatische, fail-closed ChatGPT-reconciliatie zonder destructieve Git-shortcuts.",
+  "summary": "E018 draaide de diagnostische unittest-runner succesvol, maar de compacte wake-resultaatregel bevatte niet de geprinte testdiagnose. Daardoor is de eerste falende test nog niet bewijsbaar vastgesteld.",
+  "why": "De diagnostische runner exitte bewust 0 ongeacht de testuitkomst; de stdout met CONTROL_CENTER_E017_DIAG/FIRST_TRACEBACK werd niet in de wake-samenvatting opgenomen.",
+  "next_action": "Classificeer de eerste falende test via een unieke exitcode in E019; exit 0 betekent dat de volledige suite op de actuele bron slaagt.",
+  "session_route_task_id": "SESSION-ROUTE-fc2613ecbc81e22d4c913b2a",
+  "task_ids": [
+    "DEV-PRED-CONTROL-CENTER-SYNC-E017-DIAG-20261005-E018"
+  ],
+  "commits": [
+    "8aa9f5b89d776008fad8d91210172c3e0418824a"
+  ],
+  "evidence_refs": [
+    "event=1791223275-34149513556e",
+    "status=PASS exit=0 rcs=1:0"
+  ],
+  "tags": [
+    "control-center",
+    "git-sync",
+    "diagnostic"
+  ],
+  "parent_event_id": "20261005T180900Z-CONTROL-CENTER-SYNC-BUTTON-E018-DIAG-ATTEMPT",
+  "first_incomplete_step": "Eerste falende unittest classificeren zonder afhankelijkheid van stdout."
+}
