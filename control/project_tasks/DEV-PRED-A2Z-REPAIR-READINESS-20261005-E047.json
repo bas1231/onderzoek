@@ -1,0 +1,41 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-A2Z-REPAIR-READINESS-20261005-E047",
+  "source_commit": "06a8b3e3781fbb93707093adc3955151a8390e7f",
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "Codex; exact model identity unavailable to runtime",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_runtime"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 90,
+  "notes": "Lees uitsluitend E046-diagnoseverslag. E046 PASS bewijst het ophalen, niet gerepareerde keten. Readiness blijft FAIL door bewezen E044 postbuild-gatefout. Retourneer concrete E042-blokkade en beschikbaarheid vereiste modellen via detail. Geen scans, tests of modellen herhalen.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/read_readiness_e047.py",
+      "content": "from pathlib import Path\nimport json\nhome=Path.home()\np=home/'.local/share/prediction-project-executor/worktrees/DEV-PRED-A2Z-REPAIR-BLOCKER-20261005-E046/diagnostic-result/repair-blocker.json'\nif p.is_symlink() or not p.is_file():\n    raise RuntimeError('REPAIR_EVIDENCE_MISSING')\nr=json.loads(p.read_text())\nmodels=r.get('visible_models',[])\nsol=[m for m in models if str(m.get('display_name')).strip().casefold()=='gpt-5.6 sol']\nastra=[m for m in models if str(m.get('display_name')).strip().casefold()=='gpt-6 astra']\nrepair=r.get('states',{}).get('repair',{})\nerrors=[e for row in r.get('events',[]) if row.get('task')=='repair' for e in row.get('errors',[]) if 'ERROR=' in e or 'Error' in e]\nreason=r.get('reason','UNKNOWN')\nif reason!='SHARED_COORDINATOR_OUTSIDE_SCOPE' and errors:\n    reason=errors[-1][-135:]\nsummary={'reason':reason,'repair':repair.get('status','UNKNOWN'),'sol':len(sol),'astra':len(astra),'patched':r.get('repair_source_sha256')=='d8fc774c936c92e4e5bc65cd600f7106774f3233b0e0f5555e02e2223962198e'}\nout=Path.cwd()/'diagnostic-result'\nout.mkdir(exist_ok=True)\n(out/'readiness.json').write_text(json.dumps({'summary':summary,'source_ref':str(p),'postbuild_gate':'FAIL','full_chain_pass':False},indent=2))\nprint('A2Z_READINESS '+json.dumps(summary,separators=(',',':')),flush=True)\nraise SystemExit(1)\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/read_readiness_e047.py"
+      ],
+      "timeout_seconds": 30
+    }
+  ]
+}
