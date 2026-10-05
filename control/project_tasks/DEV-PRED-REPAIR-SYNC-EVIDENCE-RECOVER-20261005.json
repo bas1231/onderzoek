@@ -1,0 +1,41 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-REPAIR-SYNC-EVIDENCE-RECOVER-20261005",
+  "source_commit": "06053ceacc6fca6f1b95885fc630a1b283cf6aeb",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_runtime"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 180,
+  "notes": "Read-only recovery of compact already-delivered repair/sync result lines. No system test and no production mutation.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/recover_repair_sync_evidence_20261005.py",
+      "content": "from pathlib import Path\nimport json\nbase=Path.home()/'.local/share/prediction-chat-bridge'\nitems=[('1791193355-a2751a10ad07','DEV-PRED-REPAIR-VERIFY-CURRENT-20261005'),('1791193375-fab944ada4fa','DEV-PRED-PROD-SYNC-EXACT-CURRENT-20261005'),('1791193689-fa1468ea6bf0','DEV-PRED-PROD-SYNC-REPAIR-CURRENT-20261005')]\nfor event,task in items:\n    msg=''\n    loc=''\n    for d in ('sent','inflight','outbox'):\n        p=base/d/(event+'.json')\n        if p.is_file():\n            obj=json.loads(p.read_text(encoding='utf-8',errors='replace'))\n            msg=str(obj.get('message') or '')\n            loc=str(p)\n            break\n    hit=''\n    for line in msg.splitlines():\n        if 'NIGHTSHIFT_WSL_RESULT_V1' in line and ('task='+task) in line:\n            hit=line.strip()\n            break\n    print('RECOVER task='+task+' event='+event+' line='+(hit[:1600] if hit else 'NOT_FOUND')+' file='+loc,flush=True)\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/recover_repair_sync_evidence_20261005.py"
+      ],
+      "timeout_seconds": 60
+    }
+  ]
+}
