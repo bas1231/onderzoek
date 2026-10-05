@@ -1,0 +1,41 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-ASTRA-FIRSTFAIL-COMPACT-20261005",
+  "source_commit": "9ef86be5bacdf13303d000061f3a7f4f0db994b8",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_runtime"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 180,
+  "notes": "Diagnostic-only compact extractor. Intentionally exits nonzero after printing a single compact FIRST_FAILURE line so the bridge result detail exposes the exact failing pytest and assertion. No production mutation.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/astra_firstfail_compact_20261005.py",
+      "content": "from pathlib import Path\nimport json,re\n\ntasks=[\n 'DEV-PRED-ASTRA-AUTONOMOUS-REVIEWER-FIRSTFAIL-20261005',\n 'DEV-PRED-ASTRA-AUTONOMOUS-FIRSTFAIL-LOG-20261005',\n]\nblobs=[]\nfor task in tasks:\n    paths=[\n        Path.home()/'.local/state/prediction-project-executor'/f'{task}.json',\n        Path.home()/'prediction_research_prod'/'control/results'/task/'RESULT.json',\n        Path.home()/'prediction_research_prod'/'control/results'/task/'stdout.log',\n        Path.home()/'prediction_research_prod'/'control/results'/task/'stderr.log',\n    ]\n    for p in paths:\n        if p.is_file():\n            try:\n                blobs.append((str(p),p.read_text(encoding='utf-8',errors='replace')))\n            except Exception:\n                pass\n\ntext='\\n'.join(body for _,body in blobs)\nlines=text.splitlines()\nfailure_test=''\nfor ln in lines:\n    if '::' in ln and re.search(r'\\bFAILED\\b',ln):\n        failure_test=ln.strip()\n        break\nif not failure_test:\n    for ln in lines:\n        if re.search(r'tests/.+::.+',ln) and ('AssertionError' in ln or 'ERROR' in ln):\n            failure_test=ln.strip()\n            break\n\ndetails=[]\nfor ln in lines:\n    s=ln.strip()\n    if not s:\n        continue\n    if s.startswith('E ') or 'AssertionError' in s or 'assert ' in s or 'short test summary' in s:\n        details.append(s)\n\ndef clean(s):\n    s=re.sub(r'\\s+',' ',s).strip()\n    return s[:900]\n\nfailure_test=clean(failure_test or 'UNKNOWN')\ndetail=clean(' | '.join(details[-8:]) or 'NO_ASSERTION_TEXT_FOUND')\nprint('FIRST_FAILURE='+failure_test+' || DETAIL='+detail,flush=True)\nraise SystemExit(42)\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/astra_firstfail_compact_20261005.py"
+      ],
+      "timeout_seconds": 60
+    }
+  ]
+}
