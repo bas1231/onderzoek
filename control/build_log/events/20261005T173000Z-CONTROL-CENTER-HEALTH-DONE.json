@@ -1,0 +1,36 @@
+{
+  "schema": "PREDICTION_BUILD_LOG_EVENT_V1",
+  "event_id": "20261005T173000Z-CONTROL-CENTER-HEALTH-DONE",
+  "work_item_id": "CONTROL-CENTER-HEALTH-20261005",
+  "created_at_utc": "2026-10-05T17:30:00Z",
+  "event_type": "CLOSE",
+  "work_item_status": "DONE",
+  "outcome": "PASS",
+  "title": "Control Center actieve taken, Git-sync en ketenfouten",
+  "objective": "Maak actieve taken echt actueel, toon Git/main-synchronisatie en meld recente ketenfouten direct op Overzicht.",
+  "summary": "Na meerdere gerichte diagnoses is de semantiek gecorrigeerd: command-bus DISPATCHED is een afgeronde transportstatus en telt niet als actieve uitvoering. De actieve lijst is niet meer afgekapt. Git-sync toont production HEAD, lokale main, opgehaalde GitHub-main, dirty status en afwijkende paden. E014 doorstond regressies, installatie, servicecheck en runtime-canary.",
+  "why": "E005/E006/E011 maakten zichtbaar dat de eerste implementatie oude DISPATCHED-records als actief telde. E013 gaf COUNT=851/LEN=500 en een echte dirty production-worktree. E014 bewees de gerichte reparatie.",
+  "next_action": "Geen bouwactie meer voor dit werkitem. Gebruik Git-sync en ketenalerts als operationele signalen; nieuwe defecten krijgen een nieuw werkitem of een expliciete heropening met nieuw event.",
+  "session_route_task_id": "SESSION-ROUTE-fc2613ecbc81e22d4c913b2a",
+  "task_ids": [
+    "DEV-PRED-CONTROL-CENTER-HEALTH-20261005-E005",
+    "DEV-PRED-CONTROL-CENTER-HEALTH-20261005-E006",
+    "DEV-PRED-CONTROL-CENTER-HEALTH-20261005-E011",
+    "DEV-PRED-CONTROL-CENTER-ACTIVE-SYNC-20261005-E014"
+  ],
+  "commits": [
+    "61e9d1bdb8c42e73e4f2270d6b92c3e57272e293"
+  ],
+  "evidence_refs": [
+    "NIGHTSHIFT_WSL_RESULT_V1:E014:PASS:exit=0",
+    "control/control_center/runtime_canary.py"
+  ],
+  "tags": [
+    "control-center",
+    "health",
+    "git-sync",
+    "tasks"
+  ],
+  "parent_event_id": null,
+  "first_incomplete_step": null
+}
