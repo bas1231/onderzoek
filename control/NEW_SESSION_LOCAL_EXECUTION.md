@@ -24,8 +24,17 @@ Read:
 5. `control/PROJECT_EXECUTOR.md`
 6. `control/tampermonkey_multichat/PROTOCOL.md`
 7. `control/tampermonkey_multichat/CHATGPT_PROJECT_INSTRUCTIONS.md`
+8. `control/build_log/PROTOCOL.md`
 
 Treat current Git documentation as canonical over old chat memory or obsolete bridge instructions.
+
+## Shared build log before dispatch
+
+Before creating a new build, repair, or diagnostic task, inspect open events in `control/build_log/events/`.
+
+Continue the same `work_item_id` when the objective is the same. Add a `PLAN` or `ATTEMPT` event before dispatch and a `RESULT` event after the result returns. On failure or handoff, record the first incomplete step and the next action. Do not repeat an earlier successful step merely because another ChatGPT session takes over.
+
+The dashboard Logboek page is the human-facing view of this ledger.
 
 ## Step 0 — establish the current chat route
 
