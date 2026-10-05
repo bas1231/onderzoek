@@ -1,0 +1,19 @@
+{
+  "schema": "PREDICTION_BRIDGE_COMMAND_V1",
+  "task_id": "DEV-PRED-DASHBOARD-NEW-SESSION-RECHECK-20261005-E025",
+  "action": "SIX_AI_HEALTH",
+  "created_at_utc": "2026-10-05T18:41:00Z",
+  "route_task_id": "SESSION-ROUTE-fc2613ecbc81e22d4c913b2a",
+  "delivery_mode": "chat",
+  "live_trading": false,
+  "paid_actions": false,
+  "wallet_actions": false,
+  "intelligence_tier": "B",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "auto_continue": false,
+  "parent_continuation_id": null,
+  "notes": "Regression recheck after restoring active-page presence to userscript v0.5.0. Exit 0 means all tampermonkey_multichat modules pass; exit 41-54 identifies the next failing module. No runtime/service mutation."
+}
