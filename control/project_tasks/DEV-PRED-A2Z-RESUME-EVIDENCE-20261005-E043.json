@@ -1,0 +1,41 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-A2Z-RESUME-EVIDENCE-20261005-E043",
+  "source_commit": "7f40553a331b37bcaa2d8b62296c18176612a777",
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "Codex; exact model identity unavailable to runtime",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_runtime"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 180,
+  "notes": "Hervat expliciet gevraagde volledige echte A2Z-test: lees eerst resultaat en eventuele concrete blokkade van bestaande E042-reparatie plus beschikbare exacte Sol/Astra-modelmetadata. Geen nieuwe bron-synccontrole, Scout-run, modelaanroep of bridgewijziging. PASS is uitsluitend hervattingsvoorwaarde, nooit ketenbewijs.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/a2z_resume_evidence_e043.py",
+      "content": "from pathlib import Path\nimport json,re\nhome=Path.home()\ntid='DEV-PRED-A2Z-REVIEW-CALL-REPAIR-20261005-E042'\nstate_path=home/'.local/state/prediction-project-executor'/(tid+'.json')\nstate=json.loads(state_path.read_text()) if state_path.is_file() and not state_path.is_symlink() else {}\nevidence=[]\nbase=home/'.local/share/prediction-chat-bridge'\nfor folder in ('sent','inflight','outbox'):\n    directory=base/folder\n    if not directory.is_dir():\n        continue\n    for p in sorted(directory.glob('*.json'),key=lambda p:p.name,reverse=True)[:500]:\n        if p.is_symlink() or not p.is_file() or p.stat().st_size>2000000:\n            continue\n        try:\n            obj=json.loads(p.read_text())\n        except (ValueError,OSError):\n            continue\n        msg=str(obj.get('message') or '')\n        if ('DEV_TASK_ID='+tid) not in msg and ('PROJECT_TASK_ID='+tid) not in msg:\n            continue\n        errors=[line.strip() for line in msg.splitlines() if line.startswith('ERROR=') or 'PermissionError:' in line or line.startswith('DEV_TASK_STATUS=')]\n        evidence.append({'event_file':p.name,'errors':errors[-4:]})\ncache=home/'.codex/models_cache.json'\nmodels=[]\nif cache.is_file() and not cache.is_symlink():\n    data=json.loads(cache.read_text())\n    models=[{'slug':m.get('slug'),'display_name':m.get('display_name')} for m in data.get('models',[]) if m.get('visibility')=='list']\nsol=[m for m in models if str(m.get('display_name') or '').strip().casefold()=='gpt-5.6 sol']\nastra=[m for m in models if str(m.get('display_name') or '').strip().casefold()=='gpt-6 astra']\nreport={'repair_task':tid,'repair_state':state,'repair_events':evidence,'available_model_metadata':models,'required_sol_matches':sol,'required_astra_matches':astra,'production_modified':False,'scout_repeated':False,'full_chain_pass':False}\nout=Path.cwd()/'diagnostic-result'\nout.mkdir(exist_ok=True)\n(out/'resume-evidence.json').write_text(json.dumps(report,indent=2))\nproven=state.get('status')=='PASS' and state.get('operation_count')==8 and state.get('source_commit')=='0f0f954a0cffbed95c55a904fec8c5ef8f30f223'\nreasons=' '.join(line for e in evidence for line in e['errors'])\nif 'blocked write outside task roots' in reasons:\n    reason='SHARED_COORDINATOR_OUTSIDE_EXECUTOR_WRITE_SCOPE'\nelif reasons:\n    reason=reasons[-160:]\nelse:\n    reason='NO_COMPLETED_REPAIR_EVIDENCE' if not proven else 'REPAIR_VERIFIED'\ncompact={'repair':state.get('status','MISSING'),'proven':proven,'sol':len(sol),'astra':len(astra),'reason':reason}\nprint('A2Z_RESUME '+json.dumps(compact,separators=(',',':')),flush=True)\nraise SystemExit(0 if proven and len(sol)==1 and len(astra)==1 else 1)\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/a2z_resume_evidence_e043.py"
+      ],
+      "timeout_seconds": 90
+    }
+  ]
+}
