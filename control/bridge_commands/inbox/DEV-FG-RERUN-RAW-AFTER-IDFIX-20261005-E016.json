@@ -1,0 +1,17 @@
+{
+  "schema": "PREDICTION_BRIDGE_COMMAND_V1",
+  "task_id": "DEV-FG-RERUN-RAW-AFTER-IDFIX-20261005-E016",
+  "action": "SIX_AI_HEALTH",
+  "created_at_utc": "2026-10-05T12:41:00Z",
+  "route_task_id": "DEV-FG-REMAINING-ID-FIX-20261005-E015",
+  "delivery_mode": "chat",
+  "live_trading": false,
+  "paid_actions": false,
+  "wallet_actions": false,
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "notes": "Rerun privacy stage only on the existing latest failed RAW transcript after verified remaining-identifier fix. No Whisper rerun."
+}
