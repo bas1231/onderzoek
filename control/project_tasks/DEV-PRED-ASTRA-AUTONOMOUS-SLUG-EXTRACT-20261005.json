@@ -1,0 +1,41 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-ASTRA-AUTONOMOUS-SLUG-EXTRACT-20261005",
+  "source_commit": "6cf8de1c2f881fcc0691c1e31b47b870b97ad18f",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_runtime"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 180,
+  "notes": "Extract exact Astra model slug from the already PASSed autonomous model-details task state. Read-only; no credential access or mutation.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/astra_slug_extract_20261005.py",
+      "content": "from pathlib import Path\nimport json,re\n\nstate=Path.home()/'.local/state/prediction-project-executor/DEV-PRED-ASTRA-AUTONOMOUS-MODEL-DETAILS-20261005.json'\nif not state.is_file():\n    print('DETAILS_STATE=MISSING',flush=True)\n    raise SystemExit(31)\nobj=json.loads(state.read_text(encoding='utf-8'))\nif obj.get('status')!='PASS' or obj.get('exit_code') not in (0,'0'):\n    print('DETAILS_NOT_PASS',flush=True)\n    raise SystemExit(32)\nblob='\\n'.join(str(x) for x in (obj.get('operations') or []))\nm=re.search(r'ASTRA_EXACT_SLUG=([^\\s]+)',blob)\nif not m:\n    print('ASTRA_EXACT_SLUG=NOT_FOUND',flush=True)\n    raise SystemExit(33)\nslug=m.group(1).strip()\nprint('ASTRA_EXACT_SLUG='+slug,flush=True)\nprint('AUTONOMOUS_MODEL_PROVENANCE_READY=true',flush=True)\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/astra_slug_extract_20261005.py"
+      ],
+      "timeout_seconds": 60
+    }
+  ]
+}
