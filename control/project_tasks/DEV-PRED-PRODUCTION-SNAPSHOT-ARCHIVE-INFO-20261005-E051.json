@@ -1,0 +1,32 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-PRODUCTION-SNAPSHOT-ARCHIVE-INFO-20261005-E051",
+  "source_commit": "535730693a1936971b02681e9761dd2cd9a999b3",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "High"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "production_dirty_snapshot_inspect"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 180,
+  "notes": "Read-only deterministic archive sizing for immutable E034 dirty snapshot. Return file_count, raw_tar_bytes, gzip_bytes, base64_chars and archive_sha256 only. No cleanup, runtime install, production mutation, or remote writes.",
+  "operations": [
+    {
+      "type": "production_dirty_snapshot_inspect",
+      "snapshot_task_id": "DEV-PRED-PRODUCTION-DIRTY-SNAPSHOT-20261005-E034",
+      "report_mode": "archive_info",
+      "fail_for_visibility": true
+    }
+  ]
+}
