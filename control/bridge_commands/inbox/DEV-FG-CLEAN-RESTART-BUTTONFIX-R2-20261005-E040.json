@@ -1,0 +1,17 @@
+{
+  "schema": "PREDICTION_BRIDGE_COMMAND_V1",
+  "task_id": "DEV-FG-CLEAN-RESTART-BUTTONFIX-R2-20261005-E040",
+  "action": "SIX_AI_HEALTH",
+  "created_at_utc": "2026-10-05T14:07:00Z",
+  "route_task_id": "DEV-FG-CLEAN-RESTART-BUTTONFIX-20261005-E039",
+  "delivery_mode": "chat",
+  "live_trading": false,
+  "paid_actions": false,
+  "wallet_actions": false,
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "notes": "Retry clean restart. Use Python wrapper rather than direct systemctl so all top-level executables are allowlisted. Re-run focused button-handshake test, stop traced rerun, restart normal FG assistant."
+}
