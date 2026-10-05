@@ -1,0 +1,32 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-PRODUCTION-SNAPSHOT-CANDIDATE-STATUS-20261005-E046",
+  "source_commit": "175946cd5ab6e8429d9cf4f9fdf167009c74012a",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "High"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "production_dirty_snapshot_inspect"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 180,
+  "notes": "Read-only compact candidate lifecycle report from immutable E034 dirty snapshot. No live worktree mutation, cleanup, network beyond normal mirror refresh, or remote writes.",
+  "operations": [
+    {
+      "type": "production_dirty_snapshot_inspect",
+      "snapshot_task_id": "DEV-PRED-PRODUCTION-DIRTY-SNAPSHOT-20261005-E034",
+      "report_mode": "semantic_candidate_status",
+      "fail_for_visibility": true
+    }
+  ]
+}
