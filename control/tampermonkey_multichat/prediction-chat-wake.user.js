@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Prediction Chat Wake Bridge
 // @namespace    local.prediction.chatbridge
-// @version      0.4.8
+// @version      0.5.0
 // @description  Multi-chat transport for the local Prediction control plane.
 // @match        https://chatgpt.com/*
 // @updateURL    http://localhost:8765/prediction-chat-wake.user.js
@@ -13,6 +13,7 @@
 // @grant        GM_getTab
 // @grant        GM_saveTab
 // @grant        GM_getTabs
+// @grant        GM_openInTab
 // @grant        window.onurlchange
 // @connect      localhost
 // @noframes
@@ -32,7 +33,8 @@
   const KEY_SENT_TASKS = 'prediction_sent_tasks_v047';
   const deliveryRetryAfter = new Map();
   const KEY_FALLBACK_REGISTERED = 'prediction_fallback_registered_v3';
-  const SCRIPT_VERSION = '0.4.8';
+  const KEY_DASHBOARD_LAUNCHES = 'prediction_dashboard_launches_v1';
+  const SCRIPT_VERSION = '0.5.0';
 
   let statusEl = null;
   let scanBusy = false;
@@ -57,6 +59,15 @@
   function canonicalChatUrl() {
     const u = new URL(location.href);
     return `${u.origin}${u.pathname}`;
+  }
+
+  function projectLaunchBase() {
+    const u = new URL(location.href);
+    const match = u.pathname.match(/^(.*)\/c\/[^/?#]+\/?$/);
+    if (!match) return '';
+    const basePath = String(match[1] || '').replace(/\/$/, '');
+    if (!basePath || basePath === '/') return '';
+    return `${u.origin}${basePath}`;
   }
 
   function conversationState() {
@@ -168,6 +179,98 @@
   function enabled() { return GM_getValue(KEY_ENABLED, true) !== false; }
   function legacyBoundPath() { return String(GM_getValue(KEY_BOUND_PATH, '') || ''); }
   function authHeaders() { return { Authorization: `Bearer ${token()}` }; }
+
+  async function registerDashboardLauncher() {
+    if (!enabled() || !token()) return false;
+    const identity = await ensureTabIdentity();
+    const launchBase = projectLaunchBase();
+    if (!identity.stable || !launchBase) return false;
+    const response = await gmRequest({
+      method: 'POST',
+      url: `${WAKE_BASE}/dashboard-launcher/register`,
+      timeout: 5000,
+      headers: { ...authHeaders(), 'Content-Type': 'application/json' },
+      data: JSON.stringify({
+        chat_id: identity.chatId,
+        consumer_id: identity.consumerId,
+        launch_base_url: launchBase,
+        script_version: SCRIPT_VERSION
+      })
+    });
+    return response.status === 200;
+  }
+
+  async function openDashboardLaunch(event, identity) {
+    const tokenValue = String(event.launch_token || '').trim();
+    const launchBase = String(event.launch_base_url || '').trim();
+    const currentBase = projectLaunchBase();
+    if (!tokenValue || !launchBase || !currentBase || launchBase !== currentBase) {
+      status('dashboard-launch geweigerd: projectcontext mismatch', true);
+      return false;
+    }
+    const u = new URL(launchBase);
+    u.searchParams.set('prediction_launch', tokenValue);
+    GM_openInTab(u.toString(), { active: true, insert: true, setParent: false });
+    return true;
+  }
+
+  async function consumeDashboardLaunch() {
+    if (!enabled() || !token()) return false;
+    const u = new URL(location.href);
+    const tokenValue = String(u.searchParams.get('prediction_launch') || '').trim();
+    if (!tokenValue || remembered(KEY_DASHBOARD_LAUNCHES, tokenValue)) return false;
+
+    let launch = null;
+    try {
+      const response = await gmRequest({
+        method: 'GET',
+        url: `${WAKE_BASE}/dashboard-launch?token=${encodeURIComponent(tokenValue)}`,
+        timeout: 5000,
+        headers: authHeaders()
+      });
+      if (response.status !== 200) {
+        status(`dashboard-launch HTTP ${response.status}`, true);
+        return false;
+      }
+      launch = JSON.parse(response.responseText);
+    } catch (_) {
+      status('dashboard-launch payload niet bereikbaar', true);
+      return false;
+    }
+    const promptText = String(launch && launch.prompt || '').trim();
+    if (!promptText) {
+      status('dashboard-launch prompt ontbreekt', true);
+      return false;
+    }
+
+    let sent = false;
+    for (let i = 0; i < 60 && !sent; i += 1) {
+      if (!chatIsBusy()) sent = await submitMessage(promptText);
+      if (!sent) await sleep(250);
+    }
+    if (!sent && !recentUserTurnContainsDelivery(promptText)) {
+      status('dashboard-launch kon niet worden geplaatst', true);
+      return false;
+    }
+
+    remember(KEY_DASHBOARD_LAUNCHES, tokenValue);
+    try {
+      await gmRequest({
+        method: 'POST',
+        url: `${WAKE_BASE}/dashboard-launch/ack`,
+        timeout: 5000,
+        headers: { ...authHeaders(), 'Content-Type': 'application/json' },
+        data: JSON.stringify({ token: tokenValue })
+      });
+    } catch (_) {}
+    try {
+      const clean = new URL(location.href);
+      clean.searchParams.delete('prediction_launch');
+      history.replaceState(history.state, '', clean.toString());
+    } catch (_) {}
+    status('dashboardactie gestart in nieuwe sessie');
+    return true;
+  }
 
   function recentList(key) {
     const value = GM_getValue(key, []);
@@ -435,6 +538,14 @@
 
         const event = JSON.parse(response.responseText);
         if (!event || !event.event_id || !event.message) { status('ongeldig event', true); await sleep(1000); continue; }
+        if (String(event.kind || '') === 'DASHBOARD_NEW_SESSION_LAUNCH_V1') {
+          const launched = await openDashboardLaunch(event, identity);
+          if (!launched) { await sleep(1000); continue; }
+          const ok = await ack(event.event_id, identity.chatId, identity.consumerId);
+          status(ok ? 'nieuwe Prediction-sessie geopend' : 'launch ACK mislukt', !ok);
+          if (!ok) await sleep(1200);
+          continue;
+        }
         const message = String(event.message);
         // Scope durable receipts by chat and full payload; task IDs may carry
         // multiple legitimate updates. Do not use a lossy hash or partial anchor.
@@ -486,6 +597,8 @@
 
   async function handleUrlChange() {
     await ensureTabIdentity(true);
+    registerDashboardLauncher().catch(() => {});
+    consumeDashboardLaunch().catch(() => {});
     restartWakeLoop('URL gewijzigd');
     setTimeout(() => {
       scanCommands();
@@ -511,8 +624,11 @@
       status(identity.stable ? `${identity.tabApiOk ? 'tab-api OK' : 'tab-api fallback'} ${identity.chatId.slice(-8)}` : 'wacht op vaste ChatGPT chat-ID', !identity.tabApiOk);
       preserveLegacyFallback();
       scanCommands();
+      registerDashboardLauncher().catch(() => {});
+      consumeDashboardLaunch().catch(() => {});
       restartWakeLoop('startup');
     });
+    setInterval(() => { registerDashboardLauncher().catch(() => {}); }, 30000);
   } catch (error) {
     status(`startup fout: ${String(error)}`, true);
   }
