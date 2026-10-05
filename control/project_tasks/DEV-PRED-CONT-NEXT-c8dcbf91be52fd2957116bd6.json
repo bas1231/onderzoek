@@ -1,0 +1,41 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-CONT-NEXT-c8dcbf91be52fd2957116bd6",
+  "source_commit": "bdea57b293335c8772af1a105274ce6bdfa2f76f",
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "Codex; exact model identity unavailable to runtime",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_runtime"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 180,
+  "notes": "NEXT for targeted-verification recovery. Read existing final acceptance receipt with exact source and operation-count assertions; compare production repaired modules and all nine runtime pins. No test rerun, A-to-Z change, cleanup, deployment or service change.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/repair_acceptance_readonly_c8dcbf91.py",
+      "content": "from pathlib import Path\nimport json,hashlib\nroot=Path.cwd()\nhome=Path.home()\nprod=home/'prediction_research_prod'\ndef read(p):\n    if not p.is_file() or p.is_symlink(): return None\n    obj=json.loads(p.read_text())\n    return obj if isinstance(obj,dict) else None\ntasks={\n'final':('DEV-PRED-REQUESTED-REPAIRS-FINAL-ACCEPT-20261005','8511127a874f323cc46cf701b2e9286d287f0b9a',7),\n'targeted':('DEV-PRED-REPAIRS-TARGETED-VERIFY-R2-20261005','06f77566e538d8e0eaa5dd9e97744515a0ee55a7',4)}\nrecords={}\nfor label,(tid,source,count) in tasks.items():\n    r=read(home/'.local/state/prediction-project-executor'/(tid+'.json'))\n    records[label]={'task_id':tid,'status':(r or {}).get('status','MISSING'),'source_commit':(r or {}).get('source_commit'),'operation_count':(r or {}).get('operation_count'),'completed_at_utc':(r or {}).get('completed_at_utc'),'proven':bool(r and r.get('task_id')==tid and r.get('status')=='PASS' and r.get('source_commit')==source and r.get('operation_count')==count)}\nfiles={'supervisor':'control/codex_supervisor/supervisor.py','report':'control/hourly/candidate_reporting.py'}\ndiff=[]\nfor label,rel in files.items():\n    p=prod/rel\n    if not p.is_file() or p.is_symlink() or hashlib.sha256(p.read_bytes()).hexdigest()!=hashlib.sha256((root/rel).read_bytes()).hexdigest():diff.append(label)\nmapping={'candidate_dispatch.py_sha256':'control/codex_supervisor/candidate_dispatch.py','candidate_policy_sha256':'control/hourly/candidate_queue.py','evidence_wake.py_sha256':'control/codex_supervisor/evidence_wake.py','build_wake.py_sha256':'control/codex_supervisor/build_wake.py','model_quality_gate.py_sha256':'control/codex_supervisor/model_quality_gate.py','astra_review_wake.py_sha256':'control/codex_supervisor/astra_review_wake.py','measurement_wake.py_sha256':'control/codex_supervisor/measurement_wake.py','supervisor_sha256':'control/codex_supervisor/supervisor.py','astra_autonomous_review.py_sha256':'control/codex_supervisor/astra_autonomous_review.py'}\ncfg=read(prod/'knowledge/codex_runtime/CONFIG.json') or {}\nbad=[]\nfor key,rel in mapping.items():\n    p=prod/rel\n    if not p.is_file() or p.is_symlink() or cfg.get(key)!=hashlib.sha256(p.read_bytes()).hexdigest():bad.append(key)\nresult={'receipts':records,'production_diff':diff,'production_bad_pins':bad,'full_system_test_run':False,'production_modified':False}\nout=root/'diagnostic-result'\nout.mkdir(exist_ok=True)\n(out/'repair-acceptance.json').write_text(json.dumps(result,indent=2))\ncompact={'final':records['final']['status'],'final_proven':records['final']['proven'],'targeted':records['targeted']['status'],'prod_diff':diff,'bad_pins':[x.replace('.py_sha256','').replace('_sha256','') for x in bad]}\nprint('REPAIR_ACCEPTANCE '+json.dumps(compact,separators=(',',':')),flush=True)\nraise SystemExit(0 if records['final']['proven'] and not diff and not bad else 1)\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/repair_acceptance_readonly_c8dcbf91.py"
+      ],
+      "timeout_seconds": 90
+    }
+  ]
+}
