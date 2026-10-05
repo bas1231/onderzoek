@@ -1,0 +1,35 @@
+{
+  "schema": "PREDICTION_BUILD_LOG_EVENT_V1",
+  "event_id": "20261005T184500Z-DASHBOARD-NEW-SESSION-ACTIONS-PLAN",
+  "work_item_id": "DASHBOARD-NEW-SESSION-ACTIONS-20261005",
+  "created_at_utc": "2026-10-05T18:45:00Z",
+  "event_type": "PLAN",
+  "work_item_status": "IN_PROGRESS",
+  "outcome": "STARTED",
+  "title": "Dashboardknoppen starten altijd een nieuwe ChatGPT-sessie",
+  "objective": "Maak het platformbreed verplicht dat iedere dashboardactie die ChatGPT start, het werk in een nieuwe Prediction ChatGPT-sessie opent met een eigen route en logboekspoor.",
+  "summary": "Canonical protocol, wake-server launcher-endpoints, userscript new-tab launchpad, Control Center fail-closed backend en UI-semantiek zijn voorbereid.",
+  "why": "Dashboardacties mogen bestaande werksessies niet vervuilen of parallelle werkzaamheden door elkaar laten lopen.",
+  "next_action": "Draai volledige Control Center- en multichat/bridge-regressies, installeer server/userscript/dashboard-runtime en verifieer beide services.",
+  "session_route_task_id": "SESSION-ROUTE-fc2613ecbc81e22d4c913b2a",
+  "task_ids": [
+    "DEV-PRED-DASHBOARD-NEW-SESSION-20261005-E023"
+  ],
+  "commits": [
+    "a6f4af2d10a271d86368146680e143665d962b94"
+  ],
+  "evidence_refs": [
+    "control/control_center/DASHBOARD_CHAT_ACTION_PROTOCOL.md",
+    "control/tampermonkey_multichat/prediction-chat-wake.user.js",
+    "control/tampermonkey_multichat/bridge_server_session_bootstrap.py"
+  ],
+  "tags": [
+    "control-center",
+    "dashboard",
+    "chatgpt",
+    "new-session",
+    "routing"
+  ],
+  "parent_event_id": null,
+  "first_incomplete_step": "Regressiontests en runtime-installatie van de generieke nieuwe-sessie-launcher."
+}
