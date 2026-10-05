@@ -1,0 +1,19 @@
+{
+  "schema": "PREDICTION_BRIDGE_COMMAND_V1",
+  "task_id": "BRIDGE-E024-ROUTE-CANARY-20261005-E026",
+  "action": "BRIDGE_PING",
+  "created_at_utc": "2026-10-05T13:10:30Z",
+  "route_task_id": "SESSION-ROUTE-b277b86c3ff1b5ff38f678be",
+  "delivery_mode": "chat",
+  "live_trading": false,
+  "paid_actions": false,
+  "wallet_actions": false,
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "notes": "Route canary while diagnosing missing E024 executor result.",
+  "auto_continue": false,
+  "parent_continuation_id": null
+}
