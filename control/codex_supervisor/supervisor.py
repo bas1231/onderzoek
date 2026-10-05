@@ -299,7 +299,7 @@ class CodexWorker:
             astra=[
                 m for m in models
                 if str(m.get('display_name') or '').strip().casefold()=='gpt-6 astra'
-                and 'gpt-6' in str(m.get('slug') or '').strip().casefold()
+                and str(m.get('slug') or '').strip().casefold().startswith('gpt-6')
                 and 'astra' in str(m.get('slug') or '').strip().casefold()
             ]
             if len(astra)!=1:raise Blocked('ASTRA_MODEL_UNAVAILABLE_OR_AMBIGUOUS')
@@ -309,7 +309,7 @@ class CodexWorker:
         else:
             eligible=[
                 m for m in models
-                if 'gpt' in str(m.get('slug') or '').strip().casefold()
+                if str(m.get('slug') or '').strip().casefold().startswith('gpt-')
                 or str(m.get('display_name') or '').strip().casefold().startswith('gpt')
             ]
             if not eligible:raise Blocked('GPT_BUILDER_UNAVAILABLE')
