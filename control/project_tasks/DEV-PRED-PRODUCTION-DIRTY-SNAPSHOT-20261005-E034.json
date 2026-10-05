@@ -1,0 +1,29 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-PRODUCTION-DIRTY-SNAPSHOT-20261005-E034",
+  "source_commit": "86c965a91b5f5ed951f5323e166313f0f7021b9c",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "High"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "production_dirty_snapshot"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 240,
+  "notes": "Continuation of PRODUCTION-RECONCILIATION-20261005. E032 proved production HEAD==local main. Create a durable local snapshot ref of the complete current dirty state without changing production index/worktree. No cleanup, no branch switch, no reset, no fast-forward, no remote write.",
+  "operations": [
+    {
+      "type": "production_dirty_snapshot"
+    }
+  ]
+}
