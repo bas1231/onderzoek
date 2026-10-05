@@ -1,0 +1,41 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-ASTRA-FIRSTFAIL-RUNTIME-RECOVER-20261005",
+  "source_commit": "fce6e56cfe4d31d7948f924c15b3e24d72859a0c",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_runtime"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 240,
+  "notes": "Read-only recover the original FIRSTFAIL task payload from allowlisted Prediction runtime/command-bus state. No production mutation.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/astra_firstfail_runtime_recover_20261005.py",
+      "content": "from pathlib import Path\nimport re\n\nneedle='DEV-PRED-ASTRA-AUTONOMOUS-REVIEWER-FIRSTFAIL-20261005'\nroots=[\n    Path.home()/'.local/state/prediction-command-bus',\n    Path.home()/'.local/share/prediction-command-bus',\n    Path.home()/'.local/state/prediction-project-executor',\n]\nhits=[]\nfor root in roots:\n    if not root.exists():\n        continue\n    for p in root.rglob('*'):\n        if not p.is_file():\n            continue\n        try:\n            if p.stat().st_size > 2_000_000:\n                continue\n            txt=p.read_text(encoding='utf-8',errors='replace')\n        except Exception:\n            continue\n        if needle in txt:\n            hits.append((p,txt))\n\nprint('RUNTIME_HITS='+str(len(hits)))\nfor p,txt in hits[:20]:\n    print('FILE='+str(p))\n    lines=txt.splitlines()\n    selected=[]\n    for i,line in enumerate(lines):\n        if needle in line or re.search(r'(FAILED|FAILURES|AssertionError|E\\s+|short test summary|Traceback|python rc=1)',line):\n            start=max(0,i-3); end=min(len(lines),i+12)\n            selected.extend(lines[start:end])\n    if not selected:\n        selected=lines[-160:]\n    seen=set()\n    print('EXCERPT_BEGIN')\n    for line in selected[-220:]:\n        if line in seen:\n            continue\n        seen.add(line)\n        print(line[:2500])\n    print('EXCERPT_END')\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/astra_firstfail_runtime_recover_20261005.py"
+      ],
+      "timeout_seconds": 120
+    }
+  ]
+}
