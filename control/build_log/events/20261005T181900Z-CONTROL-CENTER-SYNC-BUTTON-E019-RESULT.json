@@ -1,0 +1,33 @@
+{
+  "schema": "PREDICTION_BUILD_LOG_EVENT_V1",
+  "event_id": "20261005T181900Z-CONTROL-CENTER-SYNC-BUTTON-E019-RESULT",
+  "work_item_id": "CONTROL-CENTER-SYNC-BUTTON-20261005",
+  "created_at_utc": "2026-10-05T18:19:00Z",
+  "event_type": "RESULT",
+  "work_item_status": "IN_PROGRESS",
+  "outcome": "FAIL",
+  "title": "One-click veilige Git-sync vanuit Control Center",
+  "objective": "Toon bij Git-sync rood een Sync-knop die één klik omzet in een automatische, fail-closed ChatGPT-reconciliatie zonder destructieve Git-shortcuts.",
+  "summary": "E019 classificeerde de eerste falende test als exitcode 28: test_sync_request_routes_to_latest_proven_chat_and_preserves_safety.",
+  "why": "Inspectie van die test toont dat hij safe_json(...) zonder modulekwalificatie aanroept. De helper staat in de geladen servermodule als mod.safe_json; dit veroorzaakt een NameError in de test zelf, niet in de Sync-backend.",
+  "next_action": "Vervang de twee testaanroepen door mod.safe_json en draai daarna de volledige suite plus runtime-installatie/canary.",
+  "session_route_task_id": "SESSION-ROUTE-fc2613ecbc81e22d4c913b2a",
+  "task_ids": [
+    "DEV-PRED-CONTROL-CENTER-SYNC-E017-CLASSIFY-20261005-E019"
+  ],
+  "commits": [
+    "e73600fe83c23e3794f34c2dd35d5bfdb4e384ba"
+  ],
+  "evidence_refs": [
+    "event=1791223393-c6a912fba4bc",
+    "python rc=28",
+    "tests/control_center/test_control_center.py"
+  ],
+  "tags": [
+    "control-center",
+    "git-sync",
+    "test-bug"
+  ],
+  "parent_event_id": "20261005T181500Z-CONTROL-CENTER-SYNC-BUTTON-E019-CLASSIFY",
+  "first_incomplete_step": "Testhelper correct kwalificeren en volledige regressies opnieuw uitvoeren."
+}
