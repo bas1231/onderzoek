@@ -1,0 +1,41 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-ASTRA-FIRSTFAIL-FIX-PROOF-20261005",
+  "source_commit": "9cbf2956e002bf4758605ef26cc91d2568a05ed2",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_runtime"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 180,
+  "notes": "Read-only proof retrieval for targeted Astra first-failure fix test. Inspect exact executor state and raw wake event. Intentionally exit 42 after one compact FIX_PROOF line. No production mutation.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/astra_firstfail_fix_proof_20261005.py",
+      "content": "from pathlib import Path\nimport json,re\n\ntarget='DEV-PRED-ASTRA-FIRSTFAIL-FIX-TEST-20261005'\nstate=Path.home()/'.local/state/prediction-project-executor'/f'{target}.json'\nbridge=Path.home()/'.local/share/prediction-chat-bridge'\nparts=[]\n\nif state.is_file():\n    try:\n        obj=json.loads(state.read_text(encoding='utf-8'))\n        parts.append('EXECUTOR_STATUS='+str(obj.get('status')))\n        parts.append('SOURCE_COMMIT='+str(obj.get('source_commit')))\n        parts.append('HEAD_AFTER='+str(obj.get('head_after')))\n        parts.append('OP_COUNT='+str(obj.get('operation_count')))\n    except Exception as exc:\n        parts.append('STATE_PARSE_ERROR='+exc.__class__.__name__)\nelse:\n    parts.append('EXECUTOR_STATUS=MISSING')\n\nfound=[]\nfor dname in ('outbox','inflight','sent'):\n    d=bridge/dname\n    if not d.exists():\n        continue\n    for p in d.glob('*.json'):\n        try:\n            o=json.loads(p.read_text(encoding='utf-8',errors='replace'))\n        except Exception:\n            continue\n        if str(o.get('task_id') or '')!=target:\n            continue\n        msg=str(o.get('message') or '')\n        status=re.search(r'DEV_TASK_STATUS=(PASS|FAIL)',msg)\n        rcs=re.findall(r'COMMAND_(\\d+)_RC=(-?\\d+)',msg)\n        tests=[]\n        for name in (\n            'test_candidate_dispatch_legacy_needs_build_cannot_bypass_astra',\n            'test_stale_approved_overlay_cannot_retrigger_build_after_source_change',\n        ):\n            if name in msg:\n                tests.append(name)\n        found.append({\n            'queue':dname,\n            'event_id':o.get('event_id'),\n            'dev_status':status.group(1) if status else None,\n            'rcs':rcs,\n            'tests_seen':tests,\n            'tail':re.sub(r'\\s+',' ',msg[-1800:])[:1800],\n        })\n\nif found:\n    f=found[-1]\n    parts.append('QUEUE='+str(f['queue']))\n    parts.append('EVENT='+str(f['event_id']))\n    parts.append('DEV_STATUS='+str(f['dev_status']))\n    parts.append('RCS='+','.join(a+':'+b for a,b in f['rcs']))\n    parts.append('TESTS_SEEN='+str(len(f['tests_seen'])))\n    if f['tests_seen']:\n        parts.append('TEST_NAMES='+','.join(f['tests_seen']))\n    if f['tail']:\n        parts.append('TAIL='+f['tail'])\nelse:\n    parts.append('WAKE_EVENT=NOT_FOUND')\n\nprint('FIX_PROOF='+' || '.join(parts),flush=True)\nraise SystemExit(42)\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/astra_firstfail_fix_proof_20261005.py"
+      ],
+      "timeout_seconds": 60
+    }
+  ]
+}
