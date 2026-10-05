@@ -1,0 +1,41 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-CONT-NEXT-3fc305c113cffc3fa1d3224b",
+  "source_commit": "8511127a874f323cc46cf701b2e9286d287f0b9a",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "production_inspect",
+    "production_compare_worktree",
+    "production_merge_representation"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 180,
+  "notes": "Read-only postcondition verification after E034 RESULT_ACK_TIMEOUT. Do not mutate production. Verify HEAD equals local main, worktree has no meaningful divergence from pinned canonical, and canonical still subsumes current production head. Result payload must expose production head for comparison with pinned source.",
+  "operations": [
+    {
+      "type": "production_inspect",
+      "require_head_equals_main": true,
+      "report_mode": "status_summary"
+    },
+    {
+      "type": "production_compare_worktree",
+      "require_exact": true,
+      "report_mode": "counts"
+    },
+    {
+      "type": "production_merge_representation",
+      "require_subsumed": true
+    }
+  ]
+}
