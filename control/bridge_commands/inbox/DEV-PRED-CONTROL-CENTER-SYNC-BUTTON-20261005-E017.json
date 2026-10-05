@@ -1,0 +1,19 @@
+{
+  "schema": "PREDICTION_BRIDGE_COMMAND_V1",
+  "task_id": "DEV-PRED-CONTROL-CENTER-SYNC-BUTTON-20261005-E017",
+  "action": "SIX_AI_HEALTH",
+  "created_at_utc": "2026-10-05T18:00:00Z",
+  "route_task_id": "SESSION-ROUTE-fc2613ecbc81e22d4c913b2a",
+  "delivery_mode": "chat",
+  "live_trading": false,
+  "paid_actions": false,
+  "wallet_actions": false,
+  "intelligence_tier": "B",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "auto_continue": false,
+  "parent_continuation_id": null,
+  "notes": "Deploy the one-click safe Control Center Sync action. Sync button only appears for RED git-sync. Button queues a bounded PREDICTION_CONTROL_SYNC_REQUEST_V1 to the most recently proven ChatGPT route; repeated clicks deduplicate; dashboard itself performs no destructive Git and no WSL remote writes. Require full Control Center regressions, install, active service and expanded runtime canary PASS."
+}
