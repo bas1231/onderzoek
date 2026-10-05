@@ -1,0 +1,19 @@
+{
+  "schema": "PREDICTION_BRIDGE_COMMAND_V1",
+  "task_id": "CONT-DONE-cbc8819ca755c8d916d62bbd",
+  "action": "BRIDGE_PING",
+  "created_at_utc": "2026-10-05T08:37:00Z",
+  "route_task_id": "DEV-PRED-ASTRA-AUTONOMOUS-REVIEWER-TEST-20261005",
+  "delivery_mode": "headless",
+  "live_trading": false,
+  "paid_actions": false,
+  "wallet_actions": false,
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "notes": "Close failed autonomous-reviewer full-suite continuation as superseded. Failure diagnosis has already proceeded via DEV-PRED-ASTRA-AUTONOMOUS-REVIEWER-FIRSTFAIL-20261005 and DEV-PRED-ASTRA-AUTONOMOUS-FIRSTFAIL-LOG-20261005. No duplicate NEXT task is created.",
+  "auto_continue": false,
+  "parent_continuation_id": "CONT-cbc8819ca755c8d916d62bbd"
+}
