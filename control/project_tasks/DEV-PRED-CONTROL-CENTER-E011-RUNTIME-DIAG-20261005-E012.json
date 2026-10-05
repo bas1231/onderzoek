@@ -1,0 +1,43 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-CONTROL-CENTER-E011-RUNTIME-DIAG-20261005-E012",
+  "source_commit": "fb4760d8ee5f304b11e2393134e3e093a44c6073",
+  "intelligence_tier": "B",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_runtime",
+    "user_service_manage",
+    "read_logs"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 150,
+  "notes": "Diagnostic E011 runtime stage. Inspect installed Control Center hashes, service active state, localhost health/snapshot and recent journal. Intentionally exit 17 so compact one-line diagnostic is surfaced in bridge detail. No runtime mutation.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/control_center_e011_runtime_diag.py",
+      "content": "from __future__ import annotations\n\nimport hashlib\nimport json\nimport subprocess\nimport urllib.error\nimport urllib.request\nfrom pathlib import Path\n\nhome = Path.home()\nruntime = home / \".local/share/prediction-project-executor/control-center\"\nsource_root = Path.cwd() / \"control/control_center\"\n\ndef sha(path):\n    try:\n        return hashlib.sha256(path.read_bytes()).hexdigest()\n    except Exception:\n        return None\n\ndef run(args):\n    try:\n        cp = subprocess.run(args, text=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, timeout=12)\n        return {\"rc\": cp.returncode, \"out\": (cp.stdout or \"\")}\n    except Exception as exc:\n        return {\"rc\": -1, \"out\": f\"{exc.__class__.__name__}:{exc}\"}\n\ndef http_json(url):\n    try:\n        with urllib.request.urlopen(url, timeout=8) as response:\n            body = response.read().decode(\"utf-8\", errors=\"replace\")\n            return {\"ok\": True, \"status\": response.status, \"body\": json.loads(body)}\n    except Exception as exc:\n        return {\"ok\": False, \"error\": f\"{exc.__class__.__name__}:{exc}\"}\n\ninstalled = {\n    \"server_matches\": sha(runtime / \"server.py\") == sha(source_root / \"server.py\"),\n    \"ui_matches\": sha(runtime / \"static/index.html\") == sha(source_root / \"static/index.html\"),\n    \"canary_matches\": sha(runtime / \"runtime_canary.py\") == sha(source_root / \"runtime_canary.py\"),\n}\nservice = run([\"systemctl\", \"--user\", \"is-active\", \"prediction-control-center.service\"])\nhealth = http_json(\"http://127.0.0.1:8770/api/health\")\nsnapshot = http_json(\"http://127.0.0.1:8770/api/snapshot\")\njournal = run([\"journalctl\", \"--user\", \"-u\", \"prediction-control-center.service\", \"-n\", \"100\", \"--no-pager\"])\nlines = [line.strip() for line in journal[\"out\"].splitlines() if line.strip()]\ninteresting = [\n    line for line in lines\n    if any(token in line for token in (\"Traceback\", \"Error\", \"Exception\", \"Permission\", \"File \", \"git\", \"CONTROL_CENTER\"))\n]\ntail = (interesting[-12:] or lines[-12:])\ndiag = {\n    \"installed\": installed,\n    \"service_rc\": service[\"rc\"],\n    \"service\": service[\"out\"].strip(),\n    \"health_ok\": health.get(\"ok\"),\n    \"health_status\": health.get(\"status\"),\n    \"health_error\": health.get(\"error\"),\n    \"snapshot_ok\": snapshot.get(\"ok\"),\n    \"snapshot_error\": snapshot.get(\"error\"),\n    \"snapshot_schema\": (snapshot.get(\"body\") or {}).get(\"schema\") if snapshot.get(\"ok\") else None,\n    \"git_sync\": ((snapshot.get(\"body\") or {}).get(\"git_sync\") or {}).get(\"status\") if snapshot.get(\"ok\") else None,\n    \"active_tasks\": ((snapshot.get(\"body\") or {}).get(\"counts\") or {}).get(\"tasks\") if snapshot.get(\"ok\") else None,\n    \"chain_alerts\": len((snapshot.get(\"body\") or {}).get(\"chain_alerts\") or []) if snapshot.get(\"ok\") else None,\n    \"journal\": \" || \".join(tail)[-2200:],\n}\nprint(\"CONTROL_CENTER_E011_RUNTIME_DIAG=\" + json.dumps(diag, separators=(\",\", \":\")), flush=True)\nraise SystemExit(17)\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/control_center_e011_runtime_diag.py"
+      ],
+      "timeout_seconds": 90
+    }
+  ]
+}
