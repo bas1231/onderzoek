@@ -1,0 +1,17 @@
+{
+  "schema": "PREDICTION_BRIDGE_COMMAND_V1",
+  "task_id": "DEV-FG-NEON-UI-DEPLOY-20261005-E063",
+  "action": "SIX_AI_HEALTH",
+  "created_at_utc": "2026-10-05T16:35:00Z",
+  "route_task_id": "DEV-FG-E2E-SMOKE-RETRY-20261005-E062",
+  "delivery_mode": "chat",
+  "live_trading": false,
+  "paid_actions": false,
+  "wallet_actions": false,
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "notes": "Deploy only visual PowerShell changes for FG status and privacy review popups. Preserve all existing Dutch texts and logic, create Windows backups, verify copy hashes, and PowerShell-parse both deployed scripts."
+}
