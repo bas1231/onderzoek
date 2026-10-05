@@ -1,0 +1,50 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-PRODUCTION-SNAPSHOT-EXPORT-TEST-20261005-E050",
+  "source_commit": "9aa1865e3c24322ba754c682850c1ade6bf63eeb",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "High"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "run_project_python",
+    "run_tests"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 300,
+  "notes": "Test-only validation of bounded immutable snapshot export and browser delivery compaction. No runtime install, no production mutation.",
+  "operations": [
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "-m",
+        "compileall",
+        "-q",
+        "control/tampermonkey_multichat"
+      ],
+      "timeout_seconds": 120
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "-m",
+        "pytest",
+        "control/tampermonkey_multichat/test_snapshot_export_delivery.py",
+        "-q"
+      ],
+      "test": true,
+      "timeout_seconds": 180
+    }
+  ]
+}
