@@ -8,6 +8,8 @@ from typing import Any
 SCHEMA = "PVA_ASTRA_REVIEW_V1"
 MODEL_PROVENANCE_SCHEMA = "PVA_MODEL_ROUTE_ATTESTATION_V1"
 MODEL_PROVENANCE_METHOD = "HUMAN_SELECTED_CHATGPT_MODEL_UI"
+MODEL_PROVENANCE_TEST_SCOPE = "TEST_ONLY"
+MODEL_PROVENANCE_PRODUCTION_SCOPE = "PRODUCTION_AUTONOMOUS"
 REQUIRED_REVIEWER_MODEL = "GPT-6 Astra"
 ECONOMIC_POLICY = "ANY_POSITIVE_NET_EDGE_COUNTS"
 PHASES = {"PREBUILD", "PREMEASUREMENT"}
@@ -74,7 +76,19 @@ def expected_model_provenance_ref(route_task_id: str) -> str:
     return f"control/model_provenance/astra_routes/{route}.json"
 
 
-def load_model_provenance(repo: Path, route_task_id: str) -> tuple[dict[str, Any], str, str]:
+def is_qualification_fixture(overlay: dict[str, Any]) -> bool:
+    snapshot = overlay.get("candidate_snapshot") if isinstance(overlay, dict) else None
+    if isinstance(snapshot, dict) and snapshot.get("qualification_fixture") is True:
+        return True
+    return bool(isinstance(overlay, dict) and overlay.get("qualification_fixture") is True)
+
+
+def load_model_provenance(
+    repo: Path,
+    route_task_id: str,
+    *,
+    allow_test_only: bool = False,
+) -> tuple[dict[str, Any], str, str]:
     ref = expected_model_provenance_ref(route_task_id)
     path = Path(repo) / ref
     if not path.exists():
@@ -97,6 +111,12 @@ def load_model_provenance(repo: Path, route_task_id: str) -> tuple[dict[str, Any
         raise ReviewGateError("ASTRA_MODEL_PROVENANCE_METHOD")
     if value.get("attestation_scope") != "ROUTE":
         raise ReviewGateError("ASTRA_MODEL_PROVENANCE_SCOPE")
+    usage_scope = value.get("usage_scope")
+    if usage_scope == MODEL_PROVENANCE_TEST_SCOPE:
+        if not allow_test_only:
+            raise ReviewGateError("ASTRA_TEST_ONLY_PROVENANCE_FORBIDDEN_IN_PRODUCTION")
+    elif usage_scope != MODEL_PROVENANCE_PRODUCTION_SCOPE:
+        raise ReviewGateError("ASTRA_MODEL_PROVENANCE_USAGE_SCOPE")
     if value.get("revoked") is not False:
         raise ReviewGateError("ASTRA_MODEL_PROVENANCE_REVOKED")
     return value, ref, canonical_sha(value)
@@ -141,7 +161,11 @@ def validate_review(
         raise ReviewGateError("ASTRA_REVIEW_ROUTE_MISSING")
     if repo is None:
         raise ReviewGateError("ASTRA_REVIEW_PROVENANCE_CONTEXT_REQUIRED")
-    _, expected_ref, expected_sha = load_model_provenance(Path(repo), route_task_id)
+    _, expected_ref, expected_sha = load_model_provenance(
+        Path(repo),
+        route_task_id,
+        allow_test_only=is_qualification_fixture(overlay),
+    )
     if review.get("model_provenance_ref") != expected_ref:
         raise ReviewGateError("ASTRA_REVIEW_PROVENANCE_REF")
     if review.get("model_provenance_sha256") != expected_sha:
