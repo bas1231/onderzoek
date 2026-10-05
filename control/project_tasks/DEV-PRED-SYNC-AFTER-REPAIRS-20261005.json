@@ -1,0 +1,44 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-SYNC-AFTER-REPAIRS-20261005",
+  "source_commit": "d3399878e2ddf7fa6b889f2bf7fe5127b994534d",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "production_compare_source",
+    "production_merge_representation",
+    "production_compare_worktree",
+    "production_staged_inspect"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 300,
+  "notes": "Read-only post-repair synchronization audit against current canonical source. No production mutation; no system test.",
+  "operations": [
+    {
+      "type": "production_compare_source",
+      "require_equal": false
+    },
+    {
+      "type": "production_merge_representation",
+      "require_subsumed": false
+    },
+    {
+      "type": "production_compare_worktree",
+      "require_exact": false
+    },
+    {
+      "type": "production_staged_inspect",
+      "fail_for_visibility": true
+    }
+  ]
+}
