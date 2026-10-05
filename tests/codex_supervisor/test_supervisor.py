@@ -175,6 +175,27 @@ def test_reasoning_worker_highest_available_gpt_ignores_non_gpt(tmp_path,monkeyp
     assert worker['model_selection']['eligible_gpt_count']==1
 
 
+def test_reasoning_worker_highest_available_gpt_rejects_non_gpt_slug_with_gpt_display_name(tmp_path,monkeypatch):
+    cache=tmp_path/'.codex';cache.mkdir();(cache/'models_cache.json').write_text(json.dumps({'models':[
+        {'slug':'other-provider-model','display_name':'GPT-6 Sol','visibility':'list','priority':1},
+        {'slug':'gpt-5-6-sol','display_name':'GPT-5.6 Sol','visibility':'list','priority':7},
+    ]}))
+    monkeypatch.setattr(m.P,'home',classmethod(lambda cls:tmp_path))
+    monkeypatch.setattr(m.subprocess,'run',lambda *a,**k:subprocess.CompletedProcess(a,0,'Logged in using ChatGPT',''))
+    seen={}
+    class Process:
+        pid=123;returncode=0
+        def communicate(self,*a,**k):return None
+    def popen(args,**kw):
+        seen['args']=args
+        return Process()
+    monkeypatch.setattr(m.subprocess,'Popen',popen)
+    assert m.CodexWorker('codex')(task(),None,tmp_path,7)==0
+    assert seen['args'][seen['args'].index('-m')+1]=='gpt-5-6-sol'
+    worker=json.loads((tmp_path/'WORKER.json').read_text())
+    assert worker['model_selection']['eligible_gpt_count']==1
+
+
 def test_reasoning_worker_highest_available_gpt_fails_closed_without_gpt(tmp_path,monkeypatch):
     cache=tmp_path/'.codex';cache.mkdir();(cache/'models_cache.json').write_text(json.dumps({'models':[
         {'slug':'other-reasoner','display_name':'Other Reasoner','visibility':'list','priority':1},
