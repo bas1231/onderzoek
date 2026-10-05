@@ -18,6 +18,7 @@ from urllib.parse import parse_qs, quote, unquote, urlparse
 
 SCHEMA = "PREDICTION_CONTROL_CENTER_SNAPSHOT_V1"
 REVIVE_SCHEMA = "PREDICTION_RESEARCH_REVIVE_REQUEST_V1"
+BUILD_LOG_SCHEMA = "PREDICTION_BUILD_LOG_EVENT_V1"
 MAX_ARTIFACT_BYTES = 2_000_000
 MAX_JSON_BYTES = 4_000_000
 CACHE_SECONDS = 3.0
@@ -113,6 +114,7 @@ class ControlCenterModel:
         self.command_state = (Path.home() / ".local/state/prediction-command-bus/tasks").resolve()
         self.executor_state = (Path.home() / ".local/state/prediction-project-executor").resolve()
         self.mirror_root = (Path.home() / ".local/share/prediction-project-executor/repo").resolve()
+        self.bus_repo = (Path.home() / ".local/share/prediction-command-bus/repo").resolve()
         self._cache_lock = threading.Lock()
         self._cache_at = 0.0
         self._cache = None
@@ -505,6 +507,201 @@ class ControlCenterModel:
         alerts.sort(key=lambda x: parse_time(x.get("at")) or 0, reverse=True)
         return alerts[:20]
 
+    def _build_log_events_from_git(self, repo: Path, source: str):
+        listing = self._git_output(
+            repo,
+            "ls-tree", "-r", "--name-only", "FETCH_HEAD", "--",
+            "control/build_log/events",
+        )
+        if not listing:
+            return []
+        rows = []
+        paths = [
+            line.strip()
+            for line in listing.splitlines()
+            if line.strip().startswith("control/build_log/events/")
+            and line.strip().endswith(".json")
+        ]
+        for rel in paths[-2000:]:
+            raw = self._git_output(repo, "show", f"FETCH_HEAD:{rel}")
+            if not raw or len(raw) > MAX_JSON_BYTES:
+                continue
+            try:
+                obj = json.loads(raw)
+            except Exception:
+                continue
+            if not isinstance(obj, dict) or obj.get("schema") != BUILD_LOG_SCHEMA:
+                continue
+            event_id = obj.get("event_id")
+            work_item_id = obj.get("work_item_id")
+            if not isinstance(event_id, str) or not event_id:
+                continue
+            if not isinstance(work_item_id, str) or not work_item_id:
+                continue
+            row = dict(obj)
+            row["ledger_source"] = source
+            rows.append(row)
+        return rows
+
+    def _build_log_events_from_fs(self):
+        root = self.repo / "control/build_log/events"
+        if not root.is_dir():
+            return []
+        rows = []
+        for path in sorted(root.glob("*.json"))[-2000:]:
+            obj = safe_json(path)
+            if not isinstance(obj, dict) or obj.get("schema") != BUILD_LOG_SCHEMA:
+                continue
+            if not isinstance(obj.get("event_id"), str) or not obj.get("event_id"):
+                continue
+            if not isinstance(obj.get("work_item_id"), str) or not obj.get("work_item_id"):
+                continue
+            row = dict(obj)
+            row["ledger_source"] = "production"
+            rows.append(row)
+        return rows
+
+    def load_build_log_events(self):
+        by_id = {}
+        sources = [
+            self._build_log_events_from_git(self.bus_repo, "command_bus_fetch_head"),
+            self._build_log_events_from_git(self.mirror_root, "executor_fetch_head"),
+            self._build_log_events_from_fs(),
+        ]
+        for rows in sources:
+            for row in rows:
+                event_id = row["event_id"]
+                if event_id not in by_id:
+                    by_id[event_id] = row
+        events = list(by_id.values())
+        events.sort(
+            key=lambda x: (
+                parse_time(x.get("created_at_utc")) or 0,
+                str(x.get("event_id") or ""),
+            ),
+            reverse=True,
+        )
+        return events
+
+    def build_log_projection(self, events=None):
+        events = self.load_build_log_events() if events is None else list(events)
+        grouped = {}
+        for event in events:
+            grouped.setdefault(str(event.get("work_item_id")), []).append(event)
+
+        work_items = []
+        for work_item_id, rows in grouped.items():
+            ordered = sorted(
+                rows,
+                key=lambda x: (
+                    parse_time(x.get("created_at_utc")) or 0,
+                    str(x.get("event_id") or ""),
+                ),
+            )
+            latest = ordered[-1]
+            task_ids = []
+            sessions = []
+            commits = []
+            tags = []
+            for event in ordered:
+                for value in event.get("task_ids") or []:
+                    if isinstance(value, str) and value not in task_ids:
+                        task_ids.append(value)
+                route = event.get("session_route_task_id")
+                if isinstance(route, str) and route and route not in sessions:
+                    sessions.append(route)
+                for value in event.get("commits") or []:
+                    if isinstance(value, str) and value not in commits:
+                        commits.append(value)
+                for value in event.get("tags") or []:
+                    if isinstance(value, str) and value not in tags:
+                        tags.append(value)
+            work_items.append({
+                "work_item_id": work_item_id,
+                "title": str(latest.get("title") or work_item_id),
+                "objective": str(latest.get("objective") or ""),
+                "status": str(latest.get("work_item_status") or "OPEN").upper(),
+                "outcome": str(latest.get("outcome") or "INFO").upper(),
+                "summary": str(latest.get("summary") or ""),
+                "why": str(latest.get("why") or ""),
+                "next_action": str(latest.get("next_action") or ""),
+                "first_incomplete_step": latest.get("first_incomplete_step"),
+                "updated_at": latest.get("created_at_utc"),
+                "latest_event_id": latest.get("event_id"),
+                "event_count": len(ordered),
+                "attempt_count": sum(
+                    1 for event in ordered
+                    if str(event.get("event_type") or "").upper() in {"ATTEMPT", "RESULT"}
+                ),
+                "session_routes": sessions,
+                "task_ids": task_ids,
+                "commits": commits,
+                "tags": tags,
+            })
+
+        rank = {"BLOCKED": 0, "IN_PROGRESS": 1, "OPEN": 2, "DONE": 3}
+        work_items.sort(
+            key=lambda x: (
+                rank.get(x["status"], 2),
+                -(parse_time(x.get("updated_at")) or 0),
+            )
+        )
+
+        open_items = [x for x in work_items if x["status"] in {"OPEN", "IN_PROGRESS", "BLOCKED"}]
+        objective_groups = {}
+        for item in open_items:
+            key = " ".join(item["objective"].casefold().split())
+            if not key:
+                continue
+            objective_groups.setdefault(hashlib.sha256(key.encode()).hexdigest()[:16], []).append(item)
+        duplicates = [
+            {
+                "work_item_ids": [item["work_item_id"] for item in rows],
+                "title": rows[0]["title"],
+            }
+            for rows in objective_groups.values()
+            if len(rows) > 1
+        ]
+
+        return {
+            "schema": "PREDICTION_BUILD_LOG_PROJECTION_V1",
+            "counts": {
+                "work_items": len(work_items),
+                "open": sum(1 for x in work_items if x["status"] == "OPEN"),
+                "in_progress": sum(1 for x in work_items if x["status"] == "IN_PROGRESS"),
+                "blocked": sum(1 for x in work_items if x["status"] == "BLOCKED"),
+                "done": sum(1 for x in work_items if x["status"] == "DONE"),
+                "events": len(events),
+                "fail_events": sum(1 for x in events if str(x.get("outcome") or "").upper() == "FAIL"),
+                "duplicate_open_objectives": len(duplicates),
+            },
+            "open_work": open_items,
+            "work_items": work_items,
+            "recent_events": events[:250],
+            "duplicate_open_objectives": duplicates,
+        }
+
+    def work_item_detail(self, work_item_id):
+        projection = self.build_log_projection()
+        item = next(
+            (x for x in projection["work_items"] if x["work_item_id"] == work_item_id),
+            None,
+        )
+        if item is None:
+            return None
+        timeline = [
+            event
+            for event in self.load_build_log_events()
+            if event.get("work_item_id") == work_item_id
+        ]
+        timeline.sort(
+            key=lambda x: (
+                parse_time(x.get("created_at_utc")) or 0,
+                str(x.get("event_id") or ""),
+            )
+        )
+        return {"work_item": item, "timeline": timeline}
+
     def lifecycle_status(self):
         paths = [
             self.repo / "control/control_center/lifecycle_status.json",
@@ -676,6 +873,7 @@ class ControlCenterModel:
         ]
         revives = self.load_revive_requests()
         lifecycle = self.lifecycle_status()
+        build_log = self.build_log_projection()
         git_sync = self.git_sync_status()
         chain_alerts = self._chain_alerts(all_tasks, runs)
 
@@ -715,10 +913,16 @@ class ControlCenterModel:
                 "revive_requests": len(revives),
                 "legacy_candidates": sum(1 for c in candidates if c.get("legacy_imported")),
                 "chain_alerts": len(chain_alerts),
+                "build_log_open": (
+                    build_log["counts"]["open"]
+                    + build_log["counts"]["in_progress"]
+                    + build_log["counts"]["blocked"]
+                ),
             },
             "task_metrics": self._task_metrics(all_tasks),
             "candidate_funnel": self._candidate_funnel(candidates),
             "lifecycle": lifecycle,
+            "build_log": build_log,
             "git_sync": git_sync,
             "chain_alerts": chain_alerts,
             "candidates": candidates,
@@ -904,6 +1108,11 @@ class Handler(BaseHTTPRequestHandler):
         if parsed.path.startswith("/api/run/"):
             run_id = unquote(parsed.path.split("/api/run/", 1)[1])
             value = self.model.run_detail(run_id)
+            self._json(value if value is not None else {"error": "not found"}, 200 if value else 404)
+            return
+        if parsed.path.startswith("/api/work-item/"):
+            work_item_id = unquote(parsed.path.split("/api/work-item/", 1)[1])
+            value = self.model.work_item_detail(work_item_id)
             self._json(value if value is not None else {"error": "not found"}, 200 if value else 404)
             return
         if parsed.path == "/api/artifact":
