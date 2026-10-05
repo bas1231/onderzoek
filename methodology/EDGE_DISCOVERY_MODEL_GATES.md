@@ -42,11 +42,21 @@ Een kleine maar echte edge is valide. Een grote maar niet-reproduceerbare paper 
 
 ## 3. Verplichte modelrollen en reviewlus
 
-De research lifecycle gebruikt de volgende vaste rolverdeling.
+> **MANDATORY ACCEPTANCE CRITERION — TARGET ARCHITECTURE**
+>
+> De vereiste lifecycle is exact:
+>
+> `Scout -> selectie -> GPT-5.6 Sol-opzet -> GPT-6 Astra pre-build review -> GPT-5.6 Sol-build -> GPT-6 Astra post-build code-review -> tests en meting -> supervisor -> rapportage over EDGE / NO_EDGE / NO_PROVEN_EDGE`
+>
+> **Astra beoordeelt dus verplicht vóór én na de build.**
+>
+> Bij iedere Astra-afkeur of `NEEDS_REVISION` verwerkt Sol de feedback, maakt een nieuwe exact gebonden versie en biedt die opnieuw aan Astra aan. **Tests en metingen van het edge-experiment mogen pas starten nadat exact GPT-6 Astra de daadwerkelijk gebouwde code/harness expliciet heeft goedgekeurd.**
+>
+> Een implementatie, testfixture of A→Z-kwalificatie die deze volgorde omdraait of tests/meting vóór de post-build Astra-approval laat starten, **voldoet niet aan de canonical acceptance criteria** en mag niet als volledige A→Z-PASS worden gerapporteerd.
 
 ### Director / researcher
 
-De bestaande reasoning-worker analyseert candidates, selecteert kansrijke hypotheses en bepaalt de eerstvolgende beslissende falsificatie. Een advies `NEEDS_BUILD` of `VALIDATION` is **geen autorisatie** om direct een experiment te bouwen of uit te voeren.
+De bestaande reasoning-worker analyseert candidates, selecteert kansrijke hypotheses en bepaalt de eerstvolgende beslissende falsificatie. Een advies `NEEDS_BUILD` of `VALIDATION` is **geen autorisatie** om direct een experiment te bouwen, testen of meten.
 
 ### GPT-5.6 Sol — experimentele opzet
 
@@ -66,7 +76,7 @@ De opzet bevat minimaal:
 
 ### GPT-6 Astra — pre-build review en feedbacklus
 
-Voordat het daadwerkelijke edge-experiment mag worden gebouwd of uitgevoerd, moet **exact GPT-6 Astra** de exact gebonden Sol-opzet onafhankelijk beoordelen.
+Voordat het daadwerkelijke edge-experiment mag worden gebouwd, moet **exact GPT-6 Astra** de exact gebonden Sol-opzet onafhankelijk beoordelen.
 
 State:
 
@@ -121,11 +131,58 @@ Dit experiment kan afhankelijk van de hypothese bestaan uit bijvoorbeeld:
 
 Sol bevriest objective/scope/acceptance criteria en bouwt tegen de door Astra goedgekeurde opzet. De build evidence vermeldt minimaal de exacte builder-provenance, candidate/opzetversie en relevante hashes.
 
-Een technische build-PASS is nooit automatisch bewijs van economische edge.
+Tijdens de build zijn alleen bouwgerichte checks toegestaan die nodig zijn om een reviewbaar artefact te produceren, zoals syntax/import/compile checks. **De inhoudelijke experimenttests, validatieruns, backtests, shadowmetingen of andere edge-metingen starten nog niet.**
 
-### Uitvoering, tests en meting
+Een technische build-PASS is nooit automatisch bewijs van economische edge en geeft op zichzelf geen toestemming om te testen of meten.
 
-Het door Sol gebouwde experiment wordt daadwerkelijk technisch getest en daarna volgens de goedgekeurde opzet uitgevoerd/gemeten.
+### GPT-6 Astra — verplichte post-build code-review en feedbacklus
+
+Na de Sol-build, maar **vóór iedere inhoudelijke test of meting**, beoordeelt **exact GPT-6 Astra** de daadwerkelijk gebouwde, exact gebonden code/harness.
+
+Canonical state:
+
+`ASTRA_POSTBUILD_REVIEW`
+
+Astra beoordeelt minimaal:
+
+- of de gebouwde code de eerder goedgekeurde Sol-opzet correct implementeert;
+- of objective, scope en falsificatiecriteria onveranderd zijn gebleven;
+- of data- en tijdsafbakening correct zijn;
+- of leakage/look-ahead/bias technisch wordt voorkomen;
+- of meet- en scoringslogica klopt;
+- of execution-realistische kosten/fills/slippage correct zijn geïmplementeerd waar relevant;
+- of de test- en meetpaden reproduceerbaar en fail-closed zijn;
+- of safetygrenzen en read-only/shadow-beperkingen technisch worden afgedwongen;
+- of de exacte code/harness-hashes overeenkomen met de reviewbinding.
+
+Alleen een geldige, exact gebonden:
+
+`decision = APPROVE`
+
+mag de lifecycle vrijgeven naar tests en meting.
+
+Bij `NEEDS_REVISION` of afkeur:
+
+1. Astra-feedback gaat versiegebonden terug naar GPT-5.6 Sol;
+2. Sol verwerkt de feedback en bouwt een nieuwe versie;
+3. de nieuwe build krijgt nieuwe hashes/binding;
+4. **er worden nog steeds geen inhoudelijke tests of metingen uitgevoerd**;
+5. exact GPT-6 Astra beoordeelt de nieuwe gebouwde versie opnieuw;
+6. deze lus herhaalt zich totdat Astra `APPROVE` geeft of de kandidaat wordt afgewezen/geparkeerd.
+
+Een Astra-approval van buildversie N is ongeldig voor buildversie N+1.
+
+### Tests en meting — uitsluitend na Astra post-build approval
+
+Pas nadat `ASTRA_POSTBUILD_REVIEW = APPROVE` voor de actuele build is vastgelegd, mag het experiment technisch/invaliderend worden getest en volgens de goedgekeurde opzet worden uitgevoerd/gemeten.
+
+Daaronder vallen onder meer:
+
+- unit/integratie-/acceptatietests van de experimentlogica;
+- frozen-fixture en positive-control tests;
+- replay/backtest/holdout;
+- prospectieve shadowmeting;
+- andere inhoudelijke validatie die economische of wetenschappelijke evidence produceert.
 
 Waar actuele marktdata wordt gebruikt, blijft dit:
 
@@ -157,34 +214,17 @@ De safety flags blijven:
 - `paid_actions = false`
 - `wallet_actions = false`
 
-### GPT-6 Astra — post-experiment review
+### Supervisor — beoordeling na tests en meting
 
-Na technische tests, uitvoering en meting beoordeelt **exact GPT-6 Astra** opnieuw de exact gebonden gerealiseerde experimentversie en resultaten.
+Na tests en meting beoordeelt de supervisor/falsifier/reproducer de immutable evidence en bepaalt of het bewijs leidt tot:
 
-State:
+- `EDGE`;
+- `NO_EDGE`;
+- `NO_PROVEN_EDGE`;
+- aanvullende proof/reproduction gates;
+- of afwijzen/parkeren.
 
-`ASTRA_POSTEXPERIMENT_REVIEW`
-
-Astra beoordeelt minimaal:
-
-- of Sol daadwerkelijk de goedgekeurde opzet heeft geïmplementeerd;
-- of de gerealiseerde code/harness bij de goedgekeurde versie hoort;
-- data- en tijdsafbakening;
-- leakage/look-ahead/bias;
-- test- en meetmethodiek;
-- execution-realistische aannames;
-- resultaten en onzekerheid;
-- reproduceerbaarheid;
-- of de conclusie `EDGE`, `NO_EDGE` of `NO_PROVEN_EDGE` door het bewijs wordt gedragen.
-
-Bij `NEEDS_REVISION` of afkeur:
-
-1. Astra-feedback gaat versiegebonden terug naar GPT-5.6 Sol;
-2. Sol past het experiment, de analyse of beide aan binnen de toegestane scope;
-3. relevante technische tests/meting worden opnieuw uitgevoerd;
-4. de nieuwe versie wordt opnieuw aan exact GPT-6 Astra aangeboden.
-
-Pas na geldige post-experiment approval mag de lifecycle door naar definitieve supervisor/reproducer-beslissing en eindrapportage.
+De supervisor mag een ontbrekende pre-build of post-build Astra-approval nooit achteraf repareren of overslaan. Als de actuele build niet vóór tests/meting door exact GPT-6 Astra was goedgekeurd, is de run voor volledige A→Z-acceptance ongeldig en moet hij fail-closed worden geclassificeerd.
 
 ## 4. Versiebinding en fail-closed gedrag
 
@@ -212,27 +252,33 @@ Scout
   -> Director / eerste falsification-selectie
   -> GPT-5.6 Sol maakt versiegebonden experimentele opzet
   -> ASTRA_PREBUILD_REVIEW (exact GPT-6 Astra)
-       -> NEEDS_REVISION: feedback -> Sol reviseert -> opnieuw Astra
+       -> NEEDS_REVISION: feedback -> Sol reviseert opzet -> opnieuw Astra
        -> REJECT/PARK: stop
        -> APPROVE: door
   -> GPT-5.6 Sol bouwt daadwerkelijk edge-experiment
-  -> technische tests / deathchecks / canary waar relevant
+  -> ASTRA_POSTBUILD_REVIEW (exact GPT-6 Astra) op de gebouwde code/harness
+       -> NEEDS_REVISION: feedback -> Sol herbouwt -> opnieuw Astra
+       -> REJECT/PARK: stop
+       -> APPROVE: pas nu vrijgave voor tests/meting
+  -> technische/invaliderende tests
   -> experiment uitvoeren en meten
   -> immutable measurement evidence
-  -> ASTRA_POSTEXPERIMENT_REVIEW (exact GPT-6 Astra)
-       -> NEEDS_REVISION: feedback -> Sol repareert -> opnieuw testen/meten -> opnieuw Astra
-       -> REJECT/PARK/NO_PROVEN_EDGE: vastleggen
-       -> APPROVE: door
   -> Director / falsifier / reproducer / supervisor
   -> netto economisch oordeel
-       -> NO_PROVEN_EDGE / REJECT / PARK
+       -> NO_PROVEN_EDGE / NO_EDGE / REJECT / PARK
        -> of verdere proof gates bij positieve survivor
   -> rapportage
 ```
 
 Canonical shorthand:
 
-`Scout -> selectie -> Sol-opzet -> Astra pre-build review/revisielus -> Sol bouwt experiment -> test/uitvoering/meting -> Astra post-experiment review/revisielus -> supervisor -> rapportage`
+`Scout -> selectie -> Sol-opzet -> Astra pre-build review/revisielus -> Sol-build -> Astra post-build code-review/revisielus -> tests en meting -> supervisor -> rapportage`
+
+Hard sequencing invariant:
+
+`NO_TEST_OR_MEASUREMENT_BEFORE_ASTRA_POSTBUILD_APPROVAL`
+
+Dit is een formeel acceptatiecriterium. Een A→Z-test die tests of meting uitvoert vóór de post-build Astra-approval is per definitie **geen geldige volledige A→Z-PASS**, ook als alle latere stappen technisch groen zijn.
 
 ## 6. Wetenschappelijke default
 
@@ -250,4 +296,4 @@ Een lagere technische PASS, een enkele positieve meting of alleen een Astra pre-
 
 Succes is niet "veel ideeën" en ook niet "grote theoretische percentages".
 
-Succes is het vinden van één of meer **reproduceerbare, netto positieve, execution-realistische mechanisms** die uiteindelijk geld kunnen verdienen — ook wanneer de absolute winst in eerste instantie klein is — via een lifecycle waarin Sol het experiment ontwerpt/bouwt en exact GPT-6 Astra onafhankelijk vóór en na de uitvoering reviewt.
+Succes is het vinden van één of meer **reproduceerbare, netto positieve, execution-realistische mechanisms** die uiteindelijk geld kunnen verdienen — ook wanneer de absolute winst in eerste instantie klein is — via een lifecycle waarin Sol de opzet maakt en bouwt, exact GPT-6 Astra zowel vóór de build als na de build de actuele versie onafhankelijk goedkeurt, en pas daarna tests/meting, supervisorbeoordeling en rapportage plaatsvinden.
