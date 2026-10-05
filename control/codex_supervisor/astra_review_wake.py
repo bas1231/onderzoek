@@ -64,29 +64,50 @@ def ensure_review_continuation(supervisor, repo: P, overlay: dict, phase: str) -
         }
 
     route_task_id, chat_id = _control_route()
+    try:
+        _, provenance_ref, provenance_sha = model_quality_gate.load_model_provenance(
+            P(repo), route_task_id
+        )
+    except model_quality_gate.ReviewGateError as exc:
+        raise AstraReviewWakeBlocked(
+            "ASTRA_MODEL_PROVENANCE_INVALID:" + str(exc)[:100]
+        ) from exc
+
     binding = model_quality_gate.review_binding(overlay, phase)
     source_task_id = "ASTRA-REVIEW-" + hashlib.sha256(
         (overlay["candidate_id"] + phase + binding).encode("utf-8")
     ).hexdigest()[:40]
-    template = model_quality_gate.review_template(overlay, phase)
+    template = model_quality_gate.review_template(
+        overlay,
+        phase,
+        route_task_id=route_task_id,
+        model_provenance_ref=provenance_ref,
+        model_provenance_sha256=provenance_sha,
+    )
     context = (
-        "PREDICTION_ASTRA_REVIEW_REQUEST_V1\n"
+        "PREDICTION_ASTRA_REVIEW_REQUEST_V2\n"
         "required_model=GPT-6 Astra\n"
         f"phase={phase}\n"
         f"candidate_id={overlay['candidate_id']}\n"
         f"binding_sha256={binding}\n"
         f"review_ref={ref}\n"
+        f"reviewer_route_task_id={route_task_id}\n"
+        f"model_provenance_ref={provenance_ref}\n"
+        f"model_provenance_sha256={provenance_sha}\n"
+        "model_identity_verification=EXTERNAL_ROUTE_ATTESTATION\n"
         "economic_policy=ANY_POSITIVE_NET_EDGE_COUNTS\n"
         "minimum_net_profit_eur=0.0\n"
         "measurement_scope=READ_ONLY_PROSPECTIVE_MARKET_DATA\n"
-        "IMPORTANT: if you are not actually GPT-6 Astra, choose BLOCKED and do not author a review.\n"
+        "IMPORTANT: do not self-attest your model identity and do not block solely because you cannot inspect your own model name. "
+        "The control plane has externally attested the exact session route to GPT-6 Astra; the deterministic gate will independently verify the immutable provenance ref/hash and this exact route before accepting a review. "
+        "If the supplied route/provenance facts are missing or inconsistent with canonical Git, choose BLOCKED. "
         "Inspect the exact current canonical candidate/evidence and the supplied immutable overlay facts. "
         "Do not reject an idea merely because expected profit is small: any strictly positive NET executable euro edge is worth testing. "
         "Evidence quality, reproducibility, fees, slippage, fill probability, limits and capital/time cost still matter. "
         "For PREBUILD decide whether the proposed falsification/build is worth implementing. "
         "For PREMEASUREMENT decide whether tested code is safe and scientifically adequate to run prospectively on current public market data. "
         "Measurement means read-only/shadow observation only: no orders, no live trading, no wallets, no paid actions. "
-        "If APPROVE/REJECT/REVISE, create exactly the canonical JSON review file at review_ref via the GitHub connector, using this exact template shape and exact binding; "
+        "If APPROVE/REJECT/REVISE, create exactly the canonical JSON review file at review_ref via the GitHub connector, using this exact template shape and exact binding/provenance fields; "
         "set finding and next_action substantively. Then choose DONE. Do not change candidate code or build code during review.\n"
         "review_template=" + json.dumps(template, sort_keys=True, ensure_ascii=False)
     )
@@ -111,6 +132,9 @@ def ensure_review_continuation(supervisor, repo: P, overlay: dict, phase: str) -
         "review_ref": ref,
         "continuation_id": record["continuation_id"],
         "control_route_task_id": route_task_id,
+        "model_provenance_ref": provenance_ref,
+        "model_provenance_sha256": provenance_sha,
+        "model_identity_verification": "EXTERNAL_ROUTE_ATTESTATION",
         "economic_policy": "ANY_POSITIVE_NET_EDGE_COUNTS",
         "measurement_scope": "READ_ONLY_PROSPECTIVE_MARKET_DATA",
         "live_trading": False,
@@ -131,5 +155,8 @@ def ensure_review_continuation(supervisor, repo: P, overlay: dict, phase: str) -
         "review_ref": ref,
         "continuation_id": record["continuation_id"],
         "continuation_state": record["state"],
+        "control_route_task_id": route_task_id,
+        "model_provenance_ref": provenance_ref,
+        "model_provenance_sha256": provenance_sha,
         "audit_ref": str(audit_path.relative_to(P(supervisor.root))),
     }
