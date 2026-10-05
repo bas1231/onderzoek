@@ -1,0 +1,37 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-ASTRA-PROD-STAGED-INSPECT-20261005",
+  "source_commit": "93702486f8342acb08bd569d8d26abf583c997fc",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "production_inspect",
+    "production_staged_inspect",
+    "production_compare_source"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 180,
+  "notes": "Read-only inspect staged production state blocking fast-forward. Determine exact staged paths/content relationship to canonical Git. No cleanup or mutation.",
+  "operations": [
+    {
+      "type": "production_inspect"
+    },
+    {
+      "type": "production_staged_inspect"
+    },
+    {
+      "type": "production_compare_source"
+    }
+  ]
+}
