@@ -1,14 +1,23 @@
 from __future__ import annotations
 
 import json
+import time
+import urllib.error
 import urllib.request
 
 
 def get_json(url: str):
-    with urllib.request.urlopen(url, timeout=8) as response:
-        if response.status != 200:
-            raise RuntimeError(f"HTTP_{response.status}")
-        return json.loads(response.read().decode("utf-8"))
+    last_error = None
+    for _ in range(20):
+        try:
+            with urllib.request.urlopen(url, timeout=4) as response:
+                if response.status != 200:
+                    raise RuntimeError(f"HTTP_{response.status}")
+                return json.loads(response.read().decode("utf-8"))
+        except (urllib.error.URLError, ConnectionError, TimeoutError, OSError) as exc:
+            last_error = exc
+            time.sleep(0.5)
+    raise RuntimeError(f"CONTROL_CENTER_NOT_READY:{last_error}")
 
 
 def main() -> int:
