@@ -100,6 +100,10 @@ pre.raw{white-space:pre-wrap;word-break:break-word;background:#040613;border:1px
 
   <section class="page" id="page-live">
     <div class="grid4" id="liveCards"></div>
+    <article class="card glow" style="margin-bottom:14px">
+      <div class="section-title"><h2>Actieve systeemacties</h2><span class="pill pink live-pulse" id="systemActionCount">0 actief</span></div>
+      <div id="systemActionList" class="list"></div>
+    </article>
     <div class="row2">
       <article class="card"><div class="section-title"><h2>Actieve taken</h2><span class="pill cyan">alle sessies</span></div><div id="taskList" class="list"></div></article>
       <article class="card"><div class="section-title"><h2>ChatGPT-sessies</h2><span class="pill">op route gegroepeerd</span></div><div id="sessionList" class="list"></div></article>
@@ -264,12 +268,18 @@ function render(){
  const syncCard='<div class="card"><div class="kicker">Git-sync</div><div class="big">'+esc(syncNaam)+'</div><div class="sub">'+esc(syncUitleg)+'</div>'+syncAction+'</div>';
  q('#homeCards').innerHTML=card('Voordeelstatus',nlStatus(d.edge_state),'Strenge standaard totdat bewijs de controles doorstaat.','glow')+card('Actieve taken',c.tasks,'Alleen wat nu bezig of wachtend is')+syncCard+card('Open bouwwerk',c.build_log_open??0,'Gedeeld over alle ChatGPT-sessies');
  const active=d.tasks.slice(0,12);
- q('#nowList').innerHTML=active.length?active.map(t=>'<div class="item"><div class="item-head"><b class="mono">'+esc(t.task_id)+'</b>'+pill(t.status)+'</div><div class="meta">Sessie: '+esc(t.route_task_id||'geen routegegevens')+' • '+fmtDate(t.started_at)+'</div></div>').join(''):'<div class="empty">Geen actieve taken. Het systeem kan wel wachten op een geplande onderzoeksuitvoering.</div>';
+ const syncPhase=syncRequest&&gs.status!=='GREEN'?(String(syncRequest.state||'REQUESTED').toUpperCase()==='DELIVERED'?'BEZIG':String(syncRequest.state||'REQUESTED').toUpperCase()):null;
+ const syncNow=syncPhase?'<button class="item click sync-work-open"><div class="item-head"><b>Git-sync productie → main</b>'+pill(syncPhase)+'</div><div class="meta">Verzoek '+esc(syncRequest.request_id||'onbekend')+' • gestart '+fmtDate(syncRequest.created_at_utc)+'<br>ChatGPT voert de veilige reconciliatie uit; lokale wijzigingen blijven beschermd.</div></button>':'';
+ const taskNow=active.map(t=>'<div class="item"><div class="item-head"><b class="mono">'+esc(t.task_id)+'</b>'+pill(t.status)+'</div><div class="meta">Sessie: '+esc(t.route_task_id||'geen routegegevens')+' • '+fmtDate(t.started_at)+'</div></div>').join('');
+ q('#nowList').innerHTML=syncNow+taskNow||'<div class="empty">Geen actieve taken of systeemacties. Het systeem kan wel wachten op een geplande onderzoeksuitvoering.</div>';
  q('#attentionCount').textContent=alerts.length;
  q('#attentionList').innerHTML=alerts.length?alerts.slice(0,5).map(e=>'<div class="alert"><div class="item-head"><b>'+esc(e.id||'onbekend')+'</b>'+pill(e.status)+'</div><div class="meta">'+fmtDate(e.at)+' • '+esc(e.reason)+'</div></div>').join(''):'<div class="ok"><b>Geen recente ketenfouten</b><div class="meta">Nieuwe foutmeldingen verschijnen hier direct.</div></div>';
  const good=[]; if(m.success_rate!=null)good.push('<div class="ok"><b>Taaksucces '+pct(m.success_rate)+'</b><div class="meta">'+m.success+' volledig geslaagde taken tegenover '+m.failure+' fouten.</div></div>');good.push('<div class="ok"><b>Financiële beveiliging staat standaard dicht</b><div class="meta">Live handelen, betaalde acties en walletacties staan uit.</div></div>');good.push('<div class="ok"><b>'+c.candidates+' ideeën bewaard</b><div class="meta">Historie wordt niet overschreven bij heronderzoek.</div></div>');q('#goodList').innerHTML=good.join('');
 
- q('#liveCards').innerHTML=card('Actieve sessies',c.sessions,'ChatGPT-routes met actief werk')+card('Actieve taken',c.tasks,'Alleen huidige taakstatussen')+card('Ketenfouten',alerts.length,'Nieuwe fouten in de laatste 6 uur')+card('Git-sync',syncNaam,syncUitleg);
+ const activeSystemActions=syncPhase?1:0;
+ q('#liveCards').innerHTML=card('Actieve sessies',c.sessions,'ChatGPT-routes met actief werk')+card('Actieve taken',c.tasks,'Alleen huidige taakstatussen')+card('Systeemacties',activeSystemActions,'Bijvoorbeeld een door jou gestarte Git-sync')+card('Ketenfouten',alerts.length,'Nieuwe fouten in de laatste 6 uur');
+ q('#systemActionCount').textContent=activeSystemActions+' actief';
+ q('#systemActionList').innerHTML=syncPhase?'<button class="item click sync-work-open"><div class="item-head"><div><b>Git-sync productie → main</b><div class="meta mono">'+esc(syncRequest.request_id||'onbekend')+'</div></div>'+pill(syncPhase)+'</div><div class="meta"><strong>Status:</strong> '+esc(syncPhase==='BEZIG'?'ChatGPT is bezig met de veilige reconciliatie':nlStatus(syncPhase))+'<br><strong>Gestart:</strong> '+fmtDate(syncRequest.created_at_utc)+'<br><strong>Doel:</strong> production veilig gelijkmaken aan canonical main zonder lokaal werk te verliezen.</div></button>':'<div class="ok"><b>Geen actieve systeemacties</b><div class="meta">Een gestart Sync-verzoek verschijnt hier direct en blijft zichtbaar tot Git-sync groen is.</div></div>';
  q('#taskList').innerHTML=d.tasks.slice(0,30).map(t=>'<div class="item"><div class="item-head"><b class="mono">'+esc(t.task_id)+'</b>'+pill(t.status)+'</div><div class="meta">'+fmtDate(t.started_at)+' • afsluitcode '+esc(t.exit_code??'—')+' • '+esc(t.route_task_id||'route onbekend')+'</div></div>').join('')||'<div class="empty">Geen task-state.</div>';
  q('#sessionList').innerHTML=d.sessions.slice(0,30).map(s=>'<div class="item"><div class="item-head"><b class="mono">'+esc(s.route_task_id)+'</b><span class="pill">'+s.tasks+' tasks</span></div><div class="meta">'+s.active+' actief • '+s.failures+' fouten • laatste: '+esc(s.last_task||'—')+'</div></div>').join('')||'<div class="empty">Geen sessieroutes in task-state.</div>';
 
@@ -282,6 +292,7 @@ function render(){
  q('#buildEventCount').textContent=(bc.events||0)+' gebeurtenissen';
  renderBuildLog();
  qa('.work-open').forEach(b=>b.addEventListener('click',()=>showWorkItem(decodeURIComponent(b.dataset.work))));
+ qa('.sync-work-open').forEach(b=>b.addEventListener('click',()=>showWorkItem((syncRequest&&syncRequest.work_item_id)||'PRODUCTION-RECONCILIATION-20261005')));
 
  q('#ideaCount').textContent=c.candidates+' totaal'; renderIdeas();
  q('#runCount').textContent=c.runs+' totaal'; renderRuns();
