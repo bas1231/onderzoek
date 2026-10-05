@@ -1,0 +1,43 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-ASTRA-AUTONOMOUS-REVIEWER-FIRSTFAIL-20261005",
+  "source_commit": "819f5d12012e636d302489e3dc9f1e053601d86f",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "run_tests"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 900,
+  "notes": "Diagnostic rerun of autonomous Astra reviewer regression suite with -x -vv to expose the first failing test and traceback. No production mutation.",
+  "operations": [
+    {
+      "type": "python",
+      "argv": [
+        "/home/leonh/prediction_research_prod/.venv/bin/python",
+        "-m",
+        "pytest",
+        "-x",
+        "-vv",
+        "tests/codex_supervisor/test_model_quality_gates.py",
+        "tests/codex_supervisor/test_astra_autonomous_review.py",
+        "tests/codex_supervisor/test_supervisor.py",
+        "tests/codex_supervisor/test_candidate_dispatch.py",
+        "tests/codex_supervisor/test_autobuild_chat_wake.py"
+      ],
+      "test": true,
+      "timeout_seconds": 720
+    }
+  ]
+}
