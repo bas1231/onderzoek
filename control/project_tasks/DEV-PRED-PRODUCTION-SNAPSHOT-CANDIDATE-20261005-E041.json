@@ -1,0 +1,32 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-PRODUCTION-SNAPSHOT-CANDIDATE-20261005-E041",
+  "source_commit": "ac95cd2d86799dd7ce7d92a49e4b26b3af95e8a4",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "High"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "production_dirty_snapshot_inspect"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 180,
+  "notes": "Read-only semantic_candidate report from immutable E034 dirty snapshot. No live worktree mutation, cleanup, network, or remote writes.",
+  "operations": [
+    {
+      "type": "production_dirty_snapshot_inspect",
+      "snapshot_task_id": "DEV-PRED-PRODUCTION-DIRTY-SNAPSHOT-20261005-E034",
+      "report_mode": "semantic_candidate",
+      "fail_for_visibility": true
+    }
+  ]
+}
