@@ -1,0 +1,24 @@
+{
+  "schema": "PREDICTION_BUILD_LOG_EVENT_V1",
+  "event_id": "20261005T210300Z-A2Z-SYSTEMTEST-CONT-DEAFB",
+  "work_item_id": "A2Z-SYSTEMTEST-20261005",
+  "created_at_utc": "2026-10-05T21:03:00Z",
+  "event_type": "ATTEMPT",
+  "work_item_status": "IN_PROGRESS",
+  "outcome": "STARTED",
+  "title": "A2Z hervatting na E049 ACK-timeout",
+  "objective": "Hervat de bestaande A→Z-systeemtest vanaf de E049-coördinatiecanary zonder eerdere stappen te herhalen.",
+  "summary": "Continuation CONT-deafb0e7c5311ee5c3c9d74f wordt als NEXT behandeld. Het vervolgtask leest uitsluitend de reeds uitgevoerde E049-canary, actuele exacte Sol/Astra-modelslugs en de bestaande E042-reparatie-evidence om de eerstvolgende reparatiestap fail-closed te bepalen.",
+  "next_action": "Lees E049/E042/model-evidence; geen Scout, experiment, test of meting herhalen.",
+  "session_route_task_id": "DEV-PRED-A2Z-COORDINATION-CANARY-20261005-E049",
+  "task_ids": [
+    "DEV-PRED-CONT-NEXT-deafb0e7c5311ee5c3c9d74f"
+  ],
+  "tags": [
+    "a2z",
+    "continuation",
+    "e049",
+    "coordination",
+    "readiness"
+  ]
+}
