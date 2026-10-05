@@ -1,0 +1,36 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-DASHBOARD-NEW-SESSION-RECHECK-20261005-E025",
+  "source_commit": "30e3d79e02257ade54b3773a5101638431c56f23",
+  "intelligence_tier": "B",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "run_project_python",
+    "run_tests"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 240,
+  "notes": "Regression recheck after restoring active-page presence into userscript v0.5.0. Run the same module-by-module bridge classifier. Exit 0 means every tampermonkey_multichat test module passes; exit 41-54 identifies the next first failing module. No runtime install or service mutation.",
+  "operations": [
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/dashboard_new_session_e023_classify.py"
+      ],
+      "test": true,
+      "timeout_seconds": 200
+    }
+  ]
+}
