@@ -68,7 +68,13 @@ mag de state naar `NEEDS_BUILD` brengen.
 
 Een stale review of review van een ander model is ongeldig.
 
-Modelidentiteit wordt **niet** bewezen door zelfverklaring in modeltekst. Een Astra-review is alleen geldig wanneer de review ook bindt aan een vooraf vastgelegde, immutable sessieroute-attestation onder `control/model_provenance/astra_routes/`. Die attestation legt de door de operator in de ChatGPT-UI geselecteerde GPT-6 Astra-sessie vast. De gate controleert onafhankelijk: exact route-task-ID, provenance-ref, provenance-hash, reviewer-model, kandidaatbinding en safetyvelden. Ontbrekende, gewijzigde of ingetrokken provenance faalt gesloten.
+Modelidentiteit wordt **niet** bewezen door zelfverklaring in modeltekst.
+
+Voor **productie** moet Astra volledig autonoom worden geselecteerd door de uitvoeringslaag. De werkelijk gebruikte modelslug/modelversie wordt door die uitvoeringslaag zelf als run-provenance vastgelegd en vervolgens cryptografisch gebonden aan de review en candidate-hash. Handmatige modelselectie in de ChatGPT-UI mag nooit een production build- of measurement-gate vrijgeven.
+
+Een handmatig geopende Astra-chat met sessieroute-attestation is uitsluitend toegestaan voor expliciet gemarkeerde systeemkwalificatie-fixtures (`qualification_fixture=true`). Zulke provenance draagt `usage_scope=TEST_ONLY`; dezelfde provenance faalt gesloten voor iedere production candidate.
+
+Ontbrekende, gewijzigde, ingetrokken of niet-autonome production-provenance blokkeert de Astra-gate met `REQUIRES_HIGH_INTELLIGENCE_REVIEW`/equivalent en veroorzaakt geen stille degradatie.
 
 ### Builder
 
