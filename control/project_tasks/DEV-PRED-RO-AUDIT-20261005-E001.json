@@ -1,0 +1,42 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-RO-AUDIT-20261005-E001",
+  "source_commit": "03f0d00306bdbed0ba3f15655cc0214287577b50",
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "Codex; exact model identity unavailable to runtime",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "run_tests",
+    "local_git"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 1500,
+  "notes": "Read-only production audit. Offline regression tests and deterministic full-chain fixture only. No real LLM workers, market calls, runtime installs, services or production mutations. Persist complete logs in isolated audit-output.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/read_only_audit_20261005_e001.py",
+      "content": "from pathlib import Path\nimport sys,json,subprocess,xml.etree.ElementTree as ET\nroot=Path.cwd()\nout=root/'audit-output'\nout.mkdir(exist_ok=True)\ngroups={\n'scout':['control/hourly/test_primary_scout_candidate_creation.py','control/hourly/test_recon_candidate_bridge.py'],\n'gates':['tests/codex_supervisor/test_model_quality_gates.py','tests/codex_supervisor/test_astra_autonomous_review.py','tests/codex_supervisor/test_supervisor.py','tests/codex_supervisor/test_candidate_dispatch.py','tests/codex_supervisor/test_autobuild_chat_wake.py']}\nsummary={}\nfor name,paths in groups.items():\n    xml=out/(name+'.xml')\n    p=subprocess.run([sys.executable,'-m','pytest','-q','-p','no:cacheprovider','--tb=short','--junitxml='+str(xml),*paths],capture_output=True,text=True,timeout=500)\n    (out/(name+'.log')).write_text(p.stdout+p.stderr)\n    record={'exit':p.returncode}\n    if xml.exists():\n        tree=ET.parse(xml)\n        cases=list(tree.iter('testcase'))\n        failed=[x for x in cases if x.find('failure') is not None or x.find('error') is not None]\n        record.update(tests=len(cases),failed=len(failed),skipped=sum(x.find('skipped') is not None for x in cases),failures=[{'name':x.attrib.get('name'),'message':(x.find('failure') if x.find('failure') is not None else x.find('error')).attrib.get('message','')[:700]} for x in failed])\n    summary[name]=record\nresult=out/'full-chain.json'\np=subprocess.run([sys.executable,'control/hourly/full_chain_qualification.py','--mode','deterministic','--result',str(result)],capture_output=True,text=True,timeout=240)\n(out/'full-chain.log').write_text(p.stdout+p.stderr)\nsummary['full_chain']=json.loads(result.read_text()) if result.exists() else {'status':'NO_RESULT','exit':p.returncode,'error':(p.stdout+p.stderr)[-300:]}\n(out/'summary.json').write_text(json.dumps(summary,indent=2))\nparts=[]\nfor n in groups:\n    r=summary[n]\n    parts.append(n+':tests='+str(r.get('tests'))+',failed='+str(r.get('failed'))+',exit='+str(r['exit']))\nf=summary['full_chain']\nparts.append('chain='+str(f.get('status'))+':'+str(f.get('error'))[:160])\nbad=any(summary[n]['exit']!=0 for n in groups) or f.get('status')!='PASS'\nprint('AUDIT '+ '; '.join(parts),flush=True)\nraise SystemExit(1 if bad else 0)\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "/home/leonh/prediction_research_prod/.venv/bin/python",
+        "control/dev_checks/read_only_audit_20261005_e001.py"
+      ],
+      "timeout_seconds": 900
+    }
+  ]
+}
