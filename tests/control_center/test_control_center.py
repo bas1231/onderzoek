@@ -31,6 +31,34 @@ class ControlCenterTests(unittest.TestCase):
         (repo / "knowledge/runs/agent_packets").mkdir(parents=True)
         (repo / "knowledge/manual_scout_seeds").mkdir(parents=True)
         (repo / "knowledge/research").mkdir(parents=True)
+        (repo / "control/control_center").mkdir(parents=True)
+        write_json(
+            repo / "control/control_center/lifecycle_status.json",
+            {
+                "schema": "PREDICTION_CONTROL_CENTER_LIFECYCLE_V1",
+                "updated_at": "2026-10-05",
+                "full_chain_status": "NOT_PROVEN",
+                "full_chain_label": "Volledige A→Z-keten nog niet bewezen",
+                "next_required": "Bewijs één volledige actuele A→Z-run.",
+                "invariant": "NO_TEST_OR_MEASUREMENT_BEFORE_ASTRA_POSTBUILD_APPROVAL",
+                "stages": [
+                    {
+                        "id": "scout",
+                        "label": "Verkenner",
+                        "subtitle": "kansen vinden",
+                        "state": "WORKING_COMPONENT",
+                        "detail": "Scoutcomponent werkt.",
+                    },
+                    {
+                        "id": "measurement",
+                        "label": "Tests en meting",
+                        "subtitle": "pas na Astra-goedkeuring",
+                        "state": "PENDING_E2E",
+                        "detail": "Volledige doorgang nog bewijzen.",
+                    },
+                ],
+            },
+        )
 
         write_json(
             repo / "knowledge/candidates/C-1.json",
@@ -94,6 +122,8 @@ class ControlCenterTests(unittest.TestCase):
         self.assertEqual(snapshot["counts"]["candidates"], 2)
         self.assertEqual(snapshot["counts"]["legacy_candidates"], 1)
         self.assertEqual(snapshot["edge_state"], "NO_PROVEN_EDGE")
+        self.assertEqual(snapshot["lifecycle"]["full_chain_status"], "NOT_PROVEN")
+        self.assertEqual(snapshot["lifecycle"]["stages"][0]["state"], "WORKING_COMPONENT")
         self.assertEqual(
             snapshot["legacy_artifacts"][0]["path"],
             "knowledge/research/legacy-note.md",
@@ -273,6 +303,19 @@ class ControlCenterTests(unittest.TestCase):
         self.assertTrue(any("Production HEAD" in x for x in sync["issues"]))
         self.assertTrue(any("niet-vastgelegde" in x for x in sync["issues"]))
 
+    def test_lifecycle_status_is_persistent_and_fail_closed(self):
+        lifecycle = self.model.lifecycle_status()
+        self.assertEqual(lifecycle["full_chain_status"], "NOT_PROVEN")
+        self.assertEqual(lifecycle["invariant"], "NO_TEST_OR_MEASUREMENT_BEFORE_ASTRA_POSTBUILD_APPROVAL")
+
+        html = (ROOT / "control/control_center/static/index.html").read_text(encoding="utf-8")
+        self.assertEqual(html.count('id="persistentLifecycle"'), 1)
+        self.assertLess(html.index('id="persistentLifecycle"'), html.index('id="page-home"'))
+        self.assertIn("Wat gebeurt er nu? — vaste A→Z-ketenstatus", html)
+        self.assertIn("Wat moet nog gebeuren:", html)
+        self.assertIn("GERICHT GETEST", html)
+        self.assertIn("NOG A→Z BEWIJZEN", html)
+
     def test_artifact_path_traversal_blocked(self):
         with self.assertRaises(PermissionError):
             self.model.artifact("../secret")
@@ -297,6 +340,9 @@ class ControlCenterTests(unittest.TestCase):
             "Synchronisatie met main",
             "Geen historisch taakgetal",
             "Alleen wat nu bezig of wachtend is",
+            "Wat gebeurt er nu? — vaste A→Z-ketenstatus",
+            "Volgende mijlpaal",
+            "Wat moet nog gebeuren:",
         ):
             self.assertIn(expected, html)
         self.assertIn("NO_PROVEN_EDGE", html)
