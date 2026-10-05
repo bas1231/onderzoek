@@ -30,8 +30,9 @@ Before doing local Prediction work, read these files from `bas1231/onderzoek`:
 8. `control/tampermonkey_multichat/PROTOCOL.md` — canonical bridge protocol.
 9. `control/tampermonkey_multichat/CHATGPT_PROJECT_INSTRUCTIONS.md` — full project-specific bridge instructions.
 10. `control/build_log/PROTOCOL.md` — shared append-only build ledger for cross-session work, retries, failures, handoffs and next actions.
-11. `control/control_center/SYNC_PROTOCOL.md` — one-click Control Center repository reconciliation trigger and fail-closed sync rules.
-12. `methodology/EDGE_DISCOVERY_MODEL_GATES.md` — mandatory model roles, Astra gates, read-only prospective measurement, and the any-positive-net-edge objective.
+11. `control/control_center/DASHBOARD_CHAT_ACTION_PROTOCOL.md` — mandatory fresh-session rule for every dashboard action that starts ChatGPT work.
+12. `control/control_center/SYNC_PROTOCOL.md` — one-click Control Center repository reconciliation trigger and fail-closed sync rules.
+13. `methodology/EDGE_DISCOVERY_MODEL_GATES.md` — mandatory model roles, Astra gates, read-only prospective measurement, and the any-positive-net-edge objective.
 
 When old chat memory or older docs conflict with these files, the current Git documentation above is authoritative.
 
@@ -82,6 +83,17 @@ Before starting a substantial build, repair, diagnosis or qualification, inspect
 - When handing unfinished work to another session, append a `HANDOFF` event naming the first incomplete step.
 
 This ledger is the cross-session project memory for construction work. GitHub event files are immutable; WSL remains GitHub read-only.
+
+## Dashboard actions always start a new ChatGPT session
+
+Any Control Center/dashboard button whose purpose is to start ChatGPT work must follow
+`control/control_center/DASHBOARD_CHAT_ACTION_PROTOCOL.md`.
+
+- The work itself always starts in a brand-new Prediction ChatGPT session.
+- An existing Prediction chat may only be used as a browser-launcher control plane.
+- The action prompt must never be injected into an existing work chat.
+- The new session must receive its own automatic `SESSION-ROUTE-*` PASS before dispatching local tasks.
+- If a fresh Prediction launcher is unavailable, fail closed; never fall back to reusing an existing chat.
 
 ## Control Center one-click sync trigger
 
