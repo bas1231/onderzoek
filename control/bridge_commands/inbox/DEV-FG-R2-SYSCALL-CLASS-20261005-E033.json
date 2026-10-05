@@ -1,0 +1,17 @@
+{
+  "schema": "PREDICTION_BRIDGE_COMMAND_V1",
+  "task_id": "DEV-FG-R2-SYSCALL-CLASS-20261005-E033",
+  "action": "SIX_AI_HEALTH",
+  "created_at_utc": "2026-10-05T13:48:00Z",
+  "route_task_id": "DEV-FG-R2-SYSCALL-20261005-E032",
+  "delivery_mode": "chat",
+  "live_trading": false,
+  "paid_actions": false,
+  "wallet_actions": false,
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "notes": "Read-only classify the syscall wait state of the current FG rerun into an exit code."
+}
