@@ -1,0 +1,36 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-PYTEST-PROVIDER-CLASSIFY-20261005-E029",
+  "source_commit": "7926d8380bd8f29f0fb35ced951b285e4607a3f6",
+  "intelligence_tier": "B",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "run_project_python",
+    "run_tests"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 180,
+  "notes": "Diagnostic only. Same local pytest-provider probe as E028, but do NOT allow diagnostic exitcodes. Expected task failure detail rc 71-75 identifies a concrete existing pytest provider; rc 76 means none. No install, no network, no runtime mutation.",
+  "operations": [
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/find_local_pytest_provider.py"
+      ],
+      "test": true,
+      "timeout_seconds": 120
+    }
+  ]
+}
