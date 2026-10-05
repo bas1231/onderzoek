@@ -1,0 +1,41 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-RO-AUDIT-20261005-E006",
+  "source_commit": "03f0d00306bdbed0ba3f15655cc0214287577b50",
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "Codex; exact model identity unavailable to runtime",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_runtime"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 180,
+  "notes": "Read existing E004 JUnit-derived failures only. No tests rerun or production mutation.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/read_only_audit_20261005_e006.py",
+      "content": "from pathlib import Path\nimport json\np=Path.home()/'.local/share/prediction-project-executor/worktrees/DEV-PRED-RO-AUDIT-20261005-E004/audit-output/summary.json'\ndata=json.loads(p.read_text())\nfailures=data['gates'].get('failures',[])\ncompact=[{'test':x['name'].removeprefix('test_')[:82],'error':' '.join(x.get('message','').split())[:62]} for x in failures]\nprint('AUDIT_FAILED_TESTS '+json.dumps(compact,separators=(',',':')),flush=True)\nraise SystemExit(1 if failures else 0)\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/read_only_audit_20261005_e006.py"
+      ],
+      "timeout_seconds": 60
+    }
+  ]
+}
