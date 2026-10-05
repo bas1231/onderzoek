@@ -1,0 +1,32 @@
+{
+  "schema": "PREDICTION_BUILD_LOG_EVENT_V1",
+  "event_id": "20261005T173600Z-CONTROL-CENTER-LIFECYCLE-DONE",
+  "work_item_id": "CONTROL-CENTER-LIFECYCLE-20261005",
+  "created_at_utc": "2026-10-05T17:36:00Z",
+  "event_type": "CLOSE",
+  "work_item_status": "DONE",
+  "outcome": "PASS",
+  "title": "Permanente A→Z-ketenstatus in Control Center",
+  "objective": "Maak de actuele A→Z-ketenstatus op iedere dashboardpagina permanent zichtbaar, met onderscheid tussen werkend, gericht getest en nog end-to-end te bewijzen.",
+  "summary": "E015 installeerde de permanente evidence-bound ketenbalk. De globale status blijft fail-closed NOT_PROVEN en de runtime-canary controleert negen stappen plus de post-build Astra-invariant.",
+  "why": "De gebruiker wilde ook bij meerdere pagina's en sessies steeds kunnen zien welke delen aantoonbaar werken en wat nog moet gebeuren zonder dat geplande architectuur als bewezen wordt gepresenteerd.",
+  "next_action": "Geen bouwactie meer voor dit werkitem. Werk de lifecycle_status alleen bij wanneer nieuwe evidence een stap aantoonbaar verandert.",
+  "session_route_task_id": "SESSION-ROUTE-fc2613ecbc81e22d4c913b2a",
+  "task_ids": [
+    "DEV-PRED-CONTROL-CENTER-LIFECYCLE-20261005-E015"
+  ],
+  "commits": [
+    "45e5c34fb1b8fd67c2f8a14aaf6c2d2a3cd751d9"
+  ],
+  "evidence_refs": [
+    "NIGHTSHIFT_WSL_RESULT_V1:E015:PASS:exit=0",
+    "control/control_center/lifecycle_status.json"
+  ],
+  "tags": [
+    "control-center",
+    "lifecycle",
+    "a2z"
+  ],
+  "parent_event_id": null,
+  "first_incomplete_step": null
+}
