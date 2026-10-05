@@ -1,0 +1,33 @@
+{
+  "schema": "PREDICTION_BUILD_LOG_EVENT_V1",
+  "event_id": "20261005T194200Z-CONTROL-CENTER-SESSION-DRIFT-E033-PASS",
+  "work_item_id": "CONTROL-CENTER-SESSION-DRIFT-20261005",
+  "created_at_utc": "2026-10-05T19:42:00Z",
+  "event_type": "RESULT",
+  "work_item_status": "IN_PROGRESS",
+  "outcome": "PASS",
+  "title": "Duidelijke waarschuwing bij sessie-afwijking",
+  "objective": "Toon in het Prediction Control Center een duidelijke waarschuwing wanneer een actieve ChatGPT-sessie buiten haar expliciet vastgelegde opdracht werkt.",
+  "summary": "E033 doorstond compilechecks en de volledige Control Center-regressies met PASS exit=0. Deterministische assignment/drift-detectie en dependency-uitzonderingen zijn daarmee bronmatig bewezen.",
+  "why": "De waarschuwing gebruikt expliciete session_assignment_scope + work-item/task-koppeling en geeft geen false positive voor expliciet ondersteunend dependency-werk.",
+  "next_action": "Installeer de nieuwste Control Center server/UI/canary pas nadat E031 niet meer kan overlappen met runtime-writes; verifieer daarna service + runtime-canary.",
+  "session_route_task_id": "SESSION-ROUTE-fc2613ecbc81e22d4c913b2a",
+  "task_ids": [
+    "DEV-PRED-CONTROL-CENTER-SESSION-DRIFT-TEST-20261005-E033"
+  ],
+  "commits": [
+    "11b4fe7757d9f949eb5cbff06d2bb1569c95afac"
+  ],
+  "evidence_refs": [
+    "event=1791226705-7167f044225a",
+    "status=PASS exit=0 rcs=1:0"
+  ],
+  "tags": [
+    "control-center",
+    "session",
+    "drift",
+    "regression-pass"
+  ],
+  "parent_event_id": "20261005T193000Z-CONTROL-CENTER-SESSION-DRIFT-E033-ATTEMPT",
+  "first_incomplete_step": "Runtime-installatie en live canary van de sessie-afwijkingsmelding."
+}
