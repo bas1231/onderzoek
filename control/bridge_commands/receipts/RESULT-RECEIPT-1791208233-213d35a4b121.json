@@ -1,0 +1,14 @@
+{
+  "schema": "PREDICTION_RESULT_RECEIPT_V1",
+  "receipt_id": "RESULT-RECEIPT-1791208233-213d35a4b121",
+  "event_id": "1791208233-213d35a4b121",
+  "source_task_id": "DEV-PRED-PROD-DIRTY-CLEAN-FF-20261005-E031",
+  "created_at_utc": "2026-10-05T14:12:00Z",
+  "live_trading": false,
+  "paid_actions": false,
+  "wallet_actions": false,
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  }
+}
