@@ -1,0 +1,68 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-REPAIR-VERIFY-CURRENT-20261005",
+  "source_commit": "5bd4021c09debcf1090cf4e953adc3a88a532a3e",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_tests",
+    "run_project_python"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 720,
+  "notes": "Independent current-session verification of requested product repairs only: exact GPT-6 Astra selection, GPT-only highest builder selection, current-binding-only reporting, compile and all Codex runtime pins. Full A-to-Z/system qualification explicitly excluded.",
+  "operations": [
+    {
+      "type": "python",
+      "argv": [
+        "/home/leonh/prediction_research_prod/.venv/bin/python",
+        "-m",
+        "pytest",
+        "-q",
+        "tests/codex_supervisor/test_supervisor.py",
+        "tests/codex_supervisor/test_model_quality_gates.py",
+        "tests/codex_supervisor/test_candidate_dispatch.py",
+        "tests/hourly/test_candidate_reporting_current_binding.py"
+      ],
+      "test": true,
+      "timeout_seconds": 480
+    },
+    {
+      "type": "python",
+      "argv": [
+        "/home/leonh/prediction_research_prod/.venv/bin/python",
+        "-m",
+        "compileall",
+        "-q",
+        "control/codex_supervisor/supervisor.py",
+        "control/hourly/candidate_reporting.py"
+      ],
+      "timeout_seconds": 120
+    },
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/verify_runtime_pins_current_20261005.py",
+      "content": "from pathlib import Path\nimport hashlib,json\nroot=Path.cwd()\ncfg=json.loads((root/\"knowledge/codex_runtime/CONFIG.json\").read_text())\nmapping={\n\"candidate_dispatch.py_sha256\":\"control/codex_supervisor/candidate_dispatch.py\",\n\"candidate_policy_sha256\":\"control/hourly/candidate_queue.py\",\n\"evidence_wake.py_sha256\":\"control/codex_supervisor/evidence_wake.py\",\n\"build_wake.py_sha256\":\"control/codex_supervisor/build_wake.py\",\n\"model_quality_gate.py_sha256\":\"control/codex_supervisor/model_quality_gate.py\",\n\"astra_review_wake.py_sha256\":\"control/codex_supervisor/astra_review_wake.py\",\n\"measurement_wake.py_sha256\":\"control/codex_supervisor/measurement_wake.py\",\n\"supervisor_sha256\":\"control/codex_supervisor/supervisor.py\",\n\"astra_autonomous_review.py_sha256\":\"control/codex_supervisor/astra_autonomous_review.py\",\n}\nbad=[]\nfor key,rel in mapping.items():\n    actual=hashlib.sha256((root/rel).read_bytes()).hexdigest()\n    if cfg.get(key)!=actual:\n        bad.append({\"key\":key,\"expected\":cfg.get(key),\"actual\":actual})\nprint(\"PIN_VERIFY=\"+json.dumps({\"checked\":len(mapping),\"mismatch\":bad},sort_keys=True),flush=True)\nif bad: raise SystemExit(41)\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/verify_runtime_pins_current_20261005.py"
+      ],
+      "timeout_seconds": 60
+    }
+  ]
+}
