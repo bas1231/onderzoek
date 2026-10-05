@@ -1,0 +1,41 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-ASTRA-AUTONOMOUS-MODEL-DETAILS-20261005",
+  "source_commit": "9afd7581d76595ca2a606e9b393613360764faa0",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_runtime"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 180,
+  "notes": "Read exact autonomous Astra model slug(s) and prior discovery operation evidence. No credential/token access and no mutation.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/astra_autonomous_model_details_20261005.py",
+      "content": "from pathlib import Path\nimport json\n\nstate=Path.home()/'.local/state/prediction-project-executor/DEV-PRED-ASTRA-AUTONOMOUS-MODEL-DISCOVERY-20261005.json'\nif state.is_file():\n    o=json.loads(state.read_text(encoding='utf-8'))\n    print('DISCOVERY_STATUS='+str(o.get('status')),flush=True)\n    print('DISCOVERY_EXIT='+str(o.get('exit_code')),flush=True)\n    for i,x in enumerate(o.get('operations') or [],1):\n        print(f'DISCOVERY_OP_{i}='+str(x)[:5000],flush=True)\n\ncache=Path.home()/'.codex/models_cache.json'\nobj=json.loads(cache.read_text(encoding='utf-8'))\nmodels=[]\nfor m in obj.get('models') or []:\n    if not isinstance(m,dict) or m.get('visibility')!='list':\n        continue\n    slug=str(m.get('slug') or '')\n    name=str(m.get('display_name') or '')\n    if 'astra' in slug.lower() or 'astra' in name.lower():\n        models.append({\n            'slug':slug,\n            'display_name':name,\n            'priority':m.get('priority'),\n            'supported_reasoning_efforts':m.get('supported_reasoning_efforts'),\n        })\nprint('ASTRA_MODELS='+json.dumps(models,sort_keys=True),flush=True)\nif len(models)!=1:\n    raise SystemExit(41)\nslug=models[0]['slug']\nif not slug:\n    raise SystemExit(42)\nprint('ASTRA_EXACT_SLUG='+slug,flush=True)\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/astra_autonomous_model_details_20261005.py"
+      ],
+      "timeout_seconds": 60
+    }
+  ]
+}
