@@ -1,0 +1,36 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-CONTROL-CENTER-SYNC-E017-CLASSIFY-20261005-E019",
+  "source_commit": "c4f905c350d4486e21d1717dba351b5e296628eb",
+  "intelligence_tier": "B",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "run_project_python",
+    "run_tests"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 180,
+  "notes": "Failfast classifier for the E017 Control Center unittest failure. Exit 21-36 maps in source order to the sixteen test methods in tests/control_center/test_control_center.py; exit 0 means the complete suite passes. Diagnostic only; no runtime/service mutation.",
+  "operations": [
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/control_center_sync_e017_classify.py"
+      ],
+      "test": true,
+      "timeout_seconds": 150
+    }
+  ]
+}
