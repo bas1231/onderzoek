@@ -291,17 +291,20 @@ def test_stale_approved_overlay_cannot_retrigger_build_after_source_change(tmp_p
 
 
 def test_candidate_dispatch_astra_approved_needs_build_routes_to_chat_wake(tmp_path, monkeypatch):
+    import hashlib
     import candidate_dispatch as d
     runtime = tmp_path / "runtime"
     states = runtime / "candidate_states"
     states.mkdir(parents=True)
+    repo = tmp_path / "repo"
+    source = repo / "knowledge/candidates/CANARY.json"
+    source.parent.mkdir(parents=True)
+    source.write_text('{"candidate_id":"CANARY","version":1}')
     item = overlay()
-    item["astra_reviews"] = {
-        "PREBUILD": {
-            "decision": "APPROVE",
-            "reviewer_model": "GPT-6 Astra",
-        }
+    item["source_hashes"] = {
+        "knowledge/candidates/CANARY.json": hashlib.sha256(source.read_bytes()).hexdigest()
     }
+    repo = canonical_prebuild_review(tmp_path, item)
     path = states / "generic.json"
     path.write_text(json.dumps(item))
 
@@ -319,7 +322,7 @@ def test_candidate_dispatch_astra_approved_needs_build_routes_to_chat_wake(tmp_p
             "continuation_state": "CONTINUE_REQUESTED",
         },
     )
-    result = d.select_next(S(runtime), tmp_path / "repo")
+    result = d.select_next(S(runtime), repo)
     assert result["queue_blocked"] is True
     assert result["reason"] == "AUTOBUILD_CHAT_WAKE_QUEUED"
     assert result["continuation_id"] == "CONT-1234567890abcdef12345678"
