@@ -1,0 +1,35 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-PROD-STAGED-DIFF-VIS-RETRY-20261005-E017B",
+  "source_commit": "8511127a874f323cc46cf701b2e9286d287f0b9a",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "production_diff_inspect"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 120,
+  "notes": "Immutable retry of E016 subset without blocked python -m precheck. Read-only staged production diff; intentional visibility TaskError expected. No cleanup/reset/ff/source/bridge/service mutation.",
+  "operations": [
+    {
+      "type": "production_diff_inspect",
+      "mode": "cached",
+      "paths": [
+        "control/codex_supervisor/model_quality_gate.py",
+        "control/codex_supervisor/supervisor.py"
+      ],
+      "max_chars": 14000,
+      "fail_for_visibility": true
+    }
+  ]
+}
