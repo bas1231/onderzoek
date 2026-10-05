@@ -506,10 +506,14 @@ class ControlCenterModel:
         return alerts[:20]
 
     def lifecycle_status(self):
-        path = self.repo / "control/control_center/lifecycle_status.json"
-        obj = safe_json(path)
-        if isinstance(obj, dict) and isinstance(obj.get("stages"), list):
-            return obj
+        paths = [
+            self.repo / "control/control_center/lifecycle_status.json",
+            Path(__file__).resolve().parent / "lifecycle_status.json",
+        ]
+        for path in paths:
+            obj = safe_json(path)
+            if isinstance(obj, dict) and isinstance(obj.get("stages"), list):
+                return obj
         return {
             "schema": "PREDICTION_CONTROL_CENTER_LIFECYCLE_V1",
             "updated_at": None,
