@@ -1,0 +1,41 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-RO-AUDIT-20261005-E005",
+  "source_commit": "03f0d00306bdbed0ba3f15655cc0214287577b50",
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "Codex; exact model identity unavailable to runtime",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_runtime"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 180,
+  "notes": "Read-only classify exact source drift and stale versus missing pinned hashes from confirmed E003 evidence. No production mutations.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/read_only_audit_20261005_e005.py",
+      "content": "from pathlib import Path\nimport json,hashlib\nhome=Path.home()\nprior=home/'.local/share/prediction-project-executor/worktrees/DEV-PRED-RO-AUDIT-20261005-E003/audit-output-e003/runtime.json'\ndata=json.loads(prior.read_text())\nalias={'supervisor.py':'supervisor','candidate_dispatch.py':'dispatch','model_quality_gate.py':'gate','astra_autonomous_review.py':'auto_review','astra_review_wake.py':'review_wake','build_wake.py':'build','measurement_wake.py':'measure','ai_response.py':'scout','candidate_reporting.py':'report'}\ncompact={'drift':[alias.get(Path(p).name,Path(p).name) for p in data['production_source_drift']],'bad_pins':[alias.get(p,p) for p in data['pin_mismatches']]}\nprod=home/'prediction_research_prod'\nconfig=json.loads((prod/'knowledge/codex_runtime/CONFIG.json').read_text())\ncompact['missing_pins']=[alias.get(n,n) for n in data['pin_mismatches'] if ('supervisor_sha256' if n=='supervisor.py' else n+'_sha256') not in config]\nout=Path.cwd()/'audit-output-e005'\nout.mkdir(exist_ok=True)\n(out/'details.json').write_text(json.dumps({'compact':compact,'runtime_evidence':data},indent=2))\nprint('AUDIT_ALIGNMENT '+json.dumps(compact,separators=(',',':')),flush=True)\nraise SystemExit(1 if compact['drift'] or compact['bad_pins'] else 0)\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/read_only_audit_20261005_e005.py"
+      ],
+      "timeout_seconds": 90
+    }
+  ]
+}
