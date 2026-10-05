@@ -1,0 +1,45 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-CONT-NEXT-4327b9fc034dd0e7e7ccb70b",
+  "source_commit": "7744dd66bb4d14687a2c4bab5120864a90be5c5c",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_runtime",
+    "production_inspect"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 180,
+  "notes": "Continuation follow-up for Astra route provenance deployment. Verify the source deploy task reached PASS and inspect current production state. No mutation.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/cont_4327_provenance_verify.py",
+      "content": "from pathlib import Path\nimport json\np=Path.home()/'.local/state/prediction-project-executor/DEV-PRED-ASTRA-ROUTE-PROVENANCE-DEPLOY-20261005.json'\nif not p.is_file():\n print('SOURCE_DEPLOY_STATE=MISSING',flush=True); raise SystemExit(31)\no=json.loads(p.read_text(encoding='utf-8'))\nprint('SOURCE_DEPLOY_STATUS='+str(o.get('status')),flush=True)\nprint('SOURCE_DEPLOY_EXIT='+str(o.get('exit_code')),flush=True)\nprint('SOURCE_DEPLOY_ERROR='+str(o.get('error') or ''),flush=True)\nops=o.get('operations') or []\nfor i,x in enumerate(ops,1):\n print('SOURCE_DEPLOY_OP%d='%i+str(x)[:1200],flush=True)\nif o.get('status')!='PASS' or o.get('exit_code') not in (0,'0'):\n raise SystemExit(32)\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/cont_4327_provenance_verify.py"
+      ],
+      "timeout_seconds": 60
+    },
+    {
+      "type": "production_inspect"
+    }
+  ]
+}
