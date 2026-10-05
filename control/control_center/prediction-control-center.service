@@ -1,0 +1,14 @@
+[Unit]
+Description=Prediction Control Center
+After=default.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/python3 %h/.local/share/prediction-project-executor/control-center/server.py --repo %h/prediction_research_prod --state-root %h/.local/state/prediction-project-executor/control-center --static-root %h/.local/share/prediction-project-executor/control-center/static --host 127.0.0.1 --port 8770
+Restart=on-failure
+RestartSec=3
+NoNewPrivileges=true
+PrivateTmp=true
+
+[Install]
+WantedBy=default.target
