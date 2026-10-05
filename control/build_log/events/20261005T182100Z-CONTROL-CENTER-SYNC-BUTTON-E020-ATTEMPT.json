@@ -1,0 +1,32 @@
+{
+  "schema": "PREDICTION_BUILD_LOG_EVENT_V1",
+  "event_id": "20261005T182100Z-CONTROL-CENTER-SYNC-BUTTON-E020-ATTEMPT",
+  "work_item_id": "CONTROL-CENTER-SYNC-BUTTON-20261005",
+  "created_at_utc": "2026-10-05T18:21:00Z",
+  "event_type": "ATTEMPT",
+  "work_item_status": "IN_PROGRESS",
+  "outcome": "STARTED",
+  "title": "One-click veilige Git-sync vanuit Control Center",
+  "objective": "Toon bij Git-sync rood een Sync-knop die één klik omzet in een automatische, fail-closed ChatGPT-reconciliatie zonder destructieve Git-shortcuts.",
+  "summary": "Na classificatie van E019 is de testhelperfout hersteld. E020 draait de volledige regressies en installeert daarna de actuele Control Center-runtime inclusief Logboek en Sync-knop.",
+  "why": "De vorige fout zat in de regressietest zelf (safe_json zonder mod.-kwalificatie), niet in de Sync-backend. Een volledige suite en runtime-canary moeten nu bewijzen dat de geïntegreerde versie werkt.",
+  "next_action": "Wacht op E020. Alleen PASS exit=0 sluit de Sync-knop en het gedeelde Logboek operationeel af.",
+  "session_route_task_id": "SESSION-ROUTE-fc2613ecbc81e22d4c913b2a",
+  "task_ids": [
+    "DEV-PRED-CONTROL-CENTER-SYNC-BUTTON-20261005-E020"
+  ],
+  "commits": [
+    "f41a6b5fcaf62063562ee06c2a7533a2e3583252"
+  ],
+  "evidence_refs": [
+    "tests/control_center/test_control_center.py"
+  ],
+  "tags": [
+    "control-center",
+    "git-sync",
+    "logbook",
+    "runtime"
+  ],
+  "parent_event_id": "20261005T181900Z-CONTROL-CENTER-SYNC-BUTTON-E019-RESULT",
+  "first_incomplete_step": "Volledige regressies, runtime-installatie en live canary."
+}
