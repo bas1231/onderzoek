@@ -1,0 +1,88 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-PROD-REPAIR-CONVERGE-20261005-E005",
+  "source_commit": "8511127a874f323cc46cf701b2e9286d287f0b9a",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_tests",
+    "run_project_python",
+    "read_runtime",
+    "production_merge_representation",
+    "production_clean_canonical",
+    "production_fast_forward",
+    "production_staged_inspect",
+    "production_compare_worktree",
+    "production_inspect"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 900,
+  "notes": "Retry after DEV-wrapper timeout-definition rejection; same fail-closed convergence of Prediction production onto canonical requested-repair commit 8511127. First prove canonical tests and committed production representation; clean dirty production only if byte-for-byte already represented by canonical; then safe production fast-forward; finally verify no dirty delta and exact repaired modules plus all nine runtime pins. No bridge changes, no service changes, no trading/paid/wallet actions.",
+  "operations": [
+    {
+      "type": "python",
+      "argv": [
+        "/home/leonh/prediction_research_prod/.venv/bin/python",
+        "-m",
+        "pytest",
+        "-q",
+        "tests/codex_supervisor/test_model_quality_gates.py",
+        "tests/codex_supervisor/test_astra_autonomous_review.py",
+        "tests/codex_supervisor/test_supervisor.py",
+        "tests/codex_supervisor/test_candidate_dispatch.py",
+        "tests/codex_supervisor/test_autobuild_chat_wake.py",
+        "tests/hourly/test_candidate_reporting_current_binding.py"
+      ],
+      "test": true,
+      "timeout_seconds": 720
+    },
+    {
+      "type": "production_merge_representation",
+      "require_subsumed": true
+    },
+    {
+      "type": "production_clean_canonical"
+    },
+    {
+      "type": "production_ff",
+      "target_commit": "8511127a874f323cc46cf701b2e9286d287f0b9a"
+    },
+    {
+      "type": "production_staged_inspect",
+      "fail_for_visibility": false
+    },
+    {
+      "type": "production_compare_worktree",
+      "require_exact": true,
+      "report_mode": "counts"
+    },
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/prod_repair_converge_verify_20261005_e004.py",
+      "content": "from pathlib import Path\nimport hashlib,json\nroot=Path.cwd()\nprod=Path.home()/\"prediction_research_prod\"\n\ndef sha(p): return hashlib.sha256(p.read_bytes()).hexdigest()\ndef load(p):\n    if not p.is_file() or p.is_symlink(): return {}\n    try:\n        x=json.loads(p.read_text(encoding=\"utf-8\"))\n        return x if isinstance(x,dict) else {}\n    except Exception: return {}\n\nfiles={\n\"supervisor\":\"control/codex_supervisor/supervisor.py\",\n\"report\":\"control/hourly/candidate_reporting.py\",\n}\ndiff=[]\nfor label,rel in files.items():\n    a=root/rel;b=prod/rel\n    if (not a.is_file()) or (not b.is_file()) or b.is_symlink() or sha(a)!=sha(b):\n        diff.append(label)\n\nmapping={\n\"candidate_dispatch.py_sha256\":\"control/codex_supervisor/candidate_dispatch.py\",\n\"candidate_policy_sha256\":\"control/hourly/candidate_queue.py\",\n\"evidence_wake.py_sha256\":\"control/codex_supervisor/evidence_wake.py\",\n\"build_wake.py_sha256\":\"control/codex_supervisor/build_wake.py\",\n\"model_quality_gate.py_sha256\":\"control/codex_supervisor/model_quality_gate.py\",\n\"astra_review_wake.py_sha256\":\"control/codex_supervisor/astra_review_wake.py\",\n\"measurement_wake.py_sha256\":\"control/codex_supervisor/measurement_wake.py\",\n\"supervisor_sha256\":\"control/codex_supervisor/supervisor.py\",\n\"astra_autonomous_review.py_sha256\":\"control/codex_supervisor/astra_autonomous_review.py\",\n}\ncfg=load(prod/\"knowledge/codex_runtime/CONFIG.json\")\nbad=[]\nfor key,rel in mapping.items():\n    p=prod/rel\n    if (not p.is_file()) or p.is_symlink() or cfg.get(key)!=sha(p):\n        bad.append(key.replace(\".py_sha256\",\"\").replace(\"_sha256\",\"\"))\n\nprint(\"PROD_REPAIR_VERIFY=\"+json.dumps({\"diff\":diff,\"bad_pins\":bad},separators=(\",\",\":\"),sort_keys=True),flush=True)\nraise SystemExit(0 if not diff and not bad else 1)\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/prod_repair_converge_verify_20261005_e004.py"
+      ],
+      "timeout_seconds": 90
+    },
+    {
+      "type": "production_inspect"
+    }
+  ]
+}
