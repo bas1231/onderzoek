@@ -1,0 +1,33 @@
+{
+  "schema": "PREDICTION_BUILD_LOG_EVENT_V1",
+  "event_id": "20261005T175600Z-CONTROL-CENTER-SYNC-BUTTON-E017-ATTEMPT",
+  "work_item_id": "CONTROL-CENTER-SYNC-BUTTON-20261005",
+  "created_at_utc": "2026-10-05T17:56:00Z",
+  "event_type": "ATTEMPT",
+  "work_item_status": "IN_PROGRESS",
+  "outcome": "STARTED",
+  "title": "One-click veilige Git-sync vanuit Control Center",
+  "objective": "Toon bij Git-sync rood een Sync-knop die één klik omzet in een automatische, fail-closed ChatGPT-reconciliatie zonder destructieve Git-shortcuts.",
+  "summary": "E017 installeert de Sync-knop samen met de gedeelde Logboek-functie, draait de volledige Control Center-regressies, herstart de service en vereist de uitgebreide runtime-canary.",
+  "why": "De knop is pas bruikbaar wanneer de live server, UI, build-logprojectie en sync-request-status samen aantoonbaar werken.",
+  "next_action": "Wacht op E017 PASS/FAIL en log daarna de exacte uitkomst onder ditzelfde work_item_id.",
+  "session_route_task_id": "SESSION-ROUTE-fc2613ecbc81e22d4c913b2a",
+  "task_ids": [
+    "DEV-PRED-CONTROL-CENTER-SYNC-BUTTON-20261005-E017"
+  ],
+  "commits": [
+    "2d318d1a2206f972eff2ef3033d00f2de63c394d"
+  ],
+  "evidence_refs": [
+    "control/control_center/SYNC_PROTOCOL.md",
+    "control/control_center/runtime_canary.py"
+  ],
+  "tags": [
+    "control-center",
+    "git-sync",
+    "one-click",
+    "runtime"
+  ],
+  "parent_event_id": "20261005T175400Z-CONTROL-CENTER-SYNC-BUTTON-PLAN",
+  "first_incomplete_step": "Live installatie en runtime-canary."
+}
