@@ -1,0 +1,40 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-CONTROL-CENTER-E012-SHORT-20261005-E013",
+  "source_commit": "5a68efaa306f13e1018ca6a8d82017cfad9327cf",
+  "intelligence_tier": "B",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 90,
+  "notes": "Ultra-short read-only follow-up to E012 so bridge cannot truncate the remaining Control Center runtime values. No mutations.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/control_center_e012_short_e013.py",
+      "content": "from __future__ import annotations\nimport json, urllib.request\n\nwith urllib.request.urlopen(\"http://127.0.0.1:8770/api/snapshot\", timeout=8) as r:\n    d=json.loads(r.read().decode())\nstates={\"RUNNING\",\"STARTED\",\"CLAIMED\",\"DISPATCHED\",\"INFLIGHT\",\"CONTINUE_QUEUED\",\"CONTINUE_SENT\",\"PENDING\"}\ntasks=d.get(\"tasks\") or []\nbad=[str(x.get(\"status\") or \"\") for x in tasks if str(x.get(\"status\") or \"\").upper() not in states]\ncounts=d.get(\"counts\") or {}\ngs=d.get(\"git_sync\") or {}\nprint(\n    \"CC_SHORT \"\n    f\"GS={gs.get('status')} \"\n    f\"COUNT={counts.get('tasks')} \"\n    f\"LEN={len(tasks)} \"\n    f\"BAD={','.join(bad[:3]) or '-'} \"\n    f\"ALERTS={len(d.get('chain_alerts') or [])} \"\n    f\"ISSUE={(gs.get('issues') or ['-'])[0][:160]}\",\n    flush=True,\n)\nraise SystemExit(17)\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/control_center_e012_short_e013.py"
+      ],
+      "timeout_seconds": 45
+    }
+  ]
+}
