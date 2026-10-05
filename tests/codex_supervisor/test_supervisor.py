@@ -87,7 +87,7 @@ def test_agent_prose_about_usage_is_not_usage_limit():
     assert m.classify(e,0)[0]=='COMPLETE'
 
 def test_reasoning_worker_cli_is_restricted(tmp_path,monkeypatch):
-    cache=tmp_path/'.codex';cache.mkdir();(cache/'models_cache.json').write_text(json.dumps({'models':[{'slug':'available-model','visibility':'list','priority':1}]}))
+    cache=tmp_path/'.codex';cache.mkdir();(cache/'models_cache.json').write_text(json.dumps({'models':[{'slug':'gpt-available-model','visibility':'list','priority':1}]}))
     monkeypatch.setattr(m.P,'home',classmethod(lambda cls:tmp_path))
     monkeypatch.setattr(m.subprocess,'run',lambda *a,**k:subprocess.CompletedProcess(a,0,'Logged in using ChatGPT',''))
     class Process:
@@ -142,8 +142,51 @@ def test_reasoning_worker_exact_astra_policy_fails_closed_when_not_unique(tmp_pa
         m.CodexWorker('codex')(t,None,tmp_path,7)
 
 
+def test_reasoning_worker_exact_astra_rejects_wrong_version_even_when_unique(tmp_path,monkeypatch):
+    cache=tmp_path/'.codex';cache.mkdir();(cache/'models_cache.json').write_text(json.dumps({'models':[
+        {'slug':'gpt-5-astra','display_name':'GPT-5 Astra','visibility':'list','priority':1},
+    ]}))
+    monkeypatch.setattr(m.P,'home',classmethod(lambda cls:tmp_path))
+    monkeypatch.setattr(m.subprocess,'run',lambda *a,**k:subprocess.CompletedProcess(a,0,'Logged in using ChatGPT',''))
+    t=task();t['model_policy']='ASTRA_EXACT';t['astra_review_task']=True
+    with pytest.raises(m.Blocked,match='ASTRA_MODEL_UNAVAILABLE_OR_AMBIGUOUS'):
+        m.CodexWorker('codex')(t,None,tmp_path,7)
+
+
+def test_reasoning_worker_highest_available_gpt_ignores_non_gpt(tmp_path,monkeypatch):
+    cache=tmp_path/'.codex';cache.mkdir();(cache/'models_cache.json').write_text(json.dumps({'models':[
+        {'slug':'other-reasoner','display_name':'Other Reasoner','visibility':'list','priority':1},
+        {'slug':'gpt-5-6-sol','display_name':'GPT-5.6 Sol','visibility':'list','priority':7},
+    ]}))
+    monkeypatch.setattr(m.P,'home',classmethod(lambda cls:tmp_path))
+    monkeypatch.setattr(m.subprocess,'run',lambda *a,**k:subprocess.CompletedProcess(a,0,'Logged in using ChatGPT',''))
+    seen={}
+    class Process:
+        pid=123;returncode=0
+        def communicate(self,*a,**k):return None
+    def popen(args,**kw):
+        seen['args']=args
+        return Process()
+    monkeypatch.setattr(m.subprocess,'Popen',popen)
+    assert m.CodexWorker('codex')(task(),None,tmp_path,7)==0
+    assert seen['args'][seen['args'].index('-m')+1]=='gpt-5-6-sol'
+    worker=json.loads((tmp_path/'WORKER.json').read_text())
+    assert worker['model_selection']['policy']=='HIGHEST_AVAILABLE_GPT'
+    assert worker['model_selection']['eligible_gpt_count']==1
+
+
+def test_reasoning_worker_highest_available_gpt_fails_closed_without_gpt(tmp_path,monkeypatch):
+    cache=tmp_path/'.codex';cache.mkdir();(cache/'models_cache.json').write_text(json.dumps({'models':[
+        {'slug':'other-reasoner','display_name':'Other Reasoner','visibility':'list','priority':1},
+    ]}))
+    monkeypatch.setattr(m.P,'home',classmethod(lambda cls:tmp_path))
+    monkeypatch.setattr(m.subprocess,'run',lambda *a,**k:subprocess.CompletedProcess(a,0,'Logged in using ChatGPT',''))
+    with pytest.raises(m.Blocked,match='GPT_BUILDER_UNAVAILABLE'):
+        m.CodexWorker('codex')(task(),None,tmp_path,7)
+
+
 def test_reasoning_worker_honors_bounded_timeout_override(tmp_path,monkeypatch):
-    cache=tmp_path/'.codex';cache.mkdir();(cache/'models_cache.json').write_text(json.dumps({'models':[{'slug':'available-model','visibility':'list','priority':1}]}))
+    cache=tmp_path/'.codex';cache.mkdir();(cache/'models_cache.json').write_text(json.dumps({'models':[{'slug':'gpt-available-model','visibility':'list','priority':1}]}))
     monkeypatch.setattr(m.P,'home',classmethod(lambda cls:tmp_path))
     monkeypatch.setattr(m.subprocess,'run',lambda *a,**k:subprocess.CompletedProcess(a,0,'Logged in using ChatGPT',''))
     monkeypatch.setenv('PREDICTION_CODEX_WORKER_TIMEOUT_SECONDS','321')
@@ -158,7 +201,7 @@ def test_reasoning_worker_honors_bounded_timeout_override(tmp_path,monkeypatch):
     assert seen['timeout']==321
 
 def test_reasoning_worker_rejects_invalid_timeout_override(tmp_path,monkeypatch):
-    cache=tmp_path/'.codex';cache.mkdir();(cache/'models_cache.json').write_text(json.dumps({'models':[{'slug':'available-model','visibility':'list','priority':1}]}))
+    cache=tmp_path/'.codex';cache.mkdir();(cache/'models_cache.json').write_text(json.dumps({'models':[{'slug':'gpt-available-model','visibility':'list','priority':1}]}))
     monkeypatch.setattr(m.P,'home',classmethod(lambda cls:tmp_path))
     monkeypatch.setattr(m.subprocess,'run',lambda *a,**k:subprocess.CompletedProcess(a,0,'Logged in using ChatGPT',''))
     monkeypatch.setenv('PREDICTION_CODEX_WORKER_TIMEOUT_SECONDS','59')
