@@ -74,6 +74,21 @@ run is actually evidenced.
 The visual theme follows the dark navy / magenta / cyan design language used by
 the FG-assistant.
 
+## One-click repository sync
+
+When Git-sync is red, the UI shows a `Sync` button. The button does not run
+Git directly. It creates a bounded local sync request and queues
+`PREDICTION_CONTROL_SYNC_REQUEST_V1` to the most recently proven ChatGPT
+Prediction route.
+
+The receiving ChatGPT session follows
+`control/control_center/SYNC_PROTOCOL.md`: preserve local work, use GitHub
+remote writes only through the ChatGPT connector, use the projectexecutor for
+bounded local reconciliation, and never use reset/force/rebase/stash-discard
+shortcuts. Repeated clicks within the active request window are deduplicated.
+
+Completion means a fresh dashboard snapshot reports `git_sync.status == GREEN`.
+
 ## Shared build log
 
 The `Logboek` page is a projection of immutable events under:
