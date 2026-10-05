@@ -1,0 +1,59 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-ASTRA-PROD-AUTONOMY-GUARD-DEPLOY-20261005",
+  "source_commit": "6cd1f305981c823d60cf9262149e9c2943ceecb8",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "run_tests",
+    "production_fast_forward",
+    "production_inspect"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 600,
+  "notes": "Enforce that manually selected Astra browser sessions are TEST_ONLY and cannot authorize production. Regression-test the model gate and fast-forward production only if green.",
+  "operations": [
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "-m",
+        "pytest",
+        "-q",
+        "tests/codex_supervisor/test_model_quality_gates.py"
+      ],
+      "test": true,
+      "timeout_seconds": 300
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "-m",
+        "compileall",
+        "-q",
+        "control/codex_supervisor/model_quality_gate.py",
+        "control/codex_supervisor/astra_review_wake.py"
+      ],
+      "timeout_seconds": 120
+    },
+    {
+      "type": "production_ff",
+      "target_commit": "6cd1f305981c823d60cf9262149e9c2943ceecb8"
+    },
+    {
+      "type": "production_inspect"
+    }
+  ]
+}
