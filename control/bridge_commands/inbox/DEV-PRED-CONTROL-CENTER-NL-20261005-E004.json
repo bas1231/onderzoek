@@ -1,0 +1,19 @@
+{
+  "schema": "PREDICTION_BRIDGE_COMMAND_V1",
+  "task_id": "DEV-PRED-CONTROL-CENTER-NL-20261005-E004",
+  "action": "SIX_AI_HEALTH",
+  "created_at_utc": "2026-10-05T17:03:00Z",
+  "route_task_id": "SESSION-ROUTE-fc2613ecbc81e22d4c913b2a",
+  "delivery_mode": "chat",
+  "live_trading": false,
+  "paid_actions": false,
+  "wallet_actions": false,
+  "intelligence_tier": "B",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "auto_continue": false,
+  "parent_continuation_id": null,
+  "notes": "Deploy Dutch owner-facing Control Center UI. Canonical internal status codes and raw evidence remain unchanged. Require unittest PASS, installed static UI, active service and runtime canary."
+}
