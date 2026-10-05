@@ -224,7 +224,7 @@ function render(){
    '<div class="item"><div class="kicker">Production HEAD</div><div class="mono">'+esc(gs.production_head||'onbekend')+'</div></div>'+
    '<div class="item"><div class="kicker">Lokale main</div><div class="mono">'+esc(gs.local_main||'onbekend')+'</div></div>'+
    '<div class="item"><div class="kicker">Laatst opgehaalde GitHub-main</div><div class="mono">'+esc(gs.fetched_github_main||'onbekend')+'</div><div class="meta">Opgehaald: '+fmtDate(gs.fetched_at)+'</div></div>'+
-   '<div class="item"><div class="kicker">Worktree</div><b>'+(gs.dirty===false?'Schoon':gs.dirty===true?'Niet schoon':'Onbekend')+'</b></div>';
+   '<div class="item"><div class="kicker">Worktree</div><b>'+(gs.dirty===false?'Schoon':gs.dirty===true?'Niet schoon':'Onbekend')+'</b><div class="meta">'+esc((gs.dirty_paths||[]).join(' • ')||'Geen afwijkende bestanden gemeld.')+'</div></div>';
  q('#systemRows').innerHTML=d.tasks.slice(0,200).map(t=>'<tr><td class="mono">'+esc(t.task_id)+'</td><td>'+pill(t.status)+'</td><td>'+esc(t.exit_code??'—')+'</td><td class="mono">'+esc(t.route_task_id||'—')+'</td><td class="mono">'+esc((t.source_commit||'—').slice(0,12))+'</td></tr>').join('')||'<tr><td colspan="5" class="empty">Geen actieve taken.</td></tr>';
 }
 
