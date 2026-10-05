@@ -1,0 +1,19 @@
+{
+  "schema": "PREDICTION_BRIDGE_COMMAND_V1",
+  "task_id": "CONT-DONE-68997b28f5336ab663511360",
+  "action": "BRIDGE_PING",
+  "created_at_utc": "2026-10-05T07:51:00Z",
+  "route_task_id": "DEV-PRED-PROD-CANONICAL-CLEAN-20261005",
+  "delivery_mode": "headless",
+  "live_trading": false,
+  "paid_actions": false,
+  "wallet_actions": false,
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "notes": "Close blocked canonical-cleanup continuation as superseded. Cleanup correctly failed closed because production contained unique local bytes. Read-only reconciliation has already proceeded via DEV-PRED-PROD-STAGED-DIFF-INSPECT-20261005 and DEV-PRED-PROD-STAGED-DIFF-COMPACT-20261005. No duplicate NEXT task is created.",
+  "auto_continue": false,
+  "parent_continuation_id": "CONT-68997b28f5336ab663511360"
+}
