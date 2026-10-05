@@ -16,13 +16,13 @@ Git operations, or autonomous WSL remote writes.
 
 The dashboard does not run a destructive Git command itself.
 
-It creates a bounded local request and queues a routed wake event:
+It follows `control/control_center/DASHBOARD_CHAT_ACTION_PROTOCOL.md`: every Sync click
+must start the work in a brand-new Prediction ChatGPT session. An existing Prediction
+chat may only act as the browser launcher that opens the new project chat.
 
-`PREDICTION_CONTROL_SYNC_REQUEST_V1`
-
-to the most recently proven ChatGPT Prediction route in the local wake bridge.
-That ChatGPT session then performs the reconciliation through the normal GitHub
-connector + capability-scoped projectexecutor path.
+The new chat receives `PREDICTION_CONTROL_SYNC_REQUEST_V2` as its first user turn. It
+must wait for its own automatic `SESSION-ROUTE-* status=PASS exit=0` bootstrap before
+dispatching any local task. There is no fallback to reusing an existing working chat.
 
 The trigger is deduplicated for a short window so repeated clicks cannot create
 parallel reconciliation attempts.
