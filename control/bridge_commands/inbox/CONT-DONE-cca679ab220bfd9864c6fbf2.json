@@ -1,0 +1,19 @@
+{
+  "schema": "PREDICTION_BRIDGE_COMMAND_V1",
+  "task_id": "CONT-DONE-cca679ab220bfd9864c6fbf2",
+  "action": "BRIDGE_PING",
+  "created_at_utc": "2026-10-05T08:34:00Z",
+  "route_task_id": "DEV-PRED-RAW-RESULT-RECOVER-20261005",
+  "delivery_mode": "headless",
+  "live_trading": false,
+  "paid_actions": false,
+  "wallet_actions": false,
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "notes": "Close raw-result recovery continuation as superseded. The exact failing Astra regression was identified; targeted fix and explicit proof retrieval are already active. No duplicate NEXT task is created.",
+  "auto_continue": false,
+  "parent_continuation_id": "CONT-cca679ab220bfd9864c6fbf2"
+}
