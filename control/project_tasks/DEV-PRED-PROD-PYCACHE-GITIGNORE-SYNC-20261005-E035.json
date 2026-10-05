@@ -1,0 +1,55 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-PROD-PYCACHE-GITIGNORE-SYNC-20261005-E035",
+  "source_commit": "a3a61e9d8944ba4d23545bee158063d21ea244a5",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "run_tests",
+    "production_merge_representation",
+    "production_reconcile_subsumed_main",
+    "production_compare_worktree",
+    "production_inspect"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 540,
+  "notes": "Structural final sync after proving production HEAD already reached prior canonical but recurring untracked Python bytecode kept status dirty. Target canonical adds __pycache__/ and *.py[cod] ignore rules. Re-run executor tests, re-prove subsumption, allow deletion of exactly the two diagnosed pyc files, require E030 recovery snapshot, reconcile production to pinned source, then require exact clean production. No remote git write.",
+  "operations": [
+    {
+      "type": "executor_selftest",
+      "timeout_seconds": 300
+    },
+    {
+      "type": "production_merge_representation",
+      "require_subsumed": true
+    },
+    {
+      "type": "production_reconcile_subsumed_main",
+      "required_snapshot_task_id": "DEV-PRED-PROD-DIRTY-SNAPSHOT-20261005-E030",
+      "expected_ephemeral_untracked": [
+        "control/hourly/__pycache__/candidate_queue.cpython-312.pyc",
+        "control/hourly/__pycache__/work_cadence.cpython-312.pyc"
+      ]
+    },
+    {
+      "type": "production_compare_worktree",
+      "require_exact": true,
+      "report_mode": "counts"
+    },
+    {
+      "type": "production_inspect",
+      "require_head_equals_main": true,
+      "report_mode": "status_summary"
+    }
+  ]
+}
