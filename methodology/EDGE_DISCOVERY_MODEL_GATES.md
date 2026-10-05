@@ -68,6 +68,8 @@ mag de state naar `NEEDS_BUILD` brengen.
 
 Een stale review of review van een ander model is ongeldig.
 
+Modelidentiteit wordt **niet** bewezen door zelfverklaring in modeltekst. Een Astra-review is alleen geldig wanneer de review ook bindt aan een vooraf vastgelegde, immutable sessieroute-attestation onder `control/model_provenance/astra_routes/`. Die attestation legt de door de operator in de ChatGPT-UI geselecteerde GPT-6 Astra-sessie vast. De gate controleert onafhankelijk: exact route-task-ID, provenance-ref, provenance-hash, reviewer-model, kandidaatbinding en safetyvelden. Ontbrekende, gewijzigde of ingetrokken provenance faalt gesloten.
+
 ### Builder
 
 Bouwen gebeurt volgens:
