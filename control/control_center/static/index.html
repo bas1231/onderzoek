@@ -31,13 +31,26 @@ main{padding:26px;min-width:0}.top{display:flex;align-items:flex-start;justify-c
 .metric-line{display:flex;justify-content:space-between;gap:10px;margin:8px 0;font-size:13px}.bar{height:8px;background:#131939;border-radius:99px;overflow:hidden}.bar>span{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,var(--pink),var(--cyan))}
 .alert{border:1px solid rgba(255,82,120,.32);background:rgba(255,82,120,.055);border-radius:12px;padding:12px}.ok{border:1px solid rgba(77,231,168,.26);background:rgba(77,231,168,.045);border-radius:12px;padding:12px}
 .flow{display:flex;gap:6px;align-items:stretch;overflow:auto;padding-bottom:6px}.stage{min-width:125px;border:1px solid var(--line);border-radius:11px;padding:10px;background:#080c20}.stage.done{border-color:rgba(77,231,168,.35)}.stage.current{border-color:var(--pink);box-shadow:0 0 16px rgba(255,46,189,.12)}.stage small{display:block;color:var(--muted);margin-top:5px}.arrow{align-self:center;color:var(--muted)}
+.lifecycle-fixed{position:sticky;top:10px;z-index:9;margin:0 0 16px;padding:13px 14px;background:linear-gradient(180deg,rgba(10,15,42,.98),rgba(6,10,28,.97));border-color:rgba(49,214,255,.3);box-shadow:0 14px 34px rgba(0,0,0,.22);backdrop-filter:blur(10px)}
+.lifecycle-head{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;margin-bottom:10px}.lifecycle-head h2{font-size:15px;margin:0 0 4px}.lifecycle-summary{font-size:12px;color:var(--muted);line-height:1.4}
+.lifecycle-flow{display:flex;gap:5px;align-items:stretch;overflow-x:auto;padding:1px 0 7px}
+.life-stage{appearance:none;color:var(--text);text-align:left;min-width:142px;max-width:166px;border:1px solid var(--line);border-radius:10px;padding:9px 10px;background:#080c20;cursor:pointer;position:relative}
+.life-stage:hover{transform:translateY(-1px);border-color:rgba(49,214,255,.45)}
+.life-stage b{display:block;font-size:12px;line-height:1.25}.life-stage small{display:block;color:var(--muted);font-size:10px;margin-top:4px;line-height:1.3}
+.life-stage .life-state{display:block;margin-top:7px;font-size:9px;font-weight:750;letter-spacing:.06em;text-transform:uppercase}
+.life-stage.working{border-color:rgba(77,231,168,.45);box-shadow:inset 0 0 0 1px rgba(77,231,168,.04)}.life-stage.working .life-state{color:#86f4c5}
+.life-stage.tested{border-color:rgba(49,214,255,.45);box-shadow:inset 0 0 0 1px rgba(49,214,255,.04)}.life-stage.tested .life-state{color:#82e8ff}
+.life-stage.pending{border-color:rgba(255,202,106,.36)}.life-stage.pending .life-state{color:#ffe09c}
+.life-arrow{align-self:center;color:var(--muted);font-size:12px;flex:0 0 auto}
+.lifecycle-foot{display:flex;justify-content:space-between;gap:14px;align-items:flex-start;border-top:1px solid rgba(37,44,85,.6);padding-top:8px;font-size:11px;color:var(--muted);line-height:1.45}
+.lifecycle-next{max-width:72%}.life-legend{white-space:nowrap}.life-dot{display:inline-block;width:7px;height:7px;border-radius:50%;margin:0 4px 0 8px}.life-dot:first-child{margin-left:0}.life-dot.working{background:var(--green)}.life-dot.tested{background:var(--cyan)}.life-dot.pending{background:#ffca6a}
 .drawer{position:fixed;right:0;top:0;bottom:0;width:min(680px,94vw);background:#06091a;border-left:1px solid rgba(49,214,255,.35);box-shadow:-20px 0 60px rgba(0,0,0,.38);z-index:20;transform:translateX(105%);transition:.18s ease;display:flex;flex-direction:column}.drawer.open{transform:translateX(0)}.drawer-head{display:flex;justify-content:space-between;gap:15px;padding:18px;border-bottom:1px solid var(--line)}.drawer-body{overflow:auto;padding:18px}.x{border:1px solid var(--line);background:#0b102a;border-radius:9px;width:38px;height:38px}.timeline{border-left:1px solid var(--line);margin-left:6px;padding-left:16px}.event{position:relative;margin:0 0 17px}.event:before{content:"";position:absolute;left:-21px;top:5px;width:9px;height:9px;border-radius:50%;background:var(--cyan);box-shadow:0 0 10px rgba(49,214,255,.5)}.event b{font-size:13px}.event p{margin:4px 0 0;color:var(--muted);font-size:12px;line-height:1.5}
 .btn{border:1px solid rgba(255,46,189,.45);background:linear-gradient(90deg,rgba(255,46,189,.2),rgba(84,38,255,.15));border-radius:10px;padding:10px 13px;font-weight:650}.btn:hover{box-shadow:0 0 18px rgba(255,46,189,.15)}.btn.secondary{border-color:var(--line);background:#0b1029}
 pre.raw{white-space:pre-wrap;word-break:break-word;background:#040613;border:1px solid var(--line);border-radius:10px;padding:12px;font-size:11px;max-height:420px;overflow:auto}
 .empty{padding:24px;text-align:center;color:var(--muted)}.live-pulse{color:var(--pink);animation:pulse 1.7s infinite}@keyframes pulse{50%{opacity:.45}}
 .toast{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);background:#101633;border:1px solid var(--cyan);padding:10px 14px;border-radius:10px;z-index:30;display:none;max-width:min(540px,90vw)}
 @media(max-width:1050px){.grid4{grid-template-columns:repeat(2,minmax(0,1fr))}.row2{grid-template-columns:1fr}.app{grid-template-columns:82px minmax(0,1fr)}.brand b,.brand small,.nav span,.side-foot span{display:none}.brand{justify-content:center}.nav button{text-align:center;padding:12px 6px}.side{padding-left:10px;padding-right:10px}}
-@media(max-width:680px){main{padding:16px}.grid4{grid-template-columns:1fr}.app{display:block}.side{height:auto;position:static;border-right:0;border-bottom:1px solid var(--line);padding:10px}.brand{padding:4px 5px 10px}.nav{display:flex;overflow:auto}.nav button{white-space:nowrap}.nav span{display:inline}.side-foot{display:none}.top{flex-direction:column}.stamp{text-align:left}.row2{margin-top:10px}}
+@media(max-width:680px){main{padding:16px}.lifecycle-fixed{top:4px}.lifecycle-head,.lifecycle-foot{display:block}.lifecycle-next{max-width:none}.life-legend{margin-top:6px;white-space:normal}.grid4{grid-template-columns:1fr}.app{display:block}.side{height:auto;position:static;border-right:0;border-bottom:1px solid var(--line);padding:10px}.brand{padding:4px 5px 10px}.nav{display:flex;overflow:auto}.nav button{white-space:nowrap}.nav span{display:inline}.side-foot{display:none}.top{flex-direction:column}.stamp{text-align:left}.row2{margin-top:10px}}
 </style>
 </head>
 <body>
@@ -59,6 +72,18 @@ pre.raw{white-space:pre-wrap;word-break:break-word;background:#040613;border:1px
 <main>
   <header class="top"><div><h1 id="pageTitle">Overzicht</h1><p id="pageSub">Wat doet Prediction, wat gaat goed en waar moet je kijken?</p></div><div class="stamp"><div id="updated">Laden…</div><div id="health">● verbinden</div></div></header>
 
+  <section class="card lifecycle-fixed" id="persistentLifecycle" aria-label="Permanente A tot Z ketenstatus">
+    <div class="lifecycle-head">
+      <div><h2>Wat gebeurt er nu? — vaste A→Z-ketenstatus</h2><div class="lifecycle-summary" id="lifecycleSummary">Ketenstatus laden…</div></div>
+      <span class="pill amber" id="lifecycleOverall">NOG NIET BEWEZEN</span>
+    </div>
+    <div class="lifecycle-flow" id="lifecycleFlow"></div>
+    <div class="lifecycle-foot">
+      <div class="lifecycle-next"><b>Wat moet nog gebeuren:</b> <span id="lifecycleNext">Laden…</span></div>
+      <div class="life-legend"><span class="life-dot working"></span>werkend <span class="life-dot tested"></span>gericht getest <span class="life-dot pending"></span>nog A→Z bewijzen</div>
+    </div>
+  </section>
+
   <section class="page active" id="page-home">
     <div id="chainAlertBar" style="margin-bottom:14px"></div>
     <div class="grid4" id="homeCards"></div>
@@ -67,19 +92,7 @@ pre.raw{white-space:pre-wrap;word-break:break-word;background:#040613;border:1px
       <article class="card"><div class="section-title"><h2>Jouw aandacht</h2><span class="pill" id="attentionCount">0</span></div><div id="attentionList" class="list"></div></article>
     </div>
     <div class="row2">
-      <article class="card"><div class="section-title"><h2>Ideetraject</h2><span class="pill cyan">VAN A TOT Z</span></div>
-        <div class="flow">
-          <div class="stage done"><b>Verkenner</b><small>ontdekt</small></div><div class="arrow">→</div>
-          <div class="stage done"><b>Selectie</b><small>falsificatie</small></div><div class="arrow">→</div>
-          <div class="stage done"><b>Sol-opzet</b><small>ontwerp</small></div><div class="arrow">→</div>
-          <div class="stage done"><b>Astra</b><small>vóór bouw</small></div><div class="arrow">→</div>
-          <div class="stage"><b>Sol-bouw</b><small>experiment</small></div><div class="arrow">→</div>
-          <div class="stage current"><b>Astra</b><small>na bouw</small></div><div class="arrow">→</div>
-          <div class="stage"><b>Meting</b><small>alleen-lezen</small></div><div class="arrow">→</div>
-          <div class="stage"><b>Toezichthouder</b><small>oordeel</small></div>
-        </div>
-        <p class="sub">Iedere kandidaat heeft straks zijn eigen lijn. Klik in Ideeën op een kandidaat om de echte geschiedenis te openen.</p>
-      </article>
+      <article class="card"><div class="section-title"><h2>Volgende mijlpaal</h2><span class="pill amber">A→Z</span></div><div class="item"><b>Volledige actuele keten bewijzen</b><div class="meta" id="homeLifecycleNext">De permanente ketenstatus hierboven toont exact wat al werkt en wat nog moet worden bewezen.</div></div></article>
       <article class="card"><div class="section-title"><h2>Wat loopt lekker?</h2><span class="pill green">GEZONDHEID</span></div><div id="goodList" class="list"></div></article>
     </div>
   </section>
@@ -95,7 +108,7 @@ pre.raw{white-space:pre-wrap;word-break:break-word;background:#040613;border:1px
   <section class="page" id="page-ideas">
     <article class="card">
       <div class="section-title"><h2>Alle ideeën en kandidaten</h2><span class="pill pink" id="ideaCount"></span></div>
-      <div class="toolbar"><input id="ideaSearch" placeholder="Zoek hypothese, lane, status…"><select id="ideaFilter"><option value="">Alle statussen</option><option value="RUNNING">Bezig</option><option value="NEEDS_DIRECTOR">Wacht op onderzoeksdirecteur</option><option value="EXPERIMENT_REQUIRED">Experiment vereist</option><option value="NO_PROVEN_EDGE">Nog geen bewezen voordeel</option><option value="NO_EDGE">Geen voordeel</option><option value="EDGE">Bewezen voordeel</option><option value="LEGACY_IMPORTED">Historisch geïmporteerd</option></select></div>
+      <div class="toolbar"><input id="ideaSearch" placeholder="Zoek hypothese, onderzoekslijn, status…"><select id="ideaFilter"><option value="">Alle statussen</option><option value="RUNNING">Bezig</option><option value="NEEDS_DIRECTOR">Wacht op onderzoeksdirecteur</option><option value="EXPERIMENT_REQUIRED">Experiment vereist</option><option value="NO_PROVEN_EDGE">Nog geen bewezen voordeel</option><option value="NO_EDGE">Geen voordeel</option><option value="EDGE">Bewezen voordeel</option><option value="LEGACY_IMPORTED">Historisch geïmporteerd</option></select></div>
       <div class="table-wrap"><table class="table"><thead><tr><th>Idee</th><th>Onderzoekslijn</th><th>Fase</th><th>Wachtrij</th><th>Wetenschappelijk</th><th>Bijgewerkt</th></tr></thead><tbody id="ideaRows"></tbody></table></div>
     </article>
   </section>
@@ -116,13 +129,13 @@ pre.raw{white-space:pre-wrap;word-break:break-word;background:#040613;border:1px
   <section class="page" id="page-performance">
     <div class="row2">
       <article class="card"><div class="section-title"><h2>Taakprestaties</h2><span class="pill cyan">uitvoering</span></div><div id="performanceMetrics"></div></article>
-      <article class="card"><div class="section-title"><h2>Research-funnel</h2><span class="pill pink">zicht op gemiste kansen</span></div><div id="funnel"></div></article>
+      <article class="card"><div class="section-title"><h2>Onderzoeksfunnel</h2><span class="pill pink">zicht op gemiste kansen</span></div><div id="funnel"></div></article>
     </div>
   </section>
 
   <section class="page" id="page-history">
     <div class="row2">
-      <article class="card"><div class="section-title"><h2>Heronderzoekverzoeken</h2><span class="pill amber">immutable</span></div><div id="reviveList" class="list"></div></article>
+      <article class="card"><div class="section-title"><h2>Heronderzoekverzoeken</h2><span class="pill amber">onwijzigbaar</span></div><div id="reviveList" class="list"></div></article>
       <article class="card"><div class="section-title"><h2>Oude onderzoeksbestanden</h2><span class="pill">historisch</span></div><div id="legacyList" class="list"></div></article>
     </div>
   </section>
@@ -176,10 +189,12 @@ const statusClass=s=>{s=String(s||'').toUpperCase();if(/FAIL|ERROR|INCIDENT|REJE
 const pill=s=>'<span class="pill '+statusClass(s)+'">'+esc(s||'UNKNOWN')+'</span>';
 const pct=v=>v==null?'—':(v*100).toFixed(1)+'%';
 const secs=v=>v==null?'—':v<60?v.toFixed(1)+' s':(v/60).toFixed(1)+' min';
+const lifeClass=s=>s==='WORKING_COMPONENT'?'working':s==='TARGETED_TESTED'?'tested':'pending';
+const lifeStateLabel=s=>s==='WORKING_COMPONENT'?'WERKEND':s==='TARGETED_TESTED'?'GERICHT GETEST':s==='IMPLEMENTED_NOT_E2E'?'AANWEZIG • NOG A→Z':'NOG A→Z BEWIJZEN';
 
 function toast(msg){const t=q('#toast');t.textContent=msg;t.style.display='block';setTimeout(()=>t.style.display='none',3200)}
 function card(k,v,s,c=''){return '<div class="card '+c+'"><div class="kicker">'+esc(k)+'</div><div class="big">'+esc(v)+'</div><div class="sub">'+esc(s)+'</div></div>'}
-function nav(page){S.page=page;qa('.page').forEach(x=>x.classList.toggle('active',x.id==='page-'+page));qa('#nav button').forEach(x=>x.classList.toggle('active',x.dataset.page===page));const names={home:['Overzicht','Wat doet Prediction, wat gaat goed en waar moet je kijken?'],live:['Live','Alle gelijktijdige sessies, taken en uitvoeringen.'],ideas:['Ideeën','Volg ieder idee van verkenner tot eindbesluit.'],runs:['Uitvoeringen','Iedere verkennings-, review- en meetuitvoering terugvinden.'],errors:['Fouten','Waar stroopt het, wat brak en is herstel gelukt?'],performance:['Prestaties','Snelheid, betrouwbaarheid en onderzoeksfunnel.'],history:['Historie','Oude ideeën verdwijnen nooit en kunnen opnieuw worden aangeboden.'],system:['Systeem','De technische motorruimte wanneer je die nodig hebt.']};q('#pageTitle').textContent=names[page][0];q('#pageSub').textContent=names[page][1]}
+function nav(page){S.page=page;qa('.page').forEach(x=>x.classList.toggle('active',x.id==='page-'+page));qa('#nav button').forEach(x=>x.classList.toggle('active',x.dataset.page===page));const names={home:['Overzicht','Wat doet Prediction, wat gaat goed en waar moet je kijken?'],live:['Live','Alle gelijktijdige sessies, taken en uitvoeringen.'],ideas:['Ideeën','Volg ieder idee van verkenner tot eindbesluit.'],runs:['Uitvoeringen','Iedere verkennings-, beoordelings- en meetuitvoering terugvinden.'],errors:['Fouten','Waar stroopt het, wat brak en is herstel gelukt?'],performance:['Prestaties','Snelheid, betrouwbaarheid en onderzoeksfunnel.'],history:['Historie','Oude ideeën verdwijnen nooit en kunnen opnieuw worden aangeboden.'],system:['Systeem','De technische motorruimte wanneer je die nodig hebt.']};q('#pageTitle').textContent=names[page][0];q('#pageSub').textContent=names[page][1]}
 qa('#nav button').forEach(b=>b.addEventListener('click',()=>nav(b.dataset.page)));
 q('#closeDrawer').addEventListener('click',closeDrawer);
 function closeDrawer(){q('#drawer').classList.remove('open');q('#drawer').setAttribute('aria-hidden','true')}
@@ -189,7 +204,15 @@ async function api(path,opt={}){const r=await fetch(path,{cache:'no-store',...op
 async function load(){try{S.data=await api('/api/snapshot');render();q('#health').innerHTML='<span style="color:var(--green)">● verbonden</span>';q('#updated').textContent='Bijgewerkt '+fmtDate(S.data.generated_at)}catch(e){q('#health').innerHTML='<span style="color:var(--red)">● niet bereikbaar</span>';q('#updated').textContent=e.message}}
 
 function render(){
- const d=S.data,m=d.task_metrics,c=d.counts,gs=d.git_sync||{},alerts=d.chain_alerts||[];
+ const d=S.data,m=d.task_metrics,c=d.counts,gs=d.git_sync||{},alerts=d.chain_alerts||[],lc=d.lifecycle||{};
+ const stages=Array.isArray(lc.stages)?lc.stages:[];
+ q('#lifecycleSummary').textContent=(lc.full_chain_label||'Ketenstatus onbekend')+' • status per stap is bewijsgebonden, niet alleen gepland.';
+ q('#lifecycleOverall').textContent=lc.full_chain_status==='NOT_PROVEN'?'VOLLEDIGE KETEN: NOG NIET BEWEZEN':nlStatus(lc.full_chain_status||'UNKNOWN').toUpperCase();
+ q('#lifecycleOverall').className='pill '+(lc.full_chain_status==='NOT_PROVEN'?'amber':lc.full_chain_status==='PROVEN'?'green':'');
+ q('#lifecycleNext').textContent=lc.next_required||'Controleer de canonieke lifecycle-status.';
+ q('#homeLifecycleNext').textContent=lc.next_required||'Controleer de canonieke lifecycle-status.';
+ q('#lifecycleFlow').innerHTML=stages.map((s,i)=>'<button class="life-stage '+lifeClass(s.state)+'" data-life="'+esc(s.id)+'"><b>'+esc(s.label)+'</b><small>'+esc(s.subtitle||'')+'</small><span class="life-state">'+esc(lifeStateLabel(s.state))+'</span></button>'+(i<stages.length-1?'<span class="life-arrow">→</span>':'')).join('')||'<div class="empty">Geen lifecycle-status beschikbaar.</div>';
+ qa('[data-life]').forEach(b=>b.addEventListener('click',()=>{const s=stages.find(x=>x.id===b.dataset.life);if(!s)return;openDrawer(s.label,'KETENSTAP','<div class="item"><div class="kicker">STATUS</div><b>'+esc(lifeStateLabel(s.state))+'</b><div class="meta">'+esc(s.detail||'Geen detail beschikbaar.')+'</div></div><div class="item" style="margin-top:10px"><div class="kicker">VOLLEDIGE KETEN</div><b>'+esc(lc.full_chain_label||'Onbekend')+'</b><div class="meta">'+esc(lc.next_required||'')+'</div></div>')}));
  const syncNaam=gs.status==='GREEN'?'In sync':gs.status==='RED'?'Niet in sync':gs.status==='AMBER'?'Controle verouderd':'Onbekend';
  const syncUitleg=gs.status==='GREEN'?'Production HEAD, lokale main en opgehaalde GitHub-main zijn gelijk en de worktree is schoon.':((gs.issues||[])[0]||'Synchronisatiestatus kon niet volledig worden vastgesteld.');
  q('#chainAlertBar').innerHTML=alerts.length
@@ -219,7 +242,7 @@ function render(){
  q('#legacyList').innerHTML=d.legacy_artifacts.slice(0,80).map(a=>'<button class="item click" data-artifact="'+esc(a.path)+'"><div class="item-head"><b>'+esc(a.name)+'</b><span class="pill">historisch</span></div><div class="meta mono">'+esc(a.path)+'</div></button>').join('')||'<div class="empty">Geen historische onderzoeksbestanden gevonden.</div>';
  qa('[data-artifact]').forEach(b=>b.addEventListener('click',()=>showArtifact(b.dataset.artifact)));
 
- q('#systemCards').innerHTML=card('Repository',d.repo,'Bron voor kandidaten en onderzoeksuitvoeringen')+card('Actieve taken',c.tasks,'Geen historisch taakgetal')+card('Git-sync',syncNaam,syncUitleg)+card('Veiligheid','ALLEEN-LEZEN','Geen live handel, betaalde acties of walletacties');
+ q('#systemCards').innerHTML=card('Broncode-opslag',d.repo,'Bron voor kandidaten en onderzoeksuitvoeringen')+card('Actieve taken',c.tasks,'Geen historisch taakgetal')+card('Git-sync',syncNaam,syncUitleg)+card('Veiligheid','ALLEEN-LEZEN','Geen live handel, betaalde acties of walletacties');
  q('#syncDetails').innerHTML='<div class="item"><div class="item-head"><b>Status</b>'+pill(gs.status||'UNKNOWN')+'</div><div class="meta">'+esc(syncUitleg)+'</div></div>'+
    '<div class="item"><div class="kicker">Production HEAD</div><div class="mono">'+esc(gs.production_head||'onbekend')+'</div></div>'+
    '<div class="item"><div class="kicker">Lokale main</div><div class="mono">'+esc(gs.local_main||'onbekend')+'</div></div>'+
