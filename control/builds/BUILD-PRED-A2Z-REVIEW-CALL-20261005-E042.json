@@ -1,0 +1,47 @@
+{
+  "schema": "AUTONOMOUS_BUILD_CHARTER_V1",
+  "build_id": "BUILD-PRED-A2Z-REVIEW-CALL-20261005-E042",
+  "protocol_version": 1,
+  "objective": "Herstel de verouderde Astra-reviewaanroep in de bestaande kwalificatieharness met expliciete gevalideerde TEST_ONLY provenance; behoud alle productie-gates. Dit is een gerichte reparatie, geen volledig A→Z-bewijs.",
+  "source_commit": "0f0f954a0cffbed95c55a904fec8c5ef8f30f223",
+  "allowed_capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "run_tests",
+    "local_git"
+  ],
+  "allowed_paths": [
+    "control/hourly/full_chain_qualification.py",
+    "tests/hourly/test_full_chain_review_provenance.py"
+  ],
+  "planned_paths": [
+    "control/hourly/full_chain_qualification.py",
+    "tests/hourly/test_full_chain_review_provenance.py"
+  ],
+  "acceptance_criteria": [
+    "Geldige TEST_ONLY fixture doorloopt huidige review_template-interface met alle drie verplichte provenancevelden.",
+    "Ontbrekende, ongeldige, verkeerde-versie, ingetrokken of hash-afwijkende provenance geeft geen approval of state-advance.",
+    "TEST_ONLY route kan geen production-candidate goedkeuren.",
+    "Geen route-attestation wordt verzonnen door de harness; ontbrekende expliciete route stopt voor Scout.",
+    "Tien gerichte regressies groen; productie-validator blijft byte-identiek.",
+    "Fixture-evidence declareert real_model_lifecycle_proven=false; geen volledige A→Z-run in deze reparatiestap."
+  ],
+  "non_goals": [
+    "Scout en Director herhalen",
+    "Git/source-sync of historische pins onderzoeken",
+    "Bridge/executor/guard/config/services wijzigen",
+    "Experiment bouwen zonder echte Sol/Astra-provenance",
+    "Productie-deployment of finale A→Z-acceptatie claimen"
+  ],
+  "independent_verification": "Gerichte positieve/negatieve regressies via bestaande WSL-executor, naast lokale testuitvoering. Volledige werkelijke modelcyclus blijft afzonderlijk te bewijzen.",
+  "rollback_plan": "Alle implementatie uitsluitend in eigen taakworktree. Bij falen geen publicatie of installatie; behoud broncommit en evidence.",
+  "cleanup_plan": "Gedeelde sessielease na tests vrijgeven; bij mislukking maximaal 900 seconden TTL. Geen services starten; test-temp wordt via TemporaryDirectory opgeruimd; worktree/evidence behouden.",
+  "max_attempts": 2,
+  "governance_change": false,
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false
+  }
+}
