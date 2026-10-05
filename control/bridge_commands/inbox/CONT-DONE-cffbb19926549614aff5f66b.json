@@ -1,0 +1,19 @@
+{
+  "schema": "PREDICTION_BRIDGE_COMMAND_V1",
+  "task_id": "CONT-DONE-cffbb19926549614aff5f66b",
+  "action": "BRIDGE_PING",
+  "created_at_utc": "2026-10-05T12:36:45Z",
+  "route_task_id": "DEV-PRED-PROD-UNIQUE-DIFF-NAMES-20261005-E013",
+  "delivery_mode": "headless",
+  "live_trading": false,
+  "paid_actions": false,
+  "wallet_actions": false,
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "notes": "Close E013 continuation as superseded by completed E014 staged diff capture and active DEV-PRED-PROD-STAGED-SEMANTIC-VIS-20261005-E015. Do not create duplicate NEXT work. No bridge/source/service/production mutation.",
+  "auto_continue": false,
+  "parent_continuation_id": "CONT-cffbb19926549614aff5f66b"
+}
