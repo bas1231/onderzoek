@@ -1,0 +1,17 @@
+{
+  "schema": "PREDICTION_BRIDGE_COMMAND_V1",
+  "task_id": "DEV-FG-REVIEW-HANDSHAKE-20261005-E022",
+  "action": "SIX_AI_HEALTH",
+  "created_at_utc": "2026-10-05T13:25:00Z",
+  "route_task_id": "DEV-FG-RERUN-LONG-STATUS2-20261005-E020",
+  "delivery_mode": "chat",
+  "live_trading": false,
+  "paid_actions": false,
+  "wallet_actions": false,
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "notes": "Read-only check whether the batch-review popup wrote its response and whether its PowerShell process is still waiting."
+}
