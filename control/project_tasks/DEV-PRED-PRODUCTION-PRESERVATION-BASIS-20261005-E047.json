@@ -1,0 +1,32 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-PRODUCTION-PRESERVATION-BASIS-20261005-E047",
+  "source_commit": "b4cd1e5159b00ae0d19908eed17ad39455f7a285",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "High"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "production_dirty_snapshot_inspect"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 180,
+  "notes": "Read-only compact preservation basis for immutable E034 dirty snapshot. Report exact snapshot ref/commit, total bytes, group counts/bytes, and remote blob coverage. No cleanup, live worktree mutation, or remote writes.",
+  "operations": [
+    {
+      "type": "production_dirty_snapshot_inspect",
+      "snapshot_task_id": "DEV-PRED-PRODUCTION-DIRTY-SNAPSHOT-20261005-E034",
+      "report_mode": "preservation_basis",
+      "fail_for_visibility": true
+    }
+  ]
+}
