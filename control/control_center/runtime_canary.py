@@ -76,7 +76,7 @@ def main() -> int:
     if not isinstance(sync, dict) or sync.get("status") not in {"GREEN", "AMBER", "RED", "UNKNOWN"}:
         raise RuntimeError("CONTROL_CENTER_GIT_SYNC_MISSING")
     html = get_text("http://127.0.0.1:8770/")
-    for needle in ("Logboek", "Sync gestart…", "/api/sync", "fail-closed reconciliatie", "Actieve systeemacties", "Git-sync productie → main"):
+    for needle in ("Logboek", "Sync gestart…", "/api/sync", "fail-closed reconciliatie", "Actieve systeemacties", "Git-sync productie → main", "nieuwe Prediction ChatGPT-sessie", "opent altijd een nieuwe Prediction ChatGPT-sessie"):
         if needle not in html:
             raise RuntimeError("CONTROL_CENTER_SYNC_UI_MISSING:" + needle)
     active_states = {
