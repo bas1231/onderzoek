@@ -1,0 +1,34 @@
+{
+  "schema": "PREDICTION_BUILD_LOG_EVENT_V1",
+  "event_id": "20261005T180700Z-CONTROL-CENTER-SYNC-BUTTON-E017-FAIL",
+  "work_item_id": "CONTROL-CENTER-SYNC-BUTTON-20261005",
+  "created_at_utc": "2026-10-05T18:07:00Z",
+  "event_type": "RESULT",
+  "work_item_status": "IN_PROGRESS",
+  "outcome": "FAIL",
+  "title": "One-click veilige Git-sync vanuit Control Center",
+  "objective": "Toon bij Git-sync rood een Sync-knop die één klik omzet in een automatische, fail-closed ChatGPT-reconciliatie zonder destructieve Git-shortcuts.",
+  "summary": "E017 faalde tijdens de Control Center unittest-suite voordat runtime-installatie begon. De meegeleverde browser-samenvatting bevatte alleen een afgekapt fragment en niet de eerste echte traceback.",
+  "why": "Executor operation 2 retourneerde python rc=1; de getoonde test_artifact_path_traversal_blocked-regel zelf was OK en identificeert de oorzaak niet.",
+  "next_action": "Voer een geïsoleerde diagnostische unittest-run uit die de eerste volledige failure/error traceback print en zelf met rc=0 afsluit.",
+  "session_route_task_id": "SESSION-ROUTE-fc2613ecbc81e22d4c913b2a",
+  "task_ids": [
+    "DEV-PRED-CONTROL-CENTER-SYNC-BUTTON-20261005-E017"
+  ],
+  "commits": [
+    "424d0295f6723d833c3939c871e00f533d1b6e6f"
+  ],
+  "evidence_refs": [
+    "event=1791223188-225e51c7d764",
+    "status=FAIL exit=2 rcs=1:2",
+    "detail=python rc=1"
+  ],
+  "tags": [
+    "control-center",
+    "git-sync",
+    "one-click",
+    "regression-failure"
+  ],
+  "parent_event_id": "20261005T175600Z-CONTROL-CENTER-SYNC-BUTTON-E017-ATTEMPT",
+  "first_incomplete_step": "De eerste falende unittest en volledige traceback vaststellen."
+}
