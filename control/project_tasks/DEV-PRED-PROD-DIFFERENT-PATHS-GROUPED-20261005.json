@@ -1,0 +1,41 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-PROD-DIFFERENT-PATHS-GROUPED-20261005",
+  "source_commit": "69e8ce47a4e80257562a462176dc978055257043",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_runtime"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 120,
+  "notes": "Read-only grouped rendering of the 11 staged production paths differing from canonical. Intentionally exits 42 for compact visibility. No production mutation.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/prod_different_paths_grouped_20261005.py",
+      "content": "from pathlib import Path\nimport json,re,collections\n\nevent_id=\"1791189806-19cb6b264c6d\"\nbase=Path.home()/\".local/share/prediction-chat-bridge\"\nraw=None\nwhere=None\nfor d in (\"sent\",\"inflight\",\"outbox\"):\n    p=base/d/f\"{event_id}.json\"\n    if p.is_file():\n        obj=json.loads(p.read_text(encoding=\"utf-8\",errors=\"replace\"))\n        raw=str(obj.get(\"message\") or \"\")\n        where=str(p)\n        break\nif raw is None:\n    print(\"GROUPED=EVENT_MISSING\")\n    raise SystemExit(42)\n\nm=re.search(r'DIFFERENT_PATHS=(\\[[^\\n]*?\\])\\s*\\|\\| COUNT=',raw)\nif not m:\n    print(\"GROUPED=LIST_NOT_FOUND || FILE=\"+str(where))\n    raise SystemExit(42)\n\npaths=json.loads(m.group(1))\ngroups=collections.OrderedDict()\nfor p in paths:\n    parent,name=p.rsplit(\"/\",1)\n    groups.setdefault(parent,[]).append(name)\n\nparts=[]\nfor parent,names in groups.items():\n    parts.append(parent+\"={\"+\",\".join(names)+\"}\")\nprint(\"GROUPED=\"+\" | \".join(parts)+\" || COUNT=\"+str(len(paths)),flush=True)\nraise SystemExit(42)\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/prod_different_paths_grouped_20261005.py"
+      ],
+      "timeout_seconds": 60
+    }
+  ]
+}
