@@ -205,6 +205,14 @@ class ControlCenterTests(unittest.TestCase):
         self.assertNotIn(">Task performance<", html)
         self.assertNotIn(">RUN DETAIL<", html)
         self.assertNotIn(">RAW EVIDENCE<", html)
+        self.assertNotIn("Geen actieve task-state", html)
+        self.assertNotIn("research-run.", html)
+        self.assertNotIn("failure-state", html)
+        self.assertNotIn("runtime-index", html)
+        self.assertNotIn("<h3>Director</h3>", html)
+        self.assertNotIn("Agents / scouts", html)
+        self.assertNotIn("run-artifacts", html)
+        self.assertNotIn("Geen gekoppelde artifacts", html)
 
 
 if __name__ == "__main__":
