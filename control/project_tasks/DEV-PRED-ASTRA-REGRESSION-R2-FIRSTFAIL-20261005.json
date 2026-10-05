@@ -1,0 +1,41 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-ASTRA-REGRESSION-R2-FIRSTFAIL-20261005",
+  "source_commit": "e8e05934720b630cc6e25d6eaa90a0bccf9240db",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_runtime"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 180,
+  "notes": "Read-only extraction of the exact first pytest failure from raw wake event for autonomous Astra regression R2. Intentionally exit 42 after concise diagnostic.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/astra_regression_r2_firstfail_20261005.py",
+      "content": "from pathlib import Path\nimport json,re\n\nevent_id='1791187776-9c80e73d1b46'\nbase=Path.home()/'.local/share/prediction-chat-bridge'\nraw=None\nwhere=None\nfor dname in ('sent','inflight','outbox'):\n    p=base/dname/f'{event_id}.json'\n    if p.is_file():\n        try:\n            obj=json.loads(p.read_text(encoding='utf-8',errors='replace'))\n            raw=str(obj.get('message') or '')\n            where=str(p)\n            break\n        except Exception:\n            pass\n\nif raw is None:\n    print('R2_FIRSTFAIL=RAW_EVENT_MISSING')\n    raise SystemExit(42)\n\nlines=raw.splitlines()\ntest=''\nfor ln in lines:\n    s=ln.strip()\n    if re.search(r'tests/.+::.+\\s+FAILED(?:\\s|$)',s):\n        test=s\n        break\nif not test:\n    for ln in lines:\n        s=ln.strip()\n        if s.startswith('FAILED ') and '::' in s:\n            test=s\n            break\n\ndetails=[]\ncapture=False\nfor ln in lines:\n    s=ln.rstrip()\n    if ' FAILURES ' in s or s.startswith('___'):\n        capture=True\n    if capture and (\n        s.startswith('E ') or 'AssertionError' in s or 'TypeError' in s\n        or 'KeyError' in s or 'ValueError' in s or 'AttributeError' in s\n        or 'assert ' in s or 'Error:' in s\n    ):\n        details.append(re.sub(r'\\s+',' ',s).strip())\n\nsummary=[]\nfor ln in lines:\n    s=ln.strip()\n    if s.startswith('FAILED ') or re.search(r'\\b[0-9]+ failed\\b',s):\n        summary.append(re.sub(r'\\s+',' ',s))\n\nprint('R2_FIRSTFAIL='+ (test or 'UNKNOWN') +\n      ' || DETAIL=' + ((' | '.join(details[-6:]))[:2200] if details else 'NO_ASSERTION_TEXT') +\n      ' || SUMMARY=' + ((' | '.join(summary[-8:]))[:1200] if summary else 'NONE') +\n      ' || FILE=' + where)\nraise SystemExit(42)\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/astra_regression_r2_firstfail_20261005.py"
+      ],
+      "timeout_seconds": 60
+    }
+  ]
+}
