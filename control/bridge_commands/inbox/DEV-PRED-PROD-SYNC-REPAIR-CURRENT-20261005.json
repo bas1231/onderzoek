@@ -1,0 +1,19 @@
+{
+  "schema": "PREDICTION_BRIDGE_COMMAND_V1",
+  "task_id": "DEV-PRED-PROD-SYNC-REPAIR-CURRENT-20261005",
+  "action": "SIX_AI_HEALTH",
+  "created_at_utc": "2026-10-05T09:48:00Z",
+  "route_task_id": "DEV-PRED-REPAIR-VERIFY-CURRENT-20261005",
+  "delivery_mode": "chat",
+  "live_trading": false,
+  "paid_actions": false,
+  "wallet_actions": false,
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "notes": "Read-only production representation verification against proven repair commit 5bd4021c09debcf1090cf4e953adc3a88a532a3e. No cleanup, reset, deploy, service changes, or full system test.",
+  "auto_continue": true,
+  "parent_continuation_id": null
+}
