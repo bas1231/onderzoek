@@ -1,0 +1,41 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-ASTRA-AUTONOMOUS-FIRSTFAIL-LOG-20261005",
+  "source_commit": "da803b2a17c38585e5c134cced8832a291952d4c",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_runtime"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 180,
+  "notes": "Read-only extract first failing pytest traceback from prior autonomous Astra reviewer diagnostic task. No production mutation.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/astra_firstfail_log_20261005.py",
+      "content": "from pathlib import Path\nimport json,re\n\ntask='DEV-PRED-ASTRA-AUTONOMOUS-REVIEWER-FIRSTFAIL-20261005'\ncandidates=[\n    Path.home()/'.local/state/prediction-project-executor'/f'{task}.json',\n    Path.home()/'prediction_research_prod'/'control/results'/task/'RESULT.json',\n    Path.home()/'prediction_research_prod'/'control/results'/task/'stdout.log',\n    Path.home()/'prediction_research_prod'/'control/results'/task/'stderr.log',\n]\nprint('DIAG_TASK='+task)\nfor p in candidates:\n    print('PATH='+str(p)+' EXISTS='+str(p.exists()))\n    if not p.exists() or not p.is_file():\n        continue\n    try:\n        text=p.read_text(encoding='utf-8',errors='replace')\n    except Exception as exc:\n        print('READ_ERROR='+repr(exc));continue\n    print('SIZE='+str(len(text)))\n    lines=text.splitlines()\n    interesting=[ln for ln in lines if re.search(r'(FAILED|FAILURES|ERROR|AssertionError|E\\s+|short test summary|Traceback|pytest)',ln)]\n    print('INTERESTING_BEGIN')\n    for ln in interesting[-120:]:\n        print(ln[:2000])\n    print('INTERESTING_END')\n    print('TAIL_BEGIN')\n    for ln in lines[-220:]:\n        print(ln[:2000])\n    print('TAIL_END')\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/astra_firstfail_log_20261005.py"
+      ],
+      "timeout_seconds": 60
+    }
+  ]
+}
