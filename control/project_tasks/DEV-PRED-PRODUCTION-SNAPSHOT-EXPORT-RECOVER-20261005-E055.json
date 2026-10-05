@@ -1,0 +1,41 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-PRODUCTION-SNAPSHOT-EXPORT-RECOVER-20261005-E055",
+  "source_commit": "ff2f8f34bb9ccb84c32d1ae19d69c98c169f46ec",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "High"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_runtime"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 180,
+  "notes": "Recover the already-produced E054 snapshot export from the local bridge queue/sent evidence and re-emit only its exact bounded export meta/data. No production mutation, cleanup, or remote write.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/recover_e054_snapshot_export.py",
+      "content": "from pathlib import Path\nimport json\n\nROOT=Path.home()/'.local/share/prediction-chat-bridge'\nTARGET='DEV-PRED-PRODUCTION-SNAPSHOT-EXPORT-CHUNK-20261005-E054'\n\nfound=None\nwhere=None\nfor box in ('inflight','sent','outbox'):\n    d=ROOT/box\n    if not d.is_dir():\n        continue\n    for p in sorted(d.glob('*.json'), key=lambda x: x.stat().st_mtime_ns, reverse=True):\n        try:\n            obj=json.loads(p.read_text(encoding='utf-8',errors='replace'))\n        except Exception:\n            continue\n        if str(obj.get('task_id') or '')==TARGET:\n            found=obj\n            where=box\n            break\n    if found:\n        break\n\nif not found:\n    print('PREDICTION_SNAPSHOT_EXPORT_V1')\n    print('SNAPSHOT_EXPORT_META={\"status\":\"MISSING\",\"target\":\"'+TARGET+'\"}')\n    print('SNAPSHOT_EXPORT_DATA=Tk9UX0ZPVU5E')\n    raise SystemExit(4)\n\nraw=str(found.get('message') or '')\nmeta=''\ndata=''\nfor line in raw.splitlines():\n    if line.startswith('SNAPSHOT_EXPORT_META='):\n        meta=line.split('=',1)[1].strip()\n    elif line.startswith('SNAPSHOT_EXPORT_DATA='):\n        data=line.split('=',1)[1].strip()\n\nif not meta or not data:\n    print('PREDICTION_SNAPSHOT_EXPORT_V1')\n    print('SNAPSHOT_EXPORT_META={\"status\":\"FIELDS_MISSING\",\"box\":\"'+where+'\"}')\n    print('SNAPSHOT_EXPORT_DATA=RklFTERTX01JU1NJTkc=')\n    raise SystemExit(5)\n\nprint('PREDICTION_SNAPSHOT_EXPORT_V1')\nprint('SNAPSHOT_EXPORT_META='+meta)\nprint('SNAPSHOT_EXPORT_DATA='+data)\nraise SystemExit(0)\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/recover_e054_snapshot_export.py"
+      ],
+      "timeout_seconds": 60
+    }
+  ]
+}
