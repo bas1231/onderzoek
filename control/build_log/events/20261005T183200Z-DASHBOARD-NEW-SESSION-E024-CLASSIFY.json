@@ -1,0 +1,32 @@
+{
+  "schema": "PREDICTION_BUILD_LOG_EVENT_V1",
+  "event_id": "20261005T183200Z-DASHBOARD-NEW-SESSION-E024-CLASSIFY",
+  "work_item_id": "DASHBOARD-NEW-SESSION-ACTIONS-20261005",
+  "created_at_utc": "2026-10-05T18:32:00Z",
+  "event_type": "ATTEMPT",
+  "work_item_status": "IN_PROGRESS",
+  "outcome": "STARTED",
+  "title": "Dashboardknoppen starten altijd een nieuwe ChatGPT-sessie",
+  "objective": "Maak het platformbreed verplicht dat iedere dashboardactie die ChatGPT start, het werk in een nieuwe Prediction ChatGPT-sessie opent.",
+  "summary": "E024 draait iedere multichat/bridge-testmodule afzonderlijk en encodeert de eerste falende module in de proces-exitcode. Exit 0 betekent dat alle bridge-modules groen zijn.",
+  "why": "E023 gaf alleen afgekorte stdout. Een exitcode-classifier maakt de eerste regressie zichtbaar in de compacte bridge-resultaatregel.",
+  "next_action": "Gebruik de E024-exitcode om exact de eerste falende testmodule te repareren; voer daarna de geïntegreerde suite opnieuw uit.",
+  "session_route_task_id": "SESSION-ROUTE-fc2613ecbc81e22d4c913b2a",
+  "task_ids": [
+    "DEV-PRED-DASHBOARD-NEW-SESSION-E023-CLASSIFY-20261005-E024"
+  ],
+  "commits": [
+    "cdfc86cb12ff765474241dcbbf46e7b4857bc0b2"
+  ],
+  "evidence_refs": [
+    "control/dev_checks/dashboard_new_session_e023_classify.py"
+  ],
+  "tags": [
+    "dashboard",
+    "new-session",
+    "bridge",
+    "diagnostic"
+  ],
+  "parent_event_id": "20261005T183000Z-DASHBOARD-NEW-SESSION-E023-FAIL",
+  "first_incomplete_step": "Eerste falende multichat/bridge-testmodule exact classificeren."
+}
