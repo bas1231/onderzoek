@@ -60,6 +60,7 @@ pre.raw{white-space:pre-wrap;word-break:break-word;background:#040613;border:1px
   <nav class="nav" id="nav">
     <button class="active" data-page="home">⌂ <span>Overzicht</span></button>
     <button data-page="live">◉ <span>Live</span></button>
+    <button data-page="logbook">☷ <span>Logboek</span></button>
     <button data-page="ideas">◇ <span>Ideeën</span></button>
     <button data-page="runs">▤ <span>Uitvoeringen</span></button>
     <button data-page="errors">! <span>Fouten</span></button>
@@ -103,6 +104,35 @@ pre.raw{white-space:pre-wrap;word-break:break-word;background:#040613;border:1px
       <article class="card"><div class="section-title"><h2>Actieve taken</h2><span class="pill cyan">alle sessies</span></div><div id="taskList" class="list"></div></article>
       <article class="card"><div class="section-title"><h2>ChatGPT-sessies</h2><span class="pill">op route gegroepeerd</span></div><div id="sessionList" class="list"></div></article>
     </div>
+  </section>
+
+  <section class="page" id="page-logbook">
+    <div class="grid4" id="logbookCards"></div>
+    <div class="row2">
+      <article class="card glow">
+        <div class="section-title"><h2>Wat moet gebeuren?</h2><span class="pill pink" id="openWorkCount">0 open</span></div>
+        <div id="openWorkList" class="list"></div>
+      </article>
+      <article class="card">
+        <div class="section-title"><h2>Anti-rondjes controle</h2><span class="pill cyan">gedeelde werkstatus</span></div>
+        <div id="duplicateWorkList" class="list"></div>
+      </article>
+    </div>
+    <article class="card" style="margin-top:14px">
+      <div class="section-title"><h2>Bouwlogboek</h2><span class="pill cyan" id="buildEventCount">0 gebeurtenissen</span></div>
+      <div class="toolbar">
+        <input id="buildLogSearch" placeholder="Zoek werkitem, taak, reden, volgende stap…">
+        <select id="buildLogFilter">
+          <option value="">Alle uitkomsten</option>
+          <option value="FAIL">Mislukt</option>
+          <option value="PASS">Geslaagd</option>
+          <option value="BLOCKED">Geblokkeerd</option>
+          <option value="STARTED">Gestart</option>
+          <option value="INFO">Informatie</option>
+        </select>
+      </div>
+      <div id="buildEventList" class="list"></div>
+    </article>
   </section>
 
   <section class="page" id="page-ideas">
@@ -165,7 +195,8 @@ const NL_STATUS={
   VALIDATION:'Validatie',RESULT_READY:'Resultaat gereed',NEEDS_REVISION:'Herziening nodig',
   APPROVE:'Goedgekeurd',APPROVED:'Goedgekeurd',UNPROVEN:'Onbewezen',DISCOVERED:'Ontdekt',
   LEGACY_IMPORTED:'Historisch geïmporteerd',NO_PROVEN_EDGE:'Nog geen bewezen voordeel',NO_EDGE:'Geen voordeel',EDGE:'Bewezen voordeel',
-  ACTIVE:'Actief',READY:'Gereed',NO_EVIDENCE:'Geen bewijs',NOT_TESTED:'Niet getest',PENDING_PROSPECTIVE:'Wacht op prospectieve meting',
+  ACTIVE:'Actief',OPEN:'Open',IN_PROGRESS:'Bezig',PLANNED:'Gepland',INFO:'Informatie',SUPERSEDED:'Vervangen',
+  READY:'Gereed',NO_EVIDENCE:'Geen bewijs',NOT_TESTED:'Niet getest',PENDING_PROSPECTIVE:'Wacht op prospectieve meting',
   DISCOVERY_COMPLETE:'Verkenning voltooid',PASS_DISCOVERY_ONLY:'Geslaagd voor verkenning',INCONCLUSIVE:'Onbeslist'
 };
 const NL_LABEL={
@@ -185,8 +216,8 @@ const NL_LABEL={
 };
 const nlStatus=s=>NL_STATUS[String(s||'UNKNOWN').toUpperCase()]||String(s||'Onbekend').replaceAll('_',' ').toLowerCase().replace(/^./,m=>m.toUpperCase());
 const nlLabel=s=>NL_LABEL[String(s||'').toLowerCase()]||String(s||'').replaceAll('_',' ');
-const statusClass=s=>{s=String(s||'').toUpperCase();if(/FAIL|ERROR|INCIDENT|REJECT|AMBIG|BLOCK/.test(s))return'red';if(/PASS|COMPLETE|DONE|APPROVE|EDGE$/.test(s)&&!s.includes('NO_'))return'green';if(/RUN|START|CLAIM|DISPATCH|INFLIGHT/.test(s))return'pink';if(/WAIT|PENDING|PARK|REVISION|NO_PROVEN/.test(s))return'amber';return''};
-const pill=s=>'<span class="pill '+statusClass(s)+'">'+esc(s||'UNKNOWN')+'</span>';
+const statusClass=s=>{s=String(s||'').toUpperCase();if(/FAIL|ERROR|INCIDENT|REJECT|AMBIG|BLOCK/.test(s))return'red';if(/PASS|COMPLETE|DONE|APPROVE|EDGE$/.test(s)&&!s.includes('NO_'))return'green';if(/RUN|START|CLAIM|INFLIGHT|IN_PROGRESS/.test(s))return'pink';if(/OPEN|WAIT|PENDING|PARK|REVISION|NO_PROVEN|PLANNED/.test(s))return'amber';return''};
+const pill=s=>'<span class="pill '+statusClass(s)+'">'+esc(nlStatus(s||'UNKNOWN'))+'</span>';
 const pct=v=>v==null?'—':(v*100).toFixed(1)+'%';
 const secs=v=>v==null?'—':v<60?v.toFixed(1)+' s':(v/60).toFixed(1)+' min';
 const lifeClass=s=>s==='WORKING_COMPONENT'?'working':s==='TARGETED_TESTED'?'tested':'pending';
@@ -194,7 +225,7 @@ const lifeStateLabel=s=>s==='WORKING_COMPONENT'?'WERKEND':s==='TARGETED_TESTED'?
 
 function toast(msg){const t=q('#toast');t.textContent=msg;t.style.display='block';setTimeout(()=>t.style.display='none',3200)}
 function card(k,v,s,c=''){return '<div class="card '+c+'"><div class="kicker">'+esc(k)+'</div><div class="big">'+esc(v)+'</div><div class="sub">'+esc(s)+'</div></div>'}
-function nav(page){S.page=page;qa('.page').forEach(x=>x.classList.toggle('active',x.id==='page-'+page));qa('#nav button').forEach(x=>x.classList.toggle('active',x.dataset.page===page));const names={home:['Overzicht','Wat doet Prediction, wat gaat goed en waar moet je kijken?'],live:['Live','Alle gelijktijdige sessies, taken en uitvoeringen.'],ideas:['Ideeën','Volg ieder idee van verkenner tot eindbesluit.'],runs:['Uitvoeringen','Iedere verkennings-, beoordelings- en meetuitvoering terugvinden.'],errors:['Fouten','Waar stroopt het, wat brak en is herstel gelukt?'],performance:['Prestaties','Snelheid, betrouwbaarheid en onderzoeksfunnel.'],history:['Historie','Oude ideeën verdwijnen nooit en kunnen opnieuw worden aangeboden.'],system:['Systeem','De technische motorruimte wanneer je die nodig hebt.']};q('#pageTitle').textContent=names[page][0];q('#pageSub').textContent=names[page][1]}
+function nav(page){S.page=page;qa('.page').forEach(x=>x.classList.toggle('active',x.id==='page-'+page));qa('#nav button').forEach(x=>x.classList.toggle('active',x.dataset.page===page));const names={home:['Overzicht','Wat doet Prediction, wat gaat goed en waar moet je kijken?'],live:['Live','Alle gelijktijdige sessies, taken en uitvoeringen.'],logbook:['Logboek','Wat moet nog gebeuren, wat is geprobeerd, waarom lukte het wel of niet en wat is de volgende stap?'],ideas:['Ideeën','Volg ieder idee van verkenner tot eindbesluit.'],runs:['Uitvoeringen','Iedere verkennings-, beoordelings- en meetuitvoering terugvinden.'],errors:['Fouten','Waar stroopt het, wat brak en is herstel gelukt?'],performance:['Prestaties','Snelheid, betrouwbaarheid en onderzoeksfunnel.'],history:['Historie','Oude ideeën verdwijnen nooit en kunnen opnieuw worden aangeboden.'],system:['Systeem','De technische motorruimte wanneer je die nodig hebt.']};q('#pageTitle').textContent=names[page][0];q('#pageSub').textContent=names[page][1]}
 qa('#nav button').forEach(b=>b.addEventListener('click',()=>nav(b.dataset.page)));
 q('#closeDrawer').addEventListener('click',closeDrawer);
 function closeDrawer(){q('#drawer').classList.remove('open');q('#drawer').setAttribute('aria-hidden','true')}
@@ -204,7 +235,7 @@ async function api(path,opt={}){const r=await fetch(path,{cache:'no-store',...op
 async function load(){try{S.data=await api('/api/snapshot');render();q('#health').innerHTML='<span style="color:var(--green)">● verbonden</span>';q('#updated').textContent='Bijgewerkt '+fmtDate(S.data.generated_at)}catch(e){q('#health').innerHTML='<span style="color:var(--red)">● niet bereikbaar</span>';q('#updated').textContent=e.message}}
 
 function render(){
- const d=S.data,m=d.task_metrics,c=d.counts,gs=d.git_sync||{},alerts=d.chain_alerts||[],lc=d.lifecycle||{};
+ const d=S.data,m=d.task_metrics,c=d.counts,gs=d.git_sync||{},alerts=d.chain_alerts||[],lc=d.lifecycle||{},bl=d.build_log||{counts:{},open_work:[],recent_events:[],duplicate_open_objectives:[]};
  const stages=Array.isArray(lc.stages)?lc.stages:[];
  q('#lifecycleSummary').textContent=(lc.full_chain_label||'Ketenstatus onbekend')+' • status per stap is bewijsgebonden, niet alleen gepland.';
  q('#lifecycleOverall').textContent=lc.full_chain_status==='NOT_PROVEN'?'VOLLEDIGE KETEN: NOG NIET BEWEZEN':nlStatus(lc.full_chain_status||'UNKNOWN').toUpperCase();
@@ -218,7 +249,7 @@ function render(){
  q('#chainAlertBar').innerHTML=alerts.length
    ? '<div class="alert"><div class="item-head"><b>🔴 Ketenfout direct gemeld</b><span class="pill red">'+alerts.length+' recent</span></div><div class="meta"><strong>'+esc(alerts[0].id||'onbekend')+'</strong> • '+fmtDate(alerts[0].at)+'<br>'+esc(alerts[0].reason||'Geen foutreden beschikbaar.')+'</div></div>'
    : '<div class="ok"><div class="item-head"><b>✓ Geen nieuwe ketenfouten</b><span class="pill green">laatste 6 uur</span></div><div class="meta">Nieuwe fouten in taken, onderzoeksuitvoeringen of agents verschijnen hier automatisch.</div></div>';
- q('#homeCards').innerHTML=card('Voordeelstatus',nlStatus(d.edge_state),'Strenge standaard totdat bewijs de controles doorstaat.','glow')+card('Actieve taken',c.tasks,'Alleen wat nu bezig of wachtend is')+card('Git-sync',syncNaam,syncUitleg)+card('Actieve sessies',c.sessions,'ChatGPT-routes met actieve taken');
+ q('#homeCards').innerHTML=card('Voordeelstatus',nlStatus(d.edge_state),'Strenge standaard totdat bewijs de controles doorstaat.','glow')+card('Actieve taken',c.tasks,'Alleen wat nu bezig of wachtend is')+card('Git-sync',syncNaam,syncUitleg)+card('Open bouwwerk',c.build_log_open??0,'Gedeeld over alle ChatGPT-sessies');
  const active=d.tasks.slice(0,12);
  q('#nowList').innerHTML=active.length?active.map(t=>'<div class="item"><div class="item-head"><b class="mono">'+esc(t.task_id)+'</b>'+pill(t.status)+'</div><div class="meta">Sessie: '+esc(t.route_task_id||'geen routegegevens')+' • '+fmtDate(t.started_at)+'</div></div>').join(''):'<div class="empty">Geen actieve taken. Het systeem kan wel wachten op een geplande onderzoeksuitvoering.</div>';
  q('#attentionCount').textContent=alerts.length;
@@ -228,6 +259,16 @@ function render(){
  q('#liveCards').innerHTML=card('Actieve sessies',c.sessions,'ChatGPT-routes met actief werk')+card('Actieve taken',c.tasks,'Alleen huidige taakstatussen')+card('Ketenfouten',alerts.length,'Nieuwe fouten in de laatste 6 uur')+card('Git-sync',syncNaam,syncUitleg);
  q('#taskList').innerHTML=d.tasks.slice(0,30).map(t=>'<div class="item"><div class="item-head"><b class="mono">'+esc(t.task_id)+'</b>'+pill(t.status)+'</div><div class="meta">'+fmtDate(t.started_at)+' • afsluitcode '+esc(t.exit_code??'—')+' • '+esc(t.route_task_id||'route onbekend')+'</div></div>').join('')||'<div class="empty">Geen task-state.</div>';
  q('#sessionList').innerHTML=d.sessions.slice(0,30).map(s=>'<div class="item"><div class="item-head"><b class="mono">'+esc(s.route_task_id)+'</b><span class="pill">'+s.tasks+' tasks</span></div><div class="meta">'+s.active+' actief • '+s.failures+' fouten • laatste: '+esc(s.last_task||'—')+'</div></div>').join('')||'<div class="empty">Geen sessieroutes in task-state.</div>';
+
+ const bc=bl.counts||{};
+ q('#logbookCards').innerHTML=card('Open',bc.open??0,'Bekend werk dat nog moet gebeuren')+card('Bezig',bc.in_progress??0,'Werkitems met actieve voortgang')+card('Geblokkeerd',bc.blocked??0,'Wacht op een concrete afhankelijkheid')+card('Afgerond',bc.done??0,'Volledig gesloten werkitems');
+ q('#openWorkCount').textContent=((bc.open||0)+(bc.in_progress||0)+(bc.blocked||0))+' open';
+ q('#openWorkList').innerHTML=(bl.open_work||[]).map(w=>'<button class="item click work-open" data-work="'+encodeURIComponent(w.work_item_id)+'"><div class="item-head"><b>'+esc(w.title)+'</b>'+pill(w.status)+'</div><div class="meta"><strong>Volgende stap:</strong> '+esc(w.next_action||'Niet vastgelegd')+'</div>'+(w.first_incomplete_step?'<div class="meta"><strong>Eerste incomplete stap:</strong> '+esc(w.first_incomplete_step)+'</div>':'')+'<div class="meta mono">'+esc(w.work_item_id)+' • '+fmtDate(w.updated_at)+'</div></button>').join('')||'<div class="ok"><b>Geen open bouwwerk</b><div class="meta">Alle geregistreerde werkitems zijn afgerond.</div></div>';
+ const dup=bl.duplicate_open_objectives||[];
+ q('#duplicateWorkList').innerHTML=dup.length?dup.map(x=>'<div class="alert"><b>Mogelijk dubbel werk</b><div class="meta">'+esc(x.title)+'<br>'+esc((x.work_item_ids||[]).join(' • '))+'</div></div>').join(''):'<div class="ok"><b>Geen exacte dubbele open doelen</b><div class="meta">Nieuwe sessies horen een bestaand work_item_id te vervolgen in plaats van hetzelfde doel opnieuw te starten.</div></div>';
+ q('#buildEventCount').textContent=(bc.events||0)+' gebeurtenissen';
+ renderBuildLog();
+ qa('.work-open').forEach(b=>b.addEventListener('click',()=>showWorkItem(decodeURIComponent(b.dataset.work))));
 
  q('#ideaCount').textContent=c.candidates+' totaal'; renderIdeas();
  q('#runCount').textContent=c.runs+' totaal'; renderRuns();
@@ -249,6 +290,35 @@ function render(){
    '<div class="item"><div class="kicker">Laatst opgehaalde GitHub-main</div><div class="mono">'+esc(gs.fetched_github_main||'onbekend')+'</div><div class="meta">Opgehaald: '+fmtDate(gs.fetched_at)+'</div></div>'+
    '<div class="item"><div class="kicker">Worktree</div><b>'+(gs.dirty===false?'Schoon':gs.dirty===true?'Niet schoon':'Onbekend')+'</b><div class="meta">'+esc((gs.dirty_paths||[]).join(' • ')||'Geen afwijkende bestanden gemeld.')+'</div></div>';
  q('#systemRows').innerHTML=d.tasks.slice(0,200).map(t=>'<tr><td class="mono">'+esc(t.task_id)+'</td><td>'+pill(t.status)+'</td><td>'+esc(t.exit_code??'—')+'</td><td class="mono">'+esc(t.route_task_id||'—')+'</td><td class="mono">'+esc((t.source_commit||'—').slice(0,12))+'</td></tr>').join('')||'<tr><td colspan="5" class="empty">Geen actieve taken.</td></tr>';
+}
+
+function renderBuildLog(){
+ if(!S.data)return;
+ const bl=S.data.build_log||{recent_events:[]};
+ const term=q('#buildLogSearch').value.toLowerCase(),filter=q('#buildLogFilter').value.toUpperCase();
+ const rows=(bl.recent_events||[]).filter(e=>{
+   const hay=[e.work_item_id,e.title,e.summary,e.why,e.next_action,e.first_incomplete_step,(e.task_ids||[]).join(' '),e.session_route_task_id].join(' ').toLowerCase();
+   return(!term||hay.includes(term))&&(!filter||String(e.outcome||'').toUpperCase()===filter);
+ }).slice(0,500);
+ q('#buildEventList').innerHTML=rows.map(e=>'<button class="item click build-event-open" data-work="'+encodeURIComponent(e.work_item_id)+'"><div class="item-head"><div><b>'+esc(e.title||e.work_item_id)+'</b><div class="meta">'+fmtDate(e.created_at_utc)+' • '+esc(nlStatus(e.event_type||'NOTE'))+' • '+esc(e.session_route_task_id||'sessie niet vastgelegd')+'</div></div>'+pill(e.outcome)+'</div><div class="meta"><strong>Resultaat:</strong> '+esc(e.summary||'—')+'</div><div class="meta"><strong>Waarom:</strong> '+esc(e.why||'Niet vastgelegd')+'</div><div class="meta"><strong>Hierna:</strong> '+esc(e.next_action||'Geen vervolgstap vastgelegd')+'</div>'+((e.task_ids||[]).length?'<div class="meta mono">Taak: '+esc(e.task_ids.join(' • '))+'</div>':'')+'</button>').join('')||'<div class="empty">Geen logboekgebeurtenissen gevonden.</div>';
+ qa('.build-event-open').forEach(b=>b.addEventListener('click',()=>showWorkItem(decodeURIComponent(b.dataset.work))));
+}
+q('#buildLogSearch').addEventListener('input',renderBuildLog);q('#buildLogFilter').addEventListener('change',renderBuildLog);
+
+async function showWorkItem(id){
+ try{
+  const d=await api('/api/work-item/'+encodeURIComponent(id)),w=d.work_item;
+  const tasks=(w.task_ids||[]).map(x=>'<span class="pill mono">'+esc(x)+'</span>').join(' ')||'—';
+  const routes=(w.session_routes||[]).map(x=>'<span class="pill mono">'+esc(x)+'</span>').join(' ')||'—';
+  const commits=(w.commits||[]).map(x=>'<span class="pill mono">'+esc(x.slice(0,12))+'</span>').join(' ')||'—';
+  const timeline=(d.timeline||[]).map(e=>'<div class="event"><div class="item-head"><b>'+esc(nlStatus(e.event_type||'NOTE'))+' • '+esc(nlStatus(e.outcome||'INFO'))+'</b>'+pill(e.work_item_status)+'</div><p>'+fmtDate(e.created_at_utc)+' • '+esc(e.session_route_task_id||'sessie niet vastgelegd')+'<br><strong>Wat gebeurde:</strong> '+esc(e.summary||'—')+'<br><strong>Waarom:</strong> '+esc(e.why||'Niet vastgelegd')+(e.first_incomplete_step?'<br><strong>Eerste incomplete stap:</strong> '+esc(e.first_incomplete_step):'')+'<br><strong>Volgende stap:</strong> '+esc(e.next_action||'Geen')+((e.task_ids||[]).length?'<br><span class="mono">Taak: '+esc(e.task_ids.join(' • '))+'</span>':'')+'</p></div>').join('');
+  const html='<div class="item"><div class="item-head"><div><div class="kicker">WERKITEM</div><b class="mono">'+esc(w.work_item_id)+'</b></div>'+pill(w.status)+'</div><div class="meta" style="margin-top:10px"><strong>Doel:</strong> '+esc(w.objective||'—')+'</div></div>'+
+   '<div class="item" style="margin-top:10px"><div class="kicker">EERSTE INCOMPLETE STAP</div><div style="margin-top:6px">'+esc(w.first_incomplete_step||'Geen — werkitem kan afgerond zijn.')+'</div></div>'+
+   '<div class="item" style="margin-top:10px"><div class="kicker">VOLGENDE ACTIE</div><div style="margin-top:6px">'+esc(w.next_action||'Geen vervolgstap vastgelegd.')+'</div></div>'+
+   '<h3>Sessies</h3><div class="item">'+routes+'</div><h3>Taak-ID’s</h3><div class="item">'+tasks+'</div><h3>Commits</h3><div class="item">'+commits+'</div>'+
+   '<h3>Volledig logboek</h3><div class="timeline">'+timeline+'</div>';
+  openDrawer(w.title,'BOUWLOGBOEK',html);
+ }catch(e){toast('Kon werkitem niet openen: '+e.message)}
 }
 
 function renderIdeas(){
