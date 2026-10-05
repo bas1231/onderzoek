@@ -1,0 +1,53 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-ASTRA-FULL-A2Z-REPAIR-V2-START-20261005",
+  "source_commit": "524f794fa0789b3f02d1816738604cff8e050e8c",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "write_runtime",
+    "read_runtime"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 300,
+  "notes": "Update only the Astra control-route runtime config to the newly proven GPT-6 Astra session route, then create immutable A2Z repair campaign V2. Preserve V1 unchanged.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/astra_control_route_v2_20261005.json",
+      "content": "{\n  \"schema\": \"PREDICTION_AUTOBUILD_ROUTE_V1\",\n  \"route_task_id\": \"SESSION-ROUTE-998ca1b7029d5f4d19c7d5d9\"\n}\n"
+    },
+    {
+      "type": "install_runtime",
+      "source": "control/dev_checks/astra_control_route_v2_20261005.json",
+      "destination": "/home/leonh/.local/share/prediction-chat-bridge/autobuild_control_route.json",
+      "mode": 420
+    },
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/start_astra_full_a2z_repair_v2_20261005.py",
+      "content": "from __future__ import annotations\nimport importlib.util,json\nfrom pathlib import Path\n\nROOT=Path.cwd()\nBRIDGE=Path.home()/\".local/share/prediction-chat-bridge\"\nROUTE_CONFIG=BRIDGE/\"autobuild_control_route.json\"\nROUTES=BRIDGE/\"routes\"\nSOURCE_TASK_ID=\"ASTRA-FULL-A2Z-REPAIR-20261005-V2\"\nEXPECTED_ROUTE=\"SESSION-ROUTE-998ca1b7029d5f4d19c7d5d9\"\nCONTEXT=\"PREDICTION_ASTRA_FULL_A2Z_REPAIR_V2\\nrequired_model=GPT-6 Astra\\ncandidate_id=AUTO-DISCOVERY-54d13314c7879b58e46d\\nqualification_id=FULL-A2Z-LIVE-20261004-V4\\nobjective=Execute the complete Prediction A-to-Z qualification, diagnose the first real failure, repair it narrowly, add regression coverage where appropriate, and rerun until the complete governed chain is green or a genuine hard blocker remains.\\n\\nThis V2 supersedes only the delivery route of V1. V1 was correctly queued to an inactive prior Astra chat and is preserved as transport evidence. Do not reinterpret that as a system/gate failure.\\n\\nYou are the supervising test-and-repair agent for this qualification campaign. If you are not actually GPT-6 Astra, choose BLOCKED and do not author changes.\\n\\nBefore changing anything, read the current canonical Prediction source of truth:\\n00_CHATGPT_START_HERE.md\\ncontrol/bridge_commands/CURRENT_STATE.md\\ncontrol/bridge_commands/SESSION_ROUTING.md\\ncontrol/NEW_SESSION_LOCAL_EXECUTION.md\\ncontrol/PROJECT_EXECUTOR.md\\ncontrol/bridge_commands/OPERATIONS.md\\ncontrol/tampermonkey_multichat/PROTOCOL.md\\ncontrol/tampermonkey_multichat/CHATGPT_PROJECT_INSTRUCTIONS.md\\nmethodology/EDGE_DISCOVERY_MODEL_GATES.md\\n\\nUse the existing GitHub command bus and capability-scoped projectexecutor. Do not ask the human to paste terminal commands. Inspect the current V4 qualification candidate/evidence and existing runtime evidence first. Reproduce each failure before fixing it. Distinguish test-harness mistakes from real system failures. For a real failure, determine the first incomplete stage, apply the smallest bounded repair, add or strengthen a regression test where useful, run targeted tests, then rerun the full A-to-Z qualification.\\n\\nThe intended governed chain is:\\nsynthetic primary-scout intake validation -> durable candidate -> queue -> real Director reasoning -> Astra PREBUILD gate -> governed build using the project's required builder policy -> technical positive/negative controls -> Director -> Astra PREMEASUREMENT gate -> read-only/shadow qualification measurement -> final Director -> final report.\\nPreserve production model gates rather than bypassing or faking them. Synthetic qualification observations never count as economic evidence. Scientific status remains NO_PROVEN_EDGE unless the formal economic proof gates are genuinely met.\\n\\nAuthorization includes ordinary bounded repository edits, tests, isolated worktrees/local commits, allowlisted Prediction runtime installs, and prediction-* user-service diagnosis/restart only when necessary to validate a demonstrated repair. Do not broaden scope beyond the first demonstrated failure.\\n\\nHard boundaries:\\nlive_trading=false\\npaid_actions=false\\nwallet_actions=false\\norder_submission=false\\nremote_git_push=false\\ncredential_access=false\\nsudo_or_root=false\\nunrestricted_external_network=false\\n\\nUse immutable task IDs. Require status=PASS exit=0 plus task-specific assertions before calling a stage green. On failure diagnose and retry with a fresh task ID. When the complete A-to-Z chain is proven, create durable final qualification evidence/report in canonical Git and choose DONE. If a genuine unavailable capability, login/KYC, specific paid action, trade/wallet approval, or unreachable command bus is essential, choose BLOCKED with the exact blocker.\"\n\ndef load(path):\n    obj=json.loads(path.read_text(encoding=\"utf-8\"))\n    if not isinstance(obj,dict):\n        raise RuntimeError(\"JSON object required\")\n    return obj\n\ndef load_cont():\n    p=ROOT/\"control\"/\"tampermonkey_multichat\"/\"continuation_manager.py\"\n    spec=importlib.util.spec_from_file_location(\"astra_v2_cont\",p)\n    if spec is None or spec.loader is None:\n        raise RuntimeError(\"continuation manager unavailable\")\n    mod=importlib.util.module_from_spec(spec)\n    spec.loader.exec_module(mod)\n    return mod\n\ndef main():\n    cfg=load(ROUTE_CONFIG)\n    route_id=str(cfg.get(\"route_task_id\") or \"\")\n    if route_id != EXPECTED_ROUTE:\n        raise RuntimeError(\"ASTRA_ROUTE_CONFIG_NOT_UPDATED\")\n    route=load(ROUTES/f\"{route_id}.json\")\n    chat_id=str(route.get(\"chat_id\") or \"\")\n    if not chat_id:\n        raise RuntimeError(\"ASTRA_CHAT_ID_MISSING\")\n    cont=load_cont()\n    rec=cont.start_external_continuation(\n        data_dir=BRIDGE,\n        source_task_id=SOURCE_TASK_ID,\n        chat_id=chat_id,\n        expected_route_task_id=route_id,\n        context_message=CONTEXT,\n        source_kind=\"ASTRA_FULL_A2Z_REPAIR\",\n    )\n    print(\"ASTRA_V2_START=PASS\")\n    print(\"CONTINUATION_ID=\"+str(rec.get(\"continuation_id\") or \"\"))\n    print(\"STATE=\"+str(rec.get(\"state\") or \"\"))\n    print(\"ROUTE=\"+str(rec.get(\"expected_route_task_id\") or \"\"))\n    if rec.get(\"expected_route_task_id\") != EXPECTED_ROUTE:\n        raise SystemExit(21)\n    if rec.get(\"state\") not in {\"CONTINUE_REQUESTED\",\"CONTINUE_QUEUED\",\"CONTINUE_SENT\"}:\n        raise SystemExit(22)\n    return 0\n\nif __name__==\"__main__\":\n    raise SystemExit(main())\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/start_astra_full_a2z_repair_v2_20261005.py"
+      ],
+      "timeout_seconds": 120
+    }
+  ]
+}
