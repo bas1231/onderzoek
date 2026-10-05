@@ -1,0 +1,17 @@
+{
+  "schema": "PREDICTION_BRIDGE_COMMAND_V1",
+  "task_id": "DEV-FG-LATEST-FAILURE-EXACT-20261005-E044",
+  "action": "SIX_AI_HEALTH",
+  "created_at_utc": "2026-10-05T14:55:00Z",
+  "route_task_id": "DEV-FG-INBOX-PICKUP-VERIFY-20261005-E043",
+  "delivery_mode": "chat",
+  "live_trading": false,
+  "paid_actions": false,
+  "wallet_actions": false,
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "notes": "Read-only retrieve exact latest failed FG job metadata and failure reason; do not inspect transcript content."
+}
