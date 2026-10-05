@@ -1,0 +1,31 @@
+{
+  "schema": "PREDICTION_BUILD_LOG_EVENT_V1",
+  "event_id": "20261005T195100Z-PRODUCTION-RECONCILIATION-E050-EXPORT-TEST",
+  "work_item_id": "PRODUCTION-RECONCILIATION-20261005",
+  "created_at_utc": "2026-10-05T19:51:00Z",
+  "event_type": "ATTEMPT",
+  "work_item_status": "IN_PROGRESS",
+  "outcome": "STARTED",
+  "title": "Production veilig reconciliëren met canonical main",
+  "objective": "Breng production veilig in sync met canonical main zonder lokaal werk te verliezen.",
+  "summary": "E050 test de nieuwe bounded snapshot-export: immutable E034 archive-export, maximaal 24k base64 per chunk, en bridge-specialcase met 26k harde aflevergrens terwijl normale WSL-results 900 tekens blijven.",
+  "why": "De 24 actieve/audit runtime-artifacts moeten exact naar canonical GitHub worden overgebracht zonder WSL remote writes en zonder de algemene bridge-resultaatlimiet te verruimen.",
+  "next_action": "Bij PASS: meet de deterministic E034 archivegrootte. Daarna deploy alleen de geteste bounded exportcompactor en exporteer het minimaal benodigde aantal chunks.",
+  "session_route_task_id": "SESSION-ROUTE-fc2613ecbc81e22d4c913b2a",
+  "task_ids": [
+    "DEV-PRED-PRODUCTION-SNAPSHOT-EXPORT-TEST-20261005-E050"
+  ],
+  "evidence_refs": [
+    "control/tampermonkey_multichat/test_snapshot_export_delivery.py",
+    "projectexecutor:archive_info/archive_chunk"
+  ],
+  "tags": [
+    "production",
+    "reconciliation",
+    "export",
+    "bridge",
+    "bounded"
+  ],
+  "parent_event_id": "20261005T194700Z-PRODUCTION-RECONCILIATION-E048-RESULT",
+  "first_incomplete_step": "Bounded snapshot-export regressies bewijzen."
+}
