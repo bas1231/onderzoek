@@ -44,8 +44,8 @@ def main() -> int:
     if not isinstance(sync, dict) or sync.get("status") not in {"GREEN", "AMBER", "RED", "UNKNOWN"}:
         raise RuntimeError("CONTROL_CENTER_GIT_SYNC_MISSING")
     active_states = {
-        "RUNNING", "STARTED", "CLAIMED", "DISPATCHED", "INFLIGHT",
-        "CONTINUE_QUEUED", "CONTINUE_SENT", "PENDING",
+        "RUNNING", "STARTED", "CLAIMED", "INFLIGHT",
+        "CONTINUE_QUEUED", "PENDING",
     }
     tasks = snapshot.get("tasks")
     if not isinstance(tasks, list):
