@@ -1,0 +1,32 @@
+{
+  "schema": "PREDICTION_BUILD_LOG_EVENT_V1",
+  "event_id": "20261005T202300Z-PRODUCTION-RECONCILIATION-E039-RESULT",
+  "work_item_id": "PRODUCTION-RECONCILIATION-20261005",
+  "created_at_utc": "2026-10-05T20:23:00Z",
+  "event_type": "RESULT",
+  "work_item_status": "IN_PROGRESS",
+  "outcome": "FAIL",
+  "title": "Production veilig reconciliëren met canonical main",
+  "objective": "Breng production veilig in sync met canonical main zonder lokaal werk te verliezen.",
+  "summary": "E039 semantic snapshot output werd afgekapt. Zichtbaar bewijs: candidate_id=AUTO-DISCOVERY-54d13314c7879b58e46d, applied_version=ea715c48db876fe8436ba0d9d5bb5911, astra_review_phases=[], has_build_handoff=false, has_measurement_authorization=false.",
+  "why": "De lokale candidate overlay lijkt nog in een pre-Astra/pre-build governed lifecyclefase te zitten en kan daarom niet als triviale disposable runtime-output worden behandeld.",
+  "next_action": "Splits immutable E034 semantic inspection in compacte candidate/wake/run summaries om truncatie te vermijden.",
+  "session_route_task_id": "SESSION-ROUTE-fc2613ecbc81e22d4c913b2a",
+  "task_ids": [
+    "DEV-PRED-PRODUCTION-SNAPSHOT-SEMANTIC-20261005-E039"
+  ],
+  "evidence_refs": [
+    "event=1791227725-ba7604906a46",
+    "candidate_id=AUTO-DISCOVERY-54d13314c7879b58e46d",
+    "applied_version=ea715c48db876fe8436ba0d9d5bb5911"
+  ],
+  "tags": [
+    "production",
+    "reconciliation",
+    "snapshot",
+    "semantic",
+    "candidate-state"
+  ],
+  "parent_event_id": "20261005T201800Z-PRODUCTION-RECONCILIATION-E039-SEMANTIC",
+  "first_incomplete_step": "Compacte semantic summary zonder truncatie."
+}
