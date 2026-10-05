@@ -215,7 +215,7 @@ def test_installed_provenance_keeps_policy_and_candidate_pins_without_supervisor
         'policy':'CHATGPT_REASONING_ONLY_NO_TOOLS_NO_RESET',
         'candidate_policy_sha256':m.digest((ROOT/'control/hourly/candidate_queue.py').read_bytes()),
     }
-    for name in ('candidate_dispatch.py','evidence_wake.py','build_wake.py'):
+    for name in ('candidate_dispatch.py','evidence_wake.py','build_wake.py','model_quality_gate.py','astra_review_wake.py','astra_autonomous_review.py','measurement_wake.py'):
         config[name+'_sha256']=m.digest((ROOT/'control/codex_supervisor'/name).read_bytes())
     m.atomic(tmp_path/'CONFIG.json',config)
     m.verify_installation(tmp_path)
