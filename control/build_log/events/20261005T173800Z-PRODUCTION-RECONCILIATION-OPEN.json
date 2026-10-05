@@ -1,0 +1,28 @@
+{
+  "schema": "PREDICTION_BUILD_LOG_EVENT_V1",
+  "event_id": "20261005T173800Z-PRODUCTION-RECONCILIATION-OPEN",
+  "work_item_id": "PRODUCTION-RECONCILIATION-20261005",
+  "created_at_utc": "2026-10-05T17:38:00Z",
+  "event_type": "HANDOFF",
+  "work_item_status": "OPEN",
+  "outcome": "INFO",
+  "title": "Production veilig reconciliëren met canonical main",
+  "objective": "Breng production veilig in overeenstemming met canonical main zonder lokale architectuurcommits of dirty/untracked werk te verliezen.",
+  "summary": "Production is volgens CURRENT_STATE nog niet geschikt voor een onvoorwaardelijke branch switch/fast-forward. Het Control Center detecteert bovendien een dirty production-worktree en toont daarom terecht Git-sync rood.",
+  "why": "De tijdelijke production-branch bevat echte lokale architectuurcommits en mogelijk aanvullende dirty/untracked inhoud. Representation gates moeten eerst bewijzen dat alles in canonical source is vertegenwoordigd.",
+  "next_action": "Inspecteer de concrete dirty paden en bestaande representation-gate evidence. Ruim niets op en reset niets voordat committed én dirty productioninhoud aantoonbaar canoniek is vertegenwoordigd.",
+  "session_route_task_id": null,
+  "task_ids": [],
+  "commits": [],
+  "evidence_refs": [
+    "control/bridge_commands/CURRENT_STATE.md"
+  ],
+  "tags": [
+    "production",
+    "git-sync",
+    "reconciliation",
+    "safety"
+  ],
+  "parent_event_id": null,
+  "first_incomplete_step": "Exacte representation/final-verification gate voor huidige productionbranch en dirty worktree."
+}
