@@ -32,6 +32,55 @@ class ControlCenterTests(unittest.TestCase):
         (repo / "knowledge/manual_scout_seeds").mkdir(parents=True)
         (repo / "knowledge/research").mkdir(parents=True)
         (repo / "control/control_center").mkdir(parents=True)
+        (repo / "control/build_log/events").mkdir(parents=True)
+        write_json(
+            repo / "control/build_log/events/20261001T090000Z-W-1-PLAN.json",
+            {
+                "schema": "PREDICTION_BUILD_LOG_EVENT_V1",
+                "event_id": "20261001T090000Z-W-1-PLAN",
+                "work_item_id": "W-1",
+                "created_at_utc": "2026-10-01T09:00:00Z",
+                "event_type": "PLAN",
+                "work_item_status": "OPEN",
+                "outcome": "PLANNED",
+                "title": "Shared test work",
+                "objective": "Prove one shared objective across sessions.",
+                "summary": "Work item created.",
+                "why": "Need shared continuity.",
+                "next_action": "Run the first attempt.",
+                "session_route_task_id": "SESSION-A",
+                "task_ids": [],
+                "commits": [],
+                "evidence_refs": [],
+                "tags": ["test"],
+                "parent_event_id": None,
+                "first_incomplete_step": "First attempt.",
+            },
+        )
+        write_json(
+            repo / "control/build_log/events/20261001T100000Z-W-1-FAIL.json",
+            {
+                "schema": "PREDICTION_BUILD_LOG_EVENT_V1",
+                "event_id": "20261001T100000Z-W-1-FAIL",
+                "work_item_id": "W-1",
+                "created_at_utc": "2026-10-01T10:00:00Z",
+                "event_type": "RESULT",
+                "work_item_status": "IN_PROGRESS",
+                "outcome": "FAIL",
+                "title": "Shared test work",
+                "objective": "Prove one shared objective across sessions.",
+                "summary": "First attempt failed.",
+                "why": "Synthetic failure.",
+                "next_action": "Continue at the first incomplete step.",
+                "session_route_task_id": "SESSION-B",
+                "task_ids": ["TASK-FAIL"],
+                "commits": [],
+                "evidence_refs": ["synthetic"],
+                "tags": ["test"],
+                "parent_event_id": "20261001T090000Z-W-1-PLAN",
+                "first_incomplete_step": "Verification.",
+            },
+        )
         write_json(
             repo / "control/control_center/lifecycle_status.json",
             {
@@ -107,6 +156,7 @@ class ControlCenterTests(unittest.TestCase):
         model.command_state = tmp_path / "command_state"
         model.executor_state = tmp_path / "executor_state"
         model.mirror_root = tmp_path / "mirror_root"
+        model.bus_repo = tmp_path / "bus_repo"
         model.command_state.mkdir()
         model.executor_state.mkdir()
         self.model = model
@@ -124,6 +174,9 @@ class ControlCenterTests(unittest.TestCase):
         self.assertEqual(snapshot["edge_state"], "NO_PROVEN_EDGE")
         self.assertEqual(snapshot["lifecycle"]["full_chain_status"], "NOT_PROVEN")
         self.assertEqual(snapshot["lifecycle"]["stages"][0]["state"], "WORKING_COMPONENT")
+        self.assertEqual(snapshot["build_log"]["counts"]["work_items"], 1)
+        self.assertEqual(snapshot["build_log"]["counts"]["in_progress"], 1)
+        self.assertEqual(snapshot["counts"]["build_log_open"], 1)
         self.assertEqual(
             snapshot["legacy_artifacts"][0]["path"],
             "knowledge/research/legacy-note.md",
@@ -303,6 +356,56 @@ class ControlCenterTests(unittest.TestCase):
         self.assertTrue(any("Production HEAD" in x for x in sync["issues"]))
         self.assertTrue(any("niet-vastgelegde" in x for x in sync["issues"]))
 
+    def test_build_log_groups_cross_session_events_into_one_work_item(self):
+        projection = self.model.build_log_projection()
+        self.assertEqual(projection["counts"]["work_items"], 1)
+        self.assertEqual(projection["counts"]["in_progress"], 1)
+        self.assertEqual(projection["counts"]["fail_events"], 1)
+        item = projection["work_items"][0]
+        self.assertEqual(item["work_item_id"], "W-1")
+        self.assertEqual(item["status"], "IN_PROGRESS")
+        self.assertEqual(item["event_count"], 2)
+        self.assertEqual(item["session_routes"], ["SESSION-A", "SESSION-B"])
+        self.assertEqual(item["task_ids"], ["TASK-FAIL"])
+        self.assertEqual(item["first_incomplete_step"], "Verification.")
+        self.assertEqual(item["next_action"], "Continue at the first incomplete step.")
+
+        detail = self.model.work_item_detail("W-1")
+        self.assertIsNotNone(detail)
+        self.assertEqual(len(detail["timeline"]), 2)
+        self.assertEqual(detail["timeline"][0]["outcome"], "PLANNED")
+        self.assertEqual(detail["timeline"][1]["outcome"], "FAIL")
+
+    def test_build_log_duplicate_open_objectives_are_flagged(self):
+        write_json(
+            self.model.repo / "control/build_log/events/20261001T110000Z-W-2.json",
+            {
+                "schema": "PREDICTION_BUILD_LOG_EVENT_V1",
+                "event_id": "20261001T110000Z-W-2",
+                "work_item_id": "W-2",
+                "created_at_utc": "2026-10-01T11:00:00Z",
+                "event_type": "PLAN",
+                "work_item_status": "OPEN",
+                "outcome": "PLANNED",
+                "title": "Duplicate shared work",
+                "objective": "Prove one shared objective across sessions.",
+                "summary": "Duplicate objective.",
+                "why": "Synthetic duplicate.",
+                "next_action": "Reuse W-1 instead.",
+                "session_route_task_id": "SESSION-C",
+                "task_ids": [],
+                "commits": [],
+                "evidence_refs": [],
+                "tags": ["test"],
+                "parent_event_id": None,
+                "first_incomplete_step": "Do not duplicate.",
+            },
+        )
+        projection = self.model.build_log_projection()
+        self.assertEqual(projection["counts"]["duplicate_open_objectives"], 1)
+        ids = set(projection["duplicate_open_objectives"][0]["work_item_ids"])
+        self.assertEqual(ids, {"W-1", "W-2"})
+
     def test_lifecycle_status_is_persistent_and_fail_closed(self):
         lifecycle = self.model.lifecycle_status()
         self.assertEqual(lifecycle["full_chain_status"], "NOT_PROVEN")
@@ -343,6 +446,10 @@ class ControlCenterTests(unittest.TestCase):
             "Wat gebeurt er nu? — vaste A→Z-ketenstatus",
             "Volgende mijlpaal",
             "Wat moet nog gebeuren:",
+            "Logboek",
+            "Anti-rondjes controle",
+            "Bouwlogboek",
+            "Open bouwwerk",
         ):
             self.assertIn(expected, html)
         self.assertIn("NO_PROVEN_EDGE", html)
