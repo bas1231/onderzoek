@@ -1,0 +1,41 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-CANDIDATE-INVENTORY-DETAIL-20261005-E003",
+  "source_commit": "365e71bcc7f0b57621d3a34abbfa05fae1c3af49",
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "high"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_runtime"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 180,
+  "notes": "Read-only candidate inventory diagnostic. Intentionally exits nonzero after printing a compact payload so the bridge exposes the inventory in TaskError detail. No production mutation/model/service/trade/paid action.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/candidate_inventory_detail_20261005_e003.py",
+      "content": "from pathlib import Path\nimport json, re\n\nprod = Path.home() / \"prediction_research_prod\"\n\ndef sj(p):\n    try:\n        if not p.is_file() or p.is_symlink(): return None\n        return json.loads(p.read_text())\n    except Exception:\n        return None\n\nrows=[]\nd=prod/\"knowledge/candidates\"\nif d.is_dir():\n    for p in sorted(d.glob(\"*.json\")):\n        x=sj(p)\n        if isinstance(x,dict) and x.get(\"candidate_id\"):\n            rows.append({\n                \"id\":x.get(\"candidate_id\"),\n                \"q\":x.get(\"queue_status\"),\n                \"ph\":x.get(\"phase\"),\n                \"dec\":x.get(\"decision\"),\n                \"pri\":x.get(\"priority\"),\n                \"exp\":x.get(\"active_experiment_ids\") or [],\n                \"qual\":bool(x.get(\"qualification_fixture\")),\n                \"next\":(x.get(\"next_decisive_test\") or \"\")[:180],\n                \"upd\":x.get(\"updated_at\")\n            })\n\nactive=[]\nad=prod/\"candidates/active\"\nif ad.is_dir():\n    for p in sorted(ad.glob(\"*\")):\n        if not p.is_file() or p.is_symlink(): continue\n        t=p.read_text(errors=\"replace\")\n        def g(k):\n            m=re.search(r\"(?m)^\\s*\"+re.escape(k)+r\":\\s*[\\\"']?([^\\\"'\\n#]+)\",t)\n            return m.group(1).strip() if m else None\n        active.append({\"id\":g(\"candidate_id\") or g(\"id\"),\"status\":g(\"status\"),\"econ\":g(\"economic_status\"),\"file\":p.name})\n\nstate=sj(prod/\"knowledge/codex_runtime/STATE.json\")\nq=sj(Path(\"/tmp/prediction-full-a2z-live-v4-state.json\"))\n\nout={\n \"rows\":rows,\n \"active\":active,\n \"supervisor\": {k:state.get(k) for k in (\"state\",\"reason\",\"candidate_id\",\"updated_at\")} if isinstance(state,dict) else None,\n \"qual_stages\":[[s.get(\"stage\"),s.get(\"status\")] for s in (q or {}).get(\"stages\",[])] if isinstance(q,dict) else None\n}\nprint(\"INVENTORY_E003 \"+json.dumps(out,separators=(\",\",\":\"),default=str),flush=True)\nraise SystemExit(2)\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/candidate_inventory_detail_20261005_e003.py"
+      ],
+      "timeout_seconds": 90
+    }
+  ]
+}
