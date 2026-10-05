@@ -1,0 +1,44 @@
+{
+  "schema": "PREDICTION_BUILD_LOG_EVENT_V1",
+  "event_id": "20261005T192600Z-CONTROL-CENTER-SESSION-DRIFT-PLAN",
+  "work_item_id": "CONTROL-CENTER-SESSION-DRIFT-20261005",
+  "created_at_utc": "2026-10-05T19:26:00Z",
+  "event_type": "PLAN",
+  "work_item_status": "IN_PROGRESS",
+  "outcome": "STARTED",
+  "title": "Duidelijke waarschuwing bij sessie-afwijking",
+  "objective": "Toon in het Prediction Control Center een duidelijke waarschuwing wanneer een actieve ChatGPT-sessie buiten haar expliciet vastgelegde opdracht werkt.",
+  "summary": "Deterministische drift-detectie is in bron voorbereid met expliciete session_assignment_scope en supports_work_item_id relaties, plus een prominente waarschuwing op alle dashboardpagina's.",
+  "why": "Een sessie moet niet stil kunnen afdwalen. De waarschuwing moet uitlegbaar zijn en dependency-werk niet ten onrechte als drift markeren.",
+  "next_action": "Na E031 de actuele Control Center regressies draaien, drift-detectie installeren en runtime-canary bewijzen.",
+  "session_route_task_id": "SESSION-ROUTE-fc2613ecbc81e22d4c913b2a",
+  "task_ids": [],
+  "commits": [
+    "54e55e5bcab857acfd8fc24b5c3b5b777f7b24c3",
+    "396de02a1bfb9fdc3fc03e0645c0742978ec4501",
+    "cf5514d766babf7d80aef20e12c748388756aa48",
+    "e4f78e2c3023cf24821d63c4ed9f947c278bc1e3"
+  ],
+  "evidence_refs": [
+    "control/build_log/SCHEMA_V1.json",
+    "control/control_center/server.py",
+    "control/control_center/static/index.html",
+    "tests/control_center/test_control_center.py"
+  ],
+  "tags": [
+    "control-center",
+    "session",
+    "drift",
+    "governance"
+  ],
+  "parent_event_id": null,
+  "first_incomplete_step": "Regressies en runtime-installatie van de sessie-afwijkingsmelding.",
+  "session_assignment_scope": {
+    "instruction": "Ga door met de dashboard fresh-session build, de production-reconciliatie en voeg de sessie-afwijkingsmelding toe.",
+    "allowed_work_item_ids": [
+      "DASHBOARD-NEW-SESSION-ACTIONS-20261005",
+      "PRODUCTION-RECONCILIATION-20261005",
+      "CONTROL-CENTER-SESSION-DRIFT-20261005"
+    ]
+  }
+}
