@@ -1,0 +1,153 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-FULL-A2Z-DETERMINISTIC-20261005-E038",
+  "source_commit": "a3a61e9d8944ba4d23545bee158063d21ea244a5",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "run_tests",
+    "run_project_python",
+    "production_inspect",
+    "production_compare_worktree"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 900,
+  "notes": "Retry full governed A-to-Z deterministic acceptance after E037 was rejected by the outer DEV timeout validator. Same substantive acceptance, but all task/command timeouts are within the proven DEV execution envelope. No production mutation and no trading/orders/funds.",
+  "operations": [
+    {
+      "type": "production_inspect",
+      "require_head_equals_main": true,
+      "report_mode": "status_summary"
+    },
+    {
+      "type": "production_compare_worktree",
+      "require_exact": true,
+      "report_mode": "counts"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "/home/leonh/prediction_research_prod/.venv/bin/python",
+        "-m",
+        "pytest",
+        "-q",
+        "tests/codex_supervisor/test_model_quality_gates.py",
+        "tests/codex_supervisor/test_candidate_dispatch.py",
+        "tests/hourly/test_candidate_reporting_current_binding.py"
+      ],
+      "test": true,
+      "timeout_seconds": 300
+    },
+    {
+      "type": "python",
+      "argv": [
+        "/home/leonh/prediction_research_prod/.venv/bin/python",
+        "control/hourly/full_chain_qualification.py",
+        "--mode",
+        "deterministic",
+        "--result",
+        "/tmp/prediction-full-a2z-e038.json"
+      ],
+      "timeout_seconds": 600
+    },
+    {
+      "type": "python",
+      "argv": [
+        "/home/leonh/prediction_research_prod/.venv/bin/python",
+        "control/hourly/full_chain_qualification.py",
+        "--result",
+        "/tmp/prediction-full-a2z-e038.json",
+        "--assert-stage",
+        "overall"
+      ],
+      "test": true,
+      "timeout_seconds": 60
+    },
+    {
+      "type": "python",
+      "argv": [
+        "/home/leonh/prediction_research_prod/.venv/bin/python",
+        "control/hourly/full_chain_qualification.py",
+        "--result",
+        "/tmp/prediction-full-a2z-e038.json",
+        "--assert-stage",
+        "tiny_positive_edge_policy"
+      ],
+      "test": true,
+      "timeout_seconds": 60
+    },
+    {
+      "type": "python",
+      "argv": [
+        "/home/leonh/prediction_research_prod/.venv/bin/python",
+        "control/hourly/full_chain_qualification.py",
+        "--result",
+        "/tmp/prediction-full-a2z-e038.json",
+        "--assert-stage",
+        "astra_prebuild_review"
+      ],
+      "test": true,
+      "timeout_seconds": 60
+    },
+    {
+      "type": "python",
+      "argv": [
+        "/home/leonh/prediction_research_prod/.venv/bin/python",
+        "control/hourly/full_chain_qualification.py",
+        "--result",
+        "/tmp/prediction-full-a2z-e038.json",
+        "--assert-stage",
+        "astra_premeasurement_review"
+      ],
+      "test": true,
+      "timeout_seconds": 60
+    },
+    {
+      "type": "python",
+      "argv": [
+        "/home/leonh/prediction_research_prod/.venv/bin/python",
+        "control/hourly/full_chain_qualification.py",
+        "--result",
+        "/tmp/prediction-full-a2z-e038.json",
+        "--assert-stage",
+        "prospective_read_only_measurement"
+      ],
+      "test": true,
+      "timeout_seconds": 60
+    },
+    {
+      "type": "python",
+      "argv": [
+        "/home/leonh/prediction_research_prod/.venv/bin/python",
+        "control/hourly/full_chain_qualification.py",
+        "--result",
+        "/tmp/prediction-full-a2z-e038.json",
+        "--assert-stage",
+        "reporting"
+      ],
+      "test": true,
+      "timeout_seconds": 60
+    },
+    {
+      "type": "production_inspect",
+      "require_head_equals_main": true,
+      "report_mode": "status_summary"
+    },
+    {
+      "type": "production_compare_worktree",
+      "require_exact": true,
+      "report_mode": "counts"
+    }
+  ]
+}
