@@ -157,8 +157,14 @@ class ControlCenterTests(unittest.TestCase):
         model.executor_state = tmp_path / "executor_state"
         model.mirror_root = tmp_path / "mirror_root"
         model.bus_repo = tmp_path / "bus_repo"
+        model.bridge_data = tmp_path / "bridge_data"
+        model.sync_request_root = state / "sync_requests"
         model.command_state.mkdir()
         model.executor_state.mkdir()
+        (model.bridge_data / "sent").mkdir(parents=True)
+        (model.bridge_data / "inflight").mkdir()
+        (model.bridge_data / "outbox").mkdir()
+        (model.bridge_data / "routes").mkdir()
         self.model = model
 
     def tearDown(self):
@@ -356,6 +362,97 @@ class ControlCenterTests(unittest.TestCase):
         self.assertTrue(any("Production HEAD" in x for x in sync["issues"]))
         self.assertTrue(any("niet-vastgelegde" in x for x in sync["issues"]))
 
+    def _seed_proven_chat_route(self):
+        write_json(
+            self.model.bridge_data / "routes/TASK-ROUTE.json",
+            {
+                "version": 2,
+                "task_id": "TASK-ROUTE",
+                "chat_id": "chat-1234",
+                "consumer_id": "consumer-old",
+            },
+        )
+        write_json(
+            self.model.bridge_data / "sent/event-route.json",
+            {
+                "event_id": "event-route",
+                "task_id": "TASK-ROUTE",
+                "message": "delivered",
+                "created_at": 1,
+            },
+        )
+
+    def test_sync_request_routes_to_latest_proven_chat_and_preserves_safety(self):
+        self._seed_proven_chat_route()
+        red = {
+            "status": "RED",
+            "production_head": "b" * 40,
+            "local_main": "a" * 40,
+            "fetched_github_main": "a" * 40,
+            "production_branch": "work",
+            "dirty": True,
+            "dirty_paths": ["control/example.py"],
+            "issues": ["Production-worktree bevat niet-vastgelegde wijzigingen."],
+        }
+        with mock.patch.object(self.model, "git_sync_status", return_value=red):
+            result = self.model.request_sync()
+
+        self.assertEqual(result["state"], "QUEUED")
+        self.assertFalse(result["deduplicated"])
+        self.assertEqual(result["selected_route_task_id"], "TASK-ROUTE")
+        self.assertEqual(result["selected_chat_id"], "chat-1234")
+        self.assertFalse(result["safety"]["destructive_git"])
+        self.assertFalse(result["safety"]["wsl_remote_git_write"])
+
+        route = safe_json(self.model.bridge_data / "routes" / f"{result['trigger_task_id']}.json")
+        self.assertEqual(route["chat_id"], "chat-1234")
+        self.assertIsNone(route["consumer_id"])
+
+        event = safe_json(self.model.bridge_data / "outbox" / f"{result['event_id']}.json")
+        self.assertEqual(event["source"], "prediction_control_center_sync_v1")
+        self.assertIn("PREDICTION_CONTROL_SYNC_REQUEST_V1", event["message"])
+        self.assertIn("PRODUCTION-RECONCILIATION-20261005", event["message"])
+        self.assertIn("Never use reset --hard", event["message"])
+        self.assertIn("git_sync.status=GREEN", event["message"])
+
+        request_path = self.model.sync_request_root / f"{result['request_id']}.json"
+        self.assertTrue(request_path.is_file())
+
+    def test_sync_request_deduplicates_recent_active_request(self):
+        self._seed_proven_chat_route()
+        red = {
+            "status": "RED",
+            "production_head": "b" * 40,
+            "local_main": "a" * 40,
+            "fetched_github_main": "a" * 40,
+            "production_branch": "work",
+            "dirty": True,
+            "dirty_paths": ["control/example.py"],
+            "issues": ["dirty"],
+        }
+        with mock.patch.object(self.model, "git_sync_status", return_value=red):
+            first = self.model.request_sync()
+            second = self.model.request_sync()
+        self.assertEqual(first["request_id"], second["request_id"])
+        self.assertTrue(second["deduplicated"])
+        self.assertEqual(len(list((self.model.bridge_data / "outbox").glob("control-sync-*.json"))), 1)
+
+    def test_sync_request_is_noop_when_green(self):
+        green = {
+            "status": "GREEN",
+            "production_head": "a" * 40,
+            "local_main": "a" * 40,
+            "fetched_github_main": "a" * 40,
+            "production_branch": "main",
+            "dirty": False,
+            "dirty_paths": [],
+            "issues": [],
+        }
+        with mock.patch.object(self.model, "git_sync_status", return_value=green):
+            result = self.model.request_sync()
+        self.assertEqual(result["state"], "ALREADY_IN_SYNC")
+        self.assertFalse(list((self.model.bridge_data / "outbox").glob("*.json")))
+
     def test_build_log_groups_cross_session_events_into_one_work_item(self):
         projection = self.model.build_log_projection()
         self.assertEqual(projection["counts"]["work_items"], 1)
@@ -450,6 +547,10 @@ class ControlCenterTests(unittest.TestCase):
             "Anti-rondjes controle",
             "Bouwlogboek",
             "Open bouwwerk",
+            "Sync gestart…",
+            "requestSync",
+            "/api/sync",
+            "fail-closed reconciliatie",
         ):
             self.assertIn(expected, html)
         self.assertIn("NO_PROVEN_EDGE", html)
