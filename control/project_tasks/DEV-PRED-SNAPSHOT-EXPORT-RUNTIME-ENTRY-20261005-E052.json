@@ -1,0 +1,31 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-SNAPSHOT-EXPORT-RUNTIME-ENTRY-20261005-E052",
+  "source_commit": "d080e6e83afbee77af5f55cf6ce670b29a3cd494",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "High"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "user_service_manage"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 120,
+  "notes": "Read-only inspect live prediction-chat-wake.service status to identify the actual ExecStart/runtime entrypoint before installing bounded snapshot export support. No restart or runtime writes.",
+  "operations": [
+    {
+      "type": "service",
+      "verb": "status",
+      "unit": "prediction-chat-wake.service"
+    }
+  ]
+}
