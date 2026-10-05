@@ -29,7 +29,8 @@ Before doing local Prediction work, read these files from `bas1231/onderzoek`:
 7. `control/bridge_commands/OPERATIONS.md` — command-bus operations.
 8. `control/tampermonkey_multichat/PROTOCOL.md` — canonical bridge protocol.
 9. `control/tampermonkey_multichat/CHATGPT_PROJECT_INSTRUCTIONS.md` — full project-specific bridge instructions.
-10. `methodology/EDGE_DISCOVERY_MODEL_GATES.md` — mandatory model roles, Astra gates, read-only prospective measurement, and the any-positive-net-edge objective.
+10. `control/build_log/PROTOCOL.md` — shared append-only build ledger for cross-session work, retries, failures, handoffs and next actions.
+11. `methodology/EDGE_DISCOVERY_MODEL_GATES.md` — mandatory model roles, Astra gates, read-only prospective measurement, and the any-positive-net-edge objective.
 
 When old chat memory or older docs conflict with these files, the current Git documentation above is authoritative.
 
@@ -67,6 +68,19 @@ Rules:
 - WSL fetches GitHub read-only and never auto-pushes;
 - ambiguous dispatches are not silently retried;
 - record actual model/reasoning provenance; when reasoning level is not exposed, use `UNAVAILABLE_TO_RUNTIME`.
+
+## Shared build log — consult before new work
+
+Before starting a substantial build, repair, diagnosis or qualification, inspect the open work items in `control/build_log/events/` and follow `control/build_log/PROTOCOL.md`.
+
+- Same objective = same stable `work_item_id`, even when another ChatGPT session continues it.
+- Before dispatching a new local attempt, append a `PLAN` or `ATTEMPT` event.
+- After the exact task result returns, append a `RESULT` event with what was actually proven, why it passed/failed, the first incomplete step and the next action.
+- Task-level `PASS` is not automatically work-item `DONE`.
+- Do not repeat earlier successful steps unless material evidence changed or the repeat is an explicit regression check.
+- When handing unfinished work to another session, append a `HANDOFF` event naming the first incomplete step.
+
+This ledger is the cross-session project memory for construction work. GitHub event files are immutable; WSL remains GitHub read-only.
 
 ## Building or changing code in WSL
 
