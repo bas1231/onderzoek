@@ -1,0 +1,41 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-ASTRA-FIRSTFAIL-RESULT-READ-20261005-E001",
+  "source_commit": "0329b81f43863ec2ba288cede83950c10a69d807",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_runtime"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 180,
+  "notes": "Read only the already-produced local executor evidence for the failed autonomous Astra reviewer first-failure run and print a compact exact failure window. No production mutation.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/astra_firstfail_result_read_20261005_e001.py",
+      "content": "from pathlib import Path\nimport json,re\n\nTASK=\"DEV-PRED-ASTRA-AUTONOMOUS-REVIEWER-FIRSTFAIL-20261005\"\npaths=[\n    Path.home()/\".local/state/prediction-project-executor\"/f\"{TASK}.json\",\n    Path.home()/\"prediction_research_prod\"/\"control/results\"/TASK/\"RESULT.json\",\n    Path.home()/\"prediction_research_prod\"/\"control/results\"/TASK/\"stdout.log\",\n    Path.home()/\"prediction_research_prod\"/\"control/results\"/TASK/\"stderr.log\",\n]\npat=re.compile(r\"(FAILURES|FAILED|AssertionError|assert |E\\s+|short test summary|Traceback|ERROR)\",re.I)\n\ndef strings(obj, prefix=\"root\"):\n    if isinstance(obj,str):\n        yield prefix,obj\n    elif isinstance(obj,dict):\n        for k,v in obj.items():\n            yield from strings(v,f\"{prefix}.{k}\")\n    elif isinstance(obj,list):\n        for i,v in enumerate(obj):\n            yield from strings(v,f\"{prefix}[{i}]\")\n\nprint(\"TARGET_TASK=\"+TASK)\nfound=False\nfor p in paths:\n    print(f\"PATH={p} EXISTS={p.exists()}\")\n    if not p.exists() or not p.is_file():\n        continue\n    found=True\n    raw=p.read_text(encoding=\"utf-8\",errors=\"replace\")\n    candidates=[]\n    try:\n        obj=json.loads(raw)\n        candidates=list(strings(obj))\n    except Exception:\n        candidates=[(\"raw\",raw)]\n    emitted=0\n    for label,text in candidates:\n        lines=text.splitlines()\n        hits=[i for i,line in enumerate(lines) if pat.search(line)]\n        if not hits:\n            continue\n        print(\"FIELD=\"+label)\n        # Prefer first explicit failure header/failed test, then include enough traceback context.\n        i=hits[0]\n        for j in range(max(0,i-18), min(len(lines),i+95)):\n            print(lines[j][:3000])\n        print(\"FIELD_END\")\n        emitted += 1\n        if emitted >= 4:\n            break\n    if emitted==0:\n        lines=raw.splitlines()\n        print(\"NO_MARKER_TAIL_BEGIN\")\n        for line in lines[-120:]:\n            print(line[:3000])\n        print(\"NO_MARKER_TAIL_END\")\nprint(\"FOUND_ANY=\"+str(found))\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/astra_firstfail_result_read_20261005_e001.py"
+      ],
+      "timeout_seconds": 60
+    }
+  ]
+}
