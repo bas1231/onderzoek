@@ -1,0 +1,39 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-CONT-NEXT-deafb0e7c5311ee5c3c9d74f",
+  "source_commit": "fc0abc607add8a6469e077595ec3e5b63a901003",
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "High"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "run_tests"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 300,
+  "notes": "Continuation after E049 result ACK timeout. Validate the newly merged bounded build-coordination capability and the current supervisor/model-policy regression baseline only. Do not rerun Scout, edge experiment tests, measurement, or the full A2Z chain. This is the final readiness check before the already-known model-selection and postbuild-gate repair.",
+  "operations": [
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "-m",
+        "pytest",
+        "tests/test_parallel_build_coordination_shared.py",
+        "tests/codex_supervisor/test_supervisor.py",
+        "-q"
+      ],
+      "test": true,
+      "timeout_seconds": 240
+    }
+  ]
+}
