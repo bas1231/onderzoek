@@ -1,0 +1,55 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-CONTROL-CENTER-SESSION-DRIFT-TEST-20261005-E033",
+  "source_commit": "11b4fe7757d9f949eb5cbff06d2bb1569c95afac",
+  "intelligence_tier": "B",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "High"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "run_project_python",
+    "run_tests"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 420,
+  "notes": "Test-only validation of deterministic session assignment drift alerts. No runtime install/service mutation. Compile Control Center/tests and run full Control Center unittest suite.",
+  "operations": [
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "-m",
+        "compileall",
+        "-q",
+        "control/control_center",
+        "tests/control_center"
+      ],
+      "timeout_seconds": 120
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests/control_center",
+        "-p",
+        "test_control_center.py",
+        "-v"
+      ],
+      "test": true,
+      "timeout_seconds": 260
+    }
+  ]
+}
