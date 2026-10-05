@@ -1,0 +1,41 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-ASTRA-AUTONOMOUS-MODEL-DISCOVERY-20261005",
+  "source_commit": "359b3eaa96d38e88543b63e109e8be59dccc33b1",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_runtime"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 180,
+  "notes": "Read-only discovery of autonomous Codex/ChatGPT model availability for production Astra review. Do not read credentials or tokens; inspect only non-secret model cache metadata and current Codex worker selection logic.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/astra_autonomous_model_discovery_20261005.py",
+      "content": "from pathlib import Path\nimport json\n\ncache=Path.home()/'.codex/models_cache.json'\nif not cache.is_file():\n    print('MODEL_CACHE=MISSING', flush=True)\n    raise SystemExit(31)\nobj=json.loads(cache.read_text(encoding='utf-8'))\nmodels=obj.get('models') or []\nvisible=[]\nfor m in models:\n    if not isinstance(m,dict) or m.get('visibility')!='list':\n        continue\n    visible.append({\n        'slug':m.get('slug'),\n        'display_name':m.get('display_name'),\n        'priority':m.get('priority'),\n        'reasoning':m.get('supported_reasoning_efforts'),\n    })\nprint('VISIBLE_MODELS='+json.dumps(visible,sort_keys=True),flush=True)\nastra=[m for m in visible if 'astra' in str(m.get('slug','')).lower() or 'astra' in str(m.get('display_name','')).lower()]\nprint('ASTRA_MODELS='+json.dumps(astra,sort_keys=True),flush=True)\nif astra:\n    raise SystemExit(0)\nraise SystemExit(32)\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/astra_autonomous_model_discovery_20261005.py"
+      ],
+      "timeout_seconds": 60
+    }
+  ]
+}
