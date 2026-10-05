@@ -1,0 +1,39 @@
+{
+  "schema": "PREDICTION_A2Z_ACCEPTANCE_V2",
+  "acceptance_id": "A2Z-POSTBUILD-BEFORE-TESTS-20261005",
+  "created_at_utc": "2026-10-05T16:01:22.405Z",
+  "authority": "Expliciete gebruikerscorrectie in deze chat, 2026-10-05 17:58 Europe/Amsterdam, bevestigd 17:59.",
+  "supersedes_order": "Sol-build -> tests/meting -> Astra post-experiment review",
+  "required_order": [
+    "SCOUT",
+    "CANDIDATE",
+    "DIRECTOR_SELECTION",
+    "SOL_EXPERIMENT_DESIGN",
+    "ASTRA_PREBUILD_APPROVAL",
+    "SOL_EXPERIMENT_BUILD",
+    "ASTRA_POSTBUILD_APPROVAL",
+    "TECHNICAL_TESTS",
+    "EXECUTION_AND_MEASUREMENT",
+    "SUPERVISOR_REPRODUCER",
+    "EDGE_REPORT"
+  ],
+  "required_designer_model": "GPT-5.6 Sol",
+  "required_builder_model": "GPT-5.6 Sol",
+  "required_reviewer_model": "GPT-6 Astra",
+  "rules": [
+    "Astra beoordeelt de concrete opzet vóór bouw en de werkelijk gebouwde code vóór experimenttests en metingen.",
+    "NEEDS_REVISION gaat terug naar Sol; iedere gewijzigde versie vereist passende nieuwe Astra-review.",
+    "Geen experimenttest of meting zonder actuele post-build approval gekoppeld aan code, candidate, opzet en runtime-modelprovenance.",
+    "Gerichte infrastructuur-/gate-regressies gebruiken expliciete test-fixtures en zijn geen experimentrun of bewijs van werkelijk modelgebruik.",
+    "Ontbrekend of ongeldig bewijs blokkeert. Geen vervalste modelidentiteit.",
+    "Bestaand Scout/Director-bewijs hergebruiken tijdens reparaties; één schone volledige run pas na gerichte reparaties."
+  ],
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false
+  },
+  "implementation_status": "NOT_YET_PROVEN",
+  "confirmed_failure": "Gerichte lokale regressie observeert subprocess.run vanuit build_and_test zonder post-build approval; uitvoering onderschept vóór start.",
+  "notes": "Deze registratie legt de nieuwe gebruikersscope vast. Zij verandert geen eerder verzonden immutable taken en claimt geen afgeronde implementatie. Canonical methodologiedocumenten bevatten nog de oude reviewvolgorde en moeten bij gecontroleerde integratie worden bijgewerkt."
+}
