@@ -1,0 +1,43 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-A2Z-COORDINATION-CANARY-20261005-E049",
+  "source_commit": "78e332e73bb637345e95616b84475ecf269c25c3",
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "Codex; exact model identity unavailable to runtime",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_tests",
+    "local_git",
+    "build_coordination"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 120,
+  "notes": "Expliciet akkoord eigenaar 2026-10-05T20:57:41Z op PR7. WSL-canary van uitsluitend gedeelde coördinatie: start/heartbeat/finish met cleanup, drie verboden schrijfpaden controleren zonder die te openen. Geen experimenttest, bridgewijziging of productiecodewijziging. PASS is uitsluitend de capability-canary.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/a2z_coordination_canary_e049.py",
+      "content": "from pathlib import Path\nimport json,sys\nimport sitecustomize as guard\nroot=Path.cwd()\nsys.path.insert(0,str(root/'control/jobs'))\nfrom parallel_build_coordination_shared import Coordinator\nassert guard.ENABLED, 'GUARD_NOT_ACTIVE'\nassert 'build_coordination' in guard.CAPS, 'CAPABILITY_NOT_ACTIVE'\ncoord=Coordinator(root)\nexpected=Path.home()/'.local/share/prediction-project-executor/repo/.git/prediction-build-coordination'\nassert coord.runtime==expected, 'UNEXPECTED_REGISTRY'\nfor forbidden in (expected.parent/'config',expected.parent/'HEAD',Path.home()/'prediction_research_prod/forbidden-canary-write'):\n    try:\n        guard._check_write_path(forbidden)\n    except PermissionError:\n        pass\n    else:\n        raise RuntimeError('WRITE_BOUNDARY_BROKEN')\nsession='A2Z-COORDINATION-CANARY-E049'\nstarted=False\ntry:\n    result=coord.start(session,'DEV-PRED-A2Z-COORDINATION-CANARY-20261005-E049',['control/dev_checks/a2z_coordination_canary_e049.py'],mutating=True,ttl=120)\n    assert result.get('ok') is True, json.dumps(result)\n    started=True\n    assert any(x.get('session_id')==session for x in coord.active_sessions()), 'LEASE_MISSING'\n    assert coord.heartbeat(session,120).get('ok') is True, 'HEARTBEAT_FAILED'\nfinally:\n    if started:\n        assert coord.finish(session).get('ok') is True, 'LEASE_CLEANUP_FAILED'\nassert not any(x.get('session_id')==session for x in coord.active_sessions()), 'LEASE_REMAINS'\nout=root/'diagnostic-result'\nout.mkdir(exist_ok=True)\n(out/'coordination-canary.json').write_text(json.dumps({'status':'PASS','lease_start':True,'heartbeat':True,'lease_cleanup':True,'forbidden_paths_blocked':3,'full_chain_pass':False,'experiment_executed':False},indent=2))\nprint('COORDINATION_CANARY PASS start heartbeat cleanup; forbidden_paths=3; full_chain_pass=false',flush=True)\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/a2z_coordination_canary_e049.py"
+      ],
+      "test": true,
+      "timeout_seconds": 45
+    }
+  ]
+}
