@@ -1,0 +1,32 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-PRODUCTION-SNAPSHOT-MANIFEST-20261005-E038",
+  "source_commit": "027da5a1023c304bd1bbeb6eb276cd13cedc2c68",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "High"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "production_dirty_snapshot_inspect"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 180,
+  "notes": "Read-only manifest of durable E034 dirty snapshot. Inspect refs/prediction/dirty-snapshots/DEV-PRED-PRODUCTION-DIRTY-SNAPSHOT-20261005-E034 only. Report group sizes + largest files for canonical transfer planning. No live worktree mutation or cleanup.",
+  "operations": [
+    {
+      "type": "production_dirty_snapshot_inspect",
+      "snapshot_task_id": "DEV-PRED-PRODUCTION-DIRTY-SNAPSHOT-20261005-E034",
+      "report_mode": "group_sizes",
+      "fail_for_visibility": true
+    }
+  ]
+}
