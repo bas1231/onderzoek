@@ -1,0 +1,53 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-PROD-SNAPSHOT-CLEAN-FF-20261005-E029",
+  "source_commit": "8511127a874f323cc46cf701b2e9286d287f0b9a",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "run_tests",
+    "production_snapshot_cleanup",
+    "production_fast_forward",
+    "production_compare_worktree",
+    "production_inspect"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 480,
+  "notes": "Repair E024 post-switch dirty state. First run executor selftests. Then clean only staged/untracked content proven byte-for-byte by durable E024 snapshot, requiring the observed 30 staged + 47 untracked shape and zero unstaged. Fast-forward local main to pinned canonical and verify exact clean production. Any mismatch fails before cleanup.",
+  "operations": [
+    {
+      "type": "executor_selftest",
+      "timeout_seconds": 300
+    },
+    {
+      "type": "production_snapshot_cleanup",
+      "snapshot_task_id": "DEV-PRED-PROD-SNAPSHOT-FF-20261005-E024",
+      "expected_staged_count": 30,
+      "expected_untracked_count": 47
+    },
+    {
+      "type": "production_ff",
+      "target_commit": "8511127a874f323cc46cf701b2e9286d287f0b9a"
+    },
+    {
+      "type": "production_compare_worktree",
+      "require_exact": true,
+      "report_mode": "counts"
+    },
+    {
+      "type": "production_inspect",
+      "require_head_equals_main": true,
+      "report_mode": "status_summary"
+    }
+  ]
+}
