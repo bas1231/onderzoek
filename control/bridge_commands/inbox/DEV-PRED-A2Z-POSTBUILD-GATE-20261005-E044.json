@@ -1,0 +1,19 @@
+{
+  "schema": "PREDICTION_BRIDGE_COMMAND_V1",
+  "task_id": "DEV-PRED-A2Z-POSTBUILD-GATE-20261005-E044",
+  "action": "SIX_AI_HEALTH",
+  "created_at_utc": "2026-10-05T16:02:13.327Z",
+  "route_task_id": "SESSION-ROUTE-8a0a088bb1b387e28c65b674",
+  "delivery_mode": "chat",
+  "live_trading": false,
+  "paid_actions": false,
+  "wallet_actions": false,
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "Codex; exact model identity unavailable to runtime",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "auto_continue": true,
+  "parent_continuation_id": null,
+  "notes": "Voer gerichte post-build-gateregressie uit en lees reeds bestaande E042/E043-evidence. Retour via in deze chat daadwerkelijk bewezen route 8a0a088bb1b387e28c65b674; eerdere 5cf-route kwam uit overgenomen prompt. Bestaande taken niet wijzigen of opnieuw uitvoeren. Geen bridge-reparatie. Doel blijft echte volledige Sol/Astra-keten."
+}
