@@ -1,0 +1,41 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-CONTROL-CENTER-E007-READ-20261005-E008",
+  "source_commit": "24911f113d36d303651097378577b5625f5256fe",
+  "intelligence_tier": "B",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_runtime"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 120,
+  "notes": "Read only the diagnostic artifact produced by E007 and print its first failing test traceback. Do not rerun tests and do not modify production/runtime.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/control_center_e007_read.py",
+      "content": "from __future__ import annotations\n\nimport json\nfrom pathlib import Path\n\ntarget = \"DEV-PRED-CONTROL-CENTER-E006-DIAG-20261005-E007\"\nhome = Path.home()\nreport_path = (\n    home\n    / \".local/share/prediction-project-executor/worktrees\"\n    / target\n    / \"diagnostic-result/control-center-e006-test-diagnostic.json\"\n)\nif not report_path.is_file() or report_path.is_symlink():\n    print(\"CONTROL_CENTER_E007_READ MISSING\", flush=True)\n    raise SystemExit(1)\ndata = json.loads(report_path.read_text(encoding=\"utf-8\"))\nsummary = data.get(\"summary\") or {}\nissue = summary.get(\"first_issue\") or {}\nout = {\n    \"tests_run\": summary.get(\"tests_run\"),\n    \"failures\": summary.get(\"failures\"),\n    \"errors\": summary.get(\"errors\"),\n    \"successful\": summary.get(\"successful\"),\n    \"first_test\": issue.get(\"test\"),\n    \"first_traceback\": issue.get(\"traceback\"),\n}\nprint(\"CONTROL_CENTER_E007_READ \" + json.dumps(out, separators=(\",\", \":\")), flush=True)\nraise SystemExit(0)\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/control_center_e007_read.py"
+      ],
+      "timeout_seconds": 60
+    }
+  ]
+}
