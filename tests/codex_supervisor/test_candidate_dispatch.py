@@ -115,13 +115,55 @@ def test_complete_task_then_existing_queued_task(tmp_path):
 def approve_astra(repo,s,phase='PREBUILD',decision='APPROVE',reviewer_model='GPT-6 Astra'):
     path=next((s.root/'candidate_states').glob('*.json'))
     overlay=json.loads(path.read_text())
-    review=q.review_template(overlay,phase)
-    review.update(
-        decision=decision,
-        reviewer_model=reviewer_model,
-        finding='Astra fixture review binds to this exact candidate version.',
-        next_action='Proceed only within the governed next gate.'
-    )
+    binding=q.review_binding(overlay,phase)
+    slug='gpt-6-astra-test'
+    source_task_id='ASTRA-AUTO-REVIEW-TEST'
+    completion_sha='d'*64
+    provenance={
+        'schema':q.AUTONOMOUS_PROVENANCE_SCHEMA,
+        'usage_scope':q.MODEL_PROVENANCE_PRODUCTION_SCOPE,
+        'verification_method':q.MODEL_PROVENANCE_PRODUCTION_METHOD,
+        'reviewer_model':'GPT-6 Astra',
+        'reviewer_role':'INDEPENDENT_GATE_REVIEWER',
+        'reviewer_model_slug':slug,
+        'model_policy':'ASTRA_EXACT',
+        'visible_astra_count':1,
+        'candidate_id':overlay['candidate_id'],
+        'phase':phase,
+        'binding_sha256':binding,
+        'source_task_id':source_task_id,
+        'input_sha256':'e'*64,
+        'completion_sha256':completion_sha,
+        'worker_record_sha256':'f'*64,
+        'model_selection':{'policy':'ASTRA_EXACT','visible_astra_count':1,'selected_slug':slug},
+    }
+    provenance_ref=q.expected_autonomous_provenance_ref(overlay,phase)
+    provenance_path=repo/provenance_ref
+    provenance_path.parent.mkdir(parents=True,exist_ok=True)
+    provenance_path.write_text(json.dumps(provenance))
+    review={
+        'schema':q.SCHEMA,
+        'candidate_id':overlay['candidate_id'],
+        'phase':phase,
+        'binding_sha256':binding,
+        'reviewer_model':reviewer_model,
+        'reviewer_role':'INDEPENDENT_GATE_REVIEWER',
+        'provenance_kind':q.PROVENANCE_AUTONOMOUS_RUN,
+        'reviewer_model_slug':slug,
+        'source_task_id':source_task_id,
+        'completion_sha256':completion_sha,
+        'model_provenance_ref':provenance_ref,
+        'model_provenance_sha256':q.canonical_sha(provenance),
+        'decision':decision,
+        'finding':'Astra fixture review binds to this exact candidate version.',
+        'next_action':'Proceed only within the governed next gate.',
+        'economic_policy':q.ECONOMIC_POLICY,
+        'minimum_net_profit_eur':0.0,
+        'measurement_scope':'READ_ONLY_PROSPECTIVE_MARKET_DATA',
+        'live_trading':False,
+        'paid_actions':False,
+        'wallet_actions':False,
+    }
     ref=q.expected_review_ref(overlay,phase)
     review_path=repo/ref
     review_path.parent.mkdir(parents=True,exist_ok=True)
