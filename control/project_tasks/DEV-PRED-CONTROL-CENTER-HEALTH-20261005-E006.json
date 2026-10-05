@@ -1,0 +1,99 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-CONTROL-CENTER-HEALTH-20261005-E006",
+  "source_commit": "aeab838b46b00a1e54c8ce6af48c75b42c172cf3",
+  "intelligence_tier": "B",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "run_project_python",
+    "run_tests",
+    "write_runtime",
+    "user_service_manage",
+    "read_logs"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 540,
+  "notes": "Retry E005 after the new Git-sync regression test itself violated the executor test-write boundary by using the default mirror path. Test mirror now lives under executor temporary test root. Same dashboard upgrade: active tasks only, Git/main sync health, immediate recent chain alerts.",
+  "operations": [
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "-m",
+        "compileall",
+        "-q",
+        "control/control_center",
+        "tests/control_center"
+      ],
+      "timeout_seconds": 120
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests/control_center",
+        "-p",
+        "test_control_center.py",
+        "-v"
+      ],
+      "test": true,
+      "timeout_seconds": 180
+    },
+    {
+      "type": "install_runtime",
+      "source": "control/control_center/server.py",
+      "destination": "~/.local/share/prediction-project-executor/control-center/server.py",
+      "mode": 420
+    },
+    {
+      "type": "install_runtime",
+      "source": "control/control_center/static/index.html",
+      "destination": "~/.local/share/prediction-project-executor/control-center/static/index.html",
+      "mode": 420
+    },
+    {
+      "type": "install_runtime",
+      "source": "control/control_center/runtime_canary.py",
+      "destination": "~/.local/share/prediction-project-executor/control-center/runtime_canary.py",
+      "mode": 420
+    },
+    {
+      "type": "service",
+      "verb": "restart",
+      "unit": "prediction-control-center.service"
+    },
+    {
+      "type": "service",
+      "verb": "status",
+      "unit": "prediction-control-center.service"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/control_center/runtime_canary.py"
+      ],
+      "timeout_seconds": 120
+    },
+    {
+      "type": "journal",
+      "unit": "prediction-control-center.service",
+      "lines": 40
+    }
+  ]
+}
