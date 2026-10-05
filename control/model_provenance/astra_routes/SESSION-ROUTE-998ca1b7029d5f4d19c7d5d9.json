@@ -1,0 +1,12 @@
+{
+  "schema": "PVA_MODEL_ROUTE_ATTESTATION_V1",
+  "route_task_id": "SESSION-ROUTE-998ca1b7029d5f4d19c7d5d9",
+  "reviewer_model": "GPT-6 Astra",
+  "reviewer_role": "INDEPENDENT_GATE_REVIEWER",
+  "verification_method": "HUMAN_SELECTED_CHATGPT_MODEL_UI",
+  "attestation_scope": "ROUTE",
+  "attested_by": "PROJECT_OPERATOR",
+  "attested_at": "2026-10-05T05:45:00Z",
+  "revoked": false,
+  "notes": "The operator opened a dedicated Prediction-project chat, selected GPT-6 Astra in the ChatGPT UI, armed the Prediction bridge, and the same chat produced this SESSION-ROUTE bootstrap PASS. This attestation proves the intended model selection for this route; review validity additionally requires exact candidate binding and this immutable provenance hash."
+}
