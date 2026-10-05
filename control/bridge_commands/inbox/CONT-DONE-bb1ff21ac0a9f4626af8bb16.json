@@ -1,0 +1,19 @@
+{
+  "schema": "PREDICTION_BRIDGE_COMMAND_V1",
+  "task_id": "CONT-DONE-bb1ff21ac0a9f4626af8bb16",
+  "action": "BRIDGE_PING",
+  "created_at_utc": "2026-10-05T10:54:44.365Z",
+  "route_task_id": "DEV-PRED-REPAIRS-TARGETED-VERIFY-20261005",
+  "delivery_mode": "headless",
+  "live_trading": false,
+  "paid_actions": false,
+  "wallet_actions": false,
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "Codex; exact model identity unavailable to runtime",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "notes": "Deze oude testherstelvertakking is opgevolgd door TARGETED-VERIFY-R2 en FINAL-ACCEPT. Ontvangen runtimebewijs event 1791196712-62230058835e meldt targeted PASS maar productieverschillen en zes ongeldige pins. Inventarisatie DEV-PRED-PROD-DIFF-INVENTORY-20261005-E001 heeft PASS event 1791197081-c4740d6c1913; bestaande NEXT-da2e4b93bf9dd8252d3d62b6 leest de paden uit. Geen duplicaat, bridgewijziging of productiemutatie. DONE sluit uitsluitend deze achterhaalde herstelvertakking; eindacceptatie blijft FAIL.",
+  "auto_continue": false,
+  "parent_continuation_id": "CONT-bb1ff21ac0a9f4626af8bb16"
+}
