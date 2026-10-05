@@ -421,6 +421,41 @@ class ControlCenterModel:
             }
         return None
 
+    def _latest_dashboard_launcher(self):
+        root = self.bridge_data / "dashboard_launchers"
+        if not root.is_dir():
+            return None
+        route = self._latest_proven_chat_route()
+        if route is None:
+            return None
+        now = time.time()
+        rows = []
+        try:
+            paths = list(root.glob("*.json"))
+        except OSError:
+            return None
+        for path in paths:
+            obj = safe_json(path)
+            if not isinstance(obj, dict):
+                continue
+            if obj.get("schema") != "PREDICTION_DASHBOARD_LAUNCHER_V1":
+                continue
+            if str(obj.get("chat_id") or "") != str(route.get("chat_id") or ""):
+                continue
+            caps = obj.get("capabilities")
+            if not isinstance(caps, list) or "dashboard_new_session_launch_v1" not in caps:
+                continue
+            updated = obj.get("updated_at_unix")
+            if not isinstance(updated, (int, float)) or now - float(updated) > 180:
+                continue
+            base_url = str(obj.get("launch_base_url") or "")
+            consumer = str(obj.get("consumer_id") or "")
+            if not base_url.startswith("https://chatgpt.com/") or not consumer:
+                continue
+            rows.append(obj)
+        rows.sort(key=lambda x: float(x.get("updated_at_unix") or 0), reverse=True)
+        return dict(rows[0]) if rows else None
+
     def latest_sync_request(self, git_sync=None):
         if git_sync is not None and git_sync.get("status") == "GREEN":
             return {"state": "SYNCED", "request_id": None, "message": "Repository is in sync."}
@@ -437,7 +472,18 @@ class ControlCenterModel:
         latest = dict(rows[0])
         event_id = str(latest.get("event_id") or "")
         state = str(latest.get("state") or "REQUESTED")
-        if event_id:
+        launch_token = str(latest.get("launch_token") or "")
+        if launch_token:
+            launch = safe_json(self.bridge_data / "dashboard_launches" / f"{launch_token}.json")
+            if isinstance(launch, dict) and str(launch.get("state") or "") == "PROMPT_SUBMITTED":
+                state = "NEW_SESSION_STARTED"
+            elif event_id and (self.bridge_data / "sent" / f"{event_id}.json").is_file():
+                state = "NEW_SESSION_OPENED"
+            elif event_id and (self.bridge_data / "inflight" / f"{event_id}.json").is_file():
+                state = "NEW_SESSION_LAUNCHING"
+            elif event_id and (self.bridge_data / "outbox" / f"{event_id}.json").is_file():
+                state = "NEW_SESSION_QUEUED"
+        elif event_id:
             if (self.bridge_data / "sent" / f"{event_id}.json").is_file():
                 state = "DELIVERED"
             elif (self.bridge_data / "inflight" / f"{event_id}.json").is_file():
@@ -461,47 +507,71 @@ class ControlCenterModel:
         if isinstance(latest, dict):
             created = parse_time(latest.get("created_at_utc"))
             recent = created is not None and time.time() - created < 900
-            if recent and latest.get("state") in {"QUEUED", "INFLIGHT", "DELIVERED"}:
+            active_states = {
+                "QUEUED", "INFLIGHT", "DELIVERED",
+                "NEW_SESSION_QUEUED", "NEW_SESSION_LAUNCHING",
+                "NEW_SESSION_OPENED", "NEW_SESSION_STARTED",
+            }
+            if recent and str(latest.get("state") or "").upper() in active_states:
                 latest = dict(latest)
                 latest["deduplicated"] = True
                 latest["git_sync"] = sync
                 return latest
 
-        route = self._latest_proven_chat_route()
-        if route is None:
-            raise RuntimeError("NO_PROVEN_CHAT_ROUTE")
+        launcher = self._latest_dashboard_launcher()
+        if launcher is None:
+            raise RuntimeError("NEW_SESSION_LAUNCHER_NOT_READY")
 
         stamp = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
-        token = uuid.uuid4().hex[:10]
-        request_id = f"SYNC-{stamp}-{token}"
-        trigger_task_id = f"CONTROL-SYNC-{stamp}-{token}"
-        event_id = f"control-sync-{int(time.time() * 1000)}-{token[:8]}"
+        token = uuid.uuid4().hex[:24]
+        request_id = f"SYNC-{stamp}-{token[:10]}"
+        trigger_task_id = f"CONTROL-SYNC-LAUNCH-{stamp}-{token[:10]}"
+        event_id = f"control-sync-launch-{int(time.time() * 1000)}-{token[:8]}"
 
-        message = (
-            "PREDICTION_CONTROL_SYNC_REQUEST_V1\n"
+        prompt = (
+            "PREDICTION_CONTROL_SYNC_REQUEST_V2\n"
             f"request_id={request_id}\n"
-            f"route_task_id={route['route_task_id']}\n"
+            "dashboard_session_policy=NEW_CHAT_REQUIRED\n"
             "work_item_id=PRODUCTION-RECONCILIATION-20261005\n"
-            "The owner explicitly clicked Sync in the Prediction Control Center. No human input is required.\n"
+            "This dashboard action intentionally started a brand-new Prediction ChatGPT session.\n"
+            "Read 00_CHATGPT_START_HERE.md, control/control_center/SYNC_PROTOCOL.md, "
+            "control/bridge_commands/CURRENT_STATE.md and the shared build log first.\n"
+            "Do not dispatch local WSL/projectexecutor tasks until this same chat receives its automatic "
+            "SESSION-ROUTE-* status=PASS exit=0 kind=SESSION_ROUTE_BOOTSTRAP user turn. "
+            "When that bootstrap arrives, continue autonomously using that new route_task_id.\n"
             "Goal: bring production safely into sync with canonical GitHub main using the shortest safe path.\n"
-            "Read control/control_center/SYNC_PROTOCOL.md, CURRENT_STATE.md and the shared build log first.\n"
             "Preserve all local committed, staged, unstaged and untracked content until canonical representation is proven.\n"
-            "Never use reset --hard, force, destructive checkout, rebase, stash/drop, credential access, WSL git push, paid actions, trading or wallet actions.\n"
-            "Use ChatGPT GitHub writes plus the capability-scoped projectexecutor for local inspection/reconciliation.\n"
+            "Never use destructive Git shortcuts, force, rebase, stash/drop, credential access, WSL git push, "
+            "paid actions, trading or wallet actions.\n"
+            "Use ChatGPT GitHub writes plus the capability-scoped projectexecutor for local reconciliation.\n"
             "Append ATTEMPT/RESULT/HANDOFF events under the same production-reconciliation work_item_id.\n"
-            "Finish only after a fresh Control Center snapshot reports git_sync.status=GREEN; otherwise fail closed with the exact first incomplete step."
+            "Finish only after a fresh Control Center snapshot reports git_sync.status=GREEN; "
+            "otherwise fail closed with the exact first incomplete step."
         )
 
+        launch = {
+            "schema": "PREDICTION_DASHBOARD_CHAT_LAUNCH_V1",
+            "launch_token": token,
+            "request_id": request_id,
+            "action": "SYNC",
+            "work_item_id": "PRODUCTION-RECONCILIATION-20261005",
+            "prompt": prompt,
+            "launch_base_url": launcher["launch_base_url"],
+            "state": "QUEUED",
+            "created_at_utc": utc_now(),
+        }
         request = {
-            "schema": "PREDICTION_CONTROL_CENTER_SYNC_REQUEST_V1",
+            "schema": "PREDICTION_CONTROL_CENTER_SYNC_REQUEST_V2",
             "request_id": request_id,
             "created_at_utc": utc_now(),
-            "state": "QUEUED",
+            "state": "NEW_SESSION_QUEUED",
             "trigger_task_id": trigger_task_id,
             "event_id": event_id,
-            "selected_route_task_id": route["route_task_id"],
-            "selected_chat_id": route["chat_id"],
-            "source_sent_event_id": route["source_event_id"],
+            "launch_token": token,
+            "launch_session_mode": "NEW_CHAT_REQUIRED",
+            "launcher_chat_id": launcher["chat_id"],
+            "launcher_consumer_id": launcher["consumer_id"],
+            "launch_base_url": launcher["launch_base_url"],
             "work_item_id": "PRODUCTION-RECONCILIATION-20261005",
             "git_sync_before": sync,
             "safety": {
@@ -510,18 +580,23 @@ class ControlCenterModel:
                 "wallet_actions": False,
                 "destructive_git": False,
                 "wsl_remote_git_write": False,
+                "reuse_existing_chat_for_work": False,
             },
         }
 
         self._exclusive_json(self.sync_request_root / f"{request_id}.json", request)
         self._exclusive_json(
+            self.bridge_data / "dashboard_launches" / f"{token}.json",
+            launch,
+        )
+        self._exclusive_json(
             self.bridge_data / "routes" / f"{trigger_task_id}.json",
             {
                 "version": 2,
                 "task_id": trigger_task_id,
-                "chat_id": route["chat_id"],
-                "consumer_id": None,
-                "source": "prediction_control_center_sync_v1",
+                "chat_id": launcher["chat_id"],
+                "consumer_id": launcher["consumer_id"],
+                "source": "prediction_control_center_new_session_launch_v1",
                 "created_at_unix": time.time(),
                 "request_id": request_id,
             },
@@ -531,9 +606,12 @@ class ControlCenterModel:
             {
                 "event_id": event_id,
                 "task_id": trigger_task_id,
-                "message": message,
+                "kind": "DASHBOARD_NEW_SESSION_LAUNCH_V1",
+                "launch_token": token,
+                "launch_base_url": launcher["launch_base_url"],
+                "message": f"PREDICTION_DASHBOARD_NEW_SESSION_LAUNCH_V1 token={token}",
                 "created_at": time.time(),
-                "source": "prediction_control_center_sync_v1",
+                "source": "prediction_control_center_new_session_launch_v1",
                 "request_id": request_id,
             },
         )
