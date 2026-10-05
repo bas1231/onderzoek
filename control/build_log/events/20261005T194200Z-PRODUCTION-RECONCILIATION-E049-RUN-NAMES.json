@@ -1,0 +1,30 @@
+{
+  "schema": "PREDICTION_BUILD_LOG_EVENT_V1",
+  "event_id": "20261005T194200Z-PRODUCTION-RECONCILIATION-E049-RUN-NAMES",
+  "work_item_id": "PRODUCTION-RECONCILIATION-20261005",
+  "created_at_utc": "2026-10-05T19:42:00Z",
+  "event_type": "ATTEMPT",
+  "work_item_status": "IN_PROGRESS",
+  "outcome": "STARTED",
+  "title": "Production veilig reconciliëren met canonical main",
+  "objective": "Breng production veilig in sync met canonical main zonder lokaal werk te verliezen.",
+  "summary": "E049 leest alleen de vijf run-directorynamen uit de immutable E034 snapshot voor een nauwkeurige canonical runtime-classificatie.",
+  "why": "De 22 runbestanden horen bij synthetische qualification-audithistorie. Exacte run-directorynamen zijn nodig om deze lokale runtime-state gericht te behandelen zonder bredere mappen te raken.",
+  "next_action": "Gebruik E049 samen met de bekende candidate-state en wake-paden om de canonical runtime-preservation vast te leggen. Verwijder de lokale artifacts niet.",
+  "session_route_task_id": "SESSION-ROUTE-fc2613ecbc81e22d4c913b2a",
+  "task_ids": [
+    "DEV-PRED-PRODUCTION-SNAPSHOT-RUN-NAMES-20261005-E049"
+  ],
+  "evidence_refs": [
+    "DEV-PRED-PRODUCTION-DIRTY-SNAPSHOT-20261005-E034",
+    "projectexecutor:semantic_run_names"
+  ],
+  "tags": [
+    "production",
+    "reconciliation",
+    "runtime",
+    "preservation"
+  ],
+  "parent_event_id": "20261005T205800Z-PRODUCTION-RECONCILIATION-E047-PRESERVATION-BASIS",
+  "first_incomplete_step": "De vijf run-directorynamen exact vaststellen."
+}
