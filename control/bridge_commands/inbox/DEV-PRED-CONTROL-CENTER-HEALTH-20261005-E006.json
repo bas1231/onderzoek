@@ -1,0 +1,19 @@
+{
+  "schema": "PREDICTION_BRIDGE_COMMAND_V1",
+  "task_id": "DEV-PRED-CONTROL-CENTER-HEALTH-20261005-E006",
+  "action": "SIX_AI_HEALTH",
+  "created_at_utc": "2026-10-05T17:14:00Z",
+  "route_task_id": "SESSION-ROUTE-fc2613ecbc81e22d4c913b2a",
+  "delivery_mode": "chat",
+  "live_trading": false,
+  "paid_actions": false,
+  "wallet_actions": false,
+  "intelligence_tier": "B",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "auto_continue": false,
+  "parent_continuation_id": null,
+  "notes": "Retry health upgrade after E005 test-harness path violation. Same active-only task view, prominent Git/main sync health, and immediate recent chain fault alert on Overview. Require unittest PASS, installed runtime, active service and canary."
+}
