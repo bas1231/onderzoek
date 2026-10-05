@@ -1,0 +1,17 @@
+{
+  "schema": "PREDICTION_BRIDGE_COMMAND_V1",
+  "task_id": "DEV-FG-INBOX-PICKUP-VERIFY-20261005-E043",
+  "action": "SIX_AI_HEALTH",
+  "created_at_utc": "2026-10-05T14:19:00Z",
+  "route_task_id": "DEV-FG-VERIFIED-WATCHER-RESTART-20261005-E042",
+  "delivery_mode": "chat",
+  "live_trading": false,
+  "paid_actions": false,
+  "wallet_actions": false,
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "notes": "Read-only verify watcher remains alive and whether the inbox file has now been claimed into processing."
+}
