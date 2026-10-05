@@ -1,0 +1,17 @@
+{
+  "schema": "PREDICTION_BRIDGE_COMMAND_V1",
+  "task_id": "DEV-FG-TIMEOUT-DIAG-20261005-E017",
+  "action": "SIX_AI_HEALTH",
+  "created_at_utc": "2026-10-05T12:48:00Z",
+  "route_task_id": "DEV-FG-RERUN-RAW-AFTER-IDFIX-20261005-E016",
+  "delivery_mode": "chat",
+  "live_trading": false,
+  "paid_actions": false,
+  "wallet_actions": false,
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "notes": "Read-only inspect watcher/UI/failed state immediately after E016 executor timeout."
+}
