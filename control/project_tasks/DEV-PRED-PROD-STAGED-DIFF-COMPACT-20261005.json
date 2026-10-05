@@ -1,0 +1,41 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-PROD-STAGED-DIFF-COMPACT-20261005",
+  "source_commit": "be089045d67424472d33d5e8a78ee4844c72c56f",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_runtime"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 180,
+  "notes": "Diagnostic-only compact parser of the already captured read-only staged production diff. Intentionally exits nonzero after one compact STAGED_DIFF_SUMMARY line so bridge detail exposes it. No production mutation.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/prod_staged_diff_compact_20261005.py",
+      "content": "from pathlib import Path\nimport json,re\n\ntask='DEV-PRED-PROD-STAGED-DIFF-INSPECT-20261005'\ncands=[\n    Path.home()/'.local/state/prediction-project-executor'/f'{task}.json',\n    Path.home()/'.local/state/prediction-project-executor'/task/'RESULT.json',\n    Path.home()/'prediction_research_prod'/'control/results'/task/'RESULT.json',\n    Path.home()/'prediction_research_prod'/'control/results'/task/'stdout.log',\n    Path.home()/'prediction_research_prod'/'control/results'/task/'stderr.log',\n]\nblobs=[]\nfor p in cands:\n    if p.is_file():\n        try:\n            blobs.append(p.read_text(encoding='utf-8',errors='replace'))\n        except Exception:\n            pass\ntext='\\n'.join(blobs)\npayload=None\nfor m in re.finditer(r'PRODUCTION_DIFF_INSPECT\\s+(\\{.*?\\})(?:\\n|$)', text):\n    raw=m.group(1)\n    try:\n        payload=json.loads(raw)\n    except Exception:\n        continue\nif payload is None:\n    # Some executor state JSON nests operation outputs as strings.\n    try:\n        root=json.loads(text)\n        stack=[root]\n        while stack and payload is None:\n            cur=stack.pop()\n            if isinstance(cur,dict):\n                stack.extend(cur.values())\n            elif isinstance(cur,list):\n                stack.extend(cur)\n            elif isinstance(cur,str) and cur.startswith('PRODUCTION_DIFF_INSPECT '):\n                try: payload=json.loads(cur.split(' ',1)[1])\n                except Exception: pass\n    except Exception:\n        pass\nif payload is None:\n    print('STAGED_DIFF_SUMMARY=NOT_FOUND',flush=True)\n    raise SystemExit(41)\n\ndiff=payload.get('diff','')\nfiles=[]\ncur=None\nstats={}\nfor line in diff.splitlines():\n    if line.startswith('diff --git a/'):\n        cur=line.split(' b/',1)[-1]\n        files.append(cur)\n        stats[cur]={'add':0,'del':0,'signals':[]}\n        continue\n    if cur is None:\n        continue\n    if line.startswith('+') and not line.startswith('+++'):\n        stats[cur]['add']+=1\n        s=line[1:].strip()\n        if re.search(r'^(def |class |async def |[A-Z][A-Z0-9_]{2,}\\s*=|if __name__|\\w+[\\w.]*\\s*=)',s):\n            if len(stats[cur]['signals'])<8: stats[cur]['signals'].append('+'+s[:140])\n    elif line.startswith('-') and not line.startswith('---'):\n        stats[cur]['del']+=1\n        s=line[1:].strip()\n        if re.search(r'^(def |class |async def |[A-Z][A-Z0-9_]{2,}\\s*=|if __name__|\\w+[\\w.]*\\s*=)',s):\n            if len(stats[cur]['signals'])<8: stats[cur]['signals'].append('-'+s[:140])\n\nparts=[]\nfor f in files:\n    st=stats[f]\n    sig=';'.join(st['signals'][:4])\n    parts.append(f\"{f}[+{st['add']}/-{st['del']}]\"+(f\"{{{sig}}}\" if sig else \"\"))\nsummary=' | '.join(parts)\nprint('STAGED_DIFF_SUMMARY='+summary[:7000],flush=True)\nraise SystemExit(42)\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/prod_staged_diff_compact_20261005.py"
+      ],
+      "timeout_seconds": 60
+    }
+  ]
+}
