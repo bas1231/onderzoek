@@ -1,0 +1,15 @@
+{
+  "schema": "PREDICTION_BRIDGE_COMMAND_V1",
+  "task_id": "CONT-DONE-f798ddc5481959024ad8753a",
+  "action": "BRIDGE_PING",
+  "created_at_utc": "2026-10-05T09:30:30Z",
+  "route_task_id": "DEV-PRED-PROD-DIFFERENT-PATHS-GROUPED-20261005",
+  "delivery_mode": "headless",
+  "live_trading": false,
+  "paid_actions": false,
+  "wallet_actions": false,
+  "intelligence_tier": "C",
+  "notes": "Close superseded recovery continuation. The prior narrow staged-path diagnostic is superseded by the current git/runtime synchronization and repair campaign requested by the user. No duplicate NEXT task is created.",
+  "auto_continue": false,
+  "parent_continuation_id": "CONT-f798ddc5481959024ad8753a"
+}
