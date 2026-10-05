@@ -1,0 +1,32 @@
+{
+  "schema": "PREDICTION_BUILD_LOG_EVENT_V1",
+  "event_id": "20261005T174000Z-CONTROL-CENTER-LOGBOOK-PLAN",
+  "work_item_id": "CONTROL-CENTER-BUILD-LOGBOOK-20261005",
+  "created_at_utc": "2026-10-05T17:40:00Z",
+  "event_type": "PLAN",
+  "work_item_status": "IN_PROGRESS",
+  "outcome": "STARTED",
+  "title": "Gedeeld bouwlogboek voor meerdere ChatGPT-sessies",
+  "objective": "Voeg een gedeeld append-only logboek toe dat werkitems, pogingen, resultaten, redenen, eerste incomplete stap en volgende actie over alle Prediction-sessies heen zichtbaar maakt en circular debugging voorkomt.",
+  "summary": "Protocol en schema worden canoniek in Git vastgelegd. Het dashboard krijgt een Logboek-pagina met open werk, blokkades, recente resultaten en volledige werkitem-tijdlijnen. Nieuwe sessies moeten het ledger raadplegen vóór ze bestaand werk opnieuw starten.",
+  "why": "Meerdere sessies werken soms tegelijk aan hetzelfde project. Zonder gedeelde werkadministratie worden geslaagde stappen herhaald en mislukte hypotheses opnieuw onderzocht zonder duidelijke handoff.",
+  "next_action": "Bouw de dashboardprojectie, voeg de logboekpagina en regressies toe, veranker het protocol in START_HERE/NEW_SESSION_LOCAL_EXECUTION en bewijs de runtime met een nieuwe executor-task.",
+  "session_route_task_id": "SESSION-ROUTE-fc2613ecbc81e22d4c913b2a",
+  "task_ids": [],
+  "commits": [
+    "891e5d9c44d63ab107fdd7d0321861a90d8fdf7b",
+    "ad964cafee747e41e54e47088583ea9f97c7a6e8"
+  ],
+  "evidence_refs": [
+    "control/build_log/PROTOCOL.md",
+    "control/build_log/SCHEMA_V1.json"
+  ],
+  "tags": [
+    "control-center",
+    "build-log",
+    "multi-session",
+    "governance"
+  ],
+  "parent_event_id": null,
+  "first_incomplete_step": "Dashboardprojectie en runtimebewijs van het gedeelde logboek."
+}
