@@ -1,0 +1,34 @@
+{
+  "schema": "PREDICTION_BUILD_LOG_EVENT_V1",
+  "event_id": "20261005T183000Z-DASHBOARD-NEW-SESSION-E023-FAIL",
+  "work_item_id": "DASHBOARD-NEW-SESSION-ACTIONS-20261005",
+  "created_at_utc": "2026-10-05T18:30:00Z",
+  "event_type": "RESULT",
+  "work_item_status": "IN_PROGRESS",
+  "outcome": "FAIL",
+  "title": "Dashboardknoppen starten altijd een nieuwe ChatGPT-sessie",
+  "objective": "Maak het platformbreed verplicht dat iedere dashboardactie die ChatGPT start, het werk in een nieuwe Prediction ChatGPT-sessie opent.",
+  "summary": "E023 faalde in de regressiefase met python rc=1 voordat runtime-installatie begon. De compacte resultregel toont alleen een testregel die zelf op OK eindigt en bevat niet de werkelijke eerste failure.",
+  "why": "De nieuwe functionaliteit raakt zowel Control Center als Tampermonkey/wake bridge. Minstens één bestaande regressie is niet groen; de afgekorte bridge-output identificeert die niet betrouwbaar.",
+  "next_action": "Classificeer de eerste falende test deterministisch via exitcode en repareer uitsluitend die eerste breuk.",
+  "session_route_task_id": "SESSION-ROUTE-fc2613ecbc81e22d4c913b2a",
+  "task_ids": [
+    "DEV-PRED-DASHBOARD-NEW-SESSION-20261005-E023"
+  ],
+  "commits": [
+    "7b8822b95bf179a206364ed1bc03564d999392c1"
+  ],
+  "evidence_refs": [
+    "event=1791224975-f7ac6ee2ddcc",
+    "status=FAIL exit=2",
+    "detail=python rc=1"
+  ],
+  "tags": [
+    "dashboard",
+    "new-session",
+    "bridge",
+    "regression-failure"
+  ],
+  "parent_event_id": "20261005T184501Z-DASHBOARD-NEW-SESSION-ACTIONS-E023-ATTEMPT",
+  "first_incomplete_step": "De eerste werkelijk falende regressietest exact identificeren."
+}
