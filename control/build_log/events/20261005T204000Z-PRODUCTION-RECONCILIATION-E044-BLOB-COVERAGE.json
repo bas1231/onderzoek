@@ -1,0 +1,30 @@
+{
+  "schema": "PREDICTION_BUILD_LOG_EVENT_V1",
+  "event_id": "20261005T204000Z-PRODUCTION-RECONCILIATION-E044-BLOB-COVERAGE",
+  "work_item_id": "PRODUCTION-RECONCILIATION-20261005",
+  "created_at_utc": "2026-10-05T20:40:00Z",
+  "event_type": "ATTEMPT",
+  "work_item_status": "IN_PROGRESS",
+  "outcome": "STARTED",
+  "title": "Production veilig reconciliëren met canonical main",
+  "objective": "Breng production veilig in sync met canonical main zonder lokaal werk te verliezen.",
+  "summary": "E044 controleert read-only of de 24 blob-objecten uit de immutable E034 dirty snapshot al bestaan in de lokale mirror van de GitHub remote.",
+  "why": "Als blobs al remote aanwezig zijn via eerdere refs/history, kan canonical tree-hergebruik de bestanden behouden zonder hun inhoud opnieuw uit WSL te exporteren.",
+  "next_action": "Gebruik blobcoverage om te kiezen tussen GitHub tree-reuse en expliciete contentexport.",
+  "session_route_task_id": "SESSION-ROUTE-fc2613ecbc81e22d4c913b2a",
+  "task_ids": [
+    "DEV-PRED-PRODUCTION-SNAPSHOT-BLOB-COVERAGE-20261005-E044"
+  ],
+  "evidence_refs": [
+    "DEV-PRED-PRODUCTION-DIRTY-SNAPSHOT-20261005-E034",
+    "projectexecutor:production_dirty_snapshot_inspect remote_blob_coverage"
+  ],
+  "tags": [
+    "production",
+    "reconciliation",
+    "git-objects",
+    "read-only"
+  ],
+  "parent_event_id": "20261005T203800Z-PRODUCTION-RECONCILIATION-E042-RESULT",
+  "first_incomplete_step": "Remote Git-objectdekking van de 24 snapshotblobs bepalen."
+}
