@@ -111,6 +111,8 @@ class ControlCenterModel:
             else (Path.home() / ".local/state/prediction-project-executor/control-center").resolve()
         )
         self.revive_root = self.state_root / "revive_requests"
+        self.sync_request_root = self.state_root / "sync_requests"
+        self.bridge_data = (Path.home() / ".local/share/prediction-chat-bridge").resolve()
         self.command_state = (Path.home() / ".local/state/prediction-command-bus/tasks").resolve()
         self.executor_state = (Path.home() / ".local/state/prediction-project-executor").resolve()
         self.mirror_root = (Path.home() / ".local/share/prediction-project-executor/repo").resolve()
@@ -374,6 +376,170 @@ class ControlCenterModel:
         if proc.returncode != 0:
             return None
         return (proc.stdout or "").strip()
+
+    def _exclusive_json(self, path: Path, payload: dict):
+        path.parent.mkdir(parents=True, exist_ok=True)
+        raw = json.dumps(payload, ensure_ascii=False, sort_keys=True, indent=2) + "\n"
+        fd = os.open(path, os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o600)
+        with os.fdopen(fd, "w", encoding="utf-8") as handle:
+            handle.write(raw)
+            handle.flush()
+            os.fsync(handle.fileno())
+
+    def _latest_proven_chat_route(self):
+        sent = self.bridge_data / "sent"
+        routes = self.bridge_data / "routes"
+        if not sent.is_dir() or not routes.is_dir():
+            return None
+        paths = []
+        try:
+            paths = sorted(
+                (p for p in sent.glob("*.json") if p.is_file() and not p.is_symlink()),
+                key=lambda p: p.stat().st_mtime_ns,
+                reverse=True,
+            )
+        except OSError:
+            return None
+        for path in paths[:2000]:
+            event = safe_json(path)
+            if not isinstance(event, dict):
+                continue
+            task_id = str(event.get("task_id") or "").strip()
+            if not task_id:
+                continue
+            route = safe_json(routes / f"{task_id}.json")
+            if not isinstance(route, dict):
+                continue
+            chat_id = str(route.get("chat_id") or "").strip()
+            if not chat_id or chat_id.startswith("HEADLESS"):
+                continue
+            return {
+                "route_task_id": task_id,
+                "chat_id": chat_id,
+                "source_event_id": str(event.get("event_id") or path.stem),
+                "source_sent_mtime": datetime.fromtimestamp(path.stat().st_mtime, timezone.utc).isoformat(),
+            }
+        return None
+
+    def latest_sync_request(self, git_sync=None):
+        if git_sync is not None and git_sync.get("status") == "GREEN":
+            return {"state": "SYNCED", "request_id": None, "message": "Repository is in sync."}
+        if not self.sync_request_root.is_dir():
+            return None
+        rows = []
+        for path in self.sync_request_root.glob("*.json"):
+            obj = safe_json(path)
+            if isinstance(obj, dict):
+                rows.append(obj)
+        rows.sort(key=lambda x: parse_time(x.get("created_at_utc")) or 0, reverse=True)
+        if not rows:
+            return None
+        latest = dict(rows[0])
+        event_id = str(latest.get("event_id") or "")
+        state = str(latest.get("state") or "REQUESTED")
+        if event_id:
+            if (self.bridge_data / "sent" / f"{event_id}.json").is_file():
+                state = "DELIVERED"
+            elif (self.bridge_data / "inflight" / f"{event_id}.json").is_file():
+                state = "INFLIGHT"
+            elif (self.bridge_data / "outbox" / f"{event_id}.json").is_file():
+                state = "QUEUED"
+        latest["state"] = state
+        return latest
+
+    def request_sync(self):
+        sync = self.git_sync_status()
+        if sync.get("status") == "GREEN":
+            return {
+                "request_id": None,
+                "state": "ALREADY_IN_SYNC",
+                "deduplicated": False,
+                "git_sync": sync,
+            }
+
+        latest = self.latest_sync_request(sync)
+        if isinstance(latest, dict):
+            created = parse_time(latest.get("created_at_utc"))
+            recent = created is not None and time.time() - created < 900
+            if recent and latest.get("state") in {"QUEUED", "INFLIGHT", "DELIVERED"}:
+                latest = dict(latest)
+                latest["deduplicated"] = True
+                latest["git_sync"] = sync
+                return latest
+
+        route = self._latest_proven_chat_route()
+        if route is None:
+            raise RuntimeError("NO_PROVEN_CHAT_ROUTE")
+
+        stamp = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
+        token = uuid.uuid4().hex[:10]
+        request_id = f"SYNC-{stamp}-{token}"
+        trigger_task_id = f"CONTROL-SYNC-{stamp}-{token}"
+        event_id = f"control-sync-{int(time.time() * 1000)}-{token[:8]}"
+
+        message = (
+            "PREDICTION_CONTROL_SYNC_REQUEST_V1\n"
+            f"request_id={request_id}\n"
+            f"route_task_id={route['route_task_id']}\n"
+            "work_item_id=PRODUCTION-RECONCILIATION-20261005\n"
+            "The owner explicitly clicked Sync in the Prediction Control Center. No human input is required.\n"
+            "Goal: bring production safely into sync with canonical GitHub main using the shortest safe path.\n"
+            "Read control/control_center/SYNC_PROTOCOL.md, CURRENT_STATE.md and the shared build log first.\n"
+            "Preserve all local committed, staged, unstaged and untracked content until canonical representation is proven.\n"
+            "Never use reset --hard, force, destructive checkout, rebase, stash/drop, credential access, WSL git push, paid actions, trading or wallet actions.\n"
+            "Use ChatGPT GitHub writes plus the capability-scoped projectexecutor for local inspection/reconciliation.\n"
+            "Append ATTEMPT/RESULT/HANDOFF events under the same production-reconciliation work_item_id.\n"
+            "Finish only after a fresh Control Center snapshot reports git_sync.status=GREEN; otherwise fail closed with the exact first incomplete step."
+        )
+
+        request = {
+            "schema": "PREDICTION_CONTROL_CENTER_SYNC_REQUEST_V1",
+            "request_id": request_id,
+            "created_at_utc": utc_now(),
+            "state": "QUEUED",
+            "trigger_task_id": trigger_task_id,
+            "event_id": event_id,
+            "selected_route_task_id": route["route_task_id"],
+            "selected_chat_id": route["chat_id"],
+            "source_sent_event_id": route["source_event_id"],
+            "work_item_id": "PRODUCTION-RECONCILIATION-20261005",
+            "git_sync_before": sync,
+            "safety": {
+                "live_trading": False,
+                "paid_actions": False,
+                "wallet_actions": False,
+                "destructive_git": False,
+                "wsl_remote_git_write": False,
+            },
+        }
+
+        self._exclusive_json(self.sync_request_root / f"{request_id}.json", request)
+        self._exclusive_json(
+            self.bridge_data / "routes" / f"{trigger_task_id}.json",
+            {
+                "version": 2,
+                "task_id": trigger_task_id,
+                "chat_id": route["chat_id"],
+                "consumer_id": None,
+                "source": "prediction_control_center_sync_v1",
+                "created_at_unix": time.time(),
+                "request_id": request_id,
+            },
+        )
+        self._exclusive_json(
+            self.bridge_data / "outbox" / f"{event_id}.json",
+            {
+                "event_id": event_id,
+                "task_id": trigger_task_id,
+                "message": message,
+                "created_at": time.time(),
+                "source": "prediction_control_center_sync_v1",
+                "request_id": request_id,
+            },
+        )
+        self.invalidate()
+        request["deduplicated"] = False
+        return request
 
     def git_sync_status(self):
         head = self._git_output(self.repo, "rev-parse", "HEAD")
@@ -875,6 +1041,7 @@ class ControlCenterModel:
         lifecycle = self.lifecycle_status()
         build_log = self.build_log_projection()
         git_sync = self.git_sync_status()
+        sync_request = self.latest_sync_request(git_sync)
         chain_alerts = self._chain_alerts(all_tasks, runs)
 
         sessions = {}
@@ -924,6 +1091,7 @@ class ControlCenterModel:
             "lifecycle": lifecycle,
             "build_log": build_log,
             "git_sync": git_sync,
+            "sync_request": sync_request,
             "chain_alerts": chain_alerts,
             "candidates": candidates,
             "runs": runs,
@@ -1132,7 +1300,7 @@ class Handler(BaseHTTPRequestHandler):
 
     def do_POST(self):
         parsed = urlparse(self.path)
-        if parsed.path != "/api/revive":
+        if parsed.path not in {"/api/revive", "/api/sync"}:
             self._json({"error": "not found"}, 404)
             return
         if self.headers.get("X-Prediction-Control-Center") != "local-ui-v1":
@@ -1147,6 +1315,18 @@ class Handler(BaseHTTPRequestHandler):
         except Exception:
             self._json({"error": "invalid json"}, 400)
             return
+        if parsed.path == "/api/sync":
+            try:
+                result = self.model.request_sync()
+            except RuntimeError as exc:
+                self._json({"error": str(exc)}, 409)
+                return
+            except FileExistsError:
+                self._json({"error": "sync request collision"}, 409)
+                return
+            self._json(result, 202 if result.get("state") != "ALREADY_IN_SYNC" else 200)
+            return
+
         candidate_id = payload.get("candidate_id") if isinstance(payload, dict) else None
         note = payload.get("note", "") if isinstance(payload, dict) else ""
         if not isinstance(candidate_id, str) or not candidate_id:
