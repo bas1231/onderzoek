@@ -78,6 +78,7 @@ class ControlCenterTests(unittest.TestCase):
         model = mod.ControlCenterModel(repo, state)
         model.command_state = tmp_path / "command_state"
         model.executor_state = tmp_path / "executor_state"
+        model.mirror_root = tmp_path / "mirror_root"
         model.command_state.mkdir()
         model.executor_state.mkdir()
         self.model = model
