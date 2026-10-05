@@ -310,7 +310,6 @@ class CodexWorker:
             eligible=[
                 m for m in models
                 if str(m.get('slug') or '').strip().casefold().startswith('gpt-')
-                or str(m.get('display_name') or '').strip().casefold().startswith('gpt')
             ]
             if not eligible:raise Blocked('GPT_BUILDER_UNAVAILABLE')
             selected=min(eligible,key=lambda m:m.get('priority',999));model=str(selected.get('slug') or '').strip()
