@@ -228,11 +228,19 @@ def test_protocol_builds_stay_on_fixed_validator_path(tmp_path):
 
 
 def test_candidate_dispatch_legacy_needs_build_cannot_bypass_astra(tmp_path, monkeypatch):
+    import hashlib
     import candidate_dispatch as d
     runtime = tmp_path / "runtime"
     states = runtime / "candidate_states"
     states.mkdir(parents=True)
+    repo = tmp_path / "repo"
+    source = repo / "knowledge/candidates/CANARY.json"
+    source.parent.mkdir(parents=True)
+    source.write_text('{"candidate_id":"CANARY","version":1}')
     item = overlay(approved=False)
+    item["source_hashes"] = {
+        "knowledge/candidates/CANARY.json": hashlib.sha256(source.read_bytes()).hexdigest()
+    }
     item["finding"] = "generic build needed"
     item["next_action"] = "build bounded collector"
     path = states / "generic.json"
@@ -244,7 +252,7 @@ def test_candidate_dispatch_legacy_needs_build_cannot_bypass_astra(tmp_path, mon
 
     monkeypatch.setattr(d, "pending_validation_task", lambda *args, **kwargs: None)
     monkeypatch.setattr(d, "select_task", lambda *args, **kwargs: None)
-    result = d.select_next(S(runtime), tmp_path / "repo")
+    result = d.select_next(S(runtime), repo)
     assert result["queue_blocked"] is True
     assert result["reason"] == "ASTRA_PREBUILD_REVIEW_REQUIRED"
     migrated = json.loads(path.read_text())
