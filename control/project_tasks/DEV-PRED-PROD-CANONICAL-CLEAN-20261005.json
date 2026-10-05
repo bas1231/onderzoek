@@ -1,0 +1,38 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-PROD-CANONICAL-CLEAN-20261005",
+  "source_commit": "01f212a365963e5d7a97122b56aa2704a468baf3",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "production_clean_canonical",
+    "production_inspect",
+    "production_staged_inspect"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 240,
+  "notes": "Safely clean production dirty/staged state only if every dirty path is byte-for-byte represented by canonical commit 01f212a365963e5d7a97122b56aa2704a468baf3. Fail closed with no mutation if any path differs or is missing in canonical. Do not fast-forward production in this task.",
+  "operations": [
+    {
+      "type": "production_clean_canonical"
+    },
+    {
+      "type": "production_inspect"
+    },
+    {
+      "type": "production_staged_inspect",
+      "fail_for_visibility": false
+    }
+  ]
+}
