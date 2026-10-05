@@ -1,0 +1,32 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-PRODUCTION-SNAPSHOT-CANDIDATE-GATE-20261005-E048",
+  "source_commit": "29d4c1c6ce0dfc7048468e5c031c49342701f345",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "High"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "production_dirty_snapshot_inspect"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 180,
+  "notes": "Read-only minimal candidate gate report from immutable E034 dirty snapshot. Report only candidate_id, queue_status, scientific_status, originating_task_id. No cleanup or production mutation.",
+  "operations": [
+    {
+      "type": "production_dirty_snapshot_inspect",
+      "snapshot_task_id": "DEV-PRED-PRODUCTION-DIRTY-SNAPSHOT-20261005-E034",
+      "report_mode": "semantic_candidate_gate",
+      "fail_for_visibility": true
+    }
+  ]
+}
