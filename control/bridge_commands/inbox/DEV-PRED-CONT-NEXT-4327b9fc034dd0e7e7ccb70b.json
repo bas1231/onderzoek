@@ -1,0 +1,19 @@
+{
+  "schema": "PREDICTION_BRIDGE_COMMAND_V1",
+  "task_id": "DEV-PRED-CONT-NEXT-4327b9fc034dd0e7e7ccb70b",
+  "action": "SIX_AI_HEALTH",
+  "created_at_utc": "2026-10-05T05:59:00Z",
+  "route_task_id": "DEV-PRED-ASTRA-ROUTE-PROVENANCE-DEPLOY-20261005",
+  "delivery_mode": "chat",
+  "live_trading": false,
+  "paid_actions": false,
+  "wallet_actions": false,
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "notes": "Continuation NEXT: verify Astra provenance deploy source task PASS and inspect production state.",
+  "auto_continue": true,
+  "parent_continuation_id": "CONT-4327b9fc034dd0e7e7ccb70b"
+}
