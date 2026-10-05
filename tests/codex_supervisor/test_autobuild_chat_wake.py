@@ -46,12 +46,59 @@ def overlay(approved=True):
 
 def canonical_prebuild_review(tmp_path, item):
     repo = tmp_path / "repo"
-    review = q.review_template(item, "PREBUILD")
-    review.update(
-        decision="APPROVE",
-        finding="Fixture Astra approves exact prebuild binding.",
-        next_action="Proceed to bounded build only.",
-    )
+    binding = q.review_binding(item, "PREBUILD")
+    slug = "gpt-6-astra-test"
+    source_task_id = "ASTRA-AUTO-REVIEW-TEST"
+    completion_sha = "d" * 64
+    provenance = {
+        "schema": q.AUTONOMOUS_PROVENANCE_SCHEMA,
+        "usage_scope": q.MODEL_PROVENANCE_PRODUCTION_SCOPE,
+        "verification_method": q.MODEL_PROVENANCE_PRODUCTION_METHOD,
+        "reviewer_model": "GPT-6 Astra",
+        "reviewer_role": "INDEPENDENT_GATE_REVIEWER",
+        "reviewer_model_slug": slug,
+        "model_policy": "ASTRA_EXACT",
+        "visible_astra_count": 1,
+        "candidate_id": item["candidate_id"],
+        "phase": "PREBUILD",
+        "binding_sha256": binding,
+        "source_task_id": source_task_id,
+        "input_sha256": "e" * 64,
+        "completion_sha256": completion_sha,
+        "worker_record_sha256": "f" * 64,
+        "model_selection": {
+            "policy": "ASTRA_EXACT",
+            "visible_astra_count": 1,
+            "selected_slug": slug,
+        },
+    }
+    provenance_ref = q.expected_autonomous_provenance_ref(item, "PREBUILD")
+    provenance_path = repo / provenance_ref
+    provenance_path.parent.mkdir(parents=True, exist_ok=True)
+    provenance_path.write_text(json.dumps(provenance))
+    review = {
+        "schema": q.SCHEMA,
+        "candidate_id": item["candidate_id"],
+        "phase": "PREBUILD",
+        "binding_sha256": binding,
+        "reviewer_model": "GPT-6 Astra",
+        "reviewer_role": "INDEPENDENT_GATE_REVIEWER",
+        "provenance_kind": q.PROVENANCE_AUTONOMOUS_RUN,
+        "reviewer_model_slug": slug,
+        "source_task_id": source_task_id,
+        "completion_sha256": completion_sha,
+        "model_provenance_ref": provenance_ref,
+        "model_provenance_sha256": q.canonical_sha(provenance),
+        "decision": "APPROVE",
+        "finding": "Fixture autonomous Astra approves exact prebuild binding.",
+        "next_action": "Proceed to bounded build only.",
+        "economic_policy": q.ECONOMIC_POLICY,
+        "minimum_net_profit_eur": 0.0,
+        "measurement_scope": "READ_ONLY_PROSPECTIVE_MARKET_DATA",
+        "live_trading": False,
+        "paid_actions": False,
+        "wallet_actions": False,
+    }
     ref = q.expected_review_ref(item, "PREBUILD")
     path = repo / ref
     path.parent.mkdir(parents=True, exist_ok=True)
@@ -59,6 +106,10 @@ def canonical_prebuild_review(tmp_path, item):
     item.setdefault("astra_reviews", {})["PREBUILD"] = {
         "decision": "APPROVE",
         "reviewer_model": "GPT-6 Astra",
+        "reviewer_model_slug": slug,
+        "provenance_kind": q.PROVENANCE_AUTONOMOUS_RUN,
+        "model_provenance_ref": provenance_ref,
+        "model_provenance_sha256": q.canonical_sha(provenance),
         "ref": ref,
     }
     return repo
