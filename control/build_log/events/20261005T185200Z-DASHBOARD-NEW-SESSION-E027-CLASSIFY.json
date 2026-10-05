@@ -1,0 +1,33 @@
+{
+  "schema": "PREDICTION_BUILD_LOG_EVENT_V1",
+  "event_id": "20261005T185200Z-DASHBOARD-NEW-SESSION-E027-CLASSIFY",
+  "work_item_id": "DASHBOARD-NEW-SESSION-ACTIONS-20261005",
+  "created_at_utc": "2026-10-05T18:52:00Z",
+  "event_type": "ATTEMPT",
+  "work_item_status": "IN_PROGRESS",
+  "outcome": "STARTED",
+  "title": "Dashboardknoppen starten altijd een nieuwe ChatGPT-sessie",
+  "objective": "Maak het platformbreed verplicht dat iedere dashboardactie die ChatGPT start, het werk in een nieuwe Prediction ChatGPT-sessie opent.",
+  "summary": "E027 classificeert eerst module-loadfouten en daarna pas de zes v0.4.6 delivery-guard methoden.",
+  "why": "E026 crashte vóór de methodecodes. De nieuwe classifier onderscheidt pytest-missing, andere loadfout en echte guardmethode.",
+  "next_action": "Gebruik E027-exitcode: 67=pytest ontbreekt, 68=andere load/importfout, 61-66=eerst falende guardmethode, 0=alles groen.",
+  "session_route_task_id": "SESSION-ROUTE-fc2613ecbc81e22d4c913b2a",
+  "task_ids": [
+    "DEV-PRED-DASHBOARD-NEW-SESSION-V046-CLASSIFY-V2-20261005-E027"
+  ],
+  "commits": [
+    "5c69f2e879785dd7b3e6717c76fce3b480350775"
+  ],
+  "evidence_refs": [
+    "control/dev_checks/dashboard_new_session_v046_method_classify_v2.py"
+  ],
+  "tags": [
+    "dashboard",
+    "new-session",
+    "bridge",
+    "delivery-guard",
+    "diagnostic"
+  ],
+  "parent_event_id": "20261005T185000Z-DASHBOARD-NEW-SESSION-E026-RESULT",
+  "first_incomplete_step": "Loadfout versus echte delivery-guard regressie onderscheiden."
+}
