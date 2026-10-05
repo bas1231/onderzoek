@@ -5,6 +5,7 @@ import json
 import tempfile
 import unittest
 from pathlib import Path
+from unittest import mock
 
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -130,7 +131,8 @@ class ControlCenterTests(unittest.TestCase):
         )
         self.assertEqual(len(list(self.model.revive_root.glob("*.json"))), 2)
 
-    def test_multisession_task_index_and_failures(self):
+    def test_multisession_task_index_only_exposes_active_and_alerts_recent_failures(self):
+        now = mod.utc_now()
         write_json(
             self.model.command_state / "T-1.json",
             {
@@ -156,7 +158,7 @@ class ControlCenterTests(unittest.TestCase):
                 "task_id": "T-2",
                 "route_task_id": "SESSION-B",
                 "state": "DISPATCHED",
-                "created_at": "2026-10-01T12:01:00Z",
+                "created_at": now,
             },
         )
         write_json(
@@ -164,18 +166,99 @@ class ControlCenterTests(unittest.TestCase):
             {
                 "task_id": "T-2",
                 "status": "FAIL",
-                "started_at": "2026-10-01T12:01:01Z",
-                "finished_at": "2026-10-01T12:01:05Z",
+                "started_at": now,
+                "finished_at": now,
                 "exit_code": 1,
                 "error": "synthetic failure",
             },
         )
+        write_json(
+            self.model.command_state / "T-3.json",
+            {
+                "task_id": "T-3",
+                "route_task_id": "SESSION-C",
+                "state": "DISPATCHED",
+                "created_at": now,
+            },
+        )
+        write_json(
+            self.model.executor_state / "T-3.json",
+            {
+                "task_id": "T-3",
+                "status": "RUNNING",
+                "started_at": now,
+                "exit_code": None,
+            },
+        )
         snapshot = self.model.build_snapshot(force=True)
-        self.assertEqual(snapshot["counts"]["sessions"], 2)
+        self.assertEqual(snapshot["counts"]["tasks"], 1)
+        self.assertEqual(snapshot["counts"]["sessions"], 1)
+        self.assertEqual([x["task_id"] for x in snapshot["tasks"]], ["T-3"])
+        self.assertEqual(snapshot["sessions"][0]["route_task_id"], "SESSION-C")
         self.assertEqual(snapshot["task_metrics"]["success"], 1)
         self.assertEqual(snapshot["task_metrics"]["failure"], 1)
         self.assertEqual(snapshot["errors"][0]["task_id"], "T-2")
         self.assertIn("synthetic failure", snapshot["errors"][0]["reason"])
+        self.assertEqual(snapshot["chain_alerts"][0]["id"], "T-2")
+        self.assertIn("synthetic failure", snapshot["chain_alerts"][0]["reason"])
+
+    def test_git_sync_green_when_production_main_matches_fetched_main(self):
+        self.model.mirror_root.mkdir(parents=True)
+        (self.model.mirror_root / ".git").mkdir()
+        (self.model.mirror_root / ".git/FETCH_HEAD").write_text("dummy", encoding="utf-8")
+        same = "a" * 40
+
+        def fake_git(repo, *args):
+            key = tuple(args)
+            if repo == self.model.repo:
+                if key == ("rev-parse", "HEAD"):
+                    return same
+                if key == ("rev-parse", "refs/heads/main"):
+                    return same
+                if key == ("branch", "--show-current"):
+                    return "main"
+                if key == ("status", "--porcelain=v1"):
+                    return ""
+            if repo == self.model.mirror_root and key == ("rev-parse", "FETCH_HEAD"):
+                return same
+            return None
+
+        with mock.patch.object(self.model, "_git_output", side_effect=fake_git):
+            sync = self.model.git_sync_status()
+        self.assertEqual(sync["status"], "GREEN")
+        self.assertFalse(sync["dirty"])
+        self.assertEqual(sync["production_head"], same)
+        self.assertEqual(sync["local_main"], same)
+        self.assertEqual(sync["fetched_github_main"], same)
+
+    def test_git_sync_red_on_production_divergence_or_dirty_tree(self):
+        self.model.mirror_root.mkdir(parents=True)
+        (self.model.mirror_root / ".git").mkdir()
+        (self.model.mirror_root / ".git/FETCH_HEAD").write_text("dummy", encoding="utf-8")
+        main = "a" * 40
+        head = "b" * 40
+
+        def fake_git(repo, *args):
+            key = tuple(args)
+            if repo == self.model.repo:
+                if key == ("rev-parse", "HEAD"):
+                    return head
+                if key == ("rev-parse", "refs/heads/main"):
+                    return main
+                if key == ("branch", "--show-current"):
+                    return "work"
+                if key == ("status", "--porcelain=v1"):
+                    return " M control/example.py"
+            if repo == self.model.mirror_root and key == ("rev-parse", "FETCH_HEAD"):
+                return main
+            return None
+
+        with mock.patch.object(self.model, "_git_output", side_effect=fake_git):
+            sync = self.model.git_sync_status()
+        self.assertEqual(sync["status"], "RED")
+        self.assertTrue(sync["dirty"])
+        self.assertTrue(any("Production HEAD" in x for x in sync["issues"]))
+        self.assertTrue(any("niet-vastgelegde" in x for x in sync["issues"]))
 
     def test_artifact_path_traversal_blocked(self):
         with self.assertRaises(PermissionError):
@@ -197,6 +280,10 @@ class ControlCenterTests(unittest.TestCase):
             "Nog geen bewezen voordeel",
             "RUWE BEWIJSGEGEVENS",
             "onderzoeksdashboard • alleen-lezen",
+            "Ketenfout direct gemeld",
+            "Synchronisatie met main",
+            "Geen historisch taakgetal",
+            "Alleen wat nu bezig of wachtend is",
         ):
             self.assertIn(expected, html)
         self.assertIn("NO_PROVEN_EDGE", html)
