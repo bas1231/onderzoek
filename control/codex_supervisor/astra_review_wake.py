@@ -66,7 +66,9 @@ def ensure_review_continuation(supervisor, repo: P, overlay: dict, phase: str) -
     route_task_id, chat_id = _control_route()
     try:
         _, provenance_ref, provenance_sha = model_quality_gate.load_model_provenance(
-            P(repo), route_task_id
+            P(repo),
+            route_task_id,
+            allow_test_only=model_quality_gate.is_qualification_fixture(overlay),
         )
     except model_quality_gate.ReviewGateError as exc:
         raise AstraReviewWakeBlocked(
@@ -94,12 +96,13 @@ def ensure_review_continuation(supervisor, repo: P, overlay: dict, phase: str) -
         f"reviewer_route_task_id={route_task_id}\n"
         f"model_provenance_ref={provenance_ref}\n"
         f"model_provenance_sha256={provenance_sha}\n"
-        "model_identity_verification=EXTERNAL_ROUTE_ATTESTATION\n"
+        "model_identity_verification=EXTERNAL_ROUTE_ATTESTATION_TEST_ONLY\n"
         "economic_policy=ANY_POSITIVE_NET_EDGE_COUNTS\n"
         "minimum_net_profit_eur=0.0\n"
         "measurement_scope=READ_ONLY_PROSPECTIVE_MARKET_DATA\n"
-        "IMPORTANT: do not self-attest your model identity and do not block solely because you cannot inspect your own model name. "
-        "The control plane has externally attested the exact session route to GPT-6 Astra; the deterministic gate will independently verify the immutable provenance ref/hash and this exact route before accepting a review. "
+        "IMPORTANT: this browser-route review path is valid only for an explicitly marked qualification fixture. "
+        "Do not self-attest your model identity. The deterministic gate will independently verify the immutable test-only route provenance, exact route and candidate binding. "
+        "Production candidates must use autonomous model-run provenance and must not use this browser-route path. "
         "If the supplied route/provenance facts are missing or inconsistent with canonical Git, choose BLOCKED. "
         "Inspect the exact current canonical candidate/evidence and the supplied immutable overlay facts. "
         "Do not reject an idea merely because expected profit is small: any strictly positive NET executable euro edge is worth testing. "
@@ -134,7 +137,7 @@ def ensure_review_continuation(supervisor, repo: P, overlay: dict, phase: str) -
         "control_route_task_id": route_task_id,
         "model_provenance_ref": provenance_ref,
         "model_provenance_sha256": provenance_sha,
-        "model_identity_verification": "EXTERNAL_ROUTE_ATTESTATION",
+        "model_identity_verification": "EXTERNAL_ROUTE_ATTESTATION_TEST_ONLY",
         "economic_policy": "ANY_POSITIVE_NET_EDGE_COUNTS",
         "measurement_scope": "READ_ONLY_PROSPECTIVE_MARKET_DATA",
         "live_trading": False,
