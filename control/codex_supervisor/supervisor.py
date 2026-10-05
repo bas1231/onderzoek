@@ -296,15 +296,26 @@ class CodexWorker:
         if not models:raise Blocked('AVAILABLE_MODEL_UNKNOWN')
         policy=task.get('model_policy') or 'HIGHEST_AVAILABLE_GPT'
         if policy=='ASTRA_EXACT':
-            astra=[m for m in models if 'astra' in str(m.get('slug') or '').lower() or 'astra' in str(m.get('display_name') or '').lower()]
+            astra=[
+                m for m in models
+                if str(m.get('display_name') or '').strip().casefold()=='gpt-6 astra'
+                and 'gpt-6' in str(m.get('slug') or '').strip().casefold()
+                and 'astra' in str(m.get('slug') or '').strip().casefold()
+            ]
             if len(astra)!=1:raise Blocked('ASTRA_MODEL_UNAVAILABLE_OR_AMBIGUOUS')
             selected=astra[0];model=str(selected.get('slug') or '').strip()
             if not model:raise Blocked('ASTRA_MODEL_SLUG_MISSING')
             selection={'policy':'ASTRA_EXACT','visible_astra_count':1,'selected_slug':model,'display_name':selected.get('display_name'),'priority':selected.get('priority')}
         else:
-            selected=min(models,key=lambda m:m.get('priority',999));model=str(selected.get('slug') or '').strip()
+            eligible=[
+                m for m in models
+                if 'gpt' in str(m.get('slug') or '').strip().casefold()
+                or str(m.get('display_name') or '').strip().casefold().startswith('gpt')
+            ]
+            if not eligible:raise Blocked('GPT_BUILDER_UNAVAILABLE')
+            selected=min(eligible,key=lambda m:m.get('priority',999));model=str(selected.get('slug') or '').strip()
             if not model:raise Blocked('AVAILABLE_MODEL_SLUG_MISSING')
-            selection={'policy':'HIGHEST_AVAILABLE_GPT','visible_model_count':len(models),'selected_slug':model,'display_name':selected.get('display_name'),'priority':selected.get('priority')}
+            selection={'policy':'HIGHEST_AVAILABLE_GPT','visible_model_count':len(models),'eligible_gpt_count':len(eligible),'selected_slug':model,'display_name':selected.get('display_name'),'priority':selected.get('priority')}
         args=[self.binary,'exec']+(['resume',thread] if thread else [])+['--json','--ignore-user-config','--ignore-rules','--skip-git-repo-check','-m',model,'-c','sandbox_mode="read-only"','-c','approval_policy="never"','-c','web_search="disabled"','-c','model_reasoning_effort="high"','--disable','shell_tool','--disable','unified_exec','--disable','apps','--disable','apply_patch_freeform','-']
         # Geen shell, hooks, repo-config, MCP of writable eigenaarworkspace beschikbaar.
         prompt='Reason only over the supplied input. Do not call tools, spend money, use credentials, alter files, activate resets, or execute commands. Give a falsifiable research/review conclusion; NO_PROVEN_EDGE is valid.\nTask ID: '+task['task_id']+'\n'+task['prompt']
