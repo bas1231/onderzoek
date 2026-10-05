@@ -1,0 +1,31 @@
+{
+  "schema": "PREDICTION_BUILD_LOG_EVENT_V1",
+  "event_id": "20261005T205000Z-PRODUCTION-RECONCILIATION-E041-RESULT",
+  "work_item_id": "PRODUCTION-RECONCILIATION-20261005",
+  "created_at_utc": "2026-10-05T20:50:00Z",
+  "event_type": "RESULT",
+  "work_item_status": "IN_PROGRESS",
+  "outcome": "FAIL",
+  "title": "Production veilig reconciliëren met canonical main",
+  "objective": "Breng production veilig in sync met canonical main zonder lokaal werk te verliezen.",
+  "summary": "E041 candidate-only snapshotinspectie leverde de juiste overlay op maar werd aan het einde afgekapt. Bewezen: candidate_id=AUTO-DISCOVERY-54d13314c7879b58e46d, applied_version=ea715c48db876fe8436ba0d9d5bb5911, astra_review_phases=[], has_build_handoff=false, has_measurement_authorization=false.",
+  "why": "Dit is geen gewone taskfout; fail_for_visibility is gebruikt om read-only snapshotdata via de wake terug te sturen. De overlay is nog niet als afgeronde post-review/build/measurement state herkenbaar.",
+  "next_action": "Vraag een ultracompact candidate-statusreport uit dezelfde immutable E034 snapshot op: queue_status, originating_task_id, scientific_status en pending_build_handoff.",
+  "session_route_task_id": "SESSION-ROUTE-fc2613ecbc81e22d4c913b2a",
+  "task_ids": [
+    "DEV-PRED-PRODUCTION-SNAPSHOT-CANDIDATE-20261005-E041"
+  ],
+  "evidence_refs": [
+    "event=1791227990-1b7c9212c1e7",
+    "candidate_id=AUTO-DISCOVERY-54d13314c7879b58e46d",
+    "applied_version=ea715c48db876fe8436ba0d9d5bb5911"
+  ],
+  "tags": [
+    "production",
+    "reconciliation",
+    "candidate-state",
+    "snapshot"
+  ],
+  "parent_event_id": "20261005T203100Z-PRODUCTION-RECONCILIATION-E040-RESULT",
+  "first_incomplete_step": "Exacte current candidate overlay lifecycle-status compact uitlezen."
+}
