@@ -1,0 +1,41 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-A2Z-E044-RESULT-READ-20261005-E045",
+  "source_commit": "02d1b768a346809c942124edee406b9a0e4aedf2",
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "Codex; exact model identity unavailable to runtime",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_runtime"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 120,
+  "notes": "Expliciet verzoek haal E044-resultaat op. Lees uitsluitend bestaande E044-uitvoer, executorregistratie en commandregistratie. Geen test opnieuw starten, geen mutatie van productie of bridge. Ontbrekend of falend bewijs blijft expliciet FAIL; PASS is hoogstens deze gerichte regressie en nooit de volledige keten.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/read_e044_result_e045.py",
+      "content": "from pathlib import Path\nimport json\nhome=Path.home()\ntarget='DEV-PRED-A2Z-POSTBUILD-GATE-20261005-E044'\ndef read(p):\n    if not p.is_file() or p.is_symlink():\n        return {}\n    value=json.loads(p.read_text())\n    return value if isinstance(value,dict) else {}\nstate=read(home/'.local/state/prediction-project-executor'/(target+'.json'))\nbus=read(home/'.local/state/prediction-command-bus/tasks'/(target+'.json'))\nreport_path=home/'.local/share/prediction-project-executor/worktrees'/target/'diagnostic-result/postbuild-gate-result.json'\nreport=read(report_path)\nreason='RESULT_NOT_AVAILABLE'\nif report:\n    if 'EXPERIMENT_TESTS_STARTED_WITHOUT_ASTRA_POSTBUILD_APPROVAL' in report.get('traceback',''):\n        reason='POSTBUILD_APPROVAL_MISSING'\n    elif report.get('regression_success') is True:\n        reason='TARGETED_GATE_PASS_NOT_FULL_E2E'\n    else:\n        reason='REGRESSION_ERROR'\nprior=report.get('prior_evidence',{})\nrepair=report.get('repair_state',{})\nraw=' '.join(str(line) for item in prior.get('repair_events',[]) for line in item.get('errors',[]))\nrepair_reason='SHARED_COORDINATOR_OUTSIDE_SCOPE' if 'blocked write outside task roots' in raw else 'SEE_REPAIR_EVIDENCE'\nout=Path.cwd()/'diagnostic-result'\nout.mkdir(exist_ok=True)\n(out/'e044-readback.json').write_text(json.dumps({'target':target,'executor_state':state,'bus_state':bus,'result':report,'test_repeated':False,'production_modified':False},indent=2))\nsummary={'found':bool(report),'bus':bus.get('state',bus.get('status','UNKNOWN')),'executor':state.get('status','MISSING'),'tests':report.get('tests_run'),'cause':reason,'repair':repair.get('status','UNKNOWN'),'repair_reason':repair_reason}\nprint('E044_RESULT '+json.dumps(summary,separators=(',',':')),flush=True)\nraise SystemExit(0 if report.get('regression_success') is True else 1)\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/read_e044_result_e045.py"
+      ],
+      "timeout_seconds": 45
+    }
+  ]
+}
