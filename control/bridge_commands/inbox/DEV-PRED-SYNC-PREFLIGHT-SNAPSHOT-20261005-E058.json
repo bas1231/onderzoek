@@ -1,0 +1,19 @@
+{
+  "schema": "PREDICTION_BRIDGE_COMMAND_V1",
+  "task_id": "DEV-PRED-SYNC-PREFLIGHT-SNAPSHOT-20261005-E058",
+  "action": "SIX_AI_HEALTH",
+  "created_at_utc": "2026-10-05T21:16:00Z",
+  "route_task_id": "DEV-PRED-A2Z-COORDINATION-CANARY-20261005-E049",
+  "delivery_mode": "chat",
+  "live_trading": false,
+  "paid_actions": false,
+  "wallet_actions": false,
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "High"
+  },
+  "auto_continue": true,
+  "parent_continuation_id": null,
+  "notes": "Sync first: freeze scheduled Codex timer, verify production at local main, snapshot current dirty state and expose preservation basis. No cleanup yet."
+}
