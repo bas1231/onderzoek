@@ -1,5 +1,26 @@
 # Prediction Command Bus — Current State
 
+## Normative A→Z lifecycle target — 2026-10-05
+
+The canonical acceptance criterion for edge-discovery work is now:
+
+`Scout -> selectie -> GPT-5.6 Sol-opzet -> GPT-6 Astra pre-build review -> GPT-5.6 Sol-build -> GPT-6 Astra post-build code-review -> tests en meting -> supervisor -> rapportage`
+
+Mandatory invariant:
+
+`NO_TEST_OR_MEASUREMENT_BEFORE_ASTRA_POSTBUILD_APPROVAL`
+
+Astra must therefore approve both:
+
+1. the version-bound Sol experiment design **before build**; and
+2. the exact built code/harness **after build but before substantive tests or measurement**.
+
+At either Astra gate, `NEEDS_REVISION` or rejection returns binding feedback to Sol. Sol revises/rebuilds, produces a newly bound version, and exact GPT-6 Astra reviews again. Tests/backtests/shadow runs/measurements remain blocked until the current built version has valid `ASTRA_POSTBUILD_REVIEW = APPROVE`.
+
+This is a **target architecture and full-chain acceptance requirement**. Do not report a complete A→Z PASS merely because an older runner or fixture follows the former order `build -> tests/measurement -> Astra review`. That former order is non-compliant with the current canonical model-gate policy.
+
+See `methodology/EDGE_DISCOVERY_MODEL_GATES.md` for the normative details.
+
 ## Operational update — 2026-10-03
 
 The continuation/result path has advanced beyond the 2026-09-29 baseline below.
