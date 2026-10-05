@@ -240,7 +240,7 @@ def test_astra_review_wake_uses_external_route_provenance_and_small_profit_polic
     msg = record["context_message"]
     assert "required_model=GPT-6 Astra" in msg
     assert "model_identity_verification=EXTERNAL_ROUTE_ATTESTATION_TEST_ONLY" in msg
-    assert "do not self-attest your model identity" in msg
+    assert "do not self-attest your model identity" in msg.lower()
     assert "minimum_net_profit_eur=0.0" in msg
     assert "strictly positive NET executable euro edge is worth testing" in msg
     assert result["control_route_task_id"] == "SESSION-ROUTE-CANARY"
