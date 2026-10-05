@@ -1,0 +1,36 @@
+{
+  "schema": "PREDICTION_BUILD_LOG_EVENT_V1",
+  "event_id": "20261005T2057Z-A2Z-COORDINATION-PROPOSAL",
+  "work_item_id": "A2Z-SYSTEMTEST-20261005",
+  "created_at_utc": "2026-10-05T20:57:03.613Z",
+  "event_type": "BLOCKER",
+  "work_item_status": "BLOCKED",
+  "outcome": "AWAITING_SCOPE_APPROVAL",
+  "title": "Modellen beschikbaar; begrensde coördinatierechten voorgesteld",
+  "summary": "E048 bevestigt actuele slugs gpt-5.6-sol en gpt-6-astra. De bestaande selectie vergelijkt displaynamen met spaties en mist de catalogusnamen met streepjes. E047 bevestigt dat E042 vóór toepassing blokkeert op de gedeelde coördinatiemap. Voorstel fg-assistent PR 7 geeft uitsluitend met een expliciete capability toegang tot die vaste map. Het voorstel is niet actief.",
+  "proposal_url": "https://github.com/bas1231/fg-assistent/pull/7",
+  "proposal_head": "165483e90aa2b1b69bb7b33c3c765aef0c075d1a",
+  "tests": {
+    "new_scope_tests": 9,
+    "existing_executor_tests": 44,
+    "result": "PASS",
+    "environment": "LOCAL_ISOLATED",
+    "wsl_canary": "NOT_RUN"
+  },
+  "open_items": [
+    "Expliciete toestemming voor begrensde uitbreiding van executorrechten",
+    "WSL-canary coördinatie",
+    "Exacte modelselectie corrigeren",
+    "E042 review_template-reparatie toepassen",
+    "Verplichte postbuild Astra-gate en echte Sol-build implementeren en verifiëren",
+    "Een volledige A2Z-acceptatierun uitvoeren"
+  ],
+  "full_chain_pass": false,
+  "production_modified": false,
+  "bridge_modified": false,
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false
+  }
+}
