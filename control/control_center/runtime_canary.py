@@ -38,6 +38,22 @@ def main() -> int:
         raise RuntimeError("CONTROL_CENTER_RUNS_MISSING")
     if not isinstance(snapshot.get("sessions"), list):
         raise RuntimeError("CONTROL_CENTER_SESSIONS_MISSING")
+    if not isinstance(snapshot.get("chain_alerts"), list):
+        raise RuntimeError("CONTROL_CENTER_CHAIN_ALERTS_MISSING")
+    sync = snapshot.get("git_sync")
+    if not isinstance(sync, dict) or sync.get("status") not in {"GREEN", "AMBER", "RED", "UNKNOWN"}:
+        raise RuntimeError("CONTROL_CENTER_GIT_SYNC_MISSING")
+    active_states = {
+        "RUNNING", "STARTED", "CLAIMED", "DISPATCHED", "INFLIGHT",
+        "CONTINUE_QUEUED", "CONTINUE_SENT", "PENDING",
+    }
+    tasks = snapshot.get("tasks")
+    if not isinstance(tasks, list):
+        raise RuntimeError("CONTROL_CENTER_TASKS_MISSING")
+    if int(counts.get("tasks") or 0) != len(tasks):
+        raise RuntimeError("CONTROL_CENTER_ACTIVE_TASK_COUNT_MISMATCH")
+    if any(str(item.get("status") or "").upper() not in active_states for item in tasks):
+        raise RuntimeError("CONTROL_CENTER_HISTORICAL_TASK_EXPOSED")
     print(
         "CONTROL_CENTER_CANARY_PASS "
         + json.dumps(
@@ -47,6 +63,8 @@ def main() -> int:
                 "tasks": counts.get("tasks"),
                 "sessions": counts.get("sessions"),
                 "legacy_candidates": counts.get("legacy_candidates"),
+                "chain_alerts": len(snapshot.get("chain_alerts") or []),
+                "git_sync": (snapshot.get("git_sync") or {}).get("status"),
             },
             separators=(",", ":"),
         ),
