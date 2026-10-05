@@ -126,3 +126,17 @@ supervisor -> rapportage`
 
 The dashboard is observability only; it never relaxes
 `NO_TEST_OR_MEASUREMENT_BEFORE_ASTRA_POSTBUILD_APPROVAL`.
+
+
+## Session assignment drift warning
+
+Control Center can show a prominent **SESSIE WIJKT AF VAN OPDRACHT** warning.
+
+The signal is deterministic. A session scope is written into the shared build log with
+`session_assignment_scope.allowed_work_item_ids`. Active task IDs are mapped back to
+their build-log work-items. Work outside that explicit scope is flagged unless the
+work-item declares `supports_work_item_id` pointing to an allowed assignment.
+
+The warning includes the session route, the recorded assignment, the out-of-scope
+work-item/task, and the reason. This avoids treating an opaque semantic/LLM similarity
+score as sufficient evidence of drift.
