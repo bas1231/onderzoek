@@ -1,0 +1,41 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-PROD-UNIQUE-DIFF-NAMES-20261005-E013",
+  "source_commit": "8511127a874f323cc46cf701b2e9286d287f0b9a",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_runtime"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 120,
+  "notes": "Read-only compact extraction of differing production basenames from E012 local result event. Intentional rc42 for visibility. No production/source/bridge/service mutation.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/prod_unique_diff_names_20261005_e013.py",
+      "content": "from pathlib import Path\nimport json,re\nevent=\"1791200758-9e01d07d1441\"\nbase=Path.home()/\".local/share/prediction-chat-bridge\"\nmsg=None\nfor d in (\"sent\",\"inflight\",\"outbox\"):\n    p=base/d/f\"{event}.json\"\n    if p.is_file():\n        obj=json.loads(p.read_text(encoding=\"utf-8\",errors=\"replace\"))\n        msg=str(obj.get(\"message\") or \"\")\n        break\nif msg is None:\n    print(\"UNIQUE_DIFF_NAMES=EVENT_MISSING\",flush=True)\n    raise SystemExit(42)\nm=re.search(r'production worktree differs from canonical source:\\s*(\\{.*\\})',msg)\nif not m:\n    print(\"UNIQUE_DIFF_NAMES=DETAIL_MISSING\",flush=True)\n    raise SystemExit(42)\nraw=m.group(1)\ntry:\n    data=json.loads(raw)\nexcept Exception:\n    # bounded fallback: extract quoted paths directly from the different array text\n    mm=re.search(r'\"different\"\\s*:\\s*\\[(.*?)\\]',raw,re.S)\n    vals=re.findall(r'\"([^\"]+)\"',mm.group(1) if mm else \"\")\nelse:\n    vals=data.get(\"different\") or []\nnames=[v.rsplit(\"/\",1)[-1] for v in vals]\nprint(\"UNIQUE_DIFF_NAMES=\"+\",\".join(names)+\" || COUNT=\"+str(len(names)),flush=True)\nraise SystemExit(42)\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/prod_unique_diff_names_20261005_e013.py"
+      ],
+      "timeout_seconds": 60
+    }
+  ]
+}
