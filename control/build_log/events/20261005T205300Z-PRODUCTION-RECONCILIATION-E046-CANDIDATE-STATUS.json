@@ -1,0 +1,31 @@
+{
+  "schema": "PREDICTION_BUILD_LOG_EVENT_V1",
+  "event_id": "20261005T205300Z-PRODUCTION-RECONCILIATION-E046-CANDIDATE-STATUS",
+  "work_item_id": "PRODUCTION-RECONCILIATION-20261005",
+  "created_at_utc": "2026-10-05T20:53:00Z",
+  "event_type": "ATTEMPT",
+  "work_item_status": "IN_PROGRESS",
+  "outcome": "STARTED",
+  "title": "Production veilig reconciliëren met canonical main",
+  "objective": "Breng production veilig in sync met canonical main zonder lokaal werk te verliezen.",
+  "summary": "E046 leest uitsluitend de immutable E034 snapshot en rapporteert alleen de lifecycle-kernvelden van de lokale candidate overlay.",
+  "why": "E041 bewees de juiste overlay maar de payload werd afgekapt vóór queue_status/originating_task/pending-handoff volledig zichtbaar waren.",
+  "next_action": "Gebruik E046 samen met E042 om te bepalen of de overlay/wake als nog-actieve PREBUILD lifecycle-state canonical preservation vereisen.",
+  "session_route_task_id": "SESSION-ROUTE-fc2613ecbc81e22d4c913b2a",
+  "task_ids": [
+    "DEV-PRED-PRODUCTION-SNAPSHOT-CANDIDATE-STATUS-20261005-E046"
+  ],
+  "evidence_refs": [
+    "DEV-PRED-PRODUCTION-DIRTY-SNAPSHOT-20261005-E034",
+    "projectexecutor:semantic_candidate_status"
+  ],
+  "tags": [
+    "production",
+    "reconciliation",
+    "candidate-state",
+    "prebuild",
+    "read-only"
+  ],
+  "parent_event_id": "20261005T205000Z-PRODUCTION-RECONCILIATION-E041-RESULT",
+  "first_incomplete_step": "Candidate overlay lifecycle-status exact uitlezen."
+}
