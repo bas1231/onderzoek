@@ -1,0 +1,14 @@
+{
+  "schema": "PREDICTION_RESULT_RECEIPT_V1",
+  "receipt_id": "RESULT-RECEIPT-1791199565-3d3147de95f7",
+  "event_id": "1791199565-3d3147de95f7",
+  "source_task_id": "DEV-PRED-PROD-REPAIR-CONVERGE-20261005-E005",
+  "created_at_utc": "2026-10-05T11:43:30Z",
+  "live_trading": false,
+  "paid_actions": false,
+  "wallet_actions": false,
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  }
+}
