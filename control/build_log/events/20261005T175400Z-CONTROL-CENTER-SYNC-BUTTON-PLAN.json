@@ -1,0 +1,33 @@
+{
+  "schema": "PREDICTION_BUILD_LOG_EVENT_V1",
+  "event_id": "20261005T175400Z-CONTROL-CENTER-SYNC-BUTTON-PLAN",
+  "work_item_id": "CONTROL-CENTER-SYNC-BUTTON-20261005",
+  "created_at_utc": "2026-10-05T17:54:00Z",
+  "event_type": "PLAN",
+  "work_item_status": "IN_PROGRESS",
+  "outcome": "STARTED",
+  "title": "One-click veilige Git-sync vanuit Control Center",
+  "objective": "Toon bij Git-sync rood een Sync-knop die één klik omzet in een automatische, fail-closed ChatGPT-reconciliatie zonder destructieve Git-shortcuts.",
+  "summary": "Backend, UI, dedupe, routekeuze, protocol en regressies zijn voorbereid. De knop routeert naar de meest recent bewezen ChatGPT-projectsessie en laat Git-mutaties uitsluitend via de bestaande governed GitHub/projectexecutor-keten lopen.",
+  "why": "Production kan echte lokale commits en dirty/untracked werk bevatten; direct reset/pull vanuit het dashboard zou onveilig zijn. De wake-route geeft dezelfde één-klik UX zonder de governance te omzeilen.",
+  "next_action": "Installeer en runtime-verifieer de nieuwe server/UI/canary. Daarna pas is de knop live.",
+  "session_route_task_id": "SESSION-ROUTE-fc2613ecbc81e22d4c913b2a",
+  "task_ids": [],
+  "commits": [
+    "f5e5185d25284fe35afcedc371b59e13da2fea7d"
+  ],
+  "evidence_refs": [
+    "control/control_center/SYNC_PROTOCOL.md",
+    "control/control_center/server.py",
+    "control/control_center/static/index.html",
+    "tests/control_center/test_control_center.py"
+  ],
+  "tags": [
+    "control-center",
+    "git-sync",
+    "one-click",
+    "safety"
+  ],
+  "parent_event_id": null,
+  "first_incomplete_step": "Runtime-installatie en canary van de Sync-knop."
+}
