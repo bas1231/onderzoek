@@ -1,0 +1,40 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-PROD-SYNC-DETAIL-CURRENT-20261005",
+  "source_commit": "e04b3b9a35e75254141ba479410eb5dda1ba6eca",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "production_compare_worktree",
+    "production_merge_representation",
+    "production_staged_inspect"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 300,
+  "notes": "Read-only production reconciliation detail after product repairs. No cleanup/reset/deploy/system test.",
+  "operations": [
+    {
+      "type": "production_merge_representation",
+      "require_subsumed": false
+    },
+    {
+      "type": "production_staged_inspect",
+      "fail_for_visibility": false
+    },
+    {
+      "type": "production_compare_worktree",
+      "require_exact": true,
+      "report_mode": "unique_paths"
+    }
+  ]
+}
