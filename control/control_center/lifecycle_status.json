@@ -1,0 +1,78 @@
+{
+  "schema": "PREDICTION_CONTROL_CENTER_LIFECYCLE_V1",
+  "updated_at": "2026-10-05",
+  "full_chain_status": "NOT_PROVEN",
+  "full_chain_label": "Volledige A→Z-keten nog niet bewezen",
+  "next_required": "Voer één echte kandidaat volledig door de actuele keten: Verkenner → selectie → Sol-opzet → Astra vóór bouw → Sol-bouw → Astra na bouw → tests en meting → toezichthouder → rapportage. Tests of metingen mogen pas starten na geldige Astra-goedkeuring van de gebouwde versie.",
+  "invariant": "NO_TEST_OR_MEASUREMENT_BEFORE_ASTRA_POSTBUILD_APPROVAL",
+  "evidence_refs": [
+    "control/bridge_commands/CURRENT_STATE.md",
+    "methodology/EDGE_DISCOVERY_MODEL_GATES.md",
+    "commit:3fca74d2b76210b33143c159d6e0baedccc4fc50"
+  ],
+  "stages": [
+    {
+      "id": "scout",
+      "label": "Verkenner",
+      "subtitle": "kansen vinden",
+      "state": "WORKING_COMPONENT",
+      "detail": "Scout- en agentuitvoeringen hebben daadwerkelijk onderzoeksruns en kandidaten geproduceerd. Dit bewijst het onderdeel, niet de volledige nieuwe A→Z-keten."
+    },
+    {
+      "id": "selection",
+      "label": "Selectie",
+      "subtitle": "falsificeren en kiezen",
+      "state": "WORKING_COMPONENT",
+      "detail": "Selectie/onderzoeksdirecteur en kandidaatwachtrij hebben daadwerkelijk kandidaten beoordeeld. De koppeling met de volledige actuele A→Z-keten blijft apart te bewijzen."
+    },
+    {
+      "id": "sol_design",
+      "label": "Sol-opzet",
+      "subtitle": "experiment ontwerpen",
+      "state": "IMPLEMENTED_NOT_E2E",
+      "detail": "De Sol-ontwerpstap behoort tot de actuele verplichte architectuur. De volledige actuele keten is nog niet end-to-end bewezen."
+    },
+    {
+      "id": "astra_prebuild",
+      "label": "Astra vóór bouw",
+      "subtitle": "ontwerp beoordelen",
+      "state": "TARGETED_TESTED",
+      "detail": "De Astra pre-build beoordeling is gericht getest/gekwalificeerd. Dit is nog geen bewijs dat de volledige actuele A→Z-run slaagt."
+    },
+    {
+      "id": "sol_build",
+      "label": "Sol-bouw",
+      "subtitle": "experiment bouwen",
+      "state": "IMPLEMENTED_NOT_E2E",
+      "detail": "De Sol-bouwstap is geïmplementeerd in de architectuur, maar moet nog als onderdeel van één volledige actuele A→Z-run worden bewezen."
+    },
+    {
+      "id": "astra_postbuild",
+      "label": "Astra na bouw",
+      "subtitle": "gebouwde code beoordelen",
+      "state": "TARGETED_TESTED",
+      "detail": "De verplichte post-build gate en de blokkade vóór tests/meting zijn gericht getest en canoniek vastgelegd. De volledige A→Z-run blijft nog te bewijzen."
+    },
+    {
+      "id": "measurement",
+      "label": "Tests en meting",
+      "subtitle": "pas na Astra-goedkeuring",
+      "state": "PENDING_E2E",
+      "detail": "De volgorde is vastgelegd: inhoudelijke tests, backtests, shadow-runs en metingen mogen pas na Astra-goedkeuring van de exacte gebouwde versie. Een volledige actuele A→Z-doorgang moet nog worden bewezen."
+    },
+    {
+      "id": "supervisor",
+      "label": "Toezichthouder",
+      "subtitle": "eindoordeel",
+      "state": "PENDING_E2E",
+      "detail": "De toezichthouder moet na de meting een eindbeoordeling geven binnen dezelfde volledige run. Dat volledige traject is nog niet bewezen."
+    },
+    {
+      "id": "reporting",
+      "label": "Rapportage",
+      "subtitle": "EDGE / NO_EDGE / NO_PROVEN_EDGE",
+      "state": "PENDING_E2E",
+      "detail": "Het eindrapport moet uit dezelfde aantoonbare keten komen. Tot die volledige keten is bewezen blijft NO_PROVEN_EDGE de wetenschappelijke standaard."
+    }
+  ]
+}
