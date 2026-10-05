@@ -1,0 +1,35 @@
+{
+  "schema": "PREDICTION_BUILD_LOG_EVENT_V1",
+  "event_id": "20261005T195700Z-PRODUCTION-RECONCILIATION-E036-RESULT",
+  "work_item_id": "PRODUCTION-RECONCILIATION-20261005",
+  "created_at_utc": "2026-10-05T19:57:00Z",
+  "event_type": "RESULT",
+  "work_item_status": "IN_PROGRESS",
+  "outcome": "FAIL",
+  "title": "Production veilig reconciliëren met canonical main",
+  "objective": "Breng production veilig in sync met canonical main zonder lokaal werk te verliezen.",
+  "summary": "E036 bevestigde dirty_count=24, different_count=0 en equal_count=0. Alle resterende production-dirty state bestaat dus uit lokale paden die niet in de gepinde canonical source voorkomen. De compacte wake-output werd afgekapt tijdens de grouped_missing payload.",
+  "why": "De relevante beslisvraag is nu niet meer inhoudelijke divergentie maar de governance van 24 lokale runtimebestanden: duurzaam canoniek bewaren versus expliciet transient behandelen.",
+  "next_action": "Herhaal read-only classificatie met uitsluitend groepnamen en aantallen zodat alle 24 paden zonder truncatie per runtimecategorie zichtbaar zijn.",
+  "session_route_task_id": "SESSION-ROUTE-fc2613ecbc81e22d4c913b2a",
+  "task_ids": [
+    "DEV-PRED-PRODUCTION-WORKTREE-GROUPED-20261005-E036"
+  ],
+  "commits": [
+    "fc4345ea8ca49dfbc6a93c77a33b7a3b8fec7663"
+  ],
+  "evidence_refs": [
+    "event=1791227227-0faa2afba0fd",
+    "dirty_count=24",
+    "different_count=0",
+    "equal_count=0"
+  ],
+  "tags": [
+    "production",
+    "reconciliation",
+    "classification",
+    "missing-only"
+  ],
+  "parent_event_id": "20261005T195200Z-PRODUCTION-RECONCILIATION-E036-GROUPED-CLASSIFY",
+  "first_incomplete_step": "Alle ontbrekende lokale runtimebestanden compact per categorie tellen."
+}
