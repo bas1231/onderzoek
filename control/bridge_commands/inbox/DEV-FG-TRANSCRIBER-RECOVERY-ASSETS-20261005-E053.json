@@ -1,0 +1,17 @@
+{
+  "schema": "PREDICTION_BRIDGE_COMMAND_V1",
+  "task_id": "DEV-FG-TRANSCRIBER-RECOVERY-ASSETS-20261005-E053",
+  "action": "SIX_AI_HEALTH",
+  "created_at_utc": "2026-10-05T15:27:00Z",
+  "route_task_id": "DEV-FG-TRANSCRIBER-PATH-REPAIR-20261005-E052",
+  "delivery_mode": "chat",
+  "live_trading": false,
+  "paid_actions": false,
+  "wallet_actions": false,
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "notes": "Read-only locate compiled process_meeting recovery artifact and verify current FG venv has Whisper/Pyannote/Torch, ffmpeg and HF token."
+}
