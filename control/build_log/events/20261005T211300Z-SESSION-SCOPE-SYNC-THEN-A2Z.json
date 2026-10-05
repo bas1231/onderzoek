@@ -1,0 +1,25 @@
+{
+  "schema": "PREDICTION_BUILD_LOG_EVENT_V1",
+  "event_id": "20261005T211300Z-SESSION-SCOPE-SYNC-THEN-A2Z",
+  "work_item_id": "A2Z-SYSTEMTEST-20261005",
+  "created_at_utc": "2026-10-05T21:13:00Z",
+  "event_type": "NOTE",
+  "work_item_status": "IN_PROGRESS",
+  "outcome": "INFO",
+  "title": "Sessieopdracht uitgebreid: sync daarna volledige A→Z-test",
+  "summary": "Gebruiker vraagt eerst alle Prediction-repository/productiestaat veilig in sync te brengen en daarna de volledige canonical A→Z-keten grondig te testen. Production reconciliation blijft een expliciete prerequisite; A→Z start pas nadat sync aantoonbaar groen is.",
+  "session_route_task_id": "DEV-PRED-A2Z-COORDINATION-CANARY-20261005-E049",
+  "session_assignment_scope": {
+    "instruction": "Breng alles veilig in sync en doorloop daarna de volledige A→Z-keten grondig tot rapportage.",
+    "allowed_work_item_ids": [
+      "PRODUCTION-RECONCILIATION-20261005",
+      "A2Z-SYSTEMTEST-20261005"
+    ]
+  },
+  "tags": [
+    "scope",
+    "sync",
+    "a2z",
+    "acceptance"
+  ]
+}
