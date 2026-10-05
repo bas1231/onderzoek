@@ -1,0 +1,41 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-PROD-DIRTY-DETAIL-20261005-E007",
+  "source_commit": "8511127a874f323cc46cf701b2e9286d287f0b9a",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_runtime"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 180,
+  "notes": "Read-only recovery of E006 full dirty-production classification from local wake event. No production/source/bridge/service mutation.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/prod_dirty_detail_20261005_e007.py",
+      "content": "from pathlib import Path\nimport json,re\nevent=\"1791199828-ba95049a4dc8\"\nbase=Path.home()/\".local/share/prediction-chat-bridge\"\nmsg=None\nwhere=None\nfor d in (\"sent\",\"inflight\",\"outbox\"):\n    p=base/d/f\"{event}.json\"\n    if p.is_file():\n        obj=json.loads(p.read_text(encoding=\"utf-8\",errors=\"replace\"))\n        msg=str(obj.get(\"message\") or \"\")\n        where=str(p)\n        break\nif msg is None:\n    print(\"DIRTY_DETAIL=EVENT_MISSING\",flush=True)\n    raise SystemExit(2)\n\nmarkers=[\"PRODUCTION_STAGED_INSPECT \",\"PRODUCTION_COMPARE_WORKTREE \",\"PRODUCTION_DIFF_INSPECT \"]\nout={\"event_file\":where,\"staged\":None,\"worktree\":None,\"diffs\":[]}\nfor line in msg.splitlines():\n    for marker in markers:\n        i=line.find(marker)\n        if i>=0:\n            raw=line[i+len(marker):].strip()\n            try:\n                obj=json.loads(raw)\n            except Exception:\n                continue\n            if marker.startswith(\"PRODUCTION_STAGED\"):\n                out[\"staged\"]=obj\n            elif marker.startswith(\"PRODUCTION_COMPARE\"):\n                out[\"worktree\"]=obj\n            else:\n                body=str(obj.get(\"diff\") or \"\")\n                paths=[]\n                for m in re.finditer(r\"^diff --git a/(.+?) b/(.+?)$\",body,re.M):\n                    paths.append(m.group(2))\n                out[\"diffs\"].append({\n                    \"mode\":obj.get(\"mode\"),\n                    \"chars_total\":obj.get(\"chars_total\"),\n                    \"truncated\":obj.get(\"truncated\"),\n                    \"paths\":paths,\n                    \"tail\":body[-12000:]\n                })\nprint(\"DIRTY_DETAIL=\"+json.dumps(out,separators=(\",\",\":\"),sort_keys=True),flush=True)\nraise SystemExit(0)\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/prod_dirty_detail_20261005_e007.py"
+      ],
+      "timeout_seconds": 60
+    }
+  ]
+}
