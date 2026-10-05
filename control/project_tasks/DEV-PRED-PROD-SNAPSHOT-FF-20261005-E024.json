@@ -1,0 +1,51 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-PROD-SNAPSHOT-FF-20261005-E024",
+  "source_commit": "8511127a874f323cc46cf701b2e9286d287f0b9a",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "production_merge_representation",
+    "production_snapshot_and_clear_staged",
+    "production_fast_forward",
+    "production_compare_worktree",
+    "production_inspect"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 300,
+  "notes": "Retry safe production reconciliation after E023 stopped pre-mutation on generated __pycache__/*.pyc. Re-prove committed branch subsumption; snapshot exact 30-file staged index to durable local ref; allow removal only of untracked regular .pyc files below __pycache__ after snapshot verification; clear staged state; safely fast-forward to pinned canonical; verify production. Any unstaged or meaningful untracked content fails closed.",
+  "operations": [
+    {
+      "type": "production_merge_representation",
+      "require_subsumed": true
+    },
+    {
+      "type": "production_snapshot_and_clear_staged",
+      "expected_staged_count": 30
+    },
+    {
+      "type": "production_ff",
+      "target_commit": "8511127a874f323cc46cf701b2e9286d287f0b9a"
+    },
+    {
+      "type": "production_compare_worktree",
+      "require_exact": true,
+      "report_mode": "counts"
+    },
+    {
+      "type": "production_inspect",
+      "require_head_equals_main": true,
+      "report_mode": "summary"
+    }
+  ]
+}
