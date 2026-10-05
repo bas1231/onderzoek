@@ -404,11 +404,11 @@ class ControlCenterTests(unittest.TestCase):
         self.assertFalse(result["safety"]["destructive_git"])
         self.assertFalse(result["safety"]["wsl_remote_git_write"])
 
-        route = safe_json(self.model.bridge_data / "routes" / f"{result['trigger_task_id']}.json")
+        route = mod.safe_json(self.model.bridge_data / "routes" / f"{result['trigger_task_id']}.json")
         self.assertEqual(route["chat_id"], "chat-1234")
         self.assertIsNone(route["consumer_id"])
 
-        event = safe_json(self.model.bridge_data / "outbox" / f"{result['event_id']}.json")
+        event = mod.safe_json(self.model.bridge_data / "outbox" / f"{result['event_id']}.json")
         self.assertEqual(event["source"], "prediction_control_center_sync_v1")
         self.assertIn("PREDICTION_CONTROL_SYNC_REQUEST_V1", event["message"])
         self.assertIn("PRODUCTION-RECONCILIATION-20261005", event["message"])
