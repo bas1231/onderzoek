@@ -1,0 +1,49 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-PYTEST-CANARY-20261005-E030",
+  "source_commit": "e3d52472900b4cb81bead0fae60d3bef634534b0",
+  "intelligence_tier": "B",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "run_tests"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 300,
+  "notes": "Canary for structurally available pytest. Executor should transparently route python -m pytest through existing ~/prediction_research/.venv/bin/python. No package install/network/sudo. Require pytest --version and the fresh-session bridge pytest module to PASS.",
+  "operations": [
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "-m",
+        "pytest",
+        "--version"
+      ],
+      "test": true,
+      "timeout_seconds": 60
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "-m",
+        "pytest",
+        "control/tampermonkey_multichat/test_dashboard_new_session_launch.py",
+        "-q"
+      ],
+      "test": true,
+      "timeout_seconds": 180
+    }
+  ]
+}
