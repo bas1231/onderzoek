@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from pathlib import Path
 from typing import Any
+import hashlib
 import json
 
 MARKER = "## Candidate outcomes"
@@ -13,6 +14,45 @@ def _load_json(path: Path) -> dict[str, Any] | None:
     except Exception:
         return None
     return value if isinstance(value, dict) else None
+
+
+def _canonical_sha(value: Any) -> str:
+    return hashlib.sha256(
+        json.dumps(value, sort_keys=True, separators=(",", ":"), ensure_ascii=False).encode("utf-8")
+    ).hexdigest()
+
+
+def _review_binding(overlay: dict[str, Any], phase: str) -> str | None:
+    if phase not in {"PREBUILD", "PREMEASUREMENT"}:
+        return None
+    if not isinstance(overlay, dict) or not overlay.get("candidate_id"):
+        return None
+    payload = {
+        "phase": phase,
+        "candidate_id": overlay.get("candidate_id"),
+        "source_hashes": overlay.get("source_hashes"),
+        "originating_task_id": overlay.get("originating_task_id"),
+        "completion_hash": overlay.get("completion_hash"),
+        "validation_hash": overlay.get("validation_hash"),
+        "finding": overlay.get("finding"),
+        "next_action": overlay.get("next_action"),
+        "candidate_snapshot": overlay.get("candidate_snapshot"),
+        "referenced_evidence_hash": _canonical_sha(overlay.get("referenced_evidence", {})),
+    }
+    return _canonical_sha(payload)
+
+
+def _current_review(overlay: dict[str, Any] | None, phase: str) -> dict[str, Any]:
+    if not isinstance(overlay, dict):
+        return {}
+    reviews = overlay.get("astra_reviews")
+    review = reviews.get(phase) if isinstance(reviews, dict) else None
+    if not isinstance(review, dict):
+        return {}
+    binding = _review_binding(overlay, phase)
+    if not binding or review.get("binding_sha256") != binding:
+        return {}
+    return review
 
 
 def overlay_history(runtime_root: Path, candidate_id: str) -> list[dict[str, Any]]:
@@ -50,18 +90,17 @@ def summarize(queue_data: dict[str, Any], runtime_root: Path) -> dict[str, Any]:
             continue
         history = overlay_history(runtime_root, cid)
         overlay = history[-1] if history else None
-        prebuild = {}
-        premeasurement = {}
+        prebuild = _current_review(overlay, "PREBUILD")
+        premeasurement = _current_review(overlay, "PREMEASUREMENT")
         measurement = {}
-        for item in history:
-            reviews = item.get("astra_reviews", {})
-            if isinstance(reviews, dict):
-                if isinstance(reviews.get("PREBUILD"), dict):
-                    prebuild = reviews["PREBUILD"]
-                if isinstance(reviews.get("PREMEASUREMENT"), dict):
-                    premeasurement = reviews["PREMEASUREMENT"]
-            if isinstance(item.get("measurement_authorization"), dict):
-                measurement = item["measurement_authorization"]
+        if isinstance(overlay, dict) and isinstance(overlay.get("measurement_authorization"), dict):
+            authorization = overlay["measurement_authorization"]
+            if (
+                premeasurement.get("decision") == "APPROVE"
+                and authorization.get("authorized") is True
+                and authorization.get("astra_premeasurement_review_ref") == premeasurement.get("ref")
+            ):
+                measurement = authorization
         rows.append({
             "candidate_id": cid,
             "source_queue_status": row.get("queue_status"),
