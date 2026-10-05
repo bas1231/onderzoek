@@ -1,0 +1,17 @@
+{
+  "schema": "PREDICTION_BRIDGE_COMMAND_V1",
+  "task_id": "DEV-FG-POSTBATCH-MINFIX-20261005-E005",
+  "action": "SIX_AI_HEALTH",
+  "created_at_utc": "2026-10-05T10:49:00Z",
+  "route_task_id": "DEV-FG-BLOCKED-DIAG-20261005-E001",
+  "delivery_mode": "chat",
+  "live_trading": false,
+  "paid_actions": false,
+  "wallet_actions": false,
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "notes": "Minimal FG privacy fix: after the single human review window, conservatively mask any newly surfaced ambiguity instead of failing with BATCH_REVIEW_LIMIT. Sync only the overlap fix and its regression test, then compile and run focused tests."
+}
