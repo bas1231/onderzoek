@@ -1,0 +1,41 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-A2Z-MODEL-IDENTITY-20261005-E048",
+  "source_commit": "64221ee4a07e12954be57892b9f902aba9c42994",
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "Codex; exact model identity unavailable to runtime",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_runtime"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 90,
+  "notes": "Gerichte diagnose van E047 modelselectie: lees uitsluitend modelnamen, slugs, zichtbaarheid en cacheleeftijd. Geen credentials, geen modelaanroep, geen modelsubstitutie, geen experimenttest. Coördinatieblokkade blijft expliciet open; geen guardwijziging.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/a2z_model_identity_e048.py",
+      "content": "from pathlib import Path\nimport json,time\np=Path.home()/'.codex/models_cache.json'\nif p.is_symlink() or not p.is_file():\n    raise RuntimeError('MODEL_CACHE_UNAVAILABLE')\nv=json.loads(p.read_text())\nmodels=v.get('models',[])\nvisible=[m for m in models if isinstance(m,dict) and m.get('visibility')=='list']\npairs=[{'name':m.get('display_name'),'slug':m.get('slug'),'visibility':m.get('visibility')} for m in models if isinstance(m,dict)]\nrequired={'gpt-5.6 sol','gpt-6 astra'}\nfound={str(m.get('display_name') or '').strip().casefold() for m in visible}\nsummary={'age_h':round((time.time()-p.stat().st_mtime)/3600,1),'names':[str(m.get('display_name') or m.get('slug'))[:35] for m in visible][:5],'slugs':[str(m.get('slug'))[:32] for m in visible][:5]}\nout=Path.cwd()/'diagnostic-result'\nout.mkdir(exist_ok=True)\n(out/'model-identity.json').write_text(json.dumps({'models':pairs,'summary':summary,'exact_required_available':required<=found,'full_chain_pass':False},indent=2))\nprint('MODEL_IDENTITY '+json.dumps(summary,separators=(',',':')),flush=True)\nraise SystemExit(0 if required<=found else 1)\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/a2z_model_identity_e048.py"
+      ],
+      "timeout_seconds": 30
+    }
+  ]
+}
