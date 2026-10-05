@@ -1,0 +1,14 @@
+{
+  "schema": "PREDICTION_RESULT_RECEIPT_V1",
+  "receipt_id": "RESULT-RECEIPT-1791232745-57033f218b76",
+  "event_id": "1791232745-57033f218b76",
+  "source_task_id": "DEV-PRED-RECONCILIATION-RESUME-CODEX-20261005-E057",
+  "created_at_utc": "2026-10-05T20:39:30Z",
+  "live_trading": false,
+  "paid_actions": false,
+  "wallet_actions": false,
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "High"
+  }
+}
