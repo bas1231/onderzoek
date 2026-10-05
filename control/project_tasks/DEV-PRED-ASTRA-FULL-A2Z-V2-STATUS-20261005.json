@@ -1,0 +1,41 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-ASTRA-FULL-A2Z-V2-STATUS-20261005",
+  "source_commit": "72f9c9359db8f9515a9aea69af0e9a12ecb1d53e",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_runtime"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 180,
+  "notes": "Read-only status probe for Astra full A2Z repair campaign V2. No bridge/runtime/service mutation.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/astra_full_a2z_v2_status_20261005.py",
+      "content": "from pathlib import Path\nimport json\nDATA=Path.home()/'.local/share/prediction-chat-bridge'\nCID='CONT-2b3de0311821bd24d9584c13'\np=DATA/'continuations'/f'{CID}.json'\nif not p.is_file():\n print('ASTRA_V2=NOT_CREATED',flush=True); raise SystemExit(81)\no=json.loads(p.read_text(encoding='utf-8'))\nprint('ASTRA_V2_STATE='+str(o.get('state')),flush=True)\nprint('ASTRA_V2_ATTEMPTS='+str(o.get('attempts') or 0),flush=True)\nprint('ASTRA_V2_ACKED='+str(o.get('last_acked_attempt') or 0),flush=True)\nprint('ASTRA_V2_ROUTE='+str(o.get('expected_route_task_id') or ''),flush=True)\nprint('ASTRA_V2_LAST_EVENT='+str(o.get('last_event_id') or ''),flush=True)\nif int(o.get('last_acked_attempt') or 0)>=1: raise SystemExit(0)\nif int(o.get('attempts') or 0)>=1: raise SystemExit(82)\nraise SystemExit(83)\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/astra_full_a2z_v2_status_20261005.py"
+      ],
+      "timeout_seconds": 60
+    }
+  ]
+}
