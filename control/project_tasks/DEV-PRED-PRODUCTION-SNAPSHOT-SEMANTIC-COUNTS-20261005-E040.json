@@ -1,0 +1,32 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-PRODUCTION-SNAPSHOT-SEMANTIC-COUNTS-20261005-E040",
+  "source_commit": "f9ece8a7f3c77a78ecb0e8b22a6f0464905abf61",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "High"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "production_dirty_snapshot_inspect"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 180,
+  "notes": "Read-only compact semantic classifier of durable E034 dirty snapshot. No live worktree mutation, cleanup, network, or remote writes.",
+  "operations": [
+    {
+      "type": "production_dirty_snapshot_inspect",
+      "snapshot_task_id": "DEV-PRED-PRODUCTION-DIRTY-SNAPSHOT-20261005-E034",
+      "report_mode": "semantic_counts",
+      "fail_for_visibility": true
+    }
+  ]
+}
