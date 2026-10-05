@@ -1,0 +1,68 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-ASTRA-ROUTE-PROVENANCE-DEPLOY-20261005",
+  "source_commit": "651301dd6f7ef44c37def2dc4aaeafa26cd9224f",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "run_tests",
+    "production_fast_forward",
+    "user_service_manage"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 600,
+  "notes": "Regression-test external route provenance for exact GPT-6 Astra review gates, then fast-forward production only if tests pass. No bridge changes, no trading/cost/wallet actions.",
+  "operations": [
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "-m",
+        "pytest",
+        "-q",
+        "tests/codex_supervisor/test_model_quality_gates.py",
+        "tests/codex_supervisor/test_autobuild_chat_wake.py"
+      ],
+      "test": true,
+      "timeout_seconds": 300
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "-m",
+        "compileall",
+        "-q",
+        "control/codex_supervisor/model_quality_gate.py",
+        "control/codex_supervisor/astra_review_wake.py",
+        "control/jobs/full_a2z_live_qualification_v4.py"
+      ],
+      "timeout_seconds": 120
+    },
+    {
+      "type": "production_ff",
+      "target_commit": "651301dd6f7ef44c37def2dc4aaeafa26cd9224f"
+    },
+    {
+      "type": "service",
+      "verb": "is-active",
+      "unit": "prediction-codex-supervisor.timer"
+    },
+    {
+      "type": "service",
+      "verb": "is-active",
+      "unit": "prediction-research-hourly-director.timer"
+    }
+  ]
+}
