@@ -30,7 +30,8 @@ Before doing local Prediction work, read these files from `bas1231/onderzoek`:
 8. `control/tampermonkey_multichat/PROTOCOL.md` — canonical bridge protocol.
 9. `control/tampermonkey_multichat/CHATGPT_PROJECT_INSTRUCTIONS.md` — full project-specific bridge instructions.
 10. `control/build_log/PROTOCOL.md` — shared append-only build ledger for cross-session work, retries, failures, handoffs and next actions.
-11. `methodology/EDGE_DISCOVERY_MODEL_GATES.md` — mandatory model roles, Astra gates, read-only prospective measurement, and the any-positive-net-edge objective.
+11. `control/control_center/SYNC_PROTOCOL.md` — one-click Control Center repository reconciliation trigger and fail-closed sync rules.
+12. `methodology/EDGE_DISCOVERY_MODEL_GATES.md` — mandatory model roles, Astra gates, read-only prospective measurement, and the any-positive-net-edge objective.
 
 When old chat memory or older docs conflict with these files, the current Git documentation above is authoritative.
 
@@ -81,6 +82,18 @@ Before starting a substantial build, repair, diagnosis or qualification, inspect
 - When handing unfinished work to another session, append a `HANDOFF` event naming the first incomplete step.
 
 This ledger is the cross-session project memory for construction work. GitHub event files are immutable; WSL remains GitHub read-only.
+
+## Control Center one-click sync trigger
+
+If a user turn starts with `PREDICTION_CONTROL_SYNC_REQUEST_V1`, treat it as the
+owner's explicit dashboard `Sync` action. Read
+`control/control_center/SYNC_PROTOCOL.md`, the current sync evidence, and the
+shared build log, then perform the shortest safe reconciliation autonomously.
+Do not ask the user for terminal commands or routine repo/test approval.
+
+The trigger never authorizes destructive Git shortcuts, WSL remote pushes,
+credential access, paid actions, trading, wallets or fund movement. Completion
+requires a fresh Control Center `git_sync.status == GREEN`.
 
 ## Building or changing code in WSL
 
