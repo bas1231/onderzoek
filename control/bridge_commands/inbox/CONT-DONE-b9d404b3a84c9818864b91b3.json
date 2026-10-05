@@ -1,0 +1,15 @@
+{
+  "schema": "PREDICTION_BRIDGE_COMMAND_V1",
+  "task_id": "CONT-DONE-b9d404b3a84c9818864b91b3",
+  "action": "BRIDGE_PING",
+  "created_at_utc": "2026-10-05T09:17:00Z",
+  "route_task_id": "DEV-PRED-PROD-STAGED-PATHS-20261005",
+  "delivery_mode": "headless",
+  "live_trading": false,
+  "paid_actions": false,
+  "wallet_actions": false,
+  "intelligence_tier": "C",
+  "notes": "Close RESULT_ACK_TIMEOUT recovery continuation. The staged-path inspection has already been superseded by DEV-PRED-PROD-DIFFERENT-PATHS-ONLY-20261005. No duplicate NEXT task is created.",
+  "auto_continue": false,
+  "parent_continuation_id": "CONT-b9d404b3a84c9818864b91b3"
+}
