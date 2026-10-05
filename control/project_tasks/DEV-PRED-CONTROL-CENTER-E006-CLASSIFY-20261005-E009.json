@@ -1,0 +1,49 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-CONTROL-CENTER-E006-CLASSIFY-20261005-E009",
+  "source_commit": "7d151950170686a64cf81150f7af3cf037db761f",
+  "intelligence_tier": "B",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "run_tests"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 150,
+  "notes": "Classify E006 failure without runtime mutation. Exit 11=active-only/alert test, 12=git sync green, 13=git sync red, 14=Dutch UI. Exit 0 means all newly added regressions pass and failure is in an older test interaction.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/control_center_e006_classify.py",
+      "content": "from __future__ import annotations\n\nimport importlib.util\nimport sys\nimport unittest\nfrom pathlib import Path\n\nroot = Path.cwd()\npath = root / \"tests/control_center/test_control_center.py\"\nspec = importlib.util.spec_from_file_location(\"cc_tests\", path)\nmod = importlib.util.module_from_spec(spec)\nassert spec.loader is not None\nspec.loader.exec_module(mod)\n\nchecks = [\n    (11, \"ACTIVE_ONLY_AND_ALERT\", \"test_multisession_task_index_only_exposes_active_and_alerts_recent_failures\"),\n    (12, \"GIT_SYNC_GREEN\", \"test_git_sync_green_when_production_main_matches_fetched_main\"),\n    (13, \"GIT_SYNC_RED\", \"test_git_sync_red_on_production_divergence_or_dirty_tree\"),\n    (14, \"DUTCH_UI\", \"test_owner_ui_is_dutch_but_canonical_codes_remain\"),\n]\n\nfor code, label, name in checks:\n    suite = unittest.TestSuite([mod.ControlCenterTests(name)])\n    result = unittest.TextTestRunner(stream=sys.stdout, verbosity=1).run(suite)\n    if not result.wasSuccessful():\n        print(f\"CONTROL_CENTER_CLASSIFY_FAIL={label}\", flush=True)\n        raise SystemExit(code)\n\nprint(\"CONTROL_CENTER_CLASSIFY_PASS=ALL_NEW_TESTS\", flush=True)\nraise SystemExit(0)\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/control_center_e006_classify.py"
+      ],
+      "test": true,
+      "timeout_seconds": 90,
+      "allowed_exit_codes": [
+        0,
+        11,
+        12,
+        13,
+        14
+      ]
+    }
+  ]
+}
