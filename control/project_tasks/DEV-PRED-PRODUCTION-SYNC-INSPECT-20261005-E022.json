@@ -1,0 +1,47 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-PRODUCTION-SYNC-INSPECT-20261005-E022",
+  "source_commit": "ebf9dce50e752ba2e10157cc26220dd34c335c54",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "production_inspect",
+    "production_compare_source",
+    "production_merge_representation",
+    "production_compare_worktree"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 360,
+  "notes": "One-click Sync continuation for work_item PRODUCTION-RECONCILIATION-20261005. Read-only fail-closed representation gates only. Inspect current production state, require the committed temporary-branch delta to be represented in pinned canonical source, require strong merge subsumption, then require dirty/untracked worktree content to be exactly represented. Stop at the first incomplete gate. No cleanup, switch, reset, fast-forward, runtime mutation, or remote write.",
+  "operations": [
+    {
+      "type": "production_inspect",
+      "report_mode": "summary"
+    },
+    {
+      "type": "production_compare_source",
+      "require_equal": true,
+      "report_mode": "summary"
+    },
+    {
+      "type": "production_merge_representation",
+      "require_subsumed": true
+    },
+    {
+      "type": "production_compare_worktree",
+      "require_exact": true,
+      "report_mode": "unique_paths"
+    }
+  ]
+}
