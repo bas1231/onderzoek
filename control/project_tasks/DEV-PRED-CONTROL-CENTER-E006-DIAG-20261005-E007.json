@@ -1,0 +1,42 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-CONTROL-CENTER-E006-DIAG-20261005-E007",
+  "source_commit": "549925e6194af44d4f0b4fc3036b360464e7e8a9",
+  "intelligence_tier": "B",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "run_tests"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 180,
+  "notes": "Read-only diagnostic of E006 unittest failure. Re-run only Control Center unit tests in isolated worktree; capture first traceback and full log. No runtime install/service mutation.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/control_center_e006_diag.py",
+      "content": "from __future__ import annotations\n\nimport io\nimport json\nimport unittest\nfrom pathlib import Path\n\nroot = Path.cwd()\nstream = io.StringIO()\nsuite = unittest.defaultTestLoader.discover(\n    str(root / \"tests/control_center\"),\n    pattern=\"test_control_center.py\",\n)\nresult = unittest.TextTestRunner(stream=stream, verbosity=2).run(suite)\nlog = stream.getvalue()\nissues = []\nfor test, tb in list(result.failures) + list(result.errors):\n    issues.append({\n        \"test\": str(test),\n        \"traceback\": tb,\n    })\nsummary = {\n    \"tests_run\": result.testsRun,\n    \"failures\": len(result.failures),\n    \"errors\": len(result.errors),\n    \"successful\": result.wasSuccessful(),\n    \"first_issue\": issues[0] if issues else None,\n}\nout = root / \"diagnostic-result\"\nout.mkdir(exist_ok=True)\n(out / \"control-center-e006-test-diagnostic.json\").write_text(\n    json.dumps({\"summary\": summary, \"full_log\": log, \"issues\": issues}, indent=2),\n    encoding=\"utf-8\",\n)\nprint(\"CONTROL_CENTER_E006_DIAG \" + json.dumps(summary, separators=(\",\", \":\")), flush=True)\nif issues:\n    print(\"FIRST_TRACEBACK_BEGIN\", flush=True)\n    print(issues[0][\"traceback\"][-12000:], flush=True)\n    print(\"FIRST_TRACEBACK_END\", flush=True)\nraise SystemExit(0)\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/control_center_e006_diag.py"
+      ],
+      "test": true,
+      "timeout_seconds": 120
+    }
+  ]
+}
