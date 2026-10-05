@@ -847,6 +847,7 @@ class ControlCenterModel:
             sessions = []
             commits = []
             tags = []
+            supports_work_item_ids = []
             for event in ordered:
                 for value in event.get("task_ids") or []:
                     if isinstance(value, str) and value not in task_ids:
@@ -860,6 +861,9 @@ class ControlCenterModel:
                 for value in event.get("tags") or []:
                     if isinstance(value, str) and value not in tags:
                         tags.append(value)
+                support = event.get("supports_work_item_id")
+                if isinstance(support, str) and support and support not in supports_work_item_ids:
+                    supports_work_item_ids.append(support)
             work_items.append({
                 "work_item_id": work_item_id,
                 "title": str(latest.get("title") or work_item_id),
@@ -881,6 +885,7 @@ class ControlCenterModel:
                 "task_ids": task_ids,
                 "commits": commits,
                 "tags": tags,
+                "supports_work_item_ids": supports_work_item_ids,
             })
 
         rank = {"BLOCKED": 0, "IN_PROGRESS": 1, "OPEN": 2, "DONE": 3}
@@ -924,6 +929,98 @@ class ControlCenterModel:
             "recent_events": events[:250],
             "duplicate_open_objectives": duplicates,
         }
+
+    def _session_drift_alerts(self, active_tasks, build_log, events=None):
+        events = self.load_build_log_events() if events is None else list(events)
+        assignments = {}
+        for event in sorted(
+            events,
+            key=lambda x: (
+                parse_time(x.get("created_at_utc")) or 0,
+                str(x.get("event_id") or ""),
+            ),
+        ):
+            route = event.get("session_route_task_id")
+            scope = event.get("session_assignment_scope")
+            if not isinstance(route, str) or not route or not isinstance(scope, dict):
+                continue
+            instruction = str(scope.get("instruction") or "").strip()
+            allowed = [
+                str(x) for x in (scope.get("allowed_work_item_ids") or [])
+                if isinstance(x, str) and x
+            ]
+            if instruction and allowed:
+                assignments[route] = {
+                    "instruction": instruction,
+                    "allowed_work_item_ids": list(dict.fromkeys(allowed)),
+                    "set_at": event.get("created_at_utc"),
+                    "source_event_id": event.get("event_id"),
+                }
+
+        task_to_items = {}
+        items_by_id = {}
+        for item in build_log.get("work_items") or []:
+            wid = str(item.get("work_item_id") or "")
+            if not wid:
+                continue
+            items_by_id[wid] = item
+            for task_id in item.get("task_ids") or []:
+                if isinstance(task_id, str) and task_id:
+                    task_to_items.setdefault(task_id, []).append(wid)
+
+        alerts = []
+        ignored_task_prefixes = ("SESSION-ROUTE-",)
+        for task in active_tasks:
+            task_id = str(task.get("task_id") or "")
+            route = str(task.get("route_task_id") or "")
+            if not task_id or not route or route not in assignments:
+                continue
+            if task_id.startswith(ignored_task_prefixes):
+                continue
+            assignment = assignments[route]
+            allowed = set(assignment["allowed_work_item_ids"])
+            linked = task_to_items.get(task_id, [])
+            if not linked:
+                alerts.append({
+                    "severity": "RED",
+                    "route_task_id": route,
+                    "task_id": task_id,
+                    "assignment": assignment["instruction"],
+                    "allowed_work_item_ids": sorted(allowed),
+                    "work_item_id": None,
+                    "work_item_title": None,
+                    "reason": "Actieve taak is niet aan een work-item in het gedeelde logboek gekoppeld.",
+                })
+                continue
+
+            acceptable = False
+            for wid in linked:
+                if wid in allowed:
+                    acceptable = True
+                    break
+                item = items_by_id.get(wid) or {}
+                supports = set(item.get("supports_work_item_ids") or [])
+                if supports & allowed:
+                    acceptable = True
+                    break
+            if acceptable:
+                continue
+
+            wid = linked[0]
+            item = items_by_id.get(wid) or {}
+            alerts.append({
+                "severity": "RED",
+                "route_task_id": route,
+                "task_id": task_id,
+                "assignment": assignment["instruction"],
+                "allowed_work_item_ids": sorted(allowed),
+                "work_item_id": wid,
+                "work_item_title": item.get("title") or wid,
+                "work_item_objective": item.get("objective") or "",
+                "reason": "Actieve taak hoort bij een ander open werkspoor en is niet als dependency van de sessie-opdracht gekoppeld.",
+            })
+
+        return alerts
 
     def work_item_detail(self, work_item_id):
         projection = self.build_log_projection()
@@ -1121,6 +1218,11 @@ class ControlCenterModel:
         git_sync = self.git_sync_status()
         sync_request = self.latest_sync_request(git_sync)
         chain_alerts = self._chain_alerts(all_tasks, runs)
+        session_drift_alerts = self._session_drift_alerts(
+            active_tasks,
+            build_log,
+            self.load_build_log_events(),
+        )
 
         sessions = {}
         for item in active_tasks:
@@ -1158,6 +1260,7 @@ class ControlCenterModel:
                 "revive_requests": len(revives),
                 "legacy_candidates": sum(1 for c in candidates if c.get("legacy_imported")),
                 "chain_alerts": len(chain_alerts),
+                "session_drift_alerts": len(session_drift_alerts),
                 "build_log_open": (
                     build_log["counts"]["open"]
                     + build_log["counts"]["in_progress"]
@@ -1171,6 +1274,7 @@ class ControlCenterModel:
             "git_sync": git_sync,
             "sync_request": sync_request,
             "chain_alerts": chain_alerts,
+            "session_drift_alerts": session_drift_alerts,
             "candidates": candidates,
             "runs": runs,
             "tasks": active_tasks,
