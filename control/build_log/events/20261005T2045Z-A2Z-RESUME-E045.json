@@ -1,0 +1,37 @@
+{
+  "schema": "PREDICTION_BUILD_LOG_EVENT_V1",
+  "event_id": "20261005T2045Z-A2Z-RESUME-E045",
+  "work_item_id": "A2Z-SYSTEMTEST-20261005",
+  "created_at_utc": "2026-10-05T20:44:06.994Z",
+  "event_type": "CHECKPOINT",
+  "work_item_status": "IN_PROGRESS",
+  "outcome": "WAITING_FOR_RUNTIME_EVIDENCE",
+  "title": "A2Z-test hervat vanaf bestaande E044-resultaatophaling",
+  "summary": "Dashboardbijlage bevestigt de vereiste keten. De eerder gedeeltelijk aangemaakte E045-ophaalopdracht is voltooid in projecttaak, DEV-manifest en command-bus. Runtime-uitkomst nog niet ontvangen; geen volledige A2Z-PASS en geen edgeclaim.",
+  "task_ids": [
+    "DEV-PRED-A2Z-E044-RESULT-READ-20261005-E045",
+    "DEV-PRED-A2Z-POSTBUILD-GATE-20261005-E044"
+  ],
+  "source_observations": [
+    {
+      "path": "control/codex_supervisor/model_quality_gate.py",
+      "blob_sha": "9472ef2a0f49e2dcac2ff1c9f5b27771ee7527a8",
+      "finding": "De opgehaalde Git-versie bevat PREBUILD en PREMEASUREMENT, geen expliciete POSTBUILD-fase."
+    },
+    {
+      "path": "control/codex_supervisor/build_wake.py",
+      "blob_sha": "fe2de9ef08a016db73f9291aee139cf526ddddb6",
+      "finding": "Build-wake vraagt HIGHEST_AVAILABLE_GPT en tests tijdens de build; dit voldoet niet aan exact Sol plus postbuild Astra-review vóór experimenttests."
+    }
+  ],
+  "next_action": "Beoordeel de bestaande E044/E042/E043-runtime-evidence via E045. Gebruik die voor de eerstvolgende gerichte reparatie; herhaal Scout of de volledige keten pas bij de uiteindelijke acceptatierun.",
+  "full_chain_pass": false,
+  "production_modified": false,
+  "bridge_modified": false,
+  "experiment_executed": false,
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false
+  }
+}
