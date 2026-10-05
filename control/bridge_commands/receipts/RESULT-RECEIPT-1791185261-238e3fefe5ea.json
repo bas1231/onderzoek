@@ -1,0 +1,14 @@
+{
+  "schema": "PREDICTION_RESULT_RECEIPT_V1",
+  "receipt_id": "RESULT-RECEIPT-1791185261-238e3fefe5ea",
+  "event_id": "1791185261-238e3fefe5ea",
+  "source_task_id": "DEV-PRED-PROD-CANONICAL-CLEAN-20261005",
+  "created_at_utc": "2026-10-05T08:41:00Z",
+  "live_trading": false,
+  "paid_actions": false,
+  "wallet_actions": false,
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  }
+}
