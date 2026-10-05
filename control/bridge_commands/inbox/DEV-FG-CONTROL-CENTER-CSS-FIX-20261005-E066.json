@@ -1,0 +1,17 @@
+{
+  "schema": "PREDICTION_BRIDGE_COMMAND_V1",
+  "task_id": "DEV-FG-CONTROL-CENTER-CSS-FIX-20261005-E066",
+  "action": "SIX_AI_HEALTH",
+  "created_at_utc": "2026-10-05T17:22:00Z",
+  "route_task_id": "TM-PING-1791218818382",
+  "delivery_mode": "chat",
+  "live_trading": false,
+  "paid_actions": false,
+  "wallet_actions": false,
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "notes": "Fix FG Control Center styling: inline CSS was blocked by the existing strict CSP. Move neon stylesheet to /static/style.css, keep CSP strict (no unsafe-inline), run regression tests, restart service, verify dashboard health."
+}
