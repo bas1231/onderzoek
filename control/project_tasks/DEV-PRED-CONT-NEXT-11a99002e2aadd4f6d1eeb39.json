@@ -1,0 +1,35 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-CONT-NEXT-11a99002e2aadd4f6d1eeb39",
+  "source_commit": "8511127a874f323cc46cf701b2e9286d287f0b9a",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "production_compare_worktree",
+    "production_staged_inspect"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 180,
+  "notes": "Read-only diagnosis for E033 clean-worktree failure. Do not mutate production. First compare current dirty worktree against pinned canonical and fail with compact counts/samples if unique/missing bytes exist. If canonical comparison is exact, intentionally surface staged/unstaged state next. This distinguishes persistent unique dirt from transient/canonical-equal residue before any further reconcile.",
+  "operations": [
+    {
+      "type": "production_compare_worktree",
+      "require_exact": true,
+      "report_mode": "summary"
+    },
+    {
+      "type": "production_staged_inspect",
+      "fail_for_visibility": true
+    }
+  ]
+}
