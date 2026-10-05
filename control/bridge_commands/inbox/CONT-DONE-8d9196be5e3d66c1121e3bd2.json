@@ -1,0 +1,19 @@
+{
+  "schema": "PREDICTION_BRIDGE_COMMAND_V1",
+  "task_id": "CONT-DONE-8d9196be5e3d66c1121e3bd2",
+  "action": "BRIDGE_PING",
+  "created_at_utc": "2026-10-05T07:44:00Z",
+  "route_task_id": "DEV-PRED-ASTRA-PROD-AUTONOMY-GUARD-DEPLOY-R3-20261005",
+  "delivery_mode": "headless",
+  "live_trading": false,
+  "paid_actions": false,
+  "wallet_actions": false,
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "notes": "Close failed R3 production Astra autonomy-guard continuation as superseded. R3 failed only because run_project_python was omitted from the task capabilities; corrected R4 is already active, so no duplicate NEXT task is created.",
+  "auto_continue": false,
+  "parent_continuation_id": "CONT-8d9196be5e3d66c1121e3bd2"
+}
