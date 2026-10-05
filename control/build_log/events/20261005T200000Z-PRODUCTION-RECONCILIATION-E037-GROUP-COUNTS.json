@@ -1,0 +1,32 @@
+{
+  "schema": "PREDICTION_BUILD_LOG_EVENT_V1",
+  "event_id": "20261005T200000Z-PRODUCTION-RECONCILIATION-E037-GROUP-COUNTS",
+  "work_item_id": "PRODUCTION-RECONCILIATION-20261005",
+  "created_at_utc": "2026-10-05T20:00:00Z",
+  "event_type": "ATTEMPT",
+  "work_item_status": "IN_PROGRESS",
+  "outcome": "STARTED",
+  "title": "Production veilig reconciliëren met canonical main",
+  "objective": "Breng production veilig in sync met canonical main zonder lokaal werk te verliezen.",
+  "summary": "E037 herhaalt de read-only production worktree-check met alleen categorie-aantallen voor de 24 missing_in_source paden, zodat de wake-resultaatregel niet meer door samples wordt afgekapt.",
+  "why": "E036 bewees missing-only state maar kon niet alle categorieën tonen door result truncation.",
+  "next_action": "Gebruik de complete group_counts om per runtimecategorie canonical preservation of transient handling te bepalen.",
+  "session_route_task_id": "SESSION-ROUTE-fc2613ecbc81e22d4c913b2a",
+  "task_ids": [
+    "DEV-PRED-PRODUCTION-WORKTREE-GROUP-COUNTS-20261005-E037"
+  ],
+  "commits": [
+    "8c0211b5ffd21cc29af6bf8f22d7633a426444df"
+  ],
+  "evidence_refs": [
+    "projectexecutor:production_compare_worktree report_mode=group_counts"
+  ],
+  "tags": [
+    "production",
+    "reconciliation",
+    "classification",
+    "read-only"
+  ],
+  "parent_event_id": "20261005T195700Z-PRODUCTION-RECONCILIATION-E036-RESULT",
+  "first_incomplete_step": "Alle 24 missing_in_source paden volledig per runtimecategorie tellen."
+}
