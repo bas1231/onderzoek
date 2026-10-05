@@ -101,7 +101,7 @@
         });
         (document.documentElement || document.body).appendChild(statusEl);
       }
-      statusEl.textContent = `WSL bridge v4.8: ${text}`;
+      statusEl.textContent = `WSL bridge v5.0: ${text}`;
       statusEl.style.outline = bad ? '1px solid #c33' : '1px solid #555';
     } catch (_) {}
   }
@@ -472,6 +472,33 @@
     try { await setFallbackForCurrentChat(false); } catch (_) {}
   }
 
+  let presenceBusy = false;
+
+  async function publishPresence() {
+    if (presenceBusy || !enabled() || !token()) return;
+    presenceBusy = true;
+    try {
+      const identity = await ensureTabIdentity();
+      if (!identity.stable) return;
+      const focused = document.visibilityState === 'visible' && document.hasFocus();
+      const response = await gmRequest({
+        method: 'POST', url: `${COMMAND_BASE}/presence`, timeout: 5000,
+        headers: { ...authHeaders(), 'Content-Type': 'application/json' },
+        data: JSON.stringify({
+          chat_id: identity.chatId,
+          consumer_id: identity.consumerId,
+          focused,
+          visible: document.visibilityState === 'visible'
+        })
+      });
+      if (response.status !== 200) throw new Error(`presence HTTP ${response.status}`);
+    } catch (_) {
+      // Presence is advisory routing state. Delivery/ACK logic remains separate.
+    } finally {
+      presenceBusy = false;
+    }
+  }
+
   GM_registerMenuCommand('Toon chat-ID', async () => {
     const identity = await ensureTabIdentity(true);
     alert(`Prediction bridge ${SCRIPT_VERSION}\nchat_id=${identity.chatId}\nconsumer_id=${identity.consumerId}\nstable_chat=${identity.stable ? 'JA' : 'NEE'}\ntab_api=${identity.tabApiOk ? 'OK' : 'FALLBACK'}`);
@@ -603,6 +630,7 @@
     setTimeout(() => {
       scanCommands();
       preserveLegacyFallback();
+      publishPresence();
     }, 150);
   }
 
@@ -615,6 +643,11 @@
       });
     }
 
+    window.addEventListener('focus', () => { publishPresence(); });
+    window.addEventListener('blur', () => { publishPresence(); });
+    document.addEventListener('visibilitychange', () => { publishPresence(); });
+    setInterval(publishPresence, 2000);
+
     const observer = new MutationObserver(() => { scanCommands(); preserveLegacyFallback(); });
     observer.observe(document.documentElement, { childList: true, subtree: true, characterData: true });
     setInterval(scanCommands, 1500);
@@ -624,6 +657,7 @@
       status(identity.stable ? `${identity.tabApiOk ? 'tab-api OK' : 'tab-api fallback'} ${identity.chatId.slice(-8)}` : 'wacht op vaste ChatGPT chat-ID', !identity.tabApiOk);
       preserveLegacyFallback();
       scanCommands();
+      publishPresence();
       registerDashboardLauncher().catch(() => {});
       consumeDashboardLaunch().catch(() => {});
       restartWakeLoop('startup');
