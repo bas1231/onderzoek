@@ -1,0 +1,41 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-CANDIDATE-INVENTORY-COMPACT-20261005-E004",
+  "source_commit": "0531c53dec99aa32a40e94e3a4656d49221de584",
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "high"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_runtime"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 180,
+  "notes": "Read-only compact local candidate/supervisor/qualification inventory. Intentionally nonzero to expose compact payload in bridge error detail. No production mutation/model/service/trade/paid action.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/candidate_inventory_compact_20261005_e004.py",
+      "content": "from pathlib import Path\nimport json,re\nprod=Path.home()/\"prediction_research_prod\"\naliases={\n\"ASSET-RANK-MAKER-HEDGE-V1\":\"AR\",\n\"AUTO-DISCOVERY-54d13314c7879b58e46d\":\"AD\",\n\"KWI-FULL-STATION-PRECANONICAL-V1\":\"KF\",\n\"KWI-INCOMPLETE-TO-CANONICAL-V1\":\"KI\",\n\"MANUAL-SCOUT-HENGELTJES-20260924\":\"H\",\n\"PAYOFF-IDENTITY-MINING-V1\":\"PI\",\n}\nvals={}\ncand=prod/\"knowledge/candidates\"\ncount=0\nif cand.is_dir():\n  for p in cand.glob(\"*.json\"):\n    try:\n      d=json.loads(p.read_text())\n    except Exception:\n      continue\n    cid=d.get(\"candidate_id\")\n    if cid: count+=1\n    if cid in aliases: vals[aliases[cid]]=d.get(\"queue_status\") or d.get(\"phase\") or \"?\"\n# YAML active\nact=prod/\"candidates/active\"\nfor fname,alias in [(\"KAL-WX-INDEX-001.yaml\",\"KW\"),(\"PM-NR-V2-CONVERT-001.yaml\",\"PM\")]:\n  p=act/fname\n  if p.is_file() and not p.is_symlink():\n    t=p.read_text(errors=\"replace\")\n    m=re.search(r\"(?m)^\\s*(?:status|queue_status):\\s*[\\\"']?([^\\\"'\\n#]+)\",t)\n    vals[alias]=m.group(1).strip() if m else \"?\"\n# supervisor\nsup=\"?\"\nsp=prod/\"knowledge/codex_runtime/STATE.json\"\nif sp.is_file() and not sp.is_symlink():\n  try: sup=json.loads(sp.read_text()).get(\"state\") or \"?\"\n  except Exception: pass\n# qualification stages\nq=[]\nqp=Path(\"/tmp/prediction-full-a2z-live-v4-state.json\")\nif qp.is_file() and not qp.is_symlink():\n  try:\n    for s in json.loads(qp.read_text()).get(\"stages\",[]):\n      q.append((s.get(\"stage\") or \"?\")+\":\"+((s.get(\"status\") or \"?\")[:1]))\n  except Exception: pass\norder=[\"AR\",\"AD\",\"H\",\"PI\",\"KF\",\"KI\",\"KW\",\"PM\"]\nmsg=\"C=\"+str(count)+\";\"+\";\".join(a+\"=\"+str(vals.get(a,\"MISSING\")) for a in order)+\";SUP=\"+sup+\";Q=\"+\",\".join(q[-6:])\nprint(\"INV4 \"+msg,flush=True)\nraise SystemExit(2)\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/candidate_inventory_compact_20261005_e004.py"
+      ],
+      "timeout_seconds": 90
+    }
+  ]
+}
