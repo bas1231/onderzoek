@@ -6,6 +6,8 @@ from pathlib import Path
 from typing import Any
 
 SCHEMA = "PVA_ASTRA_REVIEW_V1"
+MODEL_PROVENANCE_SCHEMA = "PVA_MODEL_ROUTE_ATTESTATION_V1"
+MODEL_PROVENANCE_METHOD = "HUMAN_SELECTED_CHATGPT_MODEL_UI"
 REQUIRED_REVIEWER_MODEL = "GPT-6 Astra"
 ECONOMIC_POLICY = "ANY_POSITIVE_NET_EDGE_COUNTS"
 PHASES = {"PREBUILD", "PREMEASUREMENT"}
@@ -61,7 +63,52 @@ def expected_review_ref(overlay: dict[str, Any], phase: str) -> str:
     return f"knowledge/reviews/astra/{cid}-{phase.lower()}-{binding[:20]}.json"
 
 
-def validate_review(review: dict[str, Any], overlay: dict[str, Any], phase: str) -> dict[str, Any]:
+def expected_model_provenance_ref(route_task_id: str) -> str:
+    route = str(route_task_id or "").strip()
+    if (
+        not route.startswith("SESSION-ROUTE-")
+        or len(route) > 160
+        or any(ch not in "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789._:-" for ch in route)
+    ):
+        raise ReviewGateError("ASTRA_MODEL_PROVENANCE_ROUTE_INVALID")
+    return f"control/model_provenance/astra_routes/{route}.json"
+
+
+def load_model_provenance(repo: Path, route_task_id: str) -> tuple[dict[str, Any], str, str]:
+    ref = expected_model_provenance_ref(route_task_id)
+    path = Path(repo) / ref
+    if not path.exists():
+        raise ReviewGateError("ASTRA_MODEL_PROVENANCE_MISSING")
+    if path.is_symlink():
+        raise ReviewGateError("ASTRA_MODEL_PROVENANCE_SYMLINK")
+    try:
+        value = json.loads(path.read_text(encoding="utf-8"))
+    except Exception as exc:
+        raise ReviewGateError("ASTRA_MODEL_PROVENANCE_INVALID_JSON") from exc
+    if not isinstance(value, dict) or value.get("schema") != MODEL_PROVENANCE_SCHEMA:
+        raise ReviewGateError("ASTRA_MODEL_PROVENANCE_SCHEMA")
+    if value.get("route_task_id") != route_task_id:
+        raise ReviewGateError("ASTRA_MODEL_PROVENANCE_ROUTE_MISMATCH")
+    if value.get("reviewer_model") != REQUIRED_REVIEWER_MODEL:
+        raise ReviewGateError("ASTRA_MODEL_PROVENANCE_WRONG_MODEL")
+    if value.get("reviewer_role") != "INDEPENDENT_GATE_REVIEWER":
+        raise ReviewGateError("ASTRA_MODEL_PROVENANCE_ROLE")
+    if value.get("verification_method") != MODEL_PROVENANCE_METHOD:
+        raise ReviewGateError("ASTRA_MODEL_PROVENANCE_METHOD")
+    if value.get("attestation_scope") != "ROUTE":
+        raise ReviewGateError("ASTRA_MODEL_PROVENANCE_SCOPE")
+    if value.get("revoked") is not False:
+        raise ReviewGateError("ASTRA_MODEL_PROVENANCE_REVOKED")
+    return value, ref, canonical_sha(value)
+
+
+def validate_review(
+    review: dict[str, Any],
+    overlay: dict[str, Any],
+    phase: str,
+    *,
+    repo: Path | None = None,
+) -> dict[str, Any]:
     if not isinstance(review, dict) or review.get("schema") != SCHEMA:
         raise ReviewGateError("ASTRA_REVIEW_SCHEMA")
     if phase not in PHASES or review.get("phase") != phase:
@@ -88,6 +135,18 @@ def validate_review(review: dict[str, Any], overlay: dict[str, Any], phase: str)
         raise ReviewGateError("ASTRA_REVIEW_PAID_ACTIONS")
     if review.get("wallet_actions") is not False:
         raise ReviewGateError("ASTRA_REVIEW_WALLET_ACTIONS")
+
+    route_task_id = str(review.get("reviewer_route_task_id") or "").strip()
+    if not route_task_id:
+        raise ReviewGateError("ASTRA_REVIEW_ROUTE_MISSING")
+    if repo is None:
+        raise ReviewGateError("ASTRA_REVIEW_PROVENANCE_CONTEXT_REQUIRED")
+    _, expected_ref, expected_sha = load_model_provenance(Path(repo), route_task_id)
+    if review.get("model_provenance_ref") != expected_ref:
+        raise ReviewGateError("ASTRA_REVIEW_PROVENANCE_REF")
+    if review.get("model_provenance_sha256") != expected_sha:
+        raise ReviewGateError("ASTRA_REVIEW_PROVENANCE_HASH")
+
     finding = review.get("finding")
     next_action = review.get("next_action")
     if not isinstance(finding, str) or not finding.strip():
@@ -108,10 +167,17 @@ def load_review(repo: Path, overlay: dict[str, Any], phase: str) -> tuple[dict[s
         review = json.loads(path.read_text(encoding="utf-8"))
     except Exception as exc:
         raise ReviewGateError("ASTRA_REVIEW_INVALID_JSON") from exc
-    return validate_review(review, overlay, phase), ref
+    return validate_review(review, overlay, phase, repo=Path(repo)), ref
 
 
-def review_template(overlay: dict[str, Any], phase: str) -> dict[str, Any]:
+def review_template(
+    overlay: dict[str, Any],
+    phase: str,
+    *,
+    route_task_id: str,
+    model_provenance_ref: str,
+    model_provenance_sha256: str,
+) -> dict[str, Any]:
     return {
         "schema": SCHEMA,
         "candidate_id": overlay["candidate_id"],
@@ -119,6 +185,9 @@ def review_template(overlay: dict[str, Any], phase: str) -> dict[str, Any]:
         "binding_sha256": review_binding(overlay, phase),
         "reviewer_model": REQUIRED_REVIEWER_MODEL,
         "reviewer_role": "INDEPENDENT_GATE_REVIEWER",
+        "reviewer_route_task_id": route_task_id,
+        "model_provenance_ref": model_provenance_ref,
+        "model_provenance_sha256": model_provenance_sha256,
         "decision": "APPROVE|REJECT|REVISE",
         "finding": "required",
         "next_action": "required",
@@ -146,6 +215,9 @@ def apply_review(supervisor, repo: Path, overlay_path: Path, phase: str):
         "ref": ref,
         "binding_sha256": review["binding_sha256"],
         "reviewer_model": review["reviewer_model"],
+        "reviewer_route_task_id": review["reviewer_route_task_id"],
+        "model_provenance_ref": review["model_provenance_ref"],
+        "model_provenance_sha256": review["model_provenance_sha256"],
         "decision": decision,
         "finding": review["finding"],
         "next_action": review["next_action"],
