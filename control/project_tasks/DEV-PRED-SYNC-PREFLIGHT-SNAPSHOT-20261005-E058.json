@@ -1,0 +1,47 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-SYNC-PREFLIGHT-SNAPSHOT-20261005-E058",
+  "source_commit": "1d93376cc4ebff1ff7947d5ea0e675f9b61d63b6",
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "High"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "user_service_manage",
+    "production_inspect",
+    "production_dirty_snapshot",
+    "production_dirty_snapshot_inspect"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 240,
+  "notes": "Sync prerequisite. Temporarily stop only prediction-codex-supervisor.timer so runtime state cannot race reconciliation. Require production HEAD==local main. If dirty, create a fresh immutable snapshot and visibly report preservation basis. Do not cleanup, fast-forward, trade, spend, or write remote Git from WSL.",
+  "operations": [
+    {
+      "type": "service",
+      "verb": "stop",
+      "unit": "prediction-codex-supervisor.timer"
+    },
+    {
+      "type": "production_inspect",
+      "require_head_equals_main": true,
+      "report_mode": "status_summary"
+    },
+    {
+      "type": "production_dirty_snapshot"
+    },
+    {
+      "type": "production_dirty_snapshot_inspect",
+      "snapshot_task_id": "DEV-PRED-SYNC-PREFLIGHT-SNAPSHOT-20261005-E058",
+      "report_mode": "preservation_basis",
+      "fail_for_visibility": true
+    }
+  ]
+}
