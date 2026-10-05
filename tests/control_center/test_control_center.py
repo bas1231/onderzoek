@@ -382,8 +382,25 @@ class ControlCenterTests(unittest.TestCase):
             },
         )
 
+    def _seed_dashboard_launcher(self):
+        root = self.model.bridge_data / "dashboard_launchers"
+        root.mkdir(parents=True, exist_ok=True)
+        write_json(
+            root / "launcher.json",
+            {
+                "schema": "PREDICTION_DASHBOARD_LAUNCHER_V1",
+                "chat_id": "chat-1234",
+                "consumer_id": "consumer-new",
+                "launch_base_url": "https://chatgpt.com/g/g-p-prediction",
+                "script_version": "0.5.0",
+                "updated_at_unix": time.time(),
+                "capabilities": ["dashboard_new_session_launch_v1"],
+            },
+        )
+
     def test_sync_request_routes_to_latest_proven_chat_and_preserves_safety(self):
         self._seed_proven_chat_route()
+        self._seed_dashboard_launcher()
         red = {
             "status": "RED",
             "production_head": "b" * 40,
@@ -397,29 +414,41 @@ class ControlCenterTests(unittest.TestCase):
         with mock.patch.object(self.model, "git_sync_status", return_value=red):
             result = self.model.request_sync()
 
-        self.assertEqual(result["state"], "QUEUED")
+        self.assertEqual(result["state"], "NEW_SESSION_QUEUED")
         self.assertFalse(result["deduplicated"])
-        self.assertEqual(result["selected_route_task_id"], "TASK-ROUTE")
-        self.assertEqual(result["selected_chat_id"], "chat-1234")
+        self.assertEqual(result["launch_session_mode"], "NEW_CHAT_REQUIRED")
+        self.assertEqual(result["launcher_chat_id"], "chat-1234")
+        self.assertEqual(result["launcher_consumer_id"], "consumer-new")
         self.assertFalse(result["safety"]["destructive_git"])
         self.assertFalse(result["safety"]["wsl_remote_git_write"])
+        self.assertFalse(result["safety"]["reuse_existing_chat_for_work"])
 
         route = mod.safe_json(self.model.bridge_data / "routes" / f"{result['trigger_task_id']}.json")
         self.assertEqual(route["chat_id"], "chat-1234")
-        self.assertIsNone(route["consumer_id"])
+        self.assertEqual(route["consumer_id"], "consumer-new")
 
         event = mod.safe_json(self.model.bridge_data / "outbox" / f"{result['event_id']}.json")
-        self.assertEqual(event["source"], "prediction_control_center_sync_v1")
-        self.assertIn("PREDICTION_CONTROL_SYNC_REQUEST_V1", event["message"])
-        self.assertIn("PRODUCTION-RECONCILIATION-20261005", event["message"])
-        self.assertIn("Never use reset --hard", event["message"])
-        self.assertIn("git_sync.status=GREEN", event["message"])
+        self.assertEqual(event["source"], "prediction_control_center_new_session_launch_v1")
+        self.assertEqual(event["kind"], "DASHBOARD_NEW_SESSION_LAUNCH_V1")
+        self.assertEqual(event["launch_token"], result["launch_token"])
+        self.assertNotIn("PREDICTION_CONTROL_SYNC_REQUEST_V2", event["message"])
+
+        launch = mod.safe_json(
+            self.model.bridge_data / "dashboard_launches" / f"{result['launch_token']}.json"
+        )
+        self.assertEqual(launch["action"], "SYNC")
+        self.assertEqual(launch["launch_base_url"], "https://chatgpt.com/g/g-p-prediction")
+        self.assertIn("PREDICTION_CONTROL_SYNC_REQUEST_V2", launch["prompt"])
+        self.assertIn("NEW_CHAT_REQUIRED", launch["prompt"])
+        self.assertIn("SESSION-ROUTE-*", launch["prompt"])
+        self.assertIn("git_sync.status=GREEN", launch["prompt"])
 
         request_path = self.model.sync_request_root / f"{result['request_id']}.json"
         self.assertTrue(request_path.is_file())
 
     def test_sync_request_deduplicates_recent_active_request(self):
         self._seed_proven_chat_route()
+        self._seed_dashboard_launcher()
         red = {
             "status": "RED",
             "production_head": "b" * 40,
@@ -435,7 +464,24 @@ class ControlCenterTests(unittest.TestCase):
             second = self.model.request_sync()
         self.assertEqual(first["request_id"], second["request_id"])
         self.assertTrue(second["deduplicated"])
-        self.assertEqual(len(list((self.model.bridge_data / "outbox").glob("control-sync-*.json"))), 1)
+        self.assertEqual(len(list((self.model.bridge_data / "outbox").glob("control-sync-launch-*.json"))), 1)
+
+    def test_sync_request_fails_closed_without_fresh_new_session_launcher(self):
+        self._seed_proven_chat_route()
+        red = {
+            "status": "RED",
+            "production_head": "b" * 40,
+            "local_main": "a" * 40,
+            "fetched_github_main": "a" * 40,
+            "production_branch": "work",
+            "dirty": True,
+            "dirty_paths": ["control/example.py"],
+            "issues": ["dirty"],
+        }
+        with mock.patch.object(self.model, "git_sync_status", return_value=red):
+            with self.assertRaisesRegex(RuntimeError, "NEW_SESSION_LAUNCHER_NOT_READY"):
+                self.model.request_sync()
+        self.assertFalse(list((self.model.bridge_data / "outbox").glob("*.json")))
 
     def test_sync_request_is_noop_when_green(self):
         green = {
@@ -554,6 +600,8 @@ class ControlCenterTests(unittest.TestCase):
             "Actieve systeemacties",
             "Git-sync productie → main",
             "Een gestart Sync-verzoek verschijnt hier direct",
+            "nieuwe Prediction ChatGPT-sessie",
+            "opent altijd een nieuwe Prediction ChatGPT-sessie",
         ):
             self.assertIn(expected, html)
         self.assertIn("NO_PROVEN_EDGE", html)
