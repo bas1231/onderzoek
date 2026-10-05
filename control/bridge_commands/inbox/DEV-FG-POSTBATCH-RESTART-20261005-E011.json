@@ -1,0 +1,17 @@
+{
+  "schema": "PREDICTION_BRIDGE_COMMAND_V1",
+  "task_id": "DEV-FG-POSTBATCH-RESTART-20261005-E011",
+  "action": "SIX_AI_HEALTH",
+  "created_at_utc": "2026-10-05T11:22:00Z",
+  "route_task_id": "DEV-FG-POSTBATCH-VERIFY-20261005-E010",
+  "delivery_mode": "chat",
+  "live_trading": false,
+  "paid_actions": false,
+  "wallet_actions": false,
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "notes": "Apply the verified minimal FG privacy fix by restarting only the FG watcher once."
+}
