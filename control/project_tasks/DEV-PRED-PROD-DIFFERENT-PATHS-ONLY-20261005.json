@@ -1,0 +1,41 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-PROD-DIFFERENT-PATHS-ONLY-20261005",
+  "source_commit": "5b42a17ac06a9030f996aa34865f55b5bdb91640",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_runtime"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 120,
+  "notes": "Read-only extraction of only the 11 production staged paths that differ from canonical, from raw wake event 1791189585-ea654fefcb58. Intentionally exits 42 for visibility. No production mutation.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/prod_different_paths_only_20261005.py",
+      "content": "from pathlib import Path\nimport json,re\n\nevent_id=\"1791189585-ea654fefcb58\"\nbase=Path.home()/\".local/share/prediction-chat-bridge\"\nraw=None\nwhere=None\nfor d in (\"sent\",\"inflight\",\"outbox\"):\n    p=base/d/f\"{event_id}.json\"\n    if p.is_file():\n        obj=json.loads(p.read_text(encoding=\"utf-8\",errors=\"replace\"))\n        raw=str(obj.get(\"message\") or \"\")\n        where=str(p)\n        break\n\nif raw is None:\n    print(\"DIFFERENT_PATHS=EVENT_MISSING\")\n    raise SystemExit(42)\n\nm=re.search(r'\\|\\| different=(\\[[^\\n]*?\\])\\s*\\|\\| FILE=', raw)\nif not m:\n    print(\"DIFFERENT_PATHS=LIST_NOT_FOUND || FILE=\"+where)\n    raise SystemExit(42)\n\ntry:\n    paths=json.loads(m.group(1))\nexcept Exception as exc:\n    print(\"DIFFERENT_PATHS=JSON_PARSE_FAIL || ERROR=\"+str(exc)[:180]+\" || FILE=\"+where)\n    raise SystemExit(42)\n\nprint(\"DIFFERENT_PATHS=\"+json.dumps(paths,separators=(\",\",\":\"))+\" || COUNT=\"+str(len(paths))+\" || FILE=\"+where,flush=True)\nraise SystemExit(42)\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/prod_different_paths_only_20261005.py"
+      ],
+      "timeout_seconds": 60
+    }
+  ]
+}
