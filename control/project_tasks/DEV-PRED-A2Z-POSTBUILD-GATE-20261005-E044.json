@@ -1,0 +1,48 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-A2Z-POSTBUILD-GATE-20261005-E044",
+  "source_commit": "20cb4b2a4e986b94bf73f4ba97a8690f2adc1d64",
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "Codex; exact model identity unavailable to runtime",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_tests",
+    "run_project_python",
+    "read_runtime"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 180,
+  "notes": "Gerichte negatieve regressie op gewijzigde gebruikersacceptatie: geen experimenttests vóór Astra post-build approval. Subprocess uitvoering wordt onderschept; er start geen experiment. Lees bestaande E042/E043-evidence zonder taken te herhalen. Geen productie- of bridgewijziging, geen bron-synccontrole. Volledige keten blijft onbewezen.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "tests/hourly/test_postbuild_execution_order.py",
+      "content": "from pathlib import Path\nimport sys\nimport tempfile\nimport unittest\nfrom unittest.mock import patch\n\nROOT = Path(__file__).resolve().parents[2]\nsys.path.insert(0, str(ROOT / \"control/hourly\"))\nimport full_chain_qualification as chain\n\nclass PostbuildOrderTests(unittest.TestCase):\n    def test_no_experiment_tests_without_postbuild_approval(self):\n        with tempfile.TemporaryDirectory() as td:\n            repo = Path(td)\n            with patch.object(\n                chain.subprocess, \"run\",\n                side_effect=AssertionError(\"EXPERIMENT_TESTS_STARTED_WITHOUT_ASTRA_POSTBUILD_APPROVAL\"),\n            ) as execution:\n                with self.assertRaises(chain.model_quality_gate.ReviewGateError):\n                    chain.build_and_test(repo, \"QUAL-POSTBUILD-GATE\")\n                execution.assert_not_called()\n\nif __name__ == \"__main__\":\n    unittest.main()\n"
+    },
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/a2z_postbuild_gate_e044.py",
+      "content": "from pathlib import Path\nimport io,json,unittest\nroot=Path.cwd()\nhome=Path.home()\nrepair_id='DEV-PRED-A2Z-REVIEW-CALL-REPAIR-20261005-E042'\nread_id='DEV-PRED-A2Z-RESUME-EVIDENCE-20261005-E043'\nstate_path=home/'.local/state/prediction-project-executor'/(repair_id+'.json')\nstate=json.loads(state_path.read_text()) if state_path.is_file() and not state_path.is_symlink() else {}\nprior_path=home/'.local/share/prediction-project-executor/worktrees'/read_id/'diagnostic-result/resume-evidence.json'\nprior=json.loads(prior_path.read_text()) if prior_path.is_file() and not prior_path.is_symlink() else {}\nstream=io.StringIO()\nsuite=unittest.defaultTestLoader.discover(str(root/'tests/hourly'),pattern='test_postbuild_execution_order.py')\nresult=unittest.TextTestRunner(stream=stream,verbosity=2).run(suite)\nlog=stream.getvalue()\nreason='UNKNOWN'\nraw=' '.join(str(line) for item in prior.get('repair_events',[]) for line in item.get('errors',[]))\nif 'blocked write outside task roots' in raw:\n    reason='SHARED_COORDINATOR_OUTSIDE_EXECUTOR_WRITE_SCOPE'\nelif state.get('status')=='PASS':\n    reason='REPAIR_PASS'\nelif raw:\n    reason=raw[-120:]\nout=root/'diagnostic-result'\nout.mkdir(exist_ok=True)\nreport={'acceptance':'A2Z-POSTBUILD-BEFORE-TESTS-20261005','regression_success':result.wasSuccessful(),'tests_run':result.testsRun,'failures':len(result.failures),'errors':len(result.errors),'traceback':log,'repair_state':state,'prior_evidence':prior,'scout_repeated':False,'experiment_executed':False,'production_modified':False,'full_chain_pass':False}\n(out/'postbuild-gate-result.json').write_text(json.dumps(report,indent=2))\ncompact={'gate':'PASS' if result.wasSuccessful() else 'FAIL','cause':'POSTBUILD_REVIEW_MISSING' if 'EXPERIMENT_TESTS_STARTED_WITHOUT_ASTRA_POSTBUILD_APPROVAL' in log else 'SEE_EVIDENCE','repair':state.get('status','MISSING'),'repair_reason':reason,'sol':len(prior.get('required_sol_matches',[])),'astra':len(prior.get('required_astra_matches',[]))}\nprint('E2E_GATE '+json.dumps(compact,separators=(',',':')),flush=True)\nraise SystemExit(0 if result.wasSuccessful() else 1)\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "/home/leonh/prediction_research_prod/.venv/bin/python",
+        "control/dev_checks/a2z_postbuild_gate_e044.py"
+      ],
+      "test": true,
+      "timeout_seconds": 90
+    }
+  ]
+}
