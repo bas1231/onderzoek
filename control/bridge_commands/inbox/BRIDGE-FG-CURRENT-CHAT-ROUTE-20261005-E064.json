@@ -1,0 +1,17 @@
+{
+  "schema": "PREDICTION_BRIDGE_COMMAND_V1",
+  "task_id": "BRIDGE-FG-CURRENT-CHAT-ROUTE-20261005-E064",
+  "action": "BRIDGE_PING",
+  "created_at_utc": "2026-10-05T16:55:00Z",
+  "route_task_id": "TM-PING-1791218818382",
+  "delivery_mode": "chat",
+  "live_trading": false,
+  "paid_actions": false,
+  "wallet_actions": false,
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "notes": "Verify that TM-PING-1791218818382 is a valid explicit route for this current FG-assistent chat before retrying the neon UI deployment."
+}
