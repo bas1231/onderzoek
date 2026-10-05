@@ -7,7 +7,8 @@ from typing import Any
 
 SCHEMA = "PVA_ASTRA_REVIEW_V1"
 MODEL_PROVENANCE_SCHEMA = "PVA_MODEL_ROUTE_ATTESTATION_V1"
-MODEL_PROVENANCE_METHOD = "HUMAN_SELECTED_CHATGPT_MODEL_UI"
+MODEL_PROVENANCE_TEST_METHOD = "HUMAN_SELECTED_CHATGPT_MODEL_UI"
+MODEL_PROVENANCE_PRODUCTION_METHOD = "AUTONOMOUS_WORKER_MODEL_SLUG"
 MODEL_PROVENANCE_TEST_SCOPE = "TEST_ONLY"
 MODEL_PROVENANCE_PRODUCTION_SCOPE = "PRODUCTION_AUTONOMOUS"
 REQUIRED_REVIEWER_MODEL = "GPT-6 Astra"
@@ -107,15 +108,19 @@ def load_model_provenance(
         raise ReviewGateError("ASTRA_MODEL_PROVENANCE_WRONG_MODEL")
     if value.get("reviewer_role") != "INDEPENDENT_GATE_REVIEWER":
         raise ReviewGateError("ASTRA_MODEL_PROVENANCE_ROLE")
-    if value.get("verification_method") != MODEL_PROVENANCE_METHOD:
-        raise ReviewGateError("ASTRA_MODEL_PROVENANCE_METHOD")
     if value.get("attestation_scope") != "ROUTE":
         raise ReviewGateError("ASTRA_MODEL_PROVENANCE_SCOPE")
     usage_scope = value.get("usage_scope")
+    method = value.get("verification_method")
     if usage_scope == MODEL_PROVENANCE_TEST_SCOPE:
+        if method != MODEL_PROVENANCE_TEST_METHOD:
+            raise ReviewGateError("ASTRA_MODEL_PROVENANCE_METHOD")
         if not allow_test_only:
             raise ReviewGateError("ASTRA_TEST_ONLY_PROVENANCE_FORBIDDEN_IN_PRODUCTION")
-    elif usage_scope != MODEL_PROVENANCE_PRODUCTION_SCOPE:
+    elif usage_scope == MODEL_PROVENANCE_PRODUCTION_SCOPE:
+        if method != MODEL_PROVENANCE_PRODUCTION_METHOD:
+            raise ReviewGateError("ASTRA_MODEL_PROVENANCE_METHOD")
+    else:
         raise ReviewGateError("ASTRA_MODEL_PROVENANCE_USAGE_SCOPE")
     if value.get("revoked") is not False:
         raise ReviewGateError("ASTRA_MODEL_PROVENANCE_REVOKED")
