@@ -8,5 +8,6 @@
   "attested_by": "PROJECT_OPERATOR",
   "attested_at": "2026-10-05T05:45:00Z",
   "revoked": false,
-  "notes": "The operator opened a dedicated Prediction-project chat, selected GPT-6 Astra in the ChatGPT UI, armed the Prediction bridge, and the same chat produced this SESSION-ROUTE bootstrap PASS. This attestation proves the intended model selection for this route; review validity additionally requires exact candidate binding and this immutable provenance hash."
+  "notes": "TEST ONLY. The operator manually selected GPT-6 Astra in a dedicated ChatGPT UI session and the same chat produced this SESSION-ROUTE bootstrap PASS. This attestation may be used only for qualification fixtures explicitly marked qualification_fixture=true. It must never authorize production candidate build or measurement gates.",
+  "usage_scope": "TEST_ONLY"
 }
