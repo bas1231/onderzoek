@@ -1,0 +1,41 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-REPAIR-ACCEPTANCE-RECOVER-20261005-E002",
+  "source_commit": "8511127a874f323cc46cf701b2e9286d287f0b9a",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_runtime"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 180,
+  "notes": "Read-only recovery and independent recheck of the narrow requested-repairs acceptance. Compare current production supervisor/reporting to canonical repair commit 8511127, verify all nine production runtime pins against their files, and recover prior c8 acceptance state/message. No bridge, production, service, cleanup, reset, deploy, or system-test mutation.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/repair_acceptance_recover_20261005_e002.py",
+      "content": "from pathlib import Path\nimport json,hashlib,re\n\nroot=Path.cwd()\nhome=Path.home()\nprod=home/\"prediction_research_prod\"\nbridge=home/\".local/share/prediction-chat-bridge\"\nC8=\"DEV-PRED-CONT-NEXT-c8dcbf91be52fd2957116bd6\"\n\ndef sha(p):\n    return hashlib.sha256(p.read_bytes()).hexdigest()\n\ndef read_json(p):\n    if not p.is_file() or p.is_symlink():\n        return None\n    try:\n        o=json.loads(p.read_text(encoding=\"utf-8\",errors=\"replace\"))\n        return o if isinstance(o,dict) else None\n    except Exception:\n        return None\n\n# Prior executor state.\nstates={}\nfor tid in (\n    \"DEV-PRED-REQUESTED-REPAIRS-FINAL-ACCEPT-20261005\",\n    \"DEV-PRED-REPAIRS-TARGETED-VERIFY-R2-20261005\",\n    C8,\n):\n    o=read_json(home/\".local/state/prediction-project-executor\"/(tid+\".json\")) or {}\n    states[tid]={\n        \"status\":o.get(\"status\",\"MISSING\"),\n        \"source_commit\":o.get(\"source_commit\"),\n        \"operation_count\":o.get(\"operation_count\"),\n    }\n\n# Recover compact c8 wake payload if present.\nc8_line=None\nc8_queue=None\nfor q in (\"sent\",\"inflight\",\"outbox\"):\n    d=bridge/q\n    if not d.is_dir():\n        continue\n    for p in d.glob(\"*.json\"):\n        o=read_json(p) or {}\n        if str(o.get(\"task_id\") or \"\")!=C8:\n            continue\n        msg=str(o.get(\"message\") or \"\")\n        m=re.search(r\"REPAIR_ACCEPTANCE\\s+(\\{[^\\n]+\\})\",msg)\n        if m:\n            c8_line=m.group(1)\n            c8_queue=q\n            break\n    if c8_line:\n        break\n\n# Independent narrow equality check against canonical repair commit worktree.\nrepair_files={\n    \"supervisor\":\"control/codex_supervisor/supervisor.py\",\n    \"candidate_reporting\":\"control/hourly/candidate_reporting.py\",\n}\nrepair_diff=[]\nfor label,rel in repair_files.items():\n    a=root/rel\n    b=prod/rel\n    if (not a.is_file()) or (not b.is_file()) or b.is_symlink() or sha(a)!=sha(b):\n        repair_diff.append(label)\n\nmapping={\n\"candidate_dispatch.py_sha256\":\"control/codex_supervisor/candidate_dispatch.py\",\n\"candidate_policy_sha256\":\"control/hourly/candidate_queue.py\",\n\"evidence_wake.py_sha256\":\"control/codex_supervisor/evidence_wake.py\",\n\"build_wake.py_sha256\":\"control/codex_supervisor/build_wake.py\",\n\"model_quality_gate.py_sha256\":\"control/codex_supervisor/model_quality_gate.py\",\n\"astra_review_wake.py_sha256\":\"control/codex_supervisor/astra_review_wake.py\",\n\"measurement_wake.py_sha256\":\"control/codex_supervisor/measurement_wake.py\",\n\"supervisor_sha256\":\"control/codex_supervisor/supervisor.py\",\n\"astra_autonomous_review.py_sha256\":\"control/codex_supervisor/astra_autonomous_review.py\",\n}\ncfg=read_json(prod/\"knowledge/codex_runtime/CONFIG.json\") or {}\nbad_pins=[]\nfor key,rel in mapping.items():\n    p=prod/rel\n    if (not p.is_file()) or p.is_symlink() or cfg.get(key)!=sha(p):\n        bad_pins.append(key.replace(\".py_sha256\",\"\").replace(\"_sha256\",\"\"))\n\nresult={\n    \"prior_final\":states[\"DEV-PRED-REQUESTED-REPAIRS-FINAL-ACCEPT-20261005\"],\n    \"prior_targeted\":states[\"DEV-PRED-REPAIRS-TARGETED-VERIFY-R2-20261005\"],\n    \"prior_c8\":states[C8],\n    \"c8_queue\":c8_queue,\n    \"c8_payload\":json.loads(c8_line) if c8_line else None,\n    \"current_repair_diff\":repair_diff,\n    \"current_bad_pins\":bad_pins,\n}\nprint(\"REPAIR_RECOVER \"+json.dumps(result,separators=(\",\",\":\"),sort_keys=True),flush=True)\n\n# PASS is deliberately narrow: requested repaired production modules equal canonical repair commit,\n# all nine runtime pins are internally exact, and the prior targeted verification passed.\nok=(not repair_diff and not bad_pins and states[\"DEV-PRED-REPAIRS-TARGETED-VERIFY-R2-20261005\"].get(\"status\")==\"PASS\")\nraise SystemExit(0 if ok else 1)\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/repair_acceptance_recover_20261005_e002.py"
+      ],
+      "timeout_seconds": 90
+    }
+  ]
+}
