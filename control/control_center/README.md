@@ -64,6 +64,13 @@ Main areas:
 - History / revive requests
 - System / raw task state
 
+A persistent A→Z lifecycle strip is visible above every page. Its evidence-bound
+status comes from `control/control_center/lifecycle_status.json`. Green means a
+component is operationally working, cyan means a targeted gate/test has passed,
+and amber means the step is present or specified but still needs proof inside one
+complete current A→Z run. The global status remains `NOT_PROVEN` until that full
+run is actually evidenced.
+
 The visual theme follows the dark navy / magenta / cyan design language used by
 the FG-assistant.
 
