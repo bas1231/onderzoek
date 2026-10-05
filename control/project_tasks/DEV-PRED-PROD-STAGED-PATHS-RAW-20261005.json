@@ -1,0 +1,41 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-PROD-STAGED-PATHS-RAW-20261005",
+  "source_commit": "8a53790e0e16fb2672de53a762ca7ab072ca7540",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_runtime"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 120,
+  "notes": "Read-only extraction of the full compact staged-path JSON from raw wake event 1791189331-f009466138a8. Intentionally exits 42 for browser visibility. No production mutation.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/prod_staged_paths_raw_20261005.py",
+      "content": "from pathlib import Path\nimport json\n\nevent_id=\"1791189331-f009466138a8\"\nbase=Path.home()/\".local/share/prediction-chat-bridge\"\nraw=None\nwhere=None\nfor d in (\"sent\",\"inflight\",\"outbox\"):\n    p=base/d/f\"{event_id}.json\"\n    if p.is_file():\n        obj=json.loads(p.read_text(encoding=\"utf-8\",errors=\"replace\"))\n        raw=str(obj.get(\"message\") or \"\")\n        where=str(p)\n        break\nif raw is None:\n    print(\"STAGED_PATHS_RAW=EVENT_MISSING\")\n    raise SystemExit(42)\n\nmarker=\"production staged inspect: \"\npos=raw.find(marker)\nif pos < 0:\n    print(\"STAGED_PATHS_RAW=MARKER_MISSING || FILE=\"+where)\n    raise SystemExit(42)\n\ntail=raw[pos+len(marker):]\ntry:\n    payload,_=json.JSONDecoder().raw_decode(tail)\nexcept Exception as exc:\n    print(\"STAGED_PATHS_RAW=JSON_PARSE_FAIL || ERROR=\"+str(exc)[:180]+\" || FILE=\"+where)\n    raise SystemExit(42)\n\nprint(\n    \"STAGED_PATHS_RAW=\"\n    +\"branch=\"+str(payload.get(\"branch\"))\n    +\" || staged_n=\"+str(payload.get(\"staged_n\"))\n    +\" || different_n=\"+str(payload.get(\"different_n\"))\n    +\" || staged=\"+json.dumps(payload.get(\"staged_sample\"),separators=(\",\",\":\"))\n    +\" || different=\"+json.dumps(payload.get(\"different_sample\"),separators=(\",\",\":\"))\n    +\" || FILE=\"+where,\n    flush=True,\n)\nraise SystemExit(42)\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/prod_staged_paths_raw_20261005.py"
+      ],
+      "timeout_seconds": 60
+    }
+  ]
+}
