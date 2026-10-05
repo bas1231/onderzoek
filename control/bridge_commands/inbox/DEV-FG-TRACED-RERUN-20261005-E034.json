@@ -1,0 +1,17 @@
+{
+  "schema": "PREDICTION_BRIDGE_COMMAND_V1",
+  "task_id": "DEV-FG-TRACED-RERUN-20261005-E034",
+  "action": "SIX_AI_HEALTH",
+  "created_at_utc": "2026-10-05T13:50:00Z",
+  "route_task_id": "DEV-FG-R2-SYSCALL-CLASS-20261005-E033",
+  "delivery_mode": "chat",
+  "live_trading": false,
+  "paid_actions": false,
+  "wallet_actions": false,
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "notes": "Stop the current opaque rerun and launch the same existing RAW through a diagnostic-only stage-traced privacy rerun. Trace records only stage names/timestamps, never transcript content."
+}
