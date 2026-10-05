@@ -85,6 +85,8 @@ pre.raw{white-space:pre-wrap;word-break:break-word;background:#040613;border:1px
     </div>
   </section>
 
+  <div id="sessionDriftAlertBar" style="margin-bottom:14px"></div>
+
   <section class="page active" id="page-home">
     <div id="chainAlertBar" style="margin-bottom:14px"></div>
     <div class="grid4" id="homeCards"></div>
@@ -249,7 +251,7 @@ async function requestSync(){
 async function load(){try{S.data=await api('/api/snapshot');render();q('#health').innerHTML='<span style="color:var(--green)">● verbonden</span>';q('#updated').textContent='Bijgewerkt '+fmtDate(S.data.generated_at)}catch(e){q('#health').innerHTML='<span style="color:var(--red)">● niet bereikbaar</span>';q('#updated').textContent=e.message}}
 
 function render(){
- const d=S.data,m=d.task_metrics,c=d.counts,gs=d.git_sync||{},syncRequest=d.sync_request||null,alerts=d.chain_alerts||[],lc=d.lifecycle||{},bl=d.build_log||{counts:{},open_work:[],recent_events:[],duplicate_open_objectives:[]};
+ const d=S.data,m=d.task_metrics,c=d.counts,gs=d.git_sync||{},syncRequest=d.sync_request||null,alerts=d.chain_alerts||[],driftAlerts=d.session_drift_alerts||[],lc=d.lifecycle||{},bl=d.build_log||{counts:{},open_work:[],recent_events:[],duplicate_open_objectives:[]};
  const stages=Array.isArray(lc.stages)?lc.stages:[];
  q('#lifecycleSummary').textContent=(lc.full_chain_label||'Ketenstatus onbekend')+' • status per stap is bewijsgebonden, niet alleen gepland.';
  q('#lifecycleOverall').textContent=lc.full_chain_status==='NOT_PROVEN'?'VOLLEDIGE KETEN: NOG NIET BEWEZEN':nlStatus(lc.full_chain_status||'UNKNOWN').toUpperCase();
@@ -263,6 +265,9 @@ function render(){
  q('#chainAlertBar').innerHTML=alerts.length
    ? '<div class="alert"><div class="item-head"><b>🔴 Ketenfout direct gemeld</b><span class="pill red">'+alerts.length+' recent</span></div><div class="meta"><strong>'+esc(alerts[0].id||'onbekend')+'</strong> • '+fmtDate(alerts[0].at)+'<br>'+esc(alerts[0].reason||'Geen foutreden beschikbaar.')+'</div></div>'
    : '<div class="ok"><div class="item-head"><b>✓ Geen nieuwe ketenfouten</b><span class="pill green">laatste 6 uur</span></div><div class="meta">Nieuwe fouten in taken, onderzoeksuitvoeringen of agents verschijnen hier automatisch.</div></div>';
+ q('#sessionDriftAlertBar').innerHTML=driftAlerts.length
+   ? '<div class="alert" style="border-width:2px"><div class="item-head"><b>⚠ SESSIE WIJKT AF VAN OPDRACHT</b><span class="pill red">'+driftAlerts.length+' waarschuwing'+(driftAlerts.length===1?'':'en')+'</span></div><div class="meta"><strong>Sessie:</strong> '+esc(driftAlerts[0].route_task_id||'onbekend')+'<br><strong>Opdracht:</strong> '+esc(driftAlerts[0].assignment||'niet vastgelegd')+'<br><strong>Afwijkend werk:</strong> '+esc(driftAlerts[0].work_item_title||driftAlerts[0].task_id||'onbekend')+'<br><strong>Waarom:</strong> '+esc(driftAlerts[0].reason||'Onverklaarde scope-afwijking.')+'</div></div>'
+   : '';
  const syncBusy=syncRequest&&['QUEUED','INFLIGHT','DELIVERED','NEW_SESSION_QUEUED','NEW_SESSION_LAUNCHING','NEW_SESSION_OPENED','NEW_SESSION_STARTED'].includes(String(syncRequest.state||'').toUpperCase());
  const syncAction=gs.status==='RED'?'<div style="margin-top:11px"><button class="btn sync-action" '+(syncBusy?'disabled':'')+'>'+(syncBusy?'Sync gestart…':'Sync')+'</button></div>':'';
  const syncCard='<div class="card"><div class="kicker">Git-sync</div><div class="big">'+esc(syncNaam)+'</div><div class="sub">'+esc(syncUitleg)+'</div>'+syncAction+'</div>';
@@ -273,16 +278,18 @@ function render(){
  const syncNow=syncPhase?'<button class="item click sync-work-open"><div class="item-head"><b>Git-sync productie → main</b>'+pill(syncPhase)+'</div><div class="meta">Verzoek '+esc(syncRequest.request_id||'onbekend')+' • gestart '+fmtDate(syncRequest.created_at_utc)+'<br>ChatGPT voert de veilige reconciliatie uit; lokale wijzigingen blijven beschermd.</div></button>':'';
  const taskNow=active.map(t=>'<div class="item"><div class="item-head"><b class="mono">'+esc(t.task_id)+'</b>'+pill(t.status)+'</div><div class="meta">Sessie: '+esc(t.route_task_id||'geen routegegevens')+' • '+fmtDate(t.started_at)+'</div></div>').join('');
  q('#nowList').innerHTML=syncNow+taskNow||'<div class="empty">Geen actieve taken of systeemacties. Het systeem kan wel wachten op een geplande onderzoeksuitvoering.</div>';
- q('#attentionCount').textContent=alerts.length;
- q('#attentionList').innerHTML=alerts.length?alerts.slice(0,5).map(e=>'<div class="alert"><div class="item-head"><b>'+esc(e.id||'onbekend')+'</b>'+pill(e.status)+'</div><div class="meta">'+fmtDate(e.at)+' • '+esc(e.reason)+'</div></div>').join(''):'<div class="ok"><b>Geen recente ketenfouten</b><div class="meta">Nieuwe foutmeldingen verschijnen hier direct.</div></div>';
+ q('#attentionCount').textContent=alerts.length+driftAlerts.length;
+ const driftAttention=driftAlerts.map(e=>'<div class="alert"><div class="item-head"><b>⚠ Sessie wijkt af van opdracht</b><span class="pill red">DIRECT KIJKEN</span></div><div class="meta">'+esc(e.route_task_id||'onbekende sessie')+'<br><strong>Opdracht:</strong> '+esc(e.assignment||'—')+'<br><strong>Afwijking:</strong> '+esc(e.work_item_title||e.task_id||'—')+'<br>'+esc(e.reason||'')+'</div></div>').join('');
+ const chainAttention=alerts.slice(0,5).map(e=>'<div class="alert"><div class="item-head"><b>'+esc(e.id||'onbekend')+'</b>'+pill(e.status)+'</div><div class="meta">'+fmtDate(e.at)+' • '+esc(e.reason)+'</div></div>').join('');
+ q('#attentionList').innerHTML=driftAttention+chainAttention||'<div class="ok"><b>Geen directe aandachtspunten</b><div class="meta">Ketenfouten en sessie-afwijkingen verschijnen hier direct.</div></div>';
  const good=[]; if(m.success_rate!=null)good.push('<div class="ok"><b>Taaksucces '+pct(m.success_rate)+'</b><div class="meta">'+m.success+' volledig geslaagde taken tegenover '+m.failure+' fouten.</div></div>');good.push('<div class="ok"><b>Financiële beveiliging staat standaard dicht</b><div class="meta">Live handelen, betaalde acties en walletacties staan uit.</div></div>');good.push('<div class="ok"><b>'+c.candidates+' ideeën bewaard</b><div class="meta">Historie wordt niet overschreven bij heronderzoek.</div></div>');q('#goodList').innerHTML=good.join('');
 
  const activeSystemActions=syncPhase?1:0;
- q('#liveCards').innerHTML=card('Actieve sessies',c.sessions,'ChatGPT-routes met actief werk')+card('Actieve taken',c.tasks,'Alleen huidige taakstatussen')+card('Systeemacties',activeSystemActions,'Bijvoorbeeld een door jou gestarte Git-sync')+card('Ketenfouten',alerts.length,'Nieuwe fouten in de laatste 6 uur');
+ q('#liveCards').innerHTML=card('Actieve sessies',c.sessions,'ChatGPT-routes met actief werk')+card('Actieve taken',c.tasks,'Alleen huidige taakstatussen')+card('Sessie-afwijkingen',driftAlerts.length,driftAlerts.length?'Minstens één actieve sessie werkt buiten de vastgelegde opdracht.':'Geen bewezen actieve scope-afwijking.')+card('Ketenfouten',alerts.length,'Nieuwe fouten in de laatste 6 uur');
  q('#systemActionCount').textContent=activeSystemActions+' actief';
  q('#systemActionList').innerHTML=syncPhase?'<button class="item click sync-work-open"><div class="item-head"><div><b>Git-sync productie → main</b><div class="meta mono">'+esc(syncRequest.request_id||'onbekend')+'</div></div>'+pill(syncPhase)+'</div><div class="meta"><strong>Status:</strong> '+esc(syncPhase==='BEZIG'?'ChatGPT is bezig met de veilige reconciliatie':nlStatus(syncPhase))+'<br><strong>Gestart:</strong> '+fmtDate(syncRequest.created_at_utc)+'<br><strong>Doel:</strong> production veilig gelijkmaken aan canonical main zonder lokaal werk te verliezen.</div></button>':'<div class="ok"><b>Geen actieve systeemacties</b><div class="meta">Een gestart Sync-verzoek verschijnt hier direct en blijft zichtbaar tot Git-sync groen is.</div></div>';
  q('#taskList').innerHTML=d.tasks.slice(0,30).map(t=>'<div class="item"><div class="item-head"><b class="mono">'+esc(t.task_id)+'</b>'+pill(t.status)+'</div><div class="meta">'+fmtDate(t.started_at)+' • afsluitcode '+esc(t.exit_code??'—')+' • '+esc(t.route_task_id||'route onbekend')+'</div></div>').join('')||'<div class="empty">Geen task-state.</div>';
- q('#sessionList').innerHTML=d.sessions.slice(0,30).map(s=>'<div class="item"><div class="item-head"><b class="mono">'+esc(s.route_task_id)+'</b><span class="pill">'+s.tasks+' tasks</span></div><div class="meta">'+s.active+' actief • '+s.failures+' fouten • laatste: '+esc(s.last_task||'—')+'</div></div>').join('')||'<div class="empty">Geen sessieroutes in task-state.</div>';
+ q('#sessionList').innerHTML=d.sessions.slice(0,30).map(s=>{const drift=driftAlerts.find(x=>x.route_task_id===s.route_task_id);return '<div class="'+(drift?'alert':'item')+'"><div class="item-head"><b class="mono">'+esc(s.route_task_id)+'</b>'+(drift?'<span class="pill red">WIJKT AF</span>':'<span class="pill">'+s.tasks+' tasks</span>')+'</div><div class="meta">'+s.active+' actief • '+s.failures+' fouten • laatste: '+esc(s.last_task||'—')+(drift?'<br><strong>Opdracht:</strong> '+esc(drift.assignment||'—')+'<br><strong>Afwijking:</strong> '+esc(drift.work_item_title||drift.task_id||'—'):'')+'</div></div>'}).join('')||'<div class="empty">Geen sessieroutes in task-state.</div>';
 
  const bc=bl.counts||{};
  q('#logbookCards').innerHTML=card('Open',bc.open??0,'Bekend werk dat nog moet gebeuren')+card('Bezig',bc.in_progress??0,'Werkitems met actieve voortgang')+card('Geblokkeerd',bc.blocked??0,'Wacht op een concrete afhankelijkheid')+card('Afgerond',bc.done??0,'Volledig gesloten werkitems');
