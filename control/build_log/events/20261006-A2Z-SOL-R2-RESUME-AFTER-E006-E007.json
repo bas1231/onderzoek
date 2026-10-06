@@ -1,0 +1,33 @@
+{
+  "schema": "PREDICTION_BUILD_LOG_EVENT_V1",
+  "event_id": "20261006-A2Z-SOL-R2-RESUME-AFTER-E006-E007",
+  "work_item_id": "A2Z-SYSTEMTEST-20261005",
+  "created_at_utc": "2026-10-06T12:14:20Z",
+  "event_type": "ATTEMPT",
+  "work_item_status": "IN_PROGRESS",
+  "outcome": "STARTED",
+  "title": "Resume immutable Sol R2 after confirmed expired usage-limit retry",
+  "objective": "Drive the selected candidate through the entire canonical A→Z lifecycle and prove every mandatory model gate in order.",
+  "summary": "E006 classified the exact R2 model task as PAUSED_USAGE_LIMIT attempt=3 with retry_at=1791286881.568. The returned event timestamp is 1791288838, so that retry point is already past. The next attempt may therefore resume exactly the same immutable R2 once and validate it if a durable result appears.",
+  "why": "This is the first incomplete stage. No R3 is warranted and Astra must not start before exact Sol R2 is valid.",
+  "first_incomplete_step": "Resume A2Z-V4-SOL-PROPOSAL-20261006-R2 once and either validate its durable result or classify the fresh model-service blocker.",
+  "next_action": "On verified R2 PASS, launch exact GPT-6 Astra PRE-BUILD. Otherwise repair only the newly observed first blocker. No build/test/measurement yet.",
+  "session_route_task_id": "DEV-PRED-A2Z-R2-STATE-PROBE-20261006-E006",
+  "task_ids": [
+    "DEV-PRED-A2Z-SOL-R2-RESUME-VERIFY-20261006-E007",
+    "A2Z-V4-SOL-PROPOSAL-20261006-R2"
+  ],
+  "commits": [
+    "1d8e9bc27fd1c02334081cecbea6f71376288e50"
+  ],
+  "evidence_refs": [
+    "control/build_log/events/20261006-A2Z-R2-STATE-PROBE-E006.json"
+  ],
+  "tags": [
+    "a2z",
+    "sol-r2",
+    "resume",
+    "exact-model",
+    "full-chain"
+  ]
+}
