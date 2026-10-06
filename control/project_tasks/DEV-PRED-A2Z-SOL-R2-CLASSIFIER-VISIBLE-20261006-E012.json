@@ -1,0 +1,37 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-A2Z-SOL-R2-CLASSIFIER-VISIBLE-20261006-E012",
+  "source_commit": "650ecc4c78329269c92a47df0f2dd5e1d4332108",
+  "build_id": "BUILD-PRED-A2Z-POSTBUILD-20261006",
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "run_project_python",
+    "read_runtime"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 120,
+  "notes": "Run only the existing read-only Sol R2 classifier from E010. E011 already proved E010 itself was rejected by command-bus validation because required fields were missing. This fresh task has a valid envelope and is intended solely to expose the R2 classifier line in the wake detail. No service start/restart, model call, R3, Astra, build, test or measurement.",
+  "operations": [
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/a2z_sol_r2_diag_expose_e010.py"
+      ],
+      "test": false,
+      "timeout_seconds": 60
+    }
+  ]
+}
