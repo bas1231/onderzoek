@@ -91,6 +91,13 @@ class ControlCenterTests(unittest.TestCase):
                 "full_chain_label": "Volledige A→Z-keten nog niet bewezen",
                 "next_required": "Bewijs één volledige actuele A→Z-run.",
                 "invariant": "NO_TEST_OR_MEASUREMENT_BEFORE_ASTRA_POSTBUILD_APPROVAL",
+                "current_candidate": {
+                    "candidate_id": "C-1",
+                    "current_stage": "scout",
+                    "state": "ACTIVE",
+                    "label": "Testkandidaat actief",
+                    "scientific_status": "NO_PROVEN_EDGE",
+                },
                 "stages": [
                     {
                         "id": "scout",
@@ -98,6 +105,8 @@ class ControlCenterTests(unittest.TestCase):
                         "subtitle": "kansen vinden",
                         "state": "WORKING_COMPONENT",
                         "detail": "Scoutcomponent werkt.",
+                        "current_candidate_state": "CURRENT_WAITING",
+                        "current_candidate_detail": "Testkandidaat staat hier.",
                     },
                     {
                         "id": "measurement",
@@ -105,6 +114,8 @@ class ControlCenterTests(unittest.TestCase):
                         "subtitle": "pas na Astra-goedkeuring",
                         "state": "PENDING_E2E",
                         "detail": "Volledige doorgang nog bewijzen.",
+                        "current_candidate_state": "WAITING",
+                        "current_candidate_detail": "Testkandidaat wacht.",
                     },
                 ],
             },
@@ -181,6 +192,8 @@ class ControlCenterTests(unittest.TestCase):
         self.assertEqual(snapshot["edge_state"], "NO_PROVEN_EDGE")
         self.assertEqual(snapshot["lifecycle"]["full_chain_status"], "NOT_PROVEN")
         self.assertEqual(snapshot["lifecycle"]["stages"][0]["state"], "WORKING_COMPONENT")
+        self.assertEqual(snapshot["lifecycle"]["current_candidate"]["candidate_id"], "C-1")
+        self.assertEqual(snapshot["lifecycle"]["stages"][0]["current_candidate_state"], "CURRENT_WAITING")
         self.assertEqual(snapshot["build_log"]["counts"]["work_items"], 1)
         self.assertEqual(snapshot["build_log"]["counts"]["in_progress"], 1)
         self.assertEqual(snapshot["counts"]["build_log_open"], 1)
@@ -629,8 +642,11 @@ class ControlCenterTests(unittest.TestCase):
         html = (ROOT / "control/control_center/static/index.html").read_text(encoding="utf-8")
         self.assertEqual(html.count('id="persistentLifecycle"'), 1)
         self.assertLess(html.index('id="persistentLifecycle"'), html.index('id="page-home"'))
-        self.assertIn("Wat gebeurt er nu? — vaste A→Z-ketenstatus", html)
+        self.assertIn("A→Z — componentstatus + huidige kandidaat", html)
         self.assertIn("Wat moet nog gebeuren:", html)
+        self.assertIn("COMPONENTSTATUS", html)
+        self.assertIn("HUIDIGE KANDIDAAT", html)
+        self.assertIn("KANDIDAAT: HIER NU", html)
         self.assertIn("GERICHT GETEST", html)
         self.assertIn("NOG A→Z BEWIJZEN", html)
 
@@ -658,7 +674,7 @@ class ControlCenterTests(unittest.TestCase):
             "Synchronisatie met main",
             "Geen historisch taakgetal",
             "Alleen wat nu bezig of wachtend is",
-            "Wat gebeurt er nu? — vaste A→Z-ketenstatus",
+            "A→Z — componentstatus + huidige kandidaat",
             "Volgende mijlpaal",
             "Wat moet nog gebeuren:",
             "Logboek",
