@@ -1,0 +1,36 @@
+{
+  "schema": "PREDICTION_BUILD_LOG_EVENT_V1",
+  "event_id": "20261006-A2Z-CONT8E43-DISPATCH-RECOVERED",
+  "work_item_id": "A2Z-SYSTEMTEST-20261005",
+  "created_at_utc": "2026-10-06T11:58:20Z",
+  "event_type": "ATTEMPT",
+  "work_item_status": "IN_PROGRESS",
+  "outcome": "STARTED",
+  "title": "Compacte R2-classifier dispatch hersteld",
+  "objective": "Classificeer de bestaande Sol R2-runtime na SOL_R2_SERVICE_RESUMED=1 zonder nieuwe modelcall.",
+  "summary": "De exact voorbereide project task DEV-PRED-CONT-NEXT-8e4386a72f380aab93047574 bestond al en is niet gewijzigd. De eerder ontbrekende identieke DEV-manifestlaag is nu succesvol aangemaakt. De continuation kan daarom alsnog als exact NEXT worden verzonden.",
+  "why": "De eerdere write-blokkade was tijdelijk; de drie-lageninvariant kan nu worden voltooid zonder het immutable task-ID te wijzigen.",
+  "first_incomplete_step": "Voer de compacte read-only R2-classifier uit.",
+  "next_action": "Dispatch exact NEXT. Bij RESULT_PRESENT valideer R2; bij PAUSED_USAGE_LIMIT respecteer retry; bij concrete runtimefout repareer alleen die eerste fout.",
+  "session_route_task_id": "DEV-PRED-CONT-NEXT-fb92673210e925f0fdb46ec8",
+  "task_ids": [
+    "DEV-PRED-CONT-NEXT-8e4386a72f380aab93047574",
+    "A2Z-V4-SOL-PROPOSAL-20261006-R2"
+  ],
+  "commits": [
+    "40f3cfd4ae9a627fc3b26f5d47929ee5d7d5b741",
+    "1daa73a3dff081cb1f02553efdaafee9a452d509",
+    "8e0d7c1b71ba86b5dd7652bcaddf1582bf119509"
+  ],
+  "evidence_refs": [
+    "control/project_tasks/DEV-PRED-CONT-NEXT-8e4386a72f380aab93047574.json",
+    "control/build_log/events/20261006-A2Z-CONT8E43-DISPATCH-BLOCKED.json"
+  ],
+  "tags": [
+    "a2z",
+    "sol-r2",
+    "classifier",
+    "dispatch-recovered",
+    "read-only"
+  ]
+}
