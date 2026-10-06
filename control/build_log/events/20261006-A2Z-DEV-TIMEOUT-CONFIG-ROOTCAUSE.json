@@ -1,0 +1,24 @@
+{
+  "schema": "PREDICTION_BUILD_LOG_EVENT_V1",
+  "event_id": "20261006-A2Z-DEV-TIMEOUT-CONFIG-ROOTCAUSE",
+  "work_item_id": "A2Z-SYSTEMTEST-20261005",
+  "created_at_utc": "2026-10-06T15:04:30Z",
+  "event_type": "DIAGNOSIS",
+  "work_item_status": "IN_PROGRESS",
+  "outcome": "CONFIRMED",
+  "title": "DEV wrapper timeout misconfiguration confirmed",
+  "summary": "dev_task_runner.py accepts command timeout_seconds only in the inclusive range 1..900. Several recent continuation manifests used 1000, so they fail before project_task_executor or any model invocation.",
+  "first_incomplete_step": "Create the next immutable continuation task with DEV command timeout_seconds <=900 and project operation timeout below that bound.",
+  "next_action": "Do not modify immutable failed task IDs. Use a fresh authorized continuation task with corrected timeout values. Preserve the same immutable Sol R2; no R3 or Astra before validated R2.",
+  "affected_tasks": [
+    "DEV-PRED-CONT-NEXT-68afb789b0790c29efc653df",
+    "DEV-PRED-CONT-NEXT-f38b5cccb57b211b1e40c69e",
+    "DEV-PRED-CONT-NEXT-cb1d098852b16f57e1a49d1a",
+    "DEV-PRED-CONT-NEXT-afe75c8563744c48c25b1709",
+    "DEV-PRED-CONT-NEXT-51fa2d386ca24b79eecd0169"
+  ],
+  "evidence_refs": [
+    "bas1231/fg-assistent:dev_task_runner.py",
+    "bas1231/fg-assistent:dev_tasks/DEV-PRED-CONT-NEXT-f38b5cccb57b211b1e40c69e.json"
+  ]
+}
