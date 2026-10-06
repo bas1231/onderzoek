@@ -1,0 +1,37 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-A2Z-SOL-R2-WAIT-RETRY-CLASSIFY-20261006-E016",
+  "source_commit": "3a98bbba8fa4676f7bbb20b0245405c7a04d67cc",
+  "build_id": "BUILD-PRED-A2Z-POSTBUILD-20261006",
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "run_project_python",
+    "read_runtime"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 780,
+  "notes": "Attempt 6 of the same immutable Sol R2 is PAUSED_USAGE_LIMIT with retry_at 2026-10-06T14:10:02Z. Wait until the recorded retry window, then run the existing read-only classifier. Do not start or restart any model service. No R3, Astra, build, experiment test or measurement.",
+  "operations": [
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/a2z_sol_r2_wait_retry_then_classify_e016.py"
+      ],
+      "test": false,
+      "timeout_seconds": 740
+    }
+  ]
+}
