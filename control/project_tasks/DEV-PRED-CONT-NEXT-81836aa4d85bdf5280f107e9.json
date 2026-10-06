@@ -1,0 +1,44 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-CONT-NEXT-81836aa4d85bdf5280f107e9",
+  "source_commit": "88c6575a19ca8c8e554233e6b72299d51e67d583",
+  "build_id": "BUILD-PRED-A2Z-POSTBUILD-20261006",
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_runtime",
+    "user_service_manage"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 120,
+  "notes": "NEXT voor CONT-81836aa4d85bdf5280f107e9. Compacte read-only classifier voor de bestaande Sol R2 runtime. Geen journalbulk, geen restart, geen nieuwe modelversie, geen Astra-review, build, experimenttest of meting. PASS uitsluitend als het R2 model_result inmiddels aanwezig is; anders rc=10 met alleen task status, laatste transition reason/retry en systemd-resultaat zodat de volgende continuation de eerste concrete fout minimaal kan herstellen.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/a2z_sol_r2_compact_classifier_cont8183.py",
+      "content": "from __future__ import annotations\n\nimport sqlite3\nimport subprocess\nfrom pathlib import Path\n\nROOT = Path.home() / \".local/share/prediction-project-executor/campaigns/FULL-A2Z-LIVE-20261004-V4\"\nTASK_ID = \"A2Z-V4-SOL-PROPOSAL-20261006-R2\"\nUNIT = \"prediction-a2z-v4-model@A2Z-V4-SOL-PROPOSAL-20261006-R2.service\"\nRESULT = ROOT / \"model_results\" / f\"{TASK_ID}.json\"\nDB = ROOT / \"models\" / \"runtime.sqlite\"\n\nif RESULT.is_file() and not RESULT.is_symlink():\n    print(\"SOL_R2_CLASSIFICATION=RESULT_NOW_PRESENT\")\n    print(\"NEXT=REVERIFY_R2\")\n    raise SystemExit(0)\n\nservice = {}\ncp = subprocess.run(\n    [\"systemctl\", \"--user\", \"show\", UNIT],\n    text=True,\n    capture_output=True,\n    timeout=20,\n    check=False,\n)\nfor line in cp.stdout.splitlines():\n    if \"=\" not in line:\n        continue\n    k, v = line.split(\"=\", 1)\n    if k in {\"ActiveState\", \"SubState\", \"Result\", \"ExecMainStatus\", \"ExecMainCode\"}:\n        service[k] = v\n\nstatus = \"NO_TASK_ROW\"\nreason = \"NO_TRANSITION\"\nretry = \"0\"\nattempt = \"0\"\n\nif DB.is_file() and not DB.is_symlink():\n    db = sqlite3.connect(f\"file:{DB}?mode=ro\", uri=True)\n    try:\n        row = db.execute(\n            \"select status,attempt from tasks where id=?\",\n            (TASK_ID,),\n        ).fetchone()\n        tr = db.execute(\n            \"select state,reason,attempt,retry from transitions \"\n            \"where task=? order by seq desc limit 1\",\n            (TASK_ID,),\n        ).fetchone()\n    finally:\n        db.close()\n    if row:\n        status = str(row[0])\n        attempt = str(row[1])\n    if tr:\n        reason = str(tr[1])\n        retry = str(tr[3] or 0)\n        if status == \"NO_TASK_ROW\":\n            status = str(tr[0])\n        attempt = str(tr[2])\n\nif status == \"PAUSED_USAGE_LIMIT\":\n    classification = \"PAUSED_USAGE_LIMIT\"\nelif status == \"WAITING_RETRY\":\n    classification = \"WAITING_RETRY\"\nelif status == \"FAILED\":\n    classification = \"MODEL_TASK_FAILED\"\nelif status == \"RUNNING\":\n    classification = \"RUNNING_WITHOUT_RESULT\"\nelif status == \"COMPLETE\":\n    classification = \"COMPLETE_WITHOUT_RESULT\"\nelif status == \"QUEUED\":\n    classification = \"QUEUED_NOT_COMPLETED\"\nelif status == \"NO_TASK_ROW\":\n    classification = \"TASK_NOT_ENQUEUED\"\nelse:\n    classification = \"UNEXPECTED_RUNTIME_STATUS\"\n\nprint(\"SOL_R2_CLASSIFICATION=\" + classification)\nprint(\"SOL_R2_TASK_STATUS=\" + status)\nprint(\"SOL_R2_ATTEMPT=\" + attempt)\nprint(\"SOL_R2_LAST_REASON=\" + reason)\nprint(\"SOL_R2_RETRY_AT=\" + retry)\nprint(\"SYSTEMD_ACTIVE=\" + service.get(\"ActiveState\", \"UNKNOWN\"))\nprint(\"SYSTEMD_SUB=\" + service.get(\"SubState\", \"UNKNOWN\"))\nprint(\"SYSTEMD_RESULT=\" + service.get(\"Result\", \"UNKNOWN\"))\nprint(\"SYSTEMD_EXEC_MAIN_STATUS=\" + service.get(\"ExecMainStatus\", \"UNKNOWN\"))\nprint(\"NO_ASTRA_BUILD_TEST_OR_MEASUREMENT=1\")\nraise SystemExit(10)\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/a2z_sol_r2_compact_classifier_cont8183.py"
+      ],
+      "test": false,
+      "timeout_seconds": 60
+    }
+  ]
+}
