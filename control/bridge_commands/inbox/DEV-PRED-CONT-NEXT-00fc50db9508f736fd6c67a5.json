@@ -1,0 +1,19 @@
+{
+  "schema": "PREDICTION_BRIDGE_COMMAND_V1",
+  "task_id": "DEV-PRED-CONT-NEXT-00fc50db9508f736fd6c67a5",
+  "action": "SIX_AI_HEALTH",
+  "created_at_utc": "2026-10-06T13:56:10Z",
+  "route_task_id": "DEV-PRED-CONT-NEXT-08647771eed576e73f7215cd",
+  "delivery_mode": "chat",
+  "live_trading": false,
+  "paid_actions": false,
+  "wallet_actions": false,
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "auto_continue": true,
+  "parent_continuation_id": "CONT-00fc50db9508f736fd6c67a5",
+  "notes": "Wait only for the already-dispatched E014 retry of immutable Sol R2. Do not start or restart the model service and do not create R3."
+}
