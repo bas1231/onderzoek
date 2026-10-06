@@ -1,0 +1,35 @@
+{
+  "schema": "PREDICTION_BUILD_LOG_EVENT_V1",
+  "event_id": "20261006-A2Z-CONT9A36-RECHECK-CANONICAL-R2-RUNTIME",
+  "work_item_id": "A2Z-SYSTEMTEST-20261005",
+  "created_at_utc": "2026-10-06T12:28:00Z",
+  "event_type": "ATTEMPT",
+  "work_item_status": "IN_PROGRESS",
+  "outcome": "STARTED",
+  "title": "Continuation herhaalt alleen canonical Sol R2 runtimeclassificatie",
+  "objective": "Bewijs de volledige canonical A→Z-keten voor dezelfde geselecteerde kandidaat zonder modelruns te dupliceren.",
+  "summary": "E009 is al als read-only diagnose verstuurd. Deze continuation gebruikt de verplichte exact-NEXT task_id uitsluitend om dezelfde canonical <campaign>/models runtime te classificeren met de bestaande E009-classifier. Geen modelservice-start, geen R3, geen Astra, build, test of meting.",
+  "why": "De source continuation komt uit de eerdere wait-only tak. Het eerste inhoudelijke incomplete punt blijft de concrete uitkomst van de nieuwste immutable Sol R2-attempt.",
+  "first_incomplete_step": "Classificeer R2 onder <campaign>/models: model_results, runtime.sqlite en models/runs.",
+  "next_action": "Bij RESULT_PRESENT: valideer R2 en ga naar exact Astra PRE-BUILD. Bij USAGE_LIMIT: respecteer retry. Bij andere concrete fout: herstel alleen die eerste blocker.",
+  "session_route_task_id": "DEV-PRED-CONT-NEXT-132bf3ce24cf9a64eeea2afb",
+  "task_ids": [
+    "DEV-PRED-CONT-NEXT-9a361217e694a45cd62b8587",
+    "DEV-PRED-A2Z-SOL-R2-MODELS-CHECKPOINT-DIAG-20261006-E009",
+    "A2Z-V4-SOL-PROPOSAL-20261006-R2"
+  ],
+  "commits": [
+    "c46bfd98982f5623f164a16528ade0506023416d"
+  ],
+  "evidence_refs": [
+    "control/project_tasks/DEV-PRED-A2Z-SOL-R2-MODELS-CHECKPOINT-DIAG-20261006-E009.json",
+    "control/dev_checks/a2z_sol_r2_models_checkpoint_diag_e009.py"
+  ],
+  "tags": [
+    "a2z",
+    "continuation",
+    "sol-r2",
+    "read-only",
+    "canonical-runtime"
+  ]
+}
