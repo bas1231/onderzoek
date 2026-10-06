@@ -1,0 +1,28 @@
+{
+  "schema": "PREDICTION_BUILD_LOG_EVENT_V1",
+  "event_id": "20261006-A2Z-SOL-R2-STILL-PAUSED-USAGE-LIMIT",
+  "work_item_id": "A2Z-SYSTEMTEST-20261005",
+  "created_at_utc": "2026-10-06T11:22:15Z",
+  "event_type": "RESULT",
+  "work_item_status": "IN_PROGRESS",
+  "outcome": "PAUSED",
+  "title": "Sol R2 retry raakte opnieuw usage limit",
+  "objective": "Bewijs de governed A2Z-keten met exact Sol en Astra en POSTBUILD-goedkeuring vóór experimenttests of meting.",
+  "summary": "De geldige resume-taak voor A2Z-V4-SOL-PROPOSAL-20261006-R2 bereikte de bestaande modelservice maar eindigde met SOL_R2_STILL_PAUSED_USAGE_LIMIT. Dit is opnieuw geen inhoudelijke R2-fout en geen reden voor R3.",
+  "why": "De exact GPT-5.6 Sol worker blijft door de gebruikslimiet gepauzeerd. De immutable R2-request en governed volgorde blijven behouden.",
+  "first_incomplete_step": "Dezelfde exact GPT-5.6 Sol R2-taak voltooien wanneer de usage-limit retry daadwerkelijk beschikbaar is.",
+  "next_action": "Laat de automatische continuation de bestaande R2-status opnieuw beoordelen. Geen R3, reset, Astra PREBUILD, build, experimenttest of meting voordat R2 duurzaam compleet en gevalideerd is.",
+  "session_route_task_id": "DEV-PRED-CONT-NEXT-11eafda9f8e43e3e9c5a19bf",
+  "task_ids": [
+    "DEV-PRED-CONT-NEXT-675322cd29af6284311da1c1",
+    "A2Z-V4-SOL-PROPOSAL-20261006-R2"
+  ],
+  "commits": [
+    "0208f71aae5099f88ae1626aee20557386005a00"
+  ],
+  "evidence_refs": [
+    "control/project_tasks/DEV-PRED-CONT-NEXT-675322cd29af6284311da1c1.json",
+    "control/build_log/events/20261006-A2Z-SOL-R2-PAUSED-USAGE-LIMIT.json"
+  ],
+  "tags": ["a2z", "sol-r2", "usage-limit", "retry", "immutable"]
+}
