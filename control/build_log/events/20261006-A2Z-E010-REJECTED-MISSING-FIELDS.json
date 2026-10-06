@@ -1,0 +1,17 @@
+{
+  "schema": "PREDICTION_BUILD_LOG_EVENT_V1",
+  "event_id": "20261006-A2Z-E010-REJECTED-MISSING-FIELDS",
+  "work_item_id": "A2Z-SYSTEMTEST-20261005",
+  "created_at_utc": "2026-10-06T13:46:00Z",
+  "event_type": "DIAGNOSIS",
+  "work_item_status": "IN_PROGRESS",
+  "outcome": "CONFIRMED",
+  "title": "E010 command-bus rejection confirmed",
+  "summary": "E011 proved E010 was rejected before project execution with reason MISSING_FIELDS at remote commit 84bd56cf1be7a01f17a377b3ded5a5bac4405206. The E010 inbox object lacks created_at_utc and issuer. Therefore E010 never reached the project executor and cannot be used as evidence about Sol R2 state.",
+  "first_incomplete_step": "Obtain the Sol R2 classifier through a fresh immutable command with a schema-complete envelope.",
+  "next_action": "Use a fresh task id; require created_at_utc and issuer in the command envelope; keep the task read-only and do not start a model or advance to Astra until the classifier is observed.",
+  "evidence_refs": [
+    "control/bridge_commands/inbox/DEV-PRED-A2Z-SOL-R2-DIAG-EXPOSE-20261006-E010.json",
+    "control/project_tasks/DEV-PRED-A2Z-SOL-R2-E010-DELIVERY-DIAG-20261006-E011.json"
+  ]
+}
