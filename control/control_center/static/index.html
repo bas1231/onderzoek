@@ -63,6 +63,7 @@ pre.raw{white-space:pre-wrap;word-break:break-word;background:#040613;border:1px
   <nav class="nav" id="nav">
     <button class="active" data-page="home">⌂ <span>Overzicht</span></button>
     <button data-page="live">◉ <span>Live</span></button>
+    <button data-page="scouts">⌁ <span>Scouts</span></button>
     <button data-page="logbook">☷ <span>Logboek</span></button>
     <button data-page="ideas">◇ <span>Ideeën</span></button>
     <button data-page="runs">▤ <span>Uitvoeringen</span></button>
@@ -113,6 +114,32 @@ pre.raw{white-space:pre-wrap;word-break:break-word;background:#040613;border:1px
       <article class="card"><div class="section-title"><h2>Actieve taken</h2><span class="pill cyan">alle sessies</span></div><div id="taskList" class="list"></div></article>
       <article class="card"><div class="section-title"><h2>ChatGPT-sessies</h2><span class="pill">op route gegroepeerd</span></div><div id="sessionList" class="list"></div></article>
     </div>
+  </section>
+
+  <section class="page" id="page-scouts">
+    <div class="grid4" id="scoutCards"></div>
+    <article class="card glow" style="margin-bottom:14px">
+      <div class="section-title"><h2>Live per scout</h2><span class="pill pink live-pulse">auto-refresh 15 s</span></div>
+      <div class="meta" style="margin-bottom:12px">Toont de laatst waargenomen packet per scout/onderzoeksagent. Klik op het ruwe packet voor de volledige bron zonder samenvattingsverlies.</div>
+      <div id="scoutLiveList" class="list"></div>
+    </article>
+    <article class="card">
+      <div class="section-title"><h2>Scoutlogboek</h2><span class="pill cyan" id="scoutEventCount">0 gebeurtenissen</span></div>
+      <div class="toolbar">
+        <input id="scoutLogSearch" placeholder="Zoek scout, run, kandidaat, activiteit of resultaat…">
+        <select id="scoutLogFilter">
+          <option value="">Alle statussen</option>
+          <option value="RUNNING">Bezig</option>
+          <option value="READY">Gereed om te starten</option>
+          <option value="COMPLETED">Voltooid</option>
+          <option value="RESULT_READY">Resultaat gereed</option>
+          <option value="NO_EVIDENCE">Geen bewijs</option>
+          <option value="WAITING">Wachtend</option>
+          <option value="FAIL">Mislukt</option>
+        </select>
+      </div>
+      <div id="scoutEventList" class="list"></div>
+    </article>
   </section>
 
   <section class="page" id="page-logbook">
@@ -236,7 +263,7 @@ const currentLifeStateLabel=s=>s==='DONE'?'KANDIDAAT: AFGEROND':s==='CURRENT_WAI
 
 function toast(msg){const t=q('#toast');t.textContent=msg;t.style.display='block';setTimeout(()=>t.style.display='none',3200)}
 function card(k,v,s,c=''){return '<div class="card '+c+'"><div class="kicker">'+esc(k)+'</div><div class="big">'+esc(v)+'</div><div class="sub">'+esc(s)+'</div></div>'}
-function nav(page){S.page=page;qa('.page').forEach(x=>x.classList.toggle('active',x.id==='page-'+page));qa('#nav button').forEach(x=>x.classList.toggle('active',x.dataset.page===page));const names={home:['Overzicht','Wat doet Prediction, wat gaat goed en waar moet je kijken?'],live:['Live','Alle gelijktijdige sessies, taken en uitvoeringen.'],logbook:['Logboek','Wat moet nog gebeuren, wat is geprobeerd, waarom lukte het wel of niet en wat is de volgende stap?'],ideas:['Ideeën','Volg ieder idee van verkenner tot eindbesluit.'],runs:['Uitvoeringen','Iedere verkennings-, beoordelings- en meetuitvoering terugvinden.'],errors:['Fouten','Waar stroopt het, wat brak en is herstel gelukt?'],performance:['Prestaties','Snelheid, betrouwbaarheid en onderzoeksfunnel.'],history:['Historie','Oude ideeën verdwijnen nooit en kunnen opnieuw worden aangeboden.'],system:['Systeem','De technische motorruimte wanneer je die nodig hebt.']};q('#pageTitle').textContent=names[page][0];q('#pageSub').textContent=names[page][1]}
+function nav(page){S.page=page;qa('.page').forEach(x=>x.classList.toggle('active',x.id==='page-'+page));qa('#nav button').forEach(x=>x.classList.toggle('active',x.dataset.page===page));const names={home:['Overzicht','Wat doet Prediction, wat gaat goed en waar moet je kijken?'],live:['Live','Alle gelijktijdige sessies, taken en uitvoeringen.'],scouts:['Scouts','Live zien wat iedere scout onderzoekt, welke kandidaat hij raakt en wat het resultaat is.'],logbook:['Logboek','Wat moet nog gebeuren, wat is geprobeerd, waarom lukte het wel of niet en wat is de volgende stap?'],ideas:['Ideeën','Volg ieder idee van verkenner tot eindbesluit.'],runs:['Uitvoeringen','Iedere verkennings-, beoordelings- en meetuitvoering terugvinden.'],errors:['Fouten','Waar stroopt het, wat brak en is herstel gelukt?'],performance:['Prestaties','Snelheid, betrouwbaarheid en onderzoeksfunnel.'],history:['Historie','Oude ideeën verdwijnen nooit en kunnen opnieuw worden aangeboden.'],system:['Systeem','De technische motorruimte wanneer je die nodig hebt.']};q('#pageTitle').textContent=names[page][0];q('#pageSub').textContent=names[page][1]}
 qa('#nav button').forEach(b=>b.addEventListener('click',()=>nav(b.dataset.page)));
 q('#closeDrawer').addEventListener('click',closeDrawer);
 function closeDrawer(){q('#drawer').classList.remove('open');q('#drawer').setAttribute('aria-hidden','true')}
@@ -258,6 +285,7 @@ async function load(){try{S.data=await api('/api/snapshot');render();q('#health'
 function render(){
  const d=S.data,m=d.task_metrics,c=d.counts,gs=d.git_sync||{},syncRequest=d.sync_request||null,alerts=d.chain_alerts||[],driftAlerts=d.session_drift_alerts||[],lc=d.lifecycle||{},bl=d.build_log||{counts:{},open_work:[],recent_events:[],duplicate_open_objectives:[]};
  const stages=Array.isArray(lc.stages)?lc.stages:[];
+ renderScouts(d.scouts||{});
  const currentCandidate=lc.current_candidate||{};
  const currentCandidateLabel=currentCandidate.candidate_id?('Huidige kandidaat '+currentCandidate.candidate_id+' • '+(currentCandidate.label||'status onbekend')):'Geen huidige kandidaatrun vastgelegd.';
  q('#lifecycleSummary').textContent=(lc.full_chain_label||'Ketenstatus onbekend')+' • '+currentCandidateLabel;
@@ -374,6 +402,52 @@ function renderRuns(){
  q('#runRows').innerHTML=rows.map(r=>'<tr><td><button class="linkbtn run-open" data-id="'+encodeURIComponent(r.run_id)+'">'+esc(r.run_id)+'</button><div class="meta mono">'+esc(r.path)+'</div></td><td>'+pill(r.status)+'</td><td>'+esc(nlStatus(r.decision||'—'))+'</td><td>'+esc(Object.entries(r.agents||{}).slice(0,4).map(x=>nlLabel(x[0])+': '+nlStatus(x[1])).join(', ')||'—')+'</td><td>'+esc((r.candidate_ids||[]).join(', ')||'—')+'</td><td>'+fmtDate(r.started_at)+'</td></tr>').join('')||'<tr><td colspan="6" class="empty">Geen match.</td></tr>';qa('.run-open').forEach(b=>b.addEventListener('click',()=>showRun(decodeURIComponent(b.dataset.id))))
 }
 q('#runSearch').addEventListener('input',renderRuns);q('#runFilter').addEventListener('change',renderRuns);
+
+function renderScouts(sc){
+ const agents=Array.isArray(sc.agents)?sc.agents:[],events=Array.isArray(sc.events)?sc.events:[],counts=sc.counts||{};
+ q('#scoutCards').innerHTML=
+   card('SCOUTS',String(counts.agents??agents.length),'permanente + tijdelijke rollen')+
+   card('ACTIEF / GEREED',String(counts.active??0),'bezig, klaar of wacht op resultaat','glow')+
+   card('MET RESULTAAT',String(counts.with_result??0),'laatste packet bevat een resultaat')+
+   card('LAATSTE RUN',sc.latest_run_id||'—',sc.latest_update?('update '+fmtDate(sc.latest_update)):'nog geen update');
+
+ q('#scoutLiveList').innerHTML=agents.map(a=>{
+   const caps=(a.capabilities||[]).map(nlLabel).join(', ')||'—';
+   const cids=(a.candidate_ids||[]).join(', ')||'—';
+   const refs=[...(a.input_refs||[]),...(a.output_refs||[])];
+   const raw=a.packet_path?'<button class="linkbtn scout-raw" data-path="'+esc(a.packet_path)+'">ruw scoutpacket openen</button>':'<span class="meta">geen packet</span>';
+   return '<div class="item"><div class="item-head"><div><b>'+esc(nlLabel(a.agent_id))+'</b><div class="meta mono">'+esc(a.agent_id)+(a.transient?' • tijdelijk':'')+'</div></div>'+pill(a.status)+'</div>'+
+     '<div class="meta"><strong>Doet nu:</strong> '+esc(a.work||'Geen actuele activiteit vastgelegd.')+
+     '<br><strong>Kandidaat:</strong> '+esc(cids)+
+     '<br><strong>Capaciteiten:</strong> '+esc(caps)+
+     (a.authority?'<br><strong>Bevoegdheid:</strong> '+esc(a.authority):'')+
+     '<br><strong>Resultaat:</strong> '+esc(a.result||'Nog geen resultaat in het laatste packet.')+
+     '<br><strong>Run:</strong> <span class="mono">'+esc(a.run_id||'—')+'</span> • '+fmtDate(a.updated_at)+
+     (refs.length?'<br><strong>Bron/output refs:</strong> '+esc(refs.slice(0,6).join(' • ')):'')+
+     '<br>'+raw+'</div></div>';
+ }).join('')||'<div class="empty">Nog geen scouts/agentpackets gevonden.</div>';
+
+ const term=(q('#scoutLogSearch').value||'').toLowerCase();
+ const filter=(q('#scoutLogFilter').value||'').toUpperCase();
+ const rows=events.filter(e=>{
+   const hay=[e.agent_id,e.run_id,e.status,e.work,e.result,(e.candidate_ids||[]).join(' '),(e.input_refs||[]).join(' '),(e.output_refs||[]).join(' ')].join(' ').toLowerCase();
+   const status=String(e.status||'').toUpperCase();
+   return (!term||hay.includes(term))&&(!filter||status.includes(filter));
+ });
+ q('#scoutEventCount').textContent=rows.length+' gebeurtenissen';
+ q('#scoutEventList').innerHTML=rows.map(e=>
+   '<div class="item"><div class="item-head"><div><b>'+esc(nlLabel(e.agent_id))+'</b><div class="meta mono">'+esc(e.run_id||'—')+'</div></div>'+pill(e.status)+'</div>'+
+   '<div class="meta">'+fmtDate(e.updated_at)+
+   '<br><strong>Activiteit:</strong> '+esc(e.work||'—')+
+   '<br><strong>Kandidaat:</strong> '+esc((e.candidate_ids||[]).join(', ')||'—')+
+   '<br><strong>Resultaat:</strong> '+esc(e.result||'Nog geen resultaat in dit packet.')+
+   (e.packet_path?'<br><button class="linkbtn scout-raw" data-path="'+esc(e.packet_path)+'">ruw packet</button>':'')+
+   '</div></div>'
+ ).join('')||'<div class="empty">Geen scoutgebeurtenissen voor dit filter.</div>';
+ qa('.scout-raw').forEach(b=>b.addEventListener('click',()=>showArtifact(b.dataset.path)));
+}
+q('#scoutLogSearch').addEventListener('input',()=>{if(S.data)renderScouts(S.data.scouts||{})});
+q('#scoutLogFilter').addEventListener('change',()=>{if(S.data)renderScouts(S.data.scouts||{})});
 
 async function showCandidate(id){
  try{

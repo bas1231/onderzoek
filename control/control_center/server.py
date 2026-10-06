@@ -1109,6 +1109,230 @@ class ControlCenterModel:
         self.invalidate()
         return payload
 
+    def scout_projection(self):
+        """Read-only live projection of scout/agent packets plus chronological scout log."""
+        root = self.repo / "knowledge/runs/agent_packets"
+        registry = safe_json(self.repo / "agents/registry.json")
+        role_meta = {}
+        role_order = []
+        if isinstance(registry, dict):
+            for bucket in ("roles", "transient_roles"):
+                rows = registry.get(bucket)
+                if not isinstance(rows, list):
+                    continue
+                for row in rows:
+                    if not isinstance(row, dict) or not isinstance(row.get("id"), str):
+                        continue
+                    aid = row["id"]
+                    if aid not in role_order:
+                        role_order.append(aid)
+                    role_meta[aid] = {
+                        "purpose": compact_text(row.get("purpose"), 500),
+                        "authority": str(row.get("authority") or ""),
+                        "capabilities": [
+                            str(x) for x in (row.get("capabilities") or [])
+                            if isinstance(x, str)
+                        ],
+                        "transient": bucket == "transient_roles",
+                    }
+
+        if not root.is_dir():
+            return {
+                "latest_run_id": None,
+                "latest_update": None,
+                "counts": {"agents": len(role_order), "active": 0, "with_result": 0, "events": 0},
+                "agents": [
+                    {
+                        "agent_id": aid,
+                        "status": "UNKNOWN",
+                        "run_id": None,
+                        "purpose": role_meta.get(aid, {}).get("purpose", ""),
+                        "authority": role_meta.get(aid, {}).get("authority", ""),
+                        "capabilities": role_meta.get(aid, {}).get("capabilities", []),
+                        "transient": role_meta.get(aid, {}).get("transient", False),
+                        "work": "Nog geen scoutpacket aangetroffen.",
+                        "result": "",
+                        "candidate_ids": [],
+                        "input_refs": [],
+                        "output_refs": [],
+                        "updated_at": None,
+                        "packet_path": None,
+                    }
+                    for aid in role_order
+                ],
+                "events": [],
+            }
+
+        run_dirs = []
+        for path in root.iterdir():
+            try:
+                if path.is_dir() and not path.is_symlink():
+                    run_dirs.append(path)
+            except OSError:
+                continue
+        run_dirs.sort(key=lambda p: (p.stat().st_mtime, p.name))
+
+        def compact_value(value, limit=900):
+            if value is None:
+                return ""
+            try:
+                if isinstance(value, (dict, list)):
+                    value = json.dumps(value, ensure_ascii=False, sort_keys=True)
+            except Exception:
+                pass
+            return compact_text(value, limit)
+
+        def packet_row(path):
+            obj = safe_json(path)
+            if not isinstance(obj, dict):
+                return None
+            aid = str(obj.get("agent_id") or path.stem)
+            meta = role_meta.get(aid, {})
+            candidates = []
+            raw_candidate_ids = obj.get("candidate_ids")
+            if isinstance(raw_candidate_ids, list):
+                for value in raw_candidate_ids:
+                    if isinstance(value, str) and value not in candidates:
+                        candidates.append(value)
+            for value in nested_find(obj, "candidate_id"):
+                if isinstance(value, str) and value not in candidates:
+                    candidates.append(value)
+
+            work = ""
+            for key in ("next_decisive_question", "orchestrator_reason", "objective", "task", "assignment"):
+                value = obj.get(key)
+                if value:
+                    work = compact_value(value, 700)
+                    break
+            if not work:
+                contract = obj.get("contract")
+                if isinstance(contract, dict):
+                    for key in ("purpose", "objective", "mission", "description"):
+                        if contract.get(key):
+                            work = compact_value(contract.get(key), 700)
+                            break
+            if not work:
+                work = meta.get("purpose", "") or "Geen actuele werkomschrijving in packet."
+
+            result = ""
+            for key in (
+                "ai_result", "result", "finding", "findings", "conclusion",
+                "economic_conclusion", "validation_results", "director_decision", "notes"
+            ):
+                value = obj.get(key)
+                if value not in (None, "", [], {}):
+                    result = compact_value(value, 1100)
+                    break
+
+            capabilities = []
+            cap_work = obj.get("capability_work")
+            if isinstance(cap_work, dict):
+                capabilities = sorted(str(x) for x in cap_work.keys())
+            if not capabilities:
+                capabilities = list(meta.get("capabilities", []))
+
+            def refs(key):
+                value = obj.get(key)
+                if not isinstance(value, list):
+                    return []
+                return [compact_text(x, 220) for x in value if isinstance(x, str)][:12]
+
+            updated = None
+            for key in ("updated_at", "finished_at", "created_at", "timestamp"):
+                if isinstance(obj.get(key), str) and obj.get(key):
+                    updated = obj[key]
+                    break
+            if updated is None:
+                unix = obj.get("orchestrator_updated_at_unix") or obj.get("created_at_unix")
+                if isinstance(unix, (int, float)):
+                    updated = datetime.fromtimestamp(unix, timezone.utc).isoformat()
+            if updated is None:
+                updated = datetime.fromtimestamp(path.stat().st_mtime, timezone.utc).isoformat()
+
+            return {
+                "agent_id": aid,
+                "status": status_of(obj),
+                "run_id": str(obj.get("run_id") or path.parent.name),
+                "purpose": meta.get("purpose", ""),
+                "authority": meta.get("authority", ""),
+                "capabilities": capabilities,
+                "transient": bool(meta.get("transient", False) or obj.get("transient", False)),
+                "work": work,
+                "result": result,
+                "candidate_ids": candidates,
+                "input_refs": refs("input_refs"),
+                "output_refs": refs("output_refs"),
+                "updated_at": updated,
+                "packet_path": str(path.relative_to(self.repo)),
+            }
+
+        latest_by_agent = {}
+        events = []
+        for run_dir in run_dirs[-80:]:
+            for path in sorted(run_dir.glob("*.json")):
+                if path.name.startswith("_") or path.is_symlink():
+                    continue
+                row = packet_row(path)
+                if row is None:
+                    continue
+                events.append(dict(row))
+                current = latest_by_agent.get(row["agent_id"])
+                if current is None or (parse_time(row.get("updated_at")) or 0) >= (parse_time(current.get("updated_at")) or 0):
+                    latest_by_agent[row["agent_id"]] = row
+
+        ordered_ids = list(role_order)
+        for aid in sorted(latest_by_agent):
+            if aid not in ordered_ids:
+                ordered_ids.append(aid)
+
+        agents = []
+        for aid in ordered_ids:
+            row = latest_by_agent.get(aid)
+            if row is None:
+                meta = role_meta.get(aid, {})
+                row = {
+                    "agent_id": aid,
+                    "status": "UNKNOWN",
+                    "run_id": None,
+                    "purpose": meta.get("purpose", ""),
+                    "authority": meta.get("authority", ""),
+                    "capabilities": meta.get("capabilities", []),
+                    "transient": meta.get("transient", False),
+                    "work": "Nog geen scoutpacket aangetroffen.",
+                    "result": "",
+                    "candidate_ids": [],
+                    "input_refs": [],
+                    "output_refs": [],
+                    "updated_at": None,
+                    "packet_path": None,
+                }
+            agents.append(row)
+
+        events.sort(
+            key=lambda x: (
+                parse_time(x.get("updated_at")) or 0,
+                str(x.get("run_id") or ""),
+                str(x.get("agent_id") or ""),
+            ),
+            reverse=True,
+        )
+        events = events[:600]
+        latest_update = next((x.get("updated_at") for x in events if x.get("updated_at")), None)
+        latest_run_id = run_dirs[-1].name if run_dirs else None
+        active_statuses = ACTIVE_STATES.union({"READY", "RESULT_READY", "WAITING_FOR_RESULT"})
+        return {
+            "latest_run_id": latest_run_id,
+            "latest_update": latest_update,
+            "counts": {
+                "agents": len(agents),
+                "active": sum(1 for x in agents if str(x.get("status") or "").upper() in active_statuses),
+                "with_result": sum(1 for x in agents if x.get("result")),
+                "events": len(events),
+            },
+            "agents": agents,
+            "events": events,
+        }
+
     def _task_metrics(self, tasks):
         durations = []
         success = 0
@@ -1213,6 +1437,7 @@ class ControlCenterModel:
             if str(item.get("status") or "").upper() in ACTIVE_STATES
         ]
         revives = self.load_revive_requests()
+        scouts = self.scout_projection()
         lifecycle = self.lifecycle_status()
         build_log = self.build_log_projection()
         git_sync = self.git_sync_status()
@@ -1271,6 +1496,7 @@ class ControlCenterModel:
             "candidate_funnel": self._candidate_funnel(candidates),
             "lifecycle": lifecycle,
             "build_log": build_log,
+            "scouts": scouts,
             "git_sync": git_sync,
             "sync_request": sync_request,
             "chain_alerts": chain_alerts,
