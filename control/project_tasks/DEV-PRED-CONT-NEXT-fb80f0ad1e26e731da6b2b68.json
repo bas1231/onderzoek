@@ -1,0 +1,37 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-CONT-NEXT-fb80f0ad1e26e731da6b2b68",
+  "source_commit": "3e85c61a4424ab4e649800fba0ee9424cd2b149a",
+  "build_id": "BUILD-PRED-A2Z-POSTBUILD-20261006",
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "run_project_python",
+    "read_runtime"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 120,
+  "notes": "NEXT for CONT-fb80f0ad1e26e731da6b2b68. E017 is already dispatched from E016. Run only the existing read-only Sol R2 classifier so this continuation can independently observe the current immutable R2 state after the retry window. Do not start or restart Sol. No R3, Astra, build, experiment test or measurement.",
+  "operations": [
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/a2z_sol_r2_diag_expose_e010.py"
+      ],
+      "test": false,
+      "timeout_seconds": 60
+    }
+  ]
+}
