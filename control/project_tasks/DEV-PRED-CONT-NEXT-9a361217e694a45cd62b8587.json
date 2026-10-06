@@ -1,0 +1,37 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-CONT-NEXT-9a361217e694a45cd62b8587",
+  "source_commit": "eb6b70ed96649ad8a9a6b2f34e7a0647f542b7dd",
+  "build_id": "BUILD-PRED-A2Z-POSTBUILD-20261006",
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "run_project_python",
+    "read_runtime"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 120,
+  "notes": "NEXT voor CONT-9a361217e694a45cd62b8587. Alleen read-only herclassificatie van dezelfde canonical Sol R2 runtime met de reeds bestaande E009-classifier. Geen service-start/restart, geen modelcall, geen R3, geen Astra, build, experimenttest of meting.",
+  "operations": [
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/a2z_sol_r2_models_checkpoint_diag_e009.py"
+      ],
+      "test": false,
+      "timeout_seconds": 60
+    }
+  ]
+}
