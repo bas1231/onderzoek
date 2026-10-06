@@ -1,0 +1,34 @@
+{
+  "schema": "PREDICTION_BUILD_LOG_EVENT_V1",
+  "event_id": "20261006-A2Z-CONT8E43-DISPATCH-BLOCKED",
+  "work_item_id": "A2Z-SYSTEMTEST-20261005",
+  "created_at_utc": "2026-10-06T11:55:10Z",
+  "event_type": "RESULT",
+  "work_item_status": "BLOCKED",
+  "outcome": "BLOCKED",
+  "title": "Compacte R2-classifier voorbereid maar DEV-manifestwrite geblokkeerd",
+  "objective": "Classificeer de bestaande Sol R2-runtime na SOL_R2_SERVICE_RESUMED=1 zonder nieuwe modelcall.",
+  "summary": "De exacte continuation project task DEV-PRED-CONT-NEXT-8e4386a72f380aab93047574 is canoniek voorbereid in onderzoek. Twee pogingen om het vereiste identieke DEV-manifest in bas1231/fg-assistent te schrijven zijn door de toolveiligheidscontrole geblokkeerd. Er is daarom geen command-bus NEXT-dispatch gemaakt en geen lokale uitvoering gestart.",
+  "why": "Fail-closed: projectwerk vereist dezelfde task_id in project task, DEV manifest en command-bus inbox. Zonder DEV-manifest mag de task niet worden verzonden.",
+  "first_incomplete_step": "Maak het ontbrekende DEV-manifest voor exact DEV-PRED-CONT-NEXT-8e4386a72f380aab93047574 zodra een geautoriseerde write-path beschikbaar is; wijzig de bestaande project task niet.",
+  "next_action": "Geen service-resume, R3, Astra, build, test of meting. Hervat alleen de compacte read-only classifier via dezelfde prepared task wanneer de vereiste DEV-manifestwrite weer is toegestaan.",
+  "session_route_task_id": "DEV-PRED-CONT-NEXT-fb92673210e925f0fdb46ec8",
+  "task_ids": [
+    "DEV-PRED-CONT-NEXT-8e4386a72f380aab93047574",
+    "A2Z-V4-SOL-PROPOSAL-20261006-R2"
+  ],
+  "commits": [
+    "40f3cfd4ae9a627fc3b26f5d47929ee5d7d5b741"
+  ],
+  "evidence_refs": [
+    "control/project_tasks/DEV-PRED-CONT-NEXT-8e4386a72f380aab93047574.json",
+    "control/build_log/events/20261006-A2Z-SOL-R2-POST-RESUME-CLASSIFY-CONT8E43.json"
+  ],
+  "tags": [
+    "a2z",
+    "sol-r2",
+    "classifier",
+    "dispatch-blocked",
+    "fail-closed"
+  ]
+}
