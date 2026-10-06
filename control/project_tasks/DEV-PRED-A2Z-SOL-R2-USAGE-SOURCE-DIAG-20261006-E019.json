@@ -1,0 +1,37 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-A2Z-SOL-R2-USAGE-SOURCE-DIAG-20261006-E019",
+  "source_commit": "c0253cc4616f62344e9b938e6eaa6d86878cd2aa",
+  "build_id": "BUILD-PRED-A2Z-POSTBUILD-20261006",
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "run_project_python",
+    "read_runtime"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 120,
+  "notes": "Read-only diagnosis of the raw error payload from immutable Sol R2 attempt 6. Purpose: determine whether the reported USAGE_LIMIT is a Codex/Work execution allowance signal rather than a GPT-5.6 Sol Chat-model availability limit. No model invocation, service start/restart, R3, Astra, build, experiment test or measurement.",
+  "operations": [
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/a2z_sol_r2_usage_source_diag_e019.py"
+      ],
+      "test": false,
+      "timeout_seconds": 60
+    }
+  ]
+}
