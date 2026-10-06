@@ -1,0 +1,30 @@
+{
+  "schema": "PREDICTION_BUILD_LOG_EVENT_V1",
+  "event_id": "20261006-A2Z-V4-SOL-PROPOSAL-VERIFY-CONT724",
+  "work_item_id": "A2Z-SYSTEMTEST-20261005",
+  "created_at_utc": "2026-10-06T10:31:00Z",
+  "event_type": "ATTEMPT",
+  "work_item_status": "IN_PROGRESS",
+  "outcome": "STARTED",
+  "title": "Verifieer exact Sol-resultaat vóór Astra PREBUILD",
+  "objective": "Bewijs de volledige actuele governed A→Z-keten met exact Sol en Astra en postbuild approval vóór experimenttests/meting.",
+  "summary": "E002 gaf PASS voor dispatch/start van de begrensde SOL_EXACT modelstage. Deze vervolgtaak verifieert uitsluitend het duurzame modelresultaat, request-hash, worker-hash, completion-hash en de inhoud van proposal_version=1. Geen build, experimenttest of meting.",
+  "why": "Een geslaagde service-start bewijst nog niet dat GPT-5.6 Sol de opzet daadwerkelijk en met juiste provenance heeft afgerond. Astra PREBUILD mag pas op het geverifieerde Sol-artefact worden gebaseerd.",
+  "first_incomplete_step": "Duurzaam verifiëren van de werkelijke GPT-5.6 Sol-opzet en provenance.",
+  "next_action": "Na PASS exact Astra PREBUILD laten reviewen; bij fout eerst de modelstage of provenance herstellen.",
+  "session_route_task_id": "DEV-PRED-A2Z-SOL-PROPOSAL-20261006-E002",
+  "task_ids": [
+    "DEV-PRED-CONT-NEXT-72432dd0a7b4a27fc8604108",
+    "A2Z-V4-SOL-PROPOSAL-20261006-R1"
+  ],
+  "commits": [],
+  "evidence_refs": [
+    "control/project_tasks/DEV-PRED-A2Z-SOL-PROPOSAL-20261006-E002.json"
+  ],
+  "tags": [
+    "a2z",
+    "sol-exact",
+    "prebuild",
+    "verification"
+  ]
+}
