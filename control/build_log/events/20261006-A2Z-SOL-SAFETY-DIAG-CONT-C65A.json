@@ -1,0 +1,33 @@
+{
+  "schema": "PREDICTION_BUILD_LOG_EVENT_V1",
+  "event_id": "20261006-A2Z-SOL-SAFETY-DIAG-CONT-C65A",
+  "work_item_id": "A2Z-SYSTEMTEST-20261005",
+  "created_at_utc": "2026-10-06T10:35:00Z",
+  "event_type": "ATTEMPT",
+  "work_item_status": "IN_PROGRESS",
+  "outcome": "STARTED",
+  "title": "Diagnoseer eerste Sol-opzetfout zonder safety-gate te versoepelen",
+  "objective": "Bewijs de volledige actuele governed A→Z-keten met exact Sol en Astra en postbuild approval vóór experimenttests/meting.",
+  "summary": "De duurzame Sol-verifier bereikte proposal_version=1 maar faalde fail-closed op proposal.safety.live_trading. Deze vervolgstap leest uitsluitend het bestaande immutable modelresultaat en classificeert de exacte safety-vorm. Geen normalisatie, geen Astra-review, geen build, tests of meting.",
+  "why": "De validator mag niet worden versoepeld en de Sol-output mag niet stil worden herschreven. Eerst moet de concrete mismatch worden vastgesteld zodat een eventuele Sol-revisie exact en minimaal kan zijn.",
+  "first_incomplete_step": "Exact vaststellen waarom proposal.safety.live_trading niet boolean false is.",
+  "next_action": "Als de safety-vorm semantisch of structureel fout is, laat exact GPT-5.6 Sol een nieuwe versie indienen; pas daarna Astra PREBUILD.",
+  "session_route_task_id": "DEV-PRED-CONT-NEXT-72432dd0a7b4a27fc8604108",
+  "task_ids": [
+    "DEV-PRED-CONT-NEXT-c65aec78e41cd4c5b900bd59",
+    "A2Z-V4-SOL-PROPOSAL-20261006-R1"
+  ],
+  "commits": [
+    "e22e322467b34197100831cb2b97503cf810ab5c"
+  ],
+  "evidence_refs": [
+    "control/project_tasks/DEV-PRED-CONT-NEXT-72432dd0a7b4a27fc8604108.json",
+    "control/project_tasks/DEV-PRED-A2Z-SOL-PROPOSAL-20261006-E002.json"
+  ],
+  "tags": [
+    "a2z",
+    "sol-exact",
+    "safety",
+    "diagnosis"
+  ]
+}
