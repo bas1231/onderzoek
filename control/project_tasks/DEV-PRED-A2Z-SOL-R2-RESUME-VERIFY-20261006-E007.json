@@ -1,0 +1,39 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-A2Z-SOL-R2-RESUME-VERIFY-20261006-E007",
+  "source_commit": "22fc6bd36ab1b66ae8fecf8476a834e940702989",
+  "build_id": "BUILD-PRED-A2Z-POSTBUILD-20261006",
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "run_project_python",
+    "read_runtime",
+    "user_service_manage",
+    "read_logs"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 300,
+  "notes": "E007 hervat exact dezelfde immutable A2Z-V4-SOL-PROPOSAL-20261006-R2 één keer nadat E006 PAUSED_USAGE_LIMIT attempt=3 aantoonde en het gerapporteerde retry_at al voorbij was. Daarna wacht maximaal 180s op het duurzame model_result. Bij resultaat valideert hij exact Sol/SOL_EXACT provenance, hashes, proposal_version=2, safety false triple, frozen stream en NO_PROVEN_EDGE. Zonder resultaat classificeert hij compact via journal. Geen R3, geen Astra, build, experimenttest of meting in deze taak. PASS autoriseert exact GPT-6 Astra PREBUILD als volgende gate.",
+  "operations": [
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/a2z_sol_r2_resume_verify_e007.py"
+      ],
+      "test": false,
+      "timeout_seconds": 240
+    }
+  ]
+}
