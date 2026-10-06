@@ -1,0 +1,19 @@
+{
+  "schema": "PREDICTION_BRIDGE_COMMAND_V1",
+  "task_id": "DEV-PRED-CONT-NEXT-11eafda9f8e43e3e9c5a19bf",
+  "action": "SIX_AI_HEALTH",
+  "created_at_utc": "2026-10-06T11:04:00Z",
+  "route_task_id": "DEV-PRED-CONT-NEXT-81836aa4d85bdf5280f107e9",
+  "delivery_mode": "chat",
+  "live_trading": false,
+  "paid_actions": false,
+  "wallet_actions": false,
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "auto_continue": true,
+  "parent_continuation_id": "CONT-11eafda9f8e43e3e9c5a19bf",
+  "notes": "Resume only the same immutable Sol R2 after proven PAUSED_USAGE_LIMIT once retry is due, then verify durable exact-Sol R2 provenance/content. No R3, Astra review, build, experiment test or measurement. PASS authorizes exact Astra PREBUILD as next gate."
+}
