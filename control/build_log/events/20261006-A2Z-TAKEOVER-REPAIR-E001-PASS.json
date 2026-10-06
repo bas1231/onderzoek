@@ -1,0 +1,31 @@
+{
+  "schema": "PREDICTION_BUILD_LOG_EVENT_V1",
+  "event_id": "20261006-A2Z-TAKEOVER-REPAIR-E001-PASS",
+  "work_item_id": "A2Z-SYSTEMTEST-20261005",
+  "created_at_utc": "2026-10-06T10:20:56Z",
+  "event_type": "RESULT",
+  "work_item_status": "IN_PROGRESS",
+  "outcome": "PASS",
+  "title": "Gerichte model- en reviewreparatie volledig geverifieerd",
+  "objective": "Bewijs de volledige actuele governed A→Z-keten met exact Sol en Astra en postbuild approval vóór experimenttests/meting.",
+  "summary": "E001 PASS exit=0: 10 provenance-, 12 exact-model- en 33 supervisor-tests groen. De vijf bestanden zijn lokaal gecommit als ef5468df0f91e3ed34b15cef66f0ab98590a84b1; worktree clean. Dit is geen volledige A2Z-PASS.",
+  "why": "Geen nieuwe campagne; eerste incomplete reparatie afronden. Productie nog op a3a61e9 met behouden runtime-evidence.",
+  "first_incomplete_step": "Sol-opzet en harde Astra POSTBUILD-gate voor de bestaande V4-kandidaat.",
+  "next_action": "Bestaande V4 selectie-evidence behouden; Sol-opzet, echte dubbele review en versiegebonden test/meting afdwingen.",
+  "session_route_task_id": "SESSION-ROUTE-756bff225d5a976edf6da02b",
+  "task_ids": [
+    "DEV-PRED-A2Z-REPAIR-RECOVER-20261006-E001",
+    "DEV-PRED-CONT-NEXT-cdd14cf7cd42a15466ba64ca"
+  ],
+  "commits": [
+    "ef5468df0f91e3ed34b15cef66f0ab98590a84b1"
+  ],
+  "evidence_refs": [
+    "control/project_tasks/DEV-PRED-A2Z-REPAIR-RECOVER-20261006-E001.json"
+  ],
+  "tags": [
+    "a2z",
+    "takeover",
+    "first-failure"
+  ]
+}
