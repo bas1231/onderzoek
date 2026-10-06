@@ -1,0 +1,37 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-A2Z-SOL-R2-LATEST-CHECKPOINT-DIAG-20261006-E008",
+  "source_commit": "727c59d85026fd9e6199e1ea4a5e3e833cb710d6",
+  "build_id": "BUILD-PRED-A2Z-POSTBUILD-20261006",
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "run_project_python",
+    "read_runtime"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 120,
+  "notes": "Read-only diagnosis of the newest immutable Sol R2 checkpoint after E007 produced no durable model_result. Reads only run artifacts (events/stderr/WORKER/worker_error/COMPLETE) and emits one compact classifier line. No service start/restart, no new model call, no R3, no Astra, build, experiment test or measurement.",
+  "operations": [
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/a2z_sol_r2_latest_checkpoint_diag_e008.py"
+      ],
+      "test": false,
+      "timeout_seconds": 60
+    }
+  ]
+}
