@@ -1,0 +1,44 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-CONT-NEXT-8e4386a72f380aab93047574",
+  "source_commit": "aae4a39ead4f27cb9fef4b8f80d0814c9268f95d",
+  "build_id": "BUILD-PRED-A2Z-POSTBUILD-20261006",
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_runtime",
+    "user_service_manage"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 120,
+  "notes": "NEXT voor CONT-8e4386a72f380aab93047574. Compacte read-only classifier na de bewezen SOL_R2_SERVICE_RESUMED=1. Geen service-start/restart, geen nieuwe modelcall, geen R3, geen Astra, build, experimenttest of meting. Output exact één korte classifierregel. PASS uitsluitend wanneer model_result reeds duurzaam aanwezig is; anders rc=10 met status/reason/retry/systemd voor de volgende continuation.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/a2z_sol_r2_post_resume_classifier_cont8e43.py",
+      "content": "from __future__ import annotations\n\nimport sqlite3\nimport subprocess\nimport time\nfrom pathlib import Path\n\nROOT = Path.home() / \".local/share/prediction-project-executor/campaigns/FULL-A2Z-LIVE-20261004-V4\"\nTASK_ID = \"A2Z-V4-SOL-PROPOSAL-20261006-R2\"\nUNIT = \"prediction-a2z-v4-model@A2Z-V4-SOL-PROPOSAL-20261006-R2.service\"\nRESULT = ROOT / \"model_results\" / f\"{TASK_ID}.json\"\nDB = ROOT / \"models\" / \"runtime.sqlite\"\n\nif RESULT.is_file() and not RESULT.is_symlink():\n    print(\"R2_CLASS=RESULT_PRESENT RESULT_EXISTS=1\")\n    raise SystemExit(0)\n\nstatus = \"NO_TASK_ROW\"\nattempt = 0\nseq = 0\nreason = \"NO_TRANSITION\"\nretry = 0.0\nstamp = 0.0\n\nif DB.is_file() and not DB.is_symlink():\n    db = sqlite3.connect(f\"file:{DB}?mode=ro\", uri=True)\n    try:\n        row = db.execute(\n            \"select status,attempt from tasks where id=?\",\n            (TASK_ID,),\n        ).fetchone()\n        tr = db.execute(\n            \"select seq,state,reason,attempt,stamp,retry from transitions \"\n            \"where task=? order by seq desc limit 1\",\n            (TASK_ID,),\n        ).fetchone()\n    finally:\n        db.close()\n    if row:\n        status = str(row[0])\n        attempt = int(row[1] or 0)\n    if tr:\n        seq = int(tr[0] or 0)\n        reason = str(tr[2] or \"NO_REASON\")\n        attempt = int(tr[3] or attempt or 0)\n        stamp = float(tr[4] or 0)\n        retry = float(tr[5] or 0)\n\neffective_retry = min(retry, stamp + 900) if reason == \"USAGE_LIMIT\" else retry\nretry_remaining = max(0, int(effective_retry - time.time())) if effective_retry else 0\n\nservice = {}\ncp = subprocess.run(\n    [\"systemctl\", \"--user\", \"show\", UNIT,\n     \"-p\", \"ActiveState\",\n     \"-p\", \"SubState\",\n     \"-p\", \"Result\",\n     \"-p\", \"ExecMainStatus\",\n     \"-p\", \"ExecMainCode\"],\n    text=True,\n    capture_output=True,\n    timeout=20,\n    check=False,\n)\nfor line in cp.stdout.splitlines():\n    if \"=\" in line:\n        k, v = line.split(\"=\", 1)\n        service[k] = v\n\nif status == \"PAUSED_USAGE_LIMIT\":\n    classification = \"PAUSED_USAGE_LIMIT\"\nelif status == \"WAITING_RETRY\":\n    classification = \"WAITING_RETRY\"\nelif status == \"RUNNING\":\n    classification = \"RUNNING\"\nelif status == \"COMPLETE\":\n    classification = \"COMPLETE_WITHOUT_RESULT\"\nelif status in {\"FAILED\", \"BLOCKED\"}:\n    classification = \"RUNTIME_FAILURE\"\nelif status == \"QUEUED\":\n    classification = \"QUEUED\"\nelif status == \"NO_TASK_ROW\":\n    classification = \"TASK_NOT_ENQUEUED\"\nelse:\n    classification = \"UNEXPECTED_STATUS\"\n\nprint(\n    \"R2_CLASS=\" + classification\n    + \" RESULT_EXISTS=0\"\n    + \" TASK_STATUS=\" + status\n    + \" ATTEMPT=\" + str(attempt)\n    + \" SEQ=\" + str(seq)\n    + \" REASON=\" + reason.replace(\" \", \"_\")[:160]\n    + \" RETRY_REMAINING=\" + str(retry_remaining)\n    + \" ACTIVE=\" + service.get(\"ActiveState\", \"UNKNOWN\")\n    + \" SUB=\" + service.get(\"SubState\", \"UNKNOWN\")\n    + \" SYSTEMD_RESULT=\" + service.get(\"Result\", \"UNKNOWN\")\n    + \" EXEC_MAIN_STATUS=\" + service.get(\"ExecMainStatus\", \"UNKNOWN\")\n)\nraise SystemExit(10)\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/a2z_sol_r2_post_resume_classifier_cont8e43.py"
+      ],
+      "test": false,
+      "timeout_seconds": 60
+    }
+  ]
+}
