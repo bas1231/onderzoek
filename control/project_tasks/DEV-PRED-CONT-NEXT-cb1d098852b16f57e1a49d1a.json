@@ -1,0 +1,14 @@
+{
+"schema":"PREDICTION_PROJECT_TASK_V1",
+"task_id":"DEV-PRED-CONT-NEXT-cb1d098852b16f57e1a49d1a",
+"source_commit":"a772071a14ceea2946fb8a5a051fc1e106e0e9c3",
+"build_id":"BUILD-PRED-A2Z-POSTBUILD-20261006",
+"intelligence_tier":"C",
+"issuer":{"model":"GPT-5.6 Sol","reasoning_level":"UNAVAILABLE_TO_RUNTIME"},
+"safety":{"live_trading":false,"paid_actions":false,"wallet_actions":false,"remote_git_write":false,"credential_write":false},
+"capabilities":["read_repository","run_project_python","read_runtime","user_service_manage","read_logs"],
+"working_directory":".",
+"timeout_seconds":900,
+"notes":"NEXT for CONT-cb1d098852b16f57e1a49d1a. E019 proved an external Codex/Work usage limit with retry at 17:17 local. Wait in one bounded slice; if reset is reached inside this slice, resume exactly the same immutable Sol R2 via the existing verifier. Otherwise exit with remaining seconds so continuation can schedule the next slice. No R3 or Astra before validated R2.",
+"operations":[{"type":"python","argv":["python3","control/dev_checks/a2z_sol_r2_wait_codex_reset_slice_e021.py"],"test":false,"timeout_seconds":900}]
+}
