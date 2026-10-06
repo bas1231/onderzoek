@@ -1,0 +1,43 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-CONT-NEXT-cf7e81729d4dfae4fbdbe1e4",
+  "source_commit": "adcade5bd1df9c0faaaa91219f522d7ab34ed24e",
+  "build_id": "BUILD-PRED-A2Z-POSTBUILD-20261006",
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_runtime"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 860,
+  "notes": "NEXT voor CONT-cf7e81729d4dfae4fbdbe1e4. Wacht alleen tot de nieuwe effective USAGE_LIMIT retry van dezelfde immutable A2Z-V4-SOL-PROPOSAL-20261006-R2 nog maximaal 90 seconden verwijderd is. Raakt de modelservice niet aan en maakt geen R3/reset. PASS betekent uitsluitend dat het retry-window uitvoerbaar is of dat het R2-resultaat inmiddels aanwezig is. Geen Astra, build, experimenttest of meting.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/a2z_sol_r2_wait_retry_window_contcf7e.py",
+      "content": "from __future__ import annotations\n\nimport sqlite3\nimport time\nfrom pathlib import Path\n\nROOT = Path.home() / \".local/share/prediction-project-executor/campaigns/FULL-A2Z-LIVE-20261004-V4\"\nTASK_ID = \"A2Z-V4-SOL-PROPOSAL-20261006-R2\"\nRESULT = ROOT / \"model_results\" / f\"{TASK_ID}.json\"\nDB = ROOT / \"models\" / \"runtime.sqlite\"\nREADY_WITHIN_SECONDS = 90\nMAX_WAIT_SECONDS = 825\n\ndef state():\n    if RESULT.is_file() and not RESULT.is_symlink():\n        return {\"result\": True}\n    if not DB.is_file() or DB.is_symlink():\n        return {\"result\": False, \"status\": \"DB_MISSING\", \"reason\": \"NO_DB\"}\n    db = sqlite3.connect(f\"file:{DB}?mode=ro\", uri=True)\n    try:\n        row = db.execute(\n            \"select status,attempt from tasks where id=?\",\n            (TASK_ID,),\n        ).fetchone()\n        tr = db.execute(\n            \"select seq,state,reason,attempt,stamp,retry \"\n            \"from transitions where task=? order by seq desc limit 1\",\n            (TASK_ID,),\n        ).fetchone()\n    finally:\n        db.close()\n    status = row[0] if row else \"NO_TASK_ROW\"\n    if not tr:\n        return {\n            \"result\": False,\n            \"status\": status,\n            \"reason\": \"NO_TRANSITION\",\n            \"effective_retry\": 0.0,\n        }\n    seq, tr_state, reason, attempt, stamp, retry = tr\n    stamp = float(stamp or 0)\n    retry = float(retry or 0)\n    effective = min(retry, stamp + 900) if reason == \"USAGE_LIMIT\" else retry\n    return {\n        \"result\": False,\n        \"status\": status,\n        \"state\": tr_state,\n        \"reason\": reason,\n        \"attempt\": int(attempt or 0),\n        \"seq\": int(seq),\n        \"effective_retry\": effective,\n    }\n\nstarted = time.monotonic()\nwhile True:\n    s = state()\n\n    if s.get(\"result\"):\n        print(\"SOL_R2_RESULT_NOW_PRESENT=1\")\n        print(\"NEXT=VERIFY_R2\")\n        raise SystemExit(0)\n\n    if s.get(\"status\") != \"PAUSED_USAGE_LIMIT\" or s.get(\"reason\") != \"USAGE_LIMIT\":\n        raise SystemExit(\n            \"SOL_R2_RETRY_WINDOW_UNEXPECTED_STATE:\"\n            + str(s.get(\"status\")) + \":\" + str(s.get(\"reason\"))\n        )\n\n    remaining = max(0, int(s[\"effective_retry\"] - time.time()))\n    if remaining <= READY_WITHIN_SECONDS:\n        print(\"SOL_R2_RETRY_WINDOW_READY=1\")\n        print(\"SOL_R2_RETRY_SECONDS_REMAINING=\" + str(remaining))\n        print(\"NEXT=RESUME_SAME_R2_AND_VERIFY\")\n        raise SystemExit(0)\n\n    elapsed = time.monotonic() - started\n    if elapsed + max(1, remaining - READY_WITHIN_SECONDS) > MAX_WAIT_SECONDS:\n        print(\"SOL_R2_RETRY_SECONDS_REMAINING=\" + str(remaining))\n        raise SystemExit(\"SOL_R2_RETRY_WINDOW_TOO_FAR\")\n\n    sleep_for = min(15, max(1, remaining - READY_WITHIN_SECONDS))\n    time.sleep(sleep_for)\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/a2z_sol_r2_wait_retry_window_contcf7e.py"
+      ],
+      "test": false,
+      "timeout_seconds": 840
+    }
+  ]
+}
