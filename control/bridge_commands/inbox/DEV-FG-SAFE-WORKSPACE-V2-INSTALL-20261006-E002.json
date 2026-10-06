@@ -1,0 +1,17 @@
+{
+  "schema": "PREDICTION_BRIDGE_COMMAND_V1",
+  "task_id": "DEV-FG-SAFE-WORKSPACE-V2-INSTALL-20261006-E002",
+  "action": "SIX_AI_HEALTH",
+  "created_at_utc": "2026-10-06T17:05:00Z",
+  "route_task_id": "BRIDGE-FG-THISCHAT-GITHUB-PING-20260929-E024",
+  "delivery_mode": "chat",
+  "live_trading": false,
+  "paid_actions": false,
+  "wallet_actions": false,
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "notes": "Install SAFE workspace v2 UX on WSL and verify the deployed two-pane RAW-to-SAFE/ChatGPT interface."
+}
