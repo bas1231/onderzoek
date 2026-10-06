@@ -1,0 +1,69 @@
+{
+  "build_id": "BUILD-PRED-A2Z-POSTBUILD-20261006",
+  "protocol_version": "AUTONOMOUS_BUILD_PROTOCOL_V1",
+  "objective": "Voltooi bestaande A2Z-SYSTEMTEST-20261005: exacte Sol-opzet/build en autonome Astra-reviews voor en na de build, met een harde versiegebonden uitvoeringsgate.",
+  "source_commit": "9f03be526d5407adce98760d7b1ed3be56a7751c",
+  "allowed_capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "run_tests",
+    "local_git",
+    "read_runtime",
+    "write_runtime",
+    "user_service_manage",
+    "read_logs",
+    "build_coordination"
+  ],
+  "allowed_paths": [
+    "control/codex_supervisor/model_quality_gate.py",
+    "control/codex_supervisor/astra_autonomous_review.py",
+    "control/codex_supervisor/experiment_gate.py",
+    "control/codex_supervisor/build_wake.py",
+    "control/codex_supervisor/measurement_wake.py",
+    "control/codex_supervisor/candidate_validation.py",
+    "control/codex_supervisor/candidate_dispatch.py",
+    "control/hourly/full_chain_qualification.py",
+    "control/jobs/full_a2z_model_stage.py",
+    "control/jobs/full_a2z_governed_v4.py",
+    "tests/codex_supervisor/test_postbuild_gate.py"
+  ],
+  "planned_paths": [
+    "control/codex_supervisor/model_quality_gate.py",
+    "control/codex_supervisor/astra_autonomous_review.py",
+    "control/codex_supervisor/experiment_gate.py",
+    "control/codex_supervisor/build_wake.py",
+    "control/codex_supervisor/measurement_wake.py",
+    "control/codex_supervisor/candidate_validation.py",
+    "control/codex_supervisor/candidate_dispatch.py",
+    "control/hourly/full_chain_qualification.py",
+    "control/jobs/full_a2z_model_stage.py",
+    "control/jobs/full_a2z_governed_v4.py",
+    "tests/codex_supervisor/test_postbuild_gate.py"
+  ],
+  "acceptance_criteria": [
+    "Prebuild approval bindt een werkelijk door GPT-5.6 Sol geproduceerde opzet.",
+    "Postbuild approval bindt de werkelijke gebouwde code en exacte GPT-6 Astra-workerprovenance.",
+    "Directe validatie-/meetpaden weigeren ontbrekende, stale of TEST_ONLY-goedkeuring.",
+    "Modelwerk gebruikt inbegrepen ChatGPT-auth, exacte slugs, geen tools of betaalde API.",
+    "Bestaande kandidaat/campagne blijft behouden; tests/meting alleen na postbuild-goedkeuring.",
+    "Gerichte negatieve regressies groen en bewijs van echte modelroute; NO_PROVEN_EDGE blijft onafhankelijk."
+  ],
+  "non_goals": [
+    "Geen strategieherontwerp of nieuwe ontdekkingcampagne",
+    "Geen trading, wallet, betaalde acties of brede refactor",
+    "Geen mockreviews in de productiebewijsrun"
+  ],
+  "independent_verification": "Werkelijke GPT-6 Astra code-review plus fail-closed regressies; infrastructuurtests zijn geen experimentmetingen.",
+  "rollback_plan": "Ongewijzigde productiecheckout en oude receipts behouden; nieuwe code blijft geïsoleerd totdat acceptatie bewezen is.",
+  "cleanup_plan": "Tijdelijke modelservice na afloop stoppen/disablen; alle modeloutputs, receipts en negatieve resultaten bewaren.",
+  "max_attempts": 3,
+  "governance_change": false,
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  }
+}
