@@ -1,0 +1,16 @@
+{
+"schema":"PREDICTION_BRIDGE_COMMAND_V1",
+"task_id":"CONT-BLOCKED-cb2cc2307f358964fa48af1e",
+"action":"BRIDGE_PING",
+"created_at_utc":"2026-10-06T14:47:00Z",
+"route_task_id":"DEV-PRED-CONT-NEXT-27a61b99397ac00886202a5b",
+"delivery_mode":"headless",
+"live_trading":false,
+"paid_actions":false,
+"wallet_actions":false,
+"intelligence_tier":"C",
+"issuer":{"model":"GPT-5.6 Sol","reasoning_level":"UNAVAILABLE_TO_RUNTIME"},
+"auto_continue":false,
+"parent_continuation_id":"CONT-cb2cc2307f358964fa48af1e",
+"notes":"Blocked because the connector safety layer rejected the required immutable NEXT writes in this turn. No model or project execution was started."
+}
