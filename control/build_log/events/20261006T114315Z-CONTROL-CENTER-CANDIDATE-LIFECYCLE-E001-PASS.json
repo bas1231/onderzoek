@@ -1,0 +1,29 @@
+{
+  "schema": "PREDICTION_BUILD_LOG_EVENT_V1",
+  "event_id": "20261006T114315Z-CONTROL-CENTER-CANDIDATE-LIFECYCLE-E001-PASS",
+  "work_item_id": "CONTROL-CENTER-CANDIDATE-LIFECYCLE-20261006",
+  "created_at_utc": "2026-10-06T11:43:15Z",
+  "event_type": "RESULT",
+  "work_item_status": "DONE",
+  "outcome": "PASS",
+  "title": "Dashboard toont componentstatus en huidige kandidaat apart",
+  "objective": "Laat het vaste A→Z-dashboard tegelijk zien of een component technisch werkt/getest is én waar de huidige echte kandidaat zich in de governed keten bevindt.",
+  "summary": "DEV-PRED-CONTROL-CENTER-CANDIDATE-LIFECYCLE-20261006-E001 is PASS exit=0. Daarmee zijn de Control Center compile/regressietests, runtime-installatie van server/UI/canary/lifecycle-status, service-restart/status en runtime-canary volledig doorlopen.",
+  "why": "De vorige dashboardstrip kon componentkwalificatie verwarren met voortgang van de huidige kandidaat. De runtime toont nu beide als afzonderlijke lagen.",
+  "first_incomplete_step": null,
+  "next_action": "Geen verdere dashboardreparatie nodig voor dit werkitem. De huidige A→Z-kandidaat blijft bij Sol-opzet R2 totdat de exact GPT-5.6 Sol usage-limit is gepasseerd; daarna volgt Astra PRE-BUILD.",
+  "session_route_task_id": "DEV-PRED-CONT-NEXT-f1275498640bb58f2a03c7da",
+  "task_ids": ["DEV-PRED-CONTROL-CENTER-CANDIDATE-LIFECYCLE-20261006-E001"],
+  "commits": [
+    "50250c701395525287814105819ac02a82d40b12",
+    "4a8206e5035805dce333b0f2a95beb8ab184b090",
+    "f2d1c4e04f89cfac1d31b74e679b079347e903e5",
+    "1cf954039681b6150616ed8ee987182d9f8fa59d"
+  ],
+  "evidence_refs": [
+    "control/control_center/lifecycle_status.json",
+    "control/control_center/static/index.html",
+    "tests/control_center/test_control_center.py"
+  ],
+  "tags": ["control-center","dashboard","a2z","current-candidate","pass"]
+}
