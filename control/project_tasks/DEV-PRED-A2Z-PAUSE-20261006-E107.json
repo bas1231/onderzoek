@@ -1,0 +1,32 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-A2Z-PAUSE-20261006-E107",
+  "source_commit": "02c985389d4d3e2be8775c4665925b8eeaf81112",
+  "build_id": "BUILD-PRED-A2Z-POSTBUILD-20261006",
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "Codex GPT-6",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "user_service_manage"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 90,
+  "notes": "Expliciet gebruikersverzoek: pauzeer even. Stop alleen de huidige begrensde Astra POSTBUILD-reviewservice; behoud alle campaign/artifact/checkpoint-evidence. Geen vervolg, tests of metingen.",
+  "operations": [
+    {
+      "type": "service",
+      "verb": "stop",
+      "unit": "prediction-a2z-v4-model@A2Z-V4-ASTRA-POSTBUILD-20261006-R3-P2.service"
+    }
+  ]
+}
