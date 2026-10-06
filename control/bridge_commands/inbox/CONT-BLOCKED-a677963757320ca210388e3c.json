@@ -1,0 +1,19 @@
+{
+  "schema": "PREDICTION_BRIDGE_COMMAND_V1",
+  "task_id": "CONT-BLOCKED-a677963757320ca210388e3c",
+  "action": "BRIDGE_PING",
+  "created_at_utc": "2026-10-06T12:03:00Z",
+  "route_task_id": "DEV-PRED-CONT-NEXT-8e4386a72f380aab93047574",
+  "delivery_mode": "headless",
+  "live_trading": false,
+  "paid_actions": false,
+  "wallet_actions": false,
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "auto_continue": false,
+  "parent_continuation_id": "CONT-a677963757320ca210388e3c",
+  "notes": "BLOCKED: the next read-only classifier task could not be created because the authorized GitHub write was rejected by tool safety controls. No project execution was dispatched. Resume only when the same safe diagnostic can be created through an authorized write path."
+}
