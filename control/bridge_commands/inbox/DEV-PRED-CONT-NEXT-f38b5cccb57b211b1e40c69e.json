@@ -1,0 +1,16 @@
+{
+"schema":"PREDICTION_BRIDGE_COMMAND_V1",
+"task_id":"DEV-PRED-CONT-NEXT-f38b5cccb57b211b1e40c69e",
+"action":"SIX_AI_HEALTH",
+"created_at_utc":"2026-10-06T14:44:10Z",
+"route_task_id":"DEV-PRED-A2Z-SOL-R2-POST-RETRY-CLASSIFY-20261006-E017",
+"delivery_mode":"chat",
+"live_trading":false,
+"paid_actions":false,
+"wallet_actions":false,
+"intelligence_tier":"C",
+"issuer":{"model":"GPT-5.6 Sol","reasoning_level":"UNAVAILABLE_TO_RUNTIME"},
+"auto_continue":true,
+"parent_continuation_id":"CONT-f38b5cccb57b211b1e40c69e",
+"notes":"Observer-only while authoritative Codex-reset wait owns same-R2 resume. No duplicate model invocation."
+}
