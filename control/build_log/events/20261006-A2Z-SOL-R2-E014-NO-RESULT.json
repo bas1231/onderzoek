@@ -1,0 +1,17 @@
+{
+  "schema": "PREDICTION_BUILD_LOG_EVENT_V1",
+  "event_id": "20261006-A2Z-SOL-R2-E014-NO-RESULT",
+  "work_item_id": "A2Z-SYSTEMTEST-20261005",
+  "created_at_utc": "2026-10-06T13:58:30Z",
+  "event_type": "DIAGNOSIS",
+  "work_item_status": "IN_PROGRESS",
+  "outcome": "CONFIRMED",
+  "title": "E014 resumed same Sol R2 but no durable result appeared",
+  "summary": "E014 started the same immutable Sol R2 after attempt 5, but after the bounded wait no model_result existed. The wake detail only exposed a generic systemd exit-code failure, so the latest runtime attempt must be classified read-only before any further retry.",
+  "first_incomplete_step": "Classify the newest Sol R2 attempt after E014.",
+  "next_action": "Run the canonical read-only R2 classifier. If USAGE_LIMIT, respect the new retry; otherwise repair only the concrete blocker. Do not create R3 or advance to Astra yet.",
+  "evidence_refs": [
+    "control/dev_checks/a2z_sol_r2_diag_expose_e010.py",
+    "control/dev_checks/a2z_sol_r2_resume_verify_e007.py"
+  ]
+}
