@@ -1,0 +1,33 @@
+{
+  "schema": "PREDICTION_BUILD_LOG_EVENT_V1",
+  "event_id": "20261006T160000Z-CONTROL-CENTER-A2Z-REFRESH-E001-PLAN",
+  "work_item_id": "CONTROL-CENTER-A2Z-STATUS-REFRESH-20261006",
+  "created_at_utc": "2026-10-06T16:00:00Z",
+  "event_type": "PLAN",
+  "work_item_status": "IN_PROGRESS",
+  "outcome": "PLANNED",
+  "title": "Actualiseer dashboard naar actuele governed A→Z-stand",
+  "objective": "Werk de Control Center lifecycle-weergave bij van de verouderde Sol R2 usage-limit status naar de actuele kandidaatstand na Astra PRE-BUILD approval, Sol-build en de E106 post-build retry, zonder volledige A→Z-PASS of edge te claimen.",
+  "summary": "Dashboardstatus en huidige-staplabel worden bewijsgebonden bijgewerkt; volledige keten blijft NOT_PROVEN en wetenschappelijke status NO_PROVEN_EDGE.",
+  "why": "De huidige lifecycle_status.json loopt achter op de later op 2026-10-06 uitgevoerde governed lifecycle en toont daardoor een onjuiste huidige stap.",
+  "first_incomplete_step": "Bevestig inhoudelijke GPT-6 Astra POST-BUILD beslissing van E106; technisch PASS exit=0 alleen is onvoldoende.",
+  "next_action": "Werk lifecycle_status.json en de generieke huidige-staplabeling bij, test Control Center, installeer runtimebestand(en), restart service en voer runtime-canary uit.",
+  "session_route_task_id": "SESSION-ROUTE-7c74570ead4967b478905a22",
+  "task_ids": [
+    "DEV-PRED-CONTROL-CENTER-A2Z-REFRESH-20261006-E001"
+  ],
+  "commits": [],
+  "evidence_refs": [
+    "control/bridge_commands/inbox/DEV-PRED-A2Z-POSTBUILD-RETRY-20261006-E106.json",
+    "control/bridge_commands/inbox/DEV-PRED-A2Z-PAUSE-20261006-E107.json",
+    "same-chat:E106 status=PASS exit=0",
+    "same-chat:E107 status=PASS exit=0"
+  ],
+  "tags": [
+    "control-center",
+    "dashboard",
+    "a2z",
+    "postbuild",
+    "status-refresh"
+  ]
+}
