@@ -1,0 +1,37 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-A2Z-SOL-R2-MODELS-CHECKPOINT-DIAG-20261006-E009",
+  "source_commit": "c95f839387007e47a1c18691b528854baf2a1272",
+  "build_id": "BUILD-PRED-A2Z-POSTBUILD-20261006",
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "run_project_python",
+    "read_runtime"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 120,
+  "notes": "Corrected read-only diagnosis after E008 path bug. Canonical model runtime is <campaign>/models, so inspect <campaign>/models/runs plus runtime.sqlite and model_results. Emit one compact line classifying latest immutable Sol R2 attempt. No service start/restart, no model call, no R3, no Astra, build, experiment test or measurement.",
+  "operations": [
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/a2z_sol_r2_models_checkpoint_diag_e009.py"
+      ],
+      "test": false,
+      "timeout_seconds": 60
+    }
+  ]
+}
