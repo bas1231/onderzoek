@@ -1,0 +1,34 @@
+{
+  "schema": "PREDICTION_BUILD_LOG_EVENT_V1",
+  "event_id": "20261006-A2Z-SOL-R2-RUNTIME-DIAG-CONT9E78",
+  "work_item_id": "A2Z-SYSTEMTEST-20261005",
+  "created_at_utc": "2026-10-06T10:56:15Z",
+  "event_type": "ATTEMPT",
+  "work_item_status": "IN_PROGRESS",
+  "outcome": "STARTED",
+  "title": "Diagnoseer ontbrekende Sol R2 completion",
+  "objective": "Bewijs de governed A2Z-keten met exact Sol en Astra en POSTBUILD-goedkeuring vóór experimenttests of meting.",
+  "summary": "E005 vond na begrensde wachttijd geen duurzaam model_result voor A2Z-V4-SOL-PROPOSAL-20261006-R2. Deze continuation inspecteert uitsluitend de bestaande R2-service, supervisor runtime, taakstatus, transitions en run-artifacts. Geen nieuwe modelversie, Astra-review, build, experimenttest of meting.",
+  "why": "E004 startte de R2-modelservice asynchroon; eerst moet worden vastgesteld of de worker niet startte, faalde, op usage/retry wacht, nog RUNNING is, of COMPLETE werd zonder result-artifact.",
+  "first_incomplete_step": "Duurzame GPT-5.6 Sol R2 completion ontbreekt.",
+  "next_action": "Herstel alleen de eerste concrete runtime/servicefout die uit de diagnose blijkt; hergebruik R2 zolang de request/provenance intact is.",
+  "session_route_task_id": "DEV-PRED-A2Z-SOL-R2-VERIFY-20261006-E005",
+  "task_ids": [
+    "DEV-PRED-CONT-NEXT-9e785176e57d6cc43f32020e",
+    "A2Z-V4-SOL-PROPOSAL-20261006-R2"
+  ],
+  "commits": [
+    "8d631997dca62badbc801781b948f84d1016c922"
+  ],
+  "evidence_refs": [
+    "control/project_tasks/DEV-PRED-A2Z-GATE-SOL-REVISION-20261006-E004.json",
+    "control/project_tasks/DEV-PRED-A2Z-SOL-R2-VERIFY-20261006-E005.json"
+  ],
+  "tags": [
+    "a2z",
+    "sol-exact",
+    "r2",
+    "runtime-diagnosis",
+    "fail-closed"
+  ]
+}
