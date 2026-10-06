@@ -1,0 +1,39 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-CONT-NEXT-6a59ff90a904a06250169ac9",
+  "source_commit": "cf95466bc97525fa3c5ec2dcc2af61d98c86b747",
+  "build_id": "BUILD-PRED-A2Z-POSTBUILD-20261006",
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "run_project_python",
+    "read_runtime",
+    "user_service_manage",
+    "read_logs"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 300,
+  "notes": "Corrected immutable recovery NEXT after the DEV-wrapper timeout root cause. The confirmed Codex/Work reset time is now reached. Resume exactly the same immutable A2Z-V4-SOL-PROPOSAL-20261006-R2 once through the existing verifier. Do not create R3. No Astra/build/test/measurement unless R2 verification passes.",
+  "operations": [
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/a2z_sol_r2_resume_verify_e007.py"
+      ],
+      "test": false,
+      "timeout_seconds": 240
+    }
+  ]
+}
