@@ -1,0 +1,43 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-CONT-NEXT-00fc50db9508f736fd6c67a5",
+  "source_commit": "f87ebbb590add831662fcc6f60c400a593f4ebb0",
+  "build_id": "BUILD-PRED-A2Z-POSTBUILD-20261006",
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_runtime"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 260,
+  "notes": "NEXT for CONT-00fc50db9508f736fd6c67a5. E014 is already the sole authorized retry/resume of the same immutable Sol R2 after attempt 5 usage-limit. This continuation must not start or restart any model service. It waits only for the durable R2 model_result to appear, avoiding duplicate Sol execution. No R3, Astra, build, experiment test or measurement.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/a2z_sol_r2_wait_existing_e014_cont00fc.py",
+      "content": "from pathlib import Path\nimport time\n\nroot = Path.home() / \".local/share/prediction-project-executor/campaigns/FULL-A2Z-LIVE-20261004-V4\"\nresult = root / \"model_results\" / \"A2Z-V4-SOL-PROPOSAL-20261006-R2.json\"\n\ndeadline = time.monotonic() + 210\nwhile not result.exists() and time.monotonic() < deadline:\n    time.sleep(5)\n\nprint(\"SOL_R2_RESULT_PRESENT=\" + (\"1\" if result.is_file() and not result.is_symlink() else \"0\"))\nprint(\"NO_DUPLICATE_MODEL_RESUME=1\")\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/a2z_sol_r2_wait_existing_e014_cont00fc.py"
+      ],
+      "test": false,
+      "timeout_seconds": 230
+    }
+  ]
+}
