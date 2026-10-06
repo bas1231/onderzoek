@@ -1,0 +1,44 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-CONT-NEXT-11eafda9f8e43e3e9c5a19bf",
+  "source_commit": "d27fc4b8aa06f4e1f28bda5079cdfe3691654215",
+  "build_id": "BUILD-PRED-A2Z-POSTBUILD-20261006",
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_runtime",
+    "user_service_manage"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 900,
+  "notes": "NEXT voor CONT-11eafda9f8e43e3e9c5a19bf. Hervat uitsluitend dezelfde immutable A2Z-V4-SOL-PROPOSAL-20261006-R2 na de bewezen PAUSED_USAGE_LIMIT, alleen wanneer retry_at is verstreken. Wacht daarna op het bestaande model_result en valideert exact GPT-5.6 Sol/SOL_EXACT provenance, proposal_version=2, safety false-booleans, frozen stream en NO_PROVEN_EDGE. Geen R3, geen Astra-call, build, experimenttest of meting. Bij PASS is exact Astra PREBUILD de volgende gate.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/a2z_sol_r2_resume_verify_cont11ea.py",
+      "content": "from __future__ import annotations\n\nimport hashlib\nimport json\nfrom pathlib import Path\nimport sqlite3\nimport subprocess\nimport time\n\nROOT = Path.home() / \".local/share/prediction-project-executor/campaigns/FULL-A2Z-LIVE-20261004-V4\"\nTASK_ID = \"A2Z-V4-SOL-PROPOSAL-20261006-R2\"\nUNIT = \"prediction-a2z-v4-model@A2Z-V4-SOL-PROPOSAL-20261006-R2.service\"\nREQUEST = ROOT / \"requests\" / f\"{TASK_ID}.json\"\nRESULT = ROOT / \"model_results\" / f\"{TASK_ID}.json\"\nDB = ROOT / \"models\" / \"runtime.sqlite\"\nEXPECTED_ROUTE = \"SESSION-ROUTE-756bff225d5a976edf6da02b\"\nEXPECTED_CANDIDATE = \"AUTO-DISCOVERY-54d13314c7879b58e46d\"\n\ndef sha256(path: Path) -> str:\n    return hashlib.sha256(path.read_bytes()).hexdigest()\n\ndef runtime_state():\n    if not DB.is_file() or DB.is_symlink():\n        return (\"DB_MISSING\", 0.0, \"NO_DB\")\n    db = sqlite3.connect(f\"file:{DB}?mode=ro\", uri=True)\n    try:\n        row = db.execute(\n            \"select status,attempt from tasks where id=?\",\n            (TASK_ID,),\n        ).fetchone()\n        tr = db.execute(\n            \"select state,reason,retry from transitions where task=? order by seq desc limit 1\",\n            (TASK_ID,),\n        ).fetchone()\n    finally:\n        db.close()\n    status = row[0] if row else \"NO_TASK_ROW\"\n    retry = float(tr[2] or 0) if tr else 0.0\n    reason = tr[1] if tr else \"NO_TRANSITION\"\n    return (status, retry, reason)\n\nif not RESULT.is_file():\n    status, retry_at, reason = runtime_state()\n    if status != \"PAUSED_USAGE_LIMIT\":\n        raise SystemExit(f\"SOL_R2_RESUME_UNEXPECTED_STATUS:{status}:{reason}\")\n    now = time.time()\n    if retry_at > now:\n        wait = retry_at - now\n        if wait > 180:\n            raise SystemExit(f\"SOL_R2_RETRY_NOT_DUE:{int(wait)}s\")\n        time.sleep(wait + 1)\n\n    cp = subprocess.run(\n        [\"systemctl\", \"--user\", \"start\", UNIT],\n        text=True,\n        capture_output=True,\n        timeout=30,\n        check=False,\n    )\n    if cp.returncode != 0:\n        tail = (cp.stdout + cp.stderr)[-800:].replace(\"\\n\", \" \")\n        raise SystemExit(f\"SOL_R2_SERVICE_START_FAILED:{cp.returncode}:{tail}\")\n\ndeadline = time.monotonic() + 780\nwhile not RESULT.exists() and time.monotonic() < deadline:\n    time.sleep(5)\n\nif not RESULT.is_file() or RESULT.is_symlink():\n    status, retry_at, reason = runtime_state()\n    if status == \"PAUSED_USAGE_LIMIT\":\n        raise SystemExit(\"SOL_R2_STILL_PAUSED_USAGE_LIMIT\")\n    raise SystemExit(f\"SOL_R2_RESULT_STILL_MISSING:{status}:{reason}\")\n\nresult = json.loads(RESULT.read_text(encoding=\"utf-8\"))\nfor key, wanted in {\n    \"schema\": \"PVA_GOVERNED_MODEL_COMPLETION_V1\",\n    \"task_id\": TASK_ID,\n    \"phase\": \"SOL_PROPOSAL\",\n    \"model\": \"gpt-5.6-sol\",\n    \"model_policy\": \"SOL_EXACT\",\n    \"route_task_id\": EXPECTED_ROUTE,\n    \"campaign_id\": \"FULL-A2Z-LIVE-20261004-V4\",\n}.items():\n    if result.get(key) != wanted:\n        raise SystemExit(f\"SOL_R2_{key.upper()}_MISMATCH:{result.get(key)!r}\")\n\nif not REQUEST.is_file() or REQUEST.is_symlink():\n    raise SystemExit(\"SOL_R2_REQUEST_MISSING\")\nif result.get(\"request_sha256\") != sha256(REQUEST):\n    raise SystemExit(\"SOL_R2_REQUEST_HASH_MISMATCH\")\n\ncheckpoint = str(result.get(\"checkpoint\") or \"\")\nrun_dir = (ROOT / checkpoint).resolve()\nif not run_dir.is_relative_to(ROOT.resolve()):\n    raise SystemExit(\"SOL_R2_CHECKPOINT_OUTSIDE_CAMPAIGN\")\nworker = run_dir / \"WORKER.json\"\ncomplete = run_dir / \"COMPLETE.json\"\nif not worker.is_file() or worker.is_symlink():\n    raise SystemExit(\"SOL_R2_WORKER_MISSING\")\nif not complete.is_file() or complete.is_symlink():\n    raise SystemExit(\"SOL_R2_COMPLETE_MISSING\")\nif result.get(\"worker_sha256\") != sha256(worker):\n    raise SystemExit(\"SOL_R2_WORKER_HASH_MISMATCH\")\nif result.get(\"completion_sha256\") != sha256(complete):\n    raise SystemExit(\"SOL_R2_COMPLETION_HASH_MISMATCH\")\n\nworker_obj = json.loads(worker.read_text(encoding=\"utf-8\"))\nsel = worker_obj.get(\"model_selection\")\nif worker_obj.get(\"model\") != \"gpt-5.6-sol\":\n    raise SystemExit(\"SOL_R2_WORKER_WRONG_MODEL\")\nif not isinstance(sel, dict) or sel.get(\"policy\") != \"SOL_EXACT\" or sel.get(\"selected_slug\") != \"gpt-5.6-sol\":\n    raise SystemExit(\"SOL_R2_WORKER_SELECTION_INVALID\")\n\nfinal = result.get(\"final\")\nif not isinstance(final, str) or not final.strip():\n    raise SystemExit(\"SOL_R2_FINAL_MISSING\")\ntry:\n    proposal = json.loads(final)\nexcept json.JSONDecodeError as exc:\n    raise SystemExit(f\"SOL_R2_FINAL_NOT_PURE_JSON:{exc}\")\n\nif not isinstance(proposal, dict):\n    raise SystemExit(\"SOL_R2_PROPOSAL_NOT_OBJECT\")\nif proposal.get(\"candidate_id\") != EXPECTED_CANDIDATE:\n    raise SystemExit(\"SOL_R2_CANDIDATE_MISMATCH\")\nif proposal.get(\"proposal_version\") != 2:\n    raise SystemExit(\"SOL_R2_VERSION_MISMATCH\")\n\nsafety = proposal.get(\"safety\")\nif not isinstance(safety, dict):\n    raise SystemExit(\"SOL_R2_SAFETY_NOT_OBJECT\")\nfor key in (\"live_trading\", \"paid_actions\", \"wallet_actions\"):\n    if safety.get(key) is not False:\n        raise SystemExit(\"SOL_R2_SAFETY_EXACT_FALSE_REQUIRED:\" + key)\n\nscope = proposal.get(\"data_and_time_scope\")\nif not isinstance(scope, dict):\n    raise SystemExit(\"SOL_R2_SCOPE_MISSING\")\nrecords = scope.get(\"records\")\nif not isinstance(records, list) or len(records) != 3:\n    raise SystemExit(\"SOL_R2_FROZEN_STREAM_COUNT\")\nexpected = [\n    (\"v1-stream-001\", \"0.62\", \"0.43\", \"0.00\", \"0.00\"),\n    (\"v1-stream-002\", \"0.61\", \"0.44\", \"0.00\", \"0.00\"),\n    (\"v1-stream-003\", \"0.60\", \"0.45\", \"0.00\", \"0.00\"),\n]\nfor row, values in zip(records, expected):\n    if not isinstance(row, dict):\n        raise SystemExit(\"SOL_R2_STREAM_ROW_INVALID\")\n    observed = (\n        row.get(\"observation_id\"),\n        row.get(\"yes_ask\"),\n        row.get(\"no_ask\"),\n        row.get(\"yes_fee\"),\n        row.get(\"no_fee\"),\n    )\n    if observed != values:\n        raise SystemExit(\"SOL_R2_FROZEN_STREAM_CHANGED:\" + repr(observed))\n\nlimitations = proposal.get(\"scientific_limitations\")\nif not isinstance(limitations, dict) or limitations.get(\"required_conclusion\") != \"NO_PROVEN_EDGE\":\n    raise SystemExit(\"SOL_R2_SCIENTIFIC_LIMIT_INVALID\")\n\nproposal_sha = hashlib.sha256(\n    json.dumps(proposal, sort_keys=True, separators=(\",\", \":\"), ensure_ascii=False).encode(\"utf-8\")\n).hexdigest()\n\nprint(\"SOL_R2_RESUMED_AND_VERIFIED=1\")\nprint(\"SOL_R2_MODEL=gpt-5.6-sol\")\nprint(\"SOL_R2_POLICY=SOL_EXACT\")\nprint(\"SOL_R2_PROPOSAL_VERSION=2\")\nprint(\"SOL_R2_SAFETY_FALSE_TRIPLE=1\")\nprint(\"SOL_R2_FROZEN_STREAM_UNCHANGED=1\")\nprint(\"SOL_R2_PROPOSAL_SHA256=\" + proposal_sha)\nprint(\"NEXT_GATE=ASTRA_PREBUILD\")\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/a2z_sol_r2_resume_verify_cont11ea.py"
+      ],
+      "test": false,
+      "timeout_seconds": 870
+    }
+  ]
+}
