@@ -1,0 +1,54 @@
+{
+  "schema": "AUTONOMOUS_BUILD_CHARTER_V1",
+  "build_id": "BUILD-PRED-A2Z-EXACT-MODEL-REVIEW-20261006",
+  "protocol_version": 1,
+  "objective": "Hervat de geblokkeerde review_template-reparatie en corrigeer exacte Sol/Astra-modelselectie op actuele catalogusnamen en exacte slugs; geen experiment uitvoeren.",
+  "source_commit": "07f2176203615dfb622adb75b0d88d9c834a01b3",
+  "allowed_capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "run_tests",
+    "local_git",
+    "build_coordination"
+  ],
+  "allowed_paths": [
+    "control/hourly/full_chain_qualification.py",
+    "tests/hourly/test_full_chain_review_provenance.py",
+    "control/codex_supervisor/supervisor.py",
+    "tests/codex_supervisor/test_supervisor.py",
+    "tests/codex_supervisor/test_exact_model_catalog.py"
+  ],
+  "acceptance_criteria": [
+    "Bestaande tien provenance-regressies slagen zonder productieapprovals te vervalsen.",
+    "ASTRA_EXACT kiest uitsluitend gpt-6-astra; SOL_EXACT uitsluitend gpt-5.6-sol, ook bij aanwezigheid van GPT-6.1-Sol.",
+    "Spaties en streepjes in bekende displaynamen zijn toegestaan; verkeerde slug, versie, duplicaten en verborgen modellen blokkeren.",
+    "Bestaande supervisor-regressies blijven slagen; fictieve astra-test-slug wordt vervangen door de werkelijk vereiste slug en krijgt een expliciete negatieve test.",
+    "Gedeelde lease vóór bronmutatie; begrensde TTL en cleanup.",
+    "Geen volledige keten-PASS, modeluitvoering of economische edge claimen."
+  ],
+  "non_goals": [
+    "Bridge of executor wijzigen",
+    "Productiecode installeren",
+    "Scout/Director herhalen",
+    "Volledige keten of experimenttests uitvoeren",
+    "Modelbeleid versoepelen"
+  ],
+  "independent_verification": "Gerichte lokale regressies en dezelfde controle via de geautoriseerde WSL-executor; werkelijke modelruns en volledige A2Z-acceptatie volgen afzonderlijk.",
+  "rollback_plan": "Bij falen geen publicatie/installatie; broncommit en bewijs in eigen worktree behouden.",
+  "cleanup_plan": "Lease aan einde vrijgeven; maximaal 900 seconden TTL bij failure. Geen services starten.",
+  "max_attempts": 2,
+  "governance_change": false,
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false
+  },
+  "planned_paths": [
+    "control/hourly/full_chain_qualification.py",
+    "tests/hourly/test_full_chain_review_provenance.py",
+    "control/codex_supervisor/supervisor.py",
+    "tests/codex_supervisor/test_supervisor.py",
+    "tests/codex_supervisor/test_exact_model_catalog.py"
+  ]
+}
