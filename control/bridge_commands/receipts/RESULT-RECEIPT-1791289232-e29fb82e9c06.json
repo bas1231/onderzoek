@@ -1,0 +1,14 @@
+{
+  "schema": "PREDICTION_RESULT_RECEIPT_V1",
+  "receipt_id": "RESULT-RECEIPT-1791289232-e29fb82e9c06",
+  "event_id": "1791289232-e29fb82e9c06",
+  "source_task_id": "DEV-PRED-A2Z-SOL-R2-RESUME-VERIFY-20261006-E007",
+  "created_at_utc": "2026-10-06T12:20:32Z",
+  "live_trading": false,
+  "paid_actions": false,
+  "wallet_actions": false,
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  }
+}
