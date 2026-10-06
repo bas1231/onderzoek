@@ -1,0 +1,12 @@
+{
+  "schema": "PREDICTION_BRIDGE_COMMAND_V1",
+  "task_id": "DEV-PRED-A2Z-SOL-R2-DIAG-EXPOSE-20261006-E010",
+  "action": "SIX_AI_HEALTH",
+  "route_task_id": "DEV-PRED-A2Z-SOL-R2-MODELS-CHECKPOINT-DIAG-20261006-E009",
+  "delivery_mode": "chat",
+  "live_trading": false,
+  "paid_actions": false,
+  "wallet_actions": false,
+  "intelligence_tier": "C",
+  "auto_continue": true
+}
