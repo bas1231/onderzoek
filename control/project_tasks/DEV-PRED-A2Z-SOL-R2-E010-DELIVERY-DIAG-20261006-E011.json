@@ -1,0 +1,37 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-A2Z-SOL-R2-E010-DELIVERY-DIAG-20261006-E011",
+  "source_commit": "fcd1d893dcafe3c196961f1e733cc72863facb4d",
+  "build_id": "BUILD-PRED-A2Z-POSTBUILD-20261006",
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "run_project_python",
+    "read_runtime"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 120,
+  "notes": "Read-only diagnosis. First print the durable local command-bus status/reason for E010, then run the existing E010 canonical Sol R2 classifier so the wake result exposes the actual R2 state. No service changes, no model invocation, no R3, no Astra, build, test or measurement.",
+  "operations": [
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/a2z_sol_r2_e010_delivery_and_classifier_e011.py"
+      ],
+      "test": false,
+      "timeout_seconds": 60
+    }
+  ]
+}
