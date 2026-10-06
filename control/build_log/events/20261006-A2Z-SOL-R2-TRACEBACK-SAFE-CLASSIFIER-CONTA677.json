@@ -1,0 +1,34 @@
+{
+  "schema": "PREDICTION_BUILD_LOG_EVENT_V1",
+  "event_id": "20261006-A2Z-SOL-R2-TRACEBACK-SAFE-CLASSIFIER-CONTA677",
+  "work_item_id": "A2Z-SYSTEMTEST-20261005",
+  "created_at_utc": "2026-10-06T12:01:35Z",
+  "event_type": "ATTEMPT",
+  "work_item_status": "IN_PROGRESS",
+  "outcome": "STARTED",
+  "title": "Traceback-safe compacte Sol R2 classifier",
+  "objective": "Classificeer de bestaande Sol R2-runtime na SOL_R2_SERVICE_RESUMED=1 zonder nieuwe modelcall.",
+  "summary": "De vorige classifier crashte voordat een bruikbare eindregel terugkwam. Deze continuation gebruikt de eerder bewezen compacte runtime-queryvorm, houdt result-bestaan als eerste check en vangt DB/systemd-exceptions af in een korte classifierregel zodat de wakebridge de echte oorzaak niet opnieuw afkapt.",
+  "why": "De eerste incomplete stap is alleen statusclassificatie. Er is geen reden om R2 opnieuw te starten of een nieuwe proposalversie te maken.",
+  "first_incomplete_step": "Lees result-bestaan, task status, laatste transition reason/retry en systemd-resultaat fail-closed.",
+  "next_action": "Bij RESULT_PRESENT: valideer exact E005-gates. Bij PAUSED_USAGE_LIMIT: respecteer de nieuwe retry. Bij concrete classifier/runtimefout: herstel alleen die eerste fout.",
+  "session_route_task_id": "DEV-PRED-CONT-NEXT-8e4386a72f380aab93047574",
+  "task_ids": [
+    "DEV-PRED-CONT-NEXT-a677963757320ca210388e3c",
+    "A2Z-V4-SOL-PROPOSAL-20261006-R2"
+  ],
+  "commits": [
+    "97a8acd1a2fd4a18b84c917bcf3cfca824253a1b"
+  ],
+  "evidence_refs": [
+    "control/project_tasks/DEV-PRED-CONT-NEXT-81836aa4d85bdf5280f107e9.json",
+    "control/build_log/events/20261006-A2Z-SOL-R2-POST-RESUME-CLASSIFIER-TRACEBACK.json"
+  ],
+  "tags": [
+    "a2z",
+    "sol-r2",
+    "classifier",
+    "traceback-safe",
+    "read-only"
+  ]
+}
