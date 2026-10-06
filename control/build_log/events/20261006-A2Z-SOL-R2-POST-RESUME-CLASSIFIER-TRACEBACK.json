@@ -1,0 +1,34 @@
+{
+  "schema": "PREDICTION_BUILD_LOG_EVENT_V1",
+  "event_id": "20261006-A2Z-SOL-R2-POST-RESUME-CLASSIFIER-TRACEBACK",
+  "work_item_id": "A2Z-SYSTEMTEST-20261005",
+  "created_at_utc": "2026-10-06T11:59:35Z",
+  "event_type": "RESULT",
+  "work_item_status": "IN_PROGRESS",
+  "outcome": "FAIL",
+  "title": "Compacte R2-classifier faalde met Python traceback",
+  "objective": "Classificeer de bestaande Sol R2-runtime na SOL_R2_SERVICE_RESUMED=1 zonder nieuwe modelcall.",
+  "summary": "DEV-PRED-CONT-NEXT-8e4386a72f380aab93047574 bereikte de classifier maar eindigde met python rc=1 en alleen de prefix 'Traceback (most recent call last):' in het wakebericht. De concrete exceptiontekst is niet zichtbaar in deze transportmelding.",
+  "why": "Zonder de laatste tracebackregel is de precieze classifierfout niet veilig vast te stellen. De taak heeft geen modelcall of service-resume uitgevoerd.",
+  "first_incomplete_step": "Lees de volledige lokale taaklog of voer een traceback-safe minimale classifier uit die alle exceptions omzet in één korte foutregel.",
+  "next_action": "Volgende continuation: gebruik een nieuwe unieke task om uitsluitend het bestaande result-bestaan en de reeds bewezen runtimevelden te lezen met exception-wrapping. Geen service-start/restart, R3, Astra, build, experimenttest of meting.",
+  "session_route_task_id": "DEV-PRED-CONT-NEXT-fb92673210e925f0fdb46ec8",
+  "task_ids": [
+    "DEV-PRED-CONT-NEXT-8e4386a72f380aab93047574",
+    "A2Z-V4-SOL-PROPOSAL-20261006-R2"
+  ],
+  "commits": [
+    "1c261db8e7cafdef5bf29f69c79ef609da2b437f"
+  ],
+  "evidence_refs": [
+    "control/project_tasks/DEV-PRED-CONT-NEXT-8e4386a72f380aab93047574.json",
+    "control/project_tasks/DEV-PRED-CONT-NEXT-81836aa4d85bdf5280f107e9.json"
+  ],
+  "tags": [
+    "a2z",
+    "sol-r2",
+    "classifier",
+    "traceback",
+    "fail-closed"
+  ]
+}
