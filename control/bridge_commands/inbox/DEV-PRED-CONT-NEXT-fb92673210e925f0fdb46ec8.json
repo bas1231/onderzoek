@@ -1,0 +1,19 @@
+{
+  "schema": "PREDICTION_BRIDGE_COMMAND_V1",
+  "task_id": "DEV-PRED-CONT-NEXT-fb92673210e925f0fdb46ec8",
+  "action": "SIX_AI_HEALTH",
+  "created_at_utc": "2026-10-06T11:45:40Z",
+  "route_task_id": "DEV-PRED-CONT-NEXT-cf7e81729d4dfae4fbdbe1e4",
+  "delivery_mode": "chat",
+  "live_trading": false,
+  "paid_actions": false,
+  "wallet_actions": false,
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "auto_continue": true,
+  "parent_continuation_id": "CONT-fb92673210e925f0fdb46ec8",
+  "notes": "Check for an existing durable Sol R2 result first. If absent, use the ready usage-limit retry window to resume exactly the same immutable R2 once, then validate exact Sol model/provenance/content. No R3, reset, Astra review, build, experiment test or measurement. PASS authorizes exact GPT-6 Astra PREBUILD next."
+}
