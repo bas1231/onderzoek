@@ -1,0 +1,37 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-CONT-NEXT-36c39f3faee3f44da20c0aa6",
+  "source_commit": "dc40c57237dab3ca4289b2b7081561fce9965366",
+  "build_id": "BUILD-PRED-A2Z-POSTBUILD-20261006",
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "run_project_python",
+    "read_runtime"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 780,
+  "notes": "NEXT for CONT-36c39f3faee3f44da20c0aa6. E016 already owns the current wait/read-only classification path for immutable Sol R2 attempt 6. This task performs only the same bounded wait/read-only classifier and must not start or restart any model service. No R3, Astra, build, experiment test or measurement.",
+  "operations": [
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/a2z_sol_r2_wait_retry_then_classify_e016.py"
+      ],
+      "test": false,
+      "timeout_seconds": 740
+    }
+  ]
+}
