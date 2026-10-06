@@ -1,0 +1,28 @@
+{
+  "schema": "PREDICTION_BUILD_LOG_EVENT_V1",
+  "event_id": "20261006-A2Z-SOL-R2-NEW-USAGE-LIMIT-RETRY",
+  "work_item_id": "A2Z-SYSTEMTEST-20261005",
+  "created_at_utc": "2026-10-06T11:26:40Z",
+  "event_type": "RESULT",
+  "work_item_status": "IN_PROGRESS",
+  "outcome": "PAUSED",
+  "title": "Sol R2 kreeg bij geldige retry opnieuw usage limit",
+  "objective": "Bewijs de governed A2Z-keten met exact Sol en Astra en POSTBUILD-goedkeuring vóór experimenttests of meting.",
+  "summary": "De continuation wachtte tot de effectieve retry en hervatte dezelfde immutable A2Z-V4-SOL-PROPOSAL-20261006-R2. De worker liep direct opnieuw tegen usage limit aan en registreerde een nieuwe effectieve retry van 899 seconden.",
+  "why": "Dit bevestigt dat de resume-logica nu correct werkt; de blocker zit extern bij de beschikbare exact GPT-5.6 Sol usage, niet in packaging, R2-inhoud of provenance.",
+  "first_incomplete_step": "Dezelfde exact GPT-5.6 Sol R2 voltooien zodra modelusage beschikbaar is.",
+  "next_action": "Niet R3/resetten en niet door naar Astra. De volgende continuation moet eerst de nieuwe PAUSED_USAGE_LIMIT/retry-status respecteren en alleen dezelfde immutable R2 hervatten.",
+  "session_route_task_id": "DEV-PRED-CONT-NEXT-675322cd29af6284311da1c1",
+  "task_ids": [
+    "DEV-PRED-CONT-NEXT-f1275498640bb58f2a03c7da",
+    "A2Z-V4-SOL-PROPOSAL-20261006-R2"
+  ],
+  "commits": [
+    "a9cf23763730c5d410ba4ec82d5b6ec6cbf0fc9b"
+  ],
+  "evidence_refs": [
+    "control/project_tasks/DEV-PRED-CONT-NEXT-f1275498640bb58f2a03c7da.json",
+    "control/build_log/events/20261006-A2Z-SOL-R2-RETRY-WAIT-CONTF127.json"
+  ],
+  "tags": ["a2z", "sol-r2", "usage-limit", "retry", "immutable"]
+}
