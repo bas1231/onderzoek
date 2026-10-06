@@ -1,0 +1,43 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-CONT-NEXT-132bf3ce24cf9a64eeea2afb",
+  "source_commit": "28263ca90c6d6ab2cf2217e54144b0c7ff0df0ae",
+  "build_id": "BUILD-PRED-A2Z-POSTBUILD-20261006",
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_runtime"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 260,
+  "notes": "NEXT voor CONT-132bf3ce24cf9a64eeea2afb. E007 is al de enige geautoriseerde resume van dezelfde immutable Sol R2. Deze continuation start of herstart geen modelservice en maakt geen R3; hij wacht alleen maximaal 210s op het duurzame R2 model_result en rapporteert aanwezigheid. Geen Astra/build/test/meting in deze taak.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/a2z_sol_r2_wait_existing_e007_cont132.py",
+      "content": "from pathlib import Path\nimport time\n\nroot = Path.home() / \".local/share/prediction-project-executor/campaigns/FULL-A2Z-LIVE-20261004-V4\"\nresult = root / \"model_results\" / \"A2Z-V4-SOL-PROPOSAL-20261006-R2.json\"\n\ndeadline = time.monotonic() + 210\nwhile not result.exists() and time.monotonic() < deadline:\n    time.sleep(5)\n\nprint(\"SOL_R2_RESULT_PRESENT=\" + (\"1\" if result.is_file() and not result.is_symlink() else \"0\"))\nprint(\"NO_DUPLICATE_MODEL_RESUME=1\")\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/a2z_sol_r2_wait_existing_e007_cont132.py"
+      ],
+      "test": false,
+      "timeout_seconds": 230
+    }
+  ]
+}
