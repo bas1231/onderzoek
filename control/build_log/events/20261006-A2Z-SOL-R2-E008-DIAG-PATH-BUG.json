@@ -1,0 +1,34 @@
+{
+  "schema": "PREDICTION_BUILD_LOG_EVENT_V1",
+  "event_id": "20261006-A2Z-SOL-R2-E008-DIAG-PATH-BUG",
+  "work_item_id": "A2Z-SYSTEMTEST-20261005",
+  "created_at_utc": "2026-10-06T12:24:15Z",
+  "event_type": "RESULT",
+  "work_item_status": "IN_PROGRESS",
+  "outcome": "FAIL",
+  "title": "E008 diagnosticeerde verkeerde runmap",
+  "objective": "Drive one selected candidate through the full canonical A→Z lifecycle and repair only the first incomplete blocker.",
+  "summary": "E008 returned R2_LATEST_RUN=NONE because the diagnostic searched <campaign>/runs. Canonical full_a2z_model_stage.py instantiates Supervisor at <campaign>/models, so worker checkpoints live under <campaign>/models/runs. E008 therefore failed due to a diagnostic path bug, not evidence that no R2 run exists.",
+  "why": "The runtime layout is explicit in full_a2z_model_stage.py: runtime = root / 'models'; Supervisor writes runs beneath that runtime root.",
+  "first_incomplete_step": "Inspect the newest immutable R2 checkpoint under <campaign>/models/runs.",
+  "next_action": "Run corrected read-only E009 against models/runs. No service restart/model call/R3/Astra/build/test/measurement until classification is known.",
+  "session_route_task_id": "DEV-PRED-A2Z-SOL-R2-LATEST-CHECKPOINT-DIAG-20261006-E008",
+  "task_ids": [
+    "DEV-PRED-A2Z-SOL-R2-LATEST-CHECKPOINT-DIAG-20261006-E008",
+    "A2Z-V4-SOL-PROPOSAL-20261006-R2"
+  ],
+  "commits": [
+    "9899a725cce168a17f0ab89be67d462fd0636306"
+  ],
+  "evidence_refs": [
+    "control/project_tasks/DEV-PRED-A2Z-SOL-PROPOSAL-20261006-E002.json",
+    "control/jobs/full_a2z_model_stage.py"
+  ],
+  "tags": [
+    "a2z",
+    "sol-r2",
+    "diagnostic",
+    "path-bug",
+    "models-runs"
+  ]
+}
