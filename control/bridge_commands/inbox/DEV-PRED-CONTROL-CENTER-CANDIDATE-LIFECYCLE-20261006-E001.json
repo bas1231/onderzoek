@@ -1,0 +1,18 @@
+{
+  "schema": "PREDICTION_BRIDGE_COMMAND_V1",
+  "task_id": "DEV-PRED-CONTROL-CENTER-CANDIDATE-LIFECYCLE-20261006-E001",
+  "action": "SIX_AI_HEALTH",
+  "created_at_utc": "2026-10-06T11:39:00Z",
+  "route_task_id": "DEV-PRED-CONT-NEXT-f1275498640bb58f2a03c7da",
+  "delivery_mode": "chat",
+  "live_trading": false,
+  "paid_actions": false,
+  "wallet_actions": false,
+  "intelligence_tier": "B",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "auto_continue": false,
+  "notes": "Deploy the Control Center lifecycle UI update that separates component capability from current-candidate progress. Run regressions, install runtime files, restart service and require canary PASS. Do not touch the active Sol R2 model run or any Astra/build/measurement gate."
+}
