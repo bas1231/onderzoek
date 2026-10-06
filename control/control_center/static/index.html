@@ -232,7 +232,7 @@ const secs=v=>v==null?'—':v<60?v.toFixed(1)+' s':(v/60).toFixed(1)+' min';
 const lifeClass=s=>s==='WORKING_COMPONENT'?'working':s==='TARGETED_TESTED'?'tested':'pending';
 const lifeStateLabel=s=>s==='WORKING_COMPONENT'?'COMPONENT: WERKEND':s==='TARGETED_TESTED'?'COMPONENT: GERICHT GETEST':s==='IMPLEMENTED_NOT_E2E'?'COMPONENT: AANWEZIG • NOG A→Z':'COMPONENT: NOG A→Z BEWIJZEN';
 const currentLifeClass=s=>s==='DONE'?'done':s==='CURRENT_WAITING'?'current':'waiting';
-const currentLifeStateLabel=s=>s==='DONE'?'KANDIDAAT: AFGEROND':s==='CURRENT_WAITING'?'KANDIDAAT: HIER NU • WACHT OP SOL':'KANDIDAAT: WACHT';
+const currentLifeStateLabel=s=>s==='DONE'?'KANDIDAAT: AFGEROND':s==='CURRENT_WAITING'?'KANDIDAAT: HIER NU':'KANDIDAAT: WACHT';
 
 function toast(msg){const t=q('#toast');t.textContent=msg;t.style.display='block';setTimeout(()=>t.style.display='none',3200)}
 function card(k,v,s,c=''){return '<div class="card '+c+'"><div class="kicker">'+esc(k)+'</div><div class="big">'+esc(v)+'</div><div class="sub">'+esc(s)+'</div></div>'}
