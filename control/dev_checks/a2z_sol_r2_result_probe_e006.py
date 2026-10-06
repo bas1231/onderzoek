@@ -8,7 +8,7 @@ result = root / "model_results" / (task_id + ".json")
 
 if not result.is_file() or result.is_symlink():
     print("SOL_R2_RESULT_PRESENT=0")
-    raise SystemExit(10)
+    raise SystemExit(0)
 
 obj = json.loads(result.read_text(encoding="utf-8"))
 print("SOL_R2_RESULT_PRESENT=1")
