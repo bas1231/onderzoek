@@ -1,0 +1,19 @@
+{
+  "schema": "PREDICTION_BRIDGE_COMMAND_V1",
+  "task_id": "DEV-PRED-CONT-NEXT-cdd14cf7cd42a15466ba64ca",
+  "action": "SIX_AI_HEALTH",
+  "created_at_utc": "2026-10-06T10:05:41.873Z",
+  "route_task_id": "DEV-PRED-CONT-NEXT-deafb0e7c5311ee5c3c9d74f",
+  "delivery_mode": "chat",
+  "live_trading": false,
+  "paid_actions": false,
+  "wallet_actions": false,
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "Codex; exact model identity unavailable to runtime",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "auto_continue": true,
+  "parent_continuation_id": "CONT-cdd14cf7cd42a15466ba64ca",
+  "notes": "Enige durable uitkomst NEXT. Voer gerichte review_template- en exacte modelselectiereparatie uit onder goedgekeurde coördinatiecapability. 12 nieuwe modelregressies lokaal PASS; WSL-verificatie en bestaande regressies volgen. Geen Scout, experimenttests/meting of volledige A2Z herhalen; geen productieactivatie of volledige keten-PASS claimen."
+}
