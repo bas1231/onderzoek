@@ -1,0 +1,39 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-A2Z-SOL-R2-RESUME-VERIFY-20261006-E018",
+  "source_commit": "0e78039cd2127b821b51e3ebc1fa5ae6b6ee092f",
+  "build_id": "BUILD-PRED-A2Z-POSTBUILD-20261006",
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "run_project_python",
+    "read_runtime",
+    "user_service_manage",
+    "read_logs"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 300,
+  "notes": "E017 confirmed immutable Sol R2 remains PAUSED_USAGE_LIMIT at attempt 6 and its retry_at is already past. Resume exactly the same immutable A2Z-V4-SOL-PROPOSAL-20261006-R2 once using the existing verifier. Do not create R3. No Astra, build, experiment test or measurement in this task. PASS authorizes exact Astra PREBUILD next.",
+  "operations": [
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/a2z_sol_r2_resume_verify_e007.py"
+      ],
+      "test": false,
+      "timeout_seconds": 240
+    }
+  ]
+}
