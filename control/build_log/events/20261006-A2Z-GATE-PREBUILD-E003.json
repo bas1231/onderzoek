@@ -1,0 +1,31 @@
+{
+  "schema": "PREDICTION_BUILD_LOG_EVENT_V1",
+  "event_id": "20261006-A2Z-GATE-PREBUILD-E003",
+  "work_item_id": "A2Z-SYSTEMTEST-20261005",
+  "created_at_utc": "2026-10-06T10:36:17Z",
+  "event_type": "ATTEMPT",
+  "work_item_status": "IN_PROGRESS",
+  "outcome": "STARTED",
+  "title": "Harde POSTBUILD-gate en echte Astra PREBUILD-review",
+  "objective": "Bewijs de volledige actuele governed A→Z-keten met exact Sol en Astra en postbuild approval vóór experimenttests/meting.",
+  "summary": "Vervolg V4. Implementeer en test harde POSTBUILD-gate. Neem werkelijke Sol-opzet/transcript over en stuur PREBUILD naar exact Astra. Geen experimenttests of metingen.",
+  "why": "Geen nieuwe campagne; eerste incomplete reparatie afronden. Productie nog op a3a61e9 met behouden runtime-evidence.",
+  "first_incomplete_step": "Actuele Sol-opzet door exact Astra laten beoordelen; directe uitvoeringspaden fail-closed maken.",
+  "next_action": "E003 regressies en werkelijke Astra beslissing inspecteren; alleen bij APPROVE Sol laten bouwen.",
+  "session_route_task_id": "SESSION-ROUTE-756bff225d5a976edf6da02b",
+  "task_ids": [
+    "DEV-PRED-A2Z-GATE-PREBUILD-20261006-E003",
+    "A2Z-V4-ASTRA-PREBUILD-20261006-R1"
+  ],
+  "commits": [
+    "28d0c343d4be47fb543533b1a31eeb3300a8d3a3"
+  ],
+  "evidence_refs": [
+    "control/project_tasks/DEV-PRED-CONT-NEXT-cdd14cf7cd42a15466ba64ca.json"
+  ],
+  "tags": [
+    "a2z",
+    "takeover",
+    "first-failure"
+  ]
+}
