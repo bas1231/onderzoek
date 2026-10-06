@@ -1,0 +1,43 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-CONT-NEXT-72432dd0a7b4a27fc8604108",
+  "source_commit": "1f1ca4a8e8d01c9cea6462a22bcdcaad8a242159",
+  "build_id": "BUILD-PRED-A2Z-POSTBUILD-20261006",
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_runtime"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 720,
+  "notes": "NEXT voor CONT-72432dd0a7b4a27fc8604108. E002 bewees dispatch/start van SOL_EXACT, maar nog niet duurzaam de modelcompletion. Deze taak wacht begrensd op het bestaande V4 Sol-resultaat en verifieert modelslug, SOL_EXACT-selectie, request/worker/completion hashes en proposal_version=1. Geen build, experimenttest, meting of nieuw Scoutwerk. Bij PASS is exact Astra PREBUILD de eerstvolgende gate.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/a2z_sol_proposal_verify_cont724.py",
+      "content": "from __future__ import annotations\n\nimport hashlib\nimport json\nfrom pathlib import Path\nimport time\n\nROOT = Path.home() / \".local/share/prediction-project-executor/campaigns/FULL-A2Z-LIVE-20261004-V4\"\nTASK_ID = \"A2Z-V4-SOL-PROPOSAL-20261006-R1\"\nRESULT = ROOT / \"model_results\" / f\"{TASK_ID}.json\"\nREQUEST = ROOT / \"requests\" / f\"{TASK_ID}.json\"\nEXPECTED_ROUTE = \"SESSION-ROUTE-756bff225d5a976edf6da02b\"\nEXPECTED_CANDIDATE = \"AUTO-DISCOVERY-54d13314c7879b58e46d\"\nREQUIRED_FIELDS = {\n    \"candidate_id\",\n    \"proposal_version\",\n    \"hypothesis\",\n    \"falsification\",\n    \"data_and_time_scope\",\n    \"units\",\n    \"method\",\n    \"leakage_and_bias\",\n    \"scoring\",\n    \"execution_assumptions_and_costs\",\n    \"success_criteria\",\n    \"failure_criteria\",\n    \"reproducibility\",\n    \"intended_artifacts\",\n    \"safety\",\n    \"scientific_limitations\",\n}\n\ndef sha256(path: Path) -> str:\n    return hashlib.sha256(path.read_bytes()).hexdigest()\n\ndeadline = time.monotonic() + 600\nwhile not RESULT.exists() and time.monotonic() < deadline:\n    time.sleep(5)\n\nif not RESULT.exists():\n    raise SystemExit(\"SOL_MODEL_RESULT_TIMEOUT\")\n\nresult = json.loads(RESULT.read_text(encoding=\"utf-8\"))\nexpected = {\n    \"schema\": \"PVA_GOVERNED_MODEL_COMPLETION_V1\",\n    \"task_id\": TASK_ID,\n    \"phase\": \"SOL_PROPOSAL\",\n    \"model\": \"gpt-5.6-sol\",\n    \"model_policy\": \"SOL_EXACT\",\n    \"route_task_id\": EXPECTED_ROUTE,\n    \"campaign_id\": \"FULL-A2Z-LIVE-20261004-V4\",\n}\nfor key, value in expected.items():\n    if result.get(key) != value:\n        raise SystemExit(f\"SOL_RESULT_{key.upper()}_MISMATCH:{result.get(key)!r}\")\n\nif not REQUEST.is_file() or REQUEST.is_symlink():\n    raise SystemExit(\"SOL_REQUEST_MISSING_OR_SYMLINK\")\nif result.get(\"request_sha256\") != sha256(REQUEST):\n    raise SystemExit(\"SOL_REQUEST_HASH_MISMATCH\")\n\ncheckpoint = str(result.get(\"checkpoint\") or \"\")\nrun_dir = (ROOT / checkpoint).resolve()\nroot_resolved = ROOT.resolve()\nif not run_dir.is_relative_to(root_resolved):\n    raise SystemExit(\"SOL_CHECKPOINT_OUTSIDE_CAMPAIGN\")\nworker = run_dir / \"WORKER.json\"\ncomplete = run_dir / \"COMPLETE.json\"\nif not worker.is_file() or worker.is_symlink():\n    raise SystemExit(\"SOL_WORKER_EVIDENCE_MISSING\")\nif not complete.is_file() or complete.is_symlink():\n    raise SystemExit(\"SOL_COMPLETE_EVIDENCE_MISSING\")\nif result.get(\"worker_sha256\") != sha256(worker):\n    raise SystemExit(\"SOL_WORKER_HASH_MISMATCH\")\nif result.get(\"completion_sha256\") != sha256(complete):\n    raise SystemExit(\"SOL_COMPLETION_HASH_MISMATCH\")\n\nworker_obj = json.loads(worker.read_text(encoding=\"utf-8\"))\nif worker_obj.get(\"model\") != \"gpt-5.6-sol\":\n    raise SystemExit(\"SOL_WORKER_WRONG_MODEL\")\nselection = worker_obj.get(\"model_selection\")\nif not isinstance(selection, dict) or selection.get(\"policy\") != \"SOL_EXACT\" or selection.get(\"selected_slug\") != \"gpt-5.6-sol\":\n    raise SystemExit(\"SOL_WORKER_SELECTION_INVALID\")\n\nfinal = result.get(\"final\")\nif not isinstance(final, str) or not final.strip():\n    raise SystemExit(\"SOL_FINAL_MISSING\")\ntry:\n    proposal = json.loads(final)\nexcept json.JSONDecodeError as exc:\n    raise SystemExit(f\"SOL_FINAL_NOT_PURE_JSON:{exc}\")\n\nif not isinstance(proposal, dict):\n    raise SystemExit(\"SOL_PROPOSAL_NOT_OBJECT\")\nmissing = sorted(REQUIRED_FIELDS - set(proposal))\nif missing:\n    raise SystemExit(\"SOL_PROPOSAL_FIELDS_MISSING:\" + \",\".join(missing))\nif proposal.get(\"candidate_id\") != EXPECTED_CANDIDATE:\n    raise SystemExit(\"SOL_PROPOSAL_CANDIDATE_MISMATCH\")\nif proposal.get(\"proposal_version\") != 1:\n    raise SystemExit(\"SOL_PROPOSAL_VERSION_MISMATCH\")\n\nfor key in REQUIRED_FIELDS - {\"candidate_id\", \"proposal_version\"}:\n    value = proposal.get(key)\n    if value in (None, \"\", [], {}):\n        raise SystemExit(\"SOL_PROPOSAL_FIELD_EMPTY:\" + key)\n\nsafety = proposal.get(\"safety\")\nif not isinstance(safety, dict):\n    raise SystemExit(\"SOL_PROPOSAL_SAFETY_NOT_OBJECT\")\nfor key in (\"live_trading\", \"paid_actions\", \"wallet_actions\"):\n    if safety.get(key) is not False:\n        raise SystemExit(\"SOL_PROPOSAL_SAFETY_INVALID:\" + key)\n\nproposal_sha = hashlib.sha256(\n    json.dumps(proposal, sort_keys=True, separators=(\",\", \":\"), ensure_ascii=False).encode(\"utf-8\")\n).hexdigest()\n\nprint(\"SOL_PROPOSAL_VERIFIED=1\")\nprint(\"SOL_MODEL=gpt-5.6-sol\")\nprint(\"SOL_POLICY=SOL_EXACT\")\nprint(\"SOL_PROPOSAL_VERSION=1\")\nprint(\"SOL_PROPOSAL_SHA256=\" + proposal_sha)\nprint(\"SOL_RESULT_PATH=\" + str(RESULT))\nprint(\"NEXT_GATE=ASTRA_PREBUILD\")\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/a2z_sol_proposal_verify_cont724.py"
+      ],
+      "test": false,
+      "timeout_seconds": 660
+    }
+  ]
+}
