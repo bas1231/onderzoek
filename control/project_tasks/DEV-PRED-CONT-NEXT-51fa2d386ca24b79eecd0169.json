@@ -1,0 +1,14 @@
+{
+"schema":"PREDICTION_PROJECT_TASK_V1",
+"task_id":"DEV-PRED-CONT-NEXT-51fa2d386ca24b79eecd0169",
+"source_commit":"772fbe1b9c6cf48031a9ff461d5ce534d8ceef71",
+"build_id":"BUILD-PRED-A2Z-POSTBUILD-20261006",
+"intelligence_tier":"C",
+"issuer":{"model":"GPT-5.6 Sol","reasoning_level":"UNAVAILABLE_TO_RUNTIME"},
+"safety":{"live_trading":false,"paid_actions":false,"wallet_actions":false,"remote_git_write":false,"credential_write":false},
+"capabilities":["read_repository","run_project_python","read_runtime"],
+"working_directory":".",
+"timeout_seconds":900,
+"notes":"Observer-only continuation while the authoritative bounded wait toward the confirmed 17:17 Codex/Work reset owns the same immutable R2 resume. Wait 600 seconds and report whether the durable R2 result exists. No model invocation, no R3, no Astra, no build/test/measurement.",
+"operations":[{"type":"python","argv":["python3","control/dev_checks/a2z_sol_r2_wait_observe_e022.py"],"test":false,"timeout_seconds":900}]
+}
