@@ -3,14 +3,17 @@
   "updated_at": "2026-10-06",
   "full_chain_status": "NOT_PROVEN",
   "full_chain_label": "Volledige A→Z-keten nog niet bewezen",
-  "next_required": "Huidige kandidaat AUTO-DISCOVERY-54d13314c7879b58e46d: Codex/Work reset blijft 17:17. De recente wait/observer DEV-taken met timeout 1000 zijn ongeldig omdat dev_task_runner.py maximaal 900 accepteert. Gebruik bij de eerstvolgende immutable continuation een gecorrigeerde DEV-timeout <=900, hervat daarna dezelfde GPT-5.6 Sol R2 en valideer R2 vóór Astra PRE-BUILD.",
+  "next_required": "Huidige kandidaat AUTO-DISCOVERY-54d13314c7879b58e46d: verifieer nu de inhoudelijke GPT-6 Astra POST-BUILD-beslissing van E106. Alleen bij exact gebonden APPROVE mogen de experimenttests en meting starten; bij NEEDS_REVISION gaat de feedback terug naar GPT-5.6 Sol en volgt een nieuwe build plus nieuwe Astra POST-BUILD-review. De campagne is na E107 bewust gepauzeerd.",
   "invariant": "NO_TEST_OR_MEASUREMENT_BEFORE_ASTRA_POSTBUILD_APPROVAL",
   "evidence_refs": [
     "control/bridge_commands/CURRENT_STATE.md",
     "methodology/EDGE_DISCOVERY_MODEL_GATES.md",
-    "commit:3fca74d2b76210b33143c159d6e0baedccc4fc50",
-    "control/build_log/events/20261006-A2Z-SOL-R2-NEW-USAGE-LIMIT-RETRY.json",
-    "control/build_log/events/20261006-A2Z-SOL-R2-RETRY-WINDOW-CONT-CF7E.json"
+    "control/project_tasks/DEV-PRED-A2Z-POSTBUILD-RETRY-20261006-E106.json",
+    "control/bridge_commands/inbox/DEV-PRED-A2Z-POSTBUILD-RETRY-20261006-E106.json",
+    "control/project_tasks/DEV-PRED-A2Z-PAUSE-20261006-E107.json",
+    "control/bridge_commands/inbox/DEV-PRED-A2Z-PAUSE-20261006-E107.json",
+    "same-chat:E106 status=PASS exit=0",
+    "same-chat:E107 status=PASS exit=0"
   ],
   "stages": [
     {
@@ -37,8 +40,8 @@
       "subtitle": "experiment ontwerpen",
       "state": "IMPLEMENTED_NOT_E2E",
       "detail": "De Sol-ontwerpstap behoort tot de actuele verplichte architectuur. De volledige actuele keten is nog niet end-to-end bewezen.",
-      "current_candidate_state": "CURRENT_WAITING",
-      "current_candidate_detail": "R2 blijft de actieve Sol-opzet. E019 bevestigde de externe Codex/Work-limiet tot 17:17. Daarna is een aparte wrapperfout vastgesteld: meerdere wait/observer-manifests gebruikten timeout_seconds=1000, terwijl dev_task_runner.py maximaal 900 accepteert. Die taken raken Sol niet en moeten via nieuwe immutable continuations met geldige timeout worden vervangen."
+      "current_candidate_state": "DONE",
+      "current_candidate_detail": "GPT-5.6 Sol leverde voorstel R3 na verwerking van Astra-feedback. R3 vervangt de eerdere R2-stand voor deze kandidaat."
     },
     {
       "id": "astra_prebuild",
@@ -46,8 +49,8 @@
       "subtitle": "ontwerp beoordelen",
       "state": "TARGETED_TESTED",
       "detail": "De Astra pre-build beoordeling is gericht getest/gekwalificeerd. Dit is nog geen bewijs dat de volledige actuele A→Z-run slaagt.",
-      "current_candidate_state": "WAITING",
-      "current_candidate_detail": "Nog niet uitgevoerd voor deze kandidaat. Mag pas na gevalideerde Sol R2."
+      "current_candidate_state": "DONE",
+      "current_candidate_detail": "GPT-6 Astra gaf eerst REVISE op R2 en keurde daarna de herziene R3-opzet PRE-BUILD goed. De afwijzing en revisielus blijven onderdeel van het bewijs."
     },
     {
       "id": "sol_build",
@@ -55,8 +58,8 @@
       "subtitle": "experiment bouwen",
       "state": "IMPLEMENTED_NOT_E2E",
       "detail": "De Sol-bouwstap is geïmplementeerd in de architectuur, maar moet nog als onderdeel van één volledige actuele A→Z-run worden bewezen.",
-      "current_candidate_state": "WAITING",
-      "current_candidate_detail": "Nog niet gestart. Vereist Astra PRE-BUILD APPROVE op dezelfde proposalversie."
+      "current_candidate_state": "DONE",
+      "current_candidate_detail": "GPT-5.6 Sol bouwde de drie goedgekeurde R3-artifacts. Inhoudelijke experimenttests en metingen zijn daarbij nog niet gestart."
     },
     {
       "id": "astra_postbuild",
@@ -64,8 +67,8 @@
       "subtitle": "gebouwde code beoordelen",
       "state": "TARGETED_TESTED",
       "detail": "De verplichte post-build gate en de blokkade vóór tests/meting zijn gericht getest en canoniek vastgelegd. De volledige A→Z-run blijft nog te bewijzen.",
-      "current_candidate_state": "WAITING",
-      "current_candidate_detail": "Nog niet gestart. Vereist eerst de exacte Sol-build."
+      "current_candidate_state": "CURRENT_WAITING",
+      "current_candidate_detail": "E105 stopte vóór modelreview omdat het reviewpakket >100.000 tekens was. Het pakket is verkleind tot 96.235 tekens en E106 kwam technisch terug met PASS exit=0. De inhoudelijke Astra-beslissing moet nog bewijsgebonden worden uitgelezen/bevestigd. E107 heeft de campagne daarna op verzoek gepauzeerd."
     },
     {
       "id": "measurement",
@@ -74,7 +77,7 @@
       "state": "PENDING_E2E",
       "detail": "De volgorde is vastgelegd: inhoudelijke tests, backtests, shadow-runs en metingen mogen pas na Astra-goedkeuring van de exacte gebouwde versie. Een volledige actuele A→Z-doorgang moet nog worden bewezen.",
       "current_candidate_state": "WAITING",
-      "current_candidate_detail": "Geblokkeerd totdat Astra POST-BUILD de exacte gebouwde versie heeft goedgekeurd."
+      "current_candidate_detail": "Nog geblokkeerd. Tests/backtests/shadowmetingen mogen pas starten nadat E106 inhoudelijk een geldige, exact gebonden Astra POST-BUILD APPROVE blijkt te bevatten."
     },
     {
       "id": "supervisor",
@@ -83,7 +86,7 @@
       "state": "PENDING_E2E",
       "detail": "De toezichthouder moet na de meting een eindbeoordeling geven binnen dezelfde volledige run. Dat volledige traject is nog niet bewezen.",
       "current_candidate_state": "WAITING",
-      "current_candidate_detail": "Nog niet uitgevoerd; volgt pas na toegestane tests/meting."
+      "current_candidate_detail": "Nog niet uitgevoerd; volgt pas na toegestane tests en meting op exact de door Astra goedgekeurde build."
     },
     {
       "id": "reporting",
@@ -92,21 +95,27 @@
       "state": "PENDING_E2E",
       "detail": "Het eindrapport moet uit dezelfde aantoonbare keten komen. Tot die volledige keten is bewezen blijft NO_PROVEN_EDGE de wetenschappelijke standaard.",
       "current_candidate_state": "WAITING",
-      "current_candidate_detail": "Nog geen finaal A→Z-rapport voor deze kandidaat; wetenschappelijke status blijft NO_PROVEN_EDGE."
+      "current_candidate_detail": "Nog geen finaal A→Z-rapport voor deze kandidaat. Wetenschappelijke status blijft NO_PROVEN_EDGE."
     }
   ],
   "current_candidate": {
     "candidate_id": "AUTO-DISCOVERY-54d13314c7879b58e46d",
     "campaign_id": "FULL-A2Z-LIVE-20261004-V4",
-    "proposal_task_id": "A2Z-V4-SOL-PROPOSAL-20261006-R2",
-    "current_stage": "sol_design",
-    "state": "ACTIVE_WAITING_EXTERNAL_CODEX_ALLOWANCE",
-    "label": "Sol-opzet R2 gepauzeerd — Codex-reset 17:17; DEV-timeoutfix nodig",
-    "detail": "Dezelfde immutable R2 blijft behouden. De Codex/Work-limiet reset om 17:17. Recente wait/observer-taken met DEV timeout 1000 falen vóór projectuitvoering; dev_task_runner.py staat 1..900 toe. De eerstvolgende geldige continuation moet <=900 gebruiken en daarna dezelfde R2 hervatten.",
+    "proposal_task_id": "A2Z-V4-SOL-PROPOSAL-20261006-R3",
+    "build_task_id": "A2Z-V4-SOL-BUILD-20261006-R3",
+    "postbuild_task_id": "DEV-PRED-A2Z-POSTBUILD-RETRY-20261006-E106",
+    "pause_task_id": "DEV-PRED-A2Z-PAUSE-20261006-E107",
+    "current_stage": "astra_postbuild",
+    "state": "PAUSED_AWAITING_POSTBUILD_DECISION_VERIFICATION",
+    "label": "Astra POST-BUILD — E106 technisch PASS; inhoudelijke beslissing nog verifiëren",
+    "detail": "PRE-BUILD R3 is goedgekeurd en Sol heeft de drie R3-artifacts gebouwd. E105 bereikte Astra niet door een te groot reviewpakket; de begrensde retry E106 is technisch PASS exit=0. Dat bewijst nog niet zelfstandig een inhoudelijke APPROVE. De campagne is met E107 bewust gepauzeerd totdat de reviewuitkomst wordt uitgelezen en de gebruiker hervat.",
     "scientific_status": "NO_PROVEN_EDGE",
     "evidence_refs": [
-      "control/build_log/events/20261006-A2Z-SOL-R2-E019-CODEX-USAGE-LIMIT-SOURCE.json",
-      "control/build_log/events/20261006-A2Z-DEV-TIMEOUT-CONFIG-ROOTCAUSE.json"
+      "control/project_tasks/DEV-PRED-A2Z-POSTBUILD-RETRY-20261006-E106.json",
+      "control/bridge_commands/inbox/DEV-PRED-A2Z-POSTBUILD-RETRY-20261006-E106.json",
+      "control/project_tasks/DEV-PRED-A2Z-PAUSE-20261006-E107.json",
+      "same-chat:E106 status=PASS exit=0",
+      "same-chat:E107 status=PASS exit=0"
     ]
   }
 }
