@@ -1,0 +1,35 @@
+{
+  "schema": "PREDICTION_BUILD_LOG_EVENT_V1",
+  "event_id": "20261006-A2Z-SOL-R2-USAGE-RESUME-CONT11EA",
+  "work_item_id": "A2Z-SYSTEMTEST-20261005",
+  "created_at_utc": "2026-10-06T11:03:20Z",
+  "event_type": "ATTEMPT",
+  "work_item_status": "IN_PROGRESS",
+  "outcome": "STARTED",
+  "title": "Hervat dezelfde immutable Sol R2 na usage-limit",
+  "objective": "Bewijs de governed A2Z-keten met exact Sol en Astra en POSTBUILD-goedkeuring vóór experimenttests of meting.",
+  "summary": "De vorige classifier bewees PAUSED_USAGE_LIMIT voor A2Z-V4-SOL-PROPOSAL-20261006-R2. Deze vervolgtaak hervat uitsluitend dezelfde R2 wanneer retry is toegestaan, wacht op het duurzame model_result en valideert daarna exact model/provenance, proposal_version=2, safety false-booleans, frozen stream en NO_PROVEN_EDGE.",
+  "why": "Usage-limit is een duurzame retry-status en geen inhoudelijke proposal-fout; R3 of reset zou onnodig de immutable keten verbreken.",
+  "first_incomplete_step": "Voltooi dezelfde exact GPT-5.6 Sol R2 en valideer het duurzame resultaat.",
+  "next_action": "Bij PASS exact GPT-6 Astra PREBUILD op deze gevalideerde R2. Bij FAIL alleen de gerapporteerde eerste runtime/provenancefout herstellen.",
+  "session_route_task_id": "DEV-PRED-CONT-NEXT-81836aa4d85bdf5280f107e9",
+  "task_ids": [
+    "DEV-PRED-CONT-NEXT-11eafda9f8e43e3e9c5a19bf",
+    "A2Z-V4-SOL-PROPOSAL-20261006-R2"
+  ],
+  "commits": [
+    "8b0812ec7e2bc69c428403d1c30de716026da402"
+  ],
+  "evidence_refs": [
+    "control/build_log/events/20261006-A2Z-SOL-R2-PAUSED-USAGE-LIMIT.json",
+    "control/project_tasks/DEV-PRED-A2Z-GATE-SOL-REVISION-20261006-E004.json",
+    "control/project_tasks/DEV-PRED-A2Z-SOL-R2-VERIFY-20261006-E005.json"
+  ],
+  "tags": [
+    "a2z",
+    "sol-exact",
+    "r2",
+    "usage-limit",
+    "resume"
+  ]
+}
