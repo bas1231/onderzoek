@@ -1,0 +1,17 @@
+{
+  "schema": "PREDICTION_BRIDGE_COMMAND_V1",
+  "task_id": "DEV-FG-INLINE-PRIVACY-REVIEW-V3-ROUTED-20261006-E005",
+  "action": "SIX_AI_HEALTH",
+  "created_at_utc": "2026-10-06T18:12:30Z",
+  "route_task_id": "TM-PING-1791310372574",
+  "delivery_mode": "chat",
+  "live_trading": false,
+  "paid_actions": false,
+  "wallet_actions": false,
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "notes": "Use the route just proven by TM-PING in this chat. Reinstall and verify FG inline privacy review v3; return PASS/FAIL to this same chat."
+}
