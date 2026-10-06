@@ -1,0 +1,18 @@
+{
+  "schema": "PREDICTION_BRIDGE_COMMAND_V1",
+  "task_id": "DEV-PRED-CONT-NEXT-83436ca61513a6b06fbbd9b2",
+  "action": "SIX_AI_HEALTH",
+  "route_task_id": "DEV-PRED-A2Z-SOL-R2-MODELS-CHECKPOINT-DIAG-20261006-E009",
+  "delivery_mode": "chat",
+  "live_trading": false,
+  "paid_actions": false,
+  "wallet_actions": false,
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "auto_continue": true,
+  "parent_continuation_id": "CONT-83436ca61513a6b06fbbd9b2",
+  "notes": "Recovery continuation after RESULT_ACK_TIMEOUT. Read only the canonical Sol R2 runtime through the existing E010 classifier. No service start or restart, no model call, no R3, no Astra, no build, no test, no measurement."
+}
