@@ -1,0 +1,111 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-CONTROL-CENTER-A2Z-REFRESH-20261006-E001",
+  "source_commit": "9c91a295489430545de6b639fd32c6c6d0e4a7b0",
+  "intelligence_tier": "B",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "run_tests",
+    "write_runtime",
+    "user_service_manage",
+    "read_logs"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 600,
+  "notes": "Actualiseer uitsluitend het Prediction Control Center dashboard naar de bewijsgebonden A2Z-stand van 2026-10-06: R3 PRE-BUILD approved, Sol build gereed, E106 technisch PASS maar inhoudelijke Astra POST-BUILD beslissing nog niet als APPROVE bewezen, E107 gepauzeerd. Geen A2Z-campagne hervatten, geen modelrun, experimenttest, meting, trade, betaalde actie of walletactie.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/control_center_a2z_refresh_e001.py",
+      "content": "from pathlib import Path\nimport json\n\nroot = Path.cwd()\nlife = json.loads((root / \"control/control_center/lifecycle_status.json\").read_text(encoding=\"utf-8\"))\nindex = (root / \"control/control_center/static/index.html\").read_text(encoding=\"utf-8\")\n\nassert life[\"full_chain_status\"] == \"NOT_PROVEN\"\nassert life[\"invariant\"] == \"NO_TEST_OR_MEASUREMENT_BEFORE_ASTRA_POSTBUILD_APPROVAL\"\ncandidate = life[\"current_candidate\"]\nassert candidate[\"current_stage\"] == \"astra_postbuild\"\nassert candidate[\"state\"] == \"PAUSED_AWAITING_POSTBUILD_DECISION_VERIFICATION\"\nassert candidate[\"scientific_status\"] == \"NO_PROVEN_EDGE\"\nassert candidate[\"postbuild_task_id\"] == \"DEV-PRED-A2Z-POSTBUILD-RETRY-20261006-E106\"\nstages = {s[\"id\"]: s for s in life[\"stages\"]}\nfor done in (\"scout\", \"selection\", \"sol_design\", \"astra_prebuild\", \"sol_build\"):\n    assert stages[done][\"current_candidate_state\"] == \"DONE\", done\nassert stages[\"astra_postbuild\"][\"current_candidate_state\"] == \"CURRENT_WAITING\"\nfor waiting in (\"measurement\", \"supervisor\", \"reporting\"):\n    assert stages[waiting][\"current_candidate_state\"] == \"WAITING\", waiting\nassert \"KANDIDAAT: HIER NU • WACHT OP SOL\" not in index\nassert \"KANDIDAAT: HIER NU\" in index\nprint(\"CONTROL_CENTER_A2Z_REFRESH_E001_OK\")\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "-m",
+        "compileall",
+        "-q",
+        "control/control_center",
+        "tests/control_center",
+        "control/dev_checks/control_center_a2z_refresh_e001.py"
+      ],
+      "test": false,
+      "timeout_seconds": 120
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/control_center_a2z_refresh_e001.py"
+      ],
+      "test": true,
+      "timeout_seconds": 120
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests/control_center",
+        "-p",
+        "test_control_center.py",
+        "-v"
+      ],
+      "test": true,
+      "timeout_seconds": 240
+    },
+    {
+      "type": "install_runtime",
+      "source": "control/control_center/static/index.html",
+      "destination": "~/.local/share/prediction-project-executor/control-center/static/index.html",
+      "mode": 420
+    },
+    {
+      "type": "install_runtime",
+      "source": "control/control_center/lifecycle_status.json",
+      "destination": "~/.local/share/prediction-project-executor/control-center/lifecycle_status.json",
+      "mode": 420
+    },
+    {
+      "type": "service",
+      "verb": "restart",
+      "unit": "prediction-control-center.service"
+    },
+    {
+      "type": "service",
+      "verb": "status",
+      "unit": "prediction-control-center.service"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/control_center/runtime_canary.py"
+      ],
+      "test": true,
+      "timeout_seconds": 120
+    },
+    {
+      "type": "journal",
+      "unit": "prediction-control-center.service",
+      "lines": 40
+    }
+  ]
+}
