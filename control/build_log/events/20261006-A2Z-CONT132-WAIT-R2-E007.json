@@ -1,0 +1,35 @@
+{
+  "schema": "PREDICTION_BUILD_LOG_EVENT_V1",
+  "event_id": "20261006-A2Z-CONT132-WAIT-R2-E007",
+  "work_item_id": "A2Z-SYSTEMTEST-20261005",
+  "created_at_utc": "2026-10-06T12:18:10Z",
+  "event_type": "ATTEMPT",
+  "work_item_status": "IN_PROGRESS",
+  "outcome": "STARTED",
+  "title": "Continuation wacht op reeds gestarte Sol R2 E007",
+  "objective": "Drive one selected candidate through the full canonical A→Z lifecycle without duplicate model starts or skipped Astra gates.",
+  "summary": "E007 is already durably dispatched from E006 and may resume the same immutable R2 once. This continuation must therefore not start Sol again. Its exact NEXT task only waits for the durable R2 model_result to appear and reports presence/absence; E007 remains the sole model-resume attempt.",
+  "why": "Avoid duplicate model execution while preserving deterministic continuation lineage.",
+  "first_incomplete_step": "Observe whether E007 produces the durable R2 model_result.",
+  "next_action": "If result is present, validate and proceed to exact GPT-6 Astra PRE-BUILD. If absent after the wait, inspect the fresh E007 result/service blocker; do not create R3.",
+  "session_route_task_id": "DEV-PRED-A2Z-R2-STATE-PROBE-20261006-E006",
+  "task_ids": [
+    "DEV-PRED-CONT-NEXT-132bf3ce24cf9a64eeea2afb",
+    "DEV-PRED-A2Z-SOL-R2-RESUME-VERIFY-20261006-E007",
+    "A2Z-V4-SOL-PROPOSAL-20261006-R2"
+  ],
+  "commits": [
+    "280c6d726460d763868b7a9442e0e020ff5fc1c8"
+  ],
+  "evidence_refs": [
+    "control/project_tasks/DEV-PRED-A2Z-SOL-R2-RESUME-VERIFY-20261006-E007.json",
+    "control/bridge_commands/inbox/DEV-PRED-A2Z-SOL-R2-RESUME-VERIFY-20261006-E007.json"
+  ],
+  "tags": [
+    "a2z",
+    "continuation",
+    "sol-r2",
+    "wait-only",
+    "no-duplicate-resume"
+  ]
+}
