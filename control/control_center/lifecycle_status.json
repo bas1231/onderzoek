@@ -3,7 +3,7 @@
   "updated_at": "2026-10-06",
   "full_chain_status": "NOT_PROVEN",
   "full_chain_label": "Volledige A→Z-keten nog niet bewezen",
-  "next_required": "Huidige kandidaat AUTO-DISCOVERY-54d13314c7879b58e46d: rond exact GPT-5.6 Sol-opzet R2 af na de usage-limit, valideer R2 en voer daarna pas GPT-6 Astra PRE-BUILD uit. Bouw, POST-BUILD-review, tests/meting, toezichthouder en rapportage blijven wachten.",
+  "next_required": "Huidige kandidaat AUTO-DISCOVERY-54d13314c7879b58e46d: rond exact GPT-5.6 Sol-opzet R2 af zodra de Work/Codex-uitvoeringslimiet dit toestaat, valideer R2 en voer daarna pas GPT-6 Astra PRE-BUILD uit. Bouw, POST-BUILD-review, tests/meting, toezichthouder en rapportage blijven wachten.",
   "invariant": "NO_TEST_OR_MEASUREMENT_BEFORE_ASTRA_POSTBUILD_APPROVAL",
   "evidence_refs": [
     "control/bridge_commands/CURRENT_STATE.md",
@@ -38,7 +38,7 @@
       "state": "IMPLEMENTED_NOT_E2E",
       "detail": "De Sol-ontwerpstap behoort tot de actuele verplichte architectuur. De volledige actuele keten is nog niet end-to-end bewezen.",
       "current_candidate_state": "CURRENT_WAITING",
-      "current_candidate_detail": "R2 is de actieve Sol-opzet. Resume-logica is bewezen; uitvoering wacht op exact GPT-5.6 Sol usage-limit."
+      "current_candidate_detail": "R2 is de actieve Sol-opzet. Resume-logica is bewezen; de blokkade komt uit de ChatGPT-authenticated Codex/Work-uitvoeringslaag, niet uit een bewezen GPT-5.6 Sol-chatlimiet."
     },
     {
       "id": "astra_prebuild",
@@ -101,8 +101,8 @@
     "proposal_task_id": "A2Z-V4-SOL-PROPOSAL-20261006-R2",
     "current_stage": "sol_design",
     "state": "ACTIVE_WAITING_USAGE_LIMIT",
-    "label": "Sol-opzet R2 bezig — wacht op GPT-5.6 Sol usage-limit",
-    "detail": "Dezelfde immutable R2 wordt door de actuele keten gestuurd. De resume-logica werkt, maar exact GPT-5.6 Sol kreeg opnieuw USAGE_LIMIT. Er is nog geen Astra PRE-BUILD-goedkeuring voor deze kandidaat.",
+    "label": "Sol-opzet R2 bezig — wacht op Work/Codex-uitvoeringsruimte",
+    "detail": "Dezelfde immutable R2 wordt door de actuele keten gestuurd. De worker draait via Codex CLI met ChatGPT-authenticatie en rapporteert USAGE_LIMIT. Dat bewijst een limiet in de Work/Codex-uitvoeringslaag, niet dat GPT-5.6 Sol in gewone Chat zelf op is. Er is nog geen Astra PRE-BUILD-goedkeuring voor deze kandidaat.",
     "scientific_status": "NO_PROVEN_EDGE",
     "evidence_refs": [
       "control/build_log/events/20261006-A2Z-SOL-R2-NEW-USAGE-LIMIT-RETRY.json",
