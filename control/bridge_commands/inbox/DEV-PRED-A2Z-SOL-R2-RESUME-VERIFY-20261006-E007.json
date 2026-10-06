@@ -1,0 +1,18 @@
+{
+  "schema": "PREDICTION_BRIDGE_COMMAND_V1",
+  "task_id": "DEV-PRED-A2Z-SOL-R2-RESUME-VERIFY-20261006-E007",
+  "action": "SIX_AI_HEALTH",
+  "created_at_utc": "2026-10-06T12:15:10Z",
+  "route_task_id": "DEV-PRED-A2Z-R2-STATE-PROBE-20261006-E006",
+  "delivery_mode": "chat",
+  "live_trading": false,
+  "paid_actions": false,
+  "wallet_actions": false,
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "auto_continue": true,
+  "notes": "Resume exactly the same immutable Sol R2 once because E006 proved PAUSED_USAGE_LIMIT attempt=3 and its retry_at has passed. Validate durable result/provenance/content if produced; otherwise classify the fresh model-service blocker compactly. No R3, Astra, build, experiment test or measurement in this task. PASS means next gate is exact GPT-6 Astra PREBUILD."
+}
