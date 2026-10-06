@@ -38,9 +38,12 @@ main{padding:26px;min-width:0}.top{display:flex;align-items:flex-start;justify-c
 .life-stage:hover{transform:translateY(-1px);border-color:rgba(49,214,255,.45)}
 .life-stage b{display:block;font-size:12px;line-height:1.25}.life-stage small{display:block;color:var(--muted);font-size:10px;margin-top:4px;line-height:1.3}
 .life-stage .life-state{display:block;margin-top:7px;font-size:9px;font-weight:750;letter-spacing:.06em;text-transform:uppercase}
+.life-stage .life-current{display:block;margin-top:7px;padding-top:6px;border-top:1px solid rgba(37,44,85,.62);font-size:9px;font-weight:750;letter-spacing:.04em;line-height:1.35;text-transform:uppercase}
 .life-stage.working{border-color:rgba(77,231,168,.45);box-shadow:inset 0 0 0 1px rgba(77,231,168,.04)}.life-stage.working .life-state{color:#86f4c5}
 .life-stage.tested{border-color:rgba(49,214,255,.45);box-shadow:inset 0 0 0 1px rgba(49,214,255,.04)}.life-stage.tested .life-state{color:#82e8ff}
 .life-stage.pending{border-color:rgba(255,202,106,.36)}.life-stage.pending .life-state{color:#ffe09c}
+.life-stage.candidate-current{border-color:var(--pink);box-shadow:0 0 16px rgba(255,46,189,.14),inset 0 0 0 1px rgba(255,46,189,.05)}
+.life-current.done{color:#86f4c5}.life-current.current{color:#ff8ed8}.life-current.waiting{color:#ffe09c}
 .life-arrow{align-self:center;color:var(--muted);font-size:12px;flex:0 0 auto}
 .lifecycle-foot{display:flex;justify-content:space-between;gap:14px;align-items:flex-start;border-top:1px solid rgba(37,44,85,.6);padding-top:8px;font-size:11px;color:var(--muted);line-height:1.45}
 .lifecycle-next{max-width:72%}.life-legend{white-space:nowrap}.life-dot{display:inline-block;width:7px;height:7px;border-radius:50%;margin:0 4px 0 8px}.life-dot:first-child{margin-left:0}.life-dot.working{background:var(--green)}.life-dot.tested{background:var(--cyan)}.life-dot.pending{background:#ffca6a}
@@ -75,13 +78,13 @@ pre.raw{white-space:pre-wrap;word-break:break-word;background:#040613;border:1px
 
   <section class="card lifecycle-fixed" id="persistentLifecycle" aria-label="Permanente A tot Z ketenstatus">
     <div class="lifecycle-head">
-      <div><h2>Wat gebeurt er nu? — vaste A→Z-ketenstatus</h2><div class="lifecycle-summary" id="lifecycleSummary">Ketenstatus laden…</div></div>
+      <div><h2>A→Z — componentstatus + huidige kandidaat</h2><div class="lifecycle-summary" id="lifecycleSummary">Ketenstatus laden…</div></div>
       <span class="pill amber" id="lifecycleOverall">NOG NIET BEWEZEN</span>
     </div>
     <div class="lifecycle-flow" id="lifecycleFlow"></div>
     <div class="lifecycle-foot">
       <div class="lifecycle-next"><b>Wat moet nog gebeuren:</b> <span id="lifecycleNext">Laden…</span></div>
-      <div class="life-legend"><span class="life-dot working"></span>werkend <span class="life-dot tested"></span>gericht getest <span class="life-dot pending"></span>nog A→Z bewijzen</div>
+      <div class="life-legend">Boven: componentstatus • Onder: huidige kandidaat</div>
     </div>
   </section>
 
@@ -227,7 +230,9 @@ const pill=s=>'<span class="pill '+statusClass(s)+'">'+esc(nlStatus(s||'UNKNOWN'
 const pct=v=>v==null?'—':(v*100).toFixed(1)+'%';
 const secs=v=>v==null?'—':v<60?v.toFixed(1)+' s':(v/60).toFixed(1)+' min';
 const lifeClass=s=>s==='WORKING_COMPONENT'?'working':s==='TARGETED_TESTED'?'tested':'pending';
-const lifeStateLabel=s=>s==='WORKING_COMPONENT'?'WERKEND':s==='TARGETED_TESTED'?'GERICHT GETEST':s==='IMPLEMENTED_NOT_E2E'?'AANWEZIG • NOG A→Z':'NOG A→Z BEWIJZEN';
+const lifeStateLabel=s=>s==='WORKING_COMPONENT'?'COMPONENT: WERKEND':s==='TARGETED_TESTED'?'COMPONENT: GERICHT GETEST':s==='IMPLEMENTED_NOT_E2E'?'COMPONENT: AANWEZIG • NOG A→Z':'COMPONENT: NOG A→Z BEWIJZEN';
+const currentLifeClass=s=>s==='DONE'?'done':s==='CURRENT_WAITING'?'current':'waiting';
+const currentLifeStateLabel=s=>s==='DONE'?'KANDIDAAT: AFGEROND':s==='CURRENT_WAITING'?'KANDIDAAT: HIER NU • WACHT OP SOL':'KANDIDAAT: WACHT';
 
 function toast(msg){const t=q('#toast');t.textContent=msg;t.style.display='block';setTimeout(()=>t.style.display='none',3200)}
 function card(k,v,s,c=''){return '<div class="card '+c+'"><div class="kicker">'+esc(k)+'</div><div class="big">'+esc(v)+'</div><div class="sub">'+esc(s)+'</div></div>'}
@@ -253,13 +258,15 @@ async function load(){try{S.data=await api('/api/snapshot');render();q('#health'
 function render(){
  const d=S.data,m=d.task_metrics,c=d.counts,gs=d.git_sync||{},syncRequest=d.sync_request||null,alerts=d.chain_alerts||[],driftAlerts=d.session_drift_alerts||[],lc=d.lifecycle||{},bl=d.build_log||{counts:{},open_work:[],recent_events:[],duplicate_open_objectives:[]};
  const stages=Array.isArray(lc.stages)?lc.stages:[];
- q('#lifecycleSummary').textContent=(lc.full_chain_label||'Ketenstatus onbekend')+' • status per stap is bewijsgebonden, niet alleen gepland.';
+ const currentCandidate=lc.current_candidate||{};
+ const currentCandidateLabel=currentCandidate.candidate_id?('Huidige kandidaat '+currentCandidate.candidate_id+' • '+(currentCandidate.label||'status onbekend')):'Geen huidige kandidaatrun vastgelegd.';
+ q('#lifecycleSummary').textContent=(lc.full_chain_label||'Ketenstatus onbekend')+' • '+currentCandidateLabel;
  q('#lifecycleOverall').textContent=lc.full_chain_status==='NOT_PROVEN'?'VOLLEDIGE KETEN: NOG NIET BEWEZEN':nlStatus(lc.full_chain_status||'UNKNOWN').toUpperCase();
  q('#lifecycleOverall').className='pill '+(lc.full_chain_status==='NOT_PROVEN'?'amber':lc.full_chain_status==='PROVEN'?'green':'');
  q('#lifecycleNext').textContent=lc.next_required||'Controleer de canonieke lifecycle-status.';
  q('#homeLifecycleNext').textContent=lc.next_required||'Controleer de canonieke lifecycle-status.';
- q('#lifecycleFlow').innerHTML=stages.map((s,i)=>'<button class="life-stage '+lifeClass(s.state)+'" data-life="'+esc(s.id)+'"><b>'+esc(s.label)+'</b><small>'+esc(s.subtitle||'')+'</small><span class="life-state">'+esc(lifeStateLabel(s.state))+'</span></button>'+(i<stages.length-1?'<span class="life-arrow">→</span>':'')).join('')||'<div class="empty">Geen lifecycle-status beschikbaar.</div>';
- qa('[data-life]').forEach(b=>b.addEventListener('click',()=>{const s=stages.find(x=>x.id===b.dataset.life);if(!s)return;openDrawer(s.label,'KETENSTAP','<div class="item"><div class="kicker">STATUS</div><b>'+esc(lifeStateLabel(s.state))+'</b><div class="meta">'+esc(s.detail||'Geen detail beschikbaar.')+'</div></div><div class="item" style="margin-top:10px"><div class="kicker">VOLLEDIGE KETEN</div><b>'+esc(lc.full_chain_label||'Onbekend')+'</b><div class="meta">'+esc(lc.next_required||'')+'</div></div>')}));
+ q('#lifecycleFlow').innerHTML=stages.map((s,i)=>'<button class="life-stage '+lifeClass(s.state)+(s.current_candidate_state==='CURRENT_WAITING'?' candidate-current':'')+'" data-life="'+esc(s.id)+'"><b>'+esc(s.label)+'</b><small>'+esc(s.subtitle||'')+'</small><span class="life-state">'+esc(lifeStateLabel(s.state))+'</span><span class="life-current '+currentLifeClass(s.current_candidate_state)+'">'+esc(currentLifeStateLabel(s.current_candidate_state))+'</span></button>'+(i<stages.length-1?'<span class="life-arrow">→</span>':'')).join('')||'<div class="empty">Geen lifecycle-status beschikbaar.</div>';
+ qa('[data-life]').forEach(b=>b.addEventListener('click',()=>{const s=stages.find(x=>x.id===b.dataset.life);if(!s)return;openDrawer(s.label,'KETENSTAP','<div class="item"><div class="kicker">COMPONENTSTATUS</div><b>'+esc(lifeStateLabel(s.state))+'</b><div class="meta">'+esc(s.detail||'Geen detail beschikbaar.')+'</div></div><div class="item" style="margin-top:10px"><div class="kicker">HUIDIGE KANDIDAAT</div><b>'+esc(currentLifeStateLabel(s.current_candidate_state))+'</b><div class="meta">'+esc(s.current_candidate_detail||'Geen kandidaatspecifiek detail beschikbaar.')+'</div></div><div class="item" style="margin-top:10px"><div class="kicker">VOLLEDIGE KETEN</div><b>'+esc(lc.full_chain_label||'Onbekend')+'</b><div class="meta">'+esc(lc.next_required||'')+'</div></div>')}));
  const syncNaam=gs.status==='GREEN'?'In sync':gs.status==='RED'?'Niet in sync':gs.status==='AMBER'?'Controle verouderd':'Onbekend';
  const syncUitleg=gs.status==='GREEN'?'Production HEAD, lokale main en opgehaalde GitHub-main zijn gelijk en de worktree is schoon.':((gs.issues||[])[0]||'Synchronisatiestatus kon niet volledig worden vastgesteld.');
  q('#chainAlertBar').innerHTML=alerts.length
