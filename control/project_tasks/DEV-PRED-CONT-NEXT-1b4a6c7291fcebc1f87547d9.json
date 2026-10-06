@@ -1,0 +1,37 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-CONT-NEXT-1b4a6c7291fcebc1f87547d9",
+  "source_commit": "6c63822adb6a8485cb1b3939a55eca495c851fc1",
+  "build_id": "BUILD-PRED-A2Z-POSTBUILD-20261006",
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "run_project_python",
+    "read_runtime"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 120,
+  "notes": "NEXT voor CONT-1b4a6c7291fcebc1f87547d9 na RESULT_ACK_TIMEOUT. Gebruik uitsluitend de bestaande read-only E010-classifier om de actuele immutable Sol R2-status zichtbaar te maken. Geen service-start/restart, geen modelcall, geen R3, geen Astra, build, experimenttest of meting.",
+  "operations": [
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/a2z_sol_r2_diag_expose_e010.py"
+      ],
+      "test": false,
+      "timeout_seconds": 60
+    }
+  ]
+}
