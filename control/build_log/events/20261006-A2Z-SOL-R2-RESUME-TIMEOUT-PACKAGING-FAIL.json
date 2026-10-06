@@ -1,0 +1,27 @@
+{
+  "schema": "PREDICTION_BUILD_LOG_EVENT_V1",
+  "event_id": "20261006-A2Z-SOL-R2-RESUME-TIMEOUT-PACKAGING-FAIL",
+  "work_item_id": "A2Z-SYSTEMTEST-20261005",
+  "created_at_utc": "2026-10-06T11:06:20Z",
+  "event_type": "RESULT",
+  "work_item_status": "IN_PROGRESS",
+  "outcome": "FAIL",
+  "title": "Sol R2 resume blocked by DEV runner timeout ceiling",
+  "objective": "Complete the governed A2Z lifecycle with exact Sol and Astra and POSTBUILD approval before experiment tests or measurement.",
+  "summary": "DEV-PRED-CONT-NEXT-11eafda9f8e43e3e9c5a19bf did not reach project_task_executor. Its DEV manifest set command timeout_seconds=960, while dev_task_runner.py permits only 1..900 and returned 'invalid timeout'. The underlying immutable Sol R2 runtime was therefore not resumed or modified.",
+  "why": "Packaging/configuration error in the DEV manifest, not a model, proposal, provenance, Astra, build, test, or measurement failure.",
+  "first_incomplete_step": "Resume the same A2Z-V4-SOL-PROPOSAL-20261006-R2 after usage limit with a fresh immutable continuation task whose DEV command timeout is <=900.",
+  "next_action": "Use the next continuation to create a new task ID. Keep the project Python timeout within executor limits and the DEV runner command timeout at 900 or less. Do not reuse the failed task ID and do not create R3.",
+  "session_route_task_id": "DEV-PRED-CONT-NEXT-81836aa4d85bdf5280f107e9",
+  "task_ids": [
+    "DEV-PRED-CONT-NEXT-11eafda9f8e43e3e9c5a19bf",
+    "A2Z-V4-SOL-PROPOSAL-20261006-R2"
+  ],
+  "commits": [
+    "0c4420fb872d415ca8788577a516be557a1bfd77"
+  ],
+  "evidence_refs": [
+    "control/project_tasks/DEV-PRED-CONT-NEXT-11eafda9f8e43e3e9c5a19bf.json"
+  ],
+  "tags": ["a2z", "sol-r2", "packaging-failure", "timeout", "immutable-task-id"]
+}
