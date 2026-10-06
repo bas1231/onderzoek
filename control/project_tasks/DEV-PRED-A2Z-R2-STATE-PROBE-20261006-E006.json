@@ -1,0 +1,49 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-A2Z-R2-STATE-PROBE-20261006-E006",
+  "source_commit": "0524b36998151749c7d78c4da52ad329ae17605c",
+  "build_id": "BUILD-PRED-A2Z-POSTBUILD-20261006",
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "run_project_python",
+    "read_runtime",
+    "user_service_manage",
+    "read_logs"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 180,
+  "notes": "Read-only resume point for full canonical A→Z proof. Probe whether immutable Sol R2 model_result exists, then inspect native service status and journal. Do not start/restart any service, do not create R3, and do not call Astra/build/test/measure in this task.",
+  "operations": [
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/a2z_sol_r2_result_probe_e006.py"
+      ],
+      "test": false,
+      "timeout_seconds": 30
+    },
+    {
+      "type": "service",
+      "verb": "status",
+      "unit": "prediction-a2z-v4-model@A2Z-V4-SOL-PROPOSAL-20261006-R2.service"
+    },
+    {
+      "type": "journal",
+      "unit": "prediction-a2z-v4-model@A2Z-V4-SOL-PROPOSAL-20261006-R2.service",
+      "lines": 80
+    }
+  ]
+}
