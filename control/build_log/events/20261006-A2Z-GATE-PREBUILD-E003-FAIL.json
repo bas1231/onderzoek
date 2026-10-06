@@ -1,0 +1,28 @@
+{
+  "schema": "PREDICTION_BUILD_LOG_EVENT_V1",
+  "event_id": "20261006-A2Z-GATE-PREBUILD-E003-FAIL",
+  "work_item_id": "A2Z-SYSTEMTEST-20261005",
+  "created_at_utc": "2026-10-06T10:37:00Z",
+  "event_type": "RESULT",
+  "work_item_status": "IN_PROGRESS",
+  "outcome": "FAIL",
+  "title": "E003 stopped before project execution",
+  "objective": "Complete the governed A2Z lifecycle.",
+  "summary": "DEV-PRED-A2Z-GATE-PREBUILD-20261006-E003 reached the executor without a matching control/project_tasks spec. The executor returned project task spec not found before project work began.",
+  "why": "The task ID is immutable and already consumed as a failed dispatch.",
+  "first_incomplete_step": "Finish the existing Sol proposal safety diagnosis before any Astra PREBUILD task.",
+  "next_action": "Do not reuse E003. Continue from DEV-PRED-CONT-NEXT-c65aec78e41cd4c5b900bd59, then create a fresh unique PREBUILD task only if the proposal is valid.",
+  "session_route_task_id": "SESSION-ROUTE-756bff225d5a976edf6da02b",
+  "task_ids": [
+    "DEV-PRED-A2Z-GATE-PREBUILD-20261006-E003",
+    "DEV-PRED-CONT-NEXT-c65aec78e41cd4c5b900bd59"
+  ],
+  "commits": [
+    "db309f466d468a9300fd0aa612fd75419da44aca"
+  ],
+  "evidence_refs": [
+    "control/bridge_commands/inbox/DEV-PRED-A2Z-GATE-PREBUILD-20261006-E003.json",
+    "control/project_tasks/DEV-PRED-CONT-NEXT-c65aec78e41cd4c5b900bd59.json"
+  ],
+  "tags": ["a2z", "prebuild", "packaging-failure"]
+}
