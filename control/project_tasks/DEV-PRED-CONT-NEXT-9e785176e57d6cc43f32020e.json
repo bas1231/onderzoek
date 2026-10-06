@@ -1,0 +1,45 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-CONT-NEXT-9e785176e57d6cc43f32020e",
+  "source_commit": "0c46576296ce4931d6ab51cb12a050676880aae6",
+  "build_id": "BUILD-PRED-A2Z-POSTBUILD-20261006",
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_runtime",
+    "read_logs",
+    "user_service_manage"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 180,
+  "notes": "NEXT voor CONT-9e785176e57d6cc43f32020e. Diagnoseert fail-closed waarom de bestaande exact-Sol R2-service geen duurzaam model_result schreef. Leest systemd-status/journal, supervisor runtime.sqlite, transitions en run-artifacts. Maakt geen nieuwe modelversie en start/herstart niets; geen Astra, build, experimenttest of meting. PASS betekent uitsluitend dat het R2-resultaat inmiddels aanwezig is; anders geeft de taak bewust een compacte TaskError met de concrete runtimeclassificatie voor automatisch vervolg.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/a2z_sol_r2_runtime_diag_cont9e78.py",
+      "content": "from __future__ import annotations\n\nimport json\nfrom pathlib import Path\nimport sqlite3\nimport subprocess\n\nROOT = Path.home() / \".local/share/prediction-project-executor/campaigns/FULL-A2Z-LIVE-20261004-V4\"\nTASK_ID = \"A2Z-V4-SOL-PROPOSAL-20261006-R2\"\nUNIT = \"prediction-a2z-v4-model@A2Z-V4-SOL-PROPOSAL-20261006-R2.service\"\nREQUEST = ROOT / \"requests\" / f\"{TASK_ID}.json\"\nRESULT = ROOT / \"model_results\" / f\"{TASK_ID}.json\"\nMODELS = ROOT / \"models\"\nDB = MODELS / \"runtime.sqlite\"\n\ndef systemd_snapshot():\n    cp = subprocess.run(\n        [\"systemctl\", \"--user\", \"show\", UNIT],\n        text=True, capture_output=True, timeout=20, check=False,\n    )\n    wanted = {\n        \"ActiveState\", \"SubState\", \"Result\", \"ExecMainStatus\", \"ExecMainCode\",\n        \"ExecMainStartTimestamp\", \"ExecMainExitTimestamp\"\n    }\n    out = {\"rc\": cp.returncode}\n    for line in cp.stdout.splitlines():\n        if \"=\" not in line:\n            continue\n        k, v = line.split(\"=\", 1)\n        if k in wanted:\n            out[k] = v\n    return out\n\ndef journal_snapshot():\n    cp = subprocess.run(\n        [\"journalctl\", \"--user\", \"-u\", UNIT, \"-n\", \"120\", \"--no-pager\"],\n        text=True, capture_output=True, timeout=20, check=False,\n    )\n    keys = (\"error\", \"fail\", \"usage\", \"quota\", \"blocked\", \"traceback\", \"model\", TASK_ID.lower())\n    selected = []\n    for line in cp.stdout.splitlines():\n        low = line.lower()\n        if any(k in low for k in keys):\n            selected.append(line[-600:])\n    return {\"rc\": cp.returncode, \"tail\": selected[-12:]}\n\ndiag = {\n    \"task_id\": TASK_ID,\n    \"request_exists\": REQUEST.is_file() and not REQUEST.is_symlink(),\n    \"result_exists\": RESULT.is_file() and not RESULT.is_symlink(),\n    \"db_exists\": DB.is_file() and not DB.is_symlink(),\n    \"systemd\": systemd_snapshot(),\n    \"journal\": journal_snapshot(),\n}\n\nif diag[\"result_exists\"]:\n    try:\n        obj = json.loads(RESULT.read_text(encoding=\"utf-8\"))\n    except Exception as exc:\n        print(\"SOL_R2_RUNTIME_DIAG=\" + json.dumps({**diag, \"classification\": \"RESULT_PRESENT_INVALID_JSON\", \"error\": type(exc).__name__}, sort_keys=True))\n        raise SystemExit(10)\n    diag[\"result_model\"] = obj.get(\"model\")\n    diag[\"result_policy\"] = obj.get(\"model_policy\")\n    diag[\"result_phase\"] = obj.get(\"phase\")\n    diag[\"classification\"] = \"RESULT_NOW_PRESENT\"\n    print(\"SOL_R2_RUNTIME_DIAG=\" + json.dumps(diag, sort_keys=True))\n    print(\"SOL_R2_RESULT_NOW_PRESENT=1\")\n    raise SystemExit(0)\n\nif not diag[\"request_exists\"]:\n    diag[\"classification\"] = \"REQUEST_MISSING\"\nelif not diag[\"db_exists\"]:\n    diag[\"classification\"] = \"MODEL_RUNTIME_DB_MISSING\"\nelse:\n    db = sqlite3.connect(f\"file:{DB}?mode=ro\", uri=True)\n    try:\n        row = db.execute(\n            \"select status,attempt,thread,run,body from tasks where id=?\",\n            (TASK_ID,),\n        ).fetchone()\n        trans = db.execute(\n            \"select state,reason,attempt,checkpoint,next_action,stamp,retry \"\n            \"from transitions where task=? order by seq desc limit 6\",\n            (TASK_ID,),\n        ).fetchall()\n    finally:\n        db.close()\n\n    diag[\"transitions\"] = [\n        {\n            \"state\": x[0], \"reason\": x[1], \"attempt\": x[2],\n            \"checkpoint\": x[3], \"next_action\": x[4],\n            \"stamp\": x[5], \"retry\": x[6],\n        }\n        for x in trans\n    ]\n\n    if row is None:\n        diag[\"classification\"] = \"TASK_NOT_ENQUEUED\"\n    else:\n        status, attempt, thread, run, body = row\n        diag[\"runtime_task\"] = {\n            \"status\": status, \"attempt\": attempt, \"thread_present\": bool(thread), \"run\": run\n        }\n        try:\n            body_obj = json.loads(body)\n            diag[\"runtime_task\"][\"model_policy\"] = body_obj.get(\"model_policy\")\n            diag[\"runtime_task\"][\"phase\"] = body_obj.get(\"phase\")\n            diag[\"runtime_task\"][\"route_task_id\"] = body_obj.get(\"route_task_id\")\n        except Exception:\n            diag[\"runtime_task\"][\"body_parse\"] = \"INVALID\"\n\n        if run:\n            run_dir = MODELS / run\n            diag[\"run_dir_exists\"] = run_dir.is_dir()\n            for name in (\"WORKER.json\", \"COMPLETE.json\", \"worker_error.json\", \"events.jsonl\", \"stderr.log\"):\n                p = run_dir / name\n                diag[name + \"_exists\"] = p.is_file()\n            err = run_dir / \"worker_error.json\"\n            if err.is_file():\n                try:\n                    diag[\"worker_error\"] = json.loads(err.read_text(encoding=\"utf-8\"))\n                except Exception:\n                    diag[\"worker_error\"] = err.read_text(errors=\"replace\")[-800:]\n            stderr = run_dir / \"stderr.log\"\n            if stderr.is_file():\n                txt = stderr.read_text(errors=\"replace\")\n                diag[\"stderr_tail\"] = txt[-1200:]\n            events = run_dir / \"events.jsonl\"\n            if events.is_file():\n                lines = events.read_text(errors=\"replace\").splitlines()\n                diag[\"events_tail\"] = lines[-8:]\n\n        if status == \"PAUSED_USAGE_LIMIT\":\n            diag[\"classification\"] = \"PAUSED_USAGE_LIMIT\"\n        elif status == \"WAITING_RETRY\":\n            diag[\"classification\"] = \"WAITING_RETRY\"\n        elif status == \"RUNNING\":\n            diag[\"classification\"] = \"RUNNING_WITHOUT_RESULT\"\n        elif status == \"COMPLETE\":\n            diag[\"classification\"] = \"COMPLETE_WITHOUT_RESULT\"\n        elif status == \"FAILED\":\n            diag[\"classification\"] = \"MODEL_TASK_FAILED\"\n        elif status == \"QUEUED\":\n            diag[\"classification\"] = \"QUEUED_NOT_COMPLETED\"\n        else:\n            diag[\"classification\"] = \"UNEXPECTED_RUNTIME_STATUS\"\n\nprint(\"SOL_R2_RUNTIME_DIAG=\" + json.dumps(diag, sort_keys=True, ensure_ascii=False))\nprint(\"NO_ASTRA_BUILD_TEST_OR_MEASUREMENT=1\")\nraise SystemExit(10)\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/a2z_sol_r2_runtime_diag_cont9e78.py"
+      ],
+      "test": false,
+      "timeout_seconds": 120
+    }
+  ]
+}
