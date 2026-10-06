@@ -1,0 +1,28 @@
+{
+  "schema": "PREDICTION_BUILD_LOG_EVENT_V1",
+  "event_id": "20261006-A2Z-SOL-R2-RETRY-WINDOW-PASS",
+  "work_item_id": "A2Z-SYSTEMTEST-20261005",
+  "created_at_utc": "2026-10-06T11:40:10Z",
+  "event_type": "RESULT",
+  "work_item_status": "IN_PROGRESS",
+  "outcome": "PASS",
+  "title": "Sol R2 retry-window taak geslaagd",
+  "objective": "Bewijs de governed A→Z-keten met exact Sol en Astra en POSTBUILD-goedkeuring vóór experimenttests of meting.",
+  "summary": "DEV-PRED-CONT-NEXT-cf7e81729d4dfae4fbdbe1e4 is PASS. Volgens de taakdefinitie betekent dit uitsluitend dat óf het duurzame R2-resultaat inmiddels aanwezig is, óf de effectieve USAGE_LIMIT-retry nog maximaal 90 seconden verwijderd is. Deze taak startte de modelservice niet.",
+  "why": "Het wachtvenster is nu veilig genoeg om de volgende continuation de bestaande immutable R2 te laten hervatten/valideren zonder de DEV-timeout te verspillen.",
+  "first_incomplete_step": "Bepaal eerst of het R2-resultaat al aanwezig is; anders hervat dezelfde immutable A2Z-V4-SOL-PROPOSAL-20261006-R2 zodra de retry open is en valideer het resultaat.",
+  "next_action": "Volgende continuation: inspecteer R2-resultaat. Indien aanwezig, valideer exact model/provenance/content en ga bij PASS naar Astra PRE-BUILD. Indien afwezig maar retry uitvoerbaar, hervat alleen dezelfde R2. Geen R3, build, test of meting.",
+  "session_route_task_id": "DEV-PRED-CONT-NEXT-f1275498640bb58f2a03c7da",
+  "task_ids": [
+    "DEV-PRED-CONT-NEXT-cf7e81729d4dfae4fbdbe1e4",
+    "A2Z-V4-SOL-PROPOSAL-20261006-R2"
+  ],
+  "commits": [
+    "3f4d5e4aa1db787bab0c0a6d4f6caf7aa5d8c3fb"
+  ],
+  "evidence_refs": [
+    "control/project_tasks/DEV-PRED-CONT-NEXT-cf7e81729d4dfae4fbdbe1e4.json",
+    "control/build_log/events/20261006-A2Z-SOL-R2-RETRY-WINDOW-CONT-CF7E.json"
+  ],
+  "tags": ["a2z", "sol-r2", "retry-window", "pass", "immutable"]
+}
