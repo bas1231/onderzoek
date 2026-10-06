@@ -1,0 +1,17 @@
+{
+  "schema": "PREDICTION_BUILD_LOG_EVENT_V1",
+  "event_id": "20261006-A2Z-SOL-R2-E019-CODEX-USAGE-LIMIT-SOURCE",
+  "work_item_id": "A2Z-SYSTEMTEST-20261005",
+  "created_at_utc": "2026-10-06T14:38:10Z",
+  "event_type": "DIAGNOSIS",
+  "work_item_status": "IN_PROGRESS",
+  "outcome": "CONFIRMED",
+  "title": "Codex usage-limit source confirmed for Sol R2",
+  "summary": "E019 exposed the raw Codex error payload: 'You’ve hit your usage limit ... try again at 5:17 PM.' This confirms the blocker is the ChatGPT-authenticated Codex/Work execution allowance used by the Prediction worker, not evidence that ordinary GPT-5.6 Sol chat access is exhausted.",
+  "first_incomplete_step": "Wait until the external Codex allowance reset, then resume the same immutable Sol R2 thread.",
+  "next_action": "Do not create R3. Do not advance to Astra. Resume the same immutable R2 after the Codex allowance becomes available and validate the durable result before Astra PREBUILD.",
+  "evidence_refs": [
+    "control/dev_checks/a2z_sol_r2_usage_source_diag_e019.py",
+    "control/project_tasks/DEV-PRED-A2Z-SOL-R2-USAGE-SOURCE-DIAG-20261006-E019.json"
+  ]
+}
