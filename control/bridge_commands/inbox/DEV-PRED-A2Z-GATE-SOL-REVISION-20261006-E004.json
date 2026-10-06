@@ -1,0 +1,18 @@
+{
+  "schema": "PREDICTION_BRIDGE_COMMAND_V1",
+  "task_id": "DEV-PRED-A2Z-GATE-SOL-REVISION-20261006-E004",
+  "action": "SIX_AI_HEALTH",
+  "created_at_utc": "2026-10-06T10:39:16Z",
+  "route_task_id": "SESSION-ROUTE-756bff225d5a976edf6da02b",
+  "delivery_mode": "chat",
+  "live_trading": false,
+  "paid_actions": false,
+  "wallet_actions": false,
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "Codex GPT-6",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "auto_continue": false,
+  "notes": "E003 stopte vóór mutatie wegens niet-gepubliceerde spec na Git-409; E004 past dezelfde gerichte gate toe. Continuation-validator vond ontbrekende safetybooleans in echte Sol R1. Voer alleen infrastructuurregressies uit en laat exact Sol een nieuwe opzetversie indienen; nog geen Astra, build, experimenttest of meting."
+}
