@@ -1,0 +1,31 @@
+{
+  "schema": "PREDICTION_BUILD_LOG_EVENT_V1",
+  "event_id": "20261006-A2Z-TAKEOVER-REPAIR-E001",
+  "work_item_id": "A2Z-SYSTEMTEST-20261005",
+  "created_at_utc": "2026-10-06T10:20:56Z",
+  "event_type": "ATTEMPT",
+  "work_item_status": "IN_PROGRESS",
+  "outcome": "STARTED",
+  "title": "Hervat model- en reviewreparatie na verkeerd Git-operatieveld",
+  "objective": "Bewijs de volledige actuele governed A→Z-keten met exact Sol en Astra en postbuild approval vóór experimenttests/meting.",
+  "summary": "Canoniek ce134fac gecontroleerd. cdd14c paste vijf bestanden toe, maar de afsluitende Git-operatie gebruikte argv in plaats van args en faalde met git args invalid. Vervolg behoudt patchbytes en herhaalt gerichte regressies om volledige receipts vast te leggen.",
+  "why": "Geen nieuwe campagne; eerste incomplete reparatie afronden. Productie nog op a3a61e9 met behouden runtime-evidence.",
+  "first_incomplete_step": "Reparatie-acceptatie en canonical integratie, daarna echte POSTBUILD-gate.",
+  "next_action": "E001-resultaat controleren, gerepareerde bron integreren en huidige lifecycle gericht voltooien.",
+  "session_route_task_id": "SESSION-ROUTE-756bff225d5a976edf6da02b",
+  "task_ids": [
+    "DEV-PRED-A2Z-REPAIR-RECOVER-20261006-E001",
+    "DEV-PRED-CONT-NEXT-cdd14cf7cd42a15466ba64ca"
+  ],
+  "commits": [
+    "ce134facb21d5743c038cea3c43159852752cdf4"
+  ],
+  "evidence_refs": [
+    "control/project_tasks/DEV-PRED-CONT-NEXT-cdd14cf7cd42a15466ba64ca.json"
+  ],
+  "tags": [
+    "a2z",
+    "takeover",
+    "first-failure"
+  ]
+}
