@@ -3,7 +3,7 @@
   "updated_at": "2026-10-06",
   "full_chain_status": "NOT_PROVEN",
   "full_chain_label": "Volledige A→Z-keten nog niet bewezen",
-  "next_required": "Huidige kandidaat AUTO-DISCOVERY-54d13314c7879b58e46d: wacht op herstel van de ChatGPT-authenticated Codex/Work-uitvoeringsruimte (E019: try again at 5:17 PM), hervat daarna dezelfde immutable GPT-5.6 Sol R2, valideer R2 en voer pas daarna GPT-6 Astra PRE-BUILD uit.",
+  "next_required": "Huidige kandidaat AUTO-DISCOVERY-54d13314c7879b58e46d: Codex/Work reset blijft 17:17. De recente wait/observer DEV-taken met timeout 1000 zijn ongeldig omdat dev_task_runner.py maximaal 900 accepteert. Gebruik bij de eerstvolgende immutable continuation een gecorrigeerde DEV-timeout <=900, hervat daarna dezelfde GPT-5.6 Sol R2 en valideer R2 vóór Astra PRE-BUILD.",
   "invariant": "NO_TEST_OR_MEASUREMENT_BEFORE_ASTRA_POSTBUILD_APPROVAL",
   "evidence_refs": [
     "control/bridge_commands/CURRENT_STATE.md",
@@ -38,7 +38,7 @@
       "state": "IMPLEMENTED_NOT_E2E",
       "detail": "De Sol-ontwerpstap behoort tot de actuele verplichte architectuur. De volledige actuele keten is nog niet end-to-end bewezen.",
       "current_candidate_state": "CURRENT_WAITING",
-      "current_candidate_detail": "R2 is de actieve Sol-opzet. E019 heeft de bron van de blokkade hard bevestigd: de Codex/Work-worker kreeg 'You’ve hit your usage limit ... try again at 5:17 PM'. Dit is geen bewijs van een gewone GPT-5.6 Sol-chatlimiet."
+      "current_candidate_detail": "R2 blijft de actieve Sol-opzet. E019 bevestigde de externe Codex/Work-limiet tot 17:17. Daarna is een aparte wrapperfout vastgesteld: meerdere wait/observer-manifests gebruikten timeout_seconds=1000, terwijl dev_task_runner.py maximaal 900 accepteert. Die taken raken Sol niet en moeten via nieuwe immutable continuations met geldige timeout worden vervangen."
     },
     {
       "id": "astra_prebuild",
@@ -101,12 +101,12 @@
     "proposal_task_id": "A2Z-V4-SOL-PROPOSAL-20261006-R2",
     "current_stage": "sol_design",
     "state": "ACTIVE_WAITING_EXTERNAL_CODEX_ALLOWANCE",
-    "label": "Sol-opzet R2 gepauzeerd — Codex/Work-limiet tot 17:17",
-    "detail": "Dezelfde immutable R2 blijft behouden. De raw worker-error uit E019 bevestigt een ChatGPT-authenticated Codex/Work usage limit met 'try again at 5:17 PM'. Na herstel wordt dezelfde R2/thread hervat; geen R3 en nog geen Astra PRE-BUILD.",
+    "label": "Sol-opzet R2 gepauzeerd — Codex-reset 17:17; DEV-timeoutfix nodig",
+    "detail": "Dezelfde immutable R2 blijft behouden. De Codex/Work-limiet reset om 17:17. Recente wait/observer-taken met DEV timeout 1000 falen vóór projectuitvoering; dev_task_runner.py staat 1..900 toe. De eerstvolgende geldige continuation moet <=900 gebruiken en daarna dezelfde R2 hervatten.",
     "scientific_status": "NO_PROVEN_EDGE",
     "evidence_refs": [
       "control/build_log/events/20261006-A2Z-SOL-R2-E019-CODEX-USAGE-LIMIT-SOURCE.json",
-      "control/project_tasks/DEV-PRED-A2Z-SOL-R2-USAGE-SOURCE-DIAG-20261006-E019.json"
+      "control/build_log/events/20261006-A2Z-DEV-TIMEOUT-CONFIG-ROOTCAUSE.json"
     ]
   }
 }
