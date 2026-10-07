@@ -1,0 +1,41 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-CONT-NEXT-dd63d3fb194e699c4adfe5ba",
+  "source_commit": "6a08c0c83736bde6afc45b8fccd40660f67a80ae",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "High"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_runtime"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 60,
+  "notes": "Continuation NEXT for N1E47: classify existing exact R4P2 Astra PREBUILD result by deterministic exit code. Read-only.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/cont_n1e47_decision_dd63d3fb.py",
+      "content": "from pathlib import Path\nimport json\np=Path.home()/\".local/share/prediction-project-executor/campaigns/FULL-A2Z-LIVE-20261004-V4/model_results/A2Z-V4-ASTRA-PREBUILD-DIRECT-20261007-R4P2.json\"\nif not p.is_file():\n    raise SystemExit(20)\no=json.loads(p.read_text(encoding=\"utf-8\"))\nif o.get(\"task_id\")!=\"A2Z-V4-ASTRA-PREBUILD-DIRECT-20261007-R4P2\":\n    raise SystemExit(21)\nif o.get(\"phase\")!=\"ASTRA_PREBUILD\":\n    raise SystemExit(22)\nif o.get(\"model\")!=\"gpt-6-astra\":\n    raise SystemExit(23)\nif o.get(\"model_policy\")!=\"ASTRA_EXACT\":\n    raise SystemExit(24)\nf=o.get(\"final\")\nr=json.loads(f) if isinstance(f,str) else f\nif not isinstance(r,dict):\n    raise SystemExit(25)\nif r.get(\"candidate_id\")!=\"AUTO-DISCOVERY-54d13314c7879b58e46d\":\n    raise SystemExit(26)\nif r.get(\"phase\")!=\"PREBUILD\":\n    raise SystemExit(27)\nb=r.get(\"binding_sha256\")\nif not isinstance(b,str) or len(b)!=64:\n    raise SystemExit(28)\nd=r.get(\"decision\")\nif d==\"APPROVE\":\n    raise SystemExit(0)\nif d==\"REVISE\":\n    raise SystemExit(11)\nif d==\"REJECT\":\n    raise SystemExit(12)\nraise SystemExit(29)\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/cont_n1e47_decision_dd63d3fb.py"
+      ],
+      "timeout_seconds": 15
+    }
+  ]
+}
