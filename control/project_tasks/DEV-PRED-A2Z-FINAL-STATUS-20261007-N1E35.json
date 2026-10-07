@@ -1,0 +1,41 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-A2Z-FINAL-STATUS-20261007-N1E35",
+  "source_commit": "e4dac1cd2633aa6b3cc1d335babf7573ff83fdb6",
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "High"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_runtime"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 120,
+  "notes": "Single read-only final status check for N1E33 regressions and Astra PREBUILD. No model invocation or mutation.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/final_status_n1e35.py",
+      "content": "from pathlib import Path\nimport json\nhome=Path.home()\nstate_root=home/\".local/state/prediction-project-executor\"\ncampaign=home/\".local/share/prediction-project-executor/campaigns/FULL-A2Z-LIVE-20261004-V4\"\nout={}\nfor t in [\n \"DEV-PRED-A2Z-DIRECT-SOL-REGRESSION-FIX-20261007-N1E33\",\n \"DEV-PRED-A2Z-ASTRA-PREBUILD-STATUS-20261007-N1E34\",\n]:\n p=state_root/(t+\".json\")\n if p.is_file():\n  o=json.loads(p.read_text())\n  out[t]={\"status\":o.get(\"status\"),\"operation_count\":o.get(\"operation_count\"),\"completed_at_utc\":o.get(\"completed_at_utc\")}\n else:\n  out[t]={\"status\":\"MISSING\"}\nastra=\"A2Z-V4-ASTRA-PREBUILD-DIRECT-20261007-R4P2\"\np=campaign/\"model_results\"/(astra+\".json\")\nif p.is_file():\n o=json.loads(p.read_text())\n review={}\n try:\n  review=json.loads(o.get(\"final\") or \"{}\")\n except Exception:\n  pass\n out[\"ASTRA_RESULT\"]={\"exists\":True,\"phase\":o.get(\"phase\"),\"model\":o.get(\"model\"),\"model_policy\":o.get(\"model_policy\"),\"decision\":review.get(\"decision\")}\nelse:\n out[\"ASTRA_RESULT\"]={\"exists\":False}\nraise RuntimeError(\"FINAL_STATUS=\"+json.dumps(out,sort_keys=True,separators=(\",\",\":\")))\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/final_status_n1e35.py"
+      ],
+      "timeout_seconds": 30
+    }
+  ]
+}
