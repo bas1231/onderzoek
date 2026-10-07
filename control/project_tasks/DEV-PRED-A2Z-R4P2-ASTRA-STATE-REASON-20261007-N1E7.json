@@ -1,0 +1,41 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-A2Z-R4P2-ASTRA-STATE-REASON-20261007-N1E7",
+  "source_commit": "32df88fac477d8b20db9e0f50d81b040163e73e5",
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "High"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_runtime"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 120,
+  "notes": "Read-only extract of Astra model supervisor state/reason/blocker for the exact R4P2 PREBUILD task. No model invocation, service mutation, bridge mutation, tests or measurement.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/r4p2_astra_state_reason_n1e7.py",
+      "content": "from pathlib import Path\nimport json\n\nROOT=Path.home()/\".local/share/prediction-project-executor/campaigns/FULL-A2Z-LIVE-20261004-V4/models\"\nTASK=\"A2Z-V4-ASTRA-PREBUILD-DIRECT-20261007-R4P2\"\n\nout={}\nfor name in (\"STATE.json\",\"BLOCKER.json\",\"CONTINUATION.json\"):\n    p=ROOT/name\n    if p.is_file():\n        try:\n            obj=json.loads(p.read_text(encoding=\"utf-8\"))\n            if isinstance(obj,dict):\n                out[name]={\n                    k:obj.get(k) for k in (\n                        \"state\",\"reason\",\"task_id\",\"attempt\",\"retry_at\",\n                        \"checkpoint\",\"next_action\",\"type\"\n                    ) if k in obj\n                }\n        except Exception as exc:\n            out[name]={\"parse_error\":type(exc).__name__}\n\nq=ROOT/\"TASK_QUEUE.jsonl\"\nif q.is_file():\n    for line in q.read_text(encoding=\"utf-8\",errors=\"replace\").splitlines():\n        try: obj=json.loads(line)\n        except Exception: continue\n        if obj.get(\"task_id\")==TASK:\n            out[\"task_queue\"]={\n                \"status\":obj.get(\"status\"),\n                \"attempts\":obj.get(\"attempts\"),\n                \"model_policy\":obj.get(\"model_policy\"),\n                \"route_task_id\":obj.get(\"route_task_id\"),\n            }\n            break\n\nprint(\"ERROR_CLASS=R4P2_ASTRA_STATE\")\nprint(\"ERROR=\"+json.dumps(out,separators=(\",\",\":\"),sort_keys=True))\nraise SystemExit(1)\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/r4p2_astra_state_reason_n1e7.py"
+      ],
+      "timeout_seconds": 60
+    }
+  ]
+}
