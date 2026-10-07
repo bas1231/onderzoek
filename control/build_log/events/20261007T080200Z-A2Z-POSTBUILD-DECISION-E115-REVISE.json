@@ -1,0 +1,30 @@
+{
+  "schema": "PREDICTION_BUILD_LOG_EVENT_V1",
+  "event_id": "20261007T080200Z-A2Z-POSTBUILD-DECISION-E115-REVISE",
+  "work_item_id": "A2Z-SYSTEMTEST-20261005",
+  "created_at_utc": "2026-10-07T08:02:00Z",
+  "event_type": "RESULT",
+  "work_item_status": "IN_PROGRESS",
+  "outcome": "FAIL",
+  "title": "Exacte R3-P2 Astra POST-BUILD-beslissing is REVISE",
+  "objective": "Bepaal de exacte canonical beslissing van A2Z-V4-ASTRA-POSTBUILD-20261006-R3-P2.",
+  "summary": "E115 returned rc=20 en meldde exact: decision=REVISE, source=A2Z-V4-ASTRA-POSTBUILD-20261006-R3-P2, ref_exists=True. Eerdere directe APPROVE-records waren dus niet de geldige R3-P2-beslissing.",
+  "why": "De canonical gate moet dicht blijven. Volgens de lifecycle gaat Astra-feedback nu terug naar GPT-5.6 Sol voor een herziene build, gevolgd door een nieuwe Astra POST-BUILD-review.",
+  "first_incomplete_step": "Maak een nieuwe Sol-buildversie op basis van de bestaande R3-opzet plus de exacte R3-P2 Astra-feedback.",
+  "next_action": "Dispatch Sol rebuild R4 from existing R3 proposal/build and exact R3-P2 review feedback; daarna nieuwe Astra POSTBUILD op de nieuwe hashes.",
+  "session_route_task_id": "SESSION-ROUTE-5388245c5e308fbc9dcf92ab",
+  "task_ids": [
+    "DEV-PRED-A2Z-POSTBUILD-DECISION-EXACT-20261007-E115"
+  ],
+  "commits": [],
+  "evidence_refs": [
+    "result:DEV-PRED-A2Z-POSTBUILD-DECISION-EXACT-20261007-E115 rc=20 decision=REVISE source=A2Z-V4-ASTRA-POSTBUILD-20261006-R3-P2 event=1791359573-224464933b61"
+  ],
+  "tags": [
+    "a2z",
+    "astra",
+    "postbuild",
+    "revise",
+    "sol-rebuild"
+  ]
+}
