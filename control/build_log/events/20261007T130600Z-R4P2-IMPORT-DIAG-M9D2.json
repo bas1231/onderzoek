@@ -1,0 +1,25 @@
+{
+  "schema": "PREDICTION_BUILD_LOG_EVENT_V1",
+  "event_id": "20261007T130600Z-R4P2-IMPORT-DIAG-M9D2",
+  "work_item_id": "A2Z-SYSTEMTEST-20261005",
+  "created_at_utc": "2026-10-07T13:06:00Z",
+  "event_type": "ATTEMPT",
+  "work_item_status": "IN_PROGRESS",
+  "outcome": "STARTED",
+  "title": "Diagnoseer DIRECT_SOL importfout",
+  "objective": "Bepaal exact welke import vóór de R4P2-hashvalidatie faalt.",
+  "summary": "De vorige diagnose bereikte zijn marker niet; crash zat vóór de try-block imports.",
+  "first_incomplete_step": "Importeer direct_sol_chat/direct_sol_record veilig.",
+  "next_action": "Repareer alleen de eerste importfout; geen bridgewijziging.",
+  "session_route_task_id": "DEV-PRED-SOL-DIRECT-GATE-QUALIFY-R2-20261007-A7C1",
+  "task_ids": [
+    "DEV-PRED-A2Z-R4P2-IMPORT-DIAG-20261007-M9D2"
+  ],
+  "tags": [
+    "a2z",
+    "direct-sol",
+    "import",
+    "diagnostic",
+    "no-bridge-mutation"
+  ]
+}
