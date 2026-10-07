@@ -1,0 +1,25 @@
+{
+  "schema": "PREDICTION_BUILD_LOG_EVENT_V1",
+  "event_id": "20261007T134000Z-R4P2-ASTRA-PREBUILD-PENDING",
+  "work_item_id": "A2Z-SYSTEMTEST-20261005",
+  "created_at_utc": "2026-10-07T13:40:00Z",
+  "event_type": "RESULT",
+  "work_item_status": "IN_PROGRESS",
+  "outcome": "PARTIAL",
+  "title": "Astra PREBUILD completion nog niet aanwezig",
+  "objective": "Verifieer exact GPT-6 Astra PREBUILD-resultaat voor R4P2.",
+  "summary": "N1E4 returned state=PENDING reason=MODEL_RESULT_MISSING. Request exists; no completion/result envelope yet.",
+  "first_incomplete_step": "Bepaal waarom prediction-a2z-v4-model@A2Z-V4-ASTRA-PREBUILD-DIRECT-20261007-R4P2 geen model_result heeft geproduceerd.",
+  "next_action": "Read-only service status, journal and request/checkpoint presence diagnostic.",
+  "session_route_task_id": "DEV-PRED-A2Z-R4P2-SELECTION-RESTORE-20261007-N1E3",
+  "task_ids": [
+    "DEV-PRED-A2Z-R4P2-ASTRA-PREBUILD-VERIFY-20261007-N1E4"
+  ],
+  "tags": [
+    "a2z",
+    "astra-prebuild",
+    "pending",
+    "diagnostic",
+    "no-bridge-mutation"
+  ]
+}
