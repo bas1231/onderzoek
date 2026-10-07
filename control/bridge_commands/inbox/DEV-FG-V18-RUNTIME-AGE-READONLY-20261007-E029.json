@@ -1,0 +1,17 @@
+{
+  "schema": "PREDICTION_BRIDGE_COMMAND_V1",
+  "task_id": "DEV-FG-V18-RUNTIME-AGE-READONLY-20261007-E029",
+  "action": "SIX_AI_HEALTH",
+  "created_at_utc": "2026-10-07T10:21:30Z",
+  "route_task_id": "DEV-FG-V18-RUNTIME-READONLY-20261007-E028",
+  "delivery_mode": "chat",
+  "live_trading": false,
+  "paid_actions": false,
+  "wallet_actions": false,
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "notes": "Read-only FG V18 runtime-age verification only. Existing bridge is transport only and MUST NOT be modified, restarted, reinstalled, patched, reconfigured or otherwise changed. Do not access network/device endpoints. Verify fg-control-center service is active and its current process start time is after the V18 source files on disk."
+}
