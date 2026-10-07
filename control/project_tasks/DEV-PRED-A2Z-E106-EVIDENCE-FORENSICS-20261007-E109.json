@@ -1,0 +1,42 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-A2Z-E106-EVIDENCE-FORENSICS-20261007-E109",
+  "source_commit": "56af94b03e00b6459555c49edf1a660cfe98e6ee",
+  "build_id": "BUILD-PRED-A2Z-E106-FORENSICS-20261007",
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "High"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_runtime"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 180,
+  "notes": "Read-only forensic inspection of E106 POSTBUILD review/provenance evidence. No model start, build, tests, measurement, runtime writes or service actions.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/a2z_e106_evidence_forensics_20261007_e109.py",
+      "content": "from pathlib import Path\nimport json, hashlib, re, sys\n\nCID=\"AUTO-DISCOVERY-54d13314c7879b58e46d\"\nMODEL_TASK=\"A2Z-V4-ASTRA-POSTBUILD-20261006-R3-P2\"\nroots=[\n Path.home()/\".local/share/prediction-project-executor/campaigns/FULL-A2Z-LIVE-20261004-V4\",\n Path.home()/\".local/share/prediction-project-executor/worktrees/DEV-PRED-A2Z-POSTBUILD-RETRY-20261006-E106\",\n Path.home()/\".local/state/prediction-codex-supervisor\",\n]\nMAX=2_000_000\nrecords=[]\n\ndef sha256(p):\n try:\n  return hashlib.sha256(p.read_bytes()).hexdigest()\n except Exception:\n  return None\n\ndef walk(obj,path):\n if isinstance(obj,dict):\n  dec=str(obj.get(\"decision\",\"\")).upper()\n  blob=json.dumps(obj,sort_keys=True,default=str)\n  if dec in {\"APPROVE\",\"NEEDS_REVISION\",\"REVISE\",\"REJECT\",\"PARK\"} and (\n      MODEL_TASK in blob or CID in blob or \"POSTBUILD\" in blob.upper() or \"postbuild\" in path.lower()):\n   records.append((path,obj))\n  for v in obj.values(): walk(v,path)\n elif isinstance(obj,list):\n  for v in obj: walk(v,path)\n\nfor root in roots:\n if not root.exists(): continue\n for p in root.rglob(\"*\"):\n  try:\n   if not p.is_file() or p.stat().st_size>MAX: continue\n  except OSError: continue\n  if p.suffix.lower() not in {\".json\",\".jsonl\"}: continue\n  try:\n   raw=p.read_text(errors=\"replace\")\n  except Exception: continue\n  low=raw.lower()\n  if MODEL_TASK.lower() not in low and CID.lower() not in low and \"postbuild\" not in low:\n   continue\n  if p.suffix.lower()==\".json\":\n   try: walk(json.loads(raw),str(p))\n   except Exception: pass\n  else:\n   for line in raw.splitlines():\n    try: walk(json.loads(line),str(p))\n    except Exception: pass\n\n# de-duplicate by path + stable object\nuniq=[]\nseen=set()\nfor path,d in records:\n key=(path,json.dumps(d,sort_keys=True,default=str))\n if key in seen: continue\n seen.add(key); uniq.append((path,d))\n\ninteresting=[\n \"candidate_id\",\"phase\",\"review_phase\",\"gate\",\"decision\",\n \"reviewer_model\",\"reviewer_model_slug\",\"model\",\"model_slug\",\n \"binding_sha256\",\"review_binding_sha256\",\"build_binding_sha256\",\n \"source_task_id\",\"task_id\",\"model_task_id\",\"review_task_id\",\n \"provenance_kind\",\"model_provenance_ref\",\"model_provenance_sha256\",\n \"review_ref\",\"ref\",\"build_id\",\"build_task_id\",\"builder_model\",\"builder_model_slug\",\n \"experiment_sha256\",\"harness_sha256\",\"code_sha256\",\"worker_sha256\",\n]\nout=[]\nfor path,d in uniq:\n item={\"path\":path,\"keys\":sorted(d.keys())}\n for k in interesting:\n  if k in d: item[k]=d[k]\n # compact nested fields likely to contain bindings/provenance\n for k,v in d.items():\n  lk=k.lower()\n  if k in item: continue\n  if any(x in lk for x in (\"bind\",\"proven\",\"reviewer\",\"build\",\"hash\",\"worker\",\"model\")):\n   if isinstance(v,(str,int,float,bool)) or v is None:\n    item[k]=v\n   elif isinstance(v,dict):\n    item[k]={kk:vv for kk,vv in v.items() if isinstance(vv,(str,int,float,bool)) or vv is None}\n out.append(item)\n\n# resolve any referenced provenance files from review record roots and common worktree roots\nrefs=[]\nfor _,d in uniq:\n for k in (\"model_provenance_ref\",\"review_ref\",\"ref\"):\n  v=d.get(k)\n  if isinstance(v,str) and v and v not in refs: refs.append(v)\n\nresolved=[]\nfor ref in refs:\n for root in roots:\n  candidates=[root/ref]\n  if \"worktrees/\" in str(root):\n   candidates.append(root/ref.lstrip(\"/\"))\n  for p in candidates:\n   if p.exists() and p.is_file():\n    entry={\"ref\":ref,\"path\":str(p),\"sha256\":sha256(p)}\n    try:\n     obj=json.loads(p.read_text())\n     entry[\"keys\"]=sorted(obj.keys()) if isinstance(obj,dict) else []\n     if isinstance(obj,dict):\n      for k in interesting:\n       if k in obj: entry[k]=obj[k]\n    except Exception:\n     pass\n    resolved.append(entry)\n\nsummary={\"record_count\":len(out),\"records\":out,\"resolved_refs\":resolved}\nprint(\"E106_EVIDENCE_FORENSICS \"+json.dumps(summary,separators=(\",\",\":\"),default=str),flush=True)\nraise SystemExit(0)\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/a2z_e106_evidence_forensics_20261007_e109.py"
+      ],
+      "timeout_seconds": 120
+    }
+  ]
+}
