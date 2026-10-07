@@ -1,0 +1,17 @@
+{
+  "schema": "PREDICTION_BRIDGE_COMMAND_V1",
+  "task_id": "DEV-FG-STOP-TRIGGER-DETAIL-READONLY-20261007-E041",
+  "action": "SIX_AI_HEALTH",
+  "created_at_utc": "2026-10-07T14:04:00Z",
+  "route_task_id": "SESSION-ROUTE-0119cf707add47a07c830145",
+  "delivery_mode": "chat",
+  "live_trading": false,
+  "paid_actions": false,
+  "wallet_actions": false,
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "notes": "READ-ONLY FG diagnosis: watcher lifecycle timestamps, Windows trigger/action details and helper contents only. No bridge, watcher, task, service or runtime changes."
+}
