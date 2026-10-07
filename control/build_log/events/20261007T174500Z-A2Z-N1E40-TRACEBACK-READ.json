@@ -1,0 +1,32 @@
+{
+  "schema": "PREDICTION_BUILD_LOG_EVENT_V1",
+  "event_id": "20261007T174500Z-A2Z-N1E40-TRACEBACK-READ",
+  "work_item_id": "A2Z-SOL-DIRECT-EXECUTION-20261007",
+  "created_at_utc": "2026-10-07T17:45:00Z",
+  "event_type": "ATTEMPT",
+  "work_item_status": "IN_PROGRESS",
+  "outcome": "STARTED",
+  "title": "Read exact N1E40 assertion failure",
+  "objective": "Read the persisted N1E40 executor receipt and surface the first exact assertion failure without rerunning any test or starting Astra.",
+  "summary": "N1E40 returned TaskError/python rc=1 but the compact wake detail did not include the assertion message. This task reads only the existing receipt/error fields.",
+  "why": "The user required first concrete fault handling and no diagnosis carousel.",
+  "next_action": "Repair only the first concrete verifier or binding defect identified by the persisted N1E40 traceback. If the defect is only diagnostic logic, fix the diagnostic; if it is real PREBUILD binding, repair only that runtime/config path.",
+  "session_route_task_id": "SESSION-ROUTE-246799adf99f0bf8336c27a0",
+  "task_ids": [
+    "DEV-PRED-A2Z-N1E40-TRACEBACK-READ-20261007-N1E41"
+  ],
+  "commits": [
+    "b0fc664ec065c03125c54c6dae2c71126beebe67"
+  ],
+  "evidence_refs": [
+    "local:~/.local/state/prediction-project-executor/DEV-PRED-A2Z-N1E36-ASSERT-PREBUILD-BINDING-20261007-N1E40.json"
+  ],
+  "tags": [
+    "A2Z",
+    "N1E40",
+    "TRACEBACK",
+    "READ_ONLY",
+    "NO_RERUN"
+  ],
+  "first_incomplete_step": "Read the first exact N1E40 assertion failure from persisted executor state."
+}
