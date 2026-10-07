@@ -1,0 +1,19 @@
+{
+  "schema": "PREDICTION_BRIDGE_COMMAND_V1",
+  "task_id": "CONT-DONE-3d84ed7df618200ee646b9d4",
+  "action": "BRIDGE_PING",
+  "created_at_utc": "2026-10-07T19:06:30Z",
+  "route_task_id": null,
+  "delivery_mode": "headless",
+  "live_trading": false,
+  "paid_actions": false,
+  "wallet_actions": false,
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "notes": "Close superseded rc=21 continuation branch. This source was an early join that was overtaken by the later terminal PREBUILD verifier rc=30 (PAUSED_USAGE_LIMIT) and current N1E59 usage-limit retry-state diagnosis. No duplicate NEXT or Astra resume is authorized from this stale branch.",
+  "auto_continue": false,
+  "parent_continuation_id": "CONT-3d84ed7df618200ee646b9d4"
+}
