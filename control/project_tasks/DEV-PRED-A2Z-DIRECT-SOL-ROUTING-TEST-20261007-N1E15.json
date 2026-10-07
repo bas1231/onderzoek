@@ -1,0 +1,61 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-A2Z-DIRECT-SOL-ROUTING-TEST-20261007-N1E15",
+  "source_commit": "c6ae69bed040a5695ac09778ea0e1c58a9d4d1cd",
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "High"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 240,
+  "notes": "Validate only governed routing after Astra PREBUILD: SOL_BUILD/revision must emit DIRECT_SOL request; Astra stages remain Codex. No model invocation, runtime install, experiment tests/measurement, bridge mutation, paid/live/wallet actions.",
+  "operations": [
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/model_execution/patch_e106_gate.py"
+      ],
+      "timeout_seconds": 60
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "-m",
+        "compileall",
+        "-q",
+        "control/model_execution",
+        "control/codex_supervisor/experiment_gate.py",
+        "control/jobs/full_a2z_governed_v4.py"
+      ],
+      "timeout_seconds": 90
+    },
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/test_direct_sol_runner_routing_n1e15.py",
+      "content": "from __future__ import annotations\nimport importlib.util\nimport json\nimport shutil\nimport sys\nfrom pathlib import Path\n\nROOT=Path(__file__).resolve().parents[2]\nif str(ROOT) not in sys.path:\n    sys.path.insert(0,str(ROOT))\n\nfrom control.model_execution.direct_sol_chat import validate_request\n\nrunner_path=ROOT/\"control/jobs/full_a2z_governed_v4.py\"\nspec=importlib.util.spec_from_file_location(\"a2z_runner_preflight\",runner_path)\nmod=importlib.util.module_from_spec(spec)\nspec.loader.exec_module(mod)\n\nbundle=ROOT/\"control/dev_checks/direct_sol_runner_preflight_bundle\"\nif bundle.exists():\n    shutil.rmtree(bundle)\nbundle.mkdir(parents=True)\n\nbinding=\"a\"*64\nmod.direct_sol_request(\n    bundle,\n    {\"candidate_id\":mod.CID},\n    \"SOL_BUILD\",\n    \"A2Z-V4-SOL-BUILD-DIRECT-PREFLIGHT\",\n    \"Synthetic routing-only prompt; do not execute experiment code.\",\n    binding,\n)\np=bundle/\"direct_requests/A2Z-V4-SOL-BUILD-DIRECT-PREFLIGHT.json\"\nobj=json.loads(p.read_text(encoding=\"utf-8\"))\nvalidate_request(obj)\nassert obj[\"schema\"]==\"PREDICTION_DIRECT_SOL_REQUEST_V1\"\nassert obj[\"phase\"]==\"SOL_BUILD\"\nassert obj[\"target_model\"]==\"gpt-5.6-sol\"\nassert obj[\"target_experience\"]==\"CHAT\"\nassert obj[\"execution_layer\"]==\"DIRECT_SOL_CHAT\"\nassert obj[\"binding_sha256\"]==binding\nassert obj[\"candidate_id\"]==mod.CID\nassert obj[\"campaign_id\"]==mod.CAMPAIGN\nassert obj[\"live_trading\"] is False\nassert obj[\"paid_actions\"] is False\nassert obj[\"wallet_actions\"] is False\n\nsrc=runner_path.read_text(encoding=\"utf-8\")\nassert 'direct_sol_request(repo, overlay, \"SOL_BUILD\"' in src\nassert 'prepare_review(repo, overlay, \"POSTBUILD\"' in src\nassert '\"ASTRA_\" + phase' in src\n\nprint(\"DIRECT_SOL_ROUTING_PREFLIGHT=PASS\")\nprint(\"DIRECT_SOL_INPUT_SHA256=\"+obj[\"input_sha256\"])\nprint(\"DIRECT_SOL_BINDING_SHA256=\"+obj[\"binding_sha256\"])\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/test_direct_sol_runner_routing_n1e15.py"
+      ],
+      "timeout_seconds": 90
+    }
+  ]
+}
