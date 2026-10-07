@@ -1,0 +1,30 @@
+{
+  "schema": "PREDICTION_BUILD_LOG_EVENT_V1",
+  "event_id": "20261007T102100Z-CONTROL-CENTER-SOL-DIRECT-TARGET-E139",
+  "work_item_id": "A2Z-SOL-DIRECT-EXECUTION-20261007",
+  "created_at_utc": "2026-10-07T10:21:00Z",
+  "event_type": "ATTEMPT",
+  "work_item_status": "IN_PROGRESS",
+  "outcome": "STARTED",
+  "title": "Dashboard live: Sol direct / Astra via Codex",
+  "objective": "Maak de nieuwe model-routing zichtbaar in het live dashboard voordat docs/code worden aangepast.",
+  "summary": "E139 corrigeert alleen de E138 executor-opnaam naar production_ff. Target blijft dashboardcommit dcdf544.",
+  "why": "Gebruikersvolgorde is dashboard -> Git -> bouwen.",
+  "first_incomplete_step": "Fail-closed production_ff en live API snapshotasserties.",
+  "next_action": "Na PASS canonical Git-documentatie bijwerken; daarna direct-Sol executor bouwen.",
+  "session_route_task_id": "SESSION-ROUTE-5388245c5e308fbc9dcf92ab",
+  "task_ids": [
+    "DEV-PRED-CONTROL-CENTER-SOL-DIRECT-TARGET-20261007-E139"
+  ],
+  "commits": [
+    "dcdf544170275905e8b550aebb9e2ce1941a30aa"
+  ],
+  "evidence_refs": [
+    "control/control_center/lifecycle_status.json"
+  ],
+  "tags": [
+    "dashboard",
+    "sol-direct",
+    "astra-codex"
+  ]
+}
