@@ -1,0 +1,36 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-A2Z-ASTRA-RETRY-TIMER-STATUS-20261007-N1E10",
+  "source_commit": "7b143011468659950c7ad9b523340daa86a9692a",
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "High"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "user_service_manage"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 120,
+  "notes": "Read-only verify whether the existing A2Z 15-minute retry timer instance for the immutable Astra PREBUILD task is installed/enabled/active. No model invocation, no quota changes, no bridge mutation.",
+  "operations": [
+    {
+      "type": "service",
+      "verb": "is-enabled",
+      "unit": "prediction-a2z-v4-model@A2Z-V4-ASTRA-PREBUILD-DIRECT-20261007-R4P2.timer"
+    },
+    {
+      "type": "service",
+      "verb": "is-active",
+      "unit": "prediction-a2z-v4-model@A2Z-V4-ASTRA-PREBUILD-DIRECT-20261007-R4P2.timer"
+    }
+  ]
+}
