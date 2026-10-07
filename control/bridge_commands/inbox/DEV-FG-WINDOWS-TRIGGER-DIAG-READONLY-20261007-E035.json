@@ -1,0 +1,17 @@
+{
+  "schema": "PREDICTION_BRIDGE_COMMAND_V1",
+  "task_id": "DEV-FG-WINDOWS-TRIGGER-DIAG-READONLY-20261007-E035",
+  "action": "SIX_AI_HEALTH",
+  "created_at_utc": "2026-10-07T12:08:00Z",
+  "route_task_id": "DEV-FG-CHATGPT-WINDOW-CONTROLS-V21-20261007-E033",
+  "delivery_mode": "chat",
+  "live_trading": false,
+  "paid_actions": false,
+  "wallet_actions": false,
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "notes": "READ-ONLY FG auto-start trigger diagnosis. Existing Prediction bridge is transport only and MUST NOT be modified. Query only the Windows Scheduled Task 'FG-assistent Inbox Trigger', its action/state/last result/next run, and existence of the hidden helper files plus check_inbox.sh characteristics. Do not enable, disable, restart, edit or create any task or service."
+}
