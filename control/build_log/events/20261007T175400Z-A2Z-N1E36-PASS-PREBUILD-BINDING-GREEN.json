@@ -1,0 +1,36 @@
+{
+  "schema": "PREDICTION_BUILD_LOG_EVENT_V1",
+  "event_id": "20261007T175400Z-A2Z-N1E36-PASS-PREBUILD-BINDING-GREEN",
+  "work_item_id": "A2Z-SOL-DIRECT-EXECUTION-20261007",
+  "created_at_utc": "2026-10-07T17:54:00Z",
+  "event_type": "RESULT",
+  "work_item_status": "IN_PROGRESS",
+  "outcome": "PASS",
+  "title": "Direct Sol regression green and R4P2 PREBUILD binding safe",
+  "objective": "Prove the escaped-newline Direct Sol repair and verify exact R4P2 Astra PREBUILD binding before resume.",
+  "summary": "N1E43 proved from the durable DEV receipt that N1E36 executed tests/model_execution/test_direct_sol_chat.py: Ran 3 tests, OK, operation rc=0, PROJECT_TASK_STATUS=PASS and DEV_TASK_STATUS=PASS on source commit b0fc664ec065c03125c54c6dae2c71126beebe67. The same read-only task proved the R4P2 Astra request is bound to the current DIRECT_SOL proposal, candidate/scientific/safety context is correct, the executable queue contains only A2Z-V4-ASTRA-PREBUILD-DIRECT-20261007-R4P2 with ASTRA_EXACT, no old Sol resume target is active, no Astra PREBUILD result exists, and service/timer are inactive with timer not enabled.",
+  "why": "This closes the first incomplete DIRECT_SOL regression step and satisfies the user's explicit PREBUILD resume preconditions without changing the bridge or rerunning experiments.",
+  "next_action": "Start only prediction-a2z-v4-model@A2Z-V4-ASTRA-PREBUILD-DIRECT-20261007-R4P2.service once. Keep its timer disabled. Then verify exact GPT-6 Astra PREBUILD result and decision before any build.",
+  "session_route_task_id": "SESSION-ROUTE-246799adf99f0bf8336c27a0",
+  "task_ids": [
+    "DEV-PRED-A2Z-DIRECT-SOL-REGRESSION-N1E36-20261007",
+    "DEV-PRED-A2Z-N1E36-DEV-RECEIPT-PREBUILD-20261007-N1E43"
+  ],
+  "commits": [
+    "b0fc664ec065c03125c54c6dae2c71126beebe67"
+  ],
+  "evidence_refs": [
+    "local:dev-task-receipts/DEV-PRED-A2Z-DIRECT-SOL-REGRESSION-N1E36-20261007.log",
+    "local:campaigns/FULL-A2Z-LIVE-20261004-V4/requests/A2Z-V4-ASTRA-PREBUILD-DIRECT-20261007-R4P2.json",
+    "local:campaigns/FULL-A2Z-LIVE-20261004-V4/models/TASK_QUEUE.jsonl"
+  ],
+  "tags": [
+    "A2Z",
+    "DIRECT_SOL",
+    "REGRESSION_PASS",
+    "ASTRA_PREBUILD",
+    "BINDING_PASS",
+    "R4P2"
+  ],
+  "first_incomplete_step": "Obtain a valid exact GPT-6 Astra PREBUILD decision for the existing R4P2 task."
+}
