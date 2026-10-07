@@ -1,0 +1,53 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-A2Z-R4-QUOTA-RUNTIME-INVENTORY-20261007-E123",
+  "source_commit": "0d0bd140136d0cfe2aa70548b25e00e5bb634246",
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "High"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_runtime",
+    "user_service_manage",
+    "read_logs"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 180,
+  "notes": "Read-only inventory of active A2Z model supervisor/runtime and unit layout before quota-management repair. Do not modify model/service/runtime.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/a2z_e123_quota_runtime_inventory.py",
+      "content": "from pathlib import Path\nimport hashlib,json,sqlite3\n\nhome=Path.home()\nroot=home/\".local/share/prediction-project-executor/campaigns/FULL-A2Z-LIVE-20261004-V4\"\nmodels=root/\"models\"\nout={\"models_exists\":models.exists(),\"files\":[],\"units\":[]}\nif models.exists():\n    for p in sorted(models.rglob(\"*\")):\n        if p.is_file() and len(p.relative_to(models).parts)<=3:\n            item={\"path\":str(p),\"size\":p.stat().st_size}\n            if p.name in {\"supervisor.py\",\"CONFIG.json\",\"runtime.sqlite\"}:\n                item[\"sha256\"]=hashlib.sha256(p.read_bytes()).hexdigest()\n            out[\"files\"].append(item)\nunits=home/\".config/systemd/user\"\nif units.exists():\n    for p in sorted(units.glob(\"prediction-*\")):\n        n=p.name\n        if \"a2z\" in n or \"codex\" in n:\n            out[\"units\"].append({\"name\":n,\"is_symlink\":p.is_symlink(),\"target\":str(p.resolve()) if p.is_symlink() else None})\ndbp=models/\"runtime.sqlite\"\nif dbp.exists():\n    db=sqlite3.connect(\"file:\"+str(dbp)+\"?mode=ro\",uri=True)\n    try:\n        task=db.execute(\"select status,attempt,run,thread from tasks where id=?\",( \"A2Z-V4-SOL-BUILD-20261007-R4\", )).fetchone()\n        tr=db.execute(\"select state,reason,attempt,checkpoint,next_action,stamp,retry from transitions where task=? order by seq desc limit 1\",( \"A2Z-V4-SOL-BUILD-20261007-R4\", )).fetchone()\n        out[\"task_row\"]=task\n        out[\"transition_row\"]=tr\n    finally:\n        db.close()\nprint(\"E123_RUNTIME \"+json.dumps(out,separators=(\",\",\":\"),default=str),flush=True)\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/a2z_e123_quota_runtime_inventory.py"
+      ],
+      "timeout_seconds": 120
+    },
+    {
+      "type": "service",
+      "verb": "status",
+      "unit": "prediction-a2z-v4-model@A2Z-V4-SOL-BUILD-20261007-R4.service"
+    },
+    {
+      "type": "journal",
+      "unit": "prediction-a2z-v4-model@A2Z-V4-SOL-BUILD-20261007-R4.service",
+      "lines": 40
+    }
+  ]
+}
