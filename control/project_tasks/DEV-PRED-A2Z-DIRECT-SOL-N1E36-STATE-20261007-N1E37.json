@@ -1,0 +1,41 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-A2Z-DIRECT-SOL-N1E36-STATE-20261007-N1E37",
+  "source_commit": "b0fc664ec065c03125c54c6dae2c71126beebe67",
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "High"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_runtime"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 120,
+  "notes": "Read-only inspection of the already-dispatched N1E36 executor receipt/state and worktree. Do not run unittest, invoke any model, mutate services/runtime/bridge, or perform experiment tests/measurement.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/diag_n1e36_existing_state_n1e37.py",
+      "content": "from pathlib import Path\nimport json\n\nTARGET=\"DEV-PRED-A2Z-DIRECT-SOL-REGRESSION-N1E36-20261007\"\nstate=Path.home()/\".local/state/prediction-project-executor\"/(TARGET+\".json\")\nwt_default=Path.home()/\".local/share/prediction-project-executor/worktrees\"/TARGET\n\nprint(\"TARGET=\"+TARGET)\nprint(\"STATE_PATH=\"+str(state))\nprint(\"STATE_EXISTS=\"+str(state.is_file()))\n\nif not state.is_file():\n    raise SystemExit(2)\n\nobj=json.loads(state.read_text(encoding=\"utf-8\"))\nkeys=(\"task_id\",\"status\",\"exit_code\",\"source_commit\",\"remote_commit\",\"worktree\",\"branch\",\"claimed_at_utc\",\"completed_at_utc\",\"error\",\"operation_count\",\"operations\",\"operation_results\",\"results\")\nfor key in keys:\n    if key in obj:\n        val=obj[key]\n        text=json.dumps(val,ensure_ascii=False,sort_keys=True)\n        if len(text)>12000:\n            text=text[:12000]+\"...<TRUNCATED>\"\n        print(key.upper()+\"=\"+text)\n\nwt=Path(obj.get(\"worktree\") or wt_default)\nprint(\"WORKTREE=\"+str(wt))\nprint(\"WORKTREE_EXISTS=\"+str(wt.exists()))\ntestp=wt/\"tests/model_execution/test_direct_sol_chat.py\"\nprint(\"TEST_FILE_EXISTS=\"+str(testp.is_file()))\n\n# Deterministic classification from persisted executor receipt only; this script does not run tests.\nstatus=str(obj.get(\"status\") or \"\")\nexit_code=obj.get(\"exit_code\")\nblob=json.dumps(obj,ensure_ascii=False,sort_keys=True)\nran_target=(\"tests/model_execution/test_direct_sol_chat.py\" in blob and \"unittest\" in blob)\nprint(\"TARGET_TEST_REFERENCED=\"+str(ran_target))\nprint(\"EXECUTOR_PASS=\"+str(status.upper()==\"PASS\" and exit_code==0))\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/diag_n1e36_existing_state_n1e37.py"
+      ],
+      "timeout_seconds": 45
+    }
+  ]
+}
