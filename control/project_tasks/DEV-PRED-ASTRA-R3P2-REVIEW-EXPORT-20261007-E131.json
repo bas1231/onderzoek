@@ -1,0 +1,41 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-ASTRA-R3P2-REVIEW-EXPORT-20261007-E131",
+  "source_commit": "aa1b89ce634c7c361ecce92cf1e4de6ac757c54e",
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "High"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_runtime"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 180,
+  "notes": "Read-only export of the existing exact R3-P2 GPT-6 Astra POSTBUILD model review. No model invocation, build, test, measurement, service change, trading, paid action or wallet action.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/a2z_r3p2_review_export_e131.py",
+      "content": "from pathlib import Path\nimport base64, hashlib, json\n\nMODEL_TASK = \"A2Z-V4-ASTRA-POSTBUILD-20261006-R3-P2\"\nRUNTIME = Path.home() / \".local/share/prediction-project-executor/campaigns/FULL-A2Z-LIVE-20261004-V4\"\nenvelope_path = RUNTIME / \"model_results\" / (MODEL_TASK + \".json\")\nif not envelope_path.is_file():\n    raise SystemExit(\"MODEL_RESULT_MISSING\")\nenvelope = json.loads(envelope_path.read_text(encoding=\"utf-8\"))\ncheckpoint = (RUNTIME / str(envelope.get(\"checkpoint\", \"\"))).resolve()\nruns_root = (RUNTIME / \"models/runs\").resolve()\ntry:\n    checkpoint.relative_to(runs_root)\nexcept ValueError:\n    raise SystemExit(\"CHECKPOINT_OUTSIDE_RUNTIME\")\nif not checkpoint.is_dir():\n    raise SystemExit(\"CHECKPOINT_MISSING\")\n\ndef load_json(name):\n    p = checkpoint / name\n    if not p.is_file():\n        raise SystemExit(name.replace(\".\", \"_\").upper() + \"_MISSING\")\n    return json.loads(p.read_text(encoding=\"utf-8\"))\n\ntask = load_json(\"TASK.json\")\nworker = load_json(\"WORKER.json\")\ncomplete = load_json(\"COMPLETE.json\")\nfinal = complete.get(\"final\")\nreview = None\nif isinstance(final, str):\n    try:\n        review = json.loads(final)\n    except json.JSONDecodeError:\n        pass\nelif isinstance(final, dict):\n    review = final\nif not isinstance(review, dict):\n    events_path = checkpoint / \"events.jsonl\"\n    if events_path.is_file():\n        for line in events_path.read_text(encoding=\"utf-8\").splitlines():\n            try:\n                event = json.loads(line)\n            except json.JSONDecodeError:\n                continue\n            item = event.get(\"item\") if isinstance(event, dict) else None\n            if event.get(\"type\") == \"item.completed\" and isinstance(item, dict) and item.get(\"type\") == \"agent_message\":\n                text_value = item.get(\"text\")\n                if isinstance(text_value, str):\n                    try:\n                        candidate = json.loads(text_value)\n                    except json.JSONDecodeError:\n                        continue\n                    if isinstance(candidate, dict):\n                        review = candidate\nif not isinstance(review, dict):\n    raise SystemExit(\"REVIEW_JSON_NOT_FOUND\")\n\npayload = {\n    \"model_task_id\": MODEL_TASK,\n    \"model_result_envelope\": {\n        \"checkpoint\": envelope.get(\"checkpoint\"),\n        \"completion_sha256\": envelope.get(\"completion_sha256\"),\n        \"worker_sha256\": envelope.get(\"worker_sha256\"),\n    },\n    \"task\": {\n        \"task_id\": task.get(\"task_id\"),\n        \"phase\": task.get(\"phase\"),\n        \"model_policy\": task.get(\"model_policy\"),\n        \"astra_review_task\": task.get(\"astra_review_task\"),\n    },\n    \"worker\": {\n        \"model\": worker.get(\"model\"),\n        \"model_selection\": worker.get(\"model_selection\"),\n        \"thread_id\": worker.get(\"thread_id\"),\n    },\n    \"complete\": {\n        \"timestamp\": complete.get(\"timestamp\"),\n        \"thread_id\": complete.get(\"thread_id\"),\n    },\n    \"review\": review,\n}\nraw = json.dumps(payload, ensure_ascii=False, sort_keys=True, separators=(\",\", \":\")).encode(\"utf-8\")\nencoded = base64.b64encode(raw).decode(\"ascii\")\nif len(encoded) > 24000:\n    raise SystemExit(\"EXPORT_TOO_LARGE\")\nmeta = {\n    \"kind\": \"ASTRA_R3P2_REVIEW\",\n    \"model_task_id\": MODEL_TASK,\n    \"json_bytes\": len(raw),\n    \"base64_chars\": len(encoded),\n    \"sha256\": hashlib.sha256(raw).hexdigest(),\n}\nprint(\"PREDICTION_SNAPSHOT_EXPORT_V1\")\nprint(\"SNAPSHOT_EXPORT_META=\" + json.dumps(meta, sort_keys=True, separators=(\",\", \":\")))\nprint(\"SNAPSHOT_EXPORT_DATA=\" + encoded)\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/a2z_r3p2_review_export_e131.py"
+      ],
+      "timeout_seconds": 120
+    }
+  ]
+}
