@@ -1,0 +1,33 @@
+{
+  "schema": "PREDICTION_BUILD_LOG_EVENT_V1",
+  "event_id": "20261007T082700Z-A2Z-SOL-R4-PROGRESS-E121-USAGE-LIMIT",
+  "work_item_id": "A2Z-SYSTEMTEST-20261005",
+  "created_at_utc": "2026-10-07T08:27:00Z",
+  "event_type": "RESULT",
+  "work_item_status": "IN_PROGRESS",
+  "outcome": "BLOCKED",
+  "title": "Sol R4 gepauzeerd door usage limit",
+  "objective": "Bepaal via event/checkpoint of de bestaande R4-run actief, compleet of tijdelijk geblokkeerd is.",
+  "summary": "E121 zag 4 events; laatste event is turn.failed met melding dat de usage limit is bereikt en opnieuw geprobeerd kan worden om 1:20 PM. COMPLETE en model_result ontbreken.",
+  "why": "Dit is geen buildinhoudelijke fout. Prediction heeft canonical PAUSED_USAGE_LIMIT/retry-same-task logica met 900 seconden retry-cadans.",
+  "first_incomplete_step": "Verifieer in runtime.sqlite dat R4 als PAUSED_USAGE_LIMIT/USAGE_LIMIT met dezelfde immutable task en retry_at staat geregistreerd.",
+  "next_action": "E122 leest task/transition read-only. Bij correcte pause: geen nieuwe modeltask starten; bestaand retrymechanisme volgen. Bij ontbrekende pause: herstel uitsluitend supervisor-finalization.",
+  "session_route_task_id": "SESSION-ROUTE-5388245c5e308fbc9dcf92ab",
+  "task_ids": [
+    "DEV-PRED-A2Z-SOL-R4-PROGRESS-20261007-E121",
+    "A2Z-V4-SOL-BUILD-20261007-R4"
+  ],
+  "commits": [],
+  "evidence_refs": [
+    "result:DEV-PRED-A2Z-SOL-R4-PROGRESS-20261007-E121 rc=21 last_type=turn.failed usage_limit event=1791360414-c793a644c5c1",
+    "control/codex_supervisor/test_usage_limit_retry.py",
+    "control/codex_supervisor/supervisor.py"
+  ],
+  "tags": [
+    "a2z",
+    "sol",
+    "r4",
+    "usage-limit",
+    "paused"
+  ]
+}
