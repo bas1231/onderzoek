@@ -1,0 +1,41 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-A2Z-R4P2-RETRY6-JOURNAL-VERIFY-20261007-N1E99",
+  "source_commit": "49b63a323248dfc13f57f696ca6816c75b7fe491",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "High"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_logs"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 120,
+  "notes": "Read-only R4P2 journal check after N1E95; no service/model invocation.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/r4p2_retry6_journal_verify_n1e99.py",
+      "content": "import subprocess,json\nu='prediction-a2z-v4-model@A2Z-V4-ASTRA-PREBUILD-DIRECT-20261007-R4P2.service'\np=subprocess.run(['journalctl','--user','-u',u,'--since','2026-10-07 22:45:00','--no-pager'],capture_output=True,text=True)\nkeep=[]\nfor line in (p.stdout or '').splitlines():\n    if ('Started prediction-a2z-v4-model@' in line or 'SUPERVISOR_STATE' in line or 'Main process exited' in line or 'Deactivated successfully' in line or 'Failed with result' in line):\n        keep.append(line[-700:])\nprint('ERROR_CLASS=R4P2_RETRY6_JOURNAL_VERIFY',flush=True)\nprint('ERROR='+json.dumps(keep[-12:],separators=(',',':')),flush=True)\nraise SystemExit(1)\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/r4p2_retry6_journal_verify_n1e99.py"
+      ],
+      "timeout_seconds": 60
+    }
+  ]
+}
