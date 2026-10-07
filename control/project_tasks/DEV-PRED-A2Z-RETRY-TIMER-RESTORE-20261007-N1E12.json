@@ -1,0 +1,76 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-A2Z-RETRY-TIMER-RESTORE-20261007-N1E12",
+  "source_commit": "4b93fc3df982b2eb64c9497e3608143b13b72eb9",
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "High"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "write_runtime",
+    "user_service_manage"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 240,
+  "notes": "Restore the previously working generic 15-minute A2Z model retry timer from historical E134 source and enable/start it only for the current immutable Astra PREBUILD R4P2 instance. Do not enable the old Sol timer. No bridge mutation, quota changes, paid/live/wallet actions, experiment tests or measurement.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/codex_supervisor/systemd/prediction-a2z-v4-model@.timer",
+      "content": "[Unit]\nDescription=Prediction A2Z v4 model retry timer for %i\n\n[Timer]\nOnCalendar=*:0/15\nPersistent=true\nUnit=prediction-a2z-v4-model@%i.service\n\n[Install]\nWantedBy=timers.target\n"
+    },
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/check_a2z_retry_timer_restore_n1e12.py",
+      "content": "from pathlib import Path\np=Path(\"control/codex_supervisor/systemd/prediction-a2z-v4-model@.timer\")\ntext=p.read_text(encoding=\"utf-8\")\nassert \"OnCalendar=*:0/15\" in text\nassert \"Persistent=true\" in text\nassert \"Unit=prediction-a2z-v4-model@%i.service\" in text\nassert \"WantedBy=timers.target\" in text\nprint(\"A2Z_RETRY_TIMER_SOURCE=PASS\")\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/check_a2z_retry_timer_restore_n1e12.py"
+      ],
+      "timeout_seconds": 30
+    },
+    {
+      "type": "install_runtime",
+      "source": "control/codex_supervisor/systemd/prediction-a2z-v4-model@.timer",
+      "destination": "~/.config/systemd/user/prediction-a2z-v4-model@.timer",
+      "mode": 420
+    },
+    {
+      "type": "daemon_reload"
+    },
+    {
+      "type": "service",
+      "verb": "enable",
+      "unit": "prediction-a2z-v4-model@A2Z-V4-ASTRA-PREBUILD-DIRECT-20261007-R4P2.timer"
+    },
+    {
+      "type": "service",
+      "verb": "start",
+      "unit": "prediction-a2z-v4-model@A2Z-V4-ASTRA-PREBUILD-DIRECT-20261007-R4P2.timer"
+    },
+    {
+      "type": "service",
+      "verb": "is-enabled",
+      "unit": "prediction-a2z-v4-model@A2Z-V4-ASTRA-PREBUILD-DIRECT-20261007-R4P2.timer"
+    },
+    {
+      "type": "service",
+      "verb": "is-active",
+      "unit": "prediction-a2z-v4-model@A2Z-V4-ASTRA-PREBUILD-DIRECT-20261007-R4P2.timer"
+    }
+  ]
+}
