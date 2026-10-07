@@ -1,0 +1,19 @@
+{
+  "schema": "PREDICTION_BRIDGE_COMMAND_V1",
+  "task_id": "CONT-DONE-6ba2c8aafc497eec4eb4ca34",
+  "action": "BRIDGE_PING",
+  "created_at_utc": "2026-10-07T23:18:30Z",
+  "route_task_id": null,
+  "delivery_mode": "headless",
+  "live_trading": false,
+  "paid_actions": false,
+  "wallet_actions": false,
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "notes": "Close superseded N1E101 continuation. Its truncated TEMPFAIL diagnosis was already durably advanced to narrow error-line extraction DEV-PRED-A2Z-R4P2-TEMPFAIL-LINES-20261007-N1E102. No duplicate NEXT or Astra resume is authorized.",
+  "auto_continue": false,
+  "parent_continuation_id": "CONT-6ba2c8aafc497eec4eb4ca34"
+}
