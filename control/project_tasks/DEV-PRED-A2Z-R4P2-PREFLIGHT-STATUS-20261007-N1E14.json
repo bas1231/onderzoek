@@ -1,0 +1,41 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-A2Z-R4P2-PREFLIGHT-STATUS-20261007-N1E14",
+  "source_commit": "10bd2935dc6c352b49cf0ac86d1caed9fadd7959",
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "High"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_runtime"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 120,
+  "notes": "Read-only inspect local projectexecutor state for N1E13 plumbing preflight. No model invocation, no runtime mutation, no bridge mutation, no experiment tests or measurement.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/read_n1e13_state.py",
+      "content": "from pathlib import Path\nimport json\np=Path.home()/\".local/state/prediction-project-executor/DEV-PRED-A2Z-R4P2-POSTPREBUILD-PREFLIGHT-20261007-N1E13.json\"\nif not p.exists():\n    print(\"N1E13_STATE=MISSING\")\nelse:\n    obj=json.loads(p.read_text(encoding=\"utf-8\"))\n    keep={k:obj.get(k) for k in (\"task_id\",\"status\",\"claimed_at_utc\",\"finished_at_utc\",\"error\",\"source_commit\",\"remote_commit\")}\n    print(\"N1E13_STATE=\"+json.dumps(keep,sort_keys=True))\n    if obj.get(\"results\"):\n        print(\"N1E13_RESULTS_TAIL=\"+json.dumps(obj[\"results\"][-6:],ensure_ascii=False))\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/read_n1e13_state.py"
+      ],
+      "timeout_seconds": 30
+    }
+  ]
+}
