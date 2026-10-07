@@ -1,0 +1,41 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-A2Z-R4P2-PREBUILD-POSTRETRY7-VERIFY-20261007-N1E92",
+  "source_commit": "e7eb8e8eba89066bc338ce6315bbcf9f816d6b48",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "High"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_runtime"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 240,
+  "notes": "Single-flight verifier after N1E91 successful exact attempt-5 retry. Wait only for existing R4P2 PREBUILD decision or terminal/pause state. No service/model invocation.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/r4p2_postretry7_verify_n1e92.py",
+      "content": "from pathlib import Path\nimport json,time\nbase=Path.home()/\".local/share/prediction-project-executor/campaigns/FULL-A2Z-LIVE-20261004-V4\"\ntask=\"A2Z-V4-ASTRA-PREBUILD-DIRECT-20261007-R4P2\"\nresult=base/\"model_results\"/(task+\".json\")\nstate=base/\"models/STATE.json\"\ncont=base/\"models/CONTINUATION.json\"\ndeadline=time.time()+180\nwhile time.time()<deadline:\n    if result.is_file():\n        o=json.loads(result.read_text(encoding=\"utf-8\"))\n        f=o.get(\"final\")\n        r=json.loads(f) if isinstance(f,str) else f\n        if not isinstance(r,dict): raise SystemExit(29)\n        d=r.get(\"decision\")\n        if d==\"APPROVE\": raise SystemExit(0)\n        if d==\"REVISE\": raise SystemExit(11)\n        if d==\"REJECT\": raise SystemExit(12)\n        raise SystemExit(29)\n    time.sleep(2)\nfor p in (cont,state):\n    if p.is_file():\n        try:o=json.loads(p.read_text(encoding=\"utf-8\"))\n        except Exception:continue\n        if o.get(\"task_id\")==task:\n            s=o.get(\"state\")\n            if s==\"PAUSED_USAGE_LIMIT\": raise SystemExit(30)\n            if s in {\"FAILED\",\"ERROR\",\"BLOCKED\"}: raise SystemExit(31)\nraise SystemExit(32)\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/r4p2_postretry7_verify_n1e92.py"
+      ],
+      "timeout_seconds": 200
+    }
+  ]
+}
