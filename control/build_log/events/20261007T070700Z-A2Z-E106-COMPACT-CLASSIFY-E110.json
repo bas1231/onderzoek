@@ -1,0 +1,30 @@
+{
+  "schema": "PREDICTION_BUILD_LOG_EVENT_V1",
+  "event_id": "20261007T070700Z-A2Z-E106-COMPACT-CLASSIFY-E110",
+  "work_item_id": "A2Z-SYSTEMTEST-20261005",
+  "created_at_utc": "2026-10-07T07:07:00Z",
+  "event_type": "ATTEMPT",
+  "work_item_status": "IN_PROGRESS",
+  "outcome": "STARTED",
+  "title": "Compacte classificatie E106 POST-BUILD bewijs",
+  "objective": "Maak de bestaande E106 reviewvelden compact zichtbaar zonder de modelrun of ketenstappen te herhalen.",
+  "summary": "E109 forensics liep groen maar de wake-compactie verborg de grote JSON-output. E110 reduceert uitsluitend dezelfde evidence tot decision/phase/model/slug/binding/provenance.",
+  "why": "Nodig om te bepalen of E108 een veldnaam-mismatch had of dat bewijs werkelijk ontbreekt.",
+  "first_incomplete_step": "Compacte classificatie van de drie bestaande reviewrecords.",
+  "next_action": "Bij complete velden de canonical validator gebruiken; bij werkelijk ontbrekende velden alleen het ontbrekende POST-BUILD-bewijs herstellen.",
+  "session_route_task_id": "SESSION-ROUTE-5388245c5e308fbc9dcf92ab",
+  "task_ids": [
+    "DEV-PRED-A2Z-E106-COMPACT-CLASSIFY-20261007-E110"
+  ],
+  "commits": [],
+  "evidence_refs": [
+    "control/build_log/events/20261007T070600Z-A2Z-E106-EVIDENCE-FORENSICS-E109-PASS.json"
+  ],
+  "tags": [
+    "a2z",
+    "astra",
+    "postbuild",
+    "compact",
+    "read-only"
+  ]
+}
