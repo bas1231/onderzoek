@@ -1,0 +1,41 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-A2Z-R4P2-TEMPFAIL-LINES-20261007-N1E102",
+  "source_commit": "04159a210a42b5442ec2be07bb71d5d1b2738506",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "High"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_logs"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 120,
+  "notes": "Read-only narrow extraction of exact journal lines immediately around R4P2 status=75/TEMPFAIL. No service/model invocation.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/r4p2_tempfail_lines_n1e102.py",
+      "content": "import subprocess,json\nu='prediction-a2z-v4-model@A2Z-V4-ASTRA-PREBUILD-DIRECT-20261007-R4P2.service'\np=subprocess.run(['journalctl','--user','-u',u,'--since','2026-10-07 21:13:00','--until','2026-10-07 21:13:30','--no-pager'],capture_output=True,text=True)\nlines=(p.stdout or '').splitlines()\nsel=[]\nfor line in lines:\n    if any(k in line for k in ('SUPERVISOR_STATE','USAGE_LIMIT','TEMPFAIL','Traceback','ERROR','Exception','Main process exited','Failed with result','retry_at','checkpoint','WORKER_START')):\n        sel.append(line[-1200:])\nprint('ERROR_CLASS=R4P2_TEMPFAIL_LINES',flush=True)\nprint('ERROR='+json.dumps(sel[-12:],separators=(',',':')),flush=True)\nraise SystemExit(1)\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/r4p2_tempfail_lines_n1e102.py"
+      ],
+      "timeout_seconds": 60
+    }
+  ]
+}
