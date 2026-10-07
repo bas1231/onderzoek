@@ -1,0 +1,17 @@
+{
+  "schema": "PREDICTION_BRIDGE_COMMAND_V1",
+  "task_id": "DEV-FG-DIRECT-CHAT-HIGHEST-SOL-V13-20261007-E021",
+  "action": "SIX_AI_HEALTH",
+  "created_at_utc": "2026-10-07T08:24:00Z",
+  "route_task_id": "TM-PING-1791354654846",
+  "delivery_mode": "chat",
+  "live_trading": false,
+  "paid_actions": false,
+  "wallet_actions": false,
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "notes": "Supersedes E020. Install dynamic highest non-Pro Sol selection from the connected ChatGPT account catalog, exclude Astra/Codex/Luna/Terra/Pro, use low effort, and run safe verifier. No API-key or paid API fallback."
+}
