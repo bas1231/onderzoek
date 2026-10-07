@@ -1,0 +1,42 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-A2Z-R4P2-TEMPFAIL-CAUSE-20261007-N1E101",
+  "source_commit": "cdfc3a55c0b379c3be62775e85a4deb440fd240d",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "High"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_runtime",
+    "read_logs"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 120,
+  "notes": "Read-only root-cause extraction for R4P2 exit 75/TEMPFAIL. Includes N1E95 executor state and exact journal window. No service/model invocation.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/r4p2_tempfail_cause_n1e101.py",
+      "content": "from pathlib import Path\nimport json,subprocess\ntid='DEV-PRED-A2Z-R4P2-ASTRA-RETRY6-EXACT-20261007-N1E95'\nsp=Path.home()/'.local/state/prediction-project-executor'/(tid+'.json')\nestate=None\nif sp.is_file():\n    try: estate=json.loads(sp.read_text(encoding='utf-8'))\n    except Exception as e: estate={'parse_error':type(e).__name__}\nu='prediction-a2z-v4-model@A2Z-V4-ASTRA-PREBUILD-DIRECT-20261007-R4P2.service'\np=subprocess.run(['journalctl','--user','-u',u,'--since','2026-10-07 21:12:30','--until','2026-10-07 21:14:00','--no-pager'],capture_output=True,text=True)\nlines=(p.stdout or '').splitlines()\nout={'executor_state':estate,'journal':lines[-30:]}\nprint('ERROR_CLASS=R4P2_TEMPFAIL_CAUSE',flush=True)\nprint('ERROR='+json.dumps(out,separators=(',',':'),sort_keys=True),flush=True)\nraise SystemExit(1)\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/r4p2_tempfail_cause_n1e101.py"
+      ],
+      "timeout_seconds": 60
+    }
+  ]
+}
