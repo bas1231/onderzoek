@@ -1,0 +1,72 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-A2Z-SOL-REBUILD-REQUEST-20261007-E116",
+  "source_commit": "b6ff9117b8d2aeb08d46b8aa1ced6ce071769a01",
+  "build_id": "BUILD-PRED-A2Z-SOL-REBUILD-REQUEST-20261007",
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "High"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_runtime",
+    "write_runtime",
+    "user_service_manage"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 300,
+  "notes": "Create and start only the Sol rebuild request from exact canonical R3-P2 Astra REVISE feedback. No experiment execution/tests/measurement. Uses existing included ChatGPT model service, no paid API.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/a2z_e116_hydrate.py",
+      "content": "from pathlib import Path\nimport json\nroot=Path.cwd()\nspec=json.loads((root/\"control/project_tasks/DEV-PRED-A2Z-POSTBUILD-RETRY-20261006-E106.json\").read_text())\nneed={\n \"control/jobs/full_a2z_governed_v4.py\",\n \"control/codex_supervisor/experiment_gate.py\",\n \"control/codex_supervisor/model_quality_gate.py\",\n}\nfound={}\nfor op in spec[\"operations\"]:\n    if op.get(\"type\")==\"write_text\" and op.get(\"path\") in need:\n        found[op[\"path\"]]=op[\"content\"]\nmissing=need-set(found)\nif missing:\n    raise SystemExit(\"MISSING_E106_SOURCES:\"+\",\".join(sorted(missing)))\nfor rel,content in found.items():\n    p=root/rel\n    p.parent.mkdir(parents=True,exist_ok=True)\n    p.write_text(content,encoding=\"utf-8\")\nprint(\"E116_HYDRATED=1\")\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/a2z_e116_hydrate.py"
+      ],
+      "timeout_seconds": 60
+    },
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/a2z_e116_prepare_sol_rebuild.py",
+      "content": "from pathlib import Path\nimport json,shutil,sys\n\nroot=Path.cwd()\nsys.path.insert(0,str(root/\"control/codex_supervisor\"))\nsys.path.insert(0,str(root/\"control/jobs\"))\nimport full_a2z_governed_v4 as a2z\nimport experiment_gate as gate\nimport model_quality_gate as q\n\nreview_task=\"A2Z-V4-ASTRA-POSTBUILD-20261006-R3-P2\"\nnext_task=\"A2Z-V4-SOL-BUILD-20261007-R4\"\nsrc=Path.home()/\".local/share/prediction-project-executor/worktrees/DEV-PRED-A2Z-POSTBUILD-RETRY-20261006-E106/knowledge/evidence/qualification/FULL-A2Z-LIVE-20261004-V4-GOVERNED\"\ndst=root/\"knowledge/evidence/qualification/FULL-A2Z-LIVE-20261004-V4-GOVERNED\"\nif not src.exists():\n    raise SystemExit(\"SOURCE_BUNDLE_MISSING\")\nif dst.exists():\n    shutil.rmtree(dst)\nshutil.copytree(src,dst)\n\noverlay=json.loads((dst/\"overlay.json\").read_text())\nreview=a2z.import_review(dst,overlay,\"POSTBUILD\",review_task)\nif review.get(\"decision\")!=\"REVISE\":\n    raise SystemExit(\"EXPECTED_REVISE_GOT_\"+str(review.get(\"decision\")))\n\nproposal=gate.proposal(dst,overlay)\nprevious_build=gate.build(dst,overlay)\npre_ref=q.expected_review_ref(overlay,\"PREBUILD\")\npaths=sorted(previous_build[\"files\"].keys())\n\ncontext={\n    \"candidate_id\":overlay[\"candidate_id\"],\n    \"proposal\":proposal,\n    \"proposal_sha256\":overlay[\"experiment_proposal\"][\"sha256\"],\n    \"prebuild_review_ref\":pre_ref,\n    \"astra_postbuild_review\":{\n        \"decision\":review[\"decision\"],\n        \"finding\":review[\"finding\"],\n        \"next_action\":review[\"next_action\"],\n        \"binding_sha256\":review[\"binding_sha256\"],\n        \"source_task_id\":review[\"source_task_id\"],\n    },\n    \"previous_build_files\":previous_build[\"files\"],\n}\nprompt=(\n \"You are exactly GPT-5.6 Sol. Revise the existing built implementation in response to the exact independent GPT-6 Astra POSTBUILD feedback below. \"\n \"The PREBUILD-approved R3 proposal remains authoritative; do not redesign or broaden scope. \"\n \"Return ONLY one JSON object with candidate_id, proposal_sha256, prebuild_review_ref and files. \"\n \"files must be a map containing exactly these complete UTF-8 artifact paths: \"+\", \".join(paths)+\". \"\n \"Produce complete replacement contents, not patches. Preserve frozen controls, observations, safety flags, zero-cost/no-network constraints, and NO_PROVEN_EDGE semantics. \"\n \"Address every blocking issue in Astra finding/next_action. Do not execute code, tests, imports, measurements, tools, network calls, trades, paid actions or wallet actions. \"\n \"This is build revision only; the resulting files must return to GPT-6 Astra POSTBUILD review before any substantive test or measurement. \"\n \"Avoid markdown/code fences. CONTEXT_JSON:\\n\"+json.dumps(context,sort_keys=True,ensure_ascii=False)\n)\nif len(prompt)>100000:\n    raise SystemExit(\"SOL_REBUILD_PROMPT_TOO_LARGE:\"+str(len(prompt)))\na2z.request(dst,overlay,\"SOL_BUILD\",next_task,prompt)\nprint(json.dumps({\"request_task_id\":next_task,\"phase\":\"SOL_BUILD\",\"prompt_chars\":len(prompt),\"review_decision\":review[\"decision\"],\"artifact_paths\":paths},sort_keys=True))\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/a2z_e116_prepare_sol_rebuild.py"
+      ],
+      "timeout_seconds": 120
+    },
+    {
+      "type": "install_runtime",
+      "source": "control/dev_checks/a2z_next_request.json",
+      "destination": "/home/leonh/.local/share/prediction-project-executor/campaigns/FULL-A2Z-LIVE-20261004-V4/requests/A2Z-V4-SOL-BUILD-20261007-R4.json"
+    },
+    {
+      "type": "service",
+      "verb": "start",
+      "unit": "prediction-a2z-v4-model@A2Z-V4-SOL-BUILD-20261007-R4.service"
+    },
+    {
+      "type": "service",
+      "verb": "status",
+      "unit": "prediction-a2z-v4-model@A2Z-V4-SOL-BUILD-20261007-R4.service"
+    }
+  ]
+}
