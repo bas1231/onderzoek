@@ -1,0 +1,41 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-A2Z-R4P2-JOURNAL-FILTER-20261007-N1E86",
+  "source_commit": "883d8e81f45c61019113d00ce2517f9ddacd7b51",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "High"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_logs"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 120,
+  "notes": "Read-only compact filter of exact R4P2 service journal after N1E85 PASS. No service/model invocation.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/r4p2_journal_filter_n1e86.py",
+      "content": "import subprocess,json\nunit=\"prediction-a2z-v4-model@A2Z-V4-ASTRA-PREBUILD-DIRECT-20261007-R4P2.service\"\np=subprocess.run([\"journalctl\",\"--user\",\"-u\",unit,\"-n\",\"220\",\"--no-pager\"],capture_output=True,text=True)\nrows=[]\nfor line in (p.stdout or \"\").splitlines():\n    if any(k in line for k in (\"A2Z-V4-ASTRA-PREBUILD-DIRECT-20261007-R4P2\",\"USAGE_LIMIT\",\"PAUSED_USAGE_LIMIT\",\"retry_at\",\"attempt\",\"checkpoint\",\"Started\",\"Stopped\",\"Failed\",\"Main process exited\",\"Deactivated successfully\")):\n        rows.append(line[-1800:])\nprint(\"ERROR_CLASS=R4P2_JOURNAL_FILTER\",flush=True)\nprint(\"ERROR=\"+json.dumps(rows[-30:],separators=(\",\",\":\")),flush=True)\nraise SystemExit(1)\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/r4p2_journal_filter_n1e86.py"
+      ],
+      "timeout_seconds": 60
+    }
+  ]
+}
