@@ -1,0 +1,26 @@
+{
+  "schema": "PREDICTION_BUILD_LOG_EVENT_V1",
+  "event_id": "20261007T135000Z-A2Z-MODEL-QUOTA-SCOPE-PLAN",
+  "work_item_id": "A2Z-SYSTEMTEST-20261005",
+  "created_at_utc": "2026-10-07T13:50:00Z",
+  "event_type": "PLAN",
+  "work_item_status": "IN_PROGRESS",
+  "outcome": "PLANNED",
+  "title": "Scope model usage limits per model policy",
+  "objective": "Voorkom dat legacy SOL_EXACT usage-limit state een ASTRA_EXACT review blokkeert, terwijl echte Astra usage limits fail-closed blijven.",
+  "summary": "Current supervisor uses global usage_quota_until(). Canonical routing now puts Sol on DIRECT_SOL and Astra on CODEX_WORKER, so legacy Sol quota must not block Astra.",
+  "first_incomplete_step": "Resolve installed A2Z model service ExecStart/runtime supervisor path.",
+  "next_action": "Patch runtime-owned supervisor quota scoping, add deterministic regressions, install bounded runtime update, then resume exact R4P2 Astra PREBUILD.",
+  "session_route_task_id": "DEV-PRED-A2Z-R4P2-SELECTION-RESTORE-20261007-N1E3",
+  "task_ids": [
+    "DEV-PRED-A2Z-MODEL-SERVICE-EXECSTART-20261007-N1E8"
+  ],
+  "tags": [
+    "a2z",
+    "model-supervisor",
+    "quota",
+    "sol-direct",
+    "astra",
+    "no-bridge-mutation"
+  ]
+}
