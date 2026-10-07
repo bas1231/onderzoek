@@ -1,0 +1,17 @@
+{
+  "schema": "PREDICTION_BRIDGE_COMMAND_V1",
+  "task_id": "DEV-FG-NORMAL-CHATGPT-HANDOFF-V16-20261007-E024",
+  "action": "SIX_AI_HEALTH",
+  "created_at_utc": "2026-10-07T08:41:00Z",
+  "route_task_id": "TM-PING-1791354654846",
+  "delivery_mode": "chat",
+  "live_trading": false,
+  "paid_actions": false,
+  "wallet_actions": false,
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "notes": "Install V16 normal ChatGPT UI handoff. Disable SIWC fg-ai-chat service so FG work does not consume Work/Codex/Astra allowance. SAFE handoff RAM-only; user verifies High before sending. No API key/paid API."
+}
