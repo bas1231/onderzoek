@@ -1,0 +1,32 @@
+{
+  "schema": "PREDICTION_BUILD_LOG_EVENT_V1",
+  "event_id": "20261007T085000Z-A2Z-R4-QUOTA-FILE-STATE-E126",
+  "work_item_id": "A2Z-SYSTEMTEST-20261005",
+  "created_at_utc": "2026-10-07T08:50:00Z",
+  "event_type": "ATTEMPT",
+  "work_item_status": "IN_PROGRESS",
+  "outcome": "STARTED",
+  "title": "Lees R4 quota-state zonder systemd",
+  "objective": "Bepaal request/result/task/transitions/runfiles van dezelfde immutable R4-task zonder systemctl.",
+  "summary": "E123 stopte op systemctl rc=3. E126 gebruikt alleen runtimebestanden en SQLite.",
+  "why": "Een inactieve one-shot unit mag de diagnose niet blokkeren.",
+  "first_incomplete_step": "R4 taskstatus en laatste transitions exact vaststellen.",
+  "next_action": "Bij PAUSED_USAGE_LIMIT: geen duplicaat; wacht op E124 retry-fix en daarna gecontroleerde runtime-update. Bij result exists: direct provenance-verificatie.",
+  "session_route_task_id": "SESSION-ROUTE-5388245c5e308fbc9dcf92ab",
+  "task_ids": [
+    "DEV-PRED-A2Z-R4-QUOTA-FILE-STATE-20261007-E126",
+    "A2Z-V4-SOL-BUILD-20261007-R4"
+  ],
+  "commits": [],
+  "evidence_refs": [
+    "control/build_log/events/20261007T084800Z-A2Z-R4-QUOTA-RUNTIME-INVENTORY-E123-SYSTEMD3.json"
+  ],
+  "tags": [
+    "a2z",
+    "codex",
+    "r4",
+    "quota",
+    "sqlite",
+    "read-only"
+  ]
+}
