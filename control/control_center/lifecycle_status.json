@@ -2,8 +2,8 @@
   "schema": "PREDICTION_CONTROL_CENTER_LIFECYCLE_V1",
   "updated_at": "2026-10-07",
   "full_chain_status": "NOT_PROVEN",
-  "full_chain_label": "Volledige A→Z-keten nog niet bewezen",
-  "next_required": "Huidige kandidaat AUTO-DISCOVERY-54d13314c7879b58e46d: GPT-5.6 Sol R4-buildrevision is gestart op exact de canonical Astra R3-P2 REVISE-feedback, maar de lokale Codex-uitvoerlaag is tijdelijk gepauzeerd door CODEX_USAGE_LIMIT. Hervat dezelfde immutable R4-modeltask zodra Codex weer uitvoercapaciteit heeft; daarna R4 provenance/materialisatie en opnieuw exact GPT-6 Astra POST-BUILD. Tests/meting blijven geblokkeerd tot canonical POST-BUILD APPROVE.",
+  "full_chain_label": "A→Z-keten — migratie naar Sol direct / Astra via Codex",
+  "next_required": "Architectuurmigratie uitvoeren: SOL_PROPOSAL en SOL_BUILD moeten GPT-5.6 Sol rechtstreeks uitvoeren zonder CodexWorker. ASTRA_PREBUILD en ASTRA_POSTBUILD blijven exact GPT-6 Astra via Codex. De bestaande Astra-gates en NO_TEST_OR_MEASUREMENT_BEFORE_ASTRA_POSTBUILD_APPROVAL blijven ongewijzigd. De huidige onvoltooide Codex-R4-run wordt niet als wetenschappelijke afkeur gezien; dezelfde R4-inhoud/binding moet via de nieuwe directe Sol-route opnieuw provenance-gebonden worden uitgevoerd.",
   "invariant": "NO_TEST_OR_MEASUREMENT_BEFORE_ASTRA_POSTBUILD_APPROVAL",
   "evidence_refs": [
     "control/bridge_commands/CURRENT_STATE.md",
@@ -44,16 +44,16 @@
       "label": "Sol-opzet",
       "subtitle": "experiment ontwerpen",
       "state": "IMPLEMENTED_NOT_E2E",
-      "detail": "De Sol-ontwerpstap behoort tot de actuele verplichte architectuur. De volledige actuele keten is nog niet end-to-end bewezen.",
+      "detail": "Doelarchitectuur: GPT-5.6 Sol voert SOL_PROPOSAL rechtstreeks uit via de nieuwe directe Sol-executor, buiten Codex. De inhoudelijke rol van Sol blijft gelijk; alleen de uitvoeringslaag verandert.",
       "current_candidate_state": "DONE",
-      "current_candidate_detail": "GPT-5.6 Sol leverde voorstel R3 na verwerking van Astra-feedback. R3 vervangt de eerdere R2-stand voor deze kandidaat."
+      "current_candidate_detail": "R3-opzet is inhoudelijk geldig historisch bewijs. Nieuwe Sol-opzet/revisietaken moeten na de migratie via DIRECT_SOL provenance lopen; Astra PRE-BUILD blijft via Codex."
     },
     {
       "id": "astra_prebuild",
       "label": "Astra vóór bouw",
       "subtitle": "ontwerp beoordelen",
       "state": "TARGETED_TESTED",
-      "detail": "De Astra pre-build beoordeling is gericht getest/gekwalificeerd. Dit is nog geen bewijs dat de volledige actuele A→Z-run slaagt.",
+      "detail": "Exact GPT-6 Astra blijft de verplichte onafhankelijke PRE-BUILD reviewer en blijft via CodexWorker lopen. Deze migratie verandert deze gate niet.",
       "current_candidate_state": "DONE",
       "current_candidate_detail": "GPT-6 Astra gaf eerst REVISE op R2 en keurde daarna de herziene R3-opzet PRE-BUILD goed. De afwijzing en revisielus blijven onderdeel van het bewijs."
     },
@@ -62,18 +62,18 @@
       "label": "Sol-bouw",
       "subtitle": "experiment bouwen",
       "state": "IMPLEMENTED_NOT_E2E",
-      "detail": "De Sol-bouwstap is geïmplementeerd in de architectuur, maar moet nog als onderdeel van één volledige actuele A→Z-run worden bewezen.",
-      "current_candidate_state": "PAUSED_CODEX_USAGE_LIMIT",
-      "current_candidate_detail": "GPT-5.6 Sol R4-buildtask A2Z-V4-SOL-BUILD-20261007-R4 is gestart en exact gebonden aan de Astra R3-P2 REVISE-feedback. De modelinhoud is niet afgekeurd; de lokale Codex-uitvoerlaag stopte op turn.failed wegens usage limit. Dezelfde immutable R4-task moet worden hervat zodra Codex weer beschikbaar is."
+      "detail": "Doelarchitectuur: GPT-5.6 Sol bouwt rechtstreeks via DIRECT_SOL en is niet langer afhankelijk van Codex-quota. De experimentrol, binding en fail-closed provenance blijven verplicht.",
+      "current_candidate_state": "MIGRATING_TO_DIRECT_SOL",
+      "current_candidate_detail": "De eerdere R4-uitvoering via CodexWorker stopte op CODEX_USAGE_LIMIT. Dat is geen inhoudelijke Sol-afkeur. Dezelfde R4-inhoud en Astra R3-P2 feedback worden gemigreerd naar een nieuwe direct-Sol uitvoeringsprovenance; de oude Codex-run wordt niet hervat zodra DIRECT_SOL operationeel is."
     },
     {
       "id": "astra_postbuild",
       "label": "Astra na bouw",
       "subtitle": "gebouwde code beoordelen",
       "state": "TARGETED_TESTED",
-      "detail": "De verplichte post-build gate en de blokkade vóór tests/meting zijn gericht getest en canoniek vastgelegd. De volledige A→Z-run blijft nog te bewijzen.",
-      "current_candidate_state": "WAITING_FOR_SOL_R4",
-      "current_candidate_detail": "Wacht op complete, provenance-gebonden GPT-5.6 Sol R4-build. Daarna volgt een nieuwe exact gebonden GPT-6 Astra POST-BUILD-review. De eerdere R3-P2 beslissing blijft REVISE."
+      "detail": "Exact GPT-6 Astra blijft ook na de migratie de verplichte POST-BUILD reviewer via CodexWorker. Alleen een exact gebonden APPROVE opent tests/meting.",
+      "current_candidate_state": "WAITING_FOR_DIRECT_SOL_R4",
+      "current_candidate_detail": "Wacht op de via DIRECT_SOL gebouwde R4-artifacts. Daarna volgt exact GPT-6 Astra POST-BUILD via Codex."
     },
     {
       "id": "measurement",
@@ -82,7 +82,7 @@
       "state": "PENDING_E2E",
       "detail": "De volgorde is vastgelegd: inhoudelijke tests, backtests, shadow-runs en metingen mogen pas na Astra-goedkeuring van de exacte gebouwde versie. Een volledige actuele A→Z-doorgang moet nog worden bewezen.",
       "current_candidate_state": "WAITING",
-      "current_candidate_detail": "Geblokkeerd door NO_TEST_OR_MEASUREMENT_BEFORE_ASTRA_POSTBUILD_APPROVAL. Geen tests/backtests/shadowmetingen voordat de herziene R4-build een canonical GPT-6 Astra POST-BUILD APPROVE heeft."
+      "current_candidate_detail": "Nog steeds geblokkeerd door NO_TEST_OR_MEASUREMENT_BEFORE_ASTRA_POSTBUILD_APPROVAL. De uitvoeringsmigratie geeft geen uitzondering op deze gate."
     },
     {
       "id": "supervisor",
@@ -107,13 +107,13 @@
     "candidate_id": "AUTO-DISCOVERY-54d13314c7879b58e46d",
     "campaign_id": "FULL-A2Z-LIVE-20261004-V4",
     "proposal_task_id": "A2Z-V4-SOL-PROPOSAL-20261006-R3",
-    "build_task_id": "A2Z-V4-SOL-BUILD-20261006-R3",
+    "build_task_id": "A2Z-V4-SOL-BUILD-20261007-R4",
     "postbuild_task_id": "DEV-PRED-A2Z-POSTBUILD-RETRY-20261006-E106",
     "pause_task_id": "DEV-PRED-A2Z-PAUSE-20261006-E107",
-    "current_stage": "astra_postbuild",
-    "state": "SOL_R4_PAUSED_CODEX_USAGE_LIMIT",
-    "label": "Sol R4-build — tijdelijk gepauzeerd door Codex usage limit",
-    "detail": "De herziene GPT-5.6 Sol R4-build is inhoudelijk gestart op de exacte Astra R3-P2 REVISE-feedback. De lokale Codex-uitvoerlaag raakte zijn usage limit; dit is geen Sol-afkeur. Dezelfde immutable R4-task blijft leidend. Na hervatting volgt provenance/materialisatie en een nieuwe GPT-6 Astra POST-BUILD-review. Tests en meting blijven dicht.",
+    "current_stage": "sol_build",
+    "state": "ARCHITECTURE_MIGRATION_SOL_DIRECT",
+    "label": "Architectuurmigratie — Sol direct, Astra via Codex",
+    "detail": "De huidige kandidaat blijft wetenschappelijk op NO_PROVEN_EDGE. De onvoltooide R4-build liep via CodexWorker en raakte CODEX_USAGE_LIMIT. Nieuwe architectuur: GPT-5.6 Sol wordt voor voorstel en build rechtstreeks uitgevoerd buiten Codex; GPT-6 Astra blijft vóór en na de build via Codex reviewen. De R4-inhoud/binding en Astra-feedback blijven leidend; alleen de uitvoeringsprovenance wordt vernieuwd.",
     "scientific_status": "NO_PROVEN_EDGE",
     "evidence_refs": [
       "control/project_tasks/DEV-PRED-A2Z-POSTBUILD-RETRY-20261006-E106.json",
@@ -126,6 +126,39 @@
       "control/build_log/events/20261007T071000Z-A2Z-E106-COMPACT-CLASSIFY-E110-PASS.json",
       "control/build_log/events/20261007T080200Z-A2Z-POSTBUILD-DECISION-E115-REVISE.json",
       "control/build_log/events/20261007T082700Z-A2Z-SOL-R4-PROGRESS-E121-USAGE-LIMIT.json"
-    ]
+    ],
+    "execution_migration": {
+      "from": "CODEX_WORKER:gpt-5.6-sol",
+      "to": "DIRECT_SOL:gpt-5.6-sol",
+      "scientific_revision": false,
+      "preserve_prompt_and_binding": true,
+      "astra_route": "CODEX_WORKER:gpt-6-astra"
+    }
+  },
+  "model_execution_architecture": {
+    "status": "MIGRATION_IN_PROGRESS",
+    "target": "SOL_DIRECT_ASTRA_CODEX",
+    "sol": {
+      "model": "GPT-5.6 Sol",
+      "phases": [
+        "SOL_PROPOSAL",
+        "SOL_BUILD"
+      ],
+      "execution_layer": "DIRECT_SOL",
+      "codex_required": false,
+      "quota_class": "SOL_UNLIMITED"
+    },
+    "astra": {
+      "model": "GPT-6 Astra",
+      "phases": [
+        "ASTRA_PREBUILD",
+        "ASTRA_POSTBUILD",
+        "SUPERVISOR"
+      ],
+      "execution_layer": "CODEX_WORKER",
+      "codex_required": true,
+      "quota_class": "ASTRA_AND_CODEX_LIMITED"
+    },
+    "unchanged_invariant": "NO_TEST_OR_MEASUREMENT_BEFORE_ASTRA_POSTBUILD_APPROVAL"
   }
 }
