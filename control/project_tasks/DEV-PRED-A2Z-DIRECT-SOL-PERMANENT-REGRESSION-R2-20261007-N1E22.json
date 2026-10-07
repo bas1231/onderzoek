@@ -1,0 +1,37 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-A2Z-DIRECT-SOL-PERMANENT-REGRESSION-R2-20261007-N1E22",
+  "source_commit": "6c09b57ead62beb9ce10a51aefc924e56123229a",
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "High"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "run_project_python",
+    "run_tests"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 180,
+  "notes": "Retry the exact permanent model_execution regression from N1E17 with the missing run_project_python capability added. No code changes, model invocation, runtime mutation, experiment tests/measurement, bridge mutation, paid/live/wallet actions.",
+  "operations": [
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "-m",
+        "unittest",
+        "tests/model_execution/test_direct_sol_chat.py"
+      ],
+      "timeout_seconds": 120
+    }
+  ]
+}
