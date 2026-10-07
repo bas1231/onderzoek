@@ -1,0 +1,26 @@
+{
+  "schema": "PREDICTION_BUILD_LOG_EVENT_V1",
+  "event_id": "20261007T132600Z-R4P2-SELECTION-RESTORE-PLAN",
+  "work_item_id": "A2Z-SYSTEMTEST-20261005",
+  "created_at_utc": "2026-10-07T13:26:00Z",
+  "event_type": "PLAN",
+  "work_item_status": "IN_PROGRESS",
+  "outcome": "PLANNED",
+  "title": "Herstel preserved selection voor R4P2",
+  "objective": "Herstel alleen het ontbrekende a2z_previous_selection.json uit immutable E106 evidence en hervat proposal naar Astra PREBUILD.",
+  "summary": "N1E2 bewees PREVIOUS_SELECTION_MISSING. De selectie-inhoud staat intact in E106 en wordt niet opnieuw uitgevoerd.",
+  "first_incomplete_step": "Hydrate preserved selection in isolated worktree.",
+  "next_action": "Verify existing R4P2 runtime provenance, run proposal stage, prepare fresh Astra PREBUILD request.",
+  "session_route_task_id": "DEV-PRED-SOL-DIRECT-GATE-QUALIFY-R2-20261007-A7C1",
+  "task_ids": [
+    "DEV-PRED-A2Z-R4P2-SELECTION-RESTORE-20261007-N1E3"
+  ],
+  "tags": [
+    "a2z",
+    "selection",
+    "restore",
+    "direct-sol",
+    "astra-prebuild",
+    "no-bridge-mutation"
+  ]
+}
