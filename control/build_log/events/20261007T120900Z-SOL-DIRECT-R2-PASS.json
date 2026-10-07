@@ -1,0 +1,30 @@
+{
+  "schema": "PREDICTION_BUILD_LOG_EVENT_V1",
+  "event_id": "20261007T120900Z-SOL-DIRECT-R2-PASS",
+  "work_item_id": "A2Z-SOL-DIRECT-EXECUTION-20261007",
+  "created_at_utc": "2026-10-07T12:09:00Z",
+  "event_type": "RESULT",
+  "work_item_status": "IN_PROGRESS",
+  "outcome": "PASS",
+  "title": "DIRECT_SOL gatekwalificatie R2 geslaagd",
+  "objective": "Kwalificeer de DIRECT_SOL gate tegen actuele main na E144 ModuleNotFoundError.",
+  "summary": "DEV-PRED-SOL-DIRECT-GATE-QUALIFY-R2-20261007-A7C1 returned PASS exit=0 rcs=1:0 against source commit bff88ebc7dc0aa5ba66191582ee2ca7da064a25f.",
+  "why": "De eerder ontbrekende direct-Sol module is nu beschikbaar en de gate accepteerde correcte DIRECT_SOL provenance, correcte Astra provenance en verwierp een verkeerde Sol-modelidentiteit.",
+  "first_incomplete_step": "Bewijs een echte DIRECT_SOL Chat worker-uitvoering met exact GPT-5.6 Sol en immutable request/result provenance; geen fixture-only kwalificatie.",
+  "next_action": "Inspecteer bestaande DIRECT_SOL worker/request/materialization pad en hervat de bestaande R4 prompt/binding via dat pad. Bridge blijft freeze/no-mutation.",
+  "session_route_task_id": "DEV-PRED-SOL-DIRECT-GATE-QUALIFY-R2-20261007-A7C1",
+  "task_ids": [
+    "DEV-PRED-SOL-DIRECT-GATE-QUALIFY-R2-20261007-A7C1"
+  ],
+  "evidence_refs": [
+    "result:DEV-PRED-SOL-DIRECT-GATE-QUALIFY-R2-20261007-A7C1 status=PASS exit=0 rcs=1:0 head=bff88ebc7dc0aa5ba66191582ee2ca7da064a25f event=1791374922-bfa8f4d4a45b",
+    "control/project_tasks/DEV-PRED-SOL-DIRECT-GATE-QUALIFY-R2-20261007-A7C1.json"
+  ],
+  "tags": [
+    "sol-direct",
+    "gate",
+    "qualification",
+    "pass",
+    "no-bridge-mutation"
+  ]
+}
