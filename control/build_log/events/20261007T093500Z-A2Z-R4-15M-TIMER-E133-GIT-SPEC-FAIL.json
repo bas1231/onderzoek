@@ -1,0 +1,30 @@
+{
+  "schema": "PREDICTION_BUILD_LOG_EVENT_V1",
+  "event_id": "20261007T093500Z-A2Z-R4-15M-TIMER-E133-GIT-SPEC-FAIL",
+  "work_item_id": "A2Z-SYSTEMTEST-20261005",
+  "created_at_utc": "2026-10-07T09:35:00Z",
+  "event_type": "RESULT",
+  "work_item_status": "IN_PROGRESS",
+  "outcome": "FAIL",
+  "title": "E133 geblokkeerd door git task-spec",
+  "objective": "Installeer de 15-minuten A2Z retrytimer voor dezelfde immutable R4-task.",
+  "summary": "E133 stopte met 'git args invalid' vóór runtime-installatie. De timerfix is niet geïnstalleerd en R4 is niet gemuteerd.",
+  "why": "Dit is een projectexecutor task-spec fout, geen timer- of modelfout.",
+  "first_incomplete_step": "Gebruik exact het door op_git vereiste argumentformaat of verwijder de niet-essentiële git diff-check.",
+  "next_action": "Nieuwe immutable retrytaak met identieke timerinhoud en geldige executor-operaties.",
+  "session_route_task_id": "SESSION-ROUTE-5388245c5e308fbc9dcf92ab",
+  "task_ids": [
+    "DEV-PRED-A2Z-R4-15M-TIMER-INSTALL-20261007-E133",
+    "A2Z-V4-SOL-BUILD-20261007-R4"
+  ],
+  "commits": [],
+  "evidence_refs": [
+    "result:DEV-PRED-A2Z-R4-15M-TIMER-INSTALL-20261007-E133 error=git args invalid event=1791362595-834cc0302272"
+  ],
+  "tags": [
+    "a2z",
+    "r4",
+    "timer",
+    "executor-spec"
+  ]
+}
