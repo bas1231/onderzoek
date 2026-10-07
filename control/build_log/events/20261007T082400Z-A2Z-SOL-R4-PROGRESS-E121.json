@@ -1,0 +1,31 @@
+{
+  "schema": "PREDICTION_BUILD_LOG_EVENT_V1",
+  "event_id": "20261007T082400Z-A2Z-SOL-R4-PROGRESS-E121",
+  "work_item_id": "A2Z-SYSTEMTEST-20261005",
+  "created_at_utc": "2026-10-07T08:24:00Z",
+  "event_type": "ATTEMPT",
+  "work_item_status": "IN_PROGRESS",
+  "outcome": "STARTED",
+  "title": "Controleer voortgang bestaande Sol R4-run",
+  "objective": "Bepaal via event/checkpoint-mtimen of de bestaande R4-run actief voortgang maakt, stil maar nog niet stale is, compleet is of >15 minuten stale.",
+  "summary": "E120 bewees dat de R4-worker gestart is en COMPLETE nog ontbreekt. E121 leest uitsluitend dezelfde run-directory.",
+  "why": "Voorkomt onnodige duplicate/restart en maakt stall-diagnose bewijsgebonden.",
+  "first_incomplete_step": "R4 progress/staleness bepalen.",
+  "next_action": "Result/complete -> provenance/finalization; recent/quiet -> bestaande run ongemoeid laten; >15m stale -> eerste concrete workerfout diagnosticeren.",
+  "session_route_task_id": "SESSION-ROUTE-5388245c5e308fbc9dcf92ab",
+  "task_ids": [
+    "DEV-PRED-A2Z-SOL-R4-PROGRESS-20261007-E121",
+    "A2Z-V4-SOL-BUILD-20261007-R4"
+  ],
+  "commits": [],
+  "evidence_refs": [
+    "control/build_log/events/20261007T082200Z-A2Z-SOL-R4-FILES-STATUS-E120-INCOMPLETE.json"
+  ],
+  "tags": [
+    "a2z",
+    "sol",
+    "r4",
+    "progress",
+    "read-only"
+  ]
+}
