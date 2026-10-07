@@ -1,0 +1,42 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-A2Z-R4P2-POSTRETRY-STATE-DIAG-20261007-N1E80",
+  "source_commit": "7b57f6d1c0a057740e818450a9e1e397cfeaa023",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "High"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_runtime",
+    "read_logs"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 120,
+  "notes": "Read-only diagnosis after N1E77 PASS but no new attempt beyond attempt 5. Inspect current campaign state, continuation, blocker, result existence, exact service status/show and recent journal. Do not invoke service/model.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/r4p2_postretry_state_diag_n1e80.py",
+      "content": "from pathlib import Path\nimport json,subprocess\nbase=Path.home()/\".local/share/prediction-project-executor/campaigns/FULL-A2Z-LIVE-20261004-V4\"\ntask=\"A2Z-V4-ASTRA-PREBUILD-DIRECT-20261007-R4P2\"\nout={}\nfor name in (\"models/STATE.json\",\"models/CONTINUATION.json\",\"models/BLOCKER.json\"):\n    p=base/name\n    if p.is_file():\n        try: out[name]=json.loads(p.read_text(encoding=\"utf-8\"))\n        except Exception as e: out[name]={\"read_error\":repr(e)}\nresult=base/\"model_results\"/(task+\".json\")\nout[\"result_exists\"]=result.is_file()\nunit=\"prediction-a2z-v4-model@A2Z-V4-ASTRA-PREBUILD-DIRECT-20261007-R4P2.service\"\nfor cmdname,cmd in {\n  \"status\":[\"systemctl\",\"--user\",\"status\",unit,\"--no-pager\",\"-l\"],\n  \"show\":[\"systemctl\",\"--user\",\"show\",unit,\"-p\",\"ActiveState\",\"-p\",\"SubState\",\"-p\",\"Result\",\"-p\",\"ExecMainStatus\",\"-p\",\"ExecMainCode\",\"-p\",\"ActiveEnterTimestamp\",\"-p\",\"InactiveEnterTimestamp\"],\n  \"journal\":[\"journalctl\",\"--user\",\"-u\",unit,\"-n\",\"180\",\"--no-pager\"]\n}.items():\n    p=subprocess.run(cmd,capture_output=True,text=True)\n    out[cmdname]={\"rc\":p.returncode,\"stdout\":p.stdout[-16000:],\"stderr\":p.stderr[-4000:]}\nprint(\"ERROR_CLASS=R4P2_POSTRETRY_STATE_DIAG\",flush=True)\nprint(\"ERROR=\"+json.dumps(out,separators=(\",\",\":\"),sort_keys=True),flush=True)\nraise SystemExit(1)\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/r4p2_postretry_state_diag_n1e80.py"
+      ],
+      "timeout_seconds": 90
+    }
+  ]
+}
