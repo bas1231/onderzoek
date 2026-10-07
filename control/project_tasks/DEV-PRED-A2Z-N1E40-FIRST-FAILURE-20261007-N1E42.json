@@ -1,0 +1,41 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-A2Z-N1E40-FIRST-FAILURE-20261007-N1E42",
+  "source_commit": "35cc637106393b9837832ff660ad4cd878b2d91b",
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "High"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_runtime"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 90,
+  "notes": "Deterministically classify the first persisted N1E40 verifier failure and surface only its concise message. No tests/model/service/runtime/bridge mutation.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/classify_n1e40_first_failure_n1e42.py",
+      "content": "from pathlib import Path\nimport json,re\n\nTARGET=\"DEV-PRED-A2Z-N1E36-ASSERT-PREBUILD-BINDING-20261007-N1E40\"\np=Path.home()/\".local/state/prediction-project-executor\"/(TARGET+\".json\")\nif not p.is_file():\n    raise RuntimeError(\"FIRST_FAILURE=N1E40_STATE_MISSING\")\no=json.loads(p.read_text(encoding=\"utf-8\"))\n\ncandidates=[]\ndef walk(v,path=\"\"):\n    if isinstance(v,dict):\n        for k,x in v.items():\n            np=(path+\".\"+k) if path else k\n            walk(x,np)\n    elif isinstance(v,list):\n        for i,x in enumerate(v):\n            walk(x,f\"{path}[{i}]\")\n    elif isinstance(v,str):\n        if any(tok in v for tok in (\n            \"N1E36_\", \"ASTRA_\", \"PREBUILD_\", \"RuntimeError\", \"Traceback\"\n        )):\n            candidates.append((path,v))\n\n# Prefer explicit RuntimeError/assertion terminal line.\nfor path,text in candidates:\n    lines=[ln.strip() for ln in text.splitlines() if ln.strip()]\n    for ln in reversed(lines):\n        if \"RuntimeError:\" in ln:\n            msg=ln.split(\"RuntimeError:\",1)[1].strip()\n            raise RuntimeError(\"FIRST_FAILURE=\"+msg[:500])\n\n# Fallback to any explicit gate marker.\nfor path,text in candidates:\n    m=re.search(r\"(N1E36_[A-Z0-9_:,.'\\-]+|ASTRA_[A-Z0-9_:,./'\\-]+|PREBUILD_[A-Z0-9_:,./'\\-]+)\",text)\n    if m:\n        raise RuntimeError(\"FIRST_FAILURE=\"+m.group(1)[:500])\n\nraise RuntimeError(\"FIRST_FAILURE=UNCLASSIFIED_RECEIPT_SHAPE\")\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/classify_n1e40_first_failure_n1e42.py"
+      ],
+      "timeout_seconds": 20
+    }
+  ]
+}
