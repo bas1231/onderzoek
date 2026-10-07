@@ -1,0 +1,17 @@
+{
+  "schema": "PREDICTION_BRIDGE_COMMAND_V1",
+  "task_id": "DEV-FG-DIRECT-CHAT-SOL-V11-INSTALL-20261007-E019",
+  "action": "SIX_AI_HEALTH",
+  "created_at_utc": "2026-10-07T08:14:00Z",
+  "route_task_id": "TM-PING-1791354654846",
+  "delivery_mode": "chat",
+  "live_trading": false,
+  "paid_actions": false,
+  "wallet_actions": false,
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "notes": "Install highest-Sol direct chat selection. Prefer GPT-6.1 Sol -> GPT-6 Sol -> GPT-5.6 Sol; exclude Astra/Codex/Luna/Terra/Pro; low effort; no paid API fallback. Verify selected account model."
+}
