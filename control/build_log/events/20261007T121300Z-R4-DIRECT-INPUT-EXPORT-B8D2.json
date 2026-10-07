@@ -1,0 +1,31 @@
+{
+  "schema": "PREDICTION_BUILD_LOG_EVENT_V1",
+  "event_id": "20261007T121300Z-R4-DIRECT-INPUT-EXPORT-B8D2",
+  "work_item_id": "A2Z-SYSTEMTEST-20261005",
+  "created_at_utc": "2026-10-07T12:13:00Z",
+  "event_type": "ATTEMPT",
+  "work_item_status": "IN_PROGRESS",
+  "outcome": "STARTED",
+  "title": "Exporteer gebonden R4 direct-Sol input",
+  "objective": "Lees bestaande R4 request en exacte Astra R3-P2 feedback read-only zodat dezelfde buildrevision via DIRECT_SOL kan worden uitgevoerd.",
+  "summary": "Geen oude Codex-Sol retry. Alleen immutable/bestaande campaign evidence uitlezen via snapshot export.",
+  "why": "DIRECT_SOL gate is bewezen; eerst exacte reeds-goedgekeurde input behouden voordat Sol de R4 revision uitvoert.",
+  "first_incomplete_step": "Exacte R4 request + R3-P2 review in deze Sol-sessie beschikbaar maken.",
+  "next_action": "Na geldige export: Sol produceert alleen de buildrevision; daarna materialisatie en fresh Astra POSTBUILD.",
+  "session_route_task_id": "DEV-PRED-SOL-DIRECT-GATE-QUALIFY-R2-20261007-A7C1",
+  "task_ids": [
+    "DEV-PRED-A2Z-R4-DIRECT-INPUT-EXPORT-20261007-B8D2"
+  ],
+  "evidence_refs": [
+    "control/project_tasks/DEV-PRED-A2Z-SOL-REBUILD-REQUEST-20261007-E116.json",
+    "control/project_tasks/DEV-PRED-ASTRA-R3P2-REVIEW-EXPORT-20261007-E131.json"
+  ],
+  "tags": [
+    "a2z",
+    "r4",
+    "direct-sol",
+    "read-only",
+    "export",
+    "no-bridge-mutation"
+  ]
+}
