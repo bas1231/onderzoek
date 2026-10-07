@@ -164,3 +164,42 @@ def build_result(
         "wallet_actions": False,
     }
     return validate_result(request, result)
+
+
+def worker_policy_error(worker: dict[str, Any], phase: str) -> str | None:
+    selection = worker.get("model_selection") or {}
+    if phase.startswith("SOL_"):
+        if worker.get("model") != TARGET_MODEL:
+            return "EXACT_MODEL_REQUIRED"
+        if selection.get("policy") != "SOL_EXACT":
+            return "EXACT_MODEL_REQUIRED"
+        if selection.get("selected_slug") != TARGET_MODEL:
+            return "EXACT_MODEL_REQUIRED"
+        if worker.get("execution_layer") != EXECUTION_LAYER:
+            return "DIRECT_SOL_EXECUTION_REQUIRED"
+        if worker.get("experience") != TARGET_EXPERIENCE:
+            return "DIRECT_SOL_REGULAR_CHAT_REQUIRED"
+        if worker.get("provenance_kind") != PROVENANCE_KIND:
+            return "DIRECT_SOL_PROVENANCE_REQUIRED"
+        if worker.get("command_flags") not in ([], None):
+            return "DIRECT_SOL_COMMAND_FLAGS_FORBIDDEN"
+        route = str(worker.get("worker_route_task_id") or "")
+        if not route.startswith("SESSION-ROUTE-"):
+            return "DIRECT_SOL_WORKER_ROUTE_REQUIRED"
+        return None
+
+    if worker.get("model") != "gpt-6-astra":
+        return "EXACT_MODEL_REQUIRED"
+    if selection.get("policy") != "ASTRA_EXACT":
+        return "EXACT_MODEL_REQUIRED"
+    if selection.get("selected_slug") != "gpt-6-astra":
+        return "EXACT_MODEL_REQUIRED"
+    if worker.get("execution_layer") == EXECUTION_LAYER:
+        return "ASTRA_CODEX_EXECUTION_REQUIRED"
+    flags = worker.get("command_flags", [])
+    if "-m" not in flags:
+        return "MODEL_COMMAND_MISMATCH"
+    i = flags.index("-m")
+    if i + 1 >= len(flags) or flags[i + 1] != "gpt-6-astra":
+        return "MODEL_COMMAND_MISMATCH"
+    return None
