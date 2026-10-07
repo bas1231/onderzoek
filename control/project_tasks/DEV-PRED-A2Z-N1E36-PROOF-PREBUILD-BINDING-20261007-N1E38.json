@@ -1,0 +1,53 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-A2Z-N1E36-PROOF-PREBUILD-BINDING-20261007-N1E38",
+  "source_commit": "1d320233bfd99d33eb6f0fdd937e737f10c5365e",
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "High"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_runtime",
+    "user_service_manage",
+    "read_logs"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 150,
+  "notes": "Fail-closed read-only proof of existing N1E36 result and R4P2 Astra PREBUILD binding. No test rerun, model invocation, service restart/enable, runtime or bridge mutation, experiment test/measurement, paid/live/wallet action.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/prove_n1e36_prebuild_binding_n1e38.py",
+      "content": "from pathlib import Path\nimport json, re\n\nHOME=Path.home()\nSTATE_ROOT=HOME/\".local/state/prediction-project-executor\"\nCAMPAIGN=HOME/\".local/share/prediction-project-executor/campaigns/FULL-A2Z-LIVE-20261004-V4\"\nN1E36=\"DEV-PRED-A2Z-DIRECT-SOL-REGRESSION-N1E36-20261007\"\nASTRA=\"A2Z-V4-ASTRA-PREBUILD-DIRECT-20261007-R4P2\"\nPROPOSAL=\"A2Z-V4-SOL-PROPOSAL-DIRECT-20261007-R4P2\"\nOLD_SOL=\"A2Z-V4-SOL-BUILD-20261007-R4\"\n\ndef load(p):\n    return json.loads(p.read_text(encoding=\"utf-8\"))\n\ndef dump(label,obj,limit=12000):\n    s=json.dumps(obj,ensure_ascii=False,sort_keys=True,separators=(\",\",\":\"))\n    if len(s)>limit: s=s[:limit]+\"...<TRUNCATED>\"\n    print(label+\"=\"+s)\n\n# 1) Existing regression proof: do not rerun anything.\nsp=STATE_ROOT/(N1E36+\".json\")\nif not sp.is_file():\n    raise RuntimeError(\"N1E36_STATE_MISSING\")\nst=load(sp)\ndump(\"N1E36_STATE\",st)\nblob=json.dumps(st,ensure_ascii=False,sort_keys=True)\nstatus=str(st.get(\"status\") or \"\").upper()\nexit_code=st.get(\"exit_code\")\nif exit_code is None:\n    # Some receipts record per-operation rc only; infer only if explicit persisted rc(s) exist and all are zero.\n    rcs=[]\n    def walk(v):\n        if isinstance(v,dict):\n            for k,x in v.items():\n                if k in {\"rc\",\"returncode\",\"exit_code\"} and isinstance(x,int):\n                    rcs.append(x)\n                walk(x)\n        elif isinstance(v,list):\n            for x in v: walk(x)\n    walk(st)\n    if rcs and all(x==0 for x in rcs):\n        exit_code=0\nif status!=\"PASS\" or exit_code!=0:\n    raise RuntimeError(\"N1E36_NOT_PASS status=%r exit=%r\"%(status,exit_code))\nif \"tests/model_execution/test_direct_sol_chat.py\" not in blob or \"unittest\" not in blob:\n    raise RuntimeError(\"N1E36_TARGET_TEST_NOT_PROVEN\")\nprint(\"N1E36_PROOF=PASS\")\n\n# 2) Exact Astra request.\nreq=CAMPAIGN/\"requests\"/(ASTRA+\".json\")\nif not req.is_file():\n    raise RuntimeError(\"ASTRA_REQUEST_MISSING\")\nro=load(req)\ndump(\"ASTRA_REQUEST\",ro)\nif ro.get(\"task_id\")!=ASTRA:\n    raise RuntimeError(\"ASTRA_REQUEST_TASK_MISMATCH\")\nif ro.get(\"phase\")!=\"ASTRA_PREBUILD\":\n    raise RuntimeError(\"ASTRA_REQUEST_PHASE_MISMATCH\")\nif ro.get(\"model_policy\")!=\"ASTRA_EXACT\":\n    raise RuntimeError(\"ASTRA_REQUEST_POLICY_MISMATCH\")\n\nrequest_blob=json.dumps(ro,ensure_ascii=False,sort_keys=True)\nif OLD_SOL in request_blob:\n    raise RuntimeError(\"ASTRA_REQUEST_CONTAINS_OLD_SOL_BUILD\")\nif re.search(r\"codex.*resume|resume.*codex\",request_blob,re.I):\n    raise RuntimeError(\"ASTRA_REQUEST_CONTAINS_CODEX_RESUME\")\n\n# Require explicit R4P2 proposal binding somewhere in the request.\nif PROPOSAL not in request_blob:\n    raise RuntimeError(\"ASTRA_REQUEST_PROPOSAL_BINDING_MISSING\")\nprint(\"ASTRA_REQUEST_BINDING=PASS\")\n\n# 3) Existing result must still be absent; duplicate review prevention.\nres=CAMPAIGN/\"model_results\"/(ASTRA+\".json\")\nprint(\"ASTRA_RESULT_EXISTS=\"+str(res.is_file()))\nif res.is_file():\n    existing=load(res)\n    dump(\"ASTRA_EXISTING_RESULT\",existing)\n    raise RuntimeError(\"ASTRA_RESULT_ALREADY_EXISTS_DUPLICATE_RISK\")\n\n# 4) Inspect model control state / queue files and run dirs read-only.\nmodels=CAMPAIGN/\"models\"\ninteresting=[]\nif models.exists():\n    for p in sorted(models.rglob(\"*\")):\n        if not p.is_file():\n            continue\n        rel=str(p.relative_to(CAMPAIGN))\n        # Bound output; only metadata-ish files.\n        if p.name.lower() in {\"state.json\",\"queue.json\",\"task.json\",\"worker.json\",\"complete.json\",\"request.json\"} or \"queue\" in p.name.lower():\n            try:\n                txt=p.read_text(encoding=\"utf-8\")\n            except Exception:\n                continue\n            if len(txt)>20000: txt=txt[:20000]\n            if ASTRA in txt or OLD_SOL in txt or \"ASTRA_PREBUILD\" in txt or \"SOL_BUILD\" in txt:\n                interesting.append((rel,txt))\nfor rel,txt in interesting[:30]:\n    print(\"MODEL_META_FILE=\"+rel)\n    print(\"MODEL_META=\"+txt.replace(\"\\n\",\" \")[:12000])\n\n# Find exact run dirs for requested Astra task; must be zero before resuming to avoid duplicate in-flight execution.\nruns=models/\"runs\"\nastra_runs=sorted([p.name for p in runs.glob(ASTRA+\"*\") if p.is_dir()]) if runs.exists() else []\nold_runs=sorted([p.name for p in runs.glob(OLD_SOL+\"*\") if p.is_dir()]) if runs.exists() else []\ndump(\"ASTRA_RUN_DIRS\",astra_runs)\ndump(\"OLD_SOL_RUN_DIRS_LAST5\",old_runs[-5:])\nif astra_runs:\n    raise RuntimeError(\"ASTRA_EXISTING_RUN_DIR_DUPLICATE_RISK\")\n\n# Queue runnable safety: fail if any metadata containing requested Astra also binds it to old Sol or resume.\nfor rel,txt in interesting:\n    if ASTRA in txt:\n        if OLD_SOL in txt:\n            raise RuntimeError(\"QUEUE_BINDING_MIXES_ASTRA_AND_OLD_SOL file=\"+rel)\n        if re.search(r\"codex.*resume|resume.*codex\",txt,re.I):\n            raise RuntimeError(\"QUEUE_BINDING_HAS_CODEX_RESUME file=\"+rel)\n\nprint(\"PREBUILD_BINDING_READONLY=PASS\")\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/prove_n1e36_prebuild_binding_n1e38.py"
+      ],
+      "timeout_seconds": 75
+    },
+    {
+      "type": "service",
+      "verb": "status",
+      "unit": "prediction-a2z-v4-model@A2Z-V4-ASTRA-PREBUILD-DIRECT-20261007-R4P2.service"
+    },
+    {
+      "type": "journal",
+      "unit": "prediction-a2z-v4-model@A2Z-V4-ASTRA-PREBUILD-DIRECT-20261007-R4P2.service",
+      "lines": 60
+    }
+  ]
+}
