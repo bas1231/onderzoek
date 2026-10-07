@@ -1,0 +1,54 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-A2Z-POSTBUILD-IMPORT-CLASSIFY-20261007-E114",
+  "source_commit": "d7547a295ed35e25bd0bd71235e7c9290f0d20e2",
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "High"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_runtime"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 240,
+  "notes": "Isolated replay of canonical POSTBUILD import only, using existing E106 bundle and existing Astra R3-P2 model result. No new model invocation, build, experiment test, backtest, shadow run, measurement or runtime mutation. Exit code identifies first failing invariant.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/a2z_e114_hydrate.py",
+      "content": "from pathlib import Path\nimport json\nroot=Path.cwd()\nspec=json.loads((root/\"control/project_tasks/DEV-PRED-A2Z-POSTBUILD-RETRY-20261006-E106.json\").read_text())\nneed={\n \"control/jobs/full_a2z_governed_v4.py\",\n \"control/codex_supervisor/experiment_gate.py\",\n \"control/codex_supervisor/model_quality_gate.py\",\n}\nfound={}\nfor op in spec[\"operations\"]:\n    if op.get(\"type\")==\"write_text\" and op.get(\"path\") in need:\n        found[op[\"path\"]]=op[\"content\"]\nmissing=need-set(found)\nif missing:\n    raise SystemExit(\"MISSING_E106_SOURCES:\"+\",\".join(sorted(missing)))\nfor rel,content in found.items():\n    p=root/rel\n    p.parent.mkdir(parents=True,exist_ok=True)\n    p.write_text(content,encoding=\"utf-8\")\nprint(\"E114_HYDRATED=1\")\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/a2z_e114_hydrate.py"
+      ],
+      "timeout_seconds": 60
+    },
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/a2z_e114_classify_import.py",
+      "content": "from pathlib import Path\nimport json,shutil,sys,traceback\n\nroot=Path.cwd()\nsys.path.insert(0,str(root/\"control/codex_supervisor\"))\nsys.path.insert(0,str(root/\"control/jobs\"))\n\nimport full_a2z_governed_v4 as a2z\nimport experiment_gate as gate\n\nmodel_task=\"A2Z-V4-ASTRA-POSTBUILD-20261006-R3-P2\"\nsrc=Path.home()/\".local/share/prediction-project-executor/worktrees/DEV-PRED-A2Z-POSTBUILD-RETRY-20261006-E106/knowledge/evidence/qualification/FULL-A2Z-LIVE-20261004-V4-GOVERNED\"\ndst=root/\"knowledge/evidence/qualification/FULL-A2Z-LIVE-20261004-V4-GOVERNED\"\n\nif not src.exists():\n    print(\"E114=SOURCE_BUNDLE_MISSING\",flush=True); raise SystemExit(38)\nif dst.exists():\n    shutil.rmtree(dst)\nshutil.copytree(src,dst)\n\noverlay=json.loads((dst/\"overlay.json\").read_text())\nmr=a2z.RUNTIME/\"model_results\"/f\"{model_task}.json\"\nif not mr.exists():\n    print(\"E114=MODEL_RESULT_MISSING\",flush=True); raise SystemExit(40)\n\ncodes=[\n (\"MODEL_PROVENANCE_MISSING_OR_REVOKED\",42),\n (\"MODEL_PHASE_OR_POLICY\",43),\n (\"MODEL_CONTEXT_MISMATCH\",44),\n (\"EXACT_MODEL_REQUIRED\",45),\n (\"MODEL_COMMAND_MISMATCH\",46),\n (\"MODEL_COMPLETION_BINDING\",47),\n (\"MODEL_EXECUTION_TOOL_FORBIDDEN\",48),\n (\"MODEL_TRANSCRIPT_NOT_COMPLETE\",49),\n (\"MODEL_TIME_ORDER\",50),\n (\"REVIEW_ACTUAL_INPUT_MISMATCH\",51),\n (\"REVIEW_COMPLETION_CONTENT_MISMATCH\",52),\n (\"REVIEW_COMPLETION_PROVENANCE_MISMATCH\",53),\n (\"POSTBUILD_REVIEW_BEFORE_BUILD\",54),\n (\"ASTRA_REVIEW_PHASE\",55),\n (\"ASTRA_REVIEW_CANDIDATE\",56),\n (\"ASTRA_REVIEW_WRONG_MODEL\",57),\n (\"ASTRA_REVIEW_STALE_BINDING\",58),\n (\"ASTRA_REVIEW_PROVENANCE\",59),\n (\"ASTRA_GOVERNED_PROVENANCE_INVALID\",60),\n (\"ASTRA_AUTONOMOUS_PROVENANCE\",61),\n (\"NO_TEST_OR_MEASUREMENT_BEFORE_ASTRA_POSTBUILD_APPROVAL\",62),\n]\ntry:\n    review=a2z.import_review(dst,overlay,\"POSTBUILD\",model_task)\n    a2z.save(dst/\"overlay.json\",overlay)\n    checked,ref=gate.require_postbuild(dst,overlay)\n    assert checked[\"decision\"]==\"APPROVE\"\n    assert review[\"decision\"]==\"APPROVE\"\n    print(\"E114=CANONICAL_POSTBUILD_IMPORT_PASS\",flush=True)\n    raise SystemExit(0)\nexcept SystemExit:\n    raise\nexcept Exception as exc:\n    msg=type(exc).__name__+\":\"+str(exc)\n    print(\"E114_ERROR=\"+msg[:1200],flush=True)\n    for needle,rc in codes:\n        if needle in msg:\n            print(\"E114=\"+needle,flush=True); raise SystemExit(rc)\n    print(\"E114=UNMAPPED_IMPORT_FAILURE\",flush=True)\n    raise SystemExit(69)\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/a2z_e114_classify_import.py"
+      ],
+      "timeout_seconds": 120
+    }
+  ]
+}
