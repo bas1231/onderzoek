@@ -1,0 +1,41 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-CONT-NEXT-4d047a9f1e8a17e4ede842d3",
+  "source_commit": "8a3698888c5ec5cb03ab8903ff4ccb7088162906",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "High"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_runtime"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 60,
+  "notes": "Continuation NEXT: read-only exact R4P2 Astra PREBUILD gate classifier. rc=0 APPROVE, rc=11 REVISE, rc=12 REJECT; other rc invalid/pending. No model invocation, build, tests, measurement, service/runtime/bridge mutation.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/cont_prebuild_gate_4d047a9f.py",
+      "content": "from pathlib import Path\nimport json,sys\np=Path.home()/\".local/share/prediction-project-executor/campaigns/FULL-A2Z-LIVE-20261004-V4/model_results/A2Z-V4-ASTRA-PREBUILD-DIRECT-20261007-R4P2.json\"\nif not p.is_file():\n    raise SystemExit(20)\no=json.loads(p.read_text(encoding=\"utf-8\"))\nif o.get(\"task_id\")!=\"A2Z-V4-ASTRA-PREBUILD-DIRECT-20261007-R4P2\":\n    raise SystemExit(21)\nif o.get(\"phase\")!=\"ASTRA_PREBUILD\":\n    raise SystemExit(22)\nif o.get(\"model\")!=\"gpt-6-astra\":\n    raise SystemExit(23)\nif o.get(\"model_policy\")!=\"ASTRA_EXACT\":\n    raise SystemExit(24)\nf=o.get(\"final\")\nr=json.loads(f) if isinstance(f,str) else f\nif not isinstance(r,dict):\n    raise SystemExit(25)\nif r.get(\"candidate_id\")!=\"AUTO-DISCOVERY-54d13314c7879b58e46d\":\n    raise SystemExit(26)\nif r.get(\"phase\")!=\"PREBUILD\":\n    raise SystemExit(27)\nb=r.get(\"binding_sha256\")\nif not isinstance(b,str) or len(b)!=64:\n    raise SystemExit(28)\nd=r.get(\"decision\")\nif d==\"APPROVE\":\n    raise SystemExit(0)\nif d==\"REVISE\":\n    raise SystemExit(11)\nif d==\"REJECT\":\n    raise SystemExit(12)\nraise SystemExit(29)\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/cont_prebuild_gate_4d047a9f.py"
+      ],
+      "timeout_seconds": 15
+    }
+  ]
+}
