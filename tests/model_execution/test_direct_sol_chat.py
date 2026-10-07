@@ -60,5 +60,33 @@ class E106DirectRoutingPatchTests(unittest.TestCase):
             compile(gate, "experiment_gate.py", "exec")
 
 
+    def test_hydrated_runner_uses_governed_overlay_route(self):
+        root = Path(__file__).resolve().parents[2]
+        with tempfile.TemporaryDirectory() as td:
+            tmp = Path(td)
+            source = root / E106
+            target = tmp / E106
+            target.parent.mkdir(parents=True, exist_ok=True)
+            target.write_text(source.read_text(encoding="utf-8"), encoding="utf-8")
+
+            hydrate(tmp)
+            patch_gate(tmp)
+            patch_runner(tmp)
+
+            runner_path = tmp / "control/jobs/full_a2z_governed_v4.py"
+            namespace = {"__name__": "not_main", "__file__": str(runner_path)}
+            exec(compile(runner_path.read_text(encoding="utf-8"), str(runner_path), "exec"), namespace)
+
+            overlay = {
+                "governed_lifecycle": {
+                    "campaign_id": "FULL-A2Z-LIVE-20261004-V4",
+                    "route_task_id": "SESSION-ROUTE-OVERLAY-TEST",
+                }
+            }
+            self.assertEqual(namespace["governed_route"](overlay), "SESSION-ROUTE-OVERLAY-TEST")
+            with self.assertRaisesRegex(ValueError, "GOVERNED_ROUTE_REQUIRED"):
+                namespace["governed_route"]({})
+
+
 if __name__ == "__main__":
     unittest.main()
