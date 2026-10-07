@@ -6,6 +6,7 @@ from pathlib import Path
 E106 = "control/project_tasks/DEV-PRED-A2Z-POSTBUILD-RETRY-20261006-E106.json"
 NEED = {
     "control/codex_supervisor/experiment_gate.py",
+    "control/codex_supervisor/model_quality_gate.py",
     "control/jobs/full_a2z_governed_v4.py",
 }
 
