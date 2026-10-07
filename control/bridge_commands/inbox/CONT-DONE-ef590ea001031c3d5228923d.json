@@ -1,0 +1,19 @@
+{
+  "schema": "PREDICTION_BRIDGE_COMMAND_V1",
+  "task_id": "CONT-DONE-ef590ea001031c3d5228923d",
+  "action": "BRIDGE_PING",
+  "created_at_utc": "2026-10-07T19:55:30Z",
+  "route_task_id": null,
+  "delivery_mode": "headless",
+  "live_trading": false,
+  "paid_actions": false,
+  "wallet_actions": false,
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "notes": "Close superseded N1E63 continuation. Its rc=30 PAUSED_USAGE_LIMIT outcome has already been durably advanced to single-flight usage-limit state task DEV-PRED-A2Z-R4P2-USAGE-LIMIT-STATE-20261007-N1E64. No duplicate NEXT or Astra resume is authorized.",
+  "auto_continue": false,
+  "parent_continuation_id": "CONT-ef590ea001031c3d5228923d"
+}
