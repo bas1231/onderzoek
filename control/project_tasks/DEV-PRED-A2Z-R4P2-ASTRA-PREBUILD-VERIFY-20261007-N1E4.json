@@ -1,0 +1,41 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-A2Z-R4P2-ASTRA-PREBUILD-VERIFY-20261007-N1E4",
+  "source_commit": "b8cdfce2f5a2448241d9a2b07b1e685bad24bac1",
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "High"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_runtime"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 180,
+  "notes": "Read-only verification of exact GPT-6 Astra PREBUILD model completion and decision for R4P2. No model invocation, build, tests, measurement, runtime/service mutation or bridge mutation.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/verify_r4p2_astra_prebuild_n1e4.py",
+      "content": "from __future__ import annotations\nfrom pathlib import Path\nimport json\n\nROOT=Path.home()/\".local/share/prediction-project-executor/campaigns/FULL-A2Z-LIVE-20261004-V4\"\nTASK=\"A2Z-V4-ASTRA-PREBUILD-DIRECT-20261007-R4P2\"\nenvp=ROOT/\"model_results\"/(TASK+\".json\")\n\ndef emit(payload):\n    print(\"ERROR_CLASS=R4P2_ASTRA_PREBUILD\")\n    print(\"ERROR=\"+json.dumps(payload,separators=(\",\",\":\"),sort_keys=True))\n    raise SystemExit(1)\n\nif not envp.is_file():\n    emit({\"state\":\"PENDING\",\"reason\":\"MODEL_RESULT_MISSING\"})\n\nenv=json.loads(envp.read_text(encoding=\"utf-8\"))\ncp=(ROOT/str(env.get(\"checkpoint\",\"\"))).resolve()\nruns=(ROOT/\"models/runs\").resolve()\ntry:\n    cp.relative_to(runs)\nexcept ValueError:\n    emit({\"state\":\"INVALID\",\"reason\":\"CHECKPOINT_OUTSIDE_RUNTIME\"})\n\nneed={}\nfor name in (\"TASK.json\",\"WORKER.json\",\"COMPLETE.json\",\"events.jsonl\"):\n    p=cp/name\n    if not p.is_file():\n        emit({\"state\":\"PENDING\",\"reason\":\"CHECKPOINT_FILE_MISSING\",\"file\":name})\n    need[name]=p\n\ntask=json.loads(need[\"TASK.json\"].read_text(encoding=\"utf-8\"))\nworker=json.loads(need[\"WORKER.json\"].read_text(encoding=\"utf-8\"))\ncomplete=json.loads(need[\"COMPLETE.json\"].read_text(encoding=\"utf-8\"))\nfinal=complete.get(\"final\")\ntry:\n    review=json.loads(final) if isinstance(final,str) else final\nexcept Exception:\n    emit({\"state\":\"INVALID\",\"reason\":\"FINAL_NOT_JSON\"})\n\nif not isinstance(review,dict):\n    emit({\"state\":\"INVALID\",\"reason\":\"REVIEW_NOT_OBJECT\"})\n\nchecks={\n \"task_id\":task.get(\"task_id\")==TASK,\n \"phase\":task.get(\"phase\")==\"ASTRA_PREBUILD\",\n \"policy\":task.get(\"model_policy\")==\"ASTRA_EXACT\",\n \"worker_model\":worker.get(\"model\")==\"gpt-6-astra\",\n \"selected_slug\":(worker.get(\"model_selection\") or {}).get(\"selected_slug\")==\"gpt-6-astra\",\n \"decision\":review.get(\"decision\") in {\"APPROVE\",\"REJECT\",\"REVISE\"},\n \"candidate\":review.get(\"candidate_id\")==\"AUTO-DISCOVERY-54d13314c7879b58e46d\",\n \"phase_result\":review.get(\"phase\")==\"PREBUILD\",\n}\nbad=sorted(k for k,v in checks.items() if not v)\nif bad:\n    emit({\"state\":\"INVALID\",\"reason\":\"CHECK_FAILED\",\"bad\":bad})\n\nemit({\n \"state\":\"COMPLETE\",\n \"decision\":review.get(\"decision\"),\n \"model\":worker.get(\"model\"),\n \"selected_slug\":(worker.get(\"model_selection\") or {}).get(\"selected_slug\"),\n \"finding\":str(review.get(\"finding\") or \"\")[:120],\n \"next_action\":str(review.get(\"next_action\") or \"\")[:120]\n})\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/verify_r4p2_astra_prebuild_n1e4.py"
+      ],
+      "timeout_seconds": 90
+    }
+  ]
+}
