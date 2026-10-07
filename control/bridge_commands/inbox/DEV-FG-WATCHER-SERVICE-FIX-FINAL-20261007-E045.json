@@ -1,0 +1,17 @@
+{
+  "schema": "PREDICTION_BRIDGE_COMMAND_V1",
+  "task_id": "DEV-FG-WATCHER-SERVICE-FIX-FINAL-20261007-E045",
+  "action": "SIX_AI_HEALTH",
+  "created_at_utc": "2026-10-07T14:20:00Z",
+  "route_task_id": "SESSION-ROUTE-0119cf707add47a07c830145",
+  "delivery_mode": "chat",
+  "live_trading": false,
+  "paid_actions": false,
+  "wallet_actions": false,
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "notes": "FINAL approved FG-only repair. Dedicated fg-watcher.service with existing fail-closed check_inbox preflight; dashboard/check_inbox/start/stop route through service; verify service enabled, preflight installed, watcher in separate cgroup, and watcher PID survives fg-control-center.service restart. Prediction bridge is transport only and MUST NOT be changed."
+}
