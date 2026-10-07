@@ -1,0 +1,19 @@
+{
+  "schema": "PREDICTION_BRIDGE_COMMAND_V1",
+  "task_id": "CONT-DONE-b294ddcec7b0773e2137b46c",
+  "action": "BRIDGE_PING",
+  "created_at_utc": "2026-10-07T22:14:30Z",
+  "route_task_id": null,
+  "delivery_mode": "headless",
+  "live_trading": false,
+  "paid_actions": false,
+  "wallet_actions": false,
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "notes": "Close superseded N1E87 continuation. Its lifecycle evidence was already durably advanced to chronological resume-sequence parser DEV-PRED-A2Z-R4P2-RESUME-SEQUENCE-20261007-N1E88. No duplicate NEXT or Astra resume is authorized.",
+  "auto_continue": false,
+  "parent_continuation_id": "CONT-b294ddcec7b0773e2137b46c"
+}
