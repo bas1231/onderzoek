@@ -1,0 +1,49 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-DASH-ROUTING-20261007-E140",
+  "source_commit": "dcdf544170275905e8b550aebb9e2ce1941a30aa",
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "High"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "production_inspect",
+    "production_fast_forward",
+    "production_merge_representation"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 420,
+  "operations": [
+    {
+      "type": "production_inspect"
+    },
+    {
+      "type": "production_ff",
+      "target_commit": "dcdf544170275905e8b550aebb9e2ce1941a30aa"
+    },
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/e140_dashboard.py",
+      "content": "import json,urllib.request\nwith urllib.request.urlopen(\"http://127.0.0.1:8770/api/snapshot\",timeout=5) as r:\n    life=json.loads(r.read().decode())[\"lifecycle\"]\nassert life[\"model_execution_architecture\"][\"target\"]==\"SOL_DIRECT_ASTRA_CODEX\"\nassert life[\"model_execution_architecture\"][\"sol\"][\"codex_required\"] is False\nassert life[\"model_execution_architecture\"][\"astra\"][\"codex_required\"] is True\nassert life[\"invariant\"]==\"NO_TEST_OR_MEASUREMENT_BEFORE_ASTRA_POSTBUILD_APPROVAL\"\nprint(\"E140_DASH_OK\")\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/e140_dashboard.py"
+      ],
+      "timeout_seconds": 60
+    }
+  ]
+}
