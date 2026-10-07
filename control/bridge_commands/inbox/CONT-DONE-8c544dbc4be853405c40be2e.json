@@ -1,0 +1,19 @@
+{
+  "schema": "PREDICTION_BRIDGE_COMMAND_V1",
+  "task_id": "CONT-DONE-8c544dbc4be853405c40be2e",
+  "action": "BRIDGE_PING",
+  "created_at_utc": "2026-10-07T19:45:30Z",
+  "route_task_id": null,
+  "delivery_mode": "headless",
+  "live_trading": false,
+  "paid_actions": false,
+  "wallet_actions": false,
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "notes": "Close superseded N1E61 continuation. Its repeated PAUSED_USAGE_LIMIT state has already been durably advanced to the single-flight retry gate DEV-PRED-A2Z-R4P2-ASTRA-RETRY-GATE-20261007-N1E62. No duplicate NEXT or Astra resume is authorized from this branch.",
+  "auto_continue": false,
+  "parent_continuation_id": "CONT-8c544dbc4be853405c40be2e"
+}
