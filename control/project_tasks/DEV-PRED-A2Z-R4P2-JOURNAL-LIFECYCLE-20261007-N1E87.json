@@ -1,0 +1,41 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-A2Z-R4P2-JOURNAL-LIFECYCLE-20261007-N1E87",
+  "source_commit": "747ebf10d4357bf4bd6434c370a564a254987ab4",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "High"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_logs"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 120,
+  "notes": "Read-only compact lifecycle extraction from exact R4P2 Astra PREBUILD unit journal. Return only latest start/exit/deactivated/failed and usage-limit attempt/checkpoint/retry lines. No service/model invocation.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/r4p2_journal_lifecycle_n1e87.py",
+      "content": "import subprocess,json\nunit=\"prediction-a2z-v4-model@A2Z-V4-ASTRA-PREBUILD-DIRECT-20261007-R4P2.service\"\np=subprocess.run([\"journalctl\",\"--user\",\"-u\",unit,\"-n\",\"260\",\"--no-pager\"],capture_output=True,text=True)\nrows=[]\nfor line in (p.stdout or \"\").splitlines():\n    low=line.lower()\n    if any(k in low for k in (\n      \"started prediction-a2z-v4-model@a2z-v4-astra-prebuild-direct-20261007-r4p2.service\",\n      \"main process exited\",\"deactivated successfully\",\"failed with result\",\"stopped prediction-a2z-v4-model@a2z-v4-astra-prebuild-direct-20261007-r4p2.service\",\n      \"paused_usage_limit\",\"usage_limit\",\"retry_at\",\"checkpoint\",\"attempt\"\n    )):\n        rows.append(line[-1400:])\nprint(\"ERROR_CLASS=R4P2_JOURNAL_LIFECYCLE\",flush=True)\nprint(\"ERROR=\"+json.dumps(rows[-12:],separators=(\",\",\":\")),flush=True)\nraise SystemExit(1)\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/r4p2_journal_lifecycle_n1e87.py"
+      ],
+      "timeout_seconds": 60
+    }
+  ]
+}
