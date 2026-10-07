@@ -1,0 +1,38 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-A2Z-DIRECT-SOL-REGRESSION-N1E36-20261007",
+  "source_commit": "b0fc664ec065c03125c54c6dae2c71126beebe67",
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "High"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "run_project_python",
+    "run_tests"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 180,
+  "notes": "Single regression proof after Astra-identified escaped-newline repair. No model invocation, experiment test/measurement, service/runtime/bridge mutation, paid/live/wallet action.",
+  "operations": [
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "-m",
+        "unittest",
+        "tests/model_execution/test_direct_sol_chat.py"
+      ],
+      "test": true,
+      "timeout_seconds": 120
+    }
+  ]
+}
