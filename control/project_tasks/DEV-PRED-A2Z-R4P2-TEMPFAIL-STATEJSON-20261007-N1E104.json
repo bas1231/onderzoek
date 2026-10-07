@@ -1,0 +1,41 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-A2Z-R4P2-TEMPFAIL-STATEJSON-20261007-N1E104",
+  "source_commit": "639f0c7aabe534b93b3f890cf003700058460e0f",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "High"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_logs"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 120,
+  "notes": "Read-only parse of the three exact SUPERVISOR_STATE JSON records immediately before R4P2 exit 75/TEMPFAIL. No service/model invocation.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/r4p2_tempfail_statejson_n1e104.py",
+      "content": "import subprocess,json\nu='prediction-a2z-v4-model@A2Z-V4-ASTRA-PREBUILD-DIRECT-20261007-R4P2.service'\np=subprocess.run(['journalctl','--user','-u',u,'--since','2026-10-07 21:13:15','--until','2026-10-07 21:13:26','--no-pager'],capture_output=True,text=True)\nrows=[]\nfor line in (p.stdout or '').splitlines():\n    if 'SUPERVISOR_STATE' not in line: continue\n    i=line.find('{')\n    if i<0: continue\n    try:o=json.loads(line[i:])\n    except Exception as e:\n        rows.append({'parse_error':type(e).__name__,'raw':line[i:][-500:]})\n        continue\n    rows.append({k:o.get(k) for k in ('event','state','task_id','reason','attempt','checkpoint','retry_at','next_action')})\nprint('ERROR_CLASS=R4P2_TEMPFAIL_STATEJSON',flush=True)\nprint('ERROR='+json.dumps(rows,separators=(',',':'),sort_keys=True),flush=True)\nraise SystemExit(1)\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/r4p2_tempfail_statejson_n1e104.py"
+      ],
+      "timeout_seconds": 60
+    }
+  ]
+}
