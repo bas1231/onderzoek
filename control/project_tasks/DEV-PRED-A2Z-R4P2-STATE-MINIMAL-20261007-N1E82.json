@@ -1,0 +1,41 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-A2Z-R4P2-STATE-MINIMAL-20261007-N1E82",
+  "source_commit": "719d1e6f417403599e7d7cba4a14d9cca74794bc",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "High"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_runtime"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 120,
+  "notes": "Minimal read-only state diagnosis only. No systemctl, no journal, no service/model invocation.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/r4p2_state_minimal_n1e82.py",
+      "content": "from pathlib import Path\nimport json\nbase=Path.home()/\".local/share/prediction-project-executor/campaigns/FULL-A2Z-LIVE-20261004-V4\"\ntask=\"A2Z-V4-ASTRA-PREBUILD-DIRECT-20261007-R4P2\"\ndef one(rel):\n    p=base/rel\n    if not p.is_file():\n        return {\"exists\":False}\n    try:\n        o=json.loads(p.read_text(encoding=\"utf-8\"))\n    except Exception as e:\n        return {\"exists\":True,\"read_error\":type(e).__name__}\n    if not isinstance(o,dict):\n        return {\"exists\":True,\"type\":type(o).__name__}\n    return {\n      \"exists\":True,\n      \"task_id\":o.get(\"task_id\"),\n      \"state\":o.get(\"state\"),\n      \"reason\":o.get(\"reason\"),\n      \"attempt\":o.get(\"attempt\"),\n      \"checkpoint\":o.get(\"checkpoint\"),\n      \"next_action\":o.get(\"next_action\"),\n      \"retry_at\":o.get(\"retry_at\")\n    }\nout={\n \"STATE\":one(\"models/STATE.json\"),\n \"CONTINUATION\":one(\"models/CONTINUATION.json\"),\n \"BLOCKER\":one(\"models/BLOCKER.json\"),\n \"result_exists\":(base/\"model_results\"/(task+\".json\")).is_file()\n}\nprint(\"ERROR_CLASS=R4P2_STATE_MINIMAL\",flush=True)\nprint(\"ERROR=\"+json.dumps(out,separators=(\",\",\":\"),sort_keys=True),flush=True)\nraise SystemExit(1)\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/r4p2_state_minimal_n1e82.py"
+      ],
+      "timeout_seconds": 60
+    }
+  ]
+}
