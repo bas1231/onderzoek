@@ -54,6 +54,21 @@ Een kleine maar echte edge is valide. Een grote maar niet-reproduceerbare paper 
 >
 > Een implementatie, testfixture of A→Z-kwalificatie die deze volgorde omdraait of tests/meting vóór de post-build Astra-approval laat starten, **voldoet niet aan de canonical acceptance criteria** en mag niet als volledige A→Z-PASS worden gerapporteerd.
 
+### Uitvoeringslaag — Sol direct, Astra via Codex
+
+De modelrol en de uitvoeringslaag zijn afzonderlijke begrippen.
+
+Voor nieuwe governed runs geldt:
+
+- `SOL_PROPOSAL` en `SOL_BUILD`: exact **GPT-5.6 Sol via DIRECT_SOL**, buiten Codex;
+- `ASTRA_PREBUILD`, `ASTRA_POSTBUILD` en Astra-supervisorreviews: exact **GPT-6 Astra via CODEX_WORKER**.
+
+De directe Sol-route moet exact `gpt-5.6-sol` afdwingen, zonder modeltools, met `store=false` en met exacte prompt/completion-provenance. Astra blijft bewust op een andere uitvoeringslaag om de onafhankelijke reviewrol te behouden.
+
+De migratie verandert geen enkele wetenschappelijke gate. `NO_TEST_OR_MEASUREMENT_BEFORE_ASTRA_POSTBUILD_APPROVAL` blijft ongewijzigd.
+
+Zie `control/model_execution/ROUTING.md`.
+
 ### Director / researcher
 
 De bestaande reasoning-worker analyseert candidates, selecteert kansrijke hypotheses en bepaalt de eerstvolgende beslissende falsificatie. Een advies `NEEDS_BUILD` of `VALIDATION` is **geen autorisatie** om direct een experiment te bouwen, testen of meten.
