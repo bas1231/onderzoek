@@ -1,0 +1,30 @@
+{
+  "schema": "PREDICTION_BUILD_LOG_EVENT_V1",
+  "event_id": "20261007T122100Z-R4-DIRECT-INPUT-QUALIFIED-CHUNKING",
+  "work_item_id": "A2Z-SYSTEMTEST-20261005",
+  "created_at_utc": "2026-10-07T12:21:00Z",
+  "event_type": "RESULT",
+  "work_item_status": "IN_PROGRESS",
+  "outcome": "PARTIAL",
+  "title": "R4 direct-Sol input geldig; chunking vereist",
+  "objective": "Kwalificeer de bestaande immutable R4 SOL_BUILD request voor directe GPT-5.6 Sol overdracht.",
+  "summary": "B8D2 bereikte R4_DIRECT_INPUT=PASS. Exit 20 is de expliciete classifier NEEDS_CHUNKING: de geldige request past niet in één bestaande continuation-context.",
+  "why": "De inhoud/binding is geldig; alleen transportpakking moet worden opgesplitst binnen de bestaande 6000-character contextlimiet.",
+  "first_incomplete_step": "Lever chunk 1 van de exacte canonical R4 request via de bestaande continuation-transportlaag naar dezelfde chat.",
+  "next_action": "Gebruik applicatieniveau zlib+urlsafe-base64 chunks met request- en chunkhashes; wijzig bridge-implementatie/config/services niet.",
+  "session_route_task_id": "DEV-PRED-SOL-DIRECT-GATE-QUALIFY-R2-20261007-A7C1",
+  "task_ids": [
+    "DEV-PRED-A2Z-R4-DIRECT-INPUT-QUALIFY-20261007-B8D2"
+  ],
+  "evidence_refs": [
+    "result:DEV-PRED-A2Z-R4-DIRECT-INPUT-QUALIFY-20261007-B8D2 status=FAIL exit=2 rcs=1:2 detail=python rc=20: R4_DIRECT_INPUT=PASS event=1791375547-aa66c94df690"
+  ],
+  "tags": [
+    "a2z",
+    "r4",
+    "direct-sol",
+    "input-qualified",
+    "chunking",
+    "no-bridge-mutation"
+  ]
+}
