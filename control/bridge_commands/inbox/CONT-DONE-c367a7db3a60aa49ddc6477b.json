@@ -1,0 +1,19 @@
+{
+  "schema": "PREDICTION_BRIDGE_COMMAND_V1",
+  "task_id": "CONT-DONE-c367a7db3a60aa49ddc6477b",
+  "action": "BRIDGE_PING",
+  "created_at_utc": "2026-10-07T21:03:45Z",
+  "route_task_id": null,
+  "delivery_mode": "headless",
+  "live_trading": false,
+  "paid_actions": false,
+  "wallet_actions": false,
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "notes": "Close superseded N1E113 continuation. Its failed post-retry8 verification was already durably advanced to due-now exact retry DEV-PRED-A2Z-R4P2-ASTRA-RETRY8-DUE-20261007-N1E115. No duplicate NEXT or Astra resume authorized.",
+  "auto_continue": false,
+  "parent_continuation_id": "CONT-c367a7db3a60aa49ddc6477b"
+}
