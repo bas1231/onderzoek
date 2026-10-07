@@ -1,0 +1,42 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-A2Z-R4P2-ASTRA-PREBUILD-RESUME-20261007-N1E44",
+  "source_commit": "69006a8fb12eaf17a54c9b558e13204e40b91e8e",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "High"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "user_service_manage",
+    "read_logs"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 180,
+  "notes": "Resume only the existing correctly-bound R4P2 Astra PREBUILD service once. Keep timer disabled. No bridge changes, no experiment build/test/measurement, no paid/live/wallet actions.",
+  "operations": [
+    {
+      "type": "service",
+      "verb": "start",
+      "unit": "prediction-a2z-v4-model@A2Z-V4-ASTRA-PREBUILD-DIRECT-20261007-R4P2.service"
+    },
+    {
+      "type": "service",
+      "verb": "status",
+      "unit": "prediction-a2z-v4-model@A2Z-V4-ASTRA-PREBUILD-DIRECT-20261007-R4P2.service"
+    },
+    {
+      "type": "journal",
+      "unit": "prediction-a2z-v4-model@A2Z-V4-ASTRA-PREBUILD-DIRECT-20261007-R4P2.service",
+      "lines": 120
+    }
+  ]
+}
