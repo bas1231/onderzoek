@@ -1,0 +1,56 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-A2Z-R4-TIMER-FILE-20261007-E136",
+  "source_commit": "9c678bdd58bf58a5cba0590eb68be6d062b83dfb",
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "High"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "write_runtime",
+    "user_service_manage"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 240,
+  "notes": "Install only the A2Z v4 15-minute template timer file and daemon-reload. Do not enable or start any timer/service in this task.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/codex_supervisor/systemd/prediction-a2z-v4-model@.timer",
+      "content": "[Unit]\nDescription=Prediction A2Z v4 model retry timer for %i\n\n[Timer]\nOnCalendar=*:0/15\nPersistent=true\nUnit=prediction-a2z-v4-model@%i.service\n\n[Install]\nWantedBy=timers.target\n"
+    },
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/a2z_e136_timer_source.py",
+      "content": "from pathlib import Path\np=Path(\"control/codex_supervisor/systemd/prediction-a2z-v4-model@.timer\")\nt=p.read_text()\nassert \"OnCalendar=*:0/15\" in t\nassert \"Persistent=true\" in t\nassert \"Unit=prediction-a2z-v4-model@%i.service\" in t\nassert \"WantedBy=timers.target\" in t\nprint(\"E136_TIMER_SOURCE_OK\")\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/a2z_e136_timer_source.py"
+      ],
+      "timeout_seconds": 60
+    },
+    {
+      "type": "install_runtime",
+      "source": "control/codex_supervisor/systemd/prediction-a2z-v4-model@.timer",
+      "destination": "~/.config/systemd/user/prediction-a2z-v4-model@.timer",
+      "mode": 420
+    },
+    {
+      "type": "daemon_reload"
+    }
+  ]
+}
