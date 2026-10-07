@@ -1,0 +1,40 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "SESSION-ROUTE-DIRECTSOL-20261007-K7A1",
+  "source_commit": "e2f739a5fe191d22bb42dd7a9d1ca696fbb9bfbc",
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "High"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 120,
+  "notes": "Same-chat route attestation for DIRECT_SOL provenance. Harmless isolated-worktree Python only. No bridge mutation, no runtime/service changes.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/direct_sol_session_route_k7a1.py",
+      "content": "print('DIRECT_SOL_SESSION_ROUTE=PASS')\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/direct_sol_session_route_k7a1.py"
+      ],
+      "timeout_seconds": 30
+    }
+  ]
+}
