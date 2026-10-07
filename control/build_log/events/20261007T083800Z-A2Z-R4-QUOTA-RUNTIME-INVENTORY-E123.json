@@ -1,0 +1,32 @@
+{
+  "schema": "PREDICTION_BUILD_LOG_EVENT_V1",
+  "event_id": "20261007T083800Z-A2Z-R4-QUOTA-RUNTIME-INVENTORY-E123",
+  "work_item_id": "A2Z-SYSTEMTEST-20261005",
+  "created_at_utc": "2026-10-07T08:38:00Z",
+  "event_type": "ATTEMPT",
+  "work_item_status": "IN_PROGRESS",
+  "outcome": "STARTED",
+  "title": "Inventariseer actieve quota-runtime voor R4",
+  "objective": "Vind exact de actieve supervisor/runtime/unitpaden en huidige R4-state vóór quota-retry reparatie.",
+  "summary": "R4 is inhoudelijk geblokkeerd door Codex usage limit. E123 leest alleen runtimebestanden, DB-state en service/journal.",
+  "why": "De fix moet de bestaande R4-task en provenance ongemoeid laten en alleen de retry-cadans corrigeren.",
+  "first_incomplete_step": "Actieve supervisor- en unitlayout bepalen.",
+  "next_action": "Daarna gerichte test+patch voor provider-reset-aware retry; pas na regressies eventueel runtime-install.",
+  "session_route_task_id": "SESSION-ROUTE-5388245c5e308fbc9dcf92ab",
+  "task_ids": [
+    "DEV-PRED-A2Z-R4-QUOTA-RUNTIME-INVENTORY-20261007-E123",
+    "A2Z-V4-SOL-BUILD-20261007-R4"
+  ],
+  "commits": [],
+  "evidence_refs": [
+    "control/build_log/events/20261007T083200Z-A2Z-SOL-R4-USAGE-STATE-E122-PAUSED.json",
+    "control/codex_supervisor/test_usage_limit_retry.py"
+  ],
+  "tags": [
+    "a2z",
+    "codex",
+    "quota",
+    "runtime",
+    "inventory"
+  ]
+}
