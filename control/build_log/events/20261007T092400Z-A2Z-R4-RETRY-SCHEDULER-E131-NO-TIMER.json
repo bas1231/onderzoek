@@ -1,0 +1,31 @@
+{
+  "schema": "PREDICTION_BUILD_LOG_EVENT_V1",
+  "event_id": "20261007T092400Z-A2Z-R4-RETRY-SCHEDULER-E131-NO-TIMER",
+  "work_item_id": "A2Z-SYSTEMTEST-20261005",
+  "created_at_utc": "2026-10-07T09:24:00Z",
+  "event_type": "RESULT",
+  "work_item_status": "IN_PROGRESS",
+  "outcome": "FAIL",
+  "title": "A2Z-v4 heeft geen eigen retry-timer",
+  "objective": "Classificeer welke scheduler de R4 900s retry daadwerkelijk zou activeren.",
+  "summary": "E131: a2z_timer_count=0, a2z_service_count=1 (prediction-a2z-v4-model@.service). Algemene prediction-codex-supervisor.timer/service bestaan, maar de service noemt campaign FULL-A2Z-LIVE-20261004-V4 niet. De 900s DB-retry wordt dus niet automatisch door een A2Z-specific scheduler afgevuurd.",
+  "why": "Dit verklaart waarom retry_at verstreek terwijl attempt 2 niet startte.",
+  "first_incomplete_step": "Lees exact ExecStart/WorkingDirectory van prediction-a2z-v4-model@.service om een veilige 15-minuten timer eraan te koppelen.",
+  "next_action": "E132 read-only template-classificatie; daarna minimale timerinstallatie met regressietest/canary.",
+  "session_route_task_id": "SESSION-ROUTE-5388245c5e308fbc9dcf92ab",
+  "task_ids": [
+    "DEV-PRED-A2Z-R4-RETRY-SCHEDULER-CLASSIFY-20261007-E131",
+    "A2Z-V4-SOL-BUILD-20261007-R4"
+  ],
+  "commits": [],
+  "evidence_refs": [
+    "result:DEV-PRED-A2Z-R4-RETRY-SCHEDULER-CLASSIFY-20261007-E131 rc=22 a2z_timer_count=0 general_service_mentions_campaign=false event=1791362246-2b82db201896"
+  ],
+  "tags": [
+    "a2z",
+    "r4",
+    "retry",
+    "scheduler",
+    "missing-timer"
+  ]
+}
