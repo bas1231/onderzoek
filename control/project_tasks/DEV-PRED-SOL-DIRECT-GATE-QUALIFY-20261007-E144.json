@@ -1,0 +1,61 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-SOL-DIRECT-GATE-QUALIFY-20261007-E144",
+  "source_commit": "3fe1063dc7b6dc43d932877bb848707eccd438f6",
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "High"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 300,
+  "notes": "Isolated infrastructure qualification of direct-Sol Chat gate migration. No model execution, experiment test, measurement, service mutation, or production write.",
+  "operations": [
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/model_execution/patch_e106_gate.py"
+      ],
+      "timeout_seconds": 60
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "-m",
+        "compileall",
+        "-q",
+        "control/model_execution",
+        "control/codex_supervisor/experiment_gate.py",
+        "control/jobs/full_a2z_governed_v4.py"
+      ],
+      "timeout_seconds": 90
+    },
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/e144_direct_sol_gate_qualify.py",
+      "content": "from __future__ import annotations\n\nimport hashlib\nimport json\nimport sys\nimport tempfile\nfrom pathlib import Path\n\nroot = Path.cwd()\nsys.path.insert(0, str(root / \"control/codex_supervisor\"))\n\nimport experiment_gate as gate\nfrom control.model_execution.direct_sol_chat import build_request, build_result\nfrom control.model_execution.direct_sol_record import normalized_run_files, provenance_record\n\n\ndef write_record(repo: Path, prefix: str, files: dict[str, str], record: dict) -> dict:\n    for name, pin in record[\"files\"].items():\n        p = repo / pin[\"ref\"]\n        p.parent.mkdir(parents=True, exist_ok=True)\n        p.write_text(files[name], encoding=\"utf-8\")\n    return record\n\n\ndef astra_record(repo: Path, route: str) -> dict:\n    prompt = \"review\"\n    final = json.dumps({\"candidate_id\": \"X\"})\n    ih = hashlib.sha256(prompt.encode()).hexdigest()\n    task = {\n        \"task_id\": \"ASTRA-SMOKE\",\n        \"phase\": \"ASTRA_POSTBUILD\",\n        \"model_policy\": \"ASTRA_EXACT\",\n        \"campaign_id\": \"C\",\n        \"route_task_id\": route,\n        \"prompt\": prompt,\n        \"input_sha256\": ih,\n    }\n    worker = {\n        \"model\": \"gpt-6-astra\",\n        \"model_selection\": {\n            \"policy\": \"ASTRA_EXACT\",\n            \"selected_slug\": \"gpt-6-astra\",\n        },\n        \"command_flags\": [\"exec\", \"-m\", \"gpt-6-astra\"],\n        \"started_at\": 3.0,\n    }\n    complete = {\n        \"task_id\": \"ASTRA-SMOKE\",\n        \"input_sha256\": ih,\n        \"thread_id\": \"astra-thread\",\n        \"final\": final,\n        \"timestamp\": 4.0,\n    }\n    events = [\n        {\"type\": \"thread.started\", \"thread_id\": \"astra-thread\"},\n        {\"type\": \"item.completed\", \"item\": {\"type\": \"agent_message\", \"text\": final}},\n        {\"type\": \"turn.completed\"},\n    ]\n    texts = {\n        \"TASK.json\": json.dumps(task),\n        \"WORKER.json\": json.dumps(worker),\n        \"COMPLETE.json\": json.dumps(complete),\n        \"events.jsonl\": \"\".join(json.dumps(e) + \"\\n\" for e in events),\n    }\n    record = {\"revoked\": False, \"files\": {}}\n    for name, text in texts.items():\n        ref = \"astra/\" + name\n        p = repo / ref\n        p.parent.mkdir(parents=True, exist_ok=True)\n        p.write_text(text, encoding=\"utf-8\")\n        record[\"files\"][name] = {\n            \"ref\": ref,\n            \"sha256\": hashlib.sha256(text.encode()).hexdigest(),\n        }\n    return record\n\n\ndef main() -> int:\n    route = \"SESSION-ROUTE-controller\"\n    overlay = {\n        \"candidate_id\": \"X\",\n        \"governed_lifecycle\": {\"campaign_id\": \"C\", \"route_task_id\": route},\n        \"live_trading\": False,\n        \"paid_actions\": False,\n        \"wallet_actions\": False,\n    }\n\n    with tempfile.TemporaryDirectory() as td:\n        repo = Path(td)\n\n        req = build_request(\n            task_id=\"SOL-SMOKE\",\n            phase=\"SOL_BUILD\",\n            campaign_id=\"C\",\n            candidate_id=\"X\",\n            binding_sha256=\"a\" * 64,\n            prompt=\"build\",\n            delivery_route_task_id=route,\n            created_at_utc=\"2026-10-07T10:00:00Z\",\n        )\n        res = build_result(\n            req,\n            worker_route_task_id=\"SESSION-ROUTE-sol-worker\",\n            final=json.dumps({\"candidate_id\": \"X\"}),\n            started_at_utc=\"2026-10-07T10:01:00Z\",\n            finished_at_utc=\"2026-10-07T10:02:00Z\",\n        )\n        files = normalized_run_files(req, res)\n        sol_record = provenance_record(\"sol\", files)\n        write_record(repo, \"sol\", files, sol_record)\n        _, sol_worker, _, sol_result = gate.model_record(repo, sol_record, overlay, \"SOL_BUILD\")\n        assert sol_worker[\"execution_layer\"] == \"DIRECT_SOL_CHAT\"\n        assert sol_result[\"candidate_id\"] == \"X\"\n\n        ar = astra_record(repo, route)\n        _, astra_worker, _, astra_result = gate.model_record(repo, ar, overlay, \"ASTRA_POSTBUILD\")\n        assert astra_worker[\"model\"] == \"gpt-6-astra\"\n        assert astra_result[\"candidate_id\"] == \"X\"\n\n        bad_worker_path = repo / sol_record[\"files\"][\"WORKER.json\"][\"ref\"]\n        bad = json.loads(bad_worker_path.read_text())\n        bad[\"model\"] = \"gpt-6-astra\"\n        bad_worker_path.write_text(json.dumps(bad, sort_keys=True), encoding=\"utf-8\")\n        sol_record[\"files\"][\"WORKER.json\"][\"sha256\"] = hashlib.sha256(\n            bad_worker_path.read_bytes()\n        ).hexdigest()\n        try:\n            gate.model_record(repo, sol_record, overlay, \"SOL_BUILD\")\n        except gate.ExperimentGateError:\n            pass\n        else:\n            raise RuntimeError(\"DIRECT_SOL_WRONG_MODEL_ACCEPTED\")\n\n    print(\"E144_DIRECT_SOL_GATE_QUALIFY=PASS\")\n    return 0\n\n\nif __name__ == \"__main__\":\n    raise SystemExit(main())\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/e144_direct_sol_gate_qualify.py"
+      ],
+      "timeout_seconds": 90
+    }
+  ]
+}
