@@ -1,0 +1,41 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-A2Z-N1E36-COMPACT-RECEIPT-20261007-N1E39",
+  "source_commit": "b0fc664ec065c03125c54c6dae2c71126beebe67",
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "High"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_runtime"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 120,
+  "notes": "Compact read-only extraction of persisted N1E36 executor receipt fields. Do not rerun tests, invoke models, change services/runtime/bridge, or perform experiment tests/measurement.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/compact_n1e36_receipt_n1e39.py",
+      "content": "from pathlib import Path\nimport json\n\nTARGET=\"DEV-PRED-A2Z-DIRECT-SOL-REGRESSION-N1E36-20261007\"\np=Path.home()/\".local/state/prediction-project-executor\"/(TARGET+\".json\")\nif not p.is_file():\n    raise RuntimeError(\"STATE_MISSING\")\no=json.loads(p.read_text(encoding=\"utf-8\"))\nprint(\"STATUS=\"+str(o.get(\"status\")))\nprint(\"TASK_ID=\"+str(o.get(\"task_id\")))\nprint(\"SOURCE_COMMIT=\"+str(o.get(\"source_commit\")))\nprint(\"COMPLETED_AT=\"+str(o.get(\"completed_at_utc\")))\nops=o.get(\"operations\") or o.get(\"operation_results\") or o.get(\"results\") or []\nprint(\"OPS_TYPE=\"+type(ops).__name__)\nprint(\"OPS_COUNT=\"+str(len(ops) if hasattr(ops,\"__len__\") else -1))\nprint(\"OPS_JSON=\"+json.dumps(ops,ensure_ascii=False,sort_keys=True)[:14000])\nblob=json.dumps(o,ensure_ascii=False,sort_keys=True)\nprint(\"TARGET_TEST_PRESENT=\"+str(\"tests/model_execution/test_direct_sol_chat.py\" in blob))\nprint(\"UNITTEST_PRESENT=\"+str(\"unittest\" in blob))\n# Extract every explicit integer rc-like field for deterministic classification.\nrcs=[]\ndef walk(v,path=\"\"):\n    if isinstance(v,dict):\n        for k,x in v.items():\n            np=(path+\".\"+k) if path else k\n            if k in {\"rc\",\"returncode\",\"exit_code\"} and isinstance(x,int):\n                rcs.append((np,x))\n            walk(x,np)\n    elif isinstance(v,list):\n        for i,x in enumerate(v):\n            walk(x,f\"{path}[{i}]\")\nwalk(o)\nprint(\"RCS=\"+json.dumps(rcs,separators=(\",\",\":\")))\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/compact_n1e36_receipt_n1e39.py"
+      ],
+      "timeout_seconds": 30
+    }
+  ]
+}
