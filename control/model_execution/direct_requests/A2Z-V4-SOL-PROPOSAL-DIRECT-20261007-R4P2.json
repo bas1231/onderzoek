@@ -1,0 +1,19 @@
+{
+  "binding_sha256": "c026a6d4c98cbe6d658ecc117a8d1a61e35653da55f4478fe0d410e40922e0d8",
+  "campaign_id": "FULL-A2Z-LIVE-20261004-V4",
+  "candidate_id": "AUTO-DISCOVERY-54d13314c7879b58e46d",
+  "created_at_utc": "2026-10-07T12:49:00Z",
+  "delivery_route_task_id": "SESSION-ROUTE-DIRECTSOL-20261007-K7A1",
+  "execution_layer": "DIRECT_SOL_CHAT",
+  "input_sha256": "15310712848d037d5ecc5e8d327da80369d00c90f3b2e2af37325acafe047282",
+  "live_trading": false,
+  "paid_actions": false,
+  "phase": "SOL_PROPOSAL",
+  "prompt": "You are exactly GPT-5.6 Sol operating in regular Chat mode for the Prediction project.\nProduce a new complete SOL_PROPOSAL for candidate AUTO-DISCOVERY-54d13314c7879b58e46d after the prior Codex-backed R4 build became inaccessible to the direct-chat worker. This is an explicit governance fallback: do not claim continuity with the inaccessible R4 prompt; instead create proposal_version 4 from the canonical qualification fixture and require a fresh exact GPT-6 Astra PREBUILD review before any build.\n\nReturn ONLY one JSON object, no markdown and no commentary.\nThis governed retry supersedes the unmaterialized R4P1 record due canonical-JSON serialization mismatch; do not use R4P1.\n\nCanonical frozen scope:\n- qualification_id: FULL-A2Z-LIVE-20261004-V4\n- hypothesis: positive complement edge iff YES ask + NO ask + fees < 1.00\n- negative control: yes_ask=0.62, no_ask=0.43, fees=0, expected total 1.05, expected edge -0.05, NO_EDGE\n- positive control: yes_ask=0.495, no_ask=0.495, fees=0, expected total 0.99, expected edge +0.01, EDGE\n- preregistered observations:\n  1) 0.62, 0.43, 0 -> expected -0.05\n  2) 0.61, 0.44, 0 -> expected -0.05\n  3) 0.60, 0.45, 0 -> expected -0.05\n- synthetic qualification only; scientific_status remains NO_PROVEN_EDGE\n- no external market access, orders, live trading, paid actions or wallet actions\n- Python standard library only\n- artifact names must be exactly complement_checker_v4.py, test_complement_checker_v4.py, qualification_stream_v4.json\n- input handling must fail closed on bools, subclasses/custom objects, non-finite/out-of-range values and unknown fields without invoking custom hooks\n- zero edge is NO_EDGE; only strictly positive net edge is EDGE\n- no substantive tests or measurement before fresh exact GPT-6 Astra POSTBUILD approval of the exact built files/harness\n- any Astra REVISE/REJECT returns to Sol\n\nDesign the proposal so that the governed A→Z harness can later compare evaluate(record) outputs to preregistered_outputs. Include proposal_version, intended_artifacts, data_and_time_scope.preregistered_outputs, safety with exact false flags, falsification, acceptance criteria, resource constraints and governance.",
+  "schema": "PREDICTION_DIRECT_SOL_REQUEST_V1",
+  "target_experience": "CHAT",
+  "target_model": "gpt-5.6-sol",
+  "target_model_display": "GPT-5.6 Sol",
+  "task_id": "A2Z-V4-SOL-PROPOSAL-DIRECT-20261007-R4P2",
+  "wallet_actions": false
+}
