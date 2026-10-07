@@ -286,3 +286,73 @@ def test_installed_provenance_keeps_policy_and_candidate_pins_without_supervisor
     config['candidate_dispatch.py_sha256']='wrong'
     m.atomic(tmp_path/'CONFIG.json',config)
     with pytest.raises(m.Blocked,match='PINNED_CANDIDATE_SOURCE_CHANGED'):m.verify_installation(tmp_path)
+
+
+def _policy_task(tid,policy,priority=100):
+    prompt='Review '+tid
+    return dict(
+        task_id=tid,
+        task_class='research_review',
+        priority=priority,
+        expected_value=10,
+        estimated_reasoning_cost=1,
+        created_at='2026-10-07',
+        prompt=prompt,
+        input_sha256=m.digest(prompt.encode()),
+        model_policy=policy,
+        requires_bridge=False,
+    )
+
+def test_sol_usage_limit_does_not_block_astra(tmp_path):
+    clock=[1000.0];calls=[]
+    def worker(t,thread,folder,fd):
+        calls.append(t['task_id'])
+        if t['task_id']=='SOL-OLD':
+            emit(folder,[GOOD[0],{'type':'error','message':"You've hit your usage limit"}]);return 1
+        emit(folder,GOOD);return 0
+    s=m.Supervisor(tmp_path,worker,lambda:clock[0])
+    s.enqueue(_policy_task('SOL-OLD','SOL_EXACT'))
+    assert s.tick()['state']=='PAUSED_USAGE_LIMIT'
+    assert s.usage_quota_until('SOL_EXACT')>clock[0]
+    assert s.usage_quota_until('ASTRA_EXACT')<=clock[0]
+    s.enqueue(_policy_task('ASTRA-NEW','ASTRA_EXACT'))
+    state=s.tick()
+    assert state['state']=='COMPLETE'
+    assert state['task_id']=='ASTRA-NEW'
+    assert calls==['SOL-OLD','ASTRA-NEW']
+
+def test_astra_usage_limit_blocks_other_astra_until_retry(tmp_path):
+    clock=[2000.0];calls=[]
+    def worker(t,thread,folder,fd):
+        calls.append(t['task_id'])
+        if len(calls)==1:
+            emit(folder,[GOOD[0],{'type':'error','message':'usage_limit'}]);return 1
+        emit(folder,GOOD);return 0
+    s=m.Supervisor(tmp_path,worker,lambda:clock[0])
+    s.enqueue(_policy_task('ASTRA-A','ASTRA_EXACT'))
+    assert s.tick()['state']=='PAUSED_USAGE_LIMIT'
+    s.enqueue(_policy_task('ASTRA-B','ASTRA_EXACT'))
+    assert s.tick()['state']=='PAUSED_USAGE_LIMIT'
+    assert len(calls)==1
+    clock[0]+=901
+    assert s.tick()['state']=='COMPLETE'
+    assert len(calls)==2
+
+def test_explicit_global_usage_limit_blocks_cross_policy(tmp_path):
+    clock=[3000.0];calls=[]
+    def worker(t,thread,folder,fd):
+        calls.append(t['task_id'])
+        if len(calls)==1:
+            emit(folder,[GOOD[0],{'type':'error','message':'account-wide usage limit for all models'}]);return 1
+        emit(folder,GOOD);return 0
+    s=m.Supervisor(tmp_path,worker,lambda:clock[0])
+    s.enqueue(_policy_task('SOL-GLOBAL','SOL_EXACT'))
+    assert s.tick()['state']=='PAUSED_USAGE_LIMIT'
+    s.enqueue(_policy_task('ASTRA-AFTER-GLOBAL','ASTRA_EXACT'))
+    blocked=s.tick()
+    assert blocked['state']=='PAUSED_USAGE_LIMIT'
+    assert blocked['reason']=='GLOBAL_USAGE_LIMIT'
+    assert len(calls)==1
+    clock[0]+=901
+    assert s.tick()['state']=='COMPLETE'
+    assert len(calls)==2
