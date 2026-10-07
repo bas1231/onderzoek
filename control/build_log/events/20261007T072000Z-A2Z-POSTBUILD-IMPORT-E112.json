@@ -1,0 +1,31 @@
+{
+  "schema": "PREDICTION_BUILD_LOG_EVENT_V1",
+  "event_id": "20261007T072000Z-A2Z-POSTBUILD-IMPORT-E112",
+  "work_item_id": "A2Z-SYSTEMTEST-20261005",
+  "created_at_utc": "2026-10-07T07:20:00Z",
+  "event_type": "ATTEMPT",
+  "work_item_status": "IN_PROGRESS",
+  "outcome": "STARTED",
+  "title": "Canonical import bestaande Astra POST-BUILD review",
+  "objective": "Importeer en valideer de reeds bestaande R3-P2 Astra APPROVE via de canonical POSTBUILD-route zonder andere ketenstappen te herhalen.",
+  "summary": "E106 startte de review maar voerde import_review/postbuild niet uit. E112 hydrateert alleen de immutable E106 gatecode in een nieuwe worktree, importeert de bestaande modeloutput en vereist exact-model, binding en autonome provenance.",
+  "why": "Raw APPROVE is geen autorisatie. Alleen de canonical validator mag de gate openen.",
+  "first_incomplete_step": "POSTBUILD import/validatie van A2Z-V4-ASTRA-POSTBUILD-20261006-R3-P2.",
+  "next_action": "Bij PASS: dashboard naar POSTBUILD approved en daarna tests/meting uitvoeren. Bij FAIL: uitsluitend de eerste concrete validatorfout herstellen.",
+  "session_route_task_id": "SESSION-ROUTE-5388245c5e308fbc9dcf92ab",
+  "task_ids": [
+    "DEV-PRED-A2Z-POSTBUILD-IMPORT-20261007-E112"
+  ],
+  "commits": [],
+  "evidence_refs": [
+    "control/project_tasks/DEV-PRED-A2Z-POSTBUILD-RETRY-20261006-E106.json",
+    "control/build_log/events/20261007T070000Z-A2Z-E106-DECISION-VERIFY-E108-RESULT.json"
+  ],
+  "tags": [
+    "a2z",
+    "astra",
+    "postbuild",
+    "canonical-import",
+    "no-rerun"
+  ]
+}
