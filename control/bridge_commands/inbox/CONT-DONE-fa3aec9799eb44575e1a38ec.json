@@ -1,0 +1,19 @@
+{
+  "schema": "PREDICTION_BRIDGE_COMMAND_V1",
+  "task_id": "CONT-DONE-fa3aec9799eb44575e1a38ec",
+  "action": "BRIDGE_PING",
+  "created_at_utc": "2026-10-07T19:40:30Z",
+  "route_task_id": null,
+  "delivery_mode": "headless",
+  "live_trading": false,
+  "paid_actions": false,
+  "wallet_actions": false,
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "notes": "Close continuation from N1E60 after its rc=30 repeated PAUSED_USAGE_LIMIT result was already durably advanced to N1E61, the current single-flight usage-limit state diagnosis. No duplicate NEXT or Astra resume is authorized from this branch.",
+  "auto_continue": false,
+  "parent_continuation_id": "CONT-fa3aec9799eb44575e1a38ec"
+}
