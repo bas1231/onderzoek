@@ -1,0 +1,30 @@
+{
+  "schema": "PREDICTION_BUILD_LOG_EVENT_V1",
+  "event_id": "20261007T070100Z-A2Z-E106-EVIDENCE-FORENSICS-E109",
+  "work_item_id": "A2Z-SYSTEMTEST-20261005",
+  "created_at_utc": "2026-10-07T07:01:00Z",
+  "event_type": "ATTEMPT",
+  "work_item_status": "IN_PROGRESS",
+  "outcome": "STARTED",
+  "title": "Forensisch uitlezen van E106 Astra reviewbewijs",
+  "objective": "Bepaal zonder mutatie welke model-, phase-, binding-, build- en provenancevelden de drie E106 POST-BUILD APPROVE-records werkelijk bevatten.",
+  "summary": "Vervolg direct op E108 rc=24. Alleen bestaande runtime-evidence wordt gelezen; geen modelrun of experimentstap wordt herhaald.",
+  "why": "We moeten onderscheid maken tussen een onschuldige schema/veldnaam-mismatch in E108 en werkelijk onvoldoende bewijs. Tot die classificatie blijft de postbuild-gate dicht.",
+  "first_incomplete_step": "Exacte velden en gekoppelde provenance van de E106 reviewrecords vaststellen.",
+  "next_action": "Als bewijs compleet maar anders gestructureerd is: verifier corrigeren en opnieuw valideren. Als bewijs echt ontbreekt: alleen de ontbrekende postbuild-review/provenance herstellen, zonder andere ketenstappen te herhalen.",
+  "session_route_task_id": "SESSION-ROUTE-5388245c5e308fbc9dcf92ab",
+  "task_ids": [
+    "DEV-PRED-A2Z-E106-EVIDENCE-FORENSICS-20261007-E109"
+  ],
+  "commits": [],
+  "evidence_refs": [
+    "control/build_log/events/20261007T070000Z-A2Z-E106-DECISION-VERIFY-E108-RESULT.json"
+  ],
+  "tags": [
+    "a2z",
+    "astra",
+    "postbuild",
+    "forensics",
+    "read-only"
+  ]
+}
