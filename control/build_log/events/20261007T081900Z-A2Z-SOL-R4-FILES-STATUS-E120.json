@@ -1,0 +1,31 @@
+{
+  "schema": "PREDICTION_BUILD_LOG_EVENT_V1",
+  "event_id": "20261007T081900Z-A2Z-SOL-R4-FILES-STATUS-E120",
+  "work_item_id": "A2Z-SYSTEMTEST-20261005",
+  "created_at_utc": "2026-10-07T08:19:00Z",
+  "event_type": "ATTEMPT",
+  "work_item_status": "IN_PROGRESS",
+  "outcome": "STARTED",
+  "title": "Classificeer Sol R4 via runtimebestanden",
+  "objective": "Bepaal zonder systemctl of de R4-request is opgepakt en of run/completion/resultbestanden bestaan.",
+  "summary": "E119 classifier crashte. E120 gebruikt alleen campaign-files en encodeert request-not-picked-up, run-incomplete, complete-without-envelope of result-exists.",
+  "why": "Dit vermijdt de diagnosebug en laat de bestaande worker volledig ongemoeid.",
+  "first_incomplete_step": "R4 runtimefile-state bepalen.",
+  "next_action": "Result exists -> provenance verify/materialize; request not picked up -> diagnose service dispatch; run incomplete -> geen dubbele start; complete without envelope -> repair envelope/finalization only.",
+  "session_route_task_id": "SESSION-ROUTE-5388245c5e308fbc9dcf92ab",
+  "task_ids": [
+    "DEV-PRED-A2Z-SOL-R4-FILES-STATUS-20261007-E120",
+    "A2Z-V4-SOL-BUILD-20261007-R4"
+  ],
+  "commits": [],
+  "evidence_refs": [
+    "control/build_log/events/20261007T081700Z-A2Z-SOL-R4-WORKER-CLASSIFY-E119-FAIL.json"
+  ],
+  "tags": [
+    "a2z",
+    "sol",
+    "r4",
+    "runtime-files",
+    "read-only"
+  ]
+}
