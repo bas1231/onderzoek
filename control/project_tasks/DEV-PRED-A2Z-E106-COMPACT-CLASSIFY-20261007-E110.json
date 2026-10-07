@@ -1,0 +1,42 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-A2Z-E106-COMPACT-CLASSIFY-20261007-E110",
+  "source_commit": "d55a2ab5e1d718517fd2a5069a8c5dd119f47cc2",
+  "build_id": "BUILD-PRED-A2Z-E106-COMPACT-20261007",
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "High"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_runtime"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 180,
+  "notes": "Compact read-only classifier over existing E106 review records. This does not itself authorize measurement.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/a2z_e106_compact_classify_20261007_e110.py",
+      "content": "from pathlib import Path\nimport json, re, sys\n\nCID=\"AUTO-DISCOVERY-54d13314c7879b58e46d\"\nMODEL_TASK=\"A2Z-V4-ASTRA-POSTBUILD-20261006-R3-P2\"\nroots=[\n Path.home()/\".local/share/prediction-project-executor/campaigns/FULL-A2Z-LIVE-20261004-V4\",\n Path.home()/\".local/share/prediction-project-executor/worktrees/DEV-PRED-A2Z-POSTBUILD-RETRY-20261006-E106\",\n Path.home()/\".local/state/prediction-codex-supervisor\",\n]\nrecords=[]\n\ndef walk(o,path):\n if isinstance(o,dict):\n  dec=str(o.get(\"decision\",\"\")).upper()\n  blob=json.dumps(o,sort_keys=True,default=str)\n  if dec in {\"APPROVE\",\"NEEDS_REVISION\",\"REVISE\",\"REJECT\",\"PARK\"} and (\n      CID in blob or MODEL_TASK in blob or \"POSTBUILD\" in blob.upper() or \"postbuild\" in path.lower()):\n   records.append((path,o))\n  for v in o.values(): walk(v,path)\n elif isinstance(o,list):\n  for v in o: walk(v,path)\n\nfor root in roots:\n if not root.exists(): continue\n for p in root.rglob(\"*\"):\n  try:\n   if not p.is_file() or p.stat().st_size>2000000: continue\n  except OSError: continue\n  if p.suffix.lower() not in {\".json\",\".jsonl\"}: continue\n  try: raw=p.read_text(errors=\"replace\")\n  except Exception: continue\n  low=raw.lower()\n  if CID.lower() not in low and MODEL_TASK.lower() not in low and \"postbuild\" not in low: continue\n  if p.suffix.lower()==\".json\":\n   try: walk(json.loads(raw),str(p))\n   except Exception: pass\n  else:\n   for line in raw.splitlines():\n    try: walk(json.loads(line),str(p))\n    except Exception: pass\n\nuniq=[]; seen=set()\nfor path,d in records:\n key=(path,json.dumps(d,sort_keys=True,default=str))\n if key in seen: continue\n seen.add(key); uniq.append((path,d))\n\ndef pick(d,names):\n for n in names:\n  v=d.get(n)\n  if v not in (None,\"\"): return n,v\n return None,None\n\nsumm=[]\nfor path,d in uniq:\n phase_k,phase=pick(d,[\"phase\",\"review_phase\",\"gate\",\"review_kind\"])\n model_k,model=pick(d,[\"reviewer_model\",\"model\",\"model_display_name\"])\n slug_k,slug=pick(d,[\"reviewer_model_slug\",\"model_slug\",\"selected_slug\"])\n bind_k,bind=pick(d,[\"binding_sha256\",\"review_binding_sha256\",\"build_binding_sha256\",\"binding_hash\",\"binding\"])\n provref_k,provref=pick(d,[\"model_provenance_ref\",\"provenance_ref\"])\n provsha_k,provsha=pick(d,[\"model_provenance_sha256\",\"provenance_sha256\"])\n task_k,task=pick(d,[\"source_task_id\",\"task_id\",\"model_task_id\",\"review_task_id\"])\n summ.append({\n  \"file\":Path(path).name,\n  \"decision\":str(d.get(\"decision\",\"\")).upper(),\n  \"phase\":phase,\n  \"model\":model,\n  \"slug\":slug,\n  \"binding_field\":bind_k,\n  \"binding64\":bool(isinstance(bind,str) and re.fullmatch(r\"[0-9a-f]{64}\",bind)),\n  \"prov_ref\":bool(provref),\n  \"prov_sha64\":bool(isinstance(provsha,str) and re.fullmatch(r\"[0-9a-f]{64}\",provsha)),\n  \"task\":task,\n  \"candidate\":d.get(\"candidate_id\"),\n })\n\n# compact unique summaries\ncompact=[]\nseen2=set()\nfor x in summ:\n key=tuple((k,str(v)) for k,v in x.items() if k!=\"file\")\n if key in seen2: continue\n seen2.add(key); compact.append(x)\n\n# Determine strongest assessment, not authorization.\nexact=[x for x in compact if x[\"decision\"]==\"APPROVE\" and str(x[\"phase\"]).upper()==\"POSTBUILD\" and x[\"model\"]==\"GPT-6 Astra\" and x[\"slug\"]==\"gpt-6-astra\" and x[\"binding64\"] and x[\"prov_ref\"] and x[\"prov_sha64\"]]\nif exact:\n assessment=\"EXACT_FIELDS_PRESENT\"\nelse:\n missing=[]\n approvals=[x for x in compact if x[\"decision\"]==\"APPROVE\"]\n if not approvals:\n  assessment=\"NO_APPROVE_RECORD\"\n else:\n  for field,ok in [\n   (\"phase\",any(str(x[\"phase\"]).upper()==\"POSTBUILD\" for x in approvals)),\n   (\"model\",any(x[\"model\"]==\"GPT-6 Astra\" for x in approvals)),\n   (\"slug\",any(x[\"slug\"]==\"gpt-6-astra\" for x in approvals)),\n   (\"binding64\",any(x[\"binding64\"] for x in approvals)),\n   (\"provenance_ref\",any(x[\"prov_ref\"] for x in approvals)),\n   (\"provenance_sha64\",any(x[\"prov_sha64\"] for x in approvals)),\n  ]:\n   if not ok: missing.append(field)\n  assessment=\"MISSING_\"+\",\".join(missing) if missing else \"FIELDS_SPLIT_ACROSS_RECORDS\"\n\nout={\"assessment\":assessment,\"records\":compact[:6]}\nprint(\"E106_COMPACT_CLASSIFY \"+json.dumps(out,separators=(\",\",\":\")),flush=True)\nraise SystemExit(0)\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/a2z_e106_compact_classify_20261007_e110.py"
+      ],
+      "timeout_seconds": 120
+    }
+  ]
+}
