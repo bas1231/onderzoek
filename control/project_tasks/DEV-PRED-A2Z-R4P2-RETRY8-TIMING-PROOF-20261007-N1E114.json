@@ -1,0 +1,41 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-A2Z-R4P2-RETRY8-TIMING-PROOF-20261007-N1E114",
+  "source_commit": "88cf8049d5443105e52def06c59ee03ad9a0e40d",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "High"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_runtime"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 120,
+  "notes": "Read-only compare N1E112 executor claimed/completed UTC timestamps with current attempt-7 retry_at. No model/service invocation.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/r4p2_retry8_timing_proof_n1e114.py",
+      "content": "from pathlib import Path\nimport json,datetime\nhome=Path.home()\nexec_state=home/'.local/state/prediction-project-executor/DEV-PRED-A2Z-R4P2-ASTRA-RETRY8-EXACT-20261007-N1E112.json'\nbase=home/'.local/share/prediction-project-executor/campaigns/FULL-A2Z-LIVE-20261004-V4'\nstate=base/'models/STATE.json'\nout={}\nif exec_state.is_file():\n    try:e=json.loads(exec_state.read_text(encoding='utf-8'))\n    except Exception as x:e={'parse_error':type(x).__name__}\n    if isinstance(e,dict): out['executor']={k:e.get(k) for k in ('status','claimed_at_utc','completed_at_utc','operation_count','head_after')}\nif state.is_file():\n    try:s=json.loads(state.read_text(encoding='utf-8'))\n    except Exception as x:s={'parse_error':type(x).__name__}\n    if isinstance(s,dict): out['state']={k:s.get(k) for k in ('task_id','state','reason','attempt','checkpoint','retry_at','timestamp')}\nprint('ERROR_CLASS=R4P2_RETRY8_TIMING_PROOF',flush=True)\nprint('ERROR='+json.dumps(out,separators=(',',':'),sort_keys=True),flush=True)\nraise SystemExit(1)\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/r4p2_retry8_timing_proof_n1e114.py"
+      ],
+      "timeout_seconds": 60
+    }
+  ]
+}
