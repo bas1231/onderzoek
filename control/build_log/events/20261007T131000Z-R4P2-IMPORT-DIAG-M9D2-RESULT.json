@@ -1,0 +1,29 @@
+{
+  "schema": "PREDICTION_BUILD_LOG_EVENT_V1",
+  "event_id": "20261007T131000Z-R4P2-IMPORT-DIAG-M9D2-RESULT",
+  "work_item_id": "A2Z-SYSTEMTEST-20261005",
+  "created_at_utc": "2026-10-07T13:10:00Z",
+  "event_type": "RESULT",
+  "work_item_status": "IN_PROGRESS",
+  "outcome": "FAIL",
+  "title": "DIRECT_SOL importfout gelokaliseerd",
+  "objective": "Bepaal waarom R4P2-validatie vóór hashchecks faalt.",
+  "summary": "M9D2 identificeerde exact ModuleNotFoundError: No module named 'control' tijdens import_direct_sol_chat.",
+  "why": "Een script onder control/dev_checks krijgt die submap als sys.path[0]; de repository-root was niet expliciet toegevoegd.",
+  "first_incomplete_step": "Voeg de repository-root toe aan sys.path in de diagnostische/materialisatie-entrypoint.",
+  "next_action": "Rerun dezelfde request/result-validatie met expliciete repo-root import path.",
+  "session_route_task_id": "DEV-PRED-SOL-DIRECT-GATE-QUALIFY-R2-20261007-A7C1",
+  "task_ids": [
+    "DEV-PRED-A2Z-R4P2-IMPORT-DIAG-20261007-M9D2"
+  ],
+  "evidence_refs": [
+    "result:DEV-PRED-A2Z-R4P2-IMPORT-DIAG-20261007-M9D2 detail=No module named 'control' stage=import_direct_sol_chat"
+  ],
+  "tags": [
+    "a2z",
+    "direct-sol",
+    "module-path",
+    "diagnosed",
+    "no-bridge-mutation"
+  ]
+}
