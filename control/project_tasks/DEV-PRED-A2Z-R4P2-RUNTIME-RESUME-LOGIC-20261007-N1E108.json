@@ -1,0 +1,41 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-A2Z-R4P2-RUNTIME-RESUME-LOGIC-20261007-N1E108",
+  "source_commit": "6ebdc6fcda12c0559ce57f706fc7cf8c584947ce",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "High"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_runtime"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 120,
+  "notes": "Read-only inspect campaign runtime full_a2z_model_stage.py around usage-limit/resume logic. No service/model invocation.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/r4p2_runtime_resume_logic_n1e108.py",
+      "content": "from pathlib import Path\nimport json\np=Path.home()/'.local/share/prediction-project-executor/campaigns/FULL-A2Z-LIVE-20261004-V4/code/control/jobs/full_a2z_model_stage.py'\ntxt=p.read_text(encoding='utf-8',errors='replace') if p.is_file() else ''\nkeys=('PAUSED_USAGE_LIMIT','retry_at','attempt','resume','WORKER_START','TEMPFAIL','SystemExit','return 75','raise SystemExit(75)')\nlines=txt.splitlines()\nhits=[]\nfor i,line in enumerate(lines,1):\n    if any(k in line for k in keys):\n        a=max(1,i-3); b=min(len(lines),i+5)\n        hits.append({'line':i,'context':[[n,lines[n-1]] for n in range(a,b+1)]})\nprint('ERROR_CLASS=R4P2_RUNTIME_RESUME_LOGIC',flush=True)\nprint('ERROR='+json.dumps(hits,separators=(',',':')),flush=True)\nraise SystemExit(1)\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/r4p2_runtime_resume_logic_n1e108.py"
+      ],
+      "timeout_seconds": 60
+    }
+  ]
+}
