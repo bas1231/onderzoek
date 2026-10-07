@@ -1,0 +1,45 @@
+{
+  "schema": "PREDICTION_BUILD_LOG_EVENT_V1",
+  "event_id": "20261007T162900Z-N1E33-FIRST-CAUSE-SOL-HANDOFF",
+  "work_item_id": "A2Z-SYSTEMTEST-20261005",
+  "created_at_utc": "2026-10-07T16:29:00Z",
+  "event_type": "HANDOFF",
+  "work_item_status": "IN_PROGRESS",
+  "outcome": "FAIL",
+  "title": "N1E33: exacte newline-mismatch; minimale reparatie uitsluitend door Sol",
+  "objective": "Herstel alleen de DIRECT_SOL-routingregressie vóór hervatting van de bestaande R4P2 PREBUILD-gate.",
+  "summary": "N1E33 eindigde FAIL exit=2: 3 tests, 1 geslaagd, 2 errors. Beide stoppen in patch_runner op E106_RUNNER_SOL_REVISION_TAIL_MISSING. N1E34 meldt ASTRA_PREBUILD=PENDING; N1E35 bevestigt ontbrekend model_result. CLAIMED/DISPATCHED is geen PASS.",
+  "why": "Statische AST-/bronvergelijking van 5e7e745b: revise_tail bevat na 'before any build.' een echt newline-teken; de immutable E106-runner bevat daar de twee letterlijke tekens backslash+n. Exact-match-count=0. Alleen met die tekst-encoding gecorrigeerd is match-count=1. De replacement revise_tail_new heeft dezelfde ontsnappingsfout en moet syntactisch geldige Python blijven.",
+  "first_incomplete_step": "SOL_REPAIR: control/model_execution/patch_e106_gate.py, uitsluitend zoek-/vervangliteral revise_tail en revise_tail_new; geen proposal-/experiment-/bridgewijzigingen.",
+  "next_action": "GPT-5.6 Sol buiten Codex: corrigeer de literal-encoding minimaal; behoud exact-one-match fail-closed guard en q.canonical_sha(review)-binding. Behoud governed_route en ontbrekende-routeweigering, hydrate model_quality_gate.py, DIRECT_SOL_REQUIRED voor legacy SOL, Astra via Codex. Voeg gerichte regression toe die letterlijk escaped newline en compileerbare gehydrateerde source bewijst. Draai daarna dezelfde infrastructuurregressies éénmaal: python3 -m unittest tests/model_execution/test_direct_sol_chat.py, via bestaande Project Executor, nieuwe immutable task-ID en gepinde nieuwe broncommit. NIET N1E33 hergebruiken. Publiceer exacte commit/resultaten in dit werkitem. Geen experimentbuild/test/measurement. Daarna uitsluitend het al bestaande A2Z-V4-ASTRA-PREBUILD-DIRECT-20261007-R4P2-resultaat hergebruiken indien valide; geen duplicaatreview.",
+  "session_route_task_id": null,
+  "task_ids": [
+    "DEV-PRED-A2Z-SOL-ROUTING-REPAIR-HANDOFF-20261007-A1",
+    "DEV-PRED-A2Z-DIRECT-SOL-REGRESSION-FIX-20261007-N1E33",
+    "A2Z-V4-ASTRA-PREBUILD-DIRECT-20261007-R4P2"
+  ],
+  "commits": [
+    "5e7e745b4ff1dc09aa8c2f57bfdeb0adcb572c68",
+    "8c25d97e4b4dcc346be142886f0f742c03e8b0d8",
+    "f18da817dc229eb17bab82ff78e945030ef855f0"
+  ],
+  "evidence_refs": [
+    "local:dev-task-receipts/DEV-PRED-A2Z-DIRECT-SOL-REGRESSION-FIX-20261007-N1E33.log",
+    "local:dev-task-receipts/DEV-PRED-A2Z-ASTRA-PREBUILD-STATUS-20261007-N1E34.log",
+    "local:dev-task-receipts/DEV-PRED-A2Z-FINAL-STATUS-20261007-N1E35.log",
+    "control/model_execution/direct_results/A2Z-V4-SOL-PROPOSAL-DIRECT-20261007-R4P2.json"
+  ],
+  "tags": [
+    "SOL_REPAIR_REQUIRED",
+    "NO_PROVEN_EDGE",
+    "NO_TEST_OR_MEASUREMENT_BEFORE_ASTRA_POSTBUILD_APPROVAL",
+    "no-bridge-mutation",
+    "first-cause-only"
+  ],
+  "session_assignment_scope": {
+    "instruction": "Supervisor geeft uitsluitend bestaande Sol-campagnesessie deze begrensde infrareparatie. Geen claim van ontvangen resultaat in supervisorchat. Ontvangstroute is bestaande Solsessie van N1E12/N1E33; geen globale routewijziging.",
+    "allowed_work_item_ids": [
+      "A2Z-SYSTEMTEST-20261005"
+    ]
+  }
+}
