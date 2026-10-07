@@ -1,0 +1,41 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-A2Z-R4P2-PREFLIGHT-ASSERT-20261007-N1E18",
+  "source_commit": "9bcc28a8aa20c3625c2802457d682207dae323d0",
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "High"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_runtime"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 120,
+  "notes": "Strictly assert local executor PASS and full operation completion for N1E13 plumbing preflight. Read-only; no model invocation, runtime mutation, bridge mutation, experiment tests or measurement.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/assert_n1e13_state_n1e18.py",
+      "content": "from pathlib import Path\nimport json\np=Path.home()/\".local/state/prediction-project-executor/DEV-PRED-A2Z-R4P2-POSTPREBUILD-PREFLIGHT-20261007-N1E13.json\"\nif not p.is_file():\n    raise SystemExit(\"N1E13_STATE_MISSING\")\nobj=json.loads(p.read_text(encoding=\"utf-8\"))\nassert obj.get(\"task_id\")==\"DEV-PRED-A2Z-R4P2-POSTPREBUILD-PREFLIGHT-20261007-N1E13\"\nassert obj.get(\"status\")==\"PASS\", obj\nassert obj.get(\"operation_count\")==5, obj\nassert obj.get(\"completed_at_utc\")\nprint(\"N1E13_EXECUTOR_STATE=PASS\")\nprint(\"N1E13_OPERATION_COUNT=5\")\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/assert_n1e13_state_n1e18.py"
+      ],
+      "timeout_seconds": 30
+    }
+  ]
+}
