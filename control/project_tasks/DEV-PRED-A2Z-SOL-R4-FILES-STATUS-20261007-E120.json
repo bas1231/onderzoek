@@ -1,0 +1,41 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-A2Z-SOL-R4-FILES-STATUS-20261007-E120",
+  "source_commit": "1505da26a0b0d77aa8d7c7bf6f58237094f41770",
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "High"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_runtime"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 180,
+  "notes": "Read-only file-based status classification for existing Sol R4 request. No subprocess/systemctl, no service mutation, no model restart, no build/test/measurement.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/a2z_e120_r4_files_status.py",
+      "content": "from pathlib import Path\nimport json,sys,time\n\ncampaign=Path.home()/\".local/share/prediction-project-executor/campaigns/FULL-A2Z-LIVE-20261004-V4\"\nmodel_task=\"A2Z-V4-SOL-BUILD-20261007-R4\"\nreq=campaign/\"requests\"/f\"{model_task}.json\"\nmr=campaign/\"model_results\"/f\"{model_task}.json\"\nruns=campaign/\"models/runs\"\n\nif mr.exists():\n    print(\"E120=R4_RESULT_EXISTS\",flush=True)\n    raise SystemExit(0)\n\nmatches=[]\nif runs.exists():\n    for taskp in runs.rglob(\"TASK.json\"):\n        try:\n            task=json.loads(taskp.read_text())\n        except Exception:\n            continue\n        if task.get(\"task_id\")==model_task:\n            cp=taskp.parent\n            item={\"checkpoint\":str(cp)}\n            for name in (\"WORKER.json\",\"COMPLETE.json\",\"events.jsonl\"):\n                p=cp/name\n                item[name]=p.exists()\n                if p.exists():\n                    try:\n                        item[name+\"_mtime\"]=p.stat().st_mtime\n                    except Exception:\n                        pass\n            wp=cp/\"WORKER.json\"\n            if wp.exists():\n                try:\n                    w=json.loads(wp.read_text())\n                    item[\"worker_model\"]=w.get(\"model\")\n                    item[\"worker_state\"]=w.get(\"state\")\n                    item[\"worker_started_at\"]=w.get(\"started_at\")\n                except Exception as e:\n                    item[\"worker_error\"]=type(e).__name__+\":\"+str(e)\n            cpj=cp/\"COMPLETE.json\"\n            if cpj.exists():\n                try:\n                    c=json.loads(cpj.read_text())\n                    item[\"complete_task_id\"]=c.get(\"task_id\")\n                    item[\"complete_timestamp\"]=c.get(\"timestamp\")\n                    item[\"complete_has_final\"]=bool(c.get(\"final\"))\n                except Exception as e:\n                    item[\"complete_error\"]=type(e).__name__+\":\"+str(e)\n            ep=cp/\"events.jsonl\"\n            if ep.exists():\n                try:\n                    lines=[x for x in ep.read_text(errors=\"replace\").splitlines() if x.strip()]\n                    item[\"event_count\"]=len(lines)\n                    item[\"last_event\"]=lines[-1][:500] if lines else \"\"\n                except Exception as e:\n                    item[\"events_error\"]=type(e).__name__+\":\"+str(e)\n            matches.append(item)\n\nout={\n \"request_exists\":req.exists(),\n \"result_exists\":mr.exists(),\n \"matching_runs\":matches,\n}\nprint(\"E120_STATUS \"+json.dumps(out,separators=(\",\",\":\"),default=str),flush=True)\n\nif not req.exists():\n    print(\"E120=REQUEST_MISSING\",flush=True); raise SystemExit(31)\nif not matches:\n    print(\"E120=REQUEST_NOT_PICKED_UP\",flush=True); raise SystemExit(20)\nlatest=sorted(matches,key=lambda x:x.get(\"worker_started_at\") or 0)[-1]\nif latest.get(\"COMPLETE.json\"):\n    if latest.get(\"complete_has_final\"):\n        print(\"E120=COMPLETE_PRESENT_RESULT_ENVELOPE_MISSING\",flush=True); raise SystemExit(21)\n    print(\"E120=COMPLETE_PRESENT_FINAL_MISSING\",flush=True); raise SystemExit(22)\nif latest.get(\"WORKER.json\"):\n    print(\"E120=RUN_STARTED_INCOMPLETE\",flush=True); raise SystemExit(23)\nprint(\"E120=RUN_DIR_INCOMPLETE\",flush=True); raise SystemExit(24)\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/a2z_e120_r4_files_status.py"
+      ],
+      "timeout_seconds": 120
+    }
+  ]
+}
