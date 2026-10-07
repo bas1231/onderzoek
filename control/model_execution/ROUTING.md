@@ -13,9 +13,11 @@ Updated: 2026-10-07
 
 Canonical shorthand: **Sol direct; Astra via Codex**.
 
-Sol must not depend on Codex quota. The direct Sol path uses the already-connected ChatGPT-plan direct-inference capability through a bounded loopback-only broker. Prediction receives only model output plus provenance and does not own the authentication layer.
+Sol must not depend on Codex quota. The direct Sol path uses a regular ChatGPT **Chat** session running exact GPT-5.6 Sol. It must not use Codex, ChatGPT Work, or Sign in with ChatGPT plan-sharing inference, because those routes can consume the Work/Codex allowance.
 
-The direct route must enforce exact model slug `gpt-5.6-sol`, `store=false`, no tools/actions, immutable prompt hashing, exact completion provenance, idempotent completed tasks and fail-closed handling of wrong model or malformed output.
+Canonical transport is `WSL governed request -> existing wake/session route -> GPT-5.6 Sol Chat worker -> GitHub connector completion -> WSL read-only import`. This reuses the existing bridge as transport; it does not authorize bridge mutation.
+
+The direct route must preserve immutable prompt hashing, exact task/candidate/binding metadata, session-route attestation, completion provenance, idempotent completed tasks and fail-closed handling of wrong/missing worker attestation or malformed output. The Sol worker may use the GitHub connector only for the governed request/result records; it must not execute experiment code, tests, measurements, trades, paid actions or wallet actions.
 
 Astra remains deliberately on CodexWorker as the independent reviewer.
 
@@ -35,5 +37,5 @@ Preserve the R4 prompt/binding and Astra R3-P2 feedback. Execute that governed R
 
 Until runtime tests pass:
 
-`DIRECT_SOL_STATUS = NOT_YET_PROVEN`
+`DIRECT_SOL_CHAT_STATUS = NOT_YET_PROVEN`
 `scientific_status = NO_PROVEN_EDGE`
