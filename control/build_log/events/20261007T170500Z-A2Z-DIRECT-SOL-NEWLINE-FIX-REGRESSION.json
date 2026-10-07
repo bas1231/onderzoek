@@ -1,0 +1,32 @@
+{
+  "schema": "PREDICTION_BUILD_LOG_EVENT_V1",
+  "event_id": "20261007T170500Z-A2Z-DIRECT-SOL-NEWLINE-FIX-REGRESSION",
+  "work_item_id": "A2Z-SOL-DIRECT-EXECUTION-20261007",
+  "created_at_utc": "2026-10-07T17:05:00Z",
+  "event_type": "ATTEMPT",
+  "work_item_status": "IN_PROGRESS",
+  "outcome": "STARTED",
+  "title": "Prove escaped-newline Direct Sol repair",
+  "objective": "Prove the minimal E106 revision-tail newline-literal repair with the existing Direct Sol routing regression suite.",
+  "summary": "Astra identified E106_RUNNER_SOL_REVISION_TAIL_MISSING because patch_e106_gate.py matched a real newline instead of the literal \\\\n present in the E106 Python source. GPT-5.6 Sol changed only the two affected literals in commit b0fc664ec065c03125c54c6dae2c71126beebe67.",
+  "why": "This is the first incomplete step before safely resuming the exact Astra PREBUILD gate.",
+  "next_action": "Run tests/model_execution/test_direct_sol_chat.py once. If PASS, keep the PREBUILD timer off until exact GPT-6 Astra PREBUILD is resumed.",
+  "session_route_task_id": "DEV-PRED-A2Z-R4P2-PREFLIGHT-STATE-DIAG-20261007-N1E23",
+  "task_ids": [
+    "DEV-PRED-A2Z-DIRECT-SOL-REGRESSION-N1E36-20261007"
+  ],
+  "commits": [
+    "b0fc664ec065c03125c54c6dae2c71126beebe67"
+  ],
+  "evidence_refs": [
+    "control/model_execution/patch_e106_gate.py",
+    "tests/model_execution/test_direct_sol_chat.py"
+  ],
+  "tags": [
+    "A2Z",
+    "DIRECT_SOL",
+    "REGRESSION",
+    "R4P2"
+  ],
+  "first_incomplete_step": "Prove all Direct Sol routing regressions pass after the escaped-newline fix."
+}
