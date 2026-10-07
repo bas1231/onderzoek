@@ -1,0 +1,38 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-A2Z-DIRECT-SOL-REGRESSION-FIX-20261007-N1E33",
+  "source_commit": "f18da817dc229eb17bab82ff78e945030ef855f0",
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "High"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "run_project_python",
+    "run_tests"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 180,
+  "notes": "Single proof run after DIRECT_SOL hydration and governed-route fixes. Runs only model_execution routing regressions; no model invocation, runtime/service/bridge mutation, experiment execution, paid/live/wallet actions.",
+  "operations": [
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "-m",
+        "unittest",
+        "tests/model_execution/test_direct_sol_chat.py"
+      ],
+      "test": true,
+      "timeout_seconds": 120
+    }
+  ]
+}
