@@ -1,0 +1,99 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-A2Z-R4-15M-TIMER-INSTALL-20261007-E133",
+  "source_commit": "a84a402b14911bbd8a72c46e8f3228fbb9a9f717",
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "High"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "write_runtime",
+    "user_service_manage",
+    "read_runtime",
+    "local_git"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 360,
+  "notes": "Install minimal 15-minute template timer for existing A2Z model instance service. Activate only current immutable R4 task instance. No model/task/input change, no tests/measurements.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/codex_supervisor/systemd/prediction-a2z-v4-model@.timer",
+      "content": "[Unit]\nDescription=Prediction A2Z v4 model retry timer for %i\n\n[Timer]\nOnCalendar=*:0/15\nPersistent=true\nUnit=prediction-a2z-v4-model@%i.service\n\n[Install]\nWantedBy=timers.target\n"
+    },
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/a2z_e133_timer_source_check.py",
+      "content": "from pathlib import Path\nimport configparser\np=Path(\"control/codex_supervisor/systemd/prediction-a2z-v4-model@.timer\")\ntext=p.read_text()\nassert \"OnCalendar=*:0/15\" in text\nassert \"Persistent=true\" in text\nassert \"Unit=prediction-a2z-v4-model@%i.service\" in text\nassert \"WantedBy=timers.target\" in text\ncp=configparser.ConfigParser(interpolation=None,strict=True)\ncp.read_string(text)\nassert cp[\"Timer\"][\"OnCalendar\"]==\"*:0/15\"\nassert cp[\"Timer\"][\"Persistent\"].lower()==\"true\"\nassert cp[\"Timer\"][\"Unit\"]==\"prediction-a2z-v4-model@%i.service\"\nprint(\"A2Z_15M_TIMER_SOURCE_OK\")\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/a2z_e133_timer_source_check.py"
+      ],
+      "timeout_seconds": 60
+    },
+    {
+      "type": "git",
+      "argv": [
+        "git",
+        "diff",
+        "--check"
+      ]
+    },
+    {
+      "type": "install_runtime",
+      "source": "control/codex_supervisor/systemd/prediction-a2z-v4-model@.timer",
+      "destination": "~/.config/systemd/user/prediction-a2z-v4-model@.timer",
+      "mode": 420
+    },
+    {
+      "type": "daemon_reload"
+    },
+    {
+      "type": "service",
+      "verb": "enable",
+      "unit": "prediction-a2z-v4-model@A2Z-V4-SOL-BUILD-20261007-R4.timer"
+    },
+    {
+      "type": "service",
+      "verb": "start",
+      "unit": "prediction-a2z-v4-model@A2Z-V4-SOL-BUILD-20261007-R4.timer"
+    },
+    {
+      "type": "service",
+      "verb": "is-enabled",
+      "unit": "prediction-a2z-v4-model@A2Z-V4-SOL-BUILD-20261007-R4.timer"
+    },
+    {
+      "type": "service",
+      "verb": "is-active",
+      "unit": "prediction-a2z-v4-model@A2Z-V4-SOL-BUILD-20261007-R4.timer"
+    },
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/a2z_e133_r4_state.py",
+      "content": "from pathlib import Path\nimport sqlite3,json\nroot=Path.home()/\".local/share/prediction-project-executor/campaigns/FULL-A2Z-LIVE-20261004-V4\"\ndb=sqlite3.connect(\"file:\"+str(root/\"models/runtime.sqlite\")+\"?mode=ro\",uri=True)\ntry:\n    row=db.execute(\"select status,attempt,run,thread from tasks where id=?\",(\"A2Z-V4-SOL-BUILD-20261007-R4\",)).fetchone()\nfinally:\n    db.close()\nprint(\"E133_R4_STATE \"+json.dumps(row))\nassert row is not None\nassert row[0] in (\"PAUSED_USAGE_LIMIT\",\"RUNNING\",\"COMPLETE\")\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/a2z_e133_r4_state.py"
+      ],
+      "timeout_seconds": 60
+    }
+  ]
+}
