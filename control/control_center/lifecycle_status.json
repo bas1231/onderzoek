@@ -3,7 +3,7 @@
   "updated_at": "2026-10-07",
   "full_chain_status": "NOT_PROVEN",
   "full_chain_label": "Volledige A→Z-keten nog niet bewezen",
-  "next_required": "Huidige kandidaat AUTO-DISCOVERY-54d13314c7879b58e46d: de bestaande GPT-6 Astra POST-BUILD-run R3-P2 bevat een inhoudelijke APPROVE, maar die raw modeluitkomst is nog niet canoniek toegepast. Voer nu uitsluitend de ontbrekende POSTBUILD import/validatie uit via import_review() + q.validate_review() + require_postbuild(). Pas na een geldige, exact gebonden toepassing mogen experimenttests en meting starten; tot dat moment blijft de gate dicht.",
+  "next_required": "Huidige kandidaat AUTO-DISCOVERY-54d13314c7879b58e46d: de exacte GPT-6 Astra POST-BUILD-review R3-P2 is canoniek REVISE. Verwerk uitsluitend deze Astra-feedback in een nieuwe GPT-5.6 Sol buildversie met nieuwe hashes; laat die herziene build daarna opnieuw door GPT-6 Astra POST-BUILD beoordelen. Tests en meting blijven geblokkeerd totdat een exact gebonden POST-BUILD APPROVE voor de herziene build canoniek is toegepast.",
   "invariant": "NO_TEST_OR_MEASUREMENT_BEFORE_ASTRA_POSTBUILD_APPROVAL",
   "evidence_refs": [
     "control/bridge_commands/CURRENT_STATE.md",
@@ -16,7 +16,8 @@
     "same-chat:E107 status=PASS exit=0",
     "control/build_log/events/20261007T070000Z-A2Z-E106-DECISION-VERIFY-E108-RESULT.json",
     "control/build_log/events/20261007T070600Z-A2Z-E106-EVIDENCE-FORENSICS-E109-PASS.json",
-    "control/build_log/events/20261007T071000Z-A2Z-E106-COMPACT-CLASSIFY-E110-PASS.json"
+    "control/build_log/events/20261007T071000Z-A2Z-E106-COMPACT-CLASSIFY-E110-PASS.json",
+    "control/build_log/events/20261007T080200Z-A2Z-POSTBUILD-DECISION-E115-REVISE.json"
   ],
   "stages": [
     {
@@ -61,8 +62,8 @@
       "subtitle": "experiment bouwen",
       "state": "IMPLEMENTED_NOT_E2E",
       "detail": "De Sol-bouwstap is geïmplementeerd in de architectuur, maar moet nog als onderdeel van één volledige actuele A→Z-run worden bewezen.",
-      "current_candidate_state": "DONE",
-      "current_candidate_detail": "GPT-5.6 Sol bouwde de drie goedgekeurde R3-artifacts. Inhoudelijke experimenttests en metingen zijn daarbij nog niet gestart."
+      "current_candidate_state": "REVISION_REQUIRED",
+      "current_candidate_detail": "De oorspronkelijke R3-build is door Astra POST-BUILD beoordeeld als REVISE. De R3-opzet blijft het goedgekeurde ontwerp; GPT-5.6 Sol moet de build aanpassen op basis van de exacte Astra-feedback en nieuwe artifacthashes produceren."
     },
     {
       "id": "astra_postbuild",
@@ -70,8 +71,8 @@
       "subtitle": "gebouwde code beoordelen",
       "state": "TARGETED_TESTED",
       "detail": "De verplichte post-build gate en de blokkade vóór tests/meting zijn gericht getest en canoniek vastgelegd. De volledige A→Z-run blijft nog te bewijzen.",
-      "current_candidate_state": "CURRENT_WAITING",
-      "current_candidate_detail": "De bestaande R3-P2 Astra-run heeft inhoudelijk APPROVE geproduceerd. E108 vond dit als APPROVE_UNVERIFIED omdat de raw modeluitkomst nog niet door de canonical POSTBUILD import/validator is toegepast. De volgende stap is uitsluitend import_review() + q.validate_review() + require_postbuild(); Astra hoeft niet opnieuw te draaien."
+      "current_candidate_state": "NEEDS_REVISION",
+      "current_candidate_detail": "De exacte canonical review A2Z-V4-ASTRA-POSTBUILD-20261006-R3-P2 is REVISE. De eerdere raw/direct APPROVE-records gelden niet voor deze gate. Astra-feedback moet nu terug naar GPT-5.6 Sol; na de herziene build volgt opnieuw een exact gebonden Astra POST-BUILD-review."
     },
     {
       "id": "measurement",
@@ -80,7 +81,7 @@
       "state": "PENDING_E2E",
       "detail": "De volgorde is vastgelegd: inhoudelijke tests, backtests, shadow-runs en metingen mogen pas na Astra-goedkeuring van de exacte gebouwde versie. Een volledige actuele A→Z-doorgang moet nog worden bewezen.",
       "current_candidate_state": "WAITING",
-      "current_candidate_detail": "Nog geblokkeerd. Er is wel een raw Astra APPROVE, maar tests/backtests/shadowmetingen mogen pas starten nadat die review canoniek is geïmporteerd, exact gebonden en require_postbuild() geldig passeert."
+      "current_candidate_detail": "Geblokkeerd. Tests/backtests/shadowmetingen mogen pas starten na een nieuwe, exact gebonden en canoniek toegepaste Astra POST-BUILD APPROVE op de herziene Sol-build."
     },
     {
       "id": "supervisor",
@@ -109,9 +110,9 @@
     "postbuild_task_id": "DEV-PRED-A2Z-POSTBUILD-RETRY-20261006-E106",
     "pause_task_id": "DEV-PRED-A2Z-PAUSE-20261006-E107",
     "current_stage": "astra_postbuild",
-    "state": "PAUSED_AWAITING_POSTBUILD_IMPORT_VALIDATION",
-    "label": "Astra POST-BUILD — APPROVE aanwezig; canonical import/validatie nog vereist",
-    "detail": "PRE-BUILD R3 is goedgekeurd en GPT-5.6 Sol bouwde de drie R3-artifacts. De R3-P2 GPT-6 Astra-run heeft inhoudelijk APPROVE geproduceerd. E106 importeerde die modeluitkomst echter nog niet via de canonical POSTBUILD-stap, waardoor de review nog niet als exact gebonden gate-authorisatie geldt. Tests en meting blijven geblokkeerd totdat import_review(), q.validate_review() en require_postbuild() groen zijn.",
+    "state": "POSTBUILD_REVISE_RETURN_TO_SOL",
+    "label": "Astra POST-BUILD — R3-P2 = REVISE; terug naar Sol-build",
+    "detail": "De exacte canonical GPT-6 Astra POST-BUILD-review met task-ID A2Z-V4-ASTRA-POSTBUILD-20261006-R3-P2 is REVISE. De eerdere raw/direct APPROVE-signalen waren niet de geldige beslissing voor deze build. De keten gaat daarom terug naar GPT-5.6 Sol voor een herziene build op basis van Astra-feedback. Daarna is een nieuwe Astra POST-BUILD-review verplicht voordat tests/meting mogen starten.",
     "scientific_status": "NO_PROVEN_EDGE",
     "evidence_refs": [
       "control/project_tasks/DEV-PRED-A2Z-POSTBUILD-RETRY-20261006-E106.json",
@@ -121,7 +122,8 @@
       "same-chat:E107 status=PASS exit=0",
       "control/build_log/events/20261007T070000Z-A2Z-E106-DECISION-VERIFY-E108-RESULT.json",
       "control/build_log/events/20261007T070600Z-A2Z-E106-EVIDENCE-FORENSICS-E109-PASS.json",
-      "control/build_log/events/20261007T071000Z-A2Z-E106-COMPACT-CLASSIFY-E110-PASS.json"
+      "control/build_log/events/20261007T071000Z-A2Z-E106-COMPACT-CLASSIFY-E110-PASS.json",
+      "control/build_log/events/20261007T080200Z-A2Z-POSTBUILD-DECISION-E115-REVISE.json"
     ]
   }
 }
