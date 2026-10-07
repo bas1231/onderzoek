@@ -1,0 +1,53 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-A2Z-R4P2-ASTRA-RETRY4-EXACT-20261007-N1E73",
+  "source_commit": "3d2b6e81eefca619e4e1d7e557b22842d4ae2ee8",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "High"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_runtime",
+    "user_service_manage",
+    "read_logs"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 240,
+  "notes": "Exact attempt-4 Astra PREBUILD retry gate bound to checkpoint 389ea715 and retry_at 1791400375.7251313. Wait until exact retry window if needed, then start exact existing service once. No timer, no new review task, no Sol build/tests/measurement.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/r4p2_astra_retry4_exact_n1e73.py",
+      "content": "from pathlib import Path\nimport json,time\nbase=Path.home()/\".local/share/prediction-project-executor/campaigns/FULL-A2Z-LIVE-20261004-V4\"\ntask=\"A2Z-V4-ASTRA-PREBUILD-DIRECT-20261007-R4P2\"\nexpected_checkpoint=\"runs/A2Z-V4-ASTRA-PREBUILD-DIRECT-20261007-R4P2-4-389ea715\"\nexpected_retry=1791400375.7251313\nresult=base/\"model_results\"/(task+\".json\")\nif result.is_file():\n    raise SystemExit(10)\nmodels=base/\"models\"\nstate=None\nfor name in (\"CONTINUATION.json\",\"STATE.json\"):\n    p=models/name\n    if not p.is_file():\n        continue\n    try:\n        o=json.loads(p.read_text(encoding=\"utf-8\"))\n    except Exception:\n        continue\n    if isinstance(o,dict) and o.get(\"task_id\")==task:\n        state=o\n        break\nif not isinstance(state,dict):\n    raise SystemExit(20)\nif state.get(\"state\")!=\"PAUSED_USAGE_LIMIT\":\n    raise SystemExit(21)\nif state.get(\"next_action\")!=\"resume_same_task\":\n    raise SystemExit(22)\nif state.get(\"checkpoint\")!=expected_checkpoint:\n    raise SystemExit(24)\nif state.get(\"attempt\") not in (None,4):\n    raise SystemExit(25)\nnow=time.time()\nif now<expected_retry:\n    time.sleep(expected_retry-now+1)\nraise SystemExit(0)\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/r4p2_astra_retry4_exact_n1e73.py"
+      ],
+      "timeout_seconds": 180
+    },
+    {
+      "type": "service",
+      "verb": "start",
+      "unit": "prediction-a2z-v4-model@A2Z-V4-ASTRA-PREBUILD-DIRECT-20261007-R4P2.service"
+    },
+    {
+      "type": "journal",
+      "unit": "prediction-a2z-v4-model@A2Z-V4-ASTRA-PREBUILD-DIRECT-20261007-R4P2.service",
+      "lines": 120
+    }
+  ]
+}
