@@ -1,0 +1,41 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-A2Z-R4P2-PREFLIGHT-STATE-DIAG-20261007-N1E23",
+  "source_commit": "749a7b33636a6928923c7b8b28070c6704aa896c",
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "High"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_runtime"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 120,
+  "notes": "Read-only dump of N1E13 projectexecutor state after strict N1E18 assertion failed. No model invocation, runtime/service mutation, bridge mutation, experiment tests/measurement, paid/live/wallet actions.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/diag_n1e13_state_n1e23.py",
+      "content": "from pathlib import Path\nimport json\n\nTASK=\"DEV-PRED-A2Z-R4P2-POSTPREBUILD-PREFLIGHT-20261007-N1E13\"\np=Path.home()/\".local/state/prediction-project-executor\"/(TASK+\".json\")\nprint(\"STATE_EXISTS=\"+str(p.exists()))\nif not p.exists():\n    raise SystemExit(0)\nobj=json.loads(p.read_text(encoding=\"utf-8\"))\nfor key in sorted(obj):\n    value=obj[key]\n    if key in {\"worktree\",\"branch\",\"working_tree_status\",\"error\",\"status\",\"operation_count\",\"claimed_at_utc\",\"completed_at_utc\",\"source_commit\",\"remote_commit\",\"task_id\"}:\n        print(key.upper()+\"=\"+json.dumps(value,ensure_ascii=False,sort_keys=True))\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/diag_n1e13_state_n1e23.py"
+      ],
+      "timeout_seconds": 30
+    }
+  ]
+}
