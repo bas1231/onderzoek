@@ -1,0 +1,17 @@
+{
+  "schema": "PREDICTION_BRIDGE_COMMAND_V1",
+  "task_id": "DEV-FG-WATCHER-ROOTCAUSE-READONLY-20261007-E036",
+  "action": "SIX_AI_HEALTH",
+  "created_at_utc": "2026-10-07T13:04:00Z",
+  "route_task_id": "SESSION-ROUTE-11a3ba098495a0f7b895c276",
+  "delivery_mode": "chat",
+  "live_trading": false,
+  "paid_actions": false,
+  "wallet_actions": false,
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "notes": "Fresh combined READ-ONLY FG watcher root-cause diagnosis. Existing Prediction bridge is transport only and MUST NOT be modified, restarted, reinstalled, patched, reconfigured or otherwise changed. Inspect watcher/PID/logs/uptime and Windows Scheduled Task FG-assistent Inbox Trigger plus hidden helper files. Do not restart, enable, disable, edit or create any watcher/task/service."
+}
