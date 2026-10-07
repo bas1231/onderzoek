@@ -1,0 +1,33 @@
+{
+  "schema": "PREDICTION_BUILD_LOG_EVENT_V1",
+  "event_id": "20261007T172400Z-A2Z-DIRECT-SOL-N1E36-STATE-DIAG",
+  "work_item_id": "A2Z-SOL-DIRECT-EXECUTION-20261007",
+  "created_at_utc": "2026-10-07T17:24:00Z",
+  "event_type": "ATTEMPT",
+  "work_item_status": "IN_PROGRESS",
+  "outcome": "STARTED",
+  "title": "Read existing N1E36 executor state",
+  "objective": "Determine from existing local executor state whether DEV-PRED-A2Z-DIRECT-SOL-REGRESSION-N1E36-20261007 actually executed tests/model_execution/test_direct_sol_chat.py and whether it passed, without rerunning the regression.",
+  "summary": "New chat continues the existing Direct Sol work item. Same-chat route SESSION-ROUTE-246799adf99f0bf8336c27a0 is proven. This attempt is read-only and does not execute the regression, invoke a model, mutate services, or change the bridge.",
+  "why": "The user explicitly requires checking N1E36 state/receipt/worktree before any new regression dispatch.",
+  "next_action": "If existing N1E36 evidence proves PASS, record the regression green and proceed to PREBUILD binding verification. If it proves FAIL, inspect the real unittest traceback and repair only the first remaining defect.",
+  "session_route_task_id": "SESSION-ROUTE-246799adf99f0bf8336c27a0",
+  "task_ids": [
+    "DEV-PRED-A2Z-DIRECT-SOL-N1E36-STATE-20261007-N1E37"
+  ],
+  "commits": [
+    "b0fc664ec065c03125c54c6dae2c71126beebe67"
+  ],
+  "evidence_refs": [
+    "local:~/.local/state/prediction-project-executor/DEV-PRED-A2Z-DIRECT-SOL-REGRESSION-N1E36-20261007.json",
+    "local:~/.local/share/prediction-project-executor/worktrees/DEV-PRED-A2Z-DIRECT-SOL-REGRESSION-N1E36-20261007"
+  ],
+  "tags": [
+    "A2Z",
+    "DIRECT_SOL",
+    "N1E36",
+    "READ_ONLY_DIAG",
+    "R4P2"
+  ],
+  "first_incomplete_step": "Prove from existing local state whether N1E36 actually ran and passed; do not rerun it."
+}
