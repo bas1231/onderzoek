@@ -76,6 +76,18 @@ def patch_runner(root: Path) -> None:
         raise RuntimeError("E106_RUNNER_IMPORT_PATTERN_MISSING")
     text = text.replace(import_old, import_new, 1)
 
+    legacy_request_old = '''def request(repo, overlay, phase, task_id, prompt):
+    if not isinstance(prompt, str) or not prompt.strip() or len(prompt) > 100000:
+'''
+    legacy_request_new = '''def request(repo, overlay, phase, task_id, prompt):
+    if phase.startswith("SOL_"):
+        raise ValueError("DIRECT_SOL_REQUIRED")
+    if not isinstance(prompt, str) or not prompt.strip() or len(prompt) > 100000:
+'''
+    if legacy_request_old not in text:
+        raise RuntimeError("E106_RUNNER_LEGACY_REQUEST_PATTERN_MISSING")
+    text = text.replace(legacy_request_old, legacy_request_new, 1)
+
     request_anchor = '''def prepare_review(repo, overlay, phase, task_id):
 '''
     direct_fn = '''def direct_sol_request(repo, overlay, phase, task_id, prompt, binding_sha256):
