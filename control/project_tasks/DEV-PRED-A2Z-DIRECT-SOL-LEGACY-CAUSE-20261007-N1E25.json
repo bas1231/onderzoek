@@ -1,0 +1,41 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-A2Z-DIRECT-SOL-LEGACY-CAUSE-20261007-N1E25",
+  "source_commit": "65bf0220ea95a46eb46424a0f45904e91345c89e",
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "High"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_runtime"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 120,
+  "notes": "Extract one concise root-cause line from already-failed N1E16 synthetic legacy routing guard. Intentional diagnostic nonzero exit only to surface the cause. No model invocation, runtime/service mutation, bridge mutation, experiment tests/measurement, paid/live/wallet actions.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/extract_n1e16_cause_n1e25.py",
+      "content": "from pathlib import Path\nimport subprocess, sys\n\nroot=Path.home()/\".local/share/prediction-project-executor/worktrees/DEV-PRED-A2Z-DIRECT-SOL-LEGACY-GUARD-20261007-N1E16\"\np=root/\"control/dev_checks/test_direct_sol_legacy_guard_n1e16.py\"\nif not p.is_file():\n    print(\"N1E16_CAUSE=SCRIPT_MISSING\")\n    raise SystemExit(17)\n\ncp=subprocess.run([sys.executable,str(p)],cwd=str(root),text=True,stdout=subprocess.PIPE,stderr=subprocess.STDOUT)\nlines=[ln.strip() for ln in cp.stdout.splitlines() if ln.strip()]\nif cp.returncode==0:\n    print(\"N1E16_CAUSE=REPRO_NOW_PASS\")\n    raise SystemExit(17)\n\ncause=lines[-1] if lines else \"NO_OUTPUT\"\ninteresting=[ln for ln in lines if \"Error\" in ln or \"Exception\" in ln or \"Traceback\" in ln or \"Assertion\" in ln]\nif interesting:\n    cause=interesting[-1]\nprint(\"N1E16_CAUSE=\"+cause[:1200])\nraise SystemExit(17)\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/extract_n1e16_cause_n1e25.py"
+      ],
+      "timeout_seconds": 60
+    }
+  ]
+}
