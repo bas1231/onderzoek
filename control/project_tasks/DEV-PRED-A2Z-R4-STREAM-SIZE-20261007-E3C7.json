@@ -1,0 +1,41 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-A2Z-R4-STREAM-SIZE-20261007-E3C7",
+  "source_commit": "d2e06bd9e2606a2b8596495d2bd70ceea3e76e45",
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "High"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_runtime"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 180,
+  "notes": "Read-only size calculation for exact immutable R4 request stream. No bridge/runtime/config/service mutation.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/r4_stream_size_e3c7.py",
+      "content": "from pathlib import Path\nimport base64, hashlib, json, zlib\nTASK=\"A2Z-V4-SOL-BUILD-20261007-R4\"\nREQ=Path.home()/\".local/share/prediction-project-executor/campaigns/FULL-A2Z-LIVE-20261004-V4/requests\"/(TASK+\".json\")\nobj=json.loads(REQ.read_text(encoding=\"utf-8\"))\nraw=json.dumps(obj,sort_keys=True,separators=(\",\",\":\"),ensure_ascii=False).encode(\"utf-8\")\npacked=base64.urlsafe_b64encode(zlib.compress(raw,9)).decode(\"ascii\")\nchunk=700\ndetail={\"raw\":len(raw),\"packed\":len(packed),\"chunks\":(len(packed)+chunk-1)//chunk,\"chunk\":chunk,\"sha\":hashlib.sha256(raw).hexdigest()[:16]}\nprint(\"ERROR_CLASS=R4_STREAM_SIZE\")\nprint(\"ERROR=\"+json.dumps(detail,separators=(\",\",\":\")))\nraise SystemExit(1)\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/r4_stream_size_e3c7.py"
+      ],
+      "timeout_seconds": 90
+    }
+  ]
+}
