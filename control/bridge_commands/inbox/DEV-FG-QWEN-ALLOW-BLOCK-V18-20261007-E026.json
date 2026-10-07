@@ -1,0 +1,17 @@
+{
+  "schema": "PREDICTION_BRIDGE_COMMAND_V1",
+  "task_id": "DEV-FG-QWEN-ALLOW-BLOCK-V18-20261007-E026",
+  "action": "SIX_AI_HEALTH",
+  "created_at_utc": "2026-10-07T09:51:00Z",
+  "route_task_id": "DEV-FG-AUTO-NORMAL-CHATGPT-V17-20261007-E025",
+  "delivery_mode": "chat",
+  "live_trading": false,
+  "paid_actions": false,
+  "wallet_actions": false,
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "notes": "FG V18 application update only. Existing bridge is transport only and MUST NOT be modified, restarted, reinstalled, patched, reconfigured or otherwise changed. Install Qwen NonLiteralFinding review with explicit Toestaan/Blokkeren. Toestaan continues to deterministic final local privacy check; Blokkeren releases nothing to ChatGPT."
+}
