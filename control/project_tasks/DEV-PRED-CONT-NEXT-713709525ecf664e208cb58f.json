@@ -1,0 +1,41 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-CONT-NEXT-713709525ecf664e208cb58f",
+  "source_commit": "52e6beb070b6e6724ad09888c958749bb3a10ccc",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "High"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_runtime"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 60,
+  "notes": "Continuation NEXT joins the existing single-flight N1E58 terminal waiter. Read-only; no service/model invocation.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/cont_join_n1e58_71370952.py",
+      "content": "from pathlib import Path\nimport json\np=Path.home()/\".local/state/prediction-project-executor/DEV-PRED-A2Z-R4P2-N1E57-TERMINAL-WAIT-20261007-N1E58.json\"\nif not p.is_file():\n    raise SystemExit(20)\no=json.loads(p.read_text(encoding=\"utf-8\"))\nstatus=o.get(\"status\")\nif status==\"PASS\":\n    raise SystemExit(0)\nif status==\"FAIL\":\n    err=str(o.get(\"error\") or \"\")\n    for rc in (11,12,30,31,32):\n        if f\"rc={rc}\" in err:\n            raise SystemExit(rc)\n    raise SystemExit(40)\nraise SystemExit(21)\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/cont_join_n1e58_71370952.py"
+      ],
+      "timeout_seconds": 15
+    }
+  ]
+}
