@@ -1,0 +1,41 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-A2Z-R4P2-PREBUILD-SUMMARY-20261007-N1E45C",
+  "source_commit": "5b4529d0334525b3a3dce43162512285c685ac95",
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "High"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_runtime"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 90,
+  "notes": "Read-only compact summary of existing R4P2 prebuild result.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/r4p2_prebuild_summary_n1e45c.py",
+      "content": "from pathlib import Path\nimport json\np=Path.home()/\".local/share/prediction-project-executor/campaigns/FULL-A2Z-LIVE-20261004-V4/model_results/A2Z-V4-ASTRA-PREBUILD-DIRECT-20261007-R4P2.json\"\nif not p.is_file():\n    raise RuntimeError(\"PREBUILD_RESULT_MISSING\")\no=json.loads(p.read_text())\nf=o.get(\"final\")\nr=json.loads(f) if isinstance(f,str) else (f or {})\ns={\"phase\":o.get(\"phase\"),\"model\":o.get(\"model\"),\"policy\":o.get(\"model_policy\"),\"decision\":r.get(\"decision\"),\"candidate\":r.get(\"candidate_id\"),\"review_phase\":r.get(\"phase\"),\"binding\":r.get(\"binding_sha256\")}\nraise RuntimeError(\"PREBUILD_SUMMARY=\"+json.dumps(s,sort_keys=True,separators=(\",\",\":\")))\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/r4p2_prebuild_summary_n1e45c.py"
+      ],
+      "timeout_seconds": 20
+    }
+  ]
+}
