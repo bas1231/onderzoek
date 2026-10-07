@@ -1,0 +1,18 @@
+{
+  "schema": "PREDICTION_BRIDGE_COMMAND_V1",
+  "task_id": "DEV-PRED-A2Z-SOL-ROUTING-REPAIR-HANDOFF-20261007-A1",
+  "action": "SIX_AI_HEALTH",
+  "created_at_utc": "2026-10-07T16:30:15Z",
+  "route_task_id": "DEV-PRED-A2Z-RETRY-TIMER-RESTORE-20261007-N1E12",
+  "delivery_mode": "chat",
+  "auto_continue": true,
+  "live_trading": false,
+  "paid_actions": false,
+  "wallet_actions": false,
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "Codex supervisor; exact runtime model slug unavailable",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "notes": "Doelroute is de bestaande GPT-5.6 Sol-campagnesessie van N1E12/N1E33 (niet deze supervisorchat). Read-only HANDOFF_ONLY: volg het gepinde N1E33-repair-event; corrigeer alleen newline encoding in revise_tail/revise_tail_new, behoud guards. Één infrastructuurregressieronde na Sol-reparatie, geen experimenttests/meting/build vóór toepasselijke Astra-gates. Geen bridgewijziging. Geen duplicate R4P2 review. Handoff PASS is geen reparatie-PASS."
+}
