@@ -1,0 +1,41 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-A2Z-R4P2-STATE-ONLY-20261007-N1E98",
+  "source_commit": "e13b6cf87fb37b6b04cf3c0efe36bbeea20c6db8",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "High"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_runtime"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 120,
+  "notes": "Read-only exact extraction of models/STATE.json for R4P2 after N1E97 truncation. No service/model invocation.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/r4p2_state_only_n1e98.py",
+      "content": "from pathlib import Path\nimport json\nbase=Path.home()/\".local/share/prediction-project-executor/campaigns/FULL-A2Z-LIVE-20261004-V4\"\np=base/\"models/STATE.json\"\nif not p.is_file():\n    print(\"ERROR_CLASS=R4P2_STATE_ONLY\",flush=True)\n    print(\"ERROR=\"+json.dumps({\"missing\":\"models/STATE.json\"}),flush=True)\n    raise SystemExit(1)\no=json.loads(p.read_text(encoding=\"utf-8\"))\nout={k:o.get(k) for k in (\"task_id\",\"state\",\"reason\",\"attempt\",\"checkpoint\",\"retry_at\",\"next_action\",\"timestamp\",\"updated_at\")}\nprint(\"ERROR_CLASS=R4P2_STATE_ONLY\",flush=True)\nprint(\"ERROR=\"+json.dumps(out,separators=(\",\",\":\"),sort_keys=True),flush=True)\nraise SystemExit(1)\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/r4p2_state_only_n1e98.py"
+      ],
+      "timeout_seconds": 60
+    }
+  ]
+}
