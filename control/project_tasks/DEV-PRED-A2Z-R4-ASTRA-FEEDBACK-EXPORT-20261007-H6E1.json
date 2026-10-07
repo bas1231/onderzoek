@@ -1,0 +1,41 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-A2Z-R4-ASTRA-FEEDBACK-EXPORT-20261007-H6E1",
+  "source_commit": "41b38a0c2af1b5b3024e86c647fc1dea10f21363",
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "High"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_runtime"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 180,
+  "notes": "Read-only export of the exact existing Astra R3-P2 decision/finding/next_action through the already-proven bounded snapshot export delivery. No bridge source/config/service/runtime mutation.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/r4_astra_feedback_export_h6e1.py",
+      "content": "from __future__ import annotations\nfrom pathlib import Path\nimport base64, json, zlib\n\nROOT=Path.home()/\".local/share/prediction-project-executor/campaigns/FULL-A2Z-LIVE-20261004-V4\"\nTASK=\"A2Z-V4-ASTRA-POSTBUILD-20261006-R3-P2\"\nenv=json.loads((ROOT/\"model_results\"/(TASK+\".json\")).read_text(encoding=\"utf-8\"))\ncp=(ROOT/env[\"checkpoint\"]).resolve()\ncomplete=json.loads((cp/\"COMPLETE.json\").read_text(encoding=\"utf-8\"))\nfinal=complete.get(\"final\")\nreview=json.loads(final) if isinstance(final,str) else final\npayload={\n \"candidate_id\":review.get(\"candidate_id\"),\n \"phase\":review.get(\"phase\"),\n \"binding_sha256\":review.get(\"binding_sha256\"),\n \"decision\":review.get(\"decision\"),\n \"finding\":review.get(\"finding\"),\n \"next_action\":review.get(\"next_action\")\n}\nraw=json.dumps(payload,separators=(\",\",\":\"),sort_keys=True,ensure_ascii=False).encode(\"utf-8\")\ndata=base64.b64encode(zlib.compress(raw,9)).decode(\"ascii\")\nmeta={\"schema\":\"PREDICTION_ASTRA_FEEDBACK_EXPORT_V1\",\"encoding\":\"zlib+base64\",\"chars\":len(data)}\nprint(\"PREDICTION_SNAPSHOT_EXPORT_V1\")\nprint(\"SNAPSHOT_EXPORT_META=\"+json.dumps(meta,separators=(\",\",\":\"),sort_keys=True))\nprint(\"SNAPSHOT_EXPORT_DATA=\"+data)\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/r4_astra_feedback_export_h6e1.py"
+      ],
+      "timeout_seconds": 90
+    }
+  ]
+}
