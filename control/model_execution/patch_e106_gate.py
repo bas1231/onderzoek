@@ -165,9 +165,9 @@ def request(repo, overlay, phase, task_id, prompt):
         raise RuntimeError("E106_RUNNER_SOL_REVISION_PATTERN_MISSING")
     text = text.replace(revise_old, revise_new, 1)
 
-    revise_tail = '''                        "The revised proposal must return to Astra PREBUILD before any build.\n" + json.dumps({"task_id": a.next_task, "previous_proposal": gate.proposal(repo, overlay), "astra_review": review}, ensure_ascii=False))
+    revise_tail = '''                        "The revised proposal must return to Astra PREBUILD before any build.\\n" + json.dumps({"task_id": a.next_task, "previous_proposal": gate.proposal(repo, overlay), "astra_review": review}, ensure_ascii=False))
 '''
-    revise_tail_new = '''                        "The revised proposal must return to Astra PREBUILD before any build.\n" + json.dumps({"task_id": a.next_task, "previous_proposal": gate.proposal(repo, overlay), "astra_review": review}, ensure_ascii=False),
+    revise_tail_new = '''                        "The revised proposal must return to Astra PREBUILD before any build.\\n" + json.dumps({"task_id": a.next_task, "previous_proposal": gate.proposal(repo, overlay), "astra_review": review}, ensure_ascii=False),
                         q.canonical_sha(review))
 '''
     if revise_tail not in text:
