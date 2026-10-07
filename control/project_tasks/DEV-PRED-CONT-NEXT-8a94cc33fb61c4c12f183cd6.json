@@ -1,0 +1,41 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-CONT-NEXT-8a94cc33fb61c4c12f183cd6",
+  "source_commit": "70cc79a169ca4e9097d153d76763e71e2330f7b0",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "High"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_runtime"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 60,
+  "notes": "Continuation NEXT converges stale verifier branch onto current N1E59 repeated Astra usage-limit state diagnosis. Read-only.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/cont_join_n1e59_8a94cc33.py",
+      "content": "from pathlib import Path\nimport json\np=Path.home()/\".local/state/prediction-project-executor/DEV-PRED-A2Z-R4P2-USAGE-LIMIT-STATE-20261007-N1E59.json\"\nif not p.is_file():\n    raise SystemExit(20)\no=json.loads(p.read_text(encoding=\"utf-8\"))\nstatus=o.get(\"status\")\nif status==\"PASS\":\n    raise SystemExit(0)\nif status==\"FAIL\":\n    err=str(o.get(\"error\") or \"\")\n    if \"R4P2_ASTRA_USAGE_LIMIT_STATE\" in err:\n        raise SystemExit(30)\n    raise SystemExit(40)\nraise SystemExit(21)\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/cont_join_n1e59_8a94cc33.py"
+      ],
+      "timeout_seconds": 15
+    }
+  ]
+}
