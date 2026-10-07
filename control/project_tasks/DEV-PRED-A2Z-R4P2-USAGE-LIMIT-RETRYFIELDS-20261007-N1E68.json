@@ -1,0 +1,41 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-A2Z-R4P2-USAGE-LIMIT-RETRYFIELDS-20261007-N1E68",
+  "source_commit": "9663cf6ba210bc3a0d4bc6b0cd41b55e5e6ddae6",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "High"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_runtime"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 90,
+  "notes": "Compact read-only retry-field extraction after N1E67 showed attempt 4 checkpoint 389ea715. No service/model invocation.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/r4p2_retry_fields_n1e68.py",
+      "content": "from pathlib import Path\nimport json\nbase=Path.home()/\".local/share/prediction-project-executor/campaigns/FULL-A2Z-LIVE-20261004-V4/models\"\ntask=\"A2Z-V4-ASTRA-PREBUILD-DIRECT-20261007-R4P2\"\nout={}\nfor name in (\"STATE.json\",\"CONTINUATION.json\",\"BLOCKER.json\"):\n    p=base/name\n    if not p.is_file():\n        continue\n    try:\n        o=json.loads(p.read_text(encoding=\"utf-8\"))\n    except Exception:\n        continue\n    if isinstance(o,dict):\n        out[name]={\n            \"task_id\":o.get(\"task_id\"),\n            \"state\":o.get(\"state\"),\n            \"attempt\":o.get(\"attempt\"),\n            \"checkpoint\":o.get(\"checkpoint\"),\n            \"next_action\":o.get(\"next_action\"),\n            \"retry_at\":o.get(\"retry_at\"),\n            \"blocked_until\":o.get(\"blocked_until\"),\n            \"resume_at\":o.get(\"resume_at\"),\n            \"reason\":o.get(\"reason\"),\n            \"type\":o.get(\"type\")\n        }\nprint(\"ERROR_CLASS=R4P2_ASTRA_RETRY_FIELDS\",flush=True)\nprint(\"ERROR=\"+json.dumps(out,separators=(\",\",\":\"),sort_keys=True),flush=True)\nraise SystemExit(1)\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/r4p2_retry_fields_n1e68.py"
+      ],
+      "timeout_seconds": 30
+    }
+  ]
+}
