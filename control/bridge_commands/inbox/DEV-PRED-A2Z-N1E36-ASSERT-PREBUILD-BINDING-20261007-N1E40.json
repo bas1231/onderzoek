@@ -1,0 +1,16 @@
+{
+  "schema": "PREDICTION_BRIDGE_COMMAND_V1",
+  "task_id": "DEV-PRED-A2Z-N1E36-ASSERT-PREBUILD-BINDING-20261007-N1E40",
+  "action": "SIX_AI_HEALTH",
+  "created_at_utc": "2026-10-07T17:41:00Z",
+  "route_task_id": "SESSION-ROUTE-246799adf99f0bf8336c27a0",
+  "live_trading": false,
+  "paid_actions": false,
+  "wallet_actions": false,
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "High"
+  },
+  "notes": "Fail-closed read-only assertion of existing N1E36 result and R4P2 Astra PREBUILD binding. Do not rerun tests or start PREBUILD."
+}
