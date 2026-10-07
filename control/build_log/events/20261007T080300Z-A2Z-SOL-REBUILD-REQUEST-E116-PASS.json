@@ -1,0 +1,32 @@
+{
+  "schema": "PREDICTION_BUILD_LOG_EVENT_V1",
+  "event_id": "20261007T080300Z-A2Z-SOL-REBUILD-REQUEST-E116-PASS",
+  "work_item_id": "A2Z-SYSTEMTEST-20261005",
+  "created_at_utc": "2026-10-07T08:03:00Z",
+  "event_type": "RESULT",
+  "work_item_status": "IN_PROGRESS",
+  "outcome": "PASS",
+  "title": "Sol R4 rebuildrequest gestart",
+  "objective": "Laat GPT-5.6 Sol de bestaande R3-build herzien op basis van exact de canonical GPT-6 Astra POSTBUILD REVISE-feedback.",
+  "summary": "E116 kwam same-chat terug met PASS exit=0. De begrensde SOL_BUILD-request A2Z-V4-SOL-BUILD-20261007-R4 is aangemaakt/geïnstalleerd en de bestaande modelservice is gestart.",
+  "why": "De volgende stap is niet opnieuw bouwen of Astra starten, maar eerst vaststellen dat het R4-modelresultaat compleet en exact-modelgebonden is.",
+  "first_incomplete_step": "R4 modelresultaat/completion verifiëren.",
+  "next_action": "Read-only E117: controleer model_result + checkpoint + exact GPT-5.6 Sol provenance. Alleen bij complete PASS volgt materialisatie van R4 en nieuwe Astra POSTBUILD.",
+  "session_route_task_id": "SESSION-ROUTE-5388245c5e308fbc9dcf92ab",
+  "task_ids": [
+    "DEV-PRED-A2Z-SOL-REBUILD-REQUEST-20261007-E116",
+    "A2Z-V4-SOL-BUILD-20261007-R4"
+  ],
+  "commits": [],
+  "evidence_refs": [
+    "result:DEV-PRED-A2Z-SOL-REBUILD-REQUEST-20261007-E116 status=PASS exit=0 event=1791359767-7ca51bbc0bcf"
+  ],
+  "tags": [
+    "a2z",
+    "sol",
+    "r4",
+    "rebuild",
+    "model-request",
+    "pass"
+  ]
+}
