@@ -103,6 +103,17 @@ def request(repo, overlay, phase, task_id, prompt):
         raise RuntimeError("E106_RUNNER_LEGACY_REQUEST_PATTERN_MISSING")
     text = text.replace(legacy_request_old, legacy_request_new, 1)
 
+    legacy_route_old = '''    value = {"task_id": task_id, "campaign_id": CAMPAIGN, "phase": phase,
+             "created_at": time.time(), "route_task_id": ROUTE, "prompt": prompt,
+'''
+    legacy_route_new = '''    route = governed_route(overlay)
+    value = {"task_id": task_id, "campaign_id": CAMPAIGN, "phase": phase,
+             "created_at": time.time(), "route_task_id": route, "prompt": prompt,
+'''
+    if legacy_route_old not in text:
+        raise RuntimeError("E106_RUNNER_LEGACY_ROUTE_PATTERN_MISSING")
+    text = text.replace(legacy_route_old, legacy_route_new, 1)
+
     request_anchor = '''def prepare_review(repo, overlay, phase, task_id):
 '''
     direct_fn = '''def direct_sol_request(repo, overlay, phase, task_id, prompt, binding_sha256):
