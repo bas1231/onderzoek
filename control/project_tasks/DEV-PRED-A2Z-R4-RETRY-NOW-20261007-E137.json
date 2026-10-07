@@ -1,0 +1,47 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-A2Z-R4-RETRY-NOW-20261007-E137",
+  "source_commit": "7e015eb0f6633035ca737cb16f1dbcf92d9737b0",
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "High"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_runtime",
+    "user_service_manage"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 180,
+  "notes": "One-shot retry of the existing immutable R4 model service because retry_at has already passed. No timer install, no model/input/task change, no tests/measurements.",
+  "operations": [
+    {
+      "type": "service",
+      "verb": "start",
+      "unit": "prediction-a2z-v4-model@A2Z-V4-SOL-BUILD-20261007-R4.service"
+    },
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/a2z_e137_r4_state.py",
+      "content": "from pathlib import Path\nimport sqlite3,json\nroot=Path.home()/\".local/share/prediction-project-executor/campaigns/FULL-A2Z-LIVE-20261004-V4\"\ndb=sqlite3.connect(\"file:\"+str(root/\"models/runtime.sqlite\")+\"?mode=ro\",uri=True)\ntry:\n    row=db.execute(\"select status,attempt,run,thread from tasks where id=?\",(\"A2Z-V4-SOL-BUILD-20261007-R4\",)).fetchone()\nfinally:\n    db.close()\nprint(\"E137_STATE \"+json.dumps(row),flush=True)\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/a2z_e137_r4_state.py"
+      ],
+      "timeout_seconds": 60
+    }
+  ]
+}
