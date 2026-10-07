@@ -1,0 +1,32 @@
+{
+  "schema": "PREDICTION_BUILD_LOG_EVENT_V1",
+  "event_id": "20261007T092600Z-A2Z-R4-MODEL-SERVICE-CLASSIFY-E132",
+  "work_item_id": "A2Z-SYSTEMTEST-20261005",
+  "created_at_utc": "2026-10-07T09:26:00Z",
+  "event_type": "ATTEMPT",
+  "work_item_status": "IN_PROGRESS",
+  "outcome": "STARTED",
+  "title": "Classificeer A2Z modelservice voor retrytimer",
+  "objective": "Lees ExecStart/WorkingDirectory/instancegebruik van prediction-a2z-v4-model@.service voordat een 15-minuten timer wordt toegevoegd.",
+  "summary": "E131 bewees dat A2Z-v4 geen timer heeft. E132 bepaalt of de bestaande instance-service veilig direct door een timer kan worden aangeroepen.",
+  "why": "Voorkomt een timer die de verkeerde root of modeltask zou starten.",
+  "first_incomplete_step": "Service-template timercompatibiliteit bewijzen.",
+  "next_action": "Bij usable: minimale prediction-a2z-v4-model@.timer bouwen/testen/installeren voor dezelfde R4 task. Bij unsafe: gerichte wrapper/timer bouwen.",
+  "session_route_task_id": "SESSION-ROUTE-5388245c5e308fbc9dcf92ab",
+  "task_ids": [
+    "DEV-PRED-A2Z-R4-MODEL-SERVICE-CLASSIFY-20261007-E132"
+  ],
+  "commits": [
+    "aa1b89ce634c7c361ecce92cf1e4de6ac757c54e"
+  ],
+  "evidence_refs": [
+    "control/build_log/events/20261007T092400Z-A2Z-R4-RETRY-SCHEDULER-E131-NO-TIMER.json"
+  ],
+  "tags": [
+    "a2z",
+    "r4",
+    "retry",
+    "service-template",
+    "read-only"
+  ]
+}
