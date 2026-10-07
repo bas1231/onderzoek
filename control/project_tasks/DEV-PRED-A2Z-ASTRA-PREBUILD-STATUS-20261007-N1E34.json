@@ -1,0 +1,41 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-A2Z-ASTRA-PREBUILD-STATUS-20261007-N1E34",
+  "source_commit": "06488232e15552c17685c753d88f48b238314369",
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "High"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_runtime"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 120,
+  "notes": "Read-only current Astra PREBUILD result status. No model invocation, service/runtime/bridge mutation, experiment execution, paid/live/wallet actions.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/astra_prebuild_status_n1e34.py",
+      "content": "from pathlib import Path\nimport json\nroot=Path.home()/\".local/share/prediction-project-executor/campaigns/FULL-A2Z-LIVE-20261004-V4\"\ntask=\"A2Z-V4-ASTRA-PREBUILD-DIRECT-20261007-R4P2\"\np=root/\"model_results\"/(task+\".json\")\nif not p.is_file():\n    raise SystemExit(\"ASTRA_PREBUILD=PENDING\")\nobj=json.loads(p.read_text(encoding=\"utf-8\"))\nfinal=obj.get(\"final\")\nreview=json.loads(final) if isinstance(final,str) else {}\nsummary={\n \"model\":obj.get(\"model\"),\n \"model_policy\":obj.get(\"model_policy\"),\n \"phase\":obj.get(\"phase\"),\n \"decision\":review.get(\"decision\"),\n \"candidate_id\":review.get(\"candidate_id\"),\n \"binding_sha256\":review.get(\"binding_sha256\"),\n}\nraise SystemExit(\"ASTRA_PREBUILD=\"+json.dumps(summary,sort_keys=True,separators=(\",\",\":\")))\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/astra_prebuild_status_n1e34.py"
+      ],
+      "timeout_seconds": 30
+    }
+  ]
+}
