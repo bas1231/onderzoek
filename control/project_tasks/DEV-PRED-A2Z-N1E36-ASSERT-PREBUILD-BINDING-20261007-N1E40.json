@@ -1,0 +1,53 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-A2Z-N1E36-ASSERT-PREBUILD-BINDING-20261007-N1E40",
+  "source_commit": "ca1341be43984455733092cc88f2fcce0796c7e5",
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "High"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_runtime",
+    "user_service_manage",
+    "read_logs"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 150,
+  "notes": "Read-only fail-closed assertion of persisted N1E36 PASS and existing R4P2 Astra PREBUILD binding. No regression rerun, model invocation, service enable/restart, runtime/bridge mutation, experiment testing/measurement.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/assert_n1e36_prebuild_binding_n1e40.py",
+      "content": "from pathlib import Path\nimport json,re\n\nHOME=Path.home()\nSTATE=HOME/\".local/state/prediction-project-executor\"/\"DEV-PRED-A2Z-DIRECT-SOL-REGRESSION-N1E36-20261007.json\"\nCAMPAIGN=HOME/\".local/share/prediction-project-executor/campaigns/FULL-A2Z-LIVE-20261004-V4\"\nASTRA=\"A2Z-V4-ASTRA-PREBUILD-DIRECT-20261007-R4P2\"\nPROPOSAL=\"A2Z-V4-SOL-PROPOSAL-DIRECT-20261007-R4P2\"\nOLD_SOL=\"A2Z-V4-SOL-BUILD-20261007-R4\"\n\ndef load(p): return json.loads(p.read_text(encoding=\"utf-8\"))\n\n# --- Assert persisted N1E36 result, no test execution here ---\nif not STATE.is_file():\n    raise RuntimeError(\"N1E36_STATE_MISSING\")\no=load(STATE)\nblob=json.dumps(o,ensure_ascii=False,sort_keys=True)\nif str(o.get(\"status\") or \"\").upper()!=\"PASS\":\n    raise RuntimeError(\"N1E36_STATUS_NOT_PASS:\"+str(o.get(\"status\")))\nif \"tests/model_execution/test_direct_sol_chat.py\" not in blob or \"unittest\" not in blob:\n    raise RuntimeError(\"N1E36_TARGET_TEST_NOT_RECORDED\")\nrcs=[]\ndef walk(v):\n    if isinstance(v,dict):\n        for k,x in v.items():\n            if k in {\"rc\",\"returncode\",\"exit_code\"} and isinstance(x,int):\n                rcs.append(x)\n            walk(x)\n    elif isinstance(v,list):\n        for x in v: walk(x)\nwalk(o)\nif not rcs:\n    raise RuntimeError(\"N1E36_NO_EXPLICIT_RC_EVIDENCE\")\nif any(x!=0 for x in rcs):\n    raise RuntimeError(\"N1E36_NONZERO_RC:\"+repr(rcs))\nprint(\"N1E36_ASSERT=PASS\")\nprint(\"N1E36_RCS=\"+json.dumps(rcs))\n\n# --- Exact request binding ---\nreq=CAMPAIGN/\"requests\"/(ASTRA+\".json\")\nif not req.is_file():\n    raise RuntimeError(\"ASTRA_REQUEST_MISSING\")\nr=load(req)\nif r.get(\"task_id\")!=ASTRA:\n    raise RuntimeError(\"ASTRA_TASK_ID_MISMATCH\")\nif r.get(\"phase\")!=\"ASTRA_PREBUILD\":\n    raise RuntimeError(\"ASTRA_PHASE_MISMATCH:\"+str(r.get(\"phase\")))\nif r.get(\"model_policy\")!=\"ASTRA_EXACT\":\n    raise RuntimeError(\"ASTRA_POLICY_MISMATCH:\"+str(r.get(\"model_policy\")))\nrb=json.dumps(r,ensure_ascii=False,sort_keys=True)\nif PROPOSAL not in rb:\n    raise RuntimeError(\"ASTRA_PROPOSAL_BINDING_MISSING\")\nif OLD_SOL in rb:\n    raise RuntimeError(\"ASTRA_REQUEST_CONTAINS_OLD_SOL\")\nif re.search(r\"codex.{0,80}resume|resume.{0,80}codex\",rb,re.I):\n    raise RuntimeError(\"ASTRA_REQUEST_HAS_RESUME_THREAD\")\nprint(\"ASTRA_REQUEST_ASSERT=PASS\")\n\n# --- No existing result or duplicate run ---\nres=CAMPAIGN/\"model_results\"/(ASTRA+\".json\")\nif res.is_file():\n    raise RuntimeError(\"ASTRA_RESULT_ALREADY_EXISTS\")\nruns=CAMPAIGN/\"models/runs\"\nastra_runs=sorted([p.name for p in runs.glob(ASTRA+\"*\") if p.is_dir()]) if runs.exists() else []\nif astra_runs:\n    raise RuntimeError(\"ASTRA_RUN_ALREADY_EXISTS:\"+\",\".join(astra_runs))\nprint(\"ASTRA_DUPLICATE_ASSERT=PASS\")\n\n# --- Queue/control metadata: any object mentioning requested Astra must not mix old SOL or resume ---\nmodels=CAMPAIGN/\"models\"\nhits=0\nfor p in sorted(models.rglob(\"*\")) if models.exists() else []:\n    if not p.is_file():\n        continue\n    name=p.name.lower()\n    if not (name in {\"state.json\",\"queue.json\",\"task.json\",\"worker.json\",\"request.json\"} or \"queue\" in name or \"state\" in name):\n        continue\n    try:\n        txt=p.read_text(encoding=\"utf-8\")\n    except Exception:\n        continue\n    if ASTRA not in txt:\n        continue\n    hits+=1\n    if OLD_SOL in txt:\n        raise RuntimeError(\"ASTRA_QUEUE_MIXES_OLD_SOL:\"+str(p))\n    if re.search(r\"codex.{0,120}resume|resume.{0,120}codex\",txt,re.I|re.S):\n        raise RuntimeError(\"ASTRA_QUEUE_HAS_RESUME:\"+str(p))\nprint(\"ASTRA_QUEUE_HITS=\"+str(hits))\nprint(\"PREBUILD_BINDING_ASSERT=PASS\")\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/assert_n1e36_prebuild_binding_n1e40.py"
+      ],
+      "timeout_seconds": 75
+    },
+    {
+      "type": "service",
+      "verb": "status",
+      "unit": "prediction-a2z-v4-model@A2Z-V4-ASTRA-PREBUILD-DIRECT-20261007-R4P2.service"
+    },
+    {
+      "type": "journal",
+      "unit": "prediction-a2z-v4-model@A2Z-V4-ASTRA-PREBUILD-DIRECT-20261007-R4P2.service",
+      "lines": 40
+    }
+  ]
+}
