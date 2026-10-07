@@ -1,0 +1,30 @@
+{
+  "schema": "PREDICTION_BUILD_LOG_EVENT_V1",
+  "event_id": "20261007T075200Z-A2Z-POSTBUILD-IMPORT-CLASSIFY-E114",
+  "work_item_id": "A2Z-SYSTEMTEST-20261005",
+  "created_at_utc": "2026-10-07T07:52:00Z",
+  "event_type": "ATTEMPT",
+  "work_item_status": "IN_PROGRESS",
+  "outcome": "STARTED",
+  "title": "Classificeer eerste canonical POSTBUILD-importfout",
+  "objective": "Herhaal uitsluitend de geïsoleerde import van de bestaande R3-P2 Astra-output en encodeer de eerste validatorfout in de exitcode.",
+  "summary": "E113 read-only diagnose draaide groen maar stdout werd gecompact. E114 maakt de fout semantisch zichtbaar via rc.",
+  "why": "Zo kan de reparatie exact op de eerste mislukte invariant worden gericht zonder trial-and-error of ketenherhaling.",
+  "first_incomplete_step": "E112 import failure classificeren.",
+  "next_action": "Repareer uitsluitend de door E114 aangewezen invariant; daarna alleen canonical import opnieuw.",
+  "session_route_task_id": "SESSION-ROUTE-5388245c5e308fbc9dcf92ab",
+  "task_ids": [
+    "DEV-PRED-A2Z-POSTBUILD-IMPORT-CLASSIFY-20261007-E114"
+  ],
+  "commits": [],
+  "evidence_refs": [
+    "control/build_log/events/20261007T075000Z-A2Z-POSTBUILD-IMPORT-DIAG-E113-PASS.json"
+  ],
+  "tags": [
+    "a2z",
+    "astra",
+    "postbuild",
+    "classifier",
+    "read-only"
+  ]
+}
