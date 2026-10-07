@@ -1,0 +1,31 @@
+{
+  "schema": "PREDICTION_BUILD_LOG_EVENT_V1",
+  "event_id": "20261007T070600Z-A2Z-E106-EVIDENCE-FORENSICS-E109-PASS",
+  "work_item_id": "A2Z-SYSTEMTEST-20261005",
+  "created_at_utc": "2026-10-07T07:06:00Z",
+  "event_type": "RESULT",
+  "work_item_status": "IN_PROGRESS",
+  "outcome": "PASS",
+  "title": "E109 forensische uitlezing uitgevoerd",
+  "objective": "Bepaal zonder mutatie welke model-, phase-, binding-, build- en provenancevelden de drie E106 POST-BUILD APPROVE-records werkelijk bevatten.",
+  "summary": "E109 returned PASS exit=0. De forensische scan zelf is dus uitgevoerd. Het compacte wakebericht bevat niet de geprinte recorddetails; dit PASS opent de POST-BUILD-gate niet.",
+  "why": "Taak-PASS betekent hier alleen dat de read-only inspectie succesvol draaide, niet dat Astra-approval geldig is.",
+  "first_incomplete_step": "Maak de forensische uitkomst compact genoeg voor betrouwbare same-chat classificatie van modelidentiteit, binding en provenance.",
+  "next_action": "Voer een compacte read-only classifier uit over dezelfde bestaande records. Geen modelrun, build, test of meting.",
+  "session_route_task_id": "SESSION-ROUTE-5388245c5e308fbc9dcf92ab",
+  "task_ids": [
+    "DEV-PRED-A2Z-E106-EVIDENCE-FORENSICS-20261007-E109"
+  ],
+  "commits": [],
+  "evidence_refs": [
+    "result:DEV-PRED-A2Z-E106-EVIDENCE-FORENSICS-20261007-E109 status=PASS exit=0 event=1791356943-ceb504a1bebd"
+  ],
+  "tags": [
+    "a2z",
+    "astra",
+    "postbuild",
+    "forensics",
+    "pass",
+    "gate-still-closed"
+  ]
+}
