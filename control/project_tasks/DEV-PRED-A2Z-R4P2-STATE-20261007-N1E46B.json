@@ -1,0 +1,41 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-A2Z-R4P2-STATE-20261007-N1E46B",
+  "source_commit": "e490b0d5158605bf7142f2071a306fd33bd19d62",
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "High"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_runtime"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 60,
+  "notes": "Read only top-level status and error from existing executor state.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/r4p2_state_n1e46b.py",
+      "content": "from pathlib import Path\nimport json\np=Path.home()/\".local/state/prediction-project-executor/DEV-PRED-A2Z-R4P2-PREBUILD-SUMMARY-20261007-N1E45C.json\"\no=json.loads(p.read_text())\nprint(\"STATUS=\"+str(o.get(\"status\")))\nprint(\"ERROR=\"+str(o.get(\"error\")))\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/r4p2_state_n1e46b.py"
+      ],
+      "timeout_seconds": 15
+    }
+  ]
+}
