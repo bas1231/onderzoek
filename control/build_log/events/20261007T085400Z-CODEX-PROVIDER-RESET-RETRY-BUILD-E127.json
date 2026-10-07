@@ -1,0 +1,32 @@
+{
+  "schema": "PREDICTION_BUILD_LOG_EVENT_V1",
+  "event_id": "20261007T085400Z-CODEX-PROVIDER-RESET-RETRY-BUILD-E127",
+  "work_item_id": "A2Z-SYSTEMTEST-20261005",
+  "created_at_utc": "2026-10-07T08:54:00Z",
+  "event_type": "ATTEMPT",
+  "work_item_status": "IN_PROGRESS",
+  "outcome": "STARTED",
+  "title": "Herhaal Codex provider-reset retrypatch met allowlisted compileall",
+  "objective": "Test exact dezelfde retrypatch als E124, zonder niet-allowlisted py_compile module.",
+  "summary": "Alle patchinhoud uit E124 blijft identiek. Alleen compile-check wordt vervangen door python -m compileall; daarna targeted en volledige codex_supervisor pytest.",
+  "why": "E124 faalde op executor-moduleallowlist vóór inhoudelijke tests.",
+  "first_incomplete_step": "Compileall + gerichte regressies + volledige codex_supervisor tests groen krijgen.",
+  "next_action": "Bij PASS: patchinhoud op GitHub source vastleggen, daarna bounded runtime-install/canary en R4-state migreren naar provider-reset-aware pause.",
+  "session_route_task_id": "SESSION-ROUTE-5388245c5e308fbc9dcf92ab",
+  "task_ids": [
+    "DEV-PRED-CODEX-PROVIDER-RESET-RETRY-BUILD-20261007-E127"
+  ],
+  "commits": [
+    "b7e2b11ea533c86a7913ad7f308bc7c64b76e558"
+  ],
+  "evidence_refs": [
+    "control/build_log/events/20261007T085200Z-CODEX-PROVIDER-RESET-RETRY-E124-MODULE-BLOCK.json"
+  ],
+  "tags": [
+    "codex",
+    "usage-limit",
+    "retry",
+    "compileall",
+    "regression"
+  ]
+}
