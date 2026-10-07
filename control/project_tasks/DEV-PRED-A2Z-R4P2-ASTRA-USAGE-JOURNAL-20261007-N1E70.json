@@ -1,0 +1,42 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-A2Z-R4P2-ASTRA-USAGE-JOURNAL-20261007-N1E70",
+  "source_commit": "fc825c8530dec0cf62f15554a3ff28f8989d6d60",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "High"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_runtime",
+    "read_logs"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 120,
+  "notes": "Read-only targeted journal extraction for Astra R4P2 attempt 4 provider usage-limit text. No service/model invocation.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/r4p2_astra_usage_journal_n1e70.py",
+      "content": "import subprocess,sys\nunit=\"prediction-a2z-v4-model@A2Z-V4-ASTRA-PREBUILD-DIRECT-20261007-R4P2.service\"\np=subprocess.run([\"journalctl\",\"--user\",\"-u\",unit,\"-n\",\"500\",\"--no-pager\"],capture_output=True,text=True)\ntxt=(p.stdout or \"\")+\"\\n\"+(p.stderr or \"\")\nkeys=(\"usage limit\",\"try again\",\"quota\",\"reset\",\"limit\",\"paused_usage_limit\",\"389ea715\",\"attempt 4\")\nhits=[line for line in txt.splitlines() if any(k in line.lower() for k in keys)]\nprint(\"ERROR_CLASS=R4P2_ASTRA_USAGE_JOURNAL\",flush=True)\nfor line in hits[-120:]:\n    print(line[:1600],flush=True)\nraise SystemExit(1)\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/r4p2_astra_usage_journal_n1e70.py"
+      ],
+      "timeout_seconds": 60
+    }
+  ]
+}
