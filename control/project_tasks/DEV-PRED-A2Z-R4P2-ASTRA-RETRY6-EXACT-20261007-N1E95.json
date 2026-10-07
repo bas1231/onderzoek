@@ -1,0 +1,48 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-A2Z-R4P2-ASTRA-RETRY6-EXACT-20261007-N1E95",
+  "source_commit": "78fb11bbe5f7e6198f41acc1f1f51ee48f2755d0",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "High"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_runtime",
+    "user_service_manage",
+    "read_logs"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 900,
+  "notes": "Exact bounded retry for existing R4P2 Astra PREBUILD attempt 6. Verify exact task/checkpoint/state before and after waiting until retry_at, then start same existing service once. No new review task, no Sol build/tests/measurement.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/r4p2_astra_retry6_exact_n1e95.py",
+      "content": "from pathlib import Path\nimport json,time\nbase=Path.home()/\".local/share/prediction-project-executor/campaigns/FULL-A2Z-LIVE-20261004-V4\"\ntask=\"A2Z-V4-ASTRA-PREBUILD-DIRECT-20261007-R4P2\"\ncheckpoint=\"runs/A2Z-V4-ASTRA-PREBUILD-DIRECT-20261007-R4P2-6-2238a467\"\nretry_at=1791403871.386665\nresult=base/\"model_results\"/(task+\".json\")\nstate=base/\"models/STATE.json\"\ncont=base/\"models/CONTINUATION.json\"\n\ndef read_match():\n    out=[]\n    for p in (cont,state):\n        if not p.is_file():\n            continue\n        try:o=json.loads(p.read_text(encoding=\"utf-8\"))\n        except Exception:continue\n        if isinstance(o,dict) and o.get(\"task_id\")==task:\n            out.append(o)\n    return out\n\nif result.is_file():\n    raise SystemExit(10)\nrows=read_match()\nif not rows:\n    raise SystemExit(20)\nvalid=False\nfor o in rows:\n    if o.get(\"state\")==\"PAUSED_USAGE_LIMIT\" and o.get(\"checkpoint\")==checkpoint and o.get(\"attempt\") in (None,6):\n        valid=True\nif not valid:\n    raise SystemExit(24)\nremaining=retry_at-time.time()\nif remaining>0:\n    if remaining>780:\n        raise SystemExit(26)\n    time.sleep(remaining+1)\nif result.is_file():\n    raise SystemExit(10)\nrows=read_match()\nvalid=False\nfor o in rows:\n    if o.get(\"state\")==\"PAUSED_USAGE_LIMIT\" and o.get(\"checkpoint\")==checkpoint and o.get(\"attempt\") in (None,6):\n        valid=True\nif not valid:\n    raise SystemExit(27)\nraise SystemExit(0)\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/r4p2_astra_retry6_exact_n1e95.py"
+      ],
+      "timeout_seconds": 840
+    },
+    {
+      "type": "service",
+      "verb": "start",
+      "unit": "prediction-a2z-v4-model@A2Z-V4-ASTRA-PREBUILD-DIRECT-20261007-R4P2.service"
+    }
+  ]
+}
