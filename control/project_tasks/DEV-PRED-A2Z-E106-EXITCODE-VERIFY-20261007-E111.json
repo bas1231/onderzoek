@@ -1,0 +1,42 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-A2Z-E106-EXITCODE-VERIFY-20261007-E111",
+  "source_commit": "a0c4942ec51bd4e844fead661cfca63d083bf011",
+  "build_id": "BUILD-PRED-A2Z-E106-EXITCODE-20261007",
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "High"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_runtime"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 180,
+  "notes": "Read-only E106 evidence classification. Exit: 0 exact fields; 20 revision; 21 reject/park; 22 no approve; 31 phase; 32 model; 33 slug; 34 binding; 35 provenance ref; 36 provenance hash; 37 fields split.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/a2z_e106_exitcode_verify_20261007_e111.py",
+      "content": "from pathlib import Path\nimport json,re,sys\n\nCID=\"AUTO-DISCOVERY-54d13314c7879b58e46d\"\nMODEL_TASK=\"A2Z-V4-ASTRA-POSTBUILD-20261006-R3-P2\"\nroots=[\n Path.home()/\".local/share/prediction-project-executor/campaigns/FULL-A2Z-LIVE-20261004-V4\",\n Path.home()/\".local/share/prediction-project-executor/worktrees/DEV-PRED-A2Z-POSTBUILD-RETRY-20261006-E106\",\n Path.home()/\".local/state/prediction-codex-supervisor\",\n]\nrecords=[]\ndef walk(o,path):\n if isinstance(o,dict):\n  dec=str(o.get(\"decision\",\"\")).upper()\n  blob=json.dumps(o,sort_keys=True,default=str)\n  if dec in {\"APPROVE\",\"NEEDS_REVISION\",\"REVISE\",\"REJECT\",\"PARK\"} and (CID in blob or MODEL_TASK in blob or \"POSTBUILD\" in blob.upper() or \"postbuild\" in path.lower()):\n   records.append((path,o))\n  for v in o.values(): walk(v,path)\n elif isinstance(o,list):\n  for v in o: walk(v,path)\nfor root in roots:\n if not root.exists(): continue\n for p in root.rglob(\"*\"):\n  try:\n   if not p.is_file() or p.stat().st_size>2000000: continue\n  except OSError: continue\n  if p.suffix.lower() not in {\".json\",\".jsonl\"}: continue\n  try: raw=p.read_text(errors=\"replace\")\n  except Exception: continue\n  low=raw.lower()\n  if CID.lower() not in low and MODEL_TASK.lower() not in low and \"postbuild\" not in low: continue\n  if p.suffix.lower()==\".json\":\n   try: walk(json.loads(raw),str(p))\n   except Exception: pass\n  else:\n   for line in raw.splitlines():\n    try: walk(json.loads(line),str(p))\n    except Exception: pass\nuniq=[]; seen=set()\nfor path,d in records:\n key=(path,json.dumps(d,sort_keys=True,default=str))\n if key in seen: continue\n seen.add(key); uniq.append((path,d))\ndef first(d,names):\n for n in names:\n  if d.get(n) not in (None,\"\"): return d.get(n)\n return None\napprovals=[]; revisions=[]; rejects=[]\nfor path,d in uniq:\n dec=str(d.get(\"decision\",\"\")).upper()\n rec={\n  \"phase\":first(d,[\"phase\",\"review_phase\",\"gate\",\"review_kind\"]),\n  \"model\":first(d,[\"reviewer_model\",\"model\",\"model_display_name\"]),\n  \"slug\":first(d,[\"reviewer_model_slug\",\"model_slug\",\"selected_slug\"]),\n  \"binding\":first(d,[\"binding_sha256\",\"review_binding_sha256\",\"build_binding_sha256\",\"binding_hash\",\"binding\"]),\n  \"provref\":first(d,[\"model_provenance_ref\",\"provenance_ref\"]),\n  \"provsha\":first(d,[\"model_provenance_sha256\",\"provenance_sha256\"]),\n  \"candidate\":d.get(\"candidate_id\")\n }\n if dec==\"APPROVE\": approvals.append(rec)\n elif dec in {\"NEEDS_REVISION\",\"REVISE\"}: revisions.append(rec)\n elif dec in {\"REJECT\",\"PARK\"}: rejects.append(rec)\nexact=[r for r in approvals if str(r[\"phase\"]).upper()==\"POSTBUILD\" and r[\"model\"]==\"GPT-6 Astra\" and r[\"slug\"]==\"gpt-6-astra\" and isinstance(r[\"binding\"],str) and re.fullmatch(r\"[0-9a-f]{64}\",r[\"binding\"]) and r[\"provref\"] and isinstance(r[\"provsha\"],str) and re.fullmatch(r\"[0-9a-f]{64}\",r[\"provsha\"]) and r[\"candidate\"] in (None,CID)]\nif exact: print(\"E111=EXACT_POSTBUILD_APPROVE_FIELDS_PRESENT\",flush=True); raise SystemExit(0)\nif revisions: print(\"E111=NEEDS_REVISION_RECORD_PRESENT\",flush=True); raise SystemExit(20)\nif rejects: print(\"E111=REJECT_OR_PARK_RECORD_PRESENT\",flush=True); raise SystemExit(21)\nif not approvals: print(\"E111=NO_APPROVE_RECORD\",flush=True); raise SystemExit(22)\nchecks=[\n (\"POSTBUILD_PHASE\",lambda r:str(r[\"phase\"]).upper()==\"POSTBUILD\",31),\n (\"EXACT_MODEL_NAME\",lambda r:r[\"model\"]==\"GPT-6 Astra\",32),\n (\"EXACT_MODEL_SLUG\",lambda r:r[\"slug\"]==\"gpt-6-astra\",33),\n (\"BINDING_64HEX\",lambda r:isinstance(r[\"binding\"],str) and re.fullmatch(r\"[0-9a-f]{64}\",r[\"binding\"]),34),\n (\"PROVENANCE_REF\",lambda r:bool(r[\"provref\"]),35),\n (\"PROVENANCE_SHA_64HEX\",lambda r:isinstance(r[\"provsha\"],str) and re.fullmatch(r\"[0-9a-f]{64}\",r[\"provsha\"]),36),\n]\nfor label,pred,rc in checks:\n if not any(pred(r) for r in approvals):\n  print(\"E111=MISSING_\"+label,flush=True); raise SystemExit(rc)\nprint(\"E111=FIELDS_SPLIT_OR_NOT_SINGLE_BOUND_RECORD\",flush=True); raise SystemExit(37)\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/a2z_e106_exitcode_verify_20261007_e111.py"
+      ],
+      "timeout_seconds": 120
+    }
+  ]
+}
