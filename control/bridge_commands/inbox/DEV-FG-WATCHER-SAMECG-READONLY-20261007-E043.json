@@ -1,0 +1,17 @@
+{
+  "schema": "PREDICTION_BRIDGE_COMMAND_V1",
+  "task_id": "DEV-FG-WATCHER-SAMECG-READONLY-20261007-E043",
+  "action": "SIX_AI_HEALTH",
+  "created_at_utc": "2026-10-07T14:11:00Z",
+  "route_task_id": "SESSION-ROUTE-0119cf707add47a07c830145",
+  "delivery_mode": "chat",
+  "live_trading": false,
+  "paid_actions": false,
+  "wallet_actions": false,
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "notes": "READ-ONLY cgroup confirmation for FG watcher only. Existing bridge is transport only; no restart or configuration changes."
+}
