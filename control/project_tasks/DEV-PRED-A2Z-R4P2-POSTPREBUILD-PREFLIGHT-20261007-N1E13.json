@@ -1,0 +1,72 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-A2Z-R4P2-POSTPREBUILD-PREFLIGHT-20261007-N1E13",
+  "source_commit": "2cce9c429fe814cb904cc4421e48b6d436fc125d",
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "High"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "run_tests"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 300,
+  "notes": "Astra-free plumbing preflight only. Validate DIRECT_SOL SOL_BUILD request/result/materialization/provenance and exact Astra worker identity checks in an isolated worktree. No model invocation, no experiment code execution, no substantive tests or measurement, no runtime install, no bridge mutation.",
+  "operations": [
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "-m",
+        "unittest",
+        "tests/model_execution/test_direct_sol_chat.py"
+      ],
+      "timeout_seconds": 120
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/model_execution/patch_e106_gate.py"
+      ],
+      "timeout_seconds": 120
+    },
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/r4p2_postprebuild_plumbing_preflight_n1e13.py",
+      "content": "from pathlib import Path\nimport json\nimport sys\nimport tempfile\n\nROOT=Path(__file__).resolve().parents[2]\nif str(ROOT) not in sys.path:\n    sys.path.insert(0,str(ROOT))\n\nfrom control.model_execution.direct_sol_chat import (\n    build_request, build_result, worker_policy_error\n)\nfrom control.model_execution.materialize_direct_sol import materialize\n\nwith tempfile.TemporaryDirectory(prefix=\"r4p2-plumbing-\") as td:\n    base=Path(td)\n    req=build_request(\n        task_id=\"PREFLIGHT-SOL-BUILD\",\n        phase=\"SOL_BUILD\",\n        campaign_id=\"FULL-A2Z-LIVE-20261004-V4\",\n        candidate_id=\"AUTO-DISCOVERY-54d13314c7879b58e46d\",\n        binding_sha256=\"b\"*64,\n        prompt=\"Synthetic plumbing-only Sol build response. No experiment execution.\",\n        delivery_route_task_id=\"SESSION-ROUTE-PREFLIGHT\",\n        created_at_utc=\"2026-10-07T14:35:00Z\",\n    )\n    res=build_result(\n        req,\n        worker_route_task_id=\"SESSION-ROUTE-PREFLIGHT-WORKER\",\n        final='{\"schema\":\"PREFLIGHT_ONLY\",\"status\":\"OK\"}',\n        started_at_utc=\"2026-10-07T14:35:01Z\",\n        finished_at_utc=\"2026-10-07T14:35:02Z\",\n    )\n    reqp=base/\"request.json\"; resp=base/\"result.json\"; runtime=base/\"runtime\"\n    reqp.write_text(json.dumps(req),encoding=\"utf-8\")\n    resp.write_text(json.dumps(res),encoding=\"utf-8\")\n    env=materialize(reqp,resp,runtime)\n\n    assert env[\"task_id\"]==\"PREFLIGHT-SOL-BUILD\"\n    assert env[\"phase\"]==\"SOL_BUILD\"\n    assert env[\"model\"]==\"gpt-5.6-sol\"\n    assert env[\"model_policy\"]==\"SOL_EXACT\"\n    assert env[\"execution_layer\"]==\"DIRECT_SOL_CHAT\"\n\n    run=runtime/env[\"checkpoint\"]\n    worker=json.loads((run/\"WORKER.json\").read_text())\n    assert worker_policy_error(worker,\"SOL_BUILD\") is None\n    assert set(p.name for p in run.iterdir())=={\"TASK.json\",\"WORKER.json\",\"COMPLETE.json\",\"events.jsonl\"}\n\n    bad=dict(worker); bad[\"execution_layer\"]=\"CODEX_WORKER\"\n    assert worker_policy_error(bad,\"SOL_BUILD\")==\"DIRECT_SOL_EXECUTION_REQUIRED\"\n\n    astra={\n        \"model\":\"gpt-6-astra\",\n        \"model_selection\":{\"policy\":\"ASTRA_EXACT\",\"selected_slug\":\"gpt-6-astra\"},\n        \"execution_layer\":\"CODEX_WORKER\",\n        \"command_flags\":[\"exec\",\"-m\",\"gpt-6-astra\"],\n    }\n    assert worker_policy_error(astra,\"ASTRA_PREBUILD\") is None\n    astra_bad=dict(astra); astra_bad[\"model\"]=\"gpt-5.6-sol\"\n    assert worker_policy_error(astra_bad,\"ASTRA_PREBUILD\")==\"EXACT_MODEL_REQUIRED\"\n\nprint(\"R4P2_POSTPREBUILD_PLUMBING_PREFLIGHT=PASS\")\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/r4p2_postprebuild_plumbing_preflight_n1e13.py"
+      ],
+      "timeout_seconds": 120
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "-m",
+        "compileall",
+        "-q",
+        "control/model_execution",
+        "control/codex_supervisor/experiment_gate.py",
+        "control/jobs/full_a2z_governed_v4.py"
+      ],
+      "timeout_seconds": 120
+    }
+  ]
+}
