@@ -1,0 +1,41 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-A2Z-SOL-R4-PROGRESS-20261007-E121",
+  "source_commit": "1e9601539a5369eccc6fede717af5fd3e250414a",
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "High"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_runtime"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 180,
+  "notes": "Read-only progress classifier for the already-started Sol R4 run. No service/model mutation, no restart, no build materialization, no test or measurement.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/a2z_e121_r4_progress.py",
+      "content": "from pathlib import Path\nimport json,time,sys\n\ncampaign=Path.home()/\".local/share/prediction-project-executor/campaigns/FULL-A2Z-LIVE-20261004-V4\"\nmodel_task=\"A2Z-V4-SOL-BUILD-20261007-R4\"\ncp=campaign/\"models/runs\"/\"A2Z-V4-SOL-BUILD-20261007-R4-1-165d27d5\"\nmr=campaign/\"model_results\"/f\"{model_task}.json\"\n\nif mr.exists():\n    print(\"E121=R4_RESULT_EXISTS\",flush=True); raise SystemExit(0)\nif not cp.exists():\n    print(\"E121=RUN_DIR_MISSING\",flush=True); raise SystemExit(31)\n\ncomplete=cp/\"COMPLETE.json\"\nevents=cp/\"events.jsonl\"\nworker=cp/\"WORKER.json\"\n\nif complete.exists():\n    try:\n        c=json.loads(complete.read_text())\n        has_final=bool(c.get(\"final\"))\n        print(\"E121=COMPLETE_EXISTS has_final=\"+str(has_final)+\" result_exists=False\",flush=True)\n        raise SystemExit(10 if has_final else 11)\n    except SystemExit:\n        raise\n    except Exception as e:\n        print(\"E121=COMPLETE_INVALID \"+type(e).__name__+\":\"+str(e),flush=True); raise SystemExit(12)\n\nif not worker.exists():\n    print(\"E121=WORKER_MISSING\",flush=True); raise SystemExit(32)\n\nnow=time.time()\nevent_count=0\nlast_type=\"\"\nevent_age=None\nlast_preview=\"\"\nif events.exists():\n    lines=[x for x in events.read_text(errors=\"replace\").splitlines() if x.strip()]\n    event_count=len(lines)\n    if lines:\n        try:\n            obj=json.loads(lines[-1])\n            last_type=str(obj.get(\"type\") or obj.get(\"item\",{}).get(\"type\") or \"\")\n        except Exception:\n            last_type=\"UNPARSED\"\n        event_age=max(0,int(now-events.stat().st_mtime))\n        last_preview=lines[-1][:300].replace(\"\\n\",\" \")\nworker_age=max(0,int(now-worker.stat().st_mtime))\nprint(\"E121_PROGRESS events=\"+str(event_count)+\" event_age_s=\"+str(event_age)+\" worker_age_s=\"+str(worker_age)+\" last_type=\"+repr(last_type)+\" last=\"+repr(last_preview),flush=True)\n\nif events.exists() and event_age is not None:\n    if event_age <= 300:\n        print(\"E121=RUN_ACTIVE_RECENT_PROGRESS\",flush=True); raise SystemExit(20)\n    if event_age <= 900:\n        print(\"E121=RUN_QUIET_NOT_YET_STALE\",flush=True); raise SystemExit(21)\n    print(\"E121=RUN_STALE_OVER_15M\",flush=True); raise SystemExit(22)\n\nprint(\"E121=NO_EVENTS_YET\",flush=True); raise SystemExit(23)\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/a2z_e121_r4_progress.py"
+      ],
+      "timeout_seconds": 120
+    }
+  ]
+}
