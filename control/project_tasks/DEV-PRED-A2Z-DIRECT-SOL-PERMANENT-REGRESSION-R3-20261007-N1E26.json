@@ -1,0 +1,38 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-A2Z-DIRECT-SOL-PERMANENT-REGRESSION-R3-20261007-N1E26",
+  "source_commit": "ae744be232a6b7fe4ce1e103ea0760bfcdffed2d",
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "High"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "run_project_python",
+    "run_tests"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 180,
+  "notes": "Run the permanent DIRECT_SOL model_execution regression with correct executor test:true semantics. Replaces N1E17/N1E19/N1E22 manifest mistakes. No model invocation, runtime mutation, experiment tests/measurement, bridge mutation, paid/live/wallet actions.",
+  "operations": [
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "-m",
+        "unittest",
+        "tests/model_execution/test_direct_sol_chat.py"
+      ],
+      "test": true,
+      "timeout_seconds": 120
+    }
+  ]
+}
