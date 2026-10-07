@@ -58,11 +58,90 @@ def patch_gate(root: Path) -> None:
     path.write_text(text, encoding="utf-8")
 
 
+
+def patch_runner(root: Path) -> None:
+    path = root / "control/jobs/full_a2z_governed_v4.py"
+    text = path.read_text(encoding="utf-8")
+
+    import_old = 'sys.path.insert(0, str(PROJECT / "control/codex_supervisor"))\nimport experiment_gate as gate\nimport model_quality_gate as q\n'
+    import_new = (
+        'if str(PROJECT) not in sys.path:\n'
+        '    sys.path.insert(0, str(PROJECT))\n'
+        'sys.path.insert(0, str(PROJECT / "control/codex_supervisor"))\n'
+        'from control.model_execution.direct_sol_chat import build_request as build_direct_sol_request\n'
+        'import experiment_gate as gate\n'
+        'import model_quality_gate as q\n'
+    )
+    if import_old not in text:
+        raise RuntimeError("E106_RUNNER_IMPORT_PATTERN_MISSING")
+    text = text.replace(import_old, import_new, 1)
+
+    request_anchor = '''def prepare_review(repo, overlay, phase, task_id):
+'''
+    direct_fn = '''def direct_sol_request(repo, overlay, phase, task_id, prompt, binding_sha256):
+    if phase not in ("SOL_PROPOSAL", "SOL_BUILD"):
+        raise ValueError("DIRECT_SOL_PHASE")
+    created = datetime.utcnow().replace(microsecond=0).isoformat() + "Z"
+    value = build_direct_sol_request(
+        task_id=task_id,
+        phase=phase,
+        campaign_id=CAMPAIGN,
+        candidate_id=CID,
+        binding_sha256=binding_sha256,
+        prompt=prompt,
+        delivery_route_task_id=ROUTE,
+        created_at_utc=created,
+    )
+    path = repo / "direct_requests" / (task_id + ".json")
+    immutable(path, value)
+    save(PROJECT / "control/dev_checks/a2z_next_direct_sol_request.json", value)
+    print(json.dumps({
+        "direct_sol_task_id": task_id,
+        "phase": phase,
+        "input_sha256": value["input_sha256"],
+        "binding_sha256": value["binding_sha256"],
+        "request_ref": str(path.relative_to(PROJECT)),
+    }, sort_keys=True))
+
+
+'''
+    if request_anchor not in text:
+        raise RuntimeError("E106_RUNNER_REVIEW_ANCHOR_MISSING")
+    text = text.replace(request_anchor, direct_fn + request_anchor, 1)
+
+    approve_old = '''            request(repo, overlay, "SOL_BUILD", a.next_task, prompt)
+'''
+    approve_new = '''            direct_sol_request(repo, overlay, "SOL_BUILD", a.next_task, prompt, q.canonical_sha(review))
+'''
+    if approve_old not in text:
+        raise RuntimeError("E106_RUNNER_SOL_BUILD_PATTERN_MISSING")
+    text = text.replace(approve_old, approve_new, 1)
+
+    revise_old = '''                request(repo, overlay, "SOL_PROPOSAL", a.next_task,
+'''
+    revise_new = '''                direct_sol_request(repo, overlay, "SOL_PROPOSAL", a.next_task,
+'''
+    if revise_old not in text:
+        raise RuntimeError("E106_RUNNER_SOL_REVISION_PATTERN_MISSING")
+    text = text.replace(revise_old, revise_new, 1)
+
+    revise_tail = '''                        "The revised proposal must return to Astra PREBUILD before any build.\n" + json.dumps({"task_id": a.next_task, "previous_proposal": gate.proposal(repo, overlay), "astra_review": review}, ensure_ascii=False))
+'''
+    revise_tail_new = '''                        "The revised proposal must return to Astra PREBUILD before any build.\n" + json.dumps({"task_id": a.next_task, "previous_proposal": gate.proposal(repo, overlay), "astra_review": review}, ensure_ascii=False),
+                        q.canonical_sha(review))
+'''
+    if revise_tail not in text:
+        raise RuntimeError("E106_RUNNER_SOL_REVISION_TAIL_MISSING")
+    text = text.replace(revise_tail, revise_tail_new, 1)
+
+    path.write_text(text, encoding="utf-8")
+
 def main() -> int:
     root = Path.cwd()
     hydrate(root)
     patch_gate(root)
-    print("DIRECT_SOL_E106_GATE_PATCHED")
+    patch_runner(root)
+    print("DIRECT_SOL_E106_GATE_AND_RUNNER_PATCHED")
     return 0
 
 
