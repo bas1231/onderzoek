@@ -57,3 +57,110 @@ def validate_request(request: dict[str, Any]) -> dict[str, Any]:
             raise DirectSolError("DIRECT_SOL_REQUEST_FIELD:" + key)
     require_safety_false(request)
     return request
+
+
+def build_request(
+    *,
+    task_id: str,
+    phase: str,
+    campaign_id: str,
+    candidate_id: str,
+    binding_sha256: str,
+    prompt: str,
+    delivery_route_task_id: str,
+    created_at_utc: str,
+) -> dict[str, Any]:
+    request = {
+        "schema": REQUEST_SCHEMA,
+        "task_id": task_id,
+        "phase": phase,
+        "campaign_id": campaign_id,
+        "candidate_id": candidate_id,
+        "binding_sha256": binding_sha256,
+        "prompt": prompt,
+        "input_sha256": sha256_text(prompt),
+        "target_model": TARGET_MODEL,
+        "target_model_display": TARGET_DISPLAY,
+        "target_experience": TARGET_EXPERIENCE,
+        "execution_layer": EXECUTION_LAYER,
+        "delivery_route_task_id": delivery_route_task_id,
+        "created_at_utc": created_at_utc,
+        "live_trading": False,
+        "paid_actions": False,
+        "wallet_actions": False,
+    }
+    return validate_request(request)
+
+
+def validate_result(request: dict[str, Any], result: dict[str, Any]) -> dict[str, Any]:
+    validate_request(request)
+    if not isinstance(result, dict) or result.get("schema") != RESULT_SCHEMA:
+        raise DirectSolError("DIRECT_SOL_RESULT_SCHEMA")
+    require_safety_false(result)
+    exact = {
+        "task_id": request["task_id"],
+        "phase": request["phase"],
+        "campaign_id": request["campaign_id"],
+        "candidate_id": request["candidate_id"],
+        "binding_sha256": request["binding_sha256"],
+        "input_sha256": request["input_sha256"],
+        "model": TARGET_MODEL,
+        "model_display": TARGET_DISPLAY,
+        "experience": TARGET_EXPERIENCE,
+        "execution_layer": EXECUTION_LAYER,
+        "provenance_kind": PROVENANCE_KIND,
+    }
+    for key, expected in exact.items():
+        if result.get(key) != expected:
+            raise DirectSolError("DIRECT_SOL_RESULT_MISMATCH:" + key)
+    require_route(result.get("worker_route_task_id"), "DIRECT_SOL_WORKER_ROUTE")
+    if result.get("work_mode") is not False or result.get("codex") is not False:
+        raise DirectSolError("DIRECT_SOL_NOT_REGULAR_CHAT")
+    if result.get("tools_used") not in ([], None):
+        raise DirectSolError("DIRECT_SOL_MODEL_TOOLS_FORBIDDEN")
+    final = result.get("final")
+    if not isinstance(final, str) or not final.strip():
+        raise DirectSolError("DIRECT_SOL_FINAL_REQUIRED")
+    if result.get("completion_sha256") != sha256_text(final):
+        raise DirectSolError("DIRECT_SOL_COMPLETION_HASH")
+    for key in ("started_at_utc", "finished_at_utc"):
+        if not isinstance(result.get(key), str) or not result[key]:
+            raise DirectSolError("DIRECT_SOL_RESULT_FIELD:" + key)
+    return result
+
+
+def build_result(
+    request: dict[str, Any],
+    *,
+    worker_route_task_id: str,
+    final: str,
+    started_at_utc: str,
+    finished_at_utc: str,
+) -> dict[str, Any]:
+    validate_request(request)
+    result = {
+        "schema": RESULT_SCHEMA,
+        "task_id": request["task_id"],
+        "phase": request["phase"],
+        "campaign_id": request["campaign_id"],
+        "candidate_id": request["candidate_id"],
+        "binding_sha256": request["binding_sha256"],
+        "input_sha256": request["input_sha256"],
+        "model": TARGET_MODEL,
+        "model_display": TARGET_DISPLAY,
+        "experience": TARGET_EXPERIENCE,
+        "execution_layer": EXECUTION_LAYER,
+        "provenance_kind": PROVENANCE_KIND,
+        "worker_route_task_id": worker_route_task_id,
+        "work_mode": False,
+        "codex": False,
+        "tools_used": [],
+        "final": final,
+        "completion_sha256": sha256_text(final),
+        "started_at_utc": started_at_utc,
+        "finished_at_utc": finished_at_utc,
+        "live_trading": False,
+        "paid_actions": False,
+        "wallet_actions": False,
+    }
+    return validate_result(request, result)
