@@ -1,0 +1,41 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-A2Z-DIRECT-SOL-TRACEBACKS-20261007-N1E32",
+  "source_commit": "eb5e7cedbdc1461f9d476eb95e2df34cdd5ebd87",
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "High"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "run_tests"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 150,
+  "notes": "Surface compact traceback for existing DIRECT_SOL routing unit errors only.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/direct_sol_tracebacks_n1e32.py",
+      "content": "from __future__ import annotations\nimport io, unittest\nfrom pathlib import Path\nsuite=unittest.TestLoader().discover(str(Path(\"tests/model_execution\")),pattern=\"test_direct_sol_chat.py\")\nres=unittest.TextTestRunner(stream=io.StringIO(),verbosity=2).run(suite)\nprint(\"TESTS=\"+str(res.testsRun)+\" ERRORS=\"+str(len(res.errors))+\" FAILS=\"+str(len(res.failures)))\nfor i,(test,tb) in enumerate(res.errors,1):\n    lines=[x.strip() for x in tb.splitlines() if x.strip()]\n    print(\"ERR\"+str(i)+\"=\"+str(test)+\" :: \"+\" | \".join(lines[-14:]))\nfor i,(test,tb) in enumerate(res.failures,1):\n    lines=[x.strip() for x in tb.splitlines() if x.strip()]\n    print(\"FAIL\"+str(i)+\"=\"+str(test)+\" :: \"+\" | \".join(lines[-14:]))\nraise SystemExit(17)\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/direct_sol_tracebacks_n1e32.py"
+      ],
+      "timeout_seconds": 90
+    }
+  ]
+}
