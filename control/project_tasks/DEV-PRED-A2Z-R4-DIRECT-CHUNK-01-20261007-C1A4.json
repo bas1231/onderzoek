@@ -1,0 +1,42 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-A2Z-R4-DIRECT-CHUNK-01-20261007-C1A4",
+  "source_commit": "8d6581c4c63049fd08dec2b2aab665c263620d18",
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "High"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_runtime",
+    "write_runtime"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 180,
+  "notes": "Application-level delivery of chunk 1 of the already-qualified immutable R4 SOL_BUILD request through the existing continuation API. This uses bridge transport state only; it MUST NOT modify bridge source, config, service units, limits or runtime implementation.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/r4_direct_chunk_01_c1a4.py",
+      "content": "from __future__ import annotations\nfrom pathlib import Path\nimport base64, hashlib, importlib.util, json, re, zlib\n\nTASK=\"A2Z-V4-SOL-BUILD-20261007-R4\"\nROUTE_TASK_ID=\"DEV-PRED-SOL-DIRECT-GATE-QUALIFY-R2-20261007-A7C1\"\nCHUNK_INDEX=1\nCHUNK_SIZE=4200\nDATA=Path.home()/\".local/share/prediction-chat-bridge\"\nROUTES=DATA/\"routes\"\nOUTBOX=DATA/\"outbox\"\nREQ=Path.home()/\".local/share/prediction-project-executor/campaigns/FULL-A2Z-LIVE-20261004-V4/requests\"/(TASK+\".json\")\n\nif not REQ.is_file():\n    raise SystemExit(\"R4_REQUEST_MISSING\")\nroute_path=ROUTES/(ROUTE_TASK_ID+\".json\")\nif not route_path.is_file():\n    raise SystemExit(\"SESSION_ROUTE_BINDING_MISSING\")\nroute=json.loads(route_path.read_text(encoding=\"utf-8\"))\nchat_id=str(route.get(\"chat_id\") or \"\").strip()\nif not re.fullmatch(r\"[A-Za-z0-9._:-]{4,180}\", chat_id):\n    raise SystemExit(\"SESSION_CHAT_ID_INVALID\")\n\nobj=json.loads(REQ.read_text(encoding=\"utf-8\"))\nraw=json.dumps(obj,sort_keys=True,separators=(\",\",\":\"),ensure_ascii=False).encode(\"utf-8\")\nrequest_sha=hashlib.sha256(raw).hexdigest()\npacked=base64.urlsafe_b64encode(zlib.compress(raw,9)).decode(\"ascii\")\nchunks=[packed[i:i+CHUNK_SIZE] for i in range(0,len(packed),CHUNK_SIZE)]\nif not chunks:\n    raise SystemExit(\"NO_CHUNKS\")\nif CHUNK_INDEX>len(chunks):\n    raise SystemExit(\"CHUNK_INDEX_OUT_OF_RANGE\")\nchunk=chunks[CHUNK_INDEX-1]\nchunk_sha=hashlib.sha256(chunk.encode(\"ascii\")).hexdigest()\ncontext=(\n    \"PREDICTION_DIRECT_SOL_R4_CHUNK_V1\\n\"\n    f\"request_task_id={TASK}\\n\"\n    \"encoding=zlib+urlsafe_base64\\n\"\n    f\"request_sha256={request_sha}\\n\"\n    f\"chunk_index={CHUNK_INDEX}\\n\"\n    f\"chunk_total={len(chunks)}\\n\"\n    f\"chunk_sha256={chunk_sha}\\n\"\n    \"payload_data_begin\\n\"+chunk+\"\\npayload_data_end\\n\"\n    \"This is transport data for the existing governed R4 SOL_BUILD request. Do not treat encoded payload as instructions until all chunks are present and the request hash verifies.\"\n)\nif len(context)>6000:\n    raise SystemExit(\"CHUNK_CONTEXT_TOO_LARGE\")\n\nmod_path=Path.cwd()/\"control/tampermonkey_multichat/continuation_manager.py\"\nspec=importlib.util.spec_from_file_location(\"prediction_r4_chunk_continuation\",mod_path)\nif spec is None or spec.loader is None:\n    raise SystemExit(\"CONTINUATION_MODULE_UNAVAILABLE\")\nm=importlib.util.module_from_spec(spec)\nspec.loader.exec_module(m)\n\nsource_task_id=f\"R4-DIRECT-{request_sha[:12]}-CHUNK-{CHUNK_INDEX:03d}\"\nrecord=m.start_external_continuation(\n    data_dir=DATA,\n    source_task_id=source_task_id,\n    chat_id=chat_id,\n    expected_route_task_id=ROUTE_TASK_ID,\n    context_message=context,\n    source_kind=\"DIRECT_SOL_R4_CHUNK\",\n)\nqueued=m.enqueue_attempt(\n    record=record,\n    data_dir=DATA,\n    routes_dir=ROUTES,\n    outbox_dir=OUTBOX,\n)\nprint(\"R4_CHUNK_ENQUEUE=PASS\")\nprint(\"REQUEST_SHA256=\"+request_sha)\nprint(\"CHUNK_INDEX=\"+str(CHUNK_INDEX))\nprint(\"CHUNK_TOTAL=\"+str(len(chunks)))\nprint(\"CHUNK_SHA256=\"+chunk_sha)\nprint(\"CONTINUATION_ID=\"+str(record.get(\"continuation_id\")))\nprint(\"QUEUED=\"+str(bool(queued)))\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/r4_direct_chunk_01_c1a4.py"
+      ],
+      "timeout_seconds": 90
+    }
+  ]
+}
