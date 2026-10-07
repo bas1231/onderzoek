@@ -1,0 +1,61 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-A2Z-DIRECT-SOL-LEGACY-GUARD-20261007-N1E16",
+  "source_commit": "8464398bda1ff58ec88390327bbec2dd2437c992",
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "High"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 180,
+  "notes": "Fail-closed routing guard test: legacy request() must reject SOL_* and direct_sol_request() must emit exact DIRECT_SOL schema. No model invocation, runtime mutation, bridge mutation, experiment tests or measurement.",
+  "operations": [
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/model_execution/patch_e106_gate.py"
+      ],
+      "timeout_seconds": 60
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "-m",
+        "compileall",
+        "-q",
+        "control/model_execution",
+        "control/codex_supervisor/experiment_gate.py",
+        "control/jobs/full_a2z_governed_v4.py"
+      ],
+      "timeout_seconds": 60
+    },
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/test_direct_sol_legacy_guard_n1e16.py",
+      "content": "from __future__ import annotations\nimport importlib.util\nimport json\nimport shutil\nimport sys\nfrom pathlib import Path\n\nROOT=Path(__file__).resolve().parents[2]\nif str(ROOT) not in sys.path:\n    sys.path.insert(0,str(ROOT))\nfrom control.model_execution.direct_sol_chat import validate_request\n\nrp=ROOT/\"control/jobs/full_a2z_governed_v4.py\"\nspec=importlib.util.spec_from_file_location(\"a2z_runner_guard\",rp)\nmod=importlib.util.module_from_spec(spec)\nspec.loader.exec_module(mod)\n\nbundle=ROOT/\"control/dev_checks/direct_sol_guard_bundle\"\nif bundle.exists():\n    shutil.rmtree(bundle)\nbundle.mkdir(parents=True)\n\ntry:\n    mod.request(bundle, {}, \"SOL_BUILD\", \"SHOULD-NOT-RUN\", \"legacy\")\nexcept ValueError as exc:\n    assert str(exc)==\"DIRECT_SOL_REQUIRED\"\nelse:\n    raise AssertionError(\"LEGACY_SOL_REQUEST_NOT_BLOCKED\")\n\nmod.direct_sol_request(\n    bundle, {}, \"SOL_BUILD\", \"DIRECT-SOL-PREFLIGHT\", \"safe prompt\", \"b\"*64\n)\nobj=json.loads((bundle/\"direct_requests/DIRECT-SOL-PREFLIGHT.json\").read_text())\nvalidate_request(obj)\nassert obj[\"target_model\"]==\"gpt-5.6-sol\"\nassert obj[\"execution_layer\"]==\"DIRECT_SOL_CHAT\"\nassert obj[\"target_experience\"]==\"CHAT\"\nprint(\"LEGACY_SOL_BLOCK=PASS\")\nprint(\"DIRECT_SOL_REQUEST=PASS\")\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/test_direct_sol_legacy_guard_n1e16.py"
+      ],
+      "timeout_seconds": 60
+    }
+  ]
+}
