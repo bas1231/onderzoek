@@ -1,0 +1,34 @@
+{
+  "schema": "PREDICTION_BUILD_LOG_EVENT_V1",
+  "event_id": "20261007T173000Z-A2Z-N1E36-PROOF-PREBUILD-BINDING",
+  "work_item_id": "A2Z-SOL-DIRECT-EXECUTION-20261007",
+  "created_at_utc": "2026-10-07T17:30:00Z",
+  "event_type": "ATTEMPT",
+  "work_item_status": "IN_PROGRESS",
+  "outcome": "STARTED",
+  "title": "Prove N1E36 and inspect PREBUILD binding",
+  "objective": "Fail-closed proof that existing N1E36 passed the exact Direct Sol unittest, followed by read-only inspection of R4P2 Astra PREBUILD request/queue/run binding before any service resume.",
+  "summary": "N1E37 returned PASS for the read-only state reader. This bounded follow-up converts persisted state into assertions and then inspects only existing PREBUILD runtime metadata. PREBUILD remains disabled and no model invocation occurs.",
+  "why": "A compact wake PASS for N1E37 is not enough to infer the nested N1E36 test outcome or safe Astra binding.",
+  "next_action": "If N1E36 and PREBUILD binding assertions pass, record Direct Sol regressions green and resume only the existing bound Astra PREBUILD task. Otherwise repair only the first proven routing/binding defect.",
+  "session_route_task_id": "SESSION-ROUTE-246799adf99f0bf8336c27a0",
+  "task_ids": [
+    "DEV-PRED-A2Z-N1E36-PROOF-PREBUILD-BINDING-20261007-N1E38"
+  ],
+  "commits": [
+    "b0fc664ec065c03125c54c6dae2c71126beebe67"
+  ],
+  "evidence_refs": [
+    "local:prediction-project-executor/N1E36",
+    "local:campaigns/FULL-A2Z-LIVE-20261004-V4/requests/A2Z-V4-ASTRA-PREBUILD-DIRECT-20261007-R4P2.json",
+    "local:campaigns/FULL-A2Z-LIVE-20261004-V4/models"
+  ],
+  "tags": [
+    "A2Z",
+    "DIRECT_SOL",
+    "ASTRA_PREBUILD",
+    "BINDING",
+    "READ_ONLY"
+  ],
+  "first_incomplete_step": "Prove nested N1E36 PASS, then prove exact R4P2 PREBUILD binding without starting any model."
+}
