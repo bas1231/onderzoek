@@ -1,0 +1,41 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-A2Z-R4-QUOTA-FILE-STATE-20261007-E126",
+  "source_commit": "134ff3e971a0f5cfd0dbdc4acd483cde3782d23e",
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "High"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_runtime"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 180,
+  "notes": "Read-only file/SQLite state of immutable R4 model task. No systemctl/service mutation.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/a2z_e126_r4_quota_file_state.py",
+      "content": "from pathlib import Path\nimport json,sqlite3,time,sys\n\nroot=Path.home()/\".local/share/prediction-project-executor/campaigns/FULL-A2Z-LIVE-20261004-V4\"\nmodels=root/\"models\"\ndbp=models/\"runtime.sqlite\"\nresult=root/\"model_results\"/\"A2Z-V4-SOL-BUILD-20261007-R4.json\"\nrequest=root/\"requests\"/\"A2Z-V4-SOL-BUILD-20261007-R4.json\"\n\nout={\"request_exists\":request.exists(),\"result_exists\":result.exists()}\nif dbp.exists():\n    db=sqlite3.connect(\"file:\"+str(dbp)+\"?mode=ro\",uri=True)\n    try:\n        row=db.execute(\"select status,attempt,run,thread from tasks where id=?\",( \"A2Z-V4-SOL-BUILD-20261007-R4\", )).fetchone()\n        trs=db.execute(\"select state,reason,attempt,checkpoint,next_action,stamp,retry from transitions where task=? order by seq desc limit 5\",( \"A2Z-V4-SOL-BUILD-20261007-R4\", )).fetchall()\n    finally:\n        db.close()\n    out[\"task_row\"]=row\n    out[\"transitions\"]=trs\n    if row and row[2]:\n        cp=models/row[2]\n        out[\"run_dir\"]=str(cp)\n        out[\"run_exists\"]=cp.exists()\n        if cp.exists():\n            for n in (\"TASK.json\",\"WORKER.json\",\"COMPLETE.json\",\"events.jsonl\",\"stderr.log\",\"worker_error.json\"):\n                p=cp/n\n                out[n]=p.exists()\n            ep=cp/\"events.jsonl\"\n            if ep.exists():\n                lines=[x for x in ep.read_text(errors=\"replace\").splitlines() if x.strip()]\n                out[\"event_count\"]=len(lines)\n                out[\"last_event\"]=lines[-1][:1200] if lines else \"\"\n            wp=cp/\"WORKER.json\"\n            if wp.exists():\n                try:\n                    w=json.loads(wp.read_text())\n                    out[\"worker_model\"]=w.get(\"model\")\n                    out[\"worker_started_at\"]=w.get(\"started_at\")\n                except Exception as e:\n                    out[\"worker_json_error\"]=type(e).__name__+\":\"+str(e)\n            ce=cp/\"COMPLETE.json\"\n            if ce.exists():\n                try:\n                    c=json.loads(ce.read_text())\n                    out[\"complete_task_id\"]=c.get(\"task_id\")\n                    out[\"complete_attempt\"]=c.get(\"attempt\")\n                    out[\"complete_has_final\"]=bool(c.get(\"final\"))\n                except Exception as e:\n                    out[\"complete_json_error\"]=type(e).__name__+\":\"+str(e)\nprint(\"E126_STATE \"+json.dumps(out,separators=(\",\",\":\"),default=str),flush=True)\n\nif out.get(\"result_exists\"):\n    print(\"E126=R4_RESULT_EXISTS\",flush=True); raise SystemExit(0)\nrow=out.get(\"task_row\")\nif not row:\n    print(\"E126=TASK_ROW_MISSING\",flush=True); raise SystemExit(31)\nstatus=str(row[0])\nif status==\"PAUSED_USAGE_LIMIT\":\n    print(\"E126=PAUSED_USAGE_LIMIT\",flush=True); raise SystemExit(20)\nif status==\"RUNNING\":\n    print(\"E126=RUNNING\",flush=True); raise SystemExit(21)\nif status==\"COMPLETE\":\n    print(\"E126=COMPLETE_WITHOUT_RESULT\",flush=True); raise SystemExit(22)\nif status==\"WAITING_RETRY\":\n    print(\"E126=WAITING_RETRY\",flush=True); raise SystemExit(23)\nprint(\"E126=STATE_\"+status,flush=True); raise SystemExit(29)\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/a2z_e126_r4_quota_file_state.py"
+      ],
+      "timeout_seconds": 120
+    }
+  ]
+}
