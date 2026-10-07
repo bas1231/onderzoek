@@ -1,0 +1,36 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-A2Z-DIRECT-SOL-OVERLAY-ROUTE-REGRESSION-20261007-N1E19",
+  "source_commit": "b0dde836e8ba6e70b52e40a4a36edd5217ac0f8a",
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "High"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "run_tests"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 180,
+  "notes": "Run permanent model_execution regressions including governed overlay route binding for DIRECT_SOL. No model invocation, runtime mutation, experiment tests/measurement, bridge mutation, paid/live/wallet actions.",
+  "operations": [
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "-m",
+        "unittest",
+        "tests/model_execution/test_direct_sol_chat.py"
+      ],
+      "timeout_seconds": 120
+    }
+  ]
+}
