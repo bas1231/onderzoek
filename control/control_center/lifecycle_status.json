@@ -3,7 +3,7 @@
   "updated_at": "2026-10-07",
   "full_chain_status": "NOT_PROVEN",
   "full_chain_label": "Volledige A→Z-keten nog niet bewezen",
-  "next_required": "Huidige kandidaat AUTO-DISCOVERY-54d13314c7879b58e46d: de exacte GPT-6 Astra POST-BUILD-review R3-P2 is canoniek REVISE. Verwerk uitsluitend deze Astra-feedback in een nieuwe GPT-5.6 Sol buildversie met nieuwe hashes; laat die herziene build daarna opnieuw door GPT-6 Astra POST-BUILD beoordelen. Tests en meting blijven geblokkeerd totdat een exact gebonden POST-BUILD APPROVE voor de herziene build canoniek is toegepast.",
+  "next_required": "Huidige kandidaat AUTO-DISCOVERY-54d13314c7879b58e46d: GPT-5.6 Sol R4-buildrevision is gestart op exact de canonical Astra R3-P2 REVISE-feedback, maar de lokale Codex-uitvoerlaag is tijdelijk gepauzeerd door CODEX_USAGE_LIMIT. Hervat dezelfde immutable R4-modeltask zodra Codex weer uitvoercapaciteit heeft; daarna R4 provenance/materialisatie en opnieuw exact GPT-6 Astra POST-BUILD. Tests/meting blijven geblokkeerd tot canonical POST-BUILD APPROVE.",
   "invariant": "NO_TEST_OR_MEASUREMENT_BEFORE_ASTRA_POSTBUILD_APPROVAL",
   "evidence_refs": [
     "control/bridge_commands/CURRENT_STATE.md",
@@ -17,7 +17,8 @@
     "control/build_log/events/20261007T070000Z-A2Z-E106-DECISION-VERIFY-E108-RESULT.json",
     "control/build_log/events/20261007T070600Z-A2Z-E106-EVIDENCE-FORENSICS-E109-PASS.json",
     "control/build_log/events/20261007T071000Z-A2Z-E106-COMPACT-CLASSIFY-E110-PASS.json",
-    "control/build_log/events/20261007T080200Z-A2Z-POSTBUILD-DECISION-E115-REVISE.json"
+    "control/build_log/events/20261007T080200Z-A2Z-POSTBUILD-DECISION-E115-REVISE.json",
+    "control/build_log/events/20261007T082700Z-A2Z-SOL-R4-PROGRESS-E121-USAGE-LIMIT.json"
   ],
   "stages": [
     {
@@ -62,8 +63,8 @@
       "subtitle": "experiment bouwen",
       "state": "IMPLEMENTED_NOT_E2E",
       "detail": "De Sol-bouwstap is geïmplementeerd in de architectuur, maar moet nog als onderdeel van één volledige actuele A→Z-run worden bewezen.",
-      "current_candidate_state": "REVISION_REQUIRED",
-      "current_candidate_detail": "De oorspronkelijke R3-build is door Astra POST-BUILD beoordeeld als REVISE. De R3-opzet blijft het goedgekeurde ontwerp; GPT-5.6 Sol moet de build aanpassen op basis van de exacte Astra-feedback en nieuwe artifacthashes produceren."
+      "current_candidate_state": "PAUSED_CODEX_USAGE_LIMIT",
+      "current_candidate_detail": "GPT-5.6 Sol R4-buildtask A2Z-V4-SOL-BUILD-20261007-R4 is gestart en exact gebonden aan de Astra R3-P2 REVISE-feedback. De modelinhoud is niet afgekeurd; de lokale Codex-uitvoerlaag stopte op turn.failed wegens usage limit. Dezelfde immutable R4-task moet worden hervat zodra Codex weer beschikbaar is."
     },
     {
       "id": "astra_postbuild",
@@ -71,8 +72,8 @@
       "subtitle": "gebouwde code beoordelen",
       "state": "TARGETED_TESTED",
       "detail": "De verplichte post-build gate en de blokkade vóór tests/meting zijn gericht getest en canoniek vastgelegd. De volledige A→Z-run blijft nog te bewijzen.",
-      "current_candidate_state": "NEEDS_REVISION",
-      "current_candidate_detail": "De exacte canonical review A2Z-V4-ASTRA-POSTBUILD-20261006-R3-P2 is REVISE. De eerdere raw/direct APPROVE-records gelden niet voor deze gate. Astra-feedback moet nu terug naar GPT-5.6 Sol; na de herziene build volgt opnieuw een exact gebonden Astra POST-BUILD-review."
+      "current_candidate_state": "WAITING_FOR_SOL_R4",
+      "current_candidate_detail": "Wacht op complete, provenance-gebonden GPT-5.6 Sol R4-build. Daarna volgt een nieuwe exact gebonden GPT-6 Astra POST-BUILD-review. De eerdere R3-P2 beslissing blijft REVISE."
     },
     {
       "id": "measurement",
@@ -81,7 +82,7 @@
       "state": "PENDING_E2E",
       "detail": "De volgorde is vastgelegd: inhoudelijke tests, backtests, shadow-runs en metingen mogen pas na Astra-goedkeuring van de exacte gebouwde versie. Een volledige actuele A→Z-doorgang moet nog worden bewezen.",
       "current_candidate_state": "WAITING",
-      "current_candidate_detail": "Geblokkeerd. Tests/backtests/shadowmetingen mogen pas starten na een nieuwe, exact gebonden en canoniek toegepaste Astra POST-BUILD APPROVE op de herziene Sol-build."
+      "current_candidate_detail": "Geblokkeerd door NO_TEST_OR_MEASUREMENT_BEFORE_ASTRA_POSTBUILD_APPROVAL. Geen tests/backtests/shadowmetingen voordat de herziene R4-build een canonical GPT-6 Astra POST-BUILD APPROVE heeft."
     },
     {
       "id": "supervisor",
@@ -110,9 +111,9 @@
     "postbuild_task_id": "DEV-PRED-A2Z-POSTBUILD-RETRY-20261006-E106",
     "pause_task_id": "DEV-PRED-A2Z-PAUSE-20261006-E107",
     "current_stage": "astra_postbuild",
-    "state": "POSTBUILD_REVISE_RETURN_TO_SOL",
-    "label": "Astra POST-BUILD — R3-P2 = REVISE; terug naar Sol-build",
-    "detail": "De exacte canonical GPT-6 Astra POST-BUILD-review met task-ID A2Z-V4-ASTRA-POSTBUILD-20261006-R3-P2 is REVISE. De eerdere raw/direct APPROVE-signalen waren niet de geldige beslissing voor deze build. De keten gaat daarom terug naar GPT-5.6 Sol voor een herziene build op basis van Astra-feedback. Daarna is een nieuwe Astra POST-BUILD-review verplicht voordat tests/meting mogen starten.",
+    "state": "SOL_R4_PAUSED_CODEX_USAGE_LIMIT",
+    "label": "Sol R4-build — tijdelijk gepauzeerd door Codex usage limit",
+    "detail": "De herziene GPT-5.6 Sol R4-build is inhoudelijk gestart op de exacte Astra R3-P2 REVISE-feedback. De lokale Codex-uitvoerlaag raakte zijn usage limit; dit is geen Sol-afkeur. Dezelfde immutable R4-task blijft leidend. Na hervatting volgt provenance/materialisatie en een nieuwe GPT-6 Astra POST-BUILD-review. Tests en meting blijven dicht.",
     "scientific_status": "NO_PROVEN_EDGE",
     "evidence_refs": [
       "control/project_tasks/DEV-PRED-A2Z-POSTBUILD-RETRY-20261006-E106.json",
@@ -123,7 +124,8 @@
       "control/build_log/events/20261007T070000Z-A2Z-E106-DECISION-VERIFY-E108-RESULT.json",
       "control/build_log/events/20261007T070600Z-A2Z-E106-EVIDENCE-FORENSICS-E109-PASS.json",
       "control/build_log/events/20261007T071000Z-A2Z-E106-COMPACT-CLASSIFY-E110-PASS.json",
-      "control/build_log/events/20261007T080200Z-A2Z-POSTBUILD-DECISION-E115-REVISE.json"
+      "control/build_log/events/20261007T080200Z-A2Z-POSTBUILD-DECISION-E115-REVISE.json",
+      "control/build_log/events/20261007T082700Z-A2Z-SOL-R4-PROGRESS-E121-USAGE-LIMIT.json"
     ]
   }
 }
