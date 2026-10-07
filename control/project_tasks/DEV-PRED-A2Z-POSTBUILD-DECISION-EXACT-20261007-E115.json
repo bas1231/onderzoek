@@ -1,0 +1,54 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-A2Z-POSTBUILD-DECISION-EXACT-20261007-E115",
+  "source_commit": "e4751a1f2888c8647e6a52bda580787e262bb6e5",
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "High"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_runtime"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 240,
+  "notes": "Exact decision classifier for the canonical R3-P2 Astra POSTBUILD model result. Reuses existing model output only. No model invocation, build, tests or measurement.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/a2z_e115_hydrate.py",
+      "content": "from pathlib import Path\nimport json\nroot=Path.cwd()\nspec=json.loads((root/\"control/project_tasks/DEV-PRED-A2Z-POSTBUILD-RETRY-20261006-E106.json\").read_text())\nneed={\n \"control/jobs/full_a2z_governed_v4.py\",\n \"control/codex_supervisor/experiment_gate.py\",\n \"control/codex_supervisor/model_quality_gate.py\",\n}\nfound={}\nfor op in spec[\"operations\"]:\n    if op.get(\"type\")==\"write_text\" and op.get(\"path\") in need:\n        found[op[\"path\"]]=op[\"content\"]\nmissing=need-set(found)\nif missing:\n    raise SystemExit(\"MISSING_E106_SOURCES:\"+\",\".join(sorted(missing)))\nfor rel,content in found.items():\n    p=root/rel\n    p.parent.mkdir(parents=True,exist_ok=True)\n    p.write_text(content,encoding=\"utf-8\")\nprint(\"E115_HYDRATED=1\")\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/a2z_e115_hydrate.py"
+      ],
+      "timeout_seconds": 60
+    },
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/a2z_e115_exact_decision.py",
+      "content": "from pathlib import Path\nimport json,shutil,sys\nroot=Path.cwd()\nsys.path.insert(0,str(root/\"control/codex_supervisor\"))\nsys.path.insert(0,str(root/\"control/jobs\"))\nimport full_a2z_governed_v4 as a2z\nimport model_quality_gate as q\n\nmodel_task=\"A2Z-V4-ASTRA-POSTBUILD-20261006-R3-P2\"\nsrc=Path.home()/\".local/share/prediction-project-executor/worktrees/DEV-PRED-A2Z-POSTBUILD-RETRY-20261006-E106/knowledge/evidence/qualification/FULL-A2Z-LIVE-20261004-V4-GOVERNED\"\ndst=root/\"knowledge/evidence/qualification/FULL-A2Z-LIVE-20261004-V4-GOVERNED\"\nif not src.exists():\n    print(\"E115=SOURCE_BUNDLE_MISSING\",flush=True); raise SystemExit(38)\nif dst.exists(): shutil.rmtree(dst)\nshutil.copytree(src,dst)\noverlay=json.loads((dst/\"overlay.json\").read_text())\n\nreview=a2z.import_review(dst,overlay,\"POSTBUILD\",model_task)\ndecision=str(review.get(\"decision\",\"\")).upper()\nexpected=q.expected_review_ref(overlay,\"POSTBUILD\")\npath=dst/expected\nprint(\"E115_IMPORT decision=\"+decision+\" source=\"+str(review.get(\"source_task_id\"))+\" ref_exists=\"+str(path.exists()),flush=True)\nif review.get(\"source_task_id\")!=model_task:\n    print(\"E115=SOURCE_TASK_MISMATCH\",flush=True); raise SystemExit(41)\nif decision==\"APPROVE\":\n    loaded,ref=q.load_review(dst,overlay,\"POSTBUILD\")\n    if loaded is None:\n        print(\"E115=APPROVE_BUT_EXPECTED_REF_MISSING\",flush=True); raise SystemExit(31)\n    if ref!=expected:\n        print(\"E115=APPROVE_REF_MISMATCH\",flush=True); raise SystemExit(33)\n    print(\"E115=EXACT_R3P2_APPROVE\",flush=True); raise SystemExit(0)\nif decision==\"REVISE\":\n    print(\"E115=EXACT_R3P2_REVISE\",flush=True); raise SystemExit(20)\nif decision==\"REJECT\":\n    print(\"E115=EXACT_R3P2_REJECT\",flush=True); raise SystemExit(21)\nprint(\"E115=UNEXPECTED_DECISION_\"+decision,flush=True); raise SystemExit(22)\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/a2z_e115_exact_decision.py"
+      ],
+      "timeout_seconds": 120
+    }
+  ]
+}
