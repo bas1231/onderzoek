@@ -1,0 +1,14 @@
+{
+  "schema": "PREDICTION_RESULT_RECEIPT_V1",
+  "receipt_id": "RESULT-RECEIPT-1791362151-3ff4c2f0ac22",
+  "event_id": "1791362151-3ff4c2f0ac22",
+  "source_task_id": "DEV-PRED-A2Z-R4-RETRY-SCHEDULER-INVENTORY-20261007-E130",
+  "created_at_utc": "2026-10-07T09:18:00Z",
+  "live_trading": false,
+  "paid_actions": false,
+  "wallet_actions": false,
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "High"
+  }
+}
