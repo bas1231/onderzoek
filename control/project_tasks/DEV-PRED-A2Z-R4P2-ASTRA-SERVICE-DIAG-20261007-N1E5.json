@@ -1,0 +1,53 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-A2Z-R4P2-ASTRA-SERVICE-DIAG-20261007-N1E5",
+  "source_commit": "6457b7a5aec0649fc5e58b4f45b67ff1cff734dd",
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "High"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_runtime",
+    "user_service_manage",
+    "read_logs"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 180,
+  "notes": "Read-only diagnose missing Astra PREBUILD model_result for R4P2. Inspect request/result/run presence, service status and recent journal only. No service restart, runtime write, bridge mutation, model invocation, tests or measurement.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/r4p2_astra_service_diag_n1e5.py",
+      "content": "from __future__ import annotations\nfrom pathlib import Path\nimport json\n\nROOT=Path.home()/\".local/share/prediction-project-executor/campaigns/FULL-A2Z-LIVE-20261004-V4\"\nTASK=\"A2Z-V4-ASTRA-PREBUILD-DIRECT-20261007-R4P2\"\nreq=ROOT/\"requests\"/(TASK+\".json\")\nres=ROOT/\"model_results\"/(TASK+\".json\")\nruns=ROOT/\"models/runs\"\n\npayload={\n \"request_exists\": req.is_file(),\n \"result_exists\": res.is_file(),\n \"run_dirs\": sorted([p.name for p in runs.glob(TASK+\"*\") if p.is_dir()])[-5:],\n}\nif req.is_file():\n    try:\n        obj=json.loads(req.read_text(encoding=\"utf-8\"))\n        payload[\"request_phase\"]=obj.get(\"phase\")\n        payload[\"request_route\"]=obj.get(\"route_task_id\")\n    except Exception as exc:\n        payload[\"request_error\"]=type(exc).__name__+\":\"+str(exc)[:120]\nprint(\"ERROR_CLASS=R4P2_ASTRA_SERVICE_DIAG\")\nprint(\"ERROR=\"+json.dumps(payload,separators=(\",\",\":\"),sort_keys=True))\nraise SystemExit(1)\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/r4p2_astra_service_diag_n1e5.py"
+      ],
+      "timeout_seconds": 60
+    },
+    {
+      "type": "service",
+      "verb": "status",
+      "unit": "prediction-a2z-v4-model@A2Z-V4-ASTRA-PREBUILD-DIRECT-20261007-R4P2.service"
+    },
+    {
+      "type": "journal",
+      "unit": "prediction-a2z-v4-model@A2Z-V4-ASTRA-PREBUILD-DIRECT-20261007-R4P2.service",
+      "lines": 80
+    }
+  ]
+}
