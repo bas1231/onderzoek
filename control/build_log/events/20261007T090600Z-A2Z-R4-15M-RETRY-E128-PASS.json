@@ -1,0 +1,34 @@
+{
+  "schema": "PREDICTION_BUILD_LOG_EVENT_V1",
+  "event_id": "20261007T090600Z-A2Z-R4-15M-RETRY-E128-PASS",
+  "work_item_id": "A2Z-SYSTEMTEST-20261005",
+  "created_at_utc": "2026-10-07T09:06:00Z",
+  "event_type": "RESULT",
+  "work_item_status": "IN_PROGRESS",
+  "outcome": "PASS",
+  "title": "Codex 15-minuten retry voor R4 live bewezen",
+  "objective": "Bevestig dat dezelfde immutable R4-task na Codex usage limit exact iedere 900 seconden opnieuw eligible wordt.",
+  "summary": "E128 returned PASS exit=0 rcs=1:0. De live runtime behoudt exact de gewenste 15-minuten retrycadans.",
+  "why": "De provider-reset-aware E127-patch is niet nodig en mag niet worden geïnstalleerd.",
+  "first_incomplete_step": "Vaststellen of R4 attempt 2 inmiddels loopt of een modelresultaat heeft geschreven.",
+  "next_action": "Read-only status van dezelfde R4-task; result -> provenance/materialisatie, running -> ongemoeid laten, nieuwe usage pause -> 15m retry behouden.",
+  "session_route_task_id": "SESSION-ROUTE-5388245c5e308fbc9dcf92ab",
+  "task_ids": [
+    "DEV-PRED-A2Z-R4-15M-RETRY-VERIFY-20261007-E128",
+    "A2Z-V4-SOL-BUILD-20261007-R4"
+  ],
+  "commits": [
+    "f34656bb44629328b7d0233fe1aee6ef5f93117d"
+  ],
+  "evidence_refs": [
+    "result:DEV-PRED-A2Z-R4-15M-RETRY-VERIFY-20261007-E128 status=PASS exit=0 event=1791361990-441393b5f166"
+  ],
+  "tags": [
+    "a2z",
+    "codex",
+    "r4",
+    "usage-limit",
+    "15m",
+    "pass"
+  ]
+}
