@@ -1,0 +1,68 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-A2Z-POSTBUILD-IMPORT-20261007-E112",
+  "source_commit": "3140f28b9377238e266d78b73034b7e4c9473350",
+  "build_id": "BUILD-PRED-A2Z-POSTBUILD-IMPORT-20261007",
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "High"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_runtime"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 300,
+  "notes": "Continue only the first incomplete governed A2Z step. Reuse immutable E106 source and existing Astra R3-P2 result. No new model run, build, experiment test, backtest, shadow run or measurement.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/a2z_e112_hydrate_from_e106.py",
+      "content": "from pathlib import Path\nimport json\nroot=Path.cwd()\nspec=json.loads((root/\"control/project_tasks/DEV-PRED-A2Z-POSTBUILD-RETRY-20261006-E106.json\").read_text())\nneed={\n \"control/jobs/full_a2z_governed_v4.py\",\n \"control/codex_supervisor/experiment_gate.py\",\n \"control/codex_supervisor/model_quality_gate.py\",\n}\nfound={}\nfor op in spec[\"operations\"]:\n    if op.get(\"type\")==\"write_text\" and op.get(\"path\") in need:\n        found[op[\"path\"]]=op[\"content\"]\nmissing=need-set(found)\nif missing:\n    raise SystemExit(\"MISSING_E106_SOURCES:\"+\",\".join(sorted(missing)))\nfor rel,content in found.items():\n    p=root/rel\n    p.parent.mkdir(parents=True,exist_ok=True)\n    p.write_text(content,encoding=\"utf-8\")\nprint(\"E112_HYDRATED=1\")\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/a2z_e112_hydrate_from_e106.py"
+      ],
+      "timeout_seconds": 60
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/jobs/full_a2z_governed_v4.py",
+        "postbuild",
+        "--model-task",
+        "A2Z-V4-ASTRA-POSTBUILD-20261006-R3-P2",
+        "--previous",
+        "/home/leonh/.local/share/prediction-project-executor/worktrees/DEV-PRED-A2Z-POSTBUILD-RETRY-20261006-E106/knowledge/evidence/qualification/FULL-A2Z-LIVE-20261004-V4-GOVERNED"
+      ],
+      "timeout_seconds": 120
+    },
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/a2z_e112_verify_postbuild.py",
+      "content": "from pathlib import Path\nimport json,sys\nroot=Path.cwd()\nbundle=root/\"knowledge/evidence/qualification/FULL-A2Z-LIVE-20261004-V4-GOVERNED\"\nsys.path.insert(0,str(root/\"control/codex_supervisor\"))\nimport experiment_gate as gate\nimport model_quality_gate as q\noverlay=json.loads((bundle/\"overlay.json\").read_text())\nreview,ref=gate.require_postbuild(bundle,overlay)\nassert overlay[\"astra_reviews\"][\"POSTBUILD\"][\"decision\"]==\"APPROVE\"\nassert review[\"decision\"]==\"APPROVE\"\nassert review[\"reviewer_model\"]==\"GPT-6 Astra\"\nassert review[\"reviewer_model_slug\"]==\"gpt-6-astra\"\nassert review[\"source_task_id\"]==\"A2Z-V4-ASTRA-POSTBUILD-20261006-R3-P2\"\nassert review[\"provenance_kind\"]==\"AUTONOMOUS_RUN\"\nassert isinstance(review[\"binding_sha256\"],str) and len(review[\"binding_sha256\"])==64\nassert isinstance(review[\"model_provenance_sha256\"],str) and len(review[\"model_provenance_sha256\"])==64\nassert review[\"live_trading\"] is False\nassert review[\"paid_actions\"] is False\nassert review[\"wallet_actions\"] is False\nprint(\"POSTBUILD_CANONICAL_APPROVE=1\")\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/a2z_e112_verify_postbuild.py"
+      ],
+      "timeout_seconds": 60
+    }
+  ]
+}
