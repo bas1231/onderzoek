@@ -1,0 +1,36 @@
+{
+  "schema": "PREDICTION_BUILD_LOG_EVENT_V1",
+  "event_id": "20261007T175000Z-A2Z-N1E36-DEV-RECEIPT-PREBUILD-BINDING",
+  "work_item_id": "A2Z-SOL-DIRECT-EXECUTION-20261007",
+  "created_at_utc": "2026-10-07T17:50:00Z",
+  "event_type": "ATTEMPT",
+  "work_item_status": "IN_PROGRESS",
+  "outcome": "STARTED",
+  "title": "Prove N1E36 from DEV receipt and PREBUILD binding",
+  "objective": "Read the durable N1E36 DEV receipt to prove the exact three-test Direct Sol regression outcome, then in the same read-only task verify the existing R4P2 Astra PREBUILD request, proposal binding, executable queue exclusivity, no old Sol resume target and disabled service/timer state.",
+  "summary": "Earlier state-only verifier tasks could not prove the unittest output because project-executor final state does not persist operation stdout/rc. This bounded verifier reads the already-existing DEV receipt and does not rerun tests.",
+  "why": "The user requires proof from actual local execution state and prohibits another N1E36 regression dispatch or blind PREBUILD restart.",
+  "next_action": "If receipt and binding both PASS, record Direct Sol regression green and resume only A2Z-V4-ASTRA-PREBUILD-DIRECT-20261007-R4P2. If either fails, stop on that first concrete local failure.",
+  "session_route_task_id": "SESSION-ROUTE-246799adf99f0bf8336c27a0",
+  "task_ids": [
+    "DEV-PRED-A2Z-N1E36-DEV-RECEIPT-PREBUILD-20261007-N1E43"
+  ],
+  "commits": [
+    "b0fc664ec065c03125c54c6dae2c71126beebe67"
+  ],
+  "evidence_refs": [
+    "local:~/.local/share/prediction-chat-bridge/dev-task-receipts/DEV-PRED-A2Z-DIRECT-SOL-REGRESSION-N1E36-20261007.log",
+    "local:~/.local/state/prediction-project-executor/DEV-PRED-A2Z-DIRECT-SOL-REGRESSION-N1E36-20261007.json",
+    "local:campaigns/FULL-A2Z-LIVE-20261004-V4/requests/A2Z-V4-ASTRA-PREBUILD-DIRECT-20261007-R4P2.json",
+    "local:campaigns/FULL-A2Z-LIVE-20261004-V4/models/TASK_QUEUE.jsonl"
+  ],
+  "tags": [
+    "A2Z",
+    "N1E36",
+    "DEV_RECEIPT",
+    "ASTRA_PREBUILD",
+    "READ_ONLY",
+    "NO_RERUN"
+  ],
+  "first_incomplete_step": "Prove N1E36 from the durable DEV receipt; only then evaluate current PREBUILD binding."
+}
