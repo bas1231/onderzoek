@@ -1,0 +1,34 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-A2Z-SOL-ROUTING-REPAIR-HANDOFF-20261007-A1",
+  "source_commit": "83e4a8befc809f81873c4b8c5fb224243f22fa0a",
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "Codex supervisor; exact runtime model slug unavailable",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "local_git"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 120,
+  "notes": "HANDOFF ONLY naar bestaande Sol-campagnesessie. Lees de gepinde, immutable minimale reparatieopdracht; geen softwarewijzigingen, tests, modelcalls, service/bridgewijzigingen of experimentuitvoering door deze transporttask. PASS bewijst uitsluitend read-only handoff-artefact.",
+  "operations": [
+    {
+      "type": "git",
+      "args": [
+        "show",
+        "HEAD:control/build_log/events/20261007T162900Z-N1E33-FIRST-CAUSE-SOL-HANDOFF.json"
+      ],
+      "timeout_seconds": 15
+    }
+  ]
+}
