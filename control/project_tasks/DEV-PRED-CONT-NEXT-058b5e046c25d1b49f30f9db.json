@@ -1,0 +1,41 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-CONT-NEXT-058b5e046c25d1b49f30f9db",
+  "source_commit": "e580b4538091ec5e4adc096d5229df729ca1cee4",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "High"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_runtime"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 60,
+  "notes": "Continuation NEXT from terminal N1E57 rc=30 joins current N1E59 usage-limit state diagnosis. Read-only; no service/model invocation.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/cont_join_n1e59_058b5e04.py",
+      "content": "from pathlib import Path\nimport json\np=Path.home()/\".local/state/prediction-project-executor/DEV-PRED-A2Z-R4P2-USAGE-LIMIT-STATE-20261007-N1E59.json\"\nif not p.is_file():\n    raise SystemExit(20)\no=json.loads(p.read_text(encoding=\"utf-8\"))\nstatus=o.get(\"status\")\nif status==\"PASS\":\n    raise SystemExit(0)\nif status==\"FAIL\":\n    err=str(o.get(\"error\") or \"\")\n    if \"R4P2_ASTRA_USAGE_LIMIT_STATE\" in err:\n        raise SystemExit(30)\n    raise SystemExit(40)\nraise SystemExit(21)\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/cont_join_n1e59_058b5e04.py"
+      ],
+      "timeout_seconds": 15
+    }
+  ]
+}
