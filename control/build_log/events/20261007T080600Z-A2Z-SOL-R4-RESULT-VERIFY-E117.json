@@ -1,0 +1,31 @@
+{
+  "schema": "PREDICTION_BUILD_LOG_EVENT_V1",
+  "event_id": "20261007T080600Z-A2Z-SOL-R4-RESULT-VERIFY-E117",
+  "work_item_id": "A2Z-SYSTEMTEST-20261005",
+  "created_at_utc": "2026-10-07T08:06:00Z",
+  "event_type": "ATTEMPT",
+  "work_item_status": "IN_PROGRESS",
+  "outcome": "STARTED",
+  "title": "Verifieer Sol R4 modelresultaat",
+  "objective": "Controleer of A2Z-V4-SOL-BUILD-20261007-R4 compleet is en exact via GPT-5.6 Sol SOL_EXACT is geproduceerd.",
+  "summary": "E116 startte de R4-rebuildservice. E117 leest uitsluitend bestaand modelresultaat/checkpoint en controleert task, worker, completion, no-tool-use en fileset.",
+  "why": "R4 mag pas worden gematerialiseerd nadat het modelresultaat volledig en provenance-gebonden is.",
+  "first_incomplete_step": "R4 modelcompletion verifiëren.",
+  "next_action": "Bij PASS: materialiseer drie R4-artifacts, voer alleen buildgerichte syntax/structure checks uit, freeze harness en prepare nieuwe Astra POSTBUILD review. Bij pending/fail: geen vervolgketenstap.",
+  "session_route_task_id": "SESSION-ROUTE-5388245c5e308fbc9dcf92ab",
+  "task_ids": [
+    "DEV-PRED-A2Z-SOL-R4-RESULT-VERIFY-20261007-E117",
+    "A2Z-V4-SOL-BUILD-20261007-R4"
+  ],
+  "commits": [],
+  "evidence_refs": [
+    "control/build_log/events/20261007T080300Z-A2Z-SOL-REBUILD-REQUEST-E116-PASS.json"
+  ],
+  "tags": [
+    "a2z",
+    "sol",
+    "r4",
+    "provenance",
+    "read-only"
+  ]
+}
