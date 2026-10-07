@@ -1,0 +1,32 @@
+{
+  "schema": "PREDICTION_BUILD_LOG_EVENT_V1",
+  "event_id": "20261007T173500Z-A2Z-N1E38-RECEIPT-SHAPE-FIX",
+  "work_item_id": "A2Z-SOL-DIRECT-EXECUTION-20261007",
+  "created_at_utc": "2026-10-07T17:35:00Z",
+  "event_type": "RESULT",
+  "work_item_status": "IN_PROGRESS",
+  "outcome": "FAIL",
+  "title": "N1E38 proof checker assumed wrong receipt shape",
+  "objective": "Prove existing N1E36 regression result and then inspect PREBUILD binding without rerunning tests.",
+  "summary": "N1E38 reached the persisted N1E36 executor state but its local proof script exited before PREBUILD binding checks because it required a top-level exit_code representation. The wake detail shows the N1E36 state exists, has the expected branch and completed timestamps; this N1E38 failure does not prove the underlying regression failed.",
+  "why": "The verification script encoded a receipt-shape assumption instead of reading the executor's actual per-operation result fields.",
+  "next_action": "Read only the compact persisted N1E36 status, exact operation argv/rc/result output and classify PASS/FAIL from the actual receipt schema. Do not rerun unittest. If regression PASS is proven, continue directly to PREBUILD binding inspection.",
+  "session_route_task_id": "SESSION-ROUTE-246799adf99f0bf8336c27a0",
+  "task_ids": [
+    "DEV-PRED-A2Z-N1E36-PROOF-PREBUILD-BINDING-20261007-N1E38"
+  ],
+  "commits": [
+    "b0fc664ec065c03125c54c6dae2c71126beebe67"
+  ],
+  "evidence_refs": [
+    "local:~/.local/state/prediction-project-executor/DEV-PRED-A2Z-DIRECT-SOL-REGRESSION-N1E36-20261007.json"
+  ],
+  "tags": [
+    "A2Z",
+    "DIRECT_SOL",
+    "N1E36",
+    "DIAGNOSTIC_CHECKER",
+    "NO_RERUN"
+  ],
+  "first_incomplete_step": "Classify N1E36 from its actual persisted executor receipt fields."
+}
