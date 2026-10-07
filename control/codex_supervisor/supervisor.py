@@ -27,7 +27,6 @@ def classify(events,rc):
         if e.get('type')=='turn.completed':completed=True
         if e.get('type') in ('error','turn.failed'):errors.append(json.dumps(e).lower())
     text=' '.join(errors)
-    if any(s in text for s in ['account-wide usage limit','account wide usage limit','organization usage limit','organisation usage limit','shared usage limit','global usage limit','all models have reached']):return 'GLOBAL_USAGE_LIMIT',thread,final
     if any(s in text for s in ['usage_limit','usage limit','quota_exceeded','you’ve hit your usage limit',"you've hit your usage limit"]):return 'USAGE_LIMIT',thread,final
     if any(s in text for s in ['unauthorized','authentication','api key']):return 'SAFETY_BLOCK',thread,final
     if errors or rc!=0:return 'CODEX_PROCESS_FAILURE',thread,final
@@ -88,28 +87,17 @@ class Supervisor:
         row=self.db.execute('select state,task,reason,attempt,checkpoint,next_action,stamp,retry from transitions order by seq desc limit 1').fetchone()
         if not row:return {'state':'IDLE','retry_at':0}
         state=dict(zip(['state','task_id','reason','attempt','checkpoint','next_action','timestamp','retry_at'],row))
-        if state['state']=='PAUSED_USAGE_LIMIT' and state['reason'] in ('USAGE_LIMIT','GLOBAL_USAGE_LIMIT'):
+        if state['state']=='PAUSED_USAGE_LIMIT' and state['reason']=='USAGE_LIMIT':
             state['retry_at']=min(state['retry_at'],state['timestamp']+USAGE_LIMIT_RETRY_SECONDS)
         return state
-    def global_usage_quota_until(self):
-        rows=self.db.execute("select stamp,retry from transitions where reason='GLOBAL_USAGE_LIMIT'").fetchall()
+    def usage_quota_until(self):
+        rows=self.db.execute("select stamp,retry from transitions where reason='USAGE_LIMIT'").fetchall()
         return max((min(retry,stamp+USAGE_LIMIT_RETRY_SECONDS) for stamp,retry in rows),default=0)
-    def usage_quota_until(self,model_policy=None):
-        waits=[self.global_usage_quota_until()]
-        rows=self.db.execute(
-            "select tr.stamp,tr.retry,t.body from transitions tr join tasks t on t.id=tr.task where tr.reason='USAGE_LIMIT'"
-        ).fetchall()
-        for stamp,retry,body in rows:
-            try:policy=json.loads(body).get('model_policy') or 'HIGHEST_AVAILABLE_GPT'
-            except (ValueError,TypeError,AttributeError):continue
-            if model_policy is None or policy==model_policy:
-                waits.append(min(retry,stamp+USAGE_LIMIT_RETRY_SECONDS))
-        return max(waits,default=0)
     def task_retry_at(self,task_id,status):
         row=self.db.execute('select stamp,retry,reason from transitions where task=? order by seq desc limit 1',(task_id,)).fetchone()
         if not row:return 0
         stamp,retry,reason=row
-        if status=='PAUSED_USAGE_LIMIT' and reason in ('USAGE_LIMIT','GLOBAL_USAGE_LIMIT'):return min(retry,stamp+USAGE_LIMIT_RETRY_SECONDS)
+        if status=='PAUSED_USAGE_LIMIT' and reason=='USAGE_LIMIT':return min(retry,stamp+USAGE_LIMIT_RETRY_SECONDS)
         return retry
     def transition(self,state,task,reason,attempt,checkpoint='',retry=0):
         if state not in STATES:raise Blocked('INVALID_STATE')
@@ -155,8 +143,7 @@ class Supervisor:
                 parent_thread=parent[1]
             with self.db:
                 self.db.execute('insert or ignore into tasks(id,body,status,thread) values(?,?,?,?)',(t['task_id'],body,'QUEUED',parent_thread))
-                policy=t.get('model_policy') or 'HIGHEST_AVAILABLE_GPT'
-                quota=self.usage_quota_until(policy)
+                quota=self.usage_quota_until()
                 if not old and quota<=self.clock():self.transition('IDLE',t['task_id'],'QUEUED',0)
             self.views()
             if not old:print(json.dumps({'event':'TASK_QUEUED','task_id':t['task_id'],'task_class':t['task_class']}),flush=True)
@@ -188,9 +175,9 @@ class Supervisor:
             atomic(folder/'COMPLETE.json',completion)
         self.apply_result(t,attempt,folder,category,thread)
     def apply_result(self,t,attempt,folder,category,thread):
-        state={'COMPLETE':'COMPLETE','USAGE_LIMIT':'PAUSED_USAGE_LIMIT','GLOBAL_USAGE_LIMIT':'PAUSED_USAGE_LIMIT','SAFETY_BLOCK':'BLOCKED','CODEX_PROCESS_FAILURE':'WAITING_RETRY','TASK_FAILURE':'FAILED','ENVIRONMENT_FAILURE':'WAITING_RETRY','BRIDGE_FAILURE':'WAITING_RETRY','REPOSITORY_CONFLICT':'BLOCKED'}.get(category,'BLOCKED')
+        state={'COMPLETE':'COMPLETE','USAGE_LIMIT':'PAUSED_USAGE_LIMIT','SAFETY_BLOCK':'BLOCKED','CODEX_PROCESS_FAILURE':'WAITING_RETRY','TASK_FAILURE':'FAILED','ENVIRONMENT_FAILURE':'WAITING_RETRY','BRIDGE_FAILURE':'WAITING_RETRY','REPOSITORY_CONFLICT':'BLOCKED'}.get(category,'BLOCKED')
         if state=='WAITING_RETRY' and attempt>=3:state='FAILED'
-        retry=self.clock()+(USAGE_LIMIT_RETRY_SECONDS if category in ('USAGE_LIMIT','GLOBAL_USAGE_LIMIT') else 3600) if state in ('PAUSED_USAGE_LIMIT','WAITING_RETRY') else 0
+        retry=self.clock()+(USAGE_LIMIT_RETRY_SECONDS if category=='USAGE_LIMIT' else 3600) if state in ('PAUSED_USAGE_LIMIT','WAITING_RETRY') else 0
         with self.db:
             self.db.execute('update tasks set status=?,thread=coalesce(?,thread) where id=?',(state,thread,t['task_id']))
             self.transition(state,t['task_id'],category,attempt,str(folder.relative_to(self.root)),retry)
@@ -240,8 +227,10 @@ class Supervisor:
                 else:
                     events=events_from(folder/'events.jsonl');rc=0 if any(e.get('type')=='turn.completed' for e in events) else -1
                     self.finish(t,attempt,folder,rc)
-            if self.global_usage_quota_until()>self.clock():
-                return {'state':'PAUSED_USAGE_LIMIT','reason':'GLOBAL_USAGE_LIMIT','retry_at':self.global_usage_quota_until()}
+            state=self.state()
+            quota=self.usage_quota_until()
+            if quota>self.clock():return {'state':'PAUSED_USAGE_LIMIT','retry_at':quota}
+            if state.get('retry_at',0)>self.clock():return state
             if mode=='CRITICAL':return {'state':'IDLE','reason':'CRITICAL_NO_NEW_WORK'}
             rows=self.db.execute("select body,attempt,thread,status from tasks where status in ('QUEUED','PAUSED_USAGE_LIMIT','WAITING_RETRY')").fetchall()
             if not rows and self.candidate_source:
@@ -266,19 +255,9 @@ class Supervisor:
                 with self.db:self.transition('IDLE','','QUEUE_EMPTY',0)
                 self.views();return self.state()
             choices=[(validate_task(json.loads(b)),a,th,st) for b,a,th,st in rows]
-            eligible=[];blocked=[]
-            for x in choices:
-                policy=x[0].get('model_policy') or 'HIGHEST_AVAILABLE_GPT'
-                retry=max(self.task_retry_at(x[0]['task_id'],x[3]),self.usage_quota_until(policy))
-                if retry<=self.clock():eligible.append(x)
-                else:blocked.append((retry,x[3]))
-            choices=eligible
+            choices=[x for x in choices if self.task_retry_at(x[0]['task_id'],x[3])<=self.clock()]
             if mode=='CONSERVE':choices=[x for x in choices if x[0]['priority']>=80]
-            if not choices:
-                if blocked:
-                    state='PAUSED_USAGE_LIMIT' if any(st=='PAUSED_USAGE_LIMIT' for _,st in blocked) else 'WAITING_RETRY'
-                    return {'state':state,'retry_at':min(r for r,_ in blocked)}
-                return {'state':'IDLE','reason':'CONSERVE_NO_HIGH_VALUE_WORK'}
+            if not choices:return {'state':'IDLE','reason':'CONSERVE_NO_HIGH_VALUE_WORK'}
             t,attempt,thread,st=max(choices,key=lambda x:(x[0]['priority'],x[0]['expected_value']/x[0]['estimated_reasoning_cost']))
             if t.get('requires_bridge') and not bridge_ready():
                 with self.db:
