@@ -1,0 +1,53 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-A2Z-SOL-R4-RUNTIME-STATUS-20261007-E118",
+  "source_commit": "61f357fd535285a5564ca1a3c348e2fc14d174f1",
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "High"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_runtime",
+    "user_service_manage",
+    "read_logs"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 180,
+  "notes": "Read-only status check of R4 Sol model service/result after E117 pending. Do not start/restart model, do not materialize build, do not test or measure.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/a2z_e118_r4_status.py",
+      "content": "from pathlib import Path\nimport json,sys,time\ncampaign=Path.home()/\".local/share/prediction-project-executor/campaigns/FULL-A2Z-LIVE-20261004-V4\"\nmodel_task=\"A2Z-V4-SOL-BUILD-20261007-R4\"\nmr=campaign/\"model_results\"/f\"{model_task}.json\"\nreq=campaign/\"requests\"/f\"{model_task}.json\"\nout={\"request_exists\":req.exists(),\"result_exists\":mr.exists()}\nif mr.exists():\n    try:\n        env=json.loads(mr.read_text())\n        out[\"result_status\"]=env.get(\"status\")\n        out[\"checkpoint\"]=env.get(\"checkpoint\")\n        cp=campaign/env.get(\"checkpoint\",\"\")\n        out[\"checkpoint_exists\"]=cp.exists()\n        if cp.exists():\n            for n in (\"TASK.json\",\"WORKER.json\",\"COMPLETE.json\",\"events.jsonl\"):\n                out[n]= (cp/n).exists()\n            if (cp/\"WORKER.json\").exists():\n                w=json.loads((cp/\"WORKER.json\").read_text())\n                out[\"worker_model\"]=w.get(\"model\")\n                out[\"worker_state\"]=w.get(\"state\")\n            if (cp/\"COMPLETE.json\").exists():\n                c=json.loads((cp/\"COMPLETE.json\").read_text())\n                out[\"complete_task_id\"]=c.get(\"task_id\")\n                out[\"complete_timestamp\"]=c.get(\"timestamp\")\n    except Exception as e:\n        out[\"result_error\"]=type(e).__name__+\":\"+str(e)\nprint(\"E118_R4_STATUS \"+json.dumps(out,separators=(\",\",\":\"),default=str),flush=True)\nif mr.exists():\n    raise SystemExit(0)\nraise SystemExit(20)\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/a2z_e118_r4_status.py"
+      ],
+      "timeout_seconds": 60
+    },
+    {
+      "type": "service",
+      "verb": "status",
+      "unit": "prediction-a2z-v4-model@A2Z-V4-SOL-BUILD-20261007-R4.service"
+    },
+    {
+      "type": "journal",
+      "unit": "prediction-a2z-v4-model@A2Z-V4-SOL-BUILD-20261007-R4.service",
+      "lines": 60
+    }
+  ]
+}
