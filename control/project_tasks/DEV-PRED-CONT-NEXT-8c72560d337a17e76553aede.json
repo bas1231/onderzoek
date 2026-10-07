@@ -1,0 +1,31 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-CONT-NEXT-8c72560d337a17e76553aede",
+  "source_commit": "0846e3aa32b1b352b5fb95605dfa151d2500dac1",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "High"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "read_logs"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 120,
+  "notes": "Continuation NEXT after second rc=20 missing-result proof. Read only exact R4P2 Astra PREBUILD service journal; no restart, model invocation, runtime/bridge mutation, tests or measurement.",
+  "operations": [
+    {
+      "type": "journal",
+      "unit": "prediction-a2z-v4-model@A2Z-V4-ASTRA-PREBUILD-DIRECT-20261007-R4P2.service",
+      "lines": 220
+    }
+  ]
+}
