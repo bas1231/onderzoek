@@ -1,0 +1,114 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-A2Z-R4P2-SELECTION-RESTORE-20261007-N1E3",
+  "source_commit": "121e87628e7fe7b5acbd6ae7af424ca4df7fbd92",
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "High"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_runtime",
+    "write_runtime",
+    "user_service_manage"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 420,
+  "notes": "Restore only the missing preserved selection from immutable E106 evidence, verify existing R4P2 DIRECT_SOL runtime provenance, then resume proposal->fresh Astra PREBUILD request. No experiment tests, measurement, bridge mutation, trading, paid or wallet actions.",
+  "operations": [
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/model_execution/patch_e106_gate.py"
+      ],
+      "timeout_seconds": 60
+    },
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/restore_selection_n1e3.py",
+      "content": "from __future__ import annotations\nimport json\nfrom pathlib import Path\n\nROOT=Path(__file__).resolve().parents[2]\nspec=json.loads((ROOT/\"control/project_tasks/DEV-PRED-A2Z-POSTBUILD-RETRY-20261006-E106.json\").read_text(encoding=\"utf-8\"))\nmatches=[op for op in spec.get(\"operations\",[]) if op.get(\"type\")==\"write_text\" and op.get(\"path\")==\"control/dev_checks/a2z_previous_selection.json\"]\nif len(matches)!=1:\n    raise SystemExit(\"SELECTION_SOURCE_NOT_UNIQUE\")\ncontent=matches[0].get(\"content\")\nobj=json.loads(content)\nrequired={\"candidate_id\",\"originating_task_id\",\"source_hashes\",\"completion_hash\",\"finding\",\"next_action\"}\nmissing=sorted(required-set(obj))\nif missing:\n    raise SystemExit(\"SELECTION_FIELDS_MISSING:\"+\",\".join(missing))\nif obj[\"candidate_id\"]!=\"AUTO-DISCOVERY-54d13314c7879b58e46d\":\n    raise SystemExit(\"SELECTION_CANDIDATE_MISMATCH\")\nout=ROOT/\"control/dev_checks/a2z_previous_selection.json\"\nout.parent.mkdir(parents=True,exist_ok=True)\nout.write_text(json.dumps(obj,indent=2,sort_keys=False,ensure_ascii=False)+\"\\n\",encoding=\"utf-8\")\nprint(\"SELECTION_RESTORE=PASS\")\nprint(\"ORIGINATING_TASK=\"+obj[\"originating_task_id\"])\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/restore_selection_n1e3.py"
+      ],
+      "timeout_seconds": 30
+    },
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/patch_a2z_route_n1e3.py",
+      "content": "from pathlib import Path\np=Path(\"control/jobs/full_a2z_governed_v4.py\")\ntext=p.read_text(encoding=\"utf-8\")\nold='ROUTE = \"SESSION-ROUTE-756bff225d5a976edf6da02b\"'\nnew='ROUTE = \"SESSION-ROUTE-DIRECTSOL-20261007-K7A1\"'\nif old in text:\n    p.write_text(text.replace(old,new,1),encoding=\"utf-8\")\nelif new not in text:\n    raise SystemExit(\"A2Z_ROUTE_PATTERN_MISSING\")\nprint(\"A2Z_ROUTE_PATCH=PASS\")\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/patch_a2z_route_n1e3.py"
+      ],
+      "timeout_seconds": 30
+    },
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/precheck_r4p2_runtime_n1e3.py",
+      "content": "from pathlib import Path\nimport json\nROOT=Path.home()/\".local/share/prediction-project-executor/campaigns/FULL-A2Z-LIVE-20261004-V4\"\nTASK=\"A2Z-V4-SOL-PROPOSAL-DIRECT-20261007-R4P2\"\nenvp=ROOT/\"model_results\"/(TASK+\".json\")\nif not envp.is_file():\n    raise SystemExit(\"R4P2_MODEL_RESULT_MISSING\")\nenv=json.loads(envp.read_text(encoding=\"utf-8\"))\nif env.get(\"task_id\")!=TASK or env.get(\"model\")!=\"gpt-5.6-sol\" or env.get(\"execution_layer\")!=\"DIRECT_SOL_CHAT\":\n    raise SystemExit(\"R4P2_MODEL_RESULT_INVALID\")\ncp=ROOT/str(env.get(\"checkpoint\",\"\"))\nfor name in (\"TASK.json\",\"WORKER.json\",\"COMPLETE.json\",\"events.jsonl\"):\n    if not (cp/name).is_file():\n        raise SystemExit(\"R4P2_CHECKPOINT_MISSING:\"+name)\nprint(\"R4P2_RUNTIME_PRECHECK=PASS\")\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/precheck_r4p2_runtime_n1e3.py"
+      ],
+      "timeout_seconds": 60
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/jobs/full_a2z_governed_v4.py",
+        "proposal",
+        "--model-task",
+        "A2Z-V4-SOL-PROPOSAL-DIRECT-20261007-R4P2",
+        "--next-task",
+        "A2Z-V4-ASTRA-PREBUILD-DIRECT-20261007-R4P2"
+      ],
+      "timeout_seconds": 120
+    },
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/check_astra_prebuild_n1e3.py",
+      "content": "from pathlib import Path\nimport json\np=Path(\"control/dev_checks/a2z_next_request.json\")\nobj=json.loads(p.read_text(encoding=\"utf-8\"))\nassert obj[\"task_id\"]==\"A2Z-V4-ASTRA-PREBUILD-DIRECT-20261007-R4P2\"\nassert obj[\"phase\"]==\"ASTRA_PREBUILD\"\nassert obj[\"campaign_id\"]==\"FULL-A2Z-LIVE-20261004-V4\"\nassert obj[\"route_task_id\"]==\"SESSION-ROUTE-DIRECTSOL-20261007-K7A1\"\nassert obj[\"live_trading\"] is False and obj[\"paid_actions\"] is False and obj[\"wallet_actions\"] is False\nassert \"INPUT_JSON:\" in obj[\"prompt\"]\nprint(\"ASTRA_PREBUILD_REQUEST=PASS\")\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/check_astra_prebuild_n1e3.py"
+      ],
+      "timeout_seconds": 30
+    },
+    {
+      "type": "install_runtime",
+      "source": "control/dev_checks/a2z_next_request.json",
+      "destination": "/home/leonh/.local/share/prediction-project-executor/campaigns/FULL-A2Z-LIVE-20261004-V4/requests/A2Z-V4-ASTRA-PREBUILD-DIRECT-20261007-R4P2.json",
+      "mode": 420
+    },
+    {
+      "type": "service",
+      "verb": "start",
+      "unit": "prediction-a2z-v4-model@A2Z-V4-ASTRA-PREBUILD-DIRECT-20261007-R4P2.service"
+    }
+  ]
+}
