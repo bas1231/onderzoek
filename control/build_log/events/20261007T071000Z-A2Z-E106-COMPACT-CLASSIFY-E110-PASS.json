@@ -1,0 +1,31 @@
+{
+  "schema": "PREDICTION_BUILD_LOG_EVENT_V1",
+  "event_id": "20261007T071000Z-A2Z-E106-COMPACT-CLASSIFY-E110-PASS",
+  "work_item_id": "A2Z-SYSTEMTEST-20261005",
+  "created_at_utc": "2026-10-07T07:10:00Z",
+  "event_type": "RESULT",
+  "work_item_status": "IN_PROGRESS",
+  "outcome": "PASS",
+  "title": "E110 compacte evidence-scan uitgevoerd",
+  "objective": "Maak de bestaande E106 reviewvelden compact zichtbaar zonder de modelrun of ketenstappen te herhalen.",
+  "summary": "E110 returned PASS exit=0. De compacte scanner draaide succesvol, maar result-compaction liet de geprinte assessment opnieuw niet in het wakebericht zien.",
+  "why": "Taak-PASS bewijst alleen dat de classifier draaide. Het autoriseert nog geen tests/meting.",
+  "first_incomplete_step": "Encodeer de evidence-classificatie deterministisch in de exitcode zodat same-chat compactie de betekenis niet kan verbergen.",
+  "next_action": "E111 read-only exitcode-verificatie; geen modelrun/build/test/meting.",
+  "session_route_task_id": "SESSION-ROUTE-5388245c5e308fbc9dcf92ab",
+  "task_ids": [
+    "DEV-PRED-A2Z-E106-COMPACT-CLASSIFY-20261007-E110"
+  ],
+  "commits": [],
+  "evidence_refs": [
+    "result:DEV-PRED-A2Z-E106-COMPACT-CLASSIFY-20261007-E110 status=PASS exit=0 event=1791357074-7cf85bf8c536"
+  ],
+  "tags": [
+    "a2z",
+    "astra",
+    "postbuild",
+    "compact",
+    "pass",
+    "gate-still-closed"
+  ]
+}
