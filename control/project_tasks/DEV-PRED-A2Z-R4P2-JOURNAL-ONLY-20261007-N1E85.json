@@ -1,0 +1,30 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-A2Z-R4P2-JOURNAL-ONLY-20261007-N1E85",
+  "source_commit": "883d8e81f45c61019113d00ce2517f9ddacd7b51",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "High"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_logs"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 120,
+  "notes": "Read-only journal-only inspection for exact R4P2 Astra PREBUILD unit after native status returned rc=3/inactive. No service/model invocation.",
+  "operations": [
+    {
+      "type": "journal",
+      "unit": "prediction-a2z-v4-model@A2Z-V4-ASTRA-PREBUILD-DIRECT-20261007-R4P2.service",
+      "lines": 220
+    }
+  ]
+}
