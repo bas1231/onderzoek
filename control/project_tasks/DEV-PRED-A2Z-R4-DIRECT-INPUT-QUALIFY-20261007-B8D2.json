@@ -1,0 +1,41 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-A2Z-R4-DIRECT-INPUT-QUALIFY-20261007-B8D2",
+  "source_commit": "d3c53223e33c8748bb4826f9c7bf1224269e9ba9",
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "High"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_runtime"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 180,
+  "notes": "Read-only qualification of existing immutable R4 SOL_BUILD request for DIRECT_SOL handoff. No bridge mutation, no model invocation, no service mutation, no experiment tests/measurement.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/r4_direct_input_qualify_b8d2.py",
+      "content": "from __future__ import annotations\nfrom pathlib import Path\nimport base64, hashlib, json, zlib\n\nTASK=\"A2Z-V4-SOL-BUILD-20261007-R4\"\nCAMPAIGN=Path.home()/\".local/share/prediction-project-executor/campaigns/FULL-A2Z-LIVE-20261004-V4\"\nREQ=CAMPAIGN/\"requests\"/(TASK+\".json\")\n\nif not REQ.is_file():\n    print(\"R4_DIRECT_INPUT=REQUEST_MISSING\", flush=True)\n    raise SystemExit(31)\n\ntry:\n    obj=json.loads(REQ.read_text(encoding=\"utf-8\"))\nexcept Exception as exc:\n    print(\"R4_DIRECT_INPUT=INVALID_JSON:\"+type(exc).__name__, flush=True)\n    raise SystemExit(32)\n\nif obj.get(\"task_id\") != TASK:\n    print(\"R4_DIRECT_INPUT=TASK_MISMATCH\", flush=True); raise SystemExit(33)\nif obj.get(\"phase\") != \"SOL_BUILD\":\n    print(\"R4_DIRECT_INPUT=PHASE_MISMATCH\", flush=True); raise SystemExit(34)\nfor key in (\"live_trading\",\"paid_actions\",\"wallet_actions\"):\n    if obj.get(key) is not False:\n        print(\"R4_DIRECT_INPUT=UNSAFE_\"+key.upper(), flush=True); raise SystemExit(35)\nprompt=obj.get(\"prompt\")\nif not isinstance(prompt,str) or not prompt.strip():\n    print(\"R4_DIRECT_INPUT=PROMPT_MISSING\", flush=True); raise SystemExit(36)\nif len(prompt)>100000:\n    print(\"R4_DIRECT_INPUT=PROMPT_TOO_LARGE\", flush=True); raise SystemExit(37)\nneed=[\n \"You are exactly GPT-5.6 Sol.\",\n \"A2Z-V4-ASTRA-POSTBUILD-20261006-R3-P2\",\n \"AUTO-DISCOVERY-54d13314c7879b58e46d\",\n \"Do not execute code, tests, imports, measurements, tools, network calls, trades, paid actions or wallet actions.\",\n]\nmissing=[x for x in need if x not in prompt]\nif missing:\n    print(\"R4_DIRECT_INPUT=BINDING_MARKERS_MISSING count=\"+str(len(missing)), flush=True); raise SystemExit(38)\n\nraw=json.dumps(obj,sort_keys=True,separators=(\",\",\":\"),ensure_ascii=False).encode(\"utf-8\")\npacked=base64.urlsafe_b64encode(zlib.compress(raw,9)).decode(\"ascii\")\nprompt_sha=hashlib.sha256(prompt.encode(\"utf-8\")).hexdigest()\nrequest_sha=hashlib.sha256(raw).hexdigest()\nprint(\"R4_DIRECT_INPUT=PASS\", flush=True)\nprint(\"PROMPT_CHARS=\"+str(len(prompt)), flush=True)\nprint(\"PROMPT_SHA256=\"+prompt_sha, flush=True)\nprint(\"REQUEST_SHA256=\"+request_sha, flush=True)\nprint(\"COMPRESSED_CHARS=\"+str(len(packed)), flush=True)\n\n# Existing external-continuation context limit is 6000 chars. Reserve metadata overhead.\nif len(packed)>5200:\n    print(\"R4_DIRECT_INPUT=NEEDS_CHUNKING\", flush=True)\n    raise SystemExit(20)\nprint(\"R4_DIRECT_INPUT=FITS_SINGLE_CONTEXT\", flush=True)\nraise SystemExit(0)\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/r4_direct_input_qualify_b8d2.py"
+      ],
+      "timeout_seconds": 90
+    }
+  ]
+}
