@@ -1,0 +1,33 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-A2Z-MODEL-SERVICE-EXECSTART-20261007-N1E8",
+  "source_commit": "11bc169562c002b11073709ecf6c974c0c8e94f8",
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "High"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "user_service_manage"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 120,
+  "notes": "Read-only exact ExecStart inspection for installed prediction-a2z-v4-model@ service before model-supervisor quota-scope repair. No restart, writes, model invocation, bridge mutation, tests or measurement.",
+  "operations": [
+    {
+      "type": "service",
+      "verb": "status",
+      "unit": "prediction-a2z-v4-model@A2Z-V4-ASTRA-PREBUILD-DIRECT-20261007-R4P2.service",
+      "report_mode": "execstart",
+      "fail_for_visibility": true
+    }
+  ]
+}
