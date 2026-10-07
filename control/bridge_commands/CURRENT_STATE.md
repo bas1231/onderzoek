@@ -7,7 +7,7 @@ Canonical execution-layer split:
 - `SOL_PROPOSAL / SOL_BUILD -> DIRECT_SOL -> exact GPT-5.6 Sol`
 - `ASTRA_PREBUILD / ASTRA_POSTBUILD / Astra supervisor review -> CODEX_WORKER -> exact GPT-6 Astra`
 
-Sol must no longer depend on Codex quota. This is currently a **target architecture under implementation**, not yet a proven runtime path. Exact direct-Sol provenance remains mandatory.
+Sol must no longer depend on Codex quota. DIRECT_SOL means a regular GPT-5.6 Sol Chat session, not Codex, Work or ChatGPT-plan app sharing. This is currently a **target architecture under implementation**, not yet a proven runtime path. Exact session/task provenance remains mandatory.
 
 The active incomplete R4 Codex attempt is not a scientific rejection. Preserve its governed R4 prompt/binding and Astra R3-P2 feedback when rerunning through DIRECT_SOL, then require a fresh exact GPT-6 Astra POSTBUILD review.
 
