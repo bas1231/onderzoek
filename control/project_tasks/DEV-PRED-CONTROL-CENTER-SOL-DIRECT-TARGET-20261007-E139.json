@@ -1,0 +1,50 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-CONTROL-CENTER-SOL-DIRECT-TARGET-20261007-E139",
+  "source_commit": "dcdf544170275905e8b550aebb9e2ce1941a30aa",
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "High"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "production_inspect",
+    "production_fast_forward",
+    "production_merge_representation"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 420,
+  "notes": "Dashboard-first deployment only. Fail closed unless production can safely fast-forward to exact lifecycle target commit. No bridge/model/service mutation.",
+  "operations": [
+    {
+      "type": "production_inspect"
+    },
+    {
+      "type": "production_ff",
+      "target_commit": "dcdf544170275905e8b550aebb9e2ce1941a30aa"
+    },
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/e139_dashboard_sol_direct_target.py",
+      "content": "import json,urllib.request\nwith urllib.request.urlopen(\"http://127.0.0.1:8770/api/snapshot\",timeout=5) as r:\n    snap=json.loads(r.read().decode())\nlife=snap[\"lifecycle\"]\nassert life[\"full_chain_status\"]==\"NOT_PROVEN\"\nassert life[\"model_execution_architecture\"][\"target\"]==\"SOL_DIRECT_ASTRA_CODEX\"\nassert life[\"model_execution_architecture\"][\"sol\"][\"execution_layer\"]==\"DIRECT_SOL\"\nassert life[\"model_execution_architecture\"][\"sol\"][\"codex_required\"] is False\nassert life[\"model_execution_architecture\"][\"astra\"][\"execution_layer\"]==\"CODEX_WORKER\"\nassert life[\"model_execution_architecture\"][\"astra\"][\"codex_required\"] is True\nassert life[\"current_candidate\"][\"state\"]==\"ARCHITECTURE_MIGRATION_SOL_DIRECT\"\nassert life[\"invariant\"]==\"NO_TEST_OR_MEASUREMENT_BEFORE_ASTRA_POSTBUILD_APPROVAL\"\nprint(\"E139_DASHBOARD_SOL_DIRECT_TARGET_OK\")\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/e139_dashboard_sol_direct_target.py"
+      ],
+      "timeout_seconds": 60
+    }
+  ]
+}
