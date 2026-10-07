@@ -1,0 +1,28 @@
+{
+  "schema": "PREDICTION_BUILD_LOG_EVENT_V1",
+  "event_id": "20261007T112000Z-SOL-DIRECT-E144-FAIL",
+  "work_item_id": "A2Z-SOL-DIRECT-EXECUTION-20261007",
+  "created_at_utc": "2026-10-07T11:20:00Z",
+  "event_type": "RESULT",
+  "work_item_status": "IN_PROGRESS",
+  "outcome": "FAIL",
+  "title": "E144 lokale direct-Sol gatekwalificatie faalde",
+  "objective": "Kwalificeer DIRECT_SOL_CHAT voor Sol en behoud Astra via Codex in geïsoleerde worktree.",
+  "summary": "E144 reached local execution but returned FAIL exit=1 rcs=1:1. Compact wake bevat geen foutdetail.",
+  "why": "Dit is de eerste echte lokale uitvoeringsfout na herstel van manifesttransport; eerst exacte eerste fout bepalen.",
+  "first_incomplete_step": "Lees E144 DEV/projectexecutor output/receipt exact uit.",
+  "next_action": "E145 read-only diagnostic; daarna kleinste gerichte reparatie.",
+  "session_route_task_id": "SESSION-ROUTE-5388245c5e308fbc9dcf92ab",
+  "task_ids": [
+    "DEV-PRED-SOL-DIRECT-GATE-QUALIFY-20261007-E144"
+  ],
+  "evidence_refs": [
+    "result:DEV-PRED-SOL-DIRECT-GATE-QUALIFY-20261007-E144 status=FAIL exit=1 rcs=1:1 event=1791367153-acc67b1918f2"
+  ],
+  "tags": [
+    "sol-direct",
+    "gate",
+    "qualification",
+    "diagnostic"
+  ]
+}
