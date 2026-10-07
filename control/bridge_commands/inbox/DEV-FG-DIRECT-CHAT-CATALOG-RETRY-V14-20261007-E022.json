@@ -1,0 +1,17 @@
+{
+  "schema": "PREDICTION_BRIDGE_COMMAND_V1",
+  "task_id": "DEV-FG-DIRECT-CHAT-CATALOG-RETRY-V14-20261007-E022",
+  "action": "SIX_AI_HEALTH",
+  "created_at_utc": "2026-10-07T08:28:00Z",
+  "route_task_id": "TM-PING-1791354654846",
+  "delivery_mode": "chat",
+  "live_trading": false,
+  "paid_actions": false,
+  "wallet_actions": false,
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "notes": "Supersedes earlier Sol verification tasks. Install bounded retry/deferred model-catalog handling and verify highest non-Pro Sol selection. No API-key or paid API fallback."
+}
