@@ -1,0 +1,33 @@
+{
+  "schema": "PREDICTION_BUILD_LOG_EVENT_V1",
+  "event_id": "20261007T084100Z-CODEX-PROVIDER-RESET-RETRY-BUILD-E124",
+  "work_item_id": "A2Z-SYSTEMTEST-20261005",
+  "created_at_utc": "2026-10-07T08:41:00Z",
+  "event_type": "ATTEMPT",
+  "work_item_status": "IN_PROGRESS",
+  "outcome": "STARTED",
+  "title": "Bouw provider-reset-aware Codex retry",
+  "objective": "Gebruik expliciete provider-reset tijd voor CODEX_USAGE_LIMIT; behoud 15-min fallback voor usage-limit zonder reset hint.",
+  "summary": "E124 wijzigt uitsluitend supervisor retrysemantiek + regressietests in geïsoleerde worktree; geen runtime-install.",
+  "why": "Voorkomt nutteloze kwartier-retries vóór een expliciet gemelde Codex reset, zonder Sol/Astra lifecycle of immutable R4-input te wijzigen.",
+  "first_incomplete_step": "Patch compileert en targeted + volledige codex_supervisor regressies slagen.",
+  "next_action": "Na PASS en E123 runtime-inventory: patch via GitHub source vastleggen en bounded runtime-install/canary uitvoeren.",
+  "session_route_task_id": "SESSION-ROUTE-5388245c5e308fbc9dcf92ab",
+  "task_ids": [
+    "DEV-PRED-CODEX-PROVIDER-RESET-RETRY-BUILD-20261007-E124"
+  ],
+  "commits": [
+    "5f5b10c0af40924a4cc811ec6ff3a06539b19487"
+  ],
+  "evidence_refs": [
+    "control/codex_supervisor/test_usage_limit_retry.py",
+    "control/codex_supervisor/supervisor.py"
+  ],
+  "tags": [
+    "codex",
+    "usage-limit",
+    "retry",
+    "provider-reset",
+    "regression"
+  ]
+}
