@@ -1,0 +1,41 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-A2Z-R4-RETRY-SCHEDULER-INVENTORY-20261007-E130",
+  "source_commit": "127bbed817c151d79b58e29813b8a5469e004ce6",
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "High"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_runtime"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 180,
+  "notes": "Read-only inventory of installed A2Z-v4/Codex supervisor systemd unit files plus current R4 retry state. No systemctl and no mutation.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/a2z_e130_retry_scheduler_inventory.py",
+      "content": "from pathlib import Path\nimport json,sqlite3,time,sys\nhome=Path.home()\nunitdir=home/\".config/systemd/user\"\nroot=home/\".local/share/prediction-project-executor/campaigns/FULL-A2Z-LIVE-20261004-V4\"\ntask_id=\"A2Z-V4-SOL-BUILD-20261007-R4\"\nout={\"now\":time.time(),\"units\":[]}\nif unitdir.exists():\n    for p in sorted(unitdir.glob(\"prediction-*\")):\n        if \"a2z-v4\" in p.name or \"codex-supervisor\" in p.name:\n            item={\"name\":p.name,\"is_symlink\":p.is_symlink()}\n            try:item[\"target\"]=str(p.resolve())\n            except Exception:pass\n            try:item[\"content\"]=p.read_text(errors=\"replace\")[:12000]\n            except Exception as e:item[\"read_error\"]=type(e).__name__+\":\"+str(e)\n            out[\"units\"].append(item)\ndbp=root/\"models/runtime.sqlite\"\nif dbp.exists():\n    db=sqlite3.connect(\"file:\"+str(dbp)+\"?mode=ro\",uri=True)\n    try:\n        row=db.execute(\"select status,attempt,run,thread from tasks where id=?\",(task_id,)).fetchone()\n        tr=db.execute(\"select state,reason,attempt,checkpoint,next_action,stamp,retry from transitions where task=? order by seq desc limit 1\",(task_id,)).fetchone()\n    finally:db.close()\n    out[\"task\"]=row\n    out[\"transition\"]=tr\n    if tr:\n        out[\"retry_delta\"]=float(tr[6] or 0)-float(tr[5] or 0)\n        out[\"retry_overdue_seconds\"]=max(0,int(time.time()-float(tr[6] or 0)))\nprint(\"E130_SCHEDULER \"+json.dumps(out,separators=(\",\",\":\"),default=str),flush=True)\nraise SystemExit(0)\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/a2z_e130_retry_scheduler_inventory.py"
+      ],
+      "timeout_seconds": 120
+    }
+  ]
+}
