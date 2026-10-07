@@ -1,0 +1,41 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-A2Z-R4P2-GATE-CLASSIFY-20261007-N1E48",
+  "source_commit": "1881ebf64a1f24dc41f773678db45076c5e66772",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "High"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_runtime"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 90,
+  "notes": "Read-only classify terminal N1E47 gate result from persisted executor state.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/classify_n1e47_gate_n1e48.py",
+      "content": "from pathlib import Path\nimport json\np=Path.home()/\".local/state/prediction-project-executor/DEV-PRED-A2Z-R4P2-PREBUILD-GATE-20261007-N1E47.json\"\no=json.loads(p.read_text(encoding=\"utf-8\"))\ntexts=[]\ndef walk(v):\n    if isinstance(v,dict):\n        for x in v.values(): walk(x)\n    elif isinstance(v,list):\n        for x in v: walk(x)\n    elif isinstance(v,str):\n        texts.append(v)\nfor text in texts:\n    lines=[x.strip() for x in text.splitlines() if x.strip()]\n    for ln in reversed(lines):\n        if \"RuntimeError:\" in ln:\n            raise RuntimeError(\"GATE_RESULT=\"+ln.split(\"RuntimeError:\",1)[1].strip()[:900])\nraise RuntimeError(\"GATE_RESULT=UNCLASSIFIED\")\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/classify_n1e47_gate_n1e48.py"
+      ],
+      "timeout_seconds": 20
+    }
+  ]
+}
