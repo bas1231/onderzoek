@@ -1,0 +1,17 @@
+{
+  "schema": "PREDICTION_BRIDGE_COMMAND_V1",
+  "task_id": "DEV-FG-CHATGPT-FOCUS-V20-20261007-E032",
+  "action": "SIX_AI_HEALTH",
+  "created_at_utc": "2026-10-07T10:47:00Z",
+  "route_task_id": "DEV-FG-QWEN-TRIGGER-TEXT-V19-20261007-E031",
+  "delivery_mode": "chat",
+  "live_trading": false,
+  "paid_actions": false,
+  "wallet_actions": false,
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "notes": "FG V20 application-only deploy. Existing bridge is transport only and MUST NOT be modified, restarted, reinstalled, patched, reconfigured or otherwise changed. Deploy synchronous focus of the already prepared ChatGPT side window on a privacy decision that continues toward SAFE; Blokkeren remains non-handoff."
+}
