@@ -2,6 +2,27 @@
 
 **Mandatory first read for every new Prediction ChatGPT session that may need local WSL execution.**
 
+## ABSOLUTE BRIDGE FREEZE — OWNER APPROVAL REQUIRED
+
+**HARD INVARIANT: NOTHING in the working ChatGPT↔WSL bridge may be changed unless the owner gives explicit permission for that specific bridge change.**
+
+This restriction has priority over autonomy, repair, cleanup, modernization, refactoring, diagnostics, convenience and "make it work" instructions.
+
+Without explicit owner permission for the exact bridge mutation, a session MUST NOT:
+
+- edit, replace, patch, regenerate, migrate or delete bridge source files, protocols, schemas, userscripts or bridge documentation that governs runtime behavior;
+- change the GitHub command bus, poller, command router/receiver, wake/result bridge, session routing/bootstrap, ACK/result delivery, executor transport integration or their semantics;
+- change bridge-related localhost ports, tokens, credentials/config, permissions, capabilities, service definitions, timers, startup behavior or installed runtime files;
+- restart/reinstall/upgrade a bridge component as part of a repair when that action changes bridge state beyond ordinary use of the already-installed transport;
+- introduce an alternate bridge path, fallback transport, replacement userscript or "temporary" bridge workaround;
+- treat a generic instruction such as "fix it", "continue", "make it work", "repair the task" or project-level autonomy as permission to mutate the bridge.
+
+**Allowed without new permission:** use the already-installed bridge exactly as documented to dispatch tasks and receive results; read bridge state/logs/docs read-only; create normal immutable command-bus task files that use the existing protocol.
+
+If a requested Prediction or FG task would require any bridge mutation, **STOP and ask the owner for explicit permission before making that bridge change**. Do not infer permission from prior bridge work or from permission to modify Prediction/FG application code.
+
+This rule applies equally to **Prediction and FG/PO work**.
+
 Do not rediscover the local bridge, ask the user to paste normal build commands into WSL, or fall back to the old visible DOM command path as the primary method.
 
 ## Canonical execution architecture
