@@ -1,0 +1,41 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-A2Z-R4-15M-RETRY-VERIFY-20261007-E128",
+  "source_commit": "f34656bb44629328b7d0233fe1aee6ef5f93117d",
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "High"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_runtime"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 180,
+  "notes": "Read-only verification that existing Codex usage-limit retry remains exactly 900 seconds for immutable Sol R4 task. No mutation.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/a2z_e128_r4_15m_retry_verify.py",
+      "content": "from pathlib import Path\nimport sqlite3,time,json,sys\nroot=Path.home()/\".local/share/prediction-project-executor/campaigns/FULL-A2Z-LIVE-20261004-V4\"\ndbp=root/\"models/runtime.sqlite\"\nresult=root/\"model_results\"/\"A2Z-V4-SOL-BUILD-20261007-R4.json\"\nif result.exists():\n    print(\"E128=R4_RESULT_EXISTS\",flush=True); raise SystemExit(0)\ndb=sqlite3.connect(\"file:\"+str(dbp)+\"?mode=ro\",uri=True)\ntry:\n    task=db.execute(\"select status,attempt,run,thread from tasks where id=?\",( \"A2Z-V4-SOL-BUILD-20261007-R4\", )).fetchone()\n    tr=db.execute(\"select state,reason,attempt,checkpoint,stamp,retry from transitions where task=? order by seq desc limit 1\",( \"A2Z-V4-SOL-BUILD-20261007-R4\", )).fetchone()\nfinally:\n    db.close()\nout={\"task\":task,\"transition\":tr}\nif tr:\n    out[\"retry_delta_seconds\"]=None if tr[5] is None else float(tr[5])-float(tr[4])\n    out[\"remaining_seconds\"]=None if tr[5] is None else max(0,int(float(tr[5])-time.time()))\nprint(\"E128_STATE \"+json.dumps(out,separators=(\",\",\":\"),default=str),flush=True)\nif not task or not tr:\n    print(\"E128=MISSING_STATE\",flush=True); raise SystemExit(31)\nstatus,attempt,run,thread=task\nstate,reason,tr_attempt,checkpoint,stamp,retry=tr\nif status==\"PAUSED_USAGE_LIMIT\" and reason==\"USAGE_LIMIT\":\n    delta=round(float(retry)-float(stamp))\n    if delta==900:\n        print(\"E128=PAUSED_15M_RETRY_OK attempt=\"+str(attempt),flush=True); raise SystemExit(0)\n    print(\"E128=PAUSE_RETRY_DELTA_\"+str(delta),flush=True); raise SystemExit(32)\nif status==\"RUNNING\":\n    print(\"E128=R4_RUNNING attempt=\"+str(attempt),flush=True); raise SystemExit(20)\nif status==\"COMPLETE\":\n    print(\"E128=R4_COMPLETE_NO_RESULT\",flush=True); raise SystemExit(21)\nprint(\"E128=STATE_\"+str(status)+\" REASON_\"+str(reason),flush=True); raise SystemExit(29)\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/a2z_e128_r4_15m_retry_verify.py"
+      ],
+      "timeout_seconds": 120
+    }
+  ]
+}
