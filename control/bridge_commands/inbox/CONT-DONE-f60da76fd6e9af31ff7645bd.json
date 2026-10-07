@@ -1,0 +1,19 @@
+{
+  "schema": "PREDICTION_BRIDGE_COMMAND_V1",
+  "task_id": "CONT-DONE-f60da76fd6e9af31ff7645bd",
+  "action": "BRIDGE_PING",
+  "created_at_utc": "2026-10-07T20:32:00Z",
+  "route_task_id": null,
+  "delivery_mode": "headless",
+  "live_trading": false,
+  "paid_actions": false,
+  "wallet_actions": false,
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "notes": "Close superseded N1E70 continuation. Its journal result was already durably advanced to N1E71, which deterministically extracts the latest retry window for exact R4P2. No duplicate NEXT or Astra resume is authorized.",
+  "auto_continue": false,
+  "parent_continuation_id": "CONT-f60da76fd6e9af31ff7645bd"
+}
