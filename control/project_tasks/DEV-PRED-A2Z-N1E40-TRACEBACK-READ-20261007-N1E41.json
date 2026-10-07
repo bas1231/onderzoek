@@ -1,0 +1,41 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-A2Z-N1E40-TRACEBACK-READ-20261007-N1E41",
+  "source_commit": "3a8f96c7ca17bc108e9fd2a7d5e0791a92538cdb",
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "High"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_runtime"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 120,
+  "notes": "Read-only extraction of persisted N1E40 traceback/error. No test rerun, model invocation, service/runtime/bridge mutation, experiment testing/measurement.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/read_n1e40_traceback_n1e41.py",
+      "content": "from pathlib import Path\nimport json\n\nTARGET=\"DEV-PRED-A2Z-N1E36-ASSERT-PREBUILD-BINDING-20261007-N1E40\"\np=Path.home()/\".local/state/prediction-project-executor\"/(TARGET+\".json\")\nif not p.is_file():\n    raise RuntimeError(\"N1E40_STATE_MISSING\")\no=json.loads(p.read_text(encoding=\"utf-8\"))\nfor k in (\"task_id\",\"status\",\"error\",\"operations\",\"operation_results\",\"results\",\"completed_at_utc\",\"head_after\",\"source_commit\"):\n    if k in o:\n        s=json.dumps(o[k],ensure_ascii=False,sort_keys=True)\n        if len(s)>16000: s=s[:16000]+\"...<TRUNCATED>\"\n        print(k.upper()+\"=\"+s)\n# Also print any string leaf that looks like traceback/error, bounded.\ndef walk(v,path=\"\"):\n    if isinstance(v,dict):\n        for k,x in v.items():\n            np=(path+\".\"+k) if path else k\n            walk(x,np)\n    elif isinstance(v,list):\n        for i,x in enumerate(v):\n            walk(x,f\"{path}[{i}]\")\n    elif isinstance(v,str):\n        low=v.lower()\n        if \"traceback\" in low or \"runtimeerror\" in low or \"assert\" in low or \"error\" in path.lower():\n            print(\"LEAF=\"+path+\"=\"+v[:12000].replace(\"\\n\",\" | \"))\nwalk(o)\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/read_n1e40_traceback_n1e41.py"
+      ],
+      "timeout_seconds": 30
+    }
+  ]
+}
