@@ -1,0 +1,17 @@
+{
+  "schema": "PREDICTION_BRIDGE_COMMAND_V1",
+  "task_id": "DEV-FG-WATCHER-DIAG-READONLY-20261007-E034",
+  "action": "SIX_AI_HEALTH",
+  "created_at_utc": "2026-10-07T12:02:00Z",
+  "route_task_id": "DEV-FG-CHATGPT-WINDOW-CONTROLS-V21-20261007-E033",
+  "delivery_mode": "chat",
+  "live_trading": false,
+  "paid_actions": false,
+  "wallet_actions": false,
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "notes": "READ-ONLY FG watcher diagnosis. Existing Prediction bridge is transport only and MUST NOT be modified, restarted, reinstalled, patched, reconfigured or otherwise changed. Inspect only watcher process/PID state, local FG logs, system uptime and whether a watcher systemd unit exists. Do not restart or mutate the watcher."
+}
