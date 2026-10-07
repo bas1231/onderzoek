@@ -1,0 +1,14 @@
+{
+  "schema": "PREDICTION_RESULT_RECEIPT_V1",
+  "receipt_id": "RESULT-RECEIPT-1791399078-9f7701bc0292",
+  "event_id": "1791399078-9f7701bc0292",
+  "source_task_id": "DEV-PRED-A2Z-R4P2-ASTRA-RETRY-GATE-20261007-N1E62",
+  "created_at_utc": "2026-10-07T19:46:30Z",
+  "live_trading": false,
+  "paid_actions": false,
+  "wallet_actions": false,
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "High"
+  }
+}
