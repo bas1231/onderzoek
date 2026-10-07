@@ -1,0 +1,41 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-A2Z-R4P2-PREBUILD-STATE-REASON-20261007-N1E54",
+  "source_commit": "c0da0c5b686bb1fa0be2cc7f3cf6cb79407a9456",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "High"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_runtime"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 90,
+  "notes": "Read-only current Astra PREBUILD model state/reason for exact R4P2 task using established N1E7 diagnostic pattern. No model/service/runtime/bridge mutation.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/r4p2_astra_current_state_n1e54.py",
+      "content": "from pathlib import Path\nimport json\n\nROOT=Path.home()/\".local/share/prediction-project-executor/campaigns/FULL-A2Z-LIVE-20261004-V4/models\"\nTASK=\"A2Z-V4-ASTRA-PREBUILD-DIRECT-20261007-R4P2\"\nout={}\nfor name in (\"STATE.json\",\"BLOCKER.json\",\"CONTINUATION.json\"):\n    p=ROOT/name\n    if p.is_file():\n        try:\n            obj=json.loads(p.read_text(encoding=\"utf-8\"))\n            if isinstance(obj,dict):\n                out[name]={k:obj.get(k) for k in (\n                    \"state\",\"reason\",\"task_id\",\"attempt\",\"retry_at\",\n                    \"checkpoint\",\"next_action\",\"type\"\n                ) if k in obj}\n        except Exception as exc:\n            out[name]={\"parse_error\":type(exc).__name__}\nq=ROOT/\"TASK_QUEUE.jsonl\"\nif q.is_file():\n    rows=[]\n    for line in q.read_text(encoding=\"utf-8\",errors=\"replace\").splitlines():\n        try: obj=json.loads(line)\n        except Exception: continue\n        if obj.get(\"task_id\")==TASK:\n            rows.append({\n                \"status\":obj.get(\"status\"),\n                \"attempts\":obj.get(\"attempts\"),\n                \"model_policy\":obj.get(\"model_policy\"),\n                \"route_task_id\":obj.get(\"route_task_id\"),\n                \"phase\":obj.get(\"phase\")\n            })\n    out[\"task_queue\"]=rows\nprint(\"ERROR_CLASS=R4P2_ASTRA_CURRENT_STATE\",flush=True)\nprint(\"ERROR=\"+json.dumps(out,separators=(\",\",\":\"),sort_keys=True),flush=True)\nraise SystemExit(1)\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/r4p2_astra_current_state_n1e54.py"
+      ],
+      "timeout_seconds": 30
+    }
+  ]
+}
