@@ -1,0 +1,32 @@
+{
+  "schema": "PREDICTION_BUILD_LOG_EVENT_V1",
+  "event_id": "20261007T082900Z-A2Z-SOL-R4-USAGE-STATE-E122",
+  "work_item_id": "A2Z-SYSTEMTEST-20261005",
+  "created_at_utc": "2026-10-07T08:29:00Z",
+  "event_type": "ATTEMPT",
+  "work_item_status": "IN_PROGRESS",
+  "outcome": "STARTED",
+  "title": "Verifieer canonical usage-limit pause voor Sol R4",
+  "objective": "Controleer runtime.sqlite of R4 als PAUSED_USAGE_LIMIT/USAGE_LIMIT met resume_same_task en effectieve 15-minuten retry staat.",
+  "summary": "E121 toonde turn.failed door usage limit. E122 verifieert alleen de supervisor-state-machine.",
+  "why": "Bij correcte state is geen handmatige restart of nieuwe modeltask nodig; provenance blijft op dezelfde immutable task-ID.",
+  "first_incomplete_step": "Canonical PAUSED_USAGE_LIMIT state bevestigen.",
+  "next_action": "Bij PASS: dashboard markeren als tijdelijk usage-limit paused en bestaande auto-resume volgen. Bij mismatch: uitsluitend supervisor-finalization herstellen.",
+  "session_route_task_id": "SESSION-ROUTE-5388245c5e308fbc9dcf92ab",
+  "task_ids": [
+    "DEV-PRED-A2Z-SOL-R4-USAGE-STATE-20261007-E122",
+    "A2Z-V4-SOL-BUILD-20261007-R4"
+  ],
+  "commits": [],
+  "evidence_refs": [
+    "control/build_log/events/20261007T082700Z-A2Z-SOL-R4-PROGRESS-E121-USAGE-LIMIT.json",
+    "control/codex_supervisor/test_usage_limit_retry.py"
+  ],
+  "tags": [
+    "a2z",
+    "sol",
+    "r4",
+    "usage-limit",
+    "state-machine"
+  ]
+}
