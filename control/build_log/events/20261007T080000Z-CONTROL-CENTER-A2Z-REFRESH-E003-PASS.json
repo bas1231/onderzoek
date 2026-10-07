@@ -1,0 +1,33 @@
+{
+  "schema": "PREDICTION_BUILD_LOG_EVENT_V1",
+  "event_id": "20261007T080000Z-CONTROL-CENTER-A2Z-REFRESH-E003-PASS",
+  "work_item_id": "CONTROL-CENTER-A2Z-STATUS-REFRESH-20261006",
+  "created_at_utc": "2026-10-07T08:00:00Z",
+  "event_type": "RESULT",
+  "work_item_status": "DONE",
+  "outcome": "PASS",
+  "title": "Dashboard live gecorrigeerd naar Astra R3-P2 REVISE",
+  "objective": "Laat live Control Center exact tonen dat canonical Astra POSTBUILD R3-P2 REVISE is en de keten teruggaat naar Sol-build.",
+  "summary": "E003 kwam in dezelfde chat terug met status=PASS exit=0, rcs=1:0 en head=5e22d007b6fdc9f7ae84dbde4bc5f9ea3a55dc64. De runtime-installatie en canary zijn daarmee groen.",
+  "why": "De zichtbare dashboardstatus is nu bewijsgebonden aan de exacte canonical R3-P2-beslissing.",
+  "first_incomplete_step": null,
+  "next_action": "Dashboardwerk afgerond. A2Z gaat verder via reeds verzonden DEV-PRED-A2Z-SOL-REBUILD-REQUEST-20261007-E116; geen dubbele task starten.",
+  "session_route_task_id": "SESSION-ROUTE-5388245c5e308fbc9dcf92ab",
+  "task_ids": [
+    "DEV-PRED-CONTROL-CENTER-A2Z-REFRESH-20261007-E003"
+  ],
+  "commits": [
+    "5e22d007b6fdc9f7ae84dbde4bc5f9ea3a55dc64"
+  ],
+  "evidence_refs": [
+    "result:DEV-PRED-CONTROL-CENTER-A2Z-REFRESH-20261007-E003 status=PASS exit=0 rcs=1:0 head=5e22d007b6fdc9f7ae84dbde4bc5f9ea3a55dc64 event=1791359738-797d90ecb5ca"
+  ],
+  "tags": [
+    "control-center",
+    "dashboard",
+    "a2z",
+    "revise",
+    "runtime",
+    "pass"
+  ]
+}
