@@ -1,0 +1,53 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-A2Z-R4P2-ASTRA-RETRY5-DUE-20261007-N1E91",
+  "source_commit": "c105dd868a22cc4faa0256ddb74a7ad57b708af6",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "High"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_runtime",
+    "user_service_manage",
+    "read_logs"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 240,
+  "notes": "Resume exact existing R4P2 Astra PREBUILD only if still paused on attempt 5 checkpoint 9a8e982f and retry_at has passed. No new review task, no Sol build/tests/measurement.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/r4p2_astra_retry5_due_n1e91.py",
+      "content": "from pathlib import Path\nimport json,time\nbase=Path.home()/\".local/share/prediction-project-executor/campaigns/FULL-A2Z-LIVE-20261004-V4\"\ntask=\"A2Z-V4-ASTRA-PREBUILD-DIRECT-20261007-R4P2\"\ncheckpoint=\"runs/A2Z-V4-ASTRA-PREBUILD-DIRECT-20261007-R4P2-5-9a8e982f\"\nretry_at=1791401303.2864633\nresult=base/\"model_results\"/(task+\".json\")\nif result.is_file():\n    raise SystemExit(10)\nstate=None\nfor name in (\"models/CONTINUATION.json\",\"models/STATE.json\"):\n    p=base/name\n    if not p.is_file():\n        continue\n    try:o=json.loads(p.read_text(encoding=\"utf-8\"))\n    except Exception:continue\n    if isinstance(o,dict) and o.get(\"task_id\")==task:\n        state=o\n        break\nif not isinstance(state,dict):\n    raise SystemExit(20)\nif state.get(\"state\")!=\"PAUSED_USAGE_LIMIT\":\n    raise SystemExit(21)\nif state.get(\"next_action\")!=\"resume_same_task\":\n    raise SystemExit(22)\nif state.get(\"checkpoint\")!=checkpoint:\n    raise SystemExit(24)\nif state.get(\"attempt\") not in (None,5):\n    raise SystemExit(25)\nif time.time()<retry_at:\n    raise SystemExit(26)\nraise SystemExit(0)\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/r4p2_astra_retry5_due_n1e91.py"
+      ],
+      "timeout_seconds": 90
+    },
+    {
+      "type": "service",
+      "verb": "start",
+      "unit": "prediction-a2z-v4-model@A2Z-V4-ASTRA-PREBUILD-DIRECT-20261007-R4P2.service"
+    },
+    {
+      "type": "journal",
+      "unit": "prediction-a2z-v4-model@A2Z-V4-ASTRA-PREBUILD-DIRECT-20261007-R4P2.service",
+      "lines": 100
+    }
+  ]
+}
