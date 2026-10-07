@@ -1,0 +1,41 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-A2Z-DIRECT-SOL-LEGACY-DIAG-20261007-N1E21",
+  "source_commit": "b997c9c1786f82cbd849e3e52bf1d43167382e5a",
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "High"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_runtime"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 180,
+  "notes": "Read-only diagnosis of N1E16 first failing step by inspecting its isolated worktree and reproducing only patch/routing guard scripts. No model invocation, runtime/service mutation, bridge mutation, experiment tests/measurement, paid/live/wallet actions.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/diag_n1e16_n1e21.py",
+      "content": "from pathlib import Path\nimport json, subprocess, sys\n\nTASK=\"DEV-PRED-A2Z-DIRECT-SOL-LEGACY-GUARD-20261007-N1E16\"\nroot=Path.home()/\".local/share/prediction-project-executor/worktrees\"/TASK\nstate=Path.home()/\".local/state/prediction-project-executor\"/(TASK+\".json\")\n\nprint(\"STATE_EXISTS=\"+str(state.exists()))\nif state.exists():\n    obj=json.loads(state.read_text(encoding=\"utf-8\"))\n    print(\"STATE=\"+json.dumps({k:obj.get(k) for k in (\"status\",\"source_commit\",\"remote_commit\",\"claimed_at_utc\")},sort_keys=True))\n\nfor rel in (\n    \"control/model_execution/patch_e106_gate.py\",\n    \"control/jobs/full_a2z_governed_v4.py\",\n    \"control/dev_checks/test_direct_sol_legacy_guard_n1e16.py\",\n):\n    p=root/rel\n    print(rel+\"_EXISTS=\"+str(p.exists()))\n    if p.exists():\n        try:\n            compile(p.read_text(encoding=\"utf-8\"),rel,\"exec\")\n            print(rel+\"_COMPILE=PASS\")\n        except Exception as exc:\n            print(rel+\"_COMPILE=FAIL:\"+exc.__class__.__name__+\":\"+str(exc))\n\nfor rel in (\n    \"control/model_execution/patch_e106_gate.py\",\n    \"control/dev_checks/test_direct_sol_legacy_guard_n1e16.py\",\n):\n    p=root/rel\n    if p.exists():\n        cp=subprocess.run([sys.executable,str(p)],cwd=str(root),text=True,stdout=subprocess.PIPE,stderr=subprocess.STDOUT)\n        print(\"REPRO=\"+rel+\" RC=\"+str(cp.returncode))\n        print(cp.stdout[-7000:].replace(\"\\n\",\"\\\\n\"))\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/diag_n1e16_n1e21.py"
+      ],
+      "timeout_seconds": 90
+    }
+  ]
+}
