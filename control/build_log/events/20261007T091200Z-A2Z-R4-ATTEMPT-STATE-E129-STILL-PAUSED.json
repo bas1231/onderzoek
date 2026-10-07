@@ -1,0 +1,31 @@
+{
+  "schema": "PREDICTION_BUILD_LOG_EVENT_V1",
+  "event_id": "20261007T091200Z-A2Z-R4-ATTEMPT-STATE-E129-STILL-PAUSED",
+  "work_item_id": "A2Z-SYSTEMTEST-20261005",
+  "created_at_utc": "2026-10-07T09:12:00Z",
+  "event_type": "RESULT",
+  "work_item_status": "IN_PROGRESS",
+  "outcome": "BLOCKED",
+  "title": "R4 blijft op attempt 1 na verstreken retry_at",
+  "objective": "Controleer actuele attempt-state van dezelfde immutable R4-task.",
+  "summary": "E129 returned PAUSED_USAGE_LIMIT attempt=1. Laatste usage transition heeft stamp 1791359772.6381228 en retry 1791360672.6377425, exact ~900 seconden later. Bij uitvoering van E129 was nog geen attempt 2 zichtbaar.",
+  "why": "De retryberekening is correct, maar automatische supervisor-tick/retry lijkt niet te hebben plaatsgevonden.",
+  "first_incomplete_step": "Verifieer retryservice/timer-configuratie en of die de campaign supervisor periodiek tickt.",
+  "next_action": "E130 read-only inspectie van supervisor timer/service unitbestanden en campaign runtime; geen modelrestart.",
+  "session_route_task_id": "SESSION-ROUTE-5388245c5e308fbc9dcf92ab",
+  "task_ids": [
+    "DEV-PRED-A2Z-R4-ATTEMPT-STATE-20261007-E129",
+    "A2Z-V4-SOL-BUILD-20261007-R4"
+  ],
+  "commits": [],
+  "evidence_refs": [
+    "result:DEV-PRED-A2Z-R4-ATTEMPT-STATE-20261007-E129 status=PAUSED_USAGE_LIMIT attempt=1 event=1791362055-a2ef70973a3b"
+  ],
+  "tags": [
+    "a2z",
+    "codex",
+    "r4",
+    "retry",
+    "scheduler"
+  ]
+}
