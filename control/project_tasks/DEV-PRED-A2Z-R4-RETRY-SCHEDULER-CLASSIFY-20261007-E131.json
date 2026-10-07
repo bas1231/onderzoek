@@ -1,0 +1,41 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-A2Z-R4-RETRY-SCHEDULER-CLASSIFY-20261007-E131",
+  "source_commit": "186baa73e2c8b81161e4063b8efe37a5fe74e56b",
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "High"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_runtime"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 180,
+  "notes": "Read-only compact classification of installed A2Z-v4 retry timer vs general Codex supervisor timer. No systemctl or mutation.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/a2z_e131_retry_scheduler_classify.py",
+      "content": "from pathlib import Path\nimport json,sys,re\nhome=Path.home()\nunitdir=home/\".config/systemd/user\"\nunits={}\nfor p in sorted(unitdir.glob(\"prediction-*\")) if unitdir.exists() else []:\n    if \"a2z-v4\" in p.name or \"codex-supervisor\" in p.name:\n        try: txt=p.read_text(errors=\"replace\")\n        except Exception: txt=\"\"\n        units[p.name]=txt\n\na2z_timers={k:v for k,v in units.items() if \"a2z-v4\" in k and k.endswith(\".timer\")}\na2z_services={k:v for k,v in units.items() if \"a2z-v4\" in k and k.endswith(\".service\")}\ngeneral_timer=units.get(\"prediction-codex-supervisor.timer\",\"\")\ngeneral_service=units.get(\"prediction-codex-supervisor.service\",\"\")\n\ndef root_hint(txt):\n    m=re.search(r'--root\\s+([^\\s]+)',txt)\n    return m.group(1) if m else None\n\nsummary={\n \"a2z_timer_count\":len(a2z_timers),\n \"a2z_service_count\":len(a2z_services),\n \"a2z_timers\":sorted(a2z_timers),\n \"a2z_services\":sorted(a2z_services),\n \"general_timer_present\":bool(general_timer),\n \"general_service_present\":bool(general_service),\n \"general_service_root\":root_hint(general_service),\n \"general_service_mentions_campaign\":\"FULL-A2Z-LIVE-20261004-V4\" in general_service,\n \"general_service_mentions_tick\":\" tick\" in general_service or \" tick \" in general_service,\n}\nprint(\"E131_CLASS \"+json.dumps(summary,separators=(\",\",\":\")),flush=True)\n\nif a2z_timers:\n    print(\"E131=A2Z_TIMER_PRESENT\",flush=True); raise SystemExit(20)\nif general_timer and general_service and \"FULL-A2Z-LIVE-20261004-V4\" in general_service:\n    print(\"E131=GENERAL_TIMER_TICKS_A2Z_CAMPAIGN\",flush=True); raise SystemExit(21)\nif general_timer and general_service:\n    print(\"E131=NO_A2Z_TIMER_GENERAL_TIMER_OTHER_ROOT\",flush=True); raise SystemExit(22)\nprint(\"E131=NO_RETRY_TIMER_FOUND\",flush=True); raise SystemExit(23)\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/a2z_e131_retry_scheduler_classify.py"
+      ],
+      "timeout_seconds": 120
+    }
+  ]
+}
