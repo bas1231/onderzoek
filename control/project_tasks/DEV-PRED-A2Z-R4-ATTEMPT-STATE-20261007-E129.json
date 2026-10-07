@@ -1,0 +1,41 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-A2Z-R4-ATTEMPT-STATE-20261007-E129",
+  "source_commit": "1075506e7779ce2a506090569eabf803b8daf6fa",
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "High"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_runtime"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 180,
+  "notes": "Read-only status of same immutable R4 model task after proving 15-minute retry cadence. No restart or mutation.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/a2z_e129_r4_attempt_state.py",
+      "content": "from pathlib import Path\nimport json,sqlite3,sys\nroot=Path.home()/\".local/share/prediction-project-executor/campaigns/FULL-A2Z-LIVE-20261004-V4\"\ndbp=root/\"models/runtime.sqlite\"\nmr=root/\"model_results\"/\"A2Z-V4-SOL-BUILD-20261007-R4.json\"\n\nif mr.exists():\n    try:\n        env=json.loads(mr.read_text())\n        print(\"E129=R4_RESULT_EXISTS status=\"+str(env.get(\"status\"))+\" checkpoint=\"+str(env.get(\"checkpoint\")),flush=True)\n    except Exception:\n        print(\"E129=R4_RESULT_EXISTS\",flush=True)\n    raise SystemExit(0)\n\ndb=sqlite3.connect(\"file:\"+str(dbp)+\"?mode=ro\",uri=True)\ntry:\n    task=db.execute(\"select status,attempt,run,thread from tasks where id=?\",( \"A2Z-V4-SOL-BUILD-20261007-R4\", )).fetchone()\n    trs=db.execute(\"select state,reason,attempt,checkpoint,stamp,retry from transitions where task=? order by seq desc limit 4\",( \"A2Z-V4-SOL-BUILD-20261007-R4\", )).fetchall()\nfinally:\n    db.close()\n\nprint(\"E129_STATE \"+json.dumps({\"task\":task,\"transitions\":trs},separators=(\",\",\":\"),default=str),flush=True)\nif not task:\n    raise SystemExit(31)\nstatus,attempt,run,thread=task\nif status==\"RUNNING\":\n    print(\"E129=R4_RUNNING attempt=\"+str(attempt)+\" run=\"+str(run),flush=True); raise SystemExit(20)\nif status==\"PAUSED_USAGE_LIMIT\":\n    print(\"E129=R4_PAUSED_USAGE_LIMIT attempt=\"+str(attempt)+\" run=\"+str(run),flush=True); raise SystemExit(21)\nif status==\"COMPLETE\":\n    print(\"E129=R4_COMPLETE_WITHOUT_RESULT attempt=\"+str(attempt),flush=True); raise SystemExit(22)\nprint(\"E129=R4_STATE_\"+str(status)+\" attempt=\"+str(attempt),flush=True); raise SystemExit(29)\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/a2z_e129_r4_attempt_state.py"
+      ],
+      "timeout_seconds": 120
+    }
+  ]
+}
