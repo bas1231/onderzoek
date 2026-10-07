@@ -1,0 +1,41 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-A2Z-R4-R3-META-20261007-D2F6",
+  "source_commit": "82f60c19d6279eb52f86e3f7bf754948da2802c2",
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "High"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_runtime"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 180,
+  "notes": "Read-only compact metadata export of the existing R3 Sol build and exact Astra R3-P2 review. Intentionally returns metadata through normal error-detail compaction. No bridge/runtime/config/service mutation.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/r4_r3_meta_d2f6.py",
+      "content": "from __future__ import annotations\nfrom pathlib import Path\nimport hashlib, json\n\nROOT=Path.home()/\".local/share/prediction-project-executor/campaigns/FULL-A2Z-LIVE-20261004-V4\"\nBUILD=\"A2Z-V4-SOL-BUILD-20261006-R3\"\nREVIEW=\"A2Z-V4-ASTRA-POSTBUILD-20261006-R3-P2\"\n\ndef final_json(task_id: str):\n    env=json.loads((ROOT/\"model_results\"/(task_id+\".json\")).read_text(encoding=\"utf-8\"))\n    cp=(ROOT/env[\"checkpoint\"]).resolve()\n    if not cp.is_relative_to((ROOT/\"models/runs\").resolve()):\n        raise SystemExit(\"BAD_CHECKPOINT\")\n    complete=json.loads((cp/\"COMPLETE.json\").read_text(encoding=\"utf-8\"))\n    final=complete.get(\"final\")\n    if isinstance(final,str):\n        return json.loads(final)\n    if isinstance(final,dict):\n        return final\n    raise SystemExit(\"FINAL_MISSING\")\n\nb=final_json(BUILD)\nr=final_json(REVIEW)\nfiles=b.get(\"files\") or {}\nrows=[]\nfor name,text in sorted(files.items()):\n    rows.append({\n      \"n\":Path(name).name,\n      \"c\":len(text),\n      \"s\":hashlib.sha256(text.encode()).hexdigest()[:10],\n    })\nmeta={\n \"f\":rows,\n \"rf\":len(str(r.get(\"finding\") or \"\")),\n \"rn\":len(str(r.get(\"next_action\") or \"\")),\n \"rb\":str(r.get(\"binding_sha256\") or \"\")[:10],\n \"d\":str(r.get(\"decision\") or \"\"),\n \"ps\":str(b.get(\"proposal_sha256\") or \"\")[:10],\n}\ndetail=json.dumps(meta,separators=(\",\",\":\"),sort_keys=True)\nif len(detail)>315:\n    raise SystemExit(\"META_TOO_LONG:\"+str(len(detail)))\nprint(\"ERROR_CLASS=R4_META\")\nprint(\"ERROR=\"+detail)\nraise SystemExit(1)\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/r4_r3_meta_d2f6.py"
+      ],
+      "timeout_seconds": 90
+    }
+  ]
+}
