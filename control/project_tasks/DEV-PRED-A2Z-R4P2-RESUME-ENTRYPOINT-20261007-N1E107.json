@@ -1,0 +1,33 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-A2Z-R4P2-RESUME-ENTRYPOINT-20261007-N1E107",
+  "source_commit": "2d772224319ca3d936ae74be20d874e65f118b93",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "High"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "user_service_manage"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 120,
+  "notes": "Read-only exact ExecStart inspection for existing R4P2 model service; no restart or model invocation.",
+  "operations": [
+    {
+      "type": "service",
+      "verb": "status",
+      "unit": "prediction-a2z-v4-model@A2Z-V4-ASTRA-PREBUILD-DIRECT-20261007-R4P2.service",
+      "report_mode": "execstart",
+      "fail_for_visibility": true
+    }
+  ]
+}
