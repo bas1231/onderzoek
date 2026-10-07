@@ -1,0 +1,19 @@
+{
+  "schema": "PREDICTION_BRIDGE_COMMAND_V1",
+  "task_id": "CONT-DONE-d591742dc1afbcab1eb48ee4",
+  "action": "BRIDGE_PING",
+  "created_at_utc": "2026-10-07T19:15:00Z",
+  "route_task_id": null,
+  "delivery_mode": "headless",
+  "live_trading": false,
+  "paid_actions": false,
+  "wallet_actions": false,
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "notes": "Close superseded derived N1E59 continuation branch. The authoritative direct N1E59 continuation has already created the single-flight retry gate DEV-PRED-CONT-NEXT-c7d1df5ab3efbb2fa7c67c5e. No duplicate NEXT or Astra resume is authorized from this branch.",
+  "auto_continue": false,
+  "parent_continuation_id": "CONT-d591742dc1afbcab1eb48ee4"
+}
