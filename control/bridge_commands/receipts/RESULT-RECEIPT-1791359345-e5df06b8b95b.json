@@ -1,0 +1,14 @@
+{
+  "schema": "PREDICTION_RESULT_RECEIPT_V1",
+  "receipt_id": "RESULT-RECEIPT-1791359345-e5df06b8b95b",
+  "event_id": "1791359345-e5df06b8b95b",
+  "source_task_id": "DEV-PRED-A2Z-POSTBUILD-IMPORT-DIAG-20261007-E113",
+  "created_at_utc": "2026-10-07T07:50:00Z",
+  "live_trading": false,
+  "paid_actions": false,
+  "wallet_actions": false,
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "High"
+  }
+}
