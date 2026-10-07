@@ -1,0 +1,41 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-A2Z-R4P2-RESUME-SEQUENCE-20261007-N1E88",
+  "source_commit": "43204e18d45ffa5abdac89082947c07056c30d01",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "High"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_logs"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 120,
+  "notes": "Read-only chronological parse of exact R4P2 service journal since 21:12:30 to determine whether resume rewrote an older attempt/checkpoint. No service/model invocation.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/r4p2_resume_sequence_n1e88.py",
+      "content": "import subprocess,re,json\nunit=\"prediction-a2z-v4-model@A2Z-V4-ASTRA-PREBUILD-DIRECT-20261007-R4P2.service\"\np=subprocess.run([\"journalctl\",\"--user\",\"-u\",unit,\"--since\",\"2026-10-07 21:12:30\",\"--no-pager\"],capture_output=True,text=True)\nrows=[]\nfor line in (p.stdout or \"\").splitlines():\n    if \"A2Z-V4-ASTRA-PREBUILD-DIRECT-20261007-R4P2\" not in line and \"SUPERVISOR_STATE\" not in line:\n        continue\n    rec={}\n    m=re.match(r\"^([A-Z][a-z]{2} \\d{2} \\d{2}:\\d{2}:\\d{2}) \",line)\n    if m: rec[\"time\"]=m.group(1)\n    m=re.search(r'\"state\"\\s*:\\s*\"([^\"]+)\"',line)\n    if m: rec[\"state\"]=m.group(1)\n    m=re.search(r'\"reason\"\\s*:\\s*\"([^\"]+)\"',line)\n    if m: rec[\"reason\"]=m.group(1)\n    m=re.search(r'\"attempt\"\\s*:\\s*(\\d+)',line)\n    if m: rec[\"attempt\"]=int(m.group(1))\n    m=re.search(r'\"checkpoint\"\\s*:\\s*\"([^\"]+)\"',line)\n    if m: rec[\"checkpoint\"]=m.group(1)\n    m=re.search(r'\"retry_at\"\\s*:\\s*([0-9.]+)',line)\n    if m: rec[\"retry_at\"]=float(m.group(1))\n    if \"Started prediction-a2z-v4-model@\" in line: rec[\"event\"]=\"STARTED\"\n    if \"Deactivated successfully\" in line: rec[\"event\"]=\"DEACTIVATED\"\n    if \"Main process exited\" in line: rec[\"event\"]=\"MAIN_EXIT\"\n    if \"Failed with result\" in line: rec[\"event\"]=\"FAILED\"\n    if rec: rows.append(rec)\nprint(\"ERROR_CLASS=R4P2_RESUME_SEQUENCE\",flush=True)\nprint(\"ERROR=\"+json.dumps(rows[-20:],separators=(\",\",\":\"),sort_keys=True),flush=True)\nraise SystemExit(1)\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/r4p2_resume_sequence_n1e88.py"
+      ],
+      "timeout_seconds": 60
+    }
+  ]
+}
