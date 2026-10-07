@@ -10,6 +10,8 @@ Prediction has an installed GitHub command bus and a capability-scoped project e
 
 ### Mandatory first read
 
+**Absolute bridge freeze:** no Prediction or FG/PO session may modify the working ChatGPT↔WSL bridge unless the owner gives explicit permission for that specific bridge mutation. Generic autonomy, "fix it", "continue", repair or application-code permission never counts as bridge permission. The existing bridge may be used unchanged as transport and inspected read-only. If a task would require a bridge mutation, stop and ask the owner first.
+
 At the start of any session that may need local Prediction execution, first read from private repo `bas1231/onderzoek`:
 
 1. `00_CHATGPT_START_HERE.md`
