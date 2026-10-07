@@ -1,0 +1,40 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-A2Z-R4P2-PROPOSAL-BUNDLE-DIAG-20261007-N1E2",
+  "source_commit": "dc895a446eaac93c52ca4250507e97f98a70b0b5",
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "High"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 180,
+  "notes": "Isolate fresh governed proposal-bundle preconditions after proven DIRECT_SOL validation. No runtime writes, services, model execution, bridge mutation, experiment tests or measurement.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/r4p2_bundle_diag_n1e2.py",
+      "content": "from __future__ import annotations\nimport json, sys\nfrom pathlib import Path\n\nROOT=Path(__file__).resolve().parents[2]\nif str(ROOT) not in sys.path:\n    sys.path.insert(0,str(ROOT))\n\nstage=\"startup\"\ntry:\n    stage=\"hydrate_gate\"\n    from control.model_execution.patch_e106_gate import hydrate, patch_gate\n    hydrate(ROOT)\n    patch_gate(ROOT)\n\n    stage=\"patch_route\"\n    p=ROOT/\"control/jobs/full_a2z_governed_v4.py\"\n    text=p.read_text(encoding=\"utf-8\")\n    old='ROUTE = \"SESSION-ROUTE-756bff225d5a976edf6da02b\"'\n    new='ROUTE = \"SESSION-ROUTE-DIRECTSOL-20261007-K7A1\"'\n    if old in text:\n        p.write_text(text.replace(old,new,1),encoding=\"utf-8\")\n    elif new not in text:\n        raise RuntimeError(\"A2Z_ROUTE_PATTERN_MISSING\")\n\n    stage=\"selection_file\"\n    sel=ROOT/\"control/dev_checks/a2z_previous_selection.json\"\n    if not sel.is_file():\n        raise RuntimeError(\"PREVIOUS_SELECTION_MISSING\")\n    selection=json.loads(sel.read_text(encoding=\"utf-8\"))\n\n    stage=\"selection_shape\"\n    for key in (\"originating_task_id\",\"finding\",\"next_action\",\"source_hashes\"):\n        if key not in selection:\n            raise RuntimeError(\"SELECTION_FIELD_MISSING:\"+key)\n\n    stage=\"request_result_files\"\n    task=\"A2Z-V4-SOL-PROPOSAL-DIRECT-20261007-R4P2\"\n    req=ROOT/\"control/model_execution/direct_requests\"/(task+\".json\")\n    res=ROOT/\"control/model_execution/direct_results\"/(task+\".json\")\n    if not req.is_file() or not res.is_file():\n        raise RuntimeError(\"DIRECT_SOL_RECORD_MISSING\")\n\n    stage=\"proposal_parse\"\n    result=json.loads(res.read_text(encoding=\"utf-8\"))\n    proposal=json.loads(result[\"final\"])\n    if proposal.get(\"proposal_version\")!=4:\n        raise RuntimeError(\"PROPOSAL_VERSION\")\n\n    stage=\"a2z_import\"\n    sys.path.insert(0,str(ROOT/\"control/codex_supervisor\"))\n    import experiment_gate as gate\n    import model_quality_gate as q\n\n    stage=\"candidate\"\n    candidate=ROOT/\"knowledge/candidates/AUTO-DISCOVERY-54d13314c7879b58e46d.json\"\n    if not candidate.is_file():\n        raise RuntimeError(\"CANDIDATE_MISSING\")\n\n    print(\"ERROR_CLASS=R4P2_BUNDLE_DIAG\")\n    print(\"ERROR=\"+json.dumps({\n      \"stage\":\"PASS\",\n      \"selection_task\":selection.get(\"originating_task_id\"),\n      \"proposal_version\":proposal.get(\"proposal_version\"),\n      \"route\":\"SESSION-ROUTE-DIRECTSOL-20261007-K7A1\"\n    },separators=(\",\",\":\"),sort_keys=True))\n    raise SystemExit(1)\nexcept SystemExit:\n    raise\nexcept BaseException as exc:\n    print(\"ERROR_CLASS=R4P2_BUNDLE_DIAG\")\n    print(\"ERROR=\"+json.dumps({\n      \"stage\":stage,\n      \"error\":type(exc).__name__,\n      \"detail\":str(exc)[:260]\n    },separators=(\",\",\":\"),sort_keys=True))\n    raise SystemExit(1)\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/r4p2_bundle_diag_n1e2.py"
+      ],
+      "timeout_seconds": 90
+    }
+  ]
+}
