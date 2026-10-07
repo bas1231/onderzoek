@@ -1,9 +1,9 @@
 {
   "schema": "PREDICTION_CONTROL_CENTER_LIFECYCLE_V1",
-  "updated_at": "2026-10-06",
+  "updated_at": "2026-10-07",
   "full_chain_status": "NOT_PROVEN",
   "full_chain_label": "Volledige A→Z-keten nog niet bewezen",
-  "next_required": "Huidige kandidaat AUTO-DISCOVERY-54d13314c7879b58e46d: verifieer nu de inhoudelijke GPT-6 Astra POST-BUILD-beslissing van E106. Alleen bij exact gebonden APPROVE mogen de experimenttests en meting starten; bij NEEDS_REVISION gaat de feedback terug naar GPT-5.6 Sol en volgt een nieuwe build plus nieuwe Astra POST-BUILD-review. De campagne is na E107 bewust gepauzeerd.",
+  "next_required": "Huidige kandidaat AUTO-DISCOVERY-54d13314c7879b58e46d: de bestaande GPT-6 Astra POST-BUILD-run R3-P2 bevat een inhoudelijke APPROVE, maar die raw modeluitkomst is nog niet canoniek toegepast. Voer nu uitsluitend de ontbrekende POSTBUILD import/validatie uit via import_review() + q.validate_review() + require_postbuild(). Pas na een geldige, exact gebonden toepassing mogen experimenttests en meting starten; tot dat moment blijft de gate dicht.",
   "invariant": "NO_TEST_OR_MEASUREMENT_BEFORE_ASTRA_POSTBUILD_APPROVAL",
   "evidence_refs": [
     "control/bridge_commands/CURRENT_STATE.md",
@@ -13,7 +13,10 @@
     "control/project_tasks/DEV-PRED-A2Z-PAUSE-20261006-E107.json",
     "control/bridge_commands/inbox/DEV-PRED-A2Z-PAUSE-20261006-E107.json",
     "same-chat:E106 status=PASS exit=0",
-    "same-chat:E107 status=PASS exit=0"
+    "same-chat:E107 status=PASS exit=0",
+    "control/build_log/events/20261007T070000Z-A2Z-E106-DECISION-VERIFY-E108-RESULT.json",
+    "control/build_log/events/20261007T070600Z-A2Z-E106-EVIDENCE-FORENSICS-E109-PASS.json",
+    "control/build_log/events/20261007T071000Z-A2Z-E106-COMPACT-CLASSIFY-E110-PASS.json"
   ],
   "stages": [
     {
@@ -68,7 +71,7 @@
       "state": "TARGETED_TESTED",
       "detail": "De verplichte post-build gate en de blokkade vóór tests/meting zijn gericht getest en canoniek vastgelegd. De volledige A→Z-run blijft nog te bewijzen.",
       "current_candidate_state": "CURRENT_WAITING",
-      "current_candidate_detail": "E105 stopte vóór modelreview omdat het reviewpakket >100.000 tekens was. Het pakket is verkleind tot 96.235 tekens en E106 kwam technisch terug met PASS exit=0. De inhoudelijke Astra-beslissing moet nog bewijsgebonden worden uitgelezen/bevestigd. E107 heeft de campagne daarna op verzoek gepauzeerd."
+      "current_candidate_detail": "De bestaande R3-P2 Astra-run heeft inhoudelijk APPROVE geproduceerd. E108 vond dit als APPROVE_UNVERIFIED omdat de raw modeluitkomst nog niet door de canonical POSTBUILD import/validator is toegepast. De volgende stap is uitsluitend import_review() + q.validate_review() + require_postbuild(); Astra hoeft niet opnieuw te draaien."
     },
     {
       "id": "measurement",
@@ -77,7 +80,7 @@
       "state": "PENDING_E2E",
       "detail": "De volgorde is vastgelegd: inhoudelijke tests, backtests, shadow-runs en metingen mogen pas na Astra-goedkeuring van de exacte gebouwde versie. Een volledige actuele A→Z-doorgang moet nog worden bewezen.",
       "current_candidate_state": "WAITING",
-      "current_candidate_detail": "Nog geblokkeerd. Tests/backtests/shadowmetingen mogen pas starten nadat E106 inhoudelijk een geldige, exact gebonden Astra POST-BUILD APPROVE blijkt te bevatten."
+      "current_candidate_detail": "Nog geblokkeerd. Er is wel een raw Astra APPROVE, maar tests/backtests/shadowmetingen mogen pas starten nadat die review canoniek is geïmporteerd, exact gebonden en require_postbuild() geldig passeert."
     },
     {
       "id": "supervisor",
@@ -86,7 +89,7 @@
       "state": "PENDING_E2E",
       "detail": "De toezichthouder moet na de meting een eindbeoordeling geven binnen dezelfde volledige run. Dat volledige traject is nog niet bewezen.",
       "current_candidate_state": "WAITING",
-      "current_candidate_detail": "Nog niet uitgevoerd; volgt pas na toegestane tests en meting op exact de door Astra goedgekeurde build."
+      "current_candidate_detail": "Nog niet uitgevoerd; volgt pas na een geldige canonical POSTBUILD-approval en daarna toegestane tests/meting."
     },
     {
       "id": "reporting",
@@ -95,7 +98,7 @@
       "state": "PENDING_E2E",
       "detail": "Het eindrapport moet uit dezelfde aantoonbare keten komen. Tot die volledige keten is bewezen blijft NO_PROVEN_EDGE de wetenschappelijke standaard.",
       "current_candidate_state": "WAITING",
-      "current_candidate_detail": "Nog geen finaal A→Z-rapport voor deze kandidaat. Wetenschappelijke status blijft NO_PROVEN_EDGE."
+      "current_candidate_detail": "Nog geen finaal A→Z-rapport. Raw Astra APPROVE alleen is onvoldoende; scientific_status blijft NO_PROVEN_EDGE."
     }
   ],
   "current_candidate": {
@@ -106,16 +109,19 @@
     "postbuild_task_id": "DEV-PRED-A2Z-POSTBUILD-RETRY-20261006-E106",
     "pause_task_id": "DEV-PRED-A2Z-PAUSE-20261006-E107",
     "current_stage": "astra_postbuild",
-    "state": "PAUSED_AWAITING_POSTBUILD_DECISION_VERIFICATION",
-    "label": "Astra POST-BUILD — E106 technisch PASS; inhoudelijke beslissing nog verifiëren",
-    "detail": "PRE-BUILD R3 is goedgekeurd en Sol heeft de drie R3-artifacts gebouwd. E105 bereikte Astra niet door een te groot reviewpakket; de begrensde retry E106 is technisch PASS exit=0. Dat bewijst nog niet zelfstandig een inhoudelijke APPROVE. De campagne is met E107 bewust gepauzeerd totdat de reviewuitkomst wordt uitgelezen en de gebruiker hervat.",
+    "state": "PAUSED_AWAITING_POSTBUILD_IMPORT_VALIDATION",
+    "label": "Astra POST-BUILD — APPROVE aanwezig; canonical import/validatie nog vereist",
+    "detail": "PRE-BUILD R3 is goedgekeurd en GPT-5.6 Sol bouwde de drie R3-artifacts. De R3-P2 GPT-6 Astra-run heeft inhoudelijk APPROVE geproduceerd. E106 importeerde die modeluitkomst echter nog niet via de canonical POSTBUILD-stap, waardoor de review nog niet als exact gebonden gate-authorisatie geldt. Tests en meting blijven geblokkeerd totdat import_review(), q.validate_review() en require_postbuild() groen zijn.",
     "scientific_status": "NO_PROVEN_EDGE",
     "evidence_refs": [
       "control/project_tasks/DEV-PRED-A2Z-POSTBUILD-RETRY-20261006-E106.json",
       "control/bridge_commands/inbox/DEV-PRED-A2Z-POSTBUILD-RETRY-20261006-E106.json",
       "control/project_tasks/DEV-PRED-A2Z-PAUSE-20261006-E107.json",
       "same-chat:E106 status=PASS exit=0",
-      "same-chat:E107 status=PASS exit=0"
+      "same-chat:E107 status=PASS exit=0",
+      "control/build_log/events/20261007T070000Z-A2Z-E106-DECISION-VERIFY-E108-RESULT.json",
+      "control/build_log/events/20261007T070600Z-A2Z-E106-EVIDENCE-FORENSICS-E109-PASS.json",
+      "control/build_log/events/20261007T071000Z-A2Z-E106-COMPACT-CLASSIFY-E110-PASS.json"
     ]
   }
 }
