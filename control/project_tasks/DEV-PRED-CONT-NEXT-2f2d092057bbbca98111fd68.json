@@ -1,0 +1,41 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-CONT-NEXT-2f2d092057bbbca98111fd68",
+  "source_commit": "c67a9e32191a285816db4d330fdd697f91216f75",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "High"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_runtime"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 60,
+  "notes": "Continuation NEXT joins existing single-flight N1E57 verifier after PAUSED_USAGE_LIMIT. Read-only; no service/model invocation.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/cont_join_n1e57_2f2d0920.py",
+      "content": "from pathlib import Path\nimport json\nstate=Path.home()/\".local/state/prediction-project-executor/DEV-PRED-A2Z-R4P2-PREBUILD-POSTRESUME-VERIFY-20261007-N1E57.json\"\nif not state.is_file():\n    raise SystemExit(20)\no=json.loads(state.read_text(encoding=\"utf-8\"))\nstatus=o.get(\"status\")\nif status==\"PASS\":\n    raise SystemExit(0)\nif status==\"FAIL\":\n    err=str(o.get(\"error\") or \"\")\n    if \"rc=11\" in err: raise SystemExit(11)\n    if \"rc=12\" in err: raise SystemExit(12)\n    if \"rc=30\" in err: raise SystemExit(30)\n    if \"rc=31\" in err: raise SystemExit(31)\n    if \"rc=32\" in err: raise SystemExit(32)\n    raise SystemExit(40)\nraise SystemExit(21)\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/cont_join_n1e57_2f2d0920.py"
+      ],
+      "timeout_seconds": 15
+    }
+  ]
+}
