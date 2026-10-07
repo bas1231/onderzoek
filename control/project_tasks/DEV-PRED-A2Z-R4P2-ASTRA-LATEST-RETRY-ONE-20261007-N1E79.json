@@ -1,0 +1,42 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-A2Z-R4P2-ASTRA-LATEST-RETRY-ONE-20261007-N1E79",
+  "source_commit": "62795fbd1ff621ff6cfb3b81456012e0a37c10f2",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "High"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_runtime",
+    "read_logs"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 120,
+  "notes": "Read-only extract exactly one newest R4P2 Astra USAGE_LIMIT record after N1E78 rc=30. No service/model invocation.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/r4p2_astra_latest_retry_one_n1e79.py",
+      "content": "import subprocess,re,json\nunit=\"prediction-a2z-v4-model@A2Z-V4-ASTRA-PREBUILD-DIRECT-20261007-R4P2.service\"\np=subprocess.run([\"journalctl\",\"--user\",\"-u\",unit,\"--no-pager\"],capture_output=True,text=True)\ntxt=(p.stdout or \"\")+\"\\n\"+(p.stderr or \"\")\ntask=\"A2Z-V4-ASTRA-PREBUILD-DIRECT-20261007-R4P2\"\nrows=[]\nfor line in txt.splitlines():\n    if task not in line or \"USAGE_LIMIT\" not in line:\n        continue\n    rec={}\n    m=re.search(r'\"attempt\"\\s*:\\s*(\\d+)',line)\n    if m: rec[\"attempt\"]=int(m.group(1))\n    m=re.search(r'\"timestamp\"\\s*:\\s*([0-9.]+)',line)\n    if m: rec[\"timestamp\"]=float(m.group(1))\n    m=re.search(r'\"retry_at\"\\s*:\\s*([0-9.]+)',line)\n    if m: rec[\"retry_at\"]=float(m.group(1))\n    m=re.search(r'\"checkpoint\"\\s*:\\s*\"([^\"]+)\"',line)\n    if m: rec[\"checkpoint\"]=m.group(1)\n    if rec: rows.append(rec)\nprint(\"ERROR_CLASS=R4P2_ASTRA_LATEST_RETRY_ONE\",flush=True)\nif not rows:\n    print(\"ERROR={}\",flush=True)\n    raise SystemExit(1)\nrows.sort(key=lambda r:(r.get(\"timestamp\",-1),r.get(\"attempt\",-1)))\nprint(\"ERROR=\"+json.dumps(rows[-1],separators=(\",\",\":\"),sort_keys=True),flush=True)\nraise SystemExit(1)\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/r4p2_astra_latest_retry_one_n1e79.py"
+      ],
+      "timeout_seconds": 60
+    }
+  ]
+}
