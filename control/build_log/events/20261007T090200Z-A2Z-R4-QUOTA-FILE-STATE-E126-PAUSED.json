@@ -1,0 +1,31 @@
+{
+  "schema": "PREDICTION_BUILD_LOG_EVENT_V1",
+  "event_id": "20261007T090200Z-A2Z-R4-QUOTA-FILE-STATE-E126-PAUSED",
+  "work_item_id": "A2Z-SYSTEMTEST-20261005",
+  "created_at_utc": "2026-10-07T09:02:00Z",
+  "event_type": "RESULT",
+  "work_item_status": "IN_PROGRESS",
+  "outcome": "BLOCKED",
+  "title": "R4 staat canonical op PAUSED_USAGE_LIMIT",
+  "objective": "Lees de R4 quota-state zonder systemd-ruis.",
+  "summary": "E126 bevestigde request_exists=true, result_exists=false en task_row PAUSED_USAGE_LIMIT attempt=1 op dezelfde run A2Z-V4-SOL-BUILD-20261007-R4-1-165d27d5.",
+  "why": "Dit is de gewenste veilige toestand na Codex usage limit; geen nieuwe R4-task nodig.",
+  "first_incomplete_step": "Bevestig live retry delta van 900 seconden en eventuele volgende attempt.",
+  "next_action": "Behoud 15-minuten retrycadans; E127-patch niet installeren.",
+  "session_route_task_id": "SESSION-ROUTE-5388245c5e308fbc9dcf92ab",
+  "task_ids": [
+    "DEV-PRED-A2Z-R4-QUOTA-FILE-STATE-20261007-E126",
+    "A2Z-V4-SOL-BUILD-20261007-R4"
+  ],
+  "commits": [],
+  "evidence_refs": [
+    "result:DEV-PRED-A2Z-R4-QUOTA-FILE-STATE-20261007-E126 status=PAUSED_USAGE_LIMIT attempt=1 event=1791361832-b09e39e8a01a"
+  ],
+  "tags": [
+    "a2z",
+    "codex",
+    "r4",
+    "usage-limit",
+    "15m"
+  ]
+}
