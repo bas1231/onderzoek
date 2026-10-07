@@ -1,0 +1,19 @@
+{
+  "schema": "PREDICTION_BRIDGE_COMMAND_V1",
+  "task_id": "CONT-DONE-cbe4bd8c7adfd0f308841483",
+  "action": "BRIDGE_PING",
+  "created_at_utc": "2026-10-07T19:32:30Z",
+  "route_task_id": null,
+  "delivery_mode": "headless",
+  "live_trading": false,
+  "paid_actions": false,
+  "wallet_actions": false,
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "notes": "Close continuation from the authoritative retry gate after its PASS outcome was already durably advanced to single-flight post-retry verifier DEV-PRED-A2Z-R4P2-PREBUILD-POSTRETRY-VERIFY-20261007-N1E60. No duplicate NEXT or Astra resume is authorized.",
+  "auto_continue": false,
+  "parent_continuation_id": "CONT-cbe4bd8c7adfd0f308841483"
+}
