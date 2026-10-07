@@ -76,6 +76,21 @@ def patch_runner(root: Path) -> None:
         raise RuntimeError("E106_RUNNER_IMPORT_PATTERN_MISSING")
     text = text.replace(import_old, import_new, 1)
 
+    route_anchor = '''def request(repo, overlay, phase, task_id, prompt):
+'''
+    route_helper = '''def governed_route(overlay):
+    route = str((overlay.get("governed_lifecycle") or {}).get("route_task_id") or "")
+    if not route.startswith("SESSION-ROUTE-"):
+        raise ValueError("GOVERNED_ROUTE_REQUIRED")
+    return route
+
+
+def request(repo, overlay, phase, task_id, prompt):
+'''
+    if route_anchor not in text:
+        raise RuntimeError("E106_RUNNER_ROUTE_ANCHOR_MISSING")
+    text = text.replace(route_anchor, route_helper, 1)
+
     legacy_request_old = '''def request(repo, overlay, phase, task_id, prompt):
     if not isinstance(prompt, str) or not prompt.strip() or len(prompt) > 100000:
 '''
@@ -94,6 +109,7 @@ def patch_runner(root: Path) -> None:
     if phase not in ("SOL_PROPOSAL", "SOL_BUILD"):
         raise ValueError("DIRECT_SOL_PHASE")
     created = datetime.utcnow().replace(microsecond=0).isoformat() + "Z"
+    route = governed_route(overlay)
     value = build_direct_sol_request(
         task_id=task_id,
         phase=phase,
@@ -101,7 +117,7 @@ def patch_runner(root: Path) -> None:
         candidate_id=CID,
         binding_sha256=binding_sha256,
         prompt=prompt,
-        delivery_route_task_id=ROUTE,
+        delivery_route_task_id=route,
         created_at_utc=created,
     )
     path = repo / "direct_requests" / (task_id + ".json")
