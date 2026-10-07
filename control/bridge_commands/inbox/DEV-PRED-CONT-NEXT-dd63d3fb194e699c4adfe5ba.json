@@ -1,0 +1,17 @@
+{
+  "schema": "PREDICTION_BRIDGE_COMMAND_V1",
+  "task_id": "DEV-PRED-CONT-NEXT-dd63d3fb194e699c4adfe5ba",
+  "action": "SIX_AI_HEALTH",
+  "created_at_utc": "2026-10-07T18:31:00Z",
+  "route_task_id": "DEV-PRED-A2Z-R4P2-PREBUILD-GATE-20261007-N1E47",
+  "live_trading": false,
+  "paid_actions": false,
+  "wallet_actions": false,
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "High"
+  },
+  "auto_continue": true,
+  "parent_continuation_id": "CONT-dd63d3fb194e699c4adfe5ba"
+}
