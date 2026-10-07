@@ -1,0 +1,42 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-A2Z-E106-DECISION-VERIFY-20261007-E108",
+  "source_commit": "047437d10ea32195f04bd14d19b15fff6be5304e",
+  "build_id": "BUILD-PRED-A2Z-E106-VERIFY-20261007",
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "High"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_runtime"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 180,
+  "notes": "Read-only E106 evidence classification. No model start, no build, no tests, no measurement, no runtime mutation. Exit 0 only for exact GPT-6 Astra APPROVE with 64-hex binding; 20 revision; 21 reject/park; 23 missing; 24 approve but provenance/binding not sufficiently verified.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/a2z_e106_decision_verify_20261007_e108.py",
+      "content": "from pathlib import Path\nimport json, re, sys\n\nCID = \"AUTO-DISCOVERY-54d13314c7879b58e46d\"\nMODEL_TASK = \"A2Z-V4-ASTRA-POSTBUILD-20261006-R3-P2\"\nroots = [\n    Path.home()/\".local/share/prediction-project-executor/campaigns/FULL-A2Z-LIVE-20261004-V4\",\n    Path.home()/\".local/share/prediction-project-executor/worktrees/DEV-PRED-A2Z-POSTBUILD-RETRY-20261006-E106\",\n    Path.home()/\".local/state/prediction-codex-supervisor\",\n]\nMAX = 2_000_000\nseen = []\ndicts = []\n\ndef walk(obj, path, parent=None):\n    if isinstance(obj, dict):\n        dicts.append((path, obj))\n        for v in obj.values():\n            walk(v, path, obj)\n    elif isinstance(obj, list):\n        for v in obj:\n            walk(v, path, parent)\n\nfor root in roots:\n    if not root.exists():\n        continue\n    for p in root.rglob(\"*\"):\n        try:\n            if not p.is_file() or p.stat().st_size > MAX:\n                continue\n        except OSError:\n            continue\n        if p.suffix.lower() not in {\".json\", \".jsonl\", \".log\", \".txt\"}:\n            continue\n        try:\n            raw = p.read_text(errors=\"replace\")\n        except Exception:\n            continue\n        low = raw.lower()\n        if MODEL_TASK.lower() not in low and CID.lower() not in low and \"postbuild\" not in low:\n            continue\n        seen.append(str(p))\n        if p.suffix.lower() == \".json\":\n            try:\n                walk(json.loads(raw), str(p))\n            except Exception:\n                pass\n        elif p.suffix.lower() == \".jsonl\":\n            for line in raw.splitlines():\n                try:\n                    walk(json.loads(line), str(p))\n                except Exception:\n                    pass\n\ndef phase_is_post(d):\n    vals = [d.get(\"phase\"), d.get(\"review_phase\"), d.get(\"gate\"), d.get(\"review_kind\")]\n    return any(str(v).upper() == \"POSTBUILD\" or \"POSTBUILD\" in str(v).upper() for v in vals if v is not None)\n\ndef candidate_matches(d):\n    c = d.get(\"candidate_id\")\n    if c is None:\n        return True\n    return c == CID\n\ndef task_matches(d):\n    vals = [d.get(\"task_id\"), d.get(\"source_task_id\"), d.get(\"model_task_id\"), d.get(\"review_task_id\")]\n    return MODEL_TASK in [str(v) for v in vals if v is not None]\n\ndef exact_model(d):\n    return d.get(\"reviewer_model\") == \"GPT-6 Astra\" and d.get(\"reviewer_model_slug\") == \"gpt-6-astra\"\n\ndef binding_ok(d):\n    b = d.get(\"binding_sha256\")\n    return isinstance(b, str) and re.fullmatch(r\"[0-9a-f]{64}\", b) is not None\n\n# Candidate-state applied review is strongest evidence.\napplied = []\nfor path,d in dicts:\n    if d.get(\"candidate_id\") != CID:\n        continue\n    reviews = d.get(\"astra_reviews\")\n    if not isinstance(reviews, dict):\n        continue\n    post = reviews.get(\"POSTBUILD\")\n    if isinstance(post, dict):\n        applied.append((path, post, d))\n\n# Direct POSTBUILD review/result records.\nreviews = []\nfor path,d in dicts:\n    dec = str(d.get(\"decision\",\"\")).upper()\n    if dec not in {\"APPROVE\",\"NEEDS_REVISION\",\"REVISE\",\"REJECT\",\"PARK\"}:\n        continue\n    if not candidate_matches(d):\n        continue\n    if phase_is_post(d) or task_matches(d) or \"postbuild\" in path.lower():\n        reviews.append((path,d))\n\ndef classify_record(d):\n    dec = str(d.get(\"decision\",\"\")).upper()\n    if dec == \"APPROVE\":\n        if exact_model(d) and binding_ok(d):\n            return \"APPROVE_EXACT\"\n        return \"APPROVE_UNVERIFIED\"\n    if dec in {\"NEEDS_REVISION\",\"REVISE\"}:\n        return \"NEEDS_REVISION\"\n    if dec in {\"REJECT\",\"PARK\"}:\n        return dec\n    return None\n\nsummary = {\n    \"candidate_id\": CID,\n    \"model_task\": MODEL_TASK,\n    \"files_seen\": len(seen),\n    \"applied_postbuild_records\": len(applied),\n    \"direct_review_records\": len(reviews),\n    \"classification\": \"MISSING\",\n    \"evidence_paths\": []\n}\n\n# Prefer applied candidate-state review.\nfor path,post,state in applied:\n    cls = classify_record(post)\n    if cls:\n        summary[\"classification\"] = cls + \"_APPLIED\"\n        summary[\"evidence_paths\"] = [path]\n        summary[\"queue_status\"] = state.get(\"queue_status\")\n        summary[\"scientific_status\"] = state.get(\"scientific_status\")\n        summary[\"review_ref\"] = post.get(\"ref\") or post.get(\"review_ref\")\n        print(\"E106_POSTBUILD_VERIFY \"+json.dumps(summary,separators=(\",\",\":\")), flush=True)\n        if cls == \"APPROVE_EXACT\":\n            raise SystemExit(0)\n        if cls == \"NEEDS_REVISION\":\n            raise SystemExit(20)\n        if cls in {\"REJECT\",\"PARK\"}:\n            raise SystemExit(21)\n        raise SystemExit(24)\n\n# Otherwise classify direct model/review records.\nfor path,d in reviews:\n    cls = classify_record(d)\n    if not cls:\n        continue\n    summary[\"classification\"] = cls\n    summary[\"evidence_paths\"] = [path]\n    summary[\"review_ref\"] = d.get(\"ref\") or d.get(\"review_ref\")\n    print(\"E106_POSTBUILD_VERIFY \"+json.dumps(summary,separators=(\",\",\":\")), flush=True)\n    if cls == \"APPROVE_EXACT\":\n        raise SystemExit(0)\n    if cls == \"NEEDS_REVISION\":\n        raise SystemExit(20)\n    if cls in {\"REJECT\",\"PARK\"}:\n        raise SystemExit(21)\n    raise SystemExit(24)\n\nprint(\"E106_POSTBUILD_VERIFY \"+json.dumps(summary,separators=(\",\",\":\")), flush=True)\nraise SystemExit(23)\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/a2z_e106_decision_verify_20261007_e108.py"
+      ],
+      "timeout_seconds": 120
+    }
+  ]
+}
