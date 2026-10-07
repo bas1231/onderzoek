@@ -1,0 +1,61 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-SOL-DIRECT-GATE-QUALIFY-R2-20261007-A7C1",
+  "source_commit": "bff88ebc7dc0aa5ba66191582ee2ca7da064a25f",
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "High"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 300,
+  "notes": "Resume the first incomplete DIRECT_SOL gate qualification after E144. Isolated worktree only; no bridge mutation, model execution, experiment measurement, service mutation, trading, paid action, wallet action, or remote git write.",
+  "operations": [
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/model_execution/patch_e106_gate.py"
+      ],
+      "timeout_seconds": 60
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "-m",
+        "compileall",
+        "-q",
+        "control/model_execution",
+        "control/codex_supervisor/experiment_gate.py",
+        "control/jobs/full_a2z_governed_v4.py"
+      ],
+      "timeout_seconds": 90
+    },
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/direct_sol_gate_qualify_r2.py",
+      "content": "from __future__ import annotations\nimport hashlib, json, sys, tempfile\nfrom pathlib import Path\n\nroot = Path.cwd()\nsys.path.insert(0, str(root))\nsys.path.insert(0, str(root / \"control/codex_supervisor\"))\n\nfrom control.model_execution.direct_sol_chat import build_request, build_result, TARGET_MODEL\nfrom control.model_execution.direct_sol_record import normalized_run_files, provenance_record\nimport experiment_gate as gate\n\ndef write_record(repo: Path, files: dict[str,str], record: dict) -> None:\n    for name, pin in record[\"files\"].items():\n        p = repo / pin[\"ref\"]\n        p.parent.mkdir(parents=True, exist_ok=True)\n        p.write_text(files[name], encoding=\"utf-8\")\n\ndef astra_record(repo: Path, route: str) -> dict:\n    prompt=\"review\"\n    final=json.dumps({\"candidate_id\":\"X\"})\n    ih=hashlib.sha256(prompt.encode()).hexdigest()\n    task={\"task_id\":\"ASTRA-SMOKE\",\"phase\":\"ASTRA_POSTBUILD\",\"model_policy\":\"ASTRA_EXACT\",\"campaign_id\":\"C\",\"route_task_id\":route,\"prompt\":prompt,\"input_sha256\":ih}\n    worker={\"model\":\"gpt-6-astra\",\"model_selection\":{\"policy\":\"ASTRA_EXACT\",\"selected_slug\":\"gpt-6-astra\"},\"command_flags\":[\"exec\",\"-m\",\"gpt-6-astra\"],\"started_at\":3.0}\n    complete={\"task_id\":\"ASTRA-SMOKE\",\"input_sha256\":ih,\"thread_id\":\"astra-thread\",\"final\":final,\"timestamp\":4.0}\n    events=[{\"type\":\"thread.started\",\"thread_id\":\"astra-thread\"},{\"type\":\"item.completed\",\"item\":{\"type\":\"agent_message\",\"text\":final}},{\"type\":\"turn.completed\"}]\n    texts={\"TASK.json\":json.dumps(task),\"WORKER.json\":json.dumps(worker),\"COMPLETE.json\":json.dumps(complete),\"events.jsonl\":\"\".join(json.dumps(e)+\"\\n\" for e in events)}\n    rec={\"revoked\":False,\"files\":{}}\n    for name,text in texts.items():\n        ref=\"astra/\"+name\n        p=repo/ref\n        p.parent.mkdir(parents=True,exist_ok=True)\n        p.write_text(text,encoding=\"utf-8\")\n        rec[\"files\"][name]={\"ref\":ref,\"sha256\":hashlib.sha256(text.encode()).hexdigest()}\n    return rec\n\ndef main() -> int:\n    route=\"SESSION-ROUTE-controller\"\n    overlay={\"candidate_id\":\"X\",\"governed_lifecycle\":{\"campaign_id\":\"C\",\"route_task_id\":route},\"live_trading\":False,\"paid_actions\":False,\"wallet_actions\":False}\n    with tempfile.TemporaryDirectory() as td:\n        repo=Path(td)\n        req=build_request(task_id=\"SOL-SMOKE\",phase=\"SOL_BUILD\",campaign_id=\"C\",candidate_id=\"X\",binding_sha256=\"a\"*64,prompt=\"build\",delivery_route_task_id=route,created_at_utc=\"2026-10-07T11:46:00Z\")\n        res=build_result(req,worker_route_task_id=\"SESSION-ROUTE-sol-worker\",final=json.dumps({\"candidate_id\":\"X\"}),started_at_utc=\"2026-10-07T11:47:00Z\",finished_at_utc=\"2026-10-07T11:48:00Z\")\n        files=normalized_run_files(req,res)\n        sol_record=provenance_record(\"sol\",files)\n        write_record(repo,files,sol_record)\n        _,sol_worker,_,sol_result=gate.model_record(repo,sol_record,overlay,\"SOL_BUILD\")\n        assert sol_worker[\"model\"] == TARGET_MODEL\n        assert sol_worker[\"execution_layer\"] == \"DIRECT_SOL_CHAT\"\n        assert sol_result[\"candidate_id\"] == \"X\"\n\n        ar=astra_record(repo,route)\n        _,astra_worker,_,astra_result=gate.model_record(repo,ar,overlay,\"ASTRA_POSTBUILD\")\n        assert astra_worker[\"model\"] == \"gpt-6-astra\"\n        assert astra_result[\"candidate_id\"] == \"X\"\n\n        wp=repo/sol_record[\"files\"][\"WORKER.json\"][\"ref\"]\n        bad=json.loads(wp.read_text())\n        bad[\"model\"]=\"gpt-6-astra\"\n        wp.write_text(json.dumps(bad,sort_keys=True),encoding=\"utf-8\")\n        sol_record[\"files\"][\"WORKER.json\"][\"sha256\"]=hashlib.sha256(wp.read_bytes()).hexdigest()\n        try:\n            gate.model_record(repo,sol_record,overlay,\"SOL_BUILD\")\n        except gate.ExperimentGateError:\n            pass\n        else:\n            raise RuntimeError(\"DIRECT_SOL_WRONG_MODEL_ACCEPTED\")\n    print(\"DIRECT_SOL_GATE_QUALIFY_R2=PASS\")\n    return 0\n\nif __name__ == \"__main__\":\n    raise SystemExit(main())\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/direct_sol_gate_qualify_r2.py"
+      ],
+      "timeout_seconds": 90
+    }
+  ]
+}
