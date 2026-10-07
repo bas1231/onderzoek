@@ -1,0 +1,32 @@
+{
+  "schema": "PREDICTION_BUILD_LOG_EVENT_V1",
+  "event_id": "20261007T074200Z-CONTROL-CENTER-A2Z-REFRESH-E002-PASS",
+  "work_item_id": "CONTROL-CENTER-A2Z-STATUS-REFRESH-20261006",
+  "created_at_utc": "2026-10-07T07:42:00Z",
+  "event_type": "RESULT",
+  "work_item_status": "DONE",
+  "outcome": "PASS",
+  "title": "Dashboard live bijgewerkt naar Astra APPROVE / import pending",
+  "objective": "Laat het live Control Center exact tonen dat Astra raw APPROVE heeft geproduceerd maar canonical POSTBUILD import/validatie nog vereist is.",
+  "summary": "DEV-PRED-CONTROL-CENTER-A2Z-REFRESH-20261007-E002 kwam in deze chat terug met status=PASS exit=0 en rcs=1:0. Daarmee zijn runtime-installatie, Control Center restart/status en runtime-canary succesvol doorlopen.",
+  "why": "De live dashboardstatus loopt nu gelijk met de bewijsstand: raw Astra APPROVE aanwezig, canonical POSTBUILD-import nog vereist; tests/meting blijven geblokkeerd.",
+  "first_incomplete_step": null,
+  "next_action": "Dashboardwerk is afgerond. A2Z-SYSTEMTEST-20261005 gaat verder via reeds verzonden DEV-PRED-A2Z-POSTBUILD-IMPORT-20261007-E112; geen dubbele task starten.",
+  "session_route_task_id": "SESSION-ROUTE-5388245c5e308fbc9dcf92ab",
+  "task_ids": [
+    "DEV-PRED-CONTROL-CENTER-A2Z-REFRESH-20261007-E002"
+  ],
+  "commits": [
+    "f0ef62b0977267af1356e6dfe74b4703af5e04f8"
+  ],
+  "evidence_refs": [
+    "result:DEV-PRED-CONTROL-CENTER-A2Z-REFRESH-20261007-E002 status=PASS exit=0 rcs=1:0 head=f0ef62b0977267af1356e6dfe74b4703af5e04f8 event=1791359089-2c98b825e3ec"
+  ],
+  "tags": [
+    "control-center",
+    "dashboard",
+    "a2z",
+    "runtime",
+    "pass"
+  ]
+}
