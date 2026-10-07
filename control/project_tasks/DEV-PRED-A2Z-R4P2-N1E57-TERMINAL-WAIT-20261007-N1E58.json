@@ -1,0 +1,41 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-A2Z-R4P2-N1E57-TERMINAL-WAIT-20261007-N1E58",
+  "source_commit": "7a2f0495a9499839f5f145b5ab7570abd0592e99",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "High"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_runtime"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 210,
+  "notes": "Bounded read-only wait for the already-running N1E57 verifier to reach terminal PASS/FAIL. No service/model invocation, no runtime mutation.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/wait_n1e57_terminal_n1e58.py",
+      "content": "from pathlib import Path\nimport json,time\np=Path.home()/\".local/state/prediction-project-executor/DEV-PRED-A2Z-R4P2-PREBUILD-POSTRESUME-VERIFY-20261007-N1E57.json\"\ndeadline=time.time()+150\nwhile time.time()<deadline:\n    if p.is_file():\n        try:\n            o=json.loads(p.read_text(encoding=\"utf-8\"))\n        except Exception:\n            time.sleep(2); continue\n        status=o.get(\"status\")\n        if status==\"PASS\":\n            raise SystemExit(0)\n        if status==\"FAIL\":\n            err=str(o.get(\"error\") or \"\")\n            for rc in (11,12,30,31,32):\n                if f\"rc={rc}\" in err:\n                    raise SystemExit(rc)\n            raise SystemExit(40)\n    time.sleep(2)\nraise SystemExit(21)\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/wait_n1e57_terminal_n1e58.py"
+      ],
+      "timeout_seconds": 170
+    }
+  ]
+}
