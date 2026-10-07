@@ -1,0 +1,29 @@
+{
+  "schema": "PREDICTION_BUILD_LOG_EVENT_V1",
+  "event_id": "20261007T075000Z-A2Z-POSTBUILD-IMPORT-DIAG-E113-PASS",
+  "work_item_id": "A2Z-SYSTEMTEST-20261005",
+  "created_at_utc": "2026-10-07T07:50:00Z",
+  "event_type": "RESULT",
+  "work_item_status": "IN_PROGRESS",
+  "outcome": "PASS",
+  "title": "E113 read-only diagnose uitgevoerd",
+  "objective": "Lees uitsluitend de E112 worktree/executorstate en bestaande R3-P2 modelresultaten om de eerste concrete importfout vast te stellen.",
+  "summary": "E113 kwam same-chat terug met PASS exit=0. De diagnose zelf heeft de relevante E112/runtime-evidence succesvol gelezen; het compacte wakebericht bevat niet de geprinte JSON-details.",
+  "why": "De diagnose is geslaagd, maar de exacte foutclassificatie moet via een compact transportkanaal zichtbaar worden gemaakt.",
+  "first_incomplete_step": "E112 canonical-importfout deterministisch classificeren in de exitcode.",
+  "next_action": "E114 herhaalt alleen de isolated canonical import en mapt de eerste exception naar een unieke exitcode; geen model/build/test/meting.",
+  "session_route_task_id": "SESSION-ROUTE-5388245c5e308fbc9dcf92ab",
+  "task_ids": [
+    "DEV-PRED-A2Z-POSTBUILD-IMPORT-DIAG-20261007-E113"
+  ],
+  "commits": [],
+  "evidence_refs": [
+    "result:DEV-PRED-A2Z-POSTBUILD-IMPORT-DIAG-20261007-E113 status=PASS exit=0 event=1791359345-e5df06b8b95b"
+  ],
+  "tags": [
+    "a2z",
+    "postbuild",
+    "diagnostic",
+    "pass"
+  ]
+}
