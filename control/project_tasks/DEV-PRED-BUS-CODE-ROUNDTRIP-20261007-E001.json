@@ -1,0 +1,41 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-BUS-CODE-ROUNDTRIP-20261007-E001",
+  "build_id": "BUS-CODE-ROUNDTRIP-20261007",
+  "source_commit": "1d7bcbbd39d9deb3760852bcf4588dfb0062b729",
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 300,
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/bus_code_roundtrip_20261007_e001.py",
+      "content": "from pathlib import Path\nimport hashlib\n\nTOKEN = 'PREDICTION_BUS_WSL_CODE_OK_20261007_E001'\np = Path('.runtime/bus_code_roundtrip_20261007_e001.txt')\np.parent.mkdir(parents=True, exist_ok=True)\np.write_text(TOKEN + '\\n', encoding='utf-8')\nreadback = p.read_text(encoding='utf-8').strip()\nassert readback == TOKEN, (readback, TOKEN)\nprint('BUS_CODE_EXECUTION=PASS')\nprint('TOKEN=' + readback)\nprint('SHA256=' + hashlib.sha256(readback.encode('utf-8')).hexdigest())\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/bus_code_roundtrip_20261007_e001.py"
+      ],
+      "timeout_seconds": 60
+    }
+  ],
+  "notes": "Harmless end-to-end proof that ChatGPT can send repository-owned Python through the command bus to WSL and receive the result back in the same chat."
+}
