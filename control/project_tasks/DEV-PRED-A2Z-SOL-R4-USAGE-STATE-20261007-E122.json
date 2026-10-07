@@ -1,0 +1,41 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-A2Z-SOL-R4-USAGE-STATE-20261007-E122",
+  "source_commit": "115e9f3614e0fc1a1f35e305f6a516befb343df4",
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "High"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_runtime"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 180,
+  "notes": "Read-only verification of canonical usage-limit state for existing R4 Sol model task. No model/service mutation, no restart, no build/test/measurement.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/a2z_e122_r4_usage_state.py",
+      "content": "from pathlib import Path\nimport sqlite3,time,sys,json\n\nroot=Path.home()/\".local/share/prediction-project-executor/campaigns/FULL-A2Z-LIVE-20261004-V4\"\ndbp=root/\"models/runtime.sqlite\"\ntask_id=\"A2Z-V4-SOL-BUILD-20261007-R4\"\n\nif not dbp.exists() or dbp.is_symlink():\n    print(\"E122=RUNTIME_DB_MISSING\",flush=True); raise SystemExit(31)\n\ndb=sqlite3.connect(\"file:\"+str(dbp)+\"?mode=ro\",uri=True)\ntry:\n    task=db.execute(\"select status,attempt,run from tasks where id=?\",(task_id,)).fetchone()\n    tr=db.execute(\"select state,reason,attempt,checkpoint,next_action,stamp,retry from transitions where task=? order by seq desc limit 1\",(task_id,)).fetchone()\nfinally:\n    db.close()\n\nif not task:\n    print(\"E122=TASK_ROW_MISSING\",flush=True); raise SystemExit(32)\nstatus,attempt,run=task\nout={\"status\":status,\"attempt\":attempt,\"run\":run}\nif tr:\n    out.update({\"transition_state\":tr[0],\"reason\":tr[1],\"transition_attempt\":tr[2],\"checkpoint\":tr[3],\"next_action\":tr[4],\"stamp\":tr[5],\"stored_retry\":tr[6]})\n    effective=min(float(tr[6] or 0),float(tr[5] or 0)+900) if tr[1]==\"USAGE_LIMIT\" else float(tr[6] or 0)\n    out[\"effective_retry_at\"]=effective\n    out[\"remaining_seconds\"]=max(0,int(effective-time.time()))\nprint(\"E122_STATE \"+json.dumps(out,separators=(\",\",\":\"),default=str),flush=True)\n\nif status==\"PAUSED_USAGE_LIMIT\" and tr and tr[0]==\"PAUSED_USAGE_LIMIT\" and tr[1]==\"USAGE_LIMIT\" and tr[4]==\"resume_same_task\":\n    if int(attempt or 0)>=1:\n        print(\"E122=CANONICAL_USAGE_PAUSE_OK\",flush=True); raise SystemExit(0)\n    print(\"E122=PAUSE_ATTEMPT_INVALID\",flush=True); raise SystemExit(33)\nif status==\"COMPLETE\":\n    print(\"E122=R4_COMPLETE\",flush=True); raise SystemExit(10)\nif status==\"RUNNING\":\n    print(\"E122=R4_RUNNING\",flush=True); raise SystemExit(20)\nif status==\"WAITING_RETRY\":\n    print(\"E122=WAITING_RETRY_NONUSAGE\",flush=True); raise SystemExit(21)\nprint(\"E122=UNEXPECTED_STATE_\"+str(status),flush=True); raise SystemExit(39)\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/a2z_e122_r4_usage_state.py"
+      ],
+      "timeout_seconds": 120
+    }
+  ]
+}
