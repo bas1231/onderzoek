@@ -1,0 +1,43 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-A2Z-SOL-R4-WORKER-CLASSIFY-20261007-E119",
+  "source_commit": "9535e60fa24bab8d1dffe23c160db8696a583cb4",
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "High"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_runtime",
+    "read_logs",
+    "user_service_manage"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 180,
+  "notes": "Read-only classification of existing R4 model worker state. Do not start/restart/stop service. Exit 0=result exists; 20=worker active pending; 21=exited success without result; 22=failed; 23=inactive; 24=unknown.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/a2z_e119_worker_classify.py",
+      "content": "from pathlib import Path\nimport json, subprocess, sys\n\ncampaign=Path.home()/\".local/share/prediction-project-executor/campaigns/FULL-A2Z-LIVE-20261004-V4\"\nmodel_task=\"A2Z-V4-SOL-BUILD-20261007-R4\"\nunit=\"prediction-a2z-v4-model@A2Z-V4-SOL-BUILD-20261007-R4.service\"\nmr=campaign/\"model_results\"/f\"{model_task}.json\"\n\ndef run(*args):\n    p=subprocess.run(args,text=True,capture_output=True)\n    return p.returncode,p.stdout.strip(),p.stderr.strip()\n\nif mr.exists():\n    print(\"E119=R4_RESULT_EXISTS\",flush=True)\n    raise SystemExit(0)\n\nrc,active,err=run(\"systemctl\",\"--user\",\"is-active\",unit)\n_,props,_=run(\"systemctl\",\"--user\",\"show\",unit,\"--property=ActiveState,SubState,Result,ExecMainStatus,ExecMainCode\")\n_,journal,_=run(\"journalctl\",\"--user\",\"-u\",unit,\"-n\",\"20\",\"--no-pager\",\"-o\",\"cat\")\njlines=[x for x in journal.splitlines() if x.strip()]\ntail=\" | \".join(jlines[-4:])[-1200:]\nprint(\"E119_STATUS active=\"+repr(active)+\" props=\"+repr(props.replace(\"\\n\",\";\"))+\" tail=\"+repr(tail),flush=True)\n\np=props.lower()\na=active.strip().lower()\nif a in {\"active\",\"activating\",\"reloading\"}:\n    print(\"E119=WORKER_ACTIVE_RESULT_PENDING\",flush=True); raise SystemExit(20)\nif \"result=success\" in p and (\"activestate=inactive\" in p or a==\"inactive\"):\n    print(\"E119=WORKER_EXITED_SUCCESS_NO_RESULT\",flush=True); raise SystemExit(21)\nif \"activestate=failed\" in p or a==\"failed\" or (\"result=\" in p and \"result=success\" not in p and \"result=\" + \"\" not in p):\n    print(\"E119=WORKER_FAILED_NO_RESULT\",flush=True); raise SystemExit(22)\nif a==\"inactive\":\n    print(\"E119=WORKER_INACTIVE_NO_RESULT\",flush=True); raise SystemExit(23)\nprint(\"E119=WORKER_STATE_UNKNOWN_NO_RESULT\",flush=True); raise SystemExit(24)\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/a2z_e119_worker_classify.py"
+      ],
+      "timeout_seconds": 120
+    }
+  ]
+}
