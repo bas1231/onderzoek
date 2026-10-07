@@ -1,0 +1,16 @@
+{
+  "schema": "PREDICTION_BRIDGE_COMMAND_V1",
+  "task_id": "DEV-PRED-A2Z-R4-DIRECT-CHUNK-01-20261007-C1A4",
+  "action": "SIX_AI_HEALTH",
+  "created_at_utc": "2026-10-07T12:24:00Z",
+  "route_task_id": "DEV-PRED-SOL-DIRECT-GATE-QUALIFY-R2-20261007-A7C1",
+  "live_trading": false,
+  "paid_actions": false,
+  "wallet_actions": false,
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "High"
+  },
+  "notes": "Enqueue chunk 1 of the existing qualified R4 request through existing continuation transport only. No bridge source/config/service/limit changes."
+}
