@@ -1,0 +1,32 @@
+{
+  "schema": "PREDICTION_BUILD_LOG_EVENT_V1",
+  "event_id": "20261007T090000Z-CODEX-RETRY-CADENCE-KEEP-15M",
+  "work_item_id": "A2Z-SYSTEMTEST-20261005",
+  "created_at_utc": "2026-10-07T09:00:00Z",
+  "event_type": "NOTE",
+  "work_item_status": "IN_PROGRESS",
+  "outcome": "INFO",
+  "title": "Bevestig 15-minuten Codex retrycadans",
+  "objective": "Behoud voor Codex usage-limit dezelfde immutable modeltask met 15-minuten retrycadans.",
+  "summary": "Gebruikersbesluit: expliciete provider-resetmeldingen zoals 'try again at 1:20 PM' wijzigen de retrycadans niet. De bestaande USAGE_LIMIT_RETRY_SECONDS=900 blijft leidend.",
+  "why": "Prediction moet elke 15 minuten opnieuw proberen in plaats van wachten tot de provider-resetmelding.",
+  "first_incomplete_step": "Wachten op volgende retry van A2Z-V4-SOL-BUILD-20261007-R4 en daarna resultaat/provenance verifiëren.",
+  "next_action": "E127 niet installeren, ook niet bij PASS. Bestaande runtime behouden. Volgende R4-attempt monitoren via dezelfde immutable task-ID.",
+  "session_route_task_id": "SESSION-ROUTE-5388245c5e308fbc9dcf92ab",
+  "task_ids": [
+    "A2Z-V4-SOL-BUILD-20261007-R4",
+    "DEV-PRED-CODEX-PROVIDER-RESET-RETRY-BUILD-20261007-E127"
+  ],
+  "commits": [],
+  "evidence_refs": [
+    "control/codex_supervisor/supervisor.py",
+    "control/codex_supervisor/test_usage_limit_retry.py"
+  ],
+  "tags": [
+    "codex",
+    "usage-limit",
+    "retry",
+    "15m",
+    "user-decision"
+  ]
+}
