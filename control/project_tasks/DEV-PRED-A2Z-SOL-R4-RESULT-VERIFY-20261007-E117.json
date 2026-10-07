@@ -1,0 +1,41 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-A2Z-SOL-R4-RESULT-VERIFY-20261007-E117",
+  "source_commit": "1fac61f6485575d5b66954f7890eefa6a97fcf63",
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "High"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_runtime"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 180,
+  "notes": "Read-only verification of Sol R4 model result and exact SOL_EXACT provenance. No model invocation, build materialization, tests, measurement or Astra start.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/a2z_e117_verify_r4_result.py",
+      "content": "from pathlib import Path\nimport json,hashlib,sys\n\ncampaign=Path.home()/\".local/share/prediction-project-executor/campaigns/FULL-A2Z-LIVE-20261004-V4\"\nmodel_task=\"A2Z-V4-SOL-BUILD-20261007-R4\"\nmr=campaign/\"model_results\"/f\"{model_task}.json\"\n\nif not mr.exists():\n    print(\"E117=R4_RESULT_PENDING\",flush=True); raise SystemExit(20)\n\ntry:\n    env=json.loads(mr.read_text())\nexcept Exception as e:\n    print(\"E117=R4_RESULT_INVALID_JSON\",flush=True); raise SystemExit(21)\n\ncp=campaign/env.get(\"checkpoint\",\"\")\nif not cp.exists():\n    print(\"E117=R4_CHECKPOINT_MISSING\",flush=True); raise SystemExit(22)\n\nrequired=[\"TASK.json\",\"WORKER.json\",\"COMPLETE.json\",\"events.jsonl\"]\nfor name in required:\n    if not (cp/name).exists():\n        print(\"E117=MISSING_\"+name.replace(\".\",\"_\").upper(),flush=True); raise SystemExit(23)\n\ntask=json.loads((cp/\"TASK.json\").read_text())\nworker=json.loads((cp/\"WORKER.json\").read_text())\ncomplete=json.loads((cp/\"COMPLETE.json\").read_text())\nevents=[json.loads(x) for x in (cp/\"events.jsonl\").read_text().splitlines() if x.strip()]\n\nif task.get(\"task_id\")!=model_task:\n    print(\"E117=TASK_ID_MISMATCH\",flush=True); raise SystemExit(30)\nif task.get(\"phase\")!=\"SOL_BUILD\" or task.get(\"model_policy\")!=\"SOL_EXACT\":\n    print(\"E117=MODEL_PHASE_OR_POLICY\",flush=True); raise SystemExit(31)\nif worker.get(\"model\")!=\"gpt-5.6-sol\":\n    print(\"E117=WRONG_MODEL_\"+str(worker.get(\"model\")),flush=True); raise SystemExit(32)\nsel=worker.get(\"model_selection\",{})\nif sel.get(\"policy\")!=\"SOL_EXACT\" or sel.get(\"selected_slug\")!=\"gpt-5.6-sol\":\n    print(\"E117=MODEL_SELECTION_MISMATCH\",flush=True); raise SystemExit(33)\nflags=worker.get(\"command_flags\",[])\nif \"-m\" not in flags or flags[flags.index(\"-m\")+1]!=\"gpt-5.6-sol\":\n    print(\"E117=MODEL_COMMAND_MISMATCH\",flush=True); raise SystemExit(34)\n\nsha=lambda b: hashlib.sha256(b).hexdigest()\nif task.get(\"input_sha256\")!=sha(task.get(\"prompt\",\"\").encode()):\n    print(\"E117=TASK_INPUT_HASH_MISMATCH\",flush=True); raise SystemExit(35)\nif complete.get(\"task_id\")!=model_task or complete.get(\"input_sha256\")!=task.get(\"input_sha256\"):\n    print(\"E117=COMPLETION_BINDING_MISMATCH\",flush=True); raise SystemExit(36)\nif any(e.get(\"item\",{}).get(\"type\") in {\"command_execution\",\"mcp_tool_call\",\"web_search\",\"file_change\"} for e in events):\n    print(\"E117=MODEL_TOOL_USE_FORBIDDEN\",flush=True); raise SystemExit(37)\n\nfinal=complete.get(\"final\")\nif not isinstance(final,str) or not final.strip():\n    print(\"E117=FINAL_MISSING\",flush=True); raise SystemExit(38)\ntry:\n    result=json.loads(final)\nexcept Exception:\n    print(\"E117=FINAL_NOT_JSON\",flush=True); raise SystemExit(39)\n\nif result.get(\"candidate_id\")!=\"AUTO-DISCOVERY-54d13314c7879b58e46d\":\n    print(\"E117=CANDIDATE_MISMATCH\",flush=True); raise SystemExit(40)\nfiles=result.get(\"files\")\nif not isinstance(files,dict) or len(files)!=3:\n    print(\"E117=FILESET_INVALID\",flush=True); raise SystemExit(41)\n\nprint(\"E117=R4_COMPLETE_EXACT_SOL files=\"+str(len(files))+\" checkpoint=\"+str(env.get(\"checkpoint\")),flush=True)\nraise SystemExit(0)\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/a2z_e117_verify_r4_result.py"
+      ],
+      "timeout_seconds": 120
+    }
+  ]
+}
