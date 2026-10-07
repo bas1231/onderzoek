@@ -1,0 +1,41 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-A2Z-R4P2-SERVICE-STATE-20261007-N1E83",
+  "source_commit": "ea193745104233cbc06c29722eb0cfa82800149f",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "High"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_runtime"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 120,
+  "notes": "Read-only exact systemd state for the existing R4P2 Astra PREBUILD service. No journal, no service/model invocation.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/r4p2_service_state_n1e83.py",
+      "content": "import subprocess,json\nunit=\"prediction-a2z-v4-model@A2Z-V4-ASTRA-PREBUILD-DIRECT-20261007-R4P2.service\"\np=subprocess.run([\"systemctl\",\"--user\",\"show\",unit,\n \"-p\",\"ActiveState\",\"-p\",\"SubState\",\"-p\",\"Result\",\"-p\",\"ExecMainStatus\",\"-p\",\"ExecMainCode\",\n \"-p\",\"ActiveEnterTimestamp\",\"-p\",\"InactiveEnterTimestamp\",\"-p\",\"ExecMainStartTimestamp\",\"-p\",\"ExecMainExitTimestamp\"],\n capture_output=True,text=True)\nvals={}\nfor line in (p.stdout or \"\").splitlines():\n    if \"=\" in line:\n        k,v=line.split(\"=\",1); vals[k]=v\nprint(\"ERROR_CLASS=R4P2_SERVICE_STATE\",flush=True)\nprint(\"ERROR=\"+json.dumps(vals,separators=(\",\",\":\"),sort_keys=True),flush=True)\nraise SystemExit(1)\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/r4p2_service_state_n1e83.py"
+      ],
+      "timeout_seconds": 60
+    }
+  ]
+}
