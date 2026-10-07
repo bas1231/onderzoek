@@ -1,0 +1,44 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-DASH-STATE-READ-20261007-E141",
+  "source_commit": "754ff054fe6e7f1746fe6d3b2ef1e5aa0b43e9b4",
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "High"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "production_inspect"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 180,
+  "notes": "Read-only live dashboard source state; no mutation.",
+  "operations": [
+    {
+      "type": "production_inspect"
+    },
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/e141_dash_state.py",
+      "content": "from pathlib import Path\nimport json,subprocess\nprod=Path.home()/\"prediction_research_prod\"\np=prod/\"control/control_center/lifecycle_status.json\"\ncp=subprocess.run([\"git\",\"-C\",str(prod),\"rev-parse\",\"HEAD\"],text=True,stdout=subprocess.PIPE,stderr=subprocess.STDOUT)\nout={\"head\":cp.stdout.strip(),\"exists\":p.is_file()}\nif p.is_file():\n    obj=json.loads(p.read_text())\n    out[\"updated_at\"]=obj.get(\"updated_at\")\n    out[\"target\"]=(obj.get(\"model_execution_architecture\") or {}).get(\"target\")\n    out[\"candidate_state\"]=(obj.get(\"current_candidate\") or {}).get(\"state\")\nprint(\"E141_DASH_STATE \"+json.dumps(out,separators=(\",\",\":\")),flush=True)\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/e141_dash_state.py"
+      ],
+      "timeout_seconds": 60
+    }
+  ]
+}
