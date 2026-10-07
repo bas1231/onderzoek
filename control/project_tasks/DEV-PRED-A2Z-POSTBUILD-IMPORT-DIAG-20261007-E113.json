@@ -1,0 +1,41 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-A2Z-POSTBUILD-IMPORT-DIAG-20261007-E113",
+  "source_commit": "7790da6731a29f62077722ede1f842611e78865d",
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "High"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_runtime"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 180,
+  "notes": "Read-only diagnostic of failed E112 import. No model start, build, test, measurement, runtime mutation or service action.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/a2z_e112_import_diag_20261007_e113.py",
+      "content": "from pathlib import Path\nimport json,re\n\ntid=\"DEV-PRED-A2Z-POSTBUILD-IMPORT-20261007-E112\"\nmodel_task=\"A2Z-V4-ASTRA-POSTBUILD-20261006-R3-P2\"\nhome=Path.home()\nwt=home/\".local/share/prediction-project-executor/worktrees\"/tid\nbundle=wt/\"knowledge/evidence/qualification/FULL-A2Z-LIVE-20261004-V4-GOVERNED\"\ncampaign=home/\".local/share/prediction-project-executor/campaigns/FULL-A2Z-LIVE-20261004-V4\"\nstate=home/\".local/state/prediction-project-executor\"\n\nout={\n \"worktree_exists\":wt.exists(),\n \"bundle_exists\":bundle.exists(),\n \"overlay_exists\":(bundle/\"overlay.json\").exists(),\n \"model_result_exists\":(campaign/\"model_results\"/f\"{model_task}.json\").exists(),\n}\nif (bundle/\"overlay.json\").exists():\n try:\n  ov=json.loads((bundle/\"overlay.json\").read_text())\n  out[\"overlay_astra_reviews\"]=ov.get(\"astra_reviews\")\n  out[\"overlay_queue_status\"]=ov.get(\"queue_status\")\n  out[\"overlay_has_build\"]=bool(ov.get(\"experiment_build\"))\n except Exception as e:\n  out[\"overlay_error\"]=type(e).__name__+\":\"+str(e)\n\nmr=campaign/\"model_results\"/f\"{model_task}.json\"\nif mr.exists():\n try:\n  m=json.loads(mr.read_text())\n  out[\"model_result\"]={k:m.get(k) for k in (\"task_id\",\"phase\",\"checkpoint\",\"completion_sha256\",\"worker_sha256\",\"status\") if k in m}\n  cp=campaign/m.get(\"checkpoint\",\"\")\n  out[\"checkpoint_exists\"]=cp.exists()\n  if cp.exists():\n   for name in (\"TASK.json\",\"WORKER.json\",\"COMPLETE.json\",\"events.jsonl\"):\n    p=cp/name\n    out[f\"checkpoint_{name}_exists\"]=p.exists()\n   wp=cp/\"WORKER.json\"\n   if wp.exists():\n    w=json.loads(wp.read_text())\n    out[\"worker_model\"]=w.get(\"model\")\n    out[\"worker_selection\"]=w.get(\"model_selection\")\n   cpj=cp/\"COMPLETE.json\"\n   if cpj.exists():\n    c=json.loads(cpj.read_text())\n    out[\"complete_keys\"]=sorted(c.keys())\n    out[\"complete_timestamp\"]=c.get(\"timestamp\")\n except Exception as e:\n  out[\"model_result_error\"]=type(e).__name__+\":\"+str(e)\n\n# Find compact traceback/error evidence in executor state/worktree.\nsnips=[]\nroots=[state,wt]\nfor root in roots:\n if not root.exists(): continue\n for p in root.rglob(\"*\"):\n  try:\n   if not p.is_file() or p.stat().st_size>2_000_000: continue\n  except OSError:\n   continue\n  if p.suffix.lower() not in {\".json\",\".jsonl\",\".log\",\".txt\",\"\"}: continue\n  try:\n   txt=p.read_text(errors=\"replace\")\n  except Exception:\n   continue\n  if tid not in txt and \"Traceback\" not in txt and \"MODEL_\" not in txt and \"POSTBUILD\" not in txt:\n   continue\n  lines=txt.splitlines()\n  score=0\n  for s in (\"Traceback\",\"Error\",\"Exception\",\"MODEL_\",\"POSTBUILD\",\"rc=1\",tid):\n   if s in txt: score+=1\n  if score==0: continue\n  match=[]\n  for i,line in enumerate(lines):\n   if any(s in line for s in (\"Traceback\",\"Error\",\"Exception\",\"MODEL_\",\"POSTBUILD\",\"rc=1\",tid)):\n    lo=max(0,i-2); hi=min(len(lines),i+8)\n    match=lines[lo:hi]\n    break\n  snips.append((score,str(p),\"\\n\".join(match)[:1800]))\nsnips.sort(key=lambda x:(-x[0],x[1]))\nout[\"evidence_snippets\"]=[{\"path\":p,\"text\":s} for _,p,s in snips[:8]]\nprint(\"E113_DIAG \"+json.dumps(out,separators=(\",\",\":\"),default=str),flush=True)\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/a2z_e112_import_diag_20261007_e113.py"
+      ],
+      "timeout_seconds": 120
+    }
+  ]
+}
