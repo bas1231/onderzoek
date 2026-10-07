@@ -1,0 +1,41 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-A2Z-R4P2-NEWEST-RETRY-STATE-20261007-N1E97",
+  "source_commit": "317a1217be8e1bd0e5dfa724d9f97a25a15b0789",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "High"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_runtime"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 120,
+  "notes": "Read-only extraction of exact current R4P2 PREBUILD runtime state after postretry8 rc=30. No service/model invocation.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/r4p2_newest_retry_state_n1e97.py",
+      "content": "from pathlib import Path\nimport json\nbase=Path.home()/\".local/share/prediction-project-executor/campaigns/FULL-A2Z-LIVE-20261004-V4\"\ntask=\"A2Z-V4-ASTRA-PREBUILD-DIRECT-20261007-R4P2\"\nrows=[]\nfor name in (\"models/CONTINUATION.json\",\"models/STATE.json\"):\n    p=base/name\n    if not p.is_file():\n        continue\n    try:o=json.loads(p.read_text(encoding=\"utf-8\"))\n    except Exception as e:\n        rows.append({\"file\":name,\"parse_error\":type(e).__name__})\n        continue\n    if isinstance(o,dict) and o.get(\"task_id\")==task:\n        rows.append({\n          \"file\":name,\n          \"task_id\":o.get(\"task_id\"),\n          \"state\":o.get(\"state\"),\n          \"reason\":o.get(\"reason\"),\n          \"attempt\":o.get(\"attempt\"),\n          \"checkpoint\":o.get(\"checkpoint\"),\n          \"retry_at\":o.get(\"retry_at\"),\n          \"next_action\":o.get(\"next_action\"),\n          \"timestamp\":o.get(\"timestamp\"),\n          \"updated_at\":o.get(\"updated_at\")\n        })\nprint(\"ERROR_CLASS=R4P2_NEWEST_RETRY_STATE\",flush=True)\nprint(\"ERROR=\"+json.dumps(rows,separators=(\",\",\":\"),sort_keys=True),flush=True)\nraise SystemExit(1)\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/r4p2_newest_retry_state_n1e97.py"
+      ],
+      "timeout_seconds": 60
+    }
+  ]
+}
