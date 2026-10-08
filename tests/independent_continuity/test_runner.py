@@ -5,6 +5,7 @@ from datetime import datetime, timedelta, timezone
 import json
 import os
 from pathlib import Path
+from unittest.mock import patch
 from tempfile import TemporaryDirectory
 import unittest
 
@@ -35,12 +36,20 @@ class PeriodicRunnerTest(unittest.TestCase):
             "outcome": "STARTED", "task_ids": ["T001"],
         }
         (events / "E001.json").write_text(json.dumps(self.event))
+        snapshot_patch = patch("control.independent_continuity.runner.snapshot_events", self.fake_snapshot)
+        snapshot_patch.start()
+        self.addCleanup(snapshot_patch.stop)
         self.config = {
             "schema": "PREDICTION_INDEPENDENT_CONTINUITY_SCOPE_V1",
             "mode": "observe", "work_item_ids": ["A2Z-ALLOWED"],
             "stale_minutes": 90,
             "live_trading": False, "paid_actions": False, "wallet_actions": False,
         }
+
+    def fake_snapshot(self, repo, destination):
+        payload = (self.repo / "control/build_log/events/E001.json").read_bytes()
+        (destination / "E001.json").write_bytes(payload)
+        return {"source_commit": "a" * 40, "event_files": 1}
 
     def test_disabled_mode_does_not_read_or_write(self):
         cfg = dict(self.config, mode="disabled")
