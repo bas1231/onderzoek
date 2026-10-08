@@ -1,0 +1,41 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-A2Z-R4P2-PREBUILD-RAW-SCHEMA-20261008-N1E121",
+  "source_commit": "fe7d1c1c1a112d1b8f10c890bb8dc228f68a8070",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "High"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_runtime"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 120,
+  "notes": "Read-only schema-neutral inspection of completed R4P2 Astra PREBUILD result. No model invocation, build, tests or measurement.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/r4p2_prebuild_raw_schema_n1e121.py",
+      "content": "from pathlib import Path\nimport json\nbase=Path.home()/'.local/share/prediction-project-executor/campaigns/FULL-A2Z-LIVE-20261004-V4'\ntask='A2Z-V4-ASTRA-PREBUILD-DIRECT-20261007-R4P2'\np=base/'model_results'/(task+'.json')\no=json.loads(p.read_text(encoding='utf-8'))\ndef compact(v,depth=0):\n    if depth>=3:\n        return type(v).__name__\n    if isinstance(v,dict):\n        return {k:compact(v[k],depth+1) for k in list(v)[:40]}\n    if isinstance(v,list):\n        return [compact(x,depth+1) for x in v[:8]]\n    if isinstance(v,str):\n        return v[:4000]\n    return v\nout={'top_keys':list(o.keys()),'compact':compact(o)}\nprint('ERROR_CLASS=R4P2_PREBUILD_RAW_SCHEMA',flush=True)\nprint('ERROR='+json.dumps(out,separators=(',',':'),sort_keys=True),flush=True)\nraise SystemExit(1)\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/r4p2_prebuild_raw_schema_n1e121.py"
+      ],
+      "timeout_seconds": 60
+    }
+  ]
+}
