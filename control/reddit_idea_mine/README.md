@@ -1,14 +1,17 @@
 # REDDIT_IDEA_MINE: Reddit discussion discovery ingress
 
-This is a bounded, offline-only *discovery* adapter, not an active Reddit
-crawler or a shortcut into experiments.
+This is a bounded *discovery-only* adapter with an offline intake path and an
+optional fixed-host, read-only Arctic Shift source. It cannot authorize an
+experiment, a model review, or a trade. Actual scheduled source polling has
+not been activated or proven in the production research runtime.
 
 ## Source ingest
 Run `python3 control/reddit_idea_mine/ingest.py --input threads.json --output leads.json`.
 Input is a list of supplied Reddit discussions. A thread supplies id,
 subreddit, URL, title, selftext, created_utc, comments, and source; provenance
 must be one of `test_fixture`, `manual_submission`, `authorized_export`,
-`licensed_archive`. Only five named prediction-market subreddits are ingested.
+`licensed_archive`, or the explicitly unverified public source label
+`public_archive_unverified`. Only five prediction-market subreddits are ingested.
 Malformed and unrecognized sources are rejected, with counts recorded.
 
 The resulting leads preserve permalinks, timestamps, counterarguments, keyword
@@ -54,9 +57,40 @@ python3 -m control.reddit_idea_mine.source_inbox --inbox <SAFE_INBOX> --root <SA
 Do **not** run the network collector inside the restricted project executor.
 Its child guard intentionally blocks external network access. Tests pass
 in-memory fixtures to `collect()` and **do not prove remote availability**.
-An operational hourly install and live data freshness test remain independent
-deployment acceptance gates; no scheduled network polling is installed by the
-current code.
+The source is wired **before** canonical `recon.run()` in
+`control/hourly/hourly_cycle.py`, using
+`PREDICTION_REDDIT_ARCTIC_SHIFT_ENABLED=1` as an explicit opt-in.
+The source remains disabled by default, and automatically disabled in the
+offline `qualification_local` environment. The existing hourly timer can
+be reused; no extra scheduler or automatic activation is installed.
+
+For each run `hourly_ingress.py` writes a receipt under
+`knowledge/runs/reddit_idea_mine` with source status, errors, thread count,
+evidence count, and post-age metrics. Untrusted Reddit text carries
+`trust_level=untrusted_external_content` and cannot count as a directive.
+The normal independent-source, Recon and candidate gates remain required.
+
+`source_canary.py --check` is a one-request read-only source probe: it
+reports whether the API returned a recent post, archive retrieval lag if
+the archive provides `retrieved_on`, and an error type if unsuccessful.
+It never logs post/comment bodies. Offline fixture tests cannot prove live
+API availability, uptime, or freshness. This probe must run in an **already
+permitted** network-capable Prediction research runtime; do not work around
+the project executor's loopback-only child guard.
+
+**Unmet production gates:**
+1. E019 read-only timer/service readiness and E020/E021 code qualifications
+   plus E022/E023 source metrics and untrusted-data qualifications
+2. Verify the existing research runtime can safely load the canonical source,
+   without disturbing the protected production-branch reconciliation
+3. Observe a one-shot actual source response, including record age and
+   archived ingestion lag when provided
+4. Enable the existing hourly hook only after the preceding gates and confirm
+   a real hourly receipt; disable the flag if the provider is unreachable or
+   chronically stale
+
+No trading, paid API, credentials, bridge edits, autonomous GitHub pushes,
+or unrestricted external network access are authorized.
 
 The archive service is public, but the code makes no assertion that Reddit
 approved its use. Confirm usage requirements separately from the malware and
