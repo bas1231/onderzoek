@@ -1,0 +1,41 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-A2Z-R4P4-HANDOFF-CHECK-20261008-E228",
+  "source_commit": "e9f783b97f3e00c3d51c11c36c4e607f29019b77",
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-6",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_runtime"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 90,
+  "notes": "Check routed E227 delivery and Sol R4P4 completion before any duplicate dispatch. Pure read-only; nonzero returns compact actual state to same chat.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/r4p4_e227_check_e228.py",
+      "content": "from pathlib import Path\nimport json\nh=Path.home()\ntid='DEV-PRED-A2Z-R4P4-SOL-HANDOFF-20261008-E227'\nstate=h/'.local/state/prediction-command-bus/tasks'/(tid+'.json')\nreceipt=h/'.local/state/prediction-project-executor'/(tid+'.json')\nroot=h/'.local/share/prediction-project-executor/campaigns/FULL-A2Z-LIVE-20261004-V4'\nreq=root/'direct_requests/A2Z-V4-SOL-PROPOSAL-DIRECT-20261008-R4P4.json'\nout=root/'model_results/A2Z-V4-SOL-PROPOSAL-DIRECT-20261008-R4P4.json'\nmsg=[]\nfor label,p in [('BUS',state),('EXEC',receipt)]:\n if p.is_file():\n  o=json.loads(p.read_text())\n  msg.append(label+'='+str(o.get('status','UNKNOWN')))\n else: msg.append(label+'=MISSING')\nmsg+=['REQUEST='+str(req.is_file()),'SOL_RESULT='+str(out.is_file())]\nraise SystemExit('R4P4_HANDOFF '+','.join(msg))\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/r4p4_e227_check_e228.py"
+      ],
+      "timeout_seconds": 25
+    }
+  ]
+}
