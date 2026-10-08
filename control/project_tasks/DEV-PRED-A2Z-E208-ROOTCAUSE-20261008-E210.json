@@ -1,0 +1,41 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-A2Z-E208-ROOTCAUSE-20261008-E210",
+  "source_commit": "43bf8e2746c35b6cc154a6fd10a11bb5cb2e89b8",
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-6",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_logs"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 90,
+  "notes": "Read E208 error line and return it in bounded failure detail, without rerunning E208.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/e210_error.py",
+      "content": "from pathlib import Path\np=Path.home()/'.local/share/prediction-chat-bridge/dev-task-receipts/DEV-PRED-A2Z-R4P3-SELECTION-RETRY-20261008-E208.log'\nlines=p.read_text(errors='replace').splitlines() if p.exists() else []\nmarks=('ModuleNotFoundError','FileNotFoundError','AssertionError','ImportError','TaskError','Traceback','KeyError','TypeError','ERROR=')\nfound=[s.strip() for s in lines if any(m in s for m in marks)]\nraise SystemExit('E208_CAUSE='+str(found[-1][:180] if found else 'LOG_MISSING_OR_NO_ERROR'))\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/e210_error.py"
+      ],
+      "timeout_seconds": 30
+    }
+  ]
+}
