@@ -1,0 +1,48 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-REDDIT-OPERATIONAL-CANARY-20261008-E031",
+  "source_commit": "b8b26205d99c1306c48c2c9a217f948854f37d8b",
+  "intelligence_tier": "B",
+  "issuer": {
+    "model": "GPT-6",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "read_runtime",
+    "run_project_python",
+    "read_logs",
+    "user_service_manage"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 240,
+  "notes": "Strict read-only operational canary: inspect existing hourly service journal/timer, installed source modules, runtime status and actual historical Arctic Shift->Recon->canonical report receipts. No project external network or new API fetch; never alter bridge, systemd, production Git tree, orders or wallets. Expect a gated NOT_YET_PROVEN failure until real source evidence exists.",
+  "operations": [
+    {
+      "type": "journal",
+      "unit": "prediction-research-hourly-director.service",
+      "lines": 15
+    },
+    {
+      "type": "service",
+      "verb": "is-active",
+      "unit": "prediction-research-hourly-director.timer"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/reddit_idea_mine/operational_readiness.py",
+        "--check"
+      ],
+      "timeout_seconds": 90
+    }
+  ]
+}
