@@ -1,0 +1,41 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-A2Z-R4P2-POST-RETRY9-VERIFY-20261008-N1E120",
+  "source_commit": "f4c112ebe8cb811aa10a664e00c8c967b07b3216",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "High"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_runtime"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 120,
+  "notes": "Read-only verify outcome of exact R4P2 Astra PREBUILD retry 9. No model invocation, build, tests, measurement, paid/live actions.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/r4p2_post_retry9_verify_n1e120.py",
+      "content": "from pathlib import Path\nimport json\nbase=Path.home()/'.local/share/prediction-project-executor/campaigns/FULL-A2Z-LIVE-20261004-V4'\ntask='A2Z-V4-ASTRA-PREBUILD-DIRECT-20261007-R4P2'\nresult=base/'model_results'/(task+'.json')\nstate=base/'models/STATE.json'\ncont=base/'models/CONTINUATION.json'\nout={'result_exists':result.is_file()}\nfor name,p in [('state',state),('continuation',cont)]:\n    if p.is_file():\n        try:o=json.loads(p.read_text(encoding='utf-8'))\n        except Exception as e:o={'parse_error':type(e).__name__}\n        if isinstance(o,dict): out[name]={k:o.get(k) for k in ('task_id','state','reason','attempt','checkpoint','retry_at','timestamp','next_action')}\nif result.is_file():\n    try:r=json.loads(result.read_text(encoding='utf-8'))\n    except Exception as e:r={'parse_error':type(e).__name__}\n    if isinstance(r,dict): out['result']={k:r.get(k) for k in ('task_id','phase','decision','reviewer_model','model','status','completion_sha256','created_at','completed_at')}\nprint('ERROR_CLASS=R4P2_POST_RETRY9_VERIFY',flush=True)\nprint('ERROR='+json.dumps(out,separators=(',',':'),sort_keys=True),flush=True)\nraise SystemExit(1)\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/r4p2_post_retry9_verify_n1e120.py"
+      ],
+      "timeout_seconds": 60
+    }
+  ]
+}
