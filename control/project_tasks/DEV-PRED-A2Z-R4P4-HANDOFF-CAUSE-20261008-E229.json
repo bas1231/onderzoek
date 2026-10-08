@@ -1,0 +1,41 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-A2Z-R4P4-HANDOFF-CAUSE-20261008-E229",
+  "source_commit": "2335784a72897070a4031836e26e26d733906e5d",
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-6",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_runtime"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 90,
+  "notes": "Identify actual first incomplete step of E227 from durable executor state without resending R4P4 or touching the bridge.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/r4p4_handoff_cause_e229.py",
+      "content": "from pathlib import Path\nimport json\nh=Path.home()\ntid='DEV-PRED-A2Z-R4P4-SOL-HANDOFF-20261008-E227'\np=h/'.local/state/prediction-project-executor'/(tid+'.json')\nif not p.is_file(): raise SystemExit('HANDOFF_CAUSE=STATE_MISSING')\nx=json.loads(p.read_text())\nprint('HANDOFF_STATE_KEYS='+','.join(sorted(x.keys())),flush=True)\nstage=x.get('status','UNKNOWN')\nops=x.get('operations',[])\ndetail=str(x.get('error') or x.get('detail') or x.get('message') or '')\nsummary=('status='+str(stage)+';ops='+str(len(ops))+';error='+detail[:180])\nraise SystemExit('HANDOFF_CAUSE='+summary)\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/r4p4_handoff_cause_e229.py"
+      ],
+      "timeout_seconds": 30
+    }
+  ]
+}
