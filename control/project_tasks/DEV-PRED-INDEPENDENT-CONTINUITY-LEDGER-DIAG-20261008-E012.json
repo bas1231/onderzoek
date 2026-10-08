@@ -1,0 +1,51 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-INDEPENDENT-CONTINUITY-LEDGER-DIAG-20261008-E012",
+  "source_commit": "2a59e48b090bdda1bd96c9c782067b68432ff1d8",
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-6",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "run_project_python",
+    "run_tests"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 400,
+  "notes": "Read-only exact malformed ledger classifier using only allowable git ls-tree/show inside source-pinned isolated task worktree. No historical event modification, no installed sidecar or bridge mutation; service remains fail closed.",
+  "operations": [
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests/independent_continuity",
+        "-p",
+        "test_diagnose_ledger.py",
+        "-v"
+      ],
+      "test": true,
+      "timeout_seconds": 70
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/independent_continuity/diagnose_ledger.py"
+      ],
+      "timeout_seconds": 220
+    }
+  ]
+}
