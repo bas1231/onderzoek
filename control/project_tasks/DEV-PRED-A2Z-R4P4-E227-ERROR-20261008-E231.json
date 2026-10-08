@@ -1,0 +1,41 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-A2Z-R4P4-E227-ERROR-20261008-E231",
+  "source_commit": "72bd07aa913db0ad06df9cc398355fd1ac64001f",
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-6",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_runtime"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 80,
+  "notes": "Get exact E227 local log error, no bridge mutation/replay.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/e231_read_e227.py",
+      "content": "from pathlib import Path\np=Path.home()/'.local/share/prediction-chat-bridge/dev-task-receipts/DEV-PRED-A2Z-R4P4-SOL-HANDOFF-20261008-E227.log'\nlines=p.read_text(errors='replace').splitlines()\ntail=' | '.join(x.strip() for x in lines[-12:] if x.strip())\nprint('E227_LOG_LAST='+tail[:700],flush=True)\nraise SystemExit('E227_REASON='+tail[-420:])\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/e231_read_e227.py"
+      ],
+      "timeout_seconds": 20
+    }
+  ]
+}
