@@ -1,0 +1,30 @@
+{
+  "schema": "PREDICTION_BUILD_LOG_EVENT_V1",
+  "event_id": "20261008T193300Z-A2Z-R5P1-ASTRA-STATE-AUTOE236",
+  "work_item_id": "A2Z-SYSTEMTEST-20261005",
+  "created_at_utc": "2026-10-08T19:33:00Z",
+  "event_type": "ATTEMPT",
+  "work_item_status": "IN_PROGRESS",
+  "outcome": "PLANNED",
+  "title": "R5P1 Astra PREBUILD exact state diagnostic",
+  "objective": "Read exact persisted N1E134 failure and R5P1 request state without repeating model invocation.",
+  "summary": "R5P1 Sol result is present; N1E134 Astra PREBUILD start failed. N1E135 attempted recursive diagnostic but no remote completion evidence; new bounded exact-path state read avoids expensive scan.",
+  "why": "First incomplete step is Astra PREBUILD request/start; preserve bridge freeze and avoid duplicate service starts.",
+  "first_incomplete_step": "Determine exact local failure reason of N1E134; no Astra review approval evidenced.",
+  "next_action": "Read AUTOE236 result in existing Sol chat, repair only the first incomplete assertion, then request exact Astra PREBUILD.",
+  "session_route_task_id": "SESSION-ROUTE-246799adf99f0bf8336c27a0",
+  "task_ids": [
+    "DEV-PRED-A2Z-R5P1-ASTRA-STATE-20261008-AUTOE236"
+  ],
+  "evidence_refs": [
+    "control/project_tasks/DEV-PRED-A2Z-R5P1-ASTRA-PREBUILD-START-20261008-N1E134.json",
+    "control/project_tasks/DEV-PRED-A2Z-R5P1-ASTRA-START-DIAG-20261008-N1E135.json",
+    "control/model_execution/direct_results/A2Z-V4-SOL-PROPOSAL-DIRECT-20261008-R5P1.json"
+  ],
+  "tags": [
+    "a2z",
+    "r5p1",
+    "astra-prebuild",
+    "read-only"
+  ]
+}
