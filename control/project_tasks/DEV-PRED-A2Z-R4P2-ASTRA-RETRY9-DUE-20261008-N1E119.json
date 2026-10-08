@@ -1,0 +1,29 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-A2Z-R4P2-ASTRA-RETRY9-DUE-20261008-N1E119",
+  "source_commit": "dcd87c56390246f5415cfa1aee32c7f78a3f1a68",
+  "intelligence_tier": "A",
+  "issuer": {"model": "GPT-5.6 Sol", "reasoning_level": "High"},
+  "safety": {"live_trading": false, "paid_actions": false, "wallet_actions": false, "remote_git_write": false, "credential_write": false},
+  "capabilities": ["read_repository", "write_worktree", "run_project_python", "read_runtime", "user_service_manage"],
+  "working_directory": ".",
+  "timeout_seconds": 300,
+  "notes": "Resume the existing exact R4P2 Astra PREBUILD task only after verifying attempt 8 remains PAUSED_USAGE_LIMIT on checkpoint runs/A2Z-V4-ASTRA-PREBUILD-DIRECT-20261007-R4P2-8-d1a55578, no result exists, and retry_at 1791407834.7176304 has elapsed. Start the existing model service once. No Sol build, tests or measurement.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/r4p2_retry9_due_n1e119.py",
+      "content": "from pathlib import Path\nimport json,time\nbase=Path.home()/'.local/share/prediction-project-executor/campaigns/FULL-A2Z-LIVE-20261004-V4'\ntask='A2Z-V4-ASTRA-PREBUILD-DIRECT-20261007-R4P2'\ncheckpoint='runs/A2Z-V4-ASTRA-PREBUILD-DIRECT-20261007-R4P2-8-d1a55578'\nretry_at=1791407834.7176304\nresult=base/'model_results'/(task+'.json')\nstate=base/'models/STATE.json'\ncont=base/'models/CONTINUATION.json'\nif result.is_file(): raise SystemExit(10)\nif time.time() <= retry_at: raise SystemExit(21)\nok=False\nfor p in (state,cont):\n    if not p.is_file(): continue\n    try:o=json.loads(p.read_text(encoding='utf-8'))\n    except Exception: continue\n    if o.get('task_id')==task and o.get('state')=='PAUSED_USAGE_LIMIT' and o.get('checkpoint')==checkpoint and o.get('attempt') in (None,8): ok=True\nif not ok: raise SystemExit(22)\nprint('R4P2_RETRY9_DUE_NOW_PROVEN',flush=True)\n"
+    },
+    {
+      "type": "python",
+      "argv": ["python3", "control/dev_checks/r4p2_retry9_due_n1e119.py"],
+      "timeout_seconds": 60
+    },
+    {
+      "type": "service",
+      "verb": "start",
+      "unit": "prediction-a2z-v4-model@A2Z-V4-ASTRA-PREBUILD-DIRECT-20261007-R4P2.service"
+    }
+  ]
+}
