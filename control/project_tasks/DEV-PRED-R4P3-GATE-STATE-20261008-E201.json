@@ -1,0 +1,41 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-R4P3-GATE-STATE-20261008-E201",
+  "source_commit": "6e6c45bef33452a0762c6b2c932303976793408b",
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-6",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_runtime"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 120,
+  "notes": "Read-only short deterministic R4P3 gate-state diagnosis; no model, build, tests, bridge modifications or economic actions.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/r4p3_gate_state_e201.py",
+      "content": "from pathlib import Path\nimport json\nhome=Path.home()\nroot=home/'.local/state/prediction-project-executor'\ncampaign=home/'.local/share/prediction-project-executor/campaigns/FULL-A2Z-LIVE-20261004-V4'\nfor label,task in [('MATERIALIZE','DEV-PRED-A2Z-R4P3-MATERIALIZE-20261008-N1E135'),('QUEUE','DEV-PRED-A2Z-R4P3-ASTRA-PREBUILD-QUEUE-20261008-N1E138')]:\n p=root/(task+'.json')\n if not p.is_file():\n  print(label+'=NO_STATE')\n  continue\n o=json.loads(p.read_text())\n print(label+'_STATUS='+str(o.get('status','UNKNOWN')))\n print(label+'_EXIT='+str(o.get('exit_code','NONE')))\n print(label+'_ERROR='+str(o.get('error','NONE'))[:250].replace('\\n',' '))\n print(label+'_FINISHED='+str(o.get('finished_at_utc','NONE')))\nreq=campaign/'requests/A2Z-V4-ASTRA-PREBUILD-DIRECT-20261008-R4P3.json'\nres=campaign/'model_results/A2Z-V4-ASTRA-PREBUILD-DIRECT-20261008-R4P3.json'\nprint('ASTRA_REQUEST='+str(req.is_file()))\nprint('ASTRA_RESULT='+str(res.is_file()))\nif req.is_file():\n o=json.loads(req.read_text())\n print('ASTRA_TASK='+str(o.get('task_id')))\n print('ASTRA_PHASE='+str(o.get('phase')))\n print('ASTRA_MODEL='+str(o.get('target_model',o.get('model_policy','UNKNOWN'))))\nprint('DIAGNOSTIC=PASS')\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/r4p3_gate_state_e201.py"
+      ],
+      "timeout_seconds": 60
+    }
+  ]
+}
