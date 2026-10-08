@@ -1,0 +1,34 @@
+{
+  "schema": "PREDICTION_BUILD_LOG_EVENT_V1",
+  "event_id": "REDDIT-E031-OPERATIONAL-ATTEMPT-20261008",
+  "work_item_id": "REDDIT-IDEA-MINE-V1",
+  "created_at_utc": "2026-10-08T18:54:58.427Z",
+  "event_type": "ATTEMPT",
+  "work_item_status": "IN_PROGRESS",
+  "outcome": "STARTED",
+  "title": "Operational E031 installed-hourly Artemis Shift to Recon provenance check",
+  "objective": "Run read-only WSL operational acceptance: active hourly timer, installed source modules, enabled source receipts with true Recon additions, canonical run and markdown report persistence.",
+  "summary": "Offline E020-E027 and E030 PASS. Previous E019 service result not observed; E029 local production HEAD matches local main but remote GitHub main ~2014 commits ahead at inspection. Added repository-owned read-only operational_readiness.py to assess deployed source presence and actual persisted evidence, no fresh external GET and no write side effects. E031 is an operational readiness/provenance check, not permission to modify bridge/production or perform trades. Its expected failure may indicate the source is not yet installed/enabled.",
+  "why": "Users explicitly requested operational test; distinction needed between green fixture regressions and genuine installed WSL hourly source-to-Recon evidence. Existing scoped executor forbids new external networking.",
+  "next_action": "Dispatch E031 once using documented command-bus and proven session route. Diagnose first incomplete assertion from same task result; do not force checkout/merge, restart service or bypass child network guard.",
+  "session_route_task_id": "SESSION-ROUTE-74c664afabf31305265af34b",
+  "task_ids": [
+    "DEV-PRED-REDDIT-OPERATIONAL-CANARY-20261008-E031"
+  ],
+  "commits": [
+    "b8b26205d99c1306c48c2c9a217f948854f37d8b"
+  ],
+  "evidence_refs": [
+    "control/reddit_idea_mine/operational_readiness.py",
+    "control/reddit_idea_mine/source_canary.py"
+  ],
+  "tags": [
+    "reddit",
+    "production",
+    "operational-canary",
+    "read-only",
+    "hourly",
+    "recon"
+  ],
+  "first_incomplete_step": "Confirm installed hourly timer and receipt-verified Arctic Shift→Recon→canonical report flow; actual API request from approved runtime still pending."
+}
