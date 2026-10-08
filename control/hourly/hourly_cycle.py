@@ -43,6 +43,11 @@ def main() -> int:
     quality = load('source_quality', R / 'control/hourly/source_quality.py')
     router = load('role_router', R / 'control/hourly/role_router.py')
     recon = load('recon_engine', R / 'control/hourly/recon_engine.py')
+    # systemd starts the wrapper as an absolute script path, which need not
+    # include the repository root on sys.path. Keep first-party package imports
+    # deterministic without changing service settings or the project executor.
+    if str(R) not in sys.path:
+        sys.path.insert(0, str(R))
     reddit_ingress = load('reddit_hourly_ingress', R / 'control/reddit_idea_mine/hourly_ingress.py')
     recon_candidate_bridge = load('recon_candidate_bridge', R / 'control/hourly/recon_candidate_bridge.py')
     market_scanner = load('market_instance_scanner', R / 'control/hourly/market_instance_scanner.py')
