@@ -1,0 +1,19 @@
+{
+  "schema": "PREDICTION_BRIDGE_COMMAND_V1",
+  "task_id": "CONT-DONE-18f8d47c93b99553e91c7df4",
+  "action": "BRIDGE_PING",
+  "created_at_utc": "2026-10-08T11:29:15Z",
+  "route_task_id": null,
+  "delivery_mode": "headless",
+  "live_trading": false,
+  "paid_actions": false,
+  "wallet_actions": false,
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "notes": "Close superseded continuation. Current source of truth has already advanced through R4P3 proposal materialization and Astra PREBUILD queue/status/claim diagnostics up to N1E142. No duplicate NEXT.",
+  "auto_continue": false,
+  "parent_continuation_id": "CONT-18f8d47c93b99553e91c7df4"
+}
