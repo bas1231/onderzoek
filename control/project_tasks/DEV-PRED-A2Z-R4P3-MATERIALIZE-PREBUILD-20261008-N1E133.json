@@ -1,0 +1,98 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-A2Z-R4P3-MATERIALIZE-PREBUILD-20261008-N1E133",
+  "source_commit": "52961ef9791d90e784b0b1300e99f8311ecce253",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "High"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_runtime",
+    "write_runtime"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 300,
+  "operations": [
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/model_execution/patch_e106_gate.py"
+      ],
+      "timeout_seconds": 60
+    },
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/stage_r4p3.py",
+      "content": "from pathlib import Path\nimport json,hashlib\nfrom control.model_execution.direct_sol_chat import validate_request,validate_result\nfrom control.model_execution.direct_sol_record import normalized_run_files\nT='A2Z-V4-SOL-PROPOSAL-DIRECT-20261008-R4P3'\nreq=Path('control/model_execution/direct_requests')/(T+'.json')\nres=Path('control/model_execution/direct_results')/(T+'.json')\nrq=json.loads(req.read_text()); rr=json.loads(res.read_text())\nvalidate_request(rq); validate_result(rq,rr)\nassert rr['completion_sha256']=='ee8cb3d10a02d50064dcea2fd7aa4264fe2fabbb04c0f4ab58d01312fba6c918'\np=json.loads(rr['final'])\nassert p['proposal_version']==5\nassert {x['name'] for x in p['intended_artifacts']}=={'complement_checker_v4.py','test_complement_checker_v4.py','qualification_stream_v4.json'}\nout=Path('control/dev_checks/r4p3_stage'); run=out/'run'; run.mkdir(parents=True,exist_ok=True)\nfiles=normalized_run_files(rq,rr)\n[(run/n).write_text(v) for n,v in files.items()]\nsha=lambda p: hashlib.sha256(p.read_bytes()).hexdigest()\nenv={'schema':'PVA_GOVERNED_MODEL_COMPLETION_V1','task_id':T,'phase':rq['phase'],'model':'gpt-5.6-sol','model_policy':'SOL_EXACT','execution_layer':'DIRECT_SOL_CHAT','route_task_id':rq['delivery_route_task_id'],'campaign_id':rq['campaign_id'],'input_sha256':rq['input_sha256'],'checkpoint':'models/runs/'+T+'-direct-r4p3','completion_sha256':sha(run/'COMPLETE.json'),'worker_sha256':sha(run/'WORKER.json'),'request_sha256':sha(req),'direct_result_sha256':sha(res),'final':rr['final']}\n(out/'model_result.json').write_text(json.dumps(env,indent=2,sort_keys=True)+'\\n')\nprint('R4P3_STAGE=PASS')\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/stage_r4p3.py"
+      ],
+      "timeout_seconds": 60
+    },
+    {
+      "type": "install_runtime",
+      "source": "control/dev_checks/r4p3_stage/run/TASK.json",
+      "destination": "/home/leonh/.local/share/prediction-project-executor/campaigns/FULL-A2Z-LIVE-20261004-V4/models/runs/A2Z-V4-SOL-PROPOSAL-DIRECT-20261008-R4P3-direct-r4p3/TASK.json",
+      "mode": 420
+    },
+    {
+      "type": "install_runtime",
+      "source": "control/dev_checks/r4p3_stage/run/WORKER.json",
+      "destination": "/home/leonh/.local/share/prediction-project-executor/campaigns/FULL-A2Z-LIVE-20261004-V4/models/runs/A2Z-V4-SOL-PROPOSAL-DIRECT-20261008-R4P3-direct-r4p3/WORKER.json",
+      "mode": 420
+    },
+    {
+      "type": "install_runtime",
+      "source": "control/dev_checks/r4p3_stage/run/COMPLETE.json",
+      "destination": "/home/leonh/.local/share/prediction-project-executor/campaigns/FULL-A2Z-LIVE-20261004-V4/models/runs/A2Z-V4-SOL-PROPOSAL-DIRECT-20261008-R4P3-direct-r4p3/COMPLETE.json",
+      "mode": 420
+    },
+    {
+      "type": "install_runtime",
+      "source": "control/dev_checks/r4p3_stage/run/events.jsonl",
+      "destination": "/home/leonh/.local/share/prediction-project-executor/campaigns/FULL-A2Z-LIVE-20261004-V4/models/runs/A2Z-V4-SOL-PROPOSAL-DIRECT-20261008-R4P3-direct-r4p3/events.jsonl",
+      "mode": 420
+    },
+    {
+      "type": "install_runtime",
+      "source": "control/dev_checks/r4p3_stage/model_result.json",
+      "destination": "/home/leonh/.local/share/prediction-project-executor/campaigns/FULL-A2Z-LIVE-20261004-V4/model_results/A2Z-V4-SOL-PROPOSAL-DIRECT-20261008-R4P3.json",
+      "mode": 420
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/jobs/full_a2z_governed_v4.py",
+        "proposal",
+        "--model-task",
+        "A2Z-V4-SOL-PROPOSAL-DIRECT-20261008-R4P3",
+        "--next-task",
+        "A2Z-V4-ASTRA-PREBUILD-DIRECT-20261008-R4P3"
+      ],
+      "timeout_seconds": 120
+    },
+    {
+      "type": "install_runtime",
+      "source": "control/dev_checks/a2z_next_request.json",
+      "destination": "/home/leonh/.local/share/prediction-project-executor/campaigns/FULL-A2Z-LIVE-20261004-V4/requests/A2Z-V4-ASTRA-PREBUILD-DIRECT-20261008-R4P3.json",
+      "mode": 420
+    }
+  ]
+}
