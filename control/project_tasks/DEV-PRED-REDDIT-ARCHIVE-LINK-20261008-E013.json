@@ -1,0 +1,54 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-REDDIT-ARCHIVE-LINK-20261008-E013",
+  "source_commit": "89852cd8091c2a10feb619eb1dd350e1a0e03040",
+  "intelligence_tier": "B",
+  "issuer": {
+    "model": "GPT-6",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "run_tests",
+    "run_project_python"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 300,
+  "notes": "Test archive-record to existing Recon pipeline end-to-end without external fetching, costs, trading or bridge changes.",
+  "operations": [
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "-m",
+        "compileall",
+        "-q",
+        "control/reddit_idea_mine"
+      ],
+      "timeout_seconds": 60
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests",
+        "-p",
+        "test_reddit*.py",
+        "-v"
+      ],
+      "test": true,
+      "timeout_seconds": 200
+    }
+  ]
+}
