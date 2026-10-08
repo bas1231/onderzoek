@@ -1,0 +1,82 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-A2Z-R4P3-SELECTION-PREP-20261008-E203",
+  "source_commit": "9da5cae8",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-6",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_runtime",
+    "write_runtime"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 300,
+  "notes": "Restore immutable E106 candidate selection into isolated task worktree; reuse already materialized R4P3 Sol proposal; prepare and integrity-check one Astra PREBUILD request. No model invocation, build, tests, measurements, service, bridge changes or financial action.",
+  "operations": [
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/model_execution/patch_e106_gate.py"
+      ],
+      "timeout_seconds": 60
+    },
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/restore_r4p3_selection_e203.py",
+      "content": "from pathlib import Path\nimport json\nroot=Path.cwd()\nspec=json.loads((root/\"control/project_tasks/DEV-PRED-A2Z-POSTBUILD-RETRY-20261006-E106.json\").read_text())\nmatches=[op for op in spec[\"operations\"] if op.get(\"type\")==\"write_text\" and op.get(\"path\")==\"control/dev_checks/a2z_previous_selection.json\"]\nassert len(matches)==1,\"SELECTION_SOURCE_NOT_UNIQUE\"\nselection=json.loads(matches[0][\"content\"])\nassert selection[\"candidate_id\"]==\"AUTO-DISCOVERY-54d13314c7879b58e46d\"\nrequired={\"candidate_id\",\"originating_task_id\",\"source_hashes\",\"completion_hash\",\"finding\",\"next_action\"}\nassert required.issubset(selection),\"SELECTION_FIELDS_MISSING\"\np=root/\"control/dev_checks/a2z_previous_selection.json\"\np.parent.mkdir(parents=True,exist_ok=True)\np.write_text(json.dumps(selection,indent=2,ensure_ascii=False)+\"\\n\")\nprint(\"SELECTION_RESTORED=PASS\")\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/restore_r4p3_selection_e203.py"
+      ],
+      "timeout_seconds": 30
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/jobs/full_a2z_governed_v4.py",
+        "proposal",
+        "--model-task",
+        "A2Z-V4-SOL-PROPOSAL-DIRECT-20261008-R4P3",
+        "--next-task",
+        "A2Z-V4-ASTRA-PREBUILD-DIRECT-20261008-R4P3"
+      ],
+      "timeout_seconds": 120
+    },
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/verify_r4p3_prebuild_e203.py",
+      "content": "import json\nfrom pathlib import Path\np=Path(\"control/dev_checks/a2z_next_request.json\")\nr=json.loads(p.read_text())\nassert r[\"task_id\"]==\"A2Z-V4-ASTRA-PREBUILD-DIRECT-20261008-R4P3\"\nassert r[\"phase\"]==\"ASTRA_PREBUILD\"\nassert r[\"campaign_id\"]==\"FULL-A2Z-LIVE-20261004-V4\"\nassert r[\"live_trading\"] is False and r[\"paid_actions\"] is False and r[\"wallet_actions\"] is False\nassert \"INPUT_JSON:\" in r[\"prompt\"]\nassert r[\"route_task_id\"]==\"SESSION-ROUTE-DIRECTSOL-20261007-K7A1\"\nassert not (Path.home()/\".local/share/prediction-project-executor/campaigns/FULL-A2Z-LIVE-20261004-V4/requests/A2Z-V4-ASTRA-PREBUILD-DIRECT-20261008-R4P3.json\").exists(),\"R4P3_REQUEST_ALREADY_EXISTS\"\nprint(\"R4P3_PREBUILD_REQUEST_BOUND=PASS\")\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/verify_r4p3_prebuild_e203.py"
+      ],
+      "timeout_seconds": 30
+    },
+    {
+      "type": "install_runtime",
+      "source": "control/dev_checks/a2z_next_request.json",
+      "destination": "/home/leonh/.local/share/prediction-project-executor/campaigns/FULL-A2Z-LIVE-20261004-V4/requests/A2Z-V4-ASTRA-PREBUILD-DIRECT-20261008-R4P3.json",
+      "mode": 420
+    }
+  ]
+}
