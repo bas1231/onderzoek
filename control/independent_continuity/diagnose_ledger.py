@@ -1,4 +1,4 @@
-"""Read-only classifier of the exact FETCH_HEAD build-log event tree.
+"""Read-only classifier of the exact pinned project-task Git tree.
 
 This is a diagnostic of the isolated continuity observer, not an alternative
 bridge, data repair or authorization to discard malformed ledger events.
@@ -52,7 +52,8 @@ def verify_bytes(filename: str, raw: bytes) -> str | None:
 
 def git(repo: Path, *args: str) -> bytes:
     result = subprocess.run(
-        ["git", "-C", str(repo), *args],
+        ["git", *args],
+        cwd=repo,
         capture_output=True, timeout=25, check=False,
     )
     if result.returncode:
@@ -61,7 +62,7 @@ def git(repo: Path, *args: str) -> bytes:
 
 
 def diagnose(repo: Path) -> tuple[int, str]:
-    revision = git(repo, "rev-parse", "--verify", "FETCH_HEAD").decode("ascii").strip()
+    revision = git(repo, "rev-parse", "--verify", "HEAD").decode("ascii").strip()
     if len(revision) != 40 or any(c not in "0123456789abcdef" for c in revision):
         raise RuntimeError("bad_fetched_revision")
     listing = git(repo, "ls-tree", "-r", "--name-only", revision, "--", PREFIX)
@@ -90,7 +91,7 @@ def diagnose(repo: Path) -> tuple[int, str]:
 
 
 def main() -> int:
-    repo = Path.home() / ".local/share/prediction-project-executor/repo"
+    repo = Path.cwd()
     try:
         code, message = diagnose(repo)
     except (OSError, RuntimeError, UnicodeError, subprocess.SubprocessError) as exc:
