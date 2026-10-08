@@ -1,0 +1,19 @@
+{
+  "schema": "PREDICTION_BRIDGE_COMMAND_V1",
+  "task_id": "CONT-DONE-c55a78b97496c9d85b3b5b45",
+  "action": "BRIDGE_PING",
+  "created_at_utc": "2026-10-08T06:22:45Z",
+  "route_task_id": null,
+  "delivery_mode": "headless",
+  "live_trading": false,
+  "paid_actions": false,
+  "wallet_actions": false,
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "notes": "Close superseded N1E125 continuation. N1E125 failed pre-execution on unknown capability names and has already been replaced by corrected structural repair DEV-PRED-ASTRA-RESULT-NORMALIZE-R2-20261008-N1E126. No duplicate NEXT or repair run.",
+  "auto_continue": false,
+  "parent_continuation_id": "CONT-c55a78b97496c9d85b3b5b45"
+}
