@@ -1,0 +1,55 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-REDDIT-RELIABLE-DISCOVERY-20261008-E024",
+  "source_commit": "a5f22ba1461731a0604aff1d835ed36709ec3e77",
+  "intelligence_tier": "B",
+  "issuer": {
+    "model": "GPT-6",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "run_tests",
+    "run_project_python"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 300,
+  "notes": "Test reliable, age-insensitive Reddit discovery, seven-day bounded default, month-old valid archive canary, and full hourly Recon gating suite. Mocked network only, no runtime/service/bridge changes, trading, costs or credentials.",
+  "operations": [
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "-m",
+        "compileall",
+        "-q",
+        "control/reddit_idea_mine",
+        "control/hourly/hourly_cycle.py"
+      ],
+      "timeout_seconds": 60
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests",
+        "-p",
+        "test_reddit*.py",
+        "-v"
+      ],
+      "test": true,
+      "timeout_seconds": 200
+    }
+  ]
+}
