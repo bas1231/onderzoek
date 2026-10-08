@@ -1,0 +1,35 @@
+{
+  "schema": "PREDICTION_BUILD_LOG_EVENT_V1",
+  "event_id": "REDDIT-E028-FETCH-FAIL-RETRY-20261008",
+  "work_item_id": "REDDIT-IDEA-MINE-V1",
+  "created_at_utc": "2026-10-08T18:37:19.473Z",
+  "event_type": "ATTEMPT",
+  "work_item_status": "IN_PROGRESS",
+  "outcome": "STARTED",
+  "title": "E028 pre-test mirror fetch failure: exact offline replay E030",
+  "objective": "Validate empty Arctic Shift source classification without modifying bridge, executor or protected production runtime.",
+  "summary": "E028 NIGHTSHIFT_WSL_RESULT_V1 FAIL exit=2 error=TaskError mirror fetch failed, event=1791484247-c966c994c002. This failed inside project_task_executor.refresh_mirror() at git fetch --quiet --depth=64 origin main, before task spec claim/worktree and before all Python tests. GitHub connector read-only fetch verified E028 task file and pinned source commit a09f5ca539a7d2d2138964f79bb29ad680dfeca8 exist on GitHub, latest main ref reachable to connector. Exact WSL remote git error output is not exposed, so root cause remains undetermined. New immutable E030 replay is justified because prior tests never executed.",
+  "why": "Retest the first incomplete step rather than editing frozen bridge or executor or claiming any code regression.",
+  "next_action": "Dispatch E030 once with same pinned tests/commit and explicit same-chat route; await E030 PASS exit=0 with exact assertions. If fetch fails again, stop retries and diagnose read-only connection or concurrency via approved facilities; owner authorization required for any bridge or executor mutation.",
+  "session_route_task_id": "SESSION-ROUTE-74c664afabf31305265af34b",
+  "task_ids": [
+    "DEV-PRED-REDDIT-EMPTY-SOURCE-20261008-E028",
+    "DEV-PRED-REDDIT-EMPTY-SOURCE-RETRY-20261008-E030"
+  ],
+  "commits": [
+    "a09f5ca539a7d2d2138964f79bb29ad680dfeca8"
+  ],
+  "evidence_refs": [
+    "1791484247-c966c994c002",
+    "control/project_tasks/DEV-PRED-REDDIT-EMPTY-SOURCE-20261008-E028.json",
+    "control/reddit_idea_mine/hourly_ingress.py"
+  ],
+  "tags": [
+    "reddit",
+    "recon",
+    "mirror-fetch",
+    "infra-blocker",
+    "offline-regression"
+  ],
+  "first_incomplete_step": "refresh_mirror() git fetch in WSL before loading the project-task or any code tests."
+}
