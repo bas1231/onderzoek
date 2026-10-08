@@ -99,6 +99,14 @@ def test_worker_record_materializes_valid_autonomous_review(tmp_path):
     })
     applied=ar.validate_result_and_write(sup,task,final,folder)
     assert applied['decision']=='APPROVE'
+    assert applied['finding']=='The bounded falsification is scientifically appropriate.'
+    assert applied['next_action']=='Proceed to the bounded build only.'
+    assert applied['reviewer_model']=='GPT-6 Astra'
+    assert applied['reviewer_model_slug']=='gpt-6-astra-fixture'
+    assert applied['source_task_id']==task['task_id']
+    assert applied['input_sha256']==task['input_sha256']
+    assert applied['binding_sha256']==task['binding_sha256']
+    assert applied['model_provenance_sha256']
     review,ref=q.load_review(repo,item,'PREBUILD')
     assert ref==q.expected_review_ref(item,'PREBUILD')
     assert review['provenance_kind']==q.PROVENANCE_AUTONOMOUS_RUN
