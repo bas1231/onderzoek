@@ -1,0 +1,18 @@
+{
+  "schema": "PREDICTION_BRIDGE_COMMAND_V1",
+  "task_id": "DEV-PRED-REDDIT-UNTRACKED-PATHS-20261008-E035",
+  "action": "SIX_AI_HEALTH",
+  "created_at_utc": "2026-10-08T19:08:18.598Z",
+  "route_task_id": "SESSION-ROUTE-74c664afabf31305265af34b",
+  "delivery_mode": "chat",
+  "live_trading": false,
+  "paid_actions": false,
+  "wallet_actions": false,
+  "intelligence_tier": "B",
+  "issuer": {
+    "model": "GPT-6",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "auto_continue": false,
+  "notes": "Read-only E035 path classification for local runtime records. No bridge modifications, service restart, Git mutations or paid/live trading."
+}
