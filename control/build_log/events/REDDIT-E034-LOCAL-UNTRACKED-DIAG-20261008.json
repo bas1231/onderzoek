@@ -1,0 +1,33 @@
+{
+  "schema": "PREDICTION_BUILD_LOG_EVENT_V1",
+  "event_id": "REDDIT-E034-LOCAL-UNTRACKED-DIAG-20261008",
+  "work_item_id": "REDDIT-IDEA-MINE-V1",
+  "created_at_utc": "2026-10-08T19:07:29.409Z",
+  "event_type": "RESULT",
+  "work_item_status": "IN_PROGRESS",
+  "outcome": "INFO",
+  "title": "E034 read-only production worktree diagnosis: 24 noncanonical untracked files",
+  "objective": "Find the first incomplete safe-deployment gate for Arctic Shift Reddit idea mining without destroying local Prediction research state.",
+  "summary": "E034 returned deliberate diagnostic FAIL exit=2 rcs=1:2 task=DEV-PRED-REDDIT-PROD-WORKTREE-READ-20261008-E034 event=1791486147-91dc0fa98612. production_compare_worktree(require_exact=true,report_mode=group_counts,allow_active_codex_runtime_residue=true) reported dirty_count=24; different_count=0; missing_in_source_count=24; grouped missing: runs=22, candidate_states=1, astra_review_wakes=1. E033 prior staged_n=0,unstaged_n=0, so 24 local untracked files are not represented in pinned canonical source 539b9c62e5c9a8c57a759655fe93ed2e6fbbfa3f. No local files or production ref mutated. E034 is a safe diagnostic, not code failure. Lack of canonical representation does not alone prove collision with future Git fast-forward; require a full non-overlap and bridge-source freeze gate before deployment.",
+  "why": "Keep valuable local runs, candidate state and Astra review wake untouched while determining a safe bounded production update.",
+  "next_action": "Inspect exact missing paths via E035 read-only. Do not delete/move/checkpoint/copy those files into remote or fast-forward production until both preserved-state and bridge-freeze gates can be satisfied. Operational Reddit source still absent.",
+  "session_route_task_id": "SESSION-ROUTE-74c664afabf31305265af34b",
+  "task_ids": [
+    "DEV-PRED-REDDIT-PROD-WORKTREE-READ-20261008-E034"
+  ],
+  "commits": [
+    "539b9c62e5c9a8c57a759655fe93ed2e6fbbfa3f"
+  ],
+  "evidence_refs": [
+    "1791486147-91dc0fa98612",
+    "control/bridge_commands/CURRENT_STATE.md"
+  ],
+  "tags": [
+    "reddit",
+    "production-readiness",
+    "untracked-data",
+    "read-only",
+    "diagnostic"
+  ],
+  "first_incomplete_step": "Detailed path-level preserve/overlap review and bridge-freeze compatibility before safe production release."
+}
