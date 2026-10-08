@@ -1,0 +1,83 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-INDEPENDENT-CONTINUITY-ROUTE-INSTALL-20261008-E017",
+  "source_commit": "28ad23c02fb500f70e3555d4cd170950f4bd9376",
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-6",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "run_project_python",
+    "run_tests",
+    "write_runtime",
+    "user_service_manage",
+    "read_logs"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 640,
+  "notes": "Scoped update of own independent-continuity/coordinator.py after E016 route-safety regressions PASS. Config remains mode=observe, no emit, no wake queue or launcher writes, no existing bus/executor/router/browser changes.",
+  "operations": [
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests/independent_continuity",
+        "-p",
+        "test_*.py",
+        "-v"
+      ],
+      "test": true,
+      "timeout_seconds": 180
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "-m",
+        "compileall",
+        "-q",
+        "control/independent_continuity",
+        "tests/independent_continuity"
+      ],
+      "timeout_seconds": 60
+    },
+    {
+      "type": "install_runtime",
+      "source": "control/independent_continuity/coordinator.py",
+      "destination": "~/.local/share/prediction-project-executor/independent-continuity/coordinator.py"
+    },
+    {
+      "type": "service",
+      "verb": "start",
+      "unit": "prediction-independent-continuity.service"
+    },
+    {
+      "type": "service",
+      "verb": "is-active",
+      "unit": "prediction-independent-continuity.timer"
+    },
+    {
+      "type": "service",
+      "verb": "is-enabled",
+      "unit": "prediction-independent-continuity.timer"
+    },
+    {
+      "type": "journal",
+      "unit": "prediction-independent-continuity.service",
+      "lines": 12
+    }
+  ]
+}
