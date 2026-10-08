@@ -1,0 +1,41 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-CONT-NEXT-e8e2d30432944018f0d8971b",
+  "source_commit": "367bd954f8601fce59138c16f93c8cce226fb0cd",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "High"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_runtime"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 120,
+  "notes": "Continuation from the read-only N1E134 status inspection. Re-read local prediction-project-executor state for DEV-PRED-ASTRA-RESULT-NORMALIZE-R5-20261008-N1E134 and emit compact actual status, exit code, local commit/worktree, operation results and focused pytest evidence. Do not modify project code, invoke models, run tests, or perform measurement.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/read_n1e134_status_cont_e8e2.py",
+      "content": "from pathlib import Path\nimport json\ntid='DEV-PRED-ASTRA-RESULT-NORMALIZE-R5-20261008-N1E134'\nroot=Path.home()/'.local/state/prediction-project-executor'\nrows=[]\nif root.exists():\n    for p in sorted(root.rglob('*')):\n        if not p.is_file() or tid not in p.name: continue\n        try:\n            obj=json.loads(p.read_text())\n            keep={k:obj.get(k) for k in ['task_id','status','exit_code','source_commit','worktree','branch','commit','local_commit','error','detail','operations'] if k in obj}\n            rows.append(p.name+'='+json.dumps(keep,ensure_ascii=False,separators=(',',':')))\n        except Exception:\n            rows.append(p.name+'='+p.read_text(errors='replace')[:1800].replace('\\n',' '))\nprint('ERROR_CLASS=N1E134_STATUS_EVIDENCE')\nprint('ERROR='+'|'.join(rows)[:12000])\nraise SystemExit(1)\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/read_n1e134_status_cont_e8e2.py"
+      ],
+      "timeout_seconds": 60
+    }
+  ]
+}
