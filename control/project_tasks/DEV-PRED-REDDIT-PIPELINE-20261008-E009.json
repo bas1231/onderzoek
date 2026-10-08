@@ -1,0 +1,54 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-REDDIT-PIPELINE-20261008-E009",
+  "source_commit": "b081b5b0f4c3cc965301b7971bb400af6fcc43c7",
+  "intelligence_tier": "B",
+  "issuer": {
+    "model": "GPT-6",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "run_tests",
+    "run_project_python"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 300,
+  "notes": "Offline Reddit batch to persisted Recon runner qualification; tests only in isolated worktree. No external network, Reddit crawling, trading, paid action, runtime install or bridge changes.",
+  "operations": [
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "-m",
+        "compileall",
+        "-q",
+        "control/reddit_idea_mine"
+      ],
+      "timeout_seconds": 60
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests",
+        "-p",
+        "test_reddit*.py",
+        "-v"
+      ],
+      "test": true,
+      "timeout_seconds": 180
+    }
+  ]
+}
