@@ -1,0 +1,19 @@
+{
+  "schema": "PREDICTION_BRIDGE_COMMAND_V1",
+  "task_id": "CONT-DONE-0f85b2cf4bc1ea06eadbecf2",
+  "action": "BRIDGE_PING",
+  "created_at_utc": "2026-10-08T11:01:15Z",
+  "route_task_id": null,
+  "delivery_mode": "headless",
+  "live_trading": false,
+  "paid_actions": false,
+  "wallet_actions": false,
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "notes": "Close stale continuation from DEV-PRED-ASTRA-NORMALIZE-R5-STATE-20261008-N1E138. Newer substantive normalization and R4P3 state tasks already exist (N1E140); do not create duplicate NEXT.",
+  "auto_continue": false,
+  "parent_continuation_id": "CONT-0f85b2cf4bc1ea06eadbecf2"
+}
