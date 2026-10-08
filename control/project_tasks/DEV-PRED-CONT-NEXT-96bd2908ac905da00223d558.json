@@ -1,0 +1,41 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-CONT-NEXT-96bd2908ac905da00223d558",
+  "source_commit": "ccceb4ed8a3a5cbe5fb3f96b7fc9abde5c307e06",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "High"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_runtime"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 120,
+  "notes": "Continuation for N1E134. Read-only inspection of the local prediction-project-executor state for DEV-PRED-ASTRA-RESULT-NORMALIZE-R5-20261008-N1E134. Report actual status, exit code, worktree/local commit, and operation/test evidence. Do not modify project code, invoke models, run tests, or perform measurement.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/read_n1e134_executor_result_cont_96bd.py",
+      "content": "from pathlib import Path\nimport json\ntid='DEV-PRED-ASTRA-RESULT-NORMALIZE-R5-20261008-N1E134'\nroot=Path.home()/'.local/state/prediction-project-executor'\nmatches=[]\nif root.exists():\n    for p in root.rglob('*'):\n        if p.is_file() and tid in p.name:\n            matches.append(p)\ndef compact(v):\n    if isinstance(v,(dict,list)): return json.dumps(v,ensure_ascii=False,separators=(',',':'))\n    return str(v)\nprint('ERROR_CLASS=N1E134_EXECUTOR_RESULT')\nout=[]\nfor p in sorted(matches)[:20]:\n    try:\n        txt=p.read_text()\n        obj=json.loads(txt)\n        fields={k:obj.get(k) for k in ['task_id','status','exit_code','source_commit','worktree','branch','commit','local_commit','result','error','detail','operations'] if k in obj}\n        out.append(p.name+'='+compact(fields))\n    except Exception:\n        out.append(p.name+'='+p.read_text(errors='replace')[:1200].replace('\\n',' '))\nprint('ERROR='+'|'.join(out)[:12000])\nraise SystemExit(1)\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/read_n1e134_executor_result_cont_96bd.py"
+      ],
+      "timeout_seconds": 60
+    }
+  ]
+}
