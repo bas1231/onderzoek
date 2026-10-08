@@ -1,0 +1,115 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-INDEPENDENT-CONTINUITY-OBSERVE-INSTALL-20261008-E005",
+  "source_commit": "50b8e01c045f6f1d5f9abd3aec6d9be2679ac66d",
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-6",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "run_project_python",
+    "run_tests",
+    "write_runtime",
+    "user_service_manage"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 900,
+  "notes": "Standalone observation-only sidecar. Exact regression tests and compile before installing ONLY new prediction-independent-continuity service+timer and owned files. NO bridge/executor source, configuration, wake queue, launcher semantics, existing service restart, browser injection, network, trades or paid action.",
+  "operations": [
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests/independent_continuity",
+        "-p",
+        "test_*.py",
+        "-v"
+      ],
+      "test": true,
+      "timeout_seconds": 150
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "-m",
+        "compileall",
+        "-q",
+        "control/independent_continuity",
+        "tests/independent_continuity"
+      ],
+      "timeout_seconds": 60
+    },
+    {
+      "type": "install_runtime",
+      "source": "control/independent_continuity/observer.py",
+      "destination": "~/.local/share/prediction-project-executor/independent-continuity/observer.py"
+    },
+    {
+      "type": "install_runtime",
+      "source": "control/independent_continuity/coordinator.py",
+      "destination": "~/.local/share/prediction-project-executor/independent-continuity/coordinator.py"
+    },
+    {
+      "type": "install_runtime",
+      "source": "control/independent_continuity/snapshot.py",
+      "destination": "~/.local/share/prediction-project-executor/independent-continuity/snapshot.py"
+    },
+    {
+      "type": "install_runtime",
+      "source": "control/independent_continuity/runner.py",
+      "destination": "~/.local/share/prediction-project-executor/independent-continuity/runner.py"
+    },
+    {
+      "type": "install_runtime",
+      "source": "control/independent_continuity/scope.observe.json",
+      "destination": "~/.local/state/prediction-project-executor/independent-continuity/scope.json"
+    },
+    {
+      "type": "install_runtime",
+      "source": "control/independent_continuity/prediction-independent-continuity.service",
+      "destination": "~/.config/systemd/user/prediction-independent-continuity.service"
+    },
+    {
+      "type": "install_runtime",
+      "source": "control/independent_continuity/prediction-independent-continuity.timer",
+      "destination": "~/.config/systemd/user/prediction-independent-continuity.timer"
+    },
+    {
+      "type": "daemon_reload"
+    },
+    {
+      "type": "service",
+      "verb": "start",
+      "unit": "prediction-independent-continuity.service"
+    },
+    {
+      "type": "service",
+      "verb": "enable",
+      "unit": "prediction-independent-continuity.timer"
+    },
+    {
+      "type": "service",
+      "verb": "start",
+      "unit": "prediction-independent-continuity.timer"
+    },
+    {
+      "type": "service",
+      "verb": "is-active",
+      "unit": "prediction-independent-continuity.timer"
+    }
+  ]
+}
