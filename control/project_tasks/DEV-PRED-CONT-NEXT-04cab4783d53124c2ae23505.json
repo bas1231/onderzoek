@@ -1,0 +1,41 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-CONT-NEXT-04cab4783d53124c2ae23505",
+  "source_commit": "bed13f5bfeaf49e135e122a707405892b12f6448",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "High"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_runtime"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 120,
+  "notes": "Read-only continuation from N1E120. Extract exact completed R4P2 Astra PREBUILD decision, model/provenance and binding. No model invocation, build, tests or measurement.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/r4p2_prebuild_result_detail_cont_04cab478.py",
+      "content": "from pathlib import Path\nimport json\nbase=Path.home()/'.local/share/prediction-project-executor/campaigns/FULL-A2Z-LIVE-20261004-V4'\ntask='A2Z-V4-ASTRA-PREBUILD-DIRECT-20261007-R4P2'\nresult=base/'model_results'/(task+'.json')\nout={'result_exists':result.is_file()}\nif result.is_file():\n    try:r=json.loads(result.read_text(encoding='utf-8'))\n    except Exception as e:r={'parse_error':type(e).__name__}\n    if isinstance(r,dict):\n        keys=('task_id','campaign_id','phase','decision','status','reviewer_model','model','model_policy','reasoning_effort','completion_sha256','prompt_sha256','input_sha256','proposal_task_id','proposal_completion_sha256','review_text','feedback','blocking_issues','created_at','completed_at')\n        out['result']={k:r.get(k) for k in keys}\nprint('ERROR_CLASS=R4P2_PREBUILD_RESULT_DETAIL',flush=True)\nprint('ERROR='+json.dumps(out,separators=(',',':'),sort_keys=True),flush=True)\nraise SystemExit(1)\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/r4p2_prebuild_result_detail_cont_04cab478.py"
+      ],
+      "timeout_seconds": 60
+    }
+  ]
+}
