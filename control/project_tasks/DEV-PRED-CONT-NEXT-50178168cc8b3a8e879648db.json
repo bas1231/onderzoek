@@ -1,0 +1,41 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-CONT-NEXT-50178168cc8b3a8e879648db",
+  "source_commit": "d36d7ebe9f71a4717c9f47228b25b9c64de57bb3",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "High"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_runtime"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 120,
+  "notes": "Continuation from the structural Astra normalization repair. Read-only inspect local executor state for DEV-PRED-CONT-NEXT-9d4707f66ec86d580643a52c and report compact status, exit code, executed operations, test outcome and local commit if present. Do not modify code, run tests, invoke models, or change runtime.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/inspect_normalize_9d470_result.py",
+      "content": "from pathlib import Path\nimport json\ntid='DEV-PRED-CONT-NEXT-9d4707f66ec86d580643a52c'\nroots=[Path.home()/'.local/state/prediction-project-executor',Path.home()/'.local/share/prediction-project-executor']\nhits=[]\nfor root in roots:\n    if root.exists():\n        for p in root.rglob('*'):\n            if p.is_file() and tid in p.name:\n                hits.append(p)\nparts=[]\nfor p in hits[:20]:\n    try:\n        txt=p.read_text(errors='replace')\n    except Exception:\n        continue\n    parts.append(str(p)+':'+txt[:5000].replace('\\n',' ').replace('|','/'))\nprint('ERROR_CLASS=NORMALIZE_9D470_RESULT')\nprint('ERROR='+' || '.join(parts)[:12000])\nraise SystemExit(1)\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/inspect_normalize_9d470_result.py"
+      ],
+      "timeout_seconds": 60
+    }
+  ]
+}
