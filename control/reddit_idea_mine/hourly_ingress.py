@@ -10,7 +10,7 @@ import json
 from datetime import datetime, timezone
 from pathlib import Path
 
-from control.reddit_idea_mine import arctic_shift_source, ingest, recon_handoff
+from control.reddit_idea_mine import arctic_shift_source, ingest, recon_handoff, freshness
 
 def inject(routing: dict, *, enabled: bool = False, fetch=None,
            now: datetime | None = None) -> dict:
@@ -33,6 +33,11 @@ def inject(routing: dict, *, enabled: bool = False, fetch=None,
             limit=12, comment_budget=4,
         )
         batch = ingest.ingest(pulled["records"])
+        age_report = freshness.report(
+            batch,
+            observed_at=datetime.fromisoformat(pulled["retrieved_at_utc"]),
+            max_age_minutes=30,
+        )
         route = recon_handoff.to_recon_routing(batch)
         incoming = route["recon_scout"]["evidence"]
         current = routing.setdefault("recon_scout", {})
@@ -59,6 +64,10 @@ def inject(routing: dict, *, enabled: bool = False, fetch=None,
             "errors": pulled["errors"][:20],
             "observed_at_utc": pulled["retrieved_at_utc"],
             "provider": "arctic_shift",
+            "fresh_under_30_minutes": age_report["fresh_under_horizon"],
+            "median_post_age_minutes": age_report["median_age_minutes"],
+            "future_timestamp_rejected": age_report["future_timestamp_rejected"],
+            "timeliness_proven": False,
         })
     except (ValueError, TypeError, OSError, KeyError, OverflowError,
             json.JSONDecodeError) as exc:
