@@ -1,0 +1,34 @@
+{
+  "schema": "PREDICTION_BUILD_LOG_EVENT_V1",
+  "event_id": "REDDIT-E032-DIAG-E033-STAGED-20261008",
+  "work_item_id": "REDDIT-IDEA-MINE-V1",
+  "created_at_utc": "2026-10-08T19:00:47.411Z",
+  "event_type": "ATTEMPT",
+  "work_item_status": "IN_PROGRESS",
+  "outcome": "STARTED",
+  "title": "E032 stale production main; read-only staged/unstaged diagnosis E033",
+  "objective": "Determine whether canonical production runtime can be synchronized safely without losing local changes.",
+  "summary": "E032 status FAIL exit=2 diagnostic expected; branch_ref refs/heads/main, sync READY last 2026-10-04T19:14:15Z (stale), modules_4=1000 and hook=0. The failure is intentional because installation absent. Prior E029 confirmed production HEAD/local main equality, but remote main advanced. E033 explicitly inspects staged and unstaged tracked local changes via existing production_staged_inspect capability, with deliberate error result to surface compact counts. No mutations to bridge/executor/runtime are made.",
+  "why": "Potential local tracked changes or staged index must be known before triggering existing runtime_sync ExecStartPre. Old READY status is not a current safety gate.",
+  "next_action": "Receive E033 compact branch/head/staged/unstaged counters, then inspect any untracked paths/overlap and existing service readiness before invoking existing fail-closed sync. No force checkout/reset or speculative enablement.",
+  "session_route_task_id": "SESSION-ROUTE-74c664afabf31305265af34b",
+  "task_ids": [
+    "DEV-PRED-REDDIT-RUNTIME-SYNC-DIAG-20261008-E032",
+    "DEV-PRED-REDDIT-PROD-DIRTY-READ-20261008-E033"
+  ],
+  "commits": [
+    "539b9c62e5c9a8c57a759655fe93ed2e6fbbfa3f"
+  ],
+  "evidence_refs": [
+    "1791485915-d148d7f78f55",
+    "control/hourly/runtime_sync.py"
+  ],
+  "tags": [
+    "reddit",
+    "production-readiness",
+    "diagnosis",
+    "staged",
+    "sync"
+  ],
+  "first_incomplete_step": "Read-only production staged/unstaged status; remote ff gate and actual Reddit source installation remain unproven."
+}
