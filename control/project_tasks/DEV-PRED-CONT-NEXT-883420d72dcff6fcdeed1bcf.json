@@ -1,0 +1,41 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-CONT-NEXT-883420d72dcff6fcdeed1bcf",
+  "source_commit": "e3c87937dc4aae6a3fcd8fd52e8e76c11e40ab77",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "High"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_runtime"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 120,
+  "notes": "Continuation for N1E140. Read-only probe of local projectexecutor state/artifacts for the exact normalization task to determine whether the structural fix completed, failed, or produced a local commit. Do not rerun the repair, invoke models, modify services, build experiments, or run measurements.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/n1e140_state_probe_cont_8834.py",
+      "content": "from pathlib import Path\nimport json\ntid='DEV-PRED-ASTRA-RESULT-NORMALIZE-R6-20261008-N1E140'\nroots=[Path.home()/'.local/state/prediction-project-executor', Path.home()/'.local/share/prediction-project-executor']\nhits=[]\nfor root in roots:\n    if not root.exists(): continue\n    for p in root.rglob('*'):\n        if tid not in p.name: continue\n        if p.is_file():\n            try: txt=p.read_text(errors='replace')\n            except Exception: continue\n            hits.append((str(p),txt[:6000]))\nprint('ERROR_CLASS=N1E140_STATE_PROBE')\nif not hits:\n    print('ERROR=NO_MATCHING_LOCAL_STATE')\nelse:\n    flat=[]\n    for path,txt in hits[:20]:\n        s=txt.replace('\\n',' ').replace('\\r',' ').replace('|','/').replace('{','(').replace('}',')')\n        flat.append('PATH='+path+' DATA='+s[:1200])\n    print('ERROR='+' || '.join(flat))\nraise SystemExit(1)\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/n1e140_state_probe_cont_8834.py"
+      ],
+      "timeout_seconds": 60
+    }
+  ]
+}
