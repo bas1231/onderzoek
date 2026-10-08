@@ -1,0 +1,43 @@
+{
+  "schema": "PREDICTION_BUILD_LOG_EVENT_V1",
+  "event_id": "20261008T123100Z-R4P3-E201-ROUTE-GATE-NOTE",
+  "work_item_id": "A2Z-SYSTEMTEST-20261005",
+  "created_at_utc": "2026-10-08T12:30:20Z",
+  "event_type": "NOTE",
+  "work_item_status": "IN_PROGRESS",
+  "outcome": "BLOCKED",
+  "title": "R4P3 hervat; inhoudelijke E201-output en eigen sessieroute ontbreken",
+  "objective": "Bestaande FULL-A2Z-LIVE-20261004-V4 keten hervatten vanaf de eerste onbewezen R4P3-gate, zonder herhaling van bewezen stappen.",
+  "summary": "Canonical main 572561170d886c7fca7ebb402c6ab7f2cad6ffdc gelezen. R4P3 DIRECT_SOL request/result bestaat. E201 PASS exit=0 is door de eigenaar gemeld; de taskcode leest statusvelden en request/result-aanwezigheid maar bevat geen assertions voor geslaagde materialisatie of geldige Astra PREBUILD-approval. De inhoudelijke E201-output is in deze sessie niet ontvangen. De oudere lifecycle-instructie om recoverytask 732c opnieuw te dispatchen is achterhaald door het E201 ATTEMPT-event: recovery is al uitgevoerd met afgekapt resultaat. Geen lokale taak dispatched in deze sessie.",
+  "why": "De actuele chat bevat geen aantoonbaar ontvangen eigen SESSION-ROUTE-* PASS. Een route uit Git van een andere sessie is geen routebewijs voor deze chat. De blokkade betreft uitvoering vanuit deze sessie; de runtime-status zelf blijft UNKNOWN.",
+  "first_incomplete_step": "E201-inhoudelijke output teruglezen via de bewezen eigen sessieroute en daarmee bestaande R4P3-materialisatie/PREBUILD-state classificeren.",
+  "next_action": "Na eigen SESSION-ROUTE-* PASS uitsluitend bestaande E201-output en zo nodig exacte N1E135/N1E138-request/result-state ophalen via een verse read-only projectexecutor-task. E201, recovery 732c, proposal en materialisatie niet blind herhalen. Bij geldige materialisatie bestaande R4P3 PREBUILD-route hervatten. Build pas na exacte PREBUILD APPROVE; tests/meting pas na exacte POSTBUILD APPROVE.",
+  "session_route_task_id": null,
+  "task_ids": [
+    "DEV-PRED-R4P3-GATE-STATE-20261008-E201",
+    "DEV-PRED-CONT-NEXT-732c5b19eb4f734690e9761e",
+    "DEV-PRED-A2Z-R4P3-MATERIALIZE-20261008-N1E135",
+    "DEV-PRED-A2Z-R4P3-ASTRA-PREBUILD-QUEUE-20261008-N1E138"
+  ],
+  "commits": [
+    "572561170d886c7fca7ebb402c6ab7f2cad6ffdc"
+  ],
+  "evidence_refs": [
+    "control/project_tasks/DEV-PRED-R4P3-GATE-STATE-20261008-E201.json",
+    "control/build_log/events/20261008T120400Z-R4P3-E201-ATTEMPT.json",
+    "control/bridge_commands/SESSION_ROUTING.md",
+    "control/model_execution/direct_requests/A2Z-V4-SOL-PROPOSAL-DIRECT-20261008-R4P3.json",
+    "control/model_execution/direct_results/A2Z-V4-SOL-PROPOSAL-DIRECT-20261008-R4P3.json",
+    "control/control_center/lifecycle_status.json",
+    "owner-report:E201 PASS exit=0; geen inhoudelijke gate-assertions ontvangen",
+    "scientific_status:NO_PROVEN_EDGE"
+  ],
+  "tags": [
+    "a2z",
+    "r4p3",
+    "e201",
+    "same-chat-route",
+    "no-duplicate",
+    "no-proven-edge"
+  ]
+}
