@@ -1,0 +1,19 @@
+{
+  "schema": "PREDICTION_BRIDGE_COMMAND_V1",
+  "task_id": "CONT-DONE-abbd1c393d3d6815b2a182fb",
+  "action": "BRIDGE_PING",
+  "created_at_utc": "2026-10-08T06:30:15Z",
+  "route_task_id": null,
+  "delivery_mode": "headless",
+  "live_trading": false,
+  "paid_actions": false,
+  "wallet_actions": false,
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "notes": "Close superseded N1E127 continuation. The truncated revision-text path has already advanced to chunked extraction DEV-PRED-A2Z-R4P2-REVISION-CHUNKS-20261008-N1E129. No duplicate NEXT.",
+  "auto_continue": false,
+  "parent_continuation_id": "CONT-abbd1c393d3d6815b2a182fb"
+}
