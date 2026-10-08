@@ -53,8 +53,13 @@ def main() -> None:
     p=argparse.ArgumentParser()
     p.add_argument("--batch",required=True,type=Path)
     p.add_argument("--output",required=True,type=Path)
+    p.add_argument("--routing-output",type=Path,default=None)
     a=p.parse_args()
-    result=preview(json.loads(a.batch.read_text(encoding="utf-8")))
+    batch=json.loads(a.batch.read_text(encoding="utf-8"))
+    result=preview(batch)
+    if a.routing_output is not None:
+        routing=to_recon_routing(batch)
+        a.routing_output.write_text(json.dumps(routing,indent=2,sort_keys=True)+"\n",encoding="utf-8")
     a.output.write_text(json.dumps(result,indent=2,sort_keys=True)+"\n",encoding="utf-8")
     print(json.dumps({"evidence_count":result["evidence_count"],"finding_count":len(result["findings"])}))
 
