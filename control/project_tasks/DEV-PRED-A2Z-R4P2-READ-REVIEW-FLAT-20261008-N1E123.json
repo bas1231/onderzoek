@@ -1,0 +1,24 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-A2Z-R4P2-READ-REVIEW-FLAT-20261008-N1E123",
+  "source_commit": "98862a8b95177da18529809cf4ef086ce484a9c1",
+  "intelligence_tier": "A",
+  "issuer": {"model": "GPT-5.6 Sol", "reasoning_level": "High"},
+  "safety": {"live_trading": false, "paid_actions": false, "wallet_actions": false, "remote_git_write": false, "credential_write": false},
+  "capabilities": ["read_repository", "write_worktree", "run_project_python", "read_runtime"],
+  "working_directory": ".",
+  "timeout_seconds": 120,
+  "notes": "Read-only flat extraction of the already completed R4P2 PREBUILD review. No model invocation, build, tests or measurement.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/read_r4p2_review_flat_n1e123.py",
+      "content": "from pathlib import Path\nimport json,re\nb=Path.home()/'.local/share/prediction-project-executor/campaigns/FULL-A2Z-LIVE-20261004-V4'\np=b/'model_results'/'A2Z-V4-ASTRA-PREBUILD-DIRECT-20261007-R4P2.json'\no=json.loads(p.read_text())\nf=o.get('final','')\ntry:r=json.loads(f) if isinstance(f,str) else (f or {})\nexcept Exception:r={}\ndef clean(v):\n    if isinstance(v,(dict,list)): v=json.dumps(v,ensure_ascii=False,separators=(',',':'))\n    s=str(v if v is not None else '')\n    return s.replace('\\n',' ').replace('\\r',' ').replace('|','/').replace('{','(').replace('}',')')[:3500]\nvals=[]\nfor k in ['candidate_id','phase','decision','status','reviewer_model','model','model_policy','reasoning_effort','proposal_task_id','proposal_completion_sha256','completion_sha256','blocking_issues','feedback','rationale','review']:\n    vals.append(k.upper()+'='+clean(r.get(k,'')))\nprint('ERROR_CLASS=R4P2_PREBUILD_FLAT')\nprint('ERROR='+'|'.join(vals))\nraise SystemExit(1)\n"
+    },
+    {
+      "type": "python",
+      "argv": ["python3", "control/dev_checks/read_r4p2_review_flat_n1e123.py"],
+      "timeout_seconds": 60
+    }
+  ]
+}
