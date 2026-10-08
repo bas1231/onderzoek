@@ -1,0 +1,41 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-A2Z-R4P3-CLAIM-DIAG-20261008-N1E142",
+  "source_commit": "795d2f59bac6f20dd968587475bc70454868d33d",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "High"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_runtime"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 120,
+  "notes": "Read-only diagnosis of stale CLAIMED N1E138. Inspect executor state, command-bus state, isolated worktree intermediate request artifact, runtime request, and any currently running process whose cmdline contains the exact task id. No service action, model invocation, build, tests, measurement, or runtime mutation.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/r4p3_claim_diag_n1e142.py",
+      "content": "from pathlib import Path\nimport json, os, time\ntid='DEV-PRED-A2Z-R4P3-ASTRA-PREBUILD-QUEUE-20261008-N1E138'\nhome=Path.home()\nstate=home/'.local/state/prediction-project-executor'/f'{tid}.json'\nbus=home/'.local/state/prediction-command-bus/tasks'/f'{tid}.json'\nwork=home/'.local/share/prediction-project-executor/worktrees'/tid\nexpected=work/'control/dev_checks/a2z_next_request.json'\nruntime_req=home/'.local/share/prediction-project-executor/campaigns/FULL-A2Z-LIVE-20261004-V4/requests/A2Z-V4-ASTRA-PREBUILD-DIRECT-20261008-R4P3.json'\nparts=[]\ndef add(k,v): parts.append(f'{k}={v}')\nfor label,p in [('EXEC_STATE',state),('BUS_STATE',bus),('WORKTREE',work),('WORKTREE_NEXT',expected),('RUNTIME_REQUEST',runtime_req)]:\n    add(label+'_EXISTS',int(p.exists()))\n    if p.exists():\n        try: add(label+'_MTIME_AGE_S',round(time.time()-p.stat().st_mtime,1))\n        except Exception: pass\nfor label,p in [('EXEC',state),('BUS',bus)]:\n    if p.is_file():\n        try:\n            o=json.loads(p.read_text())\n            for k in ['status','exit_code','error','detail','claimed_at_utc','finished_at_utc','source_commit','worktree','branch']:\n                if k in o: add(label+'_'+k.upper(),str(o.get(k)).replace('|','/'))\n        except Exception as e: add(label+'_READ_ERROR',type(e).__name__)\nif expected.is_file():\n    try:\n        o=json.loads(expected.read_text())\n        for k in ['task_id','phase','model','model_policy','candidate_id']:\n            if k in o: add('NEXT_'+k.upper(),str(o.get(k)).replace('|','/'))\n    except Exception as e: add('NEXT_READ_ERROR',type(e).__name__)\nmatches=[]\nproc=Path('/proc')\nfor p in proc.iterdir():\n    if not p.name.isdigit(): continue\n    try:\n        raw=(p/'cmdline').read_bytes().replace(b'\\x00',b' ').decode('utf-8','ignore')\n    except Exception: continue\n    if tid in raw: matches.append(p.name+':'+raw[:500].replace('|','/'))\nadd('ACTIVE_PROC_COUNT',len(matches))\nfor i,m in enumerate(matches[:5],1): add(f'ACTIVE_PROC_{i}',m)\nprint('ERROR_CLASS=R4P3_CLAIM_DIAG')\nprint('ERROR='+'|'.join(parts))\nraise SystemExit(1)\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/r4p3_claim_diag_n1e142.py"
+      ],
+      "timeout_seconds": 60
+    }
+  ]
+}
