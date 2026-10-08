@@ -1,0 +1,41 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-CONT-NEXT-0fe7376120f3e3759d9520e8",
+  "source_commit": "3a01e41bb95549377813350eaf4f0b7d07cf95e5",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "High"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_runtime"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 120,
+  "notes": "Continuation from N1E134. Read-only forensic inspection of local project-executor state/worktree artifacts for DEV-PRED-ASTRA-RESULT-NORMALIZE-R6-20261008-N1E134. Determine whether patch/test/commit actually ran and report first incomplete step. No mutation beyond temporary worktree script, no model invocation, no build/test rerun, no service changes.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/inspect_n1e134_state_cont_0fe737.py",
+      "content": "from pathlib import Path\nimport json, subprocess\ntid='DEV-PRED-ASTRA-RESULT-NORMALIZE-R6-20261008-N1E134'\nhomes=[Path.home()/'.local/state/prediction-project-executor',Path.home()/'.local/share/prediction-project-executor']\nhits=[]\nfor base in homes:\n    if base.exists():\n        for p in base.rglob('*'):\n            if tid in str(p) and p.is_file():\n                try: txt=p.read_text(errors='replace')[:12000]\n                except Exception as e: txt='READ_ERROR:'+type(e).__name__\n                hits.append((str(p),txt))\nwt=Path.home()/'.local/share/prediction-project-executor/worktrees'/tid\ngitout=''\nif wt.exists():\n    for args in [['git','status','--short'],['git','log','-1','--oneline']]:\n        try:\n            r=subprocess.run(args,cwd=wt,capture_output=True,text=True,timeout=20)\n            gitout += ' CMD='+' '.join(args)+' RC='+str(r.returncode)+' OUT='+(r.stdout+r.stderr).replace('\\n',' ')[:2500]\n        except Exception as e: gitout+=' GITERR='+type(e).__name__\ndef clean(s): return s.replace('\\n',' ').replace('\\r',' ').replace('|','/')\nparts=[]\nfor p,txt in hits[:12]: parts.append('FILE='+clean(p)+' CONTENT='+clean(txt)[:2500])\nparts.append('WORKTREE='+str(wt.exists())+clean(gitout))\nprint('ERROR_CLASS=N1E134_FORENSIC_STATE')\nprint('ERROR='+'|'.join(parts)[:12000])\nraise SystemExit(1)\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/inspect_n1e134_state_cont_0fe737.py"
+      ],
+      "timeout_seconds": 60
+    }
+  ]
+}
