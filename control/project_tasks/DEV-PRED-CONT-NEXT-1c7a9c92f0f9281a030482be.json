@@ -1,0 +1,118 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-CONT-NEXT-1c7a9c92f0f9281a030482be",
+  "source_commit": "df8994351caadbeaa4fa71d0fdbea2771ad3d6e1",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "High"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_runtime",
+    "write_runtime",
+    "user_service_manage"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 420,
+  "notes": "Materialize and validate the already immutable DIRECT_SOL R4P3 revised proposal, then generate and start exactly one fresh GPT-6 Astra PREBUILD review for that exact version. No Sol build, experiment tests, measurement, trading, paid or wallet actions.",
+  "operations": [
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/model_execution/patch_e106_gate.py"
+      ],
+      "timeout_seconds": 60
+    },
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/stage_direct_r4p3.py",
+      "content": "from __future__ import annotations\nimport hashlib,json\nfrom pathlib import Path\nfrom control.model_execution.direct_sol_chat import validate_request,validate_result\nfrom control.model_execution.direct_sol_record import normalized_run_files\nTASK=\"A2Z-V4-SOL-PROPOSAL-DIRECT-20261008-R4P3\"\nREQ=Path(\"control/model_execution/direct_requests\")/(TASK+\".json\")\nRES=Path(\"control/model_execution/direct_results\")/(TASK+\".json\")\nOUT=Path(\"control/dev_checks/r4p3_direct_runtime_stage\")\nRUN_NAME=TASK+\"-direct-r4p3\"\nrequest=json.loads(REQ.read_text(encoding='utf-8'))\nresult=json.loads(RES.read_text(encoding='utf-8'))\nvalidate_request(request); validate_result(request,result)\nproposal=json.loads(result['final'])\nassert proposal['proposal_version']==5\nassert proposal['scientific_status']=='NO_PROVEN_EDGE'\nassert proposal['safety']=={'live_trading':False,'paid_actions':False,'wallet_actions':False}\nassert proposal['arithmetic_specification']['classification'].startswith('EDGE iff unrounded internal Decimal')\nassert len(proposal['boundary_cases'])==3\nassert proposal['frozen_harness_contract']['contract_id']=='FULL-A2Z-LIVE-20261004-V4-HARNESS-V1'\nassert 'POSTBUILD APPROVE' in proposal['frozen_harness_contract']['invocation']\nnames={x['name'] for x in proposal['intended_artifacts']}\nassert names=={'complement_checker_v4.py','test_complement_checker_v4.py','qualification_stream_v4.json'}\nfiles=normalized_run_files(request,result)\nrun=OUT/'run'; run.mkdir(parents=True,exist_ok=True)\nfor name,text in files.items(): (run/name).write_text(text,encoding='utf-8')\ndef sha(p): return hashlib.sha256(p.read_bytes()).hexdigest()\nenvelope={'schema':'PVA_GOVERNED_MODEL_COMPLETION_V1','task_id':TASK,'phase':request['phase'],'model':'gpt-5.6-sol','model_policy':'SOL_EXACT','execution_layer':'DIRECT_SOL_CHAT','route_task_id':request['delivery_route_task_id'],'campaign_id':request['campaign_id'],'input_sha256':request['input_sha256'],'checkpoint':'models/runs/'+RUN_NAME,'completion_sha256':sha(run/'COMPLETE.json'),'worker_sha256':sha(run/'WORKER.json'),'request_sha256':sha(REQ),'direct_result_sha256':sha(RES),'final':result['final']}\n(OUT/'model_result.json').write_text(json.dumps(envelope,indent=2,sort_keys=True,ensure_ascii=False)+'\\n',encoding='utf-8')\nprint('DIRECT_SOL_R4P3_STAGE=PASS')\nprint('MODEL_COMPLETION_SHA256='+result['completion_sha256'])\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/stage_direct_r4p3.py"
+      ],
+      "timeout_seconds": 60
+    },
+    {
+      "type": "install_runtime",
+      "source": "control/dev_checks/r4p3_direct_runtime_stage/run/TASK.json",
+      "destination": "/home/leonh/.local/share/prediction-project-executor/campaigns/FULL-A2Z-LIVE-20261004-V4/models/runs/A2Z-V4-SOL-PROPOSAL-DIRECT-20261008-R4P3-direct-r4p3/TASK.json",
+      "mode": 420
+    },
+    {
+      "type": "install_runtime",
+      "source": "control/dev_checks/r4p3_direct_runtime_stage/run/WORKER.json",
+      "destination": "/home/leonh/.local/share/prediction-project-executor/campaigns/FULL-A2Z-LIVE-20261004-V4/models/runs/A2Z-V4-SOL-PROPOSAL-DIRECT-20261008-R4P3-direct-r4p3/WORKER.json",
+      "mode": 420
+    },
+    {
+      "type": "install_runtime",
+      "source": "control/dev_checks/r4p3_direct_runtime_stage/run/COMPLETE.json",
+      "destination": "/home/leonh/.local/share/prediction-project-executor/campaigns/FULL-A2Z-LIVE-20261004-V4/models/runs/A2Z-V4-SOL-PROPOSAL-DIRECT-20261008-R4P3-direct-r4p3/COMPLETE.json",
+      "mode": 420
+    },
+    {
+      "type": "install_runtime",
+      "source": "control/dev_checks/r4p3_direct_runtime_stage/run/events.jsonl",
+      "destination": "/home/leonh/.local/share/prediction-project-executor/campaigns/FULL-A2Z-LIVE-20261004-V4/models/runs/A2Z-V4-SOL-PROPOSAL-DIRECT-20261008-R4P3-direct-r4p3/events.jsonl",
+      "mode": 420
+    },
+    {
+      "type": "install_runtime",
+      "source": "control/dev_checks/r4p3_direct_runtime_stage/model_result.json",
+      "destination": "/home/leonh/.local/share/prediction-project-executor/campaigns/FULL-A2Z-LIVE-20261004-V4/model_results/A2Z-V4-SOL-PROPOSAL-DIRECT-20261008-R4P3.json",
+      "mode": 420
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/jobs/full_a2z_governed_v4.py",
+        "proposal",
+        "--model-task",
+        "A2Z-V4-SOL-PROPOSAL-DIRECT-20261008-R4P3",
+        "--next-task",
+        "A2Z-V4-ASTRA-PREBUILD-DIRECT-20261008-R4P3"
+      ],
+      "timeout_seconds": 120
+    },
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/check_astra_prebuild_r4p3.py",
+      "content": "from pathlib import Path\nimport json\np=Path('control/dev_checks/a2z_next_request.json')\nobj=json.loads(p.read_text(encoding='utf-8'))\nassert obj['task_id']=='A2Z-V4-ASTRA-PREBUILD-DIRECT-20261008-R4P3'\nassert obj['phase']=='ASTRA_PREBUILD'\nassert obj['campaign_id']=='FULL-A2Z-LIVE-20261004-V4'\nassert obj['live_trading'] is False and obj['paid_actions'] is False and obj['wallet_actions'] is False\nprompt=obj['prompt']\nassert 'proposal_version' in prompt and 'frozen_harness_contract' in prompt and 'arithmetic_specification' in prompt\nprint('ASTRA_PREBUILD_R4P3_REQUEST=PASS')\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/check_astra_prebuild_r4p3.py"
+      ],
+      "timeout_seconds": 30
+    },
+    {
+      "type": "install_runtime",
+      "source": "control/dev_checks/a2z_next_request.json",
+      "destination": "/home/leonh/.local/share/prediction-project-executor/campaigns/FULL-A2Z-LIVE-20261004-V4/requests/A2Z-V4-ASTRA-PREBUILD-DIRECT-20261008-R4P3.json",
+      "mode": 420
+    },
+    {
+      "type": "service",
+      "verb": "start",
+      "unit": "prediction-a2z-v4-model@A2Z-V4-ASTRA-PREBUILD-DIRECT-20261008-R4P3.service"
+    }
+  ]
+}
