@@ -24,7 +24,7 @@ TERMS = (
 )
 CHALLENGES = ("doesn't", "does not", "won't", "cannot", "fees", "slippage",
               "liquidity", "risk", "stale", "wrong", "fail", "scam",
-              "no edge", "not possible", "settlement", "spread")
+              "no edge", "not possible", "spread")
 MAX_TEXT = 12000
 MAX_COMMENTS = 150
 
