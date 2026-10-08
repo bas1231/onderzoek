@@ -68,7 +68,7 @@ def normalize(raw: dict) -> dict:
         if comment and comment not in {"[deleted]", "[removed]"}:
             comment_texts.append(comment)
     source = _text(raw.get("source"), 80)
-    if source not in {"authorized_export", "manual_submission", "licensed_archive", "test_fixture"}:
+    if source not in {"authorized_export", "manual_submission", "licensed_archive", "test_fixture", "public_archive_unverified"}:
         raise ValueError("unapproved input provenance")
     created = raw.get("created_utc")
     if not isinstance(created, (int, float)) or not 0 < created < 4102444800:
