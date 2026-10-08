@@ -58,6 +58,18 @@ Elke task bevat daarnaast verplicht `live_trading:false`, `paid_actions:false`, 
 7. Resultaten bevatten spec-hash, remote commit, source commit, worktree, branch, operations en exitstatus.
 8. De lokale executor pusht nooit naar GitHub. Remote writes blijven via de expliciete ChatGPT GitHub-connector lopen.
 
+## Task-authoring gotchas proven in A→Z repair (2026-10-08)
+
+Use these exact task shapes to avoid pre-execution failures:
+
+- Git operations require the single capability `local_git`; do not invent per-verb capabilities such as `git_status`, `git_diff`, `git_add` or `git_commit`.
+- `python -c` is intentionally blocked. For inline repair logic, first create a repository-owned `.py` file with `write_text`, then execute that file with a `python` operation.
+- For module execution, only the executor allowlist is valid. Use `python -m compileall` for compile checks; `py_compile` is not an allowlisted module.
+- A `python -m pytest ...` or `python -m unittest ...` operation must have both capability `run_tests` **and** operation field `"test": true`. Without the per-operation flag the executor deliberately reports `run_tests capability required` even when the task capability list contains `run_tests`.
+- Keep diagnostic/recovery tasks read-only whenever possible. A transport/result extraction failure does not justify changing bridge or executor code.
+
+These rules are task-authoring constraints, not reasons to relax executor safety checks.
+
 ## Operation types
 
 `write_text`: schrijft een bestand binnen de task-worktree; optioneel met verplichte preimage-SHA.
