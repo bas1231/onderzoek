@@ -5,6 +5,7 @@ from __future__ import annotations
 import hashlib
 import json
 from pathlib import Path
+from datetime import datetime, timezone
 
 from control.hourly.recon_engine import discover
 
@@ -13,6 +14,7 @@ def to_recon_routing(batch: dict) -> dict:
     if batch.get("schema") != "PREDICTION_REDDIT_DISCOVERY_BATCH_V1":
         raise ValueError("wrong batch schema")
     evidence = []
+    observed_at = datetime.now(timezone.utc).isoformat()
     for lead in batch.get("leads", []):
         if (lead.get("schema") != "PREDICTION_REDDIT_DISCOVERY_LEAD_V1"
             or lead.get("status") != "DISCOVERY_ONLY_UNVERIFIED"
@@ -27,7 +29,8 @@ def to_recon_routing(batch: dict) -> dict:
         evidence.append({
             "source_id": "reddit_thread:" + lead["lead_id"],
             "document_sha256": hashlib.sha256(snippet.encode()).hexdigest(),
-            "retrieved_at": lead["created_at_utc"],
+            "retrieved_at": observed_at,
+            "original_post_created_at": lead["created_at_utc"],
             "snippet": snippet,
             "provenance_url": lead["url"],
             "discovery_only": True,
