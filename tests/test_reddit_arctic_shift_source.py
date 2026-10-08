@@ -113,8 +113,10 @@ class ArcticShiftSourceTests(unittest.TestCase):
                             for h in mocked.call_args.args))
 
     def test_malformed_json_rejected(self):
-        with self.assertRaises(ValueError):
-            collect(lambda *_: {"unexpected": []}, now=CLOCK)
+        result = collect(lambda *_: {"unexpected": []}, now=CLOCK)
+        self.assertEqual(result["records"], [])
+        self.assertEqual(len(result["errors"]), 5)
+        self.assertTrue(all(e["error"] == "ValueError" for e in result["errors"]))
 
 if __name__ == "__main__":
     unittest.main()
