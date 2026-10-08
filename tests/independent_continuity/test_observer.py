@@ -96,6 +96,13 @@ class ObserverTest(unittest.TestCase):
         self.assertEqual(len(first["new_report_files"]), 1)
         self.assertEqual(self.run_scan()["new_report_files"], [])
 
+    def test_later_scan_keeps_immutable_report_identical(self):
+        store(self.events, event())
+        self.assertEqual(len(self.run_scan()["new_report_files"]), 1)
+        later = scan(self.events, self.proposals, NOW + timedelta(minutes=5), 30)
+        self.assertEqual(later["status"], "PASS")
+        self.assertEqual(later["new_report_files"], [])
+
     def test_collision_not_overwritten(self):
         store(self.events, event())
         first = self.run_scan()
