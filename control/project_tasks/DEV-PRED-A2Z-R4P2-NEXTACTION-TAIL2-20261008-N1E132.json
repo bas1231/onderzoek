@@ -1,0 +1,41 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-A2Z-R4P2-NEXTACTION-TAIL2-20261008-N1E132",
+  "source_commit": "2251ee404d5c2b71a29b4534155a3b9c5e709725",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "High"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_runtime"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 120,
+  "notes": "Read-only extraction of the remaining NEXT_ACTION tail from the already completed R4P2 Astra PREBUILD review. Start after the already visible prefix so the second specification gap is first in transport output. No model invocation, build, tests or measurement.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/r4p2_nextaction_tail2_n1e132.py",
+      "content": "from pathlib import Path\nimport json\nb=Path.home()/'.local/share/prediction-project-executor/campaigns/FULL-A2Z-LIVE-20261004-V4'\np=b/'model_results'/'A2Z-V4-ASTRA-PREBUILD-DIRECT-20261007-R4P2.json'\no=json.loads(p.read_text())\nf=o.get('final','')\nr=json.loads(f) if isinstance(f,str) else (f or {})\ns=str(r.get('next_action') or '').replace('\\n',' ').replace('\\r',' ').replace('|','/')\nprint('ERROR_CLASS=R4P2_NEXTACTION_TAIL2')\nprint('ERROR=TAIL='+s[300:1800])\nraise SystemExit(1)\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/r4p2_nextaction_tail2_n1e132.py"
+      ],
+      "timeout_seconds": 60
+    }
+  ]
+}
