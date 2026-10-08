@@ -118,7 +118,7 @@ def fresh_launcher(bridge_data: Path, *, now_unix: float) -> dict:
         except (OSError, ValueError, json.JSONDecodeError):
             continue
     if latest_proven is None:
-        raise UnsafeLaunch("NO_PROVEN_LATEST_CHAT_ROUTE")
+        raise UnsafeLaunch("NEW_SESSION_LAUNCHER_NOT_READY")
     available = []
     for path in launch_root.glob("*.json"):
         try:
