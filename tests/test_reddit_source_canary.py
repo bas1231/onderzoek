@@ -26,7 +26,7 @@ class ArcticCanaryTests(unittest.TestCase):
                              "created_utc": created,
                              "retrieved_on": created + 180}]}
         result = probe(archive, now=NOW)
-        self.assertEqual(result["status"], "FRESH_DATA_OBSERVED")
+        self.assertEqual(result["status"], "DATA_OBSERVED")
         self.assertTrue(result["archive_timestamp_observed"])
         self.assertEqual(result["archive_ingest_lag_minutes"], 3.0)
         self.assertEqual(result["archive_to_probe_minutes"], 57.0)
