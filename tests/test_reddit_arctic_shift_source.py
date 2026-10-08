@@ -60,6 +60,31 @@ class ArcticShiftSourceTests(unittest.TestCase):
             with self.assertRaises(FileExistsError):
                 write_inbox(result, inbox)
 
+    def test_comment_budget_fairly_rotates_across_communities(self):
+        from datetime import timedelta
+        from control.reddit_idea_mine.ingest import SUBREDDITS
+        subs = sorted(SUBREDDITS)
+        ids = {sub: "i" + str(index).zfill(5) for index, sub in enumerate(subs)}
+        def gather(clock):
+            commented = []
+            def fetch(path, params):
+                if path == POSTS:
+                    sub = params["subreddit"]
+                    return {"data": [{**POST, "subreddit": sub, "id": ids[sub],
+                                      "created_utc": clock.timestamp()-600}]}
+                if path == COMMENTS:
+                    commented.append(params["link_id"])
+                    return {"data": [{"body": "Fees and liquidity make this risky."}]}
+                raise AssertionError("unexpected endpoint")
+            result = collect(fetch, now=clock, comment_budget=4)
+            self.assertEqual(len(result["records"]), 5)
+            self.assertEqual(len(commented), 4)
+            self.assertEqual(len(set(commented)), 4)
+            return set(commented)
+        first = gather(CLOCK)
+        second = gather(CLOCK + timedelta(hours=1))
+        self.assertEqual(len(first | second), 5)
+
     def test_bounded_query_count_and_old_post_removed(self):
         calls = []
         def get(path, params):
