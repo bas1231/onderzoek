@@ -49,7 +49,7 @@ def main() -> int:
     # Report a single bounded finding, with no unrelated journal content.
     safe = re.sub(r"[^a-zA-Z0-9 _.:/()=+,-]", " ", detail)
     print(f"OBSERVER_DIAG={code} {safe[:230]}", flush=True)
-    return 0 if code == "OBSERVER_CAUSE_UNCLASSIFIED" else 2
+    return 2  # Diagnosis alone never proves this failed service is healthy.
 
 
 if __name__ == "__main__":
