@@ -1,0 +1,19 @@
+{
+  "schema": "PREDICTION_DIRECT_SOL_REQUEST_V1",
+  "task_id": "A2Z-V4-SOL-PROPOSAL-DIRECT-20261008-R4P3",
+  "phase": "SOL_PROPOSAL",
+  "campaign_id": "FULL-A2Z-LIVE-20261004-V4",
+  "candidate_id": "AUTO-DISCOVERY-54d13314c7879b58e46d",
+  "binding_sha256": "a88f63817277c360ea5ea08b510d4ff380b575822a5f251a8d0d1bf2c257a8c8",
+  "prompt": "You are exactly GPT-5.6 Sol operating in regular Chat mode for the Prediction project.\nRevise the complete SOL_PROPOSAL for candidate AUTO-DISCOVERY-54d13314c7879b58e46d after exact GPT-6 Astra PREBUILD returned REVISE on R4P2.\n\nReturn ONLY one JSON object. Do not build, run tests, measure markets, use external market data, trade, spend money or use wallets.\n\nPreserve the frozen R4P2 controls, observations, safety flags and exact artifact names. Repair exactly these Astra specification gaps:\n1. Define exact Decimal conversion/context/precision/rounding. Classification MUST use the unrounded internal Decimal net_edge before display rounding. Define rounded-zero reporting and preregister tiny-positive, exact-zero and tiny-negative boundary expectations, including yes_ask=0.4999999999999, no_ask=0.5, fees=0.\n2. Freeze the harness contract: implementation form, runtime environment, invocation, resource accounting, limit enforcement and failure criteria. Distinguish harness operations from pure evaluator restrictions. After PREBUILD APPROVE, every built artifact plus the exact frozen harness contract must receive exact GPT-6 Astra POSTBUILD APPROVE before substantive tests or measurement.\n\nFrozen controls: negative 0.62+0.43+0 => total 1.05, edge -0.05, NO_EDGE; positive 0.495+0.495+0 => total 0.99, edge +0.01, EDGE. Frozen observations: (0.62,0.43,0), (0.61,0.44,0), (0.60,0.45,0), all total 1.05, edge -0.05, NO_EDGE. Synthetic qualification only; scientific_status NO_PROVEN_EDGE. Python standard library only. Exact artifacts: complement_checker_v4.py, test_complement_checker_v4.py, qualification_stream_v4.json. Fail closed on bools, subclasses/custom objects, non-finite/out-of-range values and unknown fields without invoking custom hooks. Zero edge is NO_EDGE; only strictly positive internal net edge is EDGE. Any Astra REVISE/REJECT returns to Sol. NO_TEST_OR_MEASUREMENT_BEFORE_ASTRA_POSTBUILD_APPROVAL.\n\nInclude proposal_version=5, intended_artifacts, arithmetic_specification, boundary_cases, frozen_harness_contract, data_and_time_scope.preregistered_outputs, safety, falsification, acceptance_criteria, resource_constraints and governance.",
+  "input_sha256": "58d7088f539d4cf9f7ffbb8b6802f130a0a0a1e4d4f74119d64dcb7ef1633bb2",
+  "target_model": "gpt-5.6-sol",
+  "target_model_display": "GPT-5.6 Sol",
+  "target_experience": "CHAT",
+  "execution_layer": "DIRECT_SOL_CHAT",
+  "delivery_route_task_id": "SESSION-ROUTE-246799adf99f0bf8336c27a0",
+  "created_at_utc": "2026-10-08T06:56:00Z",
+  "live_trading": false,
+  "paid_actions": false,
+  "wallet_actions": false
+}
