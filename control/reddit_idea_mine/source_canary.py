@@ -1,4 +1,4 @@
-"""Single-request, read-only reachability/freshness probe for Arctic Shift.
+"""Single-request, read-only response-usability probe for Arctic Shift.
 
 Only metadata (counts/age/error type) is returned; never writes post text or
 credentials, never launches subprocesses, never places orders. This can be run
@@ -14,7 +14,6 @@ from datetime import datetime, timezone
 from control.reddit_idea_mine.arctic_shift_source import POSTS, https_json
 
 SOURCE = "kalshi"
-MAX_AGE_MINUTES = 24 * 60
 
 
 def probe(fetch=None, *, now: datetime | None = None) -> dict:
@@ -77,10 +76,7 @@ def probe(fetch=None, *, now: datetime | None = None) -> dict:
                     max(0.0, (archived - created) / 60), 2)
                 output["archive_to_probe_minutes"] = round(
                     max(0.0, (clock.timestamp() - archived) / 60), 2)
-            output["status"] = (
-                "FRESH_DATA_OBSERVED" if min(ages) <= MAX_AGE_MINUTES
-                else "STALE_DATA_OBSERVED"
-            )
+            output["status"] = "DATA_OBSERVED"
     except (OSError, TimeoutError, ValueError, TypeError, KeyError,
             json.JSONDecodeError) as exc:
         output["status"] = "SOURCE_FAILURE"
