@@ -1,9 +1,9 @@
 {
   "schema": "PREDICTION_CONTROL_CENTER_LIFECYCLE_V1",
-  "updated_at": "2026-10-08T06:12:00Z",
+  "updated_at": "2026-10-08T06:59:00Z",
   "full_chain_status": "NOT_PROVEN",
   "full_chain_label": "A→Z-keten — Astra PREBUILD revisielus actief",
-  "next_required": "Lees de concrete GPT-6 Astra PREBUILD-revisiepunten uit het voltooide R4P2-reviewresultaat, laat GPT-5.6 Sol uitsluitend de proposal herzien, en bied die nieuwe version-bound proposal opnieuw aan voor Astra PREBUILD. Geen build, tests of meting vóór de vereiste approvals.",
+  "next_required": "Valideer R4P3 en stuur daarna de nieuwe version-bound proposal naar exact GPT-6 Astra PREBUILD. Build, tests en meting blijven geblokkeerd.",
   "invariant": "NO_TEST_OR_MEASUREMENT_BEFORE_ASTRA_POSTBUILD_APPROVAL",
   "evidence_refs": [
     "control/bridge_commands/CURRENT_STATE.md",
@@ -47,8 +47,8 @@
       "subtitle": "experiment ontwerpen",
       "state": "IMPLEMENTED_NOT_E2E",
       "detail": "Doelarchitectuur: GPT-5.6 Sol voert SOL_PROPOSAL rechtstreeks uit via de nieuwe directe Sol-executor, buiten Codex. De inhoudelijke rol van Sol blijft gelijk; alleen de uitvoeringslaag verandert.",
-      "current_candidate_state": "WAITING_FOR_REVISION",
-      "current_candidate_detail": "De huidige R4P2 proposal is door GPT-6 Astra PREBUILD beoordeeld met REVISE. Sol mag nog niet bouwen; eerst moeten de concrete revisiepunten in een nieuwe version-bound proposal worden verwerkt."
+      "current_candidate_state": "CURRENT",
+      "current_candidate_detail": "R4P3 is opgesteld met exacte Decimal/rounding/classificatiesemantiek en een bevroren harness-contract; materialisatie/validatie loopt."
     },
     {
       "id": "astra_prebuild",
@@ -56,8 +56,8 @@
       "subtitle": "ontwerp beoordelen",
       "state": "TARGETED_TESTED",
       "detail": "Exact GPT-6 Astra blijft de verplichte onafhankelijke PRE-BUILD reviewer en blijft via CodexWorker lopen. Deze migratie verandert deze gate niet.",
-      "current_candidate_state": "REVISE",
-      "current_candidate_detail": "GPT-6 Astra PREBUILD is op attempt 9 inhoudelijk voltooid en heeft REVISE gegeven. De concrete revisievelden worden nu uit hetzelfde immutable reviewresultaat gelezen; er wordt geen nieuwe Astra-review gestart."
+      "current_candidate_state": "WAITING_FOR_R4P3",
+      "current_candidate_detail": "R4P2 gaf REVISE. Na geldige materialisatie van R4P3 volgt een verse exact GPT-6 Astra PREBUILD review."
     },
     {
       "id": "sol_build",
@@ -65,8 +65,8 @@
       "subtitle": "experiment bouwen",
       "state": "IMPLEMENTED_NOT_E2E",
       "detail": "Doelarchitectuur: GPT-5.6 Sol bouwt rechtstreeks via DIRECT_SOL en is niet langer afhankelijk van Codex-quota. De experimentrol, binding en fail-closed provenance blijven verplicht.",
-      "current_candidate_state": "BLOCKED_BY_PREBUILD_REVISE",
-      "current_candidate_detail": "Bouw is fail-closed geblokkeerd zolang Astra PREBUILD niet APPROVE geeft op de herziene Sol-proposal."
+      "current_candidate_state": "BLOCKED",
+      "current_candidate_detail": "Nog geblokkeerd tot Astra PREBUILD APPROVE op R4P3."
     },
     {
       "id": "astra_postbuild",
@@ -108,14 +108,14 @@
   "current_candidate": {
     "candidate_id": "AUTO-DISCOVERY-54d13314c7879b58e46d",
     "campaign_id": "FULL-A2Z-LIVE-20261004-V4",
-    "proposal_task_id": "A2Z-V4-SOL-PROPOSAL-DIRECT-20261007-R4P2",
+    "proposal_task_id": "A2Z-V4-SOL-PROPOSAL-DIRECT-20261008-R4P3",
     "build_task_id": "A2Z-V4-SOL-BUILD-20261007-R4",
     "postbuild_task_id": "DEV-PRED-A2Z-POSTBUILD-RETRY-20261006-E106",
     "pause_task_id": "DEV-PRED-A2Z-PAUSE-20261006-E107",
-    "current_stage": "astra_prebuild",
-    "state": "PREBUILD_REVISE",
-    "label": "Astra PREBUILD — revisie vereist",
-    "detail": "Attempt 9 van A2Z-V4-ASTRA-PREBUILD-DIRECT-20261007-R4P2 is COMPLETE. Het immutable reviewresultaat geeft decision=REVISE. De concrete revisiepunten worden nu uit datzelfde resultaat gehaald; daarna reviseert GPT-5.6 Sol de proposal. Build/tests/measurement blijven geblokkeerd.",
+    "current_stage": "sol_design",
+    "state": "SOL_REVISION_MATERIALIZING",
+    "label": "Sol R4P3 revisie — materialisatie",
+    "detail": "R4P3 verwerkt de twee Astra-revisiepunten; DIRECT_SOL request/result bestaan en worden nu fail-closed gematerialiseerd.",
     "scientific_status": "NO_PROVEN_EDGE",
     "evidence_refs": [
       "control/project_tasks/DEV-PRED-A2Z-POSTBUILD-RETRY-20261006-E106.json",
