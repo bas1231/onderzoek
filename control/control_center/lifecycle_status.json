@@ -1,9 +1,9 @@
 {
   "schema": "PREDICTION_CONTROL_CENTER_LIFECYCLE_V1",
-  "updated_at": "2026-10-08T11:08:00Z",
+  "updated_at": "2026-10-08T11:58:30Z",
   "full_chain_status": "NOT_PROVEN",
-  "full_chain_label": "A→Z-keten — herziene Sol-proposal R4P3 wordt gematerialiseerd",
-  "next_required": "Voltooi materialisatie en provenance-validatie van A2Z-V4-SOL-PROPOSAL-DIRECT-20261008-R4P3. Bied daarna exact die version-bound proposal opnieuw aan voor GPT-6 Astra PREBUILD. Geen build, tests of meting vóór PREBUILD APPROVE en later POSTBUILD APPROVE.",
+  "full_chain_label": "A→Z-keten — R4P3 recovery vóór nieuwe Astra PREBUILD",
+  "next_required": "Bewijs eerst in de nieuwe ChatGPT-sessie een eigen same-chat SESSION-ROUTE. Dispatch daarna exact de reeds voorbereide read-only recoverytask DEV-PRED-CONT-NEXT-732c5b19eb4f734690e9761e om de lokale R4P3 materialisatie/PREBUILD-request-state te classificeren. Alleen bij bewezen geldige materialisatie mag exact die version-bound R4P3 proposal opnieuw naar GPT-6 Astra PREBUILD. Geen build, tests of meting vóór PREBUILD APPROVE en later POSTBUILD APPROVE.",
   "invariant": "NO_TEST_OR_MEASUREMENT_BEFORE_ASTRA_POSTBUILD_APPROVAL",
   "evidence_refs": [
     "control/bridge_commands/CURRENT_STATE.md",
@@ -47,8 +47,8 @@
       "subtitle": "experiment ontwerpen",
       "state": "IMPLEMENTED_NOT_E2E",
       "detail": "Doelarchitectuur: GPT-5.6 Sol voert SOL_PROPOSAL rechtstreeks uit via de nieuwe directe Sol-executor, buiten Codex. De inhoudelijke rol van Sol blijft gelijk; alleen de uitvoeringslaag verandert.",
-      "current_candidate_state": "REVISION_MATERIALIZING",
-      "current_candidate_detail": "GPT-5.6 Sol heeft R4P3 opgesteld met de Astra-revisies: exacte Decimal/rounding- en boundarysemantiek plus een expliciet frozen harness-contract. N1E135 materialiseert en valideert deze immutable proposal nu."
+      "current_candidate_state": "R4P3_RECOVERY_PENDING",
+      "current_candidate_detail": "De immutable DIRECT_SOL R4P3 request/result bestaat in Git met exact GPT-5.6 Sol provenance en completion SHA ee8cb3d10a02d50064dcea2fd7aa4264fe2fabbb04c0f4ab58d01312fba6c918. Lokale materialisatie is nog niet opnieuw bewezen; stale-claim recovery wordt eerst read-only geclassificeerd."
     },
     {
       "id": "astra_prebuild",
@@ -56,8 +56,8 @@
       "subtitle": "ontwerp beoordelen",
       "state": "TARGETED_TESTED",
       "detail": "Exact GPT-6 Astra blijft de verplichte onafhankelijke PRE-BUILD reviewer en blijft via CodexWorker lopen. Deze migratie verandert deze gate niet.",
-      "current_candidate_state": "WAITING_FOR_R4P3_MATERIALIZATION",
-      "current_candidate_detail": "R4P2 kreeg REVISE. De herziene R4P3 proposal bestaat en wordt nu gematerialiseerd; daarna volgt een nieuwe exact gebonden GPT-6 Astra PREBUILD-review."
+      "current_candidate_state": "WAITING_FOR_RECOVERY_CLASSIFICATION",
+      "current_candidate_detail": "R4P2 was REVISE. R4P3 bevat de gevraagde Decimal/rounding- en harness-specificatie, maar een nieuwe exact gebonden Astra PREBUILD is nog niet bewezen gestart/afgerond. Eerst lokale recovery-state vaststellen."
     },
     {
       "id": "sol_build",
@@ -113,9 +113,9 @@
     "postbuild_task_id": "DEV-PRED-A2Z-POSTBUILD-RETRY-20261006-E106",
     "pause_task_id": "DEV-PRED-A2Z-PAUSE-20261006-E107",
     "current_stage": "sol_design",
-    "state": "R4P3_MATERIALIZING",
-    "label": "Sol-revisie R4P3 — materialisatie/provenancecontrole",
-    "detail": "R4P3 bevat de gevraagde preciseringen voor interne Decimal-arithmetic, rounding/boundaryclassificatie en het frozen harness-contract. DEV-PRED-A2Z-R4P3-MATERIALIZE-20261008-N1E135 is geclaimd en valideert/materialiseert deze proposal. Daarna pas opnieuw Astra PREBUILD.",
+    "state": "R4P3_RECOVERY_PENDING",
+    "label": "Sol-revisie R4P3 — recovery vóór Astra PREBUILD",
+    "detail": "R4P3 request/result is remote bewezen. De vorige lokale materialisatie/PREBUILD-queue heeft een stale/CLAIMED recoverypad opgeleverd; DEV-PRED-CONT-NEXT-732c5b19eb4f734690e9761e is voorbereid maar nog niet via deze nieuwe sessieroute dispatched. Geen inhoudelijke duplicaat-task starten vóór deze classificatie.",
     "scientific_status": "NO_PROVEN_EDGE",
     "evidence_refs": [
       "control/project_tasks/DEV-PRED-A2Z-POSTBUILD-RETRY-20261006-E106.json",
@@ -154,7 +154,9 @@
       "control/project_tasks/DEV-PRED-A2Z-R5P1-ASTRA-PREBUILD-START-20261008-N1E134.json",
       "same-chat:N1E131 NEXT_ACTION=Return to Sol for revised PREBUILD proposal",
       "same-chat:N1E132 harness contract requirements",
-      "same-chat:DEV-PRED-A2Z-R4P3-MATERIALIZE-20261008-N1E135 status=CLAIMED"
+      "same-chat:DEV-PRED-A2Z-R4P3-MATERIALIZE-20261008-N1E135 status=CLAIMED",
+      "control/project_tasks/DEV-PRED-CONT-NEXT-732c5b19eb4f734690e9761e.json",
+      "control/build_log/events/20261008T115800Z-A2Z-R4P3-RECOVERY-ATTEMPT.json"
     ],
     "execution_migration": {
       "from": "CODEX_WORKER:gpt-5.6-sol",
