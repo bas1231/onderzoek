@@ -1,0 +1,14 @@
+{
+  "schema": "PREDICTION_RESULT_RECEIPT_V1",
+  "receipt_id": "RESULT-RECEIPT-1791446524-a05432206943",
+  "event_id": "1791446524-a05432206943",
+  "source_task_id": "DEV-PRED-CONT-NEXT-1c7a9c92f0f9281a030482be",
+  "created_at_utc": "2026-10-08T08:49:30Z",
+  "live_trading": false,
+  "paid_actions": false,
+  "wallet_actions": false,
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "High"
+  }
+}
