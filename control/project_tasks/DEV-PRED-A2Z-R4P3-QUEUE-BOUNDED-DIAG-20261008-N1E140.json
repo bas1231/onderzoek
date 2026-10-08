@@ -1,0 +1,41 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-A2Z-R4P3-QUEUE-BOUNDED-DIAG-20261008-N1E140",
+  "source_commit": "0df8afe1f01ae9d2f2fd5ae01ffe68fd43018a1a",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "High"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_runtime"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 120,
+  "notes": "Bounded diagnosis of N1E138. No recursive scans. Inspect only top-level executor state entries for the exact task, the exact worktree files used by N1E138, and the exact expected R4P3 Astra request path. No model invocation, build, tests, measurement, service or runtime mutation.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/r4p3_queue_bounded_diag_n1e140.py",
+      "content": "from pathlib import Path\nimport json\ntid='DEV-PRED-A2Z-R4P3-ASTRA-PREBUILD-QUEUE-20261008-N1E138'\nroots=[Path.home()/'.local/state/prediction-project-executor',Path.home()/'.local/share/prediction-project-executor']\nprint('ERROR_CLASS=R4P3_QUEUE_BOUNDED_DIAG')\nparts=[]\nfor root in roots:\n    if not root.exists():\n        parts.append('ROOT_MISSING='+str(root)); continue\n    for p in sorted(root.glob(tid+'*')):\n        if p.is_file():\n            try: txt=p.read_text(errors='replace')\n            except Exception as e: txt='READERR:'+type(e).__name__+':'+str(e)\n            parts.append('FILE='+str(p)+' TAIL='+txt[-3500:].replace('\\n','\\\\n'))\n        else:\n            parts.append('PATH='+str(p)+' TYPE=DIR')\nwt=Path.home()/'.local/share/prediction-project-executor/worktrees'/tid\nparts.append('WORKTREE_EXISTS='+str(wt.exists()))\nfor rel in ['control/model_execution/patch_e106_gate.py','control/jobs/full_a2z_governed_v4.py','control/dev_checks/a2z_next_request.json']:\n    p=wt/rel\n    parts.append('WTFILE='+rel+' EXISTS='+str(p.exists())+' SIZE='+(str(p.stat().st_size) if p.exists() else '0'))\nreq=Path.home()/'.local/share/prediction-project-executor/campaigns/FULL-A2Z-LIVE-20261004-V4/requests/A2Z-V4-ASTRA-PREBUILD-DIRECT-20261008-R4P3.json'\nparts.append('REQUEST_EXISTS='+str(req.exists()))\nif req.exists(): parts.append('REQUEST='+req.read_text(errors='replace')[:5000].replace('\\n','\\\\n'))\nprint('ERROR='+'|'.join(parts))\nraise SystemExit(1)\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/r4p3_queue_bounded_diag_n1e140.py"
+      ],
+      "timeout_seconds": 60
+    }
+  ]
+}
