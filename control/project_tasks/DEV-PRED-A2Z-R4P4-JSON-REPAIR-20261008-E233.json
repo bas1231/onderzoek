@@ -1,0 +1,48 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-A2Z-R4P4-JSON-REPAIR-20261008-E233",
+  "source_commit": "88bd78895ea8b41ec3bf33b787a5a479453070de",
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-6",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_runtime",
+    "write_runtime"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 160,
+  "notes": "Correct E226 accidental literal backslash-n after fully intact R4P4 request. Strict suffix and semantic/hash checks; atomic install same logical request bytes, no bridge/router/executor mutations, no Sol model impersonation.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/r4p4_repair_e233.py",
+      "content": "from pathlib import Path\nimport json,hashlib\nroot=Path.home()/'.local/share/prediction-project-executor/campaigns/FULL-A2Z-LIVE-20261004-V4'\nsrc=root/'direct_requests/A2Z-V4-SOL-PROPOSAL-DIRECT-20261008-R4P4.json'\ntext=src.read_text(encoding='utf-8')\ndecoder=json.JSONDecoder()\nvalue,end=decoder.raw_decode(text)\nsuffix=text[end:]\nassert suffix.strip()==r'\\n','UNEXPECTED_TRAILING_CONTENT'\nassert isinstance(value,dict)\nassert value['schema']=='PREDICTION_DIRECT_SOL_REQUEST_V1'\nassert value['task_id']=='A2Z-V4-SOL-PROPOSAL-DIRECT-20261008-R4P4'\nassert value['target_model']=='gpt-5.6-sol'\nassert value['delivery_route_task_id']=='SESSION-ROUTE-246799adf99f0bf8336c27a0'\nassert value['input_sha256']==hashlib.sha256(value['prompt'].encode('utf-8')).hexdigest()\nassert all(value[x] is False for x in ('live_trading','paid_actions','wallet_actions'))\ndst=Path('control/dev_checks/a2z_r4p4_clean_e233.json')\ndst.write_text(json.dumps(value,indent=2,ensure_ascii=False)+'\\n',encoding='utf-8')\nassert json.loads(dst.read_text())==value\nprint('R4P4_JSON_REPAIRED=PASS')\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/r4p4_repair_e233.py"
+      ],
+      "timeout_seconds": 40
+    },
+    {
+      "type": "install_runtime",
+      "source": "control/dev_checks/a2z_r4p4_clean_e233.json",
+      "destination": "/home/leonh/.local/share/prediction-project-executor/campaigns/FULL-A2Z-LIVE-20261004-V4/direct_requests/A2Z-V4-SOL-PROPOSAL-DIRECT-20261008-R4P4.json",
+      "mode": 420
+    }
+  ]
+}
