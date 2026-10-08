@@ -66,6 +66,10 @@ The source remains disabled by default, and automatically disabled in the
 offline `qualification_local` environment. The existing hourly timer can
 be reused; no extra scheduler or automatic activation is installed.
 
+Source status distinguishes `DISABLED`, `SUCCESS`, `EMPTY`,
+`PARTIAL`, and `SOURCE_FAILURE`. A healthy HTTP response with no
+accepted posts is **not** evidence that the scout found any leads.
+
 The hourly cycle also records source status and coverage counts in
 the checkpointable canonical `knowledge/runs/hourly-*.json` manifest
 and under `### Reddit Idea Mine source` in the hourly markdown report.
