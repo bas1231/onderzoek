@@ -1,0 +1,54 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-A2Z-R5P1-ASTRA-PREBUILD-START-20261008-N1E134",
+  "source_commit": "67a4ee463c078d0b022839358c0ac7ed8a4bb5b6",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "High"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_runtime",
+    "write_runtime",
+    "user_service_manage"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 420,
+  "notes": "Start exact Astra PREBUILD for revised Sol R5P1. Reuse the proven R4P2 request template from runtime, replace only immutable proposal-bound fields, validate safety/model/phase, install the new request, and start the exact model service once. No build, tests, measurement, trading, paid actions, or wallet actions.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/r5p1_make_astra_request_n1e134.py",
+      "content": "from pathlib import Path\nimport json,hashlib\nrt=Path.home()/'.local/share/prediction-project-executor/campaigns/FULL-A2Z-LIVE-20261004-V4'\nold=json.loads((rt/'requests'/'A2Z-V4-ASTRA-PREBUILD-DIRECT-20261007-R4P2.json').read_text())\nreq=json.loads(Path('control/model_execution/direct_requests/A2Z-V4-SOL-PROPOSAL-DIRECT-20261008-R5P1.json').read_text())\nres=json.loads(Path('control/model_execution/direct_results/A2Z-V4-SOL-PROPOSAL-DIRECT-20261008-R5P1.json').read_text())\nproposal=json.loads(res['final'])\nassert req['task_id']==res['task_id']=='A2Z-V4-SOL-PROPOSAL-DIRECT-20261008-R5P1'\nassert req['binding_sha256']==res['binding_sha256'] and req['input_sha256']==res['input_sha256']\nassert res['model']=='gpt-5.6-sol' and res['execution_layer']=='DIRECT_SOL_CHAT' and res['codex'] is False\nassert proposal['proposal_version']==5 and proposal['scientific_status']=='NO_PROVEN_EDGE'\nout=dict(old)\nout['task_id']='A2Z-V4-ASTRA-PREBUILD-DIRECT-20261008-R5P1'\nout['route_task_id']='SESSION-ROUTE-246799adf99f0bf8336c27a0'\npayload={'candidate_id':req['candidate_id'],'campaign_id':req['campaign_id'],'proposal_task_id':req['task_id'],'proposal_binding_sha256':req['binding_sha256'],'proposal_input_sha256':req['input_sha256'],'proposal_completion_sha256':res['completion_sha256'],'proposal':proposal,'scientific_status':'NO_PROVEN_EDGE','safety':{'live_trading':False,'paid_actions':False,'wallet_actions':False}}\nprefix=str(old['prompt']).split('INPUT_JSON:',1)[0]+'INPUT_JSON:'\nout['prompt']=prefix+json.dumps(payload,sort_keys=True,separators=(',',':'))\nout['input_sha256']=hashlib.sha256(out['prompt'].encode()).hexdigest()\nif 'binding_sha256' in out: out['binding_sha256']=hashlib.sha256(json.dumps(payload,sort_keys=True,separators=(',',':')).encode()).hexdigest()\nassert out['phase']=='ASTRA_PREBUILD'\nassert out.get('model_policy')=='ASTRA_EXACT' or out.get('target_model') in ('gpt-6-astra','GPT-6 Astra')\nassert out['live_trading'] is False and out['paid_actions'] is False and out['wallet_actions'] is False\nPath('control/dev_checks/r5p1_astra_request_n1e134.json').write_text(json.dumps(out,indent=2,sort_keys=True)+'\\n')\nprint('R5P1_ASTRA_REQUEST_READY')"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/r5p1_make_astra_request_n1e134.py"
+      ],
+      "timeout_seconds": 120
+    },
+    {
+      "type": "install_runtime",
+      "source": "control/dev_checks/r5p1_astra_request_n1e134.json",
+      "destination": "/home/leonh/.local/share/prediction-project-executor/campaigns/FULL-A2Z-LIVE-20261004-V4/requests/A2Z-V4-ASTRA-PREBUILD-DIRECT-20261008-R5P1.json",
+      "mode": 420
+    },
+    {
+      "type": "service",
+      "verb": "start",
+      "unit": "prediction-a2z-v4-model@A2Z-V4-ASTRA-PREBUILD-DIRECT-20261008-R5P1.service"
+    }
+  ]
+}
