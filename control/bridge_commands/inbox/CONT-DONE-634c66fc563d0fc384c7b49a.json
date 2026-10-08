@@ -1,0 +1,19 @@
+{
+  "schema": "PREDICTION_BRIDGE_COMMAND_V1",
+  "task_id": "CONT-DONE-634c66fc563d0fc384c7b49a",
+  "action": "BRIDGE_PING",
+  "created_at_utc": "2026-10-08T11:04:15Z",
+  "route_task_id": null,
+  "delivery_mode": "headless",
+  "live_trading": false,
+  "paid_actions": false,
+  "wallet_actions": false,
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "notes": "Close stale N1E134 materialize-diagnosis continuation. Source of truth has already advanced through newer R4P3 materialize, Astra PREBUILD queue/status, current-state and queue-execstate tasks up to N1E141. No duplicate NEXT.",
+  "auto_continue": false,
+  "parent_continuation_id": "CONT-634c66fc563d0fc384c7b49a"
+}
