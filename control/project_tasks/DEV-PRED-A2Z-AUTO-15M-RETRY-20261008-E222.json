@@ -1,0 +1,106 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-A2Z-AUTO-15M-RETRY-20261008-E222",
+  "source_commit": "a6423a4a3c064a4274e870be72c4bb1c989c5cad",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-6",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "run_tests",
+    "write_runtime",
+    "user_service_manage"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 450,
+  "notes": "Deploy persistent 15-minute generic Astra quota retry across all future A2Z campaign tasks, safely using existing model service. Strict status/phase/id/safety filtering, no bridge/executor changes.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/jobs/a2z_astra_retry_sweep.py",
+      "content": "\"\"\"Bounded, read-only discovery and retry of paused A→Z Astra review tasks.\n\nNever bypasses a review, never writes model database, never touches trading.\nInstalled by capability-scoped projectexecutor in Prediction runtime.\n\"\"\"\nfrom __future__ import annotations\n\nimport argparse\nimport json\nfrom pathlib import Path\nimport re\nimport sqlite3\nimport subprocess\n\nCAMPAIGNS = Path.home() / \".local/share/prediction-project-executor/campaigns\"\nID_RE = re.compile(r\"^A2Z-[A-Za-z0-9_-]{1,120}$\")\nRETRY_STATES = {\"PAUSED_USAGE_LIMIT\", \"WAITING_RETRY\"}\nASTRA_PHASES = {\"ASTRA_PREBUILD\", \"ASTRA_POSTBUILD\", \"SUPERVISOR\"}\nMAX_RETRIES_PER_TICK = 12\n\n\ndef candidates(root: Path):\n    \"\"\"Only already-enqueued reviewed requests with a real matching task row.\"\"\"\n    for campaign in sorted(root.iterdir()) if root.is_dir() else ():\n        if not campaign.is_dir():\n            continue\n        db = campaign / \"models/runtime.sqlite\"\n        requests = campaign / \"requests\"\n        if not db.is_file() or not requests.is_dir():\n            continue\n        try:\n            connection = sqlite3.connect(f\"file:{db}?mode=ro\", uri=True)\n        except sqlite3.Error:\n            continue\n        try:\n            for path in sorted(requests.glob(\"*.json\")):\n                tid = path.stem\n                if not ID_RE.fullmatch(tid):\n                    continue\n                if (campaign / \"model_results\" / path.name).exists():\n                    continue\n                try:\n                    request = json.loads(path.read_text(encoding=\"utf-8\"))\n                    if request.get(\"task_id\") != tid or request.get(\"phase\") not in ASTRA_PHASES:\n                        continue\n                    if any(request.get(k) is not False for k in (\"live_trading\", \"paid_actions\", \"wallet_actions\")):\n                        continue\n                    if not str(request.get(\"route_task_id\", \"\")).startswith(\"SESSION-ROUTE-\"):\n                        continue\n                    row = connection.execute(\"select status from tasks where id=?\", (tid,)).fetchone()\n                except (OSError, ValueError, sqlite3.Error):\n                    continue\n                if row and row[0] in RETRY_STATES:\n                    yield tid, row[0]\n        finally:\n            connection.close()\n\n\ndef tick(root: Path, *, run=subprocess.run):\n    sent = 0\n    for tid, status in candidates(root):\n        if sent >= MAX_RETRIES_PER_TICK:\n            break\n        unit = f\"prediction-a2z-v4-model@{tid}.service\"\n        # Existing per-task service uses the canonical reviewer and usage guards.\n        result = run([\"systemctl\", \"--user\", \"start\", unit],\n                     capture_output=True, text=True, timeout=120, check=False)\n        print(json.dumps({\"task_id\": tid, \"previous_status\": status,\n                          \"service_rc\": result.returncode}, sort_keys=True), flush=True)\n        sent += 1\n    print(f\"A2Z_ASTra_RETRY_SWEEP scanned={sent} max={MAX_RETRIES_PER_TICK}\", flush=True)\n    return 0\n\n\ndef main():\n    parser = argparse.ArgumentParser()\n    parser.add_argument(\"--campaign-root\", type=Path, default=CAMPAIGNS)\n    args = parser.parse_args()\n    return tick(args.campaign_root)\n\n\nif __name__ == \"__main__\":\n    raise SystemExit(main())\n"
+    },
+    {
+      "type": "write_text",
+      "path": "control/codex_supervisor/systemd/prediction-a2z-astra-retry-sweep.service",
+      "content": "[Unit]\nDescription=Prediction A2Z Astra paused review retry sweep\nAfter=default.target\n\n[Service]\nType=oneshot\nExecStart=/usr/bin/python3 %h/.local/share/prediction-project-executor/a2z_astra_retry_sweep.py\nTimeoutStartSec=180\nNoNewPrivileges=true\n"
+    },
+    {
+      "type": "write_text",
+      "path": "control/codex_supervisor/systemd/prediction-a2z-astra-retry-sweep.timer",
+      "content": "[Unit]\nDescription=Prediction A2Z all-campaign Astra review retry every 15 minutes\n\n[Timer]\nOnCalendar=*:0/15\nPersistent=true\nUnit=prediction-a2z-astra-retry-sweep.service\n\n[Install]\nWantedBy=timers.target\n"
+    },
+    {
+      "type": "write_text",
+      "path": "control/tests/test_a2z_astra_retry_sweep.py",
+      "content": "\"\"\"Regression: new campaign tasks are swept without per-instance timer enable.\"\"\"\nfrom pathlib import Path\nfrom tempfile import TemporaryDirectory\nimport importlib.util\nimport json\nimport sqlite3\nimport unittest\n\nMODULE=Path(__file__).resolve().parents[1]/\"jobs/a2z_astra_retry_sweep.py\"\nspec=importlib.util.spec_from_file_location(\"a2z_astra_retry_sweep\",MODULE)\nretry=importlib.util.module_from_spec(spec)\nspec.loader.exec_module(retry)\n\n\nclass RetrySweepTests(unittest.TestCase):\n    def test_paused_new_experiment_and_fail_closed(self):\n        with TemporaryDirectory() as tmp:\n            root=Path(tmp)\n            camp=root/\"FUTURE-CAMPAIGN\"\n            for p in (\"models\",\"requests\",\"model_results\"):\n                (camp/p).mkdir(parents=True)\n            with sqlite3.connect(camp/\"models/runtime.sqlite\") as db:\n                db.execute(\"create table tasks(id text primary key,status text)\")\n                for tid,status in ((\"A2Z-NEW-PREBUILD\",\"PAUSED_USAGE_LIMIT\"),\n                                   (\"A2Z-DONE-POSTBUILD\",\"COMPLETE\"),\n                                   (\"A2Z-UNSAFE\",\"PAUSED_USAGE_LIMIT\")):\n                    db.execute(\"insert into tasks values(?,?)\",(tid,status))\n            base={\"phase\":\"ASTRA_PREBUILD\",\"route_task_id\":\"SESSION-ROUTE-test\",\n                  \"live_trading\":False,\"paid_actions\":False,\"wallet_actions\":False}\n            for tid in (\"A2Z-NEW-PREBUILD\",\"A2Z-DONE-POSTBUILD\",\"A2Z-UNSAFE\"):\n                (camp/\"requests\"/(tid+\".json\")).write_text(json.dumps({**base,\"task_id\":tid,\n                    \"live_trading\":tid==\"A2Z-UNSAFE\"}))\n            found=list(retry.candidates(root))\n            self.assertEqual(found,[(\"A2Z-NEW-PREBUILD\",\"PAUSED_USAGE_LIMIT\")])\n            called=[]\n            class Result: returncode=0\n            def fake_run(args,**kwargs):\n                called.append(args)\n                return Result()\n            self.assertEqual(retry.tick(root,run=fake_run),0)\n            self.assertEqual(called,[[\"systemctl\",\"--user\",\"start\",\n              \"prediction-a2z-v4-model@A2Z-NEW-PREBUILD.service\"]])\n\n\nif __name__==\"__main__\":\n    unittest.main()\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "control/tests",
+        "-p",
+        "test_a2z_astra_retry_sweep.py"
+      ],
+      "test": true,
+      "timeout_seconds": 60
+    },
+    {
+      "type": "install_runtime",
+      "source": "control/jobs/a2z_astra_retry_sweep.py",
+      "destination": "/home/leonh/.local/share/prediction-project-executor/a2z_astra_retry_sweep.py",
+      "mode": 420
+    },
+    {
+      "type": "install_runtime",
+      "source": "control/codex_supervisor/systemd/prediction-a2z-astra-retry-sweep.service",
+      "destination": "/home/leonh/.config/systemd/user/prediction-a2z-astra-retry-sweep.service",
+      "mode": 420
+    },
+    {
+      "type": "install_runtime",
+      "source": "control/codex_supervisor/systemd/prediction-a2z-astra-retry-sweep.timer",
+      "destination": "/home/leonh/.config/systemd/user/prediction-a2z-astra-retry-sweep.timer",
+      "mode": 420
+    },
+    {
+      "type": "daemon_reload"
+    },
+    {
+      "type": "service",
+      "verb": "enable",
+      "unit": "prediction-a2z-astra-retry-sweep.timer"
+    },
+    {
+      "type": "service",
+      "verb": "start",
+      "unit": "prediction-a2z-astra-retry-sweep.timer"
+    },
+    {
+      "type": "service",
+      "verb": "is-enabled",
+      "unit": "prediction-a2z-astra-retry-sweep.timer"
+    },
+    {
+      "type": "service",
+      "verb": "is-active",
+      "unit": "prediction-a2z-astra-retry-sweep.timer"
+    }
+  ]
+}
