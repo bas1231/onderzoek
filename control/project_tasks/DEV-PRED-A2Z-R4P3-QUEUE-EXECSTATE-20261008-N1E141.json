@@ -1,0 +1,41 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-A2Z-R4P3-QUEUE-EXECSTATE-20261008-N1E141",
+  "source_commit": "b98968735d65209e513078aeb09d108298ac375a",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "High"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_runtime"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 120,
+  "notes": "Read-only exact status for N1E138. Inspect only its executor state JSON plus expected R4P3 Astra request path. Report status, exit code/operation summary if present, request existence and SHA256. No model invocation, service action, build, tests, measurement or runtime mutation.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/r4p3_queue_execstate_n1e141.py",
+      "content": "from pathlib import Path\nimport json,hashlib\ntid='DEV-PRED-A2Z-R4P3-ASTRA-PREBUILD-QUEUE-20261008-N1E138'\nstate=Path.home()/'.local/state/prediction-project-executor'/f'{tid}.json'\nreq=Path.home()/'.local/share/prediction-project-executor/campaigns/FULL-A2Z-LIVE-20261004-V4/requests/A2Z-V4-ASTRA-PREBUILD-DIRECT-20261008-R4P3.json'\nparts=[]\nif state.exists():\n    o=json.loads(state.read_text())\n    for k in ['status','exit_code','error','detail','claimed_at_utc','finished_at_utc','source_commit','worktree','branch']:\n        if k in o: parts.append(k.upper()+'='+str(o.get(k)))\n    ops=o.get('operations')\n    if isinstance(ops,list):\n        for i,x in enumerate(ops,1):\n            if isinstance(x,dict):\n                parts.append(f'OP{i}_TYPE='+str(x.get('type','')))\n                for k in ['status','returncode','exit_code','error']:\n                    if k in x: parts.append(f'OP{i}_{k.upper()}='+str(x.get(k)))\nelse: parts.append('STATE_EXISTS=0')\nparts.append('REQUEST_EXISTS='+str(int(req.exists())))\nif req.exists():\n    b=req.read_bytes(); parts.append('REQUEST_SHA256='+hashlib.sha256(b).hexdigest()); parts.append('REQUEST_SIZE='+str(len(b)))\nprint('ERROR_CLASS=R4P3_QUEUE_EXECSTATE')\nprint('ERROR='+'|'.join(parts))\nraise SystemExit(1)\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/r4p3_queue_execstate_n1e141.py"
+      ],
+      "timeout_seconds": 60
+    }
+  ]
+}
