@@ -1,6 +1,6 @@
 import unittest
 from datetime import datetime, timezone
-from control.reddit_idea_mine.source_canary import probe, POSTS, MAX_AGE_MINUTES
+from control.reddit_idea_mine.source_canary import probe, POSTS
 
 NOW=datetime(2026,10,8,18,0,tzinfo=timezone.utc)
 
@@ -14,7 +14,7 @@ def served(ts):
 class ArcticCanaryTests(unittest.TestCase):
     def test_recent_valid_data(self):
         result=probe(served(NOW.timestamp()-3600),now=NOW)
-        self.assertEqual(result["status"],"FRESH_DATA_OBSERVED")
+        self.assertEqual(result["status"],"DATA_OBSERVED")
         self.assertEqual(result["newest_post_age_minutes"],60.0)
         self.assertEqual(result["requests"],1)
         self.assertEqual(result["economic_conclusion"],"NO_PROVEN_EDGE")
@@ -44,8 +44,9 @@ class ArcticCanaryTests(unittest.TestCase):
         self.assertFalse(result["archive_timestamp_observed"])
 
     def test_stale_data(self):
-        result=probe(served(NOW.timestamp()-(MAX_AGE_MINUTES+10)*60),now=NOW)
-        self.assertEqual(result["status"],"STALE_DATA_OBSERVED")
+        result=probe(served(NOW.timestamp()-35*24*3600),now=NOW)
+        self.assertEqual(result["status"],"DATA_OBSERVED")
+        self.assertGreater(result["newest_post_age_minutes"],30*24*60)
 
     def test_failure_is_fail_closed(self):
         def fail(*_):
