@@ -1,0 +1,31 @@
+{
+  "schema": "PREDICTION_BUILD_LOG_EVENT_V1",
+  "event_id": "REDDIT-E022-PASS-20261008-INGEST-LAG",
+  "work_item_id": "REDDIT-IDEA-MINE-V1",
+  "created_at_utc": "2026-10-08T18:28:12.251Z",
+  "event_type": "RESULT",
+  "work_item_status": "IN_PROGRESS",
+  "outcome": "PASS",
+  "title": "E022 archive timestamp telemetry verified",
+  "objective": "Keep Reddit scout reliable and safe, recording archive timestamps without requiring low-latency collection.",
+  "summary": "Received same-chat NIGHTSHIFT_WSL_RESULT_V1 E022 status=PASS exit=0, rcs=1:0 and pinned head 4097b10b18e85b8532f8deaa5066e45509e91b25. Tests cover valid retrieved_on, unavailable/future archived timestamps, and previous Reddit/Recon regressions. User explicitly says speed is irrelevant; archive latency remains optional telemetry, not an approval gate. No runtime source flag activation or live API receipt confirmed.",
+  "next_action": "Consume E019 timer readiness, E023 malicious-content, E024 reliable discovery, E025 comment fairness, E026 production branch inspect and E027 reporting qualification. Resolve first actual blocker; then test a single authorized live API response without changing executor network guard or protected production branch.",
+  "session_route_task_id": "SESSION-ROUTE-74c664afabf31305265af34b",
+  "task_ids": [
+    "DEV-PRED-ARCTIC-INGEST-LAG-20261008-E022"
+  ],
+  "commits": [
+    "4097b10b18e85b8532f8deaa5066e45509e91b25"
+  ],
+  "evidence_refs": [
+    "1791483178-525dcff23a51",
+    "control/reddit_idea_mine/source_canary.py"
+  ],
+  "tags": [
+    "reddit",
+    "arctic-shift",
+    "observability",
+    "source-canary"
+  ],
+  "first_incomplete_step": "Safe production branch readiness and real API source reception; offline E019/E023-E027 result receipts remain pending."
+}
