@@ -1,0 +1,41 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-A2Z-R4P3-MATERIALIZE-TARGETED-DIAG-20261008-N1E136",
+  "source_commit": "42de70307645ebcfee50ad6037fa332946cb16b4",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "High"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_runtime"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 120,
+  "notes": "Read only the fixed R4P3 model_results file in the V4 runtime and report whether it exists and its core metadata. No model invocation, build, tests or measurement.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/r4p3_model_result_probe_n1e136.py",
+      "content": "from pathlib import Path\nimport json\np=Path.home()/'.local/share/prediction-project-executor/campaigns/FULL-A2Z-LIVE-20261004-V4/model_results/A2Z-V4-SOL-PROPOSAL-DIRECT-20261008-R4P3.json'\nprint('ERROR_CLASS=R4P3_MODEL_RESULT_PROBE')\nif not p.exists():\n print('ERROR=EXISTS=False')\n raise SystemExit(1)\no=json.loads(p.read_text())\nprint('ERROR=EXISTS=True|TASK='+str(o.get('task_id'))+'|PHASE='+str(o.get('phase'))+'|CHECKPOINT='+str(o.get('checkpoint'))+'|COMPLETION_SHA='+str(o.get('completion_sha256')))\nraise SystemExit(1)\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/r4p3_model_result_probe_n1e136.py"
+      ],
+      "timeout_seconds": 60
+    }
+  ]
+}
