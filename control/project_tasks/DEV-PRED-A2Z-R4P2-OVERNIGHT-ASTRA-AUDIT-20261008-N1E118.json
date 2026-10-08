@@ -1,0 +1,41 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-A2Z-R4P2-OVERNIGHT-ASTRA-AUDIT-20261008-N1E118",
+  "source_commit": "0bc5a09661f518c8a9c6c637b9f208b0358aef98",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "High"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_runtime"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 120,
+  "notes": "Read-only audit of overnight Astra PREBUILD usage/activity for exact R4P2 task. Inspect state, result, and run checkpoint artifacts only. No model/service invocation, no build, tests, measurement, or paid/live actions.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/r4p2_overnight_astra_audit_n1e118.py",
+      "content": "from pathlib import Path\nimport json, os, time\nbase=Path.home()/'.local/share/prediction-project-executor/campaigns/FULL-A2Z-LIVE-20261004-V4'\ntask='A2Z-V4-ASTRA-PREBUILD-DIRECT-20261007-R4P2'\nout={'task_id':task}\nfor name,rel in [('state','models/STATE.json'),('continuation','models/CONTINUATION.json')]:\n p=base/rel\n if p.is_file():\n  try:o=json.loads(p.read_text(encoding='utf-8'))\n  except Exception as e:o={'parse_error':type(e).__name__}\n  if isinstance(o,dict): out[name]={k:o.get(k) for k in ('task_id','state','reason','attempt','checkpoint','retry_at','timestamp','next_action')}\nres=base/'model_results'/(task+'.json')\nout['result_exists']=res.is_file()\nif res.is_file():\n try:r=json.loads(res.read_text(encoding='utf-8'))\n except Exception as e:r={'parse_error':type(e).__name__}\n if isinstance(r,dict): out['result']={k:r.get(k) for k in ('task_id','phase','decision','reviewer_model','model','status','completion_sha256','created_at','completed_at')}\nruns=base/'runs'\nitems=[]\nif runs.is_dir():\n for p in sorted(runs.glob(task+'-*')):\n  files=[]\n  try:\n   for q in sorted(p.iterdir()):\n    if q.is_file(): files.append({'name':q.name,'size':q.stat().st_size,'mtime':q.stat().st_mtime})\n  except Exception as e: files=[{'error':type(e).__name__}]\n  items.append({'name':p.name,'mtime':p.stat().st_mtime,'files':files})\nout['runs']=items[-12:]\nprint('ERROR_CLASS=R4P2_OVERNIGHT_ASTRA_AUDIT',flush=True)\nprint('ERROR='+json.dumps(out,separators=(',',':'),sort_keys=True),flush=True)\nraise SystemExit(1)\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/r4p2_overnight_astra_audit_n1e118.py"
+      ],
+      "timeout_seconds": 60
+    }
+  ]
+}
