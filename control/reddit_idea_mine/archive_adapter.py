@@ -9,7 +9,7 @@ from pathlib import Path
 
 from control.reddit_idea_mine.ingest import ingest
 
-def convert(records: list[dict], provenance: str = "licensed_archive") -> dict:
+def prepare(records: list[dict], provenance: str = "licensed_archive") -> list[dict]:
     if provenance not in {"licensed_archive", "authorized_export", "manual_submission", "test_fixture"}:
         raise ValueError("unrecognized provenance")
     if not isinstance(records, list) or len(records) > 500:
@@ -30,7 +30,11 @@ def convert(records: list[dict], provenance: str = "licensed_archive") -> dict:
             "comments": raw.get("comments") or [],
             "source": provenance,
         })
-    return ingest(normalized)
+    return normalized
+
+
+def convert(records: list[dict], provenance: str = "licensed_archive") -> dict:
+    return ingest(prepare(records, provenance))
 
 def main() -> None:
     import argparse
@@ -38,10 +42,12 @@ def main() -> None:
     parser.add_argument("--input", required=True, type=Path)
     parser.add_argument("--output", required=True, type=Path)
     parser.add_argument("--provenance", default="licensed_archive")
+    parser.add_argument("--format", choices=("leads", "records"), default="leads")
     args=parser.parse_args()
-    batch=convert(json.loads(args.input.read_text(encoding="utf-8")),args.provenance)
-    args.output.write_text(json.dumps(batch,indent=2,sort_keys=True)+"\n",encoding="utf-8")
-    print(json.dumps(batch["counts"],sort_keys=True))
+    records=json.loads(args.input.read_text(encoding="utf-8"))
+    value=convert(records,args.provenance) if args.format=="leads" else prepare(records,args.provenance)
+    args.output.write_text(json.dumps(value,indent=2,sort_keys=True)+"\n",encoding="utf-8")
+    print(json.dumps(value["counts"] if args.format=="leads" else {"records":len(value)},sort_keys=True))
 
 if __name__ == "__main__":
     main()
