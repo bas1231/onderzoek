@@ -1,0 +1,29 @@
+{
+  "schema": "PREDICTION_BUILD_LOG_EVENT_V1",
+  "event_id": "20261008T132000Z-A2Z-R4P3-E203-ATTEMPT",
+  "work_item_id": "A2Z-SYSTEMTEST-20261005",
+  "created_at_utc": "2026-10-08T13:20:00Z",
+  "event_type": "ATTEMPT",
+  "work_item_status": "IN_PROGRESS",
+  "outcome": "PLANNED",
+  "title": "R4P3 selectieherstel en PREBUILD-request",
+  "objective": "Herstel bewezen E106-selectie in task-worktree en maak gebonden R4P3-Astra-PREBUILD-request zonder duplicate materialisatie of experimentuitvoering.",
+  "summary": "Astra vond ontbrekende a2z_previous_selection.json als eerste blokkade; R4P3 materialisatie reeds onafhankelijk lokaal geverifieerd. E203 herstelt selectie vanuit E106 en maakt enkel PREBUILD-request.",
+  "why": "Kortste gerichte herstelstap; geen bridgewijziging, geen Astra-review of experimentmeting.",
+  "first_incomplete_step": "R4P3 PREBUILD request ontbreekt door niet-aanwezige selectie in afzonderlijke worktree.",
+  "next_action": "E203 uitkomst controleren; pas daarna Astra PREBUILD starten.",
+  "session_route_task_id": "SESSION-ROUTE-4424f3bc0927e6c9dd96bdc9",
+  "task_ids": [
+    "DEV-PRED-A2Z-R4P3-SELECTION-PREP-20261008-E203"
+  ],
+  "commits": [
+    "afdeff09fb9ccdd126af7318f0603dcba2a6b750"
+  ],
+  "evidence_refs": [
+    "control/project_tasks/DEV-PRED-A2Z-R4P3-ASTRA-PREBUILD-QUEUE-20261008-N1E138.json"
+  ],
+  "tags": [
+    "a2z",
+    "r4p3"
+  ]
+}
