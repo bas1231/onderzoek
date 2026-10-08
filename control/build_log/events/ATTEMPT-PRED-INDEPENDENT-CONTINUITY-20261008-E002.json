@@ -1,0 +1,34 @@
+{
+  "schema": "PREDICTION_BUILD_LOG_EVENT_V1",
+  "event_id": "ATTEMPT-PRED-INDEPENDENT-CONTINUITY-20261008-E002",
+  "work_item_id": "PRED-INDEPENDENT-CONTINUITY-20261008",
+  "created_at_utc": "2026-10-08T18:06:03.029Z",
+  "event_type": "ATTEMPT",
+  "work_item_status": "IN_PROGRESS",
+  "outcome": "STARTED",
+  "title": "Retest stable independent observer",
+  "objective": "Verify standalone watchdog independent of bridge/executor with immutable stable proposals.",
+  "summary": "Source corrected to avoid wall-clock age in report identity; regression test added for later rescans. E002 targets updated source.",
+  "why": "Repeated watchdog scans must not fail through false immutable-report collisions.",
+  "next_action": "Observe exact E002 same-chat PASS and inspect regression assertions; no runtime installation until source is proven.",
+  "first_incomplete_step": "Source-bound E002 WSL deterministic tests pending.",
+  "session_route_task_id": "SESSION-ROUTE-88ba3ef9802e307c74102659",
+  "task_ids": [
+    "DEV-PRED-INDEPENDENT-CONTINUITY-TEST-20261008-E002"
+  ],
+  "commits": [
+    "18ba969ca3adea52349e08f585fb06d869d7df67",
+    "4d57b17f3291c9e7e002ea4ba3ddf857c9742dbe"
+  ],
+  "evidence_refs": [
+    "control/independent_continuity/observer.py",
+    "tests/independent_continuity/test_observer.py"
+  ],
+  "tags": [
+    "continuity",
+    "watchdog",
+    "standalone",
+    "safe-retry",
+    "regression"
+  ]
+}
