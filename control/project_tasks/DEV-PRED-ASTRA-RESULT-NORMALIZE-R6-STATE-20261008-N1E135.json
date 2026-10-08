@@ -1,0 +1,41 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-ASTRA-RESULT-NORMALIZE-R6-STATE-20261008-N1E135",
+  "source_commit": "d619fbaf1994587b22352cad0263e980fc5e6882",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "High"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_runtime"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 90,
+  "notes": "Read only the exact persisted executor state for N1E134. No recursive scans, no rerun.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/read_n1e134_exact_state_n1e135.py",
+      "content": "from pathlib import Path\nimport json\ntid='DEV-PRED-ASTRA-RESULT-NORMALIZE-R6-20261008-N1E134'\np=Path.home()/'.local/state/prediction-project-executor'/(tid+'.json')\nprint('STATE_EXISTS='+str(p.is_file()))\nif not p.is_file(): raise SystemExit(2)\no=json.loads(p.read_text())\nfor k in ('task_id','status','exit_code','error','source_commit','remote_commit','worktree','branch','operation_count','operations','operation_results','results','completed_at_utc'):\n    if k in o:\n        v=json.dumps(o[k],ensure_ascii=False,sort_keys=True)\n        print(k.upper()+'='+v[:9000].replace('\\n',' '))\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/read_n1e134_exact_state_n1e135.py"
+      ],
+      "timeout_seconds": 45
+    }
+  ]
+}
