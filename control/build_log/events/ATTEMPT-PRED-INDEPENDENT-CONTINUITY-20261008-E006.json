@@ -1,0 +1,32 @@
+{
+  "schema": "PREDICTION_BUILD_LOG_EVENT_V1",
+  "event_id": "ATTEMPT-PRED-INDEPENDENT-CONTINUITY-20261008-E006",
+  "work_item_id": "PRED-INDEPENDENT-CONTINUITY-20261008",
+  "created_at_utc": "2026-10-08T18:29:49.250Z",
+  "event_type": "ATTEMPT",
+  "work_item_status": "IN_PROGRESS",
+  "outcome": "STARTED",
+  "title": "Retry standalone observe-only installation E006",
+  "objective": "Install only new independent observation service and timer, with no existing transport/executor modifications.",
+  "summary": "Correct only DEV command timeout from 1000 to 900 seconds; unchanged pinned tested source and bounded operations. E005 did not enter executor.",
+  "why": "DEV runner refuses timeouts greater than 900; E006 uses an immutable corrected manifest.",
+  "first_incomplete_step": "Receive exact E006 same-chat PASS with own unit health, or diagnose next first failing operation.",
+  "next_action": "Check E006 runtime canary and enabled timer; recovery launch remains disabled in observe mode.",
+  "session_route_task_id": "SESSION-ROUTE-88ba3ef9802e307c74102659",
+  "task_ids": [
+    "DEV-PRED-INDEPENDENT-CONTINUITY-OBSERVE-INSTALL-20261008-E006"
+  ],
+  "commits": [
+    "50b8e01c045f6f1d5f9abd3aec6d9be2679ac66d"
+  ],
+  "evidence_refs": [
+    "control/independent_continuity/README.md"
+  ],
+  "tags": [
+    "continuity",
+    "e006",
+    "observe",
+    "bounded",
+    "bridge-frozen"
+  ]
+}
