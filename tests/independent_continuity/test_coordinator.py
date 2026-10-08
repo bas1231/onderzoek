@@ -115,6 +115,8 @@ class CoordinatorTests(unittest.TestCase):
         (self.bridge / "sent" / "last.json").unlink()
         with self.assertRaisesRegex(UnsafeLaunch, "LAUNCHER_NOT_READY"):
             self.execute(emit=True)
+        self.assertEqual(list((self.bridge / "outbox").iterdir()), [])
+        self.assertFalse((self.state / "claims").exists())
 
     def test_launcher_ttl_expiry(self):
         obj = json.loads((self.bridge / "dashboard_launchers" / "1.json").read_text())
