@@ -98,7 +98,7 @@ def evaluate(events: list[dict], *, now: datetime, stale_seconds: int) -> list[d
             "work_item_id": work_item_id,
             "last_substantive_event_id": event["event_id"],
             "last_event_at_utc": event["created_at_utc"],
-            "age_seconds": max(0, int(age)),
+            # Exclude wall-clock age: immutable reports must stay byte-identical on rescans.
             "classification": code,
             "last_task_ids": event.get("task_ids") if isinstance(event.get("task_ids"), list) else [],
             "first_incomplete_step": event.get("first_incomplete_step"),
