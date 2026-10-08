@@ -1,0 +1,41 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-A2Z-R4P3-QUOTA-TIMER-20261008-E220",
+  "source_commit": "3ffdf10d82b94bb241daf0430fabee0fc65e3076",
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-6",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_runtime"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 100,
+  "notes": "Read-only R4P3 Astra queue status, usage limit state, precise configured 15-min timer instance enablement. No actions or model restart.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/r4p3_quota_timer_e220.py",
+      "content": "from pathlib import Path\nimport sqlite3,json\nh=Path.home()\ntid='A2Z-V4-ASTRA-PREBUILD-DIRECT-20261008-R4P3'\nbase=h/'.local/share/prediction-project-executor/campaigns/FULL-A2Z-LIVE-20261004-V4'\ndb=base/'models/runtime.sqlite'\nassert db.exists(),'ASTRA_RUNTIME_DB_MISSING'\nwith sqlite3.connect('file:'+str(db)+'?mode=ro',uri=True) as c:\n cols=[r[1] for r in c.execute('pragma table_info(tasks)')]\n allowed=[x for x in ('status','attempt','run','thread','retry_at','last_error','updated_at') if x in cols]\n row=c.execute('select '+','.join(allowed)+' from tasks where id=?',(tid,)).fetchone()\nstate=dict(zip(allowed,row)) if row else None\ntimer=h/'.config/systemd/user/prediction-a2z-v4-model@.timer'\ninstance='prediction-a2z-v4-model@'+tid+'.timer'\ntargets=[h/'.config/systemd/user/timers.target.wants'/instance,h/'.config/systemd/user/default.target.wants'/instance]\nsummary={'task':state,'timer_template':timer.exists(),'timer_instance_enabled':any(x.is_symlink() or x.exists() for x in targets),'timer_schedule':next((ln for ln in timer.read_text().splitlines() if ln.startswith('OnCalendar=')),'MISSING') if timer.exists() else 'MISSING','general_timer_enabled':(h/'.config/systemd/user/timers.target.wants/prediction-codex-supervisor.timer').exists()}\nprint('ASTRA_TIMER_E220 '+json.dumps(summary,default=str,sort_keys=True),flush=True)\nassert state,'ASTRA_QUEUE_TASK_MISSING'\nassert state.get('status')!='PAUSED_USAGE_LIMIT' or summary['timer_instance_enabled'],'ASTRA_USAGE_LIMIT_NO_15M_TIMER_FOR_R4P3'\nassert state.get('status')!='WAITING_RETRY' or summary['timer_instance_enabled'],'ASTRA_WAITING_RETRY_NO_15M_TIMER_FOR_R4P3'\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/r4p3_quota_timer_e220.py"
+      ],
+      "timeout_seconds": 35
+    }
+  ]
+}
