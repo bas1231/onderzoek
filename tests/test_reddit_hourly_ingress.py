@@ -39,6 +39,9 @@ class HourlyRedditIngressTests(unittest.TestCase):
         first = inject(routing, enabled=True, fetch=source_fixture, now=NOW)
         self.assertEqual(first["status"], "SUCCESS")
         self.assertEqual(first["evidence_added"], 1)
+        self.assertEqual(first["fresh_under_30_minutes"], 0)
+        self.assertEqual(first["median_post_age_minutes"], 60.0)
+        self.assertFalse(first["timeliness_proven"])
         evidence = routing["recon_scout"]["evidence"][0]
         self.assertTrue(evidence["source_id"].startswith("reddit_thread:"))
         self.assertIn("Fees and slippage", evidence["snippet"])
