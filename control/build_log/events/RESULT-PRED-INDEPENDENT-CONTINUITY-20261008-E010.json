@@ -1,0 +1,31 @@
+{
+  "schema": "PREDICTION_BUILD_LOG_EVENT_V1",
+  "work_item_id": "PRED-INDEPENDENT-CONTINUITY-20261008",
+  "created_at_utc": "2026-10-08T18:44:00.167Z",
+  "work_item_status": "IN_PROGRESS",
+  "objective": "Isolated independent observer service and recovery diagnostics, no frozen infrastructure mutations.",
+  "session_route_task_id": "SESSION-ROUTE-88ba3ef9802e307c74102659",
+  "tags": [
+    "continuity",
+    "sidecar",
+    "diagnostic",
+    "bridge-frozen"
+  ],
+  "event_id": "RESULT-PRED-INDEPENDENT-CONTINUITY-20261008-E010",
+  "event_type": "RESULT",
+  "outcome": "FAIL",
+  "title": "E010 confirms sidecar service failed, error truncated",
+  "summary": "Native status reached systemctl; rc=3 for prediction-independent-continuity.service, but compact delivery includes only service title. GitHub mirror fetch failure seen in E009 did not repeat in E010.",
+  "why": "A failed oneshot service is confirmed but the journal's first actual error is still not in the same-chat output.",
+  "first_incomplete_step": "Identify journal failure reason of sidecar only",
+  "next_action": "Run bounded journal classifier E011 via original guarded read_logs/run_project_python capabilities; do not mutate bus/executor/service yet.",
+  "task_ids": [
+    "DEV-PRED-INDEPENDENT-CONTINUITY-SERVICE-STATUS-20261008-E010"
+  ],
+  "commits": [
+    "770d62a14afc33208450b8a07215f375c42f8839"
+  ],
+  "evidence_refs": [
+    "NIGHTSHIFT_WSL_RESULT_V1 task=DEV-PRED-INDEPENDENT-CONTINUITY-SERVICE-STATUS-20261008-E010 status=FAIL exit=2 rcs=1:2 error=TaskError detail=systemctl rc=3: × prediction-independent-continuity.service - Prediction independent continuity observation (no bridge modifications) event=1791484871-77322548d774"
+  ]
+}
