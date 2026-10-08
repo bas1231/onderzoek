@@ -1,0 +1,41 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-A2Z-R4P3-MATERIALIZE-DIAG-20261008-N1E135",
+  "source_commit": "d32d9e362ab8ce83dc46a255046ceceafeada512",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "High"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_runtime"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 120,
+  "notes": "Diagnose first failure of N1E134 only. Read local projectexecutor state/results/log fragments for that task and emit compact traceback/root cause. No model invocation, no materialization retry, no build/tests/measurement.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/diag_r4p3_materialize_n1e135.py",
+      "content": "from pathlib import Path\nimport json\ntid='DEV-PRED-A2Z-R4P3-MATERIALIZE-20261008-N1E134'\nroots=[Path.home()/'.local/state/prediction-project-executor',Path.home()/'.local/share/prediction-project-executor']\nhits=[]\nfor root in roots:\n    if root.exists():\n        for p in root.rglob('*'):\n            if tid in p.name and p.is_file():\n                hits.append(p)\nprint('ERROR_CLASS=R4P3_MATERIALIZE_DIAG')\nchunks=[]\nfor p in hits[:20]:\n    try:s=p.read_text(errors='replace')\n    except Exception as e:s='READERR:'+repr(e)\n    tail=' '.join(s.splitlines()[-20:])[-5000:]\n    chunks.append(str(p)+' :: '+tail)\nprint('ERROR='+' || '.join(chunks)[:12000])\nraise SystemExit(1)\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/diag_r4p3_materialize_n1e135.py"
+      ],
+      "timeout_seconds": 60
+    }
+  ]
+}
