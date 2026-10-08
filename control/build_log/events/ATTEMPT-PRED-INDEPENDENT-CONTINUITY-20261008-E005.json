@@ -1,0 +1,35 @@
+{
+  "schema": "PREDICTION_BUILD_LOG_EVENT_V1",
+  "event_id": "ATTEMPT-PRED-INDEPENDENT-CONTINUITY-20261008-E005",
+  "work_item_id": "PRED-INDEPENDENT-CONTINUITY-20261008",
+  "created_at_utc": "2026-10-08T18:22:52.894Z",
+  "event_type": "ATTEMPT",
+  "work_item_status": "IN_PROGRESS",
+  "outcome": "STARTED",
+  "title": "Install isolated read-only continuity observation service",
+  "objective": "Activate an independent bounded Prediction user service that observes stale governed build work, without modifying the existing command bus, executor, wake bridge, browser scripts, or model approval gates.",
+  "summary": "E005 will rerun deterministic unit tests and compile first. Only if clean, install separate module files and independent service/timer in allowlisted paths, start observation service and verify it, then enable/start own timer. Mode remains observe, no new ChatGPT launch events emitted.",
+  "why": "Permit unattended detection and safe immutable proposals while protecting existing proven infrastructure.",
+  "first_incomplete_step": "Need source tests PASS, bounded install, standalone service canary and timer active (same task ID returned in this chat).",
+  "next_action": "Observe E005 exact same-chat receipt; if failed, diagnose only first incomplete step via fresh task. On PASS, evaluate separately scoped launch actuation in observe/dry-run.",
+  "session_route_task_id": "SESSION-ROUTE-88ba3ef9802e307c74102659",
+  "task_ids": [
+    "DEV-PRED-INDEPENDENT-CONTINUITY-OBSERVE-INSTALL-20261008-E005"
+  ],
+  "commits": [
+    "50b8e01c045f6f1d5f9abd3aec6d9be2679ac66d"
+  ],
+  "evidence_refs": [
+    "control/independent_continuity/prediction-independent-continuity.service",
+    "control/independent_continuity/prediction-independent-continuity.timer",
+    "control/independent_continuity/scope.observe.json"
+  ],
+  "tags": [
+    "continuity",
+    "independent-service",
+    "observe-only",
+    "no-bridge-edit",
+    "runtime-install",
+    "safety"
+  ]
+}
