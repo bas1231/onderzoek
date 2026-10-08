@@ -1,0 +1,41 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-A2Z-R4P4-HANDOFF-RECOVERY-20261008-E230",
+  "source_commit": "0cfcc16cfa556033a52213af12489fb0c796cc78",
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-6",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_runtime"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 80,
+  "notes": "Read only exact E227 immutable claim and local receipt. No replay, no bridge changes.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/e230_claim_read.py",
+      "content": "from pathlib import Path\nimport json\nh=Path.home()\ntid='DEV-PRED-A2Z-R4P4-SOL-HANDOFF-20261008-E227'\nstate=json.loads((h/'.local/state/prediction-project-executor'/(tid+'.json')).read_text())\nassert state.get('status')=='CLAIMED'\nlog=h/'.local/share/prediction-chat-bridge/dev-task-receipts'/(tid+'.log')\nprint('E227_CLAIMED_LOG_EXISTS='+str(log.exists()),flush=True)\nif log.exists():\n lines=log.read_text(errors='replace').splitlines()\n print('E227_LOG_TAIL='+repr(lines[-5:])[:600],flush=True)\nraise SystemExit('E227_STALE_CLAIM_CONFIRMED')\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/e230_claim_read.py"
+      ],
+      "timeout_seconds": 20
+    }
+  ]
+}
