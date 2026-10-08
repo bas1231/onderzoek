@@ -1,0 +1,32 @@
+{
+  "schema": "PREDICTION_BUILD_LOG_EVENT_V1",
+  "event_id": "BLOCKED-PRED-INDEPENDENT-CONTINUITY-20261008-E008",
+  "work_item_id": "PRED-INDEPENDENT-CONTINUITY-20261008",
+  "created_at_utc": "2026-10-08T18:36:33.662Z",
+  "event_type": "HANDOFF",
+  "work_item_status": "IN_PROGRESS",
+  "outcome": "BLOCKED",
+  "title": "Startup diagnosis needs readable journal detail",
+  "objective": "Identify exact cause of standalone continuity observer service startup failure before modification.",
+  "summary": "E007 completed the read-only journal/ExecStart inspection successfully, but the short return omitted the journal text. An E008 follow-up diagnostic project-task creation was blocked by tool safety controls; no E008 command was dispatched.",
+  "why": "Without actual startup exception, correcting the service would be speculation.",
+  "first_incomplete_step": "Obtain actual error line from standalone service journal in a supported way; do not touch existing command bus/executor.",
+  "next_action": "Use a permitted evidence-visible read-only diagnostic path or user-supplied existing journal output, then fix only the standalone service and retest.",
+  "session_route_task_id": "SESSION-ROUTE-88ba3ef9802e307c74102659",
+  "task_ids": [
+    "DEV-PRED-INDEPENDENT-CONTINUITY-SERVICE-DIAG-20261008-E007"
+  ],
+  "commits": [
+    "ba0c796b4cd077c8617bea1b5cb0cdef177dd9ac"
+  ],
+  "evidence_refs": [
+    "NIGHTSHIFT_WSL_RESULT_V1 task=DEV-PRED-INDEPENDENT-CONTINUITY-SERVICE-DIAG-20261008-E007 status=PASS exit=0 rcs=1:0 head=50b8e01c045f6f1d5f9abd3aec6d9be2679ac66d event=1791484396-5fb14e9b1ea8"
+  ],
+  "tags": [
+    "continuity",
+    "startup",
+    "diagnostic",
+    "pending-evidence",
+    "bridge-frozen"
+  ]
+}
