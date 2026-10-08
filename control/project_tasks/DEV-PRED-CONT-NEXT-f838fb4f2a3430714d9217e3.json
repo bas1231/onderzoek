@@ -1,0 +1,24 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-CONT-NEXT-f838fb4f2a3430714d9217e3",
+  "source_commit": "231f27da769ccc2c9c2d1511470b630acebafdeb",
+  "intelligence_tier": "A",
+  "issuer": {"model": "GPT-5.6 Sol", "reasoning_level": "High"},
+  "safety": {"live_trading": false, "paid_actions": false, "wallet_actions": false, "remote_git_write": false, "credential_write": false},
+  "capabilities": ["read_repository", "write_worktree", "run_project_python", "read_runtime"],
+  "working_directory": ".",
+  "timeout_seconds": 120,
+  "notes": "Continuation from N1E124: read the same completed R4P2 PREBUILD final object and emit every field as flat text so concrete REVISE requirements are recoverable. No model invocation, build, tests, or measurement.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/read_r4p2_review_all_fields_cont_f838.py",
+      "content": "from pathlib import Path\nimport json\nb=Path.home()/'.local/share/prediction-project-executor/campaigns/FULL-A2Z-LIVE-20261004-V4'\np=b/'model_results'/'A2Z-V4-ASTRA-PREBUILD-DIRECT-20261007-R4P2.json'\no=json.loads(p.read_text())\nf=o.get('final','')\nr=json.loads(f) if isinstance(f,str) else (f or {})\ndef flat(v):\n    if isinstance(v,(dict,list)): v=json.dumps(v,ensure_ascii=False,separators=(',',':'))\n    s=str(v if v is not None else '')\n    return s.replace('\\n',' ').replace('\\r',' ').replace('|','/').replace('{','(').replace('}',')')[:7000]\nprint('ERROR_CLASS=R4P2_PREBUILD_ALL_FIELDS_CONT')\nprint('ERROR='+'|'.join(str(k).upper()+'='+flat(r[k]) for k in sorted(r)))\nraise SystemExit(1)\n"
+    },
+    {
+      "type": "python",
+      "argv": ["python3", "control/dev_checks/read_r4p2_review_all_fields_cont_f838.py"],
+      "timeout_seconds": 60
+    }
+  ]
+}
