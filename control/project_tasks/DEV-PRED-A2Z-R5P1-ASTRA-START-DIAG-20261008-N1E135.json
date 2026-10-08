@@ -1,0 +1,41 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-A2Z-R5P1-ASTRA-START-DIAG-20261008-N1E135",
+  "source_commit": "add30c130c58eab4e7c742d46eeb35db6d28dd5d",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "High"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_runtime"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 120,
+  "notes": "Read-only diagnosis of failed R5P1 Astra PREBUILD start task N1E134. Inspect local executor result/state files for the exact Python traceback and first incomplete assertion/path. No model invocation, service start, build, tests, measurement, trading, paid actions or wallet actions.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/r5p1_astra_start_diag_n1e135.py",
+      "content": "from pathlib import Path\nimport json\ntid='DEV-PRED-A2Z-R5P1-ASTRA-PREBUILD-START-20261008-N1E134'\nroots=[Path.home()/'.local/state/prediction-project-executor',Path.home()/'.local/share/prediction-project-executor']\nhits=[]\nfor root in roots:\n    if not root.exists(): continue\n    for p in root.rglob('*'):\n        if tid in p.name and p.is_file():\n            hits.append(p)\ndef clean(s): return str(s).replace('\\n',' ').replace('\\r',' ').replace('|','/')[:5000]\nparts=[]\nfor p in hits[:20]:\n    try: txt=p.read_text(errors='replace')\n    except Exception as e: txt='READERR:'+repr(e)\n    parts.append(str(p)+'::'+clean(txt))\nprint('ERROR_CLASS=R5P1_ASTRA_START_DIAG')\nprint('ERROR='+' || '.join(parts))\nraise SystemExit(1)\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/r5p1_astra_start_diag_n1e135.py"
+      ],
+      "timeout_seconds": 60
+    }
+  ]
+}
