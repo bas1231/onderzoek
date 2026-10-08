@@ -1,0 +1,35 @@
+{
+  "schema": "PREDICTION_BUILD_LOG_EVENT_V1",
+  "event_id": "20261008T172800Z-REDDIT-IDEA-MINE-E008-E009",
+  "work_item_id": "REDDIT-IDEA-MINE-V1",
+  "created_at_utc": "2026-10-08T17:28:00Z",
+  "event_type": "ATTEMPT",
+  "work_item_status": "IN_PROGRESS",
+  "outcome": "STARTED",
+  "title": "Reddit to Recon persistent offline pipeline",
+  "objective": "Add reliable Reddit idea ingestion into canonical Recon discovery and preserve governance gates.",
+  "summary": "E008 returned PASS exit=0 for persisted Recon regression. Added offline one-command pipeline and regressions on current source, dispatched E009 for pinned qualified verification.",
+  "why": "Previously only separate ingest and preview stages existed; a controlled persistent run and artifact receipt were needed.",
+  "next_action": "Inspect E009 result. If PASS, qualify ingestion input availability and integrate a permitted automatic source; do not claim real-time Arctic Shift scanning without proven access and freshness.",
+  "session_route_task_id": "SESSION-ROUTE-74c664afabf31305265af34b",
+  "task_ids": [
+    "DEV-PRED-REDDIT-PERSISTENCE-20261008-E008",
+    "DEV-PRED-REDDIT-PIPELINE-20261008-E009"
+  ],
+  "commits": [
+    "aae1782956a66ebaa14e8c0a7341b49220cc45cd",
+    "b081b5b0f4c3cc965301b7971bb400af6fcc43c7"
+  ],
+  "evidence_refs": [
+    "1791480224-759cc6dedba9",
+    "control/reddit_idea_mine/pipeline.py",
+    "tests/test_reddit_pipeline.py"
+  ],
+  "tags": [
+    "reddit",
+    "recon",
+    "discovery",
+    "pipeline"
+  ],
+  "first_incomplete_step": "E009 regression validation and legally available time-sensitive input source."
+}
