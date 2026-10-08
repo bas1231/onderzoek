@@ -1,0 +1,32 @@
+{
+  "schema": "PREDICTION_BUILD_LOG_EVENT_V1",
+  "work_item_id": "PRED-INDEPENDENT-CONTINUITY-20261008",
+  "created_at_utc": "2026-10-08T18:44:00.167Z",
+  "work_item_status": "IN_PROGRESS",
+  "objective": "Isolated independent observer service and recovery diagnostics, no frozen infrastructure mutations.",
+  "session_route_task_id": "SESSION-ROUTE-88ba3ef9802e307c74102659",
+  "tags": [
+    "continuity",
+    "sidecar",
+    "diagnostic",
+    "bridge-frozen"
+  ],
+  "event_id": "ATTEMPT-PRED-INDEPENDENT-CONTINUITY-20261008-E011",
+  "event_type": "ATTEMPT",
+  "outcome": "STARTED",
+  "title": "E011 classify standalone service startup journal",
+  "summary": "Use new repository-owned read-only startup journal classifier against only prediction-independent-continuity.service, with deterministic tests/compile and no service/runtime/bridge/executor writes.",
+  "why": "Collect bounded root-cause text from existing journal before selecting standalone code/service correction.",
+  "first_incomplete_step": "E011 classification not yet returned; no patch chosen.",
+  "next_action": "Wait for exact E011 result and make smallest sidecar-only fix based on evidence.",
+  "task_ids": [
+    "DEV-PRED-INDEPENDENT-CONTINUITY-SERVICE-ROOT-20261008-E011"
+  ],
+  "commits": [
+    "44e09a6dc79f8c6b81ecbb109aa3c73a9a23e74a"
+  ],
+  "evidence_refs": [
+    "control/independent_continuity/diagnose_service_start.py",
+    "tests/independent_continuity/test_diagnose_service_start.py"
+  ]
+}
