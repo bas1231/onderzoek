@@ -26,7 +26,7 @@ def fake_fetch(path, params):
             return {"data": [POST]}
         return {"data": []}
     if path == COMMENTS:
-        assert params["link_id"] == "t3_abcd123"
+        assert params["link_id"] == "abcd123"
         return {"data": [COMMENT]}
     raise AssertionError("unexpected endpoint")
 
@@ -48,6 +48,15 @@ class ArcticShiftSourceTests(unittest.TestCase):
             receipt = process(inbox, root)
             self.assertEqual(receipt["results"][0]["status"], "PROCESSED")
             self.assertFalse((root / "knowledge/candidates").exists())
+            self.assertEqual(write_inbox(result, inbox), path)
+            self.assertEqual(len(list(inbox.glob("*.json"))), 1)
+
+    def test_inbox_name_collision_or_symlink_refused(self):
+        with tempfile.TemporaryDirectory() as temp:
+            inbox = Path(temp)
+            result = collect(fake_fetch, now=CLOCK, comment_budget=0)
+            path = write_inbox(result, inbox)
+            path.write_text("unexpected replacement")
             with self.assertRaises(FileExistsError):
                 write_inbox(result, inbox)
 
