@@ -1,0 +1,41 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-A2Z-R4P3-E206-DECIDE-20261008-E207",
+  "source_commit": "8f5dd118f442f3e745c259e07539fe98412b6e80",
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-6",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_runtime"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 120,
+  "notes": "Read only; classify E203 and exact R4P3 request. No model actions.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/r4p3_e207.py",
+      "content": "from pathlib import Path\nimport json\nh=Path.home()\np=h/'.local/state/prediction-project-executor/DEV-PRED-A2Z-R4P3-SELECTION-PREP-20261008-E203.json'\nr=h/'.local/share/prediction-project-executor/campaigns/FULL-A2Z-LIVE-20261004-V4/requests/A2Z-V4-ASTRA-PREBUILD-DIRECT-20261008-R4P3.json'\ns=json.loads(p.read_text()) if p.exists() else {}\nq=json.loads(r.read_text()) if r.exists() else {}\nprint('E203_STATUS='+str(s.get('status','MISSING')))\nprint('E203_EXIT='+str(s.get('exit_code','MISSING')))\nprint('REQUEST='+str(int(r.exists())))\nprint('REQUEST_PHASE='+str(q.get('phase','MISSING')))\nprint('REQUEST_TASK_MATCH='+str(int(q.get('task_id')=='A2Z-V4-ASTRA-PREBUILD-DIRECT-20261008-R4P3')))\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/r4p3_e207.py"
+      ],
+      "timeout_seconds": 60
+    }
+  ]
+}
