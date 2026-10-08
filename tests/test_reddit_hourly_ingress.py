@@ -80,6 +80,11 @@ class HourlyRedditIngressTests(unittest.TestCase):
                         code.index("recon_data, recon_path = recon.run("))
         self.assertIn("PREDICTION_REDDIT_ARCTIC_SHIFT_ENABLED", code)
         self.assertIn("qualification_local", code)
+        self.assertIn("current['reddit_idea_mine']", code)
+        self.assertIn("### Reddit Idea Mine source", code)
+        self.assertLess(code.index("current['reddit_idea_mine']"),
+                        code.index("run_path.write_text("))
+        self.assertIn("'economic_conclusion': 'NO_PROVEN_EDGE'", code)
         # The production user service executes edge_hunter_cycle.py as a file,
         # not as a python -m package. The first-party package must resolve.
         self.assertIn("sys.path.insert(0, str(R))", code)
