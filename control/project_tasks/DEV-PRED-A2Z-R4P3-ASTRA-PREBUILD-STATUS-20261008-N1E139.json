@@ -1,0 +1,41 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-A2Z-R4P3-ASTRA-PREBUILD-STATUS-20261008-N1E139",
+  "source_commit": "453c72bdc0699b8155bd6c7925f257d468c40846",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "High"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_runtime"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 120,
+  "notes": "Read-only status probe for the already-dispatched R4P3 exact Astra PREBUILD task. Do not start/resume any service or model, do not build, test, or measure. Report request/result existence plus matching model-run checkpoint/state if present.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/r4p3_astra_status_n1e139.py",
+      "content": "from pathlib import Path\nimport json\nbase=Path.home()/'.local/share/prediction-project-executor/campaigns/FULL-A2Z-LIVE-20261004-V4'\ntid='A2Z-V4-ASTRA-PREBUILD-DIRECT-20261008-R4P3'\nreq=base/'requests'/f'{tid}.json'\nres=base/'model_results'/f'{tid}.json'\nruns=base/'models'/'runs'\nmatches=sorted(runs.glob(tid+'-*'), key=lambda p:p.stat().st_mtime) if runs.exists() else []\nparts=[f'REQUEST={int(req.exists())}',f'RESULT={int(res.exists())}',f'RUNS={len(matches)}']\nif matches:\n    p=matches[-1]\n    parts.append('CHECKPOINT='+p.name)\n    for name in ['COMPLETE.json','WORKER.json','events.jsonl']:\n        parts.append(name.upper().replace('.','_')+'='+str(int((p/name).exists())))\nstate=base/'models'/'STATE.json'\nif state.exists():\n    try:\n        s=json.loads(state.read_text())\n        parts += ['STATE='+str(s.get('state','')),'TASK='+str(s.get('task_id','')),'REASON='+str(s.get('reason','')),'RETRY_AT='+str(s.get('retry_at',''))]\n    except Exception as e: parts.append('STATE_PARSE='+type(e).__name__)\nprint('ERROR_CLASS=R4P3_ASTRA_STATUS')\nprint('ERROR='+'|'.join(parts))\nraise SystemExit(1)\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/r4p3_astra_status_n1e139.py"
+      ],
+      "timeout_seconds": 60
+    }
+  ]
+}
