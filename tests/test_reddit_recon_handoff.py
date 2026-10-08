@@ -34,5 +34,24 @@ class RedditReconHandoffTest(unittest.TestCase):
         batch=ingest([{**POST,"title":"Hello everyone","selftext":"","comments":[]}])
         self.assertEqual(preview(batch)["evidence_count"],0)
 
+    def test_recon_persistence_with_real_engine_is_watch_not_candidate(self):
+        import tempfile
+        from pathlib import Path
+        from unittest.mock import patch
+        from control.hourly import recon_engine as engine
+        from control.hourly import recon_candidate_bridge as candidate_bridge
+        batch=ingest([POST])
+        routing=to_recon_routing(batch)
+        with tempfile.TemporaryDirectory() as temp:
+            root=Path(temp)
+            routing_path=root/"reddit-routing.json"
+            routing_path.write_text(__import__("json").dumps(routing))
+            with patch.object(engine,"ROOT",root), patch.object(engine,"WATCHLIST",root/"knowledge/recon/watchlist.json"), patch.object(engine,"GRAPH",root/"knowledge/recon/opportunity_graph.json"), patch.object(engine,"OUT",root/"knowledge/runs/recon"), patch.object(engine,"HUNT_PLANS",root/"knowledge/runs/recon_hunts"):
+                result,_=engine.run("reddit-fixture",routing_path)
+                self.assertGreater(len(result["findings"]),0)
+                receipt,_=candidate_bridge.promote("reddit-fixture",root=root)
+                self.assertEqual(receipt["created_count"],0)
+                self.assertEqual(result["economic_conclusion"],"NO_PROVEN_EDGE")
+
 if __name__=="__main__":
     unittest.main()
