@@ -57,6 +57,28 @@ class InstalledLauncherDiagnosisTests(unittest.TestCase):
         self.assertEqual(rc, 2)
         self.assertIn("REGISTRATION_ENDPOINT_ABSENT", detail)
 
+    def test_missing_bootstrap_file_cannot_inherit_wrapper_success(self):
+        self.write("bridge_server.py", "import bridge_server_session_bootstrap")
+        rc, detail = classify(self.home)
+        self.assertEqual(rc, 2)
+        self.assertIn("bridge_server_session_bootstrap_py=MISSING", detail)
+
+    def test_oversized_bootstrap_is_rejected_after_valid_wrapper(self):
+        self.write("bridge_server.py", "import bridge_server_session_bootstrap")
+        self.write("bridge_server_session_bootstrap.py", "x" * 350001)
+        rc, detail = classify(self.home)
+        self.assertEqual(rc, 2)
+        self.assertIn("bridge_server_session_bootstrap_py=OVERSIZED_REFUSED", detail)
+
+    def test_symlinked_script_source_refused_even_if_server_capable(self):
+        self.write("bridge_server.py", "import bridge_server_session_bootstrap")
+        self.write("bridge_server_session_bootstrap.py",
+                   "register_dashboard_launcher\\n/dashboard-launcher/register")
+        (self.root / "prediction-chat-wake.user.js").symlink_to(self.root / "bridge_server.py")
+        rc, detail = classify(self.home)
+        self.assertEqual(rc, 2)
+        self.assertIn("prediction_chat_wake_user_js=SYMLINK_REFUSED", detail)
+
     def test_symlink_refusal(self):
         self.write("bridge_server.py", "import bridge_server_session_bootstrap")
         (self.root / "bridge_server_session_bootstrap.py").symlink_to(self.root / "bridge_server.py")
