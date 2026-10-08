@@ -1,0 +1,29 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-REDDIT-PROD-DIRTY-READ-20261008-E033",
+  "source_commit": "539b9c62e5c9a8c57a759655fe93ed2e6fbbfa3f",
+  "intelligence_tier": "B",
+  "issuer": {
+    "model": "GPT-6",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "production_staged_inspect"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 120,
+  "notes": "Read-only existing production staged/unstaged tracked path counts and exact file classes, compacted via deliberate fail_for_visibility. This FAIL is a diagnostic carrier, not execution failure. No checkout, reset, fetch to production, writes, services, bridge changes, trades, credentials.",
+  "operations": [
+    {
+      "type": "production_staged_inspect",
+      "fail_for_visibility": true
+    }
+  ]
+}
