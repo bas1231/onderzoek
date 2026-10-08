@@ -66,6 +66,12 @@ The source remains disabled by default, and automatically disabled in the
 offline `qualification_local` environment. The existing hourly timer can
 be reused; no extra scheduler or automatic activation is installed.
 
+The hourly cycle also records source status and coverage counts in
+the checkpointable canonical `knowledge/runs/hourly-*.json` manifest
+and under `### Reddit Idea Mine source` in the hourly markdown report.
+This uses the existing report and Git-checkpoint allowlist; the detailed
+local receipt does not need a new synchronization mechanism.
+
 For each run `hourly_ingress.py` writes a receipt under
 `knowledge/runs/reddit_idea_mine` with source status, errors, thread count,
 evidence count, and optional post-age metrics. **Speed is not an acceptance\ncriterion**: older useful discussions remain eligible within the bounded\nseven-day default discovery window (up to 30 days when explicitly configured). Untrusted Reddit text carries
