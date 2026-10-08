@@ -1,0 +1,38 @@
+{
+  "schema": "PREDICTION_BUILD_LOG_EVENT_V1",
+  "event_id": "20261008T184700Z-REDDIT-E017-PASS-E021",
+  "work_item_id": "REDDIT-IDEA-MINE-V1",
+  "created_at_utc": "2026-10-08T18:47:00Z",
+  "event_type": "RESULT",
+  "work_item_status": "IN_PROGRESS",
+  "outcome": "PASS",
+  "title": "Hourly Reddit Recon integration E017 verified",
+  "objective": "Integrate Arctic Shift source into existing hourly Recon without bypassing evidence gates or modifying the bridge.",
+  "summary": "E017 returned PASS exit=0 on pinned commit 5996b4d. E016 idempotency and comment lookup also PASS. Corrected production script import path and added 30-minute age metrics in hourly receipts. New E020/E021 verification tasks dispatched; E018 single-request canary and E019 timer readiness still awaiting receipts.",
+  "why": "A test-harness PASS alone does not establish actual API availability or that opt-in production polling is active.",
+  "next_action": "Check E018,E019,E020,E021 PASS receipts, then permit bounded existing production runtime source probe and capture time-correlated evidence before enabling recurring access.",
+  "session_route_task_id": "SESSION-ROUTE-74c664afabf31305265af34b",
+  "task_ids": [
+    "DEV-PRED-ARCTIC-HOURLY-HOOK-20261008-E017",
+    "DEV-PRED-REDDIT-HOURLY-IMPORT-20261008-E020",
+    "DEV-PRED-REDDIT-HOURLY-METRICS-20261008-E021"
+  ],
+  "commits": [
+    "5996b4d380cde7d991667d46e8ad559d461e5d10",
+    "e767bd45efac8d5b36ef3202ab716910204f3e85",
+    "035551190f44a444b8f5929865975449ea037001"
+  ],
+  "evidence_refs": [
+    "1791482285-55aabab2f0f8",
+    "control/reddit_idea_mine/hourly_ingress.py",
+    "control/hourly/hourly_cycle.py"
+  ],
+  "tags": [
+    "reddit",
+    "arctic-shift",
+    "recon",
+    "hourly",
+    "verification"
+  ],
+  "first_incomplete_step": "E018/E019 read-only readiness and source qualification; E020/E021 code verification; live WSL API response and safe feature flag activation"
+}
