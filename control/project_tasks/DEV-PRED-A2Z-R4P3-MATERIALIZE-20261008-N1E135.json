@@ -1,0 +1,42 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-A2Z-R4P3-MATERIALIZE-20261008-N1E135",
+  "source_commit": "e2c77e93c26744a7e3acdd16f84f77d4199d2c42",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "High"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_runtime",
+    "write_runtime"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 180,
+  "notes": "Validate and materialize existing immutable DIRECT_SOL R4P3 proposal request/result into the governed V4 runtime. No model invocation, build, tests, measurement, bridge mutation, service start, trading, paid or wallet actions.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/materialize_r4p3_n1e135.py",
+      "content": "from pathlib import Path\nimport json\nfrom control.model_execution.direct_sol_chat import validate_request, validate_result\nfrom control.model_execution.materialize_direct_sol import materialize\nTASK='A2Z-V4-SOL-PROPOSAL-DIRECT-20261008-R4P3'\nREQ=Path('control/model_execution/direct_requests')/(TASK+'.json')\nRES=Path('control/model_execution/direct_results')/(TASK+'.json')\nRUNTIME=Path.home()/'.local/share/prediction-project-executor/campaigns/FULL-A2Z-LIVE-20261004-V4'\nrequest=json.loads(REQ.read_text(encoding='utf-8'))\nresult=json.loads(RES.read_text(encoding='utf-8'))\nvalidate_request(request); validate_result(request,result)\nproposal=json.loads(result['final'])\nassert proposal['proposal_version']==5\nassert proposal['candidate_id']=='AUTO-DISCOVERY-54d13314c7879b58e46d'\nassert proposal['scientific_status']=='NO_PROVEN_EDGE'\nassert proposal['safety']=={'live_trading':False,'paid_actions':False,'wallet_actions':False}\nassert proposal['arithmetic_specification']['classification'].startswith('EDGE iff unrounded internal Decimal')\nassert len(proposal['boundary_cases'])==3\nassert proposal['frozen_harness_contract']['contract_id']=='FULL-A2Z-LIVE-20261004-V4-HARNESS-V1'\nenv=materialize(REQ,RES,RUNTIME)\nprint('R4P3_MATERIALIZE=PASS')\nprint('TASK_ID='+env['task_id'])\nprint('COMPLETION_SHA256='+env['completion_sha256'])\nprint('CHECKPOINT='+env['checkpoint'])\nprint('ROUTE='+env['route_task_id'])\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/materialize_r4p3_n1e135.py"
+      ],
+      "timeout_seconds": 120
+    }
+  ]
+}
