@@ -1,0 +1,40 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-A2Z-R4P3-STAGE-REPRO-20261008-N1E134",
+  "source_commit": "3d469032672fb5018e0de705e178b7a05ef459d4",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "High"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 120,
+  "notes": "Deterministically reproduce only the already-failed R4P3 direct-Sol staging/validation step in an isolated worktree. No model invocation, no runtime install/service action, no build, tests or measurement.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/r4p3_stage_repro_n1e134.py",
+      "content": "from __future__ import annotations\nimport hashlib,json\nfrom pathlib import Path\nfrom control.model_execution.direct_sol_chat import validate_request,validate_result\nfrom control.model_execution.direct_sol_record import normalized_run_files\nTASK=\"A2Z-V4-SOL-PROPOSAL-DIRECT-20261008-R4P3\"\nREQ=Path(\"control/model_execution/direct_requests\")/(TASK+\".json\")\nRES=Path(\"control/model_execution/direct_results\")/(TASK+\".json\")\nOUT=Path(\"control/dev_checks/r4p3_stage_repro_out\")\nrequest=json.loads(REQ.read_text(encoding=\"utf-8\"))\nresult=json.loads(RES.read_text(encoding=\"utf-8\"))\nvalidate_request(request)\nvalidate_result(request,result)\nproposal=json.loads(result[\"final\"])\nassert proposal[\"proposal_version\"]==5\nassert proposal[\"scientific_status\"]==\"NO_PROVEN_EDGE\"\nassert proposal[\"arithmetic_specification\"][\"classification\"].startswith(\"EDGE iff unrounded internal Decimal\")\nassert len(proposal[\"boundary_cases\"])==3\nassert proposal[\"frozen_harness_contract\"][\"contract_id\"]==\"FULL-A2Z-LIVE-20261004-V4-HARNESS-V1\"\nfiles=normalized_run_files(request,result)\nrun=OUT/\"run\"\nrun.mkdir(parents=True,exist_ok=True)\nfor name,text in files.items():\n    (run/name).write_text(text,encoding=\"utf-8\")\nprint(\"R4P3_STAGE_REPRO=PASS\")\nprint(\"FILES=\"+\",\".join(sorted(files)))\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/r4p3_stage_repro_n1e134.py"
+      ],
+      "timeout_seconds": 60
+    }
+  ]
+}
