@@ -1,0 +1,41 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-A2Z-R4P4-SOL-HANDOFF-20261008-E227",
+  "source_commit": "0c0377d124ad20851f11141cf9f93f09e9e539f9",
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-6",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_runtime"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 90,
+  "notes": "Handoff on Sol's already-attested delivery route. Upon same-chat result Sol worker must fetch exact runtime DIRECT_SOL request, respond using gpt-5.6-sol normal chat, write signed immutable direct_results via GitHub connector. No model claims from executor. Do not execute experiment tests.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/sol_r4p4_handoff_e227.py",
+      "content": "from pathlib import Path\nimport json,hashlib\np=Path.home()/'.local/share/prediction-project-executor/campaigns/FULL-A2Z-LIVE-20261004-V4/direct_requests/A2Z-V4-SOL-PROPOSAL-DIRECT-20261008-R4P4.json'\nassert p.is_file(),'R4P4_SOL_REQUEST_MISSING'\no=json.loads(p.read_text())\nassert o['task_id']=='A2Z-V4-SOL-PROPOSAL-DIRECT-20261008-R4P4'\nassert o['phase']=='SOL_PROPOSAL'\nassert o['target_model']=='gpt-5.6-sol'\nassert o['delivery_route_task_id']=='SESSION-ROUTE-246799adf99f0bf8336c27a0'\nassert o['input_sha256']==hashlib.sha256(o['prompt'].encode()).hexdigest()\nassert all(o[k] is False for k in ('live_trading','paid_actions','wallet_actions'))\nprint('SOL_R4P4_REQUEST_VERIFIED=PASS')\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/sol_r4p4_handoff_e227.py"
+      ],
+      "timeout_seconds": 35
+    }
+  ]
+}
