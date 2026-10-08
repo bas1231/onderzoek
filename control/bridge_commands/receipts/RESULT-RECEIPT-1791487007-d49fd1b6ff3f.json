@@ -1,0 +1,14 @@
+{
+  "schema": "PREDICTION_RESULT_RECEIPT_V1",
+  "receipt_id": "RESULT-RECEIPT-1791487007-d49fd1b6ff3f",
+  "event_id": "1791487007-d49fd1b6ff3f",
+  "source_task_id": "DEV-PRED-INDEPENDENT-CONTINUITY-LAUNCHER-DIAG-FIX-20261008-E021",
+  "created_at_utc": "2026-10-08T19:18:16.571Z",
+  "live_trading": false,
+  "paid_actions": false,
+  "wallet_actions": false,
+  "issuer": {
+    "model": "GPT-6",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  }
+}
