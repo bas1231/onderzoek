@@ -1,0 +1,28 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-REDDIT-PROD-READINESS-20261008-E026",
+  "source_commit": "1172bcbf29183ab0d840a0dfaab448ab3d599048",
+  "intelligence_tier": "B",
+  "issuer": {
+    "model": "GPT-6",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "production_inspect"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 180,
+  "notes": "Only read production branch HEAD, local main, dirty paths and topology; do not reconcile, switch branches, fetch arbitrary network, install, restart service, or modify bridge. Purpose: determine safe future Reddit source activation readiness.",
+  "operations": [
+    {
+      "type": "production_inspect"
+    }
+  ]
+}
