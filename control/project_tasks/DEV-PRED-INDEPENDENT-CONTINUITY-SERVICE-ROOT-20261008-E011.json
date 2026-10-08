@@ -1,0 +1,63 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-INDEPENDENT-CONTINUITY-SERVICE-ROOT-20261008-E011",
+  "source_commit": "44e09a6dc79f8c6b81ecbb109aa3c73a9a23e74a",
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-6",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "run_tests",
+    "run_project_python",
+    "read_logs"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 180,
+  "notes": "Read-only sidecar startup journal classifier. Unit strictly prediction-independent-continuity.service. All bridge/executor/runtime files frozen; no mutations or service restarts; a nonzero diagnostic classification is expected while target oneshot service has failed.",
+  "operations": [
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests/independent_continuity",
+        "-p",
+        "test_diagnose_service_start.py",
+        "-v"
+      ],
+      "test": true,
+      "timeout_seconds": 60
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "-m",
+        "compileall",
+        "-q",
+        "control/independent_continuity/diagnose_service_start.py"
+      ],
+      "timeout_seconds": 40
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/independent_continuity/diagnose_service_start.py"
+      ],
+      "timeout_seconds": 40
+    }
+  ]
+}
