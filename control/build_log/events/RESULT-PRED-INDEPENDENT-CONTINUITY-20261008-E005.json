@@ -1,0 +1,32 @@
+{
+  "schema": "PREDICTION_BUILD_LOG_EVENT_V1",
+  "event_id": "RESULT-PRED-INDEPENDENT-CONTINUITY-20261008-E005",
+  "work_item_id": "PRED-INDEPENDENT-CONTINUITY-20261008",
+  "created_at_utc": "2026-10-08T18:29:39.047Z",
+  "event_type": "RESULT",
+  "work_item_status": "IN_PROGRESS",
+  "outcome": "FAIL",
+  "title": "E005 rejected before installation",
+  "objective": "Install independent observation-only continuity service.",
+  "summary": "E005 returned FAIL exit=2 invalid timeout. DEV manifest used command timeout_seconds=1000, exceeding existing runner maximum 900. Projectexecutor not entered.",
+  "why": "Immutable DEV runner enforces 1-900 seconds, so the command was rejected before execution.",
+  "first_incomplete_step": "Issue fresh E006 with command timeout_seconds=900; no existing infrastructure changes.",
+  "next_action": "Run E006; require PASS with service/timer checks before claiming installation.",
+  "session_route_task_id": "SESSION-ROUTE-88ba3ef9802e307c74102659",
+  "task_ids": [
+    "DEV-PRED-INDEPENDENT-CONTINUITY-OBSERVE-INSTALL-20261008-E005"
+  ],
+  "commits": [
+    "a4644b491f9a4c9bf271d255ff1870777ac839d5"
+  ],
+  "evidence_refs": [
+    "NIGHTSHIFT_WSL_RESULT_V1 task=DEV-PRED-INDEPENDENT-CONTINUITY-OBSERVE-INSTALL-20261008-E005 status=FAIL exit=2 error=TaskError detail=invalid timeout event=1791483831-9210b744e164"
+  ],
+  "tags": [
+    "continuity",
+    "observe",
+    "fail",
+    "manifest",
+    "E005"
+  ]
+}
