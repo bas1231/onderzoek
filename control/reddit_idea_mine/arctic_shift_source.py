@@ -125,7 +125,7 @@ def collect(fetch=None, *, now: datetime | None = None,
                 comments_requested += 1
                 try:
                     payload = _entries(get(COMMENTS, {
-                        "link_id": "t3_" + pid, "limit": MAX_COMMENTS_PER_POST,
+                        "link_id": pid, "limit": MAX_COMMENTS_PER_POST,
                         "sort": "desc",
                     }), "comments")
                     for c in payload[:MAX_COMMENTS_PER_POST]:
@@ -164,8 +164,12 @@ def write_inbox(result: dict, inbox: Path) -> Path:
     digest = hashlib.sha256(body.encode("utf-8")).hexdigest()[:16]
     filename = "arctic-" + digest + ".json"
     target = inbox / filename
-    with target.open("x", encoding="utf-8") as handle:
-        handle.write(body + "\n")
+    try:
+        with target.open("x", encoding="utf-8") as handle:
+            handle.write(body + "\n")
+    except FileExistsError:
+        if target.is_symlink() or target.read_text(encoding="utf-8") != body + "\n":
+            raise
     return target
 
 
