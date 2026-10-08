@@ -1,0 +1,19 @@
+{
+  "schema": "PREDICTION_DIRECT_SOL_REQUEST_V1",
+  "task_id": "A2Z-V4-SOL-PROPOSAL-DIRECT-20261008-R5P1",
+  "phase": "SOL_PROPOSAL",
+  "campaign_id": "FULL-A2Z-LIVE-20261004-V4",
+  "candidate_id": "AUTO-DISCOVERY-54d13314c7879b58e46d",
+  "binding_sha256": "b4b215d7d3ff0d7153139fed7c943234331eff92d604f4654126e6cf4036dc72",
+  "prompt": "You are exactly GPT-5.6 Sol operating in regular Chat mode for the Prediction project.\nRevise the complete SOL_PROPOSAL for candidate AUTO-DISCOVERY-54d13314c7879b58e46d after exact GPT-6 Astra PREBUILD returned REVISE on A2Z-V4-SOL-PROPOSAL-DIRECT-20261007-R4P2.\n\nReturn ONLY one JSON object, no markdown and no commentary.\n\nPreserve the existing frozen qualification controls, three observations, synthetic-only scope, prohibited actions, artifact names and NO_PROVEN_EDGE scientific status. Do not build code or run tests.\n\nAstra's two blocking specification gaps must be resolved explicitly:\n\n1. Arithmetic / classification / rounding:\n- define exact internal arithmetic before display rounding;\n- use a fixed Decimal context and rounding semantics;\n- classification must use the unrounded internal net edge, never a rounded display value;\n- define rounded-zero reporting explicitly;\n- preregister tiny-positive, exact-zero and tiny-negative boundary expectations, including yes_ask=0.4999999999999, no_ask=0.5, fees=0;\n- zero edge is NO_EDGE; only strictly positive internal net edge is EDGE.\n\n2. Frozen execution harness:\n- identify the exact harness artifact among the three allowed artifacts;\n- specify runtime environment and exact invocation;\n- specify what the harness may do versus what the pure evaluator may do;\n- specify resource accounting, limit enforcement and failure criteria;\n- preserve frozen controls and observations;\n- after PREBUILD approval, every built file plus the exact frozen harness must be submitted to exact GPT-6 Astra POSTBUILD before any substantive test or measurement.\n\nCanonical frozen scope:\n- qualification_id: FULL-A2Z-LIVE-20261004-V4\n- hypothesis: positive complement edge iff YES ask + NO ask + fees < 1.00\n- negative control: yes_ask=0.62, no_ask=0.43, fees=0, expected total 1.05, expected edge -0.05, NO_EDGE\n- positive control: yes_ask=0.495, no_ask=0.495, fees=0, expected total 0.99, expected edge +0.01, EDGE\n- preregistered observations:\n  1) 0.62, 0.43, 0 -> expected -0.05\n  2) 0.61, 0.44, 0 -> expected -0.05\n  3) 0.60, 0.45, 0 -> expected -0.05\n- synthetic qualification only; scientific_status remains NO_PROVEN_EDGE\n- no external market access, orders, live trading, paid actions or wallet actions\n- Python standard library only\n- artifact names exactly complement_checker_v4.py, test_complement_checker_v4.py, qualification_stream_v4.json\n- input handling fail closed on bools, subclasses/custom objects, non-finite/out-of-range values and unknown fields without invoking custom hooks\n- no substantive tests or measurement before exact GPT-6 Astra POSTBUILD approval\n- any Astra REVISE/REJECT returns to Sol\n\nInclude proposal_version, intended_artifacts, calculation, boundary_cases, execution_harness, data_and_time_scope.preregistered_outputs, safety with exact false flags, falsification, acceptance_criteria, resource_constraints and governance.",
+  "input_sha256": "21a0541cfe94f43c61b358af40a642a18be6b2c6796e9bc532f7733e47ba27fb",
+  "target_model": "gpt-5.6-sol",
+  "target_model_display": "GPT-5.6 Sol",
+  "target_experience": "CHAT",
+  "execution_layer": "DIRECT_SOL_CHAT",
+  "delivery_route_task_id": "SESSION-ROUTE-246799adf99f0bf8336c27a0",
+  "created_at_utc": "2026-10-08T09:25:00Z",
+  "live_trading": false,
+  "paid_actions": false,
+  "wallet_actions": false
+}
