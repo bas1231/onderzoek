@@ -1,0 +1,42 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-REDDIT-RECON-GATE-20261008-E003",
+  "source_commit": "a7888956ed861f24e38232f78cf27d4e1f55d0de",
+  "intelligence_tier": "B",
+  "issuer": {
+    "model": "GPT-6",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "run_tests"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 240,
+  "notes": "Regression prove Reddit discovery cannot bypass independent evidence and existing Recon candidate gate. No network/trading/bridge changes.",
+  "operations": [
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests",
+        "-p",
+        "test_reddit_recon_gate.py",
+        "-v"
+      ],
+      "test": true,
+      "timeout_seconds": 180
+    }
+  ]
+}
