@@ -1,0 +1,32 @@
+{
+  "schema": "PREDICTION_BUILD_LOG_EVENT_V1",
+  "event_id": "REDDIT-E035-PATH-PRESERVATION-CHECK-20261008",
+  "work_item_id": "REDDIT-IDEA-MINE-V1",
+  "created_at_utc": "2026-10-08T19:07:50.272Z",
+  "event_type": "ATTEMPT",
+  "work_item_status": "IN_PROGRESS",
+  "outcome": "STARTED",
+  "title": "E035 read-only exact path classification for 24 local runtime records",
+  "objective": "Classify which 24 noncanonical untracked files must be preserved before safely updating Reddit scout production.",
+  "summary": "E034 observed 24 noncanonical untracked files: 22 under runs, one candidate state, one Astra wake. E035 uses existing production_compare_worktree read-only report_mode=unique_paths; it exposes path names but does not read or print file contents, edit the production worktree, touch the bridge or run the scout. Intentional fail_for_visibility is expected. E033 tracked changes zero.",
+  "why": "Check exact paths and retention/provenance before any prospective production code fast-forward; avoid silent data loss.",
+  "next_action": "Receive E035 diagnostic path list and verify safe non-overlap/canonical representation strategy. Preserve all files; do not modify transport or production without satisfying bridge freeze and branch reconciliation.",
+  "session_route_task_id": "SESSION-ROUTE-74c664afabf31305265af34b",
+  "task_ids": [
+    "DEV-PRED-REDDIT-UNTRACKED-PATHS-20261008-E035"
+  ],
+  "commits": [
+    "539b9c62e5c9a8c57a759655fe93ed2e6fbbfa3f"
+  ],
+  "evidence_refs": [
+    "1791486147-91dc0fa98612"
+  ],
+  "tags": [
+    "reddit",
+    "production",
+    "untracked",
+    "read-only",
+    "preservation"
+  ],
+  "first_incomplete_step": "Path-level classification of untracked records before any source activation."
+}
