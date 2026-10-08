@@ -1,0 +1,41 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-A2Z-E208-EXCEPTION-20261008-E211",
+  "source_commit": "5fc78c51838c668bd6fb5e02b972dc3f72e2815e",
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-6",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_logs"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 90,
+  "notes": "Read-only capture tail of E208 receipt to locate actual exception. No bridge mutation.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/e211.py",
+      "content": "from pathlib import Path\np=Path.home()/'.local/share/prediction-chat-bridge/dev-task-receipts/DEV-PRED-A2Z-R4P3-SELECTION-RETRY-20261008-E208.log'\ns=p.read_text(errors='replace').splitlines() if p.exists() else []\nfor line in s[-24:]:\n if line.strip(): print('DIAG='+line.strip()[:200])\nraise SystemExit('E208_TAIL='+ ' / '.join(x.strip()[:95] for x in s[-5:])[:480])\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/e211.py"
+      ],
+      "timeout_seconds": 30
+    }
+  ]
+}
