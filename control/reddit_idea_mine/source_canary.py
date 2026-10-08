@@ -30,6 +30,9 @@ def probe(fetch=None, *, now: datetime | None = None) -> dict:
         "requests": 1,
         "records_seen": 0,
         "newest_post_age_minutes": None,
+        "archive_ingest_lag_minutes": None,
+        "archive_to_probe_minutes": None,
+        "archive_timestamp_observed": False,
         "status": "UNVERIFIED",
         "economic_conclusion": "NO_PROVEN_EDGE",
         "live_trading": False,
@@ -44,6 +47,7 @@ def probe(fetch=None, *, now: datetime | None = None) -> dict:
         if not isinstance(posts, list):
             raise ValueError("invalid API response")
         ages = []
+        newest = None
         for post in posts[:3]:
             if not isinstance(post, dict):
                 continue
@@ -56,11 +60,23 @@ def probe(fetch=None, *, now: datetime | None = None) -> dict:
             if age < -2:
                 continue
             ages.append(max(0.0, age))
+            if newest is None or ts > newest["created"]:
+                archived = post.get("retrieved_on")
+                newest = {"created": ts, "archived": archived}
         output["records_seen"] = len(ages)
         if not ages:
             output["status"] = "EMPTY_OR_INVALID"
         else:
             output["newest_post_age_minutes"] = round(min(ages), 2)
+            archived = newest["archived"]
+            created = newest["created"]
+            if (type(archived) in (float, int)
+                    and created - 120 <= archived <= clock.timestamp() + 120):
+                output["archive_timestamp_observed"] = True
+                output["archive_ingest_lag_minutes"] = round(
+                    max(0.0, (archived - created) / 60), 2)
+                output["archive_to_probe_minutes"] = round(
+                    max(0.0, (clock.timestamp() - archived) / 60), 2)
             output["status"] = (
                 "FRESH_DATA_OBSERVED" if min(ages) <= MAX_AGE_MINUTES
                 else "STALE_DATA_OBSERVED"
