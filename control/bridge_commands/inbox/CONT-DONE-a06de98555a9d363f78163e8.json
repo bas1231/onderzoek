@@ -1,0 +1,19 @@
+{
+  "schema": "PREDICTION_BRIDGE_COMMAND_V1",
+  "task_id": "CONT-DONE-a06de98555a9d363f78163e8",
+  "action": "BRIDGE_PING",
+  "created_at_utc": "2026-10-08T08:14:15Z",
+  "route_task_id": null,
+  "delivery_mode": "headless",
+  "live_trading": false,
+  "paid_actions": false,
+  "wallet_actions": false,
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "notes": "Close superseded N1E134 continuation. A newer substantive diagnostic task already exists: DEV-PRED-A2Z-R4P3-MATERIALIZE-DIAG-20261008-N1E135. No duplicate NEXT.",
+  "auto_continue": false,
+  "parent_continuation_id": "CONT-a06de98555a9d363f78163e8"
+}
