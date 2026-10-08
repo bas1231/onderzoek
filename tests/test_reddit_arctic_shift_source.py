@@ -72,6 +72,18 @@ class ArcticShiftSourceTests(unittest.TestCase):
         self.assertEqual(len(calls), 5)
         self.assertEqual(output["requests_upper_bound"], 5)
 
+    def test_seven_day_search_without_realtime_requirement(self):
+        seven_days_old = CLOCK.timestamp() - 6 * 24 * 3600
+        def historical(path, params):
+            if path == POSTS and params["subreddit"] == "kalshi":
+                self.assertEqual(params["after"], "2026-10-01")
+                return {"data": [{**POST, "created_utc": seven_days_old}]}
+            return {"data": []}
+        result = collect(historical, now=CLOCK, comment_budget=0)
+        self.assertEqual(len(result["records"]), 1)
+        with self.assertRaises(ValueError):
+            collect(historical, now=CLOCK, lookback_hours=24*31)
+
     def test_post_subreddit_and_id_are_not_trusted(self):
         def get(path, params):
             if path == POSTS and params["subreddit"] == "kalshi":
