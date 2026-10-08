@@ -1,0 +1,47 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-CONT-NEXT-dbf6a75aa9cba449b43667fc",
+  "source_commit": "c2f1e5afb77264ca8b4ae24383196286874ae72e",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "High"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "read_runtime",
+    "user_service_manage",
+    "read_logs"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 180,
+  "notes": "Continuation from R4P3 Astra PREBUILD start. Read-only verification of the already-started exact R4P3 PREBUILD service/runtime. Do not create a new model request, do not restart unless existing canonical service is inactive and current continuation semantics require status only; no build, tests, measurement, paid actions or live trading.",
+  "operations": [
+    {
+      "type": "service",
+      "verb": "status",
+      "unit": "prediction-a2z-v4-model@A2Z-V4-ASTRA-PREBUILD-DIRECT-20261008-R4P3.service"
+    },
+    {
+      "type": "journal",
+      "unit": "prediction-a2z-v4-model@A2Z-V4-ASTRA-PREBUILD-DIRECT-20261008-R4P3.service",
+      "lines": 160
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/jobs/full_a2z_live_qualification_v4.py",
+        "status"
+      ],
+      "timeout_seconds": 60
+    }
+  ]
+}
