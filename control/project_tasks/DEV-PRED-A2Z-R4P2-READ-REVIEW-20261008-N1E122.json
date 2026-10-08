@@ -1,0 +1,24 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-A2Z-R4P2-READ-REVIEW-20261008-N1E122",
+  "source_commit": "a700afb3a992ea12cf562194336a1e663598bdd1",
+  "intelligence_tier": "A",
+  "issuer": {"model": "GPT-5.6 Sol", "reasoning_level": "High"},
+  "safety": {"live_trading": false, "paid_actions": false, "wallet_actions": false, "remote_git_write": false, "credential_write": false},
+  "capabilities": ["read_repository", "write_worktree", "run_project_python", "read_runtime"],
+  "working_directory": ".",
+  "timeout_seconds": 120,
+  "notes": "Read-only inspection of the already completed R4P2 review record.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/read_r4p2_review_n1e122.py",
+      "content": "from pathlib import Path\nimport json\nb=Path.home()/'.local/share/prediction-project-executor/campaigns/FULL-A2Z-LIVE-20261004-V4'\np=b/'model_results'/'A2Z-V4-ASTRA-PREBUILD-DIRECT-20261007-R4P2.json'\no=json.loads(p.read_text())\nprint('ERROR_CLASS=R4P2_REVIEW_RECORD')\nprint('ERROR='+str(o.get('final','')))\nraise SystemExit(1)\n"
+    },
+    {
+      "type": "python",
+      "argv": ["python3", "control/dev_checks/read_r4p2_review_n1e122.py"],
+      "timeout_seconds": 60
+    }
+  ]
+}
