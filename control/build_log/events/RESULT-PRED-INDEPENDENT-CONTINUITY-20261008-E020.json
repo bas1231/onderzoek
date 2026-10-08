@@ -1,0 +1,32 @@
+{
+  "schema": "PREDICTION_BUILD_LOG_EVENT_V1",
+  "work_item_id": "PRED-INDEPENDENT-CONTINUITY-20261008",
+  "created_at_utc": "2026-10-08T19:15:47.826Z",
+  "work_item_status": "IN_PROGRESS",
+  "objective": "Diagnose independent new-ChatGPT-session launcher prerequisites without mutating frozen Prediction bridge/executor.",
+  "session_route_task_id": "SESSION-ROUTE-88ba3ef9802e307c74102659",
+  "tags": [
+    "continuity",
+    "launcher-registry",
+    "fail-closed",
+    "bridge-frozen"
+  ],
+  "event_id": "RESULT-PRED-INDEPENDENT-CONTINUITY-20261008-E020",
+  "event_type": "RESULT",
+  "outcome": "FAIL",
+  "title": "E020 source diagnostic regression failed before inspecting runtime",
+  "summary": "E020 same-chat status=FAIL exit=2 rcs=1:2 python rc=1; compact error only includes a passing test, not actual failure line. Code inspection independently identifies a fail-open flaw in standalone diagnostic: symlinked bootstrap skipped after wrapper set server_ok=True, resulting in incorrectly successful classification. Corrected source and extended regressions; no runtime inspection occurred during E020.",
+  "why": "The standalone diagnostic aggregated status incrementally without independently enforcing both prerequisites and symlink/size safety. Original error log is truncated so no claim of complete E020 failure root cause.",
+  "first_incomplete_step": "Test corrected standalone diagnostic and obtain bounded factual verdict on installed wake-server sources.",
+  "next_action": "E021 tests fail-closed source diagnostic and attempts read-only installed runtime classification. No bridge changes.",
+  "task_ids": [
+    "DEV-PRED-INDEPENDENT-CONTINUITY-INSTALLED-LAUNCHER-DIAG-20261008-E020"
+  ],
+  "commits": [
+    "f64a712828d86204d6fce59770196738731f4aa6",
+    "82d99a9ee669d025c814e54acf786cec4b049600"
+  ],
+  "evidence_refs": [
+    "NIGHTSHIFT_WSL_RESULT_V1 task=DEV-PRED-INDEPENDENT-CONTINUITY-INSTALLED-LAUNCHER-DIAG-20261008-E020 status=FAIL exit=2 rcs=1:2 error=TaskError detail=python rc=1: test_empty_runtime_read_only_failure (test_diagnose_installed_launcher_support.InstalledLauncherDiagnosisTests.test_empty_runtime_read_only_failure) ... ok event=1791486800-cc7ee913adc6"
+  ]
+}
