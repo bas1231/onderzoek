@@ -1,0 +1,33 @@
+{
+  "schema": "PREDICTION_BUILD_LOG_EVENT_V1",
+  "event_id": "REDDIT-E027-PASS-20261008",
+  "work_item_id": "REDDIT-IDEA-MINE-V1",
+  "created_at_utc": "2026-10-08T18:35:12.059Z",
+  "event_type": "RESULT",
+  "work_item_status": "IN_PROGRESS",
+  "outcome": "PASS",
+  "title": "E027 canonical hourly Reddit reporting qualified",
+  "objective": "Record read-only Arctic Shift Reddit discovery status and Recon evidence in existing Prediction hourly report and canonical run manifest.",
+  "summary": "Same-chat WSL result: NIGHTSHIFT_WSL_RESULT_V1 task=DEV-PRED-REDDIT-HOURLY-REPORT-20261008-E027 status=PASS exit=0 rcs=1:0 head=4f9103c587d98b4f1dd11f8e55c8040bf6d97a57 event=1791483983-22aea045283f. Offline suite for source status, posts, leads, evidence and errors in hourly reporting succeeded. Actual source polling in production remains unproven and disabled.",
+  "why": "Ensures Reddit discovery appears in pre-existing durable Prediction reporting rather than only a local subdirectory.",
+  "next_action": "Read previously dispatched E019 timer readiness, E028 empty-result qualification, E029 explicit production topology assertion. If protected runtime is eligible, then obtain one bounded real Arctic Shift response in a permitted network runtime without bypassing project executor restrictions. Preserve all existing governance gates.",
+  "session_route_task_id": "SESSION-ROUTE-74c664afabf31305265af34b",
+  "task_ids": [
+    "DEV-PRED-REDDIT-HOURLY-REPORT-20261008-E027"
+  ],
+  "commits": [
+    "4f9103c587d98b4f1dd11f8e55c8040bf6d97a57"
+  ],
+  "evidence_refs": [
+    "1791483983-22aea045283f",
+    "control/hourly/hourly_cycle.py"
+  ],
+  "tags": [
+    "reddit",
+    "hourly",
+    "reporting",
+    "recon",
+    "offline-qualification"
+  ],
+  "first_incomplete_step": "E019/E028/E029 result receipts and safe production readiness, then one real API canary."
+}
