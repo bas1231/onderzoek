@@ -19,6 +19,30 @@ class ArcticCanaryTests(unittest.TestCase):
         self.assertEqual(result["requests"],1)
         self.assertEqual(result["economic_conclusion"],"NO_PROVEN_EDGE")
 
+    def test_archive_ingest_lag_from_api_retrieved_on(self):
+        created = NOW.timestamp() - 3600
+        def archive(path, params):
+            return {"data": [{"subreddit": "Kalshi",
+                             "created_utc": created,
+                             "retrieved_on": created + 180}]}
+        result = probe(archive, now=NOW)
+        self.assertEqual(result["status"], "FRESH_DATA_OBSERVED")
+        self.assertTrue(result["archive_timestamp_observed"])
+        self.assertEqual(result["archive_ingest_lag_minutes"], 3.0)
+        self.assertEqual(result["archive_to_probe_minutes"], 57.0)
+
+    def test_archive_timestamp_missing_or_future_not_faked(self):
+        created = NOW.timestamp() - 3600
+        result = probe(served(created), now=NOW)
+        self.assertFalse(result["archive_timestamp_observed"])
+        self.assertIsNone(result["archive_ingest_lag_minutes"])
+        def future(path, params):
+            return {"data": [{"subreddit":"Kalshi",
+                             "created_utc": created,
+                             "retrieved_on": NOW.timestamp() + 500}]}
+        result = probe(future, now=NOW)
+        self.assertFalse(result["archive_timestamp_observed"])
+
     def test_stale_data(self):
         result=probe(served(NOW.timestamp()-(MAX_AGE_MINUTES+10)*60),now=NOW)
         self.assertEqual(result["status"],"STALE_DATA_OBSERVED")
