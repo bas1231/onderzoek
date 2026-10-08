@@ -1,0 +1,38 @@
+{
+  "schema": "PREDICTION_BUILD_LOG_EVENT_V1",
+  "event_id": "20261008T192500Z-REDDIT-RELIABILITY-E024-E025",
+  "work_item_id": "REDDIT-IDEA-MINE-V1",
+  "created_at_utc": "2026-10-08T18:20:10.425Z",
+  "event_type": "ATTEMPT",
+  "work_item_status": "IN_PROGRESS",
+  "outcome": "STARTED",
+  "title": "Reliability-first Reddit discovery and balanced critique collection",
+  "objective": "Favor safely receiving useful threads and varied critical comments over real-time source latency.",
+  "summary": "User explicitly stated scout speed is not important. Changed default discovery window to seven days, up to bounded 30 days, made source canary accept valid older posts, and rotated limited comment queries fairly across the five subreddits. E024 and E025 dispatched for deterministic offline WSL verification. Production source remains off pending E019/E020/E021/E022/E023 readiness and a permitted actual API canary.",
+  "why": "Real-time latency is not the user's scientific acceptance criterion; breadth, security and independent-source governance matter more.",
+  "next_action": "Consume E024/E025 results; resolve any regression. Check E019-E023 results and runtime branch reconciliation before any source activation. Confirm actual bounded API response without executor network bypass.",
+  "session_route_task_id": "SESSION-ROUTE-74c664afabf31305265af34b",
+  "task_ids": [
+    "DEV-PRED-REDDIT-RELIABLE-DISCOVERY-20261008-E024",
+    "DEV-PRED-REDDIT-COMMENT-COVERAGE-20261008-E025"
+  ],
+  "commits": [
+    "a5f22ba1461731a0604aff1d835ed36709ec3e77",
+    "a284f5484cbe6494d97f791a5cee576f3b88c953",
+    "1172bcbf29183ab0d840a0dfaab448ab3d599048"
+  ],
+  "evidence_refs": [
+    "control/reddit_idea_mine/arctic_shift_source.py",
+    "control/reddit_idea_mine/source_canary.py",
+    "control/reddit_idea_mine/hourly_ingress.py",
+    "tests/test_reddit_arctic_shift_source.py"
+  ],
+  "tags": [
+    "reddit",
+    "arctic-shift",
+    "reliability",
+    "coverage",
+    "recon"
+  ],
+  "first_incomplete_step": "E024/E025 full WSL regression results; existing E019-E023 results and bounded authorized runtime source readiness."
+}
