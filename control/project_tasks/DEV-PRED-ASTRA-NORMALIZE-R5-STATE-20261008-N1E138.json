@@ -1,0 +1,41 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-ASTRA-NORMALIZE-R5-STATE-20261008-N1E138",
+  "source_commit": "8d614a8fd38b68583027fbcfc5893f514916d770",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "High"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_runtime"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 120,
+  "notes": "Targeted read-only status check for the structural Astra normalization repair N1E132. Use exact known state and receipt paths only; no recursive scan, no code changes, no tests, no model invocation.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/normalize_r5_state_n1e138.py",
+      "content": "from pathlib import Path\nimport json\ntid='DEV-PRED-ASTRA-RESULT-NORMALIZE-R5-20261008-N1E132'\nstate=Path.home()/'.local/state/prediction-project-executor'/(tid+'.json')\nreceipt=Path.home()/'.local/share/prediction-chat-bridge/dev-task-receipts'/(tid+'.log')\nparts=[]\nif state.is_file():\n    o=json.loads(state.read_text())\n    for k in ['task_id','status','exit_code','error','detail','source_commit','worktree','branch']:\n        if k in o: parts.append(k.upper()+'='+str(o.get(k)).replace('\\n',' ').replace('|','/'))\nelse: parts.append('STATE_MISSING=1')\nif receipt.is_file():\n    s=' '.join(receipt.read_text(errors='replace').splitlines())\n    parts.append('RECEIPT_TAIL='+s[-3500:].replace('|','/'))\nelse: parts.append('RECEIPT_MISSING=1')\nprint('ERROR_CLASS=N1E132_NORMALIZE_EXACT_STATE')\nprint('ERROR='+'|'.join(parts)[:9000])\nraise SystemExit(1)\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/normalize_r5_state_n1e138.py"
+      ],
+      "timeout_seconds": 60
+    }
+  ]
+}
