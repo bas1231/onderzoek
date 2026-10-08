@@ -32,7 +32,7 @@ MAX_COMMENTS = 150
 def _text(value: object, limit: int = MAX_TEXT) -> str:
     if not isinstance(value, str):
         return ""
-    return re.sub(r"\\s+", " ", value).strip()[:limit]
+    return re.sub(r"\s+", " ", value).strip()[:limit]
 
 
 def _discussion_id(raw: dict) -> str:
