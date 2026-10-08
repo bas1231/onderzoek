@@ -1,0 +1,41 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-A2Z-R4P3-ASTRA-RESULT-20261008-E216",
+  "source_commit": "3e369dc5e24e5c7ff3ef07e2631a7a96e381c2db",
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-6",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_runtime"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 100,
+  "notes": "Bounded read-only result existence and exact Astra identity after E215. Never build or test.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/r4p3_astra_result_e216.py",
+      "content": "from pathlib import Path\nimport json\nroot=Path.home()/'.local/share/prediction-project-executor/campaigns/FULL-A2Z-LIVE-20261004-V4'\nt='A2Z-V4-ASTRA-PREBUILD-DIRECT-20261008-R4P3'\np=root/'model_results'/(t+'.json')\nif not p.is_file():\n raise SystemExit('ASTRA_PREBUILD=WAITING_RESULT')\no=json.loads(p.read_text())\nif o.get('task_id')!=t or o.get('phase')!='ASTRA_PREBUILD' or o.get('model')!='gpt-6-astra':\n raise SystemExit('ASTRA_PREBUILD=INVALID_PROVENANCE')\nprint('ASTRA_PREBUILD_RESULT=EXISTS')\nprint('RESULT_TASK='+t)\nprint('CHECKPOINT='+str(o.get('checkpoint','MISSING'))[:180])\nprint('ASTRA_PREBUILD_RESULT_READ=PASS')\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/r4p3_astra_result_e216.py"
+      ],
+      "timeout_seconds": 40
+    }
+  ]
+}
