@@ -1,0 +1,33 @@
+{
+  "schema": "PREDICTION_BUILD_LOG_EVENT_V1",
+  "work_item_id": "PRED-INDEPENDENT-CONTINUITY-20261008",
+  "created_at_utc": "2026-10-08T18:53:07.364Z",
+  "work_item_status": "IN_PROGRESS",
+  "objective": "Independent fail-closed Prediction continuity observation without modifications to frozen bridge and project executor.",
+  "session_route_task_id": "SESSION-ROUTE-88ba3ef9802e307c74102659",
+  "tags": [
+    "continuity",
+    "sidecar",
+    "legacy",
+    "bridge-frozen",
+    "no-trading"
+  ],
+  "event_id": "RESULT-PRED-INDEPENDENT-CONTINUITY-20261008-E012",
+  "event_type": "RESULT",
+  "outcome": "FAIL",
+  "title": "E012 discovered legacy CHECKPOINT and BLOCKER event types",
+  "summary": "E012 read the pinned Git worktree and returned diagnostic FAIL rc=2 after finding two historical event_type values outside today's canonical schema: 20261005T2045Z-A2Z-RESUME-E045.json and 20261005T2057Z-A2Z-COORDINATION-PROPOSAL.json. Historical records remain unchanged.",
+  "why": "Observer previously treated every noncanonical event_type as a global malformed snapshot. This fail-closed startup prevented the sidecar service from starting.",
+  "first_incomplete_step": "Validate whether sidecar-only per-work-item opaque legacy barriers allow a full current ledger scan while preserving no-automatic-resubmission invariants.",
+  "next_action": "E013 runs full independent continuity regression + live pinned-source ledger canary; only if both PASS, install updated observer.py and activate the new standalone observation timer.",
+  "task_ids": [
+    "DEV-PRED-INDEPENDENT-CONTINUITY-LEDGER-DIAG-20261008-E012"
+  ],
+  "commits": [
+    "444565fa75c57a04a1386978dee7b38ff431be8a",
+    "54c2f3c3bd7f50157f5dbb2bb8a495cbc0c43559"
+  ],
+  "evidence_refs": [
+    "NIGHTSHIFT_WSL_RESULT_V1 task=DEV-PRED-INDEPENDENT-CONTINUITY-LEDGER-DIAG-20261008-E012 status=FAIL exit=2 rcs=1:2 error=TaskError detail=python rc=2: LEDGER_INVALID=20261005T2045Z-A2Z-RESUME-E045.json:invalid_event_type | 20261005T2057Z-A2Z-COORDINATION-PROPOSAL.json:invalid_event_type event=1791485349-19fca97332c6"
+  ]
+}
