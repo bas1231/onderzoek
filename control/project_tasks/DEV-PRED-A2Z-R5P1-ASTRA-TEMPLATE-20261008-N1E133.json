@@ -1,0 +1,41 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-A2Z-R5P1-ASTRA-TEMPLATE-20261008-N1E133",
+  "source_commit": "6fd3b2e2101b01fb14a7c3ba171d1ac315cf920f",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "High"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_runtime"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 120,
+  "notes": "Read-only inspection of the already proven R4P2 Astra PREBUILD runtime request to capture exact request schema/template for revised R5P1. No model invocation, build, tests, measurement or runtime mutation.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/read_r4p2_astra_request_template_n1e133.py",
+      "content": "from pathlib import Path\nimport json\np=Path.home()/'.local/share/prediction-project-executor/campaigns/FULL-A2Z-LIVE-20261004-V4/requests/A2Z-V4-ASTRA-PREBUILD-DIRECT-20261007-R4P2.json'\no=json.loads(p.read_text())\nprint('ERROR_CLASS=R5P1_ASTRA_TEMPLATE')\nprint('ERROR='+json.dumps(o,ensure_ascii=False,sort_keys=True,separators=(',',':'))[:12000].replace('|','/').replace('\\n',' '))\nraise SystemExit(1)\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/read_r4p2_astra_request_template_n1e133.py"
+      ],
+      "timeout_seconds": 60
+    }
+  ]
+}
