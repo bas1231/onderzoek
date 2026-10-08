@@ -59,10 +59,14 @@ def run(config: dict, *, home: Path, now_unix: float) -> dict:
     snapshot = scan(source, proposals, datetime.fromtimestamp(now_unix, timezone.utc), stale_minutes)
     if snapshot["status"] != "PASS":
         raise UnsafeLaunch("invalid event snapshot")
-    result = process_once(
-        source, proposals, state, bridge, fetch_head, set(allow),
-        now_unix=now_unix, emit=(mode == "emit"), stale_minutes=stale_minutes
-    )
+    if mode == "observe":
+        result = {"state": "OBSERVATION_ONLY", "emitted": False,
+                  "note": "No browser dependency or wake-bridge write in observe mode."}
+    else:
+        result = process_once(
+            source, proposals, state, bridge, fetch_head, set(allow),
+            now_unix=now_unix, emit=True, stale_minutes=stale_minutes
+        )
     return {
         "status": "PASS",
         "mode": mode,
