@@ -1,0 +1,32 @@
+{
+  "schema": "PREDICTION_BUILD_LOG_EVENT_V1",
+  "work_item_id": "PRED-INDEPENDENT-CONTINUITY-20261008",
+  "created_at_utc": "2026-10-08T19:01:11.449Z",
+  "work_item_status": "IN_PROGRESS",
+  "objective": "Independently monitor stale Prediction work and safely verify new-chat recovery without mutating frozen bridge/executor.",
+  "session_route_task_id": "SESSION-ROUTE-88ba3ef9802e307c74102659",
+  "tags": [
+    "continuity",
+    "latest-route",
+    "fail-closed",
+    "no-bridge-change"
+  ],
+  "event_id": "RESULT-PRED-INDEPENDENT-CONTINUITY-20261008-E015",
+  "event_type": "RESULT",
+  "outcome": "FAIL",
+  "title": "E015 latest-route regressions failed",
+  "summary": "Exact same-chat result E015 status=FAIL exit=2, rcs=1:2 and python rc=1. Compact result shows only a passing test and truncates actual failure. Source inspection identifies mismatch: missing latest SENT route emits NO_PROVEN_LATEST_CHAT_ROUTE, while pre-existing regression expects LAUNCHER_NOT_READY.",
+  "why": "Concrete discrepancy in fail-closed error handling; whether any additional tests failed remains unverified.",
+  "first_incomplete_step": "Re-run full suite against narrow coordinator error-code correction and no-launch assertion; do not deploy or enable automatic recovery on failing tests.",
+  "next_action": "E016 targeted regression followed by full suite and compile checks; no installations.",
+  "task_ids": [
+    "DEV-PRED-INDEPENDENT-CONTINUITY-ROUTE-SAFETY-20261008-E015"
+  ],
+  "commits": [
+    "cb5aa273c7f658d3e08c13f21f1e55c5aa3f5ce1",
+    "28ad23c02fb500f70e3555d4cd170950f4bd9376"
+  ],
+  "evidence_refs": [
+    "NIGHTSHIFT_WSL_RESULT_V1 task=DEV-PRED-INDEPENDENT-CONTINUITY-ROUTE-SAFETY-20261008-E015 status=FAIL exit=2 rcs=1:2 error=TaskError detail=python rc=1: est.test_collision_not_overwritten) ... ok event=1791485971-9ea412ac06bd"
+  ]
+}
