@@ -1,0 +1,19 @@
+{
+  "schema": "PREDICTION_BRIDGE_COMMAND_V1",
+  "task_id": "CONT-DONE-d17e5177eabfcff7168c37b8",
+  "action": "BRIDGE_PING",
+  "created_at_utc": "2026-10-08T10:49:15Z",
+  "route_task_id": null,
+  "delivery_mode": "headless",
+  "live_trading": false,
+  "paid_actions": false,
+  "wallet_actions": false,
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "notes": "Close superseded R4P3 N1E139 continuation. Newer substantive R4P3 state/queue diagnostics N1E140 already exist and inspect the current exact Astra request/run/result state. No duplicate NEXT or model invocation.",
+  "auto_continue": false,
+  "parent_continuation_id": "CONT-d17e5177eabfcff7168c37b8"
+}
