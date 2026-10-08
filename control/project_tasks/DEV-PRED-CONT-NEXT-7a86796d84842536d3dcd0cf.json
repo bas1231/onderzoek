@@ -1,0 +1,41 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-CONT-NEXT-7a86796d84842536d3dcd0cf",
+  "source_commit": "a6797bd5120aa8d5a6d2da63ee00dbde089fb9eb",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "High"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_runtime"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 90,
+  "notes": "Continuation recovery for N1E135 RESULT_ACK_TIMEOUT. Read exact persisted executor state for N1E134 and N1E135 from known state-file paths only. No recursive scans, model invocation, code mutation outside task worktree, tests, build, or measurement.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/read_n1e134_n1e135_state_cont_7a867.py",
+      "content": "from pathlib import Path\nimport json\nroot=Path.home()/'.local/state/prediction-project-executor'\nids=['DEV-PRED-ASTRA-RESULT-NORMALIZE-R6-20261008-N1E134','DEV-PRED-ASTRA-RESULT-NORMALIZE-R6-STATE-20261008-N1E135']\ndef flat(v):\n    return json.dumps(v,ensure_ascii=False,sort_keys=True).replace('\\n',' ')[:6000]\nprint('ERROR_CLASS=N1E134_N1E135_EXACT_STATE')\nparts=[]\nfor tid in ids:\n    p=root/(tid+'.json')\n    parts.append(tid+'_EXISTS='+str(p.is_file()))\n    if p.is_file():\n        o=json.loads(p.read_text())\n        for k in ('status','exit_code','error','operation_count','operations','operation_results','results','completed_at_utc','source_commit','remote_commit'):\n            if k in o: parts.append(tid+'_'+k.upper()+'='+flat(o[k]))\nprint('ERROR='+'|'.join(parts))\nraise SystemExit(1)\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/read_n1e134_n1e135_state_cont_7a867.py"
+      ],
+      "timeout_seconds": 45
+    }
+  ]
+}
