@@ -84,3 +84,58 @@ work, failures, terminal states, missing next steps, timing, idempotence,
 collisions and malformed/untrusted input.
 
 No services or timers are installed by this commit.
+
+## Standalone coordinator v2 (source present; activation gated)
+
+The companion files `coordinator.py`, `snapshot.py` and `runner.py`
+add a standalone recovery coordinator. They do NOT modify the installed command
+bus, project executor, wake bridge, browser extension, existing unit files,
+ports, tokens, ACK handling or routing semantics.
+
+- `snapshot.py` loads a pinned freshly fetched `FETCH_HEAD` Git tree with
+  **local read-only** `git rev-parse` and `git archive`. It NEVER trusts the
+  mirror's possibly stale checked-out files, runs `git fetch`, pushes or
+  checks out. A stale fetch, malformed event or unsafe archive fails closed.
+- `runner.py` periodically runs the observer from an isolated temp snapshot.
+  Its default `observe` mode produces only local diagnostic files, even
+  if the browser is closed; no wake bridge writes.
+- The separate `coordinator.py` may **only after explicit `mode: emit`**
+  publish the already-installed `DASHBOARD_NEW_SESSION_LAUNCH_V1` message
+  contract. It is a producer using the existing dashboard launcher, NOT a
+  replacement bridge transport. It never creates a task or decides a model
+  gate. A new chat must obtain its OWN session route.
+- Emission is blocked without an explicitly allowlisted `work_item_id`, a
+  fresh Git snapshot (max 180 seconds old), a current unchanged ledger-derived
+  proposal, a proven matching active Prediction browser launcher (max 180
+  seconds old), and an unclaimed recovery ID. Writes are O_EXCL; a partial
+  launch is ambiguous and never silently retried. The launcher is capped at
+  three requests per work item per day and 30-minute minimum interval.
+- Recovery text is a forensic request generated from stable IDs only; no
+  untrusted `next_action` content is injected into it. It authorizes no build,
+  paid activity, trading, wallets or bypass of Astra approvals.
+
+The sample `scope.observe.json` monitors only
+`A2Z-SYSTEMTEST-20261005` after 90 minutes of no substantive ledger
+progress. It deliberately has `mode: observe` and all monetary/trading
+flags false.
+
+The new `prediction-independent-continuity.service` and
+`prediction-independent-continuity.timer` are **separate** user units, not
+modifications to the established bridge/executor services. Their source
+files are inert until explicitly installed. No bridge/runtime files are
+overwritten or removed by the independent component.
+
+### Deployment gates
+
+1. Standalone unit and snapshot regression tests PASS against exact pinned
+   source.
+2. The new code/config/user-unit files are installed only into their own
+   allowlisted directories by a bounded projectexecutor install task.
+3. The separate observation service is tested in `mode: observe`.
+4. **Only after separate activation evidence**, and without changes to the
+   frozen bridge/executor, may `mode: emit` be considered. A dashboard
+   launch is only a queued request, not proof that a new ChatGPT session
+   started or completed its work.
+
+Neither E001/E002 observation PASS alone nor static coordinator tests satisfy
+the full end-to-end self-recovery acceptance criterion.
