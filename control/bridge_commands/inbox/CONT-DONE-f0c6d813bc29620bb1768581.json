@@ -1,0 +1,19 @@
+{
+  "schema": "PREDICTION_BRIDGE_COMMAND_V1",
+  "task_id": "CONT-DONE-f0c6d813bc29620bb1768581",
+  "action": "BRIDGE_PING",
+  "created_at_utc": "2026-10-08T11:36:15Z",
+  "route_task_id": null,
+  "delivery_mode": "headless",
+  "live_trading": false,
+  "paid_actions": false,
+  "wallet_actions": false,
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "notes": "Close stale continuation from DEV-PRED-CONT-NEXT-6bb666edffb5f12122c317f6. Newer substantive task DEV-PRED-A2Z-R5P1-ASTRA-PREBUILD-START-20261008-N1E134 already exists and was dispatched, so no duplicate NEXT or Astra start.",
+  "auto_continue": false,
+  "parent_continuation_id": "CONT-f0c6d813bc29620bb1768581"
+}
