@@ -1,0 +1,19 @@
+{
+  "schema": "PREDICTION_BRIDGE_COMMAND_V1",
+  "task_id": "CONT-DONE-abae0984918a4ea51854795c",
+  "action": "BRIDGE_PING",
+  "created_at_utc": "2026-10-08T09:34:45Z",
+  "route_task_id": null,
+  "delivery_mode": "headless",
+  "live_trading": false,
+  "paid_actions": false,
+  "wallet_actions": false,
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "notes": "Close stale continuation. Source task only inspected obsolete normalization task N1E132. Newer normalization tasks through N1E140 and Sol proposal R4P3 already exist, so no duplicate NEXT is authorized.",
+  "auto_continue": false,
+  "parent_continuation_id": "CONT-abae0984918a4ea51854795c"
+}
