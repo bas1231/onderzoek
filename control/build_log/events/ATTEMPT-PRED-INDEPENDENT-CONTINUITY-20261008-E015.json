@@ -1,0 +1,35 @@
+{
+  "schema": "PREDICTION_BUILD_LOG_EVENT_V1",
+  "event_id": "ATTEMPT-PRED-INDEPENDENT-CONTINUITY-20261008-E015",
+  "work_item_id": "PRED-INDEPENDENT-CONTINUITY-20261008",
+  "created_at_utc": "2026-10-08T18:58:51.918Z",
+  "event_type": "ATTEMPT",
+  "work_item_status": "IN_PROGRESS",
+  "outcome": "STARTED",
+  "title": "E015 latest-route recovery-launcher safety regressions",
+  "objective": "Safely verify independent coordinator cannot send a recovery new-session launch to a stale historic ChatGPT tab.",
+  "summary": "Source-only correction to standalone coordinator launcher matching: align with dashboard latest proven SENT route, not any historical sent route. Add stale chat capture and current-route selection regressions; no runtime install or launch mode changes.",
+  "why": "Current sidecar source previously accepted any historically proven sent route, unlike the dashboard's latest-route policy; this could route recovery metadata to wrong chat.",
+  "first_incomplete_step": "Run full independent_continuity source-pinned test suite and compile checks in WSL; review failures without changing frozen transport.",
+  "next_action": "Observe exact E015 same-chat result. Only after PASS, plan separately approved activation canary with synthetic test work item; continue to prohibit automatic production new-chat opens.",
+  "session_route_task_id": "SESSION-ROUTE-88ba3ef9802e307c74102659",
+  "task_ids": [
+    "DEV-PRED-INDEPENDENT-CONTINUITY-ROUTE-SAFETY-20261008-E015"
+  ],
+  "commits": [
+    "2cb72cecfba4074dd743b5275143bd0aca9b2697",
+    "d9357ccbda62d05ed43a327e19d1202e634e8e6f"
+  ],
+  "evidence_refs": [
+    "control/independent_continuity/coordinator.py",
+    "tests/independent_continuity/test_coordinator.py",
+    "control/control_center/server.py"
+  ],
+  "tags": [
+    "continuity",
+    "route-isolation",
+    "synthetic",
+    "source-only",
+    "bridge-frozen"
+  ]
+}
