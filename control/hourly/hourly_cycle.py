@@ -233,6 +233,18 @@ def main() -> int:
         'active_candidate_count': len(memory_data.get('active_candidate_refs', [])),
         'recent_report_count': len(memory_data.get('recent_hourly_report_refs', [])),
     }
+    # Persist lightweight source provenance in the canonical checkpointable
+    # hourly manifest. The detailed local receipt is deliberately separate.
+    current['reddit_idea_mine'] = {
+        'status': reddit_receipt.get('status'),
+        'enabled': reddit_receipt.get('enabled', False),
+        'posts_received': reddit_receipt.get('posts_received', 0),
+        'leads_accepted': reddit_receipt.get('leads_accepted', 0),
+        'evidence_added': reddit_receipt.get('evidence_added', 0),
+        'errors': reddit_receipt.get('errors', [])[:20],
+        'receipt_ref': str(reddit_receipt_path.relative_to(R)),
+        'economic_conclusion': 'NO_PROVEN_EDGE',
+    }
     run_path.write_text(json.dumps(current, indent=2, sort_keys=True) + chr(10))
 
     report_path = R / 'hourly-reports' / (run['run_id'] + '.md')
@@ -259,6 +271,15 @@ def main() -> int:
             if market_scan_data.get('blocker'):
                 handle.write('Market scan blocker: ' + str(market_scan_data.get('blocker')) + chr(10))
             handle.write('Economic conclusion: ' + str(market_scan_data.get('economic_conclusion', 'NO_PROVEN_EDGE')) + chr(10))
+            handle.write(chr(10) + '### Reddit Idea Mine source' + chr(10))
+            handle.write('Status: ' + str(reddit_receipt.get('status')) + chr(10))
+            handle.write('Enabled: ' + str(reddit_receipt.get('enabled', False)) + chr(10))
+            handle.write('Threads received: ' + str(reddit_receipt.get('posts_received', 0)) + chr(10))
+            handle.write('Discovery leads: ' + str(reddit_receipt.get('leads_accepted', 0)) + chr(10))
+            handle.write('Recon evidence added: ' + str(reddit_receipt.get('evidence_added', 0)) + chr(10))
+            handle.write('Source errors: ' + json.dumps(reddit_receipt.get('errors', []), sort_keys=True) + chr(10))
+            handle.write('Local receipt: ' + str(reddit_receipt_path.relative_to(R)) + chr(10))
+            handle.write('Economic conclusion: NO_PROVEN_EDGE' + chr(10))
             handle.write(chr(10) + '### Recon Scout preprocessing' + chr(10))
             handle.write('Objects checked: ' + str(recon_data.get('objects_checked', 0)) + chr(10))
             handle.write('State counts: ' + json.dumps(recon_data.get('state_counts', {}), sort_keys=True) + chr(10))
