@@ -56,8 +56,11 @@ def inject(routing: dict, *, enabled: bool = False, fetch=None,
                 keys.add(key)
                 added += 1
         base.update({
-            "status": "SUCCESS" if not pulled["errors"] else
-                       ("PARTIAL" if pulled["records"] else "SOURCE_FAILURE"),
+            "status": (
+                ("PARTIAL" if pulled["records"] else "SOURCE_FAILURE")
+                if pulled["errors"] else
+                ("SUCCESS" if batch["counts"]["accepted_unique"] > 0 else "EMPTY")
+            ),
             "posts_received": len(pulled["records"]),
             "leads_accepted": batch["counts"]["accepted_unique"],
             "evidence_added": added,
