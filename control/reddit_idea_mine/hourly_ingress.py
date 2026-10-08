@@ -29,7 +29,7 @@ def inject(routing: dict, *, enabled: bool = False, fetch=None,
         return base
     try:
         pulled = arctic_shift_source.collect(
-            fetch=fetch, now=now, lookback_hours=48,
+            fetch=fetch, now=now, lookback_hours=168,
             limit=12, comment_budget=4,
         )
         batch = ingest.ingest(pulled["records"])
