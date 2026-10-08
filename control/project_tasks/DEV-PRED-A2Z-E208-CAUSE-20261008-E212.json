@@ -1,0 +1,42 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-A2Z-E208-CAUSE-20261008-E212",
+  "source_commit": "a1af2c0f255941cdf992670b0a30e05e8a7fbaca",
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-6",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_runtime",
+    "read_logs"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 90,
+  "notes": "Return last actual Python exception from E208 receipts or executor state in concise task error; no bridge change.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/e212.py",
+      "content": "from pathlib import Path\nimport json\nh=Path.home()\nt='DEV-PRED-A2Z-R4P3-SELECTION-RETRY-20261008-E208'\np=h/'.local/state/prediction-project-executor'/(t+'.json')\no=json.loads(p.read_text()) if p.exists() else {}\nr=h/'.local/share/prediction-chat-bridge/dev-task-receipts'/(t+'.log')\nlines=r.read_text(errors='replace').splitlines() if r.exists() else []\nmatches=[]\nfor i,s in enumerate(lines):\n if any(z in s for z in ('ModuleNotFoundError:', 'FileNotFoundError:', 'AssertionError:', 'ImportError:', 'KeyError:', 'TypeError:', 'SyntaxError:', 'PermissionError:', 'ValueError:')):\n  matches.append(s.strip())\nif not matches:\n for k in ('error','detail'):\n  v=o.get(k)\n  if v: matches.append(str(v).replace('\\n',' ')[:180])\nif not matches:\n for s in lines:\n  if 'ERROR=' in s and 'Traceback' not in s: matches.append(s.strip())\nraise SystemExit('ROOTCAUSE='+str(matches[-1] if matches else 'UNDETERMINED')[:240])\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/e212.py"
+      ],
+      "timeout_seconds": 30
+    }
+  ]
+}
