@@ -139,3 +139,27 @@ overwritten or removed by the independent component.
 
 Neither E001/E002 observation PASS alone nor static coordinator tests satisfy
 the full end-to-end self-recovery acceptance criterion.
+
+## Historical build-log compatibility (2026-10-08)
+
+The append-only history includes pre-schema event types such as
+`CHECKPOINT` and `BLOCKER`. Existing `SCHEMA_V1.json` only defines
+`PLAN`, `ATTEMPT`, `RESULT`, `DECISION`, `HANDOFF`, `CLOSE` and `NOTE`.
+Do not rewrite, delete or reinterpret historical events to match the new
+schema.
+
+The standalone observer now parses records with valid identities, timestamps
+and work-item states but **unknown event types** as *opaque ordering
+barriers* scoped to their original `work_item_id`. If the newest
+substantive event for an item is opaque, **no recovery proposal is made for
+that item**; a later valid canonical event may supersede the older barrier.
+Other, independently valid work items can still be observed. Invalid JSON,
+file-ID mismatches, missing identity, bad timestamps and unknown status
+still fail the entire snapshot closed. The returned
+`opaque_event_count` is visibility data, not an automatic approval.
+
+`verify_legacy_snapshot.py` is a read-only pre-install canary checking the
+full source-pinned event set and the two observed historical IDs. It must
+PASS before the updated standalone observer is installed or restarted.
+Emission remains disabled in `scope.observe.json`; no governance gate
+is relaxed.
