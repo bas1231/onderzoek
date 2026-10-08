@@ -1,0 +1,41 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-A2Z-R4P3-CURRENT-STATE-20261008-N1E140",
+  "source_commit": "25e56fe49eca03e95bc585852bf304b62a450840",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "High"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_runtime"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 120,
+  "notes": "Read-only current-state probe: verify the exact persisted normalization R6 executor outcome and the exact R4P3 Astra PREBUILD request/run/result state. No model start/resume, no build, tests, measurement, services or writes to runtime.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/r4p3_current_state_n1e140.py",
+      "content": "from pathlib import Path\nimport json\nhome=Path.home()\nstate_root=home/'.local/state/prediction-project-executor'\ncampaign=home/'.local/share/prediction-project-executor/campaigns/FULL-A2Z-LIVE-20261004-V4'\nparts=[]\nfor tid in ['DEV-PRED-ASTRA-RESULT-NORMALIZE-R6-20261008-N1E134']:\n    p=state_root/(tid+'.json')\n    parts.append('NORM_STATE_EXISTS='+str(int(p.is_file())))\n    if p.is_file():\n        o=json.loads(p.read_text())\n        parts += ['NORM_STATUS='+str(o.get('status','')),'NORM_EXIT='+str(o.get('exit_code','')),'NORM_ERROR='+str(o.get('error','')),'NORM_REMOTE_COMMIT='+str(o.get('remote_commit',''))]\ntid='A2Z-V4-ASTRA-PREBUILD-DIRECT-20261008-R4P3'\nreq=campaign/'requests'/(tid+'.json')\nres=campaign/'model_results'/(tid+'.json')\nparts += ['ASTRA_REQUEST='+str(int(req.is_file())),'ASTRA_RESULT='+str(int(res.is_file()))]\nruns=campaign/'models'/'runs'\nmatches=sorted(runs.glob(tid+'-*'),key=lambda p:p.stat().st_mtime) if runs.exists() else []\nparts.append('ASTRA_RUNS='+str(len(matches)))\nif matches:\n    p=matches[-1]\n    parts += ['ASTRA_CHECKPOINT='+p.name,'ASTRA_COMPLETE='+str(int((p/'COMPLETE.json').is_file())),'ASTRA_WORKER='+str(int((p/'WORKER.json').is_file()))]\nmstate=campaign/'models'/'STATE.json'\nif mstate.is_file():\n    s=json.loads(mstate.read_text())\n    parts += ['MODEL_STATE='+str(s.get('state','')),'MODEL_TASK='+str(s.get('task_id','')),'MODEL_REASON='+str(s.get('reason','')),'MODEL_RETRY_AT='+str(s.get('retry_at',''))]\nif res.is_file():\n    o=json.loads(res.read_text())\n    f=o.get('final','')\n    try:r=json.loads(f) if isinstance(f,str) else (f or {})\n    except Exception:r={}\n    parts += ['ASTRA_DECISION='+str(r.get('decision','')),'ASTRA_PHASE='+str(r.get('phase','')),'ASTRA_BINDING='+str(r.get('binding_sha256',''))]\nprint('ERROR_CLASS=R4P3_CURRENT_STATE')\nprint('ERROR='+'|'.join(parts))\nraise SystemExit(1)\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/r4p3_current_state_n1e140.py"
+      ],
+      "timeout_seconds": 60
+    }
+  ]
+}
