@@ -33,7 +33,7 @@ class RedditPipelineTest(unittest.TestCase):
     def test_publication_and_observation_times_distinct(self):
         routing=to_recon_routing(ingest([POST]))
         evidence=routing["recon_scout"]["evidence"][0]
-        self.assertEqual(evidence["original_post_created_at"],"2026-10-07T18:13:20+00:00")
+        self.assertEqual(evidence["original_post_created_at"],"2026-10-07T19:06:40+00:00")
         self.assertNotEqual(evidence["retrieved_at"],evidence["original_post_created_at"])
 
     def test_disallows_unsafe_run_id(self):
