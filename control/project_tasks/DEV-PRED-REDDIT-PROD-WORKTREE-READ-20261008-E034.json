@@ -1,0 +1,31 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-REDDIT-PROD-WORKTREE-READ-20261008-E034",
+  "source_commit": "539b9c62e5c9a8c57a759655fe93ed2e6fbbfa3f",
+  "intelligence_tier": "B",
+  "issuer": {
+    "model": "GPT-6",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "production_compare_worktree"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 210,
+  "notes": "Read-only canonical-vs-production dirty/untracked compare, no cleanup/edits/network/trade/bridge changes. Intended fail on unmatched dirty content. Metadata in compact same-chat result.",
+  "operations": [
+    {
+      "type": "production_compare_worktree",
+      "require_exact": true,
+      "report_mode": "group_counts",
+      "allow_active_codex_runtime_residue": true
+    }
+  ]
+}
