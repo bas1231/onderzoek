@@ -1,0 +1,41 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-A2Z-R4P3-RUNTIME-VERIFY-20261008-N1E137",
+  "source_commit": "141a1fd384fe59e69f9ef0e0ce1b128803bfbd03",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "High"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_runtime"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 120,
+  "notes": "Read-only verification that the governed R4P3 DIRECT_SOL proposal has been fully materialized into the V4 runtime. No model invocation, no build, no tests, no measurement.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/r4p3_runtime_verify_n1e137.py",
+      "content": "from pathlib import Path\nimport json, hashlib\nbase=Path.home()/'.local/share/prediction-project-executor/campaigns/FULL-A2Z-LIVE-20261004-V4'\ntask='A2Z-V4-SOL-PROPOSAL-DIRECT-20261008-R4P3'\nmr=base/'model_results'/(task+'.json')\nexpected=base/'models'/'runs'/(task+'-direct-r4p3')\nfiles=[expected/x for x in ['TASK.json','WORKER.json','COMPLETE.json','events.jsonl']]\nok=mr.is_file() and all(p.is_file() for p in files)\nparts=['MODEL_RESULT='+str(int(mr.is_file())),'RUN_FILES='+','.join(p.name+':'+str(int(p.is_file())) for p in files)]\nif mr.is_file():\n o=json.loads(mr.read_text()); parts += ['TASK='+str(o.get('task_id')),'PHASE='+str(o.get('phase')),'MODEL='+str(o.get('model')),'POLICY='+str(o.get('model_policy')),'CHECKPOINT='+str(o.get('checkpoint'))]\n if o.get('task_id')!=task or o.get('phase')!='SOL_PROPOSAL' or o.get('model')!='gpt-5.6-sol' or o.get('model_policy')!='SOL_EXACT': ok=False\nprint('ERROR_CLASS=R4P3_RUNTIME_VERIFY')\nprint('ERROR='+'|'.join(parts)+'|READY_FOR_ASTRA_PREBUILD='+str(int(ok)))\nraise SystemExit(1)\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/r4p3_runtime_verify_n1e137.py"
+      ],
+      "timeout_seconds": 60
+    }
+  ]
+}
