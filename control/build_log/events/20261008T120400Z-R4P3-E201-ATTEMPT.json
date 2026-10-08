@@ -1,0 +1,30 @@
+{
+  "schema": "PREDICTION_BUILD_LOG_EVENT_V1",
+  "event_id": "20261008T120400Z-R4P3-E201-ATTEMPT",
+  "work_item_id": "A2Z-SYSTEMTEST-20261005",
+  "created_at_utc": "2026-10-08T12:04:00Z",
+  "event_type": "ATTEMPT",
+  "work_item_status": "IN_PROGRESS",
+  "outcome": "PLANNED",
+  "title": "Compacte gate-state verificatie R4P3",
+  "objective": "Classificeer eerste incomplete lokale PREBUILD stap.",
+  "summary": "Voorgaande read-only recovery leverde diagnostische output maar ging opzettelijk exit=1 en het resultaat werd afgekapt. E201 leest exact N1E135, N1E138 en request/result aanwezigheid en geeft exit 0 bij geslaagde uitlezing.",
+  "why": "Geen duplicate R4P3 inhoudelijke task of wijziging van de bridge vóór bewijs van eerste incomplete stap.",
+  "first_incomplete_step": "Read-only status van N1E135 en N1E138 plus Astra PREBUILD request/result verifiëren.",
+  "next_action": "Gebruik het resultaat om gericht en fail-closed één vervolgactie te kiezen.",
+  "session_route_task_id": "SESSION-ROUTE-4424f3bc0927e6c9dd96bdc9",
+  "task_ids": [
+    "DEV-PRED-R4P3-GATE-STATE-20261008-E201"
+  ],
+  "commits": [],
+  "evidence_refs": [
+    "same-chat:DEV-PRED-CONT-NEXT-732c5b19eb4f734690e9761e status=FAIL exit=2 diagnostic truncated",
+    "control/control_center/lifecycle_status.json"
+  ],
+  "tags": [
+    "a2z",
+    "r4p3",
+    "diagnostic",
+    "no-duplicate"
+  ]
+}
