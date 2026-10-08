@@ -130,6 +130,42 @@ class CoordinatorTests(unittest.TestCase):
         with self.assertRaises(UnsafeLaunch):
             self.execute()
 
+    def test_older_proven_chat_cannot_capture_recovery_launch(self):
+        # The dashboard routes by the LATEST proven SENT chat, not by any
+        # historical sent chat with a still-fresh launcher registration.
+        old = self.bridge / "sent" / "last.json"
+        os.utime(old, (EPOCH - 20, EPOCH - 20))
+        self.write(self.bridge / "sent" / "new.json",
+                   {"event_id": "new", "task_id": "SESSION-ROUTE-NEW"})
+        self.write(self.bridge / "routes" / "SESSION-ROUTE-NEW.json",
+                   {"task_id": "SESSION-ROUTE-NEW", "chat_id": "CHAT-NEW",
+                    "consumer_id": "CONSUMER-NEW"})
+        os.utime(self.bridge / "sent" / "new.json", (EPOCH, EPOCH))
+        with self.assertRaisesRegex(UnsafeLaunch, "LAUNCHER_NOT_READY"):
+            self.execute(emit=True)
+        self.assertEqual(list((self.bridge / "outbox").iterdir()), [])
+        self.assertFalse((self.state / "claims").exists())
+
+    def test_latest_proven_chat_launcher_is_selected(self):
+        old = self.bridge / "sent" / "last.json"
+        os.utime(old, (EPOCH - 20, EPOCH - 20))
+        self.write(self.bridge / "sent" / "new.json",
+                   {"event_id": "new", "task_id": "SESSION-ROUTE-NEW"})
+        self.write(self.bridge / "routes" / "SESSION-ROUTE-NEW.json",
+                   {"task_id": "SESSION-ROUTE-NEW", "chat_id": "CHAT-NEW",
+                    "consumer_id": "CONSUMER-NEW"})
+        os.utime(self.bridge / "sent" / "new.json", (EPOCH, EPOCH))
+        launcher = json.loads((self.bridge / "dashboard_launchers" / "1.json").read_text())
+        launcher.update(chat_id="CHAT-NEW", consumer_id="CONSUMER-NEW")
+        self.write(self.bridge / "dashboard_launchers" / "2.json", launcher)
+        result = self.execute(emit=True)
+        self.assertTrue(result["emitted"])
+        event = json.loads((self.bridge / "outbox" / (result["event_id"] + ".json")).read_text())
+        route = json.loads((self.bridge / "routes" / (event["task_id"] + ".json")).read_text())
+        self.assertEqual(route["chat_id"], "CHAT-NEW")
+        self.assertEqual(route["consumer_id"], "CONSUMER-NEW")
+        self.assertNotEqual(route["chat_id"], self.chat)
+
     def test_source_staleness_fails_closed(self):
         os.utime(self.fetch_head, (EPOCH - 500, EPOCH - 500))
         with self.assertRaisesRegex(UnsafeLaunch, "stale"):
