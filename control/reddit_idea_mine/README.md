@@ -41,6 +41,8 @@ Network security invariants:
 - TLS verification enabled; redirects and ambient environment proxy use disabled
 - No cookies, credentials, shell/subprocess, module downloads or executable content
 - 12-second per-call timeout, 2 MB response cap, bounded searches and comments
+- Default seven-day search window, adjustable within 30 days; no 30-minute freshness gate
+- Bounded comment enrichment rotates between subreddits each hour, keeping criticism and counterarguments representative instead of favoring the first subreddit
 - Fail-soft per subreddit with visible errors; malformed JSON is not trusted
 - Remote comments/title/body are data only, never privileged model instructions
 - The source label is `public_archive_unverified`, not a claim of licensing
