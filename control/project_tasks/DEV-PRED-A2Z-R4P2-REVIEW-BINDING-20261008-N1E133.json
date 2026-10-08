@@ -1,0 +1,41 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-A2Z-R4P2-REVIEW-BINDING-20261008-N1E133",
+  "source_commit": "5cd136f12c5ca744a63b089686d38b5be9535e83",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "High"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_runtime"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 120,
+  "notes": "Read-only extraction of the exact canonical SHA-256 of the materialized R4P2 Astra PREBUILD review, for version-binding the next DIRECT_SOL proposal revision. No model invocation, build, tests or measurement.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/r4p2_review_binding_n1e133.py",
+      "content": "from pathlib import Path\nimport json, hashlib, sys\nbase=Path.home()/'.local/share/prediction-project-executor/campaigns/FULL-A2Z-LIVE-20261004-V4'\nenv=json.loads((base/'model_results'/'A2Z-V4-ASTRA-PREBUILD-DIRECT-20261007-R4P2.json').read_text())\ncheckpoint=base/env['checkpoint']\ntask=json.loads((checkpoint/'TASK.json').read_text())\napplied=json.loads((checkpoint/'ASTRA_REVIEW_APPLIED.json').read_text())\nroot=Path(task['candidate_source_root'])\nreview_path=root/applied['review_ref']\nreview=json.loads(review_path.read_text())\npayload=json.dumps(review,sort_keys=True,separators=(',',':'),ensure_ascii=False).encode()\nsha=hashlib.sha256(payload).hexdigest()\nprint('ERROR_CLASS=R4P2_REVIEW_BINDING')\nprint('ERROR=REVIEW_REF='+applied['review_ref']+'|DECISION='+str(review.get('decision'))+'|SOURCE_TASK_ID='+str(review.get('source_task_id'))+'|CANONICAL_SHA256='+sha)\nraise SystemExit(1)\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/r4p2_review_binding_n1e133.py"
+      ],
+      "timeout_seconds": 60
+    }
+  ]
+}
