@@ -1,0 +1,36 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-REDDIT-RUNTIME-SYNC-DIAG-20261008-E032",
+  "source_commit": "539b9c62e5c9a8c57a759655fe93ed2e6fbbfa3f",
+  "intelligence_tier": "B",
+  "issuer": {
+    "model": "GPT-6",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "run_project_python",
+    "read_runtime"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 180,
+  "notes": "Read-only: inspect deployed Prediction branch ref, recorded canonical runtime sync status and failure, and Reddit source/hook presence. No shell, network, writes, service actions, live trading or bridge changes. Exit 12 if missing code to expose diagnostic in compact same-chat bridge result.",
+  "operations": [
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/reddit_idea_mine/operational_sync_diagnose.py",
+        "--check"
+      ],
+      "timeout_seconds": 60
+    }
+  ]
+}
