@@ -1,0 +1,41 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-A2Z-R4P3-MATERIALIZE-DIAG-20261008-N1E134",
+  "source_commit": "3171a05be95897bf077190a174b407e028189762",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "High"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_runtime"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 120,
+  "notes": "Read-only diagnosis of failed N1E133. Inspect local project-executor state/result artifacts for exact traceback/failed operation. No model invocation, no writes outside task worktree, no build/tests/measurement.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/diag_n1e133.py",
+      "content": "from pathlib import Path\nimport json\ntid='DEV-PRED-A2Z-R4P3-MATERIALIZE-PREBUILD-20261008-N1E133'\nroots=[Path.home()/'.local/state/prediction-project-executor',Path.home()/'.local/share/prediction-project-executor']\nhits=[]\nfor root in roots:\n    if root.exists():\n        for p in root.rglob('*'):\n            if tid in p.name and p.is_file(): hits.append(p)\ndef compact(s):\n    return str(s).replace('\\n',' <NL> ').replace('\\r',' ').replace('|','/')\nprint('ERROR_CLASS=N1E133_TRACEBACK')\nfor p in hits[:20]:\n    try: txt=p.read_text(errors='replace')\n    except Exception as e: txt='READERR:'+repr(e)\n    print('ERROR=FILE='+compact(p)+'|TEXT='+compact(txt[-7000:]))\nraise SystemExit(1)\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/diag_n1e133.py"
+      ],
+      "timeout_seconds": 60
+    }
+  ]
+}
