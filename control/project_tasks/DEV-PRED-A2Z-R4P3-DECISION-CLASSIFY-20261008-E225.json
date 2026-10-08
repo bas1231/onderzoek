@@ -1,0 +1,41 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-A2Z-R4P3-DECISION-CLASSIFY-20261008-E225",
+  "source_commit": "a679bdd1016da60781b08bbb13e4f16111dcb156",
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-6",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_runtime"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 90,
+  "notes": "Extract Astra R4P3 actual decision in compact wake so next lifecycle stage can be dispatched. Read only. Nonzero is deliberate for communication.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/r4p3_decision_e225.py",
+      "content": "from pathlib import Path\nimport json,sqlite3\nroot=Path.home()/'.local/share/prediction-project-executor/campaigns/FULL-A2Z-LIVE-20261004-V4'\ntid='A2Z-V4-ASTRA-PREBUILD-DIRECT-20261008-R4P3'\np=root/'model_results'/(tid+'.json')\nif not p.is_file():\n with sqlite3.connect('file:'+str(root/'models/runtime.sqlite')+'?mode=ro',uri=True) as db:\n  row=db.execute('select status,attempt from tasks where id=?',(tid,)).fetchone()\n raise SystemExit('ASTRA_STATE='+str(row))\no=json.loads(p.read_text())\nassert o.get('task_id')==tid and o.get('phase')=='ASTRA_PREBUILD' and o.get('model')=='gpt-6-astra','PROVENANCE_INVALID'\nv=json.loads(o['final'])\ndecision=v.get('decision','MISSING')\nraise SystemExit('ASTRA_DECISION='+str(decision)+';NEXT='+str(v.get('next_action','MISSING'))[:180])\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/r4p3_decision_e225.py"
+      ],
+      "timeout_seconds": 30
+    }
+  ]
+}
