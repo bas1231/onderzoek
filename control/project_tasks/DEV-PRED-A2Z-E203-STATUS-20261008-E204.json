@@ -1,0 +1,42 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-A2Z-E203-STATUS-20261008-E204",
+  "source_commit": "8f5dd118f442f3e745c259e07539fe98412b6e80",
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-6",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_runtime",
+    "read_logs"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 120,
+  "notes": "Read-only status of already-dispatched E203. Never rerun E203 or change bridge.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/e203_status_e204.py",
+      "content": "from pathlib import Path\nimport json\nh=Path.home()\nt=\"DEV-PRED-A2Z-R4P3-SELECTION-PREP-20261008-E203\"\np=h/\".local/state/prediction-project-executor\"/(t+\".json\")\nprint(\"TARGET=\"+t)\nif p.exists():\n o=json.loads(p.read_text())\n for k in (\"status\",\"exit_code\",\"claimed_at_utc\",\"finished_at_utc\",\"error\"):\n  print(k.upper()+\"=\"+str(o.get(k,\"NA\"))[:400])\nelse: print(\"EXECUTOR_STATE=ABSENT\")\nr=h/\".local/share/prediction-chat-bridge/dev-task-receipts\"/(t+\".log\")\nif r.exists():\n lines=r.read_text(errors=\"replace\").splitlines()\n print(\"LOG_LINES=\"+str(len(lines)))\n for line in lines[-12:]:print(\"LOG=\"+line[:240])\nelse:print(\"RECEIPT_LOG=ABSENT\")\nruntime=h/\".local/share/prediction-project-executor/campaigns/FULL-A2Z-LIVE-20261004-V4/requests/A2Z-V4-ASTRA-PREBUILD-DIRECT-20261008-R4P3.json\"\nprint(\"PREBUILD_REQUEST_EXISTS=\"+str(runtime.is_file()))\nprint(\"E204_READ_ONLY=PASS\")\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/e203_status_e204.py"
+      ],
+      "timeout_seconds": 60
+    }
+  ]
+}
