@@ -66,15 +66,15 @@ be reused; no extra scheduler or automatic activation is installed.
 
 For each run `hourly_ingress.py` writes a receipt under
 `knowledge/runs/reddit_idea_mine` with source status, errors, thread count,
-evidence count, and post-age metrics. Untrusted Reddit text carries
+evidence count, and optional post-age metrics. **Speed is not an acceptance\ncriterion**: older useful discussions remain eligible within the bounded\nseven-day default discovery window (up to 30 days when explicitly configured). Untrusted Reddit text carries
 `trust_level=untrusted_external_content` and cannot count as a directive.
 The normal independent-source, Recon and candidate gates remain required.
 
 `source_canary.py --check` is a one-request read-only source probe: it
-reports whether the API returned a recent post, archive retrieval lag if
+reports whether the API returned a usable post, archive retrieval lag if
 the archive provides `retrieved_on`, and an error type if unsuccessful.
 It never logs post/comment bodies. Offline fixture tests cannot prove live
-API availability, uptime, or freshness. This probe must run in an **already
+API availability, uptime, or data completeness. This probe must run in an **already
 permitted** network-capable Prediction research runtime; do not work around
 the project executor's loopback-only child guard.
 
@@ -83,11 +83,10 @@ the project executor's loopback-only child guard.
    plus E022/E023 source metrics and untrusted-data qualifications
 2. Verify the existing research runtime can safely load the canonical source,
    without disturbing the protected production-branch reconciliation
-3. Observe a one-shot actual source response, including record age and
-   archived ingestion lag when provided
+3. Observe a one-shot actual source response with valid API structure and
+   useful thread data; post age and ingest lag are only optional telemetry
 4. Enable the existing hourly hook only after the preceding gates and confirm
-   a real hourly receipt; disable the flag if the provider is unreachable or
-   chronically stale
+   a real hourly receipt; disable the flag if the provider is persistently unreachable or responses are invalid
 
 No trading, paid API, credentials, bridge edits, autonomous GitHub pushes,
 or unrestricted external network access are authorized.
