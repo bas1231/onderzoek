@@ -11,13 +11,16 @@ import json
 from pathlib import Path
 import sys
 import time
+import tempfile
 
 try:
     from control.independent_continuity.observer import scan
-    from control.independent_continuity.coordinator import process_once, UnsafeLaunch
+    from control.independent_continuity.coordinator import process_once, UnsafeLaunch, verify_source_fresh
+    from control.independent_continuity.snapshot import snapshot_events
 except ModuleNotFoundError:
     from observer import scan
-    from coordinator import process_once, UnsafeLaunch
+    from coordinator import process_once, UnsafeLaunch, verify_source_fresh
+    from snapshot import snapshot_events
 
 
 def run(config: dict, *, home: Path, now_unix: float) -> dict:
@@ -41,35 +44,33 @@ def run(config: dict, *, home: Path, now_unix: float) -> dict:
     repo = home / ".local/share/prediction-command-bus/repo"
     bridge = home / ".local/share/prediction-chat-bridge"
     state = home / ".local/state/prediction-project-executor/independent-continuity"
-    source = repo / "control/build_log/events"
     fetch_head = repo / ".git/FETCH_HEAD"
-    if source.is_symlink() or state.is_symlink():
-        raise UnsafeLaunch("symlink source/state refused")
-    # Freshness checked BEFORE recording observations, so stale mirrors never
-    # appear to be an authoritative source of current build activity.
-    from_coordinator = None
-    try:
-        from control.independent_continuity.coordinator import verify_source_fresh
-        from_coordinator = verify_source_fresh
-    except ModuleNotFoundError:
-        from coordinator import verify_source_fresh
-        from_coordinator = verify_source_fresh
-    from_coordinator(fetch_head, now_unix=now_unix, max_age=180)
+    if state.is_symlink():
+        raise UnsafeLaunch("symlink state directory refused")
+    verify_source_fresh(fetch_head, now_unix=now_unix, max_age=180)
+    state.mkdir(parents=True, exist_ok=True)
     proposals = state / "proposals"
-    snapshot = scan(source, proposals, datetime.fromtimestamp(now_unix, timezone.utc), stale_minutes)
-    if snapshot["status"] != "PASS":
-        raise UnsafeLaunch("invalid event snapshot")
-    if mode == "observe":
-        result = {"state": "OBSERVATION_ONLY", "emitted": False,
-                  "note": "No browser dependency or wake-bridge write in observe mode."}
-    else:
-        result = process_once(
-            source, proposals, state, bridge, fetch_head, set(allow),
-            now_unix=now_unix, emit=True, stale_minutes=stale_minutes
-        )
+    # Materialize only from FETCH_HEAD's pinned Git object, NEVER the mirror
+    # working tree (which may not be checked out to the current fetched ref).
+    with tempfile.TemporaryDirectory(prefix="git-ledger-", dir=str(state)) as temp:
+        source = Path(temp) / "events"
+        source.mkdir()
+        provenance = snapshot_events(repo, source)
+        snapshot = scan(source, proposals, datetime.fromtimestamp(now_unix, timezone.utc), stale_minutes)
+        if snapshot["status"] != "PASS":
+            raise UnsafeLaunch("invalid event snapshot")
+        if mode == "observe":
+            result = {"state": "OBSERVATION_ONLY", "emitted": False,
+                      "note": "No browser dependency or wake-bridge write in observe mode."}
+        else:
+            result = process_once(
+                source, proposals, state, bridge, fetch_head, set(allow),
+                now_unix=now_unix, emit=True, stale_minutes=stale_minutes
+            )
     return {
         "status": "PASS",
         "mode": mode,
+        "source_commit": provenance["source_commit"],
         "observed_build_events": snapshot["observed_events"],
         "stale_observations": len(snapshot["observations"]),
         "fresh_proposals": len(snapshot["new_report_files"]),
