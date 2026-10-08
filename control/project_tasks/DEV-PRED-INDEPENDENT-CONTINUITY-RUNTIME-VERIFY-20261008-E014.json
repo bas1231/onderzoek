@@ -1,0 +1,47 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-INDEPENDENT-CONTINUITY-RUNTIME-VERIFY-20261008-E014",
+  "source_commit": "38564ef05895e158988150c00421a8decafa3fa1",
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-6",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "user_service_manage",
+    "read_logs"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 220,
+  "notes": "Read-only verification of own installed independent observation service and enabled/active periodic timer, no bridge/executor/user-service mutations.",
+  "operations": [
+    {
+      "type": "service",
+      "unit": "prediction-independent-continuity.timer",
+      "verb": "is-active"
+    },
+    {
+      "type": "service",
+      "unit": "prediction-independent-continuity.timer",
+      "verb": "is-enabled"
+    },
+    {
+      "type": "journal",
+      "unit": "prediction-independent-continuity.service",
+      "lines": 20
+    },
+    {
+      "type": "service",
+      "unit": "prediction-independent-continuity.service",
+      "verb": "status",
+      "report_mode": "execstart"
+    }
+  ]
+}
