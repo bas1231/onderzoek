@@ -1,0 +1,18 @@
+{
+  "schema": "PREDICTION_BRIDGE_COMMAND_V1",
+  "task_id": "DEV-PRED-REDDIT-PERSISTENCE-20261008-E008",
+  "action": "SIX_AI_HEALTH",
+  "created_at_utc": "2026-10-08T17:25:00Z",
+  "route_task_id": "SESSION-ROUTE-74c664afabf31305265af34b",
+  "delivery_mode": "chat",
+  "live_trading": false,
+  "paid_actions": false,
+  "wallet_actions": false,
+  "intelligence_tier": "B",
+  "issuer": {
+    "model": "GPT-6",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "auto_continue": false,
+  "notes": "Run isolated bounded Reddit-to-Recon persistence regressions using updated timestamps; no trading or external network."
+}
