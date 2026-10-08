@@ -1,0 +1,41 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-CONT-NEXT-34567dd41485b2b86578b5f4",
+  "source_commit": "bcd3760d45923ae0fcd0fb0565ffdf4f7f5ba880",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "High"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_runtime"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 120,
+  "notes": "Continuation from N1E142. Read only the exact executor result/state produced by DEV-PRED-A2Z-R4P3-CLAIM-DIAG-20261008-N1E142 and the exact stale-claim target DEV-PRED-A2Z-R4P3-ASTRA-PREBUILD-QUEUE-20261008-N1E138. Emit compact status, active process count, request existence, and first incomplete step. No service/model action, build, tests, measurement or runtime mutation.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/cont_34567_n1e142_result.py",
+      "content": "from pathlib import Path\nimport json\nhome=Path.home()\nids=['DEV-PRED-A2Z-R4P3-CLAIM-DIAG-20261008-N1E142','DEV-PRED-A2Z-R4P3-ASTRA-PREBUILD-QUEUE-20261008-N1E138']\nparts=[]\nfor tid in ids:\n  p=home/'.local/state/prediction-project-executor'/f'{tid}.json'\n  parts.append('TASK='+tid)\n  parts.append('STATE_EXISTS='+str(int(p.exists())))\n  if p.exists():\n    try:o=json.loads(p.read_text())\n    except Exception as e:o={'error':'READ:'+type(e).__name__}\n    for k in ['status','exit_code','error','detail','claimed_at_utc','finished_at_utc','worktree','branch']:\n      if k in o: parts.append(k.upper()+'='+str(o.get(k)).replace('|','/').replace('\\n',' ')[:5000])\nreq=home/'.local/share/prediction-project-executor/campaigns/FULL-A2Z-LIVE-20261004-V4/requests/A2Z-V4-ASTRA-PREBUILD-DIRECT-20261008-R4P3.json'\nparts.append('REQUEST_EXISTS='+str(int(req.exists())))\nprint('ERROR_CLASS=R4P3_CLAIM_DIAG_RESULT')\nprint('ERROR='+'|'.join(parts))\nraise SystemExit(1)"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/cont_34567_n1e142_result.py"
+      ],
+      "timeout_seconds": 60
+    }
+  ]
+}
