@@ -1,0 +1,41 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-CONT-NEXT-d3fde18ef8e58452208cd5b4",
+  "source_commit": "20c40b561f2e4f0e05a2ec344ac6e619872b1cf8",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "High"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_runtime"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 120,
+  "notes": "Continuation of N1E135. Read only the local projectexecutor state/result artifacts for DEV-PRED-A2Z-R4P3-MATERIALIZE-DIAG-20261008-N1E135 and emit compact root cause / first incomplete step. No model invocation, no materialization retry, no build, no tests, no measurement.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/read_n1e135_result_cont_d3fde.py",
+      "content": "from pathlib import Path\nimport json\ntid='DEV-PRED-A2Z-R4P3-MATERIALIZE-DIAG-20261008-N1E135'\nroots=[Path.home()/'.local/state/prediction-project-executor',Path.home()/'.local/share/prediction-project-executor']\nhits=[]\nfor root in roots:\n    if root.exists():\n        for p in root.rglob('*'):\n            if tid in p.name and p.is_file(): hits.append(p)\nprint('ERROR_CLASS=N1E135_RESULT_READ')\nout=[]\nfor p in hits[:20]:\n    try: s=p.read_text(errors='replace')\n    except Exception as e: s='READERR:'+repr(e)\n    out.append(str(p)+' :: '+' '.join(s.splitlines()[-30:])[-6000:])\nprint('ERROR='+' || '.join(out)[:12000])\nraise SystemExit(1)\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/read_n1e135_result_cont_d3fde.py"
+      ],
+      "timeout_seconds": 60
+    }
+  ]
+}
