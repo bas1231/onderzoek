@@ -73,14 +73,14 @@ def _entries(envelope: dict, label: str) -> list:
 
 
 def collect(fetch=None, *, now: datetime | None = None,
-            lookback_hours: int = 48, limit: int = 15,
+            lookback_hours: int = 168, limit: int = 15,
             comment_budget: int = 8) -> dict:
     """Bounded one-shot discovery; fail closed for malformed data.
 
     In test mode fetch(path, params) is a fixture; the production default is
     the fixed-host HTTPS fetcher. Each post is one independent Recon source.
     """
-    if not 1 <= lookback_hours <= 72 or not 1 <= limit <= MAX_POSTS_PER_SUB:
+    if not 1 <= lookback_hours <= 24 * 30 or not 1 <= limit <= MAX_POSTS_PER_SUB:
         raise ValueError("unsafe search settings")
     if not 0 <= comment_budget <= MAX_COMMENT_QUERIES:
         raise ValueError("unsafe comment budget")
@@ -176,7 +176,7 @@ def write_inbox(result: dict, inbox: Path) -> Path:
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--inbox", required=True, type=Path)
-    ap.add_argument("--lookback-hours", type=int, default=48)
+    ap.add_argument("--lookback-hours", type=int, default=168)
     ap.add_argument("--limit", type=int, default=15)
     ap.add_argument("--comment-budget", type=int, default=8)
     args = ap.parse_args()
