@@ -1,9 +1,9 @@
 {
   "schema": "PREDICTION_CONTROL_CENTER_LIFECYCLE_V1",
-  "updated_at": "2026-10-08T11:58:30Z",
+  "updated_at": "2026-10-08T17:30:00Z",
   "full_chain_status": "NOT_PROVEN",
-  "full_chain_label": "A→Z-keten — R4P3 recovery vóór nieuwe Astra PREBUILD",
-  "next_required": "Bewijs eerst in de nieuwe ChatGPT-sessie een eigen same-chat SESSION-ROUTE. Dispatch daarna exact de reeds voorbereide read-only recoverytask DEV-PRED-CONT-NEXT-732c5b19eb4f734690e9761e om de lokale R4P3 materialisatie/PREBUILD-request-state te classificeren. Alleen bij bewezen geldige materialisatie mag exact die version-bound R4P3 proposal opnieuw naar GPT-6 Astra PREBUILD. Geen build, tests of meting vóór PREBUILD APPROVE en later POSTBUILD APPROVE.",
+  "full_chain_label": "A→Z-keten — R4P3 applicatiefouten hersteld; Astra PREBUILD-resultaat ontbreekt",
+  "next_required": "E214 PASS: R4P3 route/artifact-shape reparatie in geïsoleerde worktree. E215 PASS: Astra PREBUILD-request gevalideerd en modelservice-start uitgevoerd. E216: model_results/A2Z-V4-ASTRA-PREBUILD-DIRECT-20261008-R4P3.json ontbreekt. E217: Astra-service niet actief (systemctl rc=3). E218 PASS: journal opgevraagd, maar de wake gaf de inhoud niet terug. Eerst de precieze service-/modelstatus en oorzaak vaststellen, daarna Astra PREBUILD-resultaat met exacte GPT-6 Astra-provenance ontvangen en beoordelen. Sol-build uitsluitend na PREBUILD APPROVE; tests/meting uitsluitend na POSTBUILD APPROVE.",
   "invariant": "NO_TEST_OR_MEASUREMENT_BEFORE_ASTRA_POSTBUILD_APPROVAL",
   "evidence_refs": [
     "control/bridge_commands/CURRENT_STATE.md",
@@ -20,7 +20,12 @@
     "control/build_log/events/20261007T080200Z-A2Z-POSTBUILD-DECISION-E115-REVISE.json",
     "control/build_log/events/20261007T082700Z-A2Z-SOL-R4-PROGRESS-E121-USAGE-LIMIT.json",
     "same-chat:DEV-PRED-A2Z-R4P2-READ-REVIEW-FLAT-20261008-N1E123 PREBUILD=REVISE",
-    "control/project_tasks/DEV-PRED-A2Z-R4P2-READ-REVIEW-ALL-FIELDS-20261008-N1E124.json"
+    "control/project_tasks/DEV-PRED-A2Z-R4P2-READ-REVIEW-ALL-FIELDS-20261008-N1E124.json",
+    "same-chat:DEV-PRED-A2Z-R4P3-APPFIX-20261008-E214 status=PASS exit=0",
+    "same-chat:DEV-PRED-A2Z-R4P3-ASTRA-START-20261008-E215 status=PASS exit=0",
+    "same-chat:DEV-PRED-A2Z-R4P3-ASTRA-RESULT-20261008-E216 status=FAIL exit=2 ASTRA_PREBUILD=WAITING_RESULT",
+    "same-chat:DEV-PRED-A2Z-R4P3-ASTRA-SERVICE-20261008-E217 status=FAIL exit=2 systemctl rc=3",
+    "same-chat:DEV-PRED-A2Z-R4P3-ASTRA-JOURNAL-20261008-E218 status=PASS exit=0 journal-content-not-in-wake"
   ],
   "stages": [
     {
@@ -47,8 +52,8 @@
       "subtitle": "experiment ontwerpen",
       "state": "IMPLEMENTED_NOT_E2E",
       "detail": "Doelarchitectuur: GPT-5.6 Sol voert SOL_PROPOSAL rechtstreeks uit via de nieuwe directe Sol-executor, buiten Codex. De inhoudelijke rol van Sol blijft gelijk; alleen de uitvoeringslaag verandert.",
-      "current_candidate_state": "R4P3_RECOVERY_PENDING",
-      "current_candidate_detail": "De immutable DIRECT_SOL R4P3 request/result bestaat in Git met exact GPT-5.6 Sol provenance en completion SHA ee8cb3d10a02d50064dcea2fd7aa4264fe2fabbb04c0f4ab58d01312fba6c918. Lokale materialisatie is nog niet opnieuw bewezen; stale-claim recovery wordt eerst read-only geclassificeerd."
+      "current_candidate_state": "DONE_R4P3_APPLICATION_REPAIRED",
+      "current_candidate_detail": "R4P3 DIRECT_SOL voorstel en provenance zijn aanwezig; E214 PASS exit=0 herstelde runner-bindings voor Sol-route en zowel lijst- als objectvorm van de drie bevroren v4-artifacts. Geen claim dat de volledige lifecycle is geslaagd."
     },
     {
       "id": "astra_prebuild",
@@ -56,8 +61,8 @@
       "subtitle": "ontwerp beoordelen",
       "state": "TARGETED_TESTED",
       "detail": "Exact GPT-6 Astra blijft de verplichte onafhankelijke PRE-BUILD reviewer en blijft via CodexWorker lopen. Deze migratie verandert deze gate niet.",
-      "current_candidate_state": "WAITING_FOR_RECOVERY_CLASSIFICATION",
-      "current_candidate_detail": "R4P2 was REVISE. R4P3 bevat de gevraagde Decimal/rounding- en harness-specificatie, maar een nieuwe exact gebonden Astra PREBUILD is nog niet bewezen gestart/afgerond. Eerst lokale recovery-state vaststellen."
+      "current_candidate_state": "BLOCKED_MISSING_REVIEW_RESULT",
+      "current_candidate_detail": "E215 PASS: R4P3-request gevalideerd en Astra PREBUILD-service start uitgevoerd. E216: geen model_results-resultaat. E217: service niet actief (systemctl rc=3). E218: journalinspectie uitgevoerd, maar wake toont geen inhoud. Astra APPROVE niet aangetoond."
     },
     {
       "id": "sol_build",
@@ -66,7 +71,7 @@
       "state": "IMPLEMENTED_NOT_E2E",
       "detail": "Doelarchitectuur: GPT-5.6 Sol bouwt rechtstreeks via DIRECT_SOL en is niet langer afhankelijk van Codex-quota. De experimentrol, binding en fail-closed provenance blijven verplicht.",
       "current_candidate_state": "BLOCKED_PENDING_PREBUILD_APPROVAL",
-      "current_candidate_detail": "Build blijft fail-closed geblokkeerd totdat Astra PREBUILD de exact gematerialiseerde R4P3 proposal APPROVE geeft."
+      "current_candidate_detail": "Sol-build voor R4P3 niet starten zonder expliciete geldige Astra PREBUILD APPROVE."
     },
     {
       "id": "astra_postbuild",
