@@ -1,0 +1,14 @@
+{
+  "schema": "PREDICTION_RESULT_RECEIPT_V1",
+  "receipt_id": "RESULT-RECEIPT-1791483417-6e4a0513f0ec",
+  "event_id": "1791483417-6e4a0513f0ec",
+  "source_task_id": "DEV-PRED-INDEPENDENT-CONTINUITY-COORDINATOR-20261008-E003",
+  "created_at_utc": "2026-10-08T18:26:11.153Z",
+  "live_trading": false,
+  "paid_actions": false,
+  "wallet_actions": false,
+  "issuer": {
+    "model": "GPT-6",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  }
+}
