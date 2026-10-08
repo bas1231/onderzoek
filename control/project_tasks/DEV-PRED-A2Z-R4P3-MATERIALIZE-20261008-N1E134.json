@@ -1,0 +1,41 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-A2Z-R4P3-MATERIALIZE-20261008-N1E134",
+  "source_commit": "1f75f0c9a5365c2cae1f85950b2274ba5e1df774",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "High"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "write_runtime"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 180,
+  "notes": "Materialize and validate the new DIRECT_SOL R4P3 proposal into the existing V4 runtime. No build, Astra invocation, tests, measurement, services, trading, paid or wallet actions.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/materialize_r4p3_n1e134.py",
+      "content": "from __future__ import annotations\nimport json, sys\nfrom pathlib import Path\n\nROOT=Path(__file__).resolve().parents[2]\nif str(ROOT) not in sys.path:\n    sys.path.insert(0,str(ROOT))\n\nfrom control.model_execution.materialize_direct_sol import materialize\n\nTASK=\"A2Z-V4-SOL-PROPOSAL-DIRECT-20261008-R4P3\"\nREQ=ROOT/\"control/model_execution/direct_requests\"/(TASK+\".json\")\nRES=ROOT/\"control/model_execution/direct_results\"/(TASK+\".json\")\nRUNTIME=Path.home()/\".local/share/prediction-project-executor/campaigns/FULL-A2Z-LIVE-20261004-V4\"\n\nenv=materialize(REQ,RES,RUNTIME)\nassert env[\"task_id\"]==TASK\nassert env[\"phase\"]==\"SOL_PROPOSAL\"\nassert env[\"model\"]==\"gpt-5.6-sol\"\nassert env[\"model_policy\"]==\"SOL_EXACT\"\nassert env[\"execution_layer\"]==\"DIRECT_SOL_CHAT\"\nassert env[\"route_task_id\"]==\"SESSION-ROUTE-246799adf99f0bf8336c27a0\"\nassert env[\"campaign_id\"]==\"FULL-A2Z-LIVE-20261004-V4\"\nassert env[\"input_sha256\"]==\"58d7088f539d4cf9f7ffbb8b6802f130a0a0a1e4d4f74119d64dcb7ef1633bb2\"\nprint(json.dumps({\"event\":\"R4P3_MATERIALIZED\",\"task_id\":TASK,\"checkpoint\":env[\"checkpoint\"],\"completion_sha256\":env[\"completion_sha256\"],\"direct_result_sha256\":env[\"direct_result_sha256\"]},sort_keys=True))\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/materialize_r4p3_n1e134.py"
+      ],
+      "timeout_seconds": 120
+    }
+  ]
+}
