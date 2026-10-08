@@ -53,6 +53,17 @@ class HourlyRedditIngressTests(unittest.TestCase):
         self.assertFalse(second["candidate_created"])
         self.assertEqual(first["economic_conclusion"], "NO_PROVEN_EDGE")
 
+    def test_empty_archive_is_not_reported_as_success(self):
+        def empty(path, params):
+            return {"data": []}
+        routing = {"recon_scout": {"evidence": []}}
+        result = inject(routing, enabled=True, fetch=empty, now=NOW)
+        self.assertEqual(result["status"], "EMPTY")
+        self.assertEqual(result["posts_received"], 0)
+        self.assertEqual(result["leads_accepted"], 0)
+        self.assertEqual(result["evidence_added"], 0)
+        self.assertEqual(result["errors"], [])
+
     def test_partial_errors_dont_abort_other_scout_evidence(self):
         existing = {"source_id": "other-source", "snippet": "Liquidity issue", "document_sha256": "a"}
         routing = {"recon_scout": {"evidence": [existing]}}
