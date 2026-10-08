@@ -1,0 +1,41 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-A2Z-R4P3-MATERIALIZE-STATE-20261008-N1E136",
+  "source_commit": "42de70307645ebcfee50ad6037fa332946cb16b4",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "High"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_runtime"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 120,
+  "notes": "Targeted read-only diagnosis after N1E135 itself timed out due broad recursive scan. Inspect exact R4P3 runtime targets and shallow/exact projectexecutor state for N1E134. No model invocation, no retry/materialization, no build/tests/measurement.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/r4p3_materialize_state_n1e136.py",
+      "content": "from pathlib import Path\nimport json\ntid='DEV-PRED-A2Z-R4P3-MATERIALIZE-20261008-N1E134'\nbase=Path.home()/'.local/share/prediction-project-executor/campaigns/FULL-A2Z-LIVE-20261004-V4'\ntargets=[\n base/'model_results'/'A2Z-V4-SOL-PROPOSAL-DIRECT-20261008-R4P3.json',\n base/'models'/'runs'/'A2Z-V4-SOL-PROPOSAL-DIRECT-20261008-R4P3-direct-r4p3'/'TASK.json',\n base/'models'/'runs'/'A2Z-V4-SOL-PROPOSAL-DIRECT-20261008-R4P3-direct-r4p3'/'WORKER.json',\n base/'models'/'runs'/'A2Z-V4-SOL-PROPOSAL-DIRECT-20261008-R4P3-direct-r4p3'/'COMPLETE.json',\n base/'models'/'runs'/'A2Z-V4-SOL-PROPOSAL-DIRECT-20261008-R4P3-direct-r4p3'/'events.jsonl'\n]\nstate=Path.home()/'.local/state/prediction-project-executor'\nparts=['TARGETS='+','.join(p.name+':'+('1' if p.is_file() else '0') for p in targets)]\nif targets[0].is_file():\n o=json.loads(targets[0].read_text()); parts.append('MODEL_RESULT_TASK='+str(o.get('task_id'))); parts.append('CHECKPOINT='+str(o.get('checkpoint')))\ncands=[]\nif state.exists():\n for p in list(state.glob('*'+tid+'*'))+list(state.glob('*/'+tid+'*')):\n  if p.is_file():\n   try: s=' '.join(p.read_text(errors='replace').splitlines())[-2500:]\n   except Exception as e: s='READERR:'+repr(e)\n   cands.append(p.name+'::'+s)\nparts.append('STATE_MATCHES='+' || '.join(cands[:8]))\nprint('ERROR_CLASS=R4P3_MATERIALIZE_STATE')\nprint('ERROR='+'|'.join(parts)[:10000])\nraise SystemExit(1)\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/r4p3_materialize_state_n1e136.py"
+      ],
+      "timeout_seconds": 60
+    }
+  ]
+}
