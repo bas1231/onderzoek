@@ -1,0 +1,29 @@
+{
+  "schema": "PREDICTION_BUILD_LOG_EVENT_V1",
+  "work_item_id": "PRED-INDEPENDENT-CONTINUITY-20261008",
+  "created_at_utc": "2026-10-08T18:32:24.173Z",
+  "work_item_status": "IN_PROGRESS",
+  "objective": "Build and validate independent fail-closed continuity observation and controlled recovery without changing bridge/executor.",
+  "session_route_task_id": "SESSION-ROUTE-88ba3ef9802e307c74102659",
+  "commits": [],
+  "tags": [
+    "continuity",
+    "standalone",
+    "diagnostic",
+    "bridge-frozen"
+  ],
+  "event_id": "RESULT-PRED-INDEPENDENT-CONTINUITY-20261008-E006",
+  "event_type": "RESULT",
+  "outcome": "FAIL",
+  "title": "Standalone observer E006 failed at service start",
+  "summary": "E006 returned FAIL exit=2, systemctl rc=1 at prediction-independent-continuity.service start. Ordered ops put test/compile, installs and daemon-reload before start; exact runtime failure requires journal evidence.",
+  "why": "Service control process exited with code 1; root cause is not yet known.",
+  "first_incomplete_step": "Read-only inspection of new service journal and installed ExecStart; no service or timer repair before evidence.",
+  "next_action": "Execute E007 journal/ExecStart diagnosis with no mutations.",
+  "task_ids": [
+    "DEV-PRED-INDEPENDENT-CONTINUITY-OBSERVE-INSTALL-20261008-E006"
+  ],
+  "evidence_refs": [
+    "NIGHTSHIFT_WSL_RESULT_V1 task=DEV-PRED-INDEPENDENT-CONTINUITY-OBSERVE-INSTALL-20261008-E006 status=FAIL exit=2 rcs=1:2 error=TaskError detail=systemctl rc=1: Job for prediction-independent-continuity.service failed because the control process exited with error code. event=1791484249-942505b1b0dc"
+  ]
+}
