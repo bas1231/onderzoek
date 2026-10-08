@@ -1,0 +1,19 @@
+{
+  "schema": "PREDICTION_BRIDGE_COMMAND_V1",
+  "task_id": "CONT-DONE-d7a1e07334689725ce41f273",
+  "action": "BRIDGE_PING",
+  "created_at_utc": "2026-10-08T11:10:15Z",
+  "route_task_id": null,
+  "delivery_mode": "headless",
+  "live_trading": false,
+  "paid_actions": false,
+  "wallet_actions": false,
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "notes": "Close stale N1E134 continuation. The R4P3 chain has already advanced through newer substantive tasks, including ASTRA PREBUILD queue/status/current-state and queue execution-state diagnostics up to N1E141. No duplicate NEXT.",
+  "auto_continue": false,
+  "parent_continuation_id": "CONT-d7a1e07334689725ce41f273"
+}
