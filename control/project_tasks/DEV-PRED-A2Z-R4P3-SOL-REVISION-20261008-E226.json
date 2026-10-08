@@ -1,0 +1,48 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-A2Z-R4P3-SOL-REVISION-20261008-E226",
+  "source_commit": "ecca623b8f938c6eabd757cf09dceb8c7d3ea2a7",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-6",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_runtime",
+    "write_runtime"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 140,
+  "notes": "Derive complete R4P4 DIRECT_SOL revision request from exact R4P3 Astra PREBUILD REVISE and preceding Sol proposal. Preserve provenance, no model execution or gate bypass.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/derive_r4p4_sol_revision_e226.py",
+      "content": "from pathlib import Path\nfrom datetime import datetime,timezone\nimport json,hashlib,sys\nroot=Path.cwd()\nsys.path.insert(0,str(root))\nfrom control.model_execution.direct_sol_chat import build_request\ncampaign=Path.home()/'.local/share/prediction-project-executor/campaigns/FULL-A2Z-LIVE-20261004-V4'\nastra_id='A2Z-V4-ASTRA-PREBUILD-DIRECT-20261008-R4P3'\nresult=json.loads((campaign/'model_results'/(astra_id+'.json')).read_text())\nassert result.get('task_id')==astra_id and result.get('phase')=='ASTRA_PREBUILD' and result.get('model')=='gpt-6-astra'\nreview=json.loads(result['final'])\nassert review.get('decision')=='REVISE','ASTRA_NOT_REVISE'\nprevious=json.loads((root/'control/model_execution/direct_results/A2Z-V4-SOL-PROPOSAL-DIRECT-20261008-R4P3.json').read_text())\nprior_req=json.loads((root/'control/model_execution/direct_requests/A2Z-V4-SOL-PROPOSAL-DIRECT-20261008-R4P3.json').read_text())\nassert previous['task_id']==prior_req['task_id']\nassert prior_req['delivery_route_task_id']==previous['worker_route_task_id']\nbinding=hashlib.sha256(json.dumps(review,sort_keys=True,separators=(',',':'),ensure_ascii=False).encode()).hexdigest()\ntid='A2Z-V4-SOL-PROPOSAL-DIRECT-20261008-R4P4'\nprompt=('You are exactly GPT-5.6 Sol in regular Chat mode, not Codex or Work. Revise the R4P3 experiment proposal according to this exact independent GPT-6 Astra PREBUILD REVISE. Return ONLY one complete proposal JSON object, with proposal_version 6 and the SAME THREE EXACT frozen v4 artifact names. Explicitly freeze all input/output and rejection contracts including ask and fee bounds. Supply exact repository-owned harness/guard Python source, concrete deterministic invocation, resource-limit enforcement and bind the source to the postbuild review. Preserve all earlier frozen controls, observations, Decimal precision and tiny-positive edge classification. No build, tests, measurement, trades, network access or paid operations. Keep scientific_status NO_PROVEN_EDGE. Re-submit to exact Astra PREBUILD after revision.\\\\n'+json.dumps({'astra_review':review,'previous_sol_proposal':json.loads(previous['final']),'previous_proposal_request_id':previous['task_id']},ensure_ascii=False,separators=(',',':')))\nreq=build_request(task_id=tid,phase='SOL_PROPOSAL',campaign_id=prior_req['campaign_id'],candidate_id=prior_req['candidate_id'],binding_sha256=binding,prompt=prompt,delivery_route_task_id=prior_req['delivery_route_task_id'],created_at_utc=datetime.now(timezone.utc).replace(microsecond=0).isoformat().replace('+00:00','Z'))\ntarget=root/'control/dev_checks/a2z_r4p4_sol_revision_request.json'\ntarget.write_text(json.dumps(req,ensure_ascii=False,indent=2)+'\\\\n')\nprint('R4P4_SOL_REVISION_REQUEST=VALIDATED')\nprint('ASTRA_REVIEW_BINDING_SHA256='+binding)\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/derive_r4p4_sol_revision_e226.py"
+      ],
+      "timeout_seconds": 60
+    },
+    {
+      "type": "install_runtime",
+      "source": "control/dev_checks/a2z_r4p4_sol_revision_request.json",
+      "destination": "/home/leonh/.local/share/prediction-project-executor/campaigns/FULL-A2Z-LIVE-20261004-V4/direct_requests/A2Z-V4-SOL-PROPOSAL-DIRECT-20261008-R4P4.json",
+      "mode": 420
+    }
+  ]
+}
