@@ -1,0 +1,41 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-CONT-NEXT-756ea335e084c4ed0307b82f",
+  "source_commit": "3337fab655ddb9ac6a66eef5e865a26fc977691d",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "High"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_runtime"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 180,
+  "notes": "Fail-closed verification of the R4P3 DIRECT_SOL proposal staging created by N1E133. Prove exact task/model/version/provenance and runtime artifacts before authorizing a new Astra PREBUILD review. No model invocation, build, tests, or measurement.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/verify_r4p3_stage_cont_756.py",
+      "content": "from pathlib import Path\nimport json, hashlib\nROOT=Path.home()/'.local/share/prediction-project-executor/campaigns/FULL-A2Z-LIVE-20261004-V4'\nTASK='A2Z-V4-SOL-PROPOSAL-DIRECT-20261008-R4P3'\nRUN=ROOT/'models/runs'/(TASK+'-direct-r4p3')\nRES=ROOT/'model_results'/(TASK+'.json')\nreq_repo=Path('control/model_execution/direct_requests')/(TASK+'.json')\nsrc_res=Path('control/model_execution/direct_results')/(TASK+'.json')\nfor p in [RES, RUN/'TASK.json', RUN/'WORKER.json', RUN/'COMPLETE.json', RUN/'events.jsonl', req_repo, src_res]:\n    assert p.is_file(), 'MISSING:'+str(p)\nenv=json.loads(RES.read_text())\nsrc=json.loads(src_res.read_text())\nproposal=json.loads(env['final'])\nassert env['task_id']==TASK\nassert env['phase']=='SOL_PROPOSAL'\nassert env['model']=='gpt-5.6-sol'\nassert env['execution_layer']=='DIRECT_SOL_CHAT'\nassert proposal['candidate_id']=='AUTO-DISCOVERY-54d13314c7879b58e46d'\nassert proposal['proposal_version']==5\nassert proposal['qualification_id']=='FULL-A2Z-LIVE-20261004-V4'\nassert proposal['scientific_status']=='NO_PROVEN_EDGE'\nassert proposal['governance']['invariant']=='NO_TEST_OR_MEASUREMENT_BEFORE_ASTRA_POSTBUILD_APPROVAL'\nassert env['completion_sha256']==hashlib.sha256((RUN/'COMPLETE.json').read_bytes()).hexdigest()\nassert env['worker_sha256']==hashlib.sha256((RUN/'WORKER.json').read_bytes()).hexdigest()\nassert env['direct_result_sha256']==hashlib.sha256(src_res.read_bytes()).hexdigest()\nassert src['model']=='gpt-5.6-sol' and src['execution_layer']=='DIRECT_SOL_CHAT'\nprint('R4P3_STAGE_VERIFY=PASS')\nprint('TASK='+TASK)\nprint('PROPOSAL_VERSION=5')\nprint('MODEL=gpt-5.6-sol')\nprint('EXECUTION_LAYER=DIRECT_SOL_CHAT')\nprint('COMPLETION_SHA256='+src['completion_sha256'])\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/verify_r4p3_stage_cont_756.py"
+      ],
+      "timeout_seconds": 90
+    }
+  ]
+}
