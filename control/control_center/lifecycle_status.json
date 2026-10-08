@@ -1,9 +1,9 @@
 {
   "schema": "PREDICTION_CONTROL_CENTER_LIFECYCLE_V1",
-  "updated_at": "2026-10-08T08:35:00Z",
+  "updated_at": "2026-10-08T08:49:00Z",
   "full_chain_status": "NOT_PROVEN",
-  "full_chain_label": "A→Z-keten — herziene Sol R4P3 proposal naar nieuwe Astra PREBUILD",
-  "next_required": "Materialiseer de immutable DIRECT_SOL R4P3 proposal completion en laat exact GPT-6 Astra een nieuwe PREBUILD-review uitvoeren. Geen build, tests of meting vóór PREBUILD APPROVE en later POSTBUILD APPROVE.",
+  "full_chain_label": "A→Z-keten — Sol R4P3 revisie klaar, PREBUILD-herstart in reparatie",
+  "next_required": "Materialiseer en valideer de immutable DIRECT_SOL R4P3 proposal zonder inhoudelijke wijziging, herstel de stagingfout, start daarna exact één nieuwe GPT-6 Astra PREBUILD review op R4P3. Geen Sol-build, experimenttests of meting vóór PREBUILD APPROVE en later POSTBUILD APPROVE.",
   "invariant": "NO_TEST_OR_MEASUREMENT_BEFORE_ASTRA_POSTBUILD_APPROVAL",
   "evidence_refs": [
     "control/bridge_commands/CURRENT_STATE.md",
@@ -48,7 +48,7 @@
       "state": "IMPLEMENTED_NOT_E2E",
       "detail": "Doelarchitectuur: GPT-5.6 Sol voert SOL_PROPOSAL rechtstreeks uit via de nieuwe directe Sol-executor, buiten Codex. De inhoudelijke rol van Sol blijft gelijk; alleen de uitvoeringslaag verandert.",
       "current_candidate_state": "DONE",
-      "current_candidate_detail": "GPT-5.6 Sol heeft R4P3 als nieuwe version-bound proposal opgeleverd met de twee Astra-revisiepunten verwerkt: exacte pre-rounding Decimal-classificatie en een bevroren harnesscontract."
+      "current_candidate_detail": "GPT-5.6 Sol heeft R4P3 proposal_version=5 opgeleverd met exacte Decimal/context/rounding/classificatie, tiny-positive/zero/tiny-negative boundary cases en een frozen harness contract."
     },
     {
       "id": "astra_prebuild",
@@ -56,8 +56,8 @@
       "subtitle": "ontwerp beoordelen",
       "state": "TARGETED_TESTED",
       "detail": "Exact GPT-6 Astra blijft de verplichte onafhankelijke PRE-BUILD reviewer en blijft via CodexWorker lopen. Deze migratie verandert deze gate niet.",
-      "current_candidate_state": "CURRENT",
-      "current_candidate_detail": "Nieuwe Astra PREBUILD-review voor R4P3 wordt voorbereid. R4P2 was REVISE; R4P3 bevat de gevraagde grens- en harnessspecificaties."
+      "current_candidate_state": "WAITING_FOR_R4P3_RESTART",
+      "current_candidate_detail": "R4P2 was REVISE. De gevraagde punten zijn verwerkt in immutable R4P3. Een eerste materialisatie/herstartpoging faalde lokaal met Python traceback vóór betrouwbare nieuwe Astra-review; staging wordt nu deterministisch gereproduceerd en gerepareerd."
     },
     {
       "id": "sol_build",
@@ -65,8 +65,8 @@
       "subtitle": "experiment bouwen",
       "state": "IMPLEMENTED_NOT_E2E",
       "detail": "Doelarchitectuur: GPT-5.6 Sol bouwt rechtstreeks via DIRECT_SOL en is niet langer afhankelijk van Codex-quota. De experimentrol, binding en fail-closed provenance blijven verplicht.",
-      "current_candidate_state": "WAITING_FOR_PREBUILD_APPROVE",
-      "current_candidate_detail": "Nog niet toegestaan. Sol-build start pas na exact GPT-6 Astra PREBUILD APPROVE op R4P3."
+      "current_candidate_state": "BLOCKED_BY_PREBUILD",
+      "current_candidate_detail": "Nog niet toegestaan. Alleen na exact GPT-6 Astra PREBUILD APPROVE op R4P3 mag Sol de drie bevroren artifacts bouwen."
     },
     {
       "id": "astra_postbuild",
@@ -75,7 +75,7 @@
       "state": "TARGETED_TESTED",
       "detail": "Exact GPT-6 Astra blijft ook na de migratie de verplichte POST-BUILD reviewer via CodexWorker. Alleen een exact gebonden APPROVE opent tests/meting.",
       "current_candidate_state": "WAITING",
-      "current_candidate_detail": "Nog niet aan de orde; volgt pas na PREBUILD APPROVE en Sol-build van exact de goedgekeurde proposal."
+      "current_candidate_detail": "Nog niet aan de orde; volgt pas na PREBUILD APPROVE en Sol-build van exact de goedgekeurde R4P3 artifacts."
     },
     {
       "id": "measurement",
@@ -113,9 +113,9 @@
     "postbuild_task_id": "DEV-PRED-A2Z-POSTBUILD-RETRY-20261006-E106",
     "pause_task_id": "DEV-PRED-A2Z-PAUSE-20261006-E107",
     "current_stage": "astra_prebuild",
-    "state": "R4P3_PREBUILD_PENDING",
-    "label": "Sol R4P3 gereed — Astra PREBUILD opnieuw",
-    "detail": "R4P3 completion is immutable op Git en verwerkt de twee Astra REVISE-blokkades. De volgende geldige stap is materialisatie en een fresh exact GPT-6 Astra PREBUILD review. Build/tests/measurement blijven geblokkeerd.",
+    "state": "R4P3_PREBUILD_RESTART_REPAIR",
+    "label": "R4P3 gereviseerd — Astra PREBUILD herstart repareren",
+    "detail": "R4P3 bevat de door Astra gevraagde rounding/boundary- en frozen-harness-specificaties. De eerste staging/prebuild-herstarttask faalde lokaal met Python traceback. Een geïsoleerde staging-reproductie bepaalt nu de eerste incomplete stap. Build/tests/measurement blijven fail-closed.",
     "scientific_status": "NO_PROVEN_EDGE",
     "evidence_refs": [
       "control/project_tasks/DEV-PRED-A2Z-POSTBUILD-RETRY-20261006-E106.json",
@@ -135,7 +135,8 @@
       "control/model_execution/direct_results/A2Z-V4-SOL-PROPOSAL-DIRECT-20261008-R4P3.json",
       "control/project_tasks/DEV-PRED-A2Z-R4P3-MATERIALIZE-20261008-N1E134.json",
       "control/project_tasks/DEV-PRED-A2Z-R4P3-MATERIALIZE-DIAG-20261008-N1E135.json",
-      "control/project_tasks/DEV-PRED-A2Z-R4P3-MATERIALIZE-STATE-20261008-N1E136.json"
+      "control/project_tasks/DEV-PRED-A2Z-R4P3-MATERIALIZE-STATE-20261008-N1E136.json",
+      "control/project_tasks/DEV-PRED-A2Z-R4P3-STAGE-REPRO-20261008-N1E134.json"
     ],
     "execution_migration": {
       "from": "CODEX_WORKER:gpt-5.6-sol",
