@@ -1,0 +1,30 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-REDDIT-PROD-DIVERGENCE-20261008-E029",
+  "source_commit": "1172bcbf29183ab0d840a0dfaab448ab3d599048",
+  "intelligence_tier": "B",
+  "issuer": {
+    "model": "GPT-6",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "production_inspect"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 150,
+  "notes": "Read-only explicit assertion: production HEAD must equal local main for launch readiness. On divergence, report compact branch/head/main/merge-base/topology via intentional fail-closed result. Do not checkout, fetch, merge, reset, modify any files or touch services.",
+  "operations": [
+    {
+      "type": "production_inspect",
+      "require_head_equals_main": true,
+      "report_mode": "topology"
+    }
+  ]
+}
