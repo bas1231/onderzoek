@@ -1,0 +1,84 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-ASTRA-RESULT-NORMALIZE-R3-20261008-N1E128",
+  "source_commit": "db57288f2a602198f59eb8ebba9074bf15651bcb",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "High"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "run_tests",
+    "local_git"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 600,
+  "notes": "Third attempt after executor rejected python -c. Apply structural Astra result normalization using a repository-owned patch script written through write_text, then focused compile/test and local commit. No bridge/executor changes, no service changes, no experiment artifacts, no scientific state mutation, no experiment tests/measurement.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/patch_astra_result_normalize_n1e128.py",
+      "content": "from pathlib import Path\np=Path('control/codex_supervisor/astra_autonomous_review.py')\ns=p.read_text()\nold='''    return {\\n        \"candidate_id\": task[\"candidate_id\"],\\n        \"phase\": task[\"phase\"],\\n        \"decision\": review[\"decision\"],\\n        \"review_ref\": review_ref,\\n        \"provenance_ref\": provenance_ref,\\n        \"reviewer_model_slug\": slug,\\n    }\\n'''\nnew='''    return {\\n        \"candidate_id\": task[\"candidate_id\"],\\n        \"phase\": task[\"phase\"],\\n        \"decision\": review[\"decision\"],\\n        \"finding\": review[\"finding\"],\\n        \"next_action\": review[\"next_action\"],\\n        \"reviewer_model\": review[\"reviewer_model\"],\\n        \"reviewer_model_slug\": slug,\\n        \"source_task_id\": task[\"task_id\"],\\n        \"input_sha256\": task[\"input_sha256\"],\\n        \"completion_sha256\": completion_sha,\\n        \"binding_sha256\": task[\"binding_sha256\"],\\n        \"review_ref\": review_ref,\\n        \"provenance_ref\": provenance_ref,\\n        \"model_provenance_sha256\": provenance_sha,\\n    }\\n'''\nassert old in s, 'target return block not found'\np.write_text(s.replace(old,new))\nt=Path('tests/codex_supervisor/test_astra_autonomous_review.py')\nx=t.read_text()\nneedle=\"    assert applied['decision']=='APPROVE'\\n\"\ninsert=\"    assert applied['decision']=='APPROVE'\\n    assert applied['finding']=='The bounded falsification is scientifically appropriate.'\\n    assert applied['next_action']=='Proceed to the bounded build only.'\\n    assert applied['reviewer_model']=='GPT-6 Astra'\\n    assert applied['reviewer_model_slug']=='gpt-6-astra-fixture'\\n    assert applied['source_task_id']==task['task_id']\\n    assert applied['input_sha256']==task['input_sha256']\\n    assert applied['binding_sha256']==task['binding_sha256']\\n    assert applied['completion_sha256']==__import__('hashlib').sha256(final.encode('utf-8')).hexdigest()\\n    assert applied['model_provenance_sha256']\\n\"\nassert needle in x, 'test insertion point not found'\nt.write_text(x.replace(needle,insert,1))\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/patch_astra_result_normalize_n1e128.py"
+      ],
+      "timeout_seconds": 120
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "-m",
+        "py_compile",
+        "control/codex_supervisor/astra_autonomous_review.py"
+      ],
+      "timeout_seconds": 60
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "-m",
+        "pytest",
+        "-q",
+        "tests/codex_supervisor/test_astra_autonomous_review.py"
+      ],
+      "timeout_seconds": 180
+    },
+    {
+      "type": "git",
+      "verb": "status"
+    },
+    {
+      "type": "git",
+      "verb": "diff"
+    },
+    {
+      "type": "git",
+      "verb": "add",
+      "paths": [
+        "control/codex_supervisor/astra_autonomous_review.py",
+        "tests/codex_supervisor/test_astra_autonomous_review.py"
+      ]
+    },
+    {
+      "type": "git",
+      "verb": "commit",
+      "message": "fix: normalize Astra review result metadata"
+    }
+  ]
+}
