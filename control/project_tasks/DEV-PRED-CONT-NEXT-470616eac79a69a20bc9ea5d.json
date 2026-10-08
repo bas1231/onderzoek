@@ -1,0 +1,41 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-CONT-NEXT-470616eac79a69a20bc9ea5d",
+  "source_commit": "4487a1a78347ff06df7e4404cc6730529c5b5deb",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "High"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_runtime"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 180,
+  "notes": "Continuation from N1E133. Build and validate a candidate Astra PREBUILD request for revised Sol R5P1 by reusing the proven R4P2 runtime template. Do not install runtime, invoke Astra, build, test or measure yet. Fail closed if template or binding assumptions do not hold.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/build_r5p1_astra_request_candidate_cont4706.py",
+      "content": "from pathlib import Path\nimport json, hashlib\nruntime=Path.home()/'.local/share/prediction-project-executor/campaigns/FULL-A2Z-LIVE-20261004-V4'\nold_path=runtime/'requests'/'A2Z-V4-ASTRA-PREBUILD-DIRECT-20261007-R4P2.json'\nold=json.loads(old_path.read_text())\nreq=json.loads(Path('control/model_execution/direct_requests/A2Z-V4-SOL-PROPOSAL-DIRECT-20261008-R5P1.json').read_text())\nres=json.loads(Path('control/model_execution/direct_results/A2Z-V4-SOL-PROPOSAL-DIRECT-20261008-R5P1.json').read_text())\nassert req['task_id']==res['task_id']=='A2Z-V4-SOL-PROPOSAL-DIRECT-20261008-R5P1'\nassert req['binding_sha256']==res['binding_sha256']\nassert req['input_sha256']==res['input_sha256']\nassert req['candidate_id']==res['candidate_id']=='AUTO-DISCOVERY-54d13314c7879b58e46d'\nassert req['campaign_id']==res['campaign_id']=='FULL-A2Z-LIVE-20261004-V4'\nassert res['model']=='gpt-5.6-sol' and res['model_display']=='GPT-5.6 Sol'\nproposal=json.loads(res['final'])\nassert proposal['proposal_version']==5\nassert proposal['scientific_status']=='NO_PROVEN_EDGE'\nassert proposal['safety']=={'live_trading':False,'paid_actions':False,'wallet_actions':False}\nout=dict(old)\nout['task_id']='A2Z-V4-ASTRA-PREBUILD-DIRECT-20261008-R5P1'\nout['campaign_id']=req['campaign_id']\nout['candidate_id']=req['candidate_id']\nif 'route_task_id' in out: out['route_task_id']='SESSION-ROUTE-246799adf99f0bf8336c27a0'\n# Replace only the proposal payload inside the proven template prompt.\nprompt=str(old['prompt'])\nmarker='INPUT_JSON:'\nassert marker in prompt\nprefix=prompt.split(marker,1)[0]+marker\npayload={'candidate_id':req['candidate_id'],'campaign_id':req['campaign_id'],'proposal_task_id':req['task_id'],'proposal_binding_sha256':req['binding_sha256'],'proposal_input_sha256':req['input_sha256'],'proposal_completion_sha256':res['completion_sha256'],'proposal':proposal,'scientific_status':'NO_PROVEN_EDGE','safety':{'live_trading':False,'paid_actions':False,'wallet_actions':False}}\nout['prompt']=prefix+json.dumps(payload,ensure_ascii=False,sort_keys=True,separators=(',',':'))\nout['input_sha256']=hashlib.sha256(out['prompt'].encode()).hexdigest()\nif 'binding_sha256' in out: out['binding_sha256']=hashlib.sha256(json.dumps(payload,ensure_ascii=False,sort_keys=True,separators=(',',':')).encode()).hexdigest()\nassert out['phase']=='ASTRA_PREBUILD'\nassert out.get('target_model','gpt-6-astra') in ('gpt-6-astra','GPT-6 Astra') or out.get('model_policy')=='ASTRA_EXACT'\nassert out['live_trading'] is False and out['paid_actions'] is False and out['wallet_actions'] is False\ndest=Path('control/dev_checks/r5p1_astra_request_candidate.json')\ndest.write_text(json.dumps(out,indent=2,sort_keys=True,ensure_ascii=False)+'\\n')\nprint('R5P1_ASTRA_REQUEST_CANDIDATE=PASS')\nprint('OLD_KEYS='+','.join(sorted(old.keys())))\nprint('TASK_ID='+out['task_id'])\nprint('INPUT_SHA256='+out['input_sha256'])\nprint('PROPOSAL_COMPLETION_SHA256='+res['completion_sha256'])\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/build_r5p1_astra_request_candidate_cont4706.py"
+      ],
+      "timeout_seconds": 120
+    }
+  ]
+}
