@@ -1,0 +1,46 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-REDDIT-IDEA-MINE-CHECK-20261008-E001",
+  "source_commit": "3b258fbdf88894f8289d68472aca341f52e6efd1",
+  "intelligence_tier": "B",
+  "issuer": {
+    "model": "GPT-6",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "run_project_python"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 240,
+  "notes": "Read-only first qualification of bounded offline Reddit idea ingestion. No outbound network, Reddit crawling, paid activity, service changes, bridge modifications or experimentation. Check imports/compilation and CLI.",
+  "operations": [
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "-m",
+        "compileall",
+        "-q",
+        "control/reddit_idea_mine/ingest.py"
+      ],
+      "timeout_seconds": 60
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/reddit_idea_mine/ingest.py",
+        "--help"
+      ],
+      "timeout_seconds": 60
+    }
+  ]
+}
