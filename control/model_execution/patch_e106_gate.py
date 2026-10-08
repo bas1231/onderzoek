@@ -174,6 +174,37 @@ def request(repo, overlay, phase, task_id, prompt):
         raise RuntimeError("E106_RUNNER_SOL_REVISION_TAIL_MISSING")
     text = text.replace(revise_tail, revise_tail_new, 1)
 
+    artifact_old = '''def artifact_names(proposal):
+    """Resolve the exact proposal version; never silently rename Sol's files."""
+    version = proposal.get("proposal_version")
+    if type(version) is not int or version < 1:
+        raise ValueError("PROPOSAL_VERSION_INVALID")
+    expected = (f"complement_checker_v{version}.py", f"test_complement_checker_v{version}.py",
+                f"qualification_stream_v{version}.json")
+    names = tuple(item["name"] for item in proposal["intended_artifacts"]["artifacts"])
+    if len(names) != 3 or set(names) != set(expected):
+        raise ValueError("PROPOSAL_ARTIFACT_SCOPE")
+    return expected
+'''
+    artifact_new = '''def artifact_names(proposal):
+    """V4 qualification freezes artifact identity independently of proposal revision."""
+    version = proposal.get("proposal_version")
+    if type(version) is not int or version < 1:
+        raise ValueError("PROPOSAL_VERSION_INVALID")
+    expected = ("complement_checker_v4.py", "test_complement_checker_v4.py",
+                "qualification_stream_v4.json")
+    artifacts = proposal.get("intended_artifacts", {}).get("artifacts", [])
+    if not isinstance(artifacts, list):
+        raise ValueError("PROPOSAL_ARTIFACT_SCOPE")
+    names = tuple(item.get("name") for item in artifacts if isinstance(item, dict))
+    if len(names) != 3 or set(names) != set(expected):
+        raise ValueError("PROPOSAL_ARTIFACT_SCOPE")
+    return expected
+'''
+    if artifact_old not in text:
+        raise RuntimeError("E106_ARTIFACT_PATTERN_MISSING")
+    text = text.replace(artifact_old, artifact_new, 1)
+
     path.write_text(text, encoding="utf-8")
 
 def main() -> int:
