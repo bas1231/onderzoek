@@ -1,0 +1,37 @@
+{
+  "schema": "PREDICTION_BUILD_LOG_EVENT_V1",
+  "event_id": "REDDIT-E021-PASS-E027-20261008",
+  "work_item_id": "REDDIT-IDEA-MINE-V1",
+  "created_at_utc": "2026-10-08T18:26:19.392Z",
+  "event_type": "RESULT",
+  "work_item_status": "IN_PROGRESS",
+  "outcome": "PASS",
+  "title": "E021 source-coverage metrics green; canonical report integration E027 dispatched",
+  "objective": "Provide durable, auditable hourly Reddit source evidence without changing existing scheduler, checkpoint or trading gates.",
+  "summary": "E021 WSL returned PASS exit=0 on commit 0355511 (hourly evidence age metrics). Inspected existing hourly Git checkpoint allowlist and added Reddit source status, thread counts, lead counts, errors and evidence additions to the canonical hourly run manifest and markdown report. E027 pinned at 4f9103c was dispatched for complete offline suite.",
+  "why": "Previously the Reddit source receipt lived only in knowledge/runs/reddit_idea_mine, a path outside the existing Git checkpoint allowlist; canonical hourly report/manifest ensure source observations participate in existing durable reporting.",
+  "next_action": "Confirm E027 status=PASS exit=0 and E019/E022/E023/E024/E025/E026 outcomes. Carry out permitted one-shot actual API source check only when protected production branch and runtime readiness are confirmed. Keep latency informational; no live trading.",
+  "session_route_task_id": "SESSION-ROUTE-74c664afabf31305265af34b",
+  "task_ids": [
+    "DEV-PRED-REDDIT-HOURLY-METRICS-20261008-E021",
+    "DEV-PRED-REDDIT-HOURLY-REPORT-20261008-E027"
+  ],
+  "commits": [
+    "035551190f44a444b8f5929865975449ea037001",
+    "4f9103c587d98b4f1dd11f8e55c8040bf6d97a57",
+    "748d572f598a417504957aec7a37265dd1c3ca45"
+  ],
+  "evidence_refs": [
+    "1791482914-1cdfa0167a32",
+    "control/hourly/hourly_cycle.py",
+    "control/reddit_idea_mine/README.md"
+  ],
+  "tags": [
+    "reddit",
+    "hourly",
+    "source-coverage",
+    "recon",
+    "reporting"
+  ],
+  "first_incomplete_step": "E027 WSL result and safe production source activation prerequisites E019/E022-E026 and one actual API response."
+}
