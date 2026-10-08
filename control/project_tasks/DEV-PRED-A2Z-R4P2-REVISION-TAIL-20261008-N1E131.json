@@ -1,0 +1,41 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-A2Z-R4P2-REVISION-TAIL-20261008-N1E131",
+  "source_commit": "c4a5b64a3e1a0e5af0c3212e3b660a9db4dce4b2",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "High"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_runtime"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 120,
+  "notes": "Read-only tail extraction from the already completed R4P2 Astra PREBUILD review. Emit FINDING starting at char 280 and full NEXT_ACTION first, so the second specification blocker is not lost to bridge truncation. No model invocation, build, tests or measurement.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/r4p2_revision_tail_n1e131.py",
+      "content": "from pathlib import Path\nimport json\nb=Path.home()/'.local/share/prediction-project-executor/campaigns/FULL-A2Z-LIVE-20261004-V4'\np=b/'model_results'/'A2Z-V4-ASTRA-PREBUILD-DIRECT-20261007-R4P2.json'\no=json.loads(p.read_text())\nf=o.get('final','')\nr=json.loads(f) if isinstance(f,str) else (f or {})\ndef c(v):\n    return str(v if v is not None else '').replace('\\n',' ').replace('\\r',' ').replace('|','/')\nfinding=c(r.get('finding'))\nnext_action=c(r.get('next_action'))\nprint('ERROR_CLASS=R4P2_REVISION_TAIL')\nprint('ERROR=NEXT_ACTION='+next_action[:900]+'|FINDING_TAIL='+finding[280:1600])\nraise SystemExit(1)\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/r4p2_revision_tail_n1e131.py"
+      ],
+      "timeout_seconds": 60
+    }
+  ]
+}
