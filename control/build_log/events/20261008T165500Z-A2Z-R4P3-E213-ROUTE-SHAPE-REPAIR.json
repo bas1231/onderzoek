@@ -1,0 +1,32 @@
+{
+  "schema": "PREDICTION_BUILD_LOG_EVENT_V1",
+  "event_id": "20261008T165500Z-A2Z-R4P3-E213-ROUTE-SHAPE-REPAIR",
+  "work_item_id": "A2Z-SYSTEMTEST-20261005",
+  "created_at_utc": "2026-10-08T16:55:00Z",
+  "event_type": "ATTEMPT",
+  "work_item_status": "IN_PROGRESS",
+  "outcome": "PLANNED",
+  "title": "R4P3 PREBUILD route- en artifact-shape herstel",
+  "objective": "Bind R4P3 overlay aan de bewezen DIRECT_SOL request-route, accepteer uitsluitend de drie exact bevroren artifactnamen uit lijst of legacy-object, genereer daarna alleen Astra PREBUILD request.",
+  "summary": "Statische inspectie E106 runner, R4P3 direct request/result en E208 toont twee deterministische incompatibiliteiten: E106 hardcoded route wijkt af van R4P3 TASK route; artifact_names verwacht een object met artifacts terwijl Sol R4P3 een lijst levert. E212 is reeds verzonden; niet dupliceren.",
+  "why": "Voorkomt opnieuw een traceback-diagnose zonder codefix. Patch raakt uitsluitend applicatie-hydratiescript en geen bridge/router/executor.",
+  "first_incomplete_step": "R4P3 proposal in de governed runner binden aan exact bestaande DIRECT_SOL provenance en Astra PREBUILD request maken.",
+  "next_action": "Patch gecontroleerd valideren; nieuwe immutable E213 task op nieuwe broncommit; fail-closed runtime request installatie alleen indien absent.",
+  "session_route_task_id": "SESSION-ROUTE-4424f3bc0927e6c9dd96bdc9",
+  "task_ids": [
+    "DEV-PRED-A2Z-R4P3-PREBUILD-ROUTE-SHAPE-20261008-E213"
+  ],
+  "commits": [],
+  "evidence_refs": [
+    "control/model_execution/patch_e106_gate.py",
+    "control/model_execution/direct_requests/A2Z-V4-SOL-PROPOSAL-DIRECT-20261008-R4P3.json",
+    "control/model_execution/direct_results/A2Z-V4-SOL-PROPOSAL-DIRECT-20261008-R4P3.json",
+    "control/project_tasks/DEV-PRED-A2Z-R4P3-SELECTION-RETRY-20261008-E208.json"
+  ],
+  "tags": [
+    "a2z",
+    "r4p3",
+    "prebuild",
+    "application-repair"
+  ]
+}
