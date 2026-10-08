@@ -19,7 +19,7 @@ from urllib.request import (
     HTTPRedirectHandler, HTTPSHandler, ProxyHandler, Request, build_opener,
 )
 
-from control.reddit_idea_mine.ingest import SUBREDDITS
+from control.reddit_idea_mine.ingest import SUBREDDITS, TERMS
 
 HOST = "arctic-shift.photon-reddit.com"
 BASE = "https://" + HOST
@@ -92,7 +92,6 @@ def collect(fetch=None, *, now: datetime | None = None,
     get = fetch or https_json
     records = []
     errors = []
-    comments_requested = 0
     for sub in sorted(SUBREDDITS):
         params = {
             "subreddit": sub, "after": cutoff.strftime("%Y-%m-%d"),
@@ -120,29 +119,52 @@ def collect(fetch=None, *, now: datetime | None = None,
                 continue
             if str(post.get("subreddit", "")).lower() != sub:
                 continue
-            comments = []
-            if comments_requested < comment_budget:
-                comments_requested += 1
-                try:
-                    payload = _entries(get(COMMENTS, {
-                        "link_id": pid, "limit": MAX_COMMENTS_PER_POST,
-                        "sort": "desc",
-                    }), "comments")
-                    for c in payload[:MAX_COMMENTS_PER_POST]:
-                        if isinstance(c, dict) and isinstance(c.get("body"), str):
-                            comments.append({"body": c["body"][:12000]})
-                except (OSError, ValueError, TimeoutError, json.JSONDecodeError) as exc:
-                    errors.append({"subreddit": sub, "post_id": pid,
-                                   "error": type(exc).__name__})
             records.append({
                 "id": pid, "subreddit": sub,
                 "url": "https://www.reddit.com/r/" + sub + "/comments/" + pid + "/",
                 "title": title[:300], "selftext": str(post.get("selftext") or "")[:12000],
-                "created_utc": ts, "comments": comments,
+                "created_utc": ts, "comments": [],
                 "source": "public_archive_unverified",
             })
     # Preserve one record per thread, even if API windows overlap.
     unique = {(p["subreddit"], p["id"]): p for p in records}
+    # Fair, bounded comment enrichment: do not spend the entire comment
+    # budget on the alphabetically first subreddit. Rotate priority hourly,
+    # so smaller communities get sampled across recurring research cycles.
+    subs = sorted(SUBREDDITS)
+    offset = int(clock.timestamp() // 3600) % len(subs)
+    order = subs[offset:] + subs[:offset]
+    queues = {sub: [] for sub in subs}
+    for post in unique.values():
+        queues[post["subreddit"]].append(post)
+    for sub in subs:
+        queues[sub].sort(
+            key=lambda p: (
+                not any(term in (p["title"] + " " + p["selftext"]).lower()
+                        for term in TERMS),
+                -p["created_utc"],
+            )
+        )
+    comment_requests = 0
+    while comment_requests < comment_budget and any(queues.values()):
+        for sub in order:
+            if comment_requests >= comment_budget:
+                break
+            if not queues[sub]:
+                continue
+            post = queues[sub].pop(0)
+            comment_requests += 1
+            try:
+                payload = _entries(get(COMMENTS, {
+                    "link_id": post["id"], "limit": MAX_COMMENTS_PER_POST,
+                    "sort": "desc",
+                }), "comments")
+                for c in payload[:MAX_COMMENTS_PER_POST]:
+                    if isinstance(c, dict) and isinstance(c.get("body"), str):
+                        post["comments"].append({"body": c["body"][:12000]})
+            except (OSError, ValueError, TimeoutError, json.JSONDecodeError) as exc:
+                errors.append({"subreddit": sub, "post_id": post["id"],
+                               "error": type(exc).__name__})
     return {
         "schema": "PREDICTION_ARCTIC_SHIFT_DISCOVERY_PULL_V1",
         "retrieved_at_utc": clock.isoformat(),
