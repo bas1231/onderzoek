@@ -1,0 +1,41 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-A2Z-R4P3-DECISION-20261008-E224",
+  "source_commit": "7567307c6e806989445fbf23c6ca4801ae975452",
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-6",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_runtime"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 90,
+  "notes": "Read-only fresh Astra R4P3 decision or queue status after E223. No model rerun or gate bypass.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/astra_r4p3_decision_e224.py",
+      "content": "from pathlib import Path\nimport json,sqlite3\nroot=Path.home()/'.local/share/prediction-project-executor/campaigns/FULL-A2Z-LIVE-20261004-V4'\ntid='A2Z-V4-ASTRA-PREBUILD-DIRECT-20261008-R4P3'\np=root/'model_results'/(tid+'.json')\nif p.is_file():\n d=json.loads(p.read_text())\n assert d.get('task_id')==tid and d.get('phase')=='ASTRA_PREBUILD' and d.get('model')=='gpt-6-astra','PROVENANCE_INVALID'\n final=d.get('final','')\n print('ASTRA_RESULT_PRESENT=YES',flush=True)\n print('ASTRA_DECISION_SNIPPET='+str(final)[:500].replace('\\n',' '),flush=True)\nelse:\n db=root/'models/runtime.sqlite'\n with sqlite3.connect('file:'+str(db)+'?mode=ro',uri=True) as conn:\n  row=conn.execute('select status,attempt from tasks where id=?',(tid,)).fetchone()\n print('ASTRA_PREBUILD_STATE='+repr(row),flush=True)\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/astra_r4p3_decision_e224.py"
+      ],
+      "timeout_seconds": 30
+    }
+  ]
+}
