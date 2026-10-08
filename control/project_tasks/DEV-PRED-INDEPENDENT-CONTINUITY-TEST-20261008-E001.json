@@ -1,0 +1,55 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-INDEPENDENT-CONTINUITY-TEST-20261008-E001",
+  "source_commit": "d4858c424a1aff5221cac37d2dfa5e3046f38806",
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-6",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "run_tests",
+    "run_project_python"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 180,
+  "notes": "Read-only deterministic unittest and compileall for standalone continuity observer. Absolutely no bridge, executor, or installed service changes.",
+  "operations": [
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests/independent_continuity",
+        "-p",
+        "test_*.py",
+        "-v"
+      ],
+      "test": true,
+      "timeout_seconds": 90
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "-m",
+        "compileall",
+        "-q",
+        "control/independent_continuity",
+        "tests/independent_continuity"
+      ],
+      "timeout_seconds": 60
+    }
+  ]
+}
