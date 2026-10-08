@@ -1,0 +1,28 @@
+{
+  "schema": "PREDICTION_BUILD_LOG_EVENT_V1",
+  "event_id": "20261008T193600Z-A2Z-R5P1-ASTRA-STATE-AUTOE236-BLOCKED",
+  "work_item_id": "A2Z-SYSTEMTEST-20261005",
+  "created_at_utc": "2026-10-08T19:36:00Z",
+  "event_type": "RESULT",
+  "work_item_status": "BLOCKED",
+  "outcome": "BLOCKED",
+  "title": "R5P1 Astra state diagnostic not dispatched",
+  "objective": "Read exact N1E134 state without altering bridge or model execution.",
+  "summary": "A read-only bounded E236 diagnostic was planned, but repeated GitHub create_file attempts for its project task were blocked by safety checks. No executor task or command-bus dispatch occurred. The earlier N1E135 diagnostic is dispatched, but its local result is not available from GitHub.",
+  "why": "Cannot establish first local failure cause or safely restart Astra PREBUILD without evidence.",
+  "first_incomplete_step": "Obtain exact local N1E134 executor error or N1E135 returned diagnostic in the routed Sol chat.",
+  "next_action": "When the existing Sol chat receives N1E135, inspect its exact error and repair the first failing step; do not replay R4P4 or modify the bridge.",
+  "session_route_task_id": "SESSION-ROUTE-246799adf99f0bf8336c27a0",
+  "task_ids": [
+    "DEV-PRED-A2Z-R5P1-ASTRA-STATE-20261008-AUTOE236",
+    "DEV-PRED-A2Z-R5P1-ASTRA-START-DIAG-20261008-N1E135"
+  ],
+  "evidence_refs": [
+    "control/project_tasks/DEV-PRED-A2Z-R5P1-ASTRA-START-DIAG-20261008-N1E135.json"
+  ],
+  "tags": [
+    "a2z",
+    "r5p1",
+    "blocked"
+  ]
+}
