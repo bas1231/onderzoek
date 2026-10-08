@@ -1,0 +1,12 @@
+[Unit]
+Description=Prediction independent continuity observation (no bridge modifications)
+Documentation=control/independent_continuity/README.md
+ConditionPathExists=%h/.local/state/prediction-project-executor/independent-continuity/scope.json
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/python3 %h/.local/share/prediction-project-executor/independent-continuity/runner.py --config %h/.local/state/prediction-project-executor/independent-continuity/scope.json
+NoNewPrivileges=true
+PrivateTmp=true
+UMask=0077
+TimeoutStartSec=90
