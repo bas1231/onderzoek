@@ -1,0 +1,32 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-A2Z-R4P3-ASTRA-SERVICE-20261008-E217",
+  "source_commit": "071abe3d7af9ad1f2872fd3acd41242afe116fe8",
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-6",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "read_logs",
+    "user_service_manage"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 100,
+  "notes": "Read-only service status of R4P3 Astra PREBUILD after E215; no restart, model rerun or bridge modification.",
+  "operations": [
+    {
+      "type": "service",
+      "verb": "status",
+      "unit": "prediction-a2z-v4-model@A2Z-V4-ASTRA-PREBUILD-DIRECT-20261008-R4P3.service"
+    }
+  ]
+}
