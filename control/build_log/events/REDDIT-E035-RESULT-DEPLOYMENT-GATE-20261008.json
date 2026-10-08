@@ -1,0 +1,37 @@
+{
+  "schema": "PREDICTION_BUILD_LOG_EVENT_V1",
+  "event_id": "REDDIT-E035-RESULT-DEPLOYMENT-GATE-20261008",
+  "work_item_id": "REDDIT-IDEA-MINE-V1",
+  "created_at_utc": "2026-10-08T19:12:46.653Z",
+  "event_type": "RESULT",
+  "work_item_status": "BLOCKED",
+  "outcome": "BLOCKED",
+  "title": "E035 noncanonical local runtime records, bridge-freeze blocks whole-repo Reddit source update",
+  "objective": "Safely qualify installed real Arctic Shift->Recon->hourly report operation in WSL while preserving all Prediction research data and working ChatGPT-WSL transport.",
+  "summary": "E035 returned diagnostic FAIL exit=2: production_compare_worktree intentionally rejects nonrepresented local untracked contents; different=[]; missing_in_source list truncated in compact bridge receipt, but E034 counted 24 untracked (runs 22, candidate_states 1, astra_review_wakes 1). These files were not modified or removed. No source-recognition or safe runtime checkpoint of these 24 files has been proven. Independently, read-only GitHub contents-blob comparison between installed production HEAD a3a61e9d8944ba4d23545bee158063d21ea244a5 and pinned source a09f5ca539a7d2d2138964f79bb29ad680dfeca8 proves protected bridge code and userscript files changed: control/tampermonkey_multichat/bridge_server_hardened.py, bridge_server_session_bootstrap.py, bridge_server_status_compaction.py, bridge_server_status_compaction_v11.py, prediction-chat-wake.user.js, plus CHATGPT_PROJECT_INSTRUCTIONS.md. Full source fast-forward would modify these source files in production and thus violates 00_CHATGPT_START_HERE.md ABSOLUTE BRIDGE FREEZE without explicit owner approval for each bridge mutation. The operational scout is not installed and no real WSL Arctic Shift request or Recon report receipt has been shown. No production fast-forward is dispatched. Existing source code offline test qualifications remain green.",
+  "why": "A request to operationally test Reddit scout authorizes normal app code tests but not bridge source mutation; the source diff contains protected files. Preserve local 24 research records and existing command-bus availability.",
+  "next_action": "Do not deploy whole repository or touch bridge. Either obtain separately documented exact bridge-change authorization after a reviewed diff, or design/use a capability-scoped application-only production release that leaves all protected bridge source and runtime unchanged, ensuring 24 untracked records remain untouched. Without an approved release mechanism, only read-only/offline evidence is possible. No paid action, live trading or wallet operations.",
+  "session_route_task_id": "SESSION-ROUTE-74c664afabf31305265af34b",
+  "task_ids": [
+    "DEV-PRED-REDDIT-UNTRACKED-PATHS-20261008-E035"
+  ],
+  "commits": [
+    "a3a61e9d8944ba4d23545bee158063d21ea244a5",
+    "a09f5ca539a7d2d2138964f79bb29ad680dfeca8"
+  ],
+  "evidence_refs": [
+    "1791486531-f1d00a8f5af5",
+    "1791486147-91dc0fa98612",
+    "00_CHATGPT_START_HERE.md",
+    "control/tampermonkey_multichat/bridge_server_session_bootstrap.py"
+  ],
+  "tags": [
+    "reddit",
+    "arctic-shift",
+    "production",
+    "bridge-freeze",
+    "research-data-preservation",
+    "blocked"
+  ],
+  "first_incomplete_step": "No authorized application-only production deployment path established; full-repo fast-forward would modify protected bridge files."
+}
