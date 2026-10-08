@@ -1,0 +1,41 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-CONT-NEXT-907e4d829c44edd5dd789a3f",
+  "source_commit": "4f156cdd6902661ed56ad817546704682e8389cd",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "High"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_runtime"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 120,
+  "notes": "Continuation from normalization chain status probe. Read only the exact local executor/result state for DEV-PRED-CONT-NEXT-1a89382dc23bab417facffc7 and its referenced normalization tasks. Emit compact terminal status including whether patch applied, focused tests recorded, and local commit if any. No code modification beyond temporary probe file, no tests, no model invocation, no runtime mutation.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/normalize_chain_status_cont_907e.py",
+      "content": "from pathlib import Path\nimport json\nhome=Path.home()\nids=['DEV-PRED-CONT-NEXT-1a89382dc23bab417facffc7','DEV-PRED-CONT-NEXT-7b8846e9669d7c05da627cc7','DEV-PRED-CONT-NEXT-50178168cc8b3a8e879648db','DEV-PRED-CONT-NEXT-9d4707f66ec86d580643a52c','DEV-PRED-ASTRA-RESULT-NORMALIZE-R6-20261008-N1E140']\nparts=[]\nfor tid in ids:\n  p=home/'.local/state/prediction-project-executor'/f'{tid}.json'\n  parts.append('TASK='+tid)\n  parts.append('STATE_EXISTS='+str(int(p.exists())))\n  if p.exists():\n    try:o=json.loads(p.read_text())\n    except Exception as e:o={'error':'READ:'+type(e).__name__}\n    for k in ['status','exit_code','error','detail','finished_at_utc','source_commit','worktree','branch']:\n      if k in o: parts.append(k.upper()+'='+str(o.get(k)).replace('|','/').replace('\\n',' ')[:4000])\nprint('ERROR_CLASS=NORMALIZE_CHAIN_STATUS_CONT')\nprint('ERROR='+'|'.join(parts))\nraise SystemExit(1)"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/normalize_chain_status_cont_907e.py"
+      ],
+      "timeout_seconds": 60
+    }
+  ]
+}
