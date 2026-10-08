@@ -1,0 +1,56 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-A2Z-R4P3-ASTRA-PREBUILD-QUEUE-20261008-N1E138",
+  "source_commit": "e7992a46ea0204f26d289c63a2ded8c705e2112a",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "High"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_runtime",
+    "write_runtime"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 240,
+  "notes": "Advance the already-materialized R4P3 DIRECT_SOL proposal to a fresh exact Astra PREBUILD request using the existing governed V4 stage. No build, tests or measurement; fail closed on missing or invalid model completion/provenance.",
+  "operations": [
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/model_execution/patch_e106_gate.py"
+      ],
+      "timeout_seconds": 60
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/jobs/full_a2z_governed_v4.py",
+        "proposal",
+        "--model-task",
+        "A2Z-V4-SOL-PROPOSAL-DIRECT-20261008-R4P3",
+        "--next-task",
+        "A2Z-V4-ASTRA-PREBUILD-DIRECT-20261008-R4P3"
+      ],
+      "timeout_seconds": 120
+    },
+    {
+      "type": "install_runtime",
+      "source": "control/dev_checks/a2z_next_request.json",
+      "destination": "/home/leonh/.local/share/prediction-project-executor/campaigns/FULL-A2Z-LIVE-20261004-V4/requests/A2Z-V4-ASTRA-PREBUILD-DIRECT-20261008-R4P3.json",
+      "mode": 420
+    }
+  ]
+}
