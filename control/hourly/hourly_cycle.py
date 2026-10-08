@@ -43,6 +43,7 @@ def main() -> int:
     quality = load('source_quality', R / 'control/hourly/source_quality.py')
     router = load('role_router', R / 'control/hourly/role_router.py')
     recon = load('recon_engine', R / 'control/hourly/recon_engine.py')
+    reddit_ingress = load('reddit_hourly_ingress', R / 'control/reddit_idea_mine/hourly_ingress.py')
     recon_candidate_bridge = load('recon_candidate_bridge', R / 'control/hourly/recon_candidate_bridge.py')
     market_scanner = load('market_instance_scanner', R / 'control/hourly/market_instance_scanner.py')
     memory = load('memory_context', R / 'control/hourly/memory_context.py')
@@ -75,6 +76,18 @@ def main() -> int:
 
     routing = router.route(run['run_id'])
     market_scanner.inject_routing(routing, market_scan_data)
+    # External access remains opt-in and must never run in offline qualification.
+    reddit_enabled = (
+        os.environ.get('PREDICTION_REDDIT_ARCTIC_SHIFT_ENABLED', '0') == '1'
+        and os.environ.get('PREDICTION_EXECUTION_MODE') != 'qualification_local'
+    )
+    reddit_receipt = reddit_ingress.inject(routing, enabled=reddit_enabled)
+    reddit_receipt_path = reddit_ingress.persist_receipt(R, run['run_id'], reddit_receipt)
+    print('REDDIT_IDEA_MINE', json.dumps({
+        'status': reddit_receipt['status'],
+        'evidence_added': reddit_receipt['evidence_added'],
+        'receipt': str(reddit_receipt_path.relative_to(R)),
+    }, sort_keys=True))
     routing_path = R / 'knowledge/runs' / (run['run_id'] + '-routing.json')
     routing_path.write_text(json.dumps(routing, indent=2, sort_keys=True) + chr(10))
 
