@@ -1,0 +1,30 @@
+{
+  "schema": "PREDICTION_BUILD_LOG_EVENT_V1",
+  "work_item_id": "PRED-INDEPENDENT-CONTINUITY-20261008",
+  "created_at_utc": "2026-10-08T18:48:04.225Z",
+  "work_item_status": "IN_PROGRESS",
+  "objective": "Determine specific invalid immutable ledger source blocking independent observation service without altering existing command-bus/executor.",
+  "session_route_task_id": "SESSION-ROUTE-88ba3ef9802e307c74102659",
+  "commits": [],
+  "tags": [
+    "continuity",
+    "ledger",
+    "fail-closed",
+    "no-bridge-edits"
+  ],
+  "event_id": "ATTEMPT-PRED-INDEPENDENT-CONTINUITY-20261008-E012",
+  "event_type": "ATTEMPT",
+  "outcome": "STARTED",
+  "title": "E012 read-only exact invalid build-log file classification",
+  "summary": "Uses repository-owned code and guarded read-only git show/ls-tree commands against source-pinned worktree, with deterministic tests first; does not modify build-log entries or the frozen execution chain.",
+  "why": "A global invalid-input failure requires targeted filename-level evidence before a safe sidecar-only fix.",
+  "first_incomplete_step": "Receive E012 exact same-chat result giving first offending filenames and reasons.",
+  "next_action": "Based on E012, choose scoped fail-closed input handling without changing historical immutable events, validate with regressions, then install only standalone observer.",
+  "task_ids": [
+    "DEV-PRED-INDEPENDENT-CONTINUITY-LEDGER-DIAG-20261008-E012"
+  ],
+  "evidence_refs": [
+    "control/independent_continuity/diagnose_ledger.py",
+    "tests/independent_continuity/test_diagnose_ledger.py"
+  ]
+}
