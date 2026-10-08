@@ -1,0 +1,29 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-INDEPENDENT-CONTINUITY-SERVICE-STATUS-20261008-E010",
+  "source_commit": "50b8e01c045f6f1d5f9abd3aec6d9be2679ac66d",
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-6",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "user_service_manage"
+  ],
+  "operations": [
+    {
+      "type": "service",
+      "verb": "status",
+      "unit": "prediction-independent-continuity.service"
+    }
+  ],
+  "timeout_seconds": 120,
+  "notes": "One bounded read-only retry of the service status from E009, whose executor never reached its operation due to mirror fetch failure. No bridge/executor/runtime mutation."
+}
