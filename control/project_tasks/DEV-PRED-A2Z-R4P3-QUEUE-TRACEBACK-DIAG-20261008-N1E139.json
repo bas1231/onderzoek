@@ -1,0 +1,41 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-A2Z-R4P3-QUEUE-TRACEBACK-DIAG-20261008-N1E139",
+  "source_commit": "6f57f9bf41fc1cd227d3ca0710374f06e852775d",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-5.6 Sol",
+    "reasoning_level": "High"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_runtime"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 180,
+  "notes": "Read-only diagnosis of N1E138 first incomplete step. Inspect local executor state/result and the preserved task worktree for traceback and referenced files. No model invocation, build, tests, measurement, service or runtime mutation.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/n1e138_traceback_diag.py",
+      "content": "from pathlib import Path\nimport json\ntid='DEV-PRED-A2Z-R4P3-ASTRA-PREBUILD-QUEUE-20261008-N1E138'\nroots=[Path.home()/'.local/state/prediction-project-executor',Path.home()/'.local/share/prediction-project-executor']\nhits=[]\nfor root in roots:\n    if not root.exists(): continue\n    for p in root.rglob('*'):\n        if p.is_file() and tid in str(p): hits.append(p)\nprint('MATCHES='+str(len(hits)))\nfor p in hits[:40]:\n    print('PATH='+str(p))\n    try:\n        txt=p.read_text(errors='replace')\n    except Exception as e:\n        print('READERR='+type(e).__name__+':'+str(e)); continue\n    print('TAIL='+txt[-6000:].replace('\\n','\\\\n'))\nwt=Path.home()/'.local/share/prediction-project-executor/worktrees'/tid\nprint('WORKTREE_EXISTS='+str(wt.exists()))\nfor rel in ['control/jobs/full_a2z_governed_v4.py','control/model_execution/patch_e106_gate.py','control/dev_checks/a2z_next_request.json']:\n    p=wt/rel\n    print('WTFILE='+rel+' EXISTS='+str(p.exists()))\n    if p.exists(): print('WTSIZE='+str(p.stat().st_size))\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/n1e138_traceback_diag.py"
+      ],
+      "timeout_seconds": 120
+    }
+  ]
+}
