@@ -1,0 +1,41 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-A2Z-R4P3-E203-CLASSIFY-20261008-E206",
+  "source_commit": "8f5dd118f442f3e745c259e07539fe98412b6e80",
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-6",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_runtime"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 120,
+  "notes": "Read-only classify E203 and R4P3 request; never repeat repair.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/r4p3_e206.py",
+      "content": "from pathlib import Path\nimport json\nh=Path.home()\nt='DEV-PRED-A2Z-R4P3-SELECTION-PREP-20261008-E203'\np=h/'.local/state/prediction-project-executor'/(t+'.json')\nr=h/'.local/share/prediction-project-executor/campaigns/FULL-A2Z-LIVE-20261004-V4/requests/A2Z-V4-ASTRA-PREBUILD-DIRECT-20261008-R4P3.json'\no=json.loads(p.read_text()) if p.exists() else {}\nprint('E203_STATUS='+str(o.get('status','MISSING')))\nprint('E203_EXIT='+str(o.get('exit_code','MISSING')))\nprint('R4P3_PREBUILD_REQUEST='+('EXISTS' if r.exists() else 'ABSENT'))\nif r.exists():\n q=json.loads(r.read_text())\n print('PHASE='+str(q.get('phase','MISSING')))\n print('TASK_MATCH='+str(q.get('task_id')=='A2Z-V4-ASTRA-PREBUILD-DIRECT-20261008-R4P3'))\nprint('CLASSIFICATION_COMPLETE=PASS')\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/r4p3_e206.py"
+      ],
+      "timeout_seconds": 60
+    }
+  ]
+}
