@@ -1,0 +1,69 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-SOL-CALL-ASTRA-INFRA-20261009-A01",
+  "source_commit": "7e032312dd3c7e7e922bbec33ec553089a6d9b60",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-6",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "read_runtime",
+    "write_runtime",
+    "user_service_manage"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 240,
+  "notes": "User-authorized independent exact GPT-6 Astra technical model review of DIRECT_SOL missing model execution, distinct from scientific PREBUILD gate. Runs via existing model service using isolated task ID and guard. Never mutate frozen bridge/executor or call Sol falsely. No paid/live actions.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/a2z_sol_call_astra_a01.py",
+      "content": "from pathlib import Path\nimport json,hashlib\nfrom control.model_execution.direct_sol_chat import validate_request\nroot=Path.cwd()\nruntime=Path.home()/'.local/share/prediction-project-executor/campaigns/FULL-A2Z-LIVE-20261004-V4'\nbase=json.loads((runtime/'requests/A2Z-V4-ASTRA-PREBUILD-DIRECT-20261008-R4P3.json').read_text())\nassert base.get('phase')=='ASTRA_PREBUILD'\nassert base.get('model_policy')=='ASTRA_EXACT' or base.get('target_model') in ('gpt-6-astra','GPT-6 Astra')\nassert all(base.get(flag) is False for flag in ('live_trading','paid_actions','wallet_actions'))\nreq=json.loads((runtime/'direct_requests/A2Z-V4-SOL-PROPOSAL-DIRECT-20261008-R4P4.json').read_text())\nvalidate_request(req)\nstate_path=Path.home()/'.local/state/prediction-project-executor/DEV-PRED-A2Z-R4P4-SOL-HANDOFF-RETRY-20261008-E234.json'\nstate=json.loads(state_path.read_text()) if state_path.exists() else {'status':'UNAVAILABLE'}\nevidence={'r4p4_direct_request_metadata':{k:v for k,v in req.items() if k!='prompt'},'e234_projectexecutor_status':state.get('status'),'r4p4_model_result_exists':(runtime/'model_results/A2Z-V4-SOL-PROPOSAL-DIRECT-20261008-R4P4.json').exists(),'r4p4_github_result_known_missing':True,'source_excerpt':{}}\nfor file,limit in [('control/model_execution/direct_sol_chat.py',6800),('control/model_execution/materialize_direct_sol.py',4500),('control/model_execution/ROUTING.md',4400),('control/tampermonkey_multichat/PROTOCOL.md',4000),('control/control_center/DASHBOARD_CHAT_ACTION_PROTOCOL.md',3500),('control/project_tasks/DEV-PRED-A2Z-R4P4-SOL-HANDOFF-RETRY-20261008-E234.json',2500)]:\n evidence['source_excerpt'][file]=(root/file).read_text(encoding='utf-8')[:limit]\ninstructions=('Act as EXACT GPT-6 Astra via CODEX_WORKER. This is an INDEPENDENT INFRASTRUCTURE DESIGN AND REPAIR AUDIT, NOT an Astra PREBUILD experiment approval. Diagnose and specify a technically feasible, minimum-scope complete repair of DIRECT_SOL model invocation. Existing WSL GitHub command bus sends result notifications to existing ChatGPT session only; E234 executor PASS did not run any model; R4P4 request is only in local WSL runtime and no GitHub direct request/result exists. The required independent Sol worker must be genuine GPT-5.6 Sol regular Chat, not Codex/Work, and WSL must remain GitHub read-only. Avoid proposing shell workarounds or pretending a wake event executes a model prompt. Determine how model request is published to Sol through permitted existing GitHub connector and how existing wake or dashboard new-chat session launcher genuinely starts Sol; distinguish tasks that require user to activate model chat or owner approval. Reuse existing authorized platform functionality and project executor; do NOT modify frozen bridge, router, poller, wake, sessions, protocols, executor, credential paths or paid/live order paths. Provide concrete file-by-file app-layer patch or dispatch plan and deterministic unit + end-to-end test acceptance with provenance, immutable SHA/binding, no duplicate result, guard on session route, model identity, and restart after incomplete result. If repair intrinsically needs a forbidden bridge change, STOP and describe exact owner approval needed; do NOT recommend backdoor. Investigate why earlier R4P3/R5P1 Sol direct results in GitHub succeeded and how to reuse that exact worker choreography. Provide a focused actionable solution, not another generic status report. Reply only as JSON with keys: decision, diagnosis, first_incomplete_step, allowed_patch_plan, exact_delivery_execution_flow, tests, end_to_end_acceptance, owner_approval_required, next_action. decision must be REVISE. Keep scientific_status NO_PROVEN_EDGE and NO_TEST_OR_MEASUREMENT_BEFORE_ASTRA_POSTBUILD_APPROVAL.\\nEVIDENCE_JSON:')\nprompt=instructions+json.dumps(evidence,sort_keys=True,ensure_ascii=False,separators=(',',':'))\nout=dict(base)\nout['task_id']='A2Z-SOL-CALL-ASTRA-INFRA-20261009-A01'\nout['phase']='ASTRA_PREBUILD'\nout['route_task_id']='SESSION-ROUTE-4424f3bc0927e6c9dd96bdc9'\nout['prompt']=prompt\nout['input_sha256']=hashlib.sha256(prompt.encode()).hexdigest()\nif 'binding_sha256' in out: out['binding_sha256']=hashlib.sha256(json.dumps(evidence,sort_keys=True,ensure_ascii=False,separators=(',',':')).encode()).hexdigest()\nout['live_trading']=out['paid_actions']=out['wallet_actions']=False\npath=Path('control/dev_checks/a2z_sol_call_astra_infra_request_a01.json')\npath.write_text(json.dumps(out,sort_keys=True,indent=2,ensure_ascii=False)+'\\n')\ncheck=json.loads(path.read_text())\nassert check['task_id']=='A2Z-SOL-CALL-ASTRA-INFRA-20261009-A01' and check['input_sha256']==hashlib.sha256(check['prompt'].encode()).hexdigest()\nprint('ASTRA_INFRA_AUDIT_REQUEST_VALID')\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/a2z_sol_call_astra_a01.py"
+      ],
+      "timeout_seconds": 75
+    },
+    {
+      "type": "install_runtime",
+      "source": "control/dev_checks/a2z_sol_call_astra_infra_request_a01.json",
+      "destination": "/home/leonh/.local/share/prediction-project-executor/campaigns/FULL-A2Z-LIVE-20261004-V4/requests/A2Z-SOL-CALL-ASTRA-INFRA-20261009-A01.json",
+      "mode": 420
+    },
+    {
+      "type": "service",
+      "verb": "enable",
+      "unit": "prediction-a2z-v4-model@A2Z-SOL-CALL-ASTRA-INFRA-20261009-A01.timer"
+    },
+    {
+      "type": "service",
+      "verb": "start",
+      "unit": "prediction-a2z-v4-model@A2Z-SOL-CALL-ASTRA-INFRA-20261009-A01.timer"
+    },
+    {
+      "type": "service",
+      "verb": "is-enabled",
+      "unit": "prediction-a2z-v4-model@A2Z-SOL-CALL-ASTRA-INFRA-20261009-A01.timer"
+    },
+    {
+      "type": "service",
+      "verb": "start",
+      "unit": "prediction-a2z-v4-model@A2Z-SOL-CALL-ASTRA-INFRA-20261009-A01.service"
+    }
+  ]
+}
