@@ -129,15 +129,21 @@ def enqueue_published_request(*, request_path: Path, request_sha256: str,
         "model_identity_status": "NOT_VERIFIED_BY_TRANSPORT",
     }
     folder = state_root / request["task_id"]
-    folder.mkdir(parents=True, exist_ok=True)
+    try:
+        folder.mkdir(parents=True, exist_ok=True)
+    except PermissionError as exc:
+        raise DirectSolError("DIRECT_SOL_STATE_ROOT_NOT_WRITABLE") from exc
     with (folder / "dispatch.lock").open("a") as handle:
         fcntl.flock(handle, fcntl.LOCK_EX)
         _immutable_json(folder / "INTENT.json", intent)
-        record = continuation.start_external_continuation(
-            data_dir=bridge_data, source_task_id=source_id, chat_id=route["chat_id"],
-            expected_route_task_id=route_id, context_message=context,
-            source_kind="DIRECT_SOL_GOVERNED_REQUEST",
-        )
+        try:
+            record = continuation.start_external_continuation(
+                data_dir=bridge_data, source_task_id=source_id, chat_id=route["chat_id"],
+                expected_route_task_id=route_id, context_message=context,
+                source_kind="DIRECT_SOL_GOVERNED_REQUEST",
+            )
+        except PermissionError as exc:
+            raise DirectSolError("DIRECT_SOL_CONTINUATION_CAPABILITY_UNAVAILABLE") from exc
         current = time.time() if now is None else now
         created_at = float(record["created_at"])
         status = delivery_status(
