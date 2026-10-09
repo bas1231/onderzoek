@@ -1,0 +1,29 @@
+{
+  "schema": "PREDICTION_BUILD_LOG_EVENT_V1",
+  "event_id": "20261009-DIRECTSOL-REPAIR-D03-FAIL-D04-BOUNDARY",
+  "work_item_id": "A2Z-SOL-DIRECT-EXECUTION-20261007",
+  "created_at_utc": "2026-10-09T07:29:38Z",
+  "event_type": "RESULT",
+  "work_item_status": "IN_PROGRESS",
+  "outcome": "FAIL",
+  "title": "D03 gestopt door executor-guard vóór modelhandoff",
+  "objective": "Bepaal exact of bestaande executor-capabilities de bestaande continuation-API kunnen aanroepen.",
+  "summary": "D03 faalde op folder.mkdir onder de campaign-runtime. write_runtime verleent aan child-Python geen runtime-write-recht; alleen install_runtime mag expliciet begrensd installeren. Geen continuation of modelaanroep aangemaakt. D04 zet alleen app-status in de eigen worktree en toetst rechtstreeks de bestaande continuation-API onder dezelfde guard. Geen guardversoepeling, alternatieve service of rechtstreekse queue-injectie.",
+  "why": "De guard mag niet worden omzeild. Een expliciete capability-blokkade moet apart van een lokale statuspadfout worden bewezen.",
+  "first_incomplete_step": "Capability-scoped runtime enqueue van de volledige Sol-opdracht.",
+  "next_action": "Gerichte permission-regressie plus één bounded boundarytest; blokkeer bij bevestiging en leg de minimaal vereiste expliciete executor/browser-interventie vast.",
+  "session_route_task_id": null,
+  "task_ids": [
+    "DEV-PRED-DIRECTSOL-REPAIR-20261009-D03",
+    "DEV-PRED-DIRECTSOL-REPAIR-20261009-D04"
+  ],
+  "commits": [],
+  "evidence_refs": [
+    "control/project_tasks/DEV-PRED-DIRECTSOL-REPAIR-20261009-D03.json"
+  ],
+  "tags": [
+    "direct-sol",
+    "guard-boundary",
+    "no-bypass"
+  ]
+}
