@@ -1,0 +1,59 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-DIRECTSOL-REPAIR-20261009-D01",
+  "source_commit": "4b33b7318e4540e1e38d4bf918061747e74991fd",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-6 (Codex; exacte variant niet blootgesteld)",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "run_project_python",
+    "build_coordination"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 90,
+  "notes": "Alleen registratie van application-layer scope. Headless resultaat wordt lokaal teruggelezen; geen claim op een browserroute van deze Codex-sessie. Bevroren bridge, executor, routing en services ongewijzigd.",
+  "operations": [
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/jobs/parallel_build_coordination_shared.py",
+        "status"
+      ],
+      "timeout_seconds": 20
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/jobs/parallel_build_coordination_shared.py",
+        "start",
+        "--session-id",
+        "DIRECTSOL-REPAIR-20261009-D01",
+        "--task-id",
+        "DEV-PRED-DIRECTSOL-REPAIR-20261009-D01",
+        "--ttl",
+        "3600",
+        "--path",
+        "control/model_execution/direct_sol_delivery.py",
+        "--path",
+        "tests/model_execution/test_direct_sol_delivery.py",
+        "--path",
+        "control/model_execution/direct_requests/A2Z-V4-SOL-PROPOSAL-DIRECT-20261008-R4P4.json",
+        "--path",
+        "control/model_execution/evidence/DIRECTSOL-REPAIR-20261009-D01"
+      ],
+      "timeout_seconds": 20
+    }
+  ]
+}
