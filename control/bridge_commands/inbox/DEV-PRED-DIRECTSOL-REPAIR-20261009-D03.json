@@ -1,0 +1,17 @@
+{
+  "schema": "PREDICTION_BRIDGE_COMMAND_V1",
+  "task_id": "DEV-PRED-DIRECTSOL-REPAIR-20261009-D03",
+  "action": "SIX_AI_HEALTH",
+  "created_at_utc": "2026-10-09T07:26:11Z",
+  "delivery_mode": "headless",
+  "route_task_id": null,
+  "live_trading": false,
+  "paid_actions": false,
+  "wallet_actions": false,
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-6 (Codex; exacte variant niet blootgesteld)",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "auto_continue": false
+}
