@@ -1,0 +1,40 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-DIRECTSOL-R4P4-MODEL-HANDOFF-20261009-D05",
+  "source_commit": "1fc4eb08cd0e478cf405f417bc65431508b62a3c",
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-6 (Codex; exacte variant niet blootgesteld)",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 90,
+  "notes": "PREDICTION_DIRECT_SOL_HANDOFF_V1\nDoel: voer bestaande R4P4 inhoudelijk uit als de echte GPT-5.6 Sol in reguliere Chat. Deze verificatietaak is alleen transportvoorbereiding; PASS is GEEN modelresultaat.\nLees via GitHub connector het VOLLEDIGE bestand control/model_execution/direct_requests/A2Z-V4-SOL-PROPOSAL-DIRECT-20261008-R4P4.json in bas1231/onderzoek op immutable commit 974466ab45ca26443f3aa8b7b48b0de91915ba60.\nrequest_sha256=7fbb08e941d8387918780fe04bd597babc10d5028b79e61e4de013f72fbe4c14\ninput_sha256=bc95bf692678be044bbe574779fbb59f69fc34d616d007e5582c8e96c0d30423\nbinding_sha256=e0e848a1cbf05d28213844792bbe2993edd95ee07e88b996696ac04376fe569e\nworker_route_task_id=SESSION-ROUTE-246799adf99f0bf8336c27a0\nVervolg na deze taak: lees eerst of exact dit resultaat al bestaat. Als daadwerkelijk exact GPT-5.6 Sol, regular Chat, niet Codex/Work, voer de volledige request.prompt uit en schrijf via GitHub connector een nieuw immutable PREDICTION_DIRECT_SOL_RESULT_V1 naar control/model_execution/direct_results/A2Z-V4-SOL-PROPOSAL-DIRECT-20261008-R4P4.json. Gebruik werkelijke model/experience/provenance, begin/eindtijd en SHA-256 van exact final. Doe geen nieuwe projectexecutor-taak om Sol te vervangen. De enige geautoriseerde modeltaak is deze revisie volgens de volledige Astra R4P3-feedback; geen nieuwe experimenten.\nDe instructie, een route-ID en een zelfverklaring bewijzen GEEN modelidentiteit. Indien de werkelijke platformidentiteit of Chat-modus niet vaststelbaar is: publiceer control/model_execution/direct_worker_events/A2Z-V4-SOL-PROPOSAL-DIRECT-20261008-R4P4/BLOCKED.json met waargenomen feiten en ontbrekende evidence (model onbekend = null), kies de bestaande continuation BLOCKED-receipt en verzin geen Sol-resultaat.\nNa een werkelijk resultaat: publiceer COMPLETE.json onder hetzelfde direct_worker_events-pad met inputhash, werkelijke route, modelbewijsbron en immutable resultcommit, kies continuation DONE. DONE/ACK op zichzelf is geen lifecycle-PASS.\nGeen build, experimenttests, meting, bridgewijziging, credentials, API-kosten, trading of wallets. NO_PROVEN_EDGE blijft. De controller laat pas na gevalideerd echt resultaat exact GPT-6 Astra PREBUILD uitvoeren.",
+  "operations": [
+    {
+      "type": "write_text",
+      "path": "control/dev_checks/directsol_r4p4_d05.py",
+      "content": "from pathlib import Path\nimport hashlib,json,sys\nsys.path.insert(0,str(Path.cwd()))\nfrom control.model_execution.direct_sol_chat import validate_request\nroot=Path.cwd()\np=root/'control/model_execution/direct_requests/A2Z-V4-SOL-PROPOSAL-DIRECT-20261008-R4P4.json'\nraw=p.read_bytes()\nr=validate_request(json.loads(raw))\nassert hashlib.sha256(raw).hexdigest()=='7fbb08e941d8387918780fe04bd597babc10d5028b79e61e4de013f72fbe4c14'\nassert r['delivery_route_task_id']=='SESSION-ROUTE-246799adf99f0bf8336c27a0'\nprint('DIRECT_SOL_ACTION_REQUIRED: lees de volledige notes van deze immutable D05-brontaak en voer de volledige gepubliceerde R4P4 request uit als echte GPT-5.6 Sol Chat, of meld BLOCKED bij ontbrekende platformidentiteit.')\nprint('MODEL_RESULT_NOT_PROVEN; validatie-PASS is geen modelcompletion.')\nprint('REQUEST=bas1231/onderzoek@974466ab45ca26443f3aa8b7b48b0de91915ba60/control/model_execution/direct_requests/'+r['task_id']+'.json')\n"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/dev_checks/directsol_r4p4_d05.py"
+      ],
+      "timeout_seconds": 30
+    }
+  ]
+}
