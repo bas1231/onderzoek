@@ -1,0 +1,30 @@
+{
+  "schema": "PREDICTION_BUILD_LOG_EVENT_V1",
+  "event_id": "20261009-DIRECTSOL-REPAIR-D02-ATTEMPT",
+  "work_item_id": "A2Z-SOL-DIRECT-EXECUTION-20261007",
+  "created_at_utc": "2026-10-09T07:22:08Z",
+  "event_type": "ATTEMPT",
+  "work_item_status": "IN_PROGRESS",
+  "outcome": "STARTED",
+  "title": "Application-layer handoff en gerichte regressies",
+  "objective": "R4P4 bytegetrouw publiceren en de bestaande continuation-capability gebruiken zonder transport als modeluitvoering te tellen.",
+  "summary": "D01 registratie PASS; geen andere actieve builder gevonden. R4P4-publicatie teruggelezen en bytes exact gelijk. D02 bouwt twee nieuwe application/test-bestanden in een geïsoleerde worktree en test de werkelijke continuation-API uitsluitend in tijdelijke testdirectories.",
+  "why": "Publicatie ontbreekt niet meer; daadwerkelijke bezorging en worker-identiteit moeten nu worden bewezen.",
+  "first_incomplete_step": "Regressies en daarna een echte bezorgpoging op de bestaande R4P3/R5P1 Sol-route.",
+  "next_action": "Na regressie-PASS code publiceren en via bestaande executor één bounded handoff uitvoeren. Geen completion importeren zonder echte identiteit en provenance.",
+  "session_route_task_id": null,
+  "task_ids": [
+    "DEV-PRED-DIRECTSOL-REPAIR-20261009-D02"
+  ],
+  "commits": [
+    "974466ab45ca26443f3aa8b7b48b0de91915ba60"
+  ],
+  "evidence_refs": [
+    "control/model_execution/evidence/DIRECTSOL-REPAIR-20261009-D01/CHARTER.json"
+  ],
+  "tags": [
+    "direct-sol",
+    "regression",
+    "no-bridge-mutation"
+  ]
+}
