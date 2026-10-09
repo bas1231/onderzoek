@@ -145,3 +145,17 @@ class DirectSolDeliveryTests(unittest.TestCase):
         self.assertEqual(second["model_status"], "BLOCKED_NO_MODEL_RESULT")
         self.assertFalse(second["new_delivery_queued"])
         self.assertEqual(len(list((self.bridge / "outbox").glob("*.json"))), 1)
+
+    def test_denied_continuation_is_explicit_capability_blocker(self):
+        class Denied:
+            def start_external_continuation(self, **kwargs):
+                raise PermissionError("guard blocked runtime write")
+        with self.assertRaisesRegex(
+            DirectSolError, "DIRECT_SOL_CONTINUATION_CAPABILITY_UNAVAILABLE"
+        ):
+            enqueue_published_request(
+                request_path=self.path, request_sha256=self.sha, commit=self.commit,
+                bridge_data=self.bridge, state_root=self.root / "delivery",
+                continuation=Denied(),
+            )
+        self.assertFalse(list((self.bridge / "outbox").glob("*.json")))
