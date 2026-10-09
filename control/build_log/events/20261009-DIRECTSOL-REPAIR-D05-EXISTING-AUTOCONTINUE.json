@@ -1,0 +1,30 @@
+{
+  "schema": "PREDICTION_BUILD_LOG_EVENT_V1",
+  "event_id": "20261009-DIRECTSOL-REPAIR-D05-EXISTING-AUTOCONTINUE",
+  "work_item_id": "A2Z-SOL-DIRECT-EXECUTION-20261007",
+  "created_at_utc": "2026-10-09T07:32:14Z",
+  "event_type": "ATTEMPT",
+  "work_item_status": "IN_PROGRESS",
+  "outcome": "STARTED",
+  "title": "Gebruik bestaande auto_continue-capability voor werkelijke Sol-handoff",
+  "objective": "Bestaande R4P4 inhoudelijk door exact GPT-5.6 Sol Chat laten uitvoeren zonder wijziging van de bevroren transportlaag.",
+  "summary": "D04 bewees dat een rechtstreekse application-Python-aanroep van external continuation niet is toegestaan. Dit bewijst nog niet dat de bestaande command-bus auto_continue-route onbruikbaar is. D05 gebruikt uitsluitend die bestaande route naar de eerder geregistreerde Sol-chat en zet de volledige opdrachtreferentie en workerinstructie in de immutable brontaak. Deze route vereist geen runtime-write vanuit child-Python.",
+  "why": "Eerst alle bestaande toegestane capabilities benutten; geen guard-bypass of nieuwe infrastructuur. De ontvanger moet de volledige immutable request lezen en werkelijke modelidentiteit verifiëren.",
+  "first_incomplete_step": "Bestaande continuation moet de echte Sol-sessie activeren en een nieuw geldig resultaat opleveren.",
+  "next_action": "Observeer D05-resultaat, continuation en werkelijke modeluitkomst. Geen modeluitvoering claimen uit transport-PASS.",
+  "session_route_task_id": null,
+  "task_ids": [
+    "DEV-PRED-DIRECTSOL-R4P4-MODEL-HANDOFF-20261009-D05"
+  ],
+  "commits": [
+    "974466ab45ca26443f3aa8b7b48b0de91915ba60"
+  ],
+  "evidence_refs": [
+    "control/model_execution/direct_requests/A2Z-V4-SOL-PROPOSAL-DIRECT-20261008-R4P4.json"
+  ],
+  "tags": [
+    "direct-sol",
+    "existing-auto-continue",
+    "no-bridge-mutation"
+  ]
+}
