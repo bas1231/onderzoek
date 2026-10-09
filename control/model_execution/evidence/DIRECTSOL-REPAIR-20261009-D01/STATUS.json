@@ -1,0 +1,67 @@
+{
+  "schema": "PREDICTION_DIRECT_SOL_REPAIR_STATUS_V1",
+  "observed_at_utc": "2026-10-09T07:40:21Z",
+  "campaign_id": "FULL-A2Z-LIVE-20261004-V4",
+  "candidate_id": "AUTO-DISCOVERY-54d13314c7879b58e46d",
+  "status": "BLOCKED_BROWSER_ACTIVATION_OR_VERIFIABLE_SOL_SESSION",
+  "scientific_status": "NO_PROVEN_EDGE",
+  "complete_a2z_proven": false,
+  "new_sol_execution_proven": false,
+  "new_astra_execution_proven": false,
+  "last_proven_checkpoint": {
+    "task_id": "A2Z-V4-ASTRA-PREBUILD-DIRECT-20261008-R4P3",
+    "decision": "REVISE",
+    "model": "gpt-6-astra",
+    "thread_id": "01a11c78-9493-7ec3-b4de-eea99cac382c",
+    "completion_sha256": "cf9927282987bbb0120e4b7781b5344e128594aae1999abaadf832cc6cead49e"
+  },
+  "request": {
+    "task_id": "A2Z-V4-SOL-PROPOSAL-DIRECT-20261008-R4P4",
+    "publication_commit": "974466ab45ca26443f3aa8b7b48b0de91915ba60",
+    "request_sha256": "7fbb08e941d8387918780fe04bd597babc10d5028b79e61e4de013f72fbe4c14",
+    "input_sha256": "bc95bf692678be044bbe574779fbb59f69fc34d616d007e5582c8e96c0d30423",
+    "binding_sha256": "e0e848a1cbf05d28213844792bbe2993edd95ee07e88b996696ac04376fe569e"
+  },
+  "existing_transport_attempt": {
+    "task_id": "DEV-PRED-DIRECTSOL-R4P4-MODEL-HANDOFF-20261009-D05",
+    "route_task_id": "SESSION-ROUTE-246799adf99f0bf8336c27a0",
+    "chat_id": "chat-c-9e3bfb0d-10",
+    "auto_continue": true,
+    "executor_status": "PASS",
+    "model_execution": false,
+    "event_id": "1791531149-cd0bb37bd857",
+    "observed_queue": "outbox",
+    "event_created_at_unix": 1791531149,
+    "browser_receipt_observed": false,
+    "model_result_observed": false,
+    "do_not_redispatch": true
+  },
+  "direct_api_attempt": {
+    "task_id": "DEV-PRED-DIRECTSOL-REPAIR-20261009-D04",
+    "status": "BLOCKED_EXECUTOR_CAPABILITY",
+    "evidence_ref": "control/model_execution/evidence/DIRECTSOL-REPAIR-20261009-D01/EXTERNAL_CONTINUATION_BLOCKED.json"
+  },
+  "application_code": {
+    "draft_pr": "https://github.com/bas1231/onderzoek/pull/54",
+    "head_commit": "69f32b0771ac525aaccd5376503988f21aca5506",
+    "merged": false,
+    "runtime_installed": false,
+    "regression_tests_passed": 18,
+    "evidence_ref": "control/model_execution/evidence/DIRECTSOL-REPAIR-20261009-D01/EXECUTOR_RESULTS.json"
+  },
+  "first_incomplete_step": "De bestaande Sol-browserroute haalt het uitgaande resultevent niet op; daardoor start de source-backed continuation niet en ontvangt geen geverifieerde GPT-5.6 Sol-worker de volledige opdracht.",
+  "minimum_interaction": "Activeer de eerdere reguliere GPT-5.6 Sol-chat met bestaande wake-bridge. Controleer feitelijke modelkeuze en Chat-modus. D05 staat al klaar; geen WSL-opdracht of nieuwe dispatch nodig. Indien die route onbeschikbaar blijft, is een nieuwe bewezen Sol-route of specifieke toestemming voor wijziging van de bevroren browseractivering/modelattestatie nodig.",
+  "automatic_activation_limit": "De geïnstalleerde wake-consumer heeft een geopende pollende chat nodig; dashboard_launchers ontbreekt en de onderzochte launcher code selecteert/attesteert geen model. Geen algemene claim over alle mogelijke ChatGPT-integraties.",
+  "safety": {
+    "bridge_files_changed": false,
+    "executor_guard_changed": false,
+    "experiment_build_started": false,
+    "experiment_tests_started": false,
+    "measurement_started": false,
+    "paid_actions": false,
+    "live_trading": false,
+    "wallet_actions": false,
+    "credential_access": false,
+    "wsl_remote_git_write": false
+  }
+}
