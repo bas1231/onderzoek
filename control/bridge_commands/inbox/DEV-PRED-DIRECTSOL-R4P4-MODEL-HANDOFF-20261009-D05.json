@@ -1,0 +1,18 @@
+{
+  "schema": "PREDICTION_BRIDGE_COMMAND_V1",
+  "task_id": "DEV-PRED-DIRECTSOL-R4P4-MODEL-HANDOFF-20261009-D05",
+  "action": "SIX_AI_HEALTH",
+  "created_at_utc": "2026-10-09T07:32:14Z",
+  "delivery_mode": "chat",
+  "route_task_id": "SESSION-ROUTE-246799adf99f0bf8336c27a0",
+  "live_trading": false,
+  "paid_actions": false,
+  "wallet_actions": false,
+  "intelligence_tier": "A",
+  "issuer": {
+    "model": "GPT-6 (Codex; exacte variant niet blootgesteld)",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "auto_continue": true,
+  "notes": "Expliciete modelhandoff naar eerder geregistreerde Sol-workerroute; dit is NIET de browserroute van de huidige Codex-controller. Lees volledige workerinstructies in notes van de gelijknamige projecttaak en vervolgens de volledige R4P4 request op commit 974466ab45ca26443f3aa8b7b48b0de91915ba60. Exact GPT-5.6 Sol regular Chat vereist, bij onbekende platformidentiteit BLOCKED zonder resultaat. Transport-PASS of ACK is nooit modelcompletion."
+}
