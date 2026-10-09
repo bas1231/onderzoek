@@ -1,0 +1,56 @@
+{
+  "build_id": "DIRECTSOL-REPAIR-20261009-D01",
+  "protocol_version": "AUTONOMOUS_BUILD_PROTOCOL_V1",
+  "source_commit": "607a7e9dd0505dcf969a7a7243846b5c83f5c763",
+  "objective": "Herstel publicatie en bezorging van de bestaande R4P4-aanvraag via de bestaande continuation-capability; bewijs werkelijke Sol-uitvoering of de concrete ontbrekende capability. Volledige A→Z-acceptatie blijft ongewijzigd.",
+  "allowed_capabilities": [
+    "read_repository",
+    "write_worktree",
+    "run_project_python",
+    "run_tests",
+    "build_coordination",
+    "local_git",
+    "read_runtime",
+    "write_runtime"
+  ],
+  "allowed_paths": [
+    "control/model_execution/direct_sol_delivery.py",
+    "tests/model_execution/test_direct_sol_delivery.py",
+    "control/model_execution/direct_requests/A2Z-V4-SOL-PROPOSAL-DIRECT-20261008-R4P4.json",
+    "control/model_execution/evidence/DIRECTSOL-REPAIR-20261009-D01",
+    "control/dev_checks/directsol_d01*"
+  ],
+  "planned_paths": [
+    "control/model_execution/direct_sol_delivery.py",
+    "tests/model_execution/test_direct_sol_delivery.py",
+    "control/model_execution/direct_requests/A2Z-V4-SOL-PROPOSAL-DIRECT-20261008-R4P4.json"
+  ],
+  "acceptance_criteria": [
+    "R4P4 wordt bytegetrouw gepubliceerd met dezelfde input- en reviewbinding.",
+    "Geen handoff zonder gevalideerde gepubliceerde request, exacte route en immutable commit.",
+    "Idempotente hervatting gebruikt hetzelfde logical continuation-ID; wijziging van request/ref/route onder hetzelfde task-ID faalt gesloten.",
+    "Geen transportstatus, ACK of executor PASS wordt modelcompletion.",
+    "Verkeerde/onbekende modelidentiteit of experience veroorzaakt BLOCKED in de worker; deze reparatiesessie maakt geen Sol-resultaten aan.",
+    "Deterministische tests via de bestaande projectexecutor; een echte roundtrip blijft afzonderlijk vereist.",
+    "Geen build/experimenttests/meting zonder de vereiste Astra-goedkeuring."
+  ],
+  "non_goals": [
+    "Wijzigingen aan bridge/poller/router/wake/sessierouting/projectexecutor",
+    "Nieuwe experimenten",
+    "Sol via Codex/Work/API",
+    "Wetenschappelijke promotie"
+  ],
+  "independent_verification": "Gerichte regressies en controle van werkelijk ontvangen Sol/Astra-provenance; geen onafhankelijke review claimen als die ontbreekt. A02 heeft geen modelreview opgeleverd.",
+  "rollback_plan": "Geen bestaande runtimecode vervangen. Bij blokkade de nieuwe continuation via de bestaande BLOCKED-receipt afsluiten; alle evidence bewaren.",
+  "cleanup_plan": "Geen nieuwe daemon of timer. Tijdelijke worktree en immutable taak-evidence behouden; scopelease na afloop sluiten.",
+  "max_attempts": 2,
+  "governance_change": false,
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_access": false,
+    "bridge_mutation": false
+  }
+}
