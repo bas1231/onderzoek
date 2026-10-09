@@ -1,0 +1,39 @@
+{
+  "schema": "PREDICTION_BUILD_LOG_EVENT_V1",
+  "event_id": "20261009-DIRECTSOL-REPAIR-D01-BLOCKED-RESULT",
+  "work_item_id": "A2Z-SOL-DIRECT-EXECUTION-20261007",
+  "created_at_utc": "2026-10-09T07:40:21Z",
+  "event_type": "RESULT",
+  "work_item_status": "BLOCKED",
+  "outcome": "BLOCKED",
+  "title": "R4P4 gedeeld en handoff getest; echte Sol-browserontvangst geblokkeerd",
+  "objective": "Herstel volledige automatische DIRECT_SOL→Astra-overdracht met echte modelidentiteit.",
+  "summary": "R4P4 bytegetrouw gepubliceerd. 18 application-layer regressies PASS. Directe callback via child-Python wordt door bestaande guard geweigerd. Bestaand auto_continue-pad D05 wel verstuurd, maar event blijft outbox; geen browserontvangst of nieuw Sol-resultaat. Draft-PR54 is geen A→Z-PASS.",
+  "why": "Geen actieve ontvanger op de bedoelde route en geen bestaande geregistreerde launcher/modelattestatie om die autonoom te activeren. Bevroren componenten niet aangepast.",
+  "first_incomplete_step": "Echte GPT-5.6 Sol Chat ontvangt/leest volledige R4P4-opdracht met verifieerbare identiteit.",
+  "next_action": "Activeer bestaande Sol-chat/wake op route 246799adf99f0bf8336c27a0; D05 niet dupliceren. Na echte output hashes/identiteit valideren, dan Astra PREBUILD. Bij onbeschikbare route is nieuwe bewezen Sol-route of specifieke browserwijzigingstoestemming nodig.",
+  "session_route_task_id": null,
+  "task_ids": [
+    "DEV-PRED-DIRECTSOL-REPAIR-20261009-D02",
+    "DEV-PRED-DIRECTSOL-REPAIR-20261009-D03",
+    "DEV-PRED-DIRECTSOL-REPAIR-20261009-D04",
+    "DEV-PRED-DIRECTSOL-R4P4-MODEL-HANDOFF-20261009-D05"
+  ],
+  "commits": [
+    "974466ab45ca26443f3aa8b7b48b0de91915ba60",
+    "69f32b0771ac525aaccd5376503988f21aca5506"
+  ],
+  "evidence_refs": [
+    "control/model_execution/evidence/DIRECTSOL-REPAIR-20261009-D01/REPORT.md",
+    "control/model_execution/evidence/DIRECTSOL-REPAIR-20261009-D01/STATUS.json",
+    "control/model_execution/evidence/DIRECTSOL-REPAIR-20261009-D01/EXECUTOR_RESULTS.json",
+    "https://github.com/bas1231/onderzoek/pull/54"
+  ],
+  "tags": [
+    "direct-sol",
+    "blocked-browser-receipt",
+    "18-tests-pass",
+    "no-proven-edge"
+  ],
+  "supports_work_item_id": "A2Z-SYSTEMTEST-20261005"
+}
