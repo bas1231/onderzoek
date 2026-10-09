@@ -1,0 +1,34 @@
+{
+  "schema": "PREDICTION_BUILD_LOG_EVENT_V1",
+  "event_id": "20261009-DIRECTSOL-REPAIR-D01-PLAN",
+  "work_item_id": "A2Z-SOL-DIRECT-EXECUTION-20261007",
+  "created_at_utc": "2026-10-09T07:18:19Z",
+  "event_type": "PLAN",
+  "work_item_status": "IN_PROGRESS",
+  "outcome": "PLANNED",
+  "title": "Herstel ontbrekende publicatie en onderzoek echte DIRECT_SOL-activering",
+  "objective": "Bestaande R4P4-aanvraag bytegetrouw publiceren, via bestaande continuation-capability naar de geregistreerde Sol-chat sturen en uitsluitend werkelijke modelcompletion als voortgang aanvaarden.",
+  "summary": "A02 faalde in de voorbereidingsassertion voordat Astra werd gestart. E234 valideerde uitsluitend lokaal JSON. R4P4 ontbreekt op GitHub (404). Eerder gepubliceerde resultaten bewaren; geen nieuwe experimenten of herhaling van Astra R4P3. Eerst executor-lease en bounded application-layer handoff met regressietests.",
+  "why": "De bevroren transportlaag kan context afleveren, maar geen modelidentiteit selecteren of bewijzen. Het handoff mag daarom geen completion of identity vervaardigen.",
+  "first_incomplete_step": "Immutable gedeelde publicatie van R4P4, gevolgd door echte verwerking in exact GPT-5.6 Sol Chat.",
+  "next_action": "Voer headless capability-scoped D01 uit; bouw alleen application-layer handoff, voer deterministische tests uit, observeer de bestaande Sol-route. Indien model/Chat-identiteit niet verifieerbaar is: expliciet BLOCKED, geen resultaatimport.",
+  "session_route_task_id": null,
+  "task_ids": [
+    "DEV-PRED-DIRECTSOL-REPAIR-20261009-D01"
+  ],
+  "commits": [
+    "4b33b7318e4540e1e38d4bf918061747e74991fd"
+  ],
+  "evidence_refs": [
+    "control/project_tasks/DEV-PRED-A2Z-R4P4-SOL-HANDOFF-RETRY-20261008-E234.json",
+    "control/project_tasks/DEV-PRED-SOL-CALL-ASTRA-INFRA-20261009-A02.json",
+    "control/model_execution/ROUTING.md"
+  ],
+  "tags": [
+    "direct-sol",
+    "application-layer",
+    "no-bridge-mutation",
+    "no-proven-edge"
+  ],
+  "supports_work_item_id": "A2Z-SYSTEMTEST-20261005"
+}
