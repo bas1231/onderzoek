@@ -45,16 +45,10 @@ def load_events(folder: Path) -> tuple[list[dict], list[str]]:
             if not isinstance(value.get("event_id"), str) or value["event_id"] != path.stem:
                 raise ValueError("file/event identity mismatch")
             value["_parsed_at"] = utc(value.get("created_at_utc"))
-            event_type = value.get("event_type")
-            if not isinstance(event_type, str) or not event_type.strip():
-                raise ValueError("missing event type")
+            if value.get("event_type") not in SUBSTANTIVE | {"NOTE"}:
+                raise ValueError("unknown event type")
             if value.get("work_item_status") not in {"OPEN", "IN_PROGRESS", "BLOCKED", "DONE"}:
                 raise ValueError("unknown work item status")
-            # Historical append-only events used types like CHECKPOINT and BLOCKER.
-            # Their semantics are NOT in the current schema. Treat these as
-            # opaque, substantive ordering barriers for their own work item;
-            # never silently translate them to NOTE or infer execution rights.
-            value["_opaque_event_type"] = event_type not in SUBSTANTIVE | {"NOTE"}
             records.append(value)
         except (OSError, UnicodeError, ValueError, TypeError, json.JSONDecodeError) as exc:
             errors.append(f"{path.name}: {type(exc).__name__}: {exc}")
@@ -66,7 +60,7 @@ def evaluate(events: list[dict], *, now: datetime, stale_seconds: int) -> list[d
         raise ValueError("stale threshold must be at least 60 seconds")
     latest: dict[str, dict] = {}
     for event in events:
-        if event["event_type"] == "NOTE":
+        if event["event_type"] not in SUBSTANTIVE:
             continue
         key = event["work_item_id"]
         current = latest.get(key)
@@ -77,10 +71,6 @@ def evaluate(events: list[dict], *, now: datetime, stale_seconds: int) -> list[d
     for work_item_id, event in sorted(latest.items()):
         status = event["work_item_status"]
         age = (now - event["_parsed_at"]).total_seconds()
-        if event.get("_opaque_event_type"):
-            # Unknown historical event is authoritative as an ordering
-            # barrier, never an auto-resume proposal; even if status is OPEN.
-            continue
         if age < -300:
             code = "CLOCK_OR_SNAPSHOT_ERROR"
         elif status in FINAL:
@@ -154,7 +144,6 @@ def scan(events_dir: Path, proposals_dir: Path | None, now: datetime, minutes: i
         "schema": "PREDICTION_INDEPENDENT_CONTINUITY_SCAN_V1",
         "status": "INPUT_INVALID" if errors else "PASS",
         "observed_events": len(events),
-        "opaque_event_count": sum(bool(e.get("_opaque_event_type")) for e in events),
         "errors": errors,
         "observations": reports,
         "new_report_files": written,
