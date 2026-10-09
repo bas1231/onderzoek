@@ -1,0 +1,13 @@
+[Unit]
+Description=Prediction Reddit Idea Mine one-shot Arctic Shift source probe
+Documentation=internal:control/reddit_idea_mine/README.md
+
+[Service]
+Type=oneshot
+WorkingDirectory=%h/.local/share/prediction-project-executor/apps/reddit_idea_mine/releases/standalone-v1-20261009
+ExecStart=/usr/bin/python3 %h/.local/share/prediction-project-executor/apps/reddit_idea_mine/releases/standalone-v1-20261009/standalone_runtime.py --probe-only
+Environment=PYTHONDONTWRITEBYTECODE=1
+Environment=PYTHONNOUSERSITE=1
+UMask=0077
+NoNewPrivileges=true
+# No [Install] section: manual one-shot, never enabled as a timer.
