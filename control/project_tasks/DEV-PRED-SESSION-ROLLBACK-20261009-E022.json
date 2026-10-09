@@ -1,0 +1,61 @@
+{
+  "schema": "PREDICTION_PROJECT_TASK_V1",
+  "task_id": "DEV-PRED-SESSION-ROLLBACK-20261009-E022",
+  "source_commit": "e25261c2da77713a48156e5b730bb2f5959cc322",
+  "intelligence_tier": "C",
+  "issuer": {
+    "model": "GPT-6",
+    "reasoning_level": "UNAVAILABLE_TO_RUNTIME"
+  },
+  "safety": {
+    "live_trading": false,
+    "paid_actions": false,
+    "wallet_actions": false,
+    "remote_git_write": false,
+    "credential_write": false
+  },
+  "capabilities": [
+    "read_repository",
+    "run_project_python",
+    "write_runtime",
+    "user_service_manage"
+  ],
+  "working_directory": ".",
+  "timeout_seconds": 420,
+  "notes": "Explicit owner-directed cleanup/rollback of ONLY the independent-continuity sidecar modifications made in this ChatGPT session. Restore baseline observer and coordinator bytes. Stop/disable only prediction-independent-continuity timer, stop only its oneshot service. Leave preexisting bridge, executor, service definitions, credentials, other runtime files and other project work unchanged. No paid/trade/wallet actions.",
+  "operations": [
+    {
+      "type": "service",
+      "verb": "stop",
+      "unit": "prediction-independent-continuity.timer"
+    },
+    {
+      "type": "service",
+      "verb": "disable",
+      "unit": "prediction-independent-continuity.timer"
+    },
+    {
+      "type": "service",
+      "verb": "stop",
+      "unit": "prediction-independent-continuity.service"
+    },
+    {
+      "type": "install_runtime",
+      "source": "control/independent_continuity/observer.py",
+      "destination": "~/.local/share/prediction-project-executor/independent-continuity/observer.py"
+    },
+    {
+      "type": "install_runtime",
+      "source": "control/independent_continuity/coordinator.py",
+      "destination": "~/.local/share/prediction-project-executor/independent-continuity/coordinator.py"
+    },
+    {
+      "type": "python",
+      "argv": [
+        "python3",
+        "control/independent_continuity/verify_session_rollback_temporary.py"
+      ],
+      "timeout_seconds": 70
+    }
+  ]
+}
