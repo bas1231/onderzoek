@@ -96,10 +96,7 @@ def fresh_launcher(bridge_data: Path, *, now_unix: float) -> dict:
     launch_root = bridge_data / "dashboard_launchers"
     if any(not p.is_dir() or p.is_symlink() for p in (sent_root, route_root, launch_root)):
         raise UnsafeLaunch("existing browser launcher/runtime not available")
-    # Match the dashboard's latest proven SENT chat route, not any older
-    # still-registered launcher. Otherwise a stale tab could unexpectedly
-    # receive a new-session recovery event after active chat changed.
-    latest_proven = None
+    proven = set()
     sent_files = sorted(
         (p for p in sent_root.glob("*.json") if p.is_file() and not p.is_symlink()),
         key=lambda p: p.stat().st_mtime_ns, reverse=True
@@ -113,12 +110,9 @@ def fresh_launcher(bridge_data: Path, *, now_unix: float) -> dict:
             route = read_safe(route_root / (task + ".json"))
             chat, consumer = route.get("chat_id"), route.get("consumer_id")
             if chat and consumer and not str(chat).startswith("HEADLESS"):
-                latest_proven = (chat, consumer)
-                break
+                proven.add((chat, consumer))
         except (OSError, ValueError, json.JSONDecodeError):
             continue
-    if latest_proven is None:
-        raise UnsafeLaunch("NEW_SESSION_LAUNCHER_NOT_READY")
     available = []
     for path in launch_root.glob("*.json"):
         try:
@@ -126,7 +120,7 @@ def fresh_launcher(bridge_data: Path, *, now_unix: float) -> dict:
             chat, consumer = obj.get("chat_id"), obj.get("consumer_id")
             if obj.get("schema") != "PREDICTION_DASHBOARD_LAUNCHER_V1":
                 continue
-            if (chat, consumer) != latest_proven:
+            if (chat, consumer) not in proven:
                 continue
             if "dashboard_new_session_launch_v1" not in obj.get("capabilities", []):
                 continue
