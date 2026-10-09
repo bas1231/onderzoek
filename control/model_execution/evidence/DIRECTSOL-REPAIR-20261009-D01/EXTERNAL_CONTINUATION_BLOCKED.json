@@ -1,0 +1,22 @@
+{
+  "bridge_mutation": false,
+  "continuation_created": false,
+  "continuation_id": "CONT-0259c2837282ed9d1e234a0f",
+  "error": "DIRECT_SOL_CONTINUATION_CAPABILITY_UNAVAILABLE",
+  "executor_task_id": "DEV-PRED-DIRECTSOL-REPAIR-20261009-D04",
+  "first_incomplete_step": "RUNTIME_CONTINUATION_ENQUEUE",
+  "frozen_hashes_unchanged": {
+    "bridge_server.py": "80256b59f67e6257e5bb84fd084301ccc0fe82e65e105d479b7a77ee767739c5",
+    "continuation_manager.py": "0eee5896814206090852f95adcd78ee194e682245fa5735b1c31df5a6065e42d",
+    "project_task_executor.py": "a4fc8e7f5643b8b5f568ed5041744af1c988390d73b628415f063b1a1b95c1c4",
+    "project_task_guard/sitecustomize.py": "bb5d2d3e427997c704f02680c22e3d98f7d0db9c2b128c165be5c03e0f58871a"
+  },
+  "guard_reason": "project task guard blocked write outside task roots: /home/leonh/.local/share/prediction-chat-bridge/continuations/.CONT-0259c2837282ed9d1e234a0f.json.1099484.d6fd42a5.tmp",
+  "input_sha256": "bc95bf692678be044bbe574779fbb59f69fc34d616d007e5582c8e96c0d30423",
+  "model_execution_proven": false,
+  "model_status": "BLOCKED_EXECUTOR_CAPABILITY",
+  "request_publication_commit": "974466ab45ca26443f3aa8b7b48b0de91915ba60",
+  "schema": "PREDICTION_DIRECT_SOL_BLOCKER_EVIDENCE_V1",
+  "scientific_status": "NO_PROVEN_EDGE",
+  "task_id": "A2Z-V4-SOL-PROPOSAL-DIRECT-20261008-R4P4"
+}
